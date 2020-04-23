@@ -1,0 +1,43 @@
+@import "mixins/themify";
+@import "global-styles/themes/themes";
+@import "global-styles/_variables";
+@import "global-styles/mixins/columns";
+@import "global-styles/controls/textarea-variables";
+
+
+:host {
+
+
+  .crypto-modal {
+    min-width: auto;
+    max-width: 400px;
+  }
+
+  .delimiter {
+    margin: 10px 0;
+  }
+
+  .two-columns {
+    @include columns(2, 10px);
+  }
+
+  .play-sound-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+    margin-left: 5px;
+  }
+
+  textarea {
+    margin: 0;
+    padding: $textarea-padding;
+    resize: vertical;
+    max-height: 150px;
+  }
+}
+
+@include themify($themes, true) {
+  .delimiter {
+    border-color: themed('appBackgroundColor');
+  }
+}

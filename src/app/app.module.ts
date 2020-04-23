@@ -1,0 +1,287 @@
+import {APP_INITIALIZER, InjectionToken, Injector, NgModule} from '@angular/core';
+import {AppComponent} from './app.component';
+import {AppRoutingModule} from "./app.router";
+import {AuthGuard} from "./services/auth/auth.guard";
+import {RouteReuseStrategy} from "@angular/router";
+import {CustomRouteReuseStrategy} from "@app/router/reuse-strategy";
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
+import {MAT_CHIPS_DEFAULT_OPTIONS} from "@angular/material/chips";
+import {MAT_TABS_CONFIG} from '@angular/material/tabs';
+import {COMMA, ENTER} from "@angular/cdk/keycodes";
+import {ThemeService} from "@app/services/theme.service";
+import {UnauthorizedGuard} from "@app/services/auth/unauthorized.guard";
+import {BrowserModule} from "@angular/platform-browser";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AppConfigService} from "@app/services/app.config.service";
+import {IdentityService} from "@app/services/auth/identity.service";
+import {AuthenticationService} from "@app/services/auth/auth.service";
+import {CookieService} from "@app/services/сookie.service";
+import {isPopupWindow, sharedProviderResolver} from "../modules/popup-window/functions";
+import {catchError, switchMap} from "rxjs/operators";
+import {forkJoin, of, throwError} from "rxjs";
+import {AuthHttpInterceptorService} from "@app/services/auth/auth.http.interceptor";
+import {BlockIfPopupWindowGuard} from "../modules/popup-window/block-if-popup-window.guard";
+import {PopupWindowGuard} from "../modules/popup-window/popup-window.guard";
+import {RoleGuard} from "@app/services/role/role.guard";
+import {SharedTranslateService} from "@app/localization/shared.token";
+import {LocalizationModule, TranslateServiceFactory} from "Localization";
+import {BrokerService} from "@app/services/broker.service";
+import {BrokerFactory} from "@app/factories/broker.factory";
+import {ApplicationTypeService} from "@app/services/application-type.service";
+import {AppTranslateService} from "@app/localization/token";
+import {UserSettingsResolver} from "@app/services/user-settings.resolver";
+import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
+import {TimeZonesModule} from "TimeZones";
+import {RealtimeService} from "@app/services/realtime.service";
+import {EducationalTipsService} from "@app/services/educational-tips.service";
+import {BrokerStorage} from "@app/services/broker.storage";
+import {LayoutStorage} from "@app/services/layout.storage";
+import {LocalStorageService} from "Storage";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
+import {MatNativeDateModule} from "@angular/material/core";
+import {BitmexBrokerService} from "@app/services/bitmex.exchange/bitmex.broker.service";
+import {BitmexInstrumentService} from "@app/services/bitmex.exchange/bitmex.instrument.service";
+import {ExchangeFactory} from "@app/factories/exchange.factory";
+import {BitmexRealtimeService} from "@app/services/bitmex.exchange/bitmex.realtime.service";
+import {BitmexHistoryService} from "@app/services/bitmex.exchange/bitmex.history.service";
+import {InstrumentService} from "@app/services/instrument.service";
+import {HistoryService} from "@app/services/history.service";
+import {UssSocketService} from "@app/services/socket/uss.socket.service";
+import {StoreModule} from "@ngrx/store";
+
+
+import * as fromPlatform from './store/reducers/platform.reducer';
+import * as fromScripts from './store/reducers/scripts.reducer';
+import {UploadFileInputConfig} from "@file-uploader/components/upload-file-input/upload-file-input-config.token";
+import {AlertService, AlertType} from "@alert/services/alert.service";
+import {UploadFile} from "@file-uploader/data/UploadFIle";
+import {IUploadFileInputConfig} from "@file-uploader/components/upload-file-input/upload-file-input.component";
+import {FileUploaderTranslateService} from "@file-uploader/localization/token";
+import {ToasterAlertService} from "@alert/services/toaster-alert.service";
+import {FileUploaderLocalizationModule, FileUploaderModule} from "@file-uploader/file-uploader.module";
+import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
+import {OandaInstrumentService} from "@app/services/oanda.exchange/oanda.instrument.service";
+import {OandaHistoryService} from "@app/services/oanda.exchange/oanda.history.service";
+import {OandaRealtimeService} from "@app/services/oanda.exchange/oanda.realtime.service";
+import {BitmexSocketService} from "@app/services/socket/bitmex.socket.service";
+import {OandaSocketService} from "@app/services/socket/oanda.socket.service";
+
+export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
+
+const FILE_INPUT_CONFIG_PROVIDER = {
+    provide: UploadFileInputConfig,
+    useFactory: (alertService: AlertService, translateService: TranslateService) => {
+        return {
+            maxSizeMb: 5,
+            maxFileSizeMb: 5,
+            allowedFiles: [], // all files
+            allowMultipleFiles: false,
+            incorrectFileSizeHandler: (file: UploadFile | UploadFile[], maxFileSizeMB: number) => {
+                alertService.warning(`${translateService.instant('uploadFileItem.incorrectSize')} ${maxFileSizeMB} MB`);
+            },
+            incorrectFileTypeHandler: (file: UploadFile | UploadFile[], allowedTypes: string[]) => {
+                alertService.warning(`${translateService.instant('uploadFileItem.incorrectType')} ${allowedTypes.join(', ')}`);
+            }
+        } as IUploadFileInputConfig;
+    },
+    deps: [
+        AlertService,
+        FileUploaderTranslateService
+    ]
+};
+
+@NgModule({
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        LocalizationModule.forRoot(),
+        TranslateModule.forRoot(),
+        TimeZonesModule.forRoot(),
+        MatNativeDateModule,
+        StoreModule.forRoot(REDUCER_TOKEN, {
+            runtimeChecks: {
+                strictStateImmutability: true,
+                strictActionImmutability: true
+            }
+        }),
+        FileUploaderLocalizationModule
+    ],
+    providers: [
+        AuthenticationService,
+        CookieService,
+        AppConfigService,
+        {
+            provide: IdentityService,
+            useFactory: (authService: AuthenticationService, cookieService: CookieService) => {
+                if (isPopupWindow()) {
+                    return sharedProviderResolver('identityService');
+                }
+
+                return new IdentityService(
+                    authService,
+                    cookieService
+                );
+            },
+            deps: [
+                AuthenticationService,
+                CookieService
+            ]
+        },
+        // ThemeService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (appConfigService: AppConfigService,
+                         identityService: IdentityService) => () => {
+                return appConfigService.loadConfig()
+                    .pipe(
+                        switchMap(() => {
+                            if (isPopupWindow()) {
+                                return of(null);
+                            }
+
+                            return forkJoin(
+                                identityService.refreshTokenFromStorage()
+                            ).pipe(
+                                catchError((e) => {
+                                    console.error(e, 'failed to refresh token');
+
+                                    return throwError(e);
+                                })
+                            );
+                        })
+                    ).toPromise();
+            },
+            multi: true,
+            deps: [AppConfigService, IdentityService]
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthHttpInterceptorService,
+            multi: true
+        },
+        {
+            provide: RouteReuseStrategy,
+            useClass: CustomRouteReuseStrategy
+        },
+        {
+            provide: MAT_TABS_CONFIG,
+            useValue: {
+                animationDuration: '0ms'
+            }
+        },
+        {
+            provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+            useValue: {
+                appearance: 'outline'
+            }
+        },
+        {
+            provide: MAT_CHIPS_DEFAULT_OPTIONS,
+            useValue: {
+                separatorKeyCodes: [ENTER, COMMA]
+            }
+        },
+        {
+            provide: AppTranslateService,
+            useFactory: TranslateServiceFactory('app'),
+            deps: [Injector, SharedTranslateService]
+        },
+        // // TODO: Review
+        {
+            provide: SharedTranslateService,
+            useFactory: TranslateServiceFactory('shared'),
+            deps: [Injector]
+        },
+
+        {
+            provide: REDUCER_TOKEN,
+            useFactory: () => {
+                return {
+                    platform: fromPlatform.reducer,
+                    scripts: fromScripts.reducer
+                };
+            }
+        },
+
+        ApplicationTypeService,
+        AuthGuard,
+        BlockIfPopupWindowGuard,
+        BrokerService,
+        BrokerFactory,
+        BrokerStorage,
+        EducationalTipsService,
+        LayoutStorage,
+        LocalStorageService,
+        PopupWindowGuard,
+        RealtimeService,
+        RoleGuard,
+        ThemeService,
+        UnauthorizedGuard,
+        UserSettingsResolver,
+        UserSettingsService,
+
+
+        ExchangeFactory,
+        BitmexRealtimeService,
+        BitmexHistoryService,
+        BitmexBrokerService,
+        BitmexInstrumentService,
+        BitmexSocketService,
+
+        OandaInstrumentService,
+        OandaHistoryService,
+        OandaRealtimeService,
+        OandaBrokerService,
+        OandaSocketService,
+
+        InstrumentService,
+        RealtimeService,
+        HistoryService,
+        UssSocketService,
+        {
+            provide: AlertService,
+            useFactory: (appTranslateService: any) => {
+                return new ToasterAlertService({
+                    getTitle: (type: AlertType) => {
+                        return appTranslateService.get(type);
+                    }
+                });
+            },
+            deps: [AppTranslateService]
+        },
+        {
+            provide: UploadFileInputConfig,
+            useFactory: (alertService: AlertService, translateService: TranslateService) => {
+                return {
+                    maxSizeMb: 5,
+                    maxFileSizeMb: 5,
+                    allowedFiles: [], // all files
+                    allowMultipleFiles: false,
+                    incorrectFileSizeHandler: (file: UploadFile | UploadFile[], maxFileSizeMB: number) => {
+                        alertService.warning(`${translateService.instant('uploadFileItem.incorrectSize')} ${maxFileSizeMB} MB`);
+                    },
+                    incorrectFileTypeHandler: (file: UploadFile | UploadFile[], allowedTypes: string[]) => {
+                        alertService.warning(`${translateService.instant('uploadFileItem.incorrectType')} ${allowedTypes.join(', ')}`);
+                    }
+                } as IUploadFileInputConfig;
+            },
+            deps: [
+                AlertService,
+                FileUploaderTranslateService
+            ]
+        },
+    ],
+    entryComponents: [],
+    bootstrap: [AppComponent]
+})
+export class AppModule {
+    constructor() {
+
+    }
+}

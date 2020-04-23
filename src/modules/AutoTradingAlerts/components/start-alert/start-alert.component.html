@@ -1,0 +1,26 @@
+<div class="crypto-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" title="{{'cancel' | translate}}" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+      <h4 class="crypto-text modal-title">{{'tradingAlert.startAlert' | translate}}</h4>
+    </div>
+    <div class="modal-body">
+      <div class="crypto-text is-small">
+        <span>{{'tradingAlert.whereStartAlert' | translate}}</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="crypto-text is-small flex justify-content-center">
+        <button class="crypto-button crypto-button_success m-right-10" (click)="confirm();">
+          {{'tradingAlert.local' | translate}}
+        </button>
+        <button class="crypto-button crypto-button_success m-right-10" (click)="confirm(true);">
+          {{'tradingAlert.onCloud' | translate}}
+        </button>
+        <button class="crypto-button crypto-button_action" (click)="close()">
+          {{'cancel' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

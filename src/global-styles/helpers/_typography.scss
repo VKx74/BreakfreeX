@@ -1,0 +1,95 @@
+@import "../variables";
+@import "../themes/themes";
+@import "../mixins/themify";
+
+$selector: ".#{$classPrefix}-text";
+
+#{$selector} {
+  font-size: 1em;
+  font-family: $primaryFontFamily;
+
+  &.is-bold {
+    //TODO review bold
+    //font-weight: 900;
+    font-weight: 600;
+  }
+
+  &.is-capitalized {
+    text-transform: capitalize;
+  }
+
+  &.is-upper-case {
+    text-transform: uppercase;
+  }
+}
+
+// Sizes
+
+#{$selector} {
+  &.is-small {
+    font-size: 12px;
+  }
+
+  &.is-medium {
+    font-size: 16px;
+  }
+
+  &.is-large {
+    font-size: 20px;
+  }
+}
+
+.first-letter-capitalized {
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.overflow-wrap-break-word {
+  overflow-wrap: break-word;
+}
+
+// Colors
+@include themify($themes) {
+  #{$selector} {
+    color: themed('valueTextColor');
+
+    &.is-secondary {
+      color: themed('titleTextColor');
+    }
+
+    &.is-muted {
+      color: themed('titleTextColor');
+    }
+  }
+}
+
+#{$selector} {
+  &.is-light {
+    color: #bdbdc4;
+  }
+
+  &.is-dark {
+    color: #323232;
+  }
+
+  &.is-primary {
+    @include themify($themes) {
+      color: themed('accentColor');
+    }
+  }
+}
+
+// deprecated
+.#{$classPrefix}-caption {
+  font-size: 1em;
+  font-family: $primaryFontFamily;
+
+  @include themify($themes) {
+    color: themed('valueTextColor');
+
+    &_muted {
+      color: themed('titleTextColor');
+    }
+  }
+}

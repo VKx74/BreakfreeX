@@ -1,0 +1,22 @@
+<div #modal class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-body" *ngIf="imageUrl">
+            <image-editor [url]="imageUrl"
+                          [config]="editorConfig"></image-editor>
+        </div>
+        <div class="modal-footer">
+            <div class="flex justify-flex-end">
+                <div>
+                    <button class="crypto-button crypto-button_danger m-right-15"
+                            (click)="close();">
+                        {{ 'cancel' | translate }}
+                    </button>
+
+                    <button class="crypto-button crypto-button_primary" (click)="submit()">
+                        {{ 'save' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

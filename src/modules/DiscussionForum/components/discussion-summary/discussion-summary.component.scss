@@ -1,0 +1,57 @@
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .top-line {
+    margin-bottom: 4px;
+
+    .avatar,
+    .created-date {
+      margin-right: 10px;
+    }
+
+    .author {
+      font-weight: 900;
+    }
+
+    .author,
+    .created-date {
+      font-size: 11px;
+      font-family: $primaryFontFamily;
+    }
+  }
+
+  .title {
+    cursor: pointer;
+    font-size: 16px;
+    font-family: $primaryFontFamily;
+    margin-bottom: 15px;
+    word-break: break-all;
+    opacity: 0.7;
+    text-decoration: none;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .tags-wrapper {
+    margin-top: 5px;
+
+    .tag {
+      margin-right: 3px;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .author,
+  .created-date {
+    color: themed('titleTextColor');
+  }
+
+  .title {
+    color: themed('valueTextColor');
+  }
+}

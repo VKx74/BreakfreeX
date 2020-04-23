@@ -1,0 +1,18 @@
+@import "global-styles/variables";
+@import "../../themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+  display: block;
+  overflow: auto;
+
+  .root {
+    margin: 10vh 0;
+  }
+
+  .restore-btn {
+    margin-bottom: 10px;
+    margin-top: 15px;
+  }
+}

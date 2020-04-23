@@ -1,0 +1,41 @@
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  display: block;
+  height: 100%;
+
+  .mat-tab-body-wrapper {
+    padding-top: 0;
+  }
+
+  .place-order-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .close-order-column {
+    box-sizing: content-box;
+    width: 26px;
+
+    .close-order-button {
+      margin: auto 0 auto auto;
+    }
+  }
+
+  .orders {
+    display: flex;
+    flex-direction: column;
+
+    .selectStatus {
+      selector {
+        display: inline-block;
+        width: 200px;
+      }
+    }
+  }
+
+  .instrument-search {
+    margin-right: 4px;
+  }
+}

@@ -1,0 +1,17 @@
+@import "variables";
+
+.search-wrapper {
+  padding: 5px;
+}
+
+.small-column {
+  width: 41px;
+}
+
+.user-banned {
+  color: $redColor;
+}
+
+.username {
+  line-height: 3.1;
+}

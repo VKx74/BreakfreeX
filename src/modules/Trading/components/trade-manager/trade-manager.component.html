@@ -1,0 +1,45 @@
+<!--Depend to broker type show specific component-->
+<ng-container *ngIf="activeBroker$ | async; else noBrokerConnected">
+    <div [ngSwitch]="applicationType$ | async" class="trade-manager h-100 flex" style="position: relative">
+        <div class="top-panel w-100 flex-grow-1 flex justify-flex-end align-items-center">
+            <div class="date-container">{{date}}</div>
+            <i *ngIf="isOpen" class="crypto-icon crypto-icon-layout-minimise" (click)="minimize()"></i>
+            <i *ngIf="isMinimized" class="crypto-icon crypto-icon-layout-maximise" (click)="open()"></i>
+        </div>
+        <div class="flex trade-managers-wrapper">
+            <crypto-trade-manager *ngSwitchCase="ApplicationType.Crypto" class="h-100"></crypto-trade-manager>
+            <forex-trade-manager *ngSwitchCase="ApplicationType.Forex" class="h-100"></forex-trade-manager>
+        </div>
+        <div class="sell-buy">
+            <order></order>
+        </div>
+    </div>
+</ng-container>
+<ng-template #noBrokerConnected>
+    <div class="h-100" [ngClass]="{'h-auto': isMinimized, 'h-100': !isMinimized}">
+        <div class="trade-manager flex" style="position: relative; height: 40px">
+            <div class="top-panel w-100 flex-grow-1 flex justify-flex-end align-items-center">
+                <div class="date-container">{{date}}</div>
+                <i *ngIf="isOpen" class="crypto-icon crypto-icon-layout-minimise" (click)="minimize()"></i>
+                <i *ngIf="isMinimized" class="crypto-icon crypto-icon-layout-maximise" (click)="open()"></i>
+            </div>
+        </div>
+        <div class="broker-not-connected flex align-items-center justify-content-center h-100 w-100 relative-wrapper">
+            <no-items-placeholder *ngIf="((brokerInitialized$ | async) !== null); else loader"
+                                   text="{{'tradeManager.connectToBroker' | translate}}">
+            </no-items-placeholder>
+            <ng-template #loader>
+                <loader></loader>
+            </ng-template>
+        </div>
+    </div>
+</ng-template>
+
+<!--<ng-template #closedBottomPanelTemplate>-->
+<!--    <div class="trade-manager h-100 flex" style="position: relative">-->
+<!--        <div class="top-panel w-100 flex-grow-1 flex justify-flex-end align-items-center">-->
+<!--            <div class="date-container">{{date}}</div>-->
+<!--            <i class="crypto-icon crypto-icon-layout-maximise" (click)="open()"></i>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</ng-template>-->

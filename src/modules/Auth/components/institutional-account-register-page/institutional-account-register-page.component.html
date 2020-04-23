@@ -1,0 +1,246 @@
+<div class="business-register-page flex">
+    <div class="background"
+         [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="overlay-wrapper" [ngStyle]="{'display': registrationStep === BusinessRegistrationStep.CompanyInfo ? 'block' : 'none'}">
+        <div class="overlay">
+            <div class="form-header">
+                <span class="logo crypto-icon crypto-icon-fintatech"></span>
+                <p class="form-header__title">Sign up</p>
+            </div>
+            <form class="form-wrapper" [formGroup]="registerFormGroup" novalidate (ngSubmit)="onCompanyInfoFilled()">
+                <div class="form-controls-wrapper">
+                    <div class="crypto-text is-small register-label">Business type:</div>
+                    <hr>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-input with-hint full-width">
+                            <mat-select formControlName="businessType" placeholder="Business type" panelClass="business-type-dropdown">
+                                <mat-option *ngFor="let type of businessTypes" [value]="type" title="{{type}}">
+                                    {{type}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>
+                                <span>Business type name is not valid</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <company-info #companyInfo></company-info>
+
+                    <div class="crypto-text is-small register-label">Fund information</div>
+                    <hr>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-input with-hint full-width">
+                            <input matInput ng-trim="false" type="text" placeholder="Fund administrator (if applicable)"
+                                   formControlName="fundAdministrator">
+                            <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                            <mat-error>
+                                <span>Fund administrator is not valid</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-date-input with-hint full-width">
+                            <input matInput readonly
+                                   class="cursor-default"
+                                   [matDatepicker]="launchDate"
+                                   placeholder="Fund launch date"
+                                   formControlName="fundLaunchDate">
+                            <mat-datepicker-toggle matSuffix [for]="launchDate"></mat-datepicker-toggle>
+                            <mat-datepicker #launchDate></mat-datepicker>
+                            <mat-error>
+                                <span>Fund launch date is required</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="crypto-text is-small register-label">Firm`s funds under management (in USD)</div>
+                    <hr>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-input with-hint full-width">
+                            <mat-select formControlName="companyFunds" placeholder="Company fund" panelClass="company-dropdown">
+                                <mat-option *ngFor="let fund of companyFunds" [value]="fund" title="{{fund}}">
+                                    {{fund}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>
+                                <span>Company fund is not valid</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="crypto-text is-small register-label">Firm`s anticipated crypto funds under management
+                        (in USD)
+                    </div>
+                    <hr>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-input with-hint full-width">
+                            <mat-select formControlName="cryptoFunds" placeholder="Crypto fund" panelClass="crypto-funds-dropdown">
+                                <mat-option *ngFor="let fund of companyFunds" [value]="fund" title="{{fund}}">
+                                    {{fund}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>
+                                <span>Crypto fund is not valid</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="crypto-text is-small register-label">Anticipated average crypto balances in first 6
+                        month (in USD)
+                    </div>
+                    <hr>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-input with-hint full-width">
+                            <mat-select formControlName="averageCryptoBalance" placeholder="Crypto balance" panelClass="crypto-balance-dropdown">
+                                <mat-option *ngFor="let balance of cryptoBalances" [value]="balance"
+                                            title="{{balance}}">
+                                    {{balance}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>
+                                <span>Crypto balance is not valid</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="crypto-text register-label is-small">Does your firm have a US, UK, or European Bank
+                        Account?
+                    </div>
+                    <hr>
+                    <div class="crypto-form-unit margin-bottom">
+                        <mat-radio-group class="flex justify-space-around" formControlName="isBankAccount">
+                            <mat-radio-button class="" [value]="true">Yes</mat-radio-button>
+                            <mat-radio-button class="" [value]="false">No</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+                    <div class="crypto-text register-label is-small">Has your firm engaged in or is your firm planning
+                        to
+                        engage in an initial coin offering?
+                    </div>
+                    <hr>
+                    <div class="crypto-form-unit margin-bottom">
+                        <mat-radio-group class="flex justify-space-around" formControlName="isEngagedInCoinOffering">
+                            <mat-radio-button class="" [value]="true">Yes</mat-radio-button>
+                            <mat-radio-button class="" [value]="false">No</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+                    <div class="crypto-text register-label is-small">Company investment strategy six</div>
+                    <hr>
+
+                    <div class="two-input-wrapper">
+                        <div class="crypto-form-unit">
+                            <mat-form-field class="crypto-input with-hint full-width">
+                                <input matInput ng-trim="false" type="number" placeholder="{{strategyMixParts.Arbitrage}}"
+                                       formControlName="strategyArbitrage">
+                                <span class="percent-icon" matSuffix>%</span>
+                                <mat-error>
+                                    <span title="{{getStrategyMixFieldErrorMessage(strategyMixParts.Arbitrage)}}">{{getStrategyMixFieldErrorMessage(strategyMixParts.Arbitrage)}}</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="crypto-form-unit">
+                            <mat-form-field class="crypto-input with-hint full-width">
+                                <input matInput ng-trim="false" type="number" placeholder="{{strategyMixParts.BuyHold}}"
+                                       formControlName="strategyBuyHold">
+                                <span class="percent-icon" matSuffix>%</span>
+                                <mat-error>
+                                    <span title="{{getStrategyMixFieldErrorMessage(strategyMixParts.BuyHold)}}">{{getStrategyMixFieldErrorMessage(strategyMixParts.BuyHold)}}</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="two-input-wrapper">
+                        <div class="crypto-form-unit">
+                            <mat-form-field class="crypto-input with-hint full-width">
+                                <input matInput ng-trim="false" type="number" placeholder="{{strategyMixParts.PriceMomentum}}"
+                                       formControlName="strategyPriceMomentum">
+                                <span class="percent-icon" matSuffix>%</span>
+                                <mat-error>
+                                    <span title="{{getStrategyMixFieldErrorMessage(strategyMixParts.PriceMomentum)}}">{{getStrategyMixFieldErrorMessage(strategyMixParts.PriceMomentum)}}</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="crypto-form-unit">
+                            <mat-form-field class="crypto-input with-hint full-width">
+                                <input matInput ng-trim="false" type="number" placeholder="{{strategyMixParts.DrivenModels}}"
+                                       formControlName="strategyDrivenModels">
+                                <span class="percent-icon" matSuffix>%</span>
+                                <mat-error>
+                                    <span title="{{getStrategyMixFieldErrorMessage(strategyMixParts.DrivenModels)}}">{{getStrategyMixFieldErrorMessage(strategyMixParts.DrivenModels)}}</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-input with-hint full-width">
+                            <input matInput ng-trim="false" type="number" placeholder="{{strategyMixParts.EtfIndexWeighting}}"
+                                   formControlName="strategyEtfIndexWeighting">
+                            <span class="percent-icon" matSuffix>%</span>
+                            <mat-error>
+                                <span title="{{getStrategyMixFieldErrorMessage(strategyMixParts.EtfIndexWeighting)}}">{{getStrategyMixFieldErrorMessage(strategyMixParts.EtfIndexWeighting)}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="two-input-wrapper">
+                        <div class="crypto-form-unit">
+                            <mat-form-field class="crypto-input with-hint full-width">
+                                <input matInput ng-trim="false" type="number" placeholder="{{strategyMixParts.Derivaives}}"
+                                       formControlName="strategyDerivaives">
+                                <span class="percent-icon" matSuffix>%</span>
+                                <mat-error>
+                                    <span title="{{getStrategyMixFieldErrorMessage(strategyMixParts.Derivaives)}}">{{getStrategyMixFieldErrorMessage(strategyMixParts.Derivaives)}}</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="crypto-form-unit">
+                            <mat-form-field class="crypto-input with-hint full-width">
+                                <input matInput ng-trim="false" type="number" placeholder="{{strategyMixParts.Other}}"
+                                       formControlName="strategyOther">
+                                <span class="percent-icon" matSuffix>%</span>
+                                <mat-error>
+                                    <span title="{{getStrategyMixFieldErrorMessage(strategyMixParts.Other)}}">{{getStrategyMixFieldErrorMessage(strategyMixParts.Other)}}</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div *ngIf="registerFormGroup.errors?.message" class="notification is-error">
+                        <span>{{registerFormGroup.errors?.message}}</span>
+                    </div>
+                </div>
+                <div *ngIf="errorNotification" class="notification is-error">
+                    <span>{{errorNotification}}</span>
+                </div>
+                <button type="submit"
+                        class="btn crypto-button crypto-button-full-width button_primary register-btn"
+                        [disabled]="registerFormGroup.invalid || companyInfo.formInvalid() || processing"
+                        mat-button>
+                    <div class="lds-ellipsis" *ngIf="processing">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <span *ngIf="!processing">Register</span>
+                </button>
+            </form>
+        </div>
+    </div>
+    <kyc-page *ngIf="registrationStep !== BusinessRegistrationStep.CompanyInfo"
+              [kycPageConfig]="kycPageConfig"
+              [completeHandler]="kycPageCompleteHandler"></kyc-page>
+</div>

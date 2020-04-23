@@ -1,0 +1,19 @@
+:host {
+  display: inline-block;
+  overflow: auto;
+  height: 100%;
+
+  .root {
+    height: 100%;
+  }
+
+  .content {
+    height: 100%;
+  }
+
+  .no-content {
+    margin: 10px auto;
+    width: fit-content;
+    color: white;
+  }
+}

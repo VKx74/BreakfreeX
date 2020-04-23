@@ -1,0 +1,25 @@
+@import "../../styles/post-shared";
+@import "themes/themes";
+@import "mixins/themify";
+
+.question-post-wrapper {
+  padding: 15px 20px 15px 20px;
+}
+
+.tags-wrapper {
+  .tag {
+    display: inline-block;
+    max-width: 60px;
+    cursor: pointer;
+  }
+
+  .tag:not(:last-of-type) {
+    margin-right: 5px;
+  }
+}
+
+@include themify($themes, true) {
+  .author-name {
+    color: themed('accentColor');
+  }
+}

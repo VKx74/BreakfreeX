@@ -1,0 +1,35 @@
+<div class="underlay flex flex-direction-column relative-wrapper h-100">
+    <mat-progress-bar class="health-check-loader" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="scroll-wrapper flex-grow-1 overflow-y-auto">
+        <table class="crypto-table crypto-table_striped crypto-table_fixed-header relative-wrapper">
+            <thead>
+            <tr class="level-title">
+                <th></th>
+                <th>Service</th>
+                <th class="" style=" padding-left: 0">
+                    <span class="text-left flex" style="padding-left: 0">Status</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let service of services"
+                [ngClass]="{'error': service.status === ServiceStatus.Error, 'success': service.status === ServiceStatus.Success}">
+                <td>
+                    <span class="status-bullet"></span>
+                </td>
+                <td>
+                    <span>{{service.displayName}}</span>
+                </td>
+                <td class="service-status-description">
+                    <span [matTooltipShowDelay]="300"
+                          [matTooltipHideDelay]="100"
+                          [matTooltip]="service.description | ellipsisAfter : MAX_TOOLTIP_LENGTH"
+                          [matTooltipDisabled]="service.description.length <= SHOW_TOOLTIP_AFTER"
+                    >{{service.description | ellipsisAfter : SHOW_TOOLTIP_AFTER}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <no-items-placeholder *ngIf="!services?.length" [text]="'No services'"></no-items-placeholder>
+    </div>
+</div>

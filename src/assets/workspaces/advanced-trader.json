@@ -1,0 +1,80 @@
+{
+  "id": "advanced-trader",
+  "name": "Advanced Trader",
+  "layoutState": {
+    "version": "1",
+    "content": [
+      {
+        "type": "row",
+        "content": [
+          {
+            "type": "column",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "a",
+                    "type": "component",
+                    "componentName": "chart",
+                    "isClosable": false
+                  }
+                ]
+              },
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "b",
+                    "type": "component",
+                    "componentName": "orderBook",
+                    "isClosable": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "column",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "c",
+                    "type": "component",
+                    "componentName": "marketTrades",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "d",
+                    "type": "component",
+                    "componentName": "watchlist",
+                    "isClosable": false
+                  }
+                ]
+              },
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "e",
+                    "type": "component",
+                    "componentName": "orderBookChart",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "g",
+                    "type": "component",
+                    "componentName": "marketTrades",
+                    "isClosable": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

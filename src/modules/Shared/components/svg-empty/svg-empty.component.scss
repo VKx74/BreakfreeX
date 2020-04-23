@@ -1,0 +1,8 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+
+@include themify($themes, true) {
+  path.svg-background {
+    fill: themed('appBackgroundColor');
+  }
+}

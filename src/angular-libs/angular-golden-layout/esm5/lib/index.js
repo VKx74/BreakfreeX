@@ -1,0 +1,10 @@
+/**
+ * @fileoverview added by tsickle
+ * Generated from: lib/index.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+export { DefaultLabels, GoldenLayoutComponent } from './components/golden-layout/golden-layout.component';
+export { GoldenLayoutModule } from './layout.module';
+export {} from './models/configuration';
+export { GoldenLayoutComponentConfiguration } from "./tokens/golden-layout-configuration.token";
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290Ijoibmc6Ly9hbmd1bGFyLWdvbGRlbi1sYXlvdXQvIiwic291cmNlcyI6WyJsaWIvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBQSxxREFBYyxvREFBb0QsQ0FBQztBQUNuRSxtQ0FBYyxpQkFBaUIsQ0FBQztBQUNoQyxlQUFjLHdCQUF3QixDQUFDO0FBRXZDLE9BQU8sRUFBQyxrQ0FBa0MsRUFBQyxNQUFNLDRDQUE0QyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0ICogZnJvbSAnLi9jb21wb25lbnRzL2dvbGRlbi1sYXlvdXQvZ29sZGVuLWxheW91dC5jb21wb25lbnQnO1xuZXhwb3J0ICogZnJvbSAnLi9sYXlvdXQubW9kdWxlJztcbmV4cG9ydCAqIGZyb20gJy4vbW9kZWxzL2NvbmZpZ3VyYXRpb24nO1xuXG5leHBvcnQge0dvbGRlbkxheW91dENvbXBvbmVudENvbmZpZ3VyYXRpb259IGZyb20gXCIuL3Rva2Vucy9nb2xkZW4tbGF5b3V0LWNvbmZpZ3VyYXRpb24udG9rZW5cIjtcbiJdfQ==

@@ -1,0 +1,24 @@
+{
+  "upload": "Upload",
+  "crop": "Crop",
+  "capturePhoto": "Capture Photo",
+  "retry": "Retry",
+  "uploadSuccessfully": "Uploaded Successfully",
+  "uploadFileItem": {
+    "incorrectSize": "File has incorrect size. Max allowed size:",
+    "incorrectType": "File has incorrect type. Allowed types:",
+    "uploadSuccess": "File successfully uploaded"
+  },
+  "uploadCaption": "Drag&Drop or select files to upload",
+  "file": {
+    "uploadTitle": "Upload File",
+    "editTitle": "Edit File",
+    "caption": "Caption",
+    "close": "Close",
+    "preview": "Preview",
+    "selectOtherFile": "Select other file",
+    "download":"Download",
+    "ok":"ОК",
+    "cancel":"Cancel"
+  }
+}

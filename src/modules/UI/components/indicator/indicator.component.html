@@ -1,0 +1,10 @@
+<div class="indicator">
+  <ng-container *ngIf="color; else color_by_class">
+    <div class="outer"  [style.backgroundColor]="color"></div>
+    <div class="inner"  [style.backgroundColor]="color"></div>
+  </ng-container>
+  <ng-template #color_by_class>
+    <div class="outer"  [ngClass]="colorClass"></div>
+    <div class="inner"  [ngClass]="colorClass"></div>
+  </ng-template>
+</div>

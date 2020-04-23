@@ -1,0 +1,104 @@
+@import "../forex.broker.component";
+
+/*@import "mixins/themify";
+@import "themes/themes";
+
+.brokers-accounts {
+  display: flex;
+  justify-content: space-between;
+
+  .account,
+  .title {
+    margin-top: 5px;
+  }
+
+  .accounts {
+    max-width: 50%;
+    width: 100%;
+  }
+
+  .account {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.oandaTokenInput {
+    width: 250px;
+    margin-left: 10px;
+}
+
+.oandaAccessToken {
+  font-size: 13px;
+  width: 180px;
+}*/
+
+/*.connectBrokerBlock, .activateAccountBlock {
+  display: flex;
+  justify-content: flex-end;
+  button {
+    margin-top: 14px;
+  }
+}*/
+
+.disconnect-btn-wrapper,
+.connect-btn-wrapper {
+  justify-content: flex-end;
+
+  button {
+    min-width: 150px;
+  }
+}
+
+.connect-broker-area,
+.connected-broker-area {
+  width: 100%;
+}
+
+.forex-broker-settings-row {
+  width: 100%;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: space-between;
+
+  selector.dropdown {
+    width: 200px;
+
+    ::ng-deep mat-form-field {
+      width: 100%;
+    }
+
+  }
+}
+
+.add-broker-button {
+  margin-left: auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.disconnect {
+  display: flex;
+  align-items: center;
+
+  .fa-trash {
+    margin-left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+}
+
+hr {
+  border-top: 1px solid #3c3c3c;
+}
+
+@include themify($themes, true) {
+  .oandaAccessToken {
+    color: themed('titleTextColor');
+  }
+  .oandaTokenInput {
+    color: themed('valueTextColor');
+    background-color: themed('inputInModalsBackgroundColor');
+  }
+}

@@ -1,0 +1,90 @@
+@import "../../../styles/variables";
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  .crypto-modal .modal-content {
+    min-width: 300px;
+  }
+
+
+  table {
+    thead, tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    .table-body {
+      @extend %crypto-table-body;
+    }
+
+    margin-top: 20px;
+
+    th {
+      font-weight: 500;
+      letter-spacing: 0.1px;
+      font-size: 14px;
+    }
+
+    td, th {
+      padding: 5px 15px 5px 10px;
+      text-align: center;
+
+      &:nth-child(3) {
+        width: 100px;
+      }
+
+      &:nth-child(4) {
+        width: 120px;
+      }
+    }
+  }
+}
+
+.modal-body {
+  padding: 0 30px 15px 30px;
+}
+
+.deposit-address-title {
+  font-size: 18px;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.buttons-wrapper {
+  padding: 15px 30px;
+}
+
+.qr-container {
+  position: relative;
+  margin-top: 20px;
+
+  .qr-img {
+    width: 150px;
+    height: 150px;
+  }
+
+  input {
+    padding: 5px 30px;
+  }
+}
+
+.copy-to-clipboard {
+  cursor: pointer;
+  padding: 3px;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+
+  @include themify($themes) {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  &:hover {
+    transform: scale(1.01);
+  }
+}
+

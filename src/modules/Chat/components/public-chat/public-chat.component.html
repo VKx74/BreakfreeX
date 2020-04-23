@@ -1,0 +1,14 @@
+<!--<div class="public-chat">-->
+<!--    <active-thread-->
+<!--            [class.maximized]="hiddenThreadList"-->
+<!--            [activeThread]="activeThread" *ngIf="activeThread"-->
+<!--            (onMaximise)="hiddenThreadList = !hiddenThreadList"></active-thread>-->
+<!--    <thread-list-->
+<!--            [type]="ThreadType.Public"-->
+<!--            [class.hidden]="hiddenThreadList"-->
+<!--            [style.height]="activeThread ? '50%' : '100%'"-->
+<!--            (onActiveThreadChanged)="activeThread = $event"></thread-list>-->
+<!--</div>-->
+<!--<base-chat [type]="ThreadType.Public" *showByTag="ComponentIdentifier.publicChat"></base-chat>-->
+
+<base-chat *showByTag="ComponentIdentifier.publicChat"></base-chat>

@@ -1,0 +1,45 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+.label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+table {
+  th {
+    padding-left: 0;
+
+    &:last-child {
+      width: 120px;
+    }
+  }
+
+  tr {
+    td {
+      padding: 8px 5px 8px 0;
+
+      &:last-child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  .slider {
+    transform: scale(1.4);
+  }
+}
+
+@include themify($themes, true) {
+  .delimiter {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid themed('appBackgroundColor');
+    //background-color: themed('delimiterColor');
+    margin: 10px 0;
+  }
+}

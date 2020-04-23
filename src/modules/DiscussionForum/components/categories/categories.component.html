@@ -1,0 +1,27 @@
+<div>
+    <breadcrumbs [breadcrumbs]="breadcrumbs"></breadcrumbs>
+
+    <page-header class="flex justify-space-between">
+        <span class="page-header-title">Categories</span>
+    </page-header>
+
+    <div class="flex flex-wrap-wrap">
+        <empty-placeholder message="No categories yet..."
+                           *ngIf="categories && categories.length === 0"></empty-placeholder>
+
+        <ng-container *ngIf="categories && categories.length">
+            <categories-grid>
+                <ng-container *ngFor="let category of categories">
+                    <category
+                            [category]="category"></category>
+
+
+                    <!--                    <a [href]="getCategoryUrl(category)" class="category">-->
+                    <!--                        <p class="category__name">{{category.name}}</p>-->
+                    <!--                        <p class="category__description">{{category.description}}</p>-->
+                    <!--                    </a>-->
+                </ng-container>
+            </categories-grid>
+        </ng-container>
+    </div>
+</div>

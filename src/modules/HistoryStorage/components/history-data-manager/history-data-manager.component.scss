@@ -1,0 +1,57 @@
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+@import "global-styles/variables";
+
+:host {
+
+  .top-line {
+    height: 40px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .controls-wrapper {
+    display: flex;
+
+    .control {
+      width: 32px;
+      height: 32px;
+
+      &:not(:last-of-type) {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .records-table tr {
+    cursor: pointer;
+  }
+
+  .records-table .delete-column {
+    width: 30px;
+  }
+
+  .index-column {
+    width: 40px;
+  }
+
+
+  .delete-button {
+    margin: auto;
+  }
+
+  .preview-wrapper {
+    margin-top: 15px;
+    height: 200px;
+  }
+}
+
+@include themify($themes, true) {
+  .root {
+    background-color: themed('appPanelColor');
+  }
+
+  .top-line {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+}

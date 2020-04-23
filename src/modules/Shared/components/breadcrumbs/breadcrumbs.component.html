@@ -1,0 +1,7 @@
+<ng-container *ngFor="let breadcrumb of breadcrumbs; let last = last">
+    <a class="breadcrumb" [href]="breadcrumb.url" *ngIf="breadcrumb.url">
+        {{breadcrumb.label | async}}
+    </a>
+    <span class="breadcrumb" *ngIf="!breadcrumb.url">{{breadcrumb.label | async}}</span>
+    <span class="breadcrumb-delimiter" *ngIf="!last">/</span>
+</ng-container>

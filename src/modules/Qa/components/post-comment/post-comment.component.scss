@@ -1,0 +1,51 @@
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+.comment-item {
+  font-size: 11px;
+  font-family: $primaryFontFamily;
+  overflow-wrap: break-word;
+  padding: 6px 0;
+  color: $primeColor;
+}
+
+.comment-date {
+  color: $mutedColor;
+}
+
+.comment-author {
+  color: $accentColor;
+}
+
+.comment-content {
+  word-break: break-all;
+}
+
+.comment-manage-box {
+  margin-top: 5px;
+}
+
+.delete,
+.edit {
+  cursor: pointer;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.input-wrapper {
+  margin-top: 6px;
+}
+
+@include themify($themes, true) {
+  .comment-content {
+    color: themed('valueTextColor');
+  }
+
+  .title-color {
+    color: themed('titleTextColor');
+  }
+}

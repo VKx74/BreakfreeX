@@ -1,0 +1,44 @@
+<div class="crypto-modal">
+  <div class="modal-content crypto-text">
+    <div class="modal-header">
+      <button type="button" class="close" title="Close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+      <h4 class="modal-title">
+        <span>Change shuftipro account</span>
+      </h4>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formGroup">
+        <div class="crypto-form-unit">
+          <div class="form-unit__label">E-mail:</div>
+          <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" placeholder="Email" formControlName="email">
+            <i class="crypto-icon crypto-icon-email" matSuffix></i>
+            <mat-error>Please, enter a valid email</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="crypto-form-unit">
+          <p class="form-unit__label">ApiKey:</p>
+          <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" placeholder="ApiKey" formControlName="apikey">
+            <mat-error>Please, enter a valid apikey</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="crypto-form-unit">
+          <p class="form-unit__label">Secret:</p>
+          <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" placeholder="Secret" formControlName="secret">
+            <mat-error>Please, enter a valid secret</mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="crypto-button crypto-button_primary w-100"
+              [ngClass]="{'is-loading': processing}"
+              [disabled]="formGroup.invalid"
+              (click)="submit()">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

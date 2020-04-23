@@ -1,0 +1,91 @@
+<div class="login-page flex">
+    <div class="background" [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="overlay-wrapper">
+        <div class="overlay">
+            <div class="form-wrapper" [ngClass]="{notificationVisible: notification}" [formGroup]="formGroup">
+                <div class="form-header">
+                    <span class="logo crypto-icon crypto-icon-fintatech"></span>
+                    <span class="form-header__title signIn">Sign in </span>
+                    <span class="form-header__title"> / </span>
+                    <span class="form-header__title signUp" (click)="doRegistration()" >Sign up </span>
+                </div>
+
+                <div class="crypto-form-unit margin-bottom">
+                    <mat-form-field class="crypto-input full-width with-hint">
+                        <input matInput type="email" formControlName="email" placeholder="Username" onEnter (enterHandler)="doLogin()">
+                        <i class="crypto-icon crypto-icon-email" matSuffix></i>
+                        <mat-error>Invalid username</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit margin-bottom">
+                    <mat-form-field class="crypto-input full-width with-hint">
+                        <input matInput type="password" formControlName="password" placeholder="Password" onEnter (enterHandler)="doLogin()">
+                        <i class="crypto-icon crypto-icon-pasword" matSuffix></i>
+                        <mat-error>Password must contain from 6 to 25 signs</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="flex justify-content-center">
+                        <ngx-recaptcha2
+                                        formControlName="captcha"
+                                        [siteKey]="RecaptchaConfig.siteKey"
+                                        [useGlobalDomain]="RecaptchaConfig.useGlobalDomain"
+                                        [size]="RecaptchaConfig.size"
+                                        [hl]="RecaptchaConfig.language"
+                                        [theme]="RecaptchaConfig.theme">
+                        </ngx-recaptcha2>
+                    </div>
+                </div>
+                <div class="crypto-form-unit margin-bottom">
+                    <pin-input placeholder="Two factor auth code (if enabled)" formControlName="pin"></pin-input>
+                </div>
+                <div class="remember-wrapper">
+                    <label>
+                        <input class="remember-chk" type="checkbox" formControlName="rememberMe"/>
+                        <span>Remember?</span>
+                    </label>
+                    <span class="forgotPassword" (click)="doPasswordRestoration()">Forgot your password?</span>
+                </div>
+                <div *ngIf="notification" class="notification"
+                     [ngClass]="notification.isError ? 'is-error' : 'is-success'">
+                    <span>{{notification.message}}</span>
+                </div>
+                <div class="button-on-error">
+                    <span *ngIf="showReconfirmButton" (click)="handleResendConfirm()">Click here if you did not get the letter on email</span>
+                    <span *ngIf="showFillInfoButton" (click)="handleFillPersonalInfo()">Click here to fill personal information again.</span>
+                </div>
+
+                <button class="btn crypto-button crypto-button-full-width button_success login-btn"
+                        [disabled]="!loginBtnEnabled" (click)="doLogin()">
+                    <div class="lds-ellipsis" *ngIf="processing">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <span *ngIf="!processing">Log in</span>
+                </button>
+<!--                <div class="socialNetworks-wrapper">
+                    <span>Or through social networks</span>
+                    <div class="socialIcon-wrapper">
+                        <a href="#">
+                            <span class="socialIcon" [ngStyle]="{'background-image': 'url(assets/img/login-page/google.svg)'}"></span>
+                            <span>Google</span>
+                        </a>
+                        <span class="socialSeparator">/</span>
+                        <a href="#">
+                            <span class="socialIcon" [ngStyle]="{'background-image': 'url(assets/img/login-page/facebook.svg)'}"></span>
+                            <span>Facebook</span>
+                        </a>
+                    </div>
+                </div>-->
+<!--                <div class="flex justify-space-between">-->
+<!--                    <div class="addition" (click)="resetTwoStepAuth()">Reset your Google Authenticator Secret</div>-->
+<!--                    <div class="addition" (click)="doPasswordRestoration()">Forgot your password?</div>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+</div>

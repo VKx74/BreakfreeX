@@ -1,0 +1,10 @@
+<mat-form-field class="crypto-input">
+    <!--[(ngModel)]="searchTerm" (ngModelChange)="onSearchInput($event)"-->
+    <span class="crypto-icon crypto-icon-search icon-size" matPrefix
+          *ngIf="!hideSearchIcon && searchIconPosition === SearchIconPosition.Start"></span>
+    <input matInput [value]="value"
+           [formControl]="inputControl"
+           [placeholder]="placeholder"/>
+    <span class="crypto-icon crypto-icon-search icon-size" matSuffix
+          *ngIf="!hideSearchIcon && searchIconPosition === SearchIconPosition.End"></span>
+</mat-form-field>

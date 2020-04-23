@@ -1,0 +1,144 @@
+<div class="root full-height flex flex-direction-column" [formGroup]="formGroup">
+    <div class="top-line flex align-items-center flex-shrink-0 justify-space-between">
+        <search-input class="search-input" formControlName="search" (onEnter)="handleSearchEnterKey()">
+        </search-input>
+
+        <selector [options]="DocumentationCategories"
+                  [optionCaption]="categoryOptionCaption"
+                  class="category-selector"
+                  formControlName="category"></selector>
+    </div>
+
+    <div class="content-wrapper flex-grow-1 h-0 flex flex-direction-column" *ngIf="documentations">
+        <as-split class="flex-grow-1"
+                  [direction]="'vertical'"
+                  unit="percent"
+                  [gutterSize]="5">
+
+            <as-split-area [order]="0" [size]="50" [minSize]="10">
+                <div class="full-height list-wrapper">
+                    <div class="not-found-placeholder"
+                         *ngIf="!documentations.methods.length && !documentations.math.length && !documentations.trading.length && !documentations.general.length && !documentations.multiData.length">
+                        <span>{{'notFound' | translate}}</span>
+                    </div>
+                    <table class="crypto-table crypto-table_striped crypto-table_selectable"
+                           *ngIf="documentations.methods.length || documentations.math.length || documentations.trading.length || documentations.general.length || documentations.multiData.length">
+                        <tbody>
+                        <ng-container *ngFor="let property of documentations.math">
+                            <tr (click)="selectDocumentation(property)" [class.selected]="selectedDocumentation === property">
+                                <td>Math {{property.signature}}</td>
+                            </tr>
+                        </ng-container>
+                        <ng-container *ngFor="let method of documentations.methods">
+                            <tr (click)="selectDocumentation(method)" [class.selected]="selectedDocumentation === method">
+                                <td>Indicator {{method.signature}}</td>
+                            </tr>
+                        </ng-container>
+                        <ng-container *ngFor="let trading of documentations.trading">
+                            <tr (click)="selectDocumentation(trading)" [class.selected]="selectedDocumentation === trading">
+                                <td>Trading {{trading.signature}}</td>
+                            </tr>
+                        </ng-container>
+                        <ng-container *ngFor="let general of documentations.general">
+                            <tr (click)="selectDocumentation(general)" [class.selected]="selectedDocumentation === general">
+                                <td>General {{general.signature}}</td>
+                            </tr>
+                        </ng-container>
+                        <ng-container *ngFor="let multiData of documentations.multiData">
+                            <tr (click)="selectDocumentation(multiData)" [class.selected]="selectedDocumentation === multiData">
+                                <td>Multi Data {{multiData.signature}}</td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </as-split-area>
+
+            <as-split-area [order]="1" [size]="50" [minSize]="10">
+                <div class="flex flex-direction-column full-height">
+                    <div class="description-caption flex-shrink-0">
+                        <span class="crypto-text">{{ 'apiDescription' | translate }}</span>
+                    </div>
+                    <div class="description-wrapper flex-grow-1 h-0 overflow-y-auto">
+
+                        <ng-container
+                                *ngIf="selectedDocumentation && (selectedDocumentation.category === DocumentationCategory.General || selectedDocumentation.category === DocumentationCategory.MultiData)">
+                            <p>
+                        <span class="bold">
+                            {{selectedDocumentation.category}} {{selectedDocumentation.signature}}
+                        </span>
+                            </p>
+                            <table *ngIf="selectedDocumentation.parameters.length" class="method-parameters-table">
+                                <tr *ngFor="let parameter of selectedDocumentation.parameters">
+                                    <td>{{parameter.name}}</td>
+                                    <td><span *ngIf="parameter.type">[{{parameter.type}}]</span> {{parameter.description}}</td>
+                                </tr>
+                            </table>
+                            <p><span class="bold">{{'description' | translate}}:</span></p>
+                            <p>{{selectedDocumentation.description}}</p>
+                            <p><span class="bold">{{'example' | translate}}:</span></p>
+                            <ng-container
+                                    *ngTemplateOutlet="examplePreviewTemplate;context:{code: selectedDocumentation.examples}"></ng-container>
+                        </ng-container>
+
+                        <ng-container
+                                *ngIf="selectedDocumentation && selectedDocumentation.category === DocumentationCategory.Math">
+                            <p>
+                        <span class="bold">
+                            {{selectedDocumentation.category}} {{selectedDocumentation.signature}}
+                        </span>
+                            </p>
+                            <table *ngIf="selectedDocumentation.parameters.length" class="method-parameters-table">
+                                <tr *ngFor="let parameter of selectedDocumentation.parameters">
+                                    <td>[{{parameter.type}}] {{parameter.description}}</td>
+                                </tr>
+                            </table>
+                            <p><span class="bold">{{'description' | translate}}:</span></p>
+                            <p>{{selectedDocumentation.description}}</p>
+                            <p><span class="bold">{{'Output' | translate}}:</span></p>
+                            <p>{{selectedDocumentation.output}}</p>
+                            <p><span class="bold">{{'example' | translate}}:</span></p>
+
+                            <ng-container
+                                    *ngTemplateOutlet="examplePreviewTemplate;context:{code: selectedDocumentation.examples}"></ng-container>
+                        </ng-container>
+
+                        <ng-container
+                                *ngIf="selectedDocumentation && (selectedDocumentation.category === DocumentationCategory.Indicators || selectedDocumentation.category === DocumentationCategory.Trading)">
+                            <p>
+                        <span class="bold">
+                            {{selectedDocumentation.category}} {{selectedDocumentation.signature}}
+                        </span>
+                            </p>
+                            <table *ngIf="selectedDocumentation.parameters.length" class="method-parameters-table">
+                                <tr *ngFor="let parameter of selectedDocumentation.parameters">
+                                    <td>{{parameter.name}}</td>
+                                    <td>[{{parameter.type}}] {{parameter.description}}</td>
+                                </tr>
+                            </table>
+                            <p><span class="bold">{{'description' | translate}}:</span></p>
+                            <p>{{selectedDocumentation.description}}</p>
+                            <p><span *ngIf="selectedDocumentation.output" class="bold">{{'Output' | translate}}:</span></p>
+                            <p>{{selectedDocumentation.output}}</p>
+                            <p><span class="bold">{{'example' | translate}}:</span></p>
+
+                            <ng-container
+                                    *ngTemplateOutlet="examplePreviewTemplate;context:{code: selectedDocumentation.examples}"></ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </as-split-area>
+        </as-split>
+
+
+    </div>
+</div>
+
+<ng-template #examplePreviewTemplate let-examples="code">
+    <div class="example-preview-wrapper" *ngFor="let example of examples">
+        <div class="example">
+            {{example}}
+        </div>
+        <i class="crypto-icon crypto-icon-copy copy-icon" [title]="'copy' | translate" (click)="copyExample(example)"></i>
+    </div>
+</ng-template>

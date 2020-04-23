@@ -1,0 +1,50 @@
+@import "../variables";
+@import "../themes/themes";
+@import "../mixins/themify";
+@import "./mat-form-field-shared";
+
+mat-paginator {
+  &.mat-paginator {
+    background-color: transparent;
+  }
+
+  mat-form-field {
+    @extend %mat-form-field-shared;
+  }
+
+  .mat-paginator-range-label,
+  .mat-paginator-page-size-label {
+    font-family: $primaryFontFamily;
+    font-size: 14px;
+  }
+
+  .mat-paginator-page-size-select {
+    margin-top: 0;
+  }
+
+  .mat-paginator-page-size {
+    align-items: center;
+  }
+
+  .mat-paginator-container {
+    min-height: auto;
+    height: auto;
+  }
+}
+
+@include themify($themes) {
+  mat-paginator {
+    .mat-paginator-range-label,
+    .mat-paginator-page-size-label {
+      color: themed('titleTextColor');
+    }
+
+    .mat-icon-button {
+      color: themed('titleTextColor');
+
+      &:disabled {
+        color: themed('selectBgDisabled')
+      }
+    }
+  }
+}

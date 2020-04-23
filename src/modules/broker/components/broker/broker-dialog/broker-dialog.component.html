@@ -1,0 +1,26 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header"></div>
+        <div class="modal-body">
+            <ng-container [ngSwitch]="applicationType">
+                <ng-container *ngSwitchCase="ApplicationType.Stock">
+                </ng-container>
+                <ng-container *ngSwitchCase="ApplicationType.Crypto">
+                    <ng-container [ngSwitch]="brokerType">
+                        <bitmex-broker-login-component
+                                *ngSwitchCase="EBrokerInstance.BitmexBroker"></bitmex-broker-login-component>
+                        <okex-broker-login-component *ngSwitchCase="EBrokerInstance.OKExBroker"></okex-broker-login-component>
+                        <switch-broker-login-component
+                                *ngSwitchCase="EBrokerInstance.SwitchBroker"></switch-broker-login-component>
+                        <binance-broker-login *ngSwitchCase="EBrokerInstance.BinanceBroker"></binance-broker-login>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="ApplicationType.Forex">
+                    <ng-container [ngSwitch]="brokerType">
+                        <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>

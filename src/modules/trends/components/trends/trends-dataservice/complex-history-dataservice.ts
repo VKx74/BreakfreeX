@@ -1,0 +1,38 @@
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {AppConfigService} from "@app/services/app.config.service";
+import {ComplexHistoryDto} from './common';
+import {Observable, of, throwError} from 'rxjs';
+import {catchError, filter} from "rxjs/operators";
+
+@Injectable()
+export class ComplexHistoryService {
+
+    constructor(private http: HttpClient) {
+    }
+
+    getData(symbol: string,
+            count: number,
+            granularities: Array<Number>): Observable<ComplexHistoryDto> {
+
+        const params = new HttpParams()
+            .append('count', count.toString())
+            .append('symbol', symbol)
+            .append('granularities', granularities.join(','));
+
+        let url = `${AppConfigService.config.apiUrls.coinigyREST}history/complex`;
+        return this.http.get<ComplexHistoryDto>(url, {params})
+            .pipe(
+                // catchError((err) => {
+                //     console.log('err', err);
+                //     // if (err.status === 404) {
+                //     //     return of(null);
+                //     // } else {
+                //     //     return of(null);
+                //     // }
+                //     return [];
+                // }),
+                // filter(d => !!d)
+            );
+    }
+}

@@ -1,0 +1,48 @@
+<div class="root flex flex-direction-column full-height">
+    <ng-container *ngIf="(loadScriptsState$ | async).isFailed()">
+        <placeholder message="{{ 'failedToLoadData' | translate }}"></placeholder>
+    </ng-container>
+
+    <ng-container *ngIf="(loadScriptsState$ | async).isPending()">
+        <placeholder message="{{ 'loading' | translate }}"></placeholder>
+    </ng-container>
+
+    <ng-container *ngIf="(loadScriptsState$ | async).isSucceeded() && (scripts$ | async).length === 0">
+        <placeholder message="{{ 'noScriptsToRunBacktest' | translate }}"></placeholder>
+    </ng-container>
+
+    <ng-container *ngIf="(loadScriptsState$ | async).isSucceeded() && (scripts$ | async).length">
+        <div class="top-line flex align-items-center justify-space-between flex-shrink-0">
+            <div>
+                <selector class="script-selector"
+                          [placeholder]="'selectScript' | translate"
+                          [options]="scripts$ | async"
+                          [optionCaption]="scriptOptionCaption"
+                          [selectedOption]="selectedScript$ | async"
+                          (onSelect)="handleScriptSelected($event)">
+                </selector>
+            </div>
+            <div class="flex align-items-center controls">
+                <div class="progress-wrapper" *ngIf="processing">
+                    <span class="crypto-text crypto-color-green progress-caption">{{ 'calculateBacktest' | translate }}</span>
+                </div>
+
+                <button class="crypto-button-icon control-button run-backtest"
+                      [title]="'runBacktestTitle' | translate"
+                      [disabled]="(selectedScript$ | async) == null"
+                      (click)="startBacktest()" *ngIf="!processing">
+                    <i class="crypto-icon crypto-icon-start-debug"></i>
+                </button>
+
+                <span class="crypto-button-icon control-button stop-backtest active"
+                      [title]="'stopBacktestTitle' | translate"
+                      *ngIf="processing" (click)="stopBacktest()">
+                <i class="crypto-icon crypto-icon-pause-server"></i>
+            </span>
+            </div>
+        </div>
+        <div class="content-wrapper flex flex-direction-column flex-grow-1 h-0">
+            <backtest-result-overview></backtest-result-overview>
+        </div>
+    </ng-container>
+</div>

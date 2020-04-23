@@ -1,0 +1,26 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+
+  .main-container {
+    margin: 0 !important;
+  }
+
+}
+
+::ng-deep .mat-form-field-wrapper, mat-form-field {
+  width: 100% !important;
+}
+
+::ng-deep div.mat-form-field-flex {
+  @include themify($themes, true) {
+    background-color: themed('appPanelColor') !important;
+
+
+    input.mat-input-element {
+      background-color: themed('appPanelColor') !important;
+    }
+  }
+}
+

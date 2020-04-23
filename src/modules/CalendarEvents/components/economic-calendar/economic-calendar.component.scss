@@ -1,0 +1,274 @@
+@import "../../styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  /deep/ .mat-cell {
+    white-space: pre-wrap !important;
+  }
+  /deep/ .mat-row {
+    max-width: 1000px;
+  }
+  /deep/ .mat-table {
+    cursor: pointer;
+  }
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 18px 12px 18px;
+  height: 50px;
+  border-radius: 5px;
+
+  .date-input {
+    width: 0;
+    height: 0;
+  }
+
+  &__title {
+    line-height: 0;
+    font-size: 14px;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+
+    .button, .educational-tips-wrapper {
+      width: 32px;
+      height: 32px;
+      font-size: 1.6em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  }
+}
+
+.calendar-content {
+  //height: calc(100% - 40px); // height of header
+  overflow: auto;
+  padding-top: 9px;
+
+  .event-description {
+    margin-left: 10px;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: calc(100% - 24px + 10px);
+  }
+
+  .event {
+    .event-upper-block {
+      padding: 13px 15px 0;
+      cursor: pointer;
+    }
+
+    .event-lower-block {
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+
+      .actual {
+        padding-right: 5px;
+      }
+
+      .consensus {
+        padding: 0 5px;
+      }
+
+      .previous {
+        padding-left: 5px;
+      }
+
+      .actual, .consensus, .previous {
+        width: calc(100% / 3);
+
+        .value {
+          font-size: 12px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .consensus {
+        text-align: center;
+      }
+
+      .previous {
+        text-align: right;
+      }
+
+      .title {
+        font-size: 12px;
+        padding-bottom: 5px;
+        text-transform: uppercase;
+      }
+    }
+
+    .description {
+      padding: 5px 13px 15px;
+      font-size: 13px;
+      user-select: text;
+      overflow-wrap: break-word;
+    }
+  }
+
+  .no-events {
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+
+.event-general-info {
+  font-size: 0.8em;
+  display: flex;
+  justify-content: space-between;
+
+  .event-block {
+    display: flex;
+
+    .indicator {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      align-self: center;
+    }
+  }
+}
+
+.event-title {
+  font-size: 14px;
+  padding: 13px 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow-wrap: break-word;
+
+  .more {
+    width: 0;
+    height: 0;
+    border-top: 5px dashed;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    color: #6b6b6b;
+    opacity: 0.5;
+
+    &.active {
+      border-bottom: 5px dashed;
+      border-top: 0;
+      opacity: 1;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .calendar-header {
+    background-color: themed('appPanelColor');
+    border-bottom: 1px solid themed('appBackgroundColor');
+
+    .button {
+      &:hover {
+        background-color: themed('appBackgroundColor');
+        color: themed('accentColor');
+      }
+    }
+  }
+
+  .event {
+    color: themed('calendarTextColor');
+
+    &:nth-child(odd) {
+      background-color: themed('appModalsPanelColor');
+    }
+
+    &:nth-child(even) {
+      background-color: themed('appModalsPanelColor');
+    }
+
+    .event-lower-block {
+      &.active {
+        background-color: themed('appPanelColor');
+      }
+
+      .title {
+        color: themed('calendarMutedTextColor');
+      }
+    }
+  }
+
+  .event-title {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  .source {
+    color: themed('calendarMutedTextColor');
+  }
+
+  .description {
+    color: themed('calendarDescriptionTextColor');
+    background-color: themed('appPanelColor');
+  }
+
+  .indicator {
+    //&.very-high-volatility {
+    //  background-color: $very-high-volatility-indicator-color;
+    //}
+    //
+    //&.high-volatility {
+    //  background-color: $high-volatility-indicator-color;
+    //}
+    //
+    //&.medium-volatility {
+    //  background-color: $medium-volatility-indicator-color;
+    //}
+    //
+    //&.low-volatility {
+    //  background-color: $low-volatility-indicator-color;
+    //}
+    //
+    //&.very-low-volatility {
+    //  background-color: $very-low-volatility-indicator-color;
+    //}
+  }
+
+  &.very-high-volatility {
+    background-color: $very-high-volatility-indicator-color;
+  }
+
+  &.high-volatility {
+    background-color: $high-volatility-indicator-color;
+  }
+
+  &.medium-volatility {
+    background-color: $medium-volatility-indicator-color;
+  }
+
+  &.low-volatility {
+    background-color: $low-volatility-indicator-color;
+  }
+
+  &.very-low-volatility {
+    background-color: $very-low-volatility-indicator-color;
+  }
+
+  .positive-text {
+    color: themed('buyColor');
+  }
+
+  .negative-text {
+    color: themed('sellColor');
+  }
+
+}
+
+:host /deep/ {
+  input.crypto-input {
+    font-size: 13px;
+  }
+}

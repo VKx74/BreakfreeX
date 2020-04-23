@@ -1,0 +1,22 @@
+<div class="manual-search">
+    <ng-container>
+        <ng-content select="[manual-search-input]"></ng-content>
+        <mat-form-field class="crypto-input full-width">
+            <input #defaultSearchInput type="text" matInput
+                   [placeholder]="placeholder"
+                   *ngIf="!searchInputPassed"
+                   (input)="handleInput($event)"
+                   (keydown)="handleInputKeyDown($event)">
+            <span matSuffix class="crypto-icon crypto-icon-search icon-size" *ngIf="showSpinner === false || !processingSearch"></span>
+            <span matSuffix class="crypto-spinner spinner icon-size" *ngIf="showSpinner && processingSearch"></span>
+        </mat-form-field>
+    </ng-container>
+    <ng-container>
+        <ng-content select="[manual-search-trigger]"></ng-content>
+        <button class="crypto-button crypto-button_success search-trigger" [ngClass]="{'is-loading': processingSearch}"
+                *ngIf="!searchTriggerPassed"
+                (click)="triggerSearch()">
+            <span>Search</span>
+        </button>
+    </ng-container>
+</div>

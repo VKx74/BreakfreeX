@@ -1,0 +1,22 @@
+@import "../global-styles/variables";
+
+:host {
+
+}
+
+.modal-body {
+  max-height: 500px;
+  overflow: auto;
+}
+
+@media #{$medium-up} {
+  .crypto-modal {
+    width: 800px;
+  }
+}
+
+@media #{$small-only} {
+  .crypto-modal {
+    width: 100%;
+  }
+}

@@ -1,0 +1,76 @@
+@import "variables";
+@import "mixins/themify";
+@import "themes/themes";
+
+:host {
+  .tabs {
+    height: 39px;
+    //background-color: #1e1f21;
+    border-radius: 3px;
+    //border: 1px solid #171717;
+    padding-left: 12px;
+    padding-right: 4px;
+  }
+
+  .title {
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+  }
+
+  .tabs-wrapper {
+    margin-bottom: -1px;
+
+    .tab {
+      cursor: pointer;
+      border-top-right-radius: 3px;
+      border-top-left-radius: 3px;
+      padding: 6px 15px 6px;
+    }
+
+    .tab-name {
+      font-size: 13px;
+      font-family: $primaryFontFamily;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  ////.title {
+  ////  color: themed('valueTextColor');
+  ////}
+  //
+  //.tabs {
+  //  //background-color: themed('inputBackgroundColor');
+  //}
+  //
+  //.tab {
+  //  .tab-name {
+  //    color: themed('titleTextColor');
+  //  }
+  //
+  //  &.active {
+  //    background-color: themed('appPanelColor');
+  //
+  //    .tab-name {
+  //      color: themed('titleTextColor');
+  //    }
+  //  }
+  //}
+  .mat-tab-label-active {
+    color: themed('accentColor') !important;
+  }
+
+  .mat-tab-nav-bar {
+    border-bottom-color: themed('appPanelColor');
+  }
+
+  .mat-tab-link {
+    color: themed('titleTextColor');
+  }
+
+  ::ng-deep {
+    .mat-ink-bar {
+      background-color: themed('accentColor') !important;
+    }
+  }
+}

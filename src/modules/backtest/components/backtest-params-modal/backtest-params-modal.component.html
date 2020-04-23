@@ -1,0 +1,75 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{ 'backtestingParams' | translate }}</h4>
+        </div>
+        <div class="modal-body" [formGroup]="formGroup">
+            <mat-tab-group class="full-height">
+                <mat-tab label="{{ 'backtestingParameters' | translate }}">
+                    <div class="flex flex-direction-column">
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'instrument' | translate}}:</div>
+                            <instrument-search formControlName="instrument"></instrument-search>
+                        </div>
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'timeFrame' | translate}}:</div>
+                            <selector [options]="allowedTimeframes"
+                                      [optionCaption]="timeFrameCaption"
+                                      formControlName="timeFrame" class="full-width"></selector>
+                        </div>
+                        <div class="crypto-form-unit">
+                            <div class="form-unit__label">{{'barsCount' | translate}}:</div>
+                            <mat-form-field class="crypto-input full-width with-hint">
+                                <input matInput type="text" formControlName="barsCount">
+                                <mat-error formError="barsCount"></mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div formGroupName="wallets" *ngIf="formGroup.controls['instrument'].value != null">
+                            <div class="crypto-form-unit">
+                                <div class="form-unit__label">{{ 'wallets' | translate }}:</div>
+                                <div class="flex" *ngFor="let walletFormGroupName of getWalletsFormGroupNames()">
+                                    <ng-container formGroupName="{{walletFormGroupName}}">
+                                        <mat-form-field class="crypto-input with-hint wallet-currency">
+                                            <input matInput type="text" formControlName="currency"
+                                                   [placeholder]="'currency' | translate">
+                                            <mat-error formError="currency"></mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field class="crypto-input with-hint wallet-balance">
+                                            <input matInput type="text" formControlName="balance"
+                                                   [placeholder]="'balance' | translate">
+                                            <mat-error formError="balance"></mat-error>
+                                        </mat-form-field>
+                                        <span class="delete-wallet-icon crypto-button-delete"
+                                              *ngIf="allowWalletFormGroupRemoving(walletFormGroupName)" (click)="deleteWallet(walletFormGroupName)">
+                                <i class="crypto-icon crypto-icon-close"></i>
+                            </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <button class="crypto-button crypto-button_primary full-width add-wallet-button" (click)="addWallet()">
+                                {{ 'addWallet' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <!--                    <crypto-order-table [showInstrumentSearch]="showInstrumentSearch"></crypto-order-table>-->
+                </mat-tab>
+                <mat-tab label="{{ 'backtestingScriptParameters' | translate }}" *ngIf="script.properties && script.properties.length">
+                    <script-params #scriptParams="scriptParams" [script]="script" [mode]="ScriptParamsComponentMode.Backtest"></script-params>
+                </mat-tab>
+            </mat-tab-group>
+
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper flex justify-flex-end">
+                <button class="crypto-button crypto-button_action m-right-15"
+                        (click)="close()">{{'cancel' | translate}}</button>
+                <button class="crypto-button crypto-button_primary"
+                        [disabled]="formGroup.invalid || (scriptParams && scriptParams.form.invalid)"
+                        (click)="submit()">{{'submit' | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

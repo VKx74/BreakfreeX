@@ -1,0 +1,34 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+button {
+  padding: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 21px;
+  height: 21px;
+  cursor: pointer;
+
+  .crypto-icon {
+    font-size: 18px;
+  }
+
+}
+
+@include themify($themes, true) {
+  .menu-toggle {
+    background-color: themed('appBackgroundColor');
+    color: themed('titleTextColor');
+  }
+  .menu-toggle:hover{
+    background-color: themed('accentColor');
+    color: themed('titleTextColor');
+  }
+}

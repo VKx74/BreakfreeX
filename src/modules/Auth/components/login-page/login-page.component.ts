@@ -1,0 +1,334 @@
+import {Component} from "@angular/core";
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {first} from 'rxjs/operators';
+import {EAuthErrorStatus, ReconfirmEmailModel} from "@app/models/auth/auth.models";
+import {AuthenticationService} from "@app/services/auth/auth.service";
+import {IdentityService} from "@app/services/auth/identity.service";
+import {AuthRoutes} from "../../auth.routes";
+import {UrlsManager} from "@app/Utils/UrlManager";
+import {SignInRequestModel} from "@app/models/auth/auth.models";
+import {PersonalInfoService} from "@app/services/personal-info/personal-info.service";
+import {AccountType} from "../../models/models";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {concat} from "@decorators/concat";
+import {Subscription} from "rxjs";
+import {AppRoutes} from "AppRoutes";
+
+export interface IRecaptchaConfig {
+    siteKey: string;
+    useGlobalDomain: boolean;
+    size: 'compact' | 'normal';
+    language: string;
+    theme: 'light' | 'dark';
+}
+
+const CaptchaSiteKey: string = '6LfsQ6cUAAAAAEKjMvxrTz3dOH7P4h3lLgOex_KP';
+const CaptchaSecretKey: string = '6LfsQ6cUAAAAAK-Ez-1RtjyVPUQkFIR8_tON35IB';
+
+interface Notification {
+    isError: boolean;
+    message: string;
+}
+
+@Component({
+    selector: 'login-page',
+    templateUrl: 'login-page.component.html',
+    styleUrls: ['login-page.component.scss']
+})
+export class LoginPageComponent {
+    processing = false;
+    notification: Notification;
+    showReconfirmButton: boolean = false;
+    showFillInfoButton: boolean = false;
+
+    readonly RecaptchaConfig: IRecaptchaConfig = {
+        language: 'en',
+        size: 'normal',
+        theme: 'light',
+        useGlobalDomain: false,
+        siteKey: CaptchaSiteKey
+    };
+
+    formGroup: FormGroup;
+
+    get loginBtnEnabled(): boolean {
+        return this.formGroup.valid && !this.processing;
+    }
+
+    resendConfirmHandler: () => Subscription;
+    fillPersonalInfoHandler: () => Subscription;
+
+
+    constructor(private _authService: AuthenticationService,
+                private _identity: IdentityService,
+                private _personalInfoService: PersonalInfoService,
+                private _router: Router,
+                private _route: ActivatedRoute,
+                private _activatedRoute: ActivatedRoute) {
+    }
+
+    ngOnInit() {
+        this.formGroup = new FormGroup({
+            email: new FormControl('', [Validators.required, Validators.email]),
+            password: new FormControl('', [
+                Validators.required,
+                Validators.minLength(6),
+                Validators.maxLength(25)
+            ]),
+            captcha: new FormControl(null, [/*Validators.required*/]),
+            pin: new FormControl(''),
+            rememberMe: new FormControl(false, [])
+        });
+
+        this._activatedRoute.queryParams
+            .pipe(first())
+            .subscribe(params => {
+                this.notification = this._getNotification(params);
+
+                if (params['email'] && params['confirmed'] && params['confirmed'] === 'True') {
+                    this.formGroup.controls['email'].setValue(params['email']);
+                }
+            });
+    }
+
+    doLogin() {
+        if (this.formGroup.invalid || this.processing) {
+            return;
+        }
+
+        if (!this.formGroup.controls['captcha'].value) {
+            this.notification = {
+                isError: true,
+                message: 'CAPTCHA is required'
+            };
+            return;
+        }
+
+        this.notification = null;
+        this.processing = true;
+        this.showFillInfoButton = false;
+        this.showReconfirmButton = false;
+
+        const model = this._getFormData();
+
+        this._identity.signIn(model)
+            .subscribe({
+                next: (value) => {
+                    if (value) {
+                        this._router.navigate([AppRoutes.Platform], {
+                            relativeTo: this._route.root
+                        });
+                    } else {
+                        this.notification = {
+                            isError: true,
+                            message: 'Authorization failed'
+                        };
+
+                        this.processing = false;
+                    }
+                },
+                error: (error) => {
+                    this._processLoginError(error, model);
+                    this.processing = false;
+                }
+            });
+    }
+
+    @concat()
+    handleFillPersonalInfo() {
+        return this.fillPersonalInfoHandler();
+    }
+
+    fillPersonalInfo(email: string) {
+        return this._personalInfoService.getUserAccountTypeByEmail(email)
+            .subscribe((accountType: AccountType) => {
+                let route = this._getPersonalInfoRoute(accountType);
+
+                this._router.navigate([route], {
+                    relativeTo: this._activatedRoute.parent,
+                    queryParams: {
+                        email: email
+                    }
+                });
+            }, e => {
+                console.log(e);
+            });
+    }
+
+    @concat()
+    handleResendConfirm() {
+        return this.resendConfirmHandler();
+    }
+
+    resendConfirm(email: string): Subscription {
+        const model: ReconfirmEmailModel = {
+            email: email,
+            redirectUri: UrlsManager.reconfirmEmailRedirectUrl(email)
+        };
+
+        return this._authService.reconfirmEmail(model).subscribe(
+            data => {
+                this.showReconfirmButton = false;
+                this.notification = {
+                    isError: false,
+                    message: 'Verification link is sent on your registration email'
+                };
+            },
+            error => {
+                this.notification = {
+                    isError: true,
+                    message: 'Failed: ' + (typeof (error.error) === 'string' ? error.error : error.error.description)
+                };
+            });
+    }
+
+    doRegistration() {
+        this._router.navigate([AuthRoutes.Registration], {relativeTo: this._activatedRoute.parent});
+    }
+
+    doPasswordRestoration() {
+        this._router.navigate([AuthRoutes.ForgotPassword], {relativeTo: this._activatedRoute.parent});
+    }
+
+    resetTwoStepAuth() {
+        this._router.navigate([AuthRoutes.ResetTwoStepAuth], {relativeTo: this._activatedRoute.parent});
+    }
+
+    private _getNotification(params: Params): Notification {
+        let notificationMessage = null;
+
+        if (params['registered']) {
+            notificationMessage = 'Verification link is sent on your registration email';
+        }
+
+        if (params['forgot']) {
+            notificationMessage = 'Please check your email for password restoration details';
+        }
+
+        if (params['passwordChanged']) {
+            notificationMessage = 'Password changed, use new password for authentication';
+        }
+
+        if (params['infoFilled']) {
+            notificationMessage = 'Your personal information is sent. Please wait until administrator check it.';
+        }
+
+        if (params['email'] && params['confirmed']) {
+            notificationMessage = params['confirmed'] === 'True'
+                ? 'Email address ' + params['email'] + ' confirmed'
+                : 'Email address ' + params['email'] + ' NOT confirmed';
+        }
+
+        if (notificationMessage) {
+            return {
+                isError: false,
+                message: notificationMessage
+            } as Notification;
+        }
+
+        return null;
+    }
+
+    private _processLoginError(error: any, model: SignInRequestModel) {
+        if (error.status === 403 || error.status === 400) {
+            const errorMessage = error.error;
+
+            switch (errorMessage.code) {
+                case EAuthErrorStatus.KycNone:
+                case EAuthErrorStatus.KycNotSent: {
+                    this._router.navigate([AuthRoutes.AccountType], {
+                        relativeTo: this._activatedRoute.parent,
+                        queryParams: {
+                            email: model.email
+                        }
+                    });
+                    break;
+                }
+                case EAuthErrorStatus.KycRejected: {
+                    this.notification = {
+                        isError: true,
+                        message: errorMessage.description
+                    };
+
+                    this.showFillInfoButton = true;
+                    this.fillPersonalInfoHandler = this.fillPersonalInfo.bind(this, model.email);
+
+                    break;
+                }
+                case EAuthErrorStatus.KycPending: {
+                    this.notification = {
+                        isError: false,
+                        message: 'Administrator checking your documents. Wait a little bit.'
+                    };
+                    break;
+                }
+                case EAuthErrorStatus.UserNotFound:
+                case EAuthErrorStatus.InvalidPassword: {
+                    this.notification = {
+                        isError: true,
+                        message: 'Authorization failed: Incorrect username or password.'
+                    };
+                    break;
+                }
+                case EAuthErrorStatus.InvalidPin: {
+                    this.notification = {
+                        isError: true,
+                        message: 'Authorization failed: Incorrect two factor auth code.'
+                    };
+                    break;
+                }
+                case EAuthErrorStatus.EmailNotConfirmed: {
+                    this.notification = {
+                        isError: true,
+                        message: 'This account is not confirmed. Confirm letter has already been sent on your email.'
+                    };
+                    this.showReconfirmButton = true;
+                    this.resendConfirmHandler = this.resendConfirm.bind(this, model.email);
+
+                    break;
+                }
+                case EAuthErrorStatus.UserDeactivated: {
+                    this.notification = {
+                        isError: true,
+                        message: 'Authorization failed: This account is deactivated.'
+                    };
+                    break;
+                }
+                default: {
+                    this.notification = {
+                        isError: true,
+                        message: `Authorization failed: ${errorMessage.description}`
+                    };
+                }
+            }
+        } else {
+            this.notification = {
+                isError: true,
+                message: 'Authorization failed' + (typeof (error.error) === 'string' ? error.error + ': ' : '.')
+            };
+            console.log(error);
+        }
+    }
+
+    private _getFormData(): SignInRequestModel {
+        const controls = this.formGroup.controls;
+
+        return {
+            email: controls['email'].value,
+            password: controls['password'].value,
+            rememberMe: controls['rememberMe'].value,
+            pin: controls['pin'].value
+        } as SignInRequestModel;
+    }
+
+    private _getPersonalInfoRoute(accountType: AccountType): string {
+        switch (accountType) {
+            case AccountType.Personal:
+                return AuthRoutes.PersonalAccount;
+            case AccountType.Business:
+                return AuthRoutes.BusinessAccount;
+            case AccountType.Institutional:
+                return AuthRoutes.InstitutionalAccount;
+        }
+    }
+}

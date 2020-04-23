@@ -1,0 +1,369 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  display: flex;
+  flex-grow: 1;
+
+  ::ng-deep {
+    .mat-form-field-suffix {
+      position: absolute;
+      font-size: 20px;
+    }
+
+    .mat-input-element {
+      text-indent: 25px !important;
+    }
+  }
+
+  .add {
+    position: absolute;
+    font-size: 20px;
+  }
+
+}
+
+.root {
+  width: 100%;
+
+  .top-line {
+    height: 50px;
+    padding-left: 14px;
+    padding-right: 14px;
+
+    .title {
+      font-size: 14px;
+      font-family: $primaryFontFamily;
+    }
+  }
+}
+
+.top-line .controls-wrapper {
+  .control {
+    &:not(:last-of-type) {
+      margin-right: 5px;
+    }
+  }
+}
+
+.search-wrapper {
+  //padding: 4px;
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+
+  manual-search {
+    width: 100%;
+  }
+
+  ::ng-deep {
+    * {
+      .fa-search {
+        display: none;
+      }
+
+      .mat-input-element {
+        font-size: 13px;
+      }
+
+      .mat-form-field-flex, input {
+        background-color: unset !important;
+        @include themify($themes, true) {
+          color: themed('valueTextColor') !important;
+        }
+      }
+    }
+  }
+}
+
+thread-list-item {
+  background: red;
+}
+
+@include themify($themes, true) {
+  .root {
+    background-color: themed('appModalsPanelColor');
+  }
+
+  .top-line {
+    background-color: themed('appPanelColor');
+    border-bottom: 1px solid themed('appBackgroundColor');
+
+    .title {
+      //color: themed('primeColor');
+    }
+  }
+
+  .search-wrapper {
+    //border-bottom: 1px solid themed('panelBorderColor');
+  }
+
+  ::ng-deep thread-list-item.active .thread-list-item {
+    border-left: 2px solid themed('accentColor');
+    background: darken(themed('appPanelColor'), 1%);
+  }
+
+  thread-list-item {
+    //&.active {
+    //  border-left: 2px solid themed('accentColor');
+    //  background: themed('appPanelColor');
+    //}
+
+    &:nth-of-type(even) {
+      //background-color: themed('tableEvenBg');
+    }
+
+    &:nth-of-type(odd) {
+      //background-color: themed('tableOddBg');
+    }
+  }
+}
+
+
+//@import "../../../../global-styles/themes/themes";
+//@import "mixins/themify";
+//
+//:host {
+//  display: flex;
+//  flex-direction: column;
+//  height: 100%;
+//
+//  &.hidden {
+//    display: none;
+//  }
+//
+//  .user-avatar {
+//    min-width: 40px;
+//    min-height: 40px;
+//  }
+//
+//  .t-overflow-ellipsis {
+//    max-width: 100%;
+//  }
+//}
+//
+////@include themify($themes, true) {
+////  .title-color {
+////    color: themed('valueTextColor');
+////  }
+////
+////  .value-color {
+////    color: themed('titleTextColor');
+////  }
+////}
+//
+//.chat-list {
+//  height: 100%;
+//
+//  @include themify($themes, true) {
+//    background-color: themed('appModalsPanelColor');
+//  }
+//
+//  .header {
+//    padding: 7px 22px 7px 22px;
+//
+//    @include themify($themes, true) {
+//      background: themed('appPanelColor');
+//    }
+//
+//    .title {
+//      font-size: 13px;
+//      //padding: 10px;
+//    }
+//
+//    .buttons {
+//      padding-right: 4px;
+//
+//      .educational-tips-wrapper {
+//        margin: 0 2px;
+//      }
+//
+//    }
+//
+//
+//    @include themify($themes, true) {
+//      //border-top: 1px solid themed('tableHeaderBg');
+//      border-top: 1px solid transparent;
+//      border-bottom: 1px solid themed('appBackgroundColor');
+//
+//
+//      .title {
+//        color: themed('valueTextColor');
+//      }
+//    }
+//  }
+//
+//  .search-wrapper {
+//    padding: 4px;
+//
+//    @include themify($themes, true) {
+//      border-bottom: 1px solid themed('appBackgroundColor');
+//    }
+//
+//    ::ng-deep {
+//      * {
+//        .fa-search {
+//          display: none;
+//        }
+//
+//        .mat-input-element {
+//          font-size: 13px;
+//        }
+//      }
+//    }
+//  }
+//
+//  .thread-list {
+//    $avatar-size: 40px;
+//    overflow-x: auto;
+//    flex-grow: 1;
+//    width: 100%;
+//
+//    .thread-list-item {
+//      border-left: 2px solid transparent;
+//      //padding: 8px 10px;
+//      padding: 12px 20px 26px 24px;
+//
+//      .user-avatar {
+//        width: $avatar-size;
+//        height: $avatar-size;
+//      }
+//
+//      .main-content {
+//        height: $avatar-size;
+//        display: flex;
+//        flex-direction: column;
+//        width: 100%;
+//
+//        .thread-name {
+//          font-size: 13px;
+//          font-weight: 600;
+//          line-height: 1.38;
+//        }
+//
+//        .thread-last-message {
+//          font-size: 13px;
+//          font-weight: normal;
+//          font-style: normal;
+//          font-stretch: normal;
+//          line-height: 1.69;
+//          letter-spacing: normal;
+//          text-align: left;
+//        }
+//      }
+//
+//      .time {
+//        width: 50px;
+//        font-size: 11px;
+//        line-height: 1.36;
+//        letter-spacing: 0.18px;
+//      }
+//
+//      &:not(.active) {
+//        cursor: pointer;
+//      }
+//
+//      &:nth-last-of-type(odd) {
+//        @include themify($themes, true) {
+//          background: transparentize(themed('appModalsPanelColor'), 0.75)
+//        }
+//      }
+//
+//      &.active {
+//        @include themify($themes, true) {
+//          border-left: 2px solid themed('accentColor');
+//          background: themed('appPanelColor');
+//        }
+//      }
+//
+//      &.blocked {
+//        cursor: not-allowed;
+//        opacity: 0.5;
+//      }
+//
+//      .title {
+//        .caption {
+//          max-width: 100%;
+//          white-space: nowrap;
+//          overflow: hidden;
+//          text-overflow: ellipsis;
+//          font-size: 13px;
+//        }
+//
+//        .count {
+//          margin-left: 3px;
+//          margin-right: auto;
+//          font-size: 11px;
+//        }
+//
+//        .buttons {
+//          .crypto-icon {
+//            cursor: pointer;
+//            visibility: hidden;
+//            margin: 0 2px;
+//
+//            &.active {
+//              visibility: initial;
+//
+//              @include themify($themes, true) {
+//                color: themed('accentColor');
+//              }
+//            }
+//          }
+//        }
+//
+//        .new-message {
+//          border-radius: 50px;
+//          font-size: small;
+//          padding: 0 6px;
+//
+//          @include themify($themes, true) {
+//            background: themed('buyColor');
+//            color: themed('valueTextColor');
+//          }
+//        }
+//      }
+//
+//      .description {
+//        .message {
+//          max-width: 100%;
+//          white-space: nowrap;
+//          overflow: hidden;
+//          text-overflow: ellipsis;
+//
+//          .creator {
+//          }
+//
+//          .text {
+//            margin-left: 3px;
+//            overflow: inherit;
+//            text-overflow: inherit;
+//          }
+//        }
+//
+//        .time {
+//          margin-left: 3px;
+//          margin-right: auto;
+//          white-space: nowrap;
+//        }
+//
+//        .count {
+//          border-radius: 3px;
+//          padding: 0 4px;
+//          margin-left: 4px;
+//
+//          @include themify($themes, true) {
+//            background: themed('sellColor');
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
+
+@include themify($themes, true) {
+  ::ng-deep .mat-input-element:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px themed('inputInModalsBackgroundColor') inset;
+  }
+}

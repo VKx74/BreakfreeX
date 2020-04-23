@@ -1,0 +1,63 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/mixins/dialog-tab-header";
+
+@include dialogTabHeader();
+
+:host {
+  display: block;
+
+  ::ng-deep {
+    .section {
+      width: 100%;
+      padding: 20px 28px;
+      margin-top: 9px;
+      border-radius: 5px;
+      max-height: 86px;
+
+      .crypto-form-unit {
+        width: 32%;
+      }
+    }
+  }
+
+
+  .crypto-icon {
+    font-size: 30px;
+  }
+  .data {
+    position: relative;
+    font-size: 15px;
+    left: 23px;
+  }
+
+  .btns {
+    position: relative;
+    top: 3px;
+  }
+
+}
+
+@include themify($themes, true) {
+  .section {
+    background-color: themed('appPanelColor');
+    box-shadow: themed('box-shadowPanel');
+    }
+  .data, .crypto-button {
+    color: themed('valueTextColor');
+  }
+
+  .crypto-button {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  .change-button {
+    background-color: themed('appPanelColor') !important;
+  }
+
+  .added {
+    color: themed('buyColor');
+  }
+
+}

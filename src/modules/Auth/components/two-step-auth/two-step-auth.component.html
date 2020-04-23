@@ -1,0 +1,32 @@
+<div class="two-step-auth">
+    <div class="background"
+         [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="overlay-wrapper">
+        <div class="overlay">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <span class="logo crypto-icon crypto-icon-fintatech"></span>
+                    <p class="form-header__title">Enter Your Verification Code</p>
+                </div>
+
+                <pin-input [(value)]="enteredPin"></pin-input>
+                <div *ngIf="notification" class="form-info form-info_error">
+                <span class="icon-wrapper">
+                            <i class="fa fa-times-circle"></i>
+                        </span>
+                    <span>{{notification}}</span>
+                </div>
+                <button class="btn crypto-button crypto-button-full-width button_primary validate-btn" [disabled]="!loginBtnEnabled" (click)="sendVerification()">
+                    <div class="lds-ellipsis" *ngIf="processing">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <span *ngIf="!processing">Validate Code</span>
+                </button>
+            </div>
+        </div>
+        <div class="addition" (click)="doReset()">Reset your Google Authenticator Secret</div>
+    </div>
+</div>

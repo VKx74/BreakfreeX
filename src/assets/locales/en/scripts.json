@@ -1,0 +1,64 @@
+{
+  "scriptsManager": {
+    "scriptsManager": "Scripts Manager",
+    "runAutomatedTrading": "Run Automated Trading"
+  },
+  "scriptsEditor": {
+    "codeEditor": "Code Editor",
+    "problems": "Problems",
+    "compile": "Compile",
+    "line": "Line",
+    "column": "Column",
+    "noProblems": "There are no problems..."
+  },
+  "runAutomatedTrading": {
+    "runAutomatedTrading": "Run Automated Trading",
+    "stopAutomatedTrading": "Stop Automated Trading",
+    "history": "History",
+    "params": "Script Parameters",
+    "calculationsParameters": "Calculations parameters",
+    "onEachTick": "On each tick",
+    "onBarClose": "On bar close",
+    "startBehavior": "Start Behavior",
+    "immediately": "Immediately",
+    "waitForBar": "Wait for bar"
+  },
+  "compilationStatus": {
+    "NEEDED": "needed",
+    "SUCCESS": "success",
+    "FAILED": "failed",
+    "WARNING": "warning",
+    "COMPILING": "compiling..."
+  },
+  "compileScript": "Compile",
+  "failedToCompileScript": "Failed to compile script",
+  "failedToSaveScript": "Failed to save script",
+  "failedToStartAutoTrading": "Failed to start auto trading",
+  "failedToStopAutoTrading": "Failed to stop auto trading",
+  "failedToCreateScript": "Failed to create script",
+  "failedToRenameScript": "Failed to rename script",
+  "failedToDeleteScript": "Failed to delete script",
+  "runningScripts": "Running Scripts",
+  "scriptName": "Script Name",
+  "scriptStartTime": "Start Time",
+  "defaultScriptName": "New Script",
+  "createScript": "Create Script",
+  "openScript": "Open Script",
+  "scriptDescription": "Script Description",
+  "deleteScript": "Delete Script",
+  "renameScript": "Rename Script",
+  "newScriptName": "New Script Name",
+  "stopScript": "Stop Script",
+  "documentation": "Documentation",
+  "apiDescription": "API Description",
+  "backtesting": "Backtesting",
+  "documentationCategories": {
+    "Indicators": "Indicators",
+    "Math": "Math",
+    "Trading": "Trading",
+    "General": "General",
+    "MultiData": "MultiData"
+  },
+  "property": "Property",
+  "method": "Method"
+}

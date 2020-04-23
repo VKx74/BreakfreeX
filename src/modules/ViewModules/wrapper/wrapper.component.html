@@ -1,0 +1,20 @@
+<div class="wrapper flex justify-content-center">
+    <div class="content flex flex-direction-column h-100" [class.full-width]="fluid">
+        <nav mat-tab-nav-bar>
+            <ng-container *ngFor="let tab of tabs">
+                <a [routerLink]="tab.url"
+                   *ngIf="tab.disabled ? !(tab.disabled | async) : true"
+                   mat-tab-link routerLinkActive
+                   #rla="routerLinkActive"
+                   [active]="rla.isActive"
+                   class="wrapper-link"
+                >
+                    {{tab.name | translate}}
+                </a>
+            </ng-container>
+        </nav>
+        <div class="user-settings-content-wrapper">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

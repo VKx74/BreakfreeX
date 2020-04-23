@@ -1,0 +1,11 @@
+@import "base";
+@import "functions/map-extend";
+
+$LightTheme: map-extend($BaseTheme, (
+  /* Navigation */
+        navigationDividerColor: #d2d6db,
+        navigationAddComponentBtnColor: rgba(50, 50, 50, 0.45),
+        navigationIconColor: #397dc4,
+  /* End Navigation */
+))
+

@@ -1,0 +1,48 @@
+<div class="flex full-height flex-direction-column">
+<!--    else loader-->
+    <ng-container *ngIf="activities$ | async as activities; else loader">
+        <data-table [rows]="activities" [allowColumnsVisibilityChange]="true" [columnCaption]="columnCaption" class="flex-grow-1 table-wrapper">
+            <data-table-header-cell columnName="action" [sortable]="true">
+                {{'action' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="status" [sortable]="true">
+                {{'status' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="time" [sortable]="true">
+                {{'time' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="IP" [sortable]="true">
+                {{'IP' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="ipRegion" [sortable]="true">
+                {{'ipRegion' | translate}}
+            </data-table-header-cell>
+
+            <div>
+                <data-table-cell columnName="action">
+                    <ng-template let-item><span
+                            class="instrument">{{ identityActivityActionMap[item.action] | translate}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="status">
+                    <ng-template let-item><span [ngClass]="{'success': item.status === 2,
+                                'failed': item.status === 1 }"> {{ actionStatusMap[item.status] | translate}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="time">
+                    <ng-template let-item>{{item.time | formatDate: 'YYYY/MM/DD HH:mm:ss'}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="IP">
+                    <ng-template let-item>{{item.ip}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="ipRegion">
+                    <ng-template let-item>{{item.country}} {{item.city}}</ng-template>
+                </data-table-cell>
+            </div>
+        </data-table>
+    </ng-container>
+</div>
+
+<ng-template #loader>
+    <loader></loader>
+</ng-template>

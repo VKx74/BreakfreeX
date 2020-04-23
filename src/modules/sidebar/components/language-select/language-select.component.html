@@ -1,0 +1,19 @@
+<div class="flex justify-content-center align-items-center h-100">
+    <mat-menu #menu="matMenu">
+        <div class="language-options" [class.shown]="languageOptionShown">
+            <div class="language-option mat-menu-item cursor-pointer flex align-items-center"
+                 (click)="setLanguage(lang)" *ngFor="let lang of languages">
+                <div class="image-container m-right-10">
+                    <img [src]="lang.src" [alt]="lang.name">
+                </div>
+                <div class="flex-grow-1 color-title">{{lang.name}}</div>
+            </div>
+        </div>
+    </mat-menu>
+    <div (click)="toggleLanguageOptions()" class="language-options-toggle cursor-pointer text-center"
+         [matMenuTriggerFor]="menu">
+        <div class="image-container">
+            <img [src]="localeInfo.src" [alt]="localeInfo.name">
+        </div>
+    </div>
+</div>

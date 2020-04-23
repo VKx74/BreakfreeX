@@ -1,0 +1,108 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!notifications?.length"
+                            [componentIdentifier]="ComponentIdentifier.adminNotifications"
+                            [title]="'Notifications'"
+                            [loading]="processing">
+    <ng-container ngProjectAs=".header-right">
+        <button class="crypto-button crypto-button_primary" (click)="addNotification()">
+            Add notification
+        </button>
+    </ng-container>
+    <div class="filters flex justify-space-between w-100">
+        <div class="flex align-items-center">
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       class="cursor-pointer"
+                       [matDatepicker]="start"
+                       [max]="toDate"
+                       [(ngModel)]="fromDate"
+                       (dateChange)="resetPagination()"
+                       placeholder="Start date"
+                       (click)="start.open()"
+                >
+                <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       class="cursor-pointer"
+                       [matDatepicker]="end"
+                       [min]="fromDate"
+                       [(ngModel)]="toDate"
+                       (dateChange)="resetPagination()"
+                       (click)="end.open()"
+                       placeholder="End date">
+                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+
+            <button class="crypto-button crypto-button_primary" [disabled]="!fromDate && !toDate"
+                    (click)="clearDatePickers()">
+                <span>Clear</span>
+            </button>
+        </div>
+        <div class="search-wrapper">
+            <debounced-input (valueChange)="searchNotifications($event)"></debounced-input>
+        </div>
+    </div>
+
+    <data-table [rows]="notifications">
+        <data-table-header-cell columnName="title">
+            Title
+        </data-table-header-cell>
+        <data-table-header-cell columnName="description">
+            Description
+        </data-table-header-cell>
+        <data-table-header-cell columnName="tags">
+            Tags
+        </data-table-header-cell>
+        <data-table-header-cell columnName="from" [columnWidth]="100">
+            From
+        </data-table-header-cell>
+        <data-table-header-cell columnName="to" [columnWidth]="100">
+            To
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="60"></data-table-header-cell>
+
+        <data-table-cell columnName="tags">
+            <ng-template let-item>
+                           <span title="{{item.userTags.join(', ')}}">
+                                {{item.userTags.join(', ')}}
+                           </span>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="from">
+            <ng-template let-item>
+                           <span title="{{utcTimeToLocal(item.startDate * 1000) | date: 'dd/MM/yy'}}">
+                                {{utcTimeToLocal(item.startDate * 1000) | date: 'dd/MM/yy'}}
+                           </span>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="to">
+            <ng-template let-item>
+                            <span title="{{utcTimeToLocal(item.endDate * 1000) | date: 'dd/MM/yy'}}">
+                                {{utcTimeToLocal(item.endDate * 1000) | date: 'dd/MM/yy'}}
+                            </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                            <span class="flex justify-flex-end">
+                                <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                                <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="editNotification(item)">
+                                    Edit
+                                </button>
+
+                                <button mat-menu-item (click)="deleteNotification(item)">
+                                    <span class="crypto-color-red">Delete</span>
+                                </button>
+                            </mat-menu>
+                            </span>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

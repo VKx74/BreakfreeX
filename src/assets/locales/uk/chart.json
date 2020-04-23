@@ -1,0 +1,11 @@
+{
+  "chartComponentName": "Чарт",
+  "chartComponentTitle": "Чарт {{symbol}}",
+  "dataFeed": "Подача даних",
+  "unableLoadData": "Неможливо завантажити дані.",
+  "unableFindSymbol": "Неможливо знайти символ ",
+  "brokerNotSupportThisSymbol": "Поточний брокер не підтримує даний символ",
+  "amountMustHaveValue": "Кількість повинна бути більше нуля",
+  "unableLoadDataByTimeFrame": "Неможжливо завантажити дані за вказаним часовим інтервалом",
+  "orderPlaced": "Замовлення зроблено"
+}

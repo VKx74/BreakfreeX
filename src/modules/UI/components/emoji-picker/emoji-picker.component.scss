@@ -1,0 +1,27 @@
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+.emoji-icon {
+  cursor: pointer;
+}
+
+.emoji-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+  flex-wrap: wrap;
+  max-width: 210px;
+  border-radius: 5px;
+  padding: 3px;
+
+  .emoji-item {
+    cursor: pointer;
+    font-size: large;
+  }
+}
+
+@include themify($themes, true) {
+  .crypto-icon.crypto-icon-smile {
+    color: themed('titleTextColor');
+  }
+}

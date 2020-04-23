@@ -1,0 +1,37 @@
+:host {
+  /deep/ {
+    .mat-form-field {
+      width: 100% !important;
+    }
+  }
+}
+
+div.crypto-modal {
+  width: 450px;
+  min-width: auto;
+}
+
+.modal-body {
+  //max-height: unset !important;
+}
+
+
+.modal-content {
+  width: 100%;
+  min-width: 100% !important;
+}
+
+.control {
+  margin-bottom: 5px;
+
+  p {
+    margin-bottom: 5px;
+  }
+}
+
+.btns-wrapper {
+  button:last-of-type {
+    margin-left: 15px;
+  }
+}
+

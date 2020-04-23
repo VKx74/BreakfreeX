@@ -1,0 +1,73 @@
+<div class="root flex flex-direction-column full-height">
+    <div class="top-line flex align-items-center justify-space-between flex-shrink-0"
+         *ngIf="loadRecordsProcessState.isSucceeded()">
+        <div></div>
+        <div class="controls-wrapper align-items-center">
+            <button class="crypto-button-icon control upload-history-control"
+                    [title]="'upload' | translate" (click)="handleLoadDatafeedHistory()">
+                <i class="crypto-icon crypto-icon-folder-add"></i>
+            </button>
+
+            <button class="crypto-button-icon control delete-all-control"
+                    [title]="'historyDataManager.removeAllRecords' | translate"
+                    (click)="handleDeleteAllRecords()">
+                <i class="crypto-icon crypto-icon-midle-delete"></i>
+            </button>
+
+            <div class="educational-tips-wrapper">
+                <educational-tips [componentName]="ComponentIdentifier.historyDataManager"></educational-tips>
+            </div>
+        </div>
+    </div>
+    <div class="content-wrapper flex flex-direction-column flex-grow-1 h-0">
+        <ng-container *ngIf="loadRecordsProcessState.isFailed()">
+            <placeholder message="{{ 'failedToLoadData' | appTranslate }}" class="m-10"></placeholder>
+        </ng-container>
+
+        <ng-container *ngIf="loadRecordsProcessState.isSucceeded() && records.length === 0">
+            <placeholder message="{{ 'noData' | appTranslate }}" class="m-10"></placeholder>
+        </ng-container>
+
+        <ng-container *ngIf="loadRecordsProcessState.isSucceeded() && records.length">
+            <div class="table-wrapper overflow-auto flex-grow-1 h-0">
+                <table class="crypto-table crypto-table-ellipsis crypto-table_striped crypto-table_fixed-header records-table">
+                    <thead>
+                    <tr>
+                        <td class="index-column">#</td>
+                        <td>{{'name' | translate}}</td>
+                        <td>{{'historyDataManager.market' | translate}}</td>
+                        <td>{{'symbol' | translate}}</td>
+                        <td>{{'historyDataManager.records' | translate}}</td>
+                        <td>{{'timeFrame' | translate}}</td>
+                        <td class="dateOutput">{{'historyDataManager.scopeTime' | translate}}</td>
+                        <td class="dateOutput">{{'historyDataManager.addingDate' | translate}}</td>
+                        <td class="delete-column"></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let record of records" (click)="handleSelectRecord(record)"
+                        [ngClass]="{'selected': selectedRecord === record}">
+                        <td class="index-column">{{record.index}}</td>
+                        <td>{{record.name}}</td>
+                        <td>{{record.instrument.exchange}}</td>
+                        <td>{{record.instrument.name}}</td>
+                        <td>{{record.barsCount}}</td>
+                        <td>{{ getRecordTimeFrameStr(record.interval, record.periodicity) | async }}</td>
+                        <td class="dateOutput">{{record.fromDate | date: 'MMM d, y, h:mm'}}</td>
+                        <td class="dateOutput">{{record.created | date: 'MMM d, y, h:mm'}}</td>
+                        <td class="delete-column">
+                            <span class="crypto-button-delete delete-button" [title]="'historyDataManager.removeRecord' | translate"
+                                  (click)="$event.stopPropagation(); handleDeleteRecord(record)">
+                                <i class="crypto-icon crypto-icon-close"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ng-container>
+        <div class="preview-wrapper" [ngClass]="{'hidden': bars.length === 0}">
+            <canvas #historyDataChart id="historyDataChart"></canvas>
+        </div>
+    </div>
+</div>

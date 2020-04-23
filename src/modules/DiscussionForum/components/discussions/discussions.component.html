@@ -1,0 +1,26 @@
+<div>
+    <breadcrumbs [breadcrumbs]="breadcrumbs"></breadcrumbs>
+
+    <page-header class="flex justify-space-between">
+        <span class="page-header-title">Top Discussions</span>
+        <create-discussion-btn routerLink="./create"></create-discussion-btn>
+    </page-header>
+
+    <div class="flex">
+        <empty-placeholder message="No Discussions yet..." *ngIf="discussions.length === 0"></empty-placeholder>
+
+        <ng-container *ngIf="discussions.length">
+            <card class="flex-grow-1">
+                <ng-container *ngFor="let discussion of discussions">
+                    <discussion-summary [discussion]="discussion"
+                                        [url]="getDiscussionUrl(discussion.id)"></discussion-summary>
+                    <div class="delimiter"></div>
+                </ng-container>
+                <paginator-container *ngIf="showPaginator">
+                    <paginator [handler]="paginationHandler" [showPageSize]="false"></paginator>
+                </paginator-container>
+            </card>
+            <sidebar></sidebar>
+        </ng-container>
+    </div>
+</div>

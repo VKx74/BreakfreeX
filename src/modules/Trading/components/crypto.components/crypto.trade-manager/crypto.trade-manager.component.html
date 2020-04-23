@@ -1,0 +1,22 @@
+<div class="root flex flex-direction-column full-width" *ngIf="brokerConnected; else noBrokerConnected">
+    <div class="tabs-wrapper flex-grow-1 h-0 p-0">
+        <mat-tab-group #tabGroup class="full-height">
+            <mat-tab label="{{'orders' | translate}}">
+                <!--                <crypto-order-table [showInstrumentSearch]="showInstrumentSearch"></crypto-order-table>-->
+                <!--                <orders [showInstrumentSearch]="showInstrumentSearch"></orders>-->
+                <crypto-order-table [rows]="openedOrders" (orderClose)="closeOrder($event)"></crypto-order-table>
+            </mat-tab>
+            <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
+                <crypto-order-table [rows]="closedOrders"></crypto-order-table>
+            </mat-tab>
+            <mat-tab label="{{'trades' | translate}}">
+                <crypto-trade-table [showInstrumentSearch]="showInstrumentSearch"></crypto-trade-table>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+<ng-template #noBrokerConnected>
+    <div class="flex align-items-center justify-content-center h-100 w-100">
+        <span class="notConnected caption">   {{"tradeManager.connectToBroker" | translate}}</span>
+    </div>
+</ng-template>

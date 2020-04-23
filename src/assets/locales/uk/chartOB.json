@@ -1,0 +1,8 @@
+{
+  "orderBookChart": {
+    "deep": "Глибина книги ордерів",
+    "all": "Всі",
+    "levels": "рівні(в)"
+  },
+  "orderBookChartComponentName": "Книга Ордерів Чарт"
+}

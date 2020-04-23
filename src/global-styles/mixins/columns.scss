@@ -1,0 +1,10 @@
+@mixin columns($columnsCount, $offsetBetweenColumns) {
+  & {
+    display: flex;
+    justify-content: space-between;
+
+    & > * {
+      width: calc((100% / #{$columnsCount}) - (#{$offsetBetweenColumns} / 2));
+    }
+  }
+}

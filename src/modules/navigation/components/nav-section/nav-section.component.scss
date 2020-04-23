@@ -1,0 +1,28 @@
+$default-space: 8px;
+
+.nav-section {
+  & > div {
+    margin: $default-space 0;
+  }
+
+  &.delimiter-left {
+    &.no-spaces {
+      padding-left: 0;
+    }
+  }
+
+  &.delimiter-right {
+    &.no-spaces {
+      padding-right: 0;
+    }
+  }
+
+  &.padding-left {
+    padding-left: $default-space;
+  }
+
+  &.padding-right {
+    padding-right: $default-space;
+  }
+
+}

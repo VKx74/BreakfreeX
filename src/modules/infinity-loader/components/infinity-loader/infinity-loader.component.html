@@ -1,0 +1,26 @@
+<div infinite-scroll
+     [infiniteScrollDistance]="1"
+     [infiniteScrollUpDistance]="1"
+     (scrolled)="handleScrollBottom()"
+     (scrolledUp)="handleScrollUp()"
+     [scrollWindow]="false"
+     [infiniteScrollContainer]="infiniteScrollContainer"
+     class="root">
+    <div class="content">
+        <ng-content></ng-content>
+    </div>
+
+    <ng-container *ngIf="loading && showLoadingIndicator">
+        <ng-container
+                *ngTemplateOutlet="moreItemsLoadingIndicator ? moreItemsLoadingIndicator : moreItemsLoadingIndicatorDefault"></ng-container>
+    </ng-container>
+
+    <!--    <div class="btn btn-success scroll-top"-->
+    <!--         *ngIf="infinityScroll.isScrollVisible && !loading"-->
+    <!--         (click)="scrollTop()">Top-->
+    <!--    </div>-->
+
+    <ng-template #moreItemsLoadingIndicatorDefault>
+        <span>Loading...</span>
+    </ng-template>
+</div>

@@ -1,0 +1,110 @@
+@import "themes/themes";
+@import "mixins/themify";
+@import "../../../../global-styles/variables";
+
+$mat-switcher-width: 25px;
+$component-tile-color: #d5d5dc;
+$component-tile-bg-color: #101822;
+
+:host {
+  width: 100%;
+
+  .component-head {
+    position: relative;
+  }
+
+  /deep/ .mat-progress-bar {
+    position: absolute !important;
+    top: calc(100%);
+    left: 0;
+  }
+
+  .underlay.components-wrapper {
+    //height: 100%;
+    height: calc(100% - 110px);
+    //overflow-y: auto;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  /deep/ .components-wrapper .mat-form-field-infix {
+    overflow: auto;
+  }
+
+  .filters-wrapper {
+    width: 100%;
+    //padding: 15px;
+    padding: 15px 10px 10px 10px;
+    border-radius: 0;
+    display: flex;
+    justify-content: space-between;
+
+    .tag-selector {
+      width: 300px;
+      max-width: 45%;
+    }
+
+    .search {
+      width: 300px;
+      max-width: 45%;
+    }
+  }
+
+  /deep/ .components-wrapper {
+    .mat-form-field {
+      width: 100%;
+
+      .mat-form-field-wrapper {
+        //height: 100%;
+      }
+
+      .mat-form-field-flex {
+        padding: 25px 0;
+        height: 100%;
+      }
+    }
+  }
+
+  /deep/ .mat-chip-list-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-auto-rows: auto;
+  }
+
+
+  .mat-chip {
+    @include themify($themes) {
+      //width: 190px;
+      padding: 30px 10px;
+      height: 45px;
+      position: relative;
+      cursor: pointer;
+      background-color: themed('appPanelColor');
+      color: themed('valueTextColor');
+    }
+
+    .component-name {
+      max-width: 100%;
+      margin-right: $mat-switcher-width + 15px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+
+    }
+
+    .access-disabled {
+      @include themify($themes) {
+        color: themed('titleTextColor');
+      }
+    }
+
+    .accessibility-switcher {
+      position: absolute;
+      width: 25px;
+      right: 15px;
+    }
+  }
+}
+
+

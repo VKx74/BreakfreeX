@@ -1,0 +1,27 @@
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+.educational-tips {
+  font-size: 26px;
+  line-height: 1;
+
+  a {
+    line-height: 1em;
+    text-decoration: none;
+  }
+}
+
+
+@include themify($themes, true) {
+  .educational-tips {
+    a {
+      color: transparentize(themed('valueTextColor'), 0.6);
+    }
+
+    &:hover {
+      a {
+        color: themed('accentColor');
+      }
+    }
+  }
+}

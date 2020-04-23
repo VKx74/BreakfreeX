@@ -1,0 +1,24 @@
+.crypto-modal {
+  min-width: auto;
+  width: 400px;
+}
+
+.wallet-currency {
+  width: 120px;
+  flex-grow: 0;
+  margin-right: 10px;
+}
+
+.wallet-balance {
+  width: 0;
+  flex-grow: 1;
+}
+
+.delete-wallet-icon {
+  margin-top: 4px;
+  margin-left: 8px;
+}
+
+.add-wallet-button {
+  margin-top: 5px;
+}

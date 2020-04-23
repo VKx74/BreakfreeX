@@ -1,0 +1,20 @@
+@import "global-styles/mixins/hover-opacity";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+}
+
+.stop-script-icon {
+  cursor: pointer;
+  font-size: 14px;
+
+  @include hoverOpacity(0.2, 1, 0.6s);
+}
+
+@include themifyDarkTheme($themes, true) {
+  .stop-script-icon {
+    color: themed('valueTextColor');
+  }
+}

@@ -1,0 +1,123 @@
+@import "../../themes/themes";
+@import "mixins/themify";
+@import "variables";
+
+:host {
+  .upload-button-wrapper {
+    padding: 4px 0;
+    background: transparent !important;
+    border: 1px dashed #6b6b6b;
+  }
+
+  .upload-button {
+    margin: auto;
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+    background-color: transparent;
+    padding: 0 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .added-documents-board {
+    margin: 15px 0;
+    padding: 5px 10px;
+    height: 120px;
+
+    table {
+      color: rgba(213, 213, 220, 0.5);
+
+      th {
+        background-color: transparent;
+      }
+
+      th:first-of-type {
+        opacity: 0.5;
+        font-size: 13px;
+        width: 50%;
+      }
+
+      th:last-of-type {
+        width: 45px;
+      }
+
+      tbody tr {
+        font-size: 12px;
+
+        td:last-of-type {
+          padding-left: 20px;
+        }
+
+        .remove {
+          width: 21px;
+          height: 21px;
+          font-size: 8px;
+          border-radius: 50%;
+          text-align: center;
+          cursor: pointer;
+
+          &:hover {
+            background-color: $redColor;
+          }
+        }
+      }
+    }
+
+    .remove-document {
+      cursor: pointer;
+    }
+  }
+
+  .register-btn {
+    margin-top: 15px;
+  }
+
+  .document-progress-indicator {
+    div {
+      height: 3px;
+      width: 43px;
+      background-color: #222426;
+    }
+
+    &.success {
+      div {
+        background-color: $greenColor;
+      }
+    }
+
+    &.primary {
+      div:nth-child(-n + 4) {
+        background-color: #3d61cc;
+      }
+    }
+  }
+
+  .button_success {
+    background-color: $greenColor;
+  }
+}
+
+@include themify($themes, true) {
+  .upload-button {
+    color: themed('accentColor');
+  }
+
+  .remove-document {
+    color: themed('sellColor');
+  }
+
+  .remove {
+    background-color: themed('rejectButtonBackgroundColor');
+  }
+
+  .added-documents-board {
+    border-top: 1px themed('appBackgroundColor');
+  }
+}

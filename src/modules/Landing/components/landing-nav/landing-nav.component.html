@@ -1,0 +1,23 @@
+<base-nav [showUserAvatar]="true">
+    <button class="crypto-button crypto-button_primary m-right-10"
+            *ngIf="activeRoute === LandingRoutes.QA"
+            [routerLink]="askQuestionRoute">
+        <!--        {{'app.deposits' | translate}}-->
+        <span>Ask question</span>
+    </button>
+
+<!--    <div class="nav-bottom-row">-->
+<!--        <div class="search-wrapper">-->
+<!--            <mat-form-field class="crypto-input search-input">-->
+<!--                <input #searchInput matInput placeholder="Search discussion...">-->
+<!--                <i class="crypto-icon crypto-icon-search search-icon" matPrefix></i>-->
+<!--            </mat-form-field>-->
+<!--        </div>-->
+<!--    </div>-->
+    <!--    <button class="crypto-button crypto-button_primary m-right-10"-->
+    <!--            *ngIf="activeRoute === LandingRoutes.Forums"-->
+    <!--            [routerLink]="createDiscussionRoute">-->
+    <!--        &lt;!&ndash;        {{'app.deposits' | translate}}&ndash;&gt;-->
+    <!--        <span>Create discussion</span>-->
+    <!--    </button>-->
+</base-nav>

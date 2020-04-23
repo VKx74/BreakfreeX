@@ -1,0 +1,40 @@
+<div *ngIf="discussion">
+    <breadcrumbs [breadcrumbs]="breadcrumbs"></breadcrumbs>
+
+    <page-header class="flex justify-space-between">
+        <span class="page-header-title">{{discussion.title}}</span>
+    </page-header>
+
+    <div class="flex">
+        <card class="flex-grow-1">
+            <discussion [discussion]="discussion" (deleted)="onDiscussionDeleted()"
+                        (edit)="onDiscussionEdit()"></discussion>
+
+            <div class="delimiter"></div>
+
+            <div class="discussion-posts-wrapper">
+                <div class="comments-header">
+                    <span class="comments-header__title">Comments</span>
+                </div>
+                <div class="items-wrapper">
+                    <ng-container *ngFor="let post of discussionPosts">
+                        <discussion-post [post]="post"
+                                         (delete)="onPostDelete($event)"
+                                         (postEdited)="onPostEdited($event)"></discussion-post>
+                        <div class="delimiter"></div>
+                    </ng-container>
+                </div>
+                <ng-container *ngIf="showPaginator">
+                    <paginator-container>
+                        <paginator [handler]="paginationHandler" [showPageSize]="false"></paginator>
+                    </paginator-container>
+                    <div class="delimiter"></div>
+                </ng-container>
+
+                <create-discussion-post [discussion]="discussion"
+                                        (onAddPost)="handlePostCreated()"></create-discussion-post>
+            </div>
+        </card>
+        <sidebar></sidebar>
+    </div>
+</div>

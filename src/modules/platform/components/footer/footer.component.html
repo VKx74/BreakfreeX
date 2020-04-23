@@ -1,0 +1,53 @@
+<div class="root flex">
+    <div class="left-side flex align-items-center">
+        <div class="time-wrapper flex align-items-center">
+            <span class="crypto-icon crypto-icon-time time-zone-icon"></span>
+            <span class="footerLabel time-zone-caption">{{"footer.selectedTZDate" | translate }}</span>
+            <span>{{date}}</span>
+        </div>
+        <div class="delimiter"></div>
+        <div class="component-selector-wrapper flex">
+            <div class="crypto-button-icon component-item" [ngClass]="{active: isTradingActive()}"
+                 (click)="selectComponentGroup(BottomPanelComponentGroups.Trading)">
+                <span class="crypto-icon crypto-icon-trade-manager"></span>
+            </div>
+            <div class="crypto-button-icon component-item" [ngClass]="{active: isScriptingActive()}"
+                 *showByTag="ComponentIdentifier.scripting"
+                 (click)="selectComponentGroup(BottomPanelComponentGroups.Scripting)">
+                <span class="crypto-icon crypto-icon-script"></span>
+            </div>
+            <div class="crypto-button-icon component-item" [ngClass]="{active: isBacktestingActive()}"
+                 *showByTag="ComponentIdentifier.backtesting"
+                 (click)="selectComponentGroup(BottomPanelComponentGroups.Backtest)">
+                <span class="crypto-icon crypto-icon-backtest"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-side flex">
+        <div class="align-items-center flex" *ngIf="isBrokerConnected">
+            <div>
+                <span class="footerLabel">
+                    {{ "exchange" | translate }}:
+                </span>
+                <span>{{exchange}}</span>
+            </div>
+            <div class="m-left-10">
+                <span class="footerLabel">
+                    {{ "footer.username" | translate }}:
+                </span>
+                <span>{{username}}</span>
+            </div>
+
+
+            <div class="m-left-10">
+                <span class="footerLabel">{{"footer.appType" | translate}}:</span>
+                <span>{{appTypeCaption | async}}</span>
+            </div>
+        </div>
+        <div class="crypto-button-icon component-item save-layout-btn" title="{{'footer.saveLayout' | translate}}">
+            <span class="crypto-icon crypto-icon-save-layout layout-save" [class.not-saved]="notSaved"
+                  (click)='saveLayout()'></span>
+        </div>
+    </div>
+</div>

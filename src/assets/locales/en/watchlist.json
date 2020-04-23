@@ -1,0 +1,21 @@
+{
+  "watchList": {
+    "tableView": "Table view",
+    "tilesView": "Tiles view",
+    "volume24h": "24h Volume",
+    "removeSymbol": "Remove symbol?",
+    "symbol": "Instrument",
+    "priceChange": "Change",
+    "highestPrice": "High",
+    "lowestPrice": "Low",
+    "tickTime": "Time",
+    "price": "Price",
+    "chart": "Chart",
+    "remove": "Remove",
+    "placeOrder": "Place order",
+    "openChart": "Open Chart",
+    "setAlert": "Set alert",
+    "showOB": "Show Order Book"
+  },
+  "watchlistComponentName": "Watchlist"
+}

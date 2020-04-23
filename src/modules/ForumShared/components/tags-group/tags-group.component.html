@@ -1,0 +1,7 @@
+<div class="tags-wrapper flex flex-wrap-wrap">
+    <div class="crypto-tag tag" *ngFor="let tag of tags; let lastTag = last" (click)="onTagClick(tag)"
+         [style.maxWidth.px]="tagMaxWidth"
+         [style.marginRight.px]="!lastTag ? tagsSpace : 0">
+        <span>{{tagTitle(tag) | async}}</span>
+    </div>
+</div>

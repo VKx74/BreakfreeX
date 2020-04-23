@@ -1,0 +1,264 @@
+@import "global-styles/variables";
+@import "../themes/themes";
+@import "mixins/themify";
+@import "mixins/columns";
+
+:host {
+  /deep/ {
+    .two-input-wrapper {
+      display: flex;
+      justify-content: space-between;
+
+      @include columns(2, 20px);
+    }
+
+    hr {
+      margin: 5px 0 15px 0;
+    }
+
+    .button_success {
+      background-color: #27cf6d;
+      opacity: 0.7;
+    }
+
+    .button_primary {
+      background-color: #3d61cc;
+    }
+
+    .form-wrapper {
+      width: 370px;
+      margin-top: 2px;
+    }
+
+    .button_primary,
+    .button_success {
+      color: #fff;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    .background {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: cover;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 0;
+      z-index: -1;
+      background-color: rgb(255, 255, 255);
+    }
+
+    .overlay-wrapper {
+      margin-right: 15%;
+      margin-left: auto;;
+    }
+
+    .overlay {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 20px 25px;
+      border-radius: 5px;
+      box-shadow: 0px 10px 19.1px 1.9px rgba(0, 0, 0, 0.2);
+      position: relative;
+      background-color: rgb(255, 255, 255);
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 10px;
+
+      .logo {
+        font-size: 50px;
+        color: #3d61cc;
+        display: block;
+      }
+
+      &__title {
+        text-align: center;
+        font-size: 18px;
+        font-family: $primaryFontFamily;
+        cursor: pointer;
+      }
+    }
+
+    .addition {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+      font-size: 11px;
+      font-family: $primaryFontFamily;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    // TCD global-styles touching checkboxes
+    [type="checkbox"] {
+      width: auto;
+      vertical-align: text-top;
+      margin-right: 10px !important;
+      z-index: initial !important;
+      position: initial !important;
+      opacity: initial !important;
+    }
+
+    .lds-ellipsis {
+      display: inline-block;
+      position: relative;
+      width: 64px;
+      height: 0;
+    }
+
+    .lds-ellipsis div {
+      position: absolute;
+      top: -10px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #fff;
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+
+    .lds-ellipsis div:nth-child(1) {
+      left: 6px;
+      animation: lds-ellipsis1 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(2) {
+      left: 6px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(3) {
+      left: 26px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(4) {
+      left: 45px;
+      animation: lds-ellipsis3 0.6s infinite;
+    }
+
+    /deep/ .notification {
+      font-size: 12px;
+      margin: 5px 0;
+      font-family: $primaryFontFamily;
+      max-height: 100px;
+      overflow: auto;
+
+      &.is-error {
+        color: #f02645 !important;
+      }
+
+      &.is-success {
+        color: #27cf6d !important;
+      }
+    }
+
+
+    /* media */
+
+    /deep/ .two-input-wrapper {
+      @media screen and (max-width: 550px) {
+        display: block;
+      }
+    }
+
+    /deep/ .two-input-wrapper > * {
+      @media screen and (max-width: 550px) {
+        width: 100%;
+      }
+    }
+
+    .form-wrapper {
+      @media screen and (max-width: 1000px) {
+        width: 400px;
+      }
+
+      @media screen and (max-width: 550px) {
+        width: 300px;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      .overlay-wrapper,
+      .form-wrapper {
+        width: 100%;
+      }
+    }
+
+    @keyframes lds-ellipsis1 {
+      0% {
+        transform: scale(0);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes lds-ellipsis3 {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0);
+      }
+    }
+
+    @keyframes lds-ellipsis2 {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(19px, 0);
+      }
+    }
+
+    @keyframes opacityChange {
+      0% {
+        opacity: 0.05;
+      }
+      100% {
+        opacity: 0.95;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  /deep/ {
+    input:not([type=checkbox]) {
+      color: themed('inputColor');
+    &::-webkit-input-placeholder {
+      color: #dddddd;
+    }
+  }
+
+    hr {
+      border-color: themed('appBackgroundColor');
+    }
+
+    .register-label {
+      color: themed('titleTextColor');
+    }
+
+    .muted-text {
+      color: themed('forgotColor');
+    }
+  }
+}

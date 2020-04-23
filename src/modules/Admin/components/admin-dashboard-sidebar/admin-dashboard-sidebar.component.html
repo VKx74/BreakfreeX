@@ -1,0 +1,171 @@
+<div class="root full-height">
+    <scroller>
+        <ul class="menu">
+            <ng-container *showIfRole="Roles.Admin">
+                <li *showByTag="ComponentIdentifier.summary" class="crypto-button-icon" routerLink="./summary"
+                    routerLinkActive="active" title="Summary">
+                    <i class="crypto-icon crypto-icon-admin-dashboard"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.blockchains" class="crypto-button-icon" routerLink="./blockchains"
+                    routerLinkActive="active" title="Blockchains">
+                    <i class="crypto-icon crypto-icon-blockchains"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.currencies" class="crypto-button-icon" routerLink="./currencies"
+                    routerLinkActive="active" title="Currencies">
+                    <i class="crypto-icon crypto-icon-currencies"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.markets" class="crypto-button-icon" routerLink="./markets"
+                    routerLinkActive="active" title="Markets">
+                    <i class="crypto-icon crypto-icon-markets"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.dataConsolidator" class="crypto-button-icon"
+                    routerLink="./data-consolidator" routerLinkActive="active" title="Data Consolidator">
+                    <i class="crypto-icon crypto-icon-data-consolidator"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.wallets" class="crypto-button-icon" routerLink="./wallets"
+                    routerLinkActive="active" title="Wallets">
+                    <i class="crypto-icon crypto-icon-wallets"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.deposits" class="crypto-button-icon" routerLink="./deposits"
+                    routerLinkActive="active" title="Deposits">
+                    <i class="crypto-icon crypto-icon-deposits"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.withdraws" class="crypto-button-icon" routerLink="./withdraws"
+                    routerLinkActive="active" title="Withdraws">
+                    <i class="crypto-icon crypto-icon-withdraws"></i>
+                </li>
+
+                <li *showByTag="ComponentIdentifier.exchangeMembers" class="crypto-button-icon"
+                    routerLink="./exchange-members" routerLinkActive="active" title="Exchange Members">
+                    <i class="crypto-icon crypto-icon-exchange-members"></i>
+                </li>
+
+                <li class="crypto-button-icon" routerLink="./running-scripts"
+                    routerLinkActive="active" title="Running Scripts">
+                    <i class="crypto-icon crypto-icon-script"></i>
+                </li>
+            </ng-container>
+
+
+            <ng-container *showByTag="ComponentIdentifier.adminNotifications">
+                <li *showIfRole="[Roles.Admin, Roles.SupportOfficer, Roles.SystemMonitoringOfficer]" class="crypto-button-icon"
+                    routerLink="./notifications"
+                    routerLinkActive="active" title="Notifications">
+                    <i class="crypto-icon crypto-icon-platform-alert"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.eventConsolidator">
+                <li *showIfRole="[Roles.Admin, Roles.NewsOfficer]" class="crypto-button-icon"
+                    routerLink="./event-consolidator"
+                    routerLinkActive="active" title="Event Consolidator">
+                    <i class="crypto-icon crypto-icon-calendar"></i>
+                </li>
+            </ng-container>
+
+
+            <ng-container *showByTag="ComponentIdentifier.appMembers">
+                <li *showIfRole="[Roles.Admin, Roles.KYCOfficer, Roles.SupportOfficer]" class="crypto-button-icon"
+                    routerLink="./app-members"
+                    title="App Members"
+                    routerLinkActive="active">
+                    <i class="crypto-icon crypto-icon-app-members"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.adminChat">
+                <li *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.Chat"
+                    routerLinkActive="active" title="Chat">
+                    <i class="crypto-icon crypto-icon-chat"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.adminForum">
+                <li *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.Forum"
+                    routerLinkActive="active" title="Forum">
+                    <i class="crypto-icon crypto-icon-forum"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.adminQA">
+                <li *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.QA"
+                    routerLinkActive="active" title="Q&A">
+                    <i class="crypto-icon crypto-icon-like"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.permissionsManager">
+                <li *showIfRole="[Roles.Admin]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.UIPermissionsManager"
+                    routerLinkActive="active" title="Permissions Manager">
+                    <i class="crypto-icon crypto-icon-permission"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.restrictionsManager">
+                <li *showIfRole="[Roles.Admin]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.RestrictionsManager"
+                    routerLinkActive="active" title="Restrictions Manager">
+                    <i class="crypto-icon crypto-icon-permission-instrument"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.adminNews">
+                <li *showIfRole="[Roles.Admin]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.News"
+                    routerLinkActive="active" title="News">
+                    <i class="crypto-icon crypto-icon-news"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.adminOrders">
+                <li *showIfRole="[Roles.Admin]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.Orders"
+                    routerLinkActive="active" title="Orders">
+                    <i class="crypto-icon crypto-icon-trade-manager"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.tradesReports">
+                <li *showIfRole="[Roles.Admin]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.TradesReports"
+                    routerLinkActive="active" title="Trades Reports">
+                    <i class="crypto-icon crypto-icon-order-exchange"></i>
+                </li>
+            </ng-container>
+
+            <ng-container *showByTag="ComponentIdentifier.accounts">
+                <li *showIfRole="[Roles.Admin]" class="crypto-button-icon"
+                    [routerLink]="AdminRoutes.Accounts"
+                    routerLinkActive="active" title="Accounts">
+                    <i class="crypto-icon crypto-icon-wallets-user"></i>
+                </li>
+            </ng-container>
+
+            <!--System monitoring start-->
+            <ng-container *showByTag="ComponentIdentifier.systemMonitoring">
+                <li [matMenuTriggerFor]="systemMonitoringOptions"
+                    *showIfRole="[Roles.Admin, Roles.SystemMonitoringOfficer]"
+                    title="System monitoring" class="crypto-button-icon" routerLinkActive="active">
+                    <i class="crypto-icon crypto-icon-system-monitoring"></i>
+                </li>
+            </ng-container>
+            <mat-menu #systemMonitoringOptions="matMenu" class="system-monitoring-menu">
+                <ng-template matMenuContent>
+                    <system-monitoring-menu></system-monitoring-menu>
+                </ng-template>
+            </mat-menu>
+            <!--System monitoring end-->
+        </ul>
+    </scroller>
+</div>

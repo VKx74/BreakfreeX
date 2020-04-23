@@ -1,0 +1,27 @@
+<main-container class="h-100">
+    <ng-container *ngFor="let news of newsList">
+        <landing-item>
+            <div class="landing-item">
+                <div class="news-title crypto-text is-large" [title]="news.title">
+                    <!--            [routerLink]="['/landing/news', news.id]"-->
+                    <a  class="first-letter-capitalized cursor-pointer"
+                        (click)="$event.preventDefault(); redirectToFullNews(news)">{{news.title}}</a>
+                </div>
+                <div>
+                    <span class="news-date">{{(news.creationTime * 1000) | utcToCurrentTz | formatDate:format}}</span>
+                </div>
+                <div class="news-text" [innerHTML]="news.description"></div>
+                <div class="tags-wrapper">
+                    <div class="tag-wrapper" *ngFor="let tag of news.tags">
+                        <div class="crypto-tag tag">
+                            <span>{{tag}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </landing-item>
+        <div class="crypto-delimiter"></div>
+    </ng-container>
+        <paginator [handler]="paginationHandler" [showPageSize]="false"></paginator>
+</main-container>
+

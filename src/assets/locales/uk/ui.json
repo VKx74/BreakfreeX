@@ -1,0 +1,17 @@
+{
+  "yes": "Так",
+  "no": "Ні",
+  "areYouSure": "Ви впевнені?",
+  "noOptions": "Немає",
+  "selectOption": "Виберіть",
+  "comingSoon": "Незабаром...",
+  "inputModal": {
+    "buttonCaption": "Ввести",
+    "inputCaption": "Значення",
+    "title": "Веддіть значення",
+    "inputPlaceholder": "",
+    "errorText": "Будь-ласка введіть вірне значення"
+  },
+  "searchPlaceholder": "Шукати...",
+  "verificationCodePlaceholder": "Код підтвердження"
+}

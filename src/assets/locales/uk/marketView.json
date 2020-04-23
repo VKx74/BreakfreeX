@@ -1,0 +1,33 @@
+{
+  "marketViewComponentComponentName": "Огляд Ринку",
+  "column": {
+    "pair": "Пара",
+    "oneWeek": "1Тиж",
+    "oneDay": "1день",
+    "fourHours": "4год",
+    "oneHour": "1год",
+    "fifteenMins": "15хв",
+    "fiveMins": "5хв",
+    "oneMinute": "1хв",
+    "numberOfTrades": "К-сть Трейдів"
+  },
+  "settings": {
+    "title": {
+      "main": "Налаштування Огляду Ринку",
+      "showColumns": "Показувати Стовпці:",
+      "showPairs": "Показувати Пари:"
+    },
+    "column": {
+      "oneWeek": "1 Тиждень",
+      "oneDay": "1 День",
+      "fourHours": "4 Години",
+      "oneHour": "1 Година",
+      "fifteenMins": "15 Хвилин",
+      "fiveMins": "5 Хвилин",
+      "oneMinute": "1 Хвилина",
+      "numberOfTrades": "К-сть Трейдів"
+    }
+  },
+  "trendWidget": "Віджет Трендів",
+  "allMarkets": "Весь ринок"
+}

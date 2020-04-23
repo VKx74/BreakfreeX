@@ -1,0 +1,32 @@
+<div class="upload-file-item">
+    <span class="wrapper">
+        <span class="file-info-wrapper">
+            <span class="file-icon">
+                <i class="fa fa-file"></i>
+            </span>
+            <span class="file-name">
+                {{file.fileName}}
+            </span>
+            <span class="file-size">
+                {{formatSize(file.size)}}
+            </span>
+        </span>
+        <span class="upload-progress-wrapper" *ngIf="showProgressBar">
+            <span class="progress-caption" *ngIf="progress != null">
+                {{progress}}%
+            </span>
+        </span>
+        <span class="btn-wrapper" *ngIf="showRetryBtn || showRemoveBtn || showSuccessBtn">
+            <i class="refresh-icon crypto-icon crypto-icon-refresh refresh" [title]="'retry' | translate" (click)="retry($event)"
+               *ngIf="showRetryBtn"></i>
+
+            <div class="delete-icon crypto-button-delete" [title]="'delete' | translate" (click)="remove($event)"
+                 *ngIf="showRemoveBtn">
+                <i class="crypto-icon crypto-icon-close" aria-hidden="true"></i>
+            </div>
+
+            <i class="success-icon fa fa-check-circle" [title]="'uploadSuccessfully' | translate"
+               *ngIf="showSuccessBtn"></i>
+        </span>
+    </span>
+</div>

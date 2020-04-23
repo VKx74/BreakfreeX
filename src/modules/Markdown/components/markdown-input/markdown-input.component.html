@@ -1,0 +1,41 @@
+<div class="qa-input">
+    <div class="editor-wrapper">
+        <div class="controls-wrapper flex align-items-center justify-space-between">
+            <div>
+                <span class="control-btn control-bold fa fa-bold"></span>
+                <span class="control-btn control-italic fa fa-italic"></span>
+                <span class="control-btn control-link fa fa-link hidden"></span>
+                <span class="control-btn control-quote fa fa-quote-right"></span>
+                <span class="control-btn control-code fa fa-code"></span>
+                <span class="control-btn control-img fa fa-image"></span>
+                <span class="control-btn control-olist fa fa-list-ol"></span>
+                <span class="control-btn control-ulist fa fa-list-ul"></span>
+                <span class="control-btn control-header fa fa-header"></span>
+                <span class="control-btn control-hr fa fa-header"></span>
+            </div>
+            <div>
+                <span class="control-btn control-undo fa fa-undo"></span>
+                <span class="control-btn control-redo fa fa-repeat"></span>
+            </div>
+        </div>
+        <div class="input-panel">
+            <div class="wmd-panel">
+                <textarea #textarea class="wmd-input" id="wmd-input" required
+                          [placeholder]="placeholder"
+                          (blur)="handleBlur()"
+                          (input)="handleUpdate(textarea.value)"
+                          (change)="handleUpdate(textarea.value)">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="error-wrapper">
+        <span *ngIf="formControl?.invalid && formControl?.touched && errorHandler">
+            {{errorHandler(formControl) | async}}
+        </span>
+    </div>
+    <div *ngIf="!noPreviewDelimiters" class="delimiter preview-delimiter"></div>
+    <div class="preview-wrapper" [ngClass]="{'hidden': !showPreview}">
+        <div #preview id="wmd-preview" class="wmd-panel wmd-preview"></div>
+    </div>
+</div>

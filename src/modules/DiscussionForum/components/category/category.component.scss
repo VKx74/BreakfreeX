@@ -1,0 +1,57 @@
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  overflow: hidden;
+
+  card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .name {
+    font-family: $primaryFontFamily;
+    font-size: 20px;
+    display: block;
+    margin-bottom: 5px;
+    text-decoration: none;
+    color: #8798ad;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .description {
+    flex-grow: 1;
+    font-family: $primaryFontFamily;
+    word-break: break-word;
+    font-size: 14px;
+    color: #615c68;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .delimiter {
+    width: 150px;
+    margin: 10px auto;
+  }
+
+  .bottom-line {
+    color: #97a4ba;
+    font-family: $primaryFontFamily;
+    font-size: 13px;
+    text-align: center;
+  }
+}
+
+@include themify($themes, true) {
+  .description {
+    color: themed('valueTextColor');
+  }
+}

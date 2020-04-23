@@ -1,0 +1,128 @@
+@import "themes/themes";
+@import "mixins/themify";
+:host {
+
+  .settings-tab-title {
+
+    font-size: 14px;
+    img {
+      width: 30px;
+      margin-left: 25px;
+
+      &.filter-gray {
+        filter: grayscale(100%);
+      }
+    }
+  }
+
+  .QR-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+
+    img {
+      width: 150px;
+      border-radius: 9px;
+    }
+  }
+
+  .pin-input-container {
+    margin-bottom: 31px;
+  }
+
+  .reset-container {
+    font-size: 0.85em;
+    margin: 20px 5px;
+    cursor: pointer;
+  }
+}
+
+.links-wrapper {
+  margin-top: 28px;
+  font-size: 12px;
+}
+
+.buttons {
+  position: relative;
+
+  .crypto-button {
+    float: right;
+  }
+}
+
+.verify-button {
+  position: relative;
+  top: 23px;
+  float: right;
+}
+
+
+.section {
+  width: 100%;
+  padding: 20px 28px;
+  margin-top: 9px;
+  border-radius: 5px;
+  min-height: 81px;
+
+  .crypto-icon {
+    position: relative;
+    bottom: 5px;
+    font-size: 30px;
+  }
+
+  .data {
+    position: relative;
+    top: 10px;
+    font-size: 15px;
+    left: 23px;
+  }
+}
+
+.relative-wrapper {
+  top: 20px;
+}
+
+@include themify($themes, true) {
+ .links-wrapper {
+   a {
+     color: themed('titleTextColor');
+
+     &:hover {
+       color: themed('accentColor');
+       text-decoration: none;
+     }
+   }
+ }
+
+  .section-naming, .section {
+    background-color: themed('appPanelColor');
+    box-shadow: themed('box-shadowPanel');
+
+
+    a, .crypto-icon {
+      color: themed('accentColor');
+    }
+  }
+
+  .data, .crypto-button, .settings-tab-title {
+    color: themed('valueTextColor');
+  }
+
+  .crypto-button {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  .reset-container {
+    color: themed('titleTextColor');
+
+    &:hover {
+      color: themed('accentColor');
+    }
+  }
+
+  .activated2-factor {
+    color: themed('buyColor') !important;
+  }
+
+}

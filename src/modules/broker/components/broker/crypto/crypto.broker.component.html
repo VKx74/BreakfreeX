@@ -1,0 +1,37 @@
+<div class="settings-tab">
+    <div class="settings-tab-title">
+        <span>{{"broker.broker" | translate}}</span>
+        <div class="educational-tips-wrapper">
+            <educational-tips [componentName]="ComponentIdentifier.brokerSettings"></educational-tips>
+        </div>
+    </div>
+    <div *ngIf="brokerConnected">
+        <div class="crypto-form-unit margin-bottom">
+            <span class="form-unit__label">{{'broker.connectedBroker' | translate}}:</span>
+            <span class="info">
+                {{connectedBrokerDescription}}
+            </span>
+        </div>
+        <div class="crypto-form-unit margin-bottom">
+            <button class="crypto-button crypto-button_action w-100" (click)="disconnect()">
+                {{'broker.disconnect' | translate}}
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="!brokerConnected">
+        <div class="crypto-form-unit margin-bottom">
+            <span class="form-unit__label">{{'broker.exchange' | translate}}:</span>
+            <selector [options]="brokerOptions"
+                      [selectedOption]="selectedBroker"
+                      (onSelect)="onBrokerSelect($event)"></selector>
+        </div>
+        <div [ngSwitch]="selectedBroker">
+            <bitmex-broker-login-component *ngSwitchCase="EBrokerInstance.BitmexBroker"></bitmex-broker-login-component>
+            <okex-broker-login-component *ngSwitchCase="EBrokerInstance.OKExBroker"></okex-broker-login-component>
+            <switch-broker-login-component *ngSwitchCase="EBrokerInstance.SwitchBroker"></switch-broker-login-component>
+            <binance-broker-login *ngSwitchCase="EBrokerInstance.BinanceBroker"></binance-broker-login>
+        </div>
+    </div>
+
+</div>

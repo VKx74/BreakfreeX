@@ -1,0 +1,15 @@
+{
+  "workspaces": "Workspaces",
+  "workspaceNames": {
+    "BasicUser": "Basic User",
+    "AdvancedUser": "Advanced User",
+    "AdvancedTrader": "Advanced Trader",
+    "Institutional": "Institutional",
+    "Empty": "Empty",
+    "saveLayout": "Save Layout",
+    "savedLayout": "Layout Saved"
+  },
+  "tradingManager": "Trading manager",
+  "tradingInitialized": "Trading initialized",
+  "failedInitTrading": "Failed to initialized trading: "
+}

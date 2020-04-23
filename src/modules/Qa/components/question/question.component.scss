@@ -1,0 +1,25 @@
+@import "../../../../global-styles/themes/themes";
+@import "mixins/themify";
+
+.question-container {
+  .vote-container {
+    margin-right: 27px;
+
+    .crypto-icon {
+      font-size: x-large;
+      cursor: pointer;
+
+      &:last-of-type{
+        @include themify($themes, true) {
+          color: themed('sellColor');
+        }
+      }
+
+      &:first-of-type{
+        @include themify($themes, true) {
+          color: themed('buyColor');
+        }
+      }
+    }
+  }
+}

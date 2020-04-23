@@ -1,0 +1,32 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+}
+
+
+object {
+  margin-right: 15px;
+}
+
+svg path {
+  @include themify($themes, true) {
+    fill: themed('inputInModalsBackgroundColor');
+  }
+}
+
+.text {
+  width: 150px;
+  font-family: "Open Sans";
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.42;
+}
+
+.notConnected {
+  display: flex;
+  align-items: center;
+}

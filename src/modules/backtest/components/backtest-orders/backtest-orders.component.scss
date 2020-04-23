@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  height: 100%;
+
+  .root {
+    height: 100%;
+  }
+
+  .table-wrapper {
+    height: 100%;
+  }
+
+  .index-column {
+    width: 50px;
+  }
+
+  /deep/ .message-wrapper {
+    background-color: inherit !important;
+  }
+}

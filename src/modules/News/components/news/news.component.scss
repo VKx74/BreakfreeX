@@ -1,0 +1,113 @@
+@import "global-styles/themes/themes";
+@import "mixins/themify";
+@import "variables";
+
+$educational-tips-height: 40px;
+$tabs-height: 35px;
+
+:host {
+  ::ng-deep {
+    .mat-cell.mat-column-gmt {
+      padding-left: 0 !important;
+    }
+
+    .mat-select, .mat-form-field-flex {
+      height: 35px !important;
+    }
+
+    //.mat-table {
+    //  max-width: 100% !important;
+    //  .expand-row-header, .is-expanded {
+    //    height: 50px !important;
+    //  }
+    //}
+
+    .mat-row {
+      :last-child {
+        text-align: right;
+      }
+    }
+    .mat-header-cell:last-of-type {
+      .header-cell-content-wrapper {
+        text-align: right;
+      }
+    }
+
+  }
+}
+
+.crypto-form-unit {
+  position: relative;
+  margin-bottom: -35px;
+  bottom: 52px;
+  right: 20px;
+  width: 100%;
+}
+.bottom-42 {
+  bottom: 42px !important;
+}
+
+.news-image-container {
+  width: 100%;
+  max-width: 150px;
+  height: 36px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.delimiter {
+  margin: 15px 0;
+}
+
+.educational-tips-wrapper {
+  margin-right: 4px;
+}
+
+.news-wrapper {
+  padding: 10px 20px;
+  margin-top: 35px;
+  max-height: calc(100% - #{$educational-tips-height + $tabs-height});
+  overflow-y: auto;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  hr {
+    margin: 0;
+  }
+
+}
+
+.tabs-wrapper {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.wrapper {
+  height: 100%;
+  overflow: hidden;
+}
+
+
+@include themify($themes, true) {
+  .news-component-wrapper {
+    position: relative;
+
+    .button, .news-title, .news-text, a {
+      color: themed('valueTextColor');
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .news-date, .last-update-time {
+    //color: themed('time-color');
+  }
+}

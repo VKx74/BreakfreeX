@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+
+  ::ng-deep category,
+  .fake {
+    flex-shrink: 0;
+    flex-basis: calc((100%) / 3 - 10px);
+    margin-bottom: 15px;
+    overflow: hidden;
+  }
+
+  .fake {
+    height: 0;
+  }
+}
+
+:host {
+  @media screen and (max-width: 900px) {
+    ::ng-deep category {
+      flex-basis: calc((100%) / 2 - (15px) / 2);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    ::ng-deep category {
+      flex-basis: 100%;
+    }
+  }
+}

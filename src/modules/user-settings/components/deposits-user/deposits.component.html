@@ -1,0 +1,65 @@
+<ng-container *ngIf="(brokerInitializationState$ | async) !== null; else loader">
+    <div class="deposits" *ngIf="(activeBroker$ | async) as broker; else broker_not_connected">
+        <ng-container *ngIf="(broker.activeWallet$ | async) as activeWallet; else no_active_wallet">
+            <ng-container *ngIf="_getDepositsObs(activeWallet) | async as history; else loader">
+                <div class="section flex justify-space-between align-items-center">
+                    <span>{{'deposits' | translate}} {{'address' | translate}} {{activeWallet.currency}}</span>
+                    <span>
+                        {{activeWallet.address}}
+                        <i class="crypto-icon crypto-icon-copy" (click)="copyExample(activeWallet.address)"></i>
+                        <i class="crypto-icon crypto-icon-layout" (click)="showQrCode()"></i>
+                     </span>
+                </div>
+
+                <data-table [rows]="history" class="stripped-mode">
+                    <data-table-header-cell [columnWidth]="150" columnName="created_at" [sortable]="true">
+                        {{'level2.time' | translate}}
+                    </data-table-header-cell>
+                    <data-table-header-cell [columnWidth]="150" columnName="transactType">
+                        {{'tradeManager.transactionType' | translate}}
+                    </data-table-header-cell>
+                    <data-table-header-cell [columnWidth]="300" columnName="transactID">
+                        {{'tradeManager.address' | translate}}
+                    </data-table-header-cell>
+                    <data-table-header-cell [columnWidth]="100" columnName="amount" [sortable]="true">
+                        {{'amount' | translate}}
+                    </data-table-header-cell>
+                    <data-table-header-cell [columnWidth]="100" columnName="fee" [sortable]="true">
+                        {{'tradeManager.fee' | translate}}
+                    </data-table-header-cell>
+                    <data-table-header-cell [columnWidth]="200" columnName="state" [sortable]="true">
+                        {{'tradeManager.status' | translate}}
+                    </data-table-header-cell>
+
+                    <data-table-cell class="stripped-mode" columnName="state">
+                        <ng-template let-item>
+                <span class="action"
+                      [ngClass]="{'accepted': item.state === ETransactionState.Completed || item.state === ETransactionState.Confirmed,
+                                  'rejected': item.state === ETransactionState.Rejected}">
+                      {{item.state}}
+                                                                </span>
+                        </ng-template>
+                    </data-table-cell>
+
+                    <data-table-cell columnName="created_at">
+                        <ng-template let-item>
+                            {{item.created_at | formatDate:'YYYY/MM/DD HH:mm:ss'}}
+                        </ng-template>
+                    </data-table-cell>
+                </data-table>
+            </ng-container>
+        </ng-container>
+    </div>
+</ng-container>
+
+<ng-template #loader>
+    <loader></loader>
+</ng-template>
+
+<ng-template #no_active_wallet>
+    <placeholder [message]="'tradeManager.noActiveWallet' | translate "></placeholder>
+</ng-template>
+
+<ng-template #broker_not_connected>
+    <placeholder [message]="'tradeManager.connectToBroker' | translate"></placeholder>
+</ng-template>

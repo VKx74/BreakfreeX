@@ -1,0 +1,13 @@
+@import "../variables";
+@import "../mixins/themify";
+@import "../themes/themes";
+
+.#{$classPrefix}-delimiter {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid transparent;
+
+  @include themify($themes) {
+    border-color: themed('appBackgroundColor');
+  }
+}

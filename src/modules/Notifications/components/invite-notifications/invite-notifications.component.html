@@ -1,0 +1,34 @@
+<div *ngIf="invites && invites.length" class="invites-wrapper-border-bottom">
+    <div class="top-line flex justify-space-between align-items-center">
+        <div class="notifications-header crypto-text">
+            {{'invites.title' | translate}}
+        </div>
+    </div>
+    <div class="notifications-body" scrollable (scrolledToBottom)="handleScrollToBottom()">
+        <div class="invite-notification flex" *ngFor="let invite of invites; let i = index">
+            <div class="creator-avatar">
+                <name-avatar [src]="invite.creator?.avatarId" [name]="invite.creator ? invite.creator.userName : 'User removed'"></name-avatar>
+            </div>
+            <div class="invite-body flex flex-direction-column flex-grow-1">
+                <div class="caption flex align-items-center">
+                    <div class="creator-name flex-grow-1 t-overflow-ellipsis">{{invite.creator ? invite.creator.userName : 'User removed'}}</div>
+                    <div class="time flex-shrink-0 crypto-color-prime">{{invite.threadInvite.createdAt | timeAgo}}</div>
+                </div>
+                <div class="text crypto-color-prime">
+                    {{'invites.notificationText' | translate}} {{invite.thread ? invite.thread.name : 'Unknown thread'}}
+                </div>
+                <div class="invite-footer flex justify-flex-end">
+                    <button class="crypto-button crypto-color-prime"
+                            (click)="reject(invite.threadInvite, i)">
+                        {{'invites.reject' | translate}}
+                    </button>
+                    <button class="crypto-button crypto-button_success"
+                            (click)="accept(invite.threadInvite, i)">
+                        {{'invites.accept' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

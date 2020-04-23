@@ -1,0 +1,130 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  .root {
+    height: 100%;
+  }
+
+
+  .top-line {
+    height: 40px;
+    padding: 0 12px;
+  }
+
+  .problem-count-label {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 12px;
+    font-family: $primaryFontFamily;
+  }
+
+  .problems-details-toggle {
+    display: inline-block;
+    opacity: 0.75;
+    margin-right: 5px;
+  }
+
+  .problem-count-value {
+    font-size: 12px;
+    font-family: $primaryFontFamily;
+  }
+
+  .content-wrapper {
+    padding-bottom: 5px;
+    min-height: 160px;
+  }
+
+  .problems-wrapper {
+    padding: 10px 12px;
+    border: solid 1px transparent;
+    border-radius: 3px;
+    overflow: auto;
+
+    .no-problems-placeholder {
+      font-size: 13px;
+      font-family: Consolas;
+    }
+  }
+
+  .problem-item {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+
+    .problem-icon {
+      margin-right: 10px;
+      margin-top: 3px;
+      font-size: 12px;
+      color: $redColor;
+    }
+
+    .problem-description {
+      font-size: 13px;
+      font-family: Consolas;
+    }
+  }
+
+
+
+
+  .compile-status {
+    font-size: 12px;
+    font-family: $primaryFontFamily;
+
+    &.warning {
+      color: yellow;
+    }
+
+    &.failed {
+      color: red;
+    }
+
+    &.success {
+      color: #328046;
+    }
+
+    &.needed {
+      color: blue;
+    }
+
+    &.compiling {
+      color: orange;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .problem-count-label,
+  .problem-count-value {
+    color: themed('valueTextColor');
+  }
+
+  .problems-details-toggle {
+    color: themed('valueTextColor');
+  }
+
+  .problems-wrapper {
+    border-color: themed('appBackgroundColor');
+    background-color: themed('appBackgroundColor');
+
+    .no-problems-placeholder {
+      color: themed('titleTextColor');
+    }
+  }
+
+  .problem-item {
+    .problem-description {
+      color: themed('valueTextColor');
+    }
+  }
+
+  .compile-status.needed {
+    color: themed('accentColor');
+  }
+}
+
+@include themify($themes, true) {
+  background-color: themed('appPanelColor');
+}

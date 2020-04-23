@@ -1,0 +1,199 @@
+<form class="w-100" [formGroup]="formGroup" novalidate>
+    <div class="crypto-text is-small register-label">Information about company</div>
+    <hr>
+    <div class="crypto-form-unit">
+        <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput ng-trim="true" type="text" placeholder="Name of company"
+                   formControlName="companyName"/>
+            <mat-error>
+                <span>Name of company is not valid</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="crypto-form-unit">
+        <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput ng-trim="true" type="email" placeholder="Company@email.com"
+                   formControlName="email"/>
+            <i class="crypto-icon crypto-icon-email" matSuffix></i>
+            <mat-error>
+                <span>Email is not valid</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="crypto-form-unit margin-bottom">
+        <mat-form-field class="crypto-input full-width">
+            <input matInput ng-trim="true" type="text" placeholder="Website (optional)"
+                   formControlName="website"/>
+            <i class="crypto-icon crypto-icon-website" matSuffix></i>
+        </mat-form-field>
+    </div>
+
+    <div class="crypto-text is-small register-label">Company global number of employers:</div>
+    <hr>
+    <div class="crypto-form-unit">
+        <mat-form-field class="crypto-input with-hint full-width">
+            <mat-select formControlName="employersCount" placeholder="Number of employers" panelClass="employers-dropdown">
+                <mat-option *ngFor="let count of employersCountList" [value]="count">
+                    {{count}}
+                </mat-option>
+            </mat-select>
+            <mat-error>
+                <span>Number of employers is not valid</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="crypto-text is-small register-label">Company location</div>
+    <hr>
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <mat-select formControlName="country" placeholder="No countries" panelClass="country-dropdown">
+                    <mat-option *ngFor="let country of countriesList" [value]="country">
+                        {{country}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>
+                    <span>Country is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="true" type="text" placeholder="City"
+                       formControlName="city">
+                <mat-error>
+                    <span>City is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="false" type="text" placeholder="Address"
+                       formControlName="address">
+                <i class="crypto-icon crypto-icon-map" matSuffix></i>
+                <mat-error>
+                    <span>Address is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="true" type="text" placeholder="Company number"
+                       formControlName="companyNumber">
+                <mat-error>
+                    <span>Company number is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="crypto-text is-small register-label">Company contact person</div>
+    <hr>
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="false" type="text" placeholder="First Name"
+                       formControlName="firstName">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>First Name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="true" type="text" placeholder="Last Name"
+                       formControlName="lastName">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>Last Name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="false" type="text" placeholder="Phone number"
+                       formControlName="phone">
+                <i class="crypto-icon crypto-icon-phone" matSuffix></i>
+                <mat-error>
+                    <span>Phone number is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="true" type="text" placeholder="Role at company"
+                       formControlName="roleAtCompany">
+                <mat-error>
+                    <span>Role at company is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="crypto-text is-small register-label">Director 1</div>
+    <hr>
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="false" type="text" placeholder="First name"
+                       formControlName="director1Name">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>First name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="true" type="text" placeholder="Last name"
+                       formControlName="director1LastName">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>Last name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="crypto-text is-small register-label">Director 2 (optional)</div>
+    <hr>
+    <div class="two-input-wrapper">
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="false" type="text" placeholder="First name"
+                       formControlName="director2Name">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>First name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input with-hint full-width">
+                <input matInput ng-trim="true" type="text" placeholder="Last name"
+                       formControlName="director2LastName">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>Last name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+</form>

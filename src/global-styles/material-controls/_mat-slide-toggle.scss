@@ -1,0 +1,62 @@
+@import "../variables";
+@import "../themes/themes";
+@import "../mixins/themify";
+
+@include themify($themes) {
+  .crypto-modal {
+    mat-slide-toggle.mat-slide-toggle {
+      .mat-slide-toggle-bar {
+        background-color: themed('inputInModalsBackgroundColor');
+      }
+
+      .mat-slide-toggle-thumb-container {
+        .mat-slide-toggle-thumb {
+          background-color: #fff;
+        }
+      }
+    }
+  }
+
+  mat-slide-toggle.mat-slide-toggle {
+    .mat-slide-toggle-thumb {
+      background-color: themed('valueTextColor');
+    }
+
+    .mat-slide-toggle-thumb-container {
+      cursor: pointer;
+    }
+
+    .mat-slide-toggle-bar {
+      width: 32px;
+      height: 16px;
+      background-color: themed('inputBackgroundColor');
+    }
+
+    .mat-slide-toggle-thumb-container {
+      width: 12px;
+      height: 12px;
+      top: 2px;
+      left: 2px;
+
+      .mat-slide-toggle-thumb {
+        width: 12px;
+        height: 12px;
+        background-color: themed('accentColor');
+      }
+    }
+
+    &.mat-checked {
+      .mat-slide-toggle-bar {
+        background-color: themed('buyColor');
+      }
+
+      .mat-slide-toggle-thumb {
+        background-color: themed('valueTextColor');
+      }
+    }
+
+    .mat-slide-toggle-ripple.mat-ripple {
+      display: none;
+    }
+  }
+}

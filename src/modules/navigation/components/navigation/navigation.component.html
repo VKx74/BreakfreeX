@@ -1,0 +1,124 @@
+<div class="flex justify-space-between align-items-center navigation" [class.open]="sidebarOpen">
+    <div class="flex sidebar-toggle-wrapper">
+        <sidebar-toggle [sidebarShown]="sidebarOpen" (click)="toggleSidebar()"></sidebar-toggle>
+
+        <a [routerLink]="logoRedirectRoute" class="logo flex align-items-center">
+            <span class="logo__img">
+                <i class="crypto-icon crypto-icon-fintatech"></i>
+            </span>
+            <span class="crypto-text logo__text">
+                <span class="title">TRADING PLATFORM</span>
+                <span class="subtitle">FINTATECH UI</span>
+            </span>
+        </a>
+    </div>
+
+    <div class="flex"></div>
+
+    <div class="navigation-right-side flex align-items-center h-100"
+         *ngIf="mode === NavigationMode.User || mode === NavigationMode.Admin">
+<!--        <ng-container *ngIf="mode === NavigationMode.User">-->
+<!--            &lt;!&ndash;    LAYOUT   &ndash;&gt;-->
+<!--            <div class="crypto-button-icon trade-manager-icon-wrapper menu-item" *ngIf="isPlatformRoot"-->
+<!--                 [matMenuTriggerFor]="workspacesMenu"-->
+<!--                 [title]="'workspaces' | translate">-->
+<!--                <span class="crypto-icon crypto-icon-layout"></span>-->
+<!--            </div>-->
+<!--            <mat-menu #workspacesMenu="matMenu" xPosition="before" class="workspaces-menu">-->
+<!--                <ng-template matMenuContent>-->
+<!--                    <workspaces></workspaces>-->
+<!--                </ng-template>-->
+<!--            </mat-menu>-->
+<!--            &lt;!&ndash;    /LAYOUT  &ndash;&gt;-->
+
+
+<!--            <div style="margin: 8px" *ngIf="isPlatformRoot">-->
+<!--                <button class="crypto-button crypto-button_default" (click)="showComponentSelector()">-->
+<!--                    {{'app.addElement' | translate}}-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="delimiter-vertical"></div>-->
+<!--            &lt;!&ndash;        <mat-divider vertical></mat-divider>&ndash;&gt;-->
+<!--            <ng-container *ngIf="applicationType === ApplicationType.Crypto">-->
+<!--                <div class="wallet-select-trigger flex align-items-center height-100"-->
+<!--                     *ngIf="activeWallet"-->
+<!--                     [class.menu-opened]="walletsMenuState"-->
+<!--                     (menuClosed)="onWalletMenuToggle(false)"-->
+<!--                     (menuOpened)="onWalletMenuToggle(true)"-->
+<!--                     [matMenuTriggerFor]="wallets_menu">-->
+<!--                    <div class="flex flex-direction-column m-right-15">-->
+<!--                        <div class="wallet-title">{{'app.yourWallets' | translate}}</div>-->
+<!--                        <div class="wallet-value">{{activeWallet?.balance}}</div>-->
+<!--                    </div>-->
+<!--                    <i class="crypto-icon crypto-icon-scroll-bottom"></i>-->
+<!--                </div>-->
+<!--                <div *ngIf="!activeWallet"-->
+<!--                     class="not-wallets flex align-items-center height-100">-->
+<!--                    {{'app.notWallets' | translate}}-->
+<!--                </div>-->
+<!--                <mat-menu #wallets_menu="matMenu">-->
+<!--                    <ng-template matMenuContent>-->
+<!--                        <wallets-list (click)="$event.stopPropagation()"></wallets-list>-->
+<!--                    </ng-template>-->
+<!--                </mat-menu>-->
+
+<!--                <div class="flex navigation-padding">-->
+<!--                    <div>-->
+<!--                        <button class="crypto-button crypto-button_primary m-right-10" [disabled]="!activeWallet"-->
+<!--                                (click)="openModalDeposit()">-->
+<!--                            {{'app.deposits' | translate}}-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <button class="crypto-button crypto-button_default" [disabled]="!activeWallet"-->
+<!--                                (click)="openModalWithdraw()">-->
+<!--                            {{'app.withdraws' | translate}}-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </ng-container>-->
+<!--        </ng-container>-->
+
+        <ng-container *ngIf="mode === NavigationMode.Forum">
+            <div class="flex navigation-padding">
+                <button class="crypto-button crypto-button_primary m-right-10" [disabled]="!activeWallet"
+                        (click)="openModalDeposit()">
+                    {{'app.deposits' | translate}}
+                </button>
+            </div>
+        </ng-container>
+
+        <div class="delimiter-vertical delimiter-left"></div>
+        <div class="navigation-padding avatar">
+            <name-avatar [name]="currentUserFullName"
+                         class="cursor-pointer"
+                         [shape]="UserAvatarShape.Rounded"
+                         [matMenuTriggerFor]="menu"
+            ></name-avatar>
+            <mat-menu #menu="matMenu" xPosition="before">
+                <user-info-menu (logOut)="logout()"></user-info-menu>
+            </mat-menu>
+        </div>
+    </div>
+
+    <div class="navigation-right-side flex align-items-center h-100" *ngIf="mode === NavigationMode.Admin">
+
+        <div class="shuftipro flex align-items-center flex-wrap-wrap"
+             *showIfRole="[Roles.Admin, Roles.KYCOfficer]"
+             (click)="changeShuftiproAccount()">
+            <span class="shuftipro__account w-100 t-overflow-ellipsis flex-grow-1"
+                  title="Shufti Pro account">{{shuftiproAccountEmail || 'Unknown'}}</span>
+            <span class="shuftipro__status w-100 t-overflow-ellipsis flex-grow-1"
+                  [title]="shuftiproStatus">{{shuftiproStatus}}</span>
+        </div>
+
+        <div class="flex navigation-padding">
+            <div>
+                <button class="crypto-button crypto-button_primary" routerLink="../platform">
+                    Platform
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

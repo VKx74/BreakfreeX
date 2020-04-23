@@ -1,0 +1,106 @@
+@import "../../themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+
+:host {
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: auto;
+
+  .captcha {
+    display: none;
+  }
+  
+  .login-page {
+    display: flex;
+    margin: 20vh 0;
+    align-items: center;
+  }
+
+  .form-header {
+    &__title.signIn {
+      color: #3d61cc;
+    }
+  }
+
+  .remember-wrapper {
+    input[type=checkbox] {
+      margin-top: 0;
+      vertical-align: middle;
+    }
+
+    label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    span {
+    .forgotPassword {
+      vertical-align: text-bottom;
+      float: right;
+      cursor: pointer;
+    }
+      font-size: 13px;
+      font-family: $primaryFontFamily;
+      float: right;
+      cursor: pointer;
+    }
+  }
+
+  .logo:before {
+    vertical-align: unset;
+  }
+
+  .crypto-button {
+    font-family: 'PT Sans';
+  }
+
+  .login-btn {
+    margin-bottom: 10px;
+    margin-top: 15px;
+  }
+
+  .notificationVisible .login-btn {
+    margin-top: 5px;
+  }
+
+  .button-on-error {
+    font-size: 12px;
+    margin: 5px 0;
+    font-family: $primaryFontFamily;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /deep/ pin-input .input-wrapper {
+    margin-bottom: 0;
+  }
+}
+
+.button_success:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+//.remember-wrapper {
+//  span {
+//    @include themify($themes, true) {
+//      color: themed('regularColor');
+//    }
+//  }
+//}
+
+.notification {
+  @include themify($themes, true) {
+    color: themed('regularColor');
+  }
+}
+
+.button-on-error {
+  @include themify($themes, true) {
+    color: themed('accentColor');
+  }
+}

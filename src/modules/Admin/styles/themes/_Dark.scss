@@ -1,0 +1,8 @@
+@import "base";
+@import "functions/map-extend";
+
+$DarkTheme: map-extend($BaseTheme, (
+  // Footer panel
+        footer-label-color: rgba(213, 213, 213, 0.5),
+        footer-icon-color: #3d61cc
+))

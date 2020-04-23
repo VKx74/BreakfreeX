@@ -1,0 +1,30 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+@include themify($themes, true) {
+  .close-order-button {
+    width: 60px;
+    height: 26px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: themed('rejectButtonBackgroundColor');
+  }
+
+  ::ng-deep mat-cell:last-of-type {
+    padding-right: 10px;
+  }
+
+  .symbol {
+    color: themed('valueTextColor');
+  }
+
+  .sell {
+    color: themed('sellColor');
+  }
+  .buy {
+    color: themed('buyColor');
+  }
+}

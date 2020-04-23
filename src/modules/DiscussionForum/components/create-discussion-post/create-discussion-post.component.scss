@@ -1,0 +1,16 @@
+@import "../../styles/variables";
+
+.post-btn {
+  font-size: 12px;
+  width: 150px;
+}
+
+.title {
+  font-size: 13px;
+  font-family: $primaryFontFamily;
+}
+
+textarea {
+  font-size: 13px;
+  min-height: 75px;
+}

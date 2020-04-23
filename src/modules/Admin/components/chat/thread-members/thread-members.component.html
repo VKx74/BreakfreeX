@@ -1,0 +1,71 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!participants?.length"
+                            [loading]="false">
+    <h3 class="header-left component-head_title">{{thread.name}} / Members</h3>
+
+    <table class="crypto-table crypto-table_striped crypto-table_fixed-header">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Ban</th>
+            <th>Role</th>
+            <th>Reason</th>
+            <th class="">Banned At</th>
+            <th class="small-column"></th>
+        </tr>
+        </thead>
+        <tbody *ngIf="participants?.length">
+        <tr *ngFor="let participant of participants">
+            <td class="flex username">
+                <ng-container *ngIf="participant.userModel; else user_removed">
+                    <div class="name-avatar flex-shrink-0">
+                        <name-avatar [src]="participant.userModel?.avatarId"
+                                     [name]="participant.userModel.userName"></name-avatar>
+                    </div>
+                    <div class="t-overflow-ellipsis">{{participant.userModel.userName}}</div>
+                </ng-container>
+                <ng-template #user_removed>
+                    User does not exist
+                </ng-template>
+            </td>
+            <td class="small-column">
+                <span class="user-banned" *ngIf="participant.ban; else notBanned">Yes</span>
+                <ng-template #notBanned>No</ng-template>
+            </td>
+            <td>{{participant.role}}</td>
+            <td class="small-column">
+                {{participant.ban ? participant.ban.description : '-'}}
+            </td>
+            <td>
+                {{participant.ban ? (participant.ban.updatedAt | localTime | date : 'short') : '-'}}
+            </td>
+            <td class="small-column">
+                <ng-container
+                        *ngIf="currentUserId !== participant.subjectId">
+                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="memberMenu"></menu-toggle>
+                    <mat-menu #memberMenu="matMenu">
+                        <button *ngIf="!participant.ban; else userBanOptions" mat-menu-item
+                                (click)="openBanModal(participant)">
+                            <span class="">Ban</span>
+                        </button>
+
+                        <ng-template #userBanOptions>
+                            <button mat-menu-item (click)="openUpdateBanModal(participant)">
+                                <span>Update ban</span>
+                            </button>
+                            <button mat-menu-item (click)="removeBan(participant)">
+                                <span class="crypto-color-red">Remove ban</span>
+                            </button>
+                        </ng-template>
+
+                        <button mat-menu-item *ngIf="thread.type !== ThreadType.Public"
+                                (click)="removeUserFromThread(participant)">
+                            <span class="crypto-color-red">Remove</span>
+                        </button>
+                    </mat-menu>
+                </ng-container>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</pagination-table-container>

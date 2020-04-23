@@ -1,0 +1,28 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+.notifications-header {
+  font-size: 13px;
+}
+
+.top-line {
+  height: 50px;
+  padding: 0 2px 0 15px;
+}
+
+.notifications-body {
+  height: calc(100% - 50px);
+  overflow: auto;
+  padding: 4px;
+
+  .no-notifications {
+    text-align: center;
+  }
+}
+
+
+@include themify($themes, true) {
+  .top-line {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+}

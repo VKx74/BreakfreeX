@@ -1,0 +1,121 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+
+
+:host {
+  .crypto-modal {
+    min-width: auto;
+  }
+
+  .modal-content {
+    max-width: 480px;
+    height: 513px;
+    padding: 17px 22px 29px 22px;
+    font-size: 13px;
+
+    .icon-section {
+      height: 150px;
+      z-index: 1;
+    }
+
+    .qrcode-section {
+      //width: 436px;
+      //height: 176px;
+      border-radius: 5px;
+      padding: 23px 18px 23px 25px;
+      //margin-top: 100px;
+    }
+
+    .currency-logo {
+      height: 100px;
+      width: 100%;
+      padding: 20px;
+    }
+  }
+
+    .qr {
+      padding-right: 30px;
+    }
+
+    .qr-img {
+      width: 130px;
+      height: 130px;
+      border: 10px solid #ffffff;
+  }
+  .about-deposit {
+    font-size: 11px;
+
+    .bt {
+      max-width: 233px;
+      min-height: 25px;
+      border-radius: 5px;
+      border: solid 1px #f02645;
+      background-color: rgba(240, 38, 69, 0.2);
+      line-height: 2;
+    }
+  }
+
+  .crypto-form-unit {
+    margin-top: 15.6px;
+  }
+
+  /deep/ .crypto-input {
+    width: 100%;
+  }
+
+  /deep/ .mat-form-field-infix {
+    display: flex !important;
+    justify-self: center;
+    justify-items: center;
+  }
+
+  .copy-button {
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .crypto-icon-copy {
+    position: relative;
+    top: 4px;
+    right: 8px;
+  }
+
+  .crypto-button {
+    height: 40px;
+    border-radius: 5px;
+    margin-top: 34px;
+  }
+
+  /deep/ .symbol-flag {
+    height: 55px !important;
+    width: 55px !important;
+  }
+  /deep/ currency-icon {
+    margin: auto;
+  }
+
+}
+
+@include themify($themes, true) {
+  .modal-content {
+    background-color: themed('appModalsPanelColor');
+    color: themed('valueTextColor');
+
+    .qrcode-section {
+      background-color: themed('inputInModalsBackgroundColor');
+    }
+
+    .about-deposit {
+      color: themed('titleTextColor');
+    }
+  }
+
+  .crypto-button {
+    background-color: themed('buyColor');
+    color: white;
+  }
+
+  .bt {
+    color: themed('valueTextColor');
+  }
+}

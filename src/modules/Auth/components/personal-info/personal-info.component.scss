@@ -1,0 +1,22 @@
+@import "../../themes/themes";
+@import "mixins/themify";
+@import "mixins/columns";
+
+
+:host {
+  .two-input-wrapper {
+    @include columns(2, 20px);
+  }
+
+  .datepicker {
+    width: 100%;
+  }
+
+  /deep/ .mat-icon-button {
+    width: 24px;
+  }
+  
+  .register-btn {
+    margin-top: 15px;
+  }
+}

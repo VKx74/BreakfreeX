@@ -1,0 +1,11 @@
+{
+  "addComponent": "Add component",
+  "noComponents": "No components to display",
+  "close": "Close",
+  "maximise": "Maximise",
+  "minimise": "Minimise",
+  "additionalTabs": "Additional tabs",
+  "openPopupFailed": "Failed to open popup. Please, allow opening popups in your browser",
+  "popout": "Open in new window",
+  "popin": "Open in main window"
+}

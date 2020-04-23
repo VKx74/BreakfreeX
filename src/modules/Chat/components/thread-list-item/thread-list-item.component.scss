@@ -1,0 +1,262 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+//:host {
+//  display: flex;
+//  //padding: 0 14px;
+//  //height: 50px;
+//  align-items: center;
+//  position: relative;
+//  cursor: pointer;
+//
+//  .thread-name,
+//  .message-creator,
+//  .message {
+//    font-size: 12px;
+//    font-family: $primaryFontFamily;
+//  }
+//
+//  .thread-name {
+//    max-width: 120px;
+//  }
+//
+//  .message-creator {
+//    max-width: 100px;
+//  }
+//
+//  .thread-name {
+//    font-weight: 900;
+//  }
+//
+//  .last-message-time {
+//    font-size: 11px;
+//    font-family: $primaryFontFamily;
+//  }
+//
+//  .unread-messages-count {
+//    display: inline-block;
+//    padding: 0px 4px;
+//    font-size: 10px;
+//    margin-right: 7px;
+//    border-radius: 2px;
+//    font-family: $primaryFontFamily;
+//
+//    background-color: $greenColor;
+//    color: #fff;
+//  }
+//
+//  .avatar-wrapper {
+//    margin-right: 10px;
+//  }
+//
+//  name-avatar {
+//    display: block;
+//    width: 30px;
+//    height: 30px;
+//  }
+//}
+//
+//:host-context(.active) {
+//  position: relative;
+//
+//  &:before {
+//    content: '';
+//    display: block;
+//    height: 100%;
+//    width: 2px;
+//    position: absolute;
+//    top: 0;
+//    left: 0;
+//  }
+//}
+//
+//@include themify($themes, true) {
+//  &.active {
+//    .thread-name {
+//      color: themed('accentColor');
+//    }
+//
+//    &:before {
+//      background-color: themed('accentColor');
+//    }
+//  }
+//
+//  &:hover {
+//    background-color: transparentize(themed('accentColor'), 0.6) !important;
+//  }
+//
+//  .thread-name,
+//  .message-creator,
+//  .message {
+//    // Add Theme
+//    //color: themed('primeColor');
+//  }
+//
+//  .last-message-time {
+//    //color: themed('secondaryColor');
+//  }
+//
+//  .active {
+//    .thread-name {
+//      color: themed('accentColor');
+//    }
+//  }
+//}
+//
+
+
+$avatar-size: 40px;
+
+:host {
+  background: green;
+}
+
+:host-context(.active) {
+  position: relative;
+
+  //@include themify($themes, true) {
+  //  border-left: 2px solid themed('accentColor');
+  //  background: themed('appPanelColor');
+  //}
+}
+
+.thread-list-item {
+  border-left: 2px solid transparent;
+  //padding: 8px 10px;
+  padding: 12px 20px 26px 24px;
+  //.active {
+  //  @include themify($themes, true) {
+  //    border-left: 2px solid themed('accentColor');
+  //    background: themed('appPanelColor');
+  //  }
+  //}
+
+  .user-avatar {
+    min-width: $avatar-size;
+    min-height: $avatar-size;
+    max-width: $avatar-size;
+    max-height: $avatar-size;
+  }
+
+  .main-content {
+    height: $avatar-size;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .thread-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.38;
+    }
+
+    .thread-last-message {
+      font-size: 13px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.69;
+      letter-spacing: normal;
+      text-align: left;
+    }
+  }
+
+  .time {
+    font-size: 11px;
+    line-height: 1.36;
+    letter-spacing: 0.18px;
+  }
+
+  &:not(.active) {
+    cursor: pointer;
+  }
+
+  &:nth-last-of-type(odd) {
+    //@include themify($themes, true) {
+    //  background: transparentize(themed('appModalsPanelColor'), 0.75)
+    //}
+  }
+
+  &.blocked {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .title {
+    .caption {
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+    }
+
+    .count {
+      margin-left: 3px;
+      margin-right: auto;
+      font-size: 11px;
+    }
+
+    .buttons {
+      .crypto-icon {
+        cursor: pointer;
+        visibility: hidden;
+        margin: 0 2px;
+
+        &.active {
+          visibility: initial;
+
+          @include themify($themes, true) {
+            color: themed('accentColor');
+          }
+        }
+      }
+    }
+
+    .new-message {
+      border-radius: 50px;
+      font-size: small;
+      padding: 0 6px;
+
+      @include themify($themes, true) {
+        background: themed('buyColor');
+        color: themed('valueTextColor');
+      }
+    }
+  }
+
+  .description {
+    .message {
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      .creator {
+      }
+
+      .text {
+        margin-left: 3px;
+        overflow: inherit;
+        text-overflow: inherit;
+      }
+    }
+
+    .time {
+      margin-left: 3px;
+      margin-right: auto;
+      white-space: nowrap;
+    }
+
+    .count {
+      border-radius: 3px;
+      padding: 0 4px;
+      margin-left: 4px;
+
+      @include themify($themes, true) {
+        background: themed('sellColor');
+      }
+    }
+  }
+}

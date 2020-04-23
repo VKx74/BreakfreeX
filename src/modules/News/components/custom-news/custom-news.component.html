@@ -1,0 +1,34 @@
+<ngx-loading [show]="loading"></ngx-loading>
+
+<pagination-buttons
+        (prev)="onPrevPageClick()"
+        (next)="onNextPageClick()"
+        [prevDisabled]="paginationHandler.isFirstPage"
+        [nextDisabled]="paginationHandler.isLastPage"></pagination-buttons>
+
+<ng-container *ngIf="newsList?.length" >
+    <data-table [rows]="newsList">
+        <data-table-header-cell columnName="title">
+            {{'title' | translate}}
+        </data-table-header-cell>
+        <data-table-header-cell columnName="description">
+            {{'description' | translate}}
+        </data-table-header-cell>
+        <data-table-header-cell columnName="creationTime" [sortable]="true">
+            <span>{{'createdAt' | translate}}</span>
+        </data-table-header-cell>
+
+        <data-table-cell columnName="creationTime">
+            <ng-template let-item>
+                <span>{{item.creationTime | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm:ss' }}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="title">
+            <ng-template let-item>
+                <span title="{{'tools.goToNews' | translate}}" class="cursor-pointer news-title" (click)="redirectToLandingNews(item.id, $event)">{{item.title}}</span>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</ng-container>
+
+<no-items-placeholder *ngIf="!loading && !newsList.length" [text]="'No Custom news yet...'"></no-items-placeholder>

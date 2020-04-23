@@ -1,0 +1,84 @@
+@import "../../styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+
+:host {
+  ::ng-deep {
+    .notifications-body {
+      .crypto-text {
+        height: 100%;
+      }
+
+      .notConnected {
+        height: auto !important;
+      }
+    }
+  }
+}
+
+.upper-block {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.lower-block {
+  padding: 10px 15px;
+  font-size: 13px;
+  overflow-wrap: break-word;
+}
+
+.is-unread {
+  width: 7px;
+  height: 7px;
+  margin-right: 2px;
+  border-radius: 50%;
+  align-self: center;
+}
+
+.notification-date {
+  font-size: 11px;
+}
+
+.notification-title {
+  overflow-wrap: break-word;
+  font-size: 14px;
+  max-height: 40px;
+  overflow: hidden;
+}
+
+.more {
+  width: 0;
+  height: 0;
+  margin-left: 10px;
+  align-self: center;
+  border-top: 5px dashed;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  color: #6b6b6b;
+  opacity: 0.5;
+
+  &.active {
+    border-bottom: 5px dashed;
+    border-top: 0;
+    opacity: 1;
+  }
+}
+
+@include themify($themes, true) {
+  .notification {
+    color: themed('calendarTextColor');
+    background-color: themed('appPanelColor');
+  }
+
+  .lower-block {
+    background-color: themed('appPanelColor');
+  }
+
+  .is-unread {
+    background-color: themed('accentColor');
+  }
+
+  .upper-block {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+}

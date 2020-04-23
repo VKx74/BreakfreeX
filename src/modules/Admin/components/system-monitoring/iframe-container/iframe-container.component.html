@@ -1,0 +1,4 @@
+<div class="system-monitoring-wrapper" *ngIf="url">
+  <iframe id="iframe" [src]="url" width="100%" height="100%" (load)="onIFrameLoaded()" frameborder="0"></iframe>
+  <ngx-loading [show]="loading"></ngx-loading>
+</div>

@@ -1,0 +1,47 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <modal-spinner-placeholder *ngIf="isLoading"></modal-spinner-placeholder>
+        <div [ngClass]="isLoading ? 'hidden' : ''">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+                <h4 class="modal-title">
+                    <span>Manage Tags</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="top-line m-bottom-10 flex">
+                    <mat-form-field class="crypto-input flex-grow-1">
+                        <input #input matInput type="text" placeholder="Tag name...">
+                    </mat-form-field>
+                    <button class="crypto-button crypto-button_primary m-left-10"
+                            [ngClass]="processing ? 'is-loading' : ''"
+                            (click)="handleAddTag()">
+                        Create
+                    </button>
+                </div>
+                <div class="tags-wrapper">
+                    <data-table [rows]="tags">
+                        <data-table-header-cell columnName="name"></data-table-header-cell>
+                        <data-table-header-cell columnName="menu"></data-table-header-cell>
+
+                            <data-table-cell columnName="name">
+                                <ng-template let-tag>
+                                    <span class="tag-name crypto-text">{{tag.name}}</span>
+                                </ng-template>
+                            </data-table-cell>
+                            <data-table-cell class="small-column text-right" columnName="menu">
+                                <ng-template let-tag>
+                                    <menu-toggle [matMenuTriggerFor]="menu"></menu-toggle>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="handleDeleteTag(tag)">
+                                            <span class="crypto-color-red">Delete</span>
+                                        </button>
+                                    </mat-menu>
+                                </ng-template>
+                            </data-table-cell>
+                    </data-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

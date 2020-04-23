@@ -1,0 +1,92 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  /deep/ {
+    .mat-tab-label {
+      flex-grow: 1;
+    }
+    
+    .settings-tab {
+      font-family: "Open Sans";
+      font-size: 14px;
+
+      .settings-tab-title {
+        margin: 10px 0 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .two-tab-unit-wrapper {
+        display: flex;
+        justify-content: space-between;
+
+        & > * {
+          width: calc(50% - 5px);
+        }
+      }
+    }
+
+    .crypto-form-unit {
+      &.margin-bottom {
+        margin-bottom: 18px;
+      }
+
+      .form-unit__label {
+        margin-bottom: 7px;
+      }
+    }
+
+    mat-form-field.crypto-input {
+      &.with-hint {
+        .mat-form-field-wrapper {
+          padding-bottom: 1.1em;
+        }
+      }
+
+      input.mat-input-element {
+        font-size: 13px;
+        padding: 0 6px 0 14px;
+        text-indent: 0;
+        border-radius: 3px;
+      }
+
+      .mat-form-field-suffix {
+        padding-right: 10px;
+
+        i {
+          font-size: 1.6em;
+        }
+      }
+    }
+  }
+}
+
+
+/deep/ {
+  @include themify($themes, true) {
+    mat-select .mat-select-value {
+      font-size: 13px;
+      color: themed('titleTextColor');
+    }
+
+    mat-form-field.crypto-input {
+      input.mat-input-element {
+        color: themed('titleTextColor');
+
+        &::-webkit-input-placeholder {
+          color: themed('titleTextColor');
+        }
+      }
+    }
+
+    .settings-tab-title {
+      color: themed('titleTextColor');
+    }
+
+    .form-unit__label {
+      color: themed('titleTextColor');
+    }
+  }
+}

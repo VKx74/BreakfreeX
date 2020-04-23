@@ -1,0 +1,8 @@
+{
+  "orderBookChart": {
+    "deep": "Order book deep",
+    "all": "All",
+    "levels": "levels"
+  },
+  "orderBookChartComponentName": "Order Book Chart"
+}

@@ -1,0 +1,9 @@
+<div class="avatar-wrapper" *ngIf="avatarSrc">
+    <img [src]="avatarSrc" [alt]="name"
+         [ngClass]="{'highlighted': highlighted,
+         'crypto-color-accent': highlighted,
+         'circle': isCircleShape,
+         'rounded': !isCircleShape}"
+         (error)="onImageError()"
+    >
+</div>

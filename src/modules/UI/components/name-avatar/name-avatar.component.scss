@@ -1,0 +1,22 @@
+.avatar-wrapper {
+  height: 100%;
+  width: 100%;
+
+  img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+
+    &.highlighted {
+      border: 2px solid;
+    }
+
+    &.circle {
+      border-radius: 50%;
+    }
+
+    &.rounded {
+      border-radius: 5px;
+    }
+  }
+}

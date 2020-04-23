@@ -1,0 +1,138 @@
+body, html {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  font-size: 16px !important;
+  touch-action: none;
+}
+
+/*body div.modal,*/
+/*body #toast-container,*/
+/*body .scxSpectrum,*/
+/*popover-container {*/
+  /*z-index: 10000000000;*/
+/*}*/
+
+@media screen and (max-width: 1480px) {
+  body.chat-container-visible .container {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1480px) {
+  body.chat-container-visible .container {
+    width: 100%;
+  }
+}
+
+.scxToolbar-scroll-right {
+  display: none !important;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px transparent;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.25);
+  -webkit-transition: color 0.2s ease;
+  transition: color 0.2s ease;
+}
+
+::-webkit-scrollbar-track:hover {
+  -webkit-box-shadow: inset 0 0 6px transparent;
+  background-color: rgba(0, 0, 0, 0.17);
+  /*border-radius: 10px;*/
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+background-color: rgba(0,0,0, 0.3);
+/*border-radius: 10px;*/
+}
+
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.loader {
+  color: #6BB997;
+}
+
+.cdk-overlay-container {
+  z-index: 1001;
+}
+
+.tooltip-inner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*instead   <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">*/
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(https://fonts.gstatic.com/s/ptsans/v9/JX7MlXqjSJNjQvI4heMMGvY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(https://fonts.gstatic.com/s/ptsans/v9/vtwNVMP8y9C17vLvIBNZI_Y6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(https://fonts.gstatic.com/s/ptsans/v9/9kaD4V2pNPMMeUVBHayd7vY6323mHUZFJMgTvxaG2iE.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(https://fonts.gstatic.com/s/ptsans/v9/ATKpv8nLYAKUYexo8iqqrg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+
+/*https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting-using-css*/
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.modal.fade.show.in {
+  background-color: rgba(12, 12, 12, 0.71);
+  /*overflow-y: auto;*/
+}
+
+body.modalPriority dialog-holder template + dialog-wrapper .modal.show.in {
+  z-index: 10001;
+}
+
+.scxIndicators_helpControlPanel {
+  display: none !important;
+}

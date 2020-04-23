@@ -1,0 +1,56 @@
+@import '~@angular/cdk/text-field';
+@import "../variables";
+@import "../themes/themes";
+@import "../mixins/themify";
+@import "./mat-form-field-shared";
+@import "../controls/inputs";
+
+mat-form-field.#{$classPrefix}-input,
+mat-form-field.mat-form-field-type-mat-input {
+  @extend %mat-form-field-shared;
+  width: 200px;
+
+  input {
+    border-radius: 5px;
+  }
+
+  .mat-form-field-flex {
+    padding: 0;
+    height: 32px !important;
+    border-radius: 5px;
+  }
+
+  .mat-form-field-outline {
+    height: 32px;
+  }
+
+  mat-form-field.crypto-autocomplete .mat-form-field-flex {
+    border-radius: 5px;
+  }
+
+  input.mat-input-element {
+    height: 32px;
+    @extend %crypto-input-shared;
+    margin-top: 0;
+  }
+
+  .mat-form-field-suffix {
+    padding-right: 10px;
+  }
+
+  .mat-form-field-prefix {
+    padding-left: 10px;
+  }
+}
+
+@include themify($themes) {
+  input {
+    @include cdk-text-field-autofill-color(themed('inputBackgroundColor'), themed('valueTextColor'));
+  }
+  .crypto-modal {
+    input {
+      @include cdk-text-field-autofill-color(themed('inputInModalsBackgroundColor'), themed('valueTextColor'));
+    }
+  }
+
+}

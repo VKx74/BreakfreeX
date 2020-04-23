@@ -1,0 +1,19 @@
+/**
+ * @fileoverview added by tsickle
+ * Generated from: public-api.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/*
+ * Public API Surface of angular-golden-layout
+ */
+export { DefaultLabels, GoldenLayoutComponent } from './lib/components/golden-layout/golden-layout.component';
+export { configurationFactory, __Holder, GoldenLayoutPopupComponent } from './lib/components/golden-layout-popup/golden-layout-popup.component';
+export { GoldenLayoutModule } from './lib/layout.module';
+export {} from './lib/models/configuration';
+export {} from './lib/models/golden-layout-component-state';
+export { GoldenLayoutItem } from './lib/golden-layout-item';
+export {} from './lib/models/golden-layout-component-state';
+export { GoldenLayoutItemState } from './lib/tokens/golden-layout-item-state.token';
+export { LayoutManagerService } from './lib/services/layout-manager.service';
+export { GoldenLayoutComponentConfiguration } from "./lib/tokens/golden-layout-configuration.token";
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL2FuZ3VsYXItZ29sZGVuLWxheW91dC8iLCJzb3VyY2VzIjpbInB1YmxpYy1hcGkudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFJQSxxREFBYyx3REFBd0QsQ0FBQztBQUN2RSwyRUFBYyxvRUFBb0UsQ0FBQztBQUNuRixtQ0FBYyxxQkFBcUIsQ0FBQztBQUNwQyxlQUFjLDRCQUE0QixDQUFDO0FBQzNDLGVBQWMsNENBQTRDLENBQUM7QUFDM0QsaUNBQWMsMEJBQTBCLENBQUM7QUFDekMsZUFBYyw0Q0FBNEMsQ0FBQztBQUMzRCxzQ0FBYyw2Q0FBNkMsQ0FBQztBQUM1RCxxQ0FBYyx1Q0FBdUMsQ0FBQztBQUV0RCxPQUFPLEVBQUMsa0NBQWtDLEVBQUMsTUFBTSxnREFBZ0QsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qXG4gKiBQdWJsaWMgQVBJIFN1cmZhY2Ugb2YgYW5ndWxhci1nb2xkZW4tbGF5b3V0XG4gKi9cblxuZXhwb3J0ICogZnJvbSAnLi9saWIvY29tcG9uZW50cy9nb2xkZW4tbGF5b3V0L2dvbGRlbi1sYXlvdXQuY29tcG9uZW50JztcbmV4cG9ydCAqIGZyb20gJy4vbGliL2NvbXBvbmVudHMvZ29sZGVuLWxheW91dC1wb3B1cC9nb2xkZW4tbGF5b3V0LXBvcHVwLmNvbXBvbmVudCc7XG5leHBvcnQgKiBmcm9tICcuL2xpYi9sYXlvdXQubW9kdWxlJztcbmV4cG9ydCAqIGZyb20gJy4vbGliL21vZGVscy9jb25maWd1cmF0aW9uJztcbmV4cG9ydCAqIGZyb20gJy4vbGliL21vZGVscy9nb2xkZW4tbGF5b3V0LWNvbXBvbmVudC1zdGF0ZSc7XG5leHBvcnQgKiBmcm9tICcuL2xpYi9nb2xkZW4tbGF5b3V0LWl0ZW0nO1xuZXhwb3J0ICogZnJvbSAnLi9saWIvbW9kZWxzL2dvbGRlbi1sYXlvdXQtY29tcG9uZW50LXN0YXRlJztcbmV4cG9ydCAqIGZyb20gJy4vbGliL3Rva2Vucy9nb2xkZW4tbGF5b3V0LWl0ZW0tc3RhdGUudG9rZW4nO1xuZXhwb3J0ICogZnJvbSAnLi9saWIvc2VydmljZXMvbGF5b3V0LW1hbmFnZXIuc2VydmljZSc7XG5cbmV4cG9ydCB7R29sZGVuTGF5b3V0Q29tcG9uZW50Q29uZmlndXJhdGlvbn0gZnJvbSBcIi4vbGliL3Rva2Vucy9nb2xkZW4tbGF5b3V0LWNvbmZpZ3VyYXRpb24udG9rZW5cIjtcbiJdfQ==

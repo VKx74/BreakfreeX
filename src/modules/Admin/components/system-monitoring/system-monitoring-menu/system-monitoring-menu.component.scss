@@ -1,0 +1,27 @@
+@import '../../../../../global-styles/variables';
+
+.system-monitoring-link {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.menu-item-label {
+  width: 100%;
+  text-align: center;
+  padding: 0 15px 5px 15px;
+  color: inherit;
+
+  &:not(:first-of-type) {
+    margin-top: 10px;
+  }
+}
+
+.system-monitoring-btn {
+  position: relative;
+  padding-right: 35px;
+  display: flex;
+  justify-content: space-between;
+}
+

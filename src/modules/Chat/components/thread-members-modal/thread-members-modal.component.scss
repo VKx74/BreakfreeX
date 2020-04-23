@@ -1,0 +1,140 @@
+//@import "themes/themes";
+//@import "mixins/themify";
+//
+//.modal-content {
+//  //width: 400px;
+//  min-width: auto;
+//}
+//
+//.modal-body{
+//  position: relative;
+//}
+//
+//.delimiter {
+//  height: 1px;
+//  width: 100%;
+//  margin: 5px 0;
+//
+//  @include themify($themes, true) {
+//    background: themed('appBackgroundColor');
+//  }
+//}
+//
+//.subject-wrapper {
+//  overflow: auto;
+//  max-height: 300px;
+//
+//  .thread-subject {
+//    padding: 5px 10px;
+//
+//    &:nth-last-of-type(odd) {
+//      @include themify($themes, true) {
+//        background: themed('appModalsPanelColor');
+//      }
+//    }
+//
+//    &:hover{
+//      @include themify($themes, true) {
+//        background: transparentize(themed('appBackgroundColor'), 0.8);
+//      }
+//    }
+//
+//    .avatar {
+//      width: 24px;
+//      height: 24px;
+//    }
+//
+//    .name {
+//      margin-left: 5px;
+//    }
+//  }
+//}
+
+
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+.crypto-modal {
+  width: 440px;
+  min-width: auto;
+}
+
+.modal-body {
+  position: relative;
+}
+
+.delimiter {
+  margin: 5px 0;
+}
+
+table td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.member-item {
+  .avatar {
+    width: 27px;
+    height: 27px;
+    margin-right: 12px;
+  }
+
+  .name,
+  .ban {
+    font-size: 12px;
+    font-family: $primaryFontFamily;
+  }
+
+  .ban {
+    color: $redColor;
+    margin-right: 20px;
+  }
+}
+
+.placeholder {
+  font-size: 12px;
+  font-family: $primaryFontFamily;
+}
+
+
+.items-wrapper {
+  overflow: auto;
+  max-height: 300px;
+
+  //.thread-subject {
+  //  padding: 5px 10px;
+  //
+  //  &:hover {
+  //    @include themify($themes, true) {
+  //      background: transparentize(themed('panelBorderColor'), 0.8);
+  //    }
+  //  }
+  //
+  //  .avatar {
+  //    width: 24px;
+  //    height: 24px;
+  //  }
+  //
+  //  .name {
+  //    margin-left: 5px;
+  //  }
+  //}
+}
+
+/deep/ .ban-modal {
+  width: 400px;
+  min-width: auto;
+}
+
+@include themify($themes, true) {
+  .member-item {
+    .name {
+      //color: themed('primeColor');
+    }
+  }
+
+  .placeholder {
+    color: themed('titleTextColor');
+  }
+}

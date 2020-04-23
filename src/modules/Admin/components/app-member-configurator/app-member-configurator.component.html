@@ -1,0 +1,77 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">
+                <span *ngIf="isUserCreating">Register member</span>
+                <span *ngIf="isUserUpdating">Update member</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formGroup">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">Role:</div>
+                    <mat-form-field class="crypto-select full-width">
+                        <mat-select formControlName="role">
+                            <mat-option *ngFor="let role of roles" [value]="role">
+                                {{roleToStr(role) | async}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">E-mail:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="email" autocomplete="new-password">
+                        <i class="crypto-icon crypto-icon-email" matSuffix></i>
+                        <mat-error>Please, enter a valid email</mat-error>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="crypto-form-unit" *ngIf="isUserCreating">
+                    <p class="form-unit__label">Password:</p>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="password" formControlName="password" autocomplete="new-password">
+                        <i class="crypto-icon crypto-icon-pasword" matSuffix></i>
+                        <mat-error>Please, enter a valid password</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="crypto-form-unit">
+                    <p class="form-unit__label">Tags:</p>
+                    <div class="tags-wrapper">
+                        <tags-input [mode]="TagsInputMode.Autocomplete"
+                                    [tags]="tags"
+                                    [tagNameSelector]="tagNameSelector"
+                                    [autocompleteHandler]="tagsAutocompleteHandler"
+                                    (onAddTag)="addTag($event)"
+                                    (onRemoveTag)="removeTag($event)">
+                        </tags-input>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <ng-container *ngIf="isUserUpdating">
+                    <button class="crypto-button crypto-button_primary"
+                            [ngClass]="{'is-loading': processing}"
+                            [disabled]="formGroup.invalid"
+                            (click)="update()">
+                        Update
+                    </button>
+                </ng-container>
+
+                <ng-container *ngIf="isUserCreating">
+                    <button class="crypto-button crypto-button_primary"
+                            [ngClass]="{'is-loading': this.processing}"
+                            [disabled]="formGroup.invalid"
+                            (click)="create()">
+                        Register
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

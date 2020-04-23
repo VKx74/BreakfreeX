@@ -1,0 +1,115 @@
+<data-table *ngIf="rows; else loader" [rows]="rows" [columnCaption]="columnCaption" [allowColumnsVisibilityChange]="true">
+<!--    *ngIf="showOrderStatus"-->
+<!--    <data-table-header-cell [columnName]="ORDER_STATUS_COLUMN_NAME">-->
+<!--        {{'closed' | translate}}-->
+<!--    </data-table-header-cell>-->
+
+    <data-table-header-cell columnName="symbol" [sortable]="false">
+
+        <div> {{'instrument' | translate}}</div>
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="side" [sortable]="true">
+         {{'side' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="size" [sortable]="true">
+        {{'size' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="remainedSize" [sortable]="true">
+        {{'remainedSize' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="price" [sortable]="true">
+        {{'price' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="stopPrice" [sortable]="true">
+        {{'stopPrice' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="avgPrice" [sortable]="true">
+        {{'avgPrice' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="type" [sortable]="true">
+        {{'type' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="status" [sortable]="true">
+        {{'status' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="time" [sortable]="true">
+        {{'time' | translate}}
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="closeOrder" [sortable]="false" [columnWidth]="80">
+
+    </data-table-header-cell>
+
+    <data-table-cell columnName="orderStatus">
+        <ng-template let-item>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="symbol">
+        <ng-template let-item>
+            <span class="symbol">
+                    {{item.symbol}}
+            </span>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="side">
+        <ng-template let-item>
+           <order-side [side]="item.side"></order-side>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="size">
+        <ng-template let-item>{{item.size}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="remainedSize">
+        <ng-template let-item>{{item.remainedSize ? item.remainedSize : '0'}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="price">
+        <ng-template let-item>{{item.price ? item.price : '-'}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="stopPrice">
+        <ng-template let-item>{{item.stopPrice ? item.stopPrice : '-'}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="avgPrice">
+        <ng-template let-item>{{item.avgPrice ? item.avgPrice : '-'}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="type">
+        <ng-template let-item>{{item.type}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="status">
+        <ng-template let-item>{{item.status}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="time">
+        <ng-template let-item>{{item.time | formatDate:'YYYY/MM/DD HH:mm:ss'}}</ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="closeOrder">
+        <ng-template let-item>
+            <div class="flex justify-content-center align-items-center">
+                <trading-close-button  *ngIf="item.status === EOrderStatus.Open"
+                                       (click)="closeOrder(item)"></trading-close-button>
+            </div>
+        </ng-template>
+    </data-table-cell>
+</data-table>
+
+<ng-template #loader>
+    <loader *ngIf="!rows"></loader>
+</ng-template>

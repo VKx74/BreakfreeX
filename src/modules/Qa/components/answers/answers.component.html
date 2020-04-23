@@ -1,0 +1,29 @@
+<div>
+    <div class="header delimiter-bottom delimiter-top" *ngIf="totalAnswersCount !== 0">
+        <tabs title="{{totalAnswersCount}} Answers"
+              [tabs]="answerTabs"
+              [activeTab]="selectedAnswerTab$ | async"
+              (onSelectTab)="handleAnswerTabChange($event)"></tabs>
+    </div>
+    <div class="answers-wrapper">
+        <ng-container *ngFor="let answer of answers">
+            <answer-post [post]="answer"
+                         (onEdited)="handleAnswerEdited($event)"
+                         (onDeleted)="handleAnswerDeleted($event)"></answer-post>
+            <div class="delimiter"></div>
+        </ng-container>
+        <ng-container *ngIf="totalAnswersCount !== 0 && showPaginator">
+            <paginator-container>
+                <paginator [handler]="paginationHandler" [showPageSize]="false"></paginator>
+            </paginator-container>
+            <div class="delimiter"></div>
+        </ng-container>
+
+        <div class="answer-input-wrapper">
+            <div class="your-answer">
+                <span class="answer-title">Your Answer</span>
+            </div>
+            <answer-input [submitHandler]="answerInputSubmitHandler"></answer-input>
+        </div>
+    </div>
+</div>

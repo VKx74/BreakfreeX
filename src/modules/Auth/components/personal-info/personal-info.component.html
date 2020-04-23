@@ -1,0 +1,108 @@
+<form [formGroup]="formGroup" novalidate class="form-wrapper" (ngSubmit)="sendInfo()">
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input full-width with-hint">
+                <input matInput type="text" placeholder="First Name" formControlName="firstName"
+                       [errorStateMatcher]="errorMatcher"
+                       [disabled]="isFullName">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>First Name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input full-width with-hint">
+                <input matInput type="text" placeholder="Last Name" formControlName="lastName"
+                       [errorStateMatcher]="errorMatcher"
+                       [disabled]="isFullName">
+                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                <mat-error>
+                    <span>Last Name is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="crypto-form-unit">
+        <mat-form-field class="crypto-date-input full-width with-hint">
+            <input matInput readonly
+                   class="cursor-default"
+                   [errorStateMatcher]="errorMatcher"
+                   [matDatepicker]="datePicker"
+                   placeholder="Date of birth"
+                   formControlName="birth">
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+            <mat-error>
+                <span>Date of birth is not valid</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-select full-width">
+                <mat-select formControlName="country" placeholder="No countries" [errorStateMatcher]="errorMatcher">
+                    <mat-option *ngFor="let country of countriesList" [value]="country">
+                        {{country}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>
+                    <span>Country is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input full-width with-hint">
+                <input matInput type="text" placeholder="City" formControlName="city"
+                       [errorStateMatcher]="errorMatcher">
+                <mat-error>
+                    <span>City is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="two-input-wrapper">
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input full-width with-hint">
+                <input matInput type="text" placeholder="Address" formControlName="address"
+                       [errorStateMatcher]="errorMatcher">
+                <i class="crypto-icon crypto-icon-map" matSuffix></i>
+                <mat-error>
+                    <span>Address is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="crypto-form-unit">
+            <mat-form-field class="crypto-input full-width with-hint">
+                <input matInput type="text" placeholder="Postcode" formControlName="postcode"
+                       [errorStateMatcher]="errorMatcher">
+                <mat-error>
+                    <span>Postcode is not valid</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="notification is-error" *ngIf="errorNotification">
+        <span>{{errorNotification}}</span>
+    </div>
+
+    <button type="submit"
+            class="btn crypto-button crypto-button-full-width button_primary register-btn"
+            [disabled]="formGroup.invalid"
+            mat-button>
+        <div class="lds-ellipsis" *ngIf="processing">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <span *ngIf="!processing">Next step</span>
+    </button>
+</form>

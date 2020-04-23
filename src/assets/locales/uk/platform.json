@@ -1,0 +1,15 @@
+{
+  "workspaces": "Робочі області",
+  "workspaceNames": {
+    "BasicUser": "Базовий Користувач",
+    "AdvancedUser": "Досвідчений Користувач",
+    "AdvancedTrader": "Досвідчений Трейдер",
+    "Institutional": "Інституційний",
+    "Empty": "Пустий",
+    "saveLayout": "Зберегти макет",
+    "savedLayout": "Макет збережено"
+  },
+  "tradingInitialized": "Трейдинг розпочато",
+  "failedInitTrading": "Не вдалося розпочати трейдинг: ",
+  "tradingManager": "Торговий менеджер"
+}

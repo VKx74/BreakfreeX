@@ -1,0 +1,7 @@
+ <div class="search-wrapper">
+        <mat-form-field class="crypto-input search-input">
+            <input #searchInput matInput placeholder="Search discussion..." [value]="query" onEnter
+                   (enterHandler)="handleSearch(searchInput.value)">
+            <i class="crypto-icon crypto-icon-search search-icon" matPrefix></i>
+        </mat-form-field>
+ </div>

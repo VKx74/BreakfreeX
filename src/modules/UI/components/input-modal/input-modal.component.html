@@ -1,0 +1,33 @@
+<div class="crypto-modal" [ngClass]="data.modalClass ? data.modalClass : ''">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="reject()"><i class="crypto-icon crypto-icon-close cursor-pointer"></i>
+            </button>
+            <h4 class="modal-title">
+                <span>{{title}}</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formGroup">
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{inputCaption}}</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="value" placeholder="{{inputPlaceholder}}"
+                               (keyup.enter)="enterValue()">
+                        <mat-error [formError]="'value'"></mat-error>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_primary"
+                        [class.is-loading]="processingSubmit"
+                        [disabled]="formGroup.invalid"
+                        (click)="enterValue()">
+                    <span>{{buttonCaption}}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

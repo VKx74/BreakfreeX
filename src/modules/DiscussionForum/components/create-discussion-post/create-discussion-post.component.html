@@ -1,0 +1,18 @@
+<div>
+    <div>
+        <span class="title">Your Comment</span>
+    </div>
+    <div class="form-wrapper" [formGroup]="formGroup">
+        <div class="m-top-5">
+            <markdown-input placeholder="Type your comment..." formControlName="content"
+                            [errorHandler]="markdownInputErrorHandler"></markdown-input>
+        </div>
+        <div class="btns-wrapper m-top-5 text-right">
+            <button class="crypto-button crypto-button_primary post-btn"
+                    (click)="handleAddPost()"
+                    [ngClass]="{'is-loading': processCreation}"
+                    [disabled]="formGroup.invalid">Post Comment
+            </button>
+        </div>
+    </div>
+</div>

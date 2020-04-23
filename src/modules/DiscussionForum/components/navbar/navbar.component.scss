@@ -1,0 +1,123 @@
+@import "../../styles/variables";
+@import "mixins/themify";
+@import "themes/themes";
+
+:host {
+  .root {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f1;
+    height: $navbarHeight;
+    padding: 0 25px;
+  }
+
+  .menu-toggle {
+    color: #606060;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  .logo {
+    a {
+      text-decoration: none;
+    }
+
+    .logo__img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .logo__caption {
+      color: #fc2cad;
+      font-family: EuropeExtBold,serif;;
+    }
+
+    .logo__delimiter {
+      height: 25px;
+      width: 1px;
+      background-color: #f0f0f1;
+      margin: 0 5px;
+    }
+  }
+
+  .avatar-wrapper {
+    cursor: pointer;
+
+    name-avatar {
+      width: 45px;
+      height: 45px;
+    }
+
+    .toggle-menu {
+      margin-left: 5px;
+    }
+  }
+
+  .search-input {
+    min-width: 600px;
+
+    .mat-form-field-flex {
+      height: 35px;
+    }
+
+    .search-icon {
+      font-size: 27px;
+    }
+  }
+
+  ::ng-deep {
+    .mat-form-field-flex {
+      background: inherit;
+    }
+
+    .mat-input-element {
+      background: inherit !important;
+    }
+  }
+  .crypto-input {
+    width: 100% !important;
+  }
+}
+
+
+@media screen and (max-width: 900px) {
+  :host {
+    .search-input {
+      min-width: 400px;
+    }
+  }
+}
+
+@media screen and (max-width: 730px) {
+  .search-wrapper {
+    flex-grow: 1;
+    padding: 0 15px;
+
+    .search-input {
+      width: 100%;
+      min-width: auto;
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .root {
+    flex-wrap: wrap;
+    align-content: center;
+    height: $mobileNavbarHeight !important;
+  }
+
+  .search-wrapper {
+    order: 3;
+    width: 100%;
+    padding: 5px 0 0;
+    margin-top: 5px;
+    border-top: 1px solid #f0f0f1;
+  }
+}
+
+@include themify($themes, true) {
+  .mat-input-element:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px themed('appPanelColor') inset;
+  }
+}
+

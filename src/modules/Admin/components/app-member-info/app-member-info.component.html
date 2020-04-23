@@ -1,0 +1,53 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <component-preloader [observable]="$initObs" [template]="template"></component-preloader>
+        <ng-template #template>
+            <div class="modal-header">
+                <div class="banner-wrapper">
+                    <img src="assets/img/login-page/Bg-sign-in.png" alt="" class="banner-img">
+                </div>
+                <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i>
+                </button>
+
+                <div class="header-wrapper">
+                    <div class="flex justify-space-between align-items-center">
+                        <h4 class="modal-title">
+                            <span>Account details</span>
+                        </h4>
+                        <span>
+                    <span class="crypto-text crypto-color-secondary is-small">Status:</span>
+                    <span [ngClass]="getPersonalInfoStatusClass(personalInfo.status)" class="crypto-text is-small">
+                        {{getPersonalInfoStatusStr() | async}}
+                    </span>
+                </span>
+                    </div>
+                    <div class="avatar-wrapper text-center">
+                        <div class="avatar flex align-items-center justify-content-center">
+                            <name-avatar *ngIf="avatarId !== undefined" [src]="avatarId"
+                                         [name]="personalInfo.lastName || personalInfo.personal.lastName"></name-avatar>
+                        </div>
+                        <span class="m-top-10 crypto-text is-medium">{{personalInfo.firstName || personalInfo.personal.firstName}} {{personalInfo.lastName || personalInfo.personal.lastName}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body flex">
+                <mat-tab-group class="tabs-wrapper full-width">
+                    <mat-tab label="KYC">
+                        <div class="crypto-scrollable-container">
+                            <app-member-kyc-info
+                                    [personalInfoData]="personalInfoData"
+                                    [approveHandler]="approveHandler"
+                                    [rejectHandler]="rejectHandler"></app-member-kyc-info>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Login Activities">
+                        <user-activities-login [userId]="user.id"></user-activities-login>
+                    </mat-tab>
+                    <mat-tab label="Activities">
+                        <user-activities [userId]="user.id"></user-activities>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,204 @@
+<div class="crypto-modal">
+    <div class="modal-content crypto-text">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <span
+                    class="modal-title">{{data.alert ? ('tradingAlert.editAlert' | translate) : ('tradingAlert.createAlert' | translate)}}
+                {{activeInstrument?.symbol}}</span>
+        </div>
+        <div class="modal-body" [formGroup]="alertWidgetForm">
+            <div class="crypto-form-unit margin-bottom">
+                <p class="form-unit__label"><span>{{'tradingAlert.condition' | translate}}</span></p>
+                <div *ngIf="controls.selectedIndicatorSeries.enabled">
+                    <selector class="condition-selector" formControlName="selectedIndicatorSeries"
+                              [options]="IndicatorCrossingTitles" [optionCaption]="indicatorsSeriesCaption">
+                    </selector>
+                </div>
+                <div *ngIf="controls.selectedInstrument.enabled">
+                    <instrument-search formControlName="selectedInstrument"
+                                       class="instrument-search condition-selector">
+                    </instrument-search>
+                </div>
+            </div>
+
+            <div class="crypto-form-unit margin-bottom">
+                <!--                    <p class="form-unit__label"><span>{{'tradingAlert.condition' | translate}}</span></p>-->
+                <selector class="condition-selector" formControlName="selectedCondition"
+                          [options]="ConditionTitle" [optionCaption]="conditionTitlesTranslate">
+                </selector>
+            </div>
+
+            <ng-container *ngIf="controls.priceAlert.enabled">
+                <div formGroupName="priceAlert">
+                    <div class="crypto-form-unit margin-bottom">
+                        <!--                    <p class="form-unit__label"><span>{{'tradingAlert.condition' | translate}}</span></p>-->
+                        <selector class="condition-selector" formControlName="indicatorCross"
+                                  [options]="IndicatorCrossedTitles" [optionCaption]="indicatorsSeriesCaption">
+                        </selector>
+                    </div>
+
+                    <div class="crypto-form-unit margin-bottom" *ngIf="priceAlertControls.priceCross.enabled">
+                        <p class="form-unit__label"><span> {{'value' | translate}}</span></p>
+
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput type="number" formControlName="priceCross">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="controls.channelAlert.enabled">
+                <div formGroupName="channelAlert">
+                    <div class="crypto-form-unit">
+                        <p class="form-unit__label"><span> {{'tradingAlert.upperBound'| translate}}</span></p>
+
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput type="number" formControlName="upperCross">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="crypto-form-unit">
+                        <p class="form-unit__label"><span> {{'tradingAlert.lowerBound'| translate}}</span></p>
+
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput type="number" formControlName="lowerCross">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="controls.movingAlert.enabled">
+                <div formGroupName="movingAlert">
+                    <div class="two-columns flex">
+                        <div class="flex-grow-1 m-right-5 w-0">
+                            <div class="crypto-form-unit">
+                                <p class="form-unit__label">
+                                    <span>{{'value' | translate}} <span
+                                            *ngIf="MovingTypeWithPercent">(%)</span></span>
+                                </p>
+
+                                <mat-form-field class="crypto-input full-width">
+                                    <input matInput type="number" formControlName="priceDelta">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow-1 m-left-5 w-0">
+                            <div class="crypto-form-unit">
+                                <p class="form-unit__label">
+                                    <span>{{'tradingAlert.withinMinutes' | translate}}</span>
+                                </p>
+                                <mat-form-field class="crypto-input full-width">
+                                    <input matInput type="number" formControlName="timeDelta">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </ng-container>
+            <hr class="delimiter"/>
+
+            <div class="crypto-form-unit margin-bottom">
+                <p class="form-unit__label flex justify-space-between align-items-center">
+                    <span>
+                         {{'tradingAlert.useExpiration' | translate}}
+                    </span>
+                    <mat-slide-toggle formControlName="useExpiration"></mat-slide-toggle>
+                </p>
+
+                <div class="two-columns" formGroupName="expiration">
+                    <mat-form-field class="crypto-date-input">
+                        <input matInput readonly [matDatepicker]="dateFrom" [min]="minDate"
+                               formControlName="expirationDate" placeholder="Datepicker"
+                               (click)="dateFrom.open()"
+                               class="crypto-input datepicker cursor-pointer">
+                        <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #dateFrom></mat-datepicker>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="crypto-time-input">
+                        <input matInput formControlName="expirationTime" [ngxTimepicker]="toggleTimepicker"
+                               (click)="toggleTimepicker.open()" class="cursor-pointer"
+                               placeholder="Time" [disableClick]="true" readonly>
+                        <ngx-material-timepicker-toggle [for]="toggleTimepicker" matSuffix>
+                        </ngx-material-timepicker-toggle>
+                        <ngx-material-timepicker #toggleTimepicker></ngx-material-timepicker>
+                    </mat-form-field>
+
+
+                </div>
+            </div>
+
+            <div class="crypto-form-unit margin-bottom">
+                <p class="form-unit__label flex align-items-center justify-space-between">
+                    <span>{{ 'tradingAlert.showPopup' | translate}}</span>
+                    <mat-slide-toggle formControlName="showPopUp"></mat-slide-toggle>
+                </p>
+            </div>
+
+            <div class="crypto-form-unit margin-bottom">
+                <p class="form-unit__label flex align-items-center justify-space-between">
+                    <span>{{'tradingAlert.playSound' | translate}}</span>
+                    <mat-slide-toggle formControlName="playSound"></mat-slide-toggle>
+                </p>
+
+                <div class="flex" *ngIf="controls.playSound.value" formGroupName="sound">
+                    <selector class="sound-selector flex-grow-1" [options]="alertsSound"
+                              formControlName="selectedSound">
+                    </selector>
+
+                    <div class="crypto-button-icon play-sound-btn" (click)="playSound()">
+                        <i class="fa fa-play option-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crypto-form-unit margin-bottom">
+                <p class="form-unit__label flex align-items-center justify-space-between">
+                    <span>{{'tradingAlert.sendSMS' | translate}}</span>
+                    <mat-slide-toggle formControlName="useSMS"></mat-slide-toggle>
+                </p>
+            </div>
+
+            <div class="crypto-form-unit margin-bottom">
+                <p class="form-unit__label flex align-items-center justify-space-between">
+                    <span>{{'tradingAlert.sendEmail' | translate}}</span>
+                    <mat-slide-toggle formControlName="useEmail"></mat-slide-toggle>
+                </p>
+            </div>
+
+            <div class="crypto-form-unit margin-bottom">
+                <p class="form-unit__label">
+                    <span>{{'tradingAlert.message' | translate}}</span>
+                </p>
+                <textarea matInput class="crypto-textarea" placeholder="{{'tradingAlert.message' | translate}}"
+                          formControlName="alertMessage">
+                    {{priceAlertControls.priceCross.enabled}}
+                </textarea>
+            </div>
+
+            <div class="crypto-form-unit">
+                <p class="form-unit__label">
+                    <span>{{'tradingAlert.trading' | translate}}</span>
+                </p>
+                <selector class="condition-selector" formControlName="tradingAction"
+                          [options]="tradingOrdersStatusTitles" [optionCaption]="tradingOrdersStatus"
+                          (optionClick)="setTradingAlertStatus()">
+                </selector>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="buttons-wrap flex justify-flex-end">
+                <button class="crypto-button crypto-button_primary crypto-button-w-100"
+                        [disabled]="alertWidgetForm.invalid"
+                        [class.is-loading]="processingSubmit"
+                        (click)="onSubmitDialog()">
+                    {{ data.alert ? ('edit' | translate) : ('create' | translate) }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

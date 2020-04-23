@@ -1,0 +1,13 @@
+<div class="caption-wrapper text-center" *ngIf="processState.isPending() || processState.isFailed()">
+    <span class="caption" *ngIf="processState.isPending()">
+<!--        {{getPendingCaption() | async}}-->
+        <loader></loader>
+    </span>
+    <span class="caption" *ngIf="processState.isFailed()">
+        {{getErrorCaption() | async}}
+    </span>
+</div>
+
+<ng-container *ngIf="template != null && processState.isSucceeded()">
+    <ng-container *ngTemplateOutlet="template"></ng-container>
+</ng-container>

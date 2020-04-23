@@ -1,0 +1,74 @@
+@import "global-styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  .root {
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 11px;
+    font-family: "Open Sans", sans-serif;
+    height: 42px;
+    text-transform: uppercase;
+
+    .footerLabel {
+      text-transform: uppercase;
+    }
+
+    .time-wrapper {
+      .time-zone-icon {
+        font-size: 2.4em;
+      }
+
+      .time-zone-caption {
+        display: inline-block;
+        margin: 0 10px;
+      }
+    }
+
+    .component-item {
+      margin: 0 3px;
+      font-size: 2.4em;
+
+      &:first-of-type {
+        margin-left: 0;
+      }
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+
+    .left-side .delimiter {
+      width: 1px;
+      align-self: stretch;
+      margin: 8px 10px;
+    }
+
+    .btn-layout-save {
+      border: 1px solid gray;
+      padding: 3px;
+      margin-left: 10px
+    }
+
+    .save-layout-btn {
+      margin-left: 15px;
+    }
+
+    .not-saved {
+      color: red;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .root {
+    background-color: themed('appPanelColor');
+    border: 1px solid themed('appBackgroundColor');
+    color: themed('valueTextColor');
+  }
+
+  .left-side .delimiter {
+    background-color: themed('appBackgroundColor');
+  }
+}

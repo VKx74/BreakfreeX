@@ -1,0 +1,571 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+
+  &.maximized {
+    height: 100%;
+  }
+
+  .root {
+    height: 100%;
+  }
+}
+
+.root {
+  @include themify($themes, true) {
+    background-color: themed('appPanelColor');
+  }
+}
+
+
+.top-line {
+  height: 40px;
+  padding: 0 2px 0 15px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+
+  .thread-name {
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+  }
+
+  .control {
+    &:not(:last-of-type) {
+      margin-right: 5px;
+    }
+  }
+}
+
+.edit-message-wrapper {
+  padding: 4px 4px 5px 4px;
+  border-top: 1px solid transparent;
+
+  .message-content {
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+  }
+
+  .edit-icon {
+    margin-right: 7px;
+  }
+
+  .cancel-editing-icon {
+    margin-right: 7px;
+    margin-left: 7px;
+    cursor: pointer;
+    opacity: 0.6;
+    font-size: 13px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .crypto-icon-close {
+    cursor: pointer;
+    opacity: 0.6;
+    margin-right: 6px;
+  }
+}
+
+.content-wrapper {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 2;
+  overflow: auto;
+
+  .overlay-content-wrapper {
+    margin: auto;
+  }
+
+  span {
+    font-size: 14px;
+    font-family: $primaryFontFamily;
+
+    &.header-caption {
+      font-size: 24px;
+    }
+  }
+
+  .banner-img-wrapper .icon {
+    font-size: 90px;
+  }
+}
+
+.messages-wrapper {
+  height: 100%;
+  overflow: auto;
+  flex-grow: 1;
+  padding: 0 3px 3px 3px;
+  flex-direction: column-reverse;
+  position: relative;
+
+  &.old-browser {
+    flex-direction: column;
+    transform: scaleY(-1);
+
+    thread-message {
+      transform: scaleY(-1);
+    }
+  }
+}
+
+.messages-outer-wrapper {
+  position: relative;
+}
+
+.load-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.load-more-spinner-wrapper {
+  height: 26px;
+}
+
+.footer {
+  padding: 4px;
+  flex-shrink: 0;
+  display: flex;
+
+  margin: 10px 23px 16px 23px;
+  border-radius: 4px;
+  //height: 50px;
+
+  .crypto-button {
+    max-height: 32px;
+    margin-left: 5px;
+    align-self: flex-end;
+    margin-bottom: 5px;
+  }
+}
+
+.message-input-wrapper {
+  border-radius: 3px;
+  //padding: 0 6px 0 4px;
+  padding: 0 6px 0 4px;
+
+  &.disabled {
+    & > * {
+      pointer-events: none;
+    }
+  }
+
+  input {
+    border-radius: 3px 0 0 3px;
+    font-size: 13px;
+    text-indent: 0;
+    padding-left: 0;
+    background-color: transparent;
+  }
+
+  .left-side-controls {
+    margin-right: 4px;
+
+    .control {
+      &.add-file-control {
+        font-size: 21px;
+      }
+    }
+  }
+
+  .right-side-controls .control {
+    margin-left: 6px;
+  }
+
+  .right-side-controls .control,
+  .left-side-controls .control {
+    opacity: 0.5;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.upload-file {
+  width: auto;
+}
+
+
+@include themify($themes, true) {
+  .header {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+  &.maximized {
+    *.crypto-icon-take-off {
+      color: themed('accentColor');
+    }
+  }
+
+  .top-line {
+    background-color: themed('appPanelColor');
+    //border-bottom-color: themed('panelBorderColor');
+  }
+
+  .thread-name {
+    //color: themed('primeColor');
+  }
+
+  .footer {
+    background: themed('inputBackgroundColor');
+
+    .edit-message-wrapper {
+      //border-top-color: themed('delimiterColor');
+    }
+
+    .edit-icon {
+      color: themed('accentColor');
+    }
+
+    .cancel-editing-icon {
+      //color: themed('primeColor');
+    }
+  }
+
+  .message-input-wrapper {
+    //background: themed('inputBackgroundColor');
+    //background: themed('inputBgColor');
+
+    &.disabled {
+      //background: themed('inputDisabledBgColor');
+      background: themed('selectBgDisabled');
+    }
+  }
+
+  .overlay {
+    //background-color: themed('primeBgColor');
+
+    span {
+      //color: themed('primeColor');
+
+      &.reason-caption {
+        color: themed('accentColor');
+      }
+    }
+  }
+
+  .banner-img-wrapper .icon {
+    color: themed('accentColor');
+  }
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 7px 9px 6px 22px;
+  //padding: 0 2px 0 15px;
+  //border-top: 1px solid transparent;
+
+
+  .header_title {
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+  }
+
+  .user-image {
+    width: 36px;
+    height: 36px;
+  }
+
+  .crypto-icon {
+    cursor: pointer;
+  }
+
+
+  ::ng-deep menu-toggle {
+    *.menu-toggle {
+      border-radius: 0;
+      margin-right: 4px;
+      height: 30px;
+      width: 30px;
+
+      @include themify($themes, true) {
+        background-color: transparent;
+
+        &:hover {
+          background-color: themed('inputBackgroundColor');
+        }
+      }
+    }
+  }
+}
+
+.active-thread-top {
+  .active-thread-info {
+    height: 37px;
+    max-width: 250px;
+  }
+
+  .active-name {
+    font-size: 12px;
+    line-height: 1.42;
+  }
+
+  .active-description {
+    font-size: 11px;
+    line-height: 1.36;
+  }
+}
+
+////@import "global-styles/themes/themes";
+////@import "global-styles/mixins/themify";
+////@import "global-styles/variables";
+//@import "../../../../global-styles/themes/themes";
+//@import "../../../../global-styles/variables";
+//@import "mixins/themify";
+//
+//
+//:host {
+//  display: flex;
+//  flex-direction: column;
+//  height: 100%;
+//
+//  &.maximized {
+//    height: 100%;
+//
+//    *.crypto-icon-take-off {
+//      @include themify($themes) {
+//        color: themed('accentColor');
+//      }
+//    }
+//  }
+//
+//  ::ng-deep .mat-menu-item {
+//    &:hover {
+//      background-color: red;
+//    }
+//  }
+//}
+//
+//.active-thread {
+//  height: 100%;
+//  padding-bottom: 20px;
+//
+//  @include themify($themes) {
+//    color: themed('appPanelColor');
+//  }
+//
+//
+//  .active-thread-top {
+//    .active-thread-info {
+//      height: 37px;
+//      max-width: 250px;
+//    }
+//
+//    .active-name {
+//      font-size: 12px;
+//      line-height: 1.42;
+//    }
+//
+//    .active-description {
+//      font-size: 11px;
+//      line-height: 1.36;
+//    }
+//  }
+//
+//  @include themify($themes, true) {
+//    border-left: 1px solid themed('appBackgroundColor');
+//    background-color: themed('appPanelColor');
+//  }
+//  //border-left: 1px solid themed('menuDelimiterColor');
+//
+//  .justify-space-between {
+//    border-top: none;
+//    justify-content: space-between;
+//
+//    .control {
+//      &:not(:last-of-type) {
+//        margin-right: 5px;
+//      }
+//    }
+//  }
+//
+//  .header {
+//    display: flex;
+//    align-items: center;
+//    //height: 40px;
+//    padding: 7px 9px 6px 22px;
+//    //padding: 0 2px 0 15px;
+//    //border-top: 1px solid transparent;
+//
+//
+//    .header_title {
+//      font-size: 13px;
+//      font-family: $primaryFontFamily;
+//    }
+//
+//    .user-image {
+//      width: 36px;
+//      height: 36px;
+//    }
+//
+//    .crypto-icon {
+//      cursor: pointer;
+//    }
+//
+//
+//
+//    ::ng-deep menu-toggle {
+//      *.menu-toggle {
+//        border-radius: 0;
+//        margin-right: 4px;
+//        height: 30px;
+//        width: 30px;
+//
+//        @include themify($themes, true) {
+//          background-color: transparent;
+//
+//          &:hover {
+//            background-color: themed('inputBackgroundColor');
+//          }
+//        }
+//      }
+//    }
+//  }
+//
+//  .message-list {
+//    overflow: auto;
+//    flex-grow: 1;
+//    padding: 0 3px 3px 3px;
+//    flex-direction: column-reverse;
+//
+//    @include themify($themes, true) {
+//      //border-left: 1px solid themed('menuDelimiterColor');
+//    }
+//
+//    &.old-browser {
+//      flex-direction: column;
+//      transform: scaleY(-1);
+//
+//      thread-message {
+//        transform: scaleY(-1);
+//      }
+//    }
+//  }
+//
+//  .footer {
+//    padding: 4px 20px 4px 20px;
+//    flex-shrink: 0;
+//    display: flex;
+//
+//    .edit-message-content {
+//      padding: 4px 4px 5px 4px;
+//
+//      @include themify($themes, true) {
+//        border-top: 1px solid themed('appBackgroundColor');
+//      }
+//
+//      .message-content {
+//        font-size: 13px;
+//      }
+//
+//      .crypto-icon-edit {
+//        margin-right: 7px;
+//
+//        @include themify($themes, true) {
+//          color: themed('accentColor');
+//        }
+//
+//        font-size: large;
+//      }
+//
+//
+//      .crypto-icon-close {
+//        cursor: pointer;
+//        opacity: 0.6;
+//        margin-right: 6px;
+//      }
+//    }
+//
+//    .massage-input-wrapper {
+//      border-radius: 3px;
+//      padding: 4px 15px;
+//
+//      emoji-picker, .btn-add-file, .input-actions {
+//        transform: scale(1.3);
+//      }
+//
+//      @include themify($themes, true) {
+//        background: themed('inputBackgroundColor');
+//      }
+//
+//      &.disabled {
+//        @include themify($themes, true) {
+//          background: themed('noactiveTabs');
+//        }
+//
+//        & > * {
+//          pointer-events: none;
+//        }
+//      }
+//
+//      .crypto-input {
+//        border-radius: 3px 0 0 3px;
+//        font-size: 13px;
+//        background-color: transparent;
+//      }
+//
+//      .input-actions {
+//        @include themify($themes, true) {
+//          color: themed('titleTextColor');
+//        }
+//
+//        .crypto-icon,
+//        emoji-picker::ng-deep.crypto-icon {
+//          opacity: 0.5;
+//          cursor: pointer;
+//        }
+//
+//        .crypto-icon {
+//          margin: 0 10px;
+//        }
+//      }
+//    }
+//
+//    .crypto-button {
+//      max-height: 32px;
+//      margin-left: 5px;
+//      align-self: flex-end;
+//      margin-bottom: 5px;
+//    }
+//  }
+//
+//  .btn-add-file {
+//    background: transparent;
+//
+//    @include themify($themes, true) {
+//      color: themed('titleTextColor');
+//    }
+//
+//    border: none;
+//    font-size: 20px;
+//
+//    span {
+//      opacity: 0.5;
+//    }
+//  }
+//}

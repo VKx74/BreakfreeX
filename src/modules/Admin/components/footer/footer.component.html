@@ -1,0 +1,27 @@
+<div class="footer-panel flex">
+    <div class="timeZone-icon-wraper">
+        <span class="crypto-icon crypto-icon-time"></span>
+    </div>
+
+    <div class="selectedTZDate-wraper">
+        <span class="footerLabel">TIME ZONE</span>
+        <span>{{date}}</span>
+    </div>
+    <div class="shuftipro-wrapper" *showIfRole="[Roles.Admin, Roles.KYCOfficer]">
+        <div class="shuftipro-info"
+             [ngClass]="{'active': changeShuftiproAccountProcessing}"
+             (click)="changeShuftiproAccount()">
+            <div class="flex align-items-center">
+                <span class="footerLabel">Shufti Pro account: </span>
+                <span class="shuftipro-account m-right-10">{{shuftiproAccountEmail}}</span>
+            </div>
+            <div class="flex align-items-center">
+                <span class="footerLabel">Shufti Pro status: </span>
+                <span class="shuftipro-health-status m-right-10"
+                      [title]="shuftiproStatus">{{shuftiproStatus}}</span>
+                <div class="shuftipro-health-indicator m-right-10"
+                     [ngClass]="{'status-ok': isShuftiproHealthy, 'status-bad': !isShuftiproHealthy}"></div>
+            </div>
+        </div>
+    </div>
+</div>

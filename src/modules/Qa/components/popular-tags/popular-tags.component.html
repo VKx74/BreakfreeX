@@ -1,0 +1,18 @@
+<div class="popular-container">
+    <div class="header">
+        <span class="title title-color">Popular Tags</span>
+    </div>
+    <div class="placeholder" *ngIf="loadProcessState.isPending() || loadProcessState.isFailed()">
+        <span *ngIf="loadProcessState.isPending()" class="qa-text is-small qa-color-prime">Loading...</span>
+        <span *ngIf="loadProcessState.isFailed()" class="qa-text is-small qa-color-prime">Failed to load data...</span>
+    </div>
+
+    <div>
+        <div class="tag-wrapper flex justify-space-between align-items-center" *ngFor="let tag of tags">
+            <div class="crypto-tag is-small tag" (click)="handleTagClick(tag.name)">
+                <span>{{tag.name}}</span>
+            </div>
+            <div class="tag-count is-small title-color">{{tag.count}}</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<!--<div class="full-width flex align-items-center">-->
+<!--    <div class="avatar-wrapper flex-shrink-0">-->
+<!--        <name-avatar [src]="threadHasAvatar ? thread.pictureId : null" [name]="thread.name"></name-avatar>-->
+<!--    </div>-->
+<!--    <div class="flex-grow-1 flex-shrink-0 w-0">-->
+<!--        <div class="top-line flex align-items-center justify-space-between">-->
+<!--            <div class="flex-grow-1">-->
+<!--                <div class="thread-name t-overflow-ellipsis">{{thread.name}}</div>-->
+<!--            </div>-->
+
+<!--            <div class="flex-shrink-0 flex align-items-center">-->
+<!--                <div class="unread-messages-count" *ngIf="thread.unreadMessagesCount !== 0">-->
+<!--                    {{thread.unreadMessagesCount}}-->
+<!--                </div>-->
+<!--                <span class="last-message-time" *ngIf="thread.lastMessage">-->
+<!--                {{thread.lastMessage.createdAt | timeAgo}}-->
+<!--              </span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="flex align-items-center" *ngIf="thread.lastMessage">-->
+<!--            <div class="message-creator t-overflow-ellipsis">{{thread.lastMessage?.creatorEmail}}</div>-->
+<!--            <div>:</div>-->
+<!--            <div class="message t-overflow-ellipsis">{{thread.lastMessage?.content}}</div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<div class="thread-list-item flex flex-shrink-0 align-items-center"
+     *ngIf="!thread.removed">
+    <!--    [class.active]="isSelected"-->
+    <!--                [class.blocked]="thread.isBlocked || thread.isBanned"-->
+    <!--                (click)="activeThread = thread"-->
+    <div class="user-avatar m-right-10">
+        <name-avatar [src]="threadHasAvatar ? thread.pictureId : null" [name]="thread.name"></name-avatar>
+<!--        <name-avatar class="" [src]="thread?.lastMessage?.fromId" [name]="thread?.name"></name-avatar>-->
+    </div>
+    <div class="flex flex-direction-column m-right-15 main-content overflow-hidden justify-content-center">
+        <div class="t-overflow-ellipsis thread-name color-title">
+            {{thread.name}}
+        </div>
+        <div class="t-overflow-ellipsis thread-last-message color-value">{{thread?.lastMessage?.content}}</div>
+    </div>
+    <div class="time flex-shrink-0 flex align-items-start color-title" *ngIf="thread?.lastMessage?.createdAt">
+        <!--                    {{getThreadLastMessageDate(thread?.lastMessage?.updatedAt)}}-->
+        {{thread.lastMessage.createdAt | timeAgo | translate}}
+    </div>
+</div>

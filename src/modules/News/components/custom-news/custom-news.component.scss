@@ -1,0 +1,34 @@
+pagination-buttons {
+  position: absolute;
+  top: 9px;
+  left: calc(100% - 64px - 22px);
+}
+
+.news-title {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+:host {
+  ::ng-deep {
+    .mat-row {
+      :last-child {
+        text-align: right;
+      }
+    }
+    .mat-header-cell:last-of-type {
+      .header-cell-content-wrapper {
+        text-align: right;
+      }
+    }
+    .crypto-text {
+      height: 100%;
+    }
+
+  }
+
+}
+

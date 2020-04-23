@@ -1,0 +1,239 @@
+<div *ngIf="filteredAlerts$ | async" class="root flex flex-direction-column full-height">
+    <div class="flex flex-direction-column flex-grow-1 h-0">
+        <div class="header manage-alerts-header flex-shrink-0">
+            <div class="flex align-items-center">
+                <span class="header_title"></span>
+            </div>
+
+            <div class="flex align-items-center">
+                <div class="crypto-button-icon control create-alert-control"
+                     (click)="showAlertDialog()"
+                     title="{{'alertWidget.setAlert' | translate}}">
+                    <span class="crypto-icon crypto-icon-midle-add"></span>
+                </div>
+                <div class="crypto-button-icon control" title="{{'app.settings' | translate}}"
+                     [matMenuTriggerFor]="alertsDropdown">
+                    <span class="crypto-icon crypto-icon-more"></span>
+                </div>
+
+                <mat-menu #alertsDropdown="matMenu">
+                    <div class="mat-menu-wrapper">
+                        <div class="mat-menu-item hideLabel">
+                            <input type="checkbox" id="hideInactive"
+                                   [checked]="isInactiveAlertsHidden$ | async"
+                                   (change)="handleHideInactiveAlerts($event)"
+                            >
+                            <label for="hideInactive">{{'alertWidget.hideInactive' | translate}}</label>
+                        </div>
+                        <div class="mat-menu-item" (click)="restartAllInactive()">
+                            <span>{{'alertWidget.restartAllInactive' | translate}}</span>
+                        </div>
+                        <div class="mat-menu-item" (click)="stopAll()">
+                            <span>{{'alertWidget.stopAll' | translate}}</span>
+                        </div>
+                        <div class="mat-menu-item" (click)="deleteAllInactive()">
+                            <span>{{'alertWidget.deleteAllInactive' | translate}}</span>
+                        </div>
+                    </div>
+                </mat-menu>
+            </div>
+        </div>
+        <div class="content-wrapper full-height flex-grow-1 overflow-y-auto">
+            <data-table [rows]="filteredAlerts$ | async" class="manage-alerts-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis crypto-table_selectable">
+                <data-table-header-cell columnName="symbol">
+                    {{'symbol' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="description">
+                    {{'description' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="status">
+                    <span class="right">{{'status' | translate}}</span>
+                </data-table-header-cell>
+
+                <data-table-cell class="stripped-mode" columnName="symbol">
+                    <ng-template let-item>
+                        <span class="flex">
+                            <currency-icon [name]="item.dataSource.relatedSymbol.toLowerCase().slice(0, 3)"></currency-icon>
+                            {{item.dataSource.relatedSymbol}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell class="stripped-mode" columnName="description">
+                        <ng-template let-item class="alert-description-wrapper">
+                            {{item.getDescription()}}
+                        </ng-template>
+                </data-table-cell>
+
+                <data-table-cell columnName="status">
+                        <ng-template let-item>
+                            <div class="alert-description-cell">
+                           <span class="running-status-wrapper">
+                               <indicator *ngIf="!item.isStarted" [colorClass]="'not-running'"></indicator>
+                               <indicator *ngIf="item.isStarted && !item.isOnCloud" [colorClass]="'is-running'"></indicator>
+                               <span class="running-status-on-cloud" *ngIf="item.isStarted && item.isOnCloud">
+                                   <i class="fa fa-cloud"></i>
+                               </span>
+                           </span>
+                            <span class="alert-controls-wrapper">
+                            <i class="crypto-icon crypto-icon-alert-code control"
+                               (click)="showAlertCode(item)"
+                               [title]="('alertWidget.showCode'| translate)"></i>
+
+                            <i class="crypto-icon crypto-icon-alert-start control"
+                               [class.disabled]="alertsLaunchProcessing.includes(item.externalId)"
+                               title="{{('alertWidget.start'| translate)}}"
+                               (click)="handleAlertLaunchButtonClick(item)"
+                               *ngIf="!item.isStarted"></i>
+
+                            <i class="fa fa-pause control control-pause"
+                               [class.disabled]="alertsLaunchProcessing.includes(item.externalId)"
+                               title="{{('alertWidget.stop'| translate)}}"
+                               (click)="handleAlertLaunchButtonClick(item)"
+                               *ngIf="item.isStarted"></i>
+
+                            <i class="crypto-icon crypto-icon-alert-edit control" title="{{'edit'| translate}}"
+                               [class.disabled]="alertsLaunchProcessing.includes(item.externalId)"
+                               (click)="showAlertDialog(item)"></i>
+
+                            <i class="control" title="{{'remove'| translate}}"
+                               [class.disabled]="alertsLaunchProcessing.includes(item.externalId)">
+                                <remove-button (click)="removeAlert(item)"></remove-button></i>
+                        </span>
+                            </div>
+                        </ng-template>
+                </data-table-cell>
+            </data-table>
+        </div>
+    </div>
+<!--    <div class="flex flex-direction-column flex-grow-1 h-0">-->
+<!--        <div class="header flex-shrink-0">-->
+<!--            <span class="header_title">{{'alertWidget.alertsLog' | translate}}</span>-->
+<!--        </div>-->
+<!--        <div class="content-wrapper flex-grow-1 h-0 overflow-y-auto">-->
+<!--            <table class="alerts-log-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <td>{{'symbol' | translate}}</td>-->
+<!--                    <td class="text-right">{{'description' | translate}}</td>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr *ngFor="let historicalEntry of alertsHistory">-->
+<!--                    <td>{{historicalEntry.Description}}{{historicalEntry.Time}}{{historicalEntry.Comment}}</td>-->
+<!--                    <td class="text-right">{{historicalEntry.Time | formatDate:'MMM DD HH:mm:ss' }}</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+
+<ng-template #loader>
+    <loader></loader>
+</ng-template>
+
+<!--<div class="alert-wrapper">-->
+<!--    <div class="manage-alerts">-->
+<!--        <div class="manage-alerts__header">-->
+<!--            <div class="manage-alerts__header&#45;&#45;title">-->
+<!--                <span>{{'alertWidget.manageAlerts' | translate}}</span>-->
+<!--            </div>-->
+<!--            <div class="manage-alerts__header&#45;&#45;actions">-->
+<!--                <div class="educational-tips-wrapper">-->
+<!--                    <educational-tips [componentName]="ComponentIdentifier.alertsWidget"></educational-tips>-->
+<!--                </div>-->
+<!--                <div class="add-alert">-->
+<!--                     <span class="add-btn" title="{{'alertWidget.setAlert' | translate}}"-->
+<!--                           (click)="showAlertDialog()">-->
+<!--                         <i class="fa fa-plus add-icon"></i>-->
+<!--                     </span>-->
+<!--                </div>-->
+<!--                <div class="dropdown">-->
+<!--                     <span class="add-btn"-->
+<!--                           title="{{'app.settings' | translate}}" [matMenuTriggerFor]="alertsDropdown">-->
+<!--                         <mat-menu #alertsDropdown="matMenu">-->
+<!--                             <div class="mat-menu-wrapper">-->
+<!--                                 <div class="mat-menu-item hideLabel">-->
+<!--                                     <input type="checkbox" id="hideInactive">-->
+<!--                                     <label for="hideInactive">{{'alertWidget.hideInactive' | translate}}</label>-->
+<!--                                 </div>-->
+<!--                                 <div class="mat-menu-item" (click)="restartAllInactive()">-->
+<!--                                     <span>{{'alertWidget.restartAllInactive' | translate}}</span>-->
+<!--                                 </div>-->
+<!--                                 <div class="mat-menu-item" (click)="stopAll()">-->
+<!--                                      <span>{{'alertWidget.stopAll' | translate}}</span>-->
+<!--                                 </div>-->
+<!--                                 <div class="mat-menu-item" (click)="deleteAllInactive()">-->
+<!--                                      <span>{{'alertWidget.deleteAllInactive' | translate}}</span>-->
+<!--                                 </div>-->
+<!--                             </div>-->
+<!--                        </mat-menu>-->
+<!--                         <i class="fa fa-list add-icon"></i>-->
+<!--                     </span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="manage-alerts__subheader">-->
+<!--            <span class="manage-symbol">{{'symbol' | translate}}</span>-->
+<!--            <span class="manage-description">{{'alertWidget.description' | translate}}</span>-->
+<!--        </div>-->
+<!--        <div class="manage-alerts__data-wrap">-->
+<!--            <div class="manage-alerts__data-wrap&#45;&#45;manage-data-item"-->
+<!--                 *ngFor="let alert of alerts"-->
+<!--                 [ngClass]="{'processing': alertsLaunchProcessing.includes(alert.externalId)}">-->
+<!--                <div class="manage-item-status">-->
+<!--                    <span class="isAlertStarted" *ngIf="alert.isStarted"></span>-->
+<!--                    <div class="isAlertStopped" *ngIf="!alert.isStarted"></div>-->
+<!--                </div>-->
+<!--                <div class="manage-item-symbol" *ngIf="alert">{{alert.dataSource.relatedSymbol}}</div>-->
+<!--                <div class="manage-item-description">-->
+<!--                    <div class="desc"> {{alert.getDescription()}}</div>-->
+<!--                    <span class="isAlertStartedOnCloud fa fa-cloud" *ngIf="alert.isStarted && alert.isOnCloud"></span>-->
+<!--                    <div class="options">-->
+<!--                        <button class="crypto-button_no-styles" [title]="('alertWidget.showCode'| translate)"-->
+<!--                                (click)="showAlertCode(alert)">-->
+<!--                            <i class="fa fa-download"></i>-->
+<!--                        </button>-->
+<!--<button class="crypto-button_no-styles"-->
+<!--        [disabled]="alertsLaunchProcessing.includes(alert.externalId)"-->
+<!--        title="{{alert.isStarted ? ('alertWidget.stop'| translate) : ('alertWidget.start'| translate)}}"-->
+<!--        (click)="handleAlertLaunchButtonClick(alert)">-->
+<!--    <i *ngIf="alert.isStarted" class="fa fa-pause option-icon"></i>-->
+<!--    <i *ngIf="!alert.isStarted" class="fa fa-play option-icon"></i>-->
+<!--</button>-->
+<!--                        <button class="crypto-button_no-styles" title="{{'edit'| translate}}"-->
+<!--                                [disabled]="alertsLaunchProcessing.includes(alert.externalId)"-->
+<!--                                (click)="showAlertDialog(alert)">-->
+<!--                            <i class="fa fa-cog option-icon"></i>-->
+<!--                        </button>-->
+<!--                        <button class="crypto-button_no-styles" title="{{'remove'| translate}}"-->
+<!--                                [disabled]="alertsLaunchProcessing.includes(alert.externalId)"-->
+<!--                                (click)="removeAlert(alert)">-->
+<!--                            <i class="fa fa-times option-icon"></i>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="alerts-log">-->
+<!--        <div class="alerts-log__header">-->
+<!--            <div class="alerts-log__header&#45;&#45;title">-->
+<!--                <span>{{'alertWidget.alertsLog' | translate}}</span>-->
+<!--            </div>-->
+<!--            <div class="alerts-log__header&#45;&#45;actions"></div>-->
+<!--        </div>-->
+<!--        <div class="alerts-log__subheader">-->
+<!--            <span class="log-description">{{'alertWidget.description' | translate}}</span>-->
+<!--            <span class="log-date">{{'alertWidget.dateTime' | translate}}</span>-->
+<!--        </div>-->
+<!--        <div class="alerts-log__data-wrap">-->
+<!--            <div class="alerts-log__data-wrap&#45;&#45;alerts-data-item" *ngFor="let historicalEntry of alertsHistory">-->
+<!--                <div class="alerts-item-description">{{historicalEntry.Description}}</div>-->
+<!--                <div class="alerts-item-date">{{getFormattedDate(historicalEntry.Time)}}</div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

@@ -1,0 +1,74 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2015",
+    "module": "esnext",
+    "baseUrl": "src",
+    "skipLibCheck": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "paths": {
+      "@app/*": ["app/*"],
+      "@linking/*": ["modules/Linking/*"],
+      "@layout/*": ["modules/Layout/*"],
+      "@alert/*": ["modules/Alert/*"],
+      "@calendarEvents/*": ["modules/CalendarEvents/*"],
+      "@decorators/*": ["decorators/*"],
+      "@file-uploader/*": ["modules/file-uploader/*"],
+      "@scroller/*": ["modules/scroller/*"],
+      "angular-split": ["angular-libs/angular-split"],
+      "@paginator/*": ["modules/paginator/*"],
+      "@tagsInput/*": ["modules/tags-input/*"],
+      "@chart/*": ["modules/Chart/*"],
+      "@scripting/*": ["modules/Scripting/*"],
+      "@marketView/*": ["modules/MarketView/*"],
+      "@historyStorage/*": ["modules/HistoryStorage/*"],
+      "@platform/*": ["modules/platform/*"],
+      "@numeric-input/*": ["modules/numeric-input/*"],
+      "@on-enter/*": ["modules/on-enter/*"],
+      "@form-error-directive/*": ["modules/form-error-directive/*"],
+      "@instrument-search/*": ["modules/instrument-search/*"],
+      "@market-trades/*": ["modules/market-trades/*"],
+      "@order-book/*": ["modules/order-book/*"],
+
+
+      "Chart": ["modules/Chart/index.ts"],
+      "UI": ["modules/UI/index.ts"],
+      "Trading": ["modules/Trading/index.ts"],
+      "Watchlist": ["modules/Watchlist/index.ts"],
+      "News": ["modules/News/index.ts"],
+      "Storage": ["modules/Storage/index.ts"],
+      "Localization": ["modules/Localization/index.ts"],
+      "TimeZones": ["modules/TimeZones/index.ts"],
+      "Validators": ["modules/Validators/index.ts"],
+      "Shared": ["modules/Shared/index.ts"],
+      "AppRoutes": ["app/app.routes.ts"],
+      "MaterialShared": ["modules/MaterialShared/index.ts"],
+      "CssClass": ["app/Utils/css.classes.ts"],
+      "angular-golden-layout": ["angular-libs/angular-golden-layout"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/libs/golden-layout/golden-layout.d.ts",
+    "src/libs/chartjs/index.d.ts",
+    "node_modules/trading-chart-designer/d.ts/TradingChartDesigner.d.ts"
+  ],
+  "exclude": [
+//    "node_modules/trading-chart-designer/d.ts/frameworks/moment.d.ts",
+//    "node_modules/trading-chart-designer/d.ts/frameworks/moment-node.d.ts"
+  ]
+}

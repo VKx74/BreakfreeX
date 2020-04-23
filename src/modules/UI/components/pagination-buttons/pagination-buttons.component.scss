@@ -1,0 +1,42 @@
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+
+  .button {
+    width: 32px;
+    height: 32px;
+    font-size: 1.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+
+    &.disabled {
+      // TODO: Themify
+      color: lightgrey;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  @include themify($themes, true) {
+    .button {
+      color: themed('valueTextColor');
+    }
+
+    .button :not(.disabled) {
+      &:hover {
+        background-color: themed('appBackgroundColor');
+        color: themed('accentColor');
+      }
+    }
+    .disabled {
+      color: themed('selectBgDisabled') !important;
+    }
+  }
+}

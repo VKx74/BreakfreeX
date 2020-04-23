@@ -1,0 +1,44 @@
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+@import "variables";
+
+:host {
+  .crypto-modal {
+    max-width: 450px;
+    min-width: 320px;
+  }
+
+  .modal-header {
+    .modal-title {
+      font-size: 16px;
+    }
+  }
+
+  .message-wrapper {
+    span {
+      font-size: 12px;
+      font-family: $primaryFontFamily;
+    }
+  }
+
+  .buttons-wrapper {
+    justify-content: right;
+
+    button {
+      font-size: 12px;
+      width: 55px;
+
+      &:first-of-type {
+        margin-right: 7px;
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .message-wrapper {
+    span {
+      color: themed('valueTextColor');
+    }
+  }
+}

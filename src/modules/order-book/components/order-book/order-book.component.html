@@ -1,0 +1,112 @@
+<div class="root">
+    <div class="top-line">
+        <div class="flex">
+            <instrument-search [instrument]="activeInstrument"
+                               (onSelect)="handleInstrumentChange($event)"
+                               class="instrument-search"></instrument-search>
+            <selector [options]="supportedPrecisions" [title]="'precision' | translate"
+                      [selectedOption]="supportedPrecisions[totalAmountPrecision]"
+                      (onSelect)="setTotalAmountPrecision($event)"
+                      class="precision-selector">
+            </selector>
+        </div>
+        <div>
+            <div class="crypto-button-icon">
+                <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
+            </div>
+            <mat-menu #menu="matMenu">
+                <button [class.active]="orderMode === OrderMode.BOTH" mat-menu-item (click)="setOrderMode(OrderMode.BOTH)">
+                    {{'orderMode.both' | translate}}
+                </button>
+
+                <button [class.active]="orderMode === OrderMode.SELL" mat-menu-item (click)="setOrderMode(OrderMode.SELL)">
+                    {{'orderMode.sell' | translate}}
+                </button>
+
+                <button [class.active]="orderMode === OrderMode.BUY" mat-menu-item (click)="setOrderMode(OrderMode.BUY)">
+                    {{'orderMode.buy' | translate}}
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="table-wrapper" #tableWrapper>
+            <table class="crypto-table crypto-table_fixed-header crypto-table_striped">
+                <thead>
+                <tr>
+                    <th class="price-column">
+                        {{'price' | translate}}
+                        <span class="symbol" *ngIf="baseCurrency"> ({{baseCurrency.toUpperCase()}})</span>
+                    </th>
+                    <th class="amount-column">
+                        {{'amount' | translate}}
+                        <span class="symbol" *ngIf="dependCurrency"> ({{dependCurrency.toUpperCase()}})</span>
+                    </th>
+                    <th class="total-column">
+                        {{'total' | translate}}
+                        <span class="symbol" *ngIf="dependCurrency"> ({{dependCurrency.toUpperCase()}})</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <ng-container *ngIf="orderMode !== 'orderBuy'">
+                    <tr class="level-row" *ngFor="let level of this.sellLevels; trackBy: trackBySell">
+                        <td class="price-column sell-symbol">
+                            {{level.price.toFixed(pricePecision)}}
+                            <div class="amountBar red" [ngStyle]="{'width': sellLevelPercentageAmount(level)}"></div>
+                        </td>
+                        <td class="amount-column">{{level.amount.toFixed(totalAmountPrecision)}}</td>
+                        <td class="total-column">{{level.total.toFixed(totalAmountPrecision)}}</td>
+
+                    </tr>
+                </ng-container>
+
+
+                <ng-container *ngIf="orderMode === OrderMode.BOTH">
+                    <ng-container *ngTemplateOutlet="extrarow"></ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="orderMode !== 'orderSell'">
+                    <tr class="level-row" *ngFor="let level of this.buyLevels; trackBy: trackByBuy">
+                        <td class="price-column buy-symbol">
+                            {{(level.price.toFixed(pricePecision))}}
+                            <div class="amountBar green" [ngStyle]="{'width': buyLevelPercentageAmount(level)}"></div>
+                        </td>
+                        <td class="amount-column">{{level.amount.toFixed(totalAmountPrecision)}}</td>
+                        <td class="total-column">{{level.total.toFixed(totalAmountPrecision)}}</td>
+                    </tr>
+                </ng-container>
+
+                <ng-container *ngIf="orderMode !== OrderMode.BOTH">
+                    <ng-container *ngTemplateOutlet="extrarow"></ng-container>
+                </ng-container>
+
+                </tbody>
+
+
+            </table>
+
+            <ng-template #extrarow>
+                <tr class="extra-row">
+                    <td colspan="3">
+                        <div class="flex align-items-center justify-space-between">
+                            <div class="spread"> {{baseCurrency.toUpperCase()}} {{'spread' | translate}}
+                                {{spread.toFixed(pricePecision)}}
+                            </div>
+
+                            <div class="price"><span class="symbolLastPrice"
+                                                     [ngClass]="{'buy-symbol' : lastTickSide === 'Buy', 'sell-symbol' : lastTickSide === 'Sell'}">
+                                {{lastMarketPrice.toFixed(pricePecision)}}</span>
+                                &asymp; {{lastMarketCost.toFixed(pricePecision)}} {{baseCurrency.toUpperCase()}}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </div>
+    </div>
+
+</div>
+

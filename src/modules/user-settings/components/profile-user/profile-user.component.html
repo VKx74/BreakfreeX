@@ -1,0 +1,91 @@
+<div class="data-user" *ngIf="initData$ | async else loader">
+    <div class="section-naming">
+        <div class="user-avatar flex justify-content-center">
+            <!--      <user-avatar [size]="UserAvatarSize.ExtraLarge"></user-avatar>-->
+            <div class="avatar-size cursor-pointer">
+                <name-avatar [shape]="UserAvatarShape.Rounded" [src]="avatarUrl ? avatarUrl : null"
+                             [name]="currentUserFullName"
+                             (click)="upload()"></name-avatar>
+            </div>
+        </div>
+        <div class="three-form-units-wrapper flex justify-space-between flex-wrap-wrap">
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{"profileInfo.firstName" | translate}}</div>
+                <mat-form-field class="crypto-input">
+                    <input matInput type="text" [value]="firstName" disabled>
+                </mat-form-field>
+            </div>
+
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{"profileInfo.lastName" | translate}}</div>
+                <mat-form-field class="crypto-input">
+                    <input matInput type="text" [value]="lastName" disabled>
+                </mat-form-field>
+            </div>
+
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{"profileInfo.role" | translate}}</div>
+                <mat-form-field class="crypto-input">
+                    <input matInput type="text" [value]="role" disabled>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <div class="flex three-form-units-wrapper justify-space-between flex-wrap-wrap">
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{"profileInfo.country" | translate}}</div>
+                <mat-form-field class="crypto-input">
+                    <input matInput type="text" [value]="personalData.country" disabled>
+                </mat-form-field>
+            </div>
+
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{"profileInfo.city" | translate}}</div>
+                <mat-form-field class="crypto-input">
+                    <input matInput type="text" [value]="personalData.city" disabled>
+                </mat-form-field>
+            </div>
+
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{"profileInfo.postcode" | translate}}</div>
+                <mat-form-field class="crypto-input">
+                    <input matInput type="text" [value]="personalData.postcode.toString()" disabled>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+
+        <div class="flex justify-space-between flex-wrap-wrap">
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{"profileInfo.dateOfBirth" | translate}}</div>
+                <mat-form-field class="crypto-input">
+                    <input matInput type="text" [value]="personalData.birthDay === null ? '' : (personalData.birthDay | date: 'dd/MM/yyyy')" disabled>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-authentication">
+        <div class="section flex justify-space-between">
+            <div class="info-user flex">
+                <i [ngClass]="{'success': email}" class="crypto-icon crypto-icon-platform-alert"></i>
+                <div class="data">{{email}}</div>
+            </div>
+        </div>
+    </div>
+
+    <change-username [username]="username" (onUsernameChanged)="handleUsernameChanged($event)"></change-username>
+
+    <change-phone [phoneNumber]="phone" (onPhoneNumberUpdated)="onPhoneNumberUpdated($event)"
+                  [email]="email"></change-phone>
+    <auth-settings></auth-settings>
+    <change-password></change-password>
+</div>
+
+<ng-template #loader>
+    <loader></loader>
+</ng-template>
+
+

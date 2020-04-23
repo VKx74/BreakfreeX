@@ -1,0 +1,49 @@
+@import "../../styles/variables";
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+  overflow: auto;
+
+  .level2 {
+    width: 100%;
+    position: relative;
+    min-height: 100%;
+  }
+
+  .instrument-select-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+
+    search-input {
+      display: inline-block;
+    }
+  }
+
+  .tables-wrapper {
+    display: flex;
+  }
+
+  @for $i from 1 through length($levelsColors) {
+    tr.level#{$i} {
+      background: map-get($levelsColors, $i) !important;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  table tr {
+    border: 1px solid themed('level2TrBorderColor');
+  }
+
+  .instrument-select-wrapper .caption {
+    color: themed('valueTextColor');
+  }
+}

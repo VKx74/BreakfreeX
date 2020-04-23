@@ -1,0 +1,66 @@
+:host {
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: auto;
+
+  .two-step-auth {
+    display: flex;
+    margin: 20vh 0;
+    align-items: center;
+  }
+
+  /deep/ pin-input .input-wrapper {
+    margin-bottom: 0 !important;
+  }
+
+  /deep/ .pin-input {
+    font-family: 'PT Sans';
+    color: #757575 !important;
+    background-color: #fafafa !important;
+    border: 1px solid transparent;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+
+    &:focus {
+      box-shadow: none;
+      border: 1px #3d61cc solid !important;
+    }
+  }
+
+  pin-input {
+    display: block;
+    margin: 20px 0px;
+  }
+
+  .validate-btn {
+    margin-top: 7px;
+  }
+
+  .logo:before {
+    vertical-align: unset;
+  }
+
+  .restore-secret {
+    justify-content: space-between;
+    align-items: center;
+    font: 12px "Open Sans";
+    user-select: none;
+    color: rgba(233, 233, 233, 0.5);
+    cursor: pointer;
+    position: relative;
+    top: 180px;
+    width: 250px;
+    margin: 0 auto;
+    text-align: center;
+    letter-spacing: normal;
+    font-family: 'PT Sans';
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .background {
+    animation: none;
+  }
+}

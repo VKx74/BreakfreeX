@@ -1,0 +1,64 @@
+{
+  "scriptsManager": {
+    "scriptsManager": "Менеджер скріптів",
+    "runAutomatedTrading": "Запустити автотрейдинг"
+  },
+  "scriptsEditor": {
+    "codeEditor": "Редактор коду",
+    "problems": "Проблеми",
+    "compile": "Компіляція",
+    "line": "Рядок",
+    "column": "Колонка",
+    "noProblems": "Немає проблем..."
+  },
+  "runAutomatedTrading": {
+    "runAutomatedTrading": "Запустити автотрейдинг",
+    "stopAutomatedTrading": "Зупинити автотрейдинг",
+    "history": "Історія",
+    "params": "Параметри скрипта",
+    "calculationsParameters": "Параметри калькуляцій",
+    "onEachTick": "На кожний тік",
+    "onBarClose": "На закриття бару",
+    "startBehavior": "Поведінка старту",
+    "immediately": "Негайно",
+    "waitForBar": "Очікувати на бар"
+  },
+  "compilationStatus": {
+    "NEEDED": "Потрібна компіляція",
+    "SUCCESS": "Успіх",
+    "FAILED": "Невдача",
+    "WARNING": "Проблеми",
+    "COMPILING": "Компіляція..."
+  },
+  "compileScript": "Компілювати",
+  "failedToCompileScript": "Невдалося скомпілювати",
+  "failedToSaveScript": "Невдалося зберегти",
+  "failedToStartAutoTrading": "Невдалося запустити автотрейдинг",
+  "failedToStopAutoTrading": "Невдалося зупинити автотрейдинг",
+  "failedToCreateScript": "Невдалося створити скрипт",
+  "failedToRenameScript": "Невдалося перейменувати скрипт",
+  "failedToDeleteScript": "Невдалося видалити скрипт",
+  "runningScripts": "Активні скрипти",
+  "scriptName": "Назва скрипта",
+  "scriptStartTime": "Час активації скрипта",
+  "defaultScriptName": "Новий скрипт",
+  "createScript": "Створити скрипт",
+  "openScript": "Відкрити скрипт",
+  "scriptDescription": "Опис скрипта",
+  "deleteScript": "Видалити скрипт",
+  "renameScript": "Перейменувати скрипт",
+  "newScriptName": "Нова назва скрипта",
+  "stopScript": "Зупинити скрипт",
+  "documentation": "Документація",
+  "apiDescription": "API Опис",
+  "backtesting": "Бектестинг",
+  "documentationCategories": {
+    "Indicators": "Індикатори",
+    "Math": "Математичні",
+    "Trading": "Трейдингові",
+    "General": "Загальні",
+    "MultiData": "Мульти дані"
+  },
+  "property": "Властивість",
+  "method": "Метод"
+}

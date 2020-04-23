@@ -1,0 +1,32 @@
+<div class="news-component-wrapper flex flex-direction-column">
+    <header [noPadding]="true" [noBottomMargin]="true">
+        <nav mat-tab-nav-bar
+             class="user-settings-header flex justify-space-between">
+            <a [routerLink]="newsRouters.RSS" mat-tab-link
+               #rla="routerLinkActive"
+               [active]="showRout ? rla.isActive : activeTab === newsRouters.RSS"
+               routerLinkActive
+               (click)="!showRout ? activeTab = newsRouters.RSS: ''">
+                {{'news' | translate}}
+            </a>
+            <a [routerLink]="newsRouters.Custom" mat-tab-link
+               #rla1="routerLinkActive"
+               routerLinkActive
+               [active]="showRout ? rla1.isActive : activeTab === newsRouters.Custom "
+               (click)="!showRout ? activeTab = newsRouters.Custom : ''">
+               {{'customNews' | translate}}
+            </a>
+        </nav>
+    </header>
+    <div [ngSwitch]="activeTab" class="h-100" [ngClass]="{'news-content': showRout}">
+        <div class="wrapper-rss" *ngSwitchCase="newsRouters.RSS">
+            <news></news>
+        </div>
+        <div class="wrapper-custom" *ngSwitchCase="newsRouters.Custom">
+            <custom-news></custom-news>
+        </div>
+        <div class="h-100" *ngSwitchDefault>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

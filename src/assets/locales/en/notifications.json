@@ -1,0 +1,14 @@
+{
+  "notifications": {
+    "title": "Notifications",
+    "noNotifications": "No notifications",
+    "showDescription": "Show description",
+    "systemNotifications": "System notifications"
+  },
+  "invites": {
+    "notificationText": "You has been invited to the",
+    "title": "Invites",
+    "accept": "Accept",
+    "reject": "Reject"
+  }
+}

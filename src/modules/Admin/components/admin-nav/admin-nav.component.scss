@@ -1,0 +1,185 @@
+@import "variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+
+@include themify($themes, true) {
+  .shuftipro {
+    width: min-content;
+    max-width: 200px;
+    cursor: pointer;
+    background-color: themed('appPanelColor');
+
+    &__account {
+      font-size: 12px;
+      color: themed('titleTextColor');
+    }
+
+    &__status {
+      font-size: 15px;
+      color: themed('valueTextColor');
+    }
+  }
+}
+
+//.navigation-center-side {
+//  .nav-item {
+//    cursor: pointer;
+//    padding: 4px 6px;
+//    margin: 0 3px;
+//    border-radius: 3px;
+//  }
+//}
+//
+//.account-info {
+//  padding: 0 5px 0 12px;
+//
+//  .right-column {
+//    padding-left: 6px;
+//  }
+//
+//  &__avatar {
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//    width: 35px;
+//    height: 35px;
+//    border-radius: 50%;
+//    background-color: #cecece;
+//
+//    span {
+//      font-size: 20px;
+//    }
+//  }
+//
+//  &__login {
+//    display: inline-block;
+//    max-width: 150px;
+//    overflow: hidden;
+//    text-overflow: ellipsis;
+//  }
+//
+//  .menu-toggle-caret {
+//    margin-left: 5px;
+//  }
+//}
+//
+//.health-status {
+//  width: 10px;
+//  height: 10px;
+//  border-radius: 5px;
+//  display: inline-block;
+//  vertical-align: middle;
+//  margin-left: 3px;
+//}
+//
+//.health-status-ok {
+//  background-color: limegreen;
+//}
+//
+//.health-status-bad {
+//  background-color: orangered;
+//}
+//
+//.health-status-warn {
+//  background-color: $yellowColor;
+//}
+//
+//.menu-toggle {
+//  cursor: pointer;
+//}
+//
+//.account-info__role,
+//.account-info__login {
+//  font-size: 13px;
+//}
+//
+//.account-info__role {
+//  display: inline-block;
+//  max-width: 150px;
+//  overflow: hidden;
+//  text-overflow: ellipsis;
+//  white-space: nowrap;
+//}
+//
+//.base-button {
+//
+//}
+//
+//.not-wallets {
+//  font-size: 13px;
+//}
+//
+//
+//.navigation {
+//  @include themify($themes, true) {
+//    background-color: themed('appPanelColor');
+//    box-shadow: themed('box-shadowPanel');
+//
+//
+//    #nav-icon4 span {
+//      background: themed('valueTextColor');
+//    }
+//
+//    .logo__img {
+//      color: themed('navigationIconColor');
+//      border-right: 1px solid themed('appBackgroundColor');
+//    }
+//
+//    .not-wallets {
+//      color: themed('titleTextColor');
+//    }
+//
+//    .wallet-select-trigger {
+//      padding-right: 20px;
+//      padding-left: 5px;
+//      border-right: solid 1px themed('appBackgroundColor');
+//      border-left: solid 1px themed('appBackgroundColor');
+//      cursor: pointer;
+//
+//      .wallet-title {
+//        font-size: 12px;
+//        font-weight: normal;
+//        text-align: left;
+//        color: themed('titleTextColor');
+//      }
+//
+//      .wallet-value {
+//        font-size: 15px;
+//        font-weight: 600;
+//        text-align: left;
+//        color: themed('valueTextColor');
+//      }
+//
+//      .crypto-icon {
+//        color: themed('valueTextColor');
+//      }
+//    }
+//
+//    .navigation-center-side {
+//      .nav-item {
+//        background: themed('appBackgroundColor');
+//        color: themed('valueTextColor');
+//
+//        &.active {
+//          background: themed('appModalsPanelColor');
+//          color: themed('accentColor');
+//        }
+//
+//      }
+//    }
+//
+//    .sidebar-toggle {
+//      border-right: 1px solid themed('appBackgroundColor');
+//    }
+//
+//    .title {
+//      color: themed('valueTextColor');
+//    }
+//
+//    .subtitle {
+//      color: themed('titleTextColor');
+//    }
+//  }
+//}
+//

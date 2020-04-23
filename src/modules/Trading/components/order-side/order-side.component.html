@@ -1,0 +1,4 @@
+<div *ngIf="side !== null"
+     [ngClass]="{'crypto-color-red': side === OrderSide.Sell, 'crypto-color-green': side === OrderSide.Buy}">
+    {{side | uppercase}}
+</div>

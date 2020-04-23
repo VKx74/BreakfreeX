@@ -1,0 +1,382 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+@import "global-styles/controls/tables-variables";
+
+$defaultModeRowHeight: 32px;
+
+:host {
+  //display: block;
+  width: 100%;
+  height: 100%;
+  overflow-x: initial;
+  position: relative;
+
+  /deep/ mat-cell,
+  /deep/ mat-header-cell {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 0;
+
+    &:first-of-type {
+      padding-left: $firstColumnPaddingLeft
+    }
+
+    &:last-of-type {
+      padding-right: $lastColumnPaddingRight;
+    }
+
+    &:not(:first-of-type) {
+      padding-left: 10px;
+    }
+  }
+
+  /deep/ mat-header-cell {
+    position: relative;
+  }
+
+  /deep/ .mat-sort-header-container {
+    height: 100%;
+  }
+
+  /deep/ .mat-sort-header-arrow {
+    display: none;
+  }
+
+  /deep/ .mat-sort-header-button {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  /deep/ .header-cell-content-wrapper {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+
+  .mat-header-row,
+  .mat-row {
+    line-height: $rowLineHeight;
+    font-family: $primaryFontFamily;
+    font-size: $rowFontSize;
+    min-height: 0;
+    //border-bottom-width: 0 !important;
+    //border: none;
+  }
+
+  mat-table.selectable {
+    .mat-row {
+      cursor: pointer;
+    }
+  }
+
+  .mat-row.selected {
+
+  }
+
+  .mat-cell {
+    font-size: $rowFontSize;
+  }
+
+  mat-table {
+    display: inline-block;
+    box-shadow: none;
+    width: 100%;
+    background-color: transparent;
+    flex-shrink: 0;
+  }
+
+  /deep/ .mat-sort-header-stem {
+    display: none;
+  }
+
+  .header-cell,
+  .mat-cell {
+    display: block;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .resize-handle {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    height: 70%;
+    transform: translateY(-50%);
+    width: 1px;
+    cursor: col-resize;
+
+    &:after {
+      content: '';
+      position: absolute;
+      width: 11px;
+      left: -10px;
+      top: 0;
+      height: 100%;
+    }
+  }
+
+  .settings-wrapper {
+    align-self: flex-start;
+    position: sticky;
+    top: 0;
+    transform: translateX(-100%);
+    z-index: 223;
+    height: $defaultModeRowHeight;
+    width: $defaultModeRowHeight;
+
+    .settings-btn {
+      background-color: transparent !important;
+      opacity: 0.6;
+    }
+  }
+}
+
+:host {
+  .default-mode {
+    /deep/ mat-header-cell {
+      height: $defaultModeRowHeight;
+    }
+
+    mat-header-cell[aria-sort="descending"]:after,
+    mat-header-cell[aria-sort="ascending"]:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+    }
+
+    mat-header-cell[aria-sort="descending"] {
+      &:after {
+        bottom: 0;
+        left: 0;
+      }
+    }
+
+    mat-header-cell[aria-sort="ascending"] {
+      &:after {
+        top: 0;
+        left: 0;
+      }
+    }
+
+    .resize-handle {
+      height: 100%;
+    }
+  }
+
+  .stripped-mode {
+    /deep/ mat-header-cell {
+      height: 30px;
+    }
+    /deep/ mat-row {
+      height: 36px;
+    }
+
+    .sort-wrapper {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      margin-top: -7px;
+      margin-right: 5px;
+      margin-left: 3px;
+      justify-content: center;
+
+      i {
+        opacity: 0.5;
+        font-size: 15px;
+        height: 10px;
+        transition: all .2s ease;
+      }
+
+      .down-arrow {
+        margin-top: -1px;
+      }
+
+      .up-arrow {
+        margin-bottom: -1px;
+      }
+    }
+
+  }
+}
+
+
+.is-expandable {
+  .mat-row {
+
+    &.expanded-row-details {
+      border-bottom: 1px solid transparent;
+      cursor: default !important;
+      border-bottom-width: 0;
+    }
+    &.expand-row-header {
+      height: 36px;
+    }
+  }
+}
+
+:not(.is-expandable) {
+  // mat-row {
+  //   border-bottom: 1px solid transparent;
+  // }
+}
+
+
+.columns-configurable {
+  mat-header-cell:last-of-type {
+    padding-right: 36px;
+  }
+}
+
+.unchecked-checkbox,
+.checked-checkbox {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+/deep/ .column-selector-menu {
+  .mat-menu-content {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .mat-menu-item {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: auto;
+  }
+}
+
+.checked-checkbox {
+  background-color: $greenColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .checked-mark {
+    color: #fff;
+    font-size: 11px;
+    line-height: 16px;
+    margin-top: 2px;
+  }
+}
+
+@include globalThemifyFromComponent($themes) {
+  .unchecked-checkbox {
+    background-color: themed('appBackgroundColor');
+  }
+}
+
+@include themify($themes, true) {
+  mat-header-cell {
+    color: themed('titleTextColor');
+  }
+
+  mat-row {
+    &.selected {
+      background-color: themed('accentColor') !important;
+
+      .mat-cell {
+        color: #fff;
+      }
+    }
+  }
+
+  mat-cell {
+    color: themed('titleTextColor');
+  }
+
+  .expanded-detail {
+    background-color: themed('activeBackgroundColor');
+    white-space: normal;
+  }
+}
+
+.default-mode {
+  @include themify($themes, true) {
+    mat-header-row {
+      border-bottom: 1px solid themed('appBackgroundColor');
+      border-top: 1px solid themed('appBackgroundColor');
+    }
+
+    mat-row {
+      border-color: themed('appBackgroundColor') !important;
+    }
+
+    mat-header-row,
+    mat-row {
+      background-color: themed('appPanelColor');
+    }
+
+    mat-row.expanded-row-details {
+      background-color: themed('appModalsPanelColor');
+    }
+
+    mat-header-cell[aria-sort="descending"],
+    mat-header-cell[aria-sort="ascending"] {
+      background-color: themed('appModalsPanelColor');
+      color: themed('accentColor');
+
+      &:after {
+        background-color: themed('accentColor');
+      }
+    }
+
+    .resize-handle {
+      background-color: themed('appBackgroundColor');
+    }
+  }
+}
+
+
+.stripped-mode {
+  @include themify($themes, true) {
+    mat-header-row {
+      background-color: themed('appPanelColor');
+    }
+
+    mat-row {
+      &:nth-child(even) {
+        background-color: themed('appModalsPanelColor');
+      }
+
+      &:nth-child(odd) {
+        background-color: themed('appModalsPanelColor');
+      }
+
+      &.selected {
+        background-color: themed('accentColor') !important;
+
+        .mat-cell {
+          color: #fff;
+        }
+      }
+    }
+
+    .resize-handle {
+      background-color: themed('appBackgroundColor');
+    }
+
+    .sort-wrapper i {
+      color: themed('titleTextColor');
+    }
+
+    [aria-sort="descending"] .sort-wrapper .down-arrow {
+      color: themed('valueTextColor');
+      opacity: 1;
+    }
+
+    [aria-sort="ascending"] .sort-wrapper .up-arrow {
+      color: themed('valueTextColor');
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<div class="top-line flex justify-space-between align-items-center">
+  <div class="notifications-header crypto-text">
+    {{'notifications.systemNotifications' | translate}}
+  </div>
+
+  <div class="educational-tips-wrapper">
+    <educational-tips [componentName]="ComponentIdentifier.notifications"></educational-tips>
+  </div>
+</div>
+<div class="notifications-body">
+  <div class="notification" *ngFor="let notification of notifications">
+    <div class="upper-block" title="{{'notifications.showDescription' | translate}}" (click)="showDescription(notification)">
+      <div class="flex justify-space-between m-bottom-10">
+        <div class="notification-date">
+          <span>{{utcTimeToLocal(notification.startDate * 1000) | date: 'dd/MM/yy'}}</span>
+        </div>
+        <div class="is-unread" *ngIf="isNotificationUnread(notification)"></div>
+      </div>
+      <div class="flex justify-space-between p-top-5">
+        <div class="notification-title">
+          {{notification.title}}
+        </div>
+        <div class="more" [ngClass]="{'active': isSelectedNotification(notification)}"></div>
+      </div>
+    </div>
+    <div class="lower-block crypto-text" *ngIf="isSelectedNotification(notification)">
+      <markdown-preview [markdown]="notification.description"></markdown-preview>
+    </div>
+  </div>
+  <no-items-placeholder  *ngIf="notifications.length === 0" [text]="'notifications.noNotifications' | translate"></no-items-placeholder>
+<!--  <div class="no-notifications">{{'notifications.noNotifications' | translate}}</div>-->
+</div>

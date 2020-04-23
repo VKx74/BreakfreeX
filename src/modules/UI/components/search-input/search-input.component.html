@@ -1,0 +1,7 @@
+<div class="root">
+    <mat-form-field class="crypto-input search-input full-width">
+        <input matInput type="text" [formControl]="formControl" class="full-width"
+               [placeholder]="placeholder != null ? placeholder : ('searchPlaceholder' | translate)" onEnter (enterHandler)="handleSearchEnterKey()">
+        <i class="crypto-icon crypto-icon-search search-icon" matSuffix></i>
+    </mat-form-field>
+</div>

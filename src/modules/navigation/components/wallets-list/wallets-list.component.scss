@@ -1,0 +1,46 @@
+:host {
+
+  /deep/ .mat-radio-label {
+    //margin-right: 8px !important;
+    display: flex;
+    align-items: flex-start !important;
+  }
+
+  /deep/ label {
+    padding: 10px 15px 0 15px;
+  }
+
+  /deep/ .mat-radio-container {
+    margin-right: 8px;
+    position: relative;
+    top: 3px;
+  }
+
+  /deep/ {
+    .mat-menu-content {
+      padding-bottom: 0;
+    }
+  }
+
+  mat-radio-button {
+    padding-bottom: 10px;
+  }
+}
+
+.wallet-item {
+  &:not(:last-of-type) {
+    margin-bottom: 15px;
+  }
+
+  .wallet-name {
+    font-size: 13px;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  .wallet-balance {
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+  }
+}

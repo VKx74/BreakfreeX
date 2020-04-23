@@ -1,0 +1,104 @@
+{
+  "apiKey": "8e738606c9ba4315aae2ef0ac15d6740",
+  "fileStorageApiKey": "123",
+  "apiUrls": {
+    "identityUrl": "https://identity.yoursite.com/",
+    "webSocketUrl": "wss://ws.yoursite.com/ws",
+    "bitmexREST": "https://yoursite.com/bitmex/",
+    "bitmexWS": "wss://yoursite.com/bitmex/subscribe/realtime/",
+    "onadaWS": "wss://yoursite.com/oanda/subscribe/realtime/",
+    "coinigyREST": "https://yoursite.com/data/vendor/coinigy/api/Coinigy/",
+    "coinigyWS": "wss://yoursite.com/data/vendor/coinigy/ws",
+    "historystorageREST": "https://rest.yoursite.com/api/historystorage/",
+    "scriptEngineUrlREST": "https://rest.yoursite.com/api/",
+    "personalInfoREST": "https://identity.yoursite.com/KYC/",
+    "eventConsolidatorUserApiREST": "https://yoursite.com/event/consolidator/user/api/TradingEvent/",
+    "eventConsolidatorAdminApiREST": "https://yoursite.com/event/consolidator/admin/api/TradingEvent/",
+    "eventConsolidatorWebSocket": "wss://yoursite.com/event/consolidator/user/TradingEventsSocket/",
+    "eventsLogREST": "https://events.yoursite.com/logs/api/Logs/",
+    "dataConsolidatorAdminApiRest": "https://yoursite.com/data/consolidator/admin/api/",
+    "fileStorageREST": "https://rest.yoursite.com/filestore/api/v1/Files/",
+    "shuftiproApiRest": "https://yoursite.com/kyc/api/",
+    "socialChatREST": "https://yoursite.com/social/chat/",
+    "socialForumREST": "https://yoursite.com/social/forum/",
+    "notificationREST": "https://yoursite.com/notification/api/",
+    "notificationWebSocketUrl": "wss://yoursite.com/notification/ws",
+    "cointelegraphRssFeedREST": "https://yoursite.com/rss/cointelegraph",
+    "coindeskRssFeedREST": "https://yoursite.com/rss/coindesk",
+    "userDataStoreREST": "https://yoursite.com/userdatastore/api/v1/",
+    "systemNotificationApiRest": "https://sysnotification.yoursite.com/sys-notification/api/",
+    "scriptEngineREST": "https://yoursite.com/scriptengine/fintasharp/api/",
+    "oandabrokerREST": "https://yoursite.com/oanda/",
+    "userprofileREST": "https://rest.yoursite.com/api/v0.0/userprofile/",
+    "historydatacollectorREST": "https://rest.yoursite.com/api/v0.0/historydatacollector/",
+    "news": "https://yoursite.com/news/",
+    "exchangeManagementREST": "https://exchange.yoursite.com/"
+  },
+  "systemMonitoringUrls": {
+    "platform": {
+      "services": "https://portainer.yoursite.com/",
+      "eventBus": "https://rabbitmq.yoursite.com/",
+      "performance": "https://monitor.yoursite.com/d/7QIdl8gWk/trading-platform-docker?orgId=1&refresh=10s"
+    },
+    "exchange": {
+      "services": "",
+      "eventBus": "",
+      "performance": ""
+    }
+  },
+  "servicesHealthCheckUrls": {
+    "bitmexREST": {
+      "name": "Bitmex",
+      "url": "https://yoursite.com/bitmex/"
+    },
+    "dataConsolidatorAdminApiRest": {
+      "name": "Data Consolidator Admin Api",
+      "url": "https://yoursite.com/data/consolidator/admin/"
+    },
+    "eventConsolidator": {
+      "name": "Event Consolidator",
+      "url": "https://yoursite.com/event/consolidator/"
+    },
+    "eventConsolidatorUserApiREST": {
+      "name": "Event Consolidator User Api",
+      "url": "https://yoursite.com/event/consolidator/user/"
+    },
+    "eventConsolidatorAdminApiREST": {
+      "name": "Event Consolidator Admin Api",
+      "url": "https://yoursite.com/event/consolidator/admin/"
+    },
+    "fileStorageREST": {
+      "name": "File Storage",
+      "url": "https://rest.yoursite.com/filestore/api/v1/Files/"
+    },
+    "identityUrl": {
+      "name": "Identity",
+      "url": "https://identity.yoursite.com/"
+    },
+    "notificationREST": {
+      "name": "Notifications",
+      "url": "https://yoursite.com/notification/"
+    },
+    "scriptEngineREST": {
+      "name": "Script Engine",
+      "url": "https://yoursite.com/scriptengine/fintasharp/api/"
+    },
+    "shuftiproApiRest": {
+      "name": "Shuftipro",
+      "url": "https://yoursite.com/kyc/"
+    },
+    "socialChatREST": {
+      "name": "Social Chat",
+      "url": "https://yoursite.com/social/chat/"
+    },
+    "socialForumREST": {
+      "name": "Social Forum",
+      "url": "https://yoursite.com/social/forum/"
+    }
+  },
+  "endpointsBearerAuthRequired": [
+    "https://rest.yoursite.com",
+    "https://yoursite.com",
+    "https://sysnotification.yoursite.com"
+  ]
+}

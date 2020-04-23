@@ -1,0 +1,30 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  table {
+    .cancel-withdraw-column {
+      width: 26px;
+
+      .crypto-icon-close {
+        color: indianred;
+        padding: 0px 5px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+    }
+
+    margin-top: 10px;
+  }
+
+  .withdraw-all-btn {
+    flex-shrink: 0;
+    margin-left: 10px;
+    height: 32px;
+  }
+
+  .crypto-input-address {
+    width: 100% !important;
+  }
+}

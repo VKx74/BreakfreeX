@@ -1,0 +1,20 @@
+:host {
+  display: flex;
+  width: 100%;
+}
+
+/deep/ .backdrop {
+  z-index: 999 !important;
+}
+
+/deep/ .relative-wrapper {
+  position: relative;
+
+  mat-progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+  }
+}

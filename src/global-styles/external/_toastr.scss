@@ -1,0 +1,66 @@
+@import "../mixins/themify";
+@import "../themes/themes";
+
+#toast-container > .toast-custom {
+  background-image: none !important;
+  padding: 5px 15px 10px 50px;
+  opacity: 0.9;
+  border-radius: 6px;
+  box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, 0.15);
+
+  .toast-title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 2.38;
+  }
+
+  .toast-message {
+    font-size: 12px;
+    font-weight: normal;
+  }
+}
+
+#toast-container > .toast-custom:before {
+  font-family: FontAwesome;
+  font-size: 30px;
+  line-height: 50px;
+  float: left;
+  margin-left: -1em;
+  padding-right: 0.2em;
+  margin-right: 0.5em;
+}
+
+#toast-container > .toast-warning:before {
+  content: "\f06a";
+  color: #ebd22c;
+}
+
+#toast-container > .toast-error:before {
+  content: "\f057";
+  color: #f02645;
+}
+
+#toast-container > .toast-info:before {
+  content: "\f05a";
+  color: #2196f3;
+}
+
+#toast-container > .toast-success:before {
+  content: "\f058";
+  color: #27cf6d;
+}
+
+.toast-custom {
+
+@include themify($themes) {
+    background-color: themed('appModalsPanelColor');
+
+    .toast-title {
+      color: themed('valueTextColor');
+    }
+
+    .toast-message {
+      color: themed('titleTextColor');
+    }
+  }
+}

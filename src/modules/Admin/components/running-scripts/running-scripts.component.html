@@ -1,0 +1,32 @@
+<div class="app-items flex flex-direction-column full-height">
+    <div class="component-head flex justify-space-between align-items-center">
+        <div class="flex align-items-center">
+            <h3 class="component-head_title">Running Scripts</h3>
+        </div>
+    </div>
+    <div class="flex-grow-1 h-0">
+        <div class="underlay relative-wrapper flex flex-direction-column max-height-100">
+            <data-table [rows]="runningScripts">
+                <data-table-header-cell columnName="scriptName">Script</data-table-header-cell>
+                <data-table-header-cell columnName="runningId">Running ID</data-table-header-cell>
+                <data-table-header-cell columnName="startTimestamp" [sortable]="true">Start Date</data-table-header-cell>
+                <data-table-header-cell columnName="actions" [columnWidth]="50"></data-table-header-cell>
+
+                <data-table-cell columnName="scriptName"></data-table-cell>
+                <data-table-cell columnName="runningId"></data-table-cell>
+                <data-table-cell columnName="startTimestamp">
+                    <ng-template let-item>{{item.startTimestamp | utcSecondsToLocal | formatDate:'YYYY-MM-DD HH:mm:ss'}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="actions">
+                    <ng-template let-item>
+                        <div class="flex align-items-center justify-content-center">
+                            <i class="stop-script-icon fa fa-stop-circle" title="Stop Script" (click)="openConfirmDialog(item)"></i>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+            </data-table>
+
+            <no-items-placeholder *ngIf="!runningScripts?.length" [text]="'No running scripts'"></no-items-placeholder>
+        </div>
+    </div>
+</div>

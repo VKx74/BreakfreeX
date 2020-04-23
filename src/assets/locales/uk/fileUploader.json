@@ -1,0 +1,24 @@
+{
+  "upload": "Завантажити",
+  "crop": "Обрізати",
+  "capturePhoto": "Зробити фото",
+  "retry": "Повторити",
+  "uploadSuccessfully": "Успішно завантажено",
+  "uploadFileItem": {
+    "incorrectSize": "Файл має некоректний розмір. Максимальний розмір:",
+    "incorrectType": "Файл має некоректний тип. Дозволені типи:",
+    "uploadSuccess": "Файл завантажено"
+  },
+  "uploadCaption": "Drag&Drop або оберіть файли для завантаження",
+  "file": {
+    "uploadTitle": "Завантажити файл",
+    "editTitle": "Редагувати файл",    
+    "caption": "Заголовок",
+    "close": "Закрити",
+    "preview": "Попередній перегляд",
+    "selectOtherFile": "Вибрати інший файл",
+    "download":"Завантажити",
+    "ok":"ОК",
+    "cancel":"Відмінити"
+  }
+}

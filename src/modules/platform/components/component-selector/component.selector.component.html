@@ -1,0 +1,9 @@
+ <div class="flex selector flex-direction-column">
+        <div class="component-item flex align-items-center justify-flex-start"
+             *ngFor="let component of components; trackBy: trackByIdentifier" (click)="selectComponent(component)">
+                <span class="component-preview m-right-15">
+                    <span class="crypto-icon" [ngClass]="component.previewImgClass"></span>
+                </span>
+            <span class="component-name">{{component.componentName | async}}</span>
+        </div>
+ </div>

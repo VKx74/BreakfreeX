@@ -1,0 +1,30 @@
+<div class="flex justify-space-between align-items-center">
+    <div class="crypto-text wallets-caption">{{'wallets' | translate}}</div>
+    <selector class="wallet-selector"
+              (onSelect)="onWalletSelect($event)"
+              [options]="wallets"
+              [optionCaption]="walletCaption"
+              [selectedOption]="currentWallet"></selector>
+</div>
+<div class="crypto-delimiter delimiter"></div>
+<table class="crypto-table_ellipsis crypto-table crypto-table_striped">
+    <tbody>
+    <tr>
+        <td>{{'tradeManager.walletBalance' | translate}}</td>
+        <td>{{currentWallet?.balance.toFixed(8)}} {{currentWallet?.currency}}</td>
+    </tr>
+    <tr>
+        <td>{{'tradeManager.locked' | translate}}</td>
+        <td>{{currentWallet?.locked.toFixed(8)}} {{currentWallet?.currency}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="buttons-wrapper">
+    <button class="crypto-button crypto-button_primary" (click)="showDepositDialog()">
+        {{'deposit' | translate}}
+    </button>
+    <button class="crypto-button crypto-button_primary" (click)="showWithdrawDialog()">
+        {{'withdraw' | translate}}
+    </button>
+</div>

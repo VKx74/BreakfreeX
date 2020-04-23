@@ -1,0 +1,22 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+
+:host {
+  display: block;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-left: 7px;
+  min-width: 320px;
+  max-width: 320px;
+  //background-color: #26282a;
+}
+
+.sidebar {
+  @include themify($themes, true) {
+    background-color: themed('appPanelColor');
+  }
+  //
+  //.sidebar-section {
+  //  padding: 15px 20px;
+  //}
+}

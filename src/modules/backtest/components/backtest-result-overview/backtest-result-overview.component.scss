@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  height: 100%;
+
+  /deep/ mat-tab-group {
+    height: 100%;
+
+    .mat-tab-body-wrapper {
+      flex-grow: 1;
+      height: 0;
+    }
+  }
+}
+
+.root {
+  height: 100%;
+}
+
+
+tab {
+  padding: 10px 0;
+  max-height: 500px;
+  overflow: auto;
+}

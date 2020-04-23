@@ -1,0 +1,39 @@
+<div class="root flex flex-direction-column full-height">
+    <div class="top-line flex justify-flex-end align-items-center">
+        <div class="educational-tips-wrapper">
+            <educational-tips [componentName]="ComponentIdentifier.runningScript"></educational-tips>
+        </div>
+    </div>
+    <div class="content-wrapper flex-grow-1 overflow-y-auto">
+        <ng-container *ngIf="(loadRecordsProcessState | async).isFailed()">
+            <placeholder message="{{ 'failedToLoadData' | appTranslate }}" class="p-10 h-100 flex justify-content-center align-items-center"></placeholder>
+        </ng-container>
+
+        <ng-container *ngIf="(loadRecordsProcessState | async).isSucceeded() && (records | async).length === 0">
+            <placeholder message="{{ 'noData' | appTranslate }}" class="p-10 h-100 flex justify-content-center align-items-center"></placeholder>
+        </ng-container>
+
+        <ng-container *ngIf="(loadRecordsProcessState | async).isSucceeded() && (records | async).length">
+            <table class="crypto-table crypto-table-ellipsis crypto-table_striped crypto-table_fixed-header records-table">
+                <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>{{ 'scriptName' | translate }}</td>
+                    <td>{{ 'scriptStartTime' | translate }}</td>
+                    <td class="controls-column"></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let record of (records | async)">
+                    <td class="index-column">{{record.runningId}}</td>
+                    <td>{{record.scriptName}}</td>
+                    <td>{{(record.startTimestamp * 1000) | formatDate:'YYYY-MM-DD HH:mm:ss'}}</td>
+                    <td class="controls-column p-0">
+                        <i class="control fa fa-stop-circle" [title]=" 'stopScript' | translate " (click)="stopScript(record)"></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </div>
+</div>

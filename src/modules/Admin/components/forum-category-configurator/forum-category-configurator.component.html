@@ -1,0 +1,41 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">
+                <span *ngIf="!isEditMode">Create category</span>
+                <span *ngIf="isEditMode">Update category</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formGroup">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">Name:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="name" placeholder="Name">
+                        <mat-error>Please, enter name from 1 to 100 characters</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">Description:</div>
+                    <mat-form-field class="crypto-textarea full-width with-hint">
+                        <textarea id="description-textarea" matInput placeholder="Description" formControlName="description"></textarea>
+                        <mat-error>Please, enter description from 1 to 1000 characters</mat-error>
+                    </mat-form-field>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_success"
+                        [ngClass]="{'is-loading': processing}"
+                        [disabled]="formGroup.invalid"
+                        (click)="submit()">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

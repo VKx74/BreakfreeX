@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title></title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="TradingPlatformDesigner_history-data-manager" transform="translate(-279.000000, -198.000000)" fill="#323232">
+            <g id="Group-3" transform="translate(255.000000, 130.000000)">
+                <g id="Group-67" transform="translate(24.000000, 67.000000)">
+                    <path d="M2.52778699,12 C3.62642809,13.2274987 5.22300037,14 7,14 C10.3137085,14 13,11.3137085 13,8 L14,8 C14,11.8659932 10.8659932,15 7,15 C5.04131183,15 3.27051704,14.1955328 2,12.8989827 L2,15 L1,15 L1,11 L2,11 L5,11 L5,12 L2.52778699,12 Z M11.472213,4 C10.3735719,2.77250128 8.77699963,2 7,2 C3.6862915,2 1,4.6862915 1,8 L0,8 C0,4.13400675 3.13400675,1 7,1 C8.95868817,1 10.729483,1.80446721 12,3.10101726 L12,1 L13,1 L13,5 L12,5 L9,5 L9,4 L11.472213,4 Z" id="refresh"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

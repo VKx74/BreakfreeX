@@ -1,0 +1,28 @@
+<div class="section-item flex align-items-center justify-space-between">
+    <span class="crypto-text crypto-color-secondary is-small">First name</span>
+    <span class="crypto-text is-small">{{director.firstName}}</span>
+</div>
+<div class="section-item flex align-items-center justify-space-between">
+    <span class="crypto-text crypto-color-secondary is-small">Last name</span>
+    <span class="crypto-text is-small">{{director.lastName}}</span>
+</div>
+<div class="section-item flex align-items-center justify-space-between">
+    <span class="crypto-text crypto-color-secondary is-small">Birthday</span>
+    <span class="crypto-text is-small">{{convertUTCTimeToLocal(director.birthDay * 1000) | date:'dd/MM/yyyy'}}</span>
+</div>
+<div class="section-item flex align-items-center justify-space-between">
+    <span class="crypto-text crypto-color-secondary is-small">Country</span>
+    <span class="crypto-text is-small">{{director.country}}</span>
+</div>
+<div class="section-item flex align-items-center justify-space-between">
+    <span class="crypto-text crypto-color-secondary is-small">City</span>
+    <span class="crypto-text is-small">{{director.city}}</span>
+</div>
+<div class="section-item flex align-items-center justify-space-between">
+    <span class="crypto-text crypto-color-secondary is-small">Address</span>
+    <span class="crypto-text is-small">{{director.address}}</span>
+</div>
+<div class="section-item flex align-items-center justify-space-between">
+    <span class="crypto-text crypto-color-secondary is-small">Postcode</span>
+    <span class="crypto-text is-small">{{director.postcode}}</span>
+</div>

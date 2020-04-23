@@ -1,0 +1,13 @@
+<div>
+    <page-header class="flex justify-space-between">
+        <span class="page-header-title color-title">{{getTitle}}</span>
+    </page-header>
+    <div class="flex" *ngIf="lastNews.length">
+        <div class="content-wrapper h-100 align-items-start">
+            <router-outlet></router-outlet>
+        </div>
+        <sidebar [news]="lastNews" [tags]="popularTags"></sidebar>
+    </div>
+    <empty-placeholder *ngIf="!lastNews.length" [message]="'No News yet...'"></empty-placeholder>
+</div>
+

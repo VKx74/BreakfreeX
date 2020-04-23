@@ -1,0 +1,111 @@
+<div class="root flex flex-direction-column">
+    <div class="top-line flex justify-space-between align-items-center flex-shrink-0">
+        <div class="search-wrapper">
+<!--            *ngIf="showSearch"-->
+            <manual-search #searchComponent
+                           [searchHandler]="searchHandler"
+                           (onInputEmpty)="handleSearchInputEmpty()"
+                           [showSpinner]="true"
+                           [allowEmptyQuery]="false"
+                           placeholder="{{'threadList.searchPlaceholder' | translate}}">
+                <span manual-search-trigger></span>
+            </manual-search>
+            <i class="crypto-icon crypto-icon-add cursor-pointer add" (click)="createThread()"></i>
+        </div>
+<!--        <span class="title">{{"threadList.title" | translate}}</span>-->
+
+<!--        <div class="flex align-items-center controls-wrapper">-->
+<!--            <div class="educational-tips-wrapper control">-->
+<!--                <educational-tips [componentName]="ComponentIdentifier.publicChat"></educational-tips>-->
+<!--            </div>-->
+<!--            <div class="crypto-button-icon control" title="{{'threadList.createRoom' | translate}}"-->
+<!--                 *ngIf="showCreateThreadBtn"-->
+<!--                 (click)="createThread()">-->
+<!--                <div class="crypto-icon crypto-icon-midle-add cursor-pointer"></div>-->
+<!--            </div>-->
+<!--            <div class="crypto-button-icon control"-->
+<!--                 title="{{'threadList.search' | translate}}"-->
+<!--                 [class.active]="showSearch"-->
+<!--                 (click)="toggleSearch()">-->
+<!--                <span class="crypto-icon crypto-icon-middle-search cursor-pointer"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+<!--    <div class="search-wrapper" *ngIf="showSearch">-->
+<!--        <manual-search #searchComponent-->
+<!--                       [searchHandler]="searchHandler"-->
+<!--                       (onInputEmpty)="handleSearchInputEmpty()"-->
+<!--                       [showSpinner]="true"-->
+<!--                       [allowEmptyQuery]="false"-->
+<!--                       placeholder="{{'threadList.searchPlaceholder' | translate}}">-->
+<!--            <span manual-search-trigger></span>-->
+<!--        </manual-search>-->
+<!--    </div>-->
+    <infinity-loader [scrollDirection]="ScrollDirection.Bottom"
+                     [handler]="infinityLoaderHandler"
+                     [showLoadingIndicator]="false"
+                     [infiniteScrollContainer]="wrapper"
+                     class="flex-grow-1 h-0">
+        <div #wrapper class="threads-wrapper full-height full-width overflow-auto">
+            <thread-list-item *ngFor="let thread of (threads$ | async); trackBy: trackByFn" class="full-width"
+                              [chatMode]="chatMode"
+                              [class.active]="(selectedThreadId$ | async) && (selectedThreadId$ | async) === thread.id"
+                              [class.blocked]="thread.isBlocked || thread.isBanned"
+                              [thread]="thread"
+                              (click)="selectThread(thread)">
+
+            </thread-list-item>
+        </div>
+    </infinity-loader>
+</div>
+
+
+
+
+<!--<div class="chat-list flex flex-direction-column">-->
+<!--    <div class="header flex justify-space-between align-items-center flex-shrink-0">-->
+<!--        <div class="title">{{"threadList.title" | translate}}</div>-->
+<!--        <div class="buttons flex align-items-center">-->
+<!--&lt;!&ndash;            <div class="educational-tips-wrapper">&ndash;&gt;-->
+<!--&lt;!&ndash;                <educational-tips [componentName]="ComponentIdentifier.publicChat"></educational-tips>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--            <div class="crypto-button-icon control">-->
+<!--                <div *ngIf="isAddThreadShown" class="crypto-icon crypto-icon-midle-add cursor-pointer"-->
+<!--                     (click)="createGroupThread()"></div>-->
+<!--            </div>-->
+<!--            <div class="crypto-button-icon control"-->
+<!--                 [class.crypto-color-accent]="showSearch"-->
+<!--                 (click)="showSearch = !showSearch">-->
+<!--                <span class="crypto-icon crypto-icon-middle-search cursor-pointer"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="search-wrapper" *ngIf="showSearch">-->
+<!--        <manual-search [searchHandler]="searchHandler" placeholder="{{'threadList.searchPlaceholder' | translate}}">-->
+<!--            <span manual-search-trigger></span>-->
+<!--        </manual-search>-->
+<!--    </div>-->
+<!--    <div class="thread-list flex flex-direction-column" scrollable (scrolledToBottom)="handleScrollToBottom()"-->
+<!--         *ngIf="!loading && threadsInitialized">-->
+<!--        <ng-container *ngFor="let thread of threads; trackBy: trackThreadById">-->
+<!--            <div class="thread-list-item flex flex-shrink-0 align-items-center"-->
+<!--                 *ngIf="!thread.removed"-->
+<!--                 [class.active]="activeThread && activeThread.id === thread.id"-->
+<!--                 [class.blocked]="thread.isBlocked || thread.isBanned"-->
+<!--                 (click)="activeThread = thread">-->
+<!--                <div class="user-avatar m-right-10" >-->
+<!--                    <name-avatar class="" [src]="thread?.lastMessage?.fromId" [name]="thread?.name"></name-avatar>-->
+<!--                </div>-->
+<!--                <div class="flex flex-direction-column m-right-15 main-content overflow-hidden justify-content-center">-->
+<!--                    <div class="t-overflow-ellipsis thread-name color-title">-->
+<!--                        {{thread.name}}-->
+<!--                    </div>-->
+<!--                    <div class="t-overflow-ellipsis thread-last-message color-value">{{thread?.lastMessage?.content}}</div>-->
+<!--                </div>-->
+<!--                <div class="time flex align-items-start color-title">-->
+<!--                    {{getThreadLastMessageDate(thread?.lastMessage?.updatedAt)}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </ng-container>-->
+<!--    </div>-->
+<!--</div>-->

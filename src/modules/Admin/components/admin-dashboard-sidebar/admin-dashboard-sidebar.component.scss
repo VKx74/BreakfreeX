@@ -1,0 +1,58 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+$panelWidth: 48px;
+
+:host {
+  width: $panelWidth;
+  flex-shrink: 0;
+  display: block;
+  min-height: 100%;
+}
+
+.system-monitoring-link {
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.menu-item-label {
+  width: 100%;
+  text-align: center;
+  padding: 0 15px 5px 0;
+  color: white;
+  border-bottom: 1px solid lightslategrey;
+}
+
+.system-monitoring-btn {
+  position: relative;
+  padding-right: 25px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu {
+  list-style: none;
+  margin-bottom: 0;
+  padding: 3px 0;
+
+  li {
+    width: 42px;
+    height: 32px;
+    margin: 3px auto;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  background-color: themed('appPanelColor');
+  border-left: 1px solid themed('appBackgroundColor');
+}

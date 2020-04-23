@@ -1,0 +1,10 @@
+export * from './lib/components/golden-layout/golden-layout.component';
+export * from './lib/components/golden-layout-popup/golden-layout-popup.component';
+export * from './lib/layout.module';
+export * from './lib/models/configuration';
+export * from './lib/models/golden-layout-component-state';
+export * from './lib/golden-layout-item';
+export * from './lib/models/golden-layout-component-state';
+export * from './lib/tokens/golden-layout-item-state.token';
+export * from './lib/services/layout-manager.service';
+export { GoldenLayoutComponentConfiguration } from "./lib/tokens/golden-layout-configuration.token";

@@ -1,0 +1,1525 @@
+[
+    {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ADL",
+    "signature": "ADL()",
+    "description": "Accumulation Distribution Line",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var adl = ADL(14);",
+      "var adl = ADL(Close, 14);"
+    ]
+  },
+   {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ADX",
+    "signature": "ADX()",
+    "description": "Average directional index",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var adx = ADX(14);",
+      "var adx = ADX(Close, 14);"
+    ]
+  },
+   {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ADXR",
+    "signature": "ADXR()",
+    "description": "Directional Movement Rating",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      },
+      {
+        "name": "interval",
+        "type": "int",
+        "description": "Indicator interval"
+      }
+    ],
+    "example": [
+      "var adxr = ADXR(Close, 100, 14);",
+      "var adxr = ADXR(100, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "AroonOscillator",
+    "signature": "AroonOscillator()",
+    "description": "Aroon Oscillator",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var aroonOscillator = AroonOscillator(14);",
+      "var aroonOscillator = AroonOscillator(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ATR",
+    "signature": "ATR()",
+    "description": "Average True Range",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var atr = ATR(14);",
+      "var atr = ATR(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "BOP",
+    "signature": "BOP()",
+    "description": "Balance of Power",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "smooth",
+        "type": "int",
+        "description": "Indicator smooth parameter"
+      }
+    ],
+    "example": [
+      "var bop = BOP(14);",
+      "var bop = BOP(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "CCI",
+    "signature": "CCI()",
+    "description": "Commodity Channel Index",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var cci = CCI(14);",
+      "var cci = CCI(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ChaikinMoneyFlow",
+    "signature": "ChaikinMoneyFlow()",
+    "description": "Chaikin Money Flow",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var chaikinMoneyFlow = ChaikinMoneyFlow(14);",
+      "var chaikinMoneyFlow = ChaikinMoneyFlow(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ChaikinOscillator",
+    "signature": "ChaikinOscillator()",
+    "description": "Chaikin Oscillator",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "slow",
+        "type": "int",
+        "description": "Indicator slow parameter"
+      },
+      {
+        "name": "fast",
+        "type": "int",
+        "description": "Indicator fast parameter"
+      }
+    ],
+    "example": [
+      "var chaikinOscillator = ChaikinOscillator(1000, 100);",
+      "var chaikinOscillator = ChaikinOscillator(Close ,1000, 100);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ChaikinVolatility",
+    "signature": "ChaikinVolatility()",
+    "description": "Chaikin Volatility",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "mAPeriod",
+        "type": "int",
+        "description": "Indicator mAPeriod parameter"
+      },
+      {
+        "name": "rOCPeriod",
+        "type": "int",
+        "description": "Indicator rOCPeriod parameter"
+      }
+    ],
+    "example": [
+      "var chaikinVolatility = ChaikinVolatility(14, 20);",
+      "var chaikinVolatility = ChaikinVolatility(Close ,1000, 100);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "CMO",
+    "signature": "CMO()",
+    "description": "Average directional index",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var cmo = CMO(14);",
+      "var cmo = CMO(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "DEMA",
+    "signature": "DEMA()",
+    "description": "Double Exponential Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var dema = DEMA(14);",
+      "var dema = DEMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "DeviationToMA",
+    "signature": "DeviationToMA()",
+    "description": "Deviation To Movement Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var deviationToMA = DeviationToMA();",
+      "var deviationToMA = DeviationToMA(Close);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "DMIndex",
+    "signature": "DMIndex()",
+    "description": "Double Exponential Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "smo0th",
+        "type": "int",
+        "description": "Indicator smooth parameter"
+      }
+    ],
+    "example": [
+      "var dmindex = DMIndex(14);",
+      "var dmindex = DMIndex(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "EaseOfMovement",
+    "signature": "EaseOfMovement()",
+    "description": "Ease Of Movement",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "smoothing",
+        "type": "int",
+        "description": "Indicator smoothing parameter"
+      },
+      {
+        "name": "volumeDivisor",
+        "type": "int",
+        "description": "Indicator volumeDivisor parameter"
+      }
+    ],
+    "example": [
+      "var easeOfMovement = EaseOfMovement(14, 20);",
+      "var easeOfMovement = EaseOfMovement(Close, 14, 20);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "EMA",
+    "signature": "EMA()",
+    "description": "Exponential Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var ema = EMA(14);",
+      "var ema = EMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "FOSC",
+    "signature": "FOSC()",
+    "description": "Exponential Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var ema = EMA(14);",
+      "var ema = EMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "HMA",
+    "signature": "HMA()",
+    "description": "Hull Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var hma = HMA(14);",
+      "var hma = HMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "KAMA",
+    "signature": "KAMA()",
+    "description": "Kaufman`s Adaptive Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      },
+      {
+        "name": "slow",
+        "type": "int",
+        "description": "Indicator slow parameter"
+      },
+      {
+        "name": "fast",
+        "type": "int",
+        "description": "Indicator fast parameter"
+      }
+    ],
+    "example": [
+      "var kama = KAMA(10, 20, 100);",
+      "var kama = KAMA(Close, 10, 20, 100);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "KeyReversalDown",
+    "signature": "KeyReversalDown()",
+    "description": "Key Reversal Down",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var keyReversalDown = KeyReversalDown(14);",
+      "var keyReversalDown = KeyReversalDown(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "KeyReversalUp",
+    "signature": "KeyReversalUp()",
+    "description": "Key Reversal Up",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var keyReversalUp = KeyReversalUp(14);",
+      "var keyReversalUp = KeyReversalUp(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "LogChange",
+    "signature": "LogChange()",
+    "description": "Log Change",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var logChange = LogChange();",
+      "var logChange = LogChange(Close);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "MAX",
+    "signature": "MAX()",
+    "description": "Maximum",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var max = MAX(14);",
+      "var max = MAX(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "MIN",
+    "signature": "MIN()",
+    "description": "Minimum",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var min = MIN(14);",
+      "var min = MIN(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "MFI",
+    "signature": "MFI()",
+    "description": "Money Flow Index",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var mfi = MFI(14);",
+      "var mfi = MFI(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "Momentum",
+    "signature": "Momentum()",
+    "description": "Momentum",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var momentum = Momentum(14);",
+      "var momentum = Momentum(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "Momentum",
+    "signature": "Momentum()",
+    "description": "Momentum",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var momentum = Momentum(14);",
+      "var momentum = Momentum(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "NBarsDown",
+    "signature": "NBarsDown()",
+    "description": "Number of Bars Down",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "barCount",
+        "type": "int",
+        "description": "Indicator barCount parameter"
+      },
+      {
+        "name": "barDown",
+        "type": "bool",
+        "description": "Indicator barDown parameter"
+      },
+      {
+        "name": "lowerHigh",
+        "type": "bool",
+        "description": "Indicator lowerHigh parameter"
+      },
+      {
+        "name": "lowerLow",
+        "type": "bool",
+        "description": "Indicator lowerLow parameter"
+      }
+    ],
+    "example": [
+      "var nbarsDown = NBarsDown(10, true, false, true);",
+      "var nbarsDown = NBarsDown(Close ,10, true, false, true);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "NBarsUp",
+    "signature": "NBarsUp()",
+    "description": "Number of Bars Up",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "barCount",
+        "type": "int",
+        "description": "Indicator barCount parameter"
+      },
+      {
+        "name": "barUp",
+        "type": "bool",
+        "description": "Indicator barDown parameter"
+      },
+      {
+        "name": "higherHigh",
+        "type": "bool",
+        "description": "Indicator higherHigh parameter"
+      },
+      {
+        "name": "higherLow",
+        "type": "bool",
+        "description": "Indicator higherLow parameter"
+      }
+    ],
+    "example": [
+      "var nbarsUp = NBarsUp(10, true, false, true);",
+      "var nbarsUp = NBarsUp(Close ,10, true, false, true);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "OBV",
+    "signature": "OBV()",
+    "description": "On-Balance Volume",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var obv = OBV();",
+      "var obv = OBV(Close);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "PEE",
+    "signature": "PEE()",
+    "description": "PEE",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      },
+      {
+        "name": "smooth",
+        "type": "int",
+        "description": "Indicator smooth period"
+      }
+    ],
+    "example": [
+      "var pee = PEE(14, 20);",
+      "var pee = PEE(Close, 14, 20);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "PriceOscillator",
+    "signature": "PriceOscillator()",
+    "description": "Price Oscillator",
+    "parameters": [
+      {
+        "name": "slow",
+        "type": "int",
+        "description": "Indicator slow parameter"
+      },
+      {
+        "name": "fast",
+        "type": "int",
+        "description": "Indicator fast parameter"
+      },
+      {
+        "name": "smooth",
+        "type": "int",
+        "description": "Indicator smooth period"
+      },
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var priceOscillator = PriceOscillator(30, 20, 10);",
+      "var priceOscillator = PriceOscillator(Close, 30, 20, 10);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "Range",
+    "signature": "Range()",
+    "description": "Range",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var range = Range();",
+      "var range = Range(Close);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "RIND",
+    "signature": "RIND()",
+    "description": "Rind",
+    "parameters": [
+      {
+        "name": "periodQ",
+        "type": "int",
+        "description": "Indicator periodQ parameter"
+      },
+      {
+        "name": "smooth",
+        "type": "int",
+        "description": "Indicator smooth period"
+      },
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var rind = RIND(30, 20);",
+      "var rind = RIND(Close, 30, 20);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ROC",
+    "signature": "ROC()",
+    "description": "Rate of Change",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var roc = ROC(14);",
+      "var roc = ROC(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "RSS",
+    "signature": "RSS()",
+    "description": "Relative Spread Strength",
+    "parameters": [
+      {
+        "name": "ema1",
+        "type": "int",
+        "description": "Indicator ema1 parameter"
+      },
+      {
+        "name": "ema2",
+        "type": "int",
+        "description": "Indicator ema2 parameter"
+      },
+      {
+        "name": "length",
+        "type": "int",
+        "description": "Indicator length period"
+      },
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var rss = RSS(30, 20, 50);",
+      "var rss = RSS(Close, 30, 20, 50);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "SMA",
+    "signature": "SMA()",
+    "description": "Simple Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var sma = SMA(14);",
+      "var sma = SMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "StdDev",
+    "signature": "StdDev()",
+    "description": "Standard Deviation",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var stdDev = StdDev(14);",
+      "var stdDev = StdDev(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "StochRSI",
+    "signature": "StochRSI()",
+    "description": "Stochastic Relative Strength Index",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var stochRSI = StochRSI(14);",
+      "var stochRSI = StochRSI(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "SUM",
+    "signature": "SUM()",
+    "description": "Sum",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var sum = SUM(14);",
+      "var sum = SUM(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "T3",
+    "signature": "T3()",
+    "description": "T3 Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "tCount",
+        "type": "int",
+        "description": "Indicator tCount parameter"
+      },
+      {
+        "name": "vFactor",
+        "type": "double",
+        "description": "Indicator vFactor parameter"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var t3 = T3(14, 30, 3D);",
+      "var t3 = T3(Close,14, 30, 3D);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "TEMA",
+    "signature": "TEMA()",
+    "description": "Triple Exponential Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var tema = TEMA(14);",
+      "var tema = TEMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "TMA",
+    "signature": "TMA()",
+    "description": "Triple Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var tma = TMA(14);",
+      "var tma = TMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "TSF",
+    "signature": "TSF()",
+    "description": "Time Series Forecast",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "forecast",
+        "type": "int",
+        "description": "Indicator forecast parameter"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var tsf = TSF(14);",
+      "var tsf = TSF(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "TSI",
+    "signature": "TSI()",
+    "description": "True Strength Index",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "fast",
+        "type": "int",
+        "description": "Indicator fast parameter"
+      },
+      {
+        "name": "slow",
+        "type": "int",
+        "description": "Indicator slow period"
+      }
+    ],
+    "example": [
+      "var tsi = TSI(100, 10);",
+      "var tsi = TSI(Close, 100, 10);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "UltimateOscillator",
+    "signature": "UltimateOscillator()",
+    "description": "Ultimate Oscillatorx",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "fast",
+        "type": "int",
+        "description": "Indicator fast parameter"
+      },
+      {
+        "name": "intermediate",
+        "type": "int",
+        "description": "Indicator intermediate parameter"
+      },
+      {
+        "name": "slow",
+        "type": "int",
+        "description": "Indicator slow parameter"
+      }
+    ],
+    "example": [
+      "var ultimateOscillator = UltimateOscillator(100, 50, 10);",
+      "var ultimateOscillator = UltimateOscillator(Close, 100, 50, 10);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "VaR",
+    "signature": "VaR()",
+    "description": "VaR",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var vaR = VaR();",
+      "var vaR = VaR(Close);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "VOL",
+    "signature": "VOL()",
+    "description": "Volume",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var vol = VOL();",
+      "var vol = VOLClose);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "VMA",
+    "signature": "VMA()",
+    "description": "Variable Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      },
+      {
+        "name": "volatilityPeriod",
+        "type": "int",
+        "description": "Indicator volatilityPeriod parameter"
+      }
+    ],
+    "example": [
+      "var vma = VMA(100, 10);",
+      "var vma = VMA(Close, 100, 10);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "Volatility",
+    "signature": "Volatility()",
+    "description": "Volatility",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var volatility = Volatility();",
+      "var volatility = Volatility(Close);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "VOLMA",
+    "signature": "VOLMA()",
+    "description": "Volume Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var volma = VOLMA(14);",
+      "var volma = VOLMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "VolumeOscillator",
+    "signature": "VolumeOscillator()",
+    "description": "Volume Oscillatorx",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "fast",
+        "type": "int",
+        "description": "Indicator fast parameter"
+      },
+      {
+        "name": "slow",
+        "type": "int",
+        "description": "Indicator slow parameter"
+      }
+    ],
+    "example": [
+      "var volumeOscillator = VolumeOscillator(50, 10);",
+      "var volumeOscillator = VolumeOscillator(Close, 50, 10);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "VolumeUpDown",
+    "signature": "VolumeUpDown()",
+    "description": "Volume Up Down",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      }
+    ],
+    "example": [
+      "var volumeUpDown = VolumeUpDown();",
+      "var volumeUpDown = VolumeUpDown(Close);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "VROC",
+    "signature": "VROC()",
+    "description": "Volume Rate of Change Definition",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "smooth",
+        "type": "int",
+        "description": "Indicator fast parameter"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator slow parameter"
+      }
+    ],
+    "example": [
+      "var vroc = VROC(50, 10);",
+      "var vroc = VROC(Close, 50, 10);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "WillamsR",
+    "signature": "WillamsR()",
+    "description": "Williams %R",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var willamsR = WillamsR(14);",
+      "var willamsR = WillamsR(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "WMA",
+    "signature": "WMA()",
+    "description": "Weighted Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var wma = WMA(14);",
+      "var wma = WMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ZLEMA",
+    "signature": "ZLEMA()",
+    "description": "Zero Lag Exponential Moving Average",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var zlema = ZLEMA(14);",
+      "var zlema = ZLEMA(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "Aroon",
+    "signature": "Aroon()",
+    "description": "Aroon",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      }
+    ],
+    "example": [
+      "var aroon = Aroon(14);",
+      "var aroon = Aroon(Close, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "APZ",
+    "signature": "APZ()",
+    "description": "Directional Movement Rating",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      },
+      {
+        "name": "bandPct",
+        "type": "double",
+        "description": "Indicator bandPct parameter"
+      }
+    ],
+    "example": [
+      "var apz = APZ(3D, 14);",
+      "var apz = APZ(Close, 3D, 14);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "Bollinger",
+    "signature": "Bollinger()",
+    "description": "Bollinger",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "period",
+        "type": "int",
+        "description": "Indicator period"
+      },
+      {
+        "name": "numStdDev",
+        "type": "double",
+        "description": "Indicator numStdDev parameter"
+      }
+    ],
+    "example": [
+      "var bollinger = Bollinger(14, 3D);",
+      "var bollinger = Bollinger(Close, 14, 3D);"
+    ]
+  },
+  {
+    "category": "Method",
+    "documentationType": 1,
+    "name": "ConstantLines",
+    "signature": "ConstantLines()",
+    "description": "Constant Lines",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "IDataRows",
+        "description": "Input series for calculation"
+      },
+      {
+        "name": "line1Value",
+        "type": "double",
+        "description": "Indicator line1Value parameter"
+      },
+      {
+        "name": "line2Value",
+        "type": "double",
+        "description": "Indicator line2Value parameter"
+      },
+      {
+        "name": "line3Value",
+        "type": "double",
+        "description": "Indicator line3Value parameter"
+      },
+      {
+        "name": "line4Value",
+        "type": "double",
+        "description": "Indicator line4Value parameter"
+      }
+    ],
+    "example": [
+      "var constantLines = ConstantLines(1.7E+3, 1.7E+2, 1.7E+1, 1.7E+4);",
+      "var constantLines = ConstantLines(Close, 1.7E+3, 1.7E+2, 1.7E+1, 1.7E+4);"
+    ]
+  }
+]

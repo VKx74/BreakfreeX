@@ -1,0 +1,9 @@
+<div class="table-wrapper flex-direction-column">
+    <header *ngIf="!isHeaderPassed" class="w-100 m-bottom-10"></header>
+    <ng-container *ngIf="isHeaderPassed">
+        <ng-content select="header"></ng-content>
+    </ng-container>
+    <div class="content h-100 flex overflow-y-auto max-height-100">
+        <ng-content></ng-content>
+    </div>
+</div>

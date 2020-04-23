@@ -1,0 +1,204 @@
+<div class="root">
+    <div class="sections-wrapper">
+
+        <!--Show if Personal account type-->
+
+        <div class="section" *ngIf="personalInfo.account === AccountType.Personal">
+            <span class="section-name crypto-text">General</span>
+            <div class="delimiter"></div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Birthday</span>
+                <span class="crypto-text is-small">{{convertUTCTimeToLocal(personalInfo.personal.birthDay * 1000) | date:'dd/MM/yyyy'}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Country</span>
+                <span class="crypto-text is-small">{{personalInfo.personal.country}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">City</span>
+                <span class="crypto-text is-small">{{personalInfo.personal.city}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Address</span>
+                <span class="crypto-text is-small">{{personalInfo.personal.address}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Postcode</span>
+                <span class="crypto-text is-small">{{personalInfo.personal.postcode}}</span>
+            </div>
+        </div>
+
+        <!--Show if it is Business or Institutional account type-->
+
+        <div class="section"
+             *ngIf="personalInfo.account === AccountType.Business || personalInfo.account === AccountType.Institutional">
+            <span class="section-name crypto-text">Company general info</span>
+            <div class="delimiter"></div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Business type</span>
+                <span class="crypto-text is-small">{{personalInfo.businessType}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Name of company</span>
+                <span class="crypto-text is-small">{{personalInfo.companyName}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Email</span>
+                <span class="crypto-text is-small">{{personalInfo.email}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between"
+                 *ngIf="personalInfo.website">
+                <span class="crypto-text crypto-color-secondary is-small">Website</span>
+                <span class="crypto-text is-small">{{personalInfo.website}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Number of employers</span>
+                <span class="crypto-text is-small">{{personalInfo.numberOfEmployers}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Location</span>
+                <span class="crypto-text is-small">{{personalInfo.companyLocation}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Address</span>
+                <span class="crypto-text is-small">{{personalInfo.companyAddress}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Registered company number</span>
+                <span class="crypto-text is-small">{{personalInfo.registeredCompanyNumber}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Contact person phone</span>
+                <span class="crypto-text is-small">{{personalInfo.phoneNumber}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Contact person role at company</span>
+                <span class="crypto-text is-small">{{personalInfo.roleAtCompany}}</span>
+            </div>
+            <ng-container *ngIf="personalInfo.account === AccountType.Institutional">
+                <div class="section-item flex align-items-center justify-space-between">
+                    <span class="crypto-text crypto-color-secondary is-small">Anticipated crypto funds</span>
+                    <span class="crypto-text is-small">{{personalInfo.anticipatedCryptoFunds}}</span>
+                </div>
+                <div class="section-item flex align-items-center justify-space-between">
+                    <span class="crypto-text crypto-color-secondary is-small">Anticipated average crypto balances</span>
+                    <span class="crypto-text is-small">{{personalInfo.anticipatedAverageCryptoFunds}}</span>
+                </div>
+                <div class="section-item flex align-items-center justify-space-between">
+                    <span class="crypto-text crypto-color-secondary is-small">Company funds</span>
+                    <span class="crypto-text is-small">{{personalInfo.companyFunds}}</span>
+                </div>
+                <div class="section-item flex align-items-center justify-space-between">
+                    <span class="crypto-text crypto-color-secondary is-small">Fund launch date</span>
+                    <span class="crypto-text is-small">{{convertUTCTimeToLocal(personalInfo.fundLaunchDate) | date: 'dd/MM/yyyy'}}</span>
+                </div>
+                <div class="section-item flex align-items-center justify-space-between"
+                     *ngIf="personalInfo.fundAdministrator">
+                    <span class="crypto-text crypto-color-secondary is-small">Fund administrator</span>
+                    <span class="crypto-text is-small">{{personalInfo.fundAdministrator}}</span>
+                </div>
+                <div class="section-item flex align-items-center justify-space-between">
+                    <span class="crypto-text crypto-color-secondary is-small">Engaged coin offering</span>
+                    <span class="crypto-text is-small">{{personalInfo.isEngagedCoinOffering ? 'Yes' : 'No'}}</span>
+                </div>
+                <div class="section-item flex align-items-center justify-space-between">
+                    <span class="crypto-text crypto-color-secondary is-small">Has US/UK/European bank account</span>
+                    <span class="crypto-text is-small">{{personalInfo.isHaveBankAccount ? 'Yes' : 'No'}}</span>
+                </div>
+            </ng-container>
+        </div>
+
+        <!--Show if Institutional account type-->
+
+        <div class="section" *ngIf="personalInfo.account === AccountType.Institutional">
+            <span class="section-name crypto-text">Investment strategy mix</span>
+            <div class="delimiter"></div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Arbitrage</span>
+                <span class="crypto-text is-small">{{personalInfo.strategyMix.arbitrage}}
+                    %</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Buy and hold</span>
+                <span class="crypto-text is-small">{{personalInfo.strategyMix.buyAndHold}}
+                    %</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Derivaives</span>
+                <span class="crypto-text is-small">{{personalInfo.strategyMix.derivaives}}
+                    %</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">ETF/Index weighting</span>
+                <span class="crypto-text is-small">{{personalInfo.strategyMix.etfIndexWeighting}}
+                    %</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Price momentum</span>
+                <span class="crypto-text is-small">{{personalInfo.strategyMix.priceMomentum}}
+                    %</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Value driven models</span>
+                <span class="crypto-text is-small">{{personalInfo.strategyMix.valueDrivenModels}}
+                    %</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Other</span>
+                <span class="crypto-text is-small">{{personalInfo.strategyMix.other}}%</span>
+            </div>
+        </div>
+
+        <div class="section" *ngIf="personalInfo.director1">
+            <span class="section-name crypto-text">Director 1 info</span>
+            <div class="delimiter"></div>
+            <business-account-company-director
+                    [director]="personalInfo.director1"></business-account-company-director>
+        </div>
+
+        <div class="section" *ngIf="personalInfo.director2">
+            <span class="section-name crypto-text">Director 2 info</span>
+            <div class="delimiter"></div>
+            <business-account-company-director
+                    [director]="personalInfo.director2"></business-account-company-director>
+        </div>
+
+        <div class="section" *ngFor="let document of personalInfo.documents">
+            <span class="section-name crypto-text">{{getPersonalDocumentName(document)}}</span>
+            <div class="delimiter"></div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Expiration</span>
+                <span class="crypto-text is-small">{{convertUTCTimeToLocal(document.expiration * 1000) | date:'dd/MM/yyyy'}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Code</span>
+                <span class="crypto-text is-small">{{document.code}}</span>
+            </div>
+            <div class="section-item flex align-items-center justify-space-between">
+                <span class="crypto-text crypto-color-secondary is-small">Photo</span>
+
+                <div class="flex align-items-center">
+                    <a [href]="documentsUrls[document.fileId]" download="">
+                        <i class="fa fa-picture-o"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *showIfRole="[Roles.Admin, Roles.KYCOfficer]">
+        <div class="btns-wrapper">
+            <button class="crypto-button crypto-button_action m-right-5"
+                    [disabled]="rejectBtnDisabled"
+                    [ngClass]="{'is-loading': processReject}"
+                    (click)="reject()">
+                Reject
+            </button>
+            <button class="crypto-button crypto-button_success"
+                    [disabled]="approveBtnDisabled"
+                    [ngClass]="{'is-loading': processApprove}"
+                    (click)="approve()">
+                Approve
+            </button>
+        </div>
+    </div>
+</div>

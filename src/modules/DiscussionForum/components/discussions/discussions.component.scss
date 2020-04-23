@@ -1,0 +1,43 @@
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+.category-selector {
+  height: 50px;
+  background-color: #fff;
+  border: 1px solid #f0f0f1;
+  border-radius: 3px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+
+  .category-item {
+    font-family: $primaryFontFamily;
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.5);
+      text-decoration: underline;
+    }
+
+    &.active {
+      font-weight: 900;
+      text-decoration: underline;
+    }
+
+    &:not(:first-of-type) {
+      margin-left: 20px;
+    }
+  }
+}
+
+.no-items {
+
+}
+
+.delimiter {
+  margin: 15px 0;
+}
+
+

@@ -1,0 +1,26 @@
+@import "../variables";
+@import "../mixins/themify";
+@import "../themes/themes";
+
+
+.#{$classPrefix}-form-unit {
+  width: 100%;
+  margin-bottom: 0;
+
+  &.margin-bottom {
+    margin-bottom: 13px;
+  }
+
+  .form-unit__label {
+    font-family: $primaryFontFamily;
+    font-size: 12px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  @include themify($themes) {
+    .form-unit__label {
+      color: themed('titleTextColor');
+    }
+  }
+}

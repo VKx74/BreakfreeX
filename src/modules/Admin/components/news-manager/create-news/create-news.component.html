@@ -1,0 +1,54 @@
+<div class="news-wrapper crypto-modal">
+    <div class="modal-content">
+    <div class="modal-title flex justify-space-between">
+        <h4 class="modal-title">{{isEdit ? 'Edit News' : 'Create News'}}</h4>
+        <button class="close">
+            <i class="crypto-icon-close crypto-icon cursor-pointer" (click)="close()"></i>
+        </button>
+    </div>
+
+    <div class="flex justify-content-center form-wrapper underlay modal-body">
+        <div class="w-100 h-100">
+            <form class="columns-wrapper" [formGroup]="newsForm">
+                <div class="crypto-form-unit">
+                    <span class="form-unit__label">Title</span>
+                    <mat-form-field class="crypto-input full-width with-hint">
+                        <input matInput type="text" formControlName="title" autocomplete="off">
+                        <mat-error formError="title"></mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="crypto-form-unit">
+                    <span class="form-unit__label">Description</span>
+                    <mat-form-field class="crypto-input full-width  with-hint">
+                        <input matInput type="text" formControlName="description" autocomplete="off">
+                        <mat-error formError="description"></mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="crypto-form-unit pb-25">
+                    <span class="form-unit__label">Tags</span>
+                    <tags-input [tags]="tagsList" (onAddTag)="addTag($event)"
+                                (onRemoveTag)="removeTag($event)"></tags-input>
+                </div>
+                <div class="crypto-form-unit margin-bottom">
+                    <span class="form-unit__label">Content</span>
+                    <markdown-input formControlName="content"></markdown-input>
+                    <mat-form-field class="fake-input">
+                        <input matInput type="text" formControlName="content">
+                        <mat-error formError="content"></mat-error>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper flex justify-flex-end w-100">
+                <button class="crypto-button crypto-button_primary is-medium"
+                        [ngClass]="{'is-loading': loading}"
+                        [disabled]="loading || !isValid"
+                        (click)="submit()">Submit
+                </button>
+            </div>
+        </div>
+
+    </div>
+    </div>
+</div>

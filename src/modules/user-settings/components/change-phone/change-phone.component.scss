@@ -1,0 +1,76 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/mixins/dialog-tab-header";
+
+@include dialogTabHeader();
+
+:host {
+  .section {
+    padding: 20px 28px;
+    margin-top: 9px;
+    border-radius: 5px;
+    max-height: 86px;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+
+    .crypto-icon {
+      position: relative;
+      bottom: 5px;
+      font-size: 30px;
+    }
+    .data {
+      position: relative;
+      top: 10px;
+      font-size: 15px;
+      left: 23px;
+    }
+
+  }
+
+  /deep/ .mat-form-field-subscript-wrapper {
+    bottom: -15px !important;
+  }
+
+  /deep/ .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+
+  .phone-number {
+    margin-top: -6px;
+  }
+
+  .crypto-button {
+    position: relative;
+    bottom: 2px;
+  }
+
+  .crypto-button_success {
+    top: 16px !important;
+  }
+
+
+}
+
+@include themify($themes, true) {
+  .section {
+    background-color: themed('appPanelColor');
+    box-shadow: themed('box-shadowPanel');
+  }
+
+  .data, .crypto-button {
+    color: themed('valueTextColor');
+  }
+
+  .crypto-button {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  .crypto-icon {
+    color: themed('accentColor');
+  }
+
+  .added {
+    color: themed('buyColor');
+  }
+
+}

@@ -1,0 +1,168 @@
+<sidebar-container>
+    <sidebar-section>
+        <div class="section-label">Menu</div>
+        <div class="section-item" routerLink="">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-platform"></i></div>
+
+            <!--            <div class="item-text">{{'exchange' | translate}}</div>-->
+            <div class="item-text" routerLink="/platform">Platform</div>
+        </div>
+        <div class="section-item" routerLink="/admin">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-admin-dashboard"></i></div>
+            <div class="item-text">Admin panel</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Platform, 'scripting']">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-script"></i></div>
+            <div class="item-text">Scripting</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Platform, 'settings']">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-settings"></i></div>
+            <div class="item-text">Settings</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.Forums]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-forum"></i></div>
+            <div class="item-text">Forums</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.QA]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-question-vote"></i></div>
+            <div class="item-text">Q&A</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.News]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-news"></i></div>
+            <div class="item-text">News</div>
+        </div>
+    </sidebar-section>
+
+    <sidebar-section>
+        <div class="section-label">Social media</div>
+        <ng-container *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]">
+            <div class="section-item" *showByTag="ComponentIdentifier.adminForum"
+                 [routerLink]="AdminRoutes.Forum">
+                <div class="flex align-items-center justify-space-between full-width">
+                    <div>
+                        <span class="item-icon">
+                            <i class="crypto-icon crypto-icon-forum"></i>
+                        </span>
+                        <span class="item-text">Forums</span>
+                    </div>
+
+
+                    <i [matMenuTriggerFor]="forumsSubmenu" (click)="$event.stopPropagation()"
+                       class="crypto-icon crypto-icon-more cursor-pointer"></i>
+                </div>
+                <mat-menu #forumsSubmenu="matMenu">
+                    <button mat-menu-item class="current-color">
+                        <span [routerLink]="AdminRoutes.Forum + '/discussions'">Discussions</span>
+                    </button>
+
+                    <button mat-menu-item >
+                        <span [routerLink]="AdminRoutes.Forum + '/categories'">Categories</span>
+                    </button>
+                </mat-menu>
+            </div>
+        </ng-container>
+
+        <ng-container *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]">
+            <div class="section-item" *showByTag="ComponentIdentifier.adminQA"
+                 [routerLink]="AdminRoutes.QA">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-like"></i></div>
+                <div class="item-text">QA</div>
+            </div>
+        </ng-container>
+
+        <ng-container *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]">
+            <div class="section-item" *showByTag="ComponentIdentifier.adminChat" [routerLink]="AdminRoutes.Chat">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-chat"></i></div>
+                <div class="item-text">Chat</div>
+            </div>
+        </ng-container>
+
+    </sidebar-section>
+
+    <sidebar-section>
+        <div class="section-label">Events / News / Notifications</div>
+
+        <ng-container *showIfRole="[Roles.Admin, Roles.NewsOfficer]">
+            <div class="section-item" *showByTag="ComponentIdentifier.eventConsolidator"
+                 [routerLink]="AdminRoutes.EventConsolidator">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-calendar"></i></div>
+                <div class="item-text">Events</div>
+            </div>
+        </ng-container>
+
+        <ng-container *showIfRole="[Roles.Admin]">
+            <div class="section-item" *showByTag="ComponentIdentifier.adminNews" [routerLink]="AdminRoutes.News">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-news"></i></div>
+                <div class="item-text">News</div>
+            </div>
+        </ng-container>
+
+        <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer, Roles.SystemMonitoringOfficer]">
+            <div class="section-item" *showByTag="ComponentIdentifier.adminNotifications"
+                 [routerLink]="AdminRoutes.Notifications">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-platform-alert"></i></div>
+                <div class="item-text">Notifications</div>
+            </div>
+        </ng-container>
+    </sidebar-section>
+
+    <sidebar-section>
+        <div class="section-label">Users Management</div>
+        <ng-container *showIfRole="[Roles.Admin, Roles.KYCOfficer, Roles.SupportOfficer]">
+            <div class="section-item" [routerLink]="AdminRoutes.AppMembers"  *showByTag="ComponentIdentifier.appMembers">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-app-members"></i></div>
+                <div class="item-text">Members of platform</div>
+            </div>
+        </ng-container>
+    </sidebar-section>
+
+    <sidebar-section>
+        <div class="section-label">Trades</div>
+        <div class="section-item" *showByTag="ComponentIdentifier.runningScript"
+             [routerLink]="AdminRoutes.RunningScripts">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-script"></i></div>
+            <div class="item-text">Running scripts</div>
+        </div>
+
+    </sidebar-section>
+
+    <sidebar-section>
+        <div class="section-label">Access management</div>
+
+        <div class="section-item" *showByTag="ComponentIdentifier.permissionsManager"
+             [routerLink]="AdminRoutes.UIPermissionsManager">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-permission"></i></div>
+            <div class="item-text">Permissions manager</div>
+        </div>
+
+    </sidebar-section>
+
+    <sidebar-section *showIfRole="[Roles.Admin, Roles.SystemMonitoringOfficer]">
+        <div class="section-label flex align-items-center justify-space-between">
+            <span>System monitoring</span>
+            <i [matMenuTriggerFor]="systemMonitoringOptions"
+               class="crypto-icon crypto-icon-more cursor-pointer"></i>
+        </div>
+        <mat-menu #systemMonitoringOptions="matMenu" class="system-monitoring-menu">
+            <ng-template matMenuContent>
+                <system-monitoring-menu></system-monitoring-menu>
+            </ng-template>
+        </mat-menu>
+    </sidebar-section>
+
+</sidebar-container>

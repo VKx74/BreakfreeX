@@ -1,0 +1,47 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!messages?.length"
+                            [loading]="false">
+    <h3 class="header-left component-head_title">{{thread.name}} / Messages</h3>
+
+    <table class="crypto-table crypto-table_striped crypto-table_fixed-header">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>File</th>
+            <th>Message</th>
+            <th>Time</th>
+            <th class="small-column"></th>
+        </tr>
+        </thead>
+        <tbody *ngIf="messages?.length">
+        <tr *ngFor="let message of messages">
+            <td class="flex username">
+                <ng-container *ngIf="message.creator; else user_removed">
+                    <div class="name-avatar flex-shrink-0">
+                        <name-avatar [src]="message.creator?.avatarId"
+                                     [name]="message.creator.userName"></name-avatar>
+                    </div>
+                    <div class="t-overflow-ellipsis">{{message.creator.userName}}</div>
+                </ng-container>
+            </td>
+            <td>
+                <a (click)="showFile(message.files)">{{message.files[0]?.name}}</a>
+            </td>
+            <td>{{message.content}}</td>
+            <td>{{message.updatedAt | localTime | date: 'short'}}</td>
+            <td class="small-column">
+                <menu-toggle class="v-align-middle" [matMenuTriggerFor]="memberMenu"></menu-toggle>
+                <mat-menu #memberMenu="matMenu">
+                    <button mat-menu-item (click)="onMessageRemove(message)">
+                        <span class="crypto-color-red">Remove</span>
+                    </button>
+                </mat-menu>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</pagination-table-container>
+
+<ng-template #user_removed>
+    User does not exist
+</ng-template>

@@ -1,0 +1,36 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+.mat-menu-item {
+  &:hover:not(:disabled) {
+    transition: background-color 0.3s ease-in;
+
+    @include themify($themes, true) {
+      background-color: themed('appPanelColor');
+      color: themed('titleTextColor');
+    }
+    //box-shadow: 0 10px 19.1px 1.9px $component-selector-item-hover-box-shadow-color;
+  }
+}
+
+.menu-delimiter {
+  margin: 6px 0px !important;
+}
+
+.crypto-icon-save-layout {
+  position: absolute;
+  right: 5px;
+  bottom: 1px;
+  font-size: 24px;
+}
+
+
+@include themify($themes, true) {
+  .save {
+    color: themed('sellColor');
+  }
+
+  .saved {
+    color: themed('buyColor');
+  }
+}

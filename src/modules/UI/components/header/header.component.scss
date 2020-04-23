@@ -1,0 +1,36 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/variables";
+
+$max_height: 50px;
+
+//:host {
+  @include themify($themes, true) {
+    .header-container {
+      border-radius: 5px;
+      border-top-color: themed('appBackgroundColor');
+      border-bottom-color: themed('appBackgroundColor');
+      background-color: themed('appPanelColor');
+
+      //.header {
+      //  .header_title {
+      //    color: themed('tableTextColor');
+      //  }
+      //}
+    }
+  }
+
+  .padding {
+    padding: 17px 16px 14px 16px;
+  }
+
+  .margin-bottom {
+    margin-bottom: 10px;
+  }
+
+  .max-height {
+    max-height: 50px;
+    overflow: hidden;
+  }
+
+//}

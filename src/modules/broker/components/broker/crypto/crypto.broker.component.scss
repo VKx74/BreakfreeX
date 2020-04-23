@@ -1,0 +1,31 @@
+@import "mixins/themify";
+@import "../../../styles/themes/themes";
+
+@include themify($themes, true) {
+  .info {
+    width: 50%;
+    color: themed('valueTextColor');
+  }
+
+  /deep/ {
+    .links-wrapper {
+      a {
+        color: themed('titleTextColor');
+
+        &:hover {
+          color: themed('accentColor');
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+.links-wrapper {
+  font-size: 12px;
+}
+
+.svg-image img{
+  max-width: 200px;
+  height: min-content;
+}

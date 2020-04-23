@@ -1,0 +1,32 @@
+empty-placeholder,
+.items-wrapper {
+  order: 0;
+}
+
+.search-filter-wrapper {
+  width: 400px;
+  align-self: flex-start;
+  margin-left: 10px;
+}
+
+.delimiter {
+  margin: 15px 0;
+}
+
+.search {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 960px) {
+  .content-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .search-filter-wrapper {
+    width: 100%;
+    order: -1;
+    margin-bottom: 10px;
+    margin-left: 0;
+  }
+}

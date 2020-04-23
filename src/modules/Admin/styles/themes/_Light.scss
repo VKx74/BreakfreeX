@@ -1,0 +1,11 @@
+@import "base";
+@import "functions/map-extend";
+
+$LightTheme: map-extend($BaseTheme, (
+  // Footer panel
+        footer-label-color: #323232,
+        footer-icon-color: #323232,
+        
+        appMemberBannerImgOpacity: 0.15
+))
+

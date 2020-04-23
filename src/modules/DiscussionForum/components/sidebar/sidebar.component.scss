@@ -1,0 +1,27 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+:host {
+  align-self: flex-start;
+  border-radius: 3px;
+  margin-left: 10px;
+  max-width: 320px;
+  min-width: 320px;
+
+  ::ng-deep {
+    .sidebar-container {
+      padding-top: 0 !important;
+    }
+  }
+
+  .sidebar-section {
+    padding: 15px 20px;
+  }
+}
+@include themify($themes, true) {
+    ::ng-deep {
+      .sidebar-container {
+        background-color: themed('appPanelColor') !important;
+      }
+    }
+}

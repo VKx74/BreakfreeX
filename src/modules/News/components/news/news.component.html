@@ -1,0 +1,61 @@
+<ngx-loading [show]="loading"></ngx-loading>
+
+<div *ngIf="newsMessages.length" class="news-component-wrapper" #newsContentContainer>
+    <div [ngClass]="{'bottom-42': isPlatformRoot$ | async}" class="crypto-form-unit flex justify-flex-end margin-bottom">
+        <selector [options]="rssFeeds"
+                  [selectedOption]="selectedRssFeed"
+                  [optionCaption]="feedCaption"
+                  (onSelect)="setFeed($event)"></selector>
+    </div>
+    <div class="wrapper">
+        <data-table [rows]="newsMessages"
+                    [expandDetailsTemplate]="details"
+                    [hiddenColumns]="hiddenColumns"
+                    [excludedColumns]="excludedColumns"
+                    [columnCaption]="columnCaption"
+                    [allowColumnsVisibilityChange]="true">
+            <data-table-header-cell columnName="image" [columnWidth]="170">
+              {{'image' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="title">
+                {{'title' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="source">
+                {{'source' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="time" [sortable]="true">
+               {{'createdAt' | translate}}
+            </data-table-header-cell>
+
+            <data-table-cell columnName="image">
+                <ng-template let-item>
+                    <div class="flex news-image-container">
+                        <img style="width: 150px" [src]="item.imageSrc" alt="">
+                    </div>
+                </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="title">
+                <ng-template let-item>
+                <span class="title" title="Go to news">
+                    <a [href]="item.link" target="_blank">{{item.title}}</a></span>
+                </ng-template>
+            </data-table-cell>
+
+            <data-table-cell columnName="source">
+                <ng-template let-item>
+                    {{channel?.title}}
+                </ng-template>
+            </data-table-cell>
+
+            <data-table-cell columnName="time">
+                <ng-template let-item>
+                    {{(item.time / 1000) | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm:ss'}}
+                </ng-template>
+            </data-table-cell>
+        </data-table>
+    </div>
+
+    <ng-template #details let-item>
+        <p style="text-align: left !important;">{{ item.text }}</p>
+    </ng-template>
+</div>

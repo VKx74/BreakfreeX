@@ -1,0 +1,37 @@
+
+    <div class="flex answer-post-wrapper">
+        <div class="vote-wrapper">
+            <vote [voteCount]="post.totalVoteCount"
+                  [vote]="post.vote"
+                  [voteHandler]="voteHandler"></vote>
+        </div>
+        <div class="flex-grow-1">
+            <div class="post-content m-bottom-15">
+                <markdown-preview [markdown]="post.message"></markdown-preview>
+            </div>
+            <div class="flex justify-space-between align-items-center m-bottom-5">
+                <div class="author-info flex align-items-center">
+                    <name-avatar class="m-right-10 avatar" [src]="post?.creator?.avatarId" [name]="post?.creator?.userName"></name-avatar>
+                    <span class="qa-text author-name is-small is-bold">{{post?.creator?.userName}}</span>
+                </div>
+                <div>
+                   <ng-container *ngIf="canManage">
+                       <span class="crypto-text color-title delete is-small" (click)="delete()">Delete</span>
+                       <span class="crypto-text color-title is-small"> | </span>
+                       <span class="crypto-text color-title edit is-small" (click)="edit()">Edit</span>
+                       <span class="crypto-text color-title is-small"> | </span>
+                   </ng-container>
+                    <span class="crypto-text color-title is-small">Created: {{post.created | timeAgo}}</span>
+                </div>
+            </div>
+            <div class="answer-input-wrapper" *ngIf="isEditing">
+                <answer-input [message]="post.message"
+                              [showCancel]="true"
+                              (onCancel)="handleCancelEdit()"
+                              [submitHandler]="editAnswerSubmitHandler"></answer-input>
+            </div>
+
+            <div class="delimiter"></div>
+            <post-comments [postId]="post.id" [postHaveComments]="post.totalCommentCount > 0"></post-comments>
+        </div>
+    </div>

@@ -1,0 +1,135 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!logs?.length"
+                            [componentIdentifier]="ComponentIdentifier.eventsLog"
+                            [title]="'Events Log'"
+                            [loading]="loading">
+    <ng-container ngProjectAs=".filters">
+        <div class="selectors flex" *ngIf="filtrationParams$ | async as params">
+            <mat-form-field class="crypto-select m-right-10">
+                <mat-select value="All" (selectionChange)="handleServiceNameChange($event)"
+                            placeholder="Filter by name">
+                    <mat-option *ngFor="let name of params.serviceNames" [value]="name">
+                        {{ name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="crypto-select m-right-10">
+                <mat-select value="All" (selectionChange)="handleStatusCodeChange($event)"
+                            placeholder="Filter by status">
+                    <mat-option *ngFor="let code of params.responseCodes" [value]="code">
+                        {{ code }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="date-pickers-wrapper">
+            <mat-form-field class="crypto-date-input">
+                <input matInput readonly
+                       [(ngModel)]="from"
+                       [matDatepicker]="start"
+                       [max]="to"
+                       (dateChange)="resetPagination()"
+                       placeholder="Start date">
+                <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="crypto-date-input">
+                <input matInput readonly
+                       [(ngModel)]="to"
+                       [matDatepicker]="end"
+                       [min]="from"
+                       (dateChange)="resetPagination()"
+                       placeholder="End date">
+                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+            <button class="crypto-button crypto-button_primary" [disabled]="!from && !to"
+                    (click)="clearDatePickers()">
+                <span>Clear</span>
+            </button>
+        </div>
+    </ng-container>
+
+    <data-table [rows]="logs">
+        <data-table-header-cell columnName="serviceName">
+            Service Name
+        </data-table-header-cell>
+        <data-table-header-cell columnName="userName">
+            User Name
+        </data-table-header-cell>
+        <data-table-header-cell columnName="status">
+            Status
+        </data-table-header-cell>
+        <data-table-header-cell columnName="method">
+            Method
+        </data-table-header-cell>
+        <data-table-header-cell columnName="ip">
+            IP
+        </data-table-header-cell>
+        <data-table-header-cell columnName="endpoint">
+            Endpoint
+        </data-table-header-cell>
+        <data-table-header-cell columnName="date">
+            Date
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+        <data-table-cell columnName="userName">
+            <ng-template let-item>
+                {{item.environment.userName}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="status">
+            <ng-template let-item>
+                            <span [style.color]="item.action.responseStatusCode | statusCodeColor">
+                                {{item.action.responseStatusCode}}
+                            </span>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="method">
+            <ng-template let-item>
+                {{item.action.httpMethod}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="ip">
+            <ng-template let-item>
+                {{item.action.ipAddress}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="endpoint">
+            <ng-template let-item>
+                {{item.eventType | urlPath}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="endpoint">
+            <ng-template let-item>
+                {{item.eventType | urlPath}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="date">
+            <ng-template let-item>
+                {{item.startDate | date : 'short'}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                               <span class="text-right">
+                                   <menu-toggle class="v-align-middle"
+                                                [matMenuTriggerFor]="menu"></menu-toggle>
+                                   <mat-menu #menu="matMenu">
+                                       <button mat-menu-item (click)="showItemDetailsDialog(item)">
+                                           Details
+                                       </button>
+                                   </mat-menu>
+                               </span>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

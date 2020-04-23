@@ -1,0 +1,18 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">2FA</h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <pin-input #pinInput></pin-input>
+            </div>
+            <div class="btn-wrapper">
+                <button class="crypto-button crypto-button_primary full-width" [disabled]="!pinInput.valid" (click)="submit(pinInput.pin)">
+                    {{ 'submit' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

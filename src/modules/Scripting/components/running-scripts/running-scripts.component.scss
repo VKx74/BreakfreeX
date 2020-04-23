@@ -1,0 +1,49 @@
+@import "global-styles/mixins/hover-opacity";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+:host {
+
+  .top-line {
+    height: 50px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .control {
+    cursor: pointer;
+    font-size: 14px;
+
+    @include hoverOpacity(0.2, 1, 0.6s);
+  }
+
+  table {
+    .controls-column {
+      width: 30px;
+    }
+  }
+
+  /deep/ .message-wrapper {
+    background-color: inherit !important;
+  }
+
+  .educational-tips-wrapper {
+    position: relative;
+    bottom: 2px;
+    right: 5px;
+  }
+}
+
+@include themify($themes, true) {
+  .root {
+    background-color: themed('appPanelColor');
+  }
+
+  .control {
+    color: themed('valueTextColor');
+  }
+
+  .top-line {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+}

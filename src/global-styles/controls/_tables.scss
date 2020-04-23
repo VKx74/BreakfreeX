@@ -1,0 +1,271 @@
+@import "../variables";
+@import "../themes/themes";
+@import "../mixins/themify";
+@import "./tables-variables";
+
+.#{$classPrefix}-table {
+  width: 100%;
+  table-layout: fixed;
+
+  thead {
+    tr {
+      @include themify($themes) {
+        border-bottom: 1px solid themed('appBackgroundColor');
+      }
+      height: 40px;
+      font-weight: normal;
+      font-size: $rowFontSize;
+      line-height: $rowLineHeight;
+      font-family: $primaryFontFamily;
+
+      th,
+      td {
+        z-index: 2;
+        font-weight: 400;
+
+        @include themify($themes) {
+          background-color: themed('appPanelColor');
+          color: themed('titleTextColor');
+        }
+      }
+    }
+  }
+
+  tbody {
+    td,
+    th {
+      font-size: $rowFontSize;
+      line-height: $rowLineHeight;
+      font-weight: normal;
+      font-family: $primaryFontFamily;
+
+      @include themify($themes) {
+        color: themed('titleTextColor');
+      }
+    }
+
+    tr {
+      height: 36px;
+      @include themify($themes) {
+        border-bottom: 1px solid themed('appBackgroundColor');
+      }
+
+    }
+
+    tr.selected {
+      @include themify($themes) {
+        background-color: themed('activeBackgroundColor') !important;
+
+        td {
+          color: themed('accentColor');
+        }
+      }
+    }
+  }
+
+  tr {
+    th:first-of-type,
+    td:first-of-type {
+      padding-left: $firstColumnPaddingLeft;
+    }
+
+    th:last-of-type,
+    td:last-of-type {
+      padding-right: $lastColumnPaddingRight;
+    }
+
+    th,
+    td {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+
+
+  &_fixed-header {
+    thead {
+      td,
+      th {
+        position: sticky;
+        top: 0;
+      }
+    }
+  }
+
+  &_ellipsis {
+    th,
+    td {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &_selectable {
+    tr>td  {
+      cursor: pointer;
+    }
+  }
+
+  &_light {
+    thead th,
+    thead td {
+      background-color: #E3E9EE !important;
+      color: #171717 !important;
+    }
+
+    tbody {
+      td,
+      th {
+        color: #171717 !important;
+      }
+    }
+
+    tbody tr {
+      &:nth-child(even) {
+        background-color: #fff !important;
+      }
+
+      &:nth-child(odd) {
+        background-color: #F6F6F6 !important;
+      }
+    }
+  }
+}
+
+.#{$classPrefix}-table2 {
+  width: 100%;
+  table-layout: fixed;
+
+  thead {
+    tr {
+      font-weight: normal;
+      font-size: $rowFontSize;
+      line-height: $rowLineHeight;
+      font-family: $primaryFontFamily;
+
+      th,
+      td {
+        z-index: 2;
+        font-weight: 400;
+
+        @include themify($themes) {
+          background-color: themed('appPanelColor');
+          color: themed('titleTextColor');
+        }
+      }
+    }
+  }
+
+  tbody {
+    td,
+    th {
+      font-size: $rowFontSize;
+      line-height: $rowLineHeight;
+      font-weight: normal;
+      font-family: $primaryFontFamily;
+
+      @include themify($themes) {
+        color: themed('titleTextColor');
+      }
+    }
+
+    tr.selected {
+      @include themify($themes) {
+        background-color: themed('activeBackgroundColor') !important;
+
+        td {
+          color: themed('accentColor');
+        }
+      }
+    }
+  }
+
+  tr {
+    th:first-of-type,
+    td:first-of-type {
+      padding-left: $firstColumnPaddingLeft;
+    }
+
+    th:last-of-type,
+    td:last-of-type {
+      padding-right: $lastColumnPaddingRight;
+    }
+
+    th,
+    td {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &_striped {
+    tbody tr {
+      &:nth-child(even) {
+        @include themify($themes) {
+          background-color: themed('appModalsPanelColor');
+        }
+      }
+
+      &:nth-child(odd) {
+        @include themify($themes) {
+          background-color: themed('appModalsPanelColor');
+        }
+      }
+    }
+  }
+
+  &_fixed-header {
+    thead {
+      td,
+      th {
+        position: sticky;
+        top: 0;
+      }
+    }
+  }
+
+  &_ellipsis {
+    th,
+    td {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &_selectable {
+    tr>td  {
+      cursor: pointer;
+    }
+  }
+
+  &_light {
+    thead th,
+    thead td {
+      background-color: #E3E9EE !important;
+      color: #171717 !important;
+    }
+
+    tbody {
+      td,
+      th {
+        color: #171717 !important;
+      }
+    }
+
+    tbody tr {
+      &:nth-child(even) {
+        background-color: #fff !important;
+      }
+
+      &:nth-child(odd) {
+        background-color: #F6F6F6 !important;
+      }
+    }
+  }
+}
+

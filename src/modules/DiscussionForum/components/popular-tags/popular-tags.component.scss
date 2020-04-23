@@ -1,0 +1,37 @@
+@import "../../styles/variables";
+
+.header {
+  font-size: 15px;
+  font-family: $primaryFontFamily;
+  line-height: 14px;
+  margin-bottom: 13px;
+  color: $primeColor;
+
+  .tags-icon {
+    color: #1a083387;
+    margin-right: 7px;
+  }
+}
+
+.placeholder {
+  font-size: 11px;
+  font-family: $primaryFontFamily;
+  color: $primeColor;
+}
+
+.tag-wrapper {
+  margin-bottom: 3px;
+}
+
+.tag {
+  cursor: pointer;
+  display: inline-block;
+  max-width: 80px;
+  margin: 0 5px;
+}
+
+.tag-count {
+  font-size: 11px;
+  font-family: $primaryFontFamily;
+  color: $mutedColor;
+}

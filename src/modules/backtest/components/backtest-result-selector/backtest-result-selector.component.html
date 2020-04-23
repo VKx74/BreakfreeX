@@ -1,0 +1,55 @@
+<div class="backtest-result-selector">
+    <p class="text-center script-selector-wrapper">
+        <span class="crypto-caption">{{'backtest.script' | translate}}: </span>
+        <span>
+        <selector [options]="scripts"
+                  [selectedOption]="selectedScript"
+                  [optionCaption]="optionCaption"
+                  (onSelect)="handleScriptSelected($event)"></selector>
+      </span>
+    </p>
+    <div class="backtest-results-wrapper">
+        <div class="table-wrapper overflow-auto">
+            <table class="crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis" *ngIf="results && results.length">
+                <thead>
+                    <tr>
+                        <td class="text-center">{{'backtest.removeBacktest' | translate}}</td>
+                        <td>{{'time' | translate}}</td>
+                        <td>{{'backtest.script' | translate}}</td>
+                        <td>{{'instrument' | translate}}</td>
+                        <td>{{'periodicity' | translate}}</td>
+                        <td>{{'backtest.dateRange' | translate}}</td>
+                        <td class="text-center">{{'barsQuantity' | translate}}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let result of results" [ngClass]="{selected: result === selectedResult}"
+                        (click)="handleBacktestResultSelected(result)">
+
+                        <td class="text-center">
+                            <i class="fa fa-trash text-danger" (click)="$event.preventDefault(); handleRemoveBacktestResult(result)"></i>
+                        </td>
+                        <td>
+                            {{result.created | date:'h:mm:ss '}} - {{result.finished | date:'h:mm:ss '}}
+                        </td>
+                        <td>
+                            {{result.script.name}}
+                        </td>
+                        <td>
+                            {{result.historicalData.instrument}}
+                        </td>
+                        <td>
+                            {{result.historicalData.interval}} {{result.historicalData.periodicity}}
+                        </td>
+                        <td>
+                            {{result.historicalData.from | date:'h:mm:ss '}} - {{result.historicalData.to | date:'h:mm:ss '}}
+                        </td>
+                        <td class="text-center">
+                            {{result.historicalData.barsCount}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

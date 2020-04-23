@@ -1,0 +1,10 @@
+@mixin hoverOpacity($opacity, $hoveredOpacity, $transitionDuration: 0s) {
+  & {
+    opacity: $opacity;
+    transition: opacity $transitionDuration;
+
+    &:hover {
+      opacity: $hoveredOpacity;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+@import "base";
+@import "functions/map-extend";
+
+$LightTheme: map-extend($BaseTheme, (
+        calendarTextColor: #171717,
+        calendarMutedTextColor: rgba(50, 50, 50, 0.5),
+        calendarDescriptionTextColor: rgba(50, 50, 50, 0.8),
+))
+

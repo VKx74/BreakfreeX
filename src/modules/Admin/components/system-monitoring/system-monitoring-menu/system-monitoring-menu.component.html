@@ -1,0 +1,30 @@
+<ng-container *ngFor="let type of types">
+    <div class="menu-item-label form-unit__label" *ngIf="isTypeVisible(type)">
+        <mat-label>{{SystemMonitoringType[type] | uppercase}}</mat-label>
+    </div>
+    <div class="menu-delimiter"  *ngIf="isTypeVisible(type)"></div>
+    <ng-container *ngFor="let subtype of subtypes">
+        <button mat-menu-item (click)="navigate(type, subtype)" routerLinkActive="menu-item-active"
+                class="system-monitoring-btn" *ngIf="URLS_MAP[type][subtype]">
+            <span class="system-monitoring-label first-letter-capitalized">{{subtype}} monitoring</span>
+            <a [href]="URLS_MAP[type][subtype]" (click)="$event.stopPropagation()"
+               target="_blank"
+               class="system-monitoring-link">
+                <i class="fa fa-external-link"></i>
+            </a>
+        </button>
+    </ng-container>
+</ng-container>
+
+<div class="menu-item-label form-unit__label">
+    <mat-label>{{'Services' | uppercase}}</mat-label>
+</div>
+<div class="menu-delimiter"></div>
+<button mat-menu-item routerLink="./system-monitoring/services" routerLinkActive="menu-item-active"
+        class="system-monitoring-btn">
+    <span class="system-monitoring-label">Health check</span>
+</button>
+<button mat-menu-item routerLink="./system-monitoring/events-log" routerLinkActive="menu-item-active"
+        class="system-monitoring-btn">
+    <span class="system-monitoring-label">Event log</span>
+</button>

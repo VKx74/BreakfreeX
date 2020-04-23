@@ -1,0 +1,68 @@
+<div *ngIf="alertsHistory$ | async  as alertHistories; else loader" class="flex flex-direction-column flex-grow-1 full-height">
+    <div class="header flex-shrink-0">
+      <span class="header_title"></span>
+    </div>
+  <div class="content-wrapper flex-grow-1 full-height overflow-y-auto">
+  <data-table [rows]="alertHistories" class="stripped-mode">
+    <data-table-header-cell columnName="symbol">
+      {{'symbol' | translate}}
+    </data-table-header-cell>
+    <data-table-header-cell columnName="description">
+      {{'description' | translate}}
+    </data-table-header-cell>
+    <data-table-header-cell [sortable]="true" columnName="Time">
+      {{'time' | translate}}
+    </data-table-header-cell>
+
+    <data-table-cell class="stripped-mode" columnName="symbol">
+        <ng-template let-item>
+          {{item.Description}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="description">
+      <ng-template let-item>
+        {{item.Comment}}
+      </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="Time">
+      <ng-template let-item>
+        {{item.Time | formatDate:'YYYY/MM/DD HH:mm:ss'}}
+      </ng-template>
+    </data-table-cell>
+  </data-table>
+  </div>
+</div>
+
+<ng-template #loader>
+  <loader></loader>
+</ng-template>
+
+
+
+
+
+<!--<div *ngIf="alertsHistory.length" class="flex flex-direction-column flex-grow-1 full-height">-->
+<!--  <div class="header flex-shrink-0">-->
+<!--    <span class="header_title"></span>-->
+<!--  </div>-->
+<!--  <div class="content-wrapper flex-grow-1 full-height overflow-y-auto">-->
+<!--    <table class="alerts-log-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <td>{{'symbol' | translate}}</td>-->
+<!--        <td>{{'description' | translate}}</td>-->
+<!--        <td class="text-right">{{'time' | translate}}</td>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <tr *ngFor="let historicalEntry of alertsHistory">-->
+<!--        <td>{{historicalEntry.Description}}</td>-->
+<!--        <td>{{historicalEntry.Comment}}</td>-->
+<!--        <td class="text-right">{{historicalEntry.Time | formatDate:'YYYY/MM/DD HH:mm:ss'}}</td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </div>-->
+<!--</div>-->

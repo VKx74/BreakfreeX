@@ -1,0 +1,160 @@
+@import "./styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+.lm_tab {
+  height: 27px !important;
+  padding-bottom: 0 !important;
+  padding-top: 6px !important;
+  .lm_title {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+.lm_add-component {
+  height: 32px !important;
+  margin-top: 0 !important;
+}
+
+.lm_close_tab {
+  top: 5px !important;
+}
+
+.lm_tab.tab-with-linker {
+  height: 27px;
+  padding: 6px 10px 0 32px !important;
+  box-sizing: border-box !important;
+
+  &.closable-tab {
+    padding: 6px 32px 0 32px !important;
+  }
+
+  .link-selector {
+    position: absolute;
+    z-index: 2;
+    left: 8px;
+    top: 8px;
+    i {
+      width: auto;
+      height: auto;
+      position: relative;
+    }
+  }
+}
+
+.lm_controls {
+  margin-top: -2px !important;
+
+  .crypto-icon {
+    font-size: 10px;
+    display: inline-block;
+    margin: 0px 7px 0;
+    cursor: pointer;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+@include globalThemifyFromComponent($themes) {
+  .golden-layout {
+    //background-color: themed('add-component-bg-color');
+  }
+
+  .lm_goldenlayout {
+    background-color: themed('headerBgColor') !important;
+  }
+
+  .lm_content {
+    background: themed('lmContent') !important;
+    //background-color: transparent !important;
+  }
+
+  .lm_tabdropdown_list  {
+    background-color: rgba(themed('tabBgColor'), 1);
+
+    .lm_tab {
+      background-color: rgba(themed('tabBgColor'), 1) !important;
+    }
+  }
+
+  .lm_header {
+    height: 34px !important;
+    background-color: themed('headerBgColor');
+
+    .lm_tab {
+      background: themed('tabBgColor');
+
+      .lm_title {
+        color: themed('tabColor') !important;
+      }
+
+      &.lm_active {
+        background-color: themed('activeTabBgColor');
+        border-top: 1px solid #3d61cc;
+
+        .lm_title {
+          color: themed('activeTabColor') !important;
+        }
+      }
+    }
+
+    .add-component-btn {
+      .fa-plus {
+        color: themed('addTabBtnColor');
+      }
+    }
+  }
+
+  .lm_splitter {
+    opacity: 1;
+    background-color: themed('splitterBgColor');
+
+    .lm_dragging {
+      background-color: themed('splitterDraggingBgColor');
+    }
+
+    z-index: 39;
+  }
+
+  .lm_header {
+    .crypto-icon {
+      color: themed('headerControlsColor');
+    }
+
+    .lm_tabdropdown {
+      opacity: 0.7 !important;
+      margin-top: 6px;
+
+      &:before {
+        color: themed('headerControlsColor');
+      }
+    }
+  }
+
+  //.placeholder {
+  //  .new-component {
+  //    border: 1px dashed themed('layoutPlaceholderBorderColor');
+  //
+  //    .title {
+  //      color: themed('layoutPlaceholderTitleColor');
+  //    }
+  //
+  //    .add-btn {
+  //      background-color: themed('layoutPlaceholderBtnBgColor');
+  //    }
+  //  }
+  //}
+
+  div.lm_dropTargetIndicator {
+    box-shadow: themed('dropTargetBoxShadow') !important;
+
+    .lm_inner {
+      opacity: 1 !important;
+      background-color: themed('dropTargetInnerBgColor') !important;
+    }
+  }
+}

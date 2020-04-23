@@ -1,0 +1,14 @@
+.crypto-modal {
+  width: 400px;
+  min-width: auto;
+}
+
+.modal-body {
+  height: 250px;
+  margin-top: 0 !important;
+
+  image-editor {
+    width: auto !important;
+    right: 10px; // temp
+  }
+}

@@ -1,0 +1,24 @@
+<div class="popular-container">
+    <div class="header">
+        <span class="title"><i class="fa fa-bars categories-icon"></i>Popular Categories</span>
+    </div>
+    <div class="placeholder"
+         *ngIf="loadThemesProcessState.isPending() || loadThemesProcessState.isFailed()">
+        <span *ngIf="loadThemesProcessState.isPending()">Loading...</span>
+        <span *ngIf="loadThemesProcessState.isFailed()">Failed to load data...</span>
+    </div>
+
+    <div class="placeholder" *ngIf="loadThemesProcessState.isSucceeded() && items.length === 0">
+        <span>No categories yet...</span>
+    </div>
+
+    <div class="items-wrapper" *ngIf="items.length">
+        <ng-container *ngFor="let item of items">
+            <ng-container *ngIf="getCategoryUrl(item) as navigationInfo">
+                <a [routerLink]="navigationInfo.url" [queryParams]="navigationInfo.queryParams" class="item">
+                    <span class="title">{{item.name}}</span>
+                </a>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>

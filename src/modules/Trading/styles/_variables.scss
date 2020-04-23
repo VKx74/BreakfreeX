@@ -1,0 +1,24 @@
+$redColor: #F42C3B;
+$greenColor: #26C14D;
+
+%crypto-table-body {
+  display: block;
+  width: 100%;
+  max-height: 272px;
+  overflow-y: auto;
+}
+
+$levelsColors: (
+        1: #598f59,
+        2: rgba(255, 109, 109, 0.67),
+        3: rgba(240, 255, 109, 0.39),
+        4: rgba(109, 168, 255, 0.46),
+        5: rgba(158, 109, 255, 0.46),
+        6: rgba(255, 109, 217, 0.46),
+        7: rgba(35, 255, 216, 0.46),
+        8: rgba(255, 24, 0, 0.46),
+        9: rgba(62, 38, 255, 0.46),
+        10: rgba(12, 38, 255, 0.46),
+        11: rgba(255, 38, 255, 0.46),
+        12: rgba(255, 138, 55, 0.46),
+);

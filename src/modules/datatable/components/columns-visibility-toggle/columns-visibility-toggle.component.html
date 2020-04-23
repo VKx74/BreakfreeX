@@ -1,0 +1,17 @@
+<div class="columns-visibility-toggle-wrapper flex flex-direction-column">
+    <div class="columns-list">
+        <div *ngFor="let column of columns"
+             class="column flex justify-space-between cursor-pointer align-items-center"
+             (click)="onVisibilityToggle(column)">
+            <div class="column-name crypto-icon-">{{column.name}}</div>
+            <div class="visibility-status">
+                <mat-checkbox [checked]="column.visible"></mat-checkbox>
+            </div>
+        </div>
+    </div>
+    <div class="delimiter"></div>
+    <div class="additional crypto-color crypto-color-muted">
+        Default settings
+    </div>
+</div>
+

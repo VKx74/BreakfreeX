@@ -1,0 +1,79 @@
+@import "../variables";
+@import "../themes/themes";
+@import "../mixins/themify";
+@import "./mat-form-field-shared";
+
+mat-form-field.#{$classPrefix}-time-input {
+  @extend %mat-form-field-shared;
+
+  .ngx-material-timepicker-toggle {
+    padding-right: 0;
+
+    svg {
+      height: 19px;
+    }
+  }
+}
+
+@include themify($themes) {
+  .mat-form-field-flex {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  .mat-input-element {
+    color: themed('valueTextColor');
+
+    &::placeholder {
+      color: themed('titleTextColor');
+    }
+  }
+
+  .mat-form-field-suffix,
+  .mat-form-field-prefix {
+    color: themed('titleTextColor');
+  }
+  ngx-material-timepicker {
+    .timepicker-overlay {
+      .timepicker__header {
+        background-color: themed('timepickerAccent') !important;
+      }
+      .clock-face__number > span.active {
+        background-color: themed('timepickerAccent') !important;
+      }
+      .clock-face__clock-hand {
+        background-color: themed('timepickerAccent') !important;
+        &::after {
+          background-color: themed('timepickerAccent') !important;
+        }
+
+        &::before {
+          border-color: themed('timepickerAccent') !important;
+        }
+      }
+      .clock-face__clock-hand-color {
+        color: themed('timepickerAccent') !important;
+      }
+    }
+    .timepicker-button {
+      color: themed('timepickerAccent') !important;
+    }
+  }
+  ngx-material-timepicker-toggle {
+    button[disabled]{
+      opacity: .5;
+      cursor: default;
+    }
+    svg {
+      height: 19px !important;
+      fill: themed('titleTextColor') !important;
+    }
+  }
+
+  mat-datepicker-toggle {
+    color: themed('titleTextColor');
+    .mat-icon-button[disabled] {
+      opacity: .5!important;
+      color: themed('titleTextColor')!important;
+    }
+  }
+}

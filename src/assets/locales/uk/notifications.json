@@ -1,0 +1,14 @@
+{
+  "notifications": {
+    "title": "Сповіщення",
+    "noNotifications": "Немає сповіщень",
+    "showDescription": "Детальніше",
+    "systemNotifications": "Системні сповіщення"
+  },
+  "invites": {
+    "notificationText": "Ви були запрошені до групи",
+    "title": "Запрошення",
+    "accept": "Прийняти",
+    "reject": "Відхилити"
+  }
+}

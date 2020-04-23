@@ -1,0 +1,64 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="component-information flex flex-direction-column" *ngIf="data">
+            <div class="component-information_title">
+                Room information
+            </div>
+            <div class="component-information_caption flex flex-direction-column align-self-center">
+                <div class="component-information_caption_avatar align-self-center">
+                    <div class="info-avatar">
+                        <name-avatar [name]="data.name"></name-avatar>
+                    </div>
+                </div>
+                <div class="component-information_caption_name">
+                    {{data.name}}
+                </div>
+                <div class="component-information_caption_delimiter">
+                </div>
+            </div>
+            <div class="component-information_item flex justify-space-between align-items-center">
+                <div class="component-information_item_name">Type</div>
+                <div class="component-information_item_value">{{data.type}}</div>
+            </div>
+            <div class="component-information_item flex justify-space-between align-items-center">
+                <div class="component-information_item_name">Creator</div>
+                <div class="component-information_item_value">
+                    <div class="t-overflow-ellipsis">{{data.creator ? data.creator.userName : 'User removed'}}</div>
+                </div>
+            </div>
+            <div class="component-information_item flex justify-space-between align-items-center">
+                <div class="component-information_item_name">Created</div>
+                <div class="component-information_item_value">{{data.createdAt | timeAgo}}</div>
+            </div>
+            <div class="component-information_item flex justify-space-between align-items-center">
+                <div class="component-information_item_name">Message count</div>
+                <div class="component-information_item_value">{{data.messagesCount}}</div>
+            </div>
+            <div class="component-information_item flex justify-space-between align-items-center">
+                <div class="component-information_item_name">Removed</div>
+                <div class="component-information_item_value">{{data.removed ? "Yes" : "No"}}</div>
+            </div>
+            <div class="component-information_item flex justify-space-between align-items-center">
+                <div class="component-information_item_name">Blocked</div>
+                <div class="component-information_item_value"
+                     title="{{data.isBlocked ? 'Unblock' : 'Block' }} thread vision for users">
+                    <mat-slide-toggle #blockToggle class="v-align-middle"
+                                      [checked]="data.isBlocked"
+                                      (change)="toggleThreadBlockStatus(data, blockToggle)">
+                    </mat-slide-toggle>
+                </div>
+            </div>
+            <div class="component-information_item flex justify-space-between align-items-center"
+                 *ngIf="data.type === 'public'">
+                <div class="component-information_item_name">Disabled</div>
+                <div class="component-information_item_value"
+                     title="{{data.isDisabled ? 'Enable' : 'Disable' }} thread for new messages">
+                    <mat-slide-toggle #disableToggle class="v-align-middle"
+                                      [checked]="data.isDisabled"
+                                      (change)="toggleThreadEnableStatus(data, disableToggle)">
+                    </mat-slide-toggle>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

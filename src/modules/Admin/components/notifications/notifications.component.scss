@@ -1,0 +1,39 @@
+:host {
+  width: 100%;
+
+  /deep/ mat-table {
+    width: 100% !important;
+  }
+}
+
+.small-column {
+  width: 35px;
+}
+
+.medium-column {
+  width: 125px;
+}
+
+.underlay {
+  max-height: 100%;
+}
+
+.search-wrapper {
+  width: 300px;
+  max-width: 50%;
+}
+
+.crypto-date-input {
+  width: 150px;
+}
+
+.relative-wrapper {
+  position: relative;
+
+  mat-progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

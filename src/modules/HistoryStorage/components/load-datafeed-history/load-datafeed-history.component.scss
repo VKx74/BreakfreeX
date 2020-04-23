@@ -1,0 +1,27 @@
+:host {
+  .modal-content {
+    min-width: auto;
+    //width: 400px;
+  }
+
+  .dates-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    .date-control {
+      width: calc(50% - 10px);
+
+      &:first-of-type {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .enable-timeframe-checkbox {
+    position: relative;
+    z-index: 1;
+    opacity: 1;
+    margin: 0;
+    width: auto;
+  }
+}

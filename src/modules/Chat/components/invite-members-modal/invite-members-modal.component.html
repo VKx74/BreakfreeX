@@ -1,0 +1,79 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">
+                <span>{{'inviteMembers.title' | translate}}</span>
+            </h4>
+        </div>
+        <component-preloader [observable]="$initObs" [template]="template"></component-preloader>
+
+        <ng-template #template>
+            <div class="modal-body">
+                <div class="crypto-form-unit">
+                    <p class="form-unit__label">{{'inviteMembers.caption' | translate}}</p>
+                    <div class="tags-wrapper">
+                        <tags-input #selectedMembersInput
+                                    [mode]="TagsInputMode.Autocomplete"
+                                    [tags]="selectedMembers"
+                                    [showAutocomplete]="false"
+                                    [tagNameSelector]="userEmailSelector"
+                                    [autocompleteHandler]="usersAutocompleteHandler"
+                                    [placeholder]="'inviteMembers.placeholder' | translate"
+                                    (onRemoveTag)="handleRemoveUserFromInvitation($event)">
+                        </tags-input>
+                    </div>
+                </div>
+                <div class="suggested-members-wrapper m-top-10">
+                    <table *ngIf="(suggestedUsers$ | async).length && !loading"
+                           class="crypto-table crypto-table_striped">
+                        <tbody>
+                        <tr *ngFor="let user of (suggestedUsers$ | async)"
+                            (click)="handleUserSelected(user)">
+                            <td>
+                                <div class="flex align-items-center">
+                                    <div class="name-avatar-wrapper flex-shrink-0"
+                                         [class.selected]="isUserSelectedForInvitation(user) || isUserMember(user)">
+                                        <name-avatar [src]="user.avatarId" [name]="user.userName"></name-avatar>
+                                        <div class="selected-indicator" [class.is-member]="isUserMember(user)">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <span>{{user.firstName}} {{user.lastName}}</span>
+                                </div>
+                            </td>
+                            <td class="t-align-right">
+                                <span *ngIf="isInvitationSentToUser(user)"
+                                      (click)="cancelInvitation(user.id)"
+                                      class="cancel-invitation">{{'cancelInvitation' | translate}}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <ng-container *ngIf="loading">
+                        <placeholder message="{{ 'loading' | translate }}"></placeholder>
+                    </ng-container>
+
+                    <ng-container *ngIf="!(suggestedUsers$ | async).length && !loading">
+                        <placeholder message="{{'notFound' | translate}}"></placeholder>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btns-wrapper">
+                    <button class="crypto-button crypto-button_danger m-right-5"
+                            (click)="close()">
+                        <span>{{'close' | translate}}</span>
+                    </button>
+                    <button class="crypto-button crypto-button_success"
+                            [disabled]="!selectedMembers.length"
+                            [class.is-loading]="processInvite"
+                            (click)="submit()">
+                        <span>{{'inviteMembers.invite' | translate}}</span>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+button {
+  margin-top: 15px;
+  width: 100%;
+}
+
+svg {
+  width: 100%;
+  object-fit: contain;
+  max-height: 93px;
+}
+
+@include themify($themes, true) {
+    path.svg-color {
+      fill: themed('inputInModalsBackgroundColor');
+    }
+}

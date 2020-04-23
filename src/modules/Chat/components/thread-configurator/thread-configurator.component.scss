@@ -1,0 +1,72 @@
+@import "../../../../global-styles/variables";
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+
+:host {
+  .crypto-modal {
+    min-width: auto;
+    width: 440px;
+  }
+
+  .modal-header {
+    height: 200px;
+    position: relative;
+  }
+
+  .file-input {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .thread-photo-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      .photo-icon {
+        opacity: 1;
+      }
+    }
+
+
+    img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .photo-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.6;
+      transition: all 0.6s ease;
+    }
+  }
+
+  .description-textarea {
+    height: 50px;
+  }
+
+  textarea {
+    max-height: 200px;
+  }
+}
+
+@include themify($themes, true) {
+  // TODO: Add theme
+  .thread-photo-wrapper {
+    background-color: darken(themed('appModalsPanelColor'), 5%);
+
+    .photo-icon {
+      color: themed('titleTextColor');
+    }
+  }
+}

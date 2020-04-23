@@ -1,0 +1,22 @@
+{
+  "historyDataManager": {
+    "historyDataManager": "History Data Manager",
+    "history": "History",
+    "removeRecord": "Remove Record",
+    "removeAllRecords": "Remove All Records",
+    "market": "Market",
+    "records": "Records",
+    "scopeTime": "Scope Time",
+    "addingDate": "Adding Date",
+    "removeSnapshot": "Remove selected history snapshot?",
+    "removeAllSnapshots": "Remove all history snapshots?",
+    "failedRemoveSnapshot": "Failed to remove history snapshot",
+    "failedLoadSnapshot": "Failed to load snapshot details",
+    "historyUploaded": "History uploaded",
+    "failedUploadHistory": "Failed to upload history"
+  },
+  "loadHistory": {
+    "loadHistory": "Load History",
+    "snapshotSaved": "History snapshot saved"
+  }
+}

@@ -1,0 +1,125 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/variables";
+
+:host /deep/ {
+  overflow: auto;
+  width: inherit;
+
+  .user-avatar {
+    margin-bottom: 41px;
+  }
+
+  .avatar-size {
+    height: 100px;
+    width: 100px;
+  }
+
+  .data-user {
+    max-width: 1000px;
+    margin: auto;
+
+    .section-naming {
+      max-width: 1000px;
+      min-height: 265px;
+      padding: 29.5px 28px;
+      box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+
+      .three-form-units-wrapper {
+        margin-bottom: 10px;
+      }
+
+      .crypto-form-unit {
+        max-width: 303px;
+        width: calc((100% / 3) - (10px / 3));
+      }
+    }
+
+    .data-authentication {
+      .section {
+        padding: 20px 28px;
+        margin-top: 9px;
+        border-radius: 5px;
+        max-height: 86px;
+        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+
+        .crypto-icon {
+          position: relative;
+          bottom: 5px;
+          font-size: 30px;
+        }
+        .data {
+          position: relative;
+          top: 10px;
+          font-size: 15px;
+          left: 23px;
+        }
+
+      }
+    }
+
+  }
+
+  .crypto-button {
+    width: max-content;
+    font-size: 13px;
+    line-height: 1;
+    height: 32px;
+    border-radius: 5px;
+    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: blur(30px);
+    margin-left: 15px;
+  }
+
+  .change-button {
+    float: right;
+    position: relative;
+    top: 20px !important;
+    right: 28px;
+  }
+
+  .mat-input-element {
+    border-radius: 5px;
+  }
+
+  .mat-form-field {
+    width: -webkit-fill-available;
+  }
+
+}
+
+@media #{$extra-small-only} {
+  .crypto-button {
+    width: auto;
+  }
+
+  .crypto-form-unit {
+    width: 100% !important;
+  }
+}
+
+@include themify($themes, true) {
+  .section-naming, .section {
+    background-color: themed('appPanelColor');
+    box-shadow: themed('box-shadowPanel');
+  }
+
+  .data, .crypto-button {
+    color: themed('valueTextColor');
+  }
+
+  .crypto-button {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  .crypto-icon {
+    color: themed('accentColor');
+  }
+
+  .success {
+    color: themed('buyColor');
+  }
+
+
+}

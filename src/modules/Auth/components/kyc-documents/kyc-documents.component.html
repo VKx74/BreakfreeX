@@ -1,0 +1,114 @@
+<form class="form-wrapper" [formGroup]="formGroup" novalidate
+      (ngSubmit)="isProgress100() ? sendDocuments() : addDocument()">
+
+    <div class="crypto-form-unit margin-bottom">
+        <mat-form-field class="crypto-select full-width">
+            <mat-select formControlName="type" placeholder="Document type">
+                <mat-option *ngFor="let document of (allowedDocumentTypes$ | async)" [value]="document">
+                    {{documentCaption(document)}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+
+    <div class="crypto-form-unit">
+        <mat-form-field class="crypto-input full-width with-hint">
+            <input matInput type="text" placeholder="Document Id" [errorStateMatcher]="errorMatcher"
+                   formControlName="id">
+            <i class="crypto-icon crypto-icon-document-id" matSuffix></i>
+            <mat-error>
+                <span>Document id is not valid</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="crypto-form-unit">
+        <mat-form-field class="crypto-date-input full-width with-hint">
+            <input matInput readonly
+                   class="cursor-default"
+                   [matDatepicker]="datePicker"
+                   placeholder="Document expiry"
+                   formControlName="expiry" [errorStateMatcher]="errorMatcher">
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+            <mat-error>
+                <span>Document expiry is not valid</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="crypto-form-unit margin-bottom">
+        <div class="upload-button-wrapper">
+            <input type="file" accept="image/*" #file
+                   placeholder="Document upload" formControlName="file"
+                   style="display:none;"
+                   (change)="validateFileToUpload(fileInput.nativeElement.files[0])">
+            <div class="upload-button" (click)="file.click()">
+                <span *ngIf="fileInput.nativeElement.files[0]">{{fileInput.nativeElement.files[0].name}}</span>
+                <span *ngIf="!fileInput.nativeElement.files[0]">Upload document</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="added-documents-board">
+        <table class="crypto-table">
+            <thead>
+            <tr>
+                <th>Added documents</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let document of (addedDocuments$ | async)">
+                <td>{{ document.file.name}}</td>
+                <td class="t-align-right">{{getDocumentName(document.type)}}</td>
+                <td class="t-align-right">
+                    <div class="remove" title="Remove" (click)="removeDocument(document)">
+                        <i class="crypto-icon crypto-icon-close"></i>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="crypto-text is-small full-width t-align-center m-bottom-10">
+        <span [ngClass]="{'crypto-color-green': isProgress100()}">{{(addedDocuments$ | async).length}}</span> /
+        <span class="crypto-color-green">{{requiredDocumentCount}}</span>
+    </div>
+
+    <div class="flex full-width justify-space-between document-progress-indicator"
+         [ngClass]="{'primary': isProgress50(), 'success': isProgress100()}">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <div *ngIf="errorNotification" class="notification is-error">
+        <span>{{errorNotification}}</span>
+    </div>
+
+    <button type="submit"
+            class="btn crypto-button crypto-button-full-width button_primary register-btn"
+            [ngClass]="{'button_primary': !isProgress100(), 'button_success': isProgress100()}"
+            [disabled]="(formGroup.invalid && !isProgress100()) || processing"
+            mat-button>
+        <div class="lds-ellipsis" *ngIf="processing">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ng-container *ngIf="!processing">
+            <span *ngIf="!isProgress100()">Add</span>
+            <span *ngIf="isProgress100()">Finish</span>
+        </ng-container>
+    </button>
+</form>

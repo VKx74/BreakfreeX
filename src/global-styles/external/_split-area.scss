@@ -1,0 +1,69 @@
+@import "modules/Layout/styles/themes/themes";
+
+.as-split-area {
+  overflow: hidden !important;
+}
+
+.as-split-gutter-icon {
+  display: none !important;
+}
+
+.as-split-gutter {
+  flex-basis: 5px !important;
+  position: relative;
+  z-index: 999;
+
+  // NEW STYLES - TEST
+  //pointer-events: none;
+  padding: 3px 0;
+  height: 12px;
+  //cursor: default;
+  cursor: row-resize;
+
+  &::before {
+    content: '';
+    left: calc(50% - 40px);
+    height: 5px;
+    width: 40px;
+    border-radius: 10px;
+    //cursor: row-resize;
+    //pointer-events: all;
+  }
+
+  .as-split-gutter-icon {
+    display: none !important;
+  }
+}
+
+.as-split.is-vertical {
+  .as-split-gutter :after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 15px;
+    top: -5px;
+    left: 0;
+  }
+}
+
+.as-split.is-horizontal {
+  .as-split-gutter :after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    width: 15px;
+    top: 0;
+    left: -5px;
+  }
+}
+
+@include themify($themes, false) {
+  .as-split-gutter {
+    //background-color: themed('splitterBgColor') !important;
+    background-color: themed('appBackgroundColor') !important;
+
+    &::before {
+      background-color: themed('appModalsPanelColor') !important;
+    }
+  }
+}

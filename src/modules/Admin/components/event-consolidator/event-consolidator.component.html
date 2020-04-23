@@ -1,0 +1,110 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!events?.length"
+                            [componentIdentifier]="ComponentIdentifier.eventConsolidator"
+                            [title]="'Event Consolidator'"
+                            [loading]="processing">
+    <ng-container ngProjectAs=".header-right">
+        <button class="crypto-button crypto-button_primary" (click)="addEvent()">
+            Add event
+        </button>
+    </ng-container>
+
+    <div class="filters flex justify-space-between w-100">
+        <div class="filters-wrapper flex align-items-center">
+            <mat-form-field class="crypto-select m-right-10">
+                <mat-select [value]="selectedEventsVolatilityFilter"
+                            (selectionChange)="handleVolatilityFilterChange($event)">
+                    <mat-option *ngFor="let filter of eventVolatilityFilters" [value]="filter">
+                        {{ getFilterStr(filter) }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [matDatepicker]="start"
+                       [max]="selectedEventsToDateFilter"
+                       [(ngModel)]="selectedEventsFromDateFilter"
+                       (dateChange)="resetPagination()"
+                       (click)="end.open()"
+                       placeholder="Start date">
+                <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [matDatepicker]="end"
+                       [min]="selectedEventsFromDateFilter"
+                       [(ngModel)]="selectedEventsToDateFilter"
+                       (dateChange)="resetPagination()"
+                       (click)="end.open()"
+                       placeholder="End date">
+                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+
+            <button class="crypto-button crypto-button_primary"
+                    [disabled]="!selectedEventsFromDateFilter && !selectedEventsToDateFilter"
+                    (click)="clearDatePickers()">
+                <span>Clear</span>
+            </button>
+        </div>
+        <div class="search-wrapper">
+            <debounced-input (valueChange)="onSearchValueChange($event)"></debounced-input>
+        </div>
+    </div>
+
+    <data-table [rows]="events">
+        <data-table-header-cell columnName="time">
+            Time
+        </data-table-header-cell>
+        <data-table-header-cell columnName="title">
+            Title
+        </data-table-header-cell>
+        <data-table-header-cell columnName="description">
+            Description
+        </data-table-header-cell>
+        <data-table-header-cell columnName="volatility">
+            Volatility
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actual">
+            Actual
+        </data-table-header-cell>
+        <data-table-header-cell columnName="consensus">
+            Consensus
+        </data-table-header-cell>
+        <data-table-header-cell columnName="previous">
+            Previous
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions">Actions</data-table-header-cell>
+
+
+        <data-table-cell columnName="time">
+            <ng-template let-item>
+                {{utcTimeToLocal(item.time) | date: 'HH:mm dd/MM/yy'}}
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="volatility">
+            <ng-template let-item>
+                {{EEventVolatility[item.volatility]}}
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                <div class="text-right">
+                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="editEvent(item)">
+                            Edit
+                        </button>
+
+                        <button mat-menu-item (click)="deleteEvent(item)">
+                            <span class="crypto-color-red">Delete</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

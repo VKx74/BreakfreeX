@@ -1,0 +1,80 @@
+<div class="settings-tab">
+<!--  <div class="settings-tab-title flex align-items-center justify-space-between">-->
+<!--    <span>{{'twoStepAuth.notActivated' | translate}}</span>-->
+<!--    <span>-->
+<!--       <img class="filter-gray" src="assets/img/google-authenticator.svg">-->
+<!--    </span>-->
+<!--  </div>-->
+  <div class="section flex justify-space-between">
+    <div class="info-user flex">
+      <i [ngClass]="{'activated2-factor': activated}" class="crypto-icon crypto-icon-permission"></i>
+      <div class="data">{{'twoStepAuth.title'| translate}}</div>
+    </div>
+    <div class="buttons flex align-items-center">
+      <button *ngIf="!activated" class="crypto-button" (click)="activate()" [disabled]="processing">
+      <span>
+        {{'twoStepAuth.enableGoogle2fa' | translate}}
+      </span>
+      </button>
+      <button *ngIf="activated" class="crypto-button" (click)="off()">{{"twoStepAuth.off"| translate}}</button>
+    </div>
+  </div>
+</div>
+
+<div class="section settings-tab" *ngIf="confirmation && !activated">
+  <div class="settings-tab-title flex align-items-center justify-space-between">
+    <span>{{'twoStepAuth.scanQRCode' | translate}}</span>
+  </div>
+  <div class="QR-container">
+    <img src="{{QRCodeLink}}">
+  </div>
+  <div>
+    <a href="https://support.google.com/accounts/topic/2954345?hl=en&ref_topic=7667090" target="_blank">{{'twoStepAuth.whatIsTwoStepAuth' | translate}}</a>
+  </div>
+  <div class="flex">
+    <div class="crypto-form-unit">
+      <div class="form-unit__label">{{'twoStepAuth.verificationCode' | translate}}</div>
+      <pin-input [(value)]="confirmationPin"></pin-input>
+    </div>
+    <div class="flex">
+      <button class="crypto-button verify-button" (click)="verify()" [disabled]="verifyActive">
+        {{'twoStepAuth.verifyCode' | translate}}
+      </button>
+      <button class="crypto-button verify-button" (click)="close()">
+       {{'profileInfo.close'| translate}}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="settings-tab" *ngIf="activated && !confirmation">
+  <div class="section">
+    <div class="settings-tab-title flex align-items-center justify-space-between">
+      <span>{{'twoStepAuth.twoStepAuthActivated' | translate}}</span>
+    </div>
+    <div class="flex">
+      <div class="crypto-form-unit">
+        <div class="form-unit__label">{{'twoStepAuth.verificationCode' | translate}}</div>
+        <pin-input [(value)]="deactivatePin"></pin-input>
+      </div>
+      <div class="flex relative-wrapper">
+        <div class="crypto-form-unit margin-bottom">
+          <button class="crypto-button" (click)="deactivate()" [disabled]="deactivateActive">
+            {{'twoStepAuth.deactivate' | translate}}
+          </button>
+        </div>
+        <div>
+          <button class="crypto-button" (click)="reset()">
+            {{'twoStepAuth.resetAuthSecret' | translate}}
+          </button>
+        </div>
+        <div class="crypto-form-unit margin-bottom">
+          <button class="crypto-button" (click)="close()">
+            {{'profileInfo.close'| translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

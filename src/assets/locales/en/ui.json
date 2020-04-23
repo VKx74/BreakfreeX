@@ -1,0 +1,16 @@
+{
+  "yes": "Yes",
+  "no": "No",
+  "areYouSure": "Are you sure?",
+  "noOptions": "No Options",
+  "selectOption": "Select option",
+  "comingSoon": "Coming soon...",
+  "inputModal": {
+    "buttonCaption": "Enter",
+    "inputCaption": "Value",
+    "title": "Enter value",
+    "inputPlaceholder": ""
+  },
+  "searchPlaceholder": "Search...",
+  "verificationCodePlaceholder": "Verification code"
+}

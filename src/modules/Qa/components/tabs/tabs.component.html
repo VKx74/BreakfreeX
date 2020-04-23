@@ -1,0 +1,30 @@
+<div class="tabs flex justify-space-between align-items-center">
+    <span class="title color-title">{{title}}</span>
+    <div class="flex flex-direction-column justify-flex-end align-self-stretch">
+        <div class="tabs-wrapper flex p-0">
+<!--            <nav mat-tab-nav-bar>-->
+<!--                <a *ngFor="let tab of tabs, let i = index" mat-tab-link routerLinkActive #rla="routerLinkActive"-->
+<!--                   [active]="rla.isActive"-->
+<!--                   [ngClass]="{'active': tab.id === activeTab.id}"-->
+<!--                   (click)="activate(tab)">-->
+<!--                    <span class="tab-name">{{tab.label}}</span>-->
+<!--                </a>-->
+<!--            </nav>-->
+
+                        <mat-tab-group>
+                            <mat-tab class="tab" *ngFor="let tab of tabs, let i = index"
+                                     (click)="activate(tab)"
+                                     [label]="tab.label"
+                                     [ngClass]="{'active': tab.id === activeTab.id}"></mat-tab>
+                        </mat-tab-group>
+
+
+<!--            <div class="tab" *ngFor="let tab of tabs, let i = index"-->
+<!--                 [ngClass]="{'active': tab.id === activeTab.id}"-->
+<!--                 (click)="activate(tab)">-->
+<!--                <span class="tab-name">{{tab.label}}</span>-->
+<!--            </div>-->
+        </div>
+    </div>
+</div>
+

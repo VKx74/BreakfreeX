@@ -1,0 +1,15 @@
+<div class="root">
+    <div class="scroll-control scroll-top" (click)="scrollTop()" *ngIf="showScrollTop">
+        <i class="crypto-icon crypto-icon-scroll-top"></i>
+    </div>
+
+    <div #scrollBox class="content-wrapper">
+        <div #contentBox>
+            <ng-content></ng-content>
+        </div>
+    </div>
+
+    <div class="scroll-control scroll-bottom" (click)="scrollBottom()" *ngIf="showScrollBottom">
+        <i class="crypto-icon crypto-icon-scroll-bottom"></i>
+    </div>
+</div>

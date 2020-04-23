@@ -1,0 +1,89 @@
+<sidebar-container>
+    <sidebar-section>
+        <div class="section-label">{{'generalSettings.menu' | translate}}</div>
+        <div class="section-item" routerLink="">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-information"></i></div>
+            <div class="item-text">{{'exchange' | translate}}</div>
+        </div>
+        <!--        <div class="section-item">-->
+        <!--            <div class="iterm-icon">-->
+        <!--                <i class="crypto-icon crypto-icon-information"></i></div>-->
+        <!--            <div class="item-text">Forums</div>-->
+        <!--        </div>-->
+        <div class="section-item" routerLink="/admin">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-information"></i></div>
+            <div class="item-text">{{'generalSettings.adminPanel' | translate}}</div>
+        </div>
+        <div class="section-item" routerLink="scripting">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-script"></i></div>
+            <div class="item-text">{{'generalSettings.scripting' | translate}}</div>
+        </div>
+        <div class="section-item" routerLink="settings">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-settings"></i></div>
+            <div class="item-text">{{'settings' | translate}}</div>
+        </div>
+    </sidebar-section>
+    <sidebar-section>
+        <div class="section-label flex align-items-center justify-space-between">
+            <span>{{'sideBarTools.title' | translate}}</span>
+            <i class="crypto-icon crypto-icon-more cursor-pointer" routerLink="/platform/tools"></i>
+        </div>
+        <div class="section-item" routerLink="/platform/tools/news">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-news"></i>
+            </div>
+            <div class="item-text">{{'sideBarTools.news' | translate}}</div>
+        </div>
+        <div class="section-item" routerLink="/platform/tools/alerts-manager">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-alert"></i>
+            </div>
+            <div class="item-text">{{'sideBarTools.alertsWidget' | translate}}</div>
+        </div>
+        <div class="section-item" routerLink="/platform/tools/trends">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-market-trend"></i>
+            </div>
+            <div class="item-text">{{'sideBarTools.trends' | translate}}</div>
+        </div>
+        <div class="section-item" routerLink="/platform/tools/economic-calendar">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-calendar"></i>
+            </div>
+            <div class="item-text">{{'sideBarTools.economicCalendar' | translate}}</div>
+        </div>
+        <div class="section-item" routerLink="/platform/tools/public-chat">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-chat"></i>
+            </div>
+            <div class="item-text">{{'sideBarTools.publicChat' | translate}}</div>
+        </div>
+        <div class="section-item" routerLink="/platform/tools/private-chat">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-private-chat"></i>
+            </div>
+            <div class="item-text">{{'sideBarTools.privateChat' | translate}}</div>
+        </div>
+    </sidebar-section>
+    <sidebar-section>
+        <div class="section-label">{{'generalSettings.type&broker' | translate}}</div>
+        <div class="app-type-select m-bottom-10">
+            <selector class="bordered"
+                      [options]="appTypes"
+                      [selectedOption]="selectedApplicationType"
+                      [optionCaption]="appTypeCaption"
+                      (onSelect)="setApplicationType($event)"></selector>
+        </div>
+        <broker-select [applicationType]="applicationType$ | async"></broker-select>
+    </sidebar-section>
+    <sidebar-section class="relative-wrapper buy-app-section">
+        <buy-app></buy-app>
+    </sidebar-section>
+    <sidebar-section [noPadding]="true">
+        <theme-language-select></theme-language-select>
+    </sidebar-section>
+</sidebar-container>

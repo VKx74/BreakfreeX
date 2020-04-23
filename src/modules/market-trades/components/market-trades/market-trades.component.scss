@@ -1,0 +1,64 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  .root {
+    height: 100%;
+  }
+
+  .top-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    height: 50px;
+  }
+
+  .instrument-search {
+    width: 200px;
+    margin-right: 4px;
+    min-width: 0;
+  }
+
+  .precision-selector {
+    width: 120px;
+  }
+
+  .level-title {
+    white-space: nowrap;
+  }
+
+  .level-row {
+    padding: 0 10px;
+  }
+
+  .sell-symbol {
+    color: $redColor;
+  }
+
+  .buy-symbol {
+    color: $greenColor;
+  }
+
+  .small-column {
+    width: 70px;
+  }
+
+}
+
+
+@include themify($themes, true) {
+  .top-line {
+    background-color: themed('appPanelColor');
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  .content-wrapper {
+    background-color: themed('appPanelColor');
+  }
+}

@@ -1,0 +1,10 @@
+<div #label class="__uploader" [ngClass]="{dragOver: dragging}"
+       ondragover="return false;"
+       (dragenter)="handleDragEnter()"
+       (dragover)="handleDragOver()"
+       (dragleave)="handleDragLeave()"
+       (drop)="handleDrop($event)" (click)="handleClick()">
+    <input #input type="file" name="file" class="hidden"
+           (change)="handleInputChange($event)" [multiple]="config.allowMultipleFiles">
+    <ng-content></ng-content>
+</div>

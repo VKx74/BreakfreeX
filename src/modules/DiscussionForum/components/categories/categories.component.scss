@@ -1,0 +1,51 @@
+@import "../../styles/variables";
+
+//.category {
+//  cursor: pointer;
+//  display: inline-block;
+//  padding: 10px 20px;
+//  border-radius: 3px;
+//  box-shadow: -1px 2px 9px 1px #f2eeee;
+//  color: #1a0833;
+//  text-decoration: none;
+//  max-width: 200px;
+//  margin: 10px;
+//
+//  &:hover {
+//    .category__name {
+//      text-decoration: underline;
+//    }
+//  }
+//
+//  .category__name {
+//    font-family: $primaryFontFamily;
+//    font-size: 14px;
+//    font-weight: bold;
+//    color: #aa6a8a;
+//    margin-bottom: 3px;
+//  }
+//
+//  .category__description {
+//    font-family: $primaryFontFamily;
+//    font-size: 13px;
+//  }
+//}
+
+category {
+  flex-shrink: 0;
+  flex-basis: calc((100%) / 3 - 10px);
+  margin-bottom: 15px;
+}
+
+@media screen and (max-width: 900px) {
+  category {
+    flex-basis: calc((100%) / 2 - (15px) / 2);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  category {
+    flex-basis: 100%;
+  }
+}
+

@@ -1,0 +1,69 @@
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+.forum-type {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 3px;
+  //box-shadow: -1px 2px 9px 1px #f2eeee;
+  color: #615c68;
+  text-decoration: none;
+  margin-bottom: 10px;
+
+  .forum-type__name {
+    display: inline-block;
+    font-family: $primaryFontFamily;
+    font-size: 20px;
+    font-weight: bold;
+    //color: #aa6a8a;
+    margin-bottom: 5px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .forum-type__description {
+    font-family: $primaryFontFamily;
+    font-size: 14px;
+    //color: #615c68;
+  }
+
+  .forum-icon {
+    font-size: 55px;
+  }
+}
+
+.categories-header {
+  margin-top: 40px;
+}
+
+.see-all-categories {
+  font-family: $primaryFontFamily;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+
+@include themify($themes, true) {
+  .forum-type {
+    .forum-type__name {
+      color: themed('titleTextColor');
+    }
+
+    .forum-type__description {
+      color: themed('valueTextColor');
+    }
+
+    .forum-icon {
+      color: themed('titleTextColor');
+    }
+
+  }
+  .see-all-categories {
+    color: themed('titleTextColor');
+  }
+}

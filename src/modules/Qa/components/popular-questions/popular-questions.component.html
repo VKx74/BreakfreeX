@@ -1,0 +1,17 @@
+<div class="popular-container">
+    <div class="header">
+        <span class="color-title">Popular Questions</span>
+    </div>
+    <div class="placeholder color-title"
+         *ngIf="loadThemesProcessState.isPending() || loadThemesProcessState.isFailed()">
+        <span *ngIf="loadThemesProcessState.isPending()">Loading...</span>
+        <span *ngIf="loadThemesProcessState.isFailed()">Failed to load data...</span>
+    </div>
+
+    <div class="items-wrapper" *ngIf="questions.length">
+        <div class="item" *ngFor="let question of questions" [ngClass]="{'answered': question.answerCount > 0}">
+            <span class="answers-count">{{question.answerCount}}</span>
+            <span class="question-title color-title" [routerLink]="question.url">{{question.title}}</span>
+        </div>
+    </div>
+</div>

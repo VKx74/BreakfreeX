@@ -1,0 +1,25 @@
+@import "global-styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+
+:host {
+  .breadcrumb {
+    padding: 0;
+    font-family: $primaryFontFamily;
+    font-size: 14px;
+    text-decoration: none;
+    background: transparent;
+  }
+
+  .breadcrumb-delimiter {
+    margin-right: 2px;
+  }
+}
+
+@include themify($themes, true) {
+  .breadcrumb,
+  .breadcrumb-delimiter {
+    color: themed('titleTextColor');
+  }
+}

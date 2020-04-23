@@ -1,0 +1,61 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="flex justify-space-between">
+            <span>{{'withdraw' | translate}}</span>
+            <i class="crypto-icon crypto-icon-close" (click)="close()"></i>
+        </div>
+        <div class="icon-section flex justify-content-center">
+            <currency-icon [name]="_currency.toLowerCase()"></currency-icon>
+        </div>
+        <div class="flex justify-content-center">
+            <background-icon></background-icon>
+        </div>
+        <div class="modal-body">
+            <div class="balance-section">
+                <div class="balance">
+                    <div>{{'tradeManager.walletBalance' | translate}}</div>
+                    <span>{{_balance}}</span>
+                    <div>Daily withdrawal limit: <span>3 BTC</span></div>
+                    <div>Quota: <span>3 BTC ≈ 34.2433 ETC</span></div>
+                    <div>Minimum withdrawal amount: <span>0.24433 ETC</span></div>
+                </div>
+            </div>
+            <div class="deposit-address">
+                <form [formGroup]="formWithdraw">
+                    <div class="crypto-form-unit">
+                        <div class="form-unit__label">{{'tradeManager.enterAddress' | translate}}</div>
+                        <mat-form-field class="crypto-input">
+                            <input formControlName="address" matInput type="text">
+                            <mat-error [formError]="'address'"></mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="crypto-form-unit">
+                        <div class="form-unit__label">{{'amount' | translate}}</div>
+                        <mat-form-field class="crypto-input">
+                            <input formControlName="amount" matInput type="text">
+                            <mat-error [formError]="'address'"></mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="crypto-form-unit" *ngIf="pinInputRequired">
+                        <div class="form-unit__label">{{"tradeManager.twoStepAuthPin" | translate}}:</div>
+                        <pin-input formControlName="pin"></pin-input>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="footer-modal">
+            <div class="flex justify-space-between footer-content">
+                <span>{{'tradeManager.fee' | translate}}</span>
+                <div>≈ 34.2433 COB</div>
+            </div>
+            <div class="flex justify-space-between" *ngIf="formWithdraw.controls['amount'].valid">
+                <span>{{'tradeManager.youWillGet' | translate}}</span>
+                <div>{{formWithdraw.controls['amount'].value}}</div>
+            </div>
+            <mat-checkbox disableRipple
+                          [(ngModel)]="stateCheckbox">{{'tradeManager.agreeUser' | translate}}</mat-checkbox>
+            <button class="crypto-button w-100" (click)="processWithdraw()"
+                    [disabled]="!stateCheckbox || formWithdraw.invalid">{{'tradeManager.processWithdraw' | translate}}</button>
+        </div>
+    </div>
+</div>

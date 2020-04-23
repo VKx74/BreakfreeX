@@ -1,0 +1,17 @@
+<div *ngIf="options">
+    <mat-form-field>
+        <input type="text" matInput
+               [formControl]="searchControl"
+               [matAutocomplete]="auto"
+               [placeholder]="placeholder"
+               autocomplete="off">
+        <span class="crypto-icon crypto-icon-search icon-size" matSuffix></span>
+    </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="getOptionTitle">
+       <ng-container *ngIf="showAutocomplete">
+           <mat-option *ngFor="let option of options" [value]="getOptionValue(option)"
+                       (onSelectionChange)="onOptionSelect(option)">{{getOptionTitle(option)}}</mat-option>
+       </ng-container>
+    </mat-autocomplete>
+</div>

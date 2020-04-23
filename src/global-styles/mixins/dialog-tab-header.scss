@@ -1,0 +1,21 @@
+@import "global-styles/themes/themes";
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+
+@mixin dialogTabHeader() { // use outside of :host
+  .title-wrapper {
+    margin: 10px 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      font-size: 14px;
+      font-family: $primaryFontFamily;
+
+      @include themify($themes, true) {
+        color: themed('titleTextColor');
+      }
+    }
+  }
+}

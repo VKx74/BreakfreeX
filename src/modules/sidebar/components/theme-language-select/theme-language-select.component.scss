@@ -1,0 +1,46 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+$flag-icon-width: 30px;
+$sidebar-padding-left: 22px;
+$sidebar-padding-right: 28px;
+
+.theme-language-select-section {
+  display: flex;
+  align-items: center;
+  min-height: 65px;
+  max-height: 65px;
+
+  .section-label {
+    margin: 0;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .theme-toggle {
+    mat-slide-toggle {
+      margin: 0 15px;
+    }
+
+    padding: 20px $sidebar-padding-right 20px $sidebar-padding-left;
+  }
+
+  .language-select {
+    width: 70px;
+  }
+}
+
+
+@include themify($themes, true) {
+  .item-text, .item-icon {
+    color: themed('titleTextColor');
+  }
+
+  .section-label {
+    color: themed('valueTextColor');
+  }
+
+  .theme-toggle {
+    border-right: 1px solid themed('appBackgroundColor');
+  }
+}

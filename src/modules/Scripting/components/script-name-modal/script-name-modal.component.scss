@@ -1,0 +1,13 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+
+.crypto-modal {
+  width: 400px;
+  min-width: auto;
+}
+
+@include themify($themes, true) {
+  .crypto-input {
+    background-color: themed('inputInModalsBackgroundColor');
+  }
+}

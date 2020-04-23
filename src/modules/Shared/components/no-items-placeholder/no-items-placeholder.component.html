@@ -1,0 +1,7 @@
+<div class="crypto-text flex align-items-center justify-content-center p-10"
+     [ngClass]="{'underlay': showUnderlay}">
+    <svg-empty *ngIf="!hideImage" class="w-100" [style.width.px]="imgWidth"></svg-empty>
+    <span class="notConnected caption crypto-text is-small color-title text">
+        {{text}}
+    </span>
+</div>

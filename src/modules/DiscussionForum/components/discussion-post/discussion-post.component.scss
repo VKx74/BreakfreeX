@@ -1,0 +1,58 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "../../styles/variables";
+
+.author-info {
+  .author-name {
+    font-size: 11px;
+    font-family: $primaryFontFamily;
+    font-weight: 900;
+  }
+
+  .author-avatar {
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.post-content {
+  font-size: 13px;
+  font-family: $primaryFontFamily;
+  line-height: 21px;
+
+  p {
+    margin: 0;
+  }
+}
+
+.create-update-info {
+  font-size: 11px;
+  font-family: $primaryFontFamily;
+}
+
+.manage-controls-wrapper {
+  font-family: $primaryFontFamily;
+  font-size: 11px;
+
+  .control {
+    cursor: pointer;
+  }
+}
+
+.input-wrapper {
+  margin-top: 5px;
+}
+
+@include themify($themes, true) {
+  .post-content,
+  .author-name,
+  .create-update-info {
+    color: themed('valueTextColor');
+  }
+
+  .manage-controls-wrapper {
+    color: themed('valueTextColor');
+  }
+}

@@ -1,0 +1,30 @@
+<div>
+    <div class="flex">
+        <div class="flex-grow-1">
+            <div class="post-content">
+                <markdown-preview [markdown]="discussion.description"></markdown-preview>
+            </div>
+            <div class="tags-wrapper" *ngIf="discussion.categories && discussion.categories.length">
+                <div class="crypto-tag tag" *ngFor="let category of discussion.categories">
+                    <span class="t-overflow-ellipsis">{{category.name}}</span>
+                </div>
+            </div>
+            <div class="flex justify-space-between align-items-center flex-wrap-wrap bottom-line">
+                <div class="author-info flex align-items-center">
+                    <name-avatar class="avatar" [src]="discussion.creator?.avatarId"
+                                 [name]="discussion.creator?.userName || 'User removed'"></name-avatar>
+                    <span class="author-name">{{discussion.creator?.userName || 'User removed'}}</span>
+                </div>
+                <div class="m-left-auto">
+                    <span class="manage-controls-wrapper" *ngIf="canManage()">
+                        <span class="control control-delete" (click)="deleteDiscussion()">Delete</span>
+                        <span> | </span>
+                        <span class="control control-edit" (click)="editDiscussion()">Edit</span>
+                        <span> | </span>
+                    </span>
+                    <span class="create-update-info">Created: {{discussion.created | timeAgo}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

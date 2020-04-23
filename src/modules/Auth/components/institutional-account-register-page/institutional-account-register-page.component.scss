@@ -1,0 +1,130 @@
+:host {
+  display: block;
+  overflow: auto;
+  width: 100%;
+
+  .business-register-page {
+    display: flex;
+    margin: 10vh 0;
+  }
+
+  .overlay {
+    flex-direction: column;
+  }
+
+  .form-controls-wrapper {
+    max-height: 500px;
+    overflow: auto;
+    padding-right: 5px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+  }
+
+  .crypto-text {
+    color: #757575;
+  }
+
+  .percent-icon {
+    font-size: 0.8em;
+  }
+
+  .form-controls-wrapper {
+
+    @media screen and (max-height: 850px) {
+      max-height: 400px;
+    }
+
+    @media screen and (max-height: 700px) {
+      max-height: 300px;
+    }
+
+    @media screen and (max-height: 600px) {
+      max-height: 200px;
+    }
+  }
+}
+
+/deep/ .mat-select-trigger {
+  background: transparent;
+  outline: none;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+
+  .mat-select-value {
+    color: #757575 !important;
+  }
+}
+
+/deep/ company-info {
+  .crypto-input {
+    input:not([type=checkbox]) {
+      color: #757575 !important;
+
+      &::-webkit-input-placeholder {
+        color: #757575 !important;
+      }
+    }
+  }
+}
+
+/deep/ institutional-account-register-page {
+  .crypto-input {
+    input:not([type=checkbox]) {
+      color: #757575 !important;
+
+      &::-webkit-input-placeholder {
+        color: #757575 !important;
+      }
+    }
+  }
+
+  .crypto-date-input {
+    .mat-form-field-flex {
+
+      input.mat-input-element {
+        color: #757575 !important;
+
+        &::-webkit-input-placeholder {
+          color: #757575 !important;
+        }
+      }
+    }
+  }
+}
+
+/deep/ .business-type-dropdown {
+  background: rgb(255, 255, 255) !important;
+
+  .mat-option:hover:not(.mat-option-disabled),
+  .mat-option:focus:not(.mat-option-disabled) {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/deep/ .company-dropdown {
+  background: rgb(255, 255, 255) !important;
+
+  .mat-option:hover:not(.mat-option-disabled),
+  .mat-option:focus:not(.mat-option-disabled) {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/deep/ .crypto-funds-dropdown {
+  background: rgb(255, 255, 255) !important;
+
+  .mat-option:hover:not(.mat-option-disabled),
+  .mat-option:focus:not(.mat-option-disabled) {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/deep/ .crypto-balance-dropdown {
+  background: rgb(255, 255, 255) !important;
+
+  .mat-option:hover:not(.mat-option-disabled),
+  .mat-option:focus:not(.mat-option-disabled) {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}

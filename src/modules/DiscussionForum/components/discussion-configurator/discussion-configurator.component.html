@@ -1,0 +1,40 @@
+<div class="form" [formGroup]="formGroup">
+    <div class="crypto-form-unit">
+        <div class="form-unit__label">Discussion Title:</div>
+
+        <mat-form-field class="crypto-input full-width with-hint">
+            <input matInput type="text" placeholder="Discussion title..." class="full-width title-input"
+                   formControlName="title">
+            <mat-error>Please, enter title from 5 to 150 characters</mat-error>
+        </mat-form-field>
+    </div>
+
+
+    <div class="content-wrapper m-bottom-5">
+        <markdown-input placeholder="Type discussion description..."
+                        formControlName="description"
+                        [errorHandler]="markdownInputErrorHandler"></markdown-input>
+    </div>
+
+    <div class="crypto-form-unit margin-bottom">
+        <div class="form-unit__label">Select category:</div>
+        <mat-form-field floatLabel="never" class="crypto-select full-width">
+            <mat-select formControlName="category" placeholder="Select category">
+                <mat-option *ngFor="let option of categoriesOptions" [value]="option !== -1 ? option.id : option">
+                    {{option !== -1 ? option.name : 'None'}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="btns-wrapper text-right">
+        <button class="crypto-button crypto-button_primary ask-btn"
+                [ngClass]="{'is-loading': processing}"
+                [disabled]="formGroup.invalid"
+                (click)="submit()"
+        >
+            <ng-container *ngIf="!isEditMode">Create discussion</ng-container>
+            <ng-container *ngIf="isEditMode">Update discussion</ng-container>
+        </button>
+    </div>
+</div>

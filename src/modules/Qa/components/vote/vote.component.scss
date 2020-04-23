@@ -1,0 +1,42 @@
+@import "global-styles/variables";
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+.vote-wrapper {
+  .vote-count {
+    font-size: 14px;
+    font-family: $primaryFontFamily;
+  }
+
+  .vote-icon {
+    font-size: 23px;
+    line-height: 23px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+
+    &.vote-up {
+      &.active,
+      &:hover {
+        color: $greenColor;
+      }
+    }
+
+    &.vote-down {
+      &.active,
+      &:hover {
+        color: $redColor;
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .vote-icon {
+    color: themed('titleTextColor');
+  }
+
+  .vote-count {
+    color: themed('valueTextColor');
+  }
+}

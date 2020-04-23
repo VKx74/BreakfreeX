@@ -1,0 +1,67 @@
+@import "variables";
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+
+.workspaces {
+  padding: 1px 5px;
+  font-size: 26px;
+}
+
+.wallet-select-trigger {
+  i {
+    transform: scale(1.5);
+  }
+
+  .menu-opened {
+
+  }
+}
+
+.add-component-btn {
+  font-size: 1.6em;
+  display: flex;
+  padding: 0 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.not-wallets {
+  font-size: 13px;
+}
+
+@include themify($themes, true) {
+  .not-wallets {
+    color: themed('titleTextColor');
+  }
+
+  .wallet-select-trigger {
+    padding-right: 20px;
+    padding-left: 5px;
+    //border-right: solid 1px themed('appBackgroundColor');
+    //border-left: solid 1px themed('appBackgroundColor');
+    cursor: pointer;
+
+    .wallet-title {
+      font-size: 12px;
+      font-weight: normal;
+      text-align: left;
+      color: themed('titleTextColor');
+    }
+
+    .wallet-value {
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      color: themed('valueTextColor');
+    }
+
+    .crypto-icon {
+      color: themed('valueTextColor');
+    }
+  }
+}
+
+

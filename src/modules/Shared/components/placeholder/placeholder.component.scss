@@ -1,0 +1,27 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+
+:host {
+  display: block;
+
+  .message-wrapper {
+    padding: 15px 0;
+
+    .message {
+      font-size: 14px;
+      font-family: $primaryFontFamily;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .message-wrapper {
+    background-color: rgba(themed('appBackgroundColor'), 0.5);
+  }
+
+  .message {
+    color: themed('titleTextColor');
+  }
+}

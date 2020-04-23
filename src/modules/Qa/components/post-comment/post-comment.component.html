@@ -1,0 +1,24 @@
+<div class="comment-item">
+    <span class="comment-content">{{comment.message}}</span>
+    <div class="flex justify-space-between comment-manage-box">
+        <span class="flex align-items-center">
+            <span class="comment-author">{{comment.creator.userName}}</span>
+        </span>
+        <div>
+            <ng-container *ngIf="canManage">
+                <span class="delete is-small title-color" (click)="delete()">Delete</span>
+                <span class="title-color"> | </span>
+                <span class="edit is-small title-color" (click)="edit()">Edit</span>
+                <span class="title-color"> | </span>
+            </ng-container>
+            <span class="comment-date is-small title-color">{{comment.created | timeAgo}}</span>
+        </div>
+    </div>
+    <ng-container *ngIf="isInEditMode">
+        <div class="input-wrapper">
+            <comment-input [text]="comment.message"
+                           [submitHandler]="editCommentHandler"
+                           (onCancel)="handleEditCancel()"></comment-input>
+        </div>
+    </ng-container>
+</div>

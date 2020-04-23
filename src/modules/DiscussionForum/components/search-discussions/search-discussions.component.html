@@ -1,0 +1,36 @@
+<div>
+    <breadcrumbs [breadcrumbs]="breadcrumbs"></breadcrumbs>
+
+    <page-header class="flex">
+        <span class="page-header-title">Search Discussions</span>
+    </page-header>
+
+    <div class="flex content-wrapper">
+
+        <empty-placeholder message="Discussions not found..." class="flex-grow-1 empty-placeholder"
+                           *ngIf="discussions && discussions.length === 0"></empty-placeholder>
+
+        <ng-container *ngIf="discussions && discussions.length">
+            <div class="items-wrapper flex-grow-1">
+                <card class="search">
+                    <navbar></navbar>
+                </card>
+                <card>
+                    <ng-container *ngFor="let discussion of discussions">
+                        <discussion-summary [discussion]="discussion"
+                                            [url]="getDiscussionUrl(discussion)"></discussion-summary>
+                        <div class="delimiter"></div>
+                    </ng-container>
+
+                    <paginator-container *ngIf="showPaginator">
+                        <paginator [handler]="paginationHandler" [showPageSize]="false"></paginator>
+                    </paginator-container>
+                </card>
+            </div>
+        </ng-container>
+
+        <card class="search-filter-wrapper flex-shrink-0">
+            <search-discussions-filter [config]="searchFilterConfig"></search-discussions-filter>
+        </card>
+    </div>
+</div>

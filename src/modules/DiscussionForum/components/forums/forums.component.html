@@ -1,0 +1,57 @@
+<div>
+    <page-header>
+        <span class="page-header-title">Forums</span>
+    </page-header>
+    <card class="forum-type">
+        <navbar class="w-100"></navbar>
+    </card>
+
+    <div>
+        <card class="forum-type">
+            <div class="flex-grow-1">
+                <a [routerLink]="getForumTypeUrl(ForumType.Investor)" class="forum-type__name">Investors</a>
+                <p class="forum-type__description">Forum for Investors</p>
+            </div>
+            <i class="crypto-icon crypto-icon-forum forum-icon"></i>
+        </card>
+
+        <card class="forum-type">
+            <div class="flex-grow-1">
+                <a [routerLink]="getForumTypeUrl(ForumType.BasicTrader)" class="forum-type__name">Basic Traders</a>
+                <p class="forum-type__description">Forum for Basic Traders</p>
+            </div>
+            <i class="crypto-icon crypto-icon-forum forum-icon"></i>
+        </card>
+
+        <card class="forum-type">
+            <div class="flex-grow-1">
+                <a [routerLink]="getForumTypeUrl(ForumType.AdvancedTrader)" class="forum-type__name">Advanced
+                    Traders</a>
+                <p class="forum-type__description">Forum for Advanced Traders</p>
+            </div>
+            <i class="crypto-icon crypto-icon-forum forum-icon"></i>
+        </card>
+
+        <card class="forum-type">
+            <div class="flex-grow-1">
+                <a [routerLink]="getForumTypeUrl(ForumType.Institutional)" class="forum-type__name">Institutional</a>
+                <p class="forum-type__description">Forum for Institutional users</p>
+            </div>
+            <i class="crypto-icon crypto-icon-forum forum-icon"></i>
+        </card>
+
+        <ng-container *ngIf="topCategories && topCategories.length">
+            <page-header class="categories-header">
+                <div class="flex justify-space-between align-items-center">
+                    <span class="page-header-title">Top Categories</span>
+                    <a [routerLink]="'categories'" class="see-all-categories">See All</a>
+                </div>
+            </page-header>
+
+            <categories-grid>
+                <category *ngFor="let category of topCategories"
+                        [category]="category"></category>
+            </categories-grid>
+        </ng-container>
+    </div>
+</div>

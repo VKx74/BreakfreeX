@@ -1,0 +1,129 @@
+<div class="root h-100">
+    <div class="h-100 flex justify-content-center align-items-center" *ngIf="!result">
+        <ng-container>
+            <placeholder message="{{ 'noData' | translate }}"></placeholder>
+        </ng-container>
+    </div>
+
+    <ng-container *ngIf="result">
+        <table class="crypto-table crypto-table_ellipsis crypto-table_striped">
+            <thead>
+            <tr>
+                <td colspan="2">
+                    {{ 'performance' | translate }}
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+
+            <ng-container *ngFor="let wallet of result.wallets; index as i">
+                <tr>
+                    <td>{{'initialCapital' | translate}} ({{summary.initialCapitals[i].symbol}})</td>
+                    <td>{{summary.initialCapitals[i].value}}</td>
+                </tr>
+                <tr>
+                    <td>{{'endCapital' | translate}} ({{summary.endCapitals[i].symbol}})</td>
+                    <td>{{summary.endCapitals[i].value}}</td>
+                </tr>
+                <tr>
+                    <td>{{ 'totalPerformance' | translate }} ({{summary.totalPerformance[i].symbol}})</td>
+                    <td>
+                        <span [class.crypto-color-red]="summary.totalPerformance[i].value < 0"
+                              [class.crypto-color-green]="summary.totalPerformance[i].value > 0">{{summary.totalPerformance[i].value}}</span>
+                        &nbsp;
+                        <span [class.crypto-color-red]="summary.totalPerformance[i].percentValue < 0"
+                              [class.crypto-color-green]="summary.totalPerformance[i].percentValue > 0">
+                            ({{summary.totalPerformance[i].percentValue}})%
+                        </span>
+                    </td>
+                </tr>
+            </ng-container>
+
+            <tr>
+                <td>{{'numberOfOrders' | translate}}</td>
+                <td>{{summary.ordersCount}}</td>
+            </tr>
+
+            <tr>
+                <td>{{'numberOfBuyOrders' | translate}}</td>
+                <td>{{summary.buyOrders.value}}</td>
+            </tr>
+
+            <tr>
+                <td>{{'numberOfSellOrders' | translate}}</td>
+                <td>{{summary.sellOrders.value}}</td>
+            </tr>
+
+            <tr>
+                <td>{{ 'numberOfTrades' | translate }}</td>
+                <td>{{summary.tradesCount}}</td>
+            </tr>
+
+
+            <tr>
+                <td>{{'numberOfBuyTrades' | translate}}</td>
+                <td>{{summary.buyTrades.value}} ({{ summary.buyTrades.percentValue }})%</td>
+            </tr>
+
+            <tr>
+                <td>{{'numberOfSellTrades' | translate}}</td>
+                <td>{{summary.sellTrades.value}} ({{ summary.sellTrades.percentValue }})%</td>
+            </tr>
+
+            <tr>
+                <td>{{ 'profitTrades' | translate }}</td>
+                <td>{{summary.profitTrades.value}} ({{ summary.profitTrades.percentValue }}%)</td>
+            </tr>
+            <tr>
+                <td>{{ 'lossTrades' | translate }}</td>
+                <td>{{summary.lossTrades.value}} ({{ summary.lossTrades.percentValue }}%)</td>
+            </tr>
+            <tr>
+                <td>{{ 'grossProfit' | translate }}</td>
+                <td>{{summary.grossProfit}}</td>
+            </tr>
+            <tr>
+                <td>{{ 'grossLoss' | translate }}</td>
+                <td>{{summary.grossLoss}}</td>
+            </tr>
+            <tr>
+                <td>{{ 'profitFactor' | translate }}</td>
+                <td>{{summary.profitFactor}}</td>
+            </tr>
+            <tr>
+                <td>{{ 'averageTrade' | translate }}</td>
+                <td>{{summary.averageTrade}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="crypto-table crypto-table_ellipsis crypto-table_striped m-top-10">
+            <thead>
+            <tr>
+                <td colspan="2">
+                    {{ 'time' | translate }}
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ 'startDate' | translate }}</td>
+                <td>{{summary.startDate | formatDate:'YYYY-MM-DD HH:mm:ss'}}</td>
+            </tr>
+            <tr>
+                <td>{{ 'endDate' | translate }}</td>
+                <td>{{summary.endDate | formatDate:'YYYY-MM-DD HH:mm:ss'}}</td>
+            </tr>
+<!--            <tr>-->
+<!--                <td>{{ 'totalTradedDays' | translate }}</td>-->
+<!--                <td>{{summary.totalTradedDays}}</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>{{ 'timeInMarket' | translate }}</td>-->
+<!--                <td>{{summary.timeInMarket}}</td>-->
+<!--            </tr>-->
+
+            </tbody>
+        </table>
+    </ng-container>
+</div>

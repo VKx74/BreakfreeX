@@ -1,0 +1,31 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  display: block;
+  margin: 0 5px;
+
+  //background-color: #26282a;
+}
+
+div {
+  border-radius: 3px;
+  overflow: hidden;
+  padding: 15px 20px 0 !important;
+
+  @include themify($themes, true) {
+    color: themed('valueTextColor');
+  }
+
+  @include themify($themes, true) {
+    background-color: themed('appPanelColor');
+  }
+
+  &.no-padding-top {
+    padding-top: 0;
+  }
+
+  &.no-padding {
+    padding: 0;
+  }
+}

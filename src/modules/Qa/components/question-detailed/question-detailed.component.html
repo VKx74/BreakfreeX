@@ -1,0 +1,17 @@
+<div>
+    <page-header class="flex justify-space-between">
+        <span class="page-header-title color-title">{{question.title}}</span>
+<!--        <ask-question-btn routerLink="../ask"></ask-question-btn>-->
+    </page-header>
+
+    <div class="flex">
+        <main-container class="flex-grow-1 w-0">
+            <question-post [post]="question"
+                           (onEdit)="handleQuestionEdit()"
+                           (onDeleted)="handleQuestionDeleted()"></question-post>
+            <div class="delimiter"></div>
+            <answers [question]="question"></answers>
+        </main-container>
+        <sidebar></sidebar>
+    </div>
+</div>

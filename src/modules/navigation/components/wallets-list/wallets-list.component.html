@@ -1,0 +1,18 @@
+<div class="wallets-list">
+        <mat-radio-group class="flex flex-direction-column" [formControl]="walletSelect">
+            <div *ngFor="let wallet of wallets; let lastWallet = last; trackBy: trackBy" class="wallet-item">
+                <mat-radio-button [value]="wallet">
+                    <div class="flex flex-direction-column align-items-start">
+                        <div class="wallet-name">
+                            Wallets
+                            {{wallet.currency}}
+                        </div>
+                        <div class="wallet-balance">
+                            {{wallet.balance}}
+                        </div>
+                    </div>
+                </mat-radio-button>
+                <div *ngIf="!lastWallet" class="delimiter"></div>
+            </div>
+        </mat-radio-group>
+</div>

@@ -1,0 +1,90 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">
+                {{ 'openScript' | translate }}
+            </h4>
+        </div>
+        <div class="modal-body">
+            <modal-spinner-placeholder *ngIf="(loadScriptsState | async).isPending()"></modal-spinner-placeholder>
+            <ng-container *ngIf="(loadScriptsState | async).isSucceeded()">
+                <div class="tabs-wrapper flex-grow-1 flex justify-space-between w-100">
+                    <mat-tab-group>
+                        <mat-tab label="Custom">
+                            <ng-container *ngIf="!(scripts | async).length">
+                                <div class="text-center">
+                                    <span class="crypto-text"> {{ 'noData' | appTranslate }}</span>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="(scripts | async).length">
+                                <table class="crypto-table crypto-table_striped crypto-table_ellipsis crypto-table_fixed-header crypto-table_selectable">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'scriptName' | translate }}</th>
+                                        <th>{{ 'scriptDescription' | translate }}</th>
+                                        <th class="small-column"></th>
+                                    </tr>
+                                    </thead>
+            
+                                    <tbody>
+            
+                                    <tr class="script-item"
+                                        *ngFor="let script of (scripts | async)"
+                                        [ngClass]="{selected: script === (selectedScript | async)}"
+                                        (click)="handleScriptSelected(script)">
+            
+                                        <td>
+                                            <span class="script-name">{{script.name}}</span>
+                                        </td>
+            
+                                        <td>
+                                            {{script.description}}
+                                        </td>
+            
+                                        <td class="small-column">
+                                            <div class="flex align-items-center justify-content-center">
+                                                <div class="remove-instrument-button crypto-button-delete" (click)="$event.stopPropagation(); handleDeleteScript(script)">
+                                                    <i class="crypto-icon crypto-icon-close" title="{{'deleteScript' | translate}}" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </ng-container>
+                        </mat-tab>
+                        <mat-tab *ngFor="let category of buildInScriptCategories"
+                                label="{{getCategoryName(category)}}">
+                            <table class="crypto-table crypto-table_striped crypto-table_ellipsis crypto-table_fixed-header crypto-table_selectable">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'scriptName' | translate }}</th>
+                                        <th>{{ 'scriptDescription' | translate }}</th>
+                                    </tr>
+                                    </thead>
+            
+                                    <tbody>
+            
+                                    <tr class="script-item"
+                                        *ngFor="let script of category.scripts"
+                                        (click)="handleDefaultScriptSelected(script)">
+                                        <td>
+                                            <span class="script-name">{{script.name}}</span>
+                                        </td>
+                                        <td>
+                                            {{script.description}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="(loadScriptsState | async).isFailed()">
+                <span class="crypto-text">{{ 'failedToLoadData' | appTranslate }}</span>
+            </ng-container>
+        </div>
+    </div>
+</div>

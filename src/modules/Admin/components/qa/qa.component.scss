@@ -1,0 +1,18 @@
+:host {
+  width: 100%;
+}
+
+.title {
+  cursor: pointer;
+}
+
+.small-column {
+  width: 75px;
+}
+
+.creator-avatar {
+  height: 24px;
+  width: 24px;
+  flex-shrink: 0;
+  margin-right: 7px;
+}

@@ -1,0 +1,249 @@
+<div class="root flex flex-direction-column" *ngIf="activeThread">
+    <!--    <div class="top-line flex align-items-center justify-space-between flex-shrink-0">-->
+    <!--        <div class="thread-name t-overflow-ellipsis">{{activeThread.name}}</div>-->
+    <!--        <div class="flex align-items-center controls-wrapper">-->
+    <!--            <div class="crypto-button-icon control"-->
+    <!--                 (click)="onMaximise.emit();"-->
+    <!--                 title="{{'activeThread.maximizeButtonTitle' | translate}}">-->
+    <!--                <span class="crypto-icon crypto-icon-take-off"></span>-->
+    <!--            </div>-->
+    <!--            <ng-container *ngIf="showMoreBtn">-->
+    <!--                <div class="crypto-button-icon control" [title]="'more' | translate"-->
+    <!--                     [matMenuTriggerFor]="menu">-->
+    <!--                    <span class="crypto-icon crypto-icon-more"></span>-->
+    <!--                </div>-->
+    <!--                <mat-menu #menu="matMenu">-->
+    <!--                    <button mat-menu-item *ngIf="canEditThread" (click)="openSettings()">-->
+    <!--                        {{'edit' | translate}}-->
+    <!--                    </button>-->
+    <!--                    <button *ngIf="canInviteMembers" mat-menu-item (click)="openInvites()">-->
+    <!--                        {{'activeThread.invites' | translate}}-->
+    <!--                    </button>-->
+    <!--                    <button *ngIf="canManageMembers" mat-menu-item (click)="openMembers()">-->
+    <!--                        {{'activeThread.members' | translate}}-->
+    <!--                    </button>-->
+    <!--                    <button *ngIf="canLeaveThread" mat-menu-item (click)="leaveThread()">-->
+    <!--                        {{'leaveThread' | translate}}-->
+    <!--                    </button>-->
+    <!--                    <button *ngIf="canRemoveThread" mat-menu-item (click)="removeThread()">-->
+    <!--                        {{'removeThread' | translate}}-->
+    <!--                    </button>-->
+    <!--                </mat-menu>-->
+    <!--            </ng-container>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+
+    <div class="header flex justify-space-between align-items-center">
+        <div class="flex active-thread-top">
+            <div class="user-image m-right-10">
+                <!--                    TODO: Implement thread image !Important!-->
+                <!--                    [src]="activeThread?.pictureId"-->
+                <name-avatar [src]="activeThread?.pictureId" [name]="activeThread?.name"></name-avatar>
+            </div>
+            <div class="flex flex-direction-column justify-content-center active-thread-info">
+                <div class="t-overflow-ellipsis active-name color-value">{{activeThread?.name}}</div>
+                <div class="t-overflow-ellipsis active-description color-title">{{activeThread?.description}}</div>
+            </div>
+        </div>
+        <div class="flex align-items-center">
+            <ng-container *ngIf="showMoreBtn">
+                <div class="crypto-button-icon control" title="More"
+                     [matMenuTriggerFor]="menu">
+                    <span class="crypto-icon crypto-icon-settings"></span>
+                </div>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item *ngIf="canEditThread" (click)="openSettings()">
+                        {{'edit' | translate}}
+                    </button>
+                    <button *ngIf="canInviteMembers" mat-menu-item (click)="openInvites()">
+                        {{'activeThread.invites' | translate}}
+                    </button>
+                    <button *ngIf="canManageMembers" mat-menu-item (click)="openMembers()">
+                        {{'activeThread.members' | translate}}
+                    </button>
+                    <button *ngIf="canLeaveThread" mat-menu-item (click)="leaveThread()">
+                        {{'leaveThread' | translate}}
+                    </button>
+                    <button *ngIf="canRemoveThread" mat-menu-item (click)="removeThread()">
+                        {{'removeThread' | translate}}
+                    </button>
+                </mat-menu>
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="content-wrapper flex flex-grow-1 h-0 full-width flex-direction-column">
+        <ng-container *ngIf="(activeThread$ | async) as activeThread">
+            <div class="overlay" *ngIf="activeThread.isBanned || activeThread.isBlocked">
+
+                <div class="overlay-content-wrapper">
+                    <div class="overlay-header text-center">
+                        <span class="header-caption">Oh no!</span>
+                    </div>
+
+                    <div class="banner-img-wrapper text-center">
+                        <i class="icon crypto-icon crypto-icon-banned-chat"></i>
+                    </div>
+
+                    <div class="text-center">
+                        <span *ngIf="activeThread.isBanned">{{'userBannedCaption' | translate}}</span>
+                        <span *ngIf="activeThread.isBlocked && !activeThread.isBanned">{{'threadBlocked' | translate}}</span>
+                    </div>
+
+                    <!--                    <ng-container *ngIf="activeThread.isBanned">-->
+                    <!--                        <div class="text-center">-->
+                    <!--                            <span class="reason-caption">{{'banReason' | translate}}:</span>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="text-center">-->
+                    <!--                            <span>{{activeThread.}}</span>-->
+                    <!--                        </div>-->
+                    <!--                    </ng-container>-->
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="messages-outer-wrapper flex-grow-1 h-0">
+            <infinity-loader [scrollDirection]="ScrollDirection.Top"
+                             [handler]="infinityLoaderHandler"
+                             [showLoadingIndicator]="false"
+                             [infiniteScrollContainer]="messagesWrapper" class="full-width">
+                <div #messagesWrapper class="messages-wrapper flex"
+                     [class.old-browser]="!isChromeBrowser()">
+                    <ng-container *ngFor="let message of (messages$ | async); trackBy: trackByFn">
+                        <thread-message
+                                [message]="message"
+                                (onMessageRemove)="handleRemoveMessage($event)"
+                                (onMessageEdit)="handleEditMessage(message)"
+                                (onMessageResend)="handleResendMessage(message)"
+                        ></thread-message>
+                    </ng-container>
+                </div>
+            </infinity-loader>
+            <div class="load-overlay" *ngIf="loadThreadMessagesStatus.isPending()">
+                <i class="crypto-spinner crypto-spinner-accent"></i>
+            </div>
+        </div>
+
+        <div class="footer flex flex-direction-column">
+            <div class="edit-message-wrapper flex align-items-baseline"
+                 *ngIf="messageForEdit && !(messageForEdit.files && messageForEdit.files.length)">
+                <i class="edit-icon crypto-icon crypto-icon-edit"></i>
+                <div class="message-content flex-grow-1">{{messageForEdit.content}}</div>
+                <i class="cancel-editing-icon crypto-icon crypto-icon-close" (click)="cancelEditing()"></i>
+            </div>
+
+            <div class="message-input-wrapper flex" (click)="onInputClick($event)"
+                 [class.disabled]="activeThread.isDisabled">
+
+                <div class="left-side-controls">
+                    <upload-file-input [onFilesSelected]="handleFileInput"
+                                       title="{{'activeThread.attachFile' | translate}}"
+                                       [config]="uploadFileInputConfig" class="upload-file">
+                        <span class="crypto-icon crypto-icon-add-document control add-file-control"></span>
+                    </upload-file-input>
+                </div>
+
+
+                <input class="crypto-input flex-grow-1"
+                       #messageInput
+                       (keyup)="onInputKeyUp($event)"
+                       [(ngModel)]="userMessage"
+                       [disabled]="activeThread.isDisabled"
+                       placeholder="{{'activeThread.' + (activeThread.isDisabled ? 'sendMessageDisabledPlaceholder' : 'sendMessagePlaceholder')  | translate}}">
+                <div class="right-side-controls flex align-items-center">
+                    <emoji-picker class="control" title="{{'activeThread.emojiTitle' | translate}}"
+                                  (onEmojiClick)="addEmoji($event)"></emoji-picker>
+                    <div class="crypto-icon crypto-icon-send-message control"
+                         title="{{'activeThread.sendMessageBtn' | translate}}"
+                         (click)="handleMessageInputSubmit()"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="active-thread flex flex-direction-column">-->
+<!--    <ng-container *ngIf="activeThread; else placeholder">-->
+<!--        <div class="header flex justify-space-between align-items-center">-->
+<!--            <div class="flex active-thread-top">-->
+<!--                <div class="user-image m-right-10">-->
+<!--                    &lt;!&ndash;                    TODO: Implement thread image !Important!&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    [src]="activeThread?.pictureId"&ndash;&gt;-->
+<!--                    <name-avatar [src]="activeThread?.pictureId" [name]="activeThread?.name" ></name-avatar>-->
+<!--                </div>-->
+<!--                <div class="flex flex-direction-column justify-content-center active-thread-info">-->
+<!--                    <div class="t-overflow-ellipsis active-name color-value">{{activeThread?.name}}</div>-->
+<!--                    <div class="t-overflow-ellipsis active-description color-title">{{activeThread?.description}}</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="flex align-items-center">-->
+<!--                <ng-container *ngIf="catEditGroup">-->
+<!--                    <div class="crypto-button-icon control" title="More"-->
+<!--                         [matMenuTriggerFor]="menu">-->
+<!--                        <span class="crypto-icon crypto-icon-settings"></span>-->
+<!--                    </div>-->
+<!--                    <mat-menu #menu="matMenu">-->
+<!--&lt;!&ndash;                        <button mat-menu-item (click)="createThread()" *ngIf="isAddThreadShown">&ndash;&gt;-->
+<!--&lt;!&ndash;                            Create&ndash;&gt;-->
+<!--&lt;!&ndash;                        </button>&ndash;&gt;-->
+<!--                        <button mat-menu-item (click)="openSettings()">-->
+<!--                            {{'edit' | translate}}-->
+<!--                        </button>-->
+<!--                        <button *ngIf="isGroupThread" mat-menu-item (click)="openInvites()">-->
+<!--                            {{'activeThread.invites' | translate}}-->
+<!--                        </button>-->
+<!--                        <button *ngIf="isGroupThread" mat-menu-item (click)="openMembers()">-->
+<!--                            {{'activeThread.members' | translate}}-->
+<!--                        </button>-->
+<!--                    </mat-menu>-->
+<!--                </ng-container>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="message-list flex flex-grow-1" scrollable-->
+<!--             (scrolledToTop)="handleScrollToTop()" (scrolledToBottom)="!isChromeBrowser() ? handleScrollToTop() : null"-->
+<!--             [class.old-browser]="!isChromeBrowser()">-->
+<!--            <ng-container *ngFor="let message of threadMessages">-->
+<!--                <thread-message-->
+<!--                        *ngIf="message.threadId === activeThread.id"-->
+<!--                        [message]="message"-->
+<!--                        (onMessageRemove)="removeMessage($event)"-->
+<!--                        (onMessageEdit)="editMessage($event)"></thread-message>-->
+<!--            </ng-container>-->
+<!--        </div>-->
+<!--        <div class="footer flex flex-direction-column">-->
+<!--            <div class="edit-message-content flex align-items-baseline"-->
+<!--                 *ngIf="messageForEdit && !(messageForEdit.files && messageForEdit.files.length)">-->
+<!--                <div class="crypto-icon crypto-icon-edit"></div>-->
+<!--                <div class="message-content flex-grow-1">{{messageForEdit.content}}</div>-->
+<!--                <div class="crypto-icon crypto-icon-close" (click)="cancelEditing()"></div>-->
+<!--            </div>-->
+<!--            <div class="massage-input-wrapper flex align-items-center" (click)="onInputClick($event)"-->
+<!--                 [class.disabled]="activeThread.isDisabled">-->
+<!--               <div class="flex align-items-center">-->
+<!--                   <button class="btn-add-file" (click)="openFileClick($event)">-->
+<!--                       <span class="crypto-icon crypto-icon-add-document"></span>-->
+<!--                   </button>-->
+<!--                   <emoji-picker (onEmojiClick)="addEmoji($event)"></emoji-picker>-->
+<!--               </div>-->
+<!--                <input type="file" #fileInput (change)="handleFileInput($event.target.files)" style="display: none;">-->
+
+<!--                <input class="crypto-input flex-grow-1"-->
+<!--                       #messageInput-->
+<!--                       (keyup)="onInputKeyUp($event)"-->
+<!--                       [(ngModel)]="userMessage"-->
+<!--                       [disabled]="activeThread.isDisabled"-->
+<!--                       placeholder="{{'activeThread.' + (activeThread.isDisabled ? 'sendMessageDisabledPlaceholder' : 'sendMessagePlaceholder')  | translate}}">-->
+<!--                <div class="input-actions flex align-items-center">-->
+<!--                    <div class="crypto-icon crypto-icon-send-message" (click)="sendUserMessage()"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </ng-container>-->
+<!--    <ng-template #placeholder>-->
+<!--        &lt;!&ndash;        <placeholder&ndash;&gt;-->
+<!--        &lt;!&ndash;                [message]="'You don\'t have any threads'">&ndash;&gt;-->
+<!--        &lt;!&ndash;        </placeholder>&ndash;&gt;-->
+<!--    </ng-template>-->
+<!--</div>-->

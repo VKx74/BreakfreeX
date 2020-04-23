@@ -1,0 +1,18 @@
+<div>
+    <div class="input-wrapper m-top-5 m-bottom-5" [formGroup]="formGroup">
+        <markdown-input placeholder="Type your answer..." formControlName="content"
+                        [noPreviewDelimiters]="true"
+                        [errorHandler]="markdownInputErrorHandler"></markdown-input>
+    </div>
+    <div class="btns-wrapper m-top-5 flex justify-flex-end align-items-center">
+<!--        <button class="crypto-button crypto-button_no-styles m-right-10 cancel-btn" *ngIf="showCancel"-->
+<!--                (click)="cancel()">Cancel-->
+<!--        </button>-->
+        <button class="crypto-button crypto-button_primary post-answer-btn w-100"
+                (click)="handleAddPost()"
+                [disabled]="formGroup.invalid"
+                [ngClass]="{'is-loading': processCreation}">Post
+            Answer
+        </button>
+    </div>
+</div>

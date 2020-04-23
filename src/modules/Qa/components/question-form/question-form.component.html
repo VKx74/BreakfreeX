@@ -1,0 +1,31 @@
+<div class="form" [formGroup]="formGroup">
+    <div class="title-wrapper m-bottom-5">
+        <span class="title-label">Add question title, text and tags:</span>
+        <mat-form-field class="crypto-input full-width with-hint">
+            <input matInput type="text" placeholder="Question title..." class="title-input full-width"
+                   formControlName="title">
+            <mat-error>Please, enter a valid title</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="content-wrapper m-bottom-5">
+        <markdown-input formControlName="message"
+                        placeholder="Type your question..."
+                        [errorHandler]="markdownInputErrorHandler"></markdown-input>
+    </div>
+    <div class="tags-wrapper m-bottom-15">
+        <tags-input [mode]="TagsInputMode.Manual"
+                    [tags]="tags"
+                    (onAddTag)="handleAddTag($event)"
+                    (onRemoveTag)="handleRemoveTag($event)"
+        ></tags-input>
+    </div>
+    <div class="btns-wrapper text-right">
+        <button class="crypto-button crypto-button_primary submit-btn"
+                [ngClass]="{'is-loading': processSubmit}"
+                [disabled]="formGroup.invalid"
+                (click)="submit()"
+        >
+            Submit
+        </button>
+    </div>
+</div>

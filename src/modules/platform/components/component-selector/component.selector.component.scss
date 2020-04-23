@@ -1,0 +1,67 @@
+@import "global-styles/variables";
+@import "../../styles/variables";
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  .component-item {
+    //display: flex;
+    //width: 130px;
+    //height: 100px;
+    cursor: pointer;
+    //margin: 7px 8px 7px 8px;
+    //justify-content: center;
+    //align-items: center;
+    flex-shrink: 0;
+    //border-radius: 9px;
+    font-size: 12px;
+    opacity: 0.95;
+    padding: 3px 15px;
+    transition: background .4s ease;
+    //flex-direction: column;
+  }
+
+  .component-preview {
+    .crypto-icon {
+      font-size: 1.6em;
+    }
+  }
+
+  .modal-content {
+    border: none;
+    max-width: 700px;
+  }
+
+  .modal-body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .component-name {
+    font-family: $primaryFontFamily;
+    //font-size: 11px;
+    text-align: center;
+  }
+
+  .modal-content {
+    background: transparent;
+    box-shadow: none;
+  }
+
+}
+
+@include themify($themes, true) {
+  .component-item {
+    background-color: themed('appModalsPanelColor');
+    color: themed('valueTextColor');
+    //box-shadow: 0 2px 6px 0 $component-selector-item-box-shadow-color;
+
+    &:hover {
+      transition: background-color 0.3s ease-in;
+      background-color: themed('appPanelColor');
+      color: themed('titleTextColor');
+      //box-shadow: 0 10px 19.1px 1.9px $component-selector-item-hover-box-shadow-color;
+    }
+  }
+}

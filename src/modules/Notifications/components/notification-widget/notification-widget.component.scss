@@ -1,0 +1,22 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+.notifications-wrapper{
+  border-radius: 5px;
+  min-height: 50%;
+}
+
+@include themify($themes, true) {
+  /deep/
+  .invites-wrapper-border-bottom {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+  .notifications-wrapper {
+    background: themed('appPanelColor');
+  }
+
+  .invites-wrapper {
+    background: themed('appPanelColor') !important;
+  }
+
+}

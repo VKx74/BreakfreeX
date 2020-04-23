@@ -1,0 +1,48 @@
+<div class="full-height flex flex-direction-column">
+    <div class="component-head flex justify-flex-start align-items-center">
+        <div class="educational-tips-wrapper m-right-10">
+            <educational-tips [componentName]="ComponentIdentifier.permissionsManager"
+                              [alwaysShow]="true"></educational-tips>
+        </div>
+        <h3 class="component-head_title">Permissions Management</h3>
+        <mat-progress-bar mode="indeterminate" *ngIf="loading" class="loader"></mat-progress-bar>
+    </div>
+    <div class="filters-wrapper underlay">
+        <div class="tag-selector">
+            <selector [options]="tags" class=""
+                      [optionCaption]="getOptionCaption"
+                      (onSelect)="onTagSelect($event)"
+                      [(ngModel)]="selectedTag"></selector>
+        </div>
+        <div class="search">
+            <debounced-input (valueChange)="search($event)"></debounced-input>
+        </div>
+    </div>
+    <div class="underlay components-wrapper">
+        <mat-form-field class="h-100">
+            <mat-chip-list *ngIf="tags && filteredComponents" [selectable]="false">
+                <mat-chip *ngFor="let component of filteredComponents"
+                          (click)="onComponentAccessToggle(component)"
+                          [disabled]="loadingComponents.includes(component.name)"
+                          [disableRipple]="true"
+                          [selectable]="true">
+                    <div class="component-name"
+                         [class.access-disabled]="!component.checked"
+                         [title]="('permissionsManager.' + component.name) | translate">{{('permissionsManager.' + component.name) | translate}}</div>
+                    <div class="accessibility-switcher">
+<!--                        (change)="onComponentAccessToggle(component)"-->
+                        <mat-slide-toggle class="v-align-middle" (click)="$event.preventDefault()" [(ngModel)]="component.checked"></mat-slide-toggle>
+                    </div>
+                </mat-chip>
+            </mat-chip-list>
+
+            <p class="text-center m-top-10 flex-grow-1" *ngIf="tags && components && !filteredComponents?.length">
+                <span class="crypto-text is-medium">No matches</span>
+            </p>
+            <p class="text-center m-top-10 flex-grow-1" *ngIf="!tags || !components">
+                <span class="crypto-text is-medium">No data available</span>
+            </p>
+        </mat-form-field>
+    </div>
+
+</div>

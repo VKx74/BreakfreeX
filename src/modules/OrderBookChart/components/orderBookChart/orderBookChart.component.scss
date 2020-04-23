@@ -1,0 +1,52 @@
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  .root {
+    height: 100%;
+    font-size: 12px;
+  }
+
+  .instrument-search {
+    width: 200px;
+    margin-right: 4px;
+    min-width: 0;
+  }
+
+  .deep-selector {
+    width: 120px;
+    min-width: 0;
+  }
+
+  .content-wrapper {
+    padding: 4px;
+
+    canvas {
+      height: 100% !important;
+      width: 100% !important;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  canvas {
+    background: themed('appPanelColor');
+  }
+
+  .top-line {
+    background-color: themed('appPanelColor');
+  }
+
+  .content-wrapper {
+    background-color: themed('appPanelColor');
+  }
+
+  .info {
+    color: themed('valueTextColor');
+  }
+
+  .info-label {
+    color: themed('valueTextColor');
+  }
+}

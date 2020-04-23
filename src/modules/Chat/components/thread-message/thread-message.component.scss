@@ -1,0 +1,283 @@
+//@import "../../../../global-styles/themes/themes";
+//@import "mixins/themify";
+//
+//:host {
+//  flex-shrink: 0;
+//}
+//
+//file-info-simple{
+//  width:100%
+//}
+//
+//.message-item {
+//  padding: 20px 12px 6px 17px;
+//  justify-content: flex-start;
+//
+//  //@include themify($themes, true) {
+//  //  border-top: 1px solid themed('panelBorderColor');
+//  //}
+//
+//
+//  &:last-of-type {
+//    margin-top: auto;
+//  }
+//
+//  &.current-user-message {
+//    &.message-item {
+//      justify-content: flex-end;
+//    }
+//
+//    .creator-avatar {
+//      display: none;
+//    }
+//
+//    .message-body {
+//      padding-left: 40px;
+//
+//      @include themify($themes, true) {
+//        //background: transparentize(themed('accentColor'), 0.6);
+//        //background: themed('accentColor');
+//        background-color: lighten(themed('accentColor'), 5%);
+//      }
+//
+//      .caption {
+//        .creator-name {
+//          display: none;
+//        }
+//
+//        .time {
+//          margin-left: auto;
+//        }
+//      }
+//
+//      .file-view {
+//        display: flex;
+//        justify-content: flex-end;
+//      }
+//
+//      .text {
+//        text-align: right;
+//      }
+//    }
+//  }
+//
+//  .creator-avatar {
+//    height: 24px;
+//    width: 24px;
+//    flex-shrink: 0;
+//    margin-right: 7px;
+//
+//    ::ng-deep img {
+//      border-radius: 100%;
+//    }
+//  }
+//
+//  .message-body {
+//    border-radius: 6px;
+//    padding: 0 9px 7px 11px;
+//    max-width: calc(100% - 31px);
+//    //min-width: 300px;
+//    //width: auto;
+//
+//    @include themify($themes, true) {
+//      //background-color: lighten(themed('accentColor'), 10%);
+//      //background: transpa rentize(themed('appBackgroundColor'), 0.85);
+//      background: themed('inputBackgroundColor');
+//    }
+//
+//    .caption {
+//      padding: 4px 0;
+//
+//      .creator-name {
+//        font-size: 12px;
+//        white-space: nowrap;
+//        overflow: hidden;
+//        text-overflow: ellipsis;
+//
+//        @include themify($themes, true) {
+//          color: themed('accentColor');
+//        }
+//      }
+//
+//      .time {
+//        margin-left: 5px;
+//        font-size: 11px;
+//        opacity: 0.5;
+//      }
+//    }
+//
+//    .file-view {
+//      display: flex;
+//      justify-content: flex-start;
+//    }
+//
+//    .text {
+//      overflow-wrap: break-word;
+//      max-width: 500px;
+//      font-size: 13px;
+//      line-height: 1.38;
+//      text-align: left;
+//    }
+//  }
+//
+//  .menu-toggle {
+//    margin: 0 5px;
+//  }
+//}
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  flex-shrink: 0;
+}
+
+file-info-simple {
+  width: 100%
+}
+
+.root {
+  display: flex;
+  padding: 14px 12px 6px 17px;
+  justify-content: flex-start;
+
+  &:last-of-type {
+    margin-top: auto;
+  }
+
+  .creator-avatar {
+    height: 24px;
+    width: 24px;
+    flex-shrink: 0;
+    margin-right: 7px;
+
+    ::ng-deep img {
+      border-radius: 100%;
+    }
+  }
+
+  .menu-toggle {
+    margin: 0 5px;
+  }
+}
+
+.message-body {
+  border-radius: 8px;
+  padding: 0 9px 7px 11px;
+  max-width: 250px;
+  width: auto;
+
+  .top-line {
+    padding: 4px 0;
+  }
+
+  .creator-name {
+    display: block;
+    max-width: 130px;
+    margin-right: auto;
+    padding-right: 10px;
+    font-size: 12px;
+    font-family: $primaryFontFamily;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .message-time {
+    font-size: 11px;
+    font-family: $primaryFontFamily;
+    opacity: 0.6;
+  }
+
+  .file-view {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .message-text {
+    font-family: $primaryFontFamily;
+    font-size: 13px;
+    overflow-wrap: break-word;
+    line-height: 1.38;
+  }
+}
+
+.message-sending-status {
+  display: flex;
+  height: 17px;
+  align-items: center;
+  margin-right: 4px;
+
+  .pending-status,
+  .succeeded-status {
+    font-size: 17px;
+  }
+
+  .pending-status {
+    opacity: 0.6;
+  }
+
+  .failed-status {
+    font-size: 13px;
+    color: $redColor;
+  }
+}
+
+
+.root.current-user-message {
+  justify-content: flex-end;
+
+  &.message-item {
+    justify-content: flex-end;
+  }
+
+  .creator-avatar {
+    display: none;
+  }
+
+  .message-body {
+    .creator-name {
+      display: none;
+    }
+
+    .file-view {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .message-text {
+      text-align: right;
+    }
+  }
+}
+
+
+@include themify($themes, true) {
+  .message-body {
+    //background-color: transparentize(themed('panelBorderColor'), 0.85);
+    //background-color: transparentize(themed('panelBorderColor'), 0.85);
+    //background-color: lighten(themed('appPanelColor'), 10%);
+    //background: transparentize(themed('appBackgroundColor'), 0.85);
+    background: themed('inputBackgroundColor');
+
+    .creator-name {
+      color: themed('accentColor');
+    }
+
+    .message-time {
+      //color: themed('primeColor');
+    }
+
+    .message-text {
+      //color: themed('primeColor');
+    }
+  }
+
+  .root.current-user-message {
+    .message-body {
+      //background: lighten(themed('accentColor'), 0.6);
+      background-color: lighten(themed('accentColor'), 5%);
+      color: themed('valueTextColor') !important;
+    }
+  }
+}

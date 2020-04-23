@@ -1,0 +1,42 @@
+:host {
+  width: 100%;
+
+  /deep/ .mat-table {
+    width: 100%;
+  }
+}
+
+.filters-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-pickers-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+table {
+  td {
+    //padding: 5px 0;
+  }
+}
+
+.title {
+  cursor: pointer;
+}
+
+.small-column {
+  width: 75px;
+}
+
+.creator-avatar {
+  height: 24px;
+  width: 24px;
+  flex-shrink: 0;
+  margin-right: 7px;
+
+  //::ng-deep img {
+  //  border-radius: 100%;
+  //}
+}

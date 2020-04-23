@@ -1,0 +1,98 @@
+{
+  "id": "institutional",
+  "name": "Institutional",
+  "layoutState": {
+    "version": "1",
+    "content": [
+      {
+        "type": "row",
+        "content": [
+          {
+            "type": "column",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "1",
+                    "type": "component",
+                    "componentName": "chart",
+                    "isClosable": false
+                  }
+                ]
+              },
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "2",
+                    "type": "component",
+                    "componentName": "orderBook",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "21",
+                    "type": "component",
+                    "componentName": "news",
+                    "isClosable": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "column",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "3",
+                    "type": "component",
+                    "componentName": "marketTrades",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "4",
+                    "type": "component",
+                    "componentName": "watchlist",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "5",
+                    "type": "component",
+                    "componentName": "publicChat",
+                    "isClosable": false
+                  }
+                ]
+              },
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "6",
+                    "type": "component",
+                    "componentName": "orderBookChart",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "7",
+                    "type": "component",
+                    "componentName": "marketTrades",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "8",
+                    "type": "component",
+                    "componentName": "privateChat",
+                    "isClosable": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

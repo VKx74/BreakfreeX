@@ -1,0 +1,11 @@
+:host {
+  width: 100%;
+
+  /deep/ mat-form-field {
+    width: 100%;
+  }
+}
+
+.icon-size {
+  font-size: 1.6em
+}

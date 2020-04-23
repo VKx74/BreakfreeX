@@ -1,0 +1,32 @@
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .header {
+    margin-bottom: 20px;
+    padding-bottom: 1px;
+  }
+
+  .delimiter {
+    margin: 15px 0;
+  }
+}
+
+.your-answer {
+  padding: 0 20px;
+}
+
+.answer-input-wrapper {
+  .answer-title {
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+  }
+}
+
+@include themify($themes, true) {
+  .answer-title {
+    color: themed('titleTextColor');
+  }
+}
+

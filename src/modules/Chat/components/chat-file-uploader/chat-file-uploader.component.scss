@@ -1,0 +1,90 @@
+@import "../../../file-uploader/styles/themes/themes";
+@import "../../../../global-styles/variables";
+@import "../../../../global-styles/mixins/themify";
+
+
+@include themify($themes, true) {
+    .message-container {
+        background: transparentize(themed('accentColor'), 0.85);
+        // TODO: Add theme
+        //color: themed('primeColor');
+    }
+}
+
+:host {
+    .message-container {
+        padding: 15px;
+        border-radius: 5px;
+
+        .manage-message {
+            justify-content: space-between;
+
+            &.flex {
+                display: flex;
+            }
+
+            .image-container {
+                display: flex;
+                justify-content: center;
+
+                img {
+                    height: 300px;
+                    width: auto;
+                }
+            }
+
+            .manage-buttons {
+
+                &.center {
+                    justify-content: center;
+                }
+
+                &.end {
+                    justify-content: flex-end;
+                }
+
+                .manage-buttons-container {
+
+                    .fa-download,
+                    .fa-edit {
+                        opacity: 0.6;
+                        margin: 5px;
+
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.massage-input-wrapper {
+    margin-top: 20px;
+
+    @include themify($themes, true) {
+        background: themed('inputInModalsBackgroundColor');
+        .input-actions {
+            // TODO: Add theme
+            //background: themed('secondaryBgColor');
+            //color: themed('primeColor');
+        }
+    }
+}
+
+emoji-picker {
+    margin: 0 10px;
+}
+
+.file-comment {
+    margin-top: 10px;
+}
+
+.preloader-wrapper {
+    margin-top: 15px;
+}
+
+.pointer{
+    cursor: pointer;
+}

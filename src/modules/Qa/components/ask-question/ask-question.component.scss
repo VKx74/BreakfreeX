@@ -1,0 +1,22 @@
+@import "../../styles/variables";
+
+:host {
+  .title-label {
+    display: inline-block;
+    color: $primeColor;
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+    margin-bottom: 7px;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  .ask-btn {
+    font-size: 12px;
+    font-weight: 900;
+    width: 120px;
+  }
+}

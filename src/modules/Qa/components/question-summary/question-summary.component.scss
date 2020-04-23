@@ -1,0 +1,66 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .question-title {
+    cursor: pointer;
+    margin-bottom: 15px;
+    word-break: break-all;
+  }
+
+  .summary {
+    flex-shrink: 0;
+
+    .summary-item {
+      display: inline-block;
+      padding: 3px 6px;
+
+      &:not(:last-of-type) {
+        margin-right: 20px;
+      }
+
+      &:not(:first-of-type) {
+        margin-left: 20px;
+      }
+    }
+
+    .answers-summary.answered {
+      border-radius: 3px;
+      background-color: rgba(39, 207, 109, 0.2);
+      color: #27cf6d;
+    }
+  }
+
+  .tags-wrapper {
+    padding-right: 20px;
+
+    .tag {
+      max-width: 80px;
+      display: inline-block;
+      cursor: pointer;
+
+      &:not(:first-of-type) {
+        margin-left: 5px;
+      }
+
+      &:not(:last-of-type) {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .vote-icon {
+    font-size: 23px;
+  }
+
+}
+
+.crypto-text {
+  word-break: break-all;
+}
+
+@include themify($themes, true) {
+  .votes-item {
+    color: themed('titleTextColor');
+  }
+}

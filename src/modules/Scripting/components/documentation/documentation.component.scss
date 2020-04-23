@@ -1,0 +1,160 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/mixins/hover-opacity";
+@import "global-styles/variables";
+
+:host {
+  width: 100%;
+
+  .top-line {
+    //height: 40px;
+    padding: 5px;
+  }
+
+  .search-input,
+  .category-selector {
+    width: calc(50% - 2px);
+  }
+
+  .description-caption {
+    padding: 4px;
+    padding-left: 13px;
+    font-size: 13px;
+  }
+
+  .list-wrapper {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .description-wrapper {
+    padding: 5px 13px;
+
+    p {
+      font-family: $primaryFontFamily;
+      font-size: 12px;
+      margin-top: 7px;
+      margin-bottom: 7px;
+    }
+
+    .bold {
+      font-weight: 900;
+    }
+  }
+
+  .example-preview-wrapper {
+    position: relative;
+    width: 100%;
+    resize: none;
+    padding: 10px;
+    font-family: Consolas;
+    font-size: 12px;
+    &:hover{
+      .copy-icon{
+        display: block;
+      }
+    }
+    .example{
+      padding-right: 30px;
+    }
+
+    .copy-icon {
+      position: absolute;
+      bottom: 0px;
+      right: 4px;
+      cursor: pointer;
+      font-size: 25px;
+      display: none;
+      @include hoverOpacity(0.8, 1, 0.6s);
+    }
+  }
+
+  .method-parameters-table {
+    margin-bottom: 4px;
+    width: 100%;
+
+    tr {
+      font-family: $primaryFontFamily;
+      font-size: 13px;
+
+      td {
+        vertical-align: top;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      td:first-child {
+        padding-right: 10px;
+        padding-left: 4px;
+      }
+
+      td:last-child {
+        padding-right: 4px;
+      }
+    }
+  }
+
+  .not-found-placeholder {
+    padding: 5px 0;
+    text-align: center;
+
+    span {
+      font-family: $primaryFontFamily;
+      font-size: 13px;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  background-color: themed('appPanelColor');
+
+  .top-line {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  .description-caption {
+    background-color: themed('appBackgroundColor');
+    border-top: 1px solid themed('appBackgroundColor');
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  /deep/ .as-split-gutter {
+    background-color: themed('appBackgroundColor') !important;
+    flex-basis: 2px !important;
+  }
+
+  .description-wrapper {
+    p {
+      color: themed('valueTextColor');
+    }
+  }
+
+  .example-preview-wrapper {
+    background-color: themed('appBackgroundColor');
+    border: 1px solid themed('appBackgroundColor');
+    border-radius: 3px;
+    color: themed('valueTextColor');
+
+    .copy-icon {
+      color: themed('valueTextColor');
+    }
+  }
+
+  .method-parameters-table {
+    tr:nth-child(even) {
+      background-color: themed('appModalsPanelColor');
+    }
+
+    tr:nth-child(odd) {
+      background-color: themed('appModalsPanelColor');
+    }
+
+    td {
+      color: themed('valueTextColor');
+    }
+  }
+
+  .not-found-placeholder span {
+    color: themed('valueTextColor');
+  }
+}

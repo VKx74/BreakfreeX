@@ -1,0 +1,70 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  height: 100%;
+}
+
+object {
+  width: 150px;
+}
+
+.trade-managers-wrapper {
+  width: calc(100% - 415px);
+}
+
+.sell-buy {
+  width: 415px;
+  margin-top: 40px;
+  position: relative;
+  overflow: auto;
+}
+
+.top-panel {
+  i {
+    position: relative;
+    left: 6px;
+    bottom: 2px;
+    cursor: pointer;
+  }
+  .crypto-icon-layout-maximise {
+    font-size: 11px;
+    bottom: 1px;
+  }
+
+
+}
+
+@include themify($themes, true) {
+  .broker-not-connected {
+    background-color: themed('appPanelColor');
+  }
+
+  .trade-managers-wrapper {
+    border-right: 2px solid themed('appBackgroundColor');
+  }
+
+  .top-panel {
+    position: absolute;
+    height: 40px;
+    padding-right: 20px;
+    background-color: themed('noactiveTabs');
+    i {
+      color: themed('valueTextColor');
+    }
+  }
+
+  .date-container {
+    font-size: 12px;
+    color: themed('titleTextColor');
+  }
+
+  .trade-manager {
+    background-color: themed('appPanelColor');
+  }
+
+  .notConnected{
+    //font-size: 1.1em;
+    color: themed('valueTextColor');
+  }
+}

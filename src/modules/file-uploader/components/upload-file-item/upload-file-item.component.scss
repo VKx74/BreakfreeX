@@ -1,0 +1,109 @@
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+@import "../../styles/themes/themes";
+
+
+$mobileViewMaxWidth: 550px;
+$progressBarBackground: #6b7cac;
+
+:host {
+
+  .upload-file-item {
+    display: flex;
+    width: 100%;
+    padding: 10px 15px;
+    justify-content: space-between;
+
+    .wrapper {
+      display: flex;
+      flex-wrap: nowrap;
+      width: 100%;
+      position: relative;
+      align-items: center;
+    }
+
+    .file-info-wrapper {
+      flex-shrink: 0;
+
+      .file-icon {
+        font-size: 16px;
+        margin-right: 3px;
+      }
+
+      .file-name {
+        font-size: 16px;
+        font-family: $primaryFontFamily;
+        margin-right: 15px;
+        display: inline-block;
+        max-width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: top;
+
+        @media (max-width: 420px) {
+          max-width: 100px;
+        }
+      }
+
+      .file-size {
+        font-size: 14px;
+        font-family: $primaryFontFamily;
+        margin-right: 15px;
+      }
+    }
+
+    .btn-wrapper {
+      display: flex;
+      flex-grow: 1;
+      justify-content: flex-end;
+      z-index: 2;
+      margin-left: 10px;
+
+      .refresh-icon,
+      .success-icon {
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .refresh {
+        height: 21px;
+        margin-right: 7px;
+      }
+
+      .success-icon {
+        color: $greenColor;
+      }
+    }
+  }
+
+  .progress-caption {
+    font-size: 14px;
+    font-family: $primaryFontFamily;
+  }
+}
+
+@include themify($themes, true) {
+  // TODO: Add Theme
+  .file-icon {
+    //color: themed('primeColor');
+  }
+
+  .file-name {
+    //color: themed('primeColor');
+  }
+
+  .file-size {
+    //color: themed('secondaryColor');
+  }
+
+  .btn-wrapper {
+    .refresh-icon {
+      //color: themed('primeColor');
+    }
+  }
+
+  .progress-caption {
+    color: themed('accentColor');
+  }
+}

@@ -1,0 +1,86 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'loadHistory.loadHistory' | translate}}</h4>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formGroup">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{"symbol" | translate}}:</div>
+                    <instrument-search formControlName="symbol" class="full-width"></instrument-search>
+                </div>
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'timeInterval' | translate}}:</div>
+                    <selector [options]="allowedTimeframes"
+                              [optionCaption]="timeFrameCaption"
+                              formControlName="timeframe" class="full-width"></selector>
+                </div>
+
+                <!--                <div class="crypto-form-unit">-->
+                <!--                    <div class="form-unit__label">Bars count:</div>-->
+                <!--                    <mat-form-field class="crypto-input with-hint full-width">-->
+                <!--                        <input matInput type="text" formControlName="barsCount" admin-panel-main-page="Bars count">-->
+                <!--                        <mat-error>Please, enter a valid bars count</mat-error>-->
+                <!--                    </mat-form-field>-->
+                <!--                </div>-->
+
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{"name" | translate}}:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="name">
+                        <mat-error formError="name"></mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{"description" | translate}}:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="description">
+                        <mat-error formError="description"></mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">
+                        <!--                        <input type="checkbox"-->
+                        <!--                               [checked]="useDateRange"-->
+                        <!--                               (change)="handleUseDateRangeChange(!useDateRange)" class="enable-timeframe-checkbox">-->
+                        {{"timeInterval" | translate}}:
+                    </div>
+                    <div class="dates-wrapper">
+                        <mat-form-field class="crypto-date-input date-control from-date-control">
+                            <input matInput
+                                   formControlName="fromDate"
+                                   [matDatepicker]="picker1"
+                                   [max]="formGroup.controls['toDate'].value"
+                                   placeholder="From Date">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="crypto-date-input date-control">
+                            <input matInput
+                                   formControlName="toDate"
+                                   [matDatepicker]="picker2"
+                                   [min]="formGroup.controls['fromDate'].value"
+                                   placeholder="To Date">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button class="crypto-button crypto-button_primary"
+                        (click)="submit()"
+                        [disabled]="formGroup.invalid"
+                        [ngClass]="{'is-loading': processing}">
+                    {{'submit' | appTranslate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

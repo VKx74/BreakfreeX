@@ -1,0 +1,51 @@
+{
+  "id": "basic-user",
+  "name": "Basic",
+  "layoutState": {
+    "version": "1",
+    "content": [
+      {
+        "type": "column",
+        "content": [
+          {
+            "type": "row",
+            "content": [
+              {
+                "type": "column",
+                "content": [
+                  {
+                    "type": "stack",
+                    "content": [
+                      {
+                        "id": "1",
+                        "type": "component",
+                        "componentName": "chart",
+                        "isClosable": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "column",
+                "content": [
+                  {
+                    "type": "stack",
+                    "content": [
+                      {
+                        "id": "4",
+                        "type": "component",
+                        "componentName": "watchlist",
+                        "isClosable": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

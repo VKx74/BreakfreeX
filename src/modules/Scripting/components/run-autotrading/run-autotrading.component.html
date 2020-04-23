@@ -1,0 +1,56 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'runAutomatedTrading.runAutomatedTrading' | translate}}</h4>
+        </div>
+
+        <div class="modal-body" [formGroup]="formGroup">
+
+            <!--            <div class="tabs-wrapper flex-grow-1 h-0">-->
+            <mat-tab-group class="full-height">
+                <mat-tab label="{{'runAutomatedTrading.history' | translate}}">
+                    <div class="flex flex-direction-column">
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'instrument' | translate}}:</div>
+                            <instrument-search formControlName="instrument"></instrument-search>
+                        </div>
+
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'timeFrame' | translate}}:</div>
+                            <interval-selector formControlName="interval"></interval-selector>
+                        </div>
+
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'periodicity' | translate}}:</div>
+                            <periodicity-selector formControlName="periodicity"></periodicity-selector>
+                        </div>
+
+                        <div class="crypto-form-unit">
+                            <div class="form-unit__label">{{'barsCount' | translate}}:</div>
+                            <mat-form-field class="crypto-input full-width with-hint">
+                                <input matInput type="text" formControlName="barsCount">
+                                <mat-error formError="barsCount"></mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <!--                    <crypto-order-table [showInstrumentSearch]="showInstrumentSearch"></crypto-order-table>-->
+                </mat-tab>
+                <mat-tab label="{{'runAutomatedTrading.params' | translate}}">
+                   <script-params #scriptParams="scriptParams" [script]="data.script"></script-params>
+                </mat-tab>
+            </mat-tab-group>
+
+            <div class="modal-footer">
+                <div class="btns-wrapper flex justify-flex-end">
+                    <button class="crypto-button crypto-button_action crypto-button-w-100"
+                            (click)="close()">{{'cancel' | appTranslate}}</button>
+                    <button class="crypto-button crypto-button_primary crypto-button-w-100"
+                            [disabled]="formGroup.invalid || scriptParams.form.invalid"
+                            (click)="submit()">{{'submit' | appTranslate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!threads?.length"
+                            [title]="'Chats'"
+                            [componentIdentifier]="ComponentIdentifier.adminChat"
+                            [loading]="false">
+    <ng-container ngProjectAs=".header-right">
+        <button class="crypto-button crypto-button_primary" (click)="newThreadModal()">
+            Add public thread
+        </button>
+    </ng-container>
+    <ng-container ngProjectAs=".filters">
+        <mat-form-field class="crypto-select m-right-10">
+            <mat-select [value]="activeTreadType"
+                        (selectionChange)="handleFilterChange($event)">
+                <mat-option *ngFor="let type of treadTypeArray" [value]="type">
+                    {{ type }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <manual-search [searchHandler]="searchHandler" placeholder="Search rooms...">
+            <span manual-search-trigger></span>
+        </manual-search>
+    </ng-container>
+    <data-table [rows]="threads">
+        <data-table-header-cell columnName="name">
+            Name
+        </data-table-header-cell>
+        <data-table-header-cell columnName="creator">
+            Creator
+        </data-table-header-cell>
+        <data-table-header-cell columnName="type" [columnWidth]="120">
+            Type
+        </data-table-header-cell>
+        <data-table-header-cell columnName="blocked" [columnWidth]="80">
+            Blocked
+        </data-table-header-cell>
+        <data-table-header-cell columnName="disabled" [columnWidth]="80">
+            Disabled
+        </data-table-header-cell>
+        <data-table-header-cell columnName="removed" [columnWidth]="90">
+            Removed
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+        <data-table-cell columnName="name">
+            <ng-template let-item>
+                <div class="flex">
+                    <div class="name-avatar flex-shrink-0">
+                        <name-avatar [name]="item.name" [src]="threadHasAvatar(item) ? item.pictureId : null"></name-avatar>
+                    </div>
+                    <div class="t-overflow-ellipsis">{{item.name}}</div>
+                </div>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="creator">
+            <ng-template let-item>
+                <div class="flex">
+                    <div class="name-avatar flex-shrink-0">
+                        <name-avatar [src]="item.creator?.avatarId"
+                                     [name]="item.creator ? item.creator.userName : 'User removed'"></name-avatar>
+                    </div>
+                    <div class="t-overflow-ellipsis">{{item.creator ? item.creator.userName : 'User removed'}}</div>
+                </div>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="blocked">
+            <ng-template let-item>
+                <mat-slide-toggle #blockToggle class="v-align-middle"
+                                  [checked]="item.isBlocked"
+                                  (change)="toggleThreadBlockStatus(item, blockToggle)">
+                </mat-slide-toggle>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="disabled">
+            <ng-template let-item>
+                <mat-slide-toggle #disableToggle class="v-align-middle"
+                                  [checked]="item.isDisabled"
+                                  (change)="toggleThreadEnableStatus(item, disableToggle)">
+                </mat-slide-toggle>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="removed">
+            <ng-template let-item>
+                <span [ngClass]="{'crypto-color-green':!item.removed, 'crypto-color-red':item.removed}">{{item.removed ? 'Yes' : 'No'}}</span>
+            </ng-template>
+        </data-table-cell>
+
+
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                <div class="text-right">
+                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"
+                                 (click)="onThreadSelect(item)"></menu-toggle>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="editThreadModal(item)" *ngIf="!item.removed">
+                            Edit
+                        </button>
+
+                        <button mat-menu-item routerLink="./{{item.id}}/members">
+                            Members
+                        </button>
+
+                        <button mat-menu-item routerLink="./{{item.id}}/messages">
+                            Messages
+                        </button>
+
+                        <button mat-menu-item (click)="openThreadDetailsDialog(item)">
+                            Details
+                        </button>
+
+                        <button mat-menu-item (click)="deleteThread(item)" *ngIf="!item.removed">
+                            <span class="crypto-color-red">Delete</span>
+                        </button>
+
+                        <button mat-menu-item (click)="restoreThread(item)" *ngIf="item.removed">
+                            <span class="crypto-color-green">Restore</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

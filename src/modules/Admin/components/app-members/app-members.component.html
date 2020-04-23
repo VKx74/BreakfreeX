@@ -1,0 +1,152 @@
+<pagination-table-container [noItems]="!members?.length"
+                            [title]="'App Members'"
+                            [componentIdentifier]="ComponentIdentifier.appMembers"
+                            [loading]="false">
+    <div class="header-right d-inline-block">
+        <button class="crypto-button crypto-button_primary m-right-5"
+                (click)="handleManageTags()"
+                *showIfRole="Roles.Admin">
+            Manage Tags
+        </button>
+        <button class="crypto-button crypto-button_primary register-btn"
+                *showIfRole="Roles.Admin"
+                (click)="registerMember()">
+            Add member
+        </button>
+    </div>
+    <ng-container ngProjectAs=".filters">
+        <mat-form-field class="crypto-select m-right-10">
+            <mat-select [value]="activeFilter"
+                        (selectionChange)="handleStatusFilterChange($event)">
+                <mat-option *ngFor="let filter of personalInfoStatusFilters" [value]="filter">
+                    {{ getFilterStr(filter) | async }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <manual-search [searchHandler]="searchHandler" placeholder="Search items...">
+            <span manual-search-trigger></span>
+        </manual-search>
+    </ng-container>
+    <data-table [rows]="members" class="h-auto">
+        <data-table-header-cell columnName="email">
+            Email
+        </data-table-header-cell>
+        <data-table-header-cell columnName="username">
+            Username
+        </data-table-header-cell>
+        <data-table-header-cell columnName="emailConfirmed" [columnWidth]="100">
+            Email Confirmed
+        </data-table-header-cell>
+        <data-table-header-cell columnName="role">
+            Role
+        </data-table-header-cell>
+        <data-table-header-cell columnName="personalInfoStatus">
+            Personal Info Status
+        </data-table-header-cell>
+        <data-table-header-cell columnName="active" [columnWidth]="100">
+            Active
+        </data-table-header-cell>
+        <data-table-header-cell columnName="2fa">
+            2FA
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="50"></data-table-header-cell>
+
+        <data-table-cell columnName="email">
+            <ng-template let-item>{{item.user.email}}</ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="username">
+            <ng-template let-item>{{item.user.userName}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="emailConfirmed">
+            <ng-template let-item>
+                            <span [ngClass]="{'crypto-color-green': item.user.emailConfirmed}">
+                                {{item.user.emailConfirmed ? 'Yes' : 'No'}}
+                            </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="role">
+            <ng-template let-item>
+                           <span>
+                               {{roleToStr(item.user.role) | async}}
+                           </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="personalInfoStatus">
+            <ng-template let-item>
+                            <span [ngClass]="getPersonalInfoStatusClass(item.user.kycStatus)">
+                                {{getPersonalInfoStatus(item.user.kycStatus) | async}}
+                            </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="active">
+            <ng-template let-item>
+                <ng-container *showIfRole="Roles.Admin">
+                    <ng-container *ngIf="!item.isCurrentUser">
+                        <ng-container *ngIf="!item.isCurrentUser">
+                            <mat-slide-toggle class="v-align-middle"
+                                              [checked]="item.isActive"
+                                              (change)="toggleMemberActiveStatus(item)"></mat-slide-toggle>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="2fa">
+            <ng-template let-item>
+                <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
+                                <span [ngClass]="item.user.twoFactorEnabled ? 'crypto-color-green' : 'crypto-color-red'">
+                                    {{item.user.twoFactorEnabled ? 'Enabled' : 'Disabled'}}
+                                </span>
+                </ng-container>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                <div class="text-right">
+                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"
+                                 *ngIf="showToggleMenu(item)"></menu-toggle>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                                *ngIf="showDetailsBtn(item)"
+                                (click)="showUserInfo(item)">Details
+                        </button>
+                        <ng-container *showIfRole="[Roles.Admin, Roles.KYCOfficer]">
+                            <button mat-menu-item
+                                    *ngIf="showKycHistoryButton(item)"
+                                    (click)="showKycHistory(item)">Kyc history
+                            </button>
+                        </ng-container>
+
+                        <button mat-menu-item *showIfRole="Roles.Admin" (click)="updateMember(item)">
+                            Update
+                        </button>
+
+                        <button mat-menu-item *showIfRole="Roles.SupportOfficer"
+                                (click)="refreshEmail(item)">
+                            Refresh email
+                        </button>
+
+                        <button mat-menu-item *showIfRole="[Roles.Admin, Roles.SupportOfficer]"
+                                (click)="refreshPassword(item)">
+                            Refresh password
+                        </button>
+
+                        <ng-container *ngIf="item.user.twoFactorEnabled">
+                            <button mat-menu-item *showIfRole="[Roles.Admin, Roles.SupportOfficer]"
+                                    (click)="disable2FA(item)">
+                                Disable 2FA
+                            </button>
+                        </ng-container>
+
+                        <button mat-menu-item *showIfRole="Roles.Admin" (click)="handleUserDelete(item)">
+                            <span class="crypto-color-red">Delete</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

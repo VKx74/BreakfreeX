@@ -1,0 +1,69 @@
+@import "../global-styles/variables";
+
+$bullet-size: 9px;
+
+.health-check-loader {
+  width: unset;
+  left: 4px;
+  right: 13px;
+  top: 38px;
+}
+
+table {
+  a {
+    cursor: pointer;
+    color: inherit;
+  }
+
+  tr {
+    th:first-of-type {
+      width: 70px;
+    }
+
+    th {
+      text-align: left;
+      padding: 5px 0 5px 0;
+
+      &:nth-child(3) {
+        width: 35%;
+        padding: 8px 10px 8px 10px;
+        text-align: center;
+      }
+    }
+
+    td {
+      padding: 5px 0;
+      text-align: left;
+
+      &:nth-of-type(3) {
+        text-align: left;
+        //word-break: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+      }
+    }
+
+    &.error {
+      .status-bullet, .service-status-description {
+        color: $redColor;
+      }
+    }
+
+    &.success {
+      .status-bullet, .service-status-description {
+        color: $greenColor;
+      }
+    }
+  }
+
+  .status-bullet {
+    height: $bullet-size;
+    width: $bullet-size;
+    line-height: $bullet-size;
+    border-radius: 50%;
+    display: block;
+    margin-left: 1rem;
+    background-color: currentColor;
+  }
+}
+

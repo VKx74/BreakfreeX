@@ -1,0 +1,57 @@
+<div class="wallets full-height full-width">
+    <data-table #table [rows]="wallets">
+        <data-table-header-cell columnName="currency" [sortable]="true">
+            {{'currency' | translate}}
+        </data-table-header-cell>
+        <data-table-header-cell columnName="balance" [sortable]="true">
+            {{ 'wallet' | translate }} {{'balance' | translate}}
+        </data-table-header-cell>
+        <data-table-header-cell columnName="locked" [sortable]="true">
+            {{'tradeManager.locked' | translate}}
+        </data-table-header-cell>
+        <data-table-header-cell columnName="address" [sortable]="true">
+            {{'tradeManager.address' | translate}}
+        </data-table-header-cell>
+
+        <data-table-header-cell columnName="action1" [sortable]="false" [columnWidth]="120">
+        </data-table-header-cell>
+
+        <data-table-header-cell columnName="action2" [sortable]="false" [columnWidth]="120">
+        </data-table-header-cell>
+
+        <data-table-cell columnName="currency">
+            <ng-template let-item>{{item?.currency}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="balance">
+            <ng-template let-item>{{item?.balance}} {{item?.currency}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="locked">
+            <ng-template let-item>{{item?.locked}} {{item?.currency}}</ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="address">
+            <ng-template let-item>
+                <span>{{item?.address}}</span>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="action1">
+            <ng-template let-item>
+                <div class="deposit crypto-button_primary" (click)="showDepositDialog(item)">
+                    <div>{{'deposit' | translate}}</div>
+                </div>
+
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="action2">
+            <ng-template let-item>
+                <div class="withdraw crypto-button_primary" (click)="showWithdrawDialog(item)">
+                    <div>{{'withdraw' | translate}}</div>
+                </div>
+
+            </ng-template>
+        </data-table-cell>
+
+    </data-table>
+</div>

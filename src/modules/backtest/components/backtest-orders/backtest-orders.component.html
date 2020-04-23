@@ -1,0 +1,70 @@
+<div class="root">
+    <ng-container *ngIf="records && records.length">
+        <div class="table-wrapper overflow-auto">
+            <data-table [rows]="records">
+                <data-table-header-cell columnName="index" [columnWidth]="50">#</data-table-header-cell>
+                <data-table-header-cell columnName="action" [sortable]="true" [columnWidth]="100">
+                    {{ 'action' | translate }}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="symbol" [sortable]="true" [dataAccessor]="symbolDataAccessor">
+                    {{ 'symbol' | translate }}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="kind" [sortable]="true">
+                    {{ 'type' | translate }}
+                </data-table-header-cell>
+<!--                <data-table-header-cell columnName="market" [sortable]="true" [columnWidth]="100">-->
+<!--                    {{ 'market' | translate }}-->
+<!--                </data-table-header-cell>-->
+                <data-table-header-cell columnName="quantity" [sortable]="true" [columnWidth]="100">
+                    {{ 'quantity' | translate }}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="averageFillPrice" [sortable]="true">
+                    {{ 'price' | translate }}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="timestamp" [sortable]="true">
+                    {{ 'time' | translate }}
+                </data-table-header-cell>
+
+
+                <data-table-cell columnName="index">
+                    <ng-template let-index="index" let-record>{{record.index}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="action">
+                    <ng-template let-record>
+                    <span [ngClass]="{
+                            'crypto-color-red': record.action === OrderAction.Sell,
+                            'crypto-color-green': record.action === OrderAction.Buy
+                            }">
+                            {{record.action | orderAction | async}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell columnName="symbol">
+                    <ng-template let-record>{{record.instrument.symbol}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="kind">
+                    <ng-template let-record>{{record.kind | orderType | async}}</ng-template>
+                </data-table-cell>
+<!--                <data-table-cell columnName="market">-->
+<!--                    <ng-template let-record>{{record.instrument.datafeed}}</ng-template>-->
+<!--                </data-table-cell>-->
+                <data-table-cell columnName="quantity">
+                    <ng-template let-record>{{record.quantity}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="averageFillPrice">
+                    <ng-template let-record>{{record.averageFillPrice}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="timestamp">
+                    <ng-template let-record>{{record.timestamp | formatDate:'YYYY-MM-DD HH:mm:ss'}}</ng-template>
+                </data-table-cell>
+            </data-table>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!records || records.length === 0">
+        <div class="h-100 flex justify-content-center align-items-center">
+            <placeholder message="{{ 'noData' | translate }}"></placeholder>
+        </div>
+    </ng-container>
+</div>

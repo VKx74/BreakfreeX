@@ -1,0 +1,22 @@
+<svg style="display: none;">
+  <symbol id="sell-buy-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect style="fill: #F02645;" height="1" width="16" y="0"/>
+    <rect style="fill: #F02645;" height="1" width="16" y="5"/>
+    <rect style="fill: #27CF6D;" height="1" width="16" y="10"/>
+    <rect style="fill: #27CF6D;" height="1" width="16" y="15"/>
+  </symbol>
+
+  <symbol id="sell-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect style="fill: #F02645;" height="1" width="16" y="0"/>
+    <rect style="fill: #F02645;" height="1" width="16" y="5"/>
+    <rect style="fill: #F02645;" height="1" width="16" y="10"/>
+    <rect style="fill: #F02645;" height="1" width="16" y="15"/>
+  </symbol>
+
+  <symbol id="buy-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect style="fill: #27CF6D;" height="1" width="16" y="0"/>
+    <rect style="fill: #27CF6D;" height="1" width="16" y="5"/>
+    <rect style="fill: #27CF6D;" height="1" width="16" y="10"/>
+    <rect style="fill: #27CF6D;" height="1" width="16" y="15"/>
+  </symbol>
+</svg>

@@ -1,0 +1,12 @@
+<div class="file-info-container" (click)="handleClick()" [ngClass]="{'pointer' : isClickable}">
+    <div class="document circle" *ngIf='!isImage'>        
+        <span class="crypto-icon crypto-icon-document"></span>
+    </div>
+    <div class="img-container" *ngIf='isImage'>
+        <img src="{{imageUrl}}">
+    </div>
+    <div class="file-info" [ngClass]="{'pointer' : isClickable}">
+        <div><label title="{{name}}" class="name">{{name}}</label></div>
+        <div><label class="size">{{size}}</label></div>
+    </div>
+</div>

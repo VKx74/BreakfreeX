@@ -1,0 +1,52 @@
+<div class="account-type-page flex">
+    <div class="background"
+         [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="overlay-wrapper">
+        <div class="overlay">
+            <div class="form-header">
+                <span class="logo crypto-icon crypto-icon-fintatech"></span>
+                <p class="form-header__title">Sign up</p>
+            </div>
+            <div class="form-wrapper crypto-text is-small t-align-justify">
+                <div class="account-types-wrapper flex justify-content-center full-width">
+                    <div class="account-type t-align-center"
+                         [ngClass]="{'active': selectedAccountType === AccountType.Personal}"
+                         (click)="selectAccountType(AccountType.Personal)">
+                        <img src="./assets/img/svg-icons/personal-account.svg">
+                        <span>Individual Account</span>
+                    </div>
+                    <div class="account-type t-align-center"
+                         [ngClass]="{'active': selectedAccountType === AccountType.Business}"
+                         (click)="selectAccountType(AccountType.Business)">
+                        <img src="./assets/img/svg-icons/business-account.svg">
+                        <span>Business Client</span>
+                    </div>
+                    <div class="account-type t-align-center"
+                         [ngClass]="{'active': selectedAccountType === AccountType.Institutional}"
+                         (click)="selectAccountType(AccountType.Institutional)">
+                        <img src="../../../../assets/img/svg-icons/institutional-account.svg">
+                        <span>Institutional Investor</span>
+                    </div>
+                </div>
+                <div class="account-description">
+                    <span *ngIf="selectedAccountType === AccountType.Personal">
+                    This option is for you if you need account for your own business.
+                    </span>
+                    <span *ngIf="selectedAccountType === AccountType.Business">
+                    This option is for you if the main activity of your company is
+                    not related to investing or trading.
+                    </span>
+                    <span *ngIf="selectedAccountType === AccountType.Institutional">
+                    This option is for you if the main activity of your company is
+                    investing or trading either your own fund of your company
+                    or on behalf of clients.
+                    </span>
+                </div>
+                <button type="button" class="btn crypto-button crypto-button-full-width button_primary" (click)="registerAccount()">
+                    Next
+                </button>
+            </div>
+        </div>
+        <div class="addition" (click)="doLogin()">Returning user? Log back in</div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<div [formGroup]="formGroup">
+
+    <div class="section flex justify-space-between">
+        <div class="info-user flex">
+            <i [ngClass]="{'added': phone}" class="crypto-icon crypto-icon-phone-contur"></i>
+            <div *ngIf="phone" class="data">{{phone}}</div>
+            <div *ngIf="!phone" class="data">{{'profileInfo.addYourPhoneNumber' | translate}}</div>
+        </div>
+        <div class="flex align-items-center">
+            <button *ngIf="phone" class="crypto-button" (click)="toggleChangeNumber()">{{'profileInfo.changePhoneNumber' | translate}}</button>
+            <button *ngIf="!phone" class="crypto-button"  (click)="phoneNumberStep = ChangePhoneNumberStep.Add">{{'profileInfo.addPhone'| translate}}</button>
+        </div>
+    </div>
+
+<!--    <div class="crypto-form-unit margin-bottom" *ngIf="!phone && phoneNumberStep === ChangePhoneNumberStep.None">-->
+<!--        <button class="crypto-button crypto-button_success w-100"-->
+<!--                [disabled]="loading"-->
+<!--                (click)="phoneNumberStep = ChangePhoneNumberStep.Add">{{"addPhone" | translate}}-->
+<!--        </button>-->
+<!--    </div>-->
+
+    <ng-container *ngIf="phoneNumberStep === ChangePhoneNumberStep.Add || phoneNumberStep === ChangePhoneNumberStep.Change && !isVerifyingCode">
+        <div class="section">
+            <div class="crypto-form-unit">
+                <div class="flex">
+                    <div class="phone-number w-100">
+                        <div class="form-unit__label flex justify-space-between align-items-center">
+                            {{"profileInfo.phoneNumber" | translate}}
+                        </div>
+                        <mat-form-field *ngIf="phoneNumberStep === ChangePhoneNumberStep.Add" class="crypto-input disabled">
+                            <input matInput ng-trim="false"
+                                   type="text" placeholder="{{'profileInfo.phoneNumber' | translate}}"
+                                   formControlName="addPhone">
+                            <mat-error formError="addPhone"></mat-error>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="phoneNumberStep === ChangePhoneNumberStep.Change" class="crypto-input disabled">
+                            <input matInput ng-trim="false"
+                                   type="text" placeholder="{{'profileInfo.phoneNumber' | translate}}"
+                                   formControlName="phone">
+                            <mat-error formError="addPhone"></mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex align-items-end">
+                        <button class="crypto-button"
+                                *ngIf="!phone && !isVerifyingCode"
+                                [disabled]="formGroup.controls['addPhone'].invalid || loading"
+                                [class.is-loading]="loading"
+                                (click)="handleAddPhoneNumberButtonClick()">{{"profileInfo.add" | translate}}
+                        </button>
+                        <button class="crypto-button w-100"
+                                *ngIf="phone && !isVerifyingCode"
+                                [disabled]="loading"
+                                [class.is-loading]="loading && phoneNumberStep === ChangePhoneNumberStep.Remove"
+                                (click)="handleRemovePhoneNumberButtonClick()">{{"remove" | translate}}
+                        </button>
+                        <button class="crypto-button w-100"
+                                *ngIf="phone && !isVerifyingCode"
+                                [disabled]="formGroup.controls['phone'].invalid || loading"
+                                [class.is-loading]="loading && phoneNumberStep === ChangePhoneNumberStep.Change"
+                                (click)="handleChangePhoneNumberButtonClick()">{{"profileInfo.confirm" | translate}}
+                        </button>
+                        <button class="crypto-button" (click)="close()">
+                            {{"close" | translate}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="phoneNumberStep !== ChangePhoneNumberStep.None">
+        <div class="section" *ngIf="isVerifyingCode">
+            <div class="crypto-form-unit">
+                <div class="flex">
+                    <div class="phone-number w-100">
+                        <div class="form-unit__label">{{"profileInfo.verificationCode" | translate}}</div>
+                        <mat-form-field class="crypto-input disabled with-hint full-width">
+                            <input matInput ng-trim="false" type="text"
+                                   placeholder="{{'profileInfo.verificationCode' | translate}}"
+                                   formControlName="code">
+                            <mat-error>{{'profileInfo.invalidField' | translate}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <button class="crypto-button crypto-button_success w-100"
+                            [disabled]="formGroup.controls['code'].invalid || loading"
+                            [class.is-loading]="loading"
+                            (click)="handleVerifyCodeButtonClick()">{{"profileInfo.verify" | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

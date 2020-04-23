@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  overflow: auto;
+  width: 100%;
+
+  .account-type-page {
+    display: flex;
+    margin: 10vh 0;
+  }
+
+  .form-wrapper {
+    width: 100%;
+    max-width: 565px;
+  }
+
+  .account-types-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .account-type {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 12px 28px;
+    width: 175px;
+    height: 134px;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    border-radius: 9px;
+
+    img {
+      width: 127px;
+      height: 83px;
+      align-self: center;
+      filter: grayscale(100%);
+    }
+
+    &:not(:last-of-type) {
+      margin-right: 20px;
+    }
+
+    &.active {
+      background-color: #3d61cc;
+      opacity: 0.95;
+      box-shadow: 0 10px 19.1px 1.9px rgba(0, 0, 0, 0.3);
+
+      img {
+        filter: grayscale(0%);
+      }
+    }
+  }
+
+  .account-description {
+    margin: 20px 0 50px;
+    font-size: 13px;
+  }
+
+  .overlay {
+    flex-direction: column;
+  }
+}

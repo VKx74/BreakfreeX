@@ -1,0 +1,13 @@
+@import "../../styles/variables";
+
+:host {
+  .section {
+    padding: 10px;
+  }
+
+  .section__name {
+    font-family: $primaryFontFamily;
+    font-size: 14px;
+    color: #cecece;
+  }
+}

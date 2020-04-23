@@ -1,0 +1,34 @@
+<div>
+    <page-header class="flex justify-space-between">
+        <span class="page-header-title color-title">Top Questions</span>
+        <!--        <ask-question-btn routerLink="./ask"></ask-question-btn>-->
+    </page-header>
+    <div class="flex">
+        <div class="flex flex-direction-column w-100">
+            <debounced-input class="w-100 flex m-bottom-10"
+                             (valueChange)="search($event)"
+                             [searchIconPosition]="SearchIconPosition.Start"
+                             [placeholder]="'Search by keyword or tags'"
+            ></debounced-input>
+            <!--            <mat-form-field class="w-100 flex m-bottom-10">-->
+            <!--                <span matPrefix class="crypto-icon crypto-icon-search"></span>-->
+            <!--                <input matInput placeholder="Search by keyword or tags">-->
+            <!--            </mat-form-field>-->
+            <main-container class="flex-grow-1 main-container" [noPadding]="true" *ngIf="questions.length; else no_items">
+                <landing-item *ngFor="let question of questions; trackBy: trackById, let lastQuestion = last"
+                              [borderBottom]="!lastQuestion">
+                    <question-summary [question]="question" class="w-100"></question-summary>
+                </landing-item>
+                <paginator-container *ngIf="showPaginator">
+                    <paginator [handler]="paginationHandler" [showPageSize]="false"></paginator>
+                </paginator-container>
+            </main-container>
+            <ng-template #no_items>
+                <main-container class="main-container">
+                    <no-items-placeholder text="No questions yet..."></no-items-placeholder>
+                </main-container>
+            </ng-template>
+        </div>
+        <sidebar class=""></sidebar>
+    </div>
+</div>

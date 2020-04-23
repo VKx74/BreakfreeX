@@ -1,0 +1,15 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  display: block;
+  border-radius: 3px;
+  padding: 15px 22px;
+  background: #fff;
+  //border: 1px solid #f0f0f1;
+}
+
+
+@include themify($themes, true) {
+  background-color: themed('appPanelColor');
+}

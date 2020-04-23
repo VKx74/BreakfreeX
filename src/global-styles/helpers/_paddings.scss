@@ -1,0 +1,28 @@
+@mixin padding($pixels) {
+  .p-#{$pixels} {
+    padding: #{$pixels}px !important;
+  }
+
+  .p-top-#{$pixels} {
+    padding-top: #{$pixels}px !important;
+  }
+
+  .p-bottom-#{$pixels} {
+    padding-bottom: #{$pixels}px !important;
+  }
+
+  .p-left-#{$pixels} {
+    padding-left: #{$pixels}px !important;
+  }
+
+  .p-right-#{$pixels} {
+    padding-right: #{$pixels}px !important;
+  }
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+
+@include padding(5);
+@include padding(10);

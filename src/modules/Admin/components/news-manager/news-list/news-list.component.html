@@ -1,0 +1,91 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!newsList?.length"
+                            [componentIdentifier]="ComponentIdentifier.news"
+                            [title]="'News'"
+                            [loading]="loading"
+>
+    <ng-container ngProjectAs=".header-right">
+        <button class="crypto-button crypto-button_primary" (click)="createNews()">
+            Create News
+        </button>
+    </ng-container>
+    <div class="filters flex justify-space-between w-100">
+        <div class="filters-wrapper flex align-items-center">
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [matDatepicker]="start"
+                       [max]="endDate"
+                       [(ngModel)]="startDate"
+                       (dateChange)="resetPagination()"
+                       (click)="start.open()"
+                       class="cursor-pointer"
+                       placeholder="Start date">
+                <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [matDatepicker]="end"
+                       [min]="startDate"
+                       [(ngModel)]="endDate"
+                       (dateChange)="resetPagination()"
+                       (click)="end.open()"
+                       class="cursor-pointer"
+                       placeholder="End date">
+                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+
+            <button class="crypto-button crypto-button_primary" [disabled]="!startDate && !endDate"
+                    (click)="clearDatePickers()">
+                <span>Clear</span>
+            </button>
+        </div>
+        <div class="search-wrapper">
+            <debounced-input (valueChange)="onSearchValueChange($event)"></debounced-input>
+        </div>
+    </div>
+
+    <data-table [rows]="newsList">
+        <data-table-header-cell columnName="title">
+            Title
+        </data-table-header-cell>
+        <data-table-header-cell columnName="description">
+            Description
+        </data-table-header-cell>
+        <data-table-header-cell columnName="creationTime">
+            Created At
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+        <data-table-cell columnName="title">
+            <ng-template let-item>
+                              <span class="title" title="Go to news"
+                                    [routerLink]="['/landing/news/', item.id]">{{item.title}}</span>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="creationTime">
+            <ng-template let-item>
+                {{item.creationTime | utcSecondsToLocal | date: 'short'}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                               <span class="text-right">
+                                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                                    <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="modalEditNews(item)">
+                                        Edit
+                                    </button>
+                                    <button mat-menu-item (click)="deleteNews(item)">
+                                        <span class="crypto-color-red">Delete</span>
+                                    </button>
+                                </mat-menu>
+                               </span>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

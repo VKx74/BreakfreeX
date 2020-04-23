@@ -1,0 +1,28 @@
+.indicator-bars {
+  display: flex;
+  justify-content: center;
+}
+
+.indicator-bar {
+  width: 1px;
+  height: 17px;
+  border-radius: 3px;
+  //transform: scaleX(2.5);
+  border-right: 2px solid transparent;
+
+  &:not(:last-of-type) {
+    margin-right: 5px;
+  }
+}
+
+.upTrend {
+  background-color: #26C14D;
+}
+
+.downTrend {
+  background-color: #F42C3B;
+}
+
+.noTrend {
+  background-color: #777777;
+}

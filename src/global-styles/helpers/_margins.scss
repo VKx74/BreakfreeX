@@ -1,0 +1,34 @@
+@mixin margin($pixels) {
+  .m-#{$pixels} {
+    margin: #{$pixels}px;
+  }
+
+  .m-top-#{$pixels} {
+    margin-top: #{$pixels}px;
+  }
+
+  .m-bottom-#{$pixels} {
+    margin-bottom: #{$pixels}px;
+  }
+
+  .m-left-#{$pixels} {
+    margin-left: #{$pixels}px;
+  }
+
+  .m-right-#{$pixels} {
+    margin-right: #{$pixels}px;
+  }
+}
+
+@include margin(5);
+@include margin(10);
+@include margin(15);
+@include margin(20);
+
+.m-right-auto {
+  margin-right: auto;
+}
+
+.m-left-auto {
+  margin-left: auto;
+}

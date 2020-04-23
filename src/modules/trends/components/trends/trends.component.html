@@ -1,0 +1,47 @@
+<div class="trends-wrapper h-100">
+
+    <search-input [placeholder]="('symbol' | translate)" [(ngModel)]="SearchSymbol" (onEnter)="handleSymbolChange()"></search-input>
+    <!--        <input type="text" [(ngModel)]="SearchSymbol" class="crypto-input symbolSearch" placeholder="Symbol"-->
+    <!--               (keydown.enter)="handleSymbolChange()">-->
+    <div class="trends-widget flex flex-direction-column overflow-auto">
+        <div class="table-wrapper">
+            <data-table [rows]="trendItemsArray">
+                <data-table-header-cell columnName="exchange">
+                    {{ 'exchange' | translate }}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="1h">
+                    <div class="text-center">{{ 'timeFrameToShortStr.1h' | translate}}</div>
+                </data-table-header-cell>
+                <data-table-header-cell columnName="15m">
+                    <div class="text-center">{{ 'timeFrameToShortStr.15m' | translate}}</div>
+                </data-table-header-cell>
+                <data-table-header-cell columnName="1m">
+                    <div class="text-center">{{ 'timeFrameToShortStr.1m' | translate}}</div>
+                </data-table-header-cell>
+
+                <data-table-cell columnName="exchange">
+                    <ng-template let-item>
+                        {{item[0]}}
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell columnName="1h">
+                    <ng-template let-item>
+                        <trend-indicator [trendData]="item[1].High.Trends"></trend-indicator>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="15m">
+                    <ng-template let-item>
+                        <trend-indicator [trendData]="item[1].Medium.Trends"></trend-indicator>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="1m">
+                    <ng-template let-item>
+                        <trend-indicator [trendData]="item[1].Low.Trends"></trend-indicator>
+                    </ng-template>
+                </data-table-cell>
+            </data-table>
+            <placeholder *ngIf="!trendItemsArray.length" [message]="'No items'"></placeholder>
+        </div>
+    </div>
+</div>

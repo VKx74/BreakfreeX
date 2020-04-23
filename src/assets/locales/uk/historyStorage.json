@@ -1,0 +1,22 @@
+{
+  "historyDataManager": {
+    "historyDataManager": "Менеджер по історії",
+    "history": "Історія",
+    "removeRecord": "Видалити запис",
+    "removeAllRecords": "Видалити всі записи",
+    "market": "Маркет",
+    "records": "Записи",
+    "scopeTime": "Термін дії",
+    "addingDate": "Додано",
+    "removeSnapshot": "Ви впевнені шо хочете видалити запис?",
+    "removeAllSnapshots": "Ви впевнені шо хочете видалити всі записи?",
+    "failedRemoveSnapshot": "Не вдалося видалити запис",
+    "failedLoadSnapshot": "Не вдалося завантажити деталі запису",
+    "historyUploaded": "Історію завантажено",
+    "failedUploadHistory": "Не вдалося завантажити історію"
+  },
+  "loadHistory": {
+    "loadHistory": "Завантажити історію",
+    "snapshotSaved": "Запис збережено"
+  }
+}

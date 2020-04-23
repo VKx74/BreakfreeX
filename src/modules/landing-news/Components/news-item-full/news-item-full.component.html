@@ -1,0 +1,16 @@
+<div class="news-content">
+    <!--    <main-container>-->
+    <!--        <div class="preview">-->
+    <!--            <p>-->
+    <!--                <img src="{{news.content}}" alt="">-->
+    <!--                {{news.description}}-->
+    <!--            </p>-->
+    <!--        </div>-->
+    <!--    </main-container>-->
+
+    <main-container *ngIf="markdown">
+        <p>{{news.description}}</p>
+        <markdown-preview [markdown]="markdown"></markdown-preview>
+    </main-container>
+
+</div>

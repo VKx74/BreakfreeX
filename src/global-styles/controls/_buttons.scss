@@ -1,0 +1,273 @@
+@import "../variables";
+@import "../mixins/themify";
+@import "../mixins/spinner";
+@import "../themes/themes";
+
+$btn-selector: ".#{$classPrefix}-button";
+$icon-selector: ".#{$classPrefix}-button-icon";
+$loadingBorderColor: transparent transparent #fff #fff !important;
+
+@mixin centerLoading($size) {
+  left: calc(50% - (#{$size} / 2));
+  top: calc(50% - (#{$size} / 2));
+}
+
+@mixin alignIcon($margin) {
+  &:first-child:not(:last-child) {
+    margin-right: $margin;
+  }
+
+  &:last-child:not(:first-child) {
+    margin-left: $margin;
+  }
+}
+
+
+#{$btn-selector} {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  font-family: $primaryFontFamily;
+  font-size: 13px;
+  border-radius: 3px;
+  border: none;
+  padding: 11px 18px;
+
+  &:focus {
+    outline: none !important;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &-w-100 {
+    width: 100px;
+  }
+
+  &_no-styles {
+    height: initial;
+    line-height: initial;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+  }
+
+  &-full-width {
+    width: 100%;
+  }
+
+  &.is-loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+
+    @include spinner();
+
+    &:after {
+      color: $loadingBorderColor;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+
+// Sizes
+
+#{$btn-selector} {
+  // default
+
+  &.is-loading:after {
+    width: 14px;
+    height: 14px;
+
+    @include centerLoading(14px);
+  }
+
+  #{$icon-selector} {
+    @include alignIcon(5px);
+  }
+
+
+
+  &.is-small {
+    font-size: 12px;
+    padding: 0 7px;
+
+    &.is-loading:after {
+      width: 12px;
+      height: 12px;
+
+      @include centerLoading(12px);
+    }
+
+    #{$icon-selector} {
+      @include alignIcon(3px);
+    }
+  }
+
+  &.is-medium {
+    font-size: 16px;
+
+    &.is-loading:after {
+      width: 16px;
+      height: 16px;
+      @include centerLoading(16px);
+    }
+
+    #{$icon-selector} {
+      @include alignIcon(7px);
+    }
+  }
+
+  &.is-large {
+    font-size: 20px;
+
+    &.is-loading:after {
+      width: 20px;
+      height: 20px;
+      @include centerLoading(20px);
+    }
+
+    #{$icon-selector} {
+      @include alignIcon(7px);
+    }
+  }
+}
+
+// Colors
+
+#{$btn-selector} {
+  &_primary {
+    color: $primaryBtnColor;
+    background-color: $primaryBtnBgColor;
+
+    &:hover:not(:disabled) {
+      background-color: $primaryBtnHoveredBgColor;
+    }
+  }
+
+  &_danger {
+    color: $dangerBtnColor;
+    background-color: $dangerBtnBgColor;
+
+    &:hover:not(:disabled) {
+      background-color: $dangerBtnHoveredBgColor;
+    }
+  }
+
+  &_success {
+    color: $successBtnColor;
+    background-color: $successBtnBgColor;
+
+    &:hover:not(:disabled) {
+      background-color: $successBtnHoveredBgColor;
+    }
+  }
+
+  &_action {
+    color: $actionBtnColor;
+    background-color: $actionBtnBgColor;
+
+    &:hover:not(:disabled) {
+      background-color: $actionBtnHoveredBgColor;
+    }
+  }
+}
+
+#{$btn-selector}-delete {
+  display: flex;
+  position: relative;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  font-size: 8px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  box-shadow: none;
+
+  i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover {
+    background-color: $redColor !important;
+    color: #d5d5dc !important;
+  }
+}
+
+
+#{$btn-selector}-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 3px;
+  position: relative;
+  font-size: 1.6em;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  line-height: 1;
+  background: transparent;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@include themify($themes) {
+  // TODO: REVIEW
+  #{$btn-selector}_cancel {
+    color: themed('titleTextColor');
+  }
+
+
+  #{$btn-selector}_default {
+    background-color: themed('inputBackgroundColor');
+    color: themed('titleTextColor');
+  }
+
+  #{$btn-selector}-delete {
+    color: themed('titleTextColor');
+    background-color: themed('appModalsPanelColor');
+  }
+
+  #{$btn-selector}-icon {
+    color: themed('valueTextColor');
+
+    &.active:not(:disabled),
+    &:hover:not(:disabled) {
+      background-color: themed('appBackgroundColor');
+      color: themed('accentColor');
+    }
+
+    &:disabled {
+      color: themed('titleTextColor');
+    }
+  }
+}
+
+
+
+@-webkit-keyframes spinAround {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}

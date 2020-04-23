@@ -1,0 +1,18 @@
+<div class="root">
+    <mat-tab-group (selectedIndexChange)="handleTabSelected($event)">
+        <mat-tab label="{{'backtest.summary' | translate}}" >
+            <backtest-summary></backtest-summary>
+        </mat-tab>
+        <mat-tab label="{{'trades' | translate}}">
+            <backtest-trades></backtest-trades>
+        </mat-tab>
+        <mat-tab label="{{'orders' | translate}}">
+            <backtest-orders></backtest-orders>
+        </mat-tab>
+        <mat-tab label="{{'backtest.chart' | translate}}" #chartTab="matTab">
+            <tab-container [active]="chartTab.isActive">
+                <backtest-chart></backtest-chart>
+            </tab-container>
+        </mat-tab>
+    </mat-tab-group>
+</div>

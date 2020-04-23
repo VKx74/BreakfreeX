@@ -1,0 +1,81 @@
+<base-nav [showUserAvatar]="true">
+    <!--    LAYOUT   -->
+    <ng-container *ngIf="isPlatformRoot$ | async">
+        <nav-section [paddingRight]="false">
+            <div class="crypto-button crypto-button_default workspaces cursor-pointer"
+                 [matMenuTriggerFor]="workspacesMenu"
+                 [title]="'workspaces' | translate">
+                <span class="crypto-icon crypto-icon-layout"></span>
+            </div>
+            <mat-menu #workspacesMenu="matMenu" xPosition="before" class="workspaces-menu">
+<!--                <ng-template matMenuContent>-->
+                    <workspaces></workspaces>
+<!--                </ng-template>-->
+            </mat-menu>
+        </nav-section>
+        <!--    /LAYOUT  -->
+
+        <nav-section>
+            <button #componentSelectorTrigger="matMenuTrigger"
+                    class="crypto-button crypto-button_default cursor-pointer"
+                    [matMenuTriggerFor]="componentSelectMenu"
+            >
+                {{'app.addElement' | translate}}
+            </button>
+            <mat-menu #componentSelectMenu="matMenu" xPosition="before" class="workspaces-menu">
+                <!--            <ng-template matMenuContent>-->
+                <component-selector (onComponentSelected)="handleAddComponent($event)"></component-selector>
+                <!--            </ng-template>-->
+            </mat-menu>
+        </nav-section>
+    </ng-container>
+
+    <ng-container *ngIf="(applicationType$ | async) === ApplicationType.Crypto;">
+        <ng-container *ngIf="activeBroker$ | async as broker">
+            <nav-section class="h-100" [leftBorder]="true">
+                <ng-container *ngIf="(getWalletsObs() | async) as wallets; else no_wallets">
+                    <!--                    (menuClosed)="onWalletMenuToggle(false)"-->
+                    <!--                    (menuOpened)="onWalletMenuToggle(true)"-->
+                    <div class="wallet-select-trigger flex align-items-center h-100"
+                         [matMenuTriggerFor]="wallets_menu">
+                        <mat-menu #wallets_menu="matMenu">
+                            <ng-template matMenuContent>
+                                <wallets-list (click)="$event.stopPropagation()" [wallets]="wallets"></wallets-list>
+                            </ng-template>
+                        </mat-menu>
+                        <div class="flex flex-direction-column m-right-15">
+                            <div class="wallet-title">{{'app.yourWallets' | translate}}</div>
+                            <div class="wallet-value">{{(broker.activeWallet$ | async)?.balance}}</div>
+                        </div>
+                        <i class="crypto-icon crypto-icon-scroll-bottom"></i>
+                    </div>
+                </ng-container>
+
+                <!--            *ngIf="wallets && !wallets.length"-->
+                <ng-template #no_wallets>
+                    <div class="not-wallets flex align-items-center height-100">
+                        {{'app.notWallets' | translate}}
+                    </div>
+                </ng-template>
+            </nav-section>
+
+
+            <nav-section [leftBorder]="true">
+                <!--                <div>-->
+                <button class="crypto-button crypto-button_primary m-right-10"
+                        [disabled]="!(broker.activeWallet$ | async)"
+                        (click)="openModalDeposit()">
+                    {{'deposit' | translate}}
+                </button>
+                <!--                </div>-->
+                <!--                <div>-->
+                <button class="crypto-button crypto-button_default"
+                        [disabled]="!(broker.activeWallet$ | async)"
+                        (click)="openModalWithdraw()">
+                    {{'withdraw' | translate}}
+                </button>
+                <!--                </div>-->
+            </nav-section>
+        </ng-container>
+    </ng-container>
+</base-nav>

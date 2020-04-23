@@ -1,0 +1,6 @@
+<div class="crypto-icon crypto-icon-smile cursor-pointer" [matMenuTriggerFor]="emojiContainer"></div>
+<mat-menu #emojiContainer="matMenu">
+    <div class="emoji-container">
+        <div class="emoji-item" (click)="onEmojiClick.emit(emoji)" *ngFor="let emoji of emojiList">{{emoji}}</div>
+    </div>
+</mat-menu>

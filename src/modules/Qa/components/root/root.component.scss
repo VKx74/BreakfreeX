@@ -1,0 +1,49 @@
+@import "../../../../global-styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
+.dashboard {
+  width: 100%;
+  overflow: auto;
+  padding-top: 45px;
+
+  .background {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation: 2s ease-out 0s 1 opacityChange;
+    z-index: -1;
+
+    @include themify($themes, true) {
+      background-color: themed('appModalsPanelColor');
+    }
+  }
+
+  .width-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  //.content-wrapper {
+  //  padding-top: 45px;
+  //}
+}
+
+
+@include themify($themes, true) {
+  .main,
+  .sidebar-sections-wrapper {
+    background: themed('appPanelColor');
+  }
+}

@@ -1,0 +1,1 @@
+export const AuthInterceptorSkipHeader = 'X-Skip-Auth-Interceptor';

@@ -1,0 +1,286 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+:host {
+  height: 100%;
+  display: flex;
+  width: 100%;
+  overflow: auto;
+
+  //.padding-wrapper {
+  //  padding: 4px;
+  //}
+
+  .root {
+    width: 100%;
+    height: 100%;
+    font-family: $primaryFontFamily, sans-serif;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .up-trend {
+    color: $greenColor;
+  }
+
+  .down-trend {
+    color: $redColor;
+  }
+
+  tr {
+    .remove-instrument-button {
+      display: none;
+    }
+
+    &:hover {
+      .remove-instrument-button {
+        display: flex;
+      }
+    }
+  }
+
+  .small-column {
+    width: 30px;
+  }
+
+  .large-column {
+    width: 150px;
+  }
+
+  .tiles-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
+    grid-auto-rows: auto;
+
+    .watchlist-tile-wrapper {
+      margin: 5px;
+      border-radius: 5px;
+      position: relative;
+      cursor: pointer;
+
+      &:hover {
+        .remove-instrument-button {
+          display: flex;
+        }
+
+        .tiles-trading-controls {
+          display: flex;
+        }
+      }
+
+      .tiles-trading-controls {
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        display: none;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+
+      .remove-instrument-button {
+        display: none;
+        position: absolute;
+        top: 20px;
+        right: calc((100% - 22px) / 2);
+      }
+    }
+  }
+
+  .underlay {
+    min-height: 100%;
+    height: auto;
+  }
+
+  instrument-search {
+    display: inline-block;
+  }
+
+  .chart-wrapper {
+    height: 32px;
+  }
+
+  .crypto-button-icon:hover {
+    background-color: transparent;
+  }
+
+  .order-book-tables-wrapper {
+    table {
+      tr {
+        height: 25px;
+      }
+
+      th {
+        background-color: transparent;
+      }
+    }
+
+    .price-column {
+      position: relative;
+    }
+
+    .amountBar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      opacity: 0.45;
+
+      &.red {
+        background-image: linear-gradient(to left, $redColor, rgba(162, 33, 139, 0.5));
+      }
+
+      &.green {
+        background-image: linear-gradient(to left, $greenColor, rgba(33, 162, 139, 0.5));
+      }
+    }
+  }
+
+  .last-bar-info {
+    padding: 0 20px;
+  }
+
+  /deep/ {
+    canvas {
+      height: 100% !important;
+    }
+  }
+
+  /deep/ .mat-column-remove {
+    text-align: right;
+
+    .controls-wrapper {
+      height: 36px;
+      width: 21px;
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+
+      .controls-wrapper-inner {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-left: 15px;
+      }
+    }
+  }
+
+  .control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 17px;
+    cursor: pointer;
+  }
+}
+
+@include themify($themes, true) {
+  .underlay {
+    background-color: themed('appPanelColor');
+  }
+
+  .top-line {
+    background-color: themed('appPanelColor');
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  .content-wrapper {
+    background-color: themed('appPanelColor');
+  }
+
+  .watchlist-tile-wrapper {
+    border: 1px solid themed('appBackgroundColor');
+  }
+
+  .order-book-tables-wrapper {
+    table:first-child {
+      border-right: 1px solid themed('appBackgroundColor');
+    }
+  }
+
+  /deep/ .mat-column-remove {
+
+  }
+
+
+  /deep/ {
+    mat-row {
+      &:hover {
+        background-color: themed('accentColor') !important;
+
+        .mat-cell {
+          color: #fff;
+        }
+
+        .mat-column-remove {
+          overflow: visible;
+        }
+
+        .mat-column-remove .controls-wrapper {
+          overflow: visible;
+        }
+
+        .expanded-detail {
+          color: themed('titleTextColor');
+        }
+      }
+    }
+
+    .control {
+      color: themed('titleTextColor');
+      background-color: themed('appModalsPanelColor');
+
+      &:hover {
+        color: themed('valueTextColor');
+      }
+    }
+
+    .watchlist-tile-wrapper:hover {
+      .watchlist-tile {
+        background-color: themed('accentColor');
+        opacity: 0.9;
+
+        .instrument, .price-value, .price-change {
+          color: #fff !important;
+        }
+      }
+    }
+  }
+
+}
+
+
+:host {
+  /deep/ .mat-row {
+    &:hover {
+      .controls-wrapper {
+        overflow: visible;
+      }
+    }
+
+    .mat-column-chart {
+      overflow: visible;
+    }
+  }
+}

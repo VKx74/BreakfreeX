@@ -1,0 +1,56 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  .top-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+  }
+
+  .controls {
+    padding-right: 5px;
+  }
+
+  .script-selector {
+    width: 200px;
+    padding-left: 8px;
+  }
+
+  .control-button {
+    width: 32px;
+    height: 32px;
+
+    &.stop-backtest {
+      font-size: 21px;
+    }
+  }
+
+  .progress-wrapper {
+    margin-right: 15px;
+
+    .progress-caption {
+      font-size: 12px;
+    }
+  }
+
+  //.content-wrapper {
+  //  padding: 4px;
+  //}
+
+  placeholder {
+    margin: 10px;
+  }
+}
+
+@include themify($themes, true) {
+  .root {
+    background-color: themed('appPanelColor');
+  }
+
+  .top-line {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+}

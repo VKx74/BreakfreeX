@@ -1,0 +1,70 @@
+<div class="root flex">
+    <div class="flex flex-direction-column flex-grow-1 w-0">
+        <div class="top-line flex justify-space-between align-items-center flex-shrink-0">
+            <div class="left-side flex align-items-center">
+            <span class="open-script-control" (click)="openScript()" [title]=" 'openScript' | translate ">
+                <i class="crypto-icon crypto-icon-folder-add"></i>
+            </span>
+
+                <i class="fa fa-chevron-right chevron"></i>
+
+                <span class="script-name"
+                      [title]="isSelectedScriptNew ? ('defaultScriptName' | translate) : script.name">
+                {{ isSelectedScriptNew ? ('defaultScriptName' | translate) : script.name }}
+            </span>
+
+                <div class="controls-wrapper">
+                    <i class="control fa fa-pencil" *ngIf="!isSelectedScriptNew && !isSelectedScriptBuiltIn"
+                       [title]="'renameScript' | translate"
+                       (click)="rename(script)"></i>
+                </div>
+            </div>
+
+            <div class="right-side flex align-items-center">
+                <div class="controls-wrapper">
+                <span class="crypto-button-icon control create-script-control" (click)="createScript()"
+                      [title]=" 'createScript' | translate">
+                    <i class="crypto-icon crypto-icon-midle-add"></i>
+                </span>
+
+                    <span class="crypto-button-icon control" (click)="compile()" [title]="'compileScript' | translate">
+                    <i class="crypto-icon crypto-icon-start-debug"></i>
+                </span>
+
+                    <span class="crypto-button-icon control" (click)="save(script)" [title]="'save' | translate">
+                    <i class="crypto-icon crypto-icon-save"></i>
+                </span>
+
+                    <span class="crypto-button-icon control" (click)="runScript()" *ngIf="!isSelectedScriptNew"
+                          title="{{'scriptsManager.runAutomatedTrading' | translate}}">
+                    <i class="crypto-icon crypto-icon-start-script"></i>
+                </span>
+                    <span class="crypto-button-icon control documentation-control" (click)="toggleDocumentation()" [class.active]="documentationVisible"
+                          title="{{'documentation' | translate}}">
+                    <i class="crypto-icon crypto-icon-script-documentation"></i>
+                </span>
+                </div>
+<!--                <div class="educational-tips-wrapper">-->
+<!--                    <educational-tips [componentName]="ComponentIdentifier.scriptEditor"></educational-tips>-->
+<!--                </div>-->
+            </div>
+        </div>
+        <div class="content-wrapper flex-grow-1 h-0 flex">
+            <ng-container>
+                <div class="editor-wrapper flex flex-direction-column full-width">
+                    <div class="ide-wrapper flex-grow-1 h-0 flex-shrink-0">
+                        <ide [options]="editorOptions"
+                             [code]="selectedScriptCode$ | async"
+                             (onChange)="handleCodeChanged($event)"></ide>
+                    </div>
+                    <compilation-problems class="flex-shrink-0"
+                                          [compilationResult]="compilationStatus"></compilation-problems>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="flex flex-shrink-0 documentation-wrapper" *ngIf="documentationVisible">
+        <documentation></documentation>
+    </div>
+
+</div>

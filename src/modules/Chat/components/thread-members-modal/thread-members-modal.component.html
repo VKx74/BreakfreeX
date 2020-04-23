@@ -1,0 +1,155 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">
+                <span>{{'members.title' | translate}}</span>
+            </h4>
+        </div>
+
+        <component-preloader [observable]="$initObs" [template]="template"></component-preloader>
+
+        <ng-template #template>
+            <div class="modal-body">
+                <div class="crypto-form-unit">
+                    <p class="form-unit__label">{{'members.caption' | translate}}</p>
+                    <div class="search-wrapper">
+                        <search-input placeholder="{{'members.placeholder' | translate}}"
+                                      (onInput)="handleSearch($event)">
+                        </search-input>
+                    </div>
+                </div>
+                <div class="crypto-delimiter delimiter"></div>
+                <div class="items-wrapper">
+                    <table class="crypto-table crypto-table_striped">
+                        <tbody>
+                        <tr *ngFor="let member of (members | async)" class="member-item">
+                            <td>
+                                <div class="flex">
+                                    <div class="flex align-items-center flex-grow-1">
+                                        <div class="avatar flex-shrink-0">
+                                            <name-avatar [src]="member.user.avatarId"
+                                                         [name]="member.user.userName"></name-avatar>
+                                        </div>
+                                        <div class="name flex-grow-1 crypto-color-prime t-overflow-ellipsis">{{member.user.userName}}</div>
+                                    </div>
+                                    <div class="t-align-right flex align-items-center">
+                                        <div class="ban flex-grow-1 crypto-color-red"
+                                             *ngIf="member.ban">{{'members.ban' | translate}}</div>
+                                        <menu-toggle [matMenuTriggerFor]="memberMenu" *ngIf="!isCurrentUser(member.user)"></menu-toggle>
+                                        <mat-menu #memberMenu="matMenu">
+                                            <button *ngIf="!member.ban" mat-menu-item (click)="handleCreateBan(member)">
+                                                <span>{{'members.banUser' | translate}}</span>
+                                            </button>
+
+                                            <ng-container *ngIf="member.ban">
+                                                <button mat-menu-item (click)="handleUpdateBan(member)">
+                                                    <span>{{'members.updateBan' | translate}}</span>
+                                                </button>
+                                                <button mat-menu-item (click)="handleUnbanUser(member)">
+                                                    <span>{{'unban' | translate}}</span>
+                                                </button>
+                                            </ng-container>
+
+                                            <button mat-menu-item (click)="handleRemoveMember(member)">
+                                                <span>{{'members.removeUser' | translate}}</span>
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center placeholder" *ngIf="!(members | async) || !(members | async).length">
+                    {{'usersNotFound' | translate}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btns-wrapper">
+                    <button class="crypto-button crypto-button_danger"
+                            (click)="close()">
+                        <span>{{'close' | translate}}</span>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+
+
+
+
+
+<!--<div class="crypto-modal">-->
+<!--    <div class="modal-content">-->
+<!--        <div class="modal-header">-->
+<!--            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>-->
+<!--            <h4 class="modal-title">-->
+<!--                <span>{{'members.title' | translate}}</span>-->
+<!--            </h4>-->
+<!--        </div>-->
+<!--        <div class="modal-body">-->
+<!--            <div class="crypto-form-unit">-->
+<!--                <p class="form-unit__label">{{'members.caption' | translate}}</p>-->
+<!--                <div class="search-wrapper">-->
+<!--                    <manual-search [searchHandler]="searchHandler"-->
+<!--                                   placeholder="{{'members.placeholder' | translate}}">-->
+<!--                        <span manual-search-trigger></span>-->
+<!--                    </manual-search>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="delimiter"></div>-->
+<!--            <div class="crypto-form-unit">-->
+<!--                <div class="subject-wrapper" *ngIf="!loading">-->
+<!--                    <ng-container *ngFor="let subject of subjects">-->
+<!--                        <div class="thread-subject flex align-items-center"-->
+<!--                             *ngIf="subject.user.email.match(searchQuery)">-->
+<!--                            <div class="avatar flex-shrink-0">-->
+<!--                                <name-avatar [src]="subject.user.avatarId" [name]="subject.user.email"></name-avatar>-->
+<!--                            </div>-->
+<!--                            <div class="name flex-grow-1 crypto-color-prime t-overflow-ellipsis">{{subject.user.email}}</div>-->
+<!--                            <div class="ban flex-grow-1 crypto-color-red"-->
+<!--                                 *ngIf="subject.ban">{{'members.ban' | translate}}</div>-->
+<!--                            <menu-toggle [matMenuTriggerFor]="memberMenu"></menu-toggle>-->
+<!--                            <mat-menu #memberMenu="matMenu">-->
+<!--                                <button *ngIf="!subject.ban" mat-menu-item (click)="openBanModal(subject)">-->
+<!--                                    <span class="crypto-color-red">{{'members.banUser' | translate}}</span>-->
+<!--                                </button>-->
+
+<!--                                <ng-container *ngIf="subject.ban">-->
+<!--                                    <button mat-menu-item (click)="openUpdateBanModal(subject)">-->
+<!--                                        <span>{{'members.updateBan' | translate}}</span>-->
+<!--                                    </button>-->
+<!--                                    <button mat-menu-item (click)="removeBan(subject)">-->
+<!--                                        <span class="crypto-color-red">{{'members.removeBan' | translate}}</span>-->
+<!--                                    </button>-->
+<!--                                </ng-container>-->
+
+<!--                                <button mat-menu-item (click)="removeMember(subject)">-->
+<!--                                    <span class="crypto-color-red">{{'members.removeUser' | translate}}</span>-->
+<!--                                </button>-->
+<!--                            </mat-menu>-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
+
+<!--                </div>-->
+<!--                <div class="text-center crypto-color-prime" *ngIf="!subjects || !subjects.length">-->
+<!--                    {{'members.noSubject' | translate}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="modal-footer">-->
+<!--            <div class="btns-wrapper">-->
+<!--                <button class="crypto-button  crypto-color-prime"-->
+<!--                        (click)="close()">-->
+<!--                    <span>{{'close' | translate}}</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

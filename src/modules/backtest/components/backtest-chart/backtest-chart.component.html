@@ -1,0 +1,10 @@
+<div class="root">
+    <ng-container *ngIf="!result">
+        <div class="h-100 flex justify-content-center align-items-center">
+            <placeholder message="{{ 'noData' | translate }}"></placeholder>
+        </div>
+    </ng-container>
+    <div class="chart-wrapper" [class.hidden]="!result">
+        <tcdBacktest #chart></tcdBacktest>
+    </div>
+</div>

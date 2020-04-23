@@ -1,0 +1,52 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()">
+                <i class="crypto-icon crypto-icon-close cursor-pointer"></i>
+            </button>
+            <h4 class="modal-title">
+                <span>{{isEdit ? 'editChat' : 'createChat' | translate}}</span>
+            </h4>
+        </div>
+        <!--        <div class="modal-header relative-wrapper">-->
+        <!--            <span class="close-btn">-->
+        <!--                <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>-->
+        <!--            </span>-->
+        <!--            <div class="modal-top">-->
+        <!--                <h4 class="modal-title">-->
+        <!--                    <span>{{'newGroupModal.title' | translate}}</span>-->
+        <!--                </h4>-->
+        <!--                <span></span>-->
+        <!--            </div>-->
+        <!--            <div class="banner-wrapper">-->
+        <!--                <img src="assets/img/login-page/Bg-sign-in.png" alt="" class="banner-img">-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="modal-body">
+            <form [formGroup]="threadGroupForm">
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{'newGroupModal.groupName' | translate}}</div>
+                    <mat-form-field class="crypto-input with-hint full-width m-bottom-10">
+                        <input matInput type="text" formControlName="name"
+                               placeholder="{{'newGroupModal.groupNamePlaceholder' | translate}}">
+                        <mat-error>{{'newGroupModal.errorText' | translate}}</mat-error>
+                    </mat-form-field>
+                    <div class="form-unit__label">{{'newGroupModal.groupDescription' | translate}}</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="description"
+                               placeholder="{{'newGroupModal.groupDescriptionPlaceholder' | translate}}">
+                        <mat-error>{{'newGroupModal.errorText' | translate}}</mat-error>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_success" (click)="submit()"
+                        [disabled]="threadGroupForm.invalid">
+                    <span>{{'newGroupModal.buttonCaption' | translate}}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

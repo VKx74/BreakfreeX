@@ -1,0 +1,32 @@
+<ng-container *ngIf="loadWorkspacesProcessState.isSucceeded()">
+    <ng-container *ngIf="workspaces.length === 0">
+        <span class="mat-menu-placeholder">{{ 'noData' | translate }}</span>
+    </ng-container>
+
+    <ng-container *ngIf="workspaces.length">
+        <ng-container *ngFor="let workspace of workspaces; let last = last">
+            <button mat-menu-item
+                    (click)="applyWorkspace(workspace)">
+                {{ ('workspaceNames.' + (WorkspaceIds | stringEnumNameByValue: workspace.id)) | translate}}
+            </button>
+        </ng-container>
+        <div class="menu-delimiter"></div>
+        <button mat-menu-item *ngIf="layoutChanged" (click)="saveLayout()">
+           {{'workspaceNames.saveLayout' | translate}}
+            <i class="crypto-icon crypto-icon-save-layout save"></i>
+        </button>
+        <button disabled mat-menu-item *ngIf="!layoutChanged">
+            {{'workspaceNames.savedLayout' | translate}}
+            <i class="crypto-icon crypto-icon-save-layout saved"></i>
+        </button>
+
+    </ng-container>
+</ng-container>
+
+<ng-container *ngIf="loadWorkspacesProcessState.isFailed()">
+    <span class="mat-menu-placeholder">{{ 'failedToLoadData' | translate }}</span>
+</ng-container>
+
+<ng-container *ngIf="loadWorkspacesProcessState.isPending()">
+    <span class="mat-menu-placeholder">{{ 'loading' | translate }}</span>
+</ng-container>

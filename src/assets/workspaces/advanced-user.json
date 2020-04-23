@@ -1,0 +1,72 @@
+{
+  "id": "advanced-user",
+  "name": "Advanced User",
+  "layoutState": {
+    "version": "1",
+    "content": [
+      {
+        "type": "column",
+        "content": [
+          {
+            "type": "row",
+            "content": [
+              {
+                "type": "column",
+                "content": [
+                  {
+                    "type": "stack",
+                    "content": [
+                      {
+                        "id": "1",
+                        "type": "component",
+                        "componentName": "chart",
+                        "isClosable": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "column",
+                "content": [
+                  {
+                    "type": "stack",
+                    "content": [
+                      {
+                        "id": "2",
+                        "type": "component",
+                        "componentName": "watchlist",
+                        "isClosable": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "row",
+            "content": [
+              {
+                "type": "column",
+                "content": [
+                  {
+                    "type": "stack",
+                    "content": [
+                      {
+                        "id": "3",
+                        "type": "component",
+                        "componentName": "news",
+                        "isClosable": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

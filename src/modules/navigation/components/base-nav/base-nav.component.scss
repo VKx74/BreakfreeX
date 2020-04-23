@@ -1,0 +1,175 @@
+@import "variables";
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  ///deep/ {
+  //  .mat-menu-panel {
+  //    max-width: 350px !important;
+  //  }
+  //}
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.about-user {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.role {
+  font-size: 12px;
+}
+.email {
+  font-size: 15px;
+}
+
+.sidebar-toggle-wrapper {
+  position: absolute;
+  z-index: 2;
+  height: 58px;
+  width: $sidebar-width;
+}
+
+//.sidebar-toggle {
+//  display: flex;
+//  align-items: center;
+//  height: 100%;
+//  transition: all .5s ease-in-out;
+//}
+
+.logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  transition: width .5s ease-in-out;
+
+  &__img {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 15px;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all .5s ease-in-out;
+
+    .title {
+      font-size: 13px;
+    }
+
+    .subtitle {
+      font-size: 11px;
+    }
+
+  }
+}
+
+.open {
+  .sidebar-toggle {
+    @include themify($themes, true) {
+      background-color: themed('appModalsPanelColor');
+    }
+  }
+
+  .sidebar-toggle-wrapper {
+    @include themify($themes, true) {
+      background-color: themed('appPanelColor');
+    }
+  }
+
+  .logo {
+    @include themify($themes, true) {
+      background-color: themed('appModalsPanelColor');
+    }
+
+    &__text {
+      padding: 0 10px;
+      width: 100%;
+    }
+  }
+
+  .navigation-right-side {
+    z-index: 0;
+  }
+}
+
+.nav-top-row {
+  padding: 0;
+  height: 57px;
+}
+
+.z-index-2 {
+  z-index: 2;
+}
+
+.navigation-right-side {
+  //z-index: 2;
+
+  //.navigation-delimiter {
+  //  width: 1px;
+  //  margin: 5px 0;
+  //  align-self: stretch;
+  //  height: auto;
+  //}
+}
+
+.logo {
+  text-decoration: none;
+
+  .logo__img {
+    i {
+      font-size: 32px;
+    }
+  }
+
+  .logo__text {
+    font-size: 16px;
+    margin-left: 11px;
+  }
+}
+
+.menu-toggle {
+  cursor: pointer;
+}
+
+.navigation {
+  @include themify($themes, true) {
+    background-color: themed('appPanelColor');
+    box-shadow: themed('box-shadowPanel');
+
+    .logo__img {
+      color: themed('navigationIconColor');
+      border-right: 1px solid themed('appBackgroundColor');
+    }
+
+    .sidebar-toggle {
+      border-right: 1px solid themed('appBackgroundColor');
+    }
+
+    .title {
+      color: themed('valueTextColor');
+    }
+
+    .subtitle {
+      color: themed('titleTextColor');
+    }
+    .role {
+      color: themed('titleTextColor');
+    }
+    .email {
+      color: themed('valueTextColor');
+    }
+  }
+}
+

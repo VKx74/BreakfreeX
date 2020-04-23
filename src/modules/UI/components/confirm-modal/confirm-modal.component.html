@@ -1,0 +1,23 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="reject()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{title}}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="message-wrapper">
+                <span>{{message}}</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="buttons-wrapper">
+                <button class="crypto-button crypto-button_action" (click)="reject()">
+                    {{rejectCaption}}
+                </button>
+                <button class="crypto-button crypto-button_primary" (click)="accept();">
+                    {{acceptCaption}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

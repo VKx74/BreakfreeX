@@ -1,0 +1,97 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!discussions?.length"
+                            [componentIdentifier]="ComponentIdentifier.deposits"
+                            [title]="'Forums'"
+                            [loading]="false">
+
+    <div class="filters flex justify-space-between w-100">
+        <div class="search-wrapper">
+            <div class="flex align-items-center justify-space-between">
+                <debounced-input (valueChange)="search($event)"></debounced-input>
+            </div>
+        </div>
+        <div class="date-pickers-wrapper">
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [(ngModel)]="from"
+                       [matDatepicker]="start"
+                       [max]="to"
+                       (dateChange)="resetPagination()"
+                       placeholder="Start date">
+                <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [(ngModel)]="to"
+                       [matDatepicker]="end"
+                       [min]="from"
+                       (dateChange)="resetPagination()"
+                       placeholder="End date">
+                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+            <button class="crypto-button crypto-button_primary" [disabled]="!from && !to"
+                    (click)="clearDatePickers()">
+                <span>Clear</span>
+            </button>
+        </div>
+
+    </div>
+
+    <data-table [rows]="discussions">
+        <data-table-header-cell columnName="title">
+            Title
+        </data-table-header-cell>
+        <data-table-header-cell columnName="creator">
+            Creator
+        </data-table-header-cell>
+        <data-table-header-cell columnName="created">
+            Created At
+        </data-table-header-cell>
+        <data-table-header-cell columnName="description">
+            Description
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+        <data-table-cell columnName="title">
+            <ng-template let-item>
+                                <span class="title" title="Go to discussion"
+                                      [routerLink]="getDiscussionUrl(item)">{{item.title}}</span>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="creator">
+            <ng-template let-item>
+                <ng-container *ngIf="item.creator; else user_removed">
+                    <div class="flex">
+                        <div class="creator-avatar">
+                            <name-avatar [src]="item.creator?.avatarId"
+                                         [name]="item.creator?.userName"></name-avatar>
+                        </div>
+                        {{item.creator.firstName }} {{item.creator.lastName}}
+                    </div>
+                </ng-container>
+                <ng-template #user_removed>User does not exist</ng-template>
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="created">
+            <ng-template let-item>
+                {{item.created | date: 'short'}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                <div class="text-right">
+                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="showDiscussionDetails(item)">Details
+                        </button>
+                    </mat-menu>
+                </div>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

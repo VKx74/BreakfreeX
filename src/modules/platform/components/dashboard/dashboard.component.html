@@ -1,0 +1,23 @@
+<div class="dashboard flex flex-direction-column">
+    <div class="content-wrapper flex flex-grow-1">
+        <div class="flex-grow-1 w-0">
+            <as-split #verticalSplit
+                      class="platform-split"
+                      [direction]="'vertical'"
+                      [gutterSize]="5"
+                      [unit]="'pixel'"
+                      (dragEnd)="handleSplitDragEnd($event)">
+                <as-split-area [order]="0" [size]="bottomPanelSizeService.sizePanel()" class="flex">
+                    <golden-layout>
+                        <div class="empty-icon flex justify-content-center align-items-center">
+                            <img alt="Empty" src="assets/img/Empty.svg" style="width: 400px">
+                        </div>
+                    </golden-layout>
+                </as-split-area>
+                <as-split-area [order]="1" [size]="bottomPanelSizeService.sizeBottomPanel()" [minSize]="bottomPanelMinSize" [maxSize]="600">
+                    <bottom-panel class="full-height"></bottom-panel>
+                </as-split-area>
+            </as-split>
+        </div>
+    </div>
+</div>

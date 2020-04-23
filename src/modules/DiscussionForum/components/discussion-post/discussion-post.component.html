@@ -1,0 +1,26 @@
+<div>
+    <div class="post-content">
+        <markdown-preview [markdown]="post.message"></markdown-preview>
+    </div>
+    <div class="flex justify-space-between align-items-center flex-wrap-wrap">
+        <div class="author-info flex align-items-center">
+            <name-avatar class="m-right-10 avatar" [src]="post.creator?.avatarId"
+                         [name]="post.creator?.userName || 'User removed'"></name-avatar>
+            <span class="author-name">{{post.creator?.userName || 'User removed'}}</span>
+        </div>
+        <div class="m-left-auto">
+            <span class="manage-controls-wrapper" *ngIf="canManage">
+                <span class="control control-delete" (click)="onPostDelete()">Delete</span>
+                <span> | </span>
+                <span class="control control-edit" (click)="toggleEdit()">Edit</span>
+                <span> | </span>
+            </span>
+            <span class="create-update-info">Created: {{post.created | timeAgo}}</span>
+        </div>
+    </div>
+    <ng-container *ngIf="isInEditMode">
+        <div class="input-wrapper">
+            <edit-discussion-post [post]="post" (postEdited)="onPostEdited($event)"></edit-discussion-post>
+        </div>
+    </ng-container>
+</div>

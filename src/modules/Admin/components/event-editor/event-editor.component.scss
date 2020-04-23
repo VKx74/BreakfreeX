@@ -1,0 +1,39 @@
+:host {
+  .tags-wrapper {
+    max-height: 150px;
+    overflow: auto;
+  }
+}
+
+.modal-content {
+  min-width: 400px;
+  max-width: 90vw;
+}
+
+.control-time, .control-date {
+  position: relative;
+
+  input {
+    cursor: pointer;
+  }
+}
+
+.btns-wrapper button:not(:last-of-type) {
+  margin-bottom: 6px;
+}
+
+:host /deep/  {
+  .ngx-material-timepicker-toggle {
+    position: absolute;
+    top: 3px;
+    right: 6px;
+
+    svg {
+      height: 19px !important;
+    }
+  }
+  
+  .mat-datepicker-toggle {
+    color: #999999;
+  }
+}

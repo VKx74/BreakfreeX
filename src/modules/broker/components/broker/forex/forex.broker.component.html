@@ -1,0 +1,19 @@
+<div class="forex-broker-settings flex">
+    <div *ngIf="brokerConnected">
+        <div [ngSwitch]="broker" class="broker-container">
+            <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
+        </div>      
+    </div>
+    <div *ngIf="!brokerConnected">
+        <div class="forex-broker-settings-row flex">
+            <span class="dropdown-title">{{'broker.exchange' | translate}}:</span>
+            <selector class="dropdown"
+                    [options]="brokers"
+                    [selectedOption]="broker"></selector>
+        </div>
+
+        <div [ngSwitch]="broker" class="broker-container">
+            <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
+        </div>
+    </div>
+</div>

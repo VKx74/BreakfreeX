@@ -1,0 +1,462 @@
+@font-face {
+	font-family: "crypto-icons";
+	src: url('../assets/fonts/crypto-icons/crypto-icons.eot');
+	src: url('../assets/fonts/crypto-icons/crypto-icons.eot?#iefix') format('eot'),
+		url('../assets/fonts/crypto-icons/crypto-icons.woff2') format('woff2'),
+		url('../assets/fonts/crypto-icons/crypto-icons.woff') format('woff'),
+		url('../assets/fonts/crypto-icons/crypto-icons.ttf') format('truetype'),
+		url('../assets/fonts/crypto-icons/crypto-icons.svg#crypto-icons') format('svg');
+}
+
+.crypto-icon:before {
+	font-family: "crypto-icons";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	/* speak: none; only necessary if not using the private unicode range (firstGlyph option) */
+	text-decoration: none;
+	text-transform: none;
+}
+
+
+.crypto-icon-add-document:before {
+	content: "\E001";
+}
+
+.crypto-icon-add:before {
+	content: "\E002";
+}
+
+.crypto-icon-admin-dashboard:before {
+	content: "\E003";
+}
+
+.crypto-icon-alert-code:before {
+	content: "\E004";
+}
+
+.crypto-icon-alert-edit:before {
+	content: "\E005";
+}
+
+.crypto-icon-alert-start:before {
+	content: "\E006";
+}
+
+.crypto-icon-alert:before {
+	content: "\E007";
+}
+
+.crypto-icon-app-members:before {
+	content: "\E008";
+}
+
+.crypto-icon-backtest:before {
+	content: "\E009";
+}
+
+.crypto-icon-blockchains:before {
+	content: "\E00A";
+}
+
+.crypto-icon-buy-arrow:before {
+	content: "\E00B";
+}
+
+.crypto-icon-calendar:before {
+	content: "\E00C";
+}
+
+.crypto-icon-chart:before {
+	content: "\E00D";
+}
+
+.crypto-icon-chat:before {
+	content: "\E00E";
+}
+
+.crypto-icon-clear:before {
+	content: "\E00F";
+}
+
+.crypto-icon-close:before {
+	content: "\E010";
+}
+
+.crypto-icon-copy:before {
+	content: "\E011";
+}
+
+.crypto-icon-create:before {
+	content: "\E012";
+}
+
+.crypto-icon-currencies:before {
+	content: "\E013";
+}
+
+.crypto-icon-data-consolidator:before {
+	content: "\E014";
+}
+
+.crypto-icon-deposits:before {
+	content: "\E015";
+}
+
+.crypto-icon-document-id:before {
+	content: "\E016";
+}
+
+.crypto-icon-document:before {
+	content: "\E017";
+}
+
+.crypto-icon-edit:before {
+	content: "\E018";
+}
+
+.crypto-icon-email:before {
+	content: "\E019";
+}
+
+.crypto-icon-exchange-members:before {
+	content: "\E01A";
+}
+
+.crypto-icon-filled-alert:before {
+	content: "\E01B";
+}
+
+.crypto-icon-filled-star:before {
+	content: "\E01C";
+}
+
+.crypto-icon-fintatech:before {
+	content: "\E01D";
+}
+
+.crypto-icon-folder-add:before {
+	content: "\E01E";
+}
+
+.crypto-icon-forum:before {
+	content: "\E01F";
+}
+
+.crypto-icon-gold-logo:before {
+	content: "\E020";
+}
+
+.crypto-icon-group-chat:before {
+	content: "\E021";
+}
+
+.crypto-icon-history:before {
+	content: "\E022";
+}
+
+.crypto-icon-information:before {
+	content: "\E023";
+}
+
+.crypto-icon-l2:before {
+	content: "\E024";
+}
+
+.crypto-icon-layout-close:before {
+	content: "\E025";
+}
+
+.crypto-icon-layout-maximise:before {
+	content: "\E026";
+}
+
+.crypto-icon-layout-minimise:before {
+	content: "\E027";
+}
+
+.crypto-icon-layout-popin:before {
+	content: "\E028";
+}
+
+.crypto-icon-layout-popup:before {
+	content: "\E029";
+}
+
+.crypto-icon-layout:before {
+	content: "\E02A";
+}
+
+.crypto-icon-like:before {
+	content: "\E02B";
+}
+
+.crypto-icon-logo-a:before {
+	content: "\E02C";
+}
+
+.crypto-icon-logout:before {
+	content: "\E02D";
+}
+
+.crypto-icon-map:before {
+	content: "\E02E";
+}
+
+.crypto-icon-market-trend:before {
+	content: "\E02F";
+}
+
+.crypto-icon-markets:before {
+	content: "\E030";
+}
+
+.crypto-icon-md:before {
+	content: "\E031";
+}
+
+.crypto-icon-message-send:before {
+	content: "\E032";
+}
+
+.crypto-icon-middle-search:before {
+	content: "\E033";
+}
+
+.crypto-icon-midle-add:before {
+	content: "\E034";
+}
+
+.crypto-icon-midle-delete:before {
+	content: "\E035";
+}
+
+.crypto-icon-more:before {
+	content: "\E036";
+}
+
+.crypto-icon-mt:before {
+	content: "\E037";
+}
+
+.crypto-icon-news:before {
+	content: "\E038";
+}
+
+.crypto-icon-ob:before {
+	content: "\E039";
+}
+
+.crypto-icon-obc:before {
+	content: "\E03A";
+}
+
+.crypto-icon-order-exchange:before {
+	content: "\E03B";
+}
+
+.crypto-icon-pasword:before {
+	content: "\E03C";
+}
+
+.crypto-icon-pause-server:before {
+	content: "\E03D";
+}
+
+.crypto-icon-permission-instrument:before {
+	content: "\E03E";
+}
+
+.crypto-icon-permission:before {
+	content: "\E03F";
+}
+
+.crypto-icon-phone-contur:before {
+	content: "\E040";
+}
+
+.crypto-icon-phone:before {
+	content: "\E041";
+}
+
+.crypto-icon-place-order:before {
+	content: "\E042";
+}
+
+.crypto-icon-platform-alert:before {
+	content: "\E043";
+}
+
+.crypto-icon-platform:before {
+	content: "\E044";
+}
+
+.crypto-icon-private-chat:before {
+	content: "\E045";
+}
+
+.crypto-icon-qr-code:before {
+	content: "\E046";
+}
+
+.crypto-icon-question-vote:before {
+	content: "\E047";
+}
+
+.crypto-icon-refresh:before {
+	content: "\E048";
+}
+
+.crypto-icon-remove-all-records:before {
+	content: "\E049";
+}
+
+.crypto-icon-remove-records:before {
+	content: "\E04A";
+}
+
+.crypto-icon-reporting:before {
+	content: "\E04B";
+}
+
+.crypto-icon-save-layout:before {
+	content: "\E04C";
+}
+
+.crypto-icon-save:before {
+	content: "\E04D";
+}
+
+.crypto-icon-script-documentation:before {
+	content: "\E04E";
+}
+
+.crypto-icon-script:before {
+	content: "\E04F";
+}
+
+.crypto-icon-scroll-bottom:before {
+	content: "\E050";
+}
+
+.crypto-icon-scroll-left:before {
+	content: "\E051";
+}
+
+.crypto-icon-scroll-right:before {
+	content: "\E052";
+}
+
+.crypto-icon-scroll-top:before {
+	content: "\E053";
+}
+
+.crypto-icon-search:before {
+	content: "\E054";
+}
+
+.crypto-icon-sell-arrow:before {
+	content: "\E055";
+}
+
+.crypto-icon-send-message:before {
+	content: "\E056";
+}
+
+.crypto-icon-settings:before {
+	content: "\E057";
+}
+
+.crypto-icon-smile:before {
+	content: "\E058";
+}
+
+.crypto-icon-start-debug:before {
+	content: "\E059";
+}
+
+.crypto-icon-start-script:before {
+	content: "\E05A";
+}
+
+.crypto-icon-stop:before {
+	content: "\E05B";
+}
+
+.crypto-icon-switch-settings:before {
+	content: "\E05C";
+}
+
+.crypto-icon-system-monitoring:before {
+	content: "\E05D";
+}
+
+.crypto-icon-take-off:before {
+	content: "\E05E";
+}
+
+.crypto-icon-time:before {
+	content: "\E05F";
+}
+
+.crypto-icon-trade-manager:before {
+	content: "\E060";
+}
+
+.crypto-icon-ts:before {
+	content: "\E061";
+}
+
+.crypto-icon-upload-image:before {
+	content: "\E062";
+}
+
+.crypto-icon-user:before {
+	content: "\E063";
+}
+
+.crypto-icon-wallets-user:before {
+	content: "\E064";
+}
+
+.crypto-icon-wallets:before {
+	content: "\E065";
+}
+
+.crypto-icon-watchlist-alert:before {
+	content: "\E066";
+}
+
+.crypto-icon-watchlist-chart:before {
+	content: "\E067";
+}
+
+.crypto-icon-watchlist-order-book:before {
+	content: "\E068";
+}
+
+.crypto-icon-watchlist-trade-manager:before {
+	content: "\E069";
+}
+
+.crypto-icon-watchlist:before {
+	content: "\E06A";
+}
+
+.crypto-icon-watchlists-cards:before {
+	content: "\E06B";
+}
+
+.crypto-icon-watchlists-list:before {
+	content: "\E06C";
+}
+
+.crypto-icon-website:before {
+	content: "\E06D";
+}
+
+.crypto-icon-withdraws:before {
+	content: "\E06E";
+}

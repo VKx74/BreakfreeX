@@ -1,0 +1,58 @@
+:host {
+  ::ng-deep {
+    .mat-checkbox-inner-container {
+      height: 20px;
+      width: 20px;
+    }
+
+    .mat-checkbox-frame, .mat-checkbox-background {
+      border-radius: 50%;
+    }
+
+    .mat-checkbox-background {
+      margin: 1px;
+    }
+
+    .mat-checkbox-checked {
+      .mat-checkbox-background {
+        // TODO: Themify
+        background-color: darkolivegreen;
+      }
+    }
+  }
+}
+
+.columns-visibility-toggle-wrapper {
+  //padding: 21px 18px;
+  border-radius: 5px;
+  max-width: 170px;
+  // TODO: Themify
+
+  .columns-list {
+    padding: 21px 18px 12px 18px;
+  }
+
+  .column {
+    &:not(:last-of-type) {
+      margin-bottom: 20px;
+    }
+
+    .column-name {
+      margin-right: 40px;
+      font-family: OpenSans;
+      font-size: 12px;
+      line-height: 1.42;
+      letter-spacing: 0.36px;
+    }
+
+    .visibility-status {
+      position: relative;
+      top: -3px
+    }
+  }
+
+  .additional {
+    padding: 11px 18px;
+  }
+}
+

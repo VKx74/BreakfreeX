@@ -1,0 +1,24 @@
+<div class="instrument-search">
+    <form>
+        <mat-form-field class="crypto-autocomplete full-width" (click)="onClick()">
+            <input matInput
+                   #instrument_input
+                   [placeholder]="'symbol' | translate"
+                   [matAutocomplete]="auto"
+                   [formControl]="inputControl"
+                   (blur)="handleBlur()"
+                   (focus)="onFocus()">
+            <i matSuffix class="crypto-icon crypto-icon-search icon-size"></i>
+
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith"
+                              (optionSelected)="handleInstrumentSelected($event)">
+                <mat-option *ngFor="let instrument of (filteredInstruments | async)" [value]="instrument"
+                            class="instrument-search-option">
+                    <span>{{instrument.symbol}}</span>
+                    <span class="exchange">{{instrument.exchange}}</span>
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </form>
+
+</div>

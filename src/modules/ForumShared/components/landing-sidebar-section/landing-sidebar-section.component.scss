@@ -1,0 +1,20 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "variables";
+
+.sidebar-section {
+  padding: 15px 20px;
+}
+
+.header {
+  //margin-bottom: 15px;
+}
+
+.section-content {
+  font-size: 13px;
+  line-height: 1.36;
+}
+
+@include themify($themes, true) {
+  color: themed('valueTextColor');
+}

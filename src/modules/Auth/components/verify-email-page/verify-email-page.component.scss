@@ -1,0 +1,27 @@
+.message {
+  margin: 20px 0 30px;
+  text-align: center;
+}
+
+:host {
+  display: block;
+  overflow: auto;
+  width: 100%;
+
+  .register-page {
+    display: flex;
+    margin: 20vh 0;
+  }
+
+  .form-header__title {
+    cursor: default;
+  }
+
+  .overlay {
+    flex-direction: column;
+  }
+
+  .logo:before {
+    vertical-align: unset;
+  }
+}

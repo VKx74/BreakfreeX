@@ -1,0 +1,12 @@
+<div class="theme-language-select-section d-block">
+  <div class="theme-toggle flex flex-grow-1 align-items-center h-100 justify-content-center">
+    <div class="section-label color-title">{{'generalSettings.light' | translate}}</div>
+    <mat-slide-toggle class="v-align-middle" [checked]="(activeTheme$ | async) === Theme.Dark"
+                      (change)="onThemeToggle($event)"></mat-slide-toggle>
+    <div class="section-label color-title">{{'generalSettings.dark' | translate}}</div>
+  </div>
+  <div class="delimiter-vertical"></div>
+  <div class="language-select">
+    <language-select (languageChange)="onLanguageChange($event)" [locale]="activeLocale$ | async"></language-select>
+  </div>
+</div>

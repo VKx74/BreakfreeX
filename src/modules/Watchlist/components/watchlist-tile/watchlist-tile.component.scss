@@ -1,0 +1,54 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+.watchlist-tile {
+  &.up {
+    .price-change {
+      color: $greenColor !important;
+    }
+  }
+
+  &.down {
+    .price-change {
+      color: $redColor !important;
+    }
+  }
+}
+
+.tile-header {
+  padding: 20px 0;
+  margin: 0 auto;
+}
+
+.tile-footer {
+  height: 80px;
+}
+
+.instrument, .price-column {
+  margin: 0 30px;
+}
+
+.price-value {
+  font-size: 16px;
+}
+
+.name-symbol {
+  font-size: 14px;
+}
+
+@include themify($themes, true) {
+  .watchlist-tile {
+    background-color: themed('appPanelColor');
+    border-radius: 5px;
+    color: themed('valueTextColor');
+
+    .instrument, .price-value, .price-change {
+      color: themed('valueTextColor');
+    }
+
+    .name-exchange {
+      color: themed('titleTextColor');
+    }
+  }
+}

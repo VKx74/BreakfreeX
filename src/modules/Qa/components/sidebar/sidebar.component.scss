@@ -1,0 +1,16 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .sidebar-section {
+    padding: 15px 20px;
+  }
+
+  .delimiter {
+    height: 1px;
+    background-color: #17191b;
+  }
+}
+
+@include themify($themes, true) {
+}

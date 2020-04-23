@@ -1,0 +1,25 @@
+<div [formGroup]="formGroup">
+    <div class="flex justify-content-center svg-image">
+        <a href="https://www.binance.com" target="_blank">
+            <img src="assets/img/binance-vector-logo.svg" alt="Binance broker">
+        </a>
+    </div>
+
+    <div class="crypto-form-unit">
+        <span class="form-unit__label">{{"broker.apiKey" | translate}}:</span>
+        <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" class="crypto-input full-width" formControlName="apiKey">
+        </mat-form-field>
+    </div>
+    <div class="crypto-form-unit">
+        <span class="form-unit__label">{{"broker.secret" | translate}}:</span>
+        <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" class="crypto-input full-width" formControlName="secretKey">
+        </mat-form-field>
+    </div>
+</div>
+<div class="crypto-form-unit margin-bottom">
+    <button class="crypto-button crypto-button_primary w-100" [disabled]="formGroup.invalid"
+            (click)="connect()">{{'broker.connect' | translate}}</button>
+</div>
+<ngx-loading [show]="showSpinner"></ngx-loading>

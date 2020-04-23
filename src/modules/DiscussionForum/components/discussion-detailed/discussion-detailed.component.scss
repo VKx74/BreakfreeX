@@ -1,0 +1,35 @@
+@import "mixins/themify";
+@import "themes/themes";
+@import "../../styles/variables";
+
+.comments-header {
+  display: flex;
+  align-items: center;
+  height: 39px;
+  //background-color: $secondaryBgColor;
+  border-radius: 3px;
+  //border: 1px solid $secondaryBgBorderColor;
+  padding-left: 12px;
+  padding-right: 4px;
+  margin-bottom: 10px;
+}
+
+.comments-header__title {
+  font-size: 13px;
+  font-family: $primaryFontFamily;
+}
+
+
+.delimiter {
+  margin: 15px 0;
+}
+
+@include themify($themes, true) {
+  .comments-header__title {
+    color: themed('valueTextColor');
+  }
+
+  .comments-header {
+    background-color: themed('inputBackgroundColor')
+  }
+}

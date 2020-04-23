@@ -1,0 +1,76 @@
+/*
+    IMPORTANT NOTICE:  This software and source code is owned and licensed by Fintatech B.V., https://fintatech.com
+    Downloading, installing or otherwise using this software or source code shall be made only under Fintatech License agreement. If you do not granted Fintatech License agreement, you must promptly delete the software, source code and all associated downloadable materials and you must not use the software for any purpose whatsoever.
+*/
+@import "../variables";
+@import "../mixins/themify";
+@import "../themes/themes";
+
+
+$prefix: 'mat';
+$tab: '#{$prefix}-tab';
+
+.mat-tab-group {
+  .mat-tab-header {
+    border: none;
+  }
+
+  .mat-tab-list {
+    .mat-tab-labels {
+      opacity: 1;
+      //padding: 3px 3px 0;
+      border-radius: 3px;
+
+      .mat-tab-label {
+        font-family: $primaryFontFamily;
+        height: 40px;
+        opacity: 1;
+        padding: 0 11px 3px;
+        font-size: 12px;
+        min-width: 0;
+
+        &:first-of-type {
+          border-left: 0;
+        }
+
+        &.mat-tab-label-active {
+          padding: 0 14px 3px;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          font-weight: 600;
+        }
+      }
+
+      .mat-tab-label-active + .mat-tab-label {
+        border-left: 0;
+      }
+    }
+
+    .mat-ink-bar {
+      display: none;
+    }
+  }
+
+  .mat-tab-body-wrapper {
+    //padding: 10px 0;
+    padding: 0;
+  }
+}
+
+@include themify($themes) {
+  .mat-tab-labels {
+    background-color: themed('noactiveTabs');
+
+    .mat-tab-label {
+      color: themed('valueTextColor');
+      background: themed('noactiveTabs');
+      border-left: 1px solid themed('appBackgroundColor');
+
+      &.mat-tab-label-active {
+        border-top: 1px solid themed('accentColor');
+        background-color: themed('appPanelColor');
+        color: themed('valueTextColor');
+      }
+    }
+  }
+}

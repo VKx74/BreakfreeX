@@ -1,0 +1,317 @@
+<div class="root">
+    <div class="top-line">
+        <div class="flex">
+            <instrument-search
+                    [openPanelOnClick]="true"
+                    [resetAfterSelection]="true"
+                    (onSelect)="addInstrument($event)"></instrument-search>
+        </div>
+        <div>
+            <div class="crypto-button-icon">
+                <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
+            </div>
+            <mat-menu #menu="matMenu">
+                <button [class.active]="viewMode === ViewMode.Table" mat-menu-item
+                        (click)="setViewMode(ViewMode.Table)">
+                    {{'watchList.tableView' | translate}}
+                </button>
+
+                <button [class.active]="viewMode === ViewMode.Tile" mat-menu-item (click)="setViewMode(ViewMode.Tile)">
+                    {{'watchList.tilesView' | translate}}
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+    <div class="content-wrapper flex-grow-1 h-0">
+        <div class="full-height padding-wrapper">
+            <ng-template #details let-item>
+                <div class="flex order-book-tables-wrapper flex-direction-column">
+                    <ng-container *ngIf="_instrumentsOrderBookInfo.get(item.instrument) as orderBookInfo">
+                        <div class="flex">
+                            <table class="crypto-table crypto-table_fixed-header crypto-table_striped">
+                                <thead>
+                                <tr>
+                                    <th class="price-column">
+                                        {{'price' | translate}}
+                                        <span class="symbol"> ({{item.instrument.baseInstrument.toUpperCase()}})</span>
+                                    </th>
+                                    <th class="amount-column">
+                                        {{'amount' | translate}}
+                                        <span class="symbol"> ({{item.instrument.dependInstrument.toUpperCase()}})</span>
+                                    </th>
+                                    <th class="total-column text-right">
+                                        {{'total' | translate}}
+                                        <span class="symbol"> ({{item.instrument.dependInstrument.toUpperCase()}})</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="level-row" *ngFor="let tick of (orderBookInfo.buys || [])">
+                                    <td class="price-column sell-symbol">
+                                        {{tick.price}}
+                                        <div class="amountBar green"
+                                             [ngStyle]="{'width': (tick.amount / orderBookInfo.buysTotal) * 100 + '%'}"></div>
+                                    </td>
+                                    <td class="amount-column">
+                                        {{tick.amount}}
+                                    </td>
+                                    <td class="total-column text-right">
+                                        {{tick.total}}
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <table class="crypto-table crypto-table_fixed-header crypto-table_striped">
+                                <thead>
+                                <tr>
+                                    <th class="price-column">
+                                        {{'price' | translate}}
+                                        <span class="symbol"> ({{item.instrument.baseInstrument.toUpperCase()}})</span>
+                                    </th>
+                                    <th class="amount-column">
+                                        {{'amount' | translate}}
+                                        <span class="symbol"> ({{item.instrument.dependInstrument.toUpperCase()}})</span>
+                                    </th>
+                                    <th class="total-column text-right">
+                                        {{'total' | translate}}
+                                        <span class="symbol"> ({{item.instrument.dependInstrument.toUpperCase()}})</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="level-row" *ngFor="let tick of  (orderBookInfo.sells || [])">
+                                    <td class="price-column sell-symbol">
+                                        {{tick.price}}
+                                        <div class="amountBar red"
+                                             [ngStyle]="{'width': (tick.amount / orderBookInfo.sellsTotal) * 100 + '%'}"></div>
+                                    </td>
+                                    <td class="amount-column">
+                                        {{tick.amount}}
+                                    </td>
+                                    <td class="total-column text-right">
+                                        {{tick.total}}
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-space-between last-bar-info">
+                            <span>
+                                <span>{{'ohlc.open' | translate}}: </span>
+                                <span>{{_instrumentsOrderBookInfo.get(item.instrument).lastBar?.open || '-'}}</span>
+                            </span>
+                            <span>
+                                <span>{{'ohlc.high' | translate}}: </span>
+                                <span>{{_instrumentsOrderBookInfo.get(item.instrument).lastBar?.high || '-'}}</span>
+                            </span>
+                            <span>
+                                <span>{{'ohlc.low' | translate}}: </span>
+                                <span>{{_instrumentsOrderBookInfo.get(item.instrument).lastBar?.low || '-'}}</span>
+                            </span>
+                            <span>
+                                <span>{{'ohlc.close' | translate}}: </span>
+                                <span>{{_instrumentsOrderBookInfo.get(item.instrument).lastBar?.close || '-'}}</span>
+                            </span>
+                            <span>
+                                <span>{{'ohlc.volume' | translate}}: </span>
+                                <span>{{_instrumentsOrderBookInfo.get(item.instrument).lastBar?.volume || '-'}}</span>
+                            </span>
+                            <span>
+                                <span>{{'date' | translate}}: </span>
+                                <span>
+                                    {{_instrumentsOrderBookInfo.get(item.instrument).lastBar?.date
+                                    ? (_instrumentsOrderBookInfo.get(item.instrument).lastBar.date | formatDate:'YYYY/MM/DD')
+                                    : '-'}}
+                                </span>
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-template>
+
+            <data-table #dataTableComponent
+                        [rows]="instrumentsVM" *ngIf="viewMode === ViewMode.Table"
+                        [selectable]="true"
+                        [expandOnClick]="false"
+                        [columnCaption]="columnCaption"
+                        [allowColumnsVisibilityChange]="true"
+                        [expandDetailsTemplate]="details"
+                        [maxExpandedRows]="5"
+                        (onRowSelect)="handleInstrumentClick($event)">
+                <data-table-header-cell columnName="symbol" [sortable]="true">
+                    {{'instrument' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="priceChange" [sortable]="true">
+                    {{'change' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="highestPrice" [sortable]="true">
+                    {{'high' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="lowestPrice" [sortable]="true">
+                    {{'low' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="volume24h" [sortable]="true">
+                    {{'watchList.volume24h' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="price"
+                                        [dataAccessor]="priceDataAccessor"
+                                        [sortable]="true">
+                    {{'price' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="tickTime" [sortable]="true">
+                    {{'time' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="chart" [sortable]="false" [columnWidth]="190">
+                    {{'chart' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="remove" [sortable]="false" [columnWidth]="50">
+                </data-table-header-cell>
+
+                <data-table-cell columnName="symbol">
+                    <ng-template let-instrumentVM>{{instrumentVM.instrument.symbol}}
+                        : {{instrumentVM.instrument.exchange}}</ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="priceChange">
+                    <ng-template let-instrumentVM>
+                    <span [class.up-trend]="instrumentVM.trendDirection === TrendDirection.Up"
+                          [class.down-trend]="instrumentVM.trendDirection === TrendDirection.Down">
+                        {{instrumentVM.priceChange | percent: '2.2-3'}}
+                    </span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="highestPrice">
+                    <ng-template let-instrumentVM>
+                        <span title="{{instrumentVM.highestPrice}}">{{instrumentVM.highestPrice.toFixed(6)}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="lowestPrice">
+                    <ng-template let-instrumentVM>
+                        <span title="{{instrumentVM.lowestPrice}}">{{instrumentVM.lowestPrice.toFixed(6)}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="volume24h">
+                    <ng-template let-instrumentVM>
+                        <span title="{{instrumentVM.volume24h}} {{instrumentVM.instrument.dependInstrument}}">
+                            {{instrumentVM.volume24h.toFixed(2)}} {{instrumentVM.instrument.dependInstrument}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="price">
+                    <ng-template let-instrumentVM>
+                        <span [class.up-trend]="instrumentVM.trendDirection === TrendDirection.Up"
+                              [class.down-trend]="instrumentVM.trendDirection === TrendDirection.Down"
+                              title="{{instrumentVM.price}}">
+                            {{(instrumentVM.price?.toFixed(6)) || '-'}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell columnName="tickTime">
+                    <ng-template let-instrumentVM>
+                        <div>{{(instrumentVM.tickTime | date: 'HH:mm:ss') || '-'}}</div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="chart">
+                    <ng-template let-instrumentVM>
+                        <div class="chart-wrapper">
+                            <watchlist-chart
+                                    [chartHistory]="instrumentsPriceHistory[getKeyForInstrumentsPriceHistory(instrumentVM.instrument)]"
+                                    [trendDirection]="instrumentVM.trendDirection"></watchlist-chart>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="remove">
+                    <ng-template let-instrumentVM let-rowIndex="index">
+                        <div class="controls-wrapper" style="margin-left: 10px">
+                            <div class="controls-wrapper-inner">
+                                <div class="control m-right-10"
+                                     (click)="$event.stopPropagation(); placeOrder(instrumentVM)">
+                                    <i class="crypto-icon crypto-icon-watchlist-trade-manager" title="{{'watchList.placeOrder' | translate}}"
+                                       aria-hidden="true"></i>
+                                </div>
+
+                                <div class="control m-right-10"
+                                     (click)="$event.stopPropagation(); openChart(instrumentVM)">
+                                    <i class="crypto-icon crypto-icon-watchlist-chart" title="{{'watchList.openChart' | translate}}"
+                                       aria-hidden="true"></i>
+                                </div>
+
+                                <div class="control m-right-10"
+                                     (click)="$event.stopPropagation(); setAlert(instrumentVM)">
+                                    <i class="crypto-icon crypto-icon-watchlist-alert" title="{{'watchList.setAlert' | translate}}"
+                                       aria-hidden="true"></i>
+                                </div>
+
+                                <div class="control m-right-10"
+                                     (click)="$event.stopPropagation(); handleToggleOrderBook(instrumentVM.instrument, rowIndex)">
+                                    <i class="crypto-icon crypto-icon-watchlist-order-book" title="{{'watchList.showOB' | translate}}"
+                                       aria-hidden="true"></i>
+                                </div>
+
+                                <div class="remove-instrument-button crypto-button-delete"
+                                     (click)="$event.stopPropagation(); removeInstrument(instrumentVM)">
+                                    <i class="crypto-icon crypto-icon-close" title="{{'remove' | translate}}"
+                                       aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+
+                <!--                <data-table-cell columnName="remove">-->
+                <!--                    <ng-template let-instrumentVM>-->
+                <!--                        -->
+                <!--                    </ng-template>-->
+                <!--                </data-table-cell>-->
+            </data-table>
+
+            <div class="underlay" *ngIf="viewMode === ViewMode.Tile">
+                <div class="tiles-wrapper w-100">
+                    <div class="watchlist-tile-wrapper"
+                         (click)="handleInstrumentClick(instrumentVM)"
+                         *ngFor="let instrumentVM of instrumentsVM">
+                        <watchlist-tile [watchlistInstrumentVM]="instrumentVM"
+                                        [chartHistory]="instrumentsPriceHistory[getKeyForInstrumentsPriceHistory(instrumentVM.instrument)]"></watchlist-tile>
+
+                        <div class="remove-instrument-button crypto-button-delete"
+                             (click)="$event.stopPropagation(); removeInstrument(instrumentVM)">
+                            <i class="crypto-icon crypto-icon-close" title="{{'remove' | translate}}"
+                               aria-hidden="true"></i>
+                        </div>
+
+                        <div class="tiles-trading-controls">
+                            <div class="control m-right-10"
+                                 (click)="$event.stopPropagation(); placeOrder(instrumentVM)">
+                                <i class="crypto-icon crypto-icon-watchlist-trade-manager" title="{{'watchList.placeOrder' | translate}}"
+                                   aria-hidden="true"></i>
+                            </div>
+
+                            <div class="control m-right-10"
+                                 (click)="$event.stopPropagation(); openChart(instrumentVM)">
+                                <i class="crypto-icon crypto-icon-watchlist-chart" title="{{'watchList.openChart' | translate}}"
+                                   aria-hidden="true"></i>
+                            </div>
+
+                            <div class="control m-right-10"
+                                 (click)="$event.stopPropagation(); setAlert(instrumentVM)">
+                                <i class="crypto-icon crypto-icon-watchlist-alert" title="{{'watchList.setAlert' | translate}}"
+                                   aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="popular-container">
+    <div class="header">
+        <span class="title"><i class="fa fa-commenting-o discussion-icon"></i>Popular Discussions</span>
+    </div>
+    <div class="placeholder"
+         *ngIf="loadThemesProcessState.isPending() || loadThemesProcessState.isFailed()">
+        <span *ngIf="loadThemesProcessState.isPending()">Loading...</span>
+        <span *ngIf="loadThemesProcessState.isFailed()">Failed to load data...</span>
+    </div>
+
+    <div class="placeholder" *ngIf="loadThemesProcessState.isSucceeded() && items.length === 0">
+        <span>No discussions yet...</span>
+    </div>
+
+    <div class="items-wrapper" *ngIf="items.length">
+        <div class="item" *ngFor="let item of items">
+            <a class="title" [routerLink]="getDiscussionUrl(item)">{{item.title}}</a>
+        </div>
+    </div>
+</div>

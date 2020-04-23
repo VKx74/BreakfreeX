@@ -1,0 +1,100 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+
+$header-height: 42px;
+$trends-margin-top: 10px;
+
+:host {
+  .search-input {
+    display: flex;
+    width: 100%;
+  }
+}
+
+.symbolSearch {
+  max-width: 200px;
+}
+
+.search-button {
+  border-width: 0;
+  height: 32px;
+  width: 32px;
+  margin-left: 2px;
+  padding: 0;
+  vertical-align: bottom;
+}
+
+.upTrend {
+  background-color: #26C14D;
+}
+
+.downTrend {
+  background-color: #F42C3B;
+}
+
+.noTrend{
+  background-color: #777777;
+}
+
+.trendcell {
+  display: inline-block;
+  height: 12px;
+  border: 2px solid transparent;
+  opacity: 0.7;
+  padding: 0;
+  margin-right: 3px;
+}
+
+.trend-info {
+  text-align: center;
+}
+
+.table-wrapper {
+  padding-left: 2px;
+  padding-right: 2px;
+  margin-bottom: 2px;
+}
+.trends-widget {
+  margin-top: 9px;
+  height: calc(100% - #{$header-height + $trends-margin-top});
+}
+
+
+@include themify($themes, true) {
+  .trends-widget {
+    //background-color: themed('appPanelColor');
+
+
+    .trends-widget-header {
+      border-color: themed('appBackgroundColor');
+
+      .trends-widget-title {
+        color: themed('accentColor');
+      }
+    }
+
+    color: themed('accentColor');
+
+    .search-button {
+      background-color: themed('inputBackgroundColor');
+      border-color: themed('inputBackgroundColor');
+    }
+
+    .order-buttons {
+      .active {
+        border-color: themed('accentColor');
+      }
+    }
+  }
+
+    /deep/ .mat-form-field-flex {
+      background-color: themed('appPanelColor') !important;
+    }
+
+   /deep/ .mat-input-element {
+    background-color: themed('appPanelColor') !important;
+  }
+  /deep/ input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0 50px themed('inputInModalsBackgroundColor') !important;
+  }
+}

@@ -1,0 +1,96 @@
+stages:
+    - analize
+    - build
+    - build-image
+
+.npmrc-settings-job: &npmrc-settings-job
+    before_script:
+        - cp ./.npmrc.template ./.npmrc;
+        - sed -i -e "s~TOKEN~$NPM_TOKEN~g" .npmrc;
+        #- cat .npmrc
+
+analize-app:
+    image: node:12.8.0-alpine
+    stage: analize
+    <<: *npmrc-settings-job
+    script:
+        - chmod 777 -R ./
+        - echo "NPM Install Chart"
+        - npm i trading-chart-designer 
+        - echo "NPM Install"
+        - npm i 
+        - echo "Analize"
+        - npm run lint
+    tags:
+        - web
+
+build-app:
+  image: node:12.8.0-alpine
+  stage: build
+  <<: *npmrc-settings-job
+  script:
+    - chmod 777 -R ./
+    - echo "NPM Cleanup"
+    - rm -rf node_modules
+    - npm cache clean --force
+    - echo "NPM Install Chart"
+    - npm i trading-chart-designer 
+    - echo "NPM Install"
+    - npm i
+    - echo "Build"
+    - npm run build-stage
+  cache:
+        paths:
+            - dist/
+  artifacts:
+        expire_in: 1 day
+        paths:
+            - dist/
+  only:
+    - develop
+    - master
+    - ci-improvements
+  tags:
+    - web
+
+build-latest:
+    image: docker:stable
+    services:
+        - docker:dind
+    stage: build-image
+    script:
+        - echo Build Docker Image
+        - echo $CI_PROJECT_PATH
+        - CONTAINER_IMAGE=$(echo "registry.git.magnise.com/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - echo $CONTAINER_IMAGE
+        - echo $CI_REGISTRY
+        - echo $CI_BUILD_TOKEN
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - docker build --tag $CONTAINER_IMAGE:latest .
+        - docker push $CONTAINER_IMAGE:latest
+    tags:
+        - docker
+    only:
+        - develop
+        - ci-improvements
+
+build-stable:
+    image: docker:stable
+    services:
+        - docker:dind
+    stage: build-image
+    when: manual
+    script:
+        - echo Build Docker Image
+        - echo $CI_PROJECT_PATH
+        - CONTAINER_IMAGE=$(echo "registry.git.magnise.com/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - echo $CONTAINER_IMAGE
+        - echo $CI_REGISTRY
+        - echo $CI_BUILD_TOKEN
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - docker build --tag $CONTAINER_IMAGE:stable .
+        - docker push $CONTAINER_IMAGE:stable
+    tags:
+        - docker
+    only:
+        - master

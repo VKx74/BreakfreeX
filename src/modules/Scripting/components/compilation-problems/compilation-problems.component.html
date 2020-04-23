@@ -1,0 +1,32 @@
+<div class="root flex flex-direction-column">
+    <div class="top-line flex justify-space-between align-items-center cursor-pointer"
+         (click)="toggleShowProblemsDetails()">
+        <div>
+            <i class="fa problems-details-toggle"
+               [ngClass]="{'fa-caret-right': !showProblemsDetails, 'fa-caret-down': showProblemsDetails}"></i>
+
+            <span class="problem-count-label">{{'scriptsEditor.problems' | translate}}: </span>
+            <span class="problem-count-value">{{compilationResult?.problems?.length || 0}}</span>
+        </div>
+        <div>
+            <span class="compile-status" [ngClass]="compilationResult?.status">{{
+                compilationResult?.status != null ? (compilationStatusLocKey(compilationResult?.status) | translate) : ""
+                }}</span>
+        </div>
+    </div>
+    <div class="content-wrapper flex-grow-1 h-0" *ngIf="showProblemsDetails">
+        <div class="problems-wrapper full-height">
+            <p class="no-problems-placeholder"
+               *ngIf="!compilationResult.problems || compilationResult?.problems?.length === 0"
+               translate="scriptsEditor.noProblems"></p>
+
+            <p class="problem-item" *ngFor="let problem of compilationResult?.problems">
+                <i class="fa fa-exclamation-triangle problem-icon"></i>
+                <span class="problem-description">
+                {{problem}}
+            </span>
+            </p>
+
+        </div>
+    </div>
+</div>

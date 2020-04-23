@@ -1,0 +1,53 @@
+<div class="business-register-page flex">
+    <div class="background"
+         [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="overlay-wrapper" [ngStyle]="{'display': registrationStep === BusinessRegistrationStep.CompanyInfo ? 'block' : 'none'}">
+        <div class="overlay">
+            <div class="form-header">
+                <span class="logo crypto-icon crypto-icon-fintatech"></span>
+                <p class="form-header__title">Sign up</p>
+            </div>
+            <form class="form-wrapper" [formGroup]="registerFormGroup" novalidate (ngSubmit)="onCompanyInfoFilled()">
+                <div class="form-controls-wrapper">
+                    <div class="crypto-text is-small register-label">Business type:</div>
+                    <hr>
+
+                    <div class="crypto-form-unit">
+                        <mat-form-field class="crypto-input with-hint full-width">
+                            <mat-select formControlName="businessType" placeholder="Business type" panelClass="business-type-dropdown">
+                                <mat-option *ngFor="let type of businessTypes" [value]="type" title="{{type}}">
+                                    {{type}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>
+                                <span>Business type name is not valid</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <company-info #companyInfo></company-info>
+                </div>
+                <div *ngIf="errorNotification" class="notification is-error">
+                    <span>{{errorNotification}}</span>
+                </div>
+                <button type="submit"
+                        class="btn crypto-button crypto-button-full-width button_primary register-btn"
+                        [disabled]="registerFormGroup.invalid || companyInfo.formInvalid() || processing"
+                        mat-button>
+                    <div class="lds-ellipsis" *ngIf="processing">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <span *ngIf="!processing">Register</span>
+                </button>
+            </form>
+        </div>
+        <div class="addition" (click)="doLogin()">Returning user? Log back in</div>
+    </div>
+    <kyc-page *ngIf="registrationStep !== BusinessRegistrationStep.CompanyInfo"
+              [completeHandler]="kycPageCompleteHandler"
+              [kycPageConfig]="kycPageConfig"
+    ></kyc-page>
+</div>

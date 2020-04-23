@@ -1,0 +1,5 @@
+<div class="indicator-bars">
+  <span *ngFor="let tfTrend of trendData" class="indicator-bar"
+       [ngClass]="{'upTrend': (tfTrend), 'downTrend': (tfTrend===false), 'noTrend': (tfTrend===null)}">
+  </span>
+</div>

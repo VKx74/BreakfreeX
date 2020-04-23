@@ -1,0 +1,26 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-top: 58px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.nav-delimiter {
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+@include themify($themes, true) {
+  .sidebar-container {
+    background-color: themed('appModalsPanelColor');
+  }
+}

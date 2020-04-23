@@ -1,0 +1,111 @@
+<div class="root flex flex-direction-column">
+    <div class="top-line">
+        <div class="flex">
+            <instrument-search [instrument]="activeInstrument"
+                               (onSelect)="handleInstrumentChange($event)"
+                               class="instrument-search"></instrument-search>
+            <selector [options]="supportedPrecisions" [title]="'precision' | translate"
+                      [selectedOption]="supportedPrecisions[totalAmountPrecision]"
+                      (onSelect)="setTotalAmountPrecision($event)"
+                      class="precision-selector">
+            </selector>
+        </div>
+        <!--        <div class="educational-tips-wrapper">-->
+        <!--            <educational-tips [componentName]="ComponentIdentifier.marketTrades"></educational-tips>-->
+        <!--        </div>-->
+    </div>
+    <div class="content-wrapper flex-grow-1 h-0">
+        <div class="table-wrapper full-height overflow-y-auto">
+            <data-table [rows]="levels">
+                <data-table-header-cell columnName="price">
+                    {{'price' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="amount">
+                    <div class="text-center">
+                        {{'amount' | translate}}
+                    </div>
+                </data-table-header-cell>
+                <data-table-header-cell columnName="orderSide">
+                    <div class="text-center">
+                        {{'side' | translate}}
+                    </div>
+                </data-table-header-cell>
+                <data-table-header-cell columnName="time">
+                    <div class="text-right">
+                        {{'time' | translate}}
+                    </div>
+                </data-table-header-cell>
+
+                <data-table-cell columnName="price">
+                    <ng-template let-item>
+                        <div class="">
+                            <div>{{item.price}}</div>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell columnName="amount">
+                    <ng-template let-item>
+                        <div class="text-center">{{item.amount.toFixed(totalAmountPrecision)}}</div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="orderSide">
+                    <ng-template let-item>
+                        <div class="text-center">
+                              <span class="buy-symbol"
+                                    *ngIf="item.orderSide === 'Buy'">{{'buyShort' | translate}}</span>
+                            <span class="sell-symbol"
+                                  *ngIf="item.orderSide === 'Sell'">{{'sellShort' | translate}}</span>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="time">
+                    <ng-template let-item>
+                        <div class="text-right">{{item.time | formatDate: 'MMM d HH:mm:ss'}}</div>
+                    </ng-template>
+                </data-table-cell>
+            </data-table>
+
+
+<!--            <table class="crypto-table crypto-table_striped crypto-table_fixed-header">-->
+<!--                <thead>-->
+<!--                <tr class="level-title">-->
+<!--                    <td class="level-price">-->
+<!--                        {{'price' | translate}}-->
+<!--                        <span class="symbol" *ngIf="baseCurrency"> ({{baseCurrency.toUpperCase()}})</span>-->
+<!--                    </td>-->
+<!--                    <td class="level-amount">-->
+<!--                        {{'amount' | translate}}-->
+<!--                        <span class="symbol" *ngIf="dependCurrency"> ({{dependCurrency.toUpperCase()}})</span>-->
+<!--                    </td>-->
+<!--                    <td class="level-time">{{'time' | translate}}</td>-->
+<!--                    <td class="level-side small-column">{{'side' | translate}}</td>-->
+<!--                </tr>-->
+<!--                </thead>-->
+
+<!--                <tbody>-->
+<!--                <tr class="level-row" *ngFor="let level of levels; let i = index"-->
+<!--                    [ngClass]="getPriceLevelClass(level)"-->
+<!--                    [highlight]="i === 0 ? getPriceLevelHighlightColor(level) : null">-->
+
+<!--                    <td class="level-price"-->
+<!--                        [ngClass]="{'buy-symbol' : level.orderSide === 'Buy', 'sell-symbol' : level.orderSide === 'Sell'}">-->
+<!--                        {{(level.price.toFixed(pricePecision))}}-->
+<!--                    </td>-->
+<!--                    <td class="level-amount">{{level.amount.toFixed(totalAmountPrecision)}}</td>-->
+<!--                    <td class="level-time">{{level.time | formatDate: 'MMM d HH:mm:ss'}}</td>-->
+<!--                    <td class="level-side small-column">-->
+<!--                            <span class="buy-symbol"-->
+<!--                                  *ngIf="level.orderSide === 'Buy'">{{'buyShort' | translate}}</span>-->
+<!--                        <span class="sell-symbol"-->
+<!--                              *ngIf="level.orderSide === 'Sell'">{{'sellShort' | translate}}</span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+
+<!--            </table>-->
+        </div>
+    </div>
+
+
+</div>

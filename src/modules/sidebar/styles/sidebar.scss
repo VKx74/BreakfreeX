@@ -1,0 +1,53 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+i {
+  font-size: 18px;
+}
+
+.crypto-icon-more {
+  transform: rotateZ(90deg) scale(2);
+}
+
+.section-label {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.section-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+
+  &.active {
+    opacity: 1;
+  }
+
+  .item-icon {
+    margin-right: 35px;
+  }
+
+  .item-text {
+    text-transform: capitalize;
+    font-size: 14px;
+    line-height: 1.21;
+    letter-spacing: normal;
+    text-align: left;
+  }
+}
+
+@include themify($themes, true) {
+  .section-item {
+    color: themed('titleTextColor');
+  }
+
+  .section-label {
+    color: themed('valueTextColor');
+  }
+}

@@ -1,0 +1,18 @@
+:host {
+  width: 100%;
+  max-width: 1100px;
+  padding: 20px;
+
+  .content-wrapper {
+    width: calc(100% - 320px);
+    min-height: 320px;
+  }
+
+  ::ng-deep {
+    no-items-placeholder {
+      .crypto-text {
+        height: 100%;
+      }
+    }
+  }
+}

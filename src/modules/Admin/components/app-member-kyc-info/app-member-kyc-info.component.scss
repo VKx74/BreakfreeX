@@ -1,0 +1,42 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  .sections-wrapper {
+    padding: 0 5px;
+    max-height: 300px;
+    overflow: auto;
+  }
+
+  /deep/ {
+    .delimiter {
+      margin: 2px 0;
+      height: 1px;
+    }
+
+    .section:not(:last-of-type) {
+      margin-bottom: 20px;
+    }
+
+    .section-item {
+      line-height: 2.58;
+    }
+  }
+
+  .btns-wrapper {
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      font-size: 12px;
+      width: 85px;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  /deep/.delimiter {
+    background-color: themed('appBackgroundColor');
+  }
+}

@@ -1,0 +1,23 @@
+<div class="trade-manager">
+    <mat-tab-group class="full-height">
+        <mat-tab label="{{'tradeManager.positions' | translate}}">
+            <oanda-positions></oanda-positions>
+        </mat-tab>
+        <mat-tab label="{{'tradeManager.openOrders' | translate}}">
+            <oanda-open-orders></oanda-open-orders>
+        </mat-tab>
+        <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
+            <oanda-history-orders></oanda-history-orders>
+        </mat-tab>
+<!--        <mat-tab label="{{'tradeManager.accountInfo' | translate}}">-->
+<!--            <oanda-account-info></oanda-account-info>-->
+<!--        </mat-tab>-->
+    </mat-tab-group>
+</div>
+
+<!--<div class="controls">-->
+<!--    <button (click)="placeOrder()"-->
+<!--            [disabled]="!brokerConnected"-->
+<!--            class="crypto-button crypto-button_action">{{'tradeManager.placeOrder' | translate}}-->
+<!--    </button>-->
+<!--</div>-->

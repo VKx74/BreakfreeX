@@ -1,0 +1,9 @@
+/**
+ * @fileoverview added by tsickle
+ * Generated from: lib/tokens/golden-layout-item-component-factory.token.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+import { InjectionToken } from "@angular/core";
+/** @type {?} */
+export const GoldenLayoutItemComponentResolver = new InjectionToken('GoldenLayoutItemComponentResolver');
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ29sZGVuLWxheW91dC1pdGVtLWNvbXBvbmVudC1mYWN0b3J5LnRva2VuLmpzIiwic291cmNlUm9vdCI6Im5nOi8vYW5ndWxhci1nb2xkZW4tbGF5b3V0LyIsInNvdXJjZXMiOlsibGliL3Rva2Vucy9nb2xkZW4tbGF5b3V0LWl0ZW0tY29tcG9uZW50LWZhY3RvcnkudG9rZW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBQSxPQUFPLEVBQUMsY0FBYyxFQUFDLE1BQU0sZUFBZSxDQUFDOztBQUU3QyxNQUFNLE9BQU8saUNBQWlDLEdBQUcsSUFBSSxjQUFjLENBQUMsbUNBQW1DLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge0luamVjdGlvblRva2VufSBmcm9tIFwiQGFuZ3VsYXIvY29yZVwiO1xuXG5leHBvcnQgY29uc3QgR29sZGVuTGF5b3V0SXRlbUNvbXBvbmVudFJlc29sdmVyID0gbmV3IEluamVjdGlvblRva2VuKCdHb2xkZW5MYXlvdXRJdGVtQ29tcG9uZW50UmVzb2x2ZXInKTtcbiJdfQ==

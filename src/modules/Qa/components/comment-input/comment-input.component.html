@@ -1,0 +1,17 @@
+<div class="form-wrapper full-width" [formGroup]="formGroup">
+    <div>
+        <mat-form-field class="crypto-textarea full-width with-hint">
+            <textarea matInput placeholder="Type your comment..." formControlName="text"></textarea>
+            <mat-error>Please, enter a valid comment</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="btns-wrapper text-right">
+        <button class="crypto-button crypto-button_action m-right-10" (click)="cancel()">Cancel</button>
+        <button class="crypto-button crypto-button_success"
+                [ngClass]="{'is-loading': submitProcessState.isPending()}"
+                (click)="submit()"
+                [disabled]="formGroup.invalid">
+            Submit
+        </button>
+    </div>
+</div>

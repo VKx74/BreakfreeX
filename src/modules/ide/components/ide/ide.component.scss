@@ -1,0 +1,34 @@
+.ide {
+  width: 100%;
+  height: 100%;
+}
+
+.editor-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  span {
+    font: 18px 'PT Sans';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+ngx-monaco-editor {
+  height: 600px;
+
+ /deep/ .monaco-editor {
+   background-color: red;
+ }
+}

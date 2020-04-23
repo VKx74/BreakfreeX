@@ -1,0 +1,16 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+.paginator-container {
+  height: 39px;
+  border-radius: 3px;
+  padding-left: 12px;
+  padding-right: 4px;
+}
+
+@include themify($themes, true) {
+  .paginator-container {
+    background-color: themed('appModalsPanelColor');
+    border: 1px solid themed('appBackgroundColor');
+  }
+}

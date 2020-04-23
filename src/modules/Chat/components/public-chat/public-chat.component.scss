@@ -1,0 +1,13 @@
+//@import "../../../../global-styles/themes/themes";
+//@import "mixins/themify";
+//
+//.public-chat {
+//  display: flex;
+//  flex-direction: column;
+//  flex-wrap: nowrap;
+//  height: 100%;
+//
+//  @include themify($themes, true) {
+//    color: themed('primeColor');
+//  }
+//}

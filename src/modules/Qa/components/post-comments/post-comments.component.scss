@@ -1,0 +1,35 @@
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+@import "variables";
+
+
+.add-comment {
+  cursor: pointer;
+  font-size: 11px;
+  font-family: $primaryFontFamily;
+}
+
+.comments-wrapper {
+  padding-bottom: 5px;
+}
+
+.placeholder {
+  font-size: 11px;
+  font-family: $primaryFontFamily;
+}
+
+
+@include themify($themes, true) {
+  .placeholder {
+    color: themed('valueTextColor');
+  }
+
+  .add-comment,
+  .comment-date {
+    color: themed('titleTextColor');
+  }
+
+  .author-name {
+    color: themed('accentColor');
+  }
+}

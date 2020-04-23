@@ -1,0 +1,11 @@
+<div class="ide flex">
+    <div class="editor-wrapper">
+        <div class="loading-overlay" *ngIf="loading">
+            <span class="crypto-caption">{{'loading' | translate}}</span>
+        </div>
+        <ngx-monaco-editor [options]="options"
+                           (ngModelChange)="handleModelChange($event)"
+                           (onInit)="handleEditorLoaded($event)"
+                           [ngModel]="code"></ngx-monaco-editor>
+    </div>
+</div>

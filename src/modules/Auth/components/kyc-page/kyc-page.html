@@ -1,0 +1,43 @@
+<div class="register-page flex">
+    <div class="background"
+         [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="overlay-wrapper">
+        <div class="overlay">
+            <div class="form-header">
+                <span class="logo crypto-icon crypto-icon-fintatech"></span>
+            </div>
+
+            <div class="full-width flex justify-space-between sub-header m-bottom-10">
+                <div class="crypto-text title">Sign up</div>
+                <div class="crypto-text is-small flex justify-flex-end custom-stepper-header">
+                    <div class="step-name m-right-10" *ngIf="stepper.selectedIndex === 0">Step: Information</div>
+                    <div class="step-name m-right-10" *ngIf="stepper.selectedIndex === 1">Step: Documents</div>
+                    <button class="crypto-button step-1"
+                            [title]="isStepActive(0) ? '' : 'Previous step'"
+                            [ngClass]="{'completed': isStepCompleted(0), 'active': isStepActive(0)}"
+                            (click)="selectStep(0)">1
+                    </button>
+                    <button class="crypto-button step-2"
+                            [ngClass]="{'active': isStepActive(1)}">2
+                    </button>
+                </div>
+            </div>
+            <div class="crypto-text is-small m-bottom-5" *ngIf="kycPageConfig.type !== AccountType.Personal">Please enter kyc for: {{(kycPageConfig.data[0] + ' ' + kycPageConfig.data[1])}}</div>
+
+            <mat-horizontal-stepper class="stepper m-top-10" #stepper>
+                <mat-step [stepControl]="infoStep.formGroup">
+                    <personal-info-page [completeHandler]="personalInfoCompleteHandler"
+                                        [userFullName]="kycPageConfig.type !== AccountType.Personal ? kycPageConfig.data : null"
+                                        #infoStep></personal-info-page>
+                </mat-step>
+                <mat-step [stepControl]="documentStep.formGroup">
+                    <kyc-documents [completeHandler]="kycDocumentsCompleteHandler"
+                                   [availableDocuments]="availableDocuments"
+                                   #documentStep></kyc-documents>
+
+                </mat-step>
+            </mat-horizontal-stepper>
+        </div>
+        <div class="addition" (click)="doLogin()">Returning user? Log back in</div>
+    </div>
+</div>

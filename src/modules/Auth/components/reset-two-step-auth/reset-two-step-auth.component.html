@@ -1,0 +1,39 @@
+<div class="root flex">
+    <div class="background" [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="overlay-wrapper">
+        <div class="overlay">
+            <form [formGroup]="formGroup" class="form-wrapper">
+                <div class="form-header">
+                    <span class="logo crypto-icon crypto-icon-fintatech"></span>
+                    <p class="form-header__title">Reset Two Step Auth</p>
+                </div>
+                <div class="crypto-form-unit">
+                    <mat-form-field class="crypto-input full-width">
+                        <input matInput type="email" placeholder="user@email.com" formControlName="email" >
+                        <i class="crypto-icon crypto-icon-email" matSuffix></i>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="notification" class="notification"
+                     [ngClass]="notification.isError ? 'is-error' : 'is-success'">
+                    <span>{{notification.message}}</span>
+                </div>
+
+                <button type="submit" class="btn crypto-button crypto-button-full-width button_primary restore-btn"
+                        [disabled]="formGroup.invalid || processing"
+                        (click)="reset()">
+                    <div class="lds-ellipsis" *ngIf="processing">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <span *ngIf="!processing">Reset</span>
+                </button>
+                <button [disabled]="processing" class="btn crypto-button crypto-button-full-width button_success"
+                        (click)="doLogin()">
+                    <span>Login Page</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

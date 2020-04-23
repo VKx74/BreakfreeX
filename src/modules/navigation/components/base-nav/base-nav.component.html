@@ -1,0 +1,59 @@
+<div class="navigation" [class.open]="sidebarState$ | async">
+    <div class="flex justify-space-between align-items-center w-100 nav-top-row">
+        <div class="flex sidebar-toggle-wrapper">
+            <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()"></sidebar-toggle>
+
+            <a [routerLink]="logoRedirectRoute" class="logo flex align-items-center">
+            <span class="logo__img">
+                <i class="crypto-icon crypto-icon-fintatech"></i>
+            </span>
+                <span class="crypto-text logo__text">
+                <span class="title">TRADING PLATFORM</span>
+                <span class="subtitle">FINTATECH UI</span>
+            </span>
+            </a>
+        </div>
+
+        <div class="flex"></div>
+
+        <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
+            <ng-content></ng-content>
+            <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="true">
+                <div [matMenuTriggerFor]="menu">
+                    <ng-container *ngTemplateOutlet="avatar"></ng-container>
+                    <mat-menu #menu="matMenu" xPosition="before">
+                        <user-info-menu [avatarTemplate]="avatarUserInfo" (logOut)="logout()"></user-info-menu>
+                    </mat-menu>
+                </div>
+            </nav-section>
+        </div>
+    </div>
+
+<!--    <div class="nav-bottom-row">-->
+<!--        <ng-content select=".nav-bottom-row"></ng-content>-->
+<!--    </div>-->
+
+
+    <ng-template #avatar>
+        <div class="flex cursor-pointer">
+            <name-avatar [name]="currentUserFullName"
+                         [src]="avatarId"
+                         class="avatar"
+                         [shape]="avatarShape"
+            ></name-avatar>
+            <div class="about-user flex flex-direction-column">
+                <span class="role">{{role}}</span>
+                <span class="email">{{firstName}}</span>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #avatarUserInfo>
+        <name-avatar [name]="currentUserFullName"
+                     [src]="avatarId"
+                     class="cursor-pointer avatar"
+                     [shape]="avatarShape"
+        ></name-avatar>
+    </ng-template>
+</div>
+

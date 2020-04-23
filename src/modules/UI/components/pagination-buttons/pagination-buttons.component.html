@@ -1,0 +1,10 @@
+<div class="pagination-buttons">
+    <div [class.disabled]="prevDisabled" class="button" title="{{'economicCalendar.previous' | translate}}"
+         (click)="onPrevClick()">
+        <i class="crypto-icon crypto-icon-scroll-left" aria-hidden="true"></i>
+    </div>
+    <div [class.disabled]="nextDisabled" class="button" title="{{'economicCalendar.next' | translate}}"
+         (click)="onNextClick()">
+        <i class="crypto-icon crypto-icon-scroll-right" aria-hidden="true"></i>
+    </div>
+</div>

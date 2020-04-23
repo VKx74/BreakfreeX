@@ -1,0 +1,9 @@
+<div class="vote-wrapper text-center">
+    <i class="crypto-icon crypto-icon-question-vote vote-icon vote-up"
+       [ngClass]="{'active': vote === PostVote.Up}"
+       (click)="doVote(true)"></i>
+    <div class="vote-count qa-color-prime">{{voteCount}}</div>
+    <i class="crypto-icon crypto-icon-question-vote vote-icon vote-down"
+       [ngClass]="{'active': vote === PostVote.Down}"
+       (click)="doVote(false)"></i>
+</div>

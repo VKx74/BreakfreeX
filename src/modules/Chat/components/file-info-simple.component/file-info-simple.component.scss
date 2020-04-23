@@ -1,0 +1,71 @@
+@import "../../../file-uploader/styles/themes/themes";
+@import "../../../../global-styles/variables";
+@import "../../../../global-styles/mixins/themify";
+
+.file-info-container {
+    height: 50px;
+    display: flex;
+
+    .document {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+
+        @include themify($themes, true) {
+            background: transparentize(themed('accentColor'), 0.8);
+        }
+
+        .crypto-icon-document {
+            margin-top: 4px;
+            font-size: 30px;
+        }
+
+        &.circle {
+            border-radius: 50%;
+            width: 50px;
+        }
+    }
+
+    .img-container {
+        width: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+
+        @include themify($themes, true) {
+            background: transparentize(themed('accentColor'), 0.8);
+        }
+
+        img {
+            height: 50px;
+            width: auto;
+        }
+    }
+
+    .file-info {
+        margin: 5px;
+        font-size: 13px;
+        width: calc(100% - 60px);
+
+        .size {
+            color: gray;
+            font-size: 12px;
+        }
+    }
+}
+
+.pointer {
+    cursor: pointer;
+
+    div {
+        label {
+            text-overflow: ellipsis;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor:pointer;
+        }
+    }
+}

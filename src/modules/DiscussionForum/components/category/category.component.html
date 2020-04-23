@@ -1,0 +1,8 @@
+<card class="flex flex-direction-column">
+    <a [routerLink]="navigationInfo.url" [queryParams]="navigationInfo.queryParams" class="name">{{category.name}}</a>
+    <p class="description">{{category.description}}</p>
+    <div class="delimiter"></div>
+    <div class="bottom-line">
+        <span>{{category.count}} Discussions</span>
+    </div>
+</card>

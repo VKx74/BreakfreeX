@@ -1,0 +1,47 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+//.news-component-wrapper {
+//  padding: 0 !important;
+//}
+//
+
+.news-title {
+  a {
+    @include themify($themes, true) {
+      color: themed('accentColor');
+    }
+  }
+  padding-bottom: 5px;
+}
+
+:host {
+  .tag {
+    display: inline-block;
+  }
+
+  .news-date {
+    font-size: 12px;
+  }
+
+  .news-text {
+    font-size: 14px;
+  }
+
+  .tags-wrapper {
+    margin-top: 15px;
+  }
+
+  .landing-item {
+    width: 100%;
+  }
+//  .crypto-delimiter {
+//    margin: 15px 0;
+//  }
+//
+//  .news-item {
+//    margin-bottom: 0 !important;
+//  }
+//
+}
+

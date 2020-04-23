@@ -1,0 +1,30 @@
+@import "../../styles/variables";
+@import "global-styles/variables";
+
+.input-wrapper {
+  padding: 15px 20px 0 20px;
+}
+
+.btns-wrapper {
+  padding: 15px 20px 15px 20px;
+}
+
+.post-answer-btn {
+  font-size: 12px;
+  //width: 150px;
+}
+
+.cancel-btn {
+  font-size: 12px;
+  color: $primeColor;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+textarea {
+  font-size: 13px;
+  min-height: 75px;
+}

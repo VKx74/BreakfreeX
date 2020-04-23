@@ -1,0 +1,85 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+
+.invites-wrapper-border-bottom {
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.no-notifications {
+  height: 83%;
+}
+
+.invite-notification {
+  padding: 14px 12px 6px 17px;
+
+  &:nth-last-of-type(odd) {
+    @include themify($themes, true) {
+      background: transparentize(themed('appPanelColor'), 0.85);
+    }
+  }
+
+  .creator-avatar {
+    height: 24px;
+    width: 24px;
+    flex-shrink: 0;
+    margin-right: 7px;
+
+    ::ng-deep img {
+      border-radius: 100%;
+    }
+  }
+
+  .invite-body {
+    padding: 0 9px 7px 11px;
+    max-width: calc(100% - 31px);
+
+
+    .caption {
+      padding: 4px 0;
+
+      .creator-name {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        @include themify($themes, true) {
+          color: themed('accentColor');
+        }
+      }
+
+      .time {
+        margin-left: 5px;
+        font-size: 11px;
+        opacity: 0.5;
+      }
+    }
+
+    .text {
+      word-break: break-all;
+      font-size: 13px;
+      line-height: 1.38;
+      text-align: left;
+    }
+
+    .invite-footer {
+      margin-top: 7px;
+
+      .crypto-button{
+        font-size: 12px;
+      }
+      :nth-child(1) {
+        margin-right: 10px;
+        @include themify($themes, true) {
+          background: themed('appModalsPanelColor');
+        }
+      }
+    }
+  }
+
+  .menu-toggle {
+    margin: 0 auto;
+  }
+}

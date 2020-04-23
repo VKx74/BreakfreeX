@@ -1,0 +1,21 @@
+<!--<navigation [mode]="NavigationMode.Admin" style="width: 100%"></navigation>-->
+<!--<mat-sidenav-container class="admin-container"-->
+<!--                       [class.sidebar-close]="!sidebarOpen" (backdropClick)="setSidebarState(false)">-->
+<!--    <mat-sidenav mode="over" [opened]="sidebarOpen">-->
+<!--        <div class="sidebar">-->
+<!--            <admin-sidebar></admin-sidebar>-->
+<!--        </div>-->
+<!--    </mat-sidenav>-->
+<!--    <mat-sidenav-content>-->
+<!--        <div class="flex flex-grow-1 w-100 flex-direction-column content">-->
+<!--            <div class="main-content-wrapper flex justify-content-center flex-grow-1">-->
+<!--                <router-outlet></router-outlet>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </mat-sidenav-content>-->
+<!--</mat-sidenav-container>-->
+
+<base-sidebar>
+    <admin-nav class="navigation w-100"></admin-nav>
+    <admin-sidebar class="sidebar"></admin-sidebar>
+</base-sidebar>

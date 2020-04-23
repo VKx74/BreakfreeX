@@ -1,0 +1,105 @@
+@import "../variables";
+@import "../themes/themes";
+@import "../mixins/themify";
+@import "../mixins/hover-opacity";
+
+.#{$classPrefix}-color {
+  &-red {
+    color: $redColor !important;
+  }
+
+  &-green {
+    color: $greenColor !important;
+  }
+
+  &-yellow {
+    color: $yellowColor !important;
+  }
+
+  &-prime {
+    @include themify($themes) {
+      color: themed('valueTextColor') !important;
+    }
+  }
+
+  &-muted {
+    @include themify($themes) {
+      color: themed('titleTextColor') !important;
+    }
+  }
+
+  &-secondary {
+    @include themify($themes) {
+      color: themed('titleTextColor') !important;
+    }
+  }
+
+  &-accent {
+    @include themify($themes) {
+      color: themed('accentColor') !important;
+    }
+  }
+}
+
+.link-no-decoration,
+.link-no-decoration * {
+  text-decoration: none !important;
+}
+
+.#{$classPrefix}-scrollable-container {
+  padding-right: 5px;
+}
+
+@include themify($themes) {
+  /deep/ .delimiter {
+    width: 100%;
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  /deep/ .delimiter-top {
+    border-top: 1px solid themed('appBackgroundColor');
+  }
+
+  /deep/ .delimiter-right {
+    border-right: 1px solid themed('appBackgroundColor');
+  }
+
+  /deep/ .delimiter-left {
+    border-left: 1px solid themed('appBackgroundColor');
+  }
+
+  /deep/ .delimiter-bottom {
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  /deep/ .delimiter-vertical {
+    @include themify($themes) {
+      height: 100%;
+      border-left: 1px solid themed('appBackgroundColor');
+    }
+  }
+}
+
+/deep/ .user-settings-header {
+  border-radius: 5px;
+
+  //TODO: Themify
+  background-color: #243445;
+  //@include themify($themes) {
+  //  background-color: themed('menuDelimiterColor') !important;
+  //}
+}
+
+@include themify($themes) {
+  .color-title {
+    color: themed('titleTextColor') !important;
+  }
+
+  .color-value {
+    color: themed('valueTextColor') !important;
+  }
+}
+
+.color-white {
+  color: #fff;
+}

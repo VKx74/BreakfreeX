@@ -1,0 +1,44 @@
+<div class="flex flex-direction-column" [formGroup]="form">
+    <ng-container *ngIf="mode === ScriptParamsComponentMode.AutoTrading">
+        <div class="crypto-form-unit">
+            <div class="form-unit__label">{{'runAutomatedTrading.calculationsParameters' | translate}}</div>
+            <selector [formControlName]="CalculateProperty"
+                      [options]="calculateParamOptions"
+                      [optionCaption]="calculateParamOptionCaption">
+            </selector>
+        </div>
+
+        <div class="crypto-form-unit">
+            <div class="form-unit__label">{{'runAutomatedTrading.startBehavior' | translate}}</div>
+            <selector [formControlName]="StartBehaviorProperty"
+                      [options]="startBehaviorParamsOptions"
+                      [optionCaption]="startBehaviorParamOptionCaption">
+            </selector>
+        </div>
+
+        <div class="delimiter" *ngIf="script.properties && script.properties.length"></div>
+    </ng-container>
+
+    <div class="properties-list">
+        <ng-container *ngFor="let property of script.properties">
+            <ng-container *ngIf="property.type !== 'Boolean'">
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{property.name}}:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" [formControlName]="property.name">
+                        <mat-error [formError]="property.name"></mat-error>
+                    </mat-form-field>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="property.type === 'Boolean'">
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{property.name}}:</div>
+                    <mat-slide-toggle class="v-align-middle slider"
+                                      [formControlName]="property.name"
+                                      [checked]="false"></mat-slide-toggle>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>

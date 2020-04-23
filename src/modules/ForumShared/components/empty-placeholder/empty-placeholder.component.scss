@@ -1,0 +1,51 @@
+@import "../../../Markdown/styles/variables";
+@import "global-styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+///deep/ path, rect:first-of-type {
+
+@include themify($themes, true) {
+  .page {
+    fill: themed('titleTextColor');
+  }
+
+  .page-background {
+    fill: themed('valueTextColor');
+  }
+
+  .page-middle {
+    fill: themed('activeBackgroundColor');
+  }
+}
+
+:host {
+  display: block;
+  width: 100%;
+
+  .empty-placeholder {
+    width: 100%;
+    border-radius: 3px;
+    padding: 9px 4px;
+    //background-color: $primeBgColor;
+  }
+
+  .message-wrapper {
+    padding: 15px 0;
+    background-color: rgba(0, 0, 0, 0.1);
+
+    .message {
+      color: rgba(213, 213, 220, 0.3);
+      font-size: 14px;
+      font-family: $primaryFontFamily;
+    }
+  }
+
+  .image-wrapper {
+    padding: 65px 0;
+
+    svg {
+      width: 150px;
+    }
+  }
+}

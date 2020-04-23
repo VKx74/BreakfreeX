@@ -1,0 +1,24 @@
+<sidebar-container>
+    <div class="sidebar-section" *ngIf="news">
+        <div class="title qa-color-prime header">Recently added</div>
+        <div *ngFor="let newsItem of news; let last = last" class="item flex flex-direction-column">
+            <div class="">
+                <span class="overflow-wrap-break-word news-title t-overflow-ellipsis" (click)="redirectToFullNews(newsItem)">{{newsItem.title}}</span>
+                <span class="time">{{newsItem.creationTime * 1000 | timeAgo}}</span>
+            </div>
+            <div *ngIf="!last" class="crypto-delimiter"></div>
+        </div>
+    </div>
+    <div class="crypto-delimiter"></div>
+    <div class="sidebar-section" *ngIf="tags">
+        <div class="title qa-color-prime header">Popular tags</div>
+        <div>
+            <div class="tag-wrapper flex justify-space-between align-items-center" *ngFor="let tag of tags">
+                <div class="crypto-tag is-small tag" (click)="handleTagClick(tag)">
+                    <span>{{tag.tagName}}</span>
+                </div>
+                <div class="tag-count tag-text is-small muted">{{tag.count}}</div>
+            </div>
+        </div>
+    </div>
+</sidebar-container>

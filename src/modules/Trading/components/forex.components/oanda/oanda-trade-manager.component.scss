@@ -1,0 +1,55 @@
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  flex-grow: 1;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  flex-direction: column;
+
+  .selectAccount {
+    selector {
+      display: inline-block;
+      width: 200px;
+      margin-left: 20px;
+
+      /deep/ ul {
+        max-height: 250px !important;
+        overflow: auto;
+      }
+    }
+
+    .caption {
+      font-size: 0.9em;
+    }
+  }
+
+  .trade-manager {
+    //padding: 10px;
+    width: 100%;
+    //height: calc(100% - 50px);
+    overflow: auto;
+
+    sortable-table {
+      flex-grow: 1;
+    }
+  }
+
+  .controls {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.tabs-wrapper {
+  padding: 10px 5px;
+}
+
+@include themify($themes, true) {
+  .control .caption {
+    color: themed('valueTextColor');
+  }
+}

@@ -1,0 +1,27 @@
+/deep/ .instrument-search-option {
+  .mat-option-text {
+    display: flex;
+    justify-content: space-between;
+
+    .crypto-autocomplete {
+      mat-form-field {
+        width: 100% !important;
+      }
+    }
+  }
+
+  .exchange {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+form {
+  line-height: 1;
+}
+
+.icon-size {
+  font-size: 1.6em
+}
+

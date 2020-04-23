@@ -1,0 +1,44 @@
+<mat-form-field class="full-width" >
+    <ng-container *ngIf="isAutocompleteMode">
+        <mat-chip-list #chipList>
+            <mat-chip *ngFor="let tag of tags"
+                      [selectable]="false"
+                      (removed)="removeTag(tag)">
+                    <span class="chip-content">
+                        {{tagNameSelector(tag)}}
+                    </span>
+                <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+
+            <input #tagInput
+                   [placeholder]="placeholder"
+                   [formControl]="tagsCtrl"
+                   [matAutocomplete]="showAutocomplete ? auto : empty"
+                   [matChipInputFor]="chipList"
+                   [matChipInputAddOnBlur]="false">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="handleTagSelected($event)">
+            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                {{tagNameSelector(tag)}}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-autocomplete #empty></mat-autocomplete>
+    </ng-container>
+    <ng-container *ngIf="isManualMode">
+        <mat-chip-list #chipList>
+            <mat-chip *ngFor="let tag of tags"
+                      [selectable]="false"
+                      (removed)="removeTag(tag)">
+                    <span class="chip-content">
+                        {{tagNameSelector(tag)}}
+                    </span>
+                <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+
+            <input [placeholder]="placeholder"
+                   [matChipInputFor]="chipList"
+                   [matChipInputAddOnBlur]="false"
+                   (matChipInputTokenEnd)="addTag($event)">
+        </mat-chip-list>
+    </ng-container>
+</mat-form-field>

@@ -1,0 +1,15 @@
+@import "../../styles/markdown-preview";
+
+/deep/ .preview {
+  @include markdownPreviewStyles();
+  overflow: hidden;
+  word-break: break-all;
+
+
+  img {
+    display: block;
+    padding-bottom: 10px;
+    text-align: center;
+    margin: 0 auto;
+  }
+}

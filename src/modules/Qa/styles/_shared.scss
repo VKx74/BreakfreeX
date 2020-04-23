@@ -1,0 +1,78 @@
+@import "global-styles/variables";
+@import "./variables";
+
+$prefix: 'qa';
+
+/deep/ {
+  .#{$prefix}-delimiter {
+    height: 1px;
+    background-color: #17191b;
+  }
+
+  .#{$prefix}-text {
+    font-size: 13px;
+    font-family: "Open Sans";
+    color: $primeColor;
+
+    &.is-very-large {
+      font-size: 21px;
+    }
+
+    &.is-large {
+      font-size: 16px;
+    }
+
+    &.is-medium {
+      font-size: 14px;
+    }
+
+    &.is-small {
+      font-size: 11px;
+    }
+
+    &.is-bold {
+      font-weight: 900;
+    }
+  }
+
+  .#{$prefix}-color {
+    &-prime {
+      color: $primeColor;
+    }
+
+    &-secondary {
+      color: $secondaryColor;
+    }
+
+    &-muted {
+      color: $mutedColor;
+    }
+
+    &-accent {
+      color: $accentColor;
+    }
+  }
+}
+
+
+:host /deep/ {
+  .delimiter {
+    height: 1px;
+    background-color: #17191b;
+  }
+
+  .avatar {
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    background-color: $avatarBgColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    font-family: $primaryFontFamily;
+    color: $accentColor;
+    text-transform: uppercase;
+  }
+}

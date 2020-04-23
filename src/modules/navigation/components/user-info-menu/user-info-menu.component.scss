@@ -1,0 +1,81 @@
+@import "variables";
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  ::ng-deep .mat-menu-panel {
+    max-width: unset !important;
+  }
+  /deep/ name-avatar {
+    cursor: default !important;
+  }
+}
+
+.avatar {
+  min-width: 70px;
+  max-width: 70px;
+  height: 70px;
+}
+
+.menu-top {
+  padding: 15px 18px 18px 18px;
+}
+
+.menu-bottom {
+  padding: 18px 18px 0px 18px;
+}
+
+.mat-menu-panel {
+}
+
+.menu-top {
+  position: relative;
+
+  .user-settings {
+    margin-right: 60px;
+    margin-left: -4px;
+    margin-top: -4px;
+  }
+
+  .log-out {
+    margin-left: 60px;
+    margin-right: -4px;
+    margin-top: -4px;
+  }
+
+  .user-name {
+    padding-top: 18px;
+    font-size: 16px;
+    //font-family: Rubik;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.19;
+    letter-spacing: normal;
+    text-align: left;
+
+    @include themify($themes, true) {
+      color: themed('titleTextColor');
+    }
+  }
+}
+
+.menu-bottom {
+  .item {
+    @include themify($themes, true) {
+      color: themed('titleTextColor');
+    }
+    margin-bottom: 10px;
+
+    .item-name {
+      font-size: 12px;
+      line-height: 1.17;
+    }
+
+    .item-value {
+      font-size: 13px;
+      line-height: 1.15;
+    }
+  }
+}
+

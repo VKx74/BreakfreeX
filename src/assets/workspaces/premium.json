@@ -1,0 +1,74 @@
+{
+  "id": "1",
+  "name": "Premium",
+  "layoutState": {
+    "version": "1",
+    "content": [
+      {
+        "type": "row",
+        "content": [
+          {
+            "type": "column",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "1",
+                    "type": "component",
+                    "componentName": "tradingChart",
+                    "isClosable": false
+                  }
+                ]
+              },
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "2",
+                    "type": "component",
+                    "componentName": "orderBook",
+                    "isClosable": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "column",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "3",
+                    "type": "component",
+                    "componentName": "marketTrades",
+                    "isClosable": false
+                  },
+                  {
+                    "id": "4",
+                    "type": "component",
+                    "componentName": "watchlist",
+                    "isClosable": false
+                  }
+                ]
+              },
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "5",
+                    "type": "component",
+                    "componentName": "orderBookChart",
+                    "isClosable": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+<div class="root flex" *ngIf="message" [class.current-user-message]="isUserMessage">
+    <ng-container *ngIf="!isUserMessage">
+        <div class="creator-avatar">
+            <name-avatar [src]="message.creator.avatarId" [name]="message.creator.userName"
+                         (onColorSet)="onAvatarColorSet($event)"></name-avatar>
+        </div>
+    </ng-container>
+
+    <div class="message-body flex flex-direction-column">
+        <div class="top-line flex align-items-center justify-flex-end">
+            <span class="creator-name t-overflow-ellipsis">{{message.creator.userName}}</span>
+
+            <span *ngIf="isUserMessage">
+                <span class="message-sending-status">
+                    <i class="crypto-icon crypto-icon-message-send pending-status"
+                       *ngIf="message.sendingState === MessageSendingStatus.Pending"></i>
+                    <i class="crypto-icon crypto-icon-message-send succeeded-status"
+                       *ngIf="message.sendingState === MessageSendingStatus.Succeeded"></i>
+                    <i class="fa fa-exclamation-circle failed-status"
+                       *ngIf="message.sendingState === MessageSendingStatus.Failed"></i>
+                </span>
+            </span>
+            <span class="message-time">{{message.createdAt | timeAgo}}</span>
+        </div>
+        <div class="message-content">
+            <ng-container *ngIf="hasFile">
+                <file-info-simple [FileInfo]="file" [isChatView]="true"
+                                  (infoClick)='fileClick($event)'></file-info-simple>
+            </ng-container>
+
+            <ng-container>
+                <div class="message-text">
+                    {{message.content}}
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <ng-container *ngIf="showMenuToggle()">
+        <menu-toggle class="menu-toggle align-self-baseline" [matMenuTriggerFor]="messageMenu"></menu-toggle>
+        <mat-menu #messageMenu="matMenu">
+            <button mat-menu-item (click)="onMessageResend.emit(message)"
+                    *ngIf="message.sendingState === MessageSendingStatus.Failed">{{'resend' | translate}}</button>
+
+            <button mat-menu-item (click)="onMessageEdit.emit(message)"
+                    *ngIf="message.sendingState === MessageSendingStatus.Succeeded">{{'edit' | translate}}</button>
+
+            <button mat-menu-item (click)="removeMessage()">
+                <span class="crypto-color-red">{{'remove' | translate}}</span>
+            </button>
+        </mat-menu>
+    </ng-container>
+</div>
+
+
+
+
+
+
+
+<!--<div class="message-item flex" *ngIf="message" [class.current-user-message]="isUserMessage">-->
+<!--    <ng-container>-->
+<!--        <div class="creator-avatar">-->
+<!--            <name-avatar [src]="message.userModel?.avatarId" [name]="message.userModel?.email" (onColorSet)="onAvatarColorSet($event)"></name-avatar>-->
+<!--        </div>-->
+<!--    </ng-container>-->
+<!--    <div class="message-body flex flex-direction-column">-->
+<!--        <div class="caption flex align-items-center">-->
+<!--            <div class="creator-name flex-grow-1" [ngStyle]="{'color': userNameColor}">{{message.userModel?.firstName && message.userModel?.lastName || 'members.userRemoved' | translate}}</div>-->
+<!--&lt;!&ndash;            <div class="time flex-shrink-0">{{message.createdAt | timeAgo}}</div>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <div *ngIf="hasFile" class="file-view">-->
+<!--            <file-info-simple [FileInfo]="file" [isChatView]="true" (infoClick)='fileClick($event)' [isUserMessage]="isUserMessage">-->
+<!--            </file-info-simple>-->
+<!--        </div>-->
+<!--        <div class="text" [class.color-white]="isUserMessage" [class.color-value]="!isUserMessage">-->
+<!--            {{message.content}}-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <ng-container *ngIf="isUserMessage">-->
+<!--        <menu-toggle class="menu-toggle align-self-baseline" [matMenuTriggerFor]="messageMenu"></menu-toggle>-->
+<!--        <mat-menu #messageMenu="matMenu">-->
+<!--            <button mat-menu-item (click)="onMessageEdit.emit(message)">{{'edit' | translate}}</button>-->
+<!--            <button mat-menu-item (click)="removeMessage()">-->
+<!--                <span class="crypto-color-red">{{'remove' | translate}}</span>-->
+<!--            </button>-->
+<!--        </mat-menu>-->
+<!--    </ng-container>-->
+<!--</div>-->

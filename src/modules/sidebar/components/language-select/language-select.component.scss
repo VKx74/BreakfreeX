@@ -1,0 +1,32 @@
+$flag-icon-height: 17px;
+$sidebar-padding-left: 22px;
+$sidebar-padding-right: 28px;
+
+.image-container {
+  height: 17px;
+  display: flex;
+
+  img {
+    height: 100%;
+  }
+}
+
+.language-options {
+  // TODO: Themify
+  color: #fff;
+  padding: 5px 10px;
+
+  .language-option {
+    width: 100%;
+
+    &:not(:last-of-type) {
+      margin-bottom: 15px;
+    }
+
+  }
+
+  &.shown {
+    opacity: 1;
+    transition: 0.3s ease-in;
+  }
+}

@@ -1,0 +1,17 @@
+@import "../crypto.broker.component";
+
+.logo {
+  text-decoration: none;
+  margin-bottom: 18px;
+
+  .logo__img {
+    i {
+      font-size: 32px;
+    }
+  }
+
+  .logo__text {
+    font-size: 16px;
+    margin-left: 10px;
+  }
+}

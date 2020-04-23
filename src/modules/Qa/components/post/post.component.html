@@ -1,0 +1,35 @@
+<div>
+    <div class="flex">
+        <div class="vote-wrapper">
+            <vote [voteCount]="post.totalVoteCount"
+                  [vote]="post.vote"
+                  [voteHandler]="voteHandler"></vote>
+        </div>
+        <div class="flex-grow-1">
+            <div class="post-content m-bottom-15">
+                <markdown-preview [markdown]="post.message"></markdown-preview>
+            </div>
+            <div class="m-bottom-15" *ngIf="isQuestion">
+                <div class="tags-wrapper">
+                    <span class="crypto-tag is-small tag" *ngFor="let tag of getTags()"
+                          (click)="handleTagClick(tag.name)">{{tag.name}}</span>
+                </div>
+            </div>
+            <div class="flex justify-space-between align-items-center m-bottom-5">
+                <div class="author-info flex align-items-center">
+                    <div class="author-avatar m-right-10"></div>
+                    <span class="author-name qa-text is-small is-bold">{{post.creator.userName}}</span>
+                </div>
+                <div>
+                    <span class="qa-text qa-color-muted delete is-small" (click)="delete()">Delete</span>
+                    <span class="qa-text qa-color-muted is-small"> | </span>
+                    <span class="qa-text qa-color-muted edit is-small" (click)="edit()">Edit</span>
+                    <span class="qa-text qa-color-muted is-small"> | </span>
+                    <span class="qa-text is-small qa-color-muted create-update-info">Created: {{post.created | timeAgo}}</span>
+                </div>
+            </div>
+            <div class="delimiter"></div>
+            <post-comments [postId]="post.id" [postHaveComments]="post.totalCommentCount > 0"></post-comments>
+        </div>
+    </div>
+</div>

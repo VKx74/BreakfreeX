@@ -1,0 +1,92 @@
+@import "../../styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+::ng-deep {
+  @import "angular-libs/angular-golden-layout/themes/Dark";
+  @import "modules/Layout/layout";
+}
+
+:host {
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+  overflow: hidden;
+
+  /deep/ bottom-panel {
+    display: block;
+
+    scripts-manager {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  //::ng-deep.content-wrapper {
+  ::ng-deep {
+    div.as-split div.as-split-gutter {
+      flex-basis: 5px !important;
+      position: relative;
+      z-index: 999;
+
+      padding: 3px 0;
+      height: 12px;
+      cursor: row-resize;
+
+      &::before {
+        content: '';
+        left: calc(50% - 40px);
+        height: 5px;
+        width: 40px;
+        border-radius: 10px;
+      }
+
+    }
+  }
+}
+
+//}
+
+
+.dashboard {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  overflow: hidden;
+}
+
+.layout-wrapper {
+  overflow: hidden;
+}
+
+.right-widgets-panel {
+  height: 100%;
+  overflow: auto;
+}
+
+golden-layout-root {
+  min-height: 300px;
+}
+
+:host {
+  ::ng-deep {
+    .placeholder {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  //.right-widgets-panel {
+  //  background-color: themed('primeBgColor');
+  //}
+
+  //.content-wrapper {
+  //  background-color: themed('dashboardBgColor');
+  //}
+}

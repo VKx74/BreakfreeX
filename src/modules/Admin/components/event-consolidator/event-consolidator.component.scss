@@ -1,0 +1,50 @@
+:host {
+  $component-head-height: 52px;
+  width: 100%;
+
+  .content-wrapper {
+    height: calc(100% - #{$component-head-height});
+  }
+
+  /deep/ .mat-table {
+    width: 100%;
+  }
+}
+
+.small-column {
+  width: 70px;
+}
+
+.underlay {
+  max-height: 100%;
+}
+
+.filters-wrapper {
+  .crypto-select {
+    width: 150px;
+  }
+
+  .crypto-date-input {
+    width: 150px;
+
+    input {
+      cursor: pointer;
+    }
+  }
+}
+
+.search-wrapper {
+  width: 300px;
+  max-width: 45%;
+}
+
+.relative-wrapper {
+  position: relative;
+
+  mat-progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

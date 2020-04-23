@@ -1,0 +1,30 @@
+<div class="alerts-component-wrapper full-height">
+    <nav mat-tab-nav-bar
+         class="user-settings-header flex justify-space-between">
+      <a [routerLink]="tabsRouters.Alerts" mat-tab-link
+         #rla="routerLinkActive"
+         [active]="rla.isActive"
+         routerLinkActive
+         (click)="!showRout ? activeTab = tabsRouters.Alerts: ''">
+        {{'alertWidget.manageAlerts' | translate}}
+      </a>
+      <a [routerLink]="tabsRouters.AlertsLog" mat-tab-link
+         #rla1="routerLinkActive"
+         routerLinkActive
+         [active]="rla1.isActive"
+         (click)="!showRout ? activeTab = tabsRouters.AlertsLog : ''">
+        {{'alertWidget.alertsLog' | translate}}
+      </a>
+    </nav>
+  <div class="full-height" [ngSwitch]="activeTab">
+    <div class="full-height section-alert" *ngSwitchCase="tabsRouters.Alerts">
+      <app-alert-widget></app-alert-widget>
+    </div>
+    <div class="full-height section-alert" *ngSwitchCase="tabsRouters.AlertsLog">
+     <alert-log-widget></alert-log-widget>
+    </div>
+    <div class="full-height section-alert" *ngSwitchDefault>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

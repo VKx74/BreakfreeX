@@ -1,0 +1,79 @@
+<div class="flex h-100 w-100">
+    <ng-container *ngIf="activeBroker$ | async; else broker_not_connected">
+        <ng-container *ngIf="trades$ | async as trades; else loader">
+            <data-table [rows]="trades"
+                        [columnCaption]="columnCaption"
+                        [allowColumnsVisibilityChange]="true" class="flex-grow-1">
+                <data-table-header-cell columnName="symbol" [sortable]="true">
+                    {{'instrument' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="time" [sortable]="true">
+                    {{'time' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="size" [sortable]="true">
+                    {{'size' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="side" [sortable]="true">
+                    {{'direction' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="price" [sortable]="true">
+                    {{'price' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="avgPrice" [sortable]="true">
+                    {{'avgPrice' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="type" [sortable]="true">
+                    {{'type' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="tradeId" [sortable]="true">
+                    {{'tradeId' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="orderId" [sortable]="true">
+                    {{'orderId' | translate}}
+                </data-table-header-cell>
+
+                <div>
+                    <data-table-cell columnName="symbol">
+                        <ng-template let-item><span class="instrument">{{item.symbol}}</span></ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="time">
+                        <ng-template let-item>{{item.time | formatDate:'YYYY/MM/DD HH:mm:ss'}}</ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="size">
+                        <ng-template let-item>{{item.size}}</ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="side">
+                        <ng-template let-item>
+                    <span [ngClass]="{'buy': item?.side === DirectionTrades.Buy,
+                        'sell': item?.side === DirectionTrades.Sell}">
+                    {{item.side.toUpperCase()}}
+                    </span></ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="price">
+                        <ng-template let-item>{{item.price}}</ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="avgPrice">
+                        <ng-template let-item>{{item.avgPrice ? item.avgPrice : '-'}}</ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="type">
+                        <ng-template let-item>{{item.type}}</ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="tradeId">
+                        <ng-template let-item>{{item.id}}</ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="orderId">
+                        <ng-template let-item>{{item.orderID}}</ng-template>
+                    </data-table-cell>
+                </div>
+            </data-table>
+        </ng-container>
+    </ng-container>
+
+    <ng-template #loader>
+        <loader></loader>
+    </ng-template>
+    <ng-template #broker_not_connected>
+        <placeholder class="w-100" [message]="'tradeManager.connectToBroker' | translate"></placeholder>
+    </ng-template>
+</div>
+

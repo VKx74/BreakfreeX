@@ -1,0 +1,166 @@
+@import "global-styles/variables";
+@import "./variables";
+@import "mixins/themify";
+@import "themes/themes";
+
+
+:host {
+  .placeholder {
+    max-width: 1100px;
+    padding-top: 35px;
+
+    @media #{$large-up} {
+      width: 1100px;
+    }
+
+    .representation {
+      height: 570px;
+      border-radius: 3px;
+
+      position: relative;
+
+
+
+      .representation-content {
+        text-align: center;
+
+        .representation-img {
+          padding: 60px 0 45px 0;
+          img{
+            width: 411px;
+            height: 251px;
+
+            @media #{$extra-small-only} {
+              width: 350px;
+              height: 200px;
+            }
+          }
+        }
+
+        h3 {
+          margin: 0;
+          height: 24px;
+          font-size: 30px;
+          line-height: 1;
+          text-align: center;
+          padding-bottom: 55px;
+
+          @media #{$extra-small-only} {
+            font-size: 25px;
+          }
+
+        }
+        p {
+          font-weight: 300;
+          margin: 0 auto;
+          width: 560px;
+          line-height: 1.88;
+          text-align: center;
+
+          @media #{$extra-small-only} {
+            max-width: 400px;
+            position: relative;
+            font-size: 14px;
+          }
+
+
+        }
+      }
+    }
+
+    .text-content {
+      position: relative;
+      left: 20px;
+      width: 61px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 3.50;
+      height: 50px;
+      text-align: left;
+    }
+
+    .content {
+      max-width: 1100px;
+
+
+      @media #{$extra-small-only} {
+        display: block;
+      }
+
+
+      .section {
+        position: relative;
+        padding: 22px;
+        margin-bottom: 28px;
+        width: 48.5%;
+        height: 180px;
+        border-radius: 3px;
+
+        @media #{$extra-small-only} {
+          width: 100%;
+        }
+
+        h3 {
+          position: relative;
+          left: 15px;
+          height: 14px;
+          font-size: 18px;
+          line-height: 0;
+          text-align: left;
+        }
+
+        p {
+          height: 15px;
+          font-size: 14px;
+          line-height: 2.14;
+          text-align: left;
+          font-weight: 300;
+        }
+
+        button {
+          float: right;
+          position: relative;
+          top: 30px;
+        }
+
+        .icon {
+          position: relative;
+          width: 42px;
+          height: 42px;
+          border-radius: 3px;
+
+          .crypto-icon {
+            position: absolute;
+            font-size: 23px;
+            left: 10px;
+            top: 1px;
+          }
+        }
+
+      }
+
+    }
+  }
+}
+
+@include themify($themes, true) {
+  /deep/ {
+    * {
+      color: themed('titleTextColor');
+    }
+    button {
+      background-color: themed('accentColor');
+      color: #d5d5dc;
+    }
+    .representation, .section {
+      background-color: themed('appModalsPanelColor');
+      box-shadow: themed('box-shadowPanel');
+    }
+
+    .icon {
+      background: themed('appBackgroundColor');
+    }
+  }
+}
+
+

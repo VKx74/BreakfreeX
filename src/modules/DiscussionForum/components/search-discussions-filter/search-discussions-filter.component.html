@@ -1,0 +1,30 @@
+<div class="root" [formGroup]="formGroup">
+    <div class="crypto-form-unit">
+        <div class="form-unit__label">Forum Types:</div>
+        <mat-form-field class="crypto-select full-width with-hint">
+            <mat-select formControlName="forumTypes" placeholder="Select forum types" multiple>
+                <mat-option *ngFor="let option of forumTypes" [value]="option">
+                    {{forumTypeOptionCaption(option) | async}}
+                </mat-option>
+            </mat-select>
+            <mat-error>Please, select at least one forum type</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="crypto-form-unit margin-bottom">
+        <div class="form-unit__label">Category:</div>
+        <mat-form-field class="crypto-select full-width">
+            <mat-select formControlName="category" placeholder="Select category">
+                <mat-option *ngFor="let option of categoryOptions" [value]="option !== -1 ? option.id : option">
+                    {{option !== -1 ? option.name : 'All Categories'}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="flex justify-flex-end">
+        <button class="crypto-button crypto-button_primary" (click)="submit()" [disabled]="formGroup.invalid">Apply
+            Filters
+        </button>
+    </div>
+</div>

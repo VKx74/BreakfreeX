@@ -1,0 +1,112 @@
+@import "variables";
+@import "../../../../../global-styles/themes/themes";
+@import "../../../../../global-styles/mixins/themify";
+
+.crypto-dialog {
+  .modal-content {
+    padding: 0;
+  }
+
+  .component-information {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+.component-information {
+  min-width: 500px;
+  border-radius: 3px;
+
+  &_title {
+    font-size: 14px;
+  }
+
+  &_caption {
+    margin-top: 30px;
+
+    &_avatar {
+      padding: 14px;
+      border-radius: 100%;
+      margin-bottom: 20px;
+
+      .info-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+      }
+    }
+
+    &_name {
+      font-size: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    &_delimiter {
+      height: 1px;
+      margin: 0 6px 20px 6px;
+    }
+  }
+
+  &_item {
+    font-size: 14px;
+    margin: 3px 0;
+    &_name {
+    }
+
+    &_value {
+    }
+  }
+}
+
+@include themify($themes, true) {
+  /deep/ {
+    .component-head_title {
+      color: themed('valueTextColor');
+    }
+
+    .component-information {
+      background: themed('appModalsPanelColor');
+
+      &_title {
+        color: themed('valueTextColor');
+      }
+
+      &_caption {
+        &_avatar {
+          border: 1px solid themed('accentColor');
+
+          .info-avatar {
+            border: 2px solid themed('accentColor');
+          }
+        }
+
+        &_name {
+          color: themed('valueTextColor');
+        }
+
+        &_delimiter {
+          background: themed('appBackgroundColor');
+        }
+      }
+
+      &_item {
+        &_name {
+          color: themed('titleTextColor');
+        }
+
+        &_value {
+          color: themed('valueTextColor');
+        }
+      }
+    }
+
+    .underlay {
+      background-color: themed('appModalsPanelColor');
+
+      .underlay__head {
+        background-color: themed('appBackgroundColor')
+      }
+    }
+  }
+}

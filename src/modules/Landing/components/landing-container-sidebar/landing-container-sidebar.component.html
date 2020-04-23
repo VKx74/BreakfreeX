@@ -1,0 +1,44 @@
+<sidebar-container>
+    <sidebar-section>
+        <div class="section-label">Menu</div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Platform]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-platform"></i></div>
+            <div class="item-text">Platform</div>
+        </div>
+        <div class="section-item"   *ngIf="isAdminPanelShown" [routerLink]="['/', AppRoutes.Admin]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-admin-dashboard"></i></div>
+            <div class="item-text">Admin panel</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Platform, 'scripting']">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-script"></i></div>
+            <div class="item-text">Scripting</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Platform, 'settings']">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-settings"></i></div>
+            <div class="item-text">Settings</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.Forums]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-forum"></i></div>
+            <div class="item-text">Forums</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.QA]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-question-vote"></i></div>
+            <div class="item-text">Q&A</div>
+        </div>
+        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.News]">
+            <div class="item-icon">
+                <i class="crypto-icon crypto-icon-news"></i></div>
+            <div class="item-text">News</div>
+        </div>
+    </sidebar-section>
+    <sidebar-section class="flex-grow-1">
+        <buy-app></buy-app>
+    </sidebar-section>
+    <theme-language-select></theme-language-select>
+</sidebar-container>

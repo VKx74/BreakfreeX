@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  height: 100%;
+
+  .root {
+    height: 100%;
+  }
+
+  .chart-wrapper {
+    height: 100%;
+  }
+
+  /deep/ .message-wrapper {
+    background-color: inherit !important;
+  }
+}

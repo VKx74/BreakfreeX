@@ -1,0 +1,71 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+$nav-content-margin: 20px;
+$nav-height: 49px;
+
+.scripting-content-wrapper {
+  height: calc(100% - #{$nav-content-margin});
+}
+
+
+
+.wrapper {
+  height: 100%;
+  padding: 50px 0;
+  //background: #192431;
+
+  .mat-tab-label-active, :hover {
+    text-decoration: none;
+  }
+
+  nav {
+    margin-bottom: $nav-content-margin;
+  }
+
+
+  ::ng-deep {
+
+    .mat-tab-links {
+      justify-content: center;
+    }
+
+    .mat-tab-link {
+      height: 40px;
+      opacity: 1 !important;
+      padding: 0;
+      min-width: auto;
+      margin: 0 40px;
+    }
+  }
+
+  .content {
+    width: 1000px;
+    max-width: 100%;
+  }
+}
+
+@include themify($themes, true) {
+  .mat-tab-label-active {
+    color: themed('accentColor') !important;
+  }
+
+  .mat-tab-nav-bar {
+    border-bottom-color: themed('appPanelColor');
+  }
+
+  .mat-tab-link {
+    color: themed('titleTextColor');
+  }
+
+  ::ng-deep{
+    .mat-ink-bar {
+      background-color: themed('accentColor') !important;
+    }
+  }
+}

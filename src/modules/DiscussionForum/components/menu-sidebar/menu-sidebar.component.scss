@@ -1,0 +1,55 @@
+@import "../../styles/variables";
+
+:host {
+  .root {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    padding: 20px 0;
+  }
+
+
+  .menu-name {
+    font-family: $primaryFontFamily;
+    font-size: 15px;
+    font-weight: 600;
+    color: #999;
+    margin-bottom: 15px;
+    padding: 0 30px;
+  }
+
+
+  .menu-item {
+    font-family: $primaryFontFamily;
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 3px;
+    padding: 7px 30px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #fef9fc;
+    }
+
+    &.active {
+      position: relative;
+      background-color: #fef9fc;
+      font-weight: 600;
+
+      &:before {
+        content: '';
+        display: block;
+        width: 6px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #fc2cad;
+      }
+    }
+  }
+
+  .delimiter {
+    margin: 10px 30px;
+  }
+}

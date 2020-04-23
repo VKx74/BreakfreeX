@@ -1,0 +1,150 @@
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  .footer-panel {
+    align-items: center;
+    font-size: 11px;
+    font-family: "Open Sans", sans-serif;
+    height: 32px;
+    text-transform: uppercase;
+
+    @media screen and (max-width: 1124px) {
+      height: 48px;
+    }
+
+    .footerLabel {
+      text-transform: uppercase;
+      margin-right: 10px;
+      margin-left: 20px;
+    }
+
+    .timeZone-icon-wraper {
+      margin-left: 16px;
+
+      .crypto-icon {
+        font-size: 2.4em;
+      }
+    }
+
+    .selectedTZDate-wraper {
+      justify-content: flex-start;
+      display: inline-flex;
+    }
+
+    .userInfo-wraper {
+      flex: 2;
+      justify-content: flex-end;
+      padding-right: 30px;
+      padding-left: 10px;
+
+      div {
+        display: inline-flex;
+      }
+
+      .marginInUse {
+        span:nth-child(2) {
+          color: #f02645;
+        }
+      }
+
+      .openPosition {
+        span:nth-child(2) {
+          color: #f02645;
+        }
+      }
+
+      .tradingResources {
+        span:nth-child(2) {
+          color: #27cf6d;
+        }
+      }
+
+      .cashBalance {
+        span:nth-child(2) {
+          color: #27cf6d;
+        }
+      }
+
+      .cashBalance {
+        span:nth-child(2) {
+          color: #27cf6d;
+        }
+      }
+    }
+
+    .shuftipro-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      flex: 2;
+      align-items: center;
+      height: 100%;
+      padding: 3px 30px 3px 10px;
+
+      .shuftipro-info {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 100%;
+        border-radius: 3px;
+        text-align: right;
+        cursor: pointer;
+      }
+
+      .footerLabel {
+        margin-left: 10px;
+      }
+
+      .shuftipro-health-status, .shuftipro-account {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .shuftipro-health-indicator {
+        min-width: 10px;
+        height: 10px;
+        border-radius: 50%;
+
+        &.status-ok {
+          background-color: limegreen;
+        }
+
+        &.status-bad {
+          background-color: orangered;
+        }
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .shuftipro-info {
+    background-color: themed('appPanelColor');
+    color: themed('valueTextColor');
+
+    &:hover {
+      background-color: themed('appBackgroundColor');
+    }
+
+    &.active {
+      background-color: themed('appBackgroundColor');
+      color: themed('accentColor');
+    }
+  }
+}
+
+.footer-panel {
+  @include themify($themes, true) {
+    background-color: themed('appPanelColor');
+    border: 1px solid themed('appBackgroundColor');
+    color: themed('footer-label-color');
+  }
+}
+
+.timeZone-icon-wraper {
+  @include themify($themes, true) {
+    color: themed('footer-icon-color');
+  }
+}

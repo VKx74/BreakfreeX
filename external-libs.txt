@@ -1,0 +1,25 @@
+@ngx-translate/core
+@ngx-translate/http-loader
+
+TO REVIEW:
+angular2-text-mask
+-ngx-toastr
+-ng2-semantic-ui
+-angular-croppie-module
+-croppie
+ng2-bootstrap-modal
+angular-tree-component
+ng2-dragula
+-ng2-bs3-modal
+dom-autoscroller
+angular2-highcharts
+ngx-bootstrap
+ng2-dnd
+-@progress/kendo-angular-inputs
+-@progress/kendo-angular-dateinputs
+ngx-chips
+-@progress/kendo-angular-intl
+-@progress/kendo-angular-l10n
+
+not worked:
+ng build --env=prod --prod --aot --sm --no-sourcemap --stats-json

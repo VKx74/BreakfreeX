@@ -1,0 +1,9 @@
+{
+    "componentName": "Order Book",
+    "spread": "Spread",
+    "orderMode": {
+        "both": "Sell/Buy",
+        "sell": "Sell",
+        "buy": "Buy"
+    }
+}

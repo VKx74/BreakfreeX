@@ -1,0 +1,35 @@
+<div class="flex flex-direction-column full-height">
+    <div class="component-head flex justify-space-between align-items-center">
+        <div>
+            <div #header_left>
+                <ng-content select=".header-left"></ng-content>
+            </div>
+            <ng-container *ngIf="!isLeftHeaderLeftPassed">
+                <div class="flex align-items-center">
+                    <div class="educational-tips-wrapper m-right-10">
+                        <educational-tips [componentName]="componentIdentifier"
+                                          [alwaysShow]="true"></educational-tips>
+                    </div>
+                    <h3 class="component-head_title">{{title}}</h3>
+                </div>
+            </ng-container>
+        </div>
+        <ng-content select=".header-right"></ng-content>
+    </div>
+
+    <div class="flex table-wrapper">
+        <div class="underlay flex flex-direction-column max-height-100 overflow-y-auto w-100">
+            <mat-progress-bar mode="indeterminate" class="loader" *ngIf="loading"></mat-progress-bar>
+            <paginator-container *ngIf="paginationHandler">
+                <paginator [showPageSize]="false" [handler]="paginationHandler"></paginator>
+            </paginator-container>
+            <div class="flex justify-space-between align-items-center p-10" #filters [class.p-10]="isFiltersPassed">
+                <ng-content select=".filters"></ng-content>
+            </div>
+            <div class="scroll-wrapper max-height-100 overflow-y-auto flex flex-direction-column justify-space-between">
+                <ng-content></ng-content>
+                <no-items-placeholder *ngIf="noItems" [text]="noItemsPlaceholderText"></no-items-placeholder>
+            </div>
+        </div>
+    </div>
+</div>

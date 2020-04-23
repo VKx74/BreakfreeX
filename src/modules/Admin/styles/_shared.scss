@@ -1,0 +1,133 @@
+@import "variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host /deep/ {
+  $default-component-head-height: 52px;
+  .component-head {
+    padding: 10px 13px;
+
+    .educational-tips-wrapper {
+      display: flex;
+      align-items: center;
+      height: 32px;
+    }
+
+    .component-head_title {
+      margin: 0;
+      font-size: 20px;
+      font-family: $primaryFontFamily;
+    }
+  }
+
+  .component-information {
+    min-width: 500px;
+    margin-left: 30px;
+    padding: 10px 17px;
+    border-radius: 3px;
+
+    &_title {
+      font-size: 14px;
+    }
+
+    &_caption {
+      margin-top: 30px;
+
+      &_avatar {
+        padding: 14px;
+        border-radius: 100%;
+        margin-bottom: 20px;
+
+        .info-avatar {
+          width: 100px;
+          height: 100px;
+          border-radius: 100%;
+        }
+      }
+
+      &_name {
+        font-size: 16px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      &_delimiter {
+        height: 1px;
+        margin: 0 6px 20px 6px;
+      }
+    }
+
+    &_item {
+      font-size: 14px;
+      margin: 3px 0;
+      &_name {
+      }
+
+      &_value {
+      }
+    }
+  }
+
+  .name-avatar {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+  }
+
+  .underlay {
+    border-radius: 3px;
+    padding: 3px;
+  }
+}
+
+@include themify($themes, true) {
+  /deep/ {
+    .component-head_title {
+      color: themed('valueTextColor');
+    }
+
+    .component-information {
+      background: themed('appPanelColor');
+
+      &_title {
+        color: themed('valueTextColor');
+      }
+
+      &_caption {
+        &_avatar {
+          border: 1px solid themed('accentColor');
+
+          .info-avatar {
+            border: 2px solid themed('accentColor');
+          }
+        }
+
+        &_name {
+          color: themed('valueTextColor');
+        }
+
+        &_delimiter {
+          background: themed('appBackgroundColor');
+        }
+      }
+
+      &_item {
+        &_name {
+          color: themed('titleTextColor');
+        }
+
+        &_value {
+          color: themed('valueTextColor');
+        }
+      }
+    }
+
+    .underlay {
+      background-color: themed('appPanelColor');
+
+      .underlay__head {
+        background-color: themed('appBackgroundColor')
+      }
+    }
+  }
+}

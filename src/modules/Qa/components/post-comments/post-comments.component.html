@@ -1,0 +1,24 @@
+<div class="post-comments">
+    <ng-container *ngIf="loadCommentsProcessState.isPending()">
+        <p class="placeholder">Loading...</p>
+    </ng-container>
+    <ng-container *ngIf="loadCommentsProcessState.isFailed()">
+        <p class="placeholder">Failed to load comments...</p>
+    </ng-container>
+
+    <ng-container *ngIf="loadCommentsProcessState.isSucceeded()">
+        <div class="comments-wrapper">
+            <ng-container *ngFor="let comment of comments">
+                <post-comment [postId]="postId"
+                              [comment]="comment"
+                              (onUpdated)="handleCommentUpdated($event)"
+                              (onRemoved)="handleCommentRemoved($event)"></post-comment>
+                <div class="delimiter comment-delimiter"></div>
+            </ng-container>
+        </div>
+        <span class="add-comment" *ngIf="!isInputShown" (click)="showCommentInput()">Add comment</span>
+        <div *ngIf="isInputShown">
+            <comment-input (onCancel)="hideCommentInput()" [submitHandler]="addCommentHandler"></comment-input>
+        </div>
+    </ng-container>
+</div>

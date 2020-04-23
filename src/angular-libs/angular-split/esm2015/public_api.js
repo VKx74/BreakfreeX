@@ -1,0 +1,12 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,uselessCode} checked by tsc
+ */
+/*
+ * Public API Surface of angular-split
+ */
+export { AngularSplitModule } from './lib/module';
+export { SplitComponent } from './lib/component/split.component';
+export { SplitAreaDirective } from './lib/directive/splitArea.directive';
+export {} from './lib/interface';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljX2FwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL2FuZ3VsYXItc3BsaXQvIiwic291cmNlcyI6WyJwdWJsaWNfYXBpLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFJQSxPQUFPLEVBQUUsa0JBQWtCLEVBQUUsTUFBTSxjQUFjLENBQUM7QUFDbEQsT0FBTyxFQUFFLGNBQWMsRUFBRSxNQUFNLGlDQUFpQyxDQUFDO0FBQ2pFLE9BQU8sRUFBRSxrQkFBa0IsRUFBRSxNQUFNLHFDQUFxQyxDQUFDO0FBQ3pFLGVBQWMsaUJBQWlCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKlxuICogUHVibGljIEFQSSBTdXJmYWNlIG9mIGFuZ3VsYXItc3BsaXRcbiAqL1xuXG5leHBvcnQgeyBBbmd1bGFyU3BsaXRNb2R1bGUgfSBmcm9tICcuL2xpYi9tb2R1bGUnO1xuZXhwb3J0IHsgU3BsaXRDb21wb25lbnQgfSBmcm9tICcuL2xpYi9jb21wb25lbnQvc3BsaXQuY29tcG9uZW50JztcbmV4cG9ydCB7IFNwbGl0QXJlYURpcmVjdGl2ZSB9IGZyb20gJy4vbGliL2RpcmVjdGl2ZS9zcGxpdEFyZWEuZGlyZWN0aXZlJztcbmV4cG9ydCAqIGZyb20gJy4vbGliL2ludGVyZmFjZSc7XG4iXX0=

@@ -1,0 +1,27 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+
+:host {
+ /deep/ mat-table {
+    //overflow: auto !important;
+    //height: 650px !important;
+  }
+}
+
+.trades-wrapper {
+  height: 100%;
+}
+
+@include themify($themes, true) {
+  .buy {
+    color: themed('buyColor');
+  }
+  .sell {
+    color: themed('sellColor');
+  }
+
+  .instrument {
+    color: themed('valueTextColor');
+  }
+}
+

@@ -1,0 +1,19 @@
+<div class="root flex flex-direction-column">
+    <div class="top-line flex align-items-center justify-space-between flex-shrink-0">
+        <div class="flex min-w-0">
+            <instrument-search
+                    [instrument]="activeInstrument"
+                    (onSelect)="handleInstrumentChange($event)"
+                    class="instrument-search"></instrument-search>
+            <selector [options]="obDeepsList"
+                      [title]="'orderBookChart.deep' | translate"
+                      [selectedOption]="obDeepsList[0]"
+                      [optionCaption]="getDeepCaption"
+                      (onSelect)="setOBDeep($event)" class="deep-selector">
+            </selector>
+        </div>
+    </div>
+    <div class="content-wrapper flex-grow-1 h-0">
+        <canvas #orderBookChart id="orderBookChart"></canvas>
+    </div>
+</div>

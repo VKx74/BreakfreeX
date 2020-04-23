@@ -1,0 +1,40 @@
+<upload-file-input [config]="uploadFileInputConfig" [onFilesSelected]="onFilesSelected">
+    <div class="uploader">
+        <div class="flex justify-content-center align-items-center flex-direction-column full-height"
+             *ngIf="uploadFileItems.length === 0">
+            <i class="download-icon crypto-icon crypto-icon-upload-image"></i>
+            <p class="upload-caption">{{ 'uploadCaption' | translate }}</p>
+        </div>
+
+        <div *ngIf="uploadFileItems.length === 1 && !uploadFileInputConfig.allowMultipleFiles" class="preview-wrapper">
+            <img class="preview-img"
+                 *ngIf="uploadFileItems.length && (uploadFileItems[0].getPreviewImageUrl() | async)"
+                 [src]="(uploadFileItems[0].getPreviewImageUrl() | async)"/>
+        </div>
+
+        <div class="file-info-wrapper" *ngIf="showFileInfo">
+            <div class="inner-wrapper">
+                <p>
+                    <span class="capture" translate="uploader.name"></span>
+                    <span>
+                    {{uploadFileItems[0].fileName}}
+                </span>
+                </p>
+                <p>
+                    <span class="capture" translate="uploader.size"></span>
+                    <span>
+                    {{uploadFileItems[0].size}}
+                </span>
+                </p>
+            </div>
+        </div>
+
+        <div *ngIf="uploadFileItems.length && uploadFileInputConfig.allowMultipleFiles">
+            <upload-file-item *ngFor="let file of uploadFileItems" [file]="file"
+                              [maxFileSizeMb]="uploadFileInputConfig.maxFileSizeMb"
+                              [allowedFiles]="uploadFileInputConfig.allowedFiles"
+                              (fileUploaded)="handleUploadItemUploaded($event)"
+                              (onRemove)="removeFile($event)"></upload-file-item>
+        </div>
+    </div>
+</upload-file-input>

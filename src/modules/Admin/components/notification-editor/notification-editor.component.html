@@ -1,0 +1,80 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">
+                <span *ngIf="!isEditMode">Create notification</span>
+                <span *ngIf="isEditMode">Update notification</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formGroup">
+                <div class="crypto-form-unit control-date">
+                    <span class="form-unit__label">From</span>
+                    <mat-form-field class="crypto-date-input with-hint full-width">
+                        <input matInput readonly [matDatepicker]="dateFrom"
+                               class="cursor-default"
+                               [max]="formGroup.controls['dateTo'].value"
+                               placeholder="Start date notification activity"
+                               formControlName="dateFrom">
+                        <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #dateFrom></mat-datepicker>
+                        <mat-error>Required field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit control-date">
+                    <span class="form-unit__label">To</span>
+                    <mat-form-field class="crypto-date-input with-hint full-width">
+                        <input matInput readonly [matDatepicker]="dateTo"
+                               class="cursor-default"
+                               [min]="formGroup.controls['dateFrom'].value"
+                               placeholder="End date notification activity"
+                               formControlName="dateTo">
+                        <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
+                        <mat-datepicker #dateTo></mat-datepicker>
+                        <mat-error>Required field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit">
+                    <span class="form-unit__label">Title</span>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" placeholder="Title" formControlName="title">
+                        <mat-error>Title have to contain 1-{{titleLength}} characters</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit">
+                    <span class="form-unit__label">Description</span>
+                    <markdown-input placeholder="Type notification`s description..."
+                                    [errorHandler]="markdownInputErrorHandler"
+                                    formControlName="description"></markdown-input>
+                </div>
+                <div class="crypto-form-unit margin-bottom">
+                    <span class="form-unit__label">User tags</span>
+                    <div class="tags-wrapper">
+                        <tags-input [tags]="tags"
+                                    [mode]="TagsInputMode.Autocomplete"
+                                    [tagNameSelector]="tagNameSelector"
+                                    [autocompleteHandler]="tagsAutocompleteHandler"
+                                    (onAddTag)="addTag($event)"
+                                    (onRemoveTag)="removeTag($event)">
+                        </tags-input>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_primary full-width"
+                        [disabled]="formGroup.invalid"
+                        [ngClass]="{'is-loading': processing}"
+                        (click)="handleSubmit()">
+                    <span *ngIf="!isEditMode">Create</span>
+                    <span *ngIf="isEditMode">Update</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!categories?.length"
+                            [title]="'Forum Categories'"
+                            [loading]="false">
+
+    <div class="header-right">
+        <button class="crypto-button crypto-button_primary" (click)="handleCreateCategory()">
+            Create Category
+        </button>
+    </div>
+
+    <!--    <div class="filters flex justify-space-between w-100">-->
+    <!--        <div class="search-wrapper">-->
+    <!--            <div class="flex align-items-center justify-space-between">-->
+    <!--                <debounced-input (valueChange)="search($event)"></debounced-input>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <data-table [rows]="categories">
+        <data-table-header-cell columnName="name">
+            Name
+        </data-table-header-cell>
+        <data-table-header-cell columnName="description">
+            Description
+        </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+
+        <data-table-cell columnName="name">
+            <ng-template let-item>{{item.name}}</ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="description">
+            <ng-template let-item>{{item.description}}</ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                <div class="text-right">
+                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="showDetails(item)">Details</button>
+                        <button mat-menu-item (click)="handleUpdateCategory(item)">Update</button>
+                        <button mat-menu-item class="crypto-color-red" (click)="handleDeleteCategory(item)">Delete</button>
+                    </mat-menu>
+                </div>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

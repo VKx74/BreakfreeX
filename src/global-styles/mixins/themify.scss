@@ -1,0 +1,77 @@
+
+// private
+@mixin __themify($selector, $theme) {
+  #{$selector} {
+    $__theme: $theme !global;
+    @content;
+    $__theme: null !global;
+  }
+}
+
+@mixin themify($themes, $isComponentStyle: false) {
+  @each $themeName, $theme in $themes {
+    $selector: if($isComponentStyle, ":host-context(.#{$themeName}-theme)", ".#{$themeName}-theme");
+    $selector: if(&, "#{$selector} &", "#{$selector}");
+
+    @include __themify($selector, $theme) {
+      @content;
+    }
+  }
+}
+
+@mixin themifyHostContext($themes, $hostContextSelector) {
+  @each $themeName, $theme in $themes {
+    $selector: ":host-context(.#{$themeName}-theme)";
+    $selector: if(&, "#{$selector} &", "#{$selector}");
+
+    @include __themify($selector, $theme) {
+      @content;
+    }
+  }
+}
+
+@mixin themifyDarkTheme($themes, $isComponentStyle: false) {
+  @each $themeName, $theme in $themes {
+    @if $themeName == 'Dark' {
+      $selector: if($isComponentStyle, ":host-context(.#{$themeName}-theme)", ".#{$themeName}-theme");
+      $selector: if(&, "#{$selector} &", "#{$selector}");
+
+      @include __themify($selector, $theme) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin globalThemifyFromComponent($themes) {
+  @each $themeName, $theme in $themes {
+    $selector: "/deep/ .#{$themeName}-theme";
+
+    @include __themify($selector, $theme) {
+      @content;
+    }
+  }
+}
+
+@function themed($key) {
+  @if (map-has-key($__theme, $key) == false) {
+    @error "Unknown theme key `#{$key}` : `#{map-keys($__theme)}`";
+  }
+
+  @return map-get($__theme, $key);
+}
+
+@function getThemeValue($key, $theme) {
+  @if (map-has-key($theme, $key) == false) {
+    @error "Unknown theme key `#{$key}` : `#{map-keys($theme)}`";
+  }
+
+  @return map-get($theme, $key);
+}
+
+
+@mixin themifyBackgroundColor($colorKey) {
+  @include themify($themes) {
+    background-color: themed($colorKey) !important;
+  }
+}

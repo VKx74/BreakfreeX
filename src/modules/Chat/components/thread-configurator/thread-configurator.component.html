@@ -1,0 +1,52 @@
+<div class="crypto-modal crypto-modal-with-banner">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <span>{{isEdit ? ('editThread' | translate) : ('createThread' | translate)}}</span>
+            </h4>
+
+            <upload-file-input [config]="fileInputConfig" [onFilesSelected]="onFilesSelected" class="file-input">
+                <div class="thread-photo-wrapper">
+                    <i class="fa fa-camera photo-icon" *ngIf="!photoUrl"></i>
+                    <img [src]="photoUrl" alt="" *ngIf="photoUrl">
+                </div>
+            </upload-file-input>
+
+            <button type="button" class="close" (click)="close()">
+                <i class="crypto-icon crypto-icon-close"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="threadGroupForm">
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{'newGroupModal.groupName' | translate}}</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="name"
+                               placeholder="{{'newGroupModal.groupNamePlaceholder' | translate}}">
+                        <mat-error>{{'newGroupModal.errorText' | translate}}</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">{{'newGroupModal.groupDescription' | translate}}</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <textarea matInput class="crypto-textarea description-textarea"
+                                  placeholder="{{'newGroupModal.groupDescriptionPlaceholder' | translate}}"
+                                  formControlName="description">
+                        </textarea>
+                        <mat-error>{{'newGroupModal.errorText' | translate}}</mat-error>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_success" (click)="submit()"
+                        [disabled]="threadGroupForm.invalid"
+                        [class.is-loading]="processing">
+                    <span>{{'newGroupModal.buttonCaption' | translate}}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

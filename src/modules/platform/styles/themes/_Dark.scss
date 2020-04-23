@@ -1,0 +1,24 @@
+@import "base";
+@import "functions/map-extend";
+
+$DarkTheme: map-extend($BaseTheme, (
+  dashboardBgColor: #17191b,
+
+  /* Component selector */
+        componentItemBgColor: #303234,
+        componentItemTextColor: #d5d5dc,
+        componentItemHoverTextColor: #d5d5dc,
+  /* End Component selector */
+
+  // Alert Widget
+        header-title-color:#dddddd,
+        add-component-btn-color: rgba(255, 255, 255, 0.35),
+        sub-header-title-color: #999,
+        add-component-btn-bg: rgba(255, 255, 255, 0.1),
+        add-component-border-color: rgba(255, 255, 255, 0.2),
+
+  // Economic calendar
+        calendarTextColor: #d5d5dc,
+        calendarMutedTextColor: rgba(213, 213, 220, 0.5),
+        calendarDescriptionTextColor: rgba(213, 213, 220, 0.8),
+))

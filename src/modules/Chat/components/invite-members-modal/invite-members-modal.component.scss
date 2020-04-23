@@ -1,0 +1,105 @@
+@import 'global-styles/variables';
+@import 'global-styles/mixins/themify';
+@import 'global-styles/themes/themes';
+
+.crypto-modal {
+  width: 440px;
+  max-width: 440px;
+  min-width: auto;
+}
+
+.suggested-members-wrapper {
+  height: 250px;
+  overflow-y: auto;
+}
+
+.name-avatar-wrapper {
+  width: 27px;
+  height: 27px;
+  margin-right: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  &.selected {
+    padding: 1px;
+
+    .selected-indicator {
+      display: flex;
+    }
+  }
+
+  .selected-indicator {
+    display: none;
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    align-items: center;
+    justify-content: center;
+
+    background-color: $greenColor;
+    color: #fff;
+
+    i {
+      margin-top: 2px;
+      font-size: 10px;
+    }
+  }
+}
+
+table {
+  td {
+    padding: 3px 13px;
+    cursor: pointer;
+  }
+}
+
+placeholder {
+  display: block;
+  height: 36px;
+}
+
+.cancel-invitation {
+  font-family: $primaryFontFamily;
+  font-size: 12px;
+  opacity: 0.85;
+  color: $redColor;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@include themify($themes, true) {
+  .name-avatar-wrapper {
+    &.selected {
+      border: 2px solid themed('accentColor');
+    }
+
+    .selected-indicator {
+      &.is-member {
+        background-color: themed('accentColor');
+      }
+    }
+  }
+
+  table tr {
+    &:nth-of-type(even) {
+      .selected-indicator {
+        //border-color: themed('tableEvenBg');
+      }
+    }
+
+    &:nth-of-type(odd) {
+      .selected-indicator {
+        //border-color: themed('tableOddBg');
+      }
+    }
+  }
+}

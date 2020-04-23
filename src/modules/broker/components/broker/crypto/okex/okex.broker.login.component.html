@@ -1,0 +1,38 @@
+<div class="flex justify-content-center align-items-center svg-image">
+    <a href="https://www.okex.com" target="_blank">
+        <img src="assets/img/okex-vector-logo.svg" alt="OKEX broker">
+    </a>
+</div>
+
+<div class="links-wrapper crypto-form-unit margin-bottom">
+    <!--<div class="title crypto-caption">BIFT Integration v1.0</div>-->
+    <div>
+        <a href="https://bitmex.com/app/apiKeys" target="_blank">API Key Help</a>
+    </div>
+</div>
+
+<div [formGroup]="okexForm">
+    <div class="crypto-form-unit">
+        <span class="form-unit__label">{{"broker.apiKey" | translate}}:</span>
+        <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" class="crypto-input full-width" formControlName="apiKey">
+        </mat-form-field>
+    </div>
+    <div class="crypto-form-unit">
+        <span class="form-unit__label">{{"broker.secret" | translate}}:</span>
+        <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" class="crypto-input full-width" formControlName="secretKey">
+        </mat-form-field>
+    </div>
+    <div class="crypto-form-unit">
+        <span class="form-unit__label">{{"broker.passPhrase" | translate}}:</span>
+        <mat-form-field class="crypto-input with-hint full-width">
+            <input matInput type="text" class="crypto-input full-width" formControlName="passPhrase">
+        </mat-form-field>
+    </div>
+</div>
+<div class="crypto-form-unit margin-bottom justibroker.connectedBroker' |fy-flex-end">
+    <button class="crypto-button crypto-button_primary w-100" [disabled]="okexForm.invalid"
+            (click)="connect()">{{'broker.connect' | translate}}</button>
+</div>
+<ngx-loading [show]="showSpinner"></ngx-loading>

@@ -1,0 +1,91 @@
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  display: block;
+  padding: 15px 15px 0;
+
+  .total {
+    margin-bottom: 15px;
+  }
+
+  .order-side-buttons {
+    margin-bottom: 15px;
+  }
+
+  .order-side-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: $primaryFontFamily;
+    height: 32px;
+    text-align: center;
+
+    &.active.order-side-buy {
+      background: $greenColor;
+      color: #fff;
+    }
+
+    &.active.order-side-sell {
+      background: $redColor;
+      color: #fff;
+    }
+
+
+    &:first-of-type {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+
+    &:last-of-type {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+  }
+
+
+  .buttons-wrapper {
+    position: relative;
+  }
+
+  .submit-btn {
+    padding: 0;
+    height: 38px;
+    border-radius: 3px;
+  }
+
+  .input-currency {
+    font-size: 13px;
+  }
+}
+
+hr {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+:host-context(.#{$classPrefix}-modal) {
+  padding: 0;
+}
+
+
+@include themify($themes, true) {
+  .order-side-btn {
+    background-color: themed('activeBackgroundColor');
+    color: themed('valueTextColor');
+  }
+
+  hr {
+    border-color: themed('appBackgroundColor');
+  }
+}
+
+
+.modal-body {
+  @include themify($themes, true) {
+    color: themed('order-modal-color');
+  }
+}

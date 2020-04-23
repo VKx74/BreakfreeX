@@ -1,0 +1,62 @@
+$classPrefix: 'crypto';
+$primaryFontFamily: "Open Sans";
+
+/* Buttons */
+
+$primaryBtnColor: #fff;
+$primaryBtnBgColor: #3d61cc;
+$primaryBtnHoveredBgColor: #0069d9;
+$primaryBtnDisabledBgColor: transparentize($primaryBtnBgColor, 0.5);
+;
+
+$dangerBtnColor: #fff;
+$dangerBtnBgColor: #dc3545;
+$dangerBtnHoveredBgColor: #c82333;
+$dangerBtnDisabledBgColor: transparentize($dangerBtnBgColor, 0.5);
+
+$successBtnColor: #fff;
+$successBtnBgColor: #27cf6d;
+$successBtnHoveredBgColor: #26be65;
+$successBtnDisabledBgColor: transparentize($successBtnBgColor, 0.5);
+
+$actionBtnColor: #fff;
+$actionBtnBgColor: #4e5865;
+$actionBtnHoveredBgColor: #58626f;
+$actionBtnDisabledBgColor: transparentize($actionBtnBgColor, 0.5);
+
+$redColor: #f02645;
+$greenColor: #27cf6d;
+$yellowColor: #ebd22c;
+
+/* End Buttons */
+
+/* Breakpoins */
+
+$screen-xs-max: 767px;
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-sm-max: 991px;
+$screen-lg-min: 1200px;
+$screen-md-max: 1199;
+
+$screen: "screen";
+$extra-small-only: "#{$screen} and (max-width: #{$screen-xs-max})";
+$small-only: "#{$screen} and (min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max})";
+$small-down: "#{$screen} and (max-width: #{$screen-sm-max})";
+$medium-up: "#{$screen} and (min-width:#{$screen-md-min})";
+$medium-only: "#{$screen} and (min-width:#{$screen-md-min}) and (max-width:#{$screen-md-max})";
+$large-up: "#{$screen} and (min-width:#{$screen-lg-min})";
+
+/* End Breakpoins */
+
+$very-high-volatility-indicator-color: #ff0000;
+$high-volatility-indicator-color: #ff4000;
+$medium-volatility-indicator-color: #ff8000;
+$low-volatility-indicator-color: #ffff00;
+$very-low-volatility-indicator-color: #27cf6d;
+
+
+// LAYOUT
+
+$sidebar-width: 280px;
+$header-height: 57px;

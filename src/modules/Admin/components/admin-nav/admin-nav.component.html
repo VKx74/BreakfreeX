@@ -1,0 +1,21 @@
+<base-nav [showUserAvatar]="true">
+    <nav-section class="h-100" *showIfRole="[Roles.Admin, Roles.KYCOfficer]" [leftBorder]="true">
+        <div class="shuftipro flex align-items-center flex-wrap-wrap"
+             (click)="changeShuftiproAccount()">
+            <span class="shuftipro__account w-100 t-overflow-ellipsis flex-grow-1"
+                  title="Shufti Pro account">Shufti Pro account</span>
+            <span class="shuftipro__status w-100 t-overflow-ellipsis flex-grow-1"
+                  [title]="shuftiproStatus">{{shuftiproStatus || "Account is not active"}}</span>
+        </div>
+    </nav-section>
+
+    <nav-section class="h-100" *showIfRole="[Roles.Admin, Roles.KYCOfficer]" [leftBorder]="true">
+        <div class="shuftipro flex align-items-center flex-wrap-wrap t-align-center"
+             (click)="showExchangeStatusSetting()">
+            <span class="shuftipro__account w-100 t-overflow-ellipsis flex-grow-1"
+                  title="Shufti Pro account">Exchange status</span>
+            <span class="shuftipro__status w-100 t-overflow-ellipsis flex-grow-1"
+                  [title]="shuftiproStatus">{{ExchangeStatus}}</span>
+        </div>
+    </nav-section>
+</base-nav>

@@ -1,0 +1,19 @@
+<ng-content select=".navigation"></ng-content>
+<mat-sidenav-container class="platform-container" [class.sidebar-close]="!sidebarOpen"
+                       (backdropClick)="setSidebarState(false)">
+  <mat-sidenav mode="over" [opened]="sidebarOpen" [autoFocus]="false">
+    <div class="sidebar">
+      <ng-content select=".sidebar"></ng-content>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <loader *ngIf="loading$ | async"></loader>
+<!--    <loader [hidden]="!(loading$ | async)"></loader>-->
+<!--    <component-preloader *ngIf="loading$ | async"></component-preloader>-->
+    <div class="flex flex-grow-1 w-100 flex-direction-column content">
+      <div class="main-content-wrapper flex justify-content-center flex-grow-1">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,136 @@
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  display: block;
+  width: 100%;
+  //padding: 15px 15px 0;
+
+  .instrumetn-search-container,
+  .order-type-container,
+  selector,
+  .limit-price,
+  .amount,
+  .stop-price {
+    width: 48%;
+  }
+
+  .instrumetn-search-container, .order-type-container {
+    width: 48%;
+  }
+
+  .form-wrapper {
+    padding: 12px;
+  }
+
+  .total {
+    margin-bottom: 15px;
+  }
+
+  .order-side-buttons {
+    margin-top: 28px;
+    height: 50px;
+  }
+
+  .order-side-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    width: 33.3%;
+    cursor: pointer;
+    font-size: 11px;
+    font-family: $primaryFontFamily;
+    //height: 32px;
+    text-align: center;
+
+    .crypto-icon-buy-arrow, .crypto-icon-sell-arrow {
+      font-size: 1.6em;
+      //position: relative;
+    }
+
+    .price {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .total-price {
+      margin-top: 3px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    &.order-side-buy {
+      color: #fff;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+
+      .arrow {
+
+        //margin-left: 25px;
+      }
+    }
+
+    &.total-btn {
+      justify-content: center;
+      cursor: default;
+    }
+
+    &.order-side-sell {
+      .arrow {
+        left: 10px;
+      }
+
+      color: #fff;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+
+
+  .buttons-wrapper {
+    position: relative;
+  }
+
+  .submit-btn {
+    padding: 0;
+    height: 38px;
+    border-radius: 3px;
+  }
+
+  .input-currency {
+    font-size: 13px;
+  }
+}
+
+:host-context(.#{$classPrefix}-modal) {
+  padding: 0;
+}
+
+@include themify($themes, true) {
+  .total-btn {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  .modal-body {
+    color: themed('order-modal-color');
+  }
+
+  .order-side-sell {
+    background-color: themed('sellColor');
+  }
+
+  .order-side-buy {
+    background-color: themed('buyColor');
+  }
+
+  .total-btn {
+    color: themed('valueTextColor');
+  }
+
+  .total-price {
+    color: themed('titleTextColor');
+  }
+}
+

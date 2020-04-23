@@ -1,0 +1,11 @@
+{
+  "chartComponentName": "Chart",
+  "chartComponentTitle": "Chart {{symbol}}",
+  "dataFeed": "Data Feed",
+  "unableLoadData": "Unable to load data.",
+  "unableFindSymbol": "Unable to find symbol ",
+  "amountMustHaveValue": "Quantity must be greater than zero",
+  "brokerNotSupportThisSymbol": "Current broker is not support this symbol",
+  "unableLoadDataByTimeFrame": "Unable to load data by specified Time Frame",
+  "orderPlaced": "Order placed"
+}

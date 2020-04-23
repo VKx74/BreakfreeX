@@ -1,0 +1,79 @@
+@import "icons";
+@import "override";
+@import "fonts";
+
+@import "helpers/layout";
+@import "helpers/flex";
+@import "helpers/margins";
+@import "helpers/paddings";
+@import "helpers/cursor";
+@import "helpers/common";
+
+@import "controls/buttons";
+@import "controls/tables";
+
+// TODO: Fix
+@import "controls/modals";
+@import "controls/delimiter";
+@import "controls/textarea";
+@import "controls/inputs";
+@import "controls/form-units";
+@import "controls/tags";
+
+@import "material-controls/mat-select";
+@import "material-controls/mat-autocomplete";
+@import "material-controls/mat-input";
+@import "material-controls/mat-menu";
+@import "material-controls/mat-tabs";
+@import "material-controls/mat-accordion";
+@import "material-controls/mat-date-input";
+@import "material-controls/mat-time-input";
+@import "material-controls/mat-paginator";
+@import "material-controls/mat-slide-toggle";
+@import "material-controls/mat-progress-bar";
+@import "material-controls/mat-tags-input";
+@import "material-controls/mat-textarea";
+@import "material-controls/mat-radio";
+
+@import "helpers/typography";
+@import "helpers/spinner";
+@import "external/toastr";
+@import "external/split-area";
+@import "material-default-theme";
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+bs-dropdown-container {
+  z-index: 10000;
+}
+
+
+.transparent-bg {
+  background-color: transparent;
+}
+
+.crypto-icon:before {
+  vertical-align: middle;
+}
+
+
+::-webkit-scrollbar-corner {
+  background: rgba(0,0,0,0);
+}
+
+.cdk-global-scrollblock { // fix scroll in admin area when dialog is opened
+  overflow: auto;
+}
+
+@mixin theme() {
+  @include themify($themes, true);
+}
+
+
+.app-loading {
+  body {
+    background-color: red;
+  }
+}

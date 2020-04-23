@@ -1,0 +1,81 @@
+@import "../global-styles/themes/themes";
+@import "../global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+  height: 100%;
+  max-height: 80vh;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center;
+
+  /deep/ .mat-form-field-infix .mat-input-element {
+    width: 100% !important;
+  }
+
+  /deep/ .fake-input {
+    width: 100%;
+
+    input {
+      display: none;
+    }
+
+    .mat-form-field-flex {
+      background: transparent;
+    }
+  }
+}
+
+.pb-25 {
+  padding-bottom: 25px;
+}
+
+.news-wrapper {
+  width: 700px;
+  max-width: 90vw;
+  height: 100%;
+  border-radius: 9px;
+}
+
+.form-wrapper {
+  height: calc(100% - 42px);
+}
+
+.small-column {
+  width: 60px;
+}
+
+.underlay {
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.w-100 {
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.icon-close {
+  font-size: 9px;
+}
+
+.component-head {
+  margin: 20px;
+}
+
+.btns-wrapper {
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+@include themify($themes, true) {
+  .news-wrapper {
+    background-color: themed('appModalsPanelColor');
+  }
+
+  .component-head {
+    color: themed('titleTextColor');
+  }
+}
+
+

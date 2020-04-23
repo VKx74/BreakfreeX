@@ -1,0 +1,37 @@
+@import "../global-styles/variables";
+
+:host {
+  ::ng-deep {
+    .mat-header-row {
+      display: none;
+    }
+    .mat-cell:last-of-type {
+      text-align: right;
+    }
+  }
+}
+
+.crypto-modal {
+  width: 500px;
+}
+
+.modal-content {
+  //width: 400px;
+  //min-width: auto;
+}
+
+.small-column {
+  width: 36px;
+  overflow: inherit !important;
+}
+
+.tags-wrapper {
+  max-height: 200px;
+  overflow: auto;
+}
+
+@media #{$extra-small-only} {
+  .modal-content {
+    width: 90vw !important;
+  }
+}

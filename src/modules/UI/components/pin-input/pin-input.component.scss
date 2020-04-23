@@ -1,0 +1,35 @@
+@import "../../styles/themes/themes";
+@import "global-styles/variables";
+@import "mixins/themify";
+
+:host {
+  width: 100%;
+
+  @keyframes blinker {
+    50% {
+      color: transparent;
+    }
+  }
+
+  .time-span {
+    opacity: 0.5;
+    font-family: $primaryFontFamily;
+    font-size: 14px;
+  }
+
+  .expiring input {
+    animation: blinker 1s linear infinite;
+    color: indianred !important;
+  }
+
+  .expiring .time-span {
+    color: indianred !important;
+    animation: blinker 1s linear infinite;
+  }
+}
+
+@include themify($themes, true) {
+  .time-span {
+    color: themed('valueTextColor');
+  }
+}

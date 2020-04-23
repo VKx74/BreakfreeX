@@ -1,0 +1,63 @@
+@import "global-styles/variables";
+@import "../../styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+.header {
+  //font-size: 13px;
+  font-family: $primaryFontFamily;
+  line-height: 13px;
+  margin-bottom: 13px;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 13px;
+
+  .answers-count {
+    display: inline-block;
+    font-family: $primaryFontFamily;
+    font-size: 11px;
+    border-radius: 3px;
+    margin-right: 12px;
+    width: 38px;
+    flex-shrink: 0;
+    text-align: center;
+    padding: 2px 0;
+    color: #fff;
+  }
+
+  &.answered .answers-count {
+    background-color: $greenColor;
+  }
+
+  .question-title {
+    font-size: 13px;
+    font-family: $primaryFontFamily;
+    cursor: pointer;
+    word-break: break-all;
+  }
+}
+
+.placeholder {
+  //color: $primeColor;
+  font-size: 12px;
+  font-family: $primaryFontFamily;
+}
+
+.header,
+.question-title {
+  //color: $primeColor;
+}
+
+//.answers-count {
+//  background-color: $secondaryBgColor;
+//}
+
+@include themify($themes, true) {
+  .answers-count {
+    background-color: themed('appBackgroundColor');
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "watchList": {
+    "tableView": "Таблиця",
+    "tilesView": "Плитки",
+    "volume24h": "Обсяг за 24год",
+    "removeSymbol": "Видалити символ?",
+    "symbol": "Інструмент",
+    "priceChange": "Зміна",
+    "highestPrice": "Максимальна",
+    "lowestPrice": "Мінімальна",
+    "tickTime": "Час",
+    "price": "Ціна",
+    "chart": "Графік",
+    "remove": "Видалити",
+    "placeOrder": "Зробити замовлення",
+    "openChart": "Відкрити чарт",
+    "setAlert": "Додати сповіщення",
+    "showOB": "Показати Книгу Ордерів"
+  },
+  "watchlistComponentName": "Список спостереження"
+}

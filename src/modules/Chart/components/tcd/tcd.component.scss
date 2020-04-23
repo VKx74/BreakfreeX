@@ -1,0 +1,33 @@
+:host-context(.lm_dragging),
+:host-context(.as-dragging){ // Class added when user resize or dragging panel
+  .tcdRootContainer {
+    pointer-events: none !important;
+    //padding-bottom: 7px;
+  }
+}
+
+:host {
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  .tcd-component {
+    width: 100%;
+    height: 100%;
+  }
+
+  /deep/ .tcdRootContainer {
+    &.tcdFullWindow {
+      z-index: 200;
+    }
+  }
+
+  /deep/ .tcdToolbarViewMode li:first-of-type {
+    display: none !important; /* Hide full screen */
+  }
+}
+
+// Global global-styles
+/deep/ .tcdDialog {
+  bottom: unset;
+}

@@ -1,0 +1,61 @@
+<div class="trends-widget full-height flex flex-direction-column">
+    <div class="trends-widget-header flex-shrink-0">
+        <div class="trends-widget-title">
+            Trends
+        </div>
+    </div>
+    <div class="top-line text-center flex align-items-center justify-space-between flex-shrink-0">
+        <div class="flex">
+            <input type="text" [(ngModel)]="SearchSymbol" class="crypto-input symbolSearch" placeholder="Symbol" (keydown.enter)="handleSymbolChange()">
+            <button class="search-button crypto-button" [class.is-loading]="isLoading" (click)="handleSymbolChange()">
+                <i class="fa fa-search iconsize"></i>
+            </button>
+        </div>
+
+        <div class="educational-tips-wrapper">
+            <educational-tips [componentName]="ComponentIdentifier.trendsWidget"></educational-tips>
+        </div>
+    </div>
+    <div class="table-wrapper flex-grow-1 overflow-auto" *ngIf="TrendItemsMap">
+        <table class="crypto-table crypto-table_striped crypto-table_fixed-header watchlist-table">
+            <thead>
+                <tr>
+                    <th>{{ 'exchange' | translate }}</th>
+                    <th class="trend-info">{{ 'timeFrameToShortStr.1h' | translate}}</th>
+                    <th class="trend-info">{{ 'timeFrameToShortStr.15m' | translate}}</th>
+                    <th class="trend-info">{{ 'timeFrameToShortStr.1m' | translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of TrendItemsMap | keyvalue">
+                    <td>
+                        <span title="{{item.key}}">
+                            {{item.key}}
+                        </span>
+                    </td>
+                    <td class="trend-info">
+                        <div>
+                            <div *ngFor="let tfTrend of item.value.High.Trends" class="trendcell"
+                            [ngClass]="{'upTrend': (tfTrend), 'downTrend': (tfTrend===false), 'noTrend': (tfTrend===null)}">
+                            </div>
+                        </div>
+                    </td>
+                    <td class="trend-info">
+                        <div>
+                            <div *ngFor="let tfTrend of item.value.Medium.Trends" class="trendcell"
+                            [ngClass]="{'upTrend': (tfTrend), 'downTrend': (tfTrend===false), 'noTrend': (tfTrend===null)}">
+                            </div>
+                        </div>
+                    </td>
+                    <td class="trend-info">
+                        <div>
+                            <div *ngFor="let tfTrend of item.value.Low.Trends" class="trendcell"
+                            [ngClass]="{'upTrend': (tfTrend), 'downTrend': (tfTrend===false), 'noTrend': (tfTrend===null)}">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

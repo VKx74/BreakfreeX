@@ -1,0 +1,64 @@
+@import "variables";
+@import "mixins/themify";
+@import "global-styles/themes/themes";
+
+@mixin markdownPreviewStyles {
+  @include themify($themes, true) {
+    * {
+      color: themed('titleTextColor');
+      font-family: $primaryFontFamily;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    h1 {
+      font-size: 21px;
+    }
+
+    h2 {
+      font-size: 19px;
+    }
+
+    h3 {
+      font-size: 17px;
+    }
+
+    p {
+      font-size: 13px;
+    }
+
+    pre,
+    code {
+      background: themed('appBackgroundColor');
+      border: solid 1px themed('appBackgroundColor');
+      border-radius: 3px;
+      font-size: 11px;
+      font-family: monospace;
+    }
+
+    pre code {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0 0 1em;
+    }
+
+    hr {
+      border-color: themed('appBackgroundColor');
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      padding-bottom: 10px;
+    }
+  }
+}

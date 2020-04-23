@@ -1,0 +1,25 @@
+<div>
+    <div class="top-line flex align-items-center">
+        <i class="crypto-icon crypto-icon-question-vote m-right-10 crypto-color-green vote-icon"></i>
+        <span class="crypto-text is-small m-right-10 color-title">asked {{question.created | date:'dd LLL'}}</span>
+        <span class="crypto-text is-small crypto-color-accent">{{question?.creator?.userName}}</span>
+    </div>
+    <div>
+        <p class="crypto-text is-medium color-title cursor-pointer" routerLink="./{{question.id}}">{{question.title}}</p>
+    </div>
+
+    <div class="flex justify-space-between align-items-start bottom-line">
+<!--        <div class="tags-wrapper">-->
+<!--            <div class="crypto-tag tag" *ngFor="let tag of question.tags" (click)="handleTagClick(tag.name)">-->
+<!--                <span>{{tag.name}}</span>-->
+<!--            </div>-->
+<!--        </div>-->
+        <tags-group [tags]="question.tags"></tags-group>
+        <div class="summary flex justify-space-between align-items-center">
+            <span class="summary-item votes-summary is-medium votes-item">{{question.totalVoteCount}} votes</span>
+            <span class="summary-item answers-summary is-medium votes-item"
+                  [ngClass]="{'answered': question.totalAnswersCount > 0}">{{question.totalAnswersCount}} answers</span>
+            <span class="summary-item views-summary is-medium votes-item">{{question.viewCount}} views</span>
+        </div>
+    </div>
+</div>

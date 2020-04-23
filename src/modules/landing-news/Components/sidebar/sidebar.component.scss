@@ -1,0 +1,92 @@
+@import "../../../../global-styles/themes/themes";
+//@import "global-styles/variables";
+@import "mixins/themify";
+@import "../../../../modules/Markdown/styles/variables";
+
+:host {
+  /deep/ .sidebar-container {
+    padding-top: 0;
+    height: auto;
+  }
+}
+
+.sidebar-section {
+  padding: 15px 20px;
+  display: block;
+  border-radius: 3px;
+  margin-left: 3px;
+  min-width: 320px;
+  max-width: 320px;
+
+  .header {
+    color: $primeColor;
+    font-family: $primaryFontFamily;
+    line-height: 13px;
+    margin-bottom: 13px;
+  }
+
+  .item {
+    margin-bottom: 13px;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+
+      font-size: 13px;
+      font-family: $primaryFontFamily;
+      cursor: pointer;
+      color: $primeColor;
+      margin-bottom: 5px;
+    }
+  }
+
+  .news-title {
+    overflow: hidden;
+    max-width: 80%;
+  }
+
+  .time {
+    //width: 50px;
+    white-space: nowrap;
+    cursor: default;
+  }
+
+  .tag-wrapper {
+    margin-bottom: 3px;
+  }
+
+  .tag {
+    cursor: pointer;
+    display: inline-block;
+    max-width: 80px;
+
+  }
+
+  .tag-text, .time, .news-title {
+    @include themify($themes, true) {
+      color: themed('titleTextColor');
+    }
+  }
+
+  .title {
+    @include themify($themes, true) {
+      color: themed('valueTextColor');
+    }
+  }
+}
+
+.tag-text {
+  font-size: 13px;
+  font-family: "Open Sans";
+
+  &.muted {
+    color: $mutedColor;
+  }
+}
+
+
+@include themify($themes, true) {
+  /deep/ .sidebar-container {
+    background-color: themed('appPanelColor') !important;
+  }
+}

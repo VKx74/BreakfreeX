@@ -1,0 +1,15 @@
+<div #pinContainer class="pin-container" [formGroup]="formGroup">
+    <mat-form-field class="crypto-input full-width input-wrapper"
+                    [ngClass]="{'expiring' : timeLeft <= 5 && pin, 'with-hint': description && description.length}">
+        <input matInput formControlName="pin" (ngModelChange)="change($event)"
+               maxlength="6" minlength="6" autocomplete="off"
+               placeholder="{{placeholder == null ? ('verificationCodePlaceholder' | translate) : placeholder}}">
+        <span matSuffix>
+            <span class="time-span">{{timeLeft}}sec</span>
+        </span>
+
+        <mat-hint>
+            <span>{{description}}</span>
+        </mat-hint>
+    </mat-form-field>
+</div>
