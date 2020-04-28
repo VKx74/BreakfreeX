@@ -11,9 +11,9 @@
             </div>
             <div class="flex justify-space-between align-items-center flex-wrap-wrap bottom-line">
                 <div class="author-info flex align-items-center">
-                    <name-avatar class="avatar" [src]="discussion.creator?.avatarId"
-                                 [name]="discussion.creator?.userName || 'User removed'"></name-avatar>
-                    <span class="author-name">{{discussion.creator?.userName || 'User removed'}}</span>
+                    <name-avatar class="avatar" [src]="discussion.creatorModel?.avatarId"
+                                 [name]="discussion.creatorModel?.userName || 'User removed'"></name-avatar>
+                    <span class="author-name">{{discussion.creatorModel?.userName || 'User removed'}}</span>
                 </div>
                 <div class="m-left-auto">
                     <span class="manage-controls-wrapper" *ngIf="canManage()">

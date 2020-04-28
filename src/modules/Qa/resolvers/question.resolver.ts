@@ -20,7 +20,7 @@ export class QuestionResolver implements Resolve<IQuestionResolverValue> {
 
     resolve(route: ActivatedRouteSnapshot): Observable<IQuestionResolverValue | null> {
         const id = route.params['id'];
-        const refererUrl = document.referrer;
+        const refererUrl = ""; //document.referrer;
         const isAuthorized = this._identityService.isAuthorized;
 
         return this._questionsService.getQuestion({

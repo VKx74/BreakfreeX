@@ -8,7 +8,7 @@ export class DiscussionModel {
     description: string;
     creatorId: string;
     created: number;
-    creator: UserProfileModel;
+    creatorModel: UserProfileModel;
     updated: string;
     forumType: ForumType;
     categories: ICategoryDTO[];
