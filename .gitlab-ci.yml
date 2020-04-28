@@ -61,7 +61,7 @@ build-latest:
     script:
         - echo Build Docker Image
         - echo $CI_PROJECT_PATH
-        - CONTAINER_IMAGE=$(echo "registry.git.magnise.com/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - CONTAINER_IMAGE=$(echo "$CI_REGISTRY/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
         - echo $CONTAINER_IMAGE
         - echo $CI_REGISTRY
         - echo $CI_BUILD_TOKEN
@@ -83,7 +83,7 @@ build-stable:
     script:
         - echo Build Docker Image
         - echo $CI_PROJECT_PATH
-        - CONTAINER_IMAGE=$(echo "registry.git.magnise.com/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - CONTAINER_IMAGE=$(echo "$CI_REGISTRY/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
         - echo $CONTAINER_IMAGE
         - echo $CI_REGISTRY
         - echo $CI_BUILD_TOKEN
