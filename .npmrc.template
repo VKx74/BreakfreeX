@@ -1,3 +1,3 @@
-registry=https://npm.fintatech.com/
+registry=https://nexus.breakfreetrading.com/repository/bft_npm
 save-exact=true
-//npm.fintatech.com/:_authToken="TOKEN"
+//nexus.breakfreetrading.com/repository/:_authToken=TOKEN

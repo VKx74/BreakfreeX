@@ -355,8 +355,12 @@ export class TcdComponent extends BaseLayoutItemComponent {
     ngOnDestroy() {
         super.ngOnDestroy();
 
-        if (this.chart) {
-            this.chart.destroy();
+        try {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 }

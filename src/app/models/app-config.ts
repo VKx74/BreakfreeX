@@ -26,7 +26,6 @@ export interface ApiUrls {
     eventConsolidatorAdminApiREST: string;
     eventConsolidatorWebSocket: string;
     eventsLogREST: string;
-    dataConsolidatorAdminApiRest: string;
     shuftiproApiRest: string;
     socialChatREST: string;
     socialForumREST: string;

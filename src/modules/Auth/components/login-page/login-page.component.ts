@@ -22,8 +22,8 @@ export interface IRecaptchaConfig {
     theme: 'light' | 'dark';
 }
 
-const CaptchaSiteKey: string = '6LfsQ6cUAAAAAEKjMvxrTz3dOH7P4h3lLgOex_KP';
-const CaptchaSecretKey: string = '6LfsQ6cUAAAAAK-Ez-1RtjyVPUQkFIR8_tON35IB';
+const CaptchaSiteKey: string = '6LdjZO8UAAAAAHGv_NDMGFokppoHHFQwAUlMkOjt';
+const CaptchaSecretKey: string = '6LdjZO8UAAAAAJ0mbMNvaI6TkWPv4BBTiz9B9F9O';
 
 interface Notification {
     isError: boolean;
