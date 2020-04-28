@@ -1,9 +1,9 @@
 <div>
     <div class="top-line flex align-items-center">
-        <name-avatar class="avatar" [src]="discussion.creator?.avatarId"
-                     [name]="discussion.creator?.userName || 'User removed'"></name-avatar>
+        <name-avatar class="avatar" [src]="discussion.creatorModel?.avatarId"
+                     [name]="discussion.creatorModel?.userName || 'User removed'"></name-avatar>
         <span class="created-date">asked {{discussion.created | date:'dd LLL'}}</span>
-        <span class="author">{{discussion.creator?.userName || 'User removed'}}</span>
+        <span class="author">{{discussion.creatorModel?.userName || 'User removed'}}</span>
     </div>
     <div>
         <a class="title" [routerLink]="url">{{discussion.title}}</a>
