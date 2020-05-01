@@ -104,3 +104,31 @@
     color: themed('accentColor');
   }
 }
+
+
+.overlay-wrapper {
+  margin: 0 auto !important;
+}
+
+.spc {
+  display: none !important;
+}
+
+button.btn.crypto-button.crypto-button-full-width.button_success.login-btn {
+  background-color: black;
+  opacity: 0.8;
+  font-weight: bold;
+}
+
+
+body.Light-theme.thmLightTheme {
+  background-color: #f2f2f2;
+}
+
+.overlay {
+  background: #fff !important;
+}
+
+::before {
+  color: #000000b5;
+}
