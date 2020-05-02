@@ -45,6 +45,7 @@ export class RefreshPasswordComponent extends Modal<ResetPasswordConfig, MemberC
         const newEmail = this.formGroup.controls['email'].value;
         const updateUserModel: UpdateUserModel = {
             role: user.role,
+            userName: user.userName,
             id: user.id,
             email: newEmail
         };

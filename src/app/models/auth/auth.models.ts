@@ -106,6 +106,8 @@ export class UpdateUserModel {
 
     public email: string;
 
+    public userName: string;
+
     public id: string;
 
     public role: string;
