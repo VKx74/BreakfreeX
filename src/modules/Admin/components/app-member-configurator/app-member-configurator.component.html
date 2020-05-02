@@ -20,6 +20,15 @@
                     </mat-form-field>
                 </div>
 
+                <div class="crypto-form-unit" *ngIf="isUserUpdating">
+                    <div class="form-unit__label">Username:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="userName" placeholder="Username">
+                        <i class="crypto-icon crypto-icon-user" matSuffix></i>
+                        <mat-error>Please, enter a valid username</mat-error>
+                    </mat-form-field>
+                </div>
+
                 <div class="crypto-form-unit">
                     <div class="form-unit__label">E-mail:</div>
                     <mat-form-field class="crypto-input with-hint full-width">

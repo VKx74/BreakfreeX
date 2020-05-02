@@ -150,6 +150,7 @@ export class AppMemberConfiguratorComponent extends Modal<ConfiguratorConfig, Me
         this._usersService.updateUser({
             id: this.data.user.id,
             email: controls['email'].value,
+            userName: controls['userName'].value,
             role: controls['role'].value as string
         })
             .pipe(
@@ -214,6 +215,7 @@ export class AppMemberConfiguratorComponent extends Modal<ConfiguratorConfig, Me
         if (this.isUserUpdating) {
             return new FormGroup({
                 role: new FormControl(this.user.role),
+                userName: new FormControl(this.user.userName, [Validators.required, Validators.minLength(3)]),
                 email: new FormControl(this.user.email, [Validators.required, Validators.email])
             });
         } else {
