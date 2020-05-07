@@ -4,11 +4,13 @@ import {InstrumentService} from "@app/services/instrument.service";
 import {EExchange} from "@app/models/common/exchange";
 import {map, switchMap} from "rxjs/operators";
 import {TranslateService} from "@ngx-translate/core";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 import {Observable, of} from "rxjs";
 import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {SharedTranslateService} from "@app/localization/shared.token";
 
+export const INPUT_DEBOUNCE_TIME = 200;
 
 @Component({
     selector: 'instrument-search',
@@ -49,6 +51,8 @@ export class InstrumentSearchComponent {
 
         this.filteredInstruments = this.inputControl.valueChanges
             .pipe(
+                debounceTime(INPUT_DEBOUNCE_TIME),
+                distinctUntilChanged(),
                 switchMap((term: string) => {
                     if (typeof term !== 'string') { // temp fix
                         return of([]);

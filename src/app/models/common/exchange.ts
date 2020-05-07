@@ -6,6 +6,7 @@ export enum EExchange {
     Bitmex = "Bitmex",
     OKEx = "OKEx",
     Binance = "Binance",
+    Polygon = "Polygon",
 
     // https://paritech.gitbook.io/zenith-websockets-api/appendices/appendix-b1-markets
     // stock markets

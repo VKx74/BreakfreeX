@@ -14,6 +14,8 @@ export interface ApiUrls {
     webSocketUrl: string;
     bitmexREST: string;
     bitmexWS: string;
+    polygonREST: string;
+    polygonWS: string;
     onadaWS: string;
     coinigyREST: string;
     coinigyWS: string;

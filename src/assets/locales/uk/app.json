@@ -25,7 +25,8 @@
     "appType": "Тип",
     "Crypto": "Крипто",
     "Stock": "Стоки",
-    "Forex": "Форекс"
+    "Forex": "Форекс",
+    "All": "Усі"
   },
   "alertWidget": {
     "title": "Віджет Сповіщень",

@@ -1,4 +1,4 @@
-import IBar = TradingChartDesigner.IBar;
+ import IBar = TradingChartDesigner.IBar;
 import Environment = TradingChartDesigner.UserAgent;
 import IRequest = TradingChartDesigner.IRequest;
 import IBarsRequest = TradingChartDesigner.IBarsRequest;
@@ -49,10 +49,28 @@ export abstract class DataFeedBase implements IDatafeedBase {
     private MAX_BARS_PER_CHART = 2000;
 
     private _requests = new Dictionary<number, IRequest>();
+    
+    private _interval: any;
 
     public instruments: IInstrument[] = [];
 
+    public chartForRefresh: TradingChartDesigner.Chart[] = [];
+
+
     constructor(protected _timeZoneManager: TimeZoneManager) {
+        this._interval = setInterval(() => {
+            try {
+                for (let i = 0; i < this.chartForRefresh.length; i++) {
+                    const c = this.chartForRefresh[i];
+                    if (!c.isDestroyed) {
+                        c.invokeValueChanged(TradingChartDesigner.ChartEvent.LAST_BAR_UPDATED, this._getLastBar(c));
+                        c.refreshAsync();
+                    }
+                }
+            } catch (e) {
+            }
+            this.chartForRefresh = [];
+        }, 1500);
     }
 
     /**
@@ -235,6 +253,10 @@ export abstract class DataFeedBase implements IDatafeedBase {
      */
     destroy() {
         this._requests.clear();
+        if (this._interval) {
+            clearInterval(this._interval);
+        }
+        this.chartForRefresh = [];
     }
 
     // endregion
@@ -296,8 +318,20 @@ export abstract class DataFeedBase implements IDatafeedBase {
             this._updateDataRowLastRecord(dataRow, bar);
         }
 
-        chart.invokeValueChanged(TradingChartDesigner.ChartEvent.LAST_BAR_UPDATED, bar);
-        chart.refreshAsync();
+        this._addChartToRefresh(chart);
+    }
+    
+    private _addChartToRefresh(chart: TradingChartDesigner.Chart) {
+        if (chart.isDestroyed) 
+            return;
+
+        for (let i = 0; i < this.chartForRefresh.length; i++) {
+            if (this.chartForRefresh[i] == chart) {
+                return;
+            }
+        }
+
+        this.chartForRefresh.push(chart);
     }
 
     private _updateDataRowLastRecord(dataRow: TradingChartDesigner.IBarDataRows, bar: TradingChartDesigner.IBar) {

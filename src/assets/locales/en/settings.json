@@ -23,7 +23,8 @@
     "showTips": "Show tips?",
     "Crypto": "Crypto",
     "Stock": "Stock",
-    "Forex": "Forex"
+    "Forex": "Forex",
+    "All": "All"
   },
   "profileInfo": {
     "title": "User profile",

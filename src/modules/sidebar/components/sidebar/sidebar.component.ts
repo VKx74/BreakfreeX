@@ -25,7 +25,7 @@ import {UserSettings, UserSettingsService} from "@app/services/user-settings/use
 })
 export class SidebarComponent implements OnInit {
     applicationType$ = this._applicationTypeService.applicationTypeChanged;
-    appTypes = [ApplicationType.Forex, ApplicationType.Crypto];
+    appTypes = [ApplicationType.Forex, ApplicationType.Crypto, ApplicationType.Stock, ApplicationType.All];
     selectedApplicationType: ApplicationType;
     Theme = Theme;
     appTypeCaption = (appType: ApplicationType) => this._translateService.get(`generalSettings.${appType}`)

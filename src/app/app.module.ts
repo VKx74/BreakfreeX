@@ -66,6 +66,11 @@ import {OandaHistoryService} from "@app/services/oanda.exchange/oanda.history.se
 import {OandaRealtimeService} from "@app/services/oanda.exchange/oanda.realtime.service";
 import {BitmexSocketService} from "@app/services/socket/bitmex.socket.service";
 import {OandaSocketService} from "@app/services/socket/oanda.socket.service";
+import {PolygonSocketService} from "@app/services/socket/polygon.socket.service";
+
+import {PolygonInstrumentService} from "@app/services/polygon.exchange/polygon.instrument.service";
+import {PolygonHistoryService} from "@app/services/polygon.exchange/polygon.history.service";
+import {PolygonRealtimeService} from "@app/services/polygon.exchange/polygon.realtime.service";
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -239,6 +244,11 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         OandaRealtimeService,
         OandaBrokerService,
         OandaSocketService,
+        PolygonSocketService,
+
+        PolygonInstrumentService,
+        PolygonHistoryService,
+        PolygonRealtimeService,
 
         InstrumentService,
         RealtimeService,

@@ -29,6 +29,8 @@ import TradeAction = TradingChartDesigner.TradeAction;
 import {OrderSide, OrderTypes} from "../../../Trading/models/models";
 import {AlertService} from "@alert/services/alert.service";
 import {GoldenLayoutItemState} from "angular-golden-layout";
+import { InstrumentService } from '@app/services/instrument.service';
+import { EExchange } from '@app/models/common/exchange';
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -74,7 +76,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _translateService: TranslateService,
                 private _timeZoneManager: TimeZoneManager,
                 private _templateDataProviderService: TemplatesDataProviderService,
-                private _linkerFactory: LinkerFactory,
+                private _instrumentService: InstrumentService,
                 private _calendarEventsDatafeed: CalendarEventsDatafeed,
                 private _brokerService: BrokerService,
                 private _alertService: AlertService,
@@ -155,7 +157,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 // helpLinks: this.linksList,
                 showHelp: this._educationalTipsService.isTipsShown(),
                 locale: this._localizationService.locale,
-                tradeHandler: this.tradeHandler.bind(this)
+                tradeHandler: this.tradeHandler.bind(this),
+                searchInstrumentHandler: this.searchInstrumentHandler.bind(this),
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
@@ -177,6 +180,16 @@ export class TcdComponent extends BaseLayoutItemComponent {
             setTimeout(() => {
                 this.showSpinner = false;
             }, 1000);
+        });
+    }
+
+    private searchInstrumentHandler(symbol: string): Promise<IInstrument[]> {
+        const self = this;
+        return new Promise<IInstrument[]>(function (resolve, reject) {
+            self._instrumentService.getInstruments(EExchange.any, symbol).subscribe((instruments: IInstrument[]) => {
+                self._datafeed.instruments = instruments;
+                resolve(instruments);
+            });
         });
     }
 

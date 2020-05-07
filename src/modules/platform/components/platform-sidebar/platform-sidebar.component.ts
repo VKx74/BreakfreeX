@@ -30,7 +30,7 @@ import {IdentityService} from "@app/services/auth/identity.service";
 })
 export class PlatformSidebarComponent implements OnInit {
     applicationType$ = this._applicationTypeService.applicationTypeChanged;
-    appTypes = [ApplicationType.Forex, ApplicationType.Crypto];
+    appTypes = [ApplicationType.Forex, ApplicationType.Crypto, ApplicationType.Stock, ApplicationType.All];
     selectedApplicationType: ApplicationType;
     Theme = Theme;
     AppRoutes = AppRoutes;

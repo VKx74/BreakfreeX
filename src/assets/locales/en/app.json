@@ -24,7 +24,8 @@
     "appType": "App. Type",
     "Crypto": "Crypto",
     "Stock": "Stock",
-    "Forex": "Forex"
+    "Forex": "Forex",
+    "All": "All"
   },
   "alertWidget": {
     "title": "Alerts Widget",

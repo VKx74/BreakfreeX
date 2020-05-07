@@ -5,7 +5,9 @@
     "identityUrl": "https://auth.platform.breakfreetrading.com/",
     "webSocketUrl": "wss://ws.platform.breakfreetrading.com/wsnotification",
     "bitmexREST": "https://datafeed.breakfreetrading.com/bitmex/",
-    "bitmexWS": "wss://datafeed.breakfreetrading.com/bitmex/subscribe/realtime/",
+    "bitmexWS": "wss://datafeed.breakfreetrading.com/bitmex/subscribe/realtime/", 
+    "polygonREST": "https://datafeed.breakfreetrading.com/polygon/",
+    "polygonWS": "wss://datafeed.breakfreetrading.com/polygon/subscribe/realtime/",
     "onadaWS": "wss://datafeed.breakfreetrading.com/oanda/subscribe/realtime/",
     "coinigyREST": "https://datafeed.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
     "coinigyWS": "wss://datafeed.breakfreetrading.com/data/vendor/coinigy/ws",
@@ -50,6 +52,10 @@
     "bitmexREST": {
       "name": "Bitmex",
       "url": "https://datafeed.breakfreetrading.com/bitmex/"
+    },
+    "polygonREST": {
+      "name": "Polygon",
+      "url": "https://datafeed.breakfreetrading.com/polygon/"
     },
     "eventConsolidator": {
       "name": "Event Consolidator",

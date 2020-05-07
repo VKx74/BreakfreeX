@@ -11,6 +11,9 @@ import {BitmexRealtimeService} from "../services/bitmex.exchange/bitmex.realtime
 import {OandaInstrumentService} from "@app/services/oanda.exchange/oanda.instrument.service";
 import {OandaHistoryService} from "@app/services/oanda.exchange/oanda.history.service";
 import {OandaRealtimeService} from "@app/services/oanda.exchange/oanda.realtime.service";
+import { PolygonInstrumentService } from '@app/services/polygon.exchange/polygon.instrument.service';
+import { PolygonHistoryService } from '@app/services/polygon.exchange/polygon.history.service';
+import { PolygonRealtimeService } from '@app/services/polygon.exchange/polygon.realtime.service';
 
 export interface CreateInstrumentServiceActionResult extends ActionResult {
     serviceInstance?: InstrumentServiceBase;
@@ -38,6 +41,9 @@ export class ExchangeFactory {
             case EExchangeInstance.OandaExchange:
                 service = this._injector.get(OandaInstrumentService);
                 break;
+            case EExchangeInstance.PolygonExchange:
+                service = this._injector.get(PolygonInstrumentService);
+                break;
         }
 
         if (service) {
@@ -62,6 +68,9 @@ export class ExchangeFactory {
                 break;
             case EExchangeInstance.OandaExchange:
                 service = this._injector.get(OandaHistoryService);
+                break; 
+            case EExchangeInstance.PolygonExchange:
+                service = this._injector.get(PolygonHistoryService);
                 break;
         }
 
@@ -87,6 +96,9 @@ export class ExchangeFactory {
                 break;
             case EExchangeInstance.OandaExchange:
                 service = this._injector.get(OandaRealtimeService);
+                break; 
+            case EExchangeInstance.PolygonExchange:
+                service = this._injector.get(PolygonRealtimeService);
                 break;
         }
 

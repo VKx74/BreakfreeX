@@ -32,16 +32,16 @@ export class DataFeed extends DataFeedBase {
 
         super(_timeZoneManager);
         const self = this;
-        TradingChartDesigner.getAllInstruments = () => {
-            return self._instrumentService.getInstruments(EExchange.any).toPromise();
-        };
+        // TradingChartDesigner.getAllInstruments = () => {
+        //     return self._instrumentService.getInstruments(EExchange.any).toPromise();
+        // };
     }
 
     init(): Promise<DataFeedBase> {
         const self = this;
 
         return new Promise<DataFeedBase>(function (resolve, reject) {
-            self._instrumentService.getInstruments(EExchange.any).subscribe((instruments: IInstrument[]) => {
+            self._instrumentService.getInstruments(EExchange.any, "").subscribe((instruments: IInstrument[]) => {
                 self.instruments = instruments;
                 resolve(self);
             });
@@ -67,12 +67,12 @@ export class DataFeed extends DataFeedBase {
         this._subscriptions = {};
     }
 
-    private _sendRequest(request: TradingChartDesigner.IBarsRequest) {
+    private async _sendRequest(request: TradingChartDesigner.IBarsRequest) {
         const instrument = request.instrument || request.chart.instrument;
         const endDate = this._getRequestEndDate(request);
         const startDate = this._getRequestStartDate(request, endDate);
         const requestMsg: IHistoryRequest = {
-            instrument: this._mapInstrument(instrument),
+            instrument: await this._mapInstrument(instrument),
             timeFrame: this._mapTimeFrame(request),
             endDate: endDate,
             startDate: startDate,
@@ -119,10 +119,18 @@ export class DataFeed extends DataFeedBase {
         return TzUtils.convertDateTz(JsUtil.UTCDate(startDateTimestamp), UTCTimeZone, this._timeZoneManager.timeZone);
     }
 
-    private _mapInstrument(instrument: TradingChartDesigner.IInstrument): IInstrument {
+    private async _mapInstrument(instrument: TradingChartDesigner.IInstrument): Promise<IInstrument> {
+        
         for (let i = 0; i < this.instruments.length; i++) {
             if (this.instruments[i].symbol === instrument.symbol && this.instruments[i].exchange === instrument.exchange) {
                 return this.instruments[i];
+            }
+        }
+
+        const instruments = await this._instrumentService.getInstruments(instrument.exchange as EExchange, instrument.symbol).toPromise();
+        for (let i = 0; i < instruments.length; i++) {
+            if (instruments[i].symbol === instrument.symbol) {
+                return instruments[i];
             }
         }
 
@@ -159,16 +167,17 @@ export class DataFeed extends DataFeedBase {
         this._subscribeToRealtime(instrument, request.chart);
     }
 
-    private _subscribeToRealtime(instrument: IInstrument, chart: TradingChartDesigner.Chart): void {
+    private _subscribeToRealtime(instrument: IInstrument, chart: TradingChartDesigner.Chart) {
         const instrumentHash = instrument.symbol + instrument.exchange;
 
         if (this._subscriptions[instrumentHash]) {
            return;
         }
 
-        this._subscriptions[instrumentHash] = this._realtimeService.subscribeToTicks(instrument, (tick: ITick) => {
+        this._subscriptions[instrumentHash] = this._realtimeService.subscribeToTicks(instrument, async (tick: ITick) => {
             const tickInstrument = tick.instrument;
-            if (this._checkSubscriptionNeeded(tickInstrument, chart)) {
+            const unsubscribeNeeded = await this._checkSubscriptionNeeded(tickInstrument, chart);
+            if (unsubscribeNeeded) {
                 this._processTick(tick, chart);
             } else {
                 this._unsubscribeFromRealtime(tickInstrument);
@@ -176,8 +185,8 @@ export class DataFeed extends DataFeedBase {
         });
     }
 
-    private _checkSubscriptionNeeded(instrument: IInstrument, chart: TradingChartDesigner.Chart): boolean {
-        const chartInstrument = this._mapInstrument(chart.instrument);
+    private async _checkSubscriptionNeeded(instrument: IInstrument, chart: TradingChartDesigner.Chart): Promise<boolean> {
+        const chartInstrument = await this._mapInstrument(chart.instrument);
 
         // main chart.json symbol need this subscription
         if (chartInstrument.symbol === instrument.symbol && chartInstrument.exchange === instrument.exchange) {
@@ -188,7 +197,7 @@ export class DataFeed extends DataFeedBase {
         const comparisionManagers = chart.handlerInstrumentComparison.instrumentsCompare;
         for (let i = 0; i < comparisionManagers.length; i++) {
             const comparisionManager = comparisionManagers[i];
-            const compareInstrument = this._mapInstrument(comparisionManager.instrument);
+            const compareInstrument = await this._mapInstrument(comparisionManager.instrument);
             if (compareInstrument.symbol === instrument.symbol && compareInstrument.exchange === instrument.exchange) {
                 return true;
             }
