@@ -65,7 +65,7 @@ export class PolygonInstrumentService extends InstrumentServiceBase {
             for (let i = 0; i < products.length; i++) {
                 const product = products[i];
                 const type = this._getMarketType(product.Market);
-                const tickSize =this._getTickSize(product.Currency, type);
+                const tickSize = this._getTickSize(product.Currency, type);
                 const instrument: IInstrument = {
                     id: product.Symbol,
                     symbol: product.Symbol,

@@ -326,7 +326,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
             return;
 
         for (let i = 0; i < this.chartForRefresh.length; i++) {
-            if (this.chartForRefresh[i] == chart) {
+            if (this.chartForRefresh[i] === chart) {
                 return;
             }
         }
