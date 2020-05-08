@@ -10,6 +10,7 @@
   "sell": "Sell",
   "buyShort": "B",
   "sellShort": "S",
+  "unknown": "Unknown",
   "precision": "Precision",
   "symbol": "Symbol",
   "save": "Save",

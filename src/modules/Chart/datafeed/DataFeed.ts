@@ -107,9 +107,11 @@ export class DataFeed extends DataFeedBase {
     }
 
     private _getRequestEndDate(request: TradingChartDesigner.IBarsRequest): Date {
+        const timeFrame = request.chart.timeFrame;
+        let goForward = TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity ? 1 : 24;
         return request.endDate
             ? request.endDate
-            : TzUtils.convertDateTz(JsUtil.UTCDate(new Date()), UTCTimeZone, this._timeZoneManager.timeZone);
+            : TzUtils.convertDateTz(JsUtil.UTCDate(new Date(Date.now() + (1000 * 60 * 60 * goForward))), UTCTimeZone, this._timeZoneManager.timeZone);
     }
 
     private _getRequestStartDate(request: TradingChartDesigner.IBarsRequest, endDate: Date): Date {
