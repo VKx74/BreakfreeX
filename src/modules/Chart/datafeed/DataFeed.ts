@@ -37,14 +37,18 @@ export class DataFeed extends DataFeedBase {
         // };
     }
 
-    init(): Promise<DataFeedBase> {
+    init(loadInstruments: boolean = true): Promise<DataFeedBase> {
         const self = this;
 
         return new Promise<DataFeedBase>(function (resolve, reject) {
-            self._instrumentService.getInstruments(EExchange.any, "").subscribe((instruments: IInstrument[]) => {
-                self.instruments = instruments;
+            if (loadInstruments) {
+                self._instrumentService.getInstruments(EExchange.any, "").subscribe((instruments: IInstrument[]) => {
+                    self.instruments = instruments;
+                    resolve(self);
+                });
+            } else {
                 resolve(self);
-            });
+            }
         });
     }
 
@@ -122,7 +126,6 @@ export class DataFeed extends DataFeedBase {
     }
 
     private async _mapInstrument(instrument: TradingChartDesigner.IInstrument): Promise<IInstrument> {
-        
         for (let i = 0; i < this.instruments.length; i++) {
             if (this.instruments[i].symbol === instrument.symbol && this.instruments[i].exchange === instrument.exchange) {
                 return this.instruments[i];

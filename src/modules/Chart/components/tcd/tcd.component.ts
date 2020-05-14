@@ -138,8 +138,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     init(state?: ITcdComponentState) {
         const theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
+        const instrumentsNeeded = !state || !state.instrument;
 
-        this._datafeed.init().then(d => {
+        this._datafeed.init(instrumentsNeeded).then(d => {
             const config = {
                 chartContainer: this.chartContainer.nativeElement,
                 width: '100%',

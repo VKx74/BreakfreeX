@@ -159,7 +159,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     private _initDatafeed(instrumentVM: WatchlistInstrumentVM) {
-        this._datafeed.init().then(d => {
+        this._datafeed.init(false).then(d => {
             this._getHistory(instrumentVM, d);
             const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
             if (this.intervals[key]) {

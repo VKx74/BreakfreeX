@@ -68,14 +68,14 @@ export class InstrumentService implements IHealthable {
     }
 
     getInstrumentBySymbol(symbol: string, exchange: EExchange): Observable<IInstrument> {
-        return this._getServiceByExchange(exchange).getInstruments()
+        return this._getServiceByExchange(exchange).getInstruments(exchange, symbol)
             .pipe(
                 map((instruments: IInstrument[]) => instruments.find(i => i.symbol === symbol))
             );
     }
 
     getInstrumentsBySymbol(symbol: string): Observable<IInstrument[]> {
-        return forkJoin(this.services.map(s => s.getInstruments()))
+        return forkJoin(this.services.map(s => s.getInstruments(undefined, symbol)))
             .pipe(
                 catchError(() => of([])),
                 map((responses: IInstrument[][]) => {
