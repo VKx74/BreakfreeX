@@ -35,22 +35,19 @@ export class PolygonInstrumentService extends InstrumentServiceBase {
             return of([]);
         }
 
-        this._subject = new Subject<IInstrument[]>();
-        this._request = this._requestInstrumentsWithSearch(search).pipe(map(response => this.mapResponse(response, exchange, search)));
-        this._request.subscribe(value => {
-            this._subject.next(value);
-            this._subject.complete();
-            this._request = null;
+        const subject = new Subject<IInstrument[]>();
+        const request = this._requestInstrumentsWithSearch(search).pipe(map(response => this.mapResponse(response, exchange, search)));
+        request.subscribe(value => {
+            subject.next(value);
+            subject.complete();
         }, error => {
             console.log('Failed to load symbol from ' + this._http);
             console.log(error);
-            this._isHealthy = false;
-            this._subject.next([]);
-            this._subject.complete();
-            this._request = null;
+            subject.next([]);
+            subject.complete();
         });
 
-        return this._subject;
+        return subject;
     }
 
     protected mapResponse(response, exchange?: EExchange, search?: string): IInstrument[] {
