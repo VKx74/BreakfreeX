@@ -163,6 +163,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
+            this.chart.showInstrumentWatermark = false;
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
 
             if (state && state.chartState) {
