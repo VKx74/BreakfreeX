@@ -96,13 +96,13 @@ export class LoginPageComponent {
             return;
         }
 
-        if (!this.formGroup.controls['captcha'].value) {
-            this.notification = {
-                isError: true,
-                message: 'CAPTCHA is required'
-            };
-            return;
-        }
+        // if (!this.formGroup.controls['captcha'].value) {
+        //     this.notification = {
+        //         isError: true,
+        //         message: 'CAPTCHA is required'
+        //     };
+        //     return;
+        // }
 
         this.notification = null;
         this.processing = true;
