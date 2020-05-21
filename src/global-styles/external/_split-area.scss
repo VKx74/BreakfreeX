@@ -15,7 +15,7 @@
 
   // NEW STYLES - TEST
   //pointer-events: none;
-  padding: 3px 0;
+  // padding: 3px 0;
   height: 12px;
   //cursor: default;
   cursor: row-resize;
@@ -23,7 +23,8 @@
   &::before {
     content: '';
     left: calc(50% - 40px);
-    height: 5px;
+    height: 4px;
+    margin: 2px;
     width: 40px;
     border-radius: 10px;
     //cursor: row-resize;

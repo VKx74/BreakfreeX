@@ -11,13 +11,14 @@ export enum ApplicationType {
 export const APP_TYPE_EXCHANGES: {[index: string]: EExchangeInstance[]} = {};
 
 APP_TYPE_EXCHANGES[ApplicationType.Crypto] = [
+    EExchangeInstance.TwelvedataExchange,
     EExchangeInstance.PolygonExchange,
     EExchangeInstance.BitmexExchange
 ];
 
-APP_TYPE_EXCHANGES[ApplicationType.Stock]  = [EExchangeInstance.PolygonExchange];
-APP_TYPE_EXCHANGES[ApplicationType.Forex] = [EExchangeInstance.PolygonExchange, EExchangeInstance.OandaExchange];
-APP_TYPE_EXCHANGES[ApplicationType.All]  = [EExchangeInstance.PolygonExchange, EExchangeInstance.OandaExchange, EExchangeInstance.BitmexExchange];
+APP_TYPE_EXCHANGES[ApplicationType.Stock]  = [EExchangeInstance.TwelvedataExchange, EExchangeInstance.PolygonExchange];
+APP_TYPE_EXCHANGES[ApplicationType.Forex] = [EExchangeInstance.TwelvedataExchange, EExchangeInstance.PolygonExchange, EExchangeInstance.OandaExchange];
+APP_TYPE_EXCHANGES[ApplicationType.All]  = [EExchangeInstance.TwelvedataExchange, EExchangeInstance.PolygonExchange, EExchangeInstance.OandaExchange, EExchangeInstance.BitmexExchange];
 
 export const APP_TYPE_BROKERS: {[index: string]: EBrokerInstance[]} = {};
 

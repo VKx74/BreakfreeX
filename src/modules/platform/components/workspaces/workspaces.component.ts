@@ -28,6 +28,8 @@ import {GoldenLayoutComponent, LayoutManagerService} from "angular-golden-layout
 export class WorkspacesComponent implements OnInit, OnDestroy {
     private _saveLayout = true;
     private _workspacesSubscription: Subscription;
+    private _intervalLink: any;
+    private _updateInterval = 1000 * 60 * 2;
     WorkspaceIds = WorkspaceIds;
     workspaces: Workspace[];
     layout: GoldenLayoutComponent;
@@ -69,11 +71,18 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
             .subscribe(() => {
                 this._layoutStateChanged = true;
             });
+
+        
+        this._intervalLink = setInterval(this.autoSave.bind(this), this._updateInterval);       
     }
 
     ngOnDestroy() {
         if (this._workspacesSubscription) {
             this._workspacesSubscription.unsubscribe();
+        }
+
+        if (this._intervalLink) {
+            clearInterval(this._intervalLink);
         }
     }
 
@@ -90,6 +99,13 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                         this._layoutStateChanged = false;
                         this._alertManager.success(this._translateService.get("workspaceNames.savedLayout"));
                     });
+        }
+    }
+    
+    autoSave() {
+        if (this._identityService.isAuthorized && this._saveLayout) {
+            const layoutState = this.layout.saveState();
+            this._layoutStorageService.saveLayoutState(layoutState, true).subscribe((data) => { this._layoutStateChanged = false; });
         }
     }
 }

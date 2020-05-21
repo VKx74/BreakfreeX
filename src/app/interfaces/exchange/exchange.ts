@@ -6,4 +6,5 @@ export enum EExchangeInstance {
     BinanceExchange = 'Binance',
     OandaExchange = 'Oanda',
     PolygonExchange = 'Polygon',
+    TwelvedataExchange = 'Twelvedata',
 }

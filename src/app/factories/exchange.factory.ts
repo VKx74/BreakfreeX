@@ -11,9 +11,14 @@ import {BitmexRealtimeService} from "../services/bitmex.exchange/bitmex.realtime
 import {OandaInstrumentService} from "@app/services/oanda.exchange/oanda.instrument.service";
 import {OandaHistoryService} from "@app/services/oanda.exchange/oanda.history.service";
 import {OandaRealtimeService} from "@app/services/oanda.exchange/oanda.realtime.service";
+
 import { PolygonInstrumentService } from '@app/services/polygon.exchange/polygon.instrument.service';
 import { PolygonHistoryService } from '@app/services/polygon.exchange/polygon.history.service';
 import { PolygonRealtimeService } from '@app/services/polygon.exchange/polygon.realtime.service';
+
+import { TwelvedataInstrumentService } from '@app/services/twelvedata.exchange/twelvedata.instrument.service';
+import { TwelvedataHistoryService } from '@app/services/twelvedata.exchange/twelvedata.history.service';
+import { TwelvedataRealtimeService } from '@app/services/twelvedata.exchange/twelvedata.realtime.service';
 
 export interface CreateInstrumentServiceActionResult extends ActionResult {
     serviceInstance?: InstrumentServiceBase;
@@ -44,6 +49,9 @@ export class ExchangeFactory {
             case EExchangeInstance.PolygonExchange:
                 service = this._injector.get(PolygonInstrumentService);
                 break;
+            case EExchangeInstance.TwelvedataExchange:
+                service = this._injector.get(TwelvedataInstrumentService);
+                break;
         }
 
         if (service) {
@@ -72,6 +80,9 @@ export class ExchangeFactory {
             case EExchangeInstance.PolygonExchange:
                 service = this._injector.get(PolygonHistoryService);
                 break;
+            case EExchangeInstance.TwelvedataExchange:
+                service = this._injector.get(TwelvedataHistoryService);
+                break;
         }
 
         if (service) {
@@ -99,6 +110,9 @@ export class ExchangeFactory {
                 break; 
             case EExchangeInstance.PolygonExchange:
                 service = this._injector.get(PolygonRealtimeService);
+                break;
+            case EExchangeInstance.TwelvedataExchange:
+                service = this._injector.get(TwelvedataRealtimeService);
                 break;
         }
 

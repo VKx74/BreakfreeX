@@ -8,6 +8,8 @@
     "bitmexWS": "wss://datafeed.breakfreetrading.com/bitmex/subscribe/realtime/", 
     "polygonREST": "https://datafeed.breakfreetrading.com/polygon/",
     "polygonWS": "wss://datafeed.breakfreetrading.com/polygon/subscribe/realtime/",
+    "twelvedataREST": "https://datafeed.breakfreetrading.com/twelvedata/",
+    "twelvedataWS": "wss://datafeed.breakfreetrading.com/twelvedata/subscribe/realtime/",
     "onadaWS": "wss://datafeed.breakfreetrading.com/oanda/subscribe/realtime/",
     "coinigyREST": "https://datafeed.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
     "coinigyWS": "wss://datafeed.breakfreetrading.com/data/vendor/coinigy/ws",
@@ -56,6 +58,10 @@
     "polygonREST": {
       "name": "Polygon",
       "url": "https://datafeed.breakfreetrading.com/polygon/"
+    }, 
+    "twelvedataREST": {
+      "name": "Twelvedata",
+      "url": "https://datafeed.breakfreetrading.com/twelvedata/"
     },
     "eventConsolidator": {
       "name": "Event Consolidator",

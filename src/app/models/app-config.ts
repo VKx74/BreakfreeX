@@ -16,6 +16,8 @@ export interface ApiUrls {
     bitmexWS: string;
     polygonREST: string;
     polygonWS: string;
+    twelvedataREST: string;
+    twelvedataWS: string;
     onadaWS: string;
     coinigyREST: string;
     coinigyWS: string;

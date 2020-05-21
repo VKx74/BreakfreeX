@@ -8,6 +8,7 @@ export class ApplicationTypeService {
     applicationTypeChanged = new BehaviorSubject(ApplicationType.All);
 
     get applicationType() {
+        return ApplicationType.All;
         return this.applicationTypeChanged.value;
     }
 
@@ -18,6 +19,7 @@ export class ApplicationTypeService {
     }
 
     setApplicationType(appType: ApplicationType) {
+        return;
         if (!ApplicationType[appType]) {
             return;
         }

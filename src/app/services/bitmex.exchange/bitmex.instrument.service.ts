@@ -5,6 +5,7 @@ import {EExchange} from "../../models/common/exchange";
 import {EMarketType} from "../../models/common/marketType";
 import {AppConfigService} from "../app.config.service";
 import {IInstrument} from "@app/models/common/instrument";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class BitmexInstrumentService extends InstrumentServiceBase {
