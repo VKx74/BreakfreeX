@@ -139,6 +139,7 @@
                         [allowColumnsVisibilityChange]="true"
                         [expandDetailsTemplate]="details"
                         [maxExpandedRows]="5"
+                        [hiddenColumns]="hiddenColumns"
                         (onRowSelect)="handleInstrumentClick($event)">
                 <data-table-header-cell columnName="symbol" [sortable]="true">
                     {{'instrument' | translate}}
@@ -234,7 +235,7 @@
                     <ng-template let-instrumentVM let-rowIndex="index">
                         <div class="controls-wrapper" style="margin-left: 10px">
                             <div class="controls-wrapper-inner">
-                                <div class="control m-right-10"
+                                <!-- <div class="control m-right-10"
                                      (click)="$event.stopPropagation(); placeOrder(instrumentVM)">
                                     <i class="crypto-icon crypto-icon-watchlist-trade-manager" title="{{'watchList.placeOrder' | translate}}"
                                        aria-hidden="true"></i>
@@ -256,7 +257,7 @@
                                      (click)="$event.stopPropagation(); handleToggleOrderBook(instrumentVM.instrument, rowIndex)">
                                     <i class="crypto-icon crypto-icon-watchlist-order-book" title="{{'watchList.showOB' | translate}}"
                                        aria-hidden="true"></i>
-                                </div>
+                                </div> -->
 
                                 <div class="remove-instrument-button crypto-button-delete"
                                      (click)="$event.stopPropagation(); removeInstrument(instrumentVM)">
@@ -289,7 +290,7 @@
                                aria-hidden="true"></i>
                         </div>
 
-                        <div class="tiles-trading-controls">
+                        <!-- <div class="tiles-trading-controls">
                             <div class="control m-right-10"
                                  (click)="$event.stopPropagation(); placeOrder(instrumentVM)">
                                 <i class="crypto-icon crypto-icon-watchlist-trade-manager" title="{{'watchList.placeOrder' | translate}}"
@@ -307,7 +308,7 @@
                                 <i class="crypto-icon crypto-icon-watchlist-alert" title="{{'watchList.setAlert' | translate}}"
                                    aria-hidden="true"></i>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

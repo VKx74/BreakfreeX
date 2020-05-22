@@ -60,8 +60,10 @@ declare let fintatechDarkTheme: any;
     ]
 })
 export class TcdComponent extends BaseLayoutItemComponent {
+    
     static componentName = 'Trading Chart Designer';
     static previewImgClass = 'crypto-icon-chart';
+
     chart: TradingChartDesigner.Chart;
     // linksList: TradingChartDesigner.IHelpLinks;
     showSpinner = true;
@@ -85,7 +87,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
         super(_injector);
     }
-
+    
     ngOnInit() {
         TradingChartDesigner.UserAgent.directory.htmlDialogs = '../node_modules/trading-chart-designer/htmldialogs/';
         TradingChartDesigner.UserAgent.directory.localization = '../node_modules/trading-chart-designer/localization/';
@@ -184,6 +186,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 this.showSpinner = false;
             }, 1000);
         });
+    }
+
+    protected useDefaultLinker(): boolean {
+        return true;
     }
 
     private searchInstrumentHandler(symbol: string): Promise<IInstrument[]> {

@@ -42,6 +42,7 @@ import {IBarData} from "@app/models/common/barData";
 export interface IWatchlistComponentState {
     instruments: { symbol: string, exchange: EExchange }[];
     viewMode: WatchlistViewMode;
+    hiddenColumns: string[];
 }
 
 export enum WatchlistViewMode {
@@ -82,7 +83,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     instrumentsVM: WatchlistInstrumentVM[] = [];
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
     selectedInstrumentVM: WatchlistInstrumentVM = null;
-    viewMode: WatchlistViewMode = WatchlistViewMode.Tile;
+    viewMode: WatchlistViewMode = WatchlistViewMode.Table;
+    hiddenColumns: string[] = ["highestPrice", "lowestPrice", "volume24h", "tickTime", "chart"];
 
     intervals: { [symbolName: string]: any } = {};
 
@@ -131,18 +133,27 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
     }
 
+    protected useDefaultLinker(): boolean {
+        return true;
+    }
+
     protected getComponentState(): IWatchlistComponentState {
         return {
             instruments: this.instrumentsVM.map((vm) => ({
                 symbol: vm.instrument.symbol,
                 exchange: vm.instrument.exchange
             })),
-            viewMode: this.viewMode
+            viewMode: this.viewMode,
+            hiddenColumns:  this.dataTableComponent ? this.dataTableComponent.hiddenColumns$.getValue() : this.hiddenColumns
         };
     }
 
     setViewMode(viewMode: WatchlistViewMode, fireStateChanged: boolean = true) {
         this.viewMode = viewMode;
+
+        if (this.dataTableComponent) {
+            this.hiddenColumns = this.dataTableComponent.hiddenColumns$.getValue();
+        }
 
         if (viewMode === WatchlistViewMode.Tile) {
             this.hideAllOrderBooks();
@@ -274,6 +285,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     private _loadState(state: IWatchlistComponentState) {
+        if (state && state.hiddenColumns) {
+            this.hiddenColumns = state.hiddenColumns;
+        }
+
         this.setViewMode(state.viewMode, false);
         forkJoin(
             state.instruments.map((item) => {

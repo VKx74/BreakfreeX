@@ -1,3 +1,4 @@
+
 import {ModuleWithProviders, NgModule} from "@angular/core";
 import {LinkingMessagesBus} from "./services";
 import {LinkerFactory} from "./linking-manager";

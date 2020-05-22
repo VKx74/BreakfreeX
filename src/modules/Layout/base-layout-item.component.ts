@@ -47,6 +47,10 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
         this.linker.setLinking(linkId);
     }
 
+    protected useDefaultLinker(): boolean {
+        return false;
+    }
+
     protected useLinker(): boolean {
         return true;
     }
@@ -80,6 +84,11 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
 
             tabElement.prepend(componentDomElem);
             tabElement.addClass(TabWithLinkerClass);
+
+            if (this.useDefaultLinker()) {
+                this.linker.setDefaultLinking();
+            }
+            
         }
     }
 
