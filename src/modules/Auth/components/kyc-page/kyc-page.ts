@@ -55,13 +55,20 @@ export class KycPageComponent {
     personalInfoCompleteHandler: PersonalInfoComponentCompleteHandler = (info: PersonalInformationModel) => {
         this.personalInfo = info;
 
-        return this._personalInfoService.getSupportedDocumentsList(info.country)
-            .pipe(
-                tap((documents: PersonalInfoDocumentType[]) => {
-                    this.availableDocuments = documents.length ? documents : [1, 2, 3];
-                    this.stepper.next();
-                })
-            );
+        const kycModel: KycModel = {
+            documents: [],
+            information: this.personalInfo
+        };
+
+        return this.completeHandler(kycModel);
+
+        // return this._personalInfoService.getSupportedDocumentsList(info.country)
+        //     .pipe(
+        //         tap((documents: PersonalInfoDocumentType[]) => {
+        //             this.availableDocuments = documents.length ? documents : [1, 2, 3];
+        //             this.stepper.next();
+        //         })
+        //     );
     }
 
     kycDocumentsCompleteHandler: KYCDocumentsCompleteHandler = (documents: UserDocumentModel[]) => {

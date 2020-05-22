@@ -38,6 +38,7 @@ import {EducationalTipsService} from "@app/services/educational-tips.service";
 import {BrokerStorage} from "@app/services/broker.storage";
 import {LayoutStorage} from "@app/services/layout.storage";
 import {LocalStorageService} from "Storage";
+import {SessionStorageService} from "Storage";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {MatNativeDateModule} from "@angular/material/core";
 import {BitmexBrokerService} from "@app/services/bitmex.exchange/bitmex.broker.service";
@@ -228,6 +229,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         EducationalTipsService,
         LayoutStorage,
         LocalStorageService,
+        SessionStorageService,
         PopupWindowGuard,
         RealtimeService,
         RoleGuard,

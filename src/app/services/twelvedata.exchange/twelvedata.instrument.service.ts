@@ -105,9 +105,9 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
 
     private _getMarketType(market: string): EMarketType {
         switch (market.toLowerCase()) {
-            case "Crypto": return EMarketType.Crypto;
-            case "Forex": return EMarketType.Forex;
-            case "Stock": return EMarketType.Stocks;
+            case "crypto": return EMarketType.Crypto;
+            case "forex": return EMarketType.Forex;
+            case "stock": return EMarketType.Stocks;
             default: return EMarketType.unknown;
         }
     }
@@ -117,8 +117,12 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             return 0.00001;
         }
         
+        if (type === EMarketType.Stocks) {  
+            return 0.01;
+        }
+        
         const c = currency.toLowerCase();
-        if (type === EMarketType.Crypto || type === EMarketType.Stocks) {
+        if (type === EMarketType.Crypto) {
             if (c.endsWith("usd") || c.endsWith("usdt") || c.endsWith("usdc") || c.endsWith("eur") || c.endsWith("jpy") || c.endsWith("gbp") || c.endsWith("aud") || c.endsWith("cad") || c.endsWith("chf")) {
                 return 0.01;
             }

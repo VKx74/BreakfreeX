@@ -7,9 +7,10 @@
                 <span class="logo crypto-icon crypto-icon-fintatech"></span>
             </div>
 
-            <div class="full-width flex justify-space-between sub-header m-bottom-10">
-                <div class="crypto-text title">Sign up</div>
-                <div class="crypto-text is-small flex justify-flex-end custom-stepper-header">
+            <div class="full-width sub-header m-bottom-10">
+            <!-- <div class="full-width flex justify-space-between sub-header m-bottom-10"> -->
+                <div class="crypto-text title" [ngStyle]="{'text-align': 'center'}">Sign up</div>
+                <!-- <div class="crypto-text is-small flex justify-flex-end custom-stepper-header">
                     <div class="step-name m-right-10" *ngIf="stepper.selectedIndex === 0">Step: Information</div>
                     <div class="step-name m-right-10" *ngIf="stepper.selectedIndex === 1">Step: Documents</div>
                     <button class="crypto-button step-1"
@@ -20,7 +21,7 @@
                     <button class="crypto-button step-2"
                             [ngClass]="{'active': isStepActive(1)}">2
                     </button>
-                </div>
+                </div> -->
             </div>
             <div class="crypto-text is-small m-bottom-5" *ngIf="kycPageConfig.type !== AccountType.Personal">Please enter kyc for: {{(kycPageConfig.data[0] + ' ' + kycPageConfig.data[1])}}</div>
 
@@ -30,12 +31,12 @@
                                         [userFullName]="kycPageConfig.type !== AccountType.Personal ? kycPageConfig.data : null"
                                         #infoStep></personal-info-page>
                 </mat-step>
-                <mat-step [stepControl]="documentStep.formGroup">
+                <!-- <mat-step [stepControl]="documentStep.formGroup">
                     <kyc-documents [completeHandler]="kycDocumentsCompleteHandler"
                                    [availableDocuments]="availableDocuments"
                                    #documentStep></kyc-documents>
 
-                </mat-step>
+                </mat-step> -->
             </mat-horizontal-stepper>
         </div>
         <div class="addition" (click)="doLogin()">Returning user? Log back in</div>

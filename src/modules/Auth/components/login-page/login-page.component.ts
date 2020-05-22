@@ -13,6 +13,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {concat} from "@decorators/concat";
 import {Subscription} from "rxjs";
 import {AppRoutes} from "AppRoutes";
+import { SessionStorageService } from 'Storage';
 
 export interface IRecaptchaConfig {
     siteKey: string;
@@ -40,6 +41,10 @@ export class LoginPageComponent {
     notification: Notification;
     showReconfirmButton: boolean = false;
     showFillInfoButton: boolean = false;
+    pwd: string;
+    email: string;
+    sessionStorageKey1: string = "Asfskdjfu43fa";
+    sessionStorageKey2: string = "Asfskdjfu43fb";
 
     readonly RecaptchaConfig: IRecaptchaConfig = {
         language: 'en',
@@ -64,6 +69,7 @@ export class LoginPageComponent {
                 private _personalInfoService: PersonalInfoService,
                 private _router: Router,
                 private _route: ActivatedRoute,
+                private _sessionStorage: SessionStorageService,
                 private _activatedRoute: ActivatedRoute) {
     }
 
@@ -110,6 +116,8 @@ export class LoginPageComponent {
         this.showReconfirmButton = false;
 
         const model = this._getFormData();
+        this.pwd = model.password;
+        this.email = model.email;
 
         this._identity.signIn(model)
             .subscribe({
@@ -210,7 +218,53 @@ export class LoginPageComponent {
         }
 
         if (params['infoFilled']) {
-            notificationMessage = 'Your personal information is sent. Please wait until administrator check it.';
+            
+            this.pwd = this._sessionStorage.get(this.sessionStorageKey1);
+            this.email = this._sessionStorage.get(this.sessionStorageKey2);
+            this._sessionStorage.remove(this.sessionStorageKey1);
+            this._sessionStorage.remove(this.sessionStorageKey2);
+
+            if (this.pwd && this.email) {
+                try {
+                    this.pwd = atob(this.pwd);
+                    this.email = atob(this.email);
+
+                    const model: SignInRequestModel = {
+                        email: this.email,
+                        password: this.pwd,
+                        rememberMe: false
+                    };
+
+                    this.processing = true;
+                    this._identity.signIn(model)
+                    .subscribe({
+                        next: (value) => {
+                            if (value) {
+                                this._router.navigate([AppRoutes.Platform], {
+                                    relativeTo: this._route.root
+                                });
+                            } else {
+                                this.notification = {
+                                    isError: true,
+                                    message: 'Authorization failed'
+                                };
+        
+                                this.processing = false;
+                            }
+                        },
+                        error: (error) => {
+                            this._processLoginError(error, model);
+                            this.processing = false;
+                        }
+                    });
+
+                } catch (e) {
+                    notificationMessage = 'Your personal information is sent and account activated. Please login.';
+                }
+            } else {
+                // notificationMessage = 'Your personal information is sent. Please wait until administrator check it.';
+                notificationMessage = 'Your personal information is sent and account activated. Please login.';
+            }
         }
 
         if (params['email'] && params['confirmed']) {
@@ -236,12 +290,17 @@ export class LoginPageComponent {
             switch (errorMessage.code) {
                 case EAuthErrorStatus.KycNone:
                 case EAuthErrorStatus.KycNotSent: {
-                    this._router.navigate([AuthRoutes.AccountType], {
+                    this._router.navigate([AuthRoutes.PersonalAccount], {
                         relativeTo: this._activatedRoute.parent,
                         queryParams: {
                             email: model.email
                         }
                     });
+
+                    if (this.pwd && this.email) {
+                        this._sessionStorage.set(this.sessionStorageKey1, btoa(this.pwd));
+                        this._sessionStorage.set(this.sessionStorageKey2, btoa(this.email));
+                    }
                     break;
                 }
                 case EAuthErrorStatus.KycRejected: {
