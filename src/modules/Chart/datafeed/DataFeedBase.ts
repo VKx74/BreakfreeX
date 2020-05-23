@@ -149,8 +149,13 @@ export abstract class DataFeedBase implements IDatafeedBase {
         }
 
         if (request.name === RequestKind.BARS) {
+            let visibleCount = 150;
+            if (barsCount < visibleCount) {
+                visibleCount = barsCount;
+            }
             if (!Environment.isMobile && barsCount > 0) {
-                chart.recordRange(barsCount);
+                chart.firstVisibleRecord = barsCount - visibleCount;
+                chart.lastVisibleRecord = barsCount + (visibleCount * 0.4);
             }
         } else if (request.name === RequestKind.MORE_BARS && !instrument) {
             chart.firstVisibleRecord = barsCount < 0 ? 0 : oldFirstVisibleRecord + barsCount;
