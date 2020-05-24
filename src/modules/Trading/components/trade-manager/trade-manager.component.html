@@ -19,6 +19,7 @@
     <div class="h-100" [ngClass]="{'h-auto': isMinimized, 'h-100': !isMinimized}">
         <div class="trade-manager flex" style="position: relative; height: 40px">
             <div class="top-panel w-100 flex-grow-1 flex justify-flex-end align-items-center">
+                <button onclick="xxx()">menu</button>
                 <div class="date-container">{{date}}</div>
                 <i *ngIf="isOpen" class="crypto-icon crypto-icon-layout-minimise" (click)="minimize()"></i>
                 <i *ngIf="isMinimized" class="crypto-icon crypto-icon-layout-maximise" (click)="open()"></i>

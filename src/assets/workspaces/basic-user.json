@@ -28,6 +28,7 @@
               },
               {
                 "type": "column",
+                "width": 25,
                 "content": [
                   {
                     "type": "stack",

@@ -77,3 +77,426 @@ bs-dropdown-container {
     background-color: red;
   }
 }
+
+
+
+// BFT //
+.tcdToolbarItemWrapper {
+  margin-top: 14px;
+}
+
+.tcdToolbarCompare,.tcdToolbarExport, .tcdTradePanel {
+  display:none !important;  
+
+
+}
+
+.tcdToolbarInput .tcdToolbarButton-dropdownElement-image {
+  display: none !important;
+}
+
+
+.instrument-search {
+  padding-left: 10px;
+}
+
+.crypto-button_default, .navigatorlayouts {
+  
+  color: #ffffffd1 !important;
+  background-color: #ffffff00 !important;
+  font-size: 12px;
+}
+
+.broker-not-connected {
+  display:none !important;
+}
+
+.mat-menu-panel.ng-trigger {
+  margin-top: 8px;
+}
+
+.workspaces {
+  font-size: 14px !important;
+}
+
+.nav-section {
+  margin: 0px !important;
+}
+
+.navigation {
+  background-color: #1a1c24 !important;
+  box-shadow: 0px 20px 15px 10px #000000 !important;
+
+}
+
+
+.telegramframe{
+  border: 0px !important;
+}
+
+.platform-container {
+    padding-top: 0px !important;
+}
+
+.sidebar-toggle-wrapper {
+  position: absolute;
+  z-index: 2;
+  height: 22px !important;
+  width: $sidebar-width !important;
+}
+
+.nav-top-row {
+  padding: 0;
+  height: 22px !important;
+}
+
+.avatar {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+.navigation .avatar-wrapper img.rounded {
+  border-radius: 50% !important;
+  vertical-align: top !important;
+}
+
+nav-section div {
+
+margin: 0px !important;
+
+}
+
+.navigation .role {
+  display: none !important;
+}
+
+.navigation span.email {
+  font-size: 12px !important;
+  color: #ffffffd1 !important;
+}
+  
+
+.delimiter-left {
+  border-left: 0.01em solid #edeff2ed !important;
+}
+
+.toggle-container.toggle-container{
+  border-right: 0.01em solid #edeff2ed !important;
+
+}
+
+
+span.logo__img {
+  border-right: 0px !important;
+}
+
+// kill bottom split
+.as-split-gutter.ng-star-inserted {
+  display: none !important;
+}
+
+// kill maximize window icon
+i.crypto-icon.crypto-icon-layout-maximise.ng-star-inserted {
+  display: none !important;
+}
+
+
+//menu
+
+.toggle {
+  width: 35px !important;
+  height: 20px !important;
+
+  
+}
+
+.toggle span {
+  background: #ffffffd1 !important;
+  height: 4px !important;
+}
+
+
+.toggle span:nth-child(1) {
+  top: -4px !important;
+  transform-origin: left center;
+}
+
+.toggle span:nth-child(2) {
+  top: 8px !important;
+  transform-origin: left center;
+}
+
+
+.toggle span:nth-child(3) {
+  top: 20px !important;
+  width: 100% !important;
+  transform-origin: left center;
+}
+
+.open span.bftsvg {
+
+  fill:#323232 ;
+}
+
+.open span.bftnlogo {
+  color: #323232 ;
+
+ 
+
+}
+
+//General
+.lm_header .lm_tab {
+  height: 18px;
+  padding-bottom: 4px;
+  padding-top: 5px;
+  padding-right: 35px;
+  margin-right: 1px;
+  box-shadow: none;
+  border-top-right-radius: 5px !important;
+  border-top-left-radius: 5px !important;
+}
+
+
+//DARK THEME
+
+.Dark-theme .lm_header .lm_tab {
+  background: #101013 !important;
+}
+
+.Dark-theme li.lm_tab.bftn {
+  cursor: default;
+  background: #101013 !important;
+}
+
+span.bftn {
+ 
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'Open Sans', sans-serif;
+  vertical-align: text-top;
+}
+
+.sidebar-toggle-wrapper{
+  background-color: transparent !important;
+}
+
+
+span.bftnlogo {
+  color: #ffffffd1;
+  font-size: 12px;
+  font-weight: bold;
+  padding-top:3px;
+ 
+}
+
+span.bftsvg {
+  padding-left: 5px;
+  padding-right: 10px;
+  height: 22px;
+  fill: #ffffffd1;
+  /* height: 15px; */
+  width: auto;
+}
+
+.flex.BFTN {
+  height: 22px;
+}
+
+.bftsvg svg#Layer_1 {
+  height: 13px;
+}
+
+
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-top: 22px !important;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+// watchlist
+
+
+
+span.lm_title.bftn {
+  max-width: 300px !important;
+  font-weight:800 !important;
+}
+
+lm_tab.bftn {
+  padding-left: 0px !important;
+}
+
+.bftlinks {
+  padding-left: 15px;
+}
+
+
+a.logo.flex.align-items-center {
+  display: none !important;
+}
+
+.navigation .navigation-right-side.flex.align-items-center {
+
+  //display: none !important;
+}
+
+.matMenuTrigger {
+  width: 10px !important;
+  height: 10px !important;
+  line-height: 15px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 9px;
+  border-radius: 50%;
+  border: 0px !important;
+  color: #58585887;
+  cursor: pointer;
+}
+
+
+.lm_tab.tab-with-linker .link-selector {
+  position: absolute;
+  z-index: 2;
+  left: 11px !important;
+  top: 10px !important;
+}
+
+
+
+.Dark-theme  .open span.bftsvg {
+
+  fill: #ffffffd1 !important;
+}
+
+
+
+.Dark-theme  input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
+  border: 1px solid #f8f8f82e;
+}
+
+
+.Dark-theme .tcdToolbarButton:hover, .Dark-theme .tcdToolbarButton-dropdownElement-image.tcdSVGIcon:hover {
+  background: #2e3740 ;
+  cursor: default ;
+}
+
+.Dark-theme span.spanlink {
+padding-right: 5px;
+color: #fff;
+}
+
+
+.Dark-theme span.bftn {
+   color:#ffffffd1 !important;
+   font-size:12px;
+
+  }
+
+
+ 
+
+.Dark-theme .lm_header .lm_tab.lm_active {
+background-color: #191919 !important;
+border-top: 0px solid #3d61cc !important;
+}
+
+.Dark-theme .lm_header .lm_tab {
+background: #19191996 ;
+}
+
+
+//Light theme
+
+.Light-theme .lm_header .lm_tab.lm_active {
+  background-color: #fff;
+  border-top: 0px solid #3d61cc !important;
+}
+
+
+.Light-theme  .open span.bftsvg {
+
+  fill:#323232  !important;
+}
+
+.Light-theme .open span.bftnlogo {
+  color: #323232 !important;
+
+ 
+}
+
+.Light-theme .open .toggle span:nth-child(1) {
+  transform: rotate(45deg);
+  top: -3px;
+  left: 8px;
+  background:#323232  !important;
+}
+
+.Light-theme .open .toggle span:nth-child(2) {
+  width: 0;
+  opacity: 0;
+}
+
+.Light-theme .open .toggle span:nth-child(3) {
+  transform: rotate(-45deg);
+  width: 100%;
+  top: 39px;
+  left: 8px;
+  background:#323232  !important;
+}
+
+
+.Light-theme .tcdToolbarButton:hover, .Light-theme  .tcdToolbarButton-dropdownElement-image.tcdSVGIcon:hover {
+  background: #f5f5f5 ;
+  cursor: default !important;
+}
+
+.Light-theme span.spanlink {
+padding-right: 5px;
+color: #000;
+}
+
+
+.Light-theme span.bftsvg, .Light-theme span.lm_title.bftn {
+  fill: #000 !important;
+}
+
+.Light-theme span.bftn {
+  color:#000 !important;
+  font-size:12px;
+
+ }
+
+
+
+ /// etc
+
+ .hidemenu {
+   
+   visibility: visible !important;
+}
+
+.hidepadding {
+  padding-top:25px !important;
+
+
+}
+
+platform-nav.navigation{
+  visibility: hidden;
+
+}
+
+.trade-manager button {
+  font-size: 10px;
+  border: 1px solid #0000007d;
+  border-radius: 5px;
+  margin-right: 5px;
+  background: none;
+}

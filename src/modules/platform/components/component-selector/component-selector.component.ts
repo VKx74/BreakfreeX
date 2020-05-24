@@ -70,7 +70,7 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._chartTranslateService.stream('chartComponentName'),
                 componentIdentifier: ComponentIdentifier.chart,
             },
-            {
+           /* {
                 component: OrderBookChartComponent,
                 previewImgClass: OrderBookChartComponent.previewImgClass,
                 componentName: this._orderBookChartTranslateService.stream('orderBookChartComponentName'),
@@ -87,14 +87,14 @@ export class ComponentSelectorComponent implements OnDestroy {
                 previewImgClass: MarketTradesComponent.previewImgClass,
                 componentName: this._marketTradesTranslateService.stream('componentName'),
                 componentIdentifier: ComponentIdentifier.marketTrades,
-            },
+            },*/
             {
                 component: WatchlistComponent,
                 previewImgClass: WatchlistComponent.previewImgClass,
                 componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
                 componentIdentifier: ComponentIdentifier.watchlist,
             },
-            {
+           /* {
                 component: Level2Component,
                 previewImgClass: Level2Component.previewImgClass,
                 componentName: this._tradingTranslateService.stream('level2ComponentName'),
@@ -105,19 +105,19 @@ export class ComponentSelectorComponent implements OnDestroy {
                 previewImgClass: NewsRootComponent.previewImgClass,
                 componentName: this._newsTranslateService.stream('newsComponentName'),
                 componentIdentifier: ComponentIdentifier.news,
-            },
+            },*/
             {
                 component: PublicChatComponent,
                 previewImgClass: 'crypto-icon-chat',
                 componentName: this._chatTranslateService.stream('publicChatTitle'),
                 componentIdentifier: ComponentIdentifier.publicChat,
             },
-            {
+           /* {
                 component: PrivateChatComponent,
                 previewImgClass: 'crypto-icon-private-chat',
                 componentName: this._chatTranslateService.stream('privateChatTitle'),
                 componentIdentifier: ComponentIdentifier.privateChat,
-            },
+            },*/
         ];
     }
 
