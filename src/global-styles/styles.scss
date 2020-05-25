@@ -122,10 +122,14 @@ body.Dark-theme.thmFintatechDarkTheme {
 }
 
 .workspaces {
-  font-size: 14px !important;
+  font-size: 16px !important;
 }
 
 .nav-section {
+  .add-elements-btn {
+    padding: 0px 10px;
+    height: 30px;
+  }
   margin: 0px !important;
 }
 
@@ -142,7 +146,7 @@ body.Dark-theme.thmFintatechDarkTheme {
 }
 
 .platform-container {
-    padding-top: 25px !important;
+    padding-top: 30px !important;
 }
 
 .sidebar-toggle-wrapper {
@@ -153,8 +157,8 @@ body.Dark-theme.thmFintatechDarkTheme {
 }
 
 .nav-top-row {
-  padding: 0;
-  height: 22px !important;
+  padding: 0px;
+  height: 30px !important;
 }
 
 .avatar {
@@ -184,12 +188,11 @@ margin: 0px !important;
   
 
 .delimiter-left {
-  border-left: 0.01em solid #edeff2ed !important;
+  border-left: 0.01em solid #edeff240 !important;
 }
 
 .toggle-container.toggle-container{
-  border-right: 0.01em solid #edeff2ed !important;
-
+  border-right: 0.01em solid #edeff240 !important;
 }
 
 
