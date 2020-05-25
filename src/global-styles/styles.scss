@@ -152,7 +152,7 @@ body.Dark-theme.thmFintatechDarkTheme {
 .sidebar-toggle-wrapper {
   position: absolute;
   z-index: 2;
-  height: 22px !important;
+  height: 17px !important;
   width: $sidebar-width !important;
 }
 
@@ -161,7 +161,7 @@ body.Dark-theme.thmFintatechDarkTheme {
   height: 30px !important;
 }
 
-.avatar {
+.navigation .avatar {
   width: 17px !important;
   height: 17px !important;
 }
@@ -246,6 +246,13 @@ i.crypto-icon.crypto-icon-layout-maximise.ng-star-inserted {
 
 
 //General
+
+button.crypto-button.crypto-button_default {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+
 .lm_header .lm_tab {
   height: 18px;
   padding-bottom: 4px;
@@ -325,7 +332,7 @@ span.bftsvg {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding-top: 22px !important;
+  padding-top: 30px !important;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
@@ -450,7 +457,7 @@ background: #19191996 ;
   background:#323232  !important;
 }
 
-.Light-theme .open .bftn,  {
+.Light-theme .open .bftn  {
   transform: rotate(-45deg);
   width: 100%;
   top: 39px;
@@ -498,3 +505,6 @@ color: #000;
  
 }
 
+
+
+a.wrapper-link.mat-tab-link[ng-reflect-router-link="deposits"],a.wrapper-link.mat-tab-link[ng-reflect-router-link="withdraws"],a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !important;}

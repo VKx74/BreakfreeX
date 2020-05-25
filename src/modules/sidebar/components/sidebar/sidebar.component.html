@@ -16,7 +16,7 @@
                 <i class="crypto-icon crypto-icon-information"></i></div>
             <div class="item-text">{{'generalSettings.adminPanel' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="scripting">
+        <div class="section-item hidden" routerLink="scripting">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-script"></i></div>
             <div class="item-text">{{'generalSettings.scripting' | translate}}</div>
@@ -27,7 +27,7 @@
             <div class="item-text">{{'settings' | translate}}</div>
         </div>
     </sidebar-section>
-    <sidebar-section>
+    <sidebar-section class="hidden">
         <div class="section-label flex align-items-center justify-space-between">
             <span>{{'sideBarTools.title' | translate}}</span>
             <i class="crypto-icon crypto-icon-more cursor-pointer" routerLink="/platform/tools"></i>
