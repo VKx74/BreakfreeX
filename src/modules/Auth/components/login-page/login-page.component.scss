@@ -59,7 +59,7 @@
   }
 
   .login-btn {
-    margin-bottom: 10px;
+    
     margin-top: 15px;
   }
 
@@ -127,7 +127,35 @@ body.Light-theme.thmLightTheme {
 
 .overlay {
   background: #fff !important;
+  display:block ;
+  padding:0px;
+  border-radius:5px;
+  overflow:hidden;
 }
+
+.form-wrapper {
+  padding:15px;
+
+}
+
+.form-header-bft {
+  background:#191919;
+  color:#fff;
+  font-size:12px;
+  padding-top:10px;
+  padding-bottom:10px;
+  text-align:center;
+  
+}
+
+
+.form-header-bft img {
+
+  width: 200px;
+  filter: invert(1);
+}
+
+
 
 ::before {
   color: #000000b5;
@@ -140,3 +168,4 @@ span.form-header__title.signIn {
 .form-header {
   margin-bottom: 20px !important;
 }
+

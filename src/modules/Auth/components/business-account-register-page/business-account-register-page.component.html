@@ -1,10 +1,11 @@
 <div class="business-register-page flex">
     <div class="background"
-         [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+         [ngStyle]="{'background-image': 'url(assets/img/login-page/bg.jpg)'}"></div>
     <div class="overlay-wrapper" [ngStyle]="{'display': registrationStep === BusinessRegistrationStep.CompanyInfo ? 'block' : 'none'}">
         <div class="overlay">
-            <div class="form-header">
-                <span class="logo crypto-icon crypto-icon-fintatech"></span>
+            <div class="form-header-bft">  
+             <img  src="assets/img/bftnavigatorlogo.svg" /></div>
+  <div class="form-header">
                 <p class="form-header__title">Sign up</p>
             </div>
             <form class="form-wrapper" [formGroup]="registerFormGroup" novalidate (ngSubmit)="onCompanyInfoFilled()">
