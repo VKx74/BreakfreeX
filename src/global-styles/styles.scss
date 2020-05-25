@@ -507,4 +507,15 @@ color: #000;
 
 
 
-a.wrapper-link.mat-tab-link[ng-reflect-router-link="deposits"],a.wrapper-link.mat-tab-link[ng-reflect-router-link="withdraws"],a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !important;}
+a.wrapper-link.mat-tab-link[ng-reflect-router-link="deposits"] { display:none !important;}
+a.wrapper-link.mat-tab-link[ng-reflect-router-link="withdraws"] { display:none !important;}
+a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !important;}
+
+.hidden {
+
+  display:none !important;
+}
+
+.tcdToolbar-scroll.tcdToolbar-left.tcdPhone {
+  border-right: 1px solid #eee;
+}
