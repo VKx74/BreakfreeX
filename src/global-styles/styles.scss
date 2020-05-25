@@ -519,3 +519,13 @@ a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !im
 .tcdToolbar-scroll.tcdToolbar-left.tcdPhone {
   border-right: 1px solid #eee;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.tcdToolbar-top .tcdToolbar-scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.tcdToolbar-top .tcdToolbar-scroll-wrapper {
+  -ms-overflow-style: none;
+}
