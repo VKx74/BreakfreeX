@@ -183,12 +183,12 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
     
     protected _watchlistRemovedHandler(item: IWatchlistItem) {
-        const existingWatchlistIndex = this.existingWatchlists.findIndex(i => i.id == item.id);
+        const existingWatchlistIndex = this.existingWatchlists.findIndex(i => i.id === item.id);
         if (existingWatchlistIndex >= 0) {
             this.existingWatchlists.splice(existingWatchlistIndex, 1);
         }
 
-        if (this.activeWatchlist && this.activeWatchlist.id == item.id) {
+        if (this.activeWatchlist && this.activeWatchlist.id === item.id) {
             if (this.existingWatchlists.length) {
                 this.setWatchlist(this.existingWatchlists[0]);
             } else  {
@@ -198,12 +198,12 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
     
     protected _watchlistUpdatedHandler(item: IWatchlistItem) {
-        const existingWatchlistIndex = this.existingWatchlists.findIndex(i => i.id == item.id);
+        const existingWatchlistIndex = this.existingWatchlists.findIndex(i => i.id === item.id);
         if (existingWatchlistIndex >= 0) {
             this.existingWatchlists[existingWatchlistIndex] = item;
         }
 
-        if (this.activeWatchlist && this.activeWatchlist.id == item.id) {
+        if (this.activeWatchlist && this.activeWatchlist.id === item.id) {
             this.activeWatchlist = item;
 
             const existingCpy = this.instrumentsVM.slice();
@@ -291,7 +291,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                     for (const watchlist of this.existingWatchlists) {
                         if (watchlist.name === name) {
                             this._alertManager.info(this._translateService.get("watchList.watchlistWithSameNameAlreadyExists"));
-                            return of(false);;
+                            return of(false);
                         }
                     }
 
@@ -330,7 +330,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         this._dialog.open(ConfirmModalComponent, {
             data: {
                 message: this._translateService.get(`watchList.removeWatchlist`).pipe(map(data => {
-                    return data.toString() + ` "${watchlistToDelete.name}"?`
+                    return data.toString() + ` "${watchlistToDelete.name}"?`;
                 })),
                 onConfirm: () => {
                     this.existingWatchlists.splice(index, 1);

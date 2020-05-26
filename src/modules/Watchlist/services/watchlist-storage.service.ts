@@ -34,11 +34,11 @@ export class WatchlistStorageService {
             Data: data,
         };
 
-        return this.http.post<IWatchlistItem>(this._templatesURL, postData).pipe(map((data: any) => {
+        return this.http.post<IWatchlistItem>(this._templatesURL, postData).pipe(map((response: any) => {
             return {
-                id: data.id,
-                name: data.name,
-                data: JSON.parse(data.data)
+                id: response.id,
+                name: response.name,
+                data: JSON.parse(response.data)
             } as IWatchlistItem;
         }));
     }

@@ -106,17 +106,17 @@ export class WatchlistService {
     } 
     
     public addWatchlist(name: string, data: IInstrument[], trackingId?: string): Observable<IWatchlistItem>  { 
-        return this._watchlistStorageService.saveWatchlist(name, data).pipe(map((data: IWatchlistItem) => {
-            if (data && data.id) {
+        return this._watchlistStorageService.saveWatchlist(name, data).pipe(map((response: IWatchlistItem) => {
+            if (response && response.id) {
                 if (!this._watchlists) {
                     this._watchlists = [];
                 }
 
-                data.trackingId = trackingId;
-                this._watchlists.push(data);
-                this.onWatchlistAdded.next(data);
+                response.trackingId = trackingId;
+                this._watchlists.push(response);
+                this.onWatchlistAdded.next(response);
             }
-            return data;
+            return response;
         }));
     } 
     

@@ -149,7 +149,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 height: 'calc( 100% - 66px )',
                 theme: theme,
                 addThemeClass: false,
-                crossHair: "crossBars",
+                //  crossHair: "crossBars",
                 datafeed: d,
                 hideScrollToLastBar: true,
                 instrument: state ? state.instrument : d.instruments[0],

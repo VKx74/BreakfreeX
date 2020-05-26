@@ -1,10 +1,13 @@
 <div class="login-page flex">
-    <div class="background" [ngStyle]="{'background-image': 'url(assets/img/login-page/gold-fon.svg)'}"></div>
+    <div class="background" [ngStyle]="{'background-image': 'url(assets/img/login-page/bg.jpg)'}"></div>
     <div class="overlay-wrapper">
         <div class="overlay">
+            <div class="form-header-bft">  
+     
+                <img  src="assets/img/bftnavigatorlogo.svg" />
+            </div>
             <div class="form-wrapper" [ngClass]="{notificationVisible: notification}" [formGroup]="formGroup">
                 <div class="form-header">
-                    <span class="logo crypto-icon crypto-icon-fintatech"></span>
                     <span class="form-header__title signIn">Sign in </span>
                     <span class="form-header__title"> / </span>
                     <span class="form-header__title signUp" (click)="doRegistration()" >Sign up </span>

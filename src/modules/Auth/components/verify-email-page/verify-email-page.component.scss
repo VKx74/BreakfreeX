@@ -25,3 +25,62 @@
     vertical-align: unset;
   }
 }
+
+
+button.btn.crypto-button.crypto-button-full-width.button_success.login-btn {
+  background-color: black;
+  opacity: 0.8;
+  font-weight: bold;
+}
+
+
+
+
+.overlay {
+  background: #fff !important;
+  display:block ;
+  padding:0px;
+  border-radius:5px;
+  overflow:hidden;
+}
+
+.form-wrapper {
+  padding:15px;
+
+}
+
+.form-header-bft {
+  background:#191919;
+  color:#fff;
+  font-size:12px;
+  padding-top:10px;
+  padding-bottom:10px;
+  text-align:center;
+  
+}
+
+
+.form-header-bft img {
+
+  width: 200px;
+  filter: invert(1);
+}
+
+
+
+::before {
+  color: #000000b5;
+}
+
+span.form-header__title.signIn {
+  color: black !important;
+}
+
+.form-header {
+  padding-top:10px;
+}
+
+
+button.btn.crypto-button {
+  background: #191919 !important;
+}
