@@ -1,6 +1,6 @@
 {
   "chartComponentName": "Chart",
-  "chartComponentTitle": "Chart {{symbol}}",
+  "chartComponentTitle": "{{symbol}}",
   "dataFeed": "Data Feed",
   "unableLoadData": "Unable to load data.",
   "unableFindSymbol": "Unable to find symbol ",
