@@ -66,7 +66,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
                 const description = this._getDescription(product, type);
                 const instrument: IInstrument = {
                     id: product.Symbol,
-                    symbol: product.Symbol,
+                    symbol: product.Symbol.replace("/", ""),
                     exchange: EExchange.Twelvedata,
                     type: type,
                     tickSize: tickSize,

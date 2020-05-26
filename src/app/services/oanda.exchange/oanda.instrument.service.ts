@@ -30,7 +30,7 @@ export class OandaInstrumentService extends InstrumentServiceBase {
                 const tickSize = this._getTickSize(product.Symbol);
                 const instrument: IInstrument = {
                     id: product.Symbol,
-                    symbol: product.Symbol,
+                    symbol: product.Symbol.replace("/", "").replace("_", ""),
                     exchange: EExchange.Oanda,
                     type: EMarketType.Forex,
                     tickSize: tickSize,

@@ -50,7 +50,7 @@ export abstract class HistoryServiceBase implements IHealthable {
 
         const params = new HttpParams()
             .append('kind', HistoryRequestKind.DateRange)
-            .append('symbol', request.instrument.symbol)
+            .append('symbol', request.instrument.id)
             .append('granularity', granularity.toString())
             .append('from', (request.startDate.getTime() / 1000).toFixed(0))
             .append('to', (request.endDate.getTime() / 1000).toFixed(0));

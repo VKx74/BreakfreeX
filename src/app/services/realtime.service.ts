@@ -84,7 +84,7 @@ export class RealtimeService implements IHealthable {
             } else {
                 let exist = false;
                 for (let i = 0; i < this._ticksSubscriptionQueue.length; i++) {
-                    if (this._ticksSubscriptionQueue[i].symbol === instrument.symbol &&
+                    if (this._ticksSubscriptionQueue[i].id === instrument.id &&
                         this._ticksSubscriptionQueue[i].exchange === instrument.exchange) {
                         exist = true;
                         break;
@@ -111,7 +111,7 @@ export class RealtimeService implements IHealthable {
             } else {
                 let exist = false;
                 for (let i = 0; i < this._l2SubscriptionQueue.length; i++) {
-                    if (this._l2SubscriptionQueue[i].symbol === instrument.symbol &&
+                    if (this._l2SubscriptionQueue[i].id === instrument.id &&
                         this._l2SubscriptionQueue[i].exchange === instrument.exchange) {
                         exist = true;
                         break;

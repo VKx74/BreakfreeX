@@ -34,7 +34,6 @@ export class WatchlistService {
             exchange: EExchange.Bitmex,
             baseInstrument: "",
             dependInstrument: "",
-            id: "XRPM20",
             pricePrecision: 2, 
             tickSize: 0.01,
             type: EMarketType.Crypto
@@ -44,36 +43,47 @@ export class WatchlistService {
             name: "Default",
             trackingId: "Default",
             data: [{
+                id: "XRPM20",
                 symbol: "XRPM20",
                 ...baseinfo
             }, {
+                id: "BCHM20",
                 symbol: "BCHM20",
                 ...baseinfo
             }, {
+                id: "ADAM20",
                 symbol: "ADAM20",
                 ...baseinfo
             }, {
+                id: "EOSM20",
                 symbol: "EOSM20",
                 ...baseinfo
             }, {
+                id: "TRXM20",
                 symbol: "TRXM20",
                 ...baseinfo
             }, {
+                id: "XRPUSD",
                 symbol: "XRPUSD",
                 ...baseinfo
             }, {
+                id: "XBTUSD",
                 symbol: "XBTUSD",
                 ...baseinfo
             }, {
+                id: "XBTM20",
                 symbol: "XBTM20",
                 ...baseinfo
             }, {
+                id: "XBTU20",
                 symbol: "XBTU20",
                 ...baseinfo
             }, {
+                id: "ETHUSD",
                 symbol: "ETHUSD",
                 ...baseinfo
             }, {
+                id: "ETHM20",
                 symbol: "ETHM20",
                 ...baseinfo
             }]

@@ -86,8 +86,8 @@ export class WatchlistInstrumentVM {
         if (!this.firstPrice) {
             this.firstPrice = tick.price;
         } else {
-            this.trendDirection = this._getTrendDirection(price, this.firstPrice);
-            this.priceChange = this._calculatePriceChange(price, this.firstPrice);
+            this.trendDirection = this._getTrendDirection(this.price, this.firstPrice);
+            this.priceChange = this._calculatePriceChange(this.price, this.firstPrice);
         }
 
         if (this.highestPrice === 0 && this.highestPrice < price) {

@@ -146,7 +146,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 this.existingWatchlists = data.slice();
             }
 
-            if (this._state.activeWatchlist) {
+            if (this._state && this._state.activeWatchlist) {
                 for (const watchlist of this.existingWatchlists) {
                     if (this._state.activeWatchlist === watchlist.id) {
                         this.setWatchlist(watchlist);
