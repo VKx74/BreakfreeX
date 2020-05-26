@@ -1,5 +1,8 @@
 <div class="root flex" *ngIf="message" [class.current-user-message]="isUserMessage">
-    <ng-container *ngIf="!isUserMessage">
+   
+   
+   
+    <ng-container >
         <div class="creator-avatar">
             <name-avatar [src]="message.creator.avatarId" [name]="message.creator.userName"
                          (onColorSet)="onAvatarColorSet($event)"></name-avatar>

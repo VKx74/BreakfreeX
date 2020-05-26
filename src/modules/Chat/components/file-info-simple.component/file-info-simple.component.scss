@@ -5,6 +5,10 @@
 .file-info-container {
     height: 50px;
     display: flex;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-top: 10px;
+    border: 1px solid #ddd;
 
     .document {
         height: 100%;
@@ -30,7 +34,7 @@
         width: 100%;
         //border-radius: 50%;
         display: flex;
-        justify-content: center;
+        justify-content: left;
         overflow: hidden;
 
         @include themify($themes, true) {
@@ -38,8 +42,7 @@
         }
 
         img {
-            height: 100%;
-            width: 100%;
+           
         }
     }
 
@@ -81,4 +84,12 @@
 
 .file-info.pointer {
     display: none !important;
+}
+
+
+.file-info-container .img-container img {
+    height: auto;
+    width: auto;
+    max-height: 160px;
+    overflow: hidden;
 }

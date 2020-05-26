@@ -5,41 +5,48 @@
     "version": "1",
     "content": [
       {
-        "type": "column",
+        "type": "row",
         "content": [
           {
-            "type": "row",
+            "type": "column",
             "content": [
               {
-                "type": "column",
+                "type": "stack",
                 "content": [
                   {
-                    "type": "stack",
-                    "content": [
-                      {
-                        "id": "1",
-                        "type": "component",
-                        "componentName": "chart",
-                        "isClosable": false
-                      }
-                    ]
+                    "id": "1",
+                    "type": "component",
+                    "componentName": "chart",
+                    "isClosable": false
+                  }
+                ]
+              }
+             
+            ]
+          },
+          {
+            "type": "column",
+            "width":"25",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "4",
+                    "type": "component",
+                    "componentName": "watchlist",
+                    "isClosable": false
                   }
                 ]
               },
               {
-                "type": "column",
-                "width": 25,
+                "type": "stack",
                 "content": [
                   {
-                    "type": "stack",
-                    "content": [
-                      {
-                        "id": "4",
-                        "type": "component",
-                        "componentName": "watchlist",
-                        "isClosable": false
-                      }
-                    ]
+                    "id": "5",
+                    "type": "component",
+                    "componentName": "publicChat",
+                    "isClosable": false
                   }
                 ]
               }
