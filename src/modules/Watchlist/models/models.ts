@@ -31,7 +31,13 @@ export class WatchlistInstrumentVM {
     }
 
     get price(): number {
-        return this.tick ? this.tick.price : null;
+        if (this.tick)
+            return this.tick.price;
+
+        if (this.lastClose)
+            return this.lastClose;
+
+        return null;
     }
 
     constructor(instrument: IInstrument) {
@@ -41,7 +47,7 @@ export class WatchlistInstrumentVM {
     handleTick(tick: ITick) {
         this.tick = Object.assign({}, tick, {
             volume: tick.volume != null ? JsUtil.roundNumber(tick.volume, 2) : null,
-            price: tick.price != null ? JsUtil.roundNumber(tick.price, this.getPricePrecision(tick.instrument.tickSize)) : null
+            price: tick.price != null ? tick.price : null
         });
         this.tickTime = new Date(tick.time).toISOString();
 
@@ -55,10 +61,8 @@ export class WatchlistInstrumentVM {
             this.highestPrice = Math.max(...data.map(value => value.high));
             this.lowestPrice = Math.min(...data.map(value => value.low));
             this.firstPrice = data[0].close;
-            if (this.tick) {
-                this.trendDirection = this._getTrendDirection(this.tick.price, this.firstPrice);
-                this.priceChange = this._calculatePriceChange(this.tick.price, this.firstPrice);
-            }
+            this.trendDirection = this._getTrendDirection(this.price, this.firstPrice);
+            this.priceChange = this._calculatePriceChange(this.price, this.firstPrice);
             this.volume24h = 0;
             data.forEach(value => this.volume24h += value.volume);
         }

@@ -4,6 +4,7 @@
     "tilesView": "Tiles view",
     "volume24h": "24h Volume",
     "removeSymbol": "Remove symbol?",
+    "removeWatchlist": "Remove watchlist",
     "symbol": "Instrument",
     "priceChange": "Change",
     "highestPrice": "High",
@@ -15,7 +16,13 @@
     "placeOrder": "Place order",
     "openChart": "Open Chart",
     "setAlert": "Set alert",
-    "showOB": "Show Order Book"
+    "showOB": "Show Order Book",
+    "watchlistWithSameNameAlreadyExists": "Watchlist with same name already exists",
+    "youCantRemoveLastWatchlist": "You can`t remove last watchlist",
+    "failedToCreateWatchlist": "Failed to create watchlist",
+    "watchlistCreated": "Watchlist created",
+    "failedToRemoveWatchlist": "Failed to removed watchlist",
+    "watchlistRemove": "Watchlist removed"
   },
   "watchlistComponentName": "Watchlist"
 }

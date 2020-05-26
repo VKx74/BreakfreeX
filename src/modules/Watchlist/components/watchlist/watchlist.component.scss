@@ -8,6 +8,17 @@
   width: 100%;
   overflow: auto;
 
+  .functional-icons {
+    .crypto-button-icon {
+      margin-left: 6px;
+    }
+  }
+
+  .watchlist-selector {
+    margin: 0px 10px;
+    max-width: 120px;
+  }
+
   //.padding-wrapper {
   //  padding: 4px;
   //}
@@ -23,6 +34,9 @@
   }
 
   .top-line {
+
+    overflow-x: auto;
+    overflow-y: hidden;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -196,6 +210,13 @@
 }
 
 @include themify($themes, true) {
+
+  .functional-icons {
+    .crypto-icon {
+      color: themed('valueTextColor');
+    }
+  }
+
   .underlay {
     background-color: themed('appPanelColor');
   }

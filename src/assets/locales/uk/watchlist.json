@@ -4,6 +4,7 @@
     "tilesView": "Плитки",
     "volume24h": "Обсяг за 24год",
     "removeSymbol": "Видалити символ?",
+    "removeWatchlist": "Видалити тікер",
     "symbol": "Інструмент",
     "priceChange": "Зміна",
     "highestPrice": "Максимальна",
@@ -15,7 +16,13 @@
     "placeOrder": "Зробити замовлення",
     "openChart": "Відкрити чарт",
     "setAlert": "Додати сповіщення",
-    "showOB": "Показати Книгу Ордерів"
+    "showOB": "Показати Книгу Ордерів",
+    "watchlistWithSameNameAlreadyExists": "Тікер з таким імене вже існує",
+    "youCantRemoveLastWatchlist": "Не можна видалити останній тікер",
+    "failedToCreateWatchlist": "Не вдалося створити тікер",
+    "watchlistCreated": "Тікер створено",
+    "failedToRemoveWatchlist": "Не вдалося видалити тікер",
+    "watchlistRemove": "Тікер видалено"
   },
   "watchlistComponentName": "Список спостереження"
 }

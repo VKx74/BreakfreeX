@@ -17,11 +17,17 @@ import {MatMenuModule} from "@angular/material/menu";
 import {HistoryService} from "@app/services/history.service";
 import {RealtimeService} from "@app/services/realtime.service";
 import {SharedModule} from "Shared";
+import { WatchlistStorageService } from './services/watchlist-storage.service';
+import { WatchlistService } from './services/watchlist.service';
+import { UIModule } from 'UI';
+import { WatchlistNameModalComponent } from './components/watchlist-name-modal/watchlist-name-modal';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
         WatchlistTileComponent,
         WatchlistChartComponent,
+        WatchlistNameModalComponent,
         WatchlistComponent
     ],
     imports: [
@@ -34,15 +40,21 @@ import {SharedModule} from "Shared";
         LinkingModule,
         TimeZonesModule,
         MatMenuModule,
-        SharedModule
+        SharedModule,
+        UIModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     entryComponents: [
-        WatchlistComponent
+        WatchlistComponent,
+        WatchlistNameModalComponent
     ],
     exports: [
         WatchlistComponent
     ],
     providers: [
+        WatchlistStorageService,
+        WatchlistService,
         {
             provide: WatchListTranslateService,
             useFactory: TranslateServiceFactory('watchlist'),

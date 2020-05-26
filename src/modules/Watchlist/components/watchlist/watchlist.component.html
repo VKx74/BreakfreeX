@@ -1,10 +1,24 @@
 <div class="root">
     <div class="top-line">
-        <div class="flex">
+        <div class="top-line flex justify-space-between align-items-center flex-shrink-0">
             <instrument-search
                     [openPanelOnClick]="true"
                     [resetAfterSelection]="true"
                     (onSelect)="addInstrument($event)"></instrument-search>
+            <selector [options]="existingWatchlists" [title]="'watchlist' | translate"
+                [selectedOption]="activeWatchlist"
+                [optionCaption]="supportedWatchlistCaption"
+                (onSelect)="watchlistSelected($event)"
+                class="watchlist-selector"></selector>
+            <div class="right-side flex align-items-center functional-icons">
+                <span class="crypto-button-icon control" (click)="createWatchlist()" [title]=" 'createWatchlist' | translate">
+                    <i class="crypto-icon crypto-icon-add"></i>
+                </span>
+
+                <span class="crypto-button-icon control" (click)="deleteWatchlist()" [title]="'deleteWatchlist' | translate">
+                    <i class="crypto-icon crypto-icon-remove-records"></i>
+                </span>
+            </div>
         </div>
         <div>
             <div class="crypto-button-icon">
