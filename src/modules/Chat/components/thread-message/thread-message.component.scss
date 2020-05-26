@@ -138,8 +138,12 @@ file-info-simple {
 
 .root {
   display: flex;
-  padding: 14px 12px 6px 17px;
+  padding-top:8px;
+  padding-bottom:8px;
+  margin-left:3px;
+  margin-right:3px;
   justify-content: flex-start;
+  border-bottom:1px solid #ddd;
 
   &:last-of-type {
     margin-top: auto;
@@ -164,7 +168,7 @@ file-info-simple {
 .message-body {
   border-radius: 8px;
   padding: 0 9px 7px 11px;
-  max-width: 250px;
+  max-width: 80%;
   width: auto;
 
   .top-line {
@@ -181,6 +185,7 @@ file-info-simple {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: capitalize;
   }
 
   .message-time {
@@ -225,28 +230,29 @@ file-info-simple {
 
 
 .root.current-user-message {
-  justify-content: flex-end;
+  justify-content: flex-start;
+  background-color:#EFF9E9;
 
   &.message-item {
     justify-content: flex-end;
   }
 
   .creator-avatar {
-    display: none;
+    
   }
 
   .message-body {
     .creator-name {
-      display: none;
+      
     }
 
     .file-view {
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
     }
 
     .message-text {
-      text-align: right;
+      text-align: left;
     }
   }
 }
@@ -258,7 +264,7 @@ file-info-simple {
     //background-color: transparentize(themed('panelBorderColor'), 0.85);
     //background-color: lighten(themed('appPanelColor'), 10%);
     //background: transparentize(themed('appBackgroundColor'), 0.85);
-    background: themed('inputBackgroundColor');
+    //background: themed('inputBackgroundColor');
 
     .creator-name {
       color: themed('accentColor');
@@ -276,8 +282,8 @@ file-info-simple {
   .root.current-user-message {
     .message-body {
       //background: lighten(themed('accentColor'), 0.6);
-      background-color: lighten(themed('accentColor'), 5%);
-      color: themed('valueTextColor') !important;
+      //background-color: lighten(themed('accentColor'), 5%);
+      //color: themed('valueTextColor') !important;
     }
   }
 }

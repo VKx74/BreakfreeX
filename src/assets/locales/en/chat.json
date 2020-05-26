@@ -1,7 +1,7 @@
 {
   "publicChatComponentName": "Public Chat",
   "privateChatComponentName": "Private Chat",
-  "publicChatTitle": "Public Chat",
+  "publicChatTitle": "Chat",
   "privateChatTitle": "Private Chat",
   "fileLoadQuestion": "Do you want download file?",
   "activeThread": {

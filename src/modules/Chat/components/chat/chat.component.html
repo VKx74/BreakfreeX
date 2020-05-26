@@ -3,15 +3,12 @@
 
 
 <ng-template #template>
-    <as-split [direction]="'horizontal'"
+    <as-split [direction]="'vertical'"
               [gutterSize]="3"
               [unit]="'percent'"
               (dragEnd)="onDragEnd($event)">
-        <as-split-area [order]="0" [size]="splitSizes[0]" [minSize]="30" [maxSize]="50" [visible]="!hiddenThreadList">
-            <thread-list class="full-height"
-                         [chatMode]="chatMode"></thread-list>
-        </as-split-area>
-        <as-split-area [order]="1"
+        
+        <as-split-area [order]="0"
                        [size]="splitSizes[1]"
                        [minSize]="50"
                        [visible]="(activeThread$ | async) != null">
@@ -20,6 +17,10 @@
                                [class.maximized]="hiddenThreadList"
                                (onMaximise)="hiddenThreadList = !hiddenThreadList"></active-thread>
             </ng-container>
+        </as-split-area>
+        <as-split-area [order]="1" [size]="splitSizes[0]" [minSize]="30" [maxSize]="50" [visible]="!hiddenThreadList">
+            <thread-list class="full-height"
+                         [chatMode]="chatMode"></thread-list>
         </as-split-area>
 
     </as-split>
