@@ -529,3 +529,7 @@ a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !im
 .tcdToolbar-top .tcdToolbar-scroll-wrapper {
   -ms-overflow-style: none;
 }
+
+.toggle-container.cursor-pointer.open {
+  background-color: transparent !important;
+}
