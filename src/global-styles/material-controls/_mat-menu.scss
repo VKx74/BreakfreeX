@@ -22,18 +22,19 @@ $menuItemHeight: 28px;
 @include themify($themes) {
   .mat-menu-panel {
     font-family: $primaryFontFamily;
-    background-color: themed('appModalsPanelColor');
+    background-color: themed('inputBackgroundColor');
     box-shadow: themed('box-shadowModals');
 
     .menu-item-label {
       color: themed('valueTextColor');
     }
     .mat-menu-item {
-      background-color: themed('appModalsPanelColor');
+      background-color: themed('inputBackgroundColor');
       color: themed('valueTextColor');
-      
+
       &:hover {
         background-color: themed('activeBackgroundColor');
+        color: themed('accentColor');
       }
 
       &:after {
