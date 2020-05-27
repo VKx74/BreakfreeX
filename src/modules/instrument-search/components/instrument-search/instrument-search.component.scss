@@ -15,6 +15,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  
+  .description {
+    max-width: 50%;
+    padding-left: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9em;
+  }
 }
 
 form {

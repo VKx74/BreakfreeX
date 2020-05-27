@@ -13,8 +13,9 @@
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith"
                               (optionSelected)="handleInstrumentSelected($event)">
                 <mat-option *ngFor="let instrument of (filteredInstruments | async)" [value]="instrument"
-                            class="instrument-search-option">
+                            class="instrument-search-option" title="{{instrument.symbol}} - {{instrument.company}} - {{instrument.exchange}}">
                     <span>{{instrument.symbol}}</span>
+                    <span class="description">{{instrument.company}}</span>
                     <span class="exchange">{{instrument.exchange}}</span>
                 </mat-option>
             </mat-autocomplete>
