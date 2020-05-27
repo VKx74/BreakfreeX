@@ -126,7 +126,7 @@ export class BrokerService implements IHealthable {
         return of([]);
     }
 
-    tryMapInstrument(instrument: string): Observable<IInstrument[]> {
+    tryMapInstrument(instrument: string, exchange: EExchange): Observable<IInstrument[]> {
         let symbolsSimilar = (s1: string, s2: string): boolean => {
             let _s1 = s1.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             let _s2 = s2.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
@@ -134,7 +134,7 @@ export class BrokerService implements IHealthable {
         };
 
         if (this._activeBroker) {
-            return this._activeBroker.getInstruments(null, instrument[0]).pipe(map((instruments: IInstrument[]) => {
+            return this._activeBroker.getInstruments(exchange, instrument[0]).pipe(map((instruments: IInstrument[]) => {
                 let res: IInstrument[] = [];
 
                 for (let i in instruments) {

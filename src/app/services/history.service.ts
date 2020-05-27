@@ -13,6 +13,7 @@ import {ExchangeFactory} from "../factories/exchange.factory";
 import {IInstrument} from "@app/models/common/instrument";
 import {ITick} from "@app/models/common/tick";
 import {TimeFrameHelper} from "@app/helpers/timeFrame.helper";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class HistoryService implements IHealthable {
@@ -57,7 +58,7 @@ export class HistoryService implements IHealthable {
     }
 
     getHistory(request: IHistoryRequest): Observable<IHistoryResponse> {
-        const service = this._getServiceByExchange(request.instrument.exchange);
+        const service = this._getServiceByDatafeed(request.instrument.datafeed);
         if (!service) {
             return of({
                 request: request,
@@ -89,7 +90,7 @@ export class HistoryService implements IHealthable {
     }
 
     getLastTrades(instrument: IInstrument): Observable<ITick[]> {
-        const service = this._getServiceByExchange(instrument.exchange);
+        const service = this._getServiceByDatafeed(instrument.datafeed);
 
         if (!service) {
             return of([]);
@@ -108,9 +109,9 @@ export class HistoryService implements IHealthable {
         };
     }
 
-    private _getServiceByExchange(exchange: EExchange): HistoryServiceBase {
+    private _getServiceByDatafeed(datafeed: EExchangeInstance): HistoryServiceBase {
         for (let i = 0; i < this.services.length; i++) {
-            if (this.services[i].supportedExchanges.indexOf(exchange) !== -1) {
+            if (this.services[i].ExchangeInstance === datafeed) {
                 return this.services[i];
             }
         }

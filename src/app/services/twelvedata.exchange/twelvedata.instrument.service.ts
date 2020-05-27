@@ -9,14 +9,19 @@ import { Observable, Subject, of } from 'rxjs';
 import {map} from "rxjs/operators";
 import {ApplicationTypeService} from "@app/services/application-type.service";
 import { ApplicationType } from '@app/enums/ApplicationType';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class TwelvedataInstrumentService extends InstrumentServiceBase {
     private _cacheBySearch: { [symbol: string]: IInstrument[]; } = {};
 
+
+    get ExchangeInstance(): EExchangeInstance {
+        return EExchangeInstance.TwelvedataExchange;
+    }
+
     constructor(protected _http: HttpClient, private _applicationTypeService: ApplicationTypeService) {
         super(_http);
-        this._supportedExchanges = [EExchange.Twelvedata];
         this._supportedMarkets = [EMarketType.Crypto, EMarketType.Forex, EMarketType.Stocks];
         this._endpoint = `${AppConfigService.config.apiUrls.twelvedataREST}instruments/extended`;
     }
@@ -62,22 +67,20 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             for (let i = 0; i < products.length; i++) {
                 const product = products[i];
                 const type = this._getMarketType(product.Kind);
-                const tickSize = this._getTickSize(product.Symbol, type);
-                const description = this._getDescription(product, type);
-                const instrument: IInstrument = {
-                    id: product.Symbol,
-                    symbol: product.Symbol.replace("/", ""),
-                    exchange: EExchange.Twelvedata,
-                    type: type,
-                    tickSize: tickSize,
-                    pricePrecision: this._getPricePrecision(tickSize),
-                    baseInstrument: product.CurrencyBase,
-                    dependInstrument: product.CurrencyQuote,
-                    company: description,
-                    tradable: false
-                };
 
-                this._cachedSymbols.push(instrument);
+                if (type === EMarketType.Crypto) {
+                    for (const availableExchange of product.AvailableExchanges) {
+                        this._addInstrument(product, type, availableExchange as EExchange);
+                    }
+                } 
+                
+                if (type === EMarketType.Forex) {
+                    this._addInstrument(product, type, EExchange.Forex);
+                }  
+                
+                if (type === EMarketType.Stocks) {
+                    this._addInstrument(product, type, product.Exchange as EExchange);
+                } 
             }
 
         } catch (ex) {
@@ -91,6 +94,27 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         return this._filterResponse(exchange, search);
     }
 
+    protected _addInstrument(product: any, type: EMarketType, exchange: EExchange) {
+        const tickSize = this._getTickSize(product.Symbol, type);
+        const description = this._getDescription(product, type);
+
+        const instrument: IInstrument = {
+            id: product.Symbol,
+            symbol: product.Symbol.replace("/", ""),
+            exchange: exchange,
+            datafeed: EExchangeInstance.TwelvedataExchange,
+            type: type,
+            tickSize: tickSize,
+            pricePrecision: this._getPricePrecision(tickSize),
+            baseInstrument: product.CurrencyBase,
+            dependInstrument: product.CurrencyQuote,
+            company: description,
+            tradable: false
+        };
+
+        this._cachedSymbols.push(instrument);
+    }
+
     protected _requestInstrumentsWithSearch(search: string = ""): Observable<any[]> {
         let market = "";
         const appType = this._applicationTypeService.applicationType;
@@ -100,7 +124,12 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             case ApplicationType.Stock: market = "&Kind=stock"; break;
         }
 
-        return this._http.get<any[]>(`${this._endpoint}?Search=${search}${market}`);
+        let takeAmount = 500;
+        if (!search) {
+            takeAmount = 100;
+        }
+
+        return this._http.get<any[]>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}`);
     }
 
     private _getMarketType(market: string): EMarketType {

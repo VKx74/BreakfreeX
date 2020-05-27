@@ -18,6 +18,7 @@ import {TzUtils} from "../../TimeZones/utils/TzUtils";
 import {JsUtil} from "../../../utils/jsUtil";
 import {TranslateService} from "@ngx-translate/core";
 import {map} from "rxjs/operators";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class DataFeed extends DataFeedBase {
@@ -42,7 +43,7 @@ export class DataFeed extends DataFeedBase {
 
         return new Promise<DataFeedBase>(function (resolve, reject) {
             if (loadInstruments) {
-                self._instrumentService.getInstruments(EExchange.any, "").subscribe((instruments: IInstrument[]) => {
+                self._instrumentService.getInstruments().subscribe((instruments: IInstrument[]) => {
                     self.instruments = instruments;
                     resolve(self);
                 });
@@ -132,7 +133,7 @@ export class DataFeed extends DataFeedBase {
             }
         }
 
-        const instruments = await this._instrumentService.getInstruments(instrument.exchange as EExchange, instrument.symbol).toPromise();
+        const instruments = await this._instrumentService.getInstruments(instrument.datafeed as EExchangeInstance, instrument.symbol).toPromise();
         for (let i = 0; i < instruments.length; i++) {
             if (instruments[i].symbol === instrument.symbol) {
                 return instruments[i];

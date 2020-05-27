@@ -78,7 +78,7 @@ export class MarketTradesComponent extends BaseLayoutItemComponent {
         if (this._state && this._state.activeInstrument) {
             this.loadState(this._state);
         } else {
-            this._instrumentService.getInstruments(EExchange.any).subscribe(values => {
+            this._instrumentService.getInstruments().subscribe(values => {
                 if (values && values.length) {
                     const activeInstrument = values[0];
                     this._selectInstrument(activeInstrument);

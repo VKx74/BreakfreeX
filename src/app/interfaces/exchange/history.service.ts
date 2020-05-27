@@ -12,6 +12,7 @@ import {catchError, map} from "rxjs/operators";
 import {JsUtil} from "../../../utils/jsUtil";
 import {ITick} from "@app/models/common/tick";
 import {IInstrument} from "@app/models/common/instrument";
+import { EExchangeInstance } from './exchange';
 
 export enum HistoryRequestKind {
     DateRange = 'daterange',
@@ -21,12 +22,7 @@ export enum HistoryRequestKind {
 export abstract class HistoryServiceBase implements IHealthable {
     protected _endpoint: string;
     protected _isHealthy: boolean = true;
-    protected _supportedExchanges: EExchange[] = [];
     protected _supportedMarkets: EMarketType[] = [];
-
-    get supportedExchanges(): EExchange[] {
-        return this._supportedExchanges;
-    }
 
     get supportedMarkets(): EMarketType[] {
         return this._supportedMarkets;
@@ -35,6 +31,8 @@ export abstract class HistoryServiceBase implements IHealthable {
     get isHealthy(): boolean {
         return this._isHealthy;
     }
+    
+    abstract get ExchangeInstance(): EExchangeInstance;
 
     constructor(protected _http: HttpClient) {
 
@@ -51,6 +49,7 @@ export abstract class HistoryServiceBase implements IHealthable {
         const params = new HttpParams()
             .append('kind', HistoryRequestKind.DateRange)
             .append('symbol', request.instrument.id)
+            .append('exchange', request.instrument.exchange)
             .append('granularity', granularity.toString())
             .append('from', (request.startDate.getTime() / 1000).toFixed(0))
             .append('to', (request.endDate.getTime() / 1000).toFixed(0));

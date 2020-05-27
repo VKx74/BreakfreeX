@@ -8,6 +8,7 @@ import { WatchlistStorageService } from './watchlist-storage.service';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
 import { EMarketType } from '@app/models/common/marketType';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 export interface IWatchlistItem {
     id: string;
@@ -32,6 +33,7 @@ export class WatchlistService {
     public getDefaultWatchlist(): IWatchlistItem { 
         const baseinfo = {
             exchange: EExchange.Bitmex,
+            datafeed: EExchangeInstance.BitmexExchange,
             baseInstrument: "",
             dependInstrument: "",
             pricePrecision: 2, 

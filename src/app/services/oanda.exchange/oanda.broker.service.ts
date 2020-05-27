@@ -18,6 +18,7 @@ import { UssWsRequestDto, UssWsResponseDto } from '@app/models/uss.ws/uss.ws.dto
 import { IWSRequestMessageBody } from '@app/models/coinbase.exchange/models';
 import {RealtimeService} from "@app/services/realtime.service";
 import {OandaRealtimeService} from "@app/services/oanda.exchange/oanda.realtime.service";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 export interface OandaBrokerState {
     ApiToken: string;
@@ -53,8 +54,12 @@ export class OandaBrokerService implements IBroker {
     brokerKey: string;
     userInfo: OandaTradingAccount;
     instanceType = EBrokerInstance.OandaBroker;
-    supportedExchanges: EExchange[] = [EExchange.Oanda];
     supportedMarkets: EMarketType[] = [EMarketType.Forex];
+
+    get ExchangeInstance(): EExchangeInstance {
+        return EExchangeInstance.OandaExchange;
+    }
+
 
     public get supportedOrderTypes(): OrderTypes[] {
         return [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
@@ -246,8 +251,8 @@ export class OandaBrokerService implements IBroker {
         return this._logout();
     }
 
-    getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
-        return this._instrumentService.getInstruments(exchange, search).pipe(map((values: IInstrument[]) => {
+    getInstruments(search?: string): Observable<IInstrument[]> {
+        return this._instrumentService.getInstruments(EExchange.Oanda, search).pipe(map((values: IInstrument[]) => {
             return values.filter(instrument => instrument.tradable);
         }));
     }
@@ -265,11 +270,10 @@ export class OandaBrokerService implements IBroker {
 
     isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes): boolean {
         const isMarketTypeAvailable = this.supportedMarkets.find((i) => i === instrument.type) || null;
-        const isExchangeAvailable = this.supportedExchanges.find((i) => i === instrument.exchange) || null;
         const isOrderTypeAvailable = this.supportedOrderTypes.find((type) => {
             return (type === orderType || type === OrderTypes[orderType]);
         }) || null;
-        return !!(isMarketTypeAvailable && isExchangeAvailable && isOrderTypeAvailable);
+        return !!(isMarketTypeAvailable && isOrderTypeAvailable && instrument.exchange === EExchange.Oanda);
     }
 
     protected _raiseAllDataChangedEvents() {

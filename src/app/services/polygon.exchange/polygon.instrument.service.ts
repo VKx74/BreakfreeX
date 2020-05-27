@@ -9,14 +9,18 @@ import { Observable, Subject, of } from 'rxjs';
 import {map} from "rxjs/operators";
 import {ApplicationTypeService} from "@app/services/application-type.service";
 import { ApplicationType } from '@app/enums/ApplicationType';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class PolygonInstrumentService extends InstrumentServiceBase {
-    private _cacheBySearch: { [symbol: string]: IInstrument[]; } = {};
+    private _cacheBySearch: { [symbol: string]: IInstrument[]; } = {};   
+
+    get ExchangeInstance(): EExchangeInstance {
+        return EExchangeInstance.PolygonExchange;
+    }
 
     constructor(protected _http: HttpClient, private _applicationTypeService: ApplicationTypeService) {
         super(_http);
-        this._supportedExchanges = [EExchange.Polygon];
         this._supportedMarkets = [EMarketType.Crypto, EMarketType.Forex, EMarketType.Stocks];
         this._endpoint = `${AppConfigService.config.apiUrls.polygonREST}instruments/extended`;
     }
@@ -67,6 +71,7 @@ export class PolygonInstrumentService extends InstrumentServiceBase {
                     id: product.Symbol,
                     symbol: product.Symbol,
                     exchange: EExchange.Polygon,
+                    datafeed: EExchangeInstance.PolygonExchange,
                     type: type,
                     tickSize: tickSize,
                     pricePrecision: this._getPricePrecision(tickSize),

@@ -14,6 +14,8 @@ import {NotificationAction, NotificationMessage} from "@app/models/notifications
 import {IInstrument} from '@app/models/common/instrument';
 import {RunningMetadata} from "@scripting/models/IScriptCloudRepositoryService";
 import {ScriptingApiService} from "@scripting/services/scripting-api.service";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { EExchange } from '@app/models/common/exchange';
 
 enum EScriptStateMessage {
     Started = "started",
@@ -81,7 +83,7 @@ export class ScriptCloudExecutorService implements IScriptCloudExecutorService {
                     tradingParameters.broker = "peatio";
                 }
 
-                this._brokerService.tryMapInstrument(params.symbol).subscribe((instruments: IInstrument[]) => {
+                this._brokerService.tryMapInstrument(params.symbol, params.exchange as EExchange).subscribe((instruments: IInstrument[]) => {
                     if (instruments.length) {
                         tradingParameters.symbol = instruments[0].symbol;
                     } else {

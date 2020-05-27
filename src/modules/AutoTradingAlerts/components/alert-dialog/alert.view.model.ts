@@ -10,6 +10,7 @@ import { IndicatorDataSource } from 'modules/AutoTradingAlerts/models/dataSource
 import { IndicatorSeriesDescription } from 'modules/AutoTradingAlerts/models/dataSources/IndicatorSeriesDescription';
 import { AlertSourceSettings, IndicatorSourceSettings, RealtimeSourceSettings } from 'modules/AutoTradingAlerts/models/AlertSourceSettingsBase';
 import { RealtimeDataSource } from 'modules/AutoTradingAlerts/models/dataSources/RealtimeDataSource';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 export enum TradingOrdersStatus {
     placeOrderTr = 'PlaceOrder',
@@ -32,7 +33,7 @@ export class AlertViewModel {
         }
         if (alert !== null && alert !== undefined) {
             let realTimeDataSource = alert.dataSource as RealtimeDataSource;
-            instrumentService.getInstrumentBySymbol(realTimeDataSource.relatedSymbol, realTimeDataSource.relatedExchange as EExchange)
+            instrumentService.getInstrumentBySymbol(realTimeDataSource.relatedSymbol, realTimeDataSource.relatedDataFeed as EExchangeInstance, realTimeDataSource.relatedExchange as EExchange)
                 .subscribe(instrument => {
                     if (instrument)
                         this.selectedInstrument = instrument;
@@ -90,7 +91,7 @@ export class AlertViewModel {
         } else {
             if (alertSourceSettings) {
                 let realTimeDataSource = alertSourceSettings as RealtimeSourceSettings;
-                instrumentService.getInstrumentBySymbol(realTimeDataSource.Symbol, realTimeDataSource.Exchange as EExchange)
+                instrumentService.getInstrumentBySymbol(realTimeDataSource.Symbol, realTimeDataSource.Datafeed as EExchangeInstance, realTimeDataSource.Exchange as EExchange)
                     .subscribe(instrument => {
                         if (instrument)
                             this.selectedInstrument = instrument;
@@ -108,7 +109,7 @@ export class AlertViewModel {
         }
 
         if (this.selectedInstrument === null)
-            instrumentService.getInstruments(EExchange.any).subscribe(values => {
+            instrumentService.getInstruments().subscribe(values => {
                 if (values && values.length)
                     this.selectedInstrument = values[0];
             });

@@ -10,9 +10,12 @@ import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 @Injectable()
 export class BitmexInstrumentService extends InstrumentServiceBase {
 
+    get ExchangeInstance(): EExchangeInstance {
+        return EExchangeInstance.BitmexExchange;
+    }
+
     constructor(protected _http: HttpClient) {
         super(_http);
-        this._supportedExchanges = [EExchange.Bitmex];
         this._supportedMarkets = [EMarketType.Crypto];
         this._endpoint = `${AppConfigService.config.apiUrls.bitmexREST}instruments/extended`;
     }
@@ -32,6 +35,7 @@ export class BitmexInstrumentService extends InstrumentServiceBase {
                     id: product.symbol,
                     symbol: product.symbol,
                     exchange: EExchange.Bitmex,
+                    datafeed: EExchangeInstance.BitmexExchange,
                     type: EMarketType.Crypto,
                     tickSize: this._getTickSize(product.tickSize),
                     pricePrecision: this._getPricePrecision(product.tickSize),

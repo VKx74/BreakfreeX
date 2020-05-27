@@ -10,12 +10,13 @@ import {Injectable} from "@angular/core";
 import {InstrumentService} from "@app/services/instrument.service";
 import {EExchange} from "@app/models/common/exchange";
 import {EMarketType} from "@app/models/common/marketType";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class RealtimeDataSource extends AlertDataSourceBase {
     protected _subscription: Subscription;
     protected _symbol: string;
-    protected _datafeed: string;
+    protected _datafeed: EExchangeInstance;
     protected _exchange: EExchange;
     protected _type: EMarketType;
     protected _instrument: IInstrument;
@@ -35,6 +36,10 @@ export class RealtimeDataSource extends AlertDataSourceBase {
     get relatedExchange(): string {
         return this._exchange;
     }
+    
+    get relatedDataFeed(): string {
+        return this._datafeed;
+    }
 
     constructor(private realtimeService: RealtimeService,
                 private instrumentService: InstrumentService) {
@@ -49,7 +54,7 @@ export class RealtimeDataSource extends AlertDataSourceBase {
         this._subscribers.push(subscription);
 
         if (this._subscribers.length === 1) {
-            this.instrumentService.getInstrumentBySymbol(this._symbol, this._exchange).subscribe((instrument: IInstrument) => {
+            this.instrumentService.getInstrumentBySymbol(this._symbol, this._datafeed, this._exchange).subscribe((instrument: IInstrument) => {
                 this._instrument = instrument;
 
                 this._subscription = this.realtimeService.subscribeToTicks(this._instrument, value => {

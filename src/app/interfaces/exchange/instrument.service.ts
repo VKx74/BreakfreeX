@@ -5,6 +5,7 @@ import {EExchange} from "../../models/common/exchange";
 import {EMarketType} from "../../models/common/marketType";
 import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
+import { EExchangeInstance } from './exchange';
 
 export abstract class InstrumentServiceBase implements IHealthable {
     protected _cachedSymbols: IInstrument[] = [];
@@ -12,12 +13,9 @@ export abstract class InstrumentServiceBase implements IHealthable {
     protected _subject: Subject<IInstrument[]>;
     protected _endpoint: string;
     protected _isHealthy: boolean = true;
-    protected _supportedExchanges: EExchange[] = [];
     protected _supportedMarkets: EMarketType[] = [];
 
-    get supportedExchanges(): EExchange[] {
-        return this._supportedExchanges;
-    }
+    abstract get ExchangeInstance(): EExchangeInstance;
 
     get supportedMarkets(): EMarketType[] {
         return this._supportedMarkets;

@@ -2,6 +2,7 @@ import {EDataSourceType} from "./Enums";
 import {EMarketType} from "@app/models/common/marketType";
 import {EExchange} from "@app/models/common/exchange";
 import { IndicatorSeriesDescription } from './dataSources/IndicatorSeriesDescription';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 export class AlertSourceSettings {
     DataSourceType: EDataSourceType;
@@ -9,7 +10,7 @@ export class AlertSourceSettings {
 
 export class RealtimeSourceSettings extends AlertSourceSettings {
     Symbol: string;
-    Datafeed: string;
+    Datafeed: EExchangeInstance;
     Exchange: EExchange;
     Type: EMarketType;
 }

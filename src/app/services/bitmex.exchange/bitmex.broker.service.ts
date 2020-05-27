@@ -19,11 +19,16 @@ import {RealtimeService} from "@app/services/realtime.service";
 import {IBrokerServiceState} from "@app/services/broker.service";
 import {BrokerStorage} from "@app/services/broker.storage";
 import {IdentityService} from "@app/services/auth/identity.service";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class BitmexBrokerService extends CryptoBroker {
     private _secretKey: string;
     private _apiKey: string;
+
+    get ExchangeInstance(): EExchangeInstance {
+        return EExchangeInstance.BitmexExchange;
+    }
 
     get instanceType(): EBrokerInstance {
         return EBrokerInstance.BitmexBroker;
@@ -32,8 +37,9 @@ export class BitmexBrokerService extends CryptoBroker {
     get supportedMarkets(): EMarketType[] {
         return [EMarketType.Crypto];
     }
+
     get supportedExchanges(): EExchange[] {
-        return [EExchange.Bitmex];
+        return [EExchange.Bitmex, EExchange.BitMEX];
     }
 
     get supportedOrderTypes(): OrderTypes[] {

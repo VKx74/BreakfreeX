@@ -112,7 +112,7 @@ export class OrderBookComponent extends BaseLayoutItemComponent {
         if (this._state && this._state.activeInstrument) {
             this.loadState(this._state);
         } else {
-            this._instrumentService.getInstruments(EExchange.any).subscribe(values => {
+            this._instrumentService.getInstruments().subscribe(values => {
                 if (values && values.length) {
                     let activeInstrument = values[0];
 

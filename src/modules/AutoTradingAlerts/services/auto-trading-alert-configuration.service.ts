@@ -10,6 +10,7 @@ import { IndicatorSourceSettings } from '../models/AlertSourceSettingsBase';
 import { EExchange } from '@app/models/common/exchange';
 import { EMarketType } from '@app/models/common/marketType';
 import { AutoTradingAlertService } from './auto-trading-alert.service';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class AutoTradingAlertConfigurationService {
@@ -43,7 +44,7 @@ export class AutoTradingAlertConfigurationService {
             DataSourceType: EDataSourceType.IndicatorDataSource,
             Symbol: symbol,
             Exchange: exchange as EExchange,
-            Datafeed: exchange,
+            Datafeed: exchange as EExchangeInstance,
             Type: EMarketType.Crypto,
             SeriesDescription: selectedSeries || series[0]
         };

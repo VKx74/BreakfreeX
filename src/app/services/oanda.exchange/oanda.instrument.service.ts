@@ -5,13 +5,18 @@ import {HttpClient} from "@angular/common/http";
 import {EExchange} from "../../models/common/exchange";
 import { EMarketType } from '@app/models/common/marketType';
 import { AppConfigService } from '../app.config.service';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class OandaInstrumentService extends InstrumentServiceBase {
 
+    get ExchangeInstance(): EExchangeInstance {
+        return EExchangeInstance.OandaExchange;
+    }
+
+
     constructor(protected _http: HttpClient) {
         super(_http);
-        this._supportedExchanges = [EExchange.Oanda];
         this._supportedMarkets = [EMarketType.Forex];
         this._endpoint = `${AppConfigService.config.apiUrls.oandabrokerREST}instruments`;
     }
@@ -28,16 +33,22 @@ export class OandaInstrumentService extends InstrumentServiceBase {
             for (let i = 0; i < products.length; i++) {
                 const product = products[i];
                 const tickSize = this._getTickSize(product.Symbol);
+                let desciption = "";
+                let splitedSymbol = product.Symbol.split("_");
+                if (splitedSymbol.length === 2) {
+                    desciption = splitedSymbol[0] + " vs " + splitedSymbol[1];
+                }
                 const instrument: IInstrument = {
                     id: product.Symbol,
                     symbol: product.Symbol.replace("/", "").replace("_", ""),
                     exchange: EExchange.Oanda,
+                    datafeed: EExchangeInstance.OandaExchange,
                     type: EMarketType.Forex,
                     tickSize: tickSize,
                     pricePrecision: this._getPricePrecision(tickSize),
                     baseInstrument: this._getBaseInstrument(product.Symbol),
                     dependInstrument: this._getDependInstrument(product.Symbol),
-                    company: "",
+                    company: desciption,
                     tradable: true
                 };
 

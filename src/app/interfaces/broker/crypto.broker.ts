@@ -26,6 +26,7 @@ import {OnInit} from "@angular/core";
 import {BrokerStorage} from "@app/services/broker.storage";
 import {RealtimeService} from "@app/services/realtime.service";
 import {IBrokerServiceState} from "@app/services/broker.service";
+import { EExchangeInstance } from '../exchange/exchange';
 
 export const SATOSHI = 100000000;
 
@@ -56,13 +57,15 @@ export abstract class CryptoBroker implements IBroker {
 
     abstract get instanceType(): EBrokerInstance;
 
-    abstract get supportedExchanges(): EExchange[];
-
     abstract get supportedMarkets(): EMarketType[];
+
+    abstract get supportedExchanges(): EExchange[];
 
     abstract get supportedOrderTypes(): OrderTypes[];
 
     abstract get operationRequires2FA(): ECryptoOperation[];
+
+    abstract get ExchangeInstance(): EExchangeInstance;
 
     get accessToken(): string {
         return this._accessToken;
@@ -409,11 +412,11 @@ export abstract class CryptoBroker implements IBroker {
 
     isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes): boolean {
         const isMarketTypeAvailable = this.supportedMarkets.find((i) => i === instrument.type) || null;
-        const isExchangeAvailable = this.supportedExchanges.find((i) => i === instrument.exchange) || null;
+        const isExchangeSupported = this.supportedExchanges.find((i) => i === instrument.exchange) || null;
         const isOrderTypeAvailable = this.supportedOrderTypes.find((type) => {
             return (type === orderType || type === OrderTypes[orderType]);
         }) || null;
-        return !!(isMarketTypeAvailable && isExchangeAvailable && isOrderTypeAvailable);
+        return !!(isMarketTypeAvailable && isOrderTypeAvailable && isExchangeSupported);
     }
 
     protected _logout(): Observable<ActionResult> {

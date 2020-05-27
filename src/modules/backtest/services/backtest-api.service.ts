@@ -13,6 +13,7 @@ import {IInstrument} from "@app/models/common/instrument";
 import {HttpClient} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
 import {EExchange} from "@app/models/common/exchange";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class BacktestApiService {
@@ -29,8 +30,8 @@ export class BacktestApiService {
                         of(result),
                         this._instrumentService.getInstrumentBySymbol(
                             result.instrument.symbol,
-                            (result.instrument as any).datafeed === 'BitMex' ? EExchange.Bitmex
-                                : (result.instrument as any).datafeed as EExchange
+                            result.instrument.datafeed as EExchangeInstance,
+                            result.instrument.exchange as EExchange
                         )
                     );
                 }),

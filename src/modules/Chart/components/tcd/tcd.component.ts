@@ -195,7 +195,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
     private searchInstrumentHandler(symbol: string): Promise<IInstrument[]> {
         const self = this;
         return new Promise<IInstrument[]>(function (resolve, reject) {
-            self._instrumentService.getInstruments(EExchange.any, symbol).subscribe((instruments: IInstrument[]) => {
+            self._instrumentService.getInstruments(undefined, symbol).subscribe((instruments: IInstrument[]) => {
                 self._datafeed.instruments = instruments;
                 resolve(instruments);
             });

@@ -4,9 +4,14 @@ import {EExchange} from "../../models/common/exchange";
 import {WebsocketBase} from "../../interfaces/socket/socketBase";
 import {EMarketType} from "../../models/common/marketType";
 import {TwelvedataSocketService} from "@app/services/socket/twelvedata.socket.service";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class TwelvedataRealtimeService extends RealtimeServiceBase {
+
+    get ExchangeInstance(): EExchangeInstance {
+        return EExchangeInstance.TwelvedataExchange;
+    }
 
     constructor(@Inject(TwelvedataSocketService) private ws: WebsocketBase) {
         super(ws);
@@ -15,7 +20,6 @@ export class TwelvedataRealtimeService extends RealtimeServiceBase {
         this. _tickerChannel = 'trade';
         this. _level2MessageType = 'L2Update';
         this. _tickerMessageType = 'TickerMessage';
-        this._supportedExchanges = [EExchange.Twelvedata];
         this._supportedMarkets = [EMarketType.Crypto, EMarketType.Forex, EMarketType.Stocks];
     }
 }

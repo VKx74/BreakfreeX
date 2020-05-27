@@ -2,13 +2,22 @@ export enum EExchange {
     any = "any",
 
     // crypto echanges
+    NASDAQ = "NASDAQ",
+    NSE = "NSE",
+    BSE = "BSE",
+    Forex = "Forex",
     Coinbase = "Coinbase",
     Bitmex = "Bitmex",
     OKEx = "OKEx",
     Binance = "Binance",
     Polygon = "Polygon",
-    Twelvedata = "Twelvedata",
-
+    Bitfinex = "Bitfinex",
+    BitMEX = "BitMEX",
+    BitStamp = "BitStamp",
+    CoinbasePro = "Coinbase Pro",
+    GDAX = "GDAX",
+    Huobi = "Huobi",
+    OKCoin = "OKCoin",
     // https://paritech.gitbook.io/zenith-websockets-api/appendices/appendix-b1-markets
     // stock markets
     // Australian Stock Exchange TradeMatch

@@ -8,6 +8,7 @@ import {map} from 'rxjs/operators';
 import {OandaOrder} from 'modules/Trading/models/forex/oanda/oanda.models';
 import {ColumnSortDataAccessor} from "../../../../../datatable/components/data-table/data-table.component";
 import {OrderSide} from "../../../../models/models";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 
 @Component({
@@ -82,6 +83,7 @@ export class OandaOpenOrdersComponent extends OandaItemsComponent<OandaOrder> {
                 baseInstrument: "",
                 dependInstrument: "",
                 exchange: EExchange.Oanda,
+                datafeed: EExchangeInstance.OandaExchange,
                 id: orders[i].symbol,
                 pricePrecision: 0,
                 symbol: orders[i].symbol,

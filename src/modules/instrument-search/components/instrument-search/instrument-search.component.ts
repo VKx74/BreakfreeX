@@ -9,8 +9,9 @@ import {Observable, of} from "rxjs";
 import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {SharedTranslateService} from "@app/localization/shared.token";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
-export const INPUT_DEBOUNCE_TIME = 200;
+export const INPUT_DEBOUNCE_TIME = 500;
 
 @Component({
     selector: 'instrument-search',
@@ -29,7 +30,7 @@ export const INPUT_DEBOUNCE_TIME = 200;
     ]
 })
 export class InstrumentSearchComponent {
-    @Input() instrumentSearchCallback?: (e?: EExchange, s?: string) => Observable<IInstrument[]>;
+    @Input() instrumentSearchCallback?: (e?: EExchangeInstance, s?: string) => Observable<IInstrument[]>;
     @Input() formControlName: string;
     @Input() resetAfterSelection: boolean = false;
     @Input() openPanelOnClick = false;
@@ -60,16 +61,16 @@ export class InstrumentSearchComponent {
 
                     const mapData = function (data: IInstrument[]) {
                         if (!term || term.length < 2) {
-                            return data.splice(0, 50);
+                            return data.splice(0, 200);
                         } else {
                             return data;
                         }
                     };
 
                     if (this.instrumentSearchCallback) {
-                        return this.instrumentSearchCallback(EExchange.any, term).pipe(map(mapData));
+                        return this.instrumentSearchCallback(undefined, term).pipe(map(mapData));
                     } else {
-                        return this._instrumentService.getInstruments(EExchange.any, term).pipe(map(mapData));
+                        return this._instrumentService.getInstruments(undefined, term).pipe(map(mapData));
                     }
                 }),
             );

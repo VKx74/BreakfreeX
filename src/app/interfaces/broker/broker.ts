@@ -3,6 +3,7 @@ import {EExchange} from "../../models/common/exchange";
 import {EMarketType} from "../../models/common/marketType";
 import {Observable, Subject} from "rxjs";
 import {IInstrument} from "../../models/common/instrument";
+import { EExchangeInstance } from '../exchange/exchange';
 
 export enum EBrokerInstance {
     ZenithBroker = 'Zenith',
@@ -19,11 +20,11 @@ export interface IBrokerState<T = any> {
 
 export interface IBroker {
     accessToken: string;
-    supportedExchanges: EExchange[];
     supportedMarkets: EMarketType[];
     instanceType: EBrokerInstance;
     userInfo: IBrokerUserInfo;
     onSaveStateRequired: Subject<void>;
+    ExchangeInstance: EExchangeInstance;
 
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]>;
 

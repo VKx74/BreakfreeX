@@ -16,6 +16,7 @@ import {EMarketType} from "@app/models/common/marketType";
 import {HistoryService} from "@app/services/history.service";
 import {switchmap} from "@decorators/switchmap";
 import {LocalizationService} from "Localization";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 declare let defaultTheme: any;
 declare let fintatechDarkTheme: any;
@@ -169,6 +170,7 @@ export class TcdBacktestComponent {
             id: result.instrument.id,
             symbol: result.instrument.symbol,
             exchange: result.instrument.exchange as EExchange,
+            datafeed: result.instrument.datafeed as EExchangeInstance,
             type: EMarketType.unknown,
             tickSize: 0.00001,
             pricePrecision: 5,

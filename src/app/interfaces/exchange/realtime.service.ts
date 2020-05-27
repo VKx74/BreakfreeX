@@ -16,6 +16,7 @@ import {
 import {WebsocketBase} from "../socket/socketBase";
 import {ReadyStateConstants} from "../socket/WebSocketConfig";
 import {ESide} from "../../models/common/side";
+import { EExchangeInstance } from './exchange';
 export abstract class RealtimeServiceBase implements IHealthable {
     protected _action: string;
     protected _level2Channel: string;
@@ -30,12 +31,9 @@ export abstract class RealtimeServiceBase implements IHealthable {
     protected _symbolToInstrument:  { [symbol: string]: IInstrument; } = {};
     protected _level2:  { [symbol: string]: ILevel2; } = {};
 
-    protected _supportedExchanges: EExchange[] = [];
     protected _supportedMarkets: EMarketType[] = [];
 
-    get supportedExchanges(): EExchange[] {
-        return this._supportedExchanges;
-    }
+    abstract get ExchangeInstance(): EExchangeInstance;
 
     get supportedMarkets(): EMarketType[] {
         return this._supportedMarkets;
@@ -147,7 +145,7 @@ export abstract class RealtimeServiceBase implements IHealthable {
 
     protected _getExistingTickerSubscribtion(instrument: IInstrument): number {
         for (let i = 0; i < this._tickerSubscriptions.length; i++) {
-            if (this._tickerSubscriptions[i].Product === instrument.symbol &&
+            if (this._tickerSubscriptions[i].Product === instrument.id &&
                 this._tickerSubscriptions[i].Market === instrument.exchange) {
                 return i;
             }
@@ -158,7 +156,7 @@ export abstract class RealtimeServiceBase implements IHealthable {
 
     protected _getExistingLevel2Subscribtion(instrument: IInstrument): number {
         for (let i = 0; i < this._level2Subscriptions.length; i++) {
-            if (this._level2Subscriptions[i].Product === instrument.symbol &&
+            if (this._level2Subscriptions[i].Product === instrument.id &&
                 this._level2Subscriptions[i].Market === instrument.exchange) {
                 return i;
             }
@@ -168,13 +166,13 @@ export abstract class RealtimeServiceBase implements IHealthable {
     }
 
     protected _createSubscriptionMessage(channel: string, action: string, instrument: IInstrument): IWSSubscriptionBody {
-        const id = this._counter + instrument.symbol + Date.now().toString();
+        const id = this._counter + instrument.id + Date.now().toString();
         this._counter++;
 
         const subscribtionBody: IWSSubscriptionBody = {
             MsgType: 'SubscribeMessage',
             Channel: channel,
-            Product: instrument.symbol,
+            Product: instrument.id,
             Market: instrument.exchange,
             IsSubscribe: true
         };
@@ -286,7 +284,7 @@ export abstract class RealtimeServiceBase implements IHealthable {
     }
 
     protected _getInstrumentHash(instrument: IInstrument) {
-        return instrument.symbol.toUpperCase();
+        return instrument.id.toUpperCase();
     }
 
     protected _getInstrumentHashFromTick(tick: ITickerResponse) {

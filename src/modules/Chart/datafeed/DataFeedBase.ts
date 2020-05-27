@@ -149,7 +149,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
         }
 
         if (request.name === RequestKind.BARS) {
-            let visibleCount = 150;
+            let visibleCount = 100;
             if (barsCount < visibleCount) {
                 visibleCount = barsCount;
             }

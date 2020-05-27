@@ -9,6 +9,7 @@ import {ApplicationTypeService} from "./application-type.service";
 import {ExchangeFactory} from "../factories/exchange.factory";
 import {APP_TYPE_EXCHANGES} from "../enums/ApplicationType";
 import {InstrumentServiceBase} from "@app/interfaces/exchange/instrument.service";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class InstrumentService implements IHealthable {
@@ -50,10 +51,10 @@ export class InstrumentService implements IHealthable {
         });
 }
 
-    getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
-        const observables: Observable<IInstrument[]>[] = [] = exchange && exchange !== EExchange.any
-            ? [this._getServiceByExchange(exchange).getInstruments(exchange, search)]
-            : this.services.map(s => s.getInstruments(exchange, search));
+    getInstruments(datafeed?: EExchangeInstance, search?: string): Observable<IInstrument[]> {
+        const observables: Observable<IInstrument[]>[] = [] = datafeed
+            ? [this._getServiceByDatafeed(datafeed).getInstruments(undefined, search)]
+            : this.services.map(s => s.getInstruments(undefined, search));
 
         return forkJoin(observables).pipe(
             catchError(error => of([])),
@@ -67,8 +68,8 @@ export class InstrumentService implements IHealthable {
         );
     }
 
-    getInstrumentBySymbol(symbol: string, exchange: EExchange): Observable<IInstrument> {
-        return this._getServiceByExchange(exchange).getInstruments(exchange, symbol)
+    getInstrumentBySymbol(symbol: string, datafeed: EExchangeInstance, exchange: EExchange): Observable<IInstrument> {
+        return this._getServiceByDatafeed(datafeed).getInstruments(exchange, symbol)
             .pipe(
                 map((instruments: IInstrument[]) => instruments.find(i => i.symbol === symbol))
             );
@@ -84,9 +85,9 @@ export class InstrumentService implements IHealthable {
             );
     }
 
-    private _getServiceByExchange(exchange: EExchange): InstrumentServiceBase {
+    private _getServiceByDatafeed(datafeed: EExchangeInstance): InstrumentServiceBase {
         for (let i = 0; i < this.services.length; i++) {
-            if (this.services[i].supportedExchanges.indexOf(exchange) !== -1) {
+            if (this.services[i].ExchangeInstance === datafeed) {
                 return this.services[i];
             }
         }

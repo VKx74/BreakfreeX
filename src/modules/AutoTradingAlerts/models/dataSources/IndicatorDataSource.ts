@@ -6,11 +6,12 @@ import { IndicatorSourceSettings } from "../AlertSourceSettingsBase";
 import { EExchange } from "@app/models/common/exchange";
 import { EMarketType } from "@app/models/common/marketType";
 import { IndicatorSeriesDescription } from './IndicatorSeriesDescription';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 export class IndicatorDataSource extends AlertDataSourceBase {
     protected _indicatorSeriesDescription: IndicatorSeriesDescription;
     protected _symbol: string;
-    protected _datafeed: string;
+    protected _datafeed: EExchangeInstance;
     protected _exchange: EExchange;
     protected _type: EMarketType;
     protected _instrument: IInstrument;

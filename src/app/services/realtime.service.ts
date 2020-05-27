@@ -11,6 +11,7 @@ import {TimeZoneManager, TzUtils, UTCTimeZone} from "TimeZones";
 import {APP_TYPE_EXCHANGES} from "../enums/ApplicationType";
 import {ExchangeFactory} from "../factories/exchange.factory";
 import {ApplicationTypeService} from "./application-type.service";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
 export class RealtimeService implements IHealthable {
@@ -78,7 +79,7 @@ export class RealtimeService implements IHealthable {
 
         if (!this._tickSubscribers[hash]) {
             this._tickSubscribers[hash] = new Subject<ITick>();
-            const service = this._getService(instrument.exchange);
+            const service = this._getService(instrument.datafeed);
             if (service) {
                 service.subscribeToTicks(instrument);
             } else {
@@ -105,7 +106,7 @@ export class RealtimeService implements IHealthable {
 
         if (!this._l2Subscribers[hash]) {
             this._l2Subscribers[hash] = new Subject<ILevel2>();
-            const service = this._getService(instrument.exchange);
+            const service = this._getService(instrument.datafeed);
             if (service) {
                 service.subscribeToLevel2(instrument);
             } else {
@@ -146,7 +147,7 @@ export class RealtimeService implements IHealthable {
         const hash = RealtimeService.getInstrumentHash(instrument);
         const subject = this._tickSubscribers[hash];
         if (subject && subject.observers.length === 0) {
-            const service = this._getService(instrument.exchange);
+            const service = this._getService(instrument.datafeed);
             if (service) {
                 service.unsubscribeFromTicks(instrument);
             }
@@ -167,7 +168,7 @@ export class RealtimeService implements IHealthable {
         const hash = RealtimeService.getInstrumentHash(instrument);
         const subject = this._l2Subscribers[hash];
         if (subject && subject.observers.length === 0) {
-            const service = this._getService(instrument.exchange);
+            const service = this._getService(instrument.datafeed);
             if (service) {
                 service.unsubscribeFromLevel2(instrument);
             }
@@ -180,7 +181,7 @@ export class RealtimeService implements IHealthable {
     private _trySubscribe() {
         for (let i = 0; i < this._ticksSubscriptionQueue.length; i++) {
             const instrument = this._ticksSubscriptionQueue[i];
-            const service = this._getService(instrument.exchange);
+            const service = this._getService(instrument.datafeed);
             if (service) {
                 service.subscribeToTicks(instrument);
                 this._ticksSubscriptionQueue.splice(i, 1);
@@ -190,7 +191,7 @@ export class RealtimeService implements IHealthable {
 
         for (let i = 0; i < this._l2SubscriptionQueue.length; i++) {
             const instrument = this._l2SubscriptionQueue[i];
-            const service = this._getService(instrument.exchange);
+            const service = this._getService(instrument.datafeed);
             if (service) {
                 service.subscribeToLevel2(instrument);
                 this._l2SubscriptionQueue.splice(i, 1);
@@ -199,9 +200,9 @@ export class RealtimeService implements IHealthable {
         }
     }
 
-    private _getService(exchange: EExchange): RealtimeServiceBase {
+    private _getService(datafeed: EExchangeInstance): RealtimeServiceBase {
         for (let i = 0; i < this.services.length; i++) {
-            if (this.services[i].supportedExchanges.indexOf(exchange) !== -1) {
+            if (this.services[i].ExchangeInstance === datafeed) {
                 return this.services[i];
             }
         }
