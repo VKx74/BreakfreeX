@@ -31,9 +31,9 @@ $menuItemHeight: 28px;
     .mat-menu-item {
       background-color: themed('appModalsPanelColor');
       color: themed('valueTextColor');
-
+      
       &:hover {
-        background-color: themed('appModalsPanelColor');
+        background-color: themed('activeBackgroundColor');
       }
 
       &:after {

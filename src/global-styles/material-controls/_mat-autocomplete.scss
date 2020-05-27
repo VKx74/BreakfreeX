@@ -44,7 +44,7 @@ mat-form-field.#{$classPrefix}-autocomplete {
   }
 
   .mat-autocomplete-panel {
-    background-color: themed('activeBackgroundColor');
+    background-color: themed('inputBackgroundColor'); 
   }
 
   .mat-select-option-text {

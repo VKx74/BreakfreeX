@@ -268,7 +268,7 @@ font-weight:600;
   /deep/ {
     mat-row {
       &:hover {
-    background-color: themed('accentColor') !important;
+    background-color: themed('activeBackgroundColor') !important;
       
 
 
@@ -297,13 +297,13 @@ font-weight:600;
         }
 
         .expanded-detail {
-          color: themed('titleTextColor');
+          color: themed('valueTextColor');
         }
       }
     }
 
     .control {
-      color: themed('titleTextColor');
+      color: themed('valueTextColor');
       background-color: themed('appModalsPanelColor');
 
       &:hover {
@@ -313,12 +313,8 @@ font-weight:600;
 
     .watchlist-tile-wrapper:hover {
       .watchlist-tile {
-        background-color: themed('accentColor');
+        background-color: themed('activeBackgroundColor');
         opacity: 0.9;
-
-        .instrument, .price-value, .price-change {
-          color: #fff !important;
-        }
       }
     }
   }

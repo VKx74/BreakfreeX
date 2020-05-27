@@ -125,7 +125,7 @@ export class InstrumentSearchComponent {
                 this.inputControl.setValue(this.selectedInstrument);
             }
 
-            this.trigger.closePanel();
+            // this.trigger.closePanel();
         }, 300); // fix it
     }
 
