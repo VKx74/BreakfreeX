@@ -128,6 +128,9 @@
 @import "global-styles/mixins/themify";
 @import "global-styles/variables";
 
+
+
+
 :host {
   flex-shrink: 0;
 }
@@ -140,10 +143,11 @@ file-info-simple {
   display: flex;
   padding-top:8px;
   padding-bottom:8px;
-  margin-left:3px;
-  margin-right:3px;
+  margin-left: -3px;
+  margin-right: -3px;
   justify-content: flex-start;
-  border-bottom:1px solid #ddd;
+ 
+  
 
   &:last-of-type {
     margin-top: auto;
@@ -153,10 +157,14 @@ file-info-simple {
     height: 24px;
     width: 24px;
     flex-shrink: 0;
-    margin-right: 7px;
+    margin-right: 0px;
+    margin-top: 2px;
+    margin-left: 11px;
+    
+    
 
     ::ng-deep img {
-      border-radius: 100%;
+      border-radius: 15%;
     }
   }
 
@@ -172,12 +180,12 @@ file-info-simple {
   width: auto;
 
   .top-line {
-    padding: 4px 0;
+    padding-bottom: 4px;
   }
 
   .creator-name {
     display: block;
-    max-width: 130px;
+    max-width: 180px;
     margin-right: auto;
     padding-right: 10px;
     font-size: 12px;
@@ -186,6 +194,8 @@ file-info-simple {
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
+    font-weight:bold;
+    min-width:100px;
   }
 
   .message-time {
@@ -199,12 +209,8 @@ file-info-simple {
     justify-content: flex-start;
   }
 
-  .message-text {
-    font-family: $primaryFontFamily;
-    font-size: 13px;
-    overflow-wrap: break-word;
-    line-height: 1.38;
-  }
+ 
+
 }
 
 .message-sending-status {
@@ -231,7 +237,6 @@ file-info-simple {
 
 .root.current-user-message {
   justify-content: flex-start;
-  background-color:#EFF9E9;
 
   &.message-item {
     justify-content: flex-end;
@@ -258,6 +263,9 @@ file-info-simple {
 }
 
 
+
+
+
 @include themify($themes, true) {
   .message-body {
     //background-color: transparentize(themed('panelBorderColor'), 0.85);
@@ -267,7 +275,7 @@ file-info-simple {
     //background: themed('inputBackgroundColor');
 
     .creator-name {
-      color: themed('accentColor');
+    //  color: themed('accentColor');
     }
 
     .message-time {
@@ -287,3 +295,4 @@ file-info-simple {
     }
   }
 }
+

@@ -526,10 +526,94 @@ a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !im
 }
 
 /* Hide scrollbar for IE and Edge */
-.tcdToolbar-top .tcdToolbar-scroll-wrapper {
+.tcdToolbar-top .tcdToolbar-scroll-wrapper,  {
   -ms-overflow-style: none;
 }
 
 .toggle-container.cursor-pointer.open {
   background-color: transparent !important;
+}
+
+.Light-theme .root.current-user-message {
+  justify-content: flex-start;
+  background-color:#EFF9E9 ;
+}
+
+.Dark-theme .root.current-user-message {
+  justify-content: flex-start;
+  background-color:#201f1f ;
+}
+
+.Dark-theme input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
+  color: #ffffffd1;
+}
+
+.Light-theme .message-text {
+ 
+  font-size: 13px;
+  overflow-wrap: break-word;
+  line-height: 1.38;
+  color:#4a4a4a;
+  
+}
+
+.Light-theme .root {
+
+  border-bottom:1px solid #e8e8e8
+
+}
+
+.Light-theme .thread-list-item {
+  border-bottom: 1px solid #e8e8e8;
+  background: #fff;
+
+}
+
+.Light-theme .thread-list-item:hover  {
+
+background:#edeff2;
+
+
+}
+
+.Light-theme thread-list-item.active .thread-list-item, .Light-theme thread-list-item.active .thread-list-item {
+  border-left: 2px solid #3d61cc !important;
+  background: #edeff2!important;
+}
+
+
+.Dark-theme .footer {
+ 
+  border: 1px solid #161616;
+
+}
+
+.Dark-theme .message-text {
+  
+  font-size: 13px;
+  overflow-wrap: break-word;
+  line-height: 1.38;
+  color: #ffffffd1;
+  
+}
+
+.Dark-theme .root {
+
+  border-bottom:1px solid #2d2b2b;
+
+}
+
+.Dark-theme .thread-list-item {
+  border-bottom: 1px solid #2d2b2b;
+  background: #201f1f;
+}
+
+.Dark-theme .footer {
+ 
+  border: 1px solid #161616;
+
+}
+
+.Dark-theme .ggtop {
+border-top:2px solid #06060D;
 }

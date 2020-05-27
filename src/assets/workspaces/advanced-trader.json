@@ -14,40 +14,25 @@
                 "type": "stack",
                 "content": [
                   {
-                    "id": "a",
+                    "id": "1",
                     "type": "component",
                     "componentName": "chart",
                     "isClosable": false
                   }
                 ]
-              },
-              {
-                "type": "stack",
-                "content": [
-                  {
-                    "id": "b",
-                    "type": "component",
-                    "componentName": "orderBook",
-                    "isClosable": false
-                  }
-                ]
               }
+             
             ]
           },
           {
             "type": "column",
+            "width":"25",
             "content": [
               {
                 "type": "stack",
                 "content": [
                   {
-                    "id": "c",
-                    "type": "component",
-                    "componentName": "marketTrades",
-                    "isClosable": false
-                  },
-                  {
-                    "id": "d",
+                    "id": "4",
                     "type": "component",
                     "componentName": "watchlist",
                     "isClosable": false
@@ -58,15 +43,9 @@
                 "type": "stack",
                 "content": [
                   {
-                    "id": "e",
+                    "id": "5",
                     "type": "component",
-                    "componentName": "orderBookChart",
-                    "isClosable": false
-                  },
-                  {
-                    "id": "g",
-                    "type": "component",
-                    "componentName": "marketTrades",
+                    "componentName": "publicChat",
                     "isClosable": false
                   }
                 ]
