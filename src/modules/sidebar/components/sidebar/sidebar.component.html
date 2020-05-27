@@ -1,68 +1,69 @@
 <sidebar-container>
+    <div class="section-label hidden">{{'generalSettings.menu' | translate}}</div>
     <sidebar-section>
-        <div class="section-label">{{'generalSettings.menu' | translate}}</div>
-        <div class="section-item" routerLink="">
+       
+        <div class="section-item flex-child" routerLink="">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-information"></i></div>
             <div class="item-text">{{'exchange' | translate}}</div>
         </div>
-        <!--        <div class="section-item">-->
+        <!--        <div class="section-item flex-child">-->
         <!--            <div class="iterm-icon">-->
         <!--                <i class="crypto-icon crypto-icon-information"></i></div>-->
         <!--            <div class="item-text">Forums</div>-->
         <!--        </div>-->
-        <div class="section-item" routerLink="/admin">
+        <div class="section-item flex-child" routerLink="/admin">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-information"></i></div>
             <div class="item-text">{{'generalSettings.adminPanel' | translate}}</div>
         </div>
-        <div class="section-item hidden" routerLink="scripting">
+        <div class="section-item flex-child " routerLink="scripting">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-script"></i></div>
             <div class="item-text">{{'generalSettings.scripting' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="settings">
+        <div class="section-item flex-child" routerLink="settings">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-settings"></i></div>
             <div class="item-text">{{'settings' | translate}}</div>
         </div>
     </sidebar-section>
-    <sidebar-section class="hidden">
+    <sidebar-section class="">
         <div class="section-label flex align-items-center justify-space-between">
             <span>{{'sideBarTools.title' | translate}}</span>
             <i class="crypto-icon crypto-icon-more cursor-pointer" routerLink="/platform/tools"></i>
         </div>
-        <div class="section-item" routerLink="/platform/tools/news">
+        <div class="section-item flex-child" routerLink="/platform/tools/news">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-news"></i>
             </div>
             <div class="item-text">{{'sideBarTools.news' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/alerts-manager">
+        <div class="section-item flex-child" routerLink="/platform/tools/alerts-manager">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-alert"></i>
             </div>
             <div class="item-text">{{'sideBarTools.alertsWidget' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/trends">
+        <div class="section-item flex-child" routerLink="/platform/tools/trends">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-market-trend"></i>
             </div>
             <div class="item-text">{{'sideBarTools.trends' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/economic-calendar">
+        <div class="section-item flex-child" routerLink="/platform/tools/economic-calendar">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-calendar"></i>
             </div>
             <div class="item-text">{{'sideBarTools.economicCalendar' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/public-chat">
+        <div class="section-item flex-child" routerLink="/platform/tools/public-chat">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-chat"></i>
             </div>
             <div class="item-text">{{'sideBarTools.publicChat' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/private-chat">
+        <div class="section-item flex-child" routerLink="/platform/tools/private-chat">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-private-chat"></i>
             </div>

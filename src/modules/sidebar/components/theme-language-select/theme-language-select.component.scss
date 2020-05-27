@@ -20,9 +20,11 @@ $sidebar-padding-right: 28px;
   .theme-toggle {
     mat-slide-toggle {
       margin: 0 15px;
+      
     }
 
-    padding: 20px $sidebar-padding-right 20px $sidebar-padding-left;
+    padding: 10px $sidebar-padding-right 10px $sidebar-padding-left;
+    width:300px;
   }
 
   .language-select {
@@ -41,6 +43,6 @@ $sidebar-padding-right: 28px;
   }
 
   .theme-toggle {
-    border-right: 1px solid themed('appBackgroundColor');
+    //border-right: 1px solid themed('appBackgroundColor');
   }
 }

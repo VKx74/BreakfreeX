@@ -74,20 +74,20 @@ $nav-height: 49px;
 
 @include themify($themes, true) {
   .mat-tab-label-active {
-    color: themed('accentColor') !important;
+    //color: themed('accentColor') !important;
   }
 
   .mat-tab-nav-bar {
-    border-bottom-color: themed('appPanelColor');
+   // border-bottom-color: themed('appPanelColor');
 
   }
 
   .mat-tab-link {
-    color: themed('titleTextColor');
+    //color: themed('titleTextColor');
   }
 
   .mat-tab-disabled {
-    color: themed('noactiveTabs') !important;
+    //color: themed('noactiveTabs') !important;
   }
 
   ::ng-deep{
