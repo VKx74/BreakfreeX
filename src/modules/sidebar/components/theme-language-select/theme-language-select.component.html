@@ -5,8 +5,8 @@
                       (change)="onThemeToggle($event)"></mat-slide-toggle>
     <div class="section-label color-title">{{'generalSettings.dark' | translate}}</div>
   </div>
-  <div class="delimiter-vertical"></div>
-  <div class="language-select">
+  <div class="delimiter-vertical hidden"></div>
+  <div class="language-select hidden">
     <language-select (languageChange)="onLanguageChange($event)" [locale]="activeLocale$ | async"></language-select>
   </div>
 </div>

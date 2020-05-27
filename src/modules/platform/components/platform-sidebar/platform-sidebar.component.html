@@ -1,39 +1,40 @@
 <sidebar-container>
+    <div class="section-label hidden">{{'app.menu' | translate}}</div>
     <sidebar-section>
-        <div class="section-label">{{'app.menu' | translate}}</div>
-        <div class="section-item" routerLink="">
+        
+        <div class="section-item flex-child" routerLink="">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-platform"></i></div>
 
 <!--            <div class="item-text">{{'exchange' | translate}}</div>-->
             <div class="item-text" routerLink="/platform">{{'app.toPlatform' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/admin"  *ngIf="isAdminPanelShown">
+        <div class="section-item flex-child" routerLink="/admin"  *ngIf="isAdminPanelShown">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-admin-dashboard"></i></div>
             <div class="item-text">{{'app.adminPanel' | translate}}</div>
         </div>
-        <div class="section-item hidden" routerLink="scripting">
+        <div class="section-item flex-child " routerLink="scripting">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-script"></i></div>
             <div class="item-text">{{'app.scripting' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="settings">
+        <div class="section-item flex-child" routerLink="settings">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-settings"></i></div>
             <div class="item-text">{{'app.settings' | translate}}</div>
         </div>
-        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.Forums]">
+        <div class="section-item flex-child" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.Forums]">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-forum"></i></div>
             <div class="item-text">{{'app.forums' | translate}}</div>
         </div>
-        <div class="section-item" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.QA]">
+        <div class="section-item flex-child" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.QA]">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-question-vote"></i></div>
             <div class="item-text">{{'Q&A' | translate}}</div>
         </div>
-        <div class="section-item hidden" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.News]">
+        <div class="section-item flex-child " [routerLink]="['/', AppRoutes.Landing, LandingRoutes.News]">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-news"></i></div>
             <div class="item-text">{{'news' | translate}}</div>
@@ -44,43 +45,43 @@
             <span>{{'tools.title' | translate}}</span>
             <i class="crypto-icon crypto-icon-more cursor-pointer" routerLink="/platform/tools"></i>
         </div>
-        <div class="section-item" routerLink="/platform/tools/news">
+        <div class="section-item flex-child" routerLink="/platform/tools/news">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-news"></i>
             </div>
             <div class="item-text">{{'tools.news' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/alerts-manager">
+        <div class="section-item flex-child" routerLink="/platform/tools/alerts-manager">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-alert"></i>
             </div>
             <div class="item-text">{{'tools.alertsWidget' | translate}}</div>
         </div>
-<!--        <div class="section-item" routerLink="/platform/tools/trends">-->
+<!--        <div class="section-item flex-child" routerLink="/platform/tools/trends">-->
 <!--            <div class="item-icon">-->
 <!--                <i class="crypto-icon crypto-icon-market-trend"></i>-->
 <!--            </div>-->
 <!--            <div class="item-text">{{'tools.trends' | translate}}</div>-->
 <!--        </div>-->
-        <div class="section-item" routerLink="/platform/tools/economic-calendar">
+        <div class="section-item flex-child" routerLink="/platform/tools/economic-calendar">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-calendar"></i>
             </div>
             <div class="item-text">{{'tools.economicCalendar' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/notifications">
+        <div class="section-item flex-child" routerLink="/platform/tools/notifications">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-platform-alert"></i>
             </div>
             <div class="item-text">{{'tools.notifications' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/public-chat">
+        <div class="section-item flex-child" routerLink="/platform/tools/public-chat">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-chat"></i>
             </div>
             <div class="item-text">{{'tools.publicChat' | translate}}</div>
         </div>
-        <div class="section-item" routerLink="/platform/tools/private-chat">
+        <div class="section-item flex-child" routerLink="/platform/tools/private-chat">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-private-chat"></i>
             </div>

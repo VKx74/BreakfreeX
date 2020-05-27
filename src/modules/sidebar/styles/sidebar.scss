@@ -19,18 +19,22 @@ i {
   text-transform: uppercase;
 }
 
+
 .section-item {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
   cursor: pointer;
+  flex-shrink: 4;
 
   &.active {
     opacity: 1;
   }
 
   .item-icon {
-    margin-right: 35px;
+    margin-right: 10px;
+    border-radius:5px;
+    padding:12px 15px;
   }
 
   .item-text {
@@ -39,15 +43,16 @@ i {
     line-height: 1.21;
     letter-spacing: normal;
     text-align: left;
+    display:none;
   }
 }
 
 @include themify($themes, true) {
   .section-item {
-    color: themed('titleTextColor');
+   // color: themed('titleTextColor');
   }
 
   .section-label {
-    color: themed('valueTextColor');
+    //color: themed('valueTextColor');
   }
 }

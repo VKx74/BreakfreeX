@@ -507,10 +507,6 @@ color: #000;
 
 
 
-a.wrapper-link.mat-tab-link[ng-reflect-router-link="deposits"] { display:none !important;}
-a.wrapper-link.mat-tab-link[ng-reflect-router-link="withdraws"] { display:none !important;}
-a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !important;}
-
 .hidden {
 
   display:none !important;
@@ -526,7 +522,7 @@ a.wrapper-link.mat-tab-link[ng-reflect-router-link="trades"]  { display:none !im
 }
 
 /* Hide scrollbar for IE and Edge */
-.tcdToolbar-top .tcdToolbar-scroll-wrapper,  {
+.tcdToolbar-top .tcdToolbar-scroll-wrapper  {
   -ms-overflow-style: none;
 }
 
@@ -578,9 +574,12 @@ background:#edeff2;
 
 .Light-theme thread-list-item.active .thread-list-item, .Light-theme thread-list-item.active .thread-list-item {
   border-left: 2px solid #3d61cc !important;
-  background: #edeff2!important;
+  background: #edeff2 !important;
 }
 
+.Dark-theme .mat-tab-link {
+  color:#fff !important;;
+}
 
 .Dark-theme .footer {
  
@@ -603,6 +602,8 @@ background:#edeff2;
 
 }
 
+
+
 .Dark-theme .thread-list-item {
   border-bottom: 1px solid #2d2b2b;
   background: #201f1f;
@@ -616,4 +617,70 @@ background:#edeff2;
 
 .Dark-theme .ggtop {
 border-top:2px solid #06060D;
+}
+
+
+.Dark-theme .mat-tab-label-active  {
+  font-weight:600;
+  color:#fff !important;
+}
+
+.Dark-theme  .open .logo {
+  background-color:transparent !important;
+  
+  }
+
+
+
+
+.Light-theme .mat-tab-link {
+  color:#191919 !important;
+}
+
+
+
+.Light-theme .mat-tab-label-active  {
+  font-weight:600;
+  color:#191919 !important;
+}
+
+.Light-theme .open .logo {
+background-color:transparent !important;
+
+}
+
+a.wrapper-link[href="#/platform/settings/withdraws"],a.wrapper-link[href="#/platform/settings/trades"],a.wrapper-link[href="#/platform/settings/deposits"] {
+  display: none !important;
+}
+
+
+.Dark-theme .item-icon {
+ 
+  background:#191919;
+  border:1px solid #dddddd21;
+  
+}
+
+.Dark-theme .section-item {
+  color:#fff;
+
+}
+
+.Dark-theme .section-item:hover {
+  color:#0da4fa;
+}
+
+
+
+.Light-theme .item-icon {
+ 
+  background:#edeff2 ;
+  border:1px solid #ddddddb3;
+  
+}
+
+
+.Light-theme .section-item:hover {
+color:#0da4fa;
+
 }

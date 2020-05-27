@@ -1,7 +1,7 @@
 <ng-content select=".navigation"></ng-content>
 <mat-sidenav-container class="platform-container" [class.sidebar-close]="!sidebarOpen"
                        (backdropClick)="setSidebarState(false)">
-  <mat-sidenav mode="over" [opened]="sidebarOpen" [autoFocus]="false">
+  <mat-sidenav mode="push" [opened]="sidebarOpen" [autoFocus]="false">
     <div class="sidebar">
       <ng-content select=".sidebar"></ng-content>
     </div>
