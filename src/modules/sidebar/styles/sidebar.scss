@@ -2,7 +2,7 @@
 @import "themes/themes";
 
 i {
-  font-size: 18px;
+  font-size: 28px;
 }
 
 .crypto-icon-more {
@@ -21,11 +21,12 @@ i {
 
 
 .section-item {
-  display: flex;
   align-items: center;
   margin-bottom: 12px;
   cursor: pointer;
-  flex-shrink: 4;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
 
   &.active {
     opacity: 1;
@@ -33,17 +34,27 @@ i {
 
   .item-icon {
     margin-right: 10px;
-    border-radius:5px;
-    padding:12px 15px;
+    border-radius: 5px;
+    padding-bottom: 5px;
+    padding-top: 0px;
+    padding-right: 8px;
+    padding-left: 8px;
+    display: flex;
+    flex-shrink: 1;
+    margin-bottom: 5px;
+    margin-left: 10px;
+
   }
 
   .item-text {
     text-transform: capitalize;
-    font-size: 14px;
+    font-size: 10px;
     line-height: 1.21;
     letter-spacing: normal;
     text-align: left;
-    display:none;
+    display: flex;
+    justify-content: initial;
+    flex-shrink: 1;
   }
 }
 

@@ -129,6 +129,7 @@ body.Dark-theme.thmFintatechDarkTheme {
   .add-elements-btn {
     padding: 0px 10px;
     height: 30px;
+    display:none;
   }
   margin: 0px !important;
 }
@@ -315,7 +316,11 @@ span.bftsvg {
 }
 
 
-
+.flex.BFTN img {
+  width: 170px;
+  -webkit-filter: invert(1);
+  filter: invert(1);
+}
 
 
 .flex.BFTN {
@@ -683,4 +688,16 @@ a.wrapper-link[href="#/platform/settings/withdraws"],a.wrapper-link[href="#/plat
 .Light-theme .section-item:hover {
 color:#0da4fa;
 
+}
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  background:transparent !important;
+}
+
+admin-root .section-label {
+  display: none;
+}
+
+.remove-bottom-padding {
+  padding-bottom:0px !important;
 }
