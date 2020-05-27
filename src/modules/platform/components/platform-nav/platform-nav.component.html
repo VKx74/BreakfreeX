@@ -17,12 +17,12 @@
 
         <nav-section>
             <button #componentSelectorTrigger="matMenuTrigger"
-                    class="crypto-button crypto-button_default cursor-pointer add-elements-btn"
+                    class="crypto-button crypto-button_default cursor-pointer add-elements-btn hidden"
                     [matMenuTriggerFor]="componentSelectMenu"
             >
                 {{'app.addElement' | translate}}
             </button>
-            <mat-menu #componentSelectMenu="matMenu" xPosition="before" class="workspaces-menu">
+            <mat-menu #componentSelectMenu="matMenu" xPosition="before" class="workspaces-menu hidden">
                 <!--            <ng-template matMenuContent>-->
                 <component-selector (onComponentSelected)="handleAddComponent($event)"></component-selector>
                 <!--            </ng-template>-->
