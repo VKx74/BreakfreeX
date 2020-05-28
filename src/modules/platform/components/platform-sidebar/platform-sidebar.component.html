@@ -14,7 +14,7 @@
                 <i class="crypto-icon crypto-icon-admin-dashboard"></i></div>
             <div class="item-text">{{'app.adminPanel' | translate}}</div>
         </div>
-        <div class="section-item flex-child " routerLink="scripting">
+        <div class="section-item flex-child hidden" routerLink="scripting">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-script"></i></div>
             <div class="item-text">{{'app.scripting' | translate}}</div>
@@ -24,17 +24,17 @@
                 <i class="crypto-icon crypto-icon-settings"></i></div>
             <div class="item-text">{{'app.settings' | translate}}</div>
         </div>
-        <div class="section-item flex-child" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.Forums]">
+        <div class="section-item flex-child  hidden" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.Forums]">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-forum"></i></div>
             <div class="item-text">{{'app.forums' | translate}}</div>
         </div>
-        <div class="section-item flex-child" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.QA]">
+        <div class="section-item flex-child  hidden" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.QA]">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-question-vote"></i></div>
             <div class="item-text">{{'Q&A' | translate}}</div>
         </div>
-        <div class="section-item flex-child " [routerLink]="['/', AppRoutes.Landing, LandingRoutes.News]">
+        <div class="section-item flex-child  hidden" [routerLink]="['/', AppRoutes.Landing, LandingRoutes.News]">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-news"></i></div>
             <div class="item-text">{{'news' | translate}}</div>
