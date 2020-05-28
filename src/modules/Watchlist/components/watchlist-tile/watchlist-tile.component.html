@@ -13,10 +13,10 @@
 
         <div class="price-column crypto-text is-small t-align-right">
             <div class="price-value">
-                {{(watchlistInstrumentVM.tick?.price.toFixed(6)) || '-'}}
+                {{(watchlistInstrumentVM.tick?.price.toFixed(watchlistInstrumentVM.pricePrecision)) || '-'}}
             </div>
             <div class="price-change">
-                {{watchlistInstrumentVM.priceChange | percent: '2.2-3'}}
+                {{watchlistInstrumentVM.priceChange | percent: '1.2-2'}}
             </div>
         </div>
     </div>

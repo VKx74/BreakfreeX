@@ -100,7 +100,7 @@ export class ThemeService {
             case Theme.Light:
                 return 'thmLightTheme';
             default:
-                return 'thmFintatechDarkTheme';
+                return 'thmLightTheme';
         }
     }
 }

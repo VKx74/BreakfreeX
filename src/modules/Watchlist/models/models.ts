@@ -29,6 +29,14 @@ export class WatchlistInstrumentVM {
     get symbol(): string {
         return this.instrument.symbol;
     }
+    
+    get pricePrecision(): number {
+        if (this.instrument && this.instrument.pricePrecision) {
+            return this.instrument.pricePrecision;
+        }
+        
+        return 6;
+    }
 
     get price(): number {
         if (this.tick)

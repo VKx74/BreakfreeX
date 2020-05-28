@@ -199,19 +199,20 @@
                 <data-table-cell columnName="priceChange">
                     <ng-template let-instrumentVM>
                     <span [class.up-trend]="instrumentVM.trendDirection === TrendDirection.Up"
-                          [class.down-trend]="instrumentVM.trendDirection === TrendDirection.Down">
-                        {{instrumentVM.priceChange | percent: '2.2-3'}}
+                          [class.down-trend]="instrumentVM.trendDirection === TrendDirection.Down"
+                          [class.no-trend]="instrumentVM.trendDirection !== TrendDirection.Up && instrumentVM.trendDirection !== TrendDirection.Down">
+                        {{instrumentVM.priceChange | percent: '1.2-2'}}
                     </span>
                     </ng-template>
                 </data-table-cell>
                 <data-table-cell columnName="highestPrice">
                     <ng-template let-instrumentVM>
-                        <span title="{{instrumentVM.highestPrice}}">{{instrumentVM.highestPrice.toFixed(6)}}</span>
+                        <span title="{{instrumentVM.highestPrice}}">{{instrumentVM.highestPrice.toFixed(instrumentVM.pricePrecision)}}</span>
                     </ng-template>
                 </data-table-cell>
                 <data-table-cell columnName="lowestPrice">
                     <ng-template let-instrumentVM>
-                        <span title="{{instrumentVM.lowestPrice}}">{{instrumentVM.lowestPrice.toFixed(6)}}</span>
+                        <span title="{{instrumentVM.lowestPrice}}">{{instrumentVM.lowestPrice.toFixed(instrumentVM.pricePrecision)}}</span>
                     </ng-template>
                 </data-table-cell>
                 <data-table-cell columnName="volume24h">
@@ -226,7 +227,7 @@
                         <span [class.up-trend]="instrumentVM.trendDirection === TrendDirection.Up"
                               [class.down-trend]="instrumentVM.trendDirection === TrendDirection.Down"
                               title="{{instrumentVM.price}}">
-                            {{(instrumentVM.price?.toFixed(6)) || '-'}}
+                            {{(instrumentVM.price?.toFixed(instrumentVM.pricePrecision)) || '-'}}
                         </span>
                     </ng-template>
                 </data-table-cell>
