@@ -113,6 +113,7 @@ import {NewsRootComponent} from "News";
 import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-layout-widget/private-chat-layout-widget.component";
 import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-layout-widget/public-chat-layout-widget.component";
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
+import { SingleSessionService } from '@app/services/single-session.service';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -252,6 +253,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         AlertFEExecutorService,
         AlertCloudRepositoryService,
         SignalService,
+        SingleSessionService,
 
         NotificationService,
         NotificationWebSocketService,

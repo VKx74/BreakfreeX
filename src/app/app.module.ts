@@ -77,6 +77,7 @@ import {PolygonRealtimeService} from "@app/services/polygon.exchange/polygon.rea
 import {TwelvedataInstrumentService} from "@app/services/twelvedata.exchange/twelvedata.instrument.service";
 import {TwelvedataHistoryService} from "@app/services/twelvedata.exchange/twelvedata.history.service";
 import {TwelvedataRealtimeService} from "@app/services/twelvedata.exchange/twelvedata.realtime.service";
+import { SingleSessionService } from './services/single-session.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -237,6 +238,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         UnauthorizedGuard,
         UserSettingsResolver,
         UserSettingsService,
+        SingleSessionService,
 
 
         ExchangeFactory,
