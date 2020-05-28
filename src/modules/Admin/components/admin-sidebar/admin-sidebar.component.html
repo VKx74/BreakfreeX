@@ -44,19 +44,18 @@
         <div class="section-label">Social media</div>
         <ng-container *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]">
             <div class="section-item" *showByTag="ComponentIdentifier.adminForum"
-                 [routerLink]="AdminRoutes.Forum">
-                <div class="flex align-items-center justify-space-between full-width">
-                    <div>
-                        <span class="item-icon">
+                 [matMenuTriggerFor]="forumsSubmenu" (click)="$event.stopPropagation()">
+    
+                        <div class="item-icon">
                             <i class="crypto-icon crypto-icon-forum"></i>
-                        </span>
-                        <span class="item-text">Forums</span>
-                    </div>
+                        </div>
+                        <div class="item-text">Forums</div>
+                    
 
 
-                    <i [matMenuTriggerFor]="forumsSubmenu" (click)="$event.stopPropagation()"
-                       class="crypto-icon crypto-icon-more cursor-pointer"></i>
-                </div>
+                    <!-- <i [matMenuTriggerFor]="forumsSubmenu" (click)="$event.stopPropagation()"
+                       class="crypto-icon crypto-icon-more cursor-pointer"></i> -->
+                
                 <mat-menu #forumsSubmenu="matMenu">
                     <button mat-menu-item class="current-color">
                         <span [routerLink]="AdminRoutes.Forum + '/discussions'">Discussions</span>
@@ -156,7 +155,7 @@
         <div class="section-label flex align-items-center justify-space-between">
             <span>System monitoring</span>
             <i [matMenuTriggerFor]="systemMonitoringOptions"
-               class="crypto-icon crypto-icon-more cursor-pointer"></i>
+               class="crypto-icon crypto-icon-more cursor-pointer system-monitoring-menu-icon"></i>
         </div>
         <mat-menu #systemMonitoringOptions="matMenu" class="system-monitoring-menu">
             <ng-template matMenuContent>
