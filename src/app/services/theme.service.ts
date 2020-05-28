@@ -58,7 +58,7 @@ export class ThemeService {
     }
 
     reset() {
-        this.setActiveTheme(Theme.Dark);
+        this.setActiveTheme(Theme.Light);
     }
 
     setupElementCssClasses(element: HTMLElement) {
@@ -89,7 +89,7 @@ export class ThemeService {
             case Theme.Light:
                 return 'Light-theme';
             default:
-                return 'Dark-theme';
+                return 'Light-theme';
         }
     }
 

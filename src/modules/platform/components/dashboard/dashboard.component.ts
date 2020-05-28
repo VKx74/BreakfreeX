@@ -47,6 +47,7 @@ import {
 import {ComponentPortal} from "@angular/cdk/portal";
 import {ComponentSelectorComponent} from "@platform/components/component-selector/component-selector.component";
 import {Overlay} from "@angular/cdk/overlay";
+import { SingleSessionService } from '@app/services/single-session.service';
 
 
 @Component({
@@ -92,6 +93,7 @@ export class DashboardComponent {
                 private _route: ActivatedRoute,
                 private _userSettingsService: UserSettingsService,
                 private _alertService: AlertService,
+                private _singleSessionService: SingleSessionService,
                 public bottomPanelSizeService: ToggleBottomPanelSizeService,
                 private _overlay: Overlay,
     ) {
@@ -116,6 +118,10 @@ export class DashboardComponent {
             .subscribe((action: LogoutSuccessAction) => {
                 this._saveLayoutState();
             });
+
+        if (!this._identityService.isAdmin) {
+            this._singleSessionService.watchSessions();
+        }
     }
 
     ngAfterViewInit() {

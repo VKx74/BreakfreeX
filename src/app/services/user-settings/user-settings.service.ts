@@ -63,7 +63,7 @@ export class UserSettingsService {
                     return {
                         locale: Locale.EN,
                         timeZone: LocalTimeZone,
-                        theme: Theme.Dark,
+                        theme: Theme.Light,
                         rssFeed: feeds[0],
                         showTips: false,
                         applicationType: ApplicationType.Crypto
