@@ -3,12 +3,12 @@
 
 .mat-menu-item {
   &:hover:not(:disabled) {
-    transition: background-color 0.3s ease-in;
+    // transition: background-color 0.3s ease-in;
 
-    @include themify($themes, true) {
-      background-color: themed('appPanelColor');
-      color: themed('titleTextColor');
-    }
+    // @include themify($themes, true) {
+    //   background-color: themed('appPanelColor');
+    //   color: themed('titleTextColor');
+    // }
     //box-shadow: 0 10px 19.1px 1.9px $component-selector-item-hover-box-shadow-color;
   }
 }
