@@ -703,3 +703,23 @@ admin-root .section-label {
 .remove-bottom-padding {
   padding-bottom:0px !important;
 }
+
+// bft loves css
+
+.bftpanel-status {
+  padding: 15px;
+  font-size: 12px;
+  width: 100%;
+}
+
+span.value1 {
+  float: left;
+  color: #191919;
+  font-weight: bold;
+  padding-left: 15px;
+}
+
+span.value2 {
+  float: right;
+  padding-right: 15px;
+}
