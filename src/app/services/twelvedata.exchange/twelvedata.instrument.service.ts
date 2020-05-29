@@ -22,7 +22,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
 
     constructor(protected _http: HttpClient, private _applicationTypeService: ApplicationTypeService) {
         super(_http);
-        this._supportedMarkets = [EMarketType.Crypto, EMarketType.Forex, EMarketType.Stocks];
+        this._supportedMarkets = [EMarketType.Crypto, EMarketType.Forex, EMarketType.Stocks, EMarketType.Indices];
         this._endpoint = `${AppConfigService.config.apiUrls.twelvedataREST}instruments/extended`;
     }
 
@@ -81,6 +81,10 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
                 if (type === EMarketType.Stocks) {
                     this._addInstrument(product, type, product.Exchange as EExchange);
                 } 
+                
+                if (type === EMarketType.Indices) {
+                    this._addInstrument(product, type, product.Exchange as EExchange);
+                } 
             }
 
         } catch (ex) {
@@ -137,6 +141,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             case "crypto": return EMarketType.Crypto;
             case "forex": return EMarketType.Forex;
             case "stock": return EMarketType.Stocks;
+            case "indices": return EMarketType.Indices;
             default: return EMarketType.unknown;
         }
     }

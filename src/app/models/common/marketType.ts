@@ -6,6 +6,7 @@ export enum EMarketType {
     ManagedFund = 'ManagedFund',
     Warrant = 'Warrant',
     Forex = 'Forex',
-    Stocks = 'Stocks'
+    Stocks = 'Stocks',
+    Indices = 'Indices'
 }
 
