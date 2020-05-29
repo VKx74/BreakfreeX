@@ -114,6 +114,8 @@ import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-
 import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-layout-widget/public-chat-layout-widget.component";
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { SingleSessionService } from '@app/services/single-session.service';
+import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
+import { BreakfreeTradingProComponent, BreakfreeTradingNavigatorComponent, BreakfreeTradingDiscoveryComponent } from 'modules/BreakfreeTrading/components';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -167,6 +169,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         UIModule,
         TradingModule,
         WatchlistModule,
+        BreakfreeTradingModule.forRoot(),
         MarketTradesModule,
         OrderBookModule,
         NewsModule.forRoot(),
@@ -199,7 +202,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         ProfileActivitiesModule.forPlatform(),
         NavigationModule,
         SidebarModule,
-        MatRadioModule,
+        MatRadioModule
     ],
     entryComponents: [
         ComponentSelectorComponent,
@@ -389,6 +392,18 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         {
                             componentName: ComponentIdentifier.privateChat,
                             component: PrivateChatLayoutWidgetComponent
+                        },
+                        {
+                            componentName: ComponentIdentifier.breakfreeTradingPro,
+                            component: BreakfreeTradingProComponent
+                        }, 
+                        {
+                            componentName: ComponentIdentifier.breakfreeTradingNavigator,
+                            component: BreakfreeTradingNavigatorComponent
+                        }, 
+                        {
+                            componentName: ComponentIdentifier.breakfreeTradingDiscovery,
+                            component: BreakfreeTradingDiscoveryComponent
                         },
                     ]
                 } as IGoldenLayoutComponentConfiguration;

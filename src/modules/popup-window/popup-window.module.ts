@@ -64,6 +64,8 @@ import {PrivateChatComponent} from "../Chat/components/private-chat/private-chat
 import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-layout-widget/public-chat-layout-widget.component";
 import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-layout-widget/private-chat-layout-widget.component";
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
+import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
+import { BreakfreeTradingProComponent, BreakfreeTradingNavigatorComponent, BreakfreeTradingDiscoveryComponent } from 'modules/BreakfreeTrading';
 
 
 export function sharedThemeService() {
@@ -93,6 +95,7 @@ export function sharedEducationalTipsService() {
         OrderBookModule,
         MarketTradesModule,
         ChatModule,
+        BreakfreeTradingModule.forPopupRoot(),
 
         StoreDevtoolsModule.instrument({
             maxAge: 30
@@ -278,6 +281,18 @@ export function sharedEducationalTipsService() {
                         {
                             componentName: ComponentIdentifier.privateChat,
                             component: PrivateChatLayoutWidgetComponent
+                        },
+                        {
+                            componentName: ComponentIdentifier.breakfreeTradingPro,
+                            component: BreakfreeTradingProComponent
+                        }, 
+                        {
+                            componentName: ComponentIdentifier.breakfreeTradingNavigator,
+                            component: BreakfreeTradingNavigatorComponent
+                        }, 
+                        {
+                            componentName: ComponentIdentifier.breakfreeTradingDiscovery,
+                            component: BreakfreeTradingDiscoveryComponent
                         },
                     ]
                 } as IGoldenLayoutComponentConfiguration;

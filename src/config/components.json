@@ -46,5 +46,8 @@
   "backtesting": true,
   "newsRss":  true,
   "authentication": true,
-  "authenticationSettings": true
+  "authenticationSettings": true,
+  "BreakfreeTradingPro": true,
+  "BreakfreeTradingDiscovery": true,
+  "BreakfreeTradingNavigator": true
 }

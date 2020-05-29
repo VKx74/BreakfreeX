@@ -27,6 +27,8 @@ import {takeUntil} from "rxjs/operators";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {ComponentPortal} from "@angular/cdk/portal";
 import {Overlay} from "@angular/cdk/overlay";
+import { BreakfreeTradingProComponent, BreakfreeTradingDiscoveryComponent, BreakfreeTradingNavigatorComponent } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 
 interface IComponent {
     component: Type<any>;
@@ -50,6 +52,7 @@ export class ComponentSelectorComponent implements OnDestroy {
         @Inject(NewsTranslateService) private _newsTranslateService: TranslateService,
         @Inject(OrderBookChartTranslateService) private _orderBookChartTranslateService: TranslateService,
         @Inject(WatchListTranslateService) private _watchlistTranslateService: TranslateService,
+        @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
         @Inject(ChatTranslateService) private _chatTranslateService: TranslateService,
         @Inject(MarketTradesTranslateService) private _marketTradesTranslateService: TranslateService,
         @Inject(OrderBookTranslateService) private _orderBookTranslateService: TranslateService
@@ -93,6 +96,24 @@ export class ComponentSelectorComponent implements OnDestroy {
                 previewImgClass: WatchlistComponent.previewImgClass,
                 componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
                 componentIdentifier: ComponentIdentifier.watchlist,
+            }, 
+            {
+                component: BreakfreeTradingProComponent,
+                previewImgClass: BreakfreeTradingProComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('breakfreeTradingProComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingPro,
+            },  
+            {
+                component: BreakfreeTradingDiscoveryComponent,
+                previewImgClass: BreakfreeTradingDiscoveryComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
+            }, 
+            {
+                component: BreakfreeTradingNavigatorComponent,
+                previewImgClass: BreakfreeTradingNavigatorComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
             },
            /* {
                 component: Level2Component,
