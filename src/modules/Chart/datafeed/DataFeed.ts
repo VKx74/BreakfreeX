@@ -19,6 +19,7 @@ import {JsUtil} from "../../../utils/jsUtil";
 import {TranslateService} from "@ngx-translate/core";
 import {map} from "rxjs/operators";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { EMarketType } from '@app/models/common/marketType';
 
 @Injectable()
 export class DataFeed extends DataFeedBase {
@@ -123,8 +124,16 @@ export class DataFeed extends DataFeedBase {
         const timeFrame = request.chart.timeFrame;
 
         let count = request.count;
+        let type = (request.chart.instrument as any).type;
 
-        if (TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity) {
+        if (TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity && type !== EMarketType.Crypto) {
+
+            let backHistory = 60 * 24 * 5;
+            if (count < backHistory)
+                count = backHistory;
+        }
+
+        if (TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity && type === EMarketType.Crypto) {
 
             let backHistory = 60 * 24 * 2;
             if (count < backHistory)
