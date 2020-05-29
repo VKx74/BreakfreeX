@@ -137,6 +137,9 @@ export abstract class DataFeedBase implements IDatafeedBase {
                     }
                 }
                 break;
+            case RequestKind.BARS1D:
+                console.log("received bars1d request");
+                break;
             default:
                 throw new Error(`Unknown request kind: ${request.name}`);
         }
@@ -235,6 +238,17 @@ export abstract class DataFeedBase implements IDatafeedBase {
      * @memberOf TradingChartDesigner.Datafeed#
      */
     sendRequest(request: IRequest) {
+        this._requests.add(request.requestNumber, request);
+        request.chart.showWaitingBar();
+    }
+
+    /**
+     * Sends request to the datafeed provider.
+     * @method send
+     * @param {TradingChartDesigner~Request} request The processing request.
+     * @memberOf TradingChartDesigner.Datafeed#
+     */
+    sendCustomRequest(request: IRequest) {
         this._requests.add(request.requestNumber, request);
         request.chart.showWaitingBar();
     }
