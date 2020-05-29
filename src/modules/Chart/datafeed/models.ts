@@ -12,7 +12,6 @@ export interface IQuote {
 export const RequestKind = {
   BARS: 'bars',
   MORE_BARS: 'moreBars',
-  BARS1D: 'bars1d',
 };
 
 export interface IRequest {

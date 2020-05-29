@@ -62,14 +62,6 @@ export class DataFeed extends DataFeedBase {
         this._sendRequest(request);
     }
 
-    /**
-     * @inheritDoc
-     */
-    sendCustomRequest(request: TradingChartDesigner.IBarsRequest) {
-        //super.sendCustomRequest(request);
-        this._sendCustomRequest(request);
-    }
-
     destroy() {
         super.destroy();
         for (let i in this._subscriptions) {
@@ -91,12 +83,6 @@ export class DataFeed extends DataFeedBase {
             endDate: endDate,
             startDate: startDate,
         };
-        const drMsg: IHistoryRequest = {
-            instrument: await this._mapInstrument(instrument),
-            timeFrame: {interval: 4, periodicity: 1},
-            endDate: endDate,
-            startDate: startDate,
-        };
 
         if (!requestMsg.instrument) {
             this._alertService.error(this._translateService.get('unableFindSymbol')
@@ -112,81 +98,6 @@ export class DataFeed extends DataFeedBase {
             return;
         }
 
-        //let drmsg = requestMsg;
-        //drmsg.timeFrame = {interval: 4, periodicity: 1}; // daily = 1 2
-        //let t : IHistoryResponse;
-        this._historyService.getHistory(drMsg).subscribe((response1D: IHistoryResponse) => {
-            if (!response1D) {
-                console.log("No response");
-            } else {
-
-                this._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
-                    if (!response) {
-                        this._processResult([], request, requestMsg.instrument);
-                    } else {
-                        if (this.requestBusy(request)) {
-                            //console.log(response.data);
-                            this._processResult(response.data, request, requestMsg.instrument);
-                            //console.log("1D", response);
-                            //console.log(t);
-                            //console.log(response1D);
-                        }
-                    }
-                }, (error) => {
-                    this.cancel(request);
-                    this._alertService.error(this._translateService.get('unableLoadData'), this._translateService.get('dataFeed'));
-                });
-            }
-        }, (error) => {
-            console.log("Broken");
-        });
-
-
-        //Original
-        /*
-        console.log(requestMsg.timeFrame);
-        this._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
-            if (!response) {
-                this._processResult([], request, requestMsg.instrument);
-            } else {
-                if (this.requestBusy(request)) {
-                    this._processResult(response.data, request, requestMsg.instrument);
-                    //console.log("1D", response);
-                }
-            }
-        }, (error) => {
-            this.cancel(request);
-            this._alertService.error(this._translateService.get('unableLoadData'), this._translateService.get('dataFeed'));
-        });
-        */
-    }
-
-    private async _sendCustomRequest(request: TradingChartDesigner.IBarsRequest) {
-        const instrument = request.instrument || request.chart.instrument;
-        const endDate = this._getRequestEndDate(request);
-        const startDate = this._getRequestStartDate(request, endDate);
-        const requestMsg: IHistoryRequest = {
-            instrument: await this._mapInstrument(instrument),
-            timeFrame: this._mapTimeFrame(request),
-            endDate: endDate,
-            startDate: startDate,
-        };
-
-        if (!requestMsg.instrument) {
-            this._alertService.error(this._translateService.get('unableFindSymbol')
-                .pipe(map((value: string) => {
-                    return value + instrument.symbol;
-                })),
-                this._translateService.get('dataFeed'));
-            return;
-        }
-
-        if (!requestMsg.timeFrame) {
-            this._alertService.error(this._translateService.get('unableLoadDataByTimeFrame'), this._translateService.get('dataFeed'));
-            return;
-        }
-
-        
         this._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
             if (!response) {
                 this._processResult([], request, requestMsg.instrument);
@@ -200,8 +111,6 @@ export class DataFeed extends DataFeedBase {
             this._alertService.error(this._translateService.get('unableLoadData'), this._translateService.get('dataFeed'));
         });
     }
-
-
 
     private _getRequestEndDate(request: TradingChartDesigner.IBarsRequest): Date {
         const timeFrame = request.chart.timeFrame;
