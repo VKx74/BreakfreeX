@@ -38,17 +38,6 @@
                     "isClosable": false
                   }
                 ]
-              },
-              {
-                "type": "stack",
-                "content": [
-                  {
-                    "id": "5",
-                    "type": "component",
-                    "componentName": "publicChat",
-                    "isClosable": false
-                  }
-                ]
               }
             ]
           }
