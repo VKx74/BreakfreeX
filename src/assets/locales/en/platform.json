@@ -1,11 +1,11 @@
 {
   "workspaces": "Workspaces",
   "workspaceNames": {
-    "BasicUser": "Breakfree Trading Navigator",
-    "AdvancedTrader": "Breakfree Trading Pro",
-    "AdvancedUser": "Breakfree Trading Discovery",
-    "Institutional": "Institutional",
-    "Empty": "Empty",
+    "AdvancedUser": "Breakfree Trading | Discovery",
+    "AdvancedTrader": "Breakfree Trading | Pro",
+    "BasicUser": "Chart & Watchlist",
+    "Institutional": "Multichart",
+    "Empty": "Reset",
     "saveLayout": "Save Layout",
     "savedLayout": "Layout Saved"
   },

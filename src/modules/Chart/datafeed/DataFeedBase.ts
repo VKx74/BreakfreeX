@@ -10,8 +10,25 @@ import {ITick} from "../../../app/models/common/tick";
 import {TimeZoneManager} from "TimeZones";
 import {ITimeFrame} from "@app/models/common/timeFrame";
 import {IPeriodicity} from "@app/models/common/periodicity";
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { EExchange } from '@app/models/common/exchange';
+import { EMarketType } from '@app/models/common/marketType';
 
 export abstract class DataFeedBase implements IDatafeedBase {
+    static DefaultInstrument: IInstrument = {
+        baseInstrument: "Euro",
+        company: "Euro vs US Dollar",
+        datafeed: EExchangeInstance.TwelvedataExchange,
+        dependInstrument: "US Dollar",
+        exchange: EExchange.Forex,
+        id: "EUR/USD",
+        pricePrecision: 5,
+        symbol: "EURUSD",
+        tickSize: 0.00001,
+        tradable: false,
+        type: EMarketType.Forex
+    };
+
     static supportedTimeFramesStr: string[] = ['1 Minute', '5 Minutes', '15 Minutes', '1 Hour', '4 Hours', '1 Day', '1 Week'];
     static supportedTimeFrames: ITimeFrame[] = [
         {
@@ -165,7 +182,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
         chart.hideWaiting();
         chart.refreshIndicators();
-        chart.refreshAsync(request.name === RequestKind.BARS);
+        chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
         chart.scaleHorizontal.onCompleteMoreHistoryRequest();
     }
 

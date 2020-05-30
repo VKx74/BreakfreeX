@@ -140,9 +140,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     init(state?: ITcdComponentState) {
         const theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
-        const instrumentsNeeded = !state || !state.instrument;
+        // const instrumentsNeeded = !state || !state.instrument;
 
-        this._datafeed.init(instrumentsNeeded).then(d => {
+        this._datafeed.init(false).then(d => {
             const config = {
                 chartContainer: this.chartContainer.nativeElement,
                 width: '100%',
@@ -152,7 +152,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 //  crossHair: "crossBars",
                 datafeed: d,
                 hideScrollToLastBar: true,
-                instrument: state ? state.instrument : d.instruments[0],
+                instrument: state ? state.instrument : DataFeedBase.DefaultInstrument,
                 timeFrame: state && state.timeFrame,
                 supportedTimeFrames: DataFeedBase.supportedTimeFramesStr,
                 templateDataProvider: this._templateDataProviderService,

@@ -151,7 +151,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             return 0.00001;
         }
         
-        if (type === EMarketType.Stocks) {  
+        if (type === EMarketType.Stocks || type === EMarketType.Indices) {  
             return 0.01;
         }
         

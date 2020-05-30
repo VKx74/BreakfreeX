@@ -135,7 +135,7 @@ export class DataFeed extends DataFeedBase {
 
         if (TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity && type === EMarketType.Crypto) {
 
-            let backHistory = 60 * 24 * 2;
+            let backHistory = 60 * 24 * 1;
             if (count < backHistory)
                 count = backHistory;
         }

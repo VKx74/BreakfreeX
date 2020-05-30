@@ -17,7 +17,7 @@
                     "id": "1",
                     "type": "component",
                     "componentName": "chart",
-                    "isClosable": false
+                    "isClosable": true
                   }
                 ]
               },
@@ -27,14 +27,8 @@
                   {
                     "id": "2",
                     "type": "component",
-                    "componentName": "orderBook",
-                    "isClosable": false
-                  },
-                  {
-                    "id": "21",
-                    "type": "component",
-                    "componentName": "news",
-                    "isClosable": false
+                    "componentName": "chart",
+                    "isClosable": true
                   }
                 ]
               }
@@ -49,20 +43,8 @@
                   {
                     "id": "3",
                     "type": "component",
-                    "componentName": "marketTrades",
-                    "isClosable": false
-                  },
-                  {
-                    "id": "4",
-                    "type": "component",
-                    "componentName": "watchlist",
-                    "isClosable": false
-                  },
-                  {
-                    "id": "5",
-                    "type": "component",
-                    "componentName": "publicChat",
-                    "isClosable": false
+                    "componentName": "chart",
+                    "isClosable": true
                   }
                 ]
               },
@@ -70,22 +52,10 @@
                 "type": "stack",
                 "content": [
                   {
-                    "id": "6",
+                    "id": "4",
                     "type": "component",
-                    "componentName": "orderBookChart",
-                    "isClosable": false
-                  },
-                  {
-                    "id": "7",
-                    "type": "component",
-                    "componentName": "marketTrades",
-                    "isClosable": false
-                  },
-                  {
-                    "id": "8",
-                    "type": "component",
-                    "componentName": "privateChat",
-                    "isClosable": false
+                    "componentName": "chart",
+                    "isClosable": true
                   }
                 ]
               }
