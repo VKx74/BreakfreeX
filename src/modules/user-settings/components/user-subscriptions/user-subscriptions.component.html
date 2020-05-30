@@ -1,0 +1,77 @@
+<div class="flex full-height flex-direction-column">
+<!--    else loader-->
+    <ng-container>
+        <data-table [rows]="user.subscriptions" class="flex-grow-1 table-wrapper">
+            <data-table-header-cell columnName="id">
+                Id
+            </data-table-header-cell>
+            <data-table-header-cell columnName="status">
+                Status
+            </data-table-header-cell>
+            <data-table-header-cell columnName="product">
+                Product
+            </data-table-header-cell>
+            <data-table-header-cell columnName="name">
+                Name
+            </data-table-header-cell>
+            <data-table-header-cell columnName="amount">
+                Amount
+            </data-table-header-cell>  
+            <data-table-header-cell columnName="currency">
+                Currency
+            </data-table-header-cell>    
+            <data-table-header-cell columnName="created">
+                Created
+            </data-table-header-cell>
+            <data-table-header-cell columnName="interval">
+                Interval
+            </data-table-header-cell>   
+            <data-table-header-cell columnName="intervalCount">
+                interval Count
+            </data-table-header-cell>
+
+            <div>
+                <data-table-cell columnName="id">
+                    <ng-template let-item><span>{{item.id}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="status">
+                    <ng-template let-item><span>{{item.status}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="product">
+                    <ng-template let-item><span>{{item.product}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="name">
+                    <ng-template let-item><span>{{item.name}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="amount">
+                    <ng-template let-item><span>{{item.amount}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="currency">
+                    <ng-template let-item><span>{{item.currency}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="created">
+                    <ng-template let-item><span>{{item.created}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="interval">
+                    <ng-template let-item><span>{{item.interval}}</span>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="intervalCount">
+                    <ng-template let-item><span>{{item.intervalCount}}</span>
+                    </ng-template>
+                </data-table-cell>
+            </div>
+        </data-table>
+    </ng-container>
+</div>
+
+<ng-template #loader>
+    <loader></loader>
+</ng-template>

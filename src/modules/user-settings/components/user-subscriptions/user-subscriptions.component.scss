@@ -1,0 +1,51 @@
+@import "../../../../global-styles/variables";
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/mixins/dialog-tab-header";
+
+@include dialogTabHeader();
+
+:host {
+  * {
+    font-size: 11px;
+  }
+  display: block;
+  height: 100%;
+
+  .table-wrapper {
+    min-height: 150px;
+    border-radius: 5px;
+  }
+
+
+  table {
+    max-width: 1000px;
+    border-radius: 5px;
+
+    td:last-child, th:last-child {
+      text-align: right;
+    }
+
+  }
+
+  component-preloader {
+    height: 650px;
+  }
+}
+
+@include themify($themes, true) {
+
+  .success {
+    color: themed('buyColor') !important;
+  }
+
+  .failed {
+    color: themed('sellColor') !important;
+  }
+  .table-wrapper {
+     /deep/ mat-cell:nth-child(4), /deep/mat-cell:nth-child(5) {
+      color: themed('valueTextColor') !important;
+    }
+  }
+
+}

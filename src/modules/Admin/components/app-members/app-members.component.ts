@@ -135,6 +135,18 @@ export class AppMembersComponent {
     getPersonalInfoStatus(status: PersonalInfoStatus): Observable<string> {
         return this._personalInfoHelper.getPersonalInfoStatusStr(status);
     }
+    
+    getSubscriptions(model: UserModel): string {
+        if (!model.subscriptions || !model.subscriptions.length) {
+            return "No Subscription";
+        }
+
+        if (model.subscriptions.length === 1) {
+            return model.subscriptions[0].name;
+        }
+
+        return `${model.subscriptions[0].name} (+${model.subscriptions.length - 1})`;
+    }
 
     registerMember() {
         this._dialog.open(AppMemberConfiguratorComponent, {

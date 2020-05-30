@@ -43,6 +43,9 @@
         </data-table-header-cell>
         <data-table-header-cell columnName="personalInfoStatus">
             Personal Info Status
+        </data-table-header-cell> 
+        <data-table-header-cell columnName="subscriptions">
+            Subscriptions
         </data-table-header-cell>
         <data-table-header-cell columnName="active" [columnWidth]="100">
             Active
@@ -78,6 +81,13 @@
                             <span [ngClass]="getPersonalInfoStatusClass(item.user.kycStatus)">
                                 {{getPersonalInfoStatus(item.user.kycStatus) | async}}
                             </span>
+            </ng-template>
+        </data-table-cell>   
+        <data-table-cell columnName="subscriptions">
+            <ng-template let-item>
+                    <span>
+                        {{getSubscriptions(item.user)}}
+                    </span>
             </ng-template>
         </data-table-cell>
         <data-table-cell columnName="active">

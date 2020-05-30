@@ -7,7 +7,6 @@ import {ChatModule} from "../Chat/chat.module";
 import {UIModule} from "UI";
 import {MatSelectModule} from "@angular/material/select";
 import {LocalizationModule} from "Localization";
-import {ProfileActivitiesComponent} from "./components/new-profile-activities/profile-activities.component";
 import {AuthSettingsComponent} from "./components/auth-settings/auth-settings.component";
 import {SharedModule} from "Shared";
 import {EducationalTipsModule} from "../educational-tips/educational-tips.module";
@@ -35,6 +34,7 @@ import {ProfileActivitiesModule} from "./profile-activities.module";
 import {ProfileActivitiesResolver} from "./resolvers/profile-activities.resolver";
 import {ProfileLoginActivitiesResolver} from "./resolvers/login-activities.resolver";
 import {ChangeUsernameComponent} from "./components/change-username/change-username.component";
+import { UserSubscriptionsComponent } from './components/user-subscriptions/user-subscriptions.component';
 
 @NgModule({
     declarations: [

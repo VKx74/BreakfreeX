@@ -46,6 +46,10 @@
                     <mat-tab label="Activities">
                         <user-activities [userId]="user.id"></user-activities>
                     </mat-tab>
+                    <mat-tab label="Subscriptions">
+                        <user-subscriptions [user]="user"></user-subscriptions>
+                    </mat-tab>
+                    
                 </mat-tab-group>
             </div>
         </ng-template>

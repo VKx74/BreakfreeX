@@ -52,6 +52,18 @@ export class ForgotPasswordModel {
     public redirectUrl: string;
 }
 
+export class Subscription {
+    id: string;
+    status: string;
+    product: string;
+    name: string;
+    amount: number;
+    currency: string;
+    created: number;
+    interval: string;
+    intervalCount: number;
+}
+
 export class UserModel {
 
     public email: string;
@@ -73,6 +85,8 @@ export class UserModel {
     public twoFactorEnabled?: boolean;
 
     public tags: string[] = [];
+
+    public subscriptions: Subscription[] = [];
 }
 
 export class UserProfileModel {
@@ -223,6 +237,7 @@ export interface IIdentityToken {
     phone_number: string;
     is_two_factor_auth_enable: boolean;
     user_tag: string;
+    user_subs: string;
     restricted: string[];
 }
 

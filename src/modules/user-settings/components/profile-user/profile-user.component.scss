@@ -36,6 +36,42 @@
       }
     }
 
+    .data-subscriptions {
+      .section {
+        padding: 20px 28px;
+        margin-top: 9px;
+        border-radius: 5px;
+        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+      }
+
+      .subscription-row  {
+        font-size: 15px;
+        width: 100%;
+        margin: 5px 0px;
+        .date, .interval {
+          min-width: 140px;
+        }
+        .price {
+          min-width: 120px;
+        }
+
+        .status {
+          text-transform: capitalize;
+          justify-content: center;
+          align-items: center;
+          margin-right: 12px;
+          width: 140px;
+          border-radius: 10px;
+          font-size: 0.9em;
+        }
+        
+        .name {
+          width: 100%;
+        }
+      }
+    } 
+    
     .data-authentication {
       .section {
         padding: 20px 28px;
@@ -115,6 +151,10 @@
 
   .crypto-icon {
     color: themed('accentColor');
+  }
+
+  .status {
+    background-color: themed('accentColor');
   }
 
   .success {

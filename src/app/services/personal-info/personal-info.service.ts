@@ -212,6 +212,17 @@ export enum PersonalInfoDocumentType {
     Passport = 3
 }
 
+export interface ISubscription {
+    status: string;
+    name: string;
+    price: number;
+    created: Date;
+    interval: string;
+    intervalCount: number;
+    currency: string;
+}
+
+
 export interface SendCodeViaSMSToAttachPhoneNumberModel {
     email: string;
     phoneNumber: string;
@@ -333,6 +344,32 @@ export class PersonalInfoService {
 
     getEmployersCountList(): Observable<string[]> {
         return this._http.get<string[]>(`${AppConfigService.config.apiUrls.identityUrl}Constants/employers`);
+    }
+    
+    getUserSubscriptions(): Observable<ISubscription[]> {
+        return this._http.get<ISubscription[]>(`${AppConfigService.config.apiUrls.identityUrl}Account/subscriptions`, this._httpOptions)
+        .pipe(
+            map((response: any[]) => {
+                const subscriptions = [];
+                if (!response || !response.length) {
+                    return subscriptions;
+                }
+
+                for (const sub of response) {
+                    subscriptions.push({
+                        status: sub.status,
+                        name: sub.name,
+                        price: sub.amount / 100,
+                        created: new Date(sub.created * 1000),
+                        interval: sub.interval,
+                        intervalCount: sub.intervalCount,
+                        currency: sub.currency
+                    });
+                }
+
+                return subscriptions;
+            })
+        );
     }
 
     getHealthStatus(): Observable<any> {

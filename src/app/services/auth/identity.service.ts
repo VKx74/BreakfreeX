@@ -26,6 +26,7 @@ export class IdentityService {
     public preferredUsername: string;
     public phoneNumber: string;
     public tags: string[];
+    public subscriptions: string[];
     public isTwoFactorAuthEnable: boolean;
     public restrictedComponents: ComponentIdentifier[];
     public token: string;
@@ -120,6 +121,7 @@ export class IdentityService {
         this.phoneNumber = parsedToken.phone_number;
         this.isTwoFactorAuthEnable = parsedToken.is_two_factor_auth_enable === true;
         this.tags = parsedToken.user_tag ? parsedToken.user_tag.split(',') : [];
+        this.subscriptions = parsedToken.user_subs ? parsedToken.user_subs.split(';') : [];
         this.restrictedComponents = parsedToken.hasOwnProperty('restricted') ? [].concat(parsedToken.restricted) : [];
         this.token = token;
         this.refreshToken = refreshToken;

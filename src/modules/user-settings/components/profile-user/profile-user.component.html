@@ -74,6 +74,30 @@
                 <div class="data">{{email}}</div>
             </div>
         </div>
+    </div> 
+    
+    <div class="data-subscriptions">
+        <div class="section flex crypto-form-unit">
+            <div class="form-unit__label">{{"profileInfo.subscriptions" | translate}}</div>
+            
+            <div class="subscription-row justify-space-between flex" *ngFor="let sub of subscriptions">
+                <div class="flex status">
+                    {{sub.status}}
+                </div>
+                <div class="flex name">
+                    {{sub.name}}
+                </div>
+                <div class="flex price">
+                    {{sub.price.toFixed(2)}}({{sub.currency}})
+                </div>
+                <div class="flex interval">
+                    {{sub.intervalCount}} {{sub.interval}}(s)
+                </div>
+                <div class="flex date">
+                    {{sub.created.toDateString()}}
+                </div>
+            </div>
+        </div>
     </div>
 
     <change-username [username]="username" (onUsernameChanged)="handleUsernameChanged($event)"></change-username>

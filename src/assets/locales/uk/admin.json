@@ -75,6 +75,9 @@
     "restrictionsManager": "Менеджерів заборон",
     "runningScripts": "Запущені скрипти",
     "tradesReports": "Звіти по трейдах",
-    "authentication": "Автентифікація"
+    "authentication": "Автентифікація",
+    "breakfreeTradingPro": "BFT Pro",
+    "breakfreeTradingNavigator": "BFT Navigator",
+    "breakfreeTradingDiscovery": "BFT Discovery"
   }
 }

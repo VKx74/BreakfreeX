@@ -29,13 +29,15 @@
     <div class="crypto-form-unit">
         <mat-form-field class="crypto-date-input full-width with-hint">
             <input matInput readonly
+                    #input
                    class="cursor-default"
                    [errorStateMatcher]="errorMatcher"
                    [matDatepicker]="datePicker"
+                    (focus)="datePicker.open()"
                    placeholder="Date of birth"
                    formControlName="birth">
             <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-            <mat-datepicker #datePicker></mat-datepicker>
+            <mat-datepicker #datePicker (closed)="input.blur()"></mat-datepicker>
             <mat-error>
                 <span>Date of birth is not valid</span>
             </mat-error>

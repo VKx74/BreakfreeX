@@ -75,6 +75,9 @@
     "restrictionsManager": "Restrictions Manager",
     "runningScripts": "Running Scripts",
     "tradesReports": "Trades Reports",
-    "authentication": "Authentication"
+    "authentication": "Authentication",
+    "breakfreeTradingPro": "BFT Pro",
+    "breakfreeTradingNavigator": "BFT Navigator",
+    "breakfreeTradingDiscovery": "BFT Discovery"
   }
 }

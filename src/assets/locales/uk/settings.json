@@ -27,6 +27,7 @@
     "All": "Усі"
   },
   "profileInfo": {
+    "subscriptions": "Підписки",
     "title": "Профіль користувача",
     "confirmPhone": "Пітдвердити номер телефону",
     "confirmEmail": "Пітдвердити email",

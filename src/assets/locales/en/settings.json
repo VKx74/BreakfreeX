@@ -27,6 +27,7 @@
     "All": "All"
   },
   "profileInfo": {
+    "subscriptions": "Subscriptions",
     "title": "User profile",
     "confirmPhone": "Confirm phone number",
     "confirmEmail": "Confirm email",

@@ -12,12 +12,14 @@ import {ProfileActivitiesLoginComponent} from "./components/profile-activities-l
 import {ProfileActivitiesComponent} from "./components/new-profile-activities/profile-activities.component";
 import {DatatableModule} from "../datatable/datatable.module";
 import {LoaderModule} from "../loader/loader.module";
+import { UserSubscriptionsComponent } from './components/user-subscriptions/user-subscriptions.component';
 
 
 
 @NgModule({
     declarations: [
         ProfileActivitiesComponent,
+        UserSubscriptionsComponent,
         ProfileActivitiesLoginComponent
     ],
     imports: [
@@ -32,6 +34,7 @@ import {LoaderModule} from "../loader/loader.module";
     entryComponents: [],
     exports: [
         ProfileActivitiesComponent,
+        UserSubscriptionsComponent,
         ProfileActivitiesLoginComponent
     ],
     providers: [
