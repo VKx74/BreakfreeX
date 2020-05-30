@@ -43,8 +43,8 @@ export class WatchlistService {
             name: "Default",
             trackingId: "Default",
             data: [{
-                id: "XRPM20",
-                symbol: "XRPM20",
+                id: "EUR/USD",
+                symbol: "EURUSD",
                 pricePrecision: 6, 
                 tickSize: 0.000001,
                 ...baseinfo

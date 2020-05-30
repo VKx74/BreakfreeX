@@ -1,7 +1,8 @@
 <div class="instrument-search">
     <form>
-        <mat-form-field class="crypto-autocomplete full-width" (click)="onClick()">
-            <input matInput
+        <mat-form-field class="crypto-autocomplete" (click)="onClick()">
+            <input class="watchlistinput"
+                   matInput
                    #instrument_input
                    [placeholder]="'symbol' | translate"
                    [matAutocomplete]="auto"

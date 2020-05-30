@@ -169,3 +169,32 @@ span.form-header__title.signIn {
   margin-bottom: 20px !important;
 }
 
+
+.beta {
+  margin-top: 15px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 5px;
+  color: #1a1a1a;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0 10px 19.1px 1.9px rgba(0, 0, 0, 0.2);
+  position: relative;
+  font-weight: 600;
+  transition-duration: 0.22s;
+  cursor: pointer;
+}
+
+.beta:hover {
+  margin-top: 15px;
+  background: #191919;
+  padding: 15px;
+  border-radius: 5px;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+
+  position: relative;
+
+  font-weight: 600;
+}
