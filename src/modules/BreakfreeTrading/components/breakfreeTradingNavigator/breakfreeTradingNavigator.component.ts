@@ -132,3 +132,4 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         };
     }
 }
+

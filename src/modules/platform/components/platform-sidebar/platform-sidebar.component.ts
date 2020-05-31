@@ -53,6 +53,27 @@ export class PlatformSidebarComponent implements OnInit {
     ngOnInit() {
         this.selectedApplicationType = this._applicationTypeService.applicationType;
         this.role = this._identityService.role;
+        // Set download link  
+        var userAgent = window.navigator.userAgent,
+        platform = window.navigator.platform,
+        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+        iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+        os = null;
+  
+    if (macosPlatforms.indexOf(platform) !== -1) {
+        document.getElementById('downloadlink').setAttribute('href', '/assets/Navigator_1.1_OSX.zip');
+      
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+     
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+        document.getElementById('downloadlink').setAttribute('href', '/assets/Navigator_1.1_WIN.zip');
+     
+    } else if (/Android/.test(userAgent)) {
+     
+    } else if (!os && /Linux/.test(platform)) {
+     
+    }
     }
 
     setApplicationType(type: ApplicationType) {
@@ -98,3 +119,4 @@ export class PlatformSidebarComponent implements OnInit {
                 || role === Roles.SystemMonitoringOfficer);
     }
 }
+
