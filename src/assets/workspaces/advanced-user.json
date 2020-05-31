@@ -12,6 +12,7 @@
             "content": [
               {
                 "type": "stack",
+                "height":"60",
                 "content": [
                   {
                     "id": "1",
@@ -20,27 +21,23 @@
                     "isClosable": false
                   }
                 ]
-              }
-             
-            ]
-          },
-          {
-            "type": "column",
-            "width":"25",
-            "content": [
+              },
               {
                 "type": "stack",
+                "height":"40",
                 "content": [
                   {
-                    "id": "4",
+                    "id": "2",
                     "type": "component",
                     "componentName": "watchlist",
                     "isClosable": false
                   }
+                  
                 ]
               }
             ]
           }
+        
         ]
       }
     ]

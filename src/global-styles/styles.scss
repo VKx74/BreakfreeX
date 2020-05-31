@@ -325,6 +325,19 @@ span.bftsvg {
 }
 
 
+.Light-theme .open .flex.BFTN img {
+  width: 170px;
+  -webkit-filter: none;
+  filter: none;
+  margin-left: 10px;
+}
+
+
+.Dark-theme .open .flex.BFTN img {
+  width: 170px;
+  margin-left: 10px;
+}
+
 .flex.BFTN {
   height: 22px;
 }
@@ -740,5 +753,65 @@ span.value2 {
   width: 300px !important;
   min-width: 300px !important;
   max-width: 300px !important;
+
+}
+
+
+img.sa-icon {
+  width: 100%;
+}
+
+.sa-child{
+  margin-left:5px;
+}
+
+.sa-child a {
+  color:unset !important;
+  text-decoration: unset !important;
+}
+
+.item-icon.sa-icon {
+  width: 100%;
+  padding:15px;
+  border: none ;
+  background: #191919;
+  padding: 8px 0px !important;
+  margin-left:0px !important;
+}
+
+
+.item-icon.sa-icon .sa-icon {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+}
+
+
+.Dark-theme .sa-child:hover .item-icon.sa-icon  {
+
+
+  background: #fff;
+  border: none;
+  
+}
+
+
+.Light-theme .sa-child:hover .item-icon.sa-icon  {
+
+
+  background: #EDEFF2;
+  border: none;
+  
+}
+.sa-child:hover .sa-icon {
+  -webkit-filter: none;
+  filter: none;
+}
+
+.Dark-theme img.emptysvg {
+  -webkit-filter: invert(1) !important;
+  filter: invert(1) !important;
 
 }

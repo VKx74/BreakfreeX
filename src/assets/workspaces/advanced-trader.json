@@ -9,6 +9,7 @@
         "content": [
           {
             "type": "column",
+            "width":"40",
             "content": [
               {
                 "type": "stack",
@@ -26,7 +27,25 @@
           },
           {
             "type": "column",
-            "width":"25",
+            "width":"40",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "2",
+                    "type": "component",
+                    "componentName": "chart",
+                    "isClosable": true
+                  }
+                ]
+              }
+             
+            ]
+          },
+          {
+            "type": "column",
+            "width":"20",
             "content": [
               {
                 "type": "stack",
@@ -35,7 +54,7 @@
                     "id": "4",
                     "type": "component",
                     "componentName": "watchlist",
-                    "isClosable": false
+                    "isClosable": true
                   }
                 ]
               }

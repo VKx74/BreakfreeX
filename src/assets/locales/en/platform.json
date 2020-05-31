@@ -1,8 +1,8 @@
 {
   "workspaces": "Workspaces",
   "workspaceNames": {
-    "AdvancedUser": "Breakfree Trading | Discovery",
-    "AdvancedTrader": "Breakfree Trading | Pro",
+    "AdvancedUser": "Mobile view",
+    "AdvancedTrader": "Splitchart",
     "BasicUser": "Chart & Watchlist",
     "Institutional": "Multichart",
     "Empty": "Reset",
