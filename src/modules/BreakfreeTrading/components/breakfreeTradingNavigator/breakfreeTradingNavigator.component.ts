@@ -1,3 +1,5 @@
+/* tslint:disable */
+
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import { BreakfreeTradingNavigatorService } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
