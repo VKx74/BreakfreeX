@@ -441,7 +441,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     addInstrument(instrument: IInstrument, fireStateChanged: boolean = true) {
-        if (this.instrumentsVM && this.instrumentsVM.length >= 3) {
+        if (this.instrumentsVM && this.instrumentsVM.length >= 30) {
             this._alertManager.error(this._translateService.get("watchList.watchlistMaxLength"));
             return false;
         }
