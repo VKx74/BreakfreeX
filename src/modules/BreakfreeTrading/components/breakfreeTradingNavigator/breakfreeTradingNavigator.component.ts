@@ -20,8 +20,8 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
     static previewImgClass = 'crypto-icon-watchlist';
 
     // private websocketAddress : string = "ws://127.0.0.1:2000"; //test
-    private websocketAddress: string = "wss://fb.breakfreetrading.com"; // production
-    private socket: WebSocket;
+    // private websocketAddress: string = "wss://fb.breakfreetrading.com"; // production
+    // private socket: WebSocket;
     
     constructor(@Inject(GoldenLayoutItemState) protected _state: IBFTNavigatorComponentState, 
         @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
@@ -48,42 +48,27 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
             this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName')
         );
 
-        // this.objective = "No trade zone";
-        // this.status = "No trade zone";
-        // this.suggestedrisk = "0% capital";
-        // this.positionsize = "0 : split 0";
-        // this.pas = "Market is neutral";
-        // this.macrotrend = "Bullish uptrend";
+        // this.InitWebSocket();
 
-        this.InitWebSocket();
+        // this.socket.onmessage = (event) => {
+        //     console.log(`Data received:`, event.data);
 
-        this.socket.onmessage = (event) => {
-            console.log(`Data received:`, event.data);
+        //     if (event.data === 'string') {
 
-            if (event.data === 'string') {
+        //         let d = JSON.parse(event.data);
+        //         this.objective = d.objective;
+        //         this.status = d.status;
+        //         this.suggestedrisk = d.suggestedrisk;
+        //         this.positionsize = d.positionsize;
+        //         this.pas = d.pas;
+        //         this.macrotrend = d.macrotrend;
+        //         this.n_currencySymbol = d.n_currencySymbol;
+        //     }
+        // };
 
-                let d = JSON.parse(event.data);
-                this.objective = d.objective;
-                this.status = d.status;
-                this.suggestedrisk = d.suggestedrisk;
-                this.positionsize = d.positionsize;
-                this.pas = d.pas;
-                this.macrotrend = d.macrotrend;
-                this.n_currencySymbol = d.n_currencySymbol;
-            }
-            //
-            
-            // this.objective = "No trade zone";
-            // this.status = "No trade zone";
-            // this.suggestedrisk = "0% capital";
-            // this.positionsize = "0 : split 0";
-            // this.pas = "Market is neutral";
-            // this.macrotrend = "Bullish uptrend";
-        };
-
-        this.socket.onopen = (event) => {
-            this.socket.send("info");
-        };
+        // this.socket.onopen = (event) => {
+        //     this.socket.send("info");
+        // };
 
 
         
@@ -101,35 +86,35 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         }
     }
 
-    private InitWebSocket() {
+    // private InitWebSocket() {
         
-        if (!this.socket) {
-            console.log("Nav Connecting");
-            this.socket = new WebSocket(this.websocketAddress);
-        } else {
-            if (this.socket.readyState === WebSocket.CLOSED) {
-                console.log("Nav Reconnecting");
-                this.socket = new WebSocket(this.websocketAddress);
-            }
-        }
+    //     if (!this.socket) {
+    //         console.log("Nav Connecting");
+    //         this.socket = new WebSocket(this.websocketAddress);
+    //     } else {
+    //         if (this.socket.readyState === WebSocket.CLOSED) {
+    //             console.log("Nav Reconnecting");
+    //             this.socket = new WebSocket(this.websocketAddress);
+    //         }
+    //     }
 
-        this.socket.onopen = function(e) {
-            console.log("Nav Connection established");
-        };
+    //     this.socket.onopen = function(e) {
+    //         console.log("Nav Connection established");
+    //     };
         
-        this.socket.onclose = (event) => {
-            if (event.wasClean) {
-                console.log(`Nav Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-            } else {
-                console.log("Nav Connection died.");
-                // this.InitWebSocket();
-                this.socket = new WebSocket(this.websocketAddress);
-            }
-        };
+    //     this.socket.onclose = (event) => {
+    //         if (event.wasClean) {
+    //             console.log(`Nav Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    //         } else {
+    //             console.log("Nav Connection died.");
+    //             // this.InitWebSocket();
+    //             this.socket = new WebSocket(this.websocketAddress);
+    //         }
+    //     };
         
-        this.socket.onerror = function(error) {
-            console.log(`Nav ${error}`);
-        };
-    }
+    //     this.socket.onerror = function(error) {
+    //         console.log(`Nav ${error}`);
+    //     };
+    // }
 }
 
