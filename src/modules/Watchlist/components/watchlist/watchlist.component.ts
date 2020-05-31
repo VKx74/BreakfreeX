@@ -441,6 +441,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     addInstrument(instrument: IInstrument, fireStateChanged: boolean = true) {
+        if (this.instrumentsVM && this.instrumentsVM.length >= 3) {
+            this._alertManager.error(this._translateService.get("watchList.watchlistMaxLength"));
+            return false;
+        }
+
         if (this._addInstrument(instrument, fireStateChanged)) {
             if (this.activeWatchlist) {
                 this.activeWatchlist.data.push(instrument);
@@ -621,11 +626,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         const alreadyExist = this.instrumentsVM.findIndex(i => i.instrument.symbol === instrument.symbol && i.instrument.exchange === instrument.exchange) !== -1;
 
         if (alreadyExist) {
-            return false;
-        }    
-        
-        if (this.instrumentsVM && this.instrumentsVM.length >= 30) {
-            this._alertManager.error(this._translateService.get("watchList.watchlistMaxLength"));
             return false;
         }
 
