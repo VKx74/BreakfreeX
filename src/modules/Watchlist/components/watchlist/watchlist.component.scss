@@ -3,6 +3,7 @@
 @import "global-styles/themes/themes";
 
 :host {
+  
   height: 100%;
   display: flex;
   width: 100%;
@@ -12,6 +13,11 @@
     .crypto-button-icon {
       margin-left: 6px;
     }
+  }
+
+  .disabled {
+    opacity: 0.35;
+    pointer-events: none;
   }
 
   .watchlist-selector {

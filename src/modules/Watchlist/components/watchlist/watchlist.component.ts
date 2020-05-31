@@ -141,10 +141,12 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     ngOnInit() {
         this._watchlistService.getWatchlists().subscribe((data: IWatchlistItem[]) => {
             if (!data || !data.length) {
-                this.existingWatchlists = [this._watchlistService.getDefaultWatchlist()];
+                this.existingWatchlists = [];
             } else {
                 this.existingWatchlists = data.slice();
             }
+
+            this._addDefaultWatchlists();
 
             if (this._state && this._state.activeWatchlist) {
                 for (const watchlist of this.existingWatchlists) {
@@ -163,6 +165,24 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this._watchlistRemoved = this._watchlistService.onWatchlistRemoved.subscribe(this._watchlistRemovedHandler.bind(this));
             this._watchlistUpdated = this._watchlistService.onWatchlistUpdated.subscribe(this._watchlistUpdatedHandler.bind(this));
         });
+    }
+
+    protected _addDefaultWatchlists() {
+        const defaultWatchlists = this._watchlistService.getDefaultWatchlist();
+
+        for (const defaultWatchlist of defaultWatchlists) {
+            let exist = false;
+            for (const existingWatchlist of this.existingWatchlists) {
+                if (existingWatchlist.name === defaultWatchlist.name) {
+                    exist = true;
+                    break;
+                }
+            }
+
+            if (!exist) {
+                this.existingWatchlists.push({...defaultWatchlist});
+            }
+        }
     }
 
     protected _watchlistAddedHandler(item: IWatchlistItem) {
@@ -192,7 +212,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             if (this.existingWatchlists.length) {
                 this.setWatchlist(this.existingWatchlists[0]);
             } else  {
-                this.setWatchlist(this._watchlistService.getDefaultWatchlist());
+                this._addDefaultWatchlists();
+                if (this.existingWatchlists.length) {
+                    this.setWatchlist(this.existingWatchlists[0]);
+                } 
             }
         }
     }
@@ -285,7 +308,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     createWatchlist() {
         if (this.activeWatchlist && !this.activeWatchlist.id && this.existingWatchlists.length === 1) {
             this._watchlistService.addWatchlist(this.activeWatchlist.name, this.activeWatchlist.data, this.activeWatchlist.trackingId).subscribe(response => {
-                console.log(response);
+                // console.log(response);
             });
         }
 
@@ -331,6 +354,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         if (this.existingWatchlists.length <= 1) {
             this._alertManager.error(this._translateService.get("watchList.youCantRemoveLastWatchlist"));
             return;
+        } 
+        
+        if (watchlistToDelete.isDefault) {
+            this._alertManager.error(this._translateService.get("watchList.youCantRemoveDefaultWatchlist"));
+            return;
         }
 
         this._dialog.open(ConfirmModalComponent, {
@@ -368,29 +396,35 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     private _getHistory(instrumentVM: WatchlistInstrumentVM, datafeed: any) {
+        const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
         let requestMsg: IHistoryRequest = {
             instrument: instrumentVM.instrument,
             timeFrame: {
                 periodicity: IPeriodicity.hour,
                 interval: 1
             },
-            startDate: new Date(new Date().getTime() - 86400000),
-            endDate: new Date()
+            startDate: new Date(new Date().getTime() - (60 * 60 * 24 * 5 * 1000)), // 5 days
+            endDate: new Date(),
+            cacheToken: key
         };
 
         datafeed._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
-            if (response && response.data.length) {
-                const data = response.data;
-                if (data.length > 24) {
-                    data.reverse().length = 24;
-                    data.reverse();
-                }
-                instrumentVM.initData(data);
-                this.instrumentsVM = [...this.instrumentsVM];
-                const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
-                this.instrumentsPriceHistory[key] = data.map(value => value.close);
-            }
+           this._processHistory(response, instrumentVM);
         });
+    }
+
+    private _processHistory(response: IHistoryResponse, instrumentVM: WatchlistInstrumentVM) {
+        if (response && response.data.length) {
+            const data = response.data;
+            if (data.length > 24) {
+                data.reverse().length = 24;
+                data.reverse();
+            }
+            instrumentVM.initData(data);
+            this.instrumentsVM = [...this.instrumentsVM];
+            const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
+            this.instrumentsPriceHistory[key] = data.map(value => value.close);
+        }
     }
 
     private _sendInstrumentChange(instrument: IInstrument) {
@@ -411,9 +445,13 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             if (this.activeWatchlist) {
                 this.activeWatchlist.data.push(instrument);
 
+                if (this.activeWatchlist.isDefault) {
+                    return;
+                }
+
                 if (this.activeWatchlist.id) {
                     this._watchlistService.editWatchlist(this.activeWatchlist.id, this.activeWatchlist.data, this.activeWatchlist.name).subscribe(response => {
-                        console.log(response);
+                        // console.log(response);
                     });
                 } else {
                     this._watchlistService.addWatchlist(this.activeWatchlist.name, this.activeWatchlist.data, this.activeWatchlist.trackingId).subscribe(response => {
@@ -425,6 +463,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     removeInstrument(instrument: WatchlistInstrumentVM) {
+        if (this.activeWatchlist.isDefault) {
+            return;
+        }
+        
         this._dialog.open(ConfirmModalComponent, {
             data: {
                 message: this._translateService.get(`watchList.removeSymbol`),
@@ -482,7 +524,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     getKeyForInstrumentsPriceHistory(instrument: IInstrument) {
-        return instrument.symbol + instrument.exchange;
+        return instrument.id + instrument.exchange;
     }
 
     private _updateWatchlistChartHistory(instrument: IInstrument, lastPrice: number) {
@@ -509,7 +551,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
                 if (this.activeWatchlist.id) {
                     this._watchlistService.editWatchlist(this.activeWatchlist.id, this.activeWatchlist.data, this.activeWatchlist.name).subscribe(response => {
-                        console.log(response);
+                        // console.log(response);
                     });
                 } else {
                     this._watchlistService.addWatchlist(this.activeWatchlist.name, this.activeWatchlist.data, this.activeWatchlist.trackingId).subscribe(response => {
@@ -544,6 +586,12 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     private _subscribeOnInstrumentTick(instrumentVM: WatchlistInstrumentVM) {
+        const lastTick = this._realtimeService.getLastTick(instrumentVM.instrument);
+
+        if (lastTick) {
+            instrumentVM.handleTick(lastTick);
+        }
+
         const subscription = this._realtimeService.subscribeToTicks(instrumentVM.instrument, (tick: ITick) => {
             this._updateWatchlistChartHistory(instrumentVM.instrument, tick.price);
             instrumentVM.handleTick(tick);
@@ -573,6 +621,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         const alreadyExist = this.instrumentsVM.findIndex(i => i.instrument.symbol === instrument.symbol && i.instrument.exchange === instrument.exchange) !== -1;
 
         if (alreadyExist) {
+            return false;
+        }    
+        
+        if (this.instrumentsVM && this.instrumentsVM.length >= 30) {
+            this._alertManager.error(this._translateService.get("watchList.watchlistMaxLength"));
             return false;
         }
 

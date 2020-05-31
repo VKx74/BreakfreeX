@@ -1,5 +1,5 @@
 ///<reference path="../healthcheck/healthable.ts"/>
-import {Observable, throwError} from "rxjs";
+import {Observable, throwError, of} from "rxjs";
 import {EExchange} from "../../models/common/exchange";
 import {IHistoryResponse} from "../../models/common/historyResponse";
 import {IHealthable} from "../healthcheck/healthable";
@@ -23,6 +23,7 @@ export abstract class HistoryServiceBase implements IHealthable {
     protected _endpoint: string;
     protected _isHealthy: boolean = true;
     protected _supportedMarkets: EMarketType[] = [];
+    private _historyCache: { [symbolName: string]: IHistoryResponse } = {};
 
     get supportedMarkets(): EMarketType[] {
         return this._supportedMarkets;
@@ -39,6 +40,14 @@ export abstract class HistoryServiceBase implements IHealthable {
     }
 
     getHistory(request: IHistoryRequest): Observable<IHistoryResponse> {
+
+        const cacheToken = request.cacheToken;
+        if (cacheToken) {
+            if (this._historyCache[cacheToken] && this._historyCache[cacheToken].data && this._historyCache[cacheToken].data.length) {
+                return of(this._historyCache[cacheToken]);
+            }
+        }
+
         const timeDiff = request.endDate.getTime() - request.startDate.getTime();
         const granularity = HistoryHelperService.getGranularity(request.timeFrame);
         let maxBarAmount = granularity < 3600 ? 10080 : 1000;
@@ -59,7 +68,13 @@ export abstract class HistoryServiceBase implements IHealthable {
             console.log(error);
             this._isHealthy = false;
             return throwError(error);
-        }), map(response => this._mapResponse(response, request)));
+        }), map(response => {
+            const result = this._mapResponse(response, request);
+            if (cacheToken) {
+                this._historyCache[cacheToken] = result;
+            }
+            return result;
+        }));
     }
 
     getLastTrades(instrument: IInstrument): Observable<ITick[]> {

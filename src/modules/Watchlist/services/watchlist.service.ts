@@ -9,12 +9,16 @@ import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
 import { EMarketType } from '@app/models/common/marketType';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import {ForexWatchlist} from './forex';
+import {MajorForexWatchlist} from './majorForex';
+import {EquitiesWatchlist} from './equities';
 
 export interface IWatchlistItem {
     id: string;
     name: string;
     data: IInstrument[];
     trackingId?: string;
+    isDefault?: boolean;
 }
 
 @Injectable()
@@ -30,86 +34,8 @@ export class WatchlistService {
 
     constructor(private _watchlistStorageService: WatchlistStorageService) { }
 
-    public getDefaultWatchlist(): IWatchlistItem { 
-        const baseinfo = {
-            exchange: EExchange.Bitmex,
-            datafeed: EExchangeInstance.BitmexExchange,
-            baseInstrument: "",
-            dependInstrument: "",
-            type: EMarketType.Crypto
-        };
-        return {
-            id: null,
-            name: "Default",
-            trackingId: "Default",
-            data: [{
-                id: "EUR/USD",
-                symbol: "EURUSD",
-                pricePrecision: 6, 
-                tickSize: 0.000001,
-                ...baseinfo
-            }, {
-                id: "BCHM20",
-                symbol: "BCHM20",
-                pricePrecision: 6, 
-                tickSize: 0.000001,
-                ...baseinfo
-            }, {
-                id: "ADAM20",
-                symbol: "ADAM20",
-                pricePrecision: 6, 
-                tickSize: 0.000001,
-                ...baseinfo
-            }, {
-                id: "EOSM20",
-                symbol: "EOSM20",
-                pricePrecision: 6, 
-                tickSize: 0.000001,
-                ...baseinfo
-            }, {
-                id: "TRXM20",
-                symbol: "TRXM20",
-                pricePrecision: 6, 
-                tickSize: 0.000001,
-                ...baseinfo
-            }, {
-                id: "XRPUSD",
-                symbol: "XRPUSD",
-                pricePrecision: 2, 
-                tickSize: 0.01,
-                ...baseinfo
-            }, {
-                id: "XBTUSD",
-                symbol: "XBTUSD",
-                pricePrecision: 2, 
-                tickSize: 0.01,
-                ...baseinfo
-            }, {
-                id: "XBTM20",
-                symbol: "XBTM20",
-                pricePrecision: 2, 
-                tickSize: 0.01,
-                ...baseinfo
-            }, {
-                id: "XBTU20",
-                symbol: "XBTU20",
-                pricePrecision: 2, 
-                tickSize: 0.01,
-                ...baseinfo
-            }, {
-                id: "ETHUSD",
-                symbol: "ETHUSD",
-                pricePrecision: 2, 
-                tickSize: 0.01,
-                ...baseinfo
-            }, {
-                id: "ETHM20",
-                symbol: "ETHM20",
-                pricePrecision: 6, 
-                tickSize: 0.000001,
-                ...baseinfo
-            }]
-        };
+    public getDefaultWatchlist(): IWatchlistItem[] { 
+        return [MajorForexWatchlist, ForexWatchlist, EquitiesWatchlist];
     }
 
     public getWatchlists(): Observable<IWatchlistItem[]> { 

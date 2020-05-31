@@ -224,7 +224,7 @@ export class JsUtil {
     }
 
     static getInstrumentHash(instrument: IInstrument): string {
-        return instrument.symbol + "." + instrument.exchange + "." + instrument.datafeed;
+        return instrument.id + "." + instrument.exchange + "." + instrument.datafeed;
     }
 
     static UTCDate(date: number | Date): Date {

@@ -6,6 +6,7 @@ export interface IHistoryRequest {
     timeFrame: ITimeFrame;
     startDate: Date;
     endDate: Date;
+    cacheToken?: string;
 }
 
 export interface IHistoryByBackBarsCountRequest {

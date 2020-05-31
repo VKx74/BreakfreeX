@@ -18,6 +18,8 @@ export enum EExchange {
     GDAX = "GDAX",
     Huobi = "Huobi",
     OKCoin = "OKCoin",
+    NYSE = "NYSE",
+    TSX = "TSX",
     // https://paritech.gitbook.io/zenith-websockets-api/appendices/appendix-b1-markets
     // stock markets
     // Australian Stock Exchange TradeMatch

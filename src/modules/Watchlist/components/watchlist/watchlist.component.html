@@ -2,6 +2,7 @@
     <div class="top-line bftscroll">
         <div class="top-line flex justify-space-between align-items-center flex-shrink-0 ">
             <instrument-search
+                    [class.disabled]="activeWatchlist?.isDefault"
                     [openPanelOnClick]="true"
                     [resetAfterSelection]="true"
                     (onSelect)="addInstrument($event)"></instrument-search>
@@ -15,7 +16,7 @@
                     <i class="crypto-icon crypto-icon-add"></i>
                 </span>
 
-                <span class="crypto-button-icon control" (click)="deleteWatchlist()" [title]="'deleteWatchlist' | translate">
+                <span [class.disabled]="activeWatchlist?.isDefault" class="crypto-button-icon control" (click)="deleteWatchlist()" [title]="'deleteWatchlist' | translate">
                     <i class="crypto-icon crypto-icon-remove-records"></i>
                 </span>
             </div>
@@ -275,6 +276,7 @@
                                 </div> -->
 
                                 <div class="remove-instrument-button crypto-button-delete"
+                                    [class.disabled]="activeWatchlist?.isDefault"
                                      (click)="$event.stopPropagation(); removeInstrument(instrumentVM)">
                                     <i class="crypto-icon crypto-icon-close" title="{{'remove' | translate}}"
                                        aria-hidden="true"></i>
@@ -300,6 +302,7 @@
                                         [chartHistory]="instrumentsPriceHistory[getKeyForInstrumentsPriceHistory(instrumentVM.instrument)]"></watchlist-tile>
 
                         <div class="remove-instrument-button crypto-button-delete"
+                            [class.disabled]="activeWatchlist?.isDefault"
                              (click)="$event.stopPropagation(); removeInstrument(instrumentVM)">
                             <i class="crypto-icon crypto-icon-close" title="{{'remove' | translate}}"
                                aria-hidden="true"></i>
