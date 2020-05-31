@@ -31,6 +31,7 @@ import {AlertService} from "@alert/services/alert.service";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { InstrumentService } from '@app/services/instrument.service';
 import { EExchange } from '@app/models/common/exchange';
+import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -83,6 +84,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _brokerService: BrokerService,
                 private _alertService: AlertService,
                 private _alertChartService: AutoTradingAlertConfigurationService,
+                private _indicatorRestrictionService: IndicatorRestrictionService,
                 protected _injector: Injector) {
 
         super(_injector);
@@ -149,6 +151,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 height: 'calc( 100% - 66px )',
                 theme: theme,
                 addThemeClass: false,
+                chartType: 'hollowCandle',
                 //  crossHair: "crossBars",
                 datafeed: d,
                 hideScrollToLastBar: true,
@@ -158,6 +161,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 templateDataProvider: this._templateDataProviderService,
                 marketEventsDatafeed: this._calendarEventsDatafeed,
                 indicatorAlertsHandler: new IndicatorAlertHandler(this._alertChartService),
+                indicatorsRestrictionsProvider: this._indicatorRestrictionService,
                 // helpLinks: this.linksList,
                 showHelp: this._educationalTipsService.isTipsShown(),
                 locale: this._localizationService.locale,
@@ -180,6 +184,12 @@ export class TcdComponent extends BaseLayoutItemComponent {
             (window as any).tcd = this.chart;
 
             this._subscribeOnChartEvents(this.chart);
+
+            let pane = this.chart.primaryPane;
+
+            if (pane) {
+                pane.preserveAutoScaling();
+            }
 
             this.setTitle();
             setTimeout(() => {

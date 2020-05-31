@@ -155,7 +155,7 @@ export class DataFeed extends DataFeedBase {
 
         const instruments = await this._instrumentService.getInstruments(instrument.datafeed as EExchangeInstance, instrument.symbol).toPromise();
         for (let i = 0; i < instruments.length; i++) {
-            if (instruments[i].symbol === instrument.symbol) {
+            if (instruments[i].symbol === instrument.symbol && instruments[i].exchange === instrument.exchange) {
                 return instruments[i];
             }
         }

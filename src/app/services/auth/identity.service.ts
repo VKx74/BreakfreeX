@@ -67,6 +67,7 @@ export class IdentityService {
     }
 
     signIn(model: SignInRequestModel): Observable<any> {
+        this._clearCookies();
         return this._authService.signIn(model)
             .pipe(
                 tap((resp: GrantTokenResponse) => {

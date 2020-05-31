@@ -12,6 +12,7 @@ import {LinkingModule} from "../Linking";
 import { AutoTradingAlertConfigurationService } from 'modules/AutoTradingAlerts/services/auto-trading-alert-configuration.service';
 import {sharedProviderResolver} from "../popup-window/functions";
 import {LoaderModule} from "../loader/loader.module";
+import { IndicatorRestrictionService } from './services/indicator-restriction.service';
 
 export function sharedTemplatesDataProviderService() {
     return sharedProviderResolver('chartTemplatesDataProviderService');
@@ -43,7 +44,8 @@ export function sharedTemplatesDataProviderService() {
             useFactory: TranslateServiceFactory('chart'),
             deps: [Injector]
         },
-        AutoTradingAlertConfigurationService
+        AutoTradingAlertConfigurationService,
+        IndicatorRestrictionService
     ]
 })
 export class ChartModule {
