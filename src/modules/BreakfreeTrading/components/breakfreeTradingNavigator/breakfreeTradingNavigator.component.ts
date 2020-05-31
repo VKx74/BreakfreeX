@@ -1,5 +1,3 @@
-/* tslint:disable */
-
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import { BreakfreeTradingNavigatorService } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
@@ -17,12 +15,13 @@ export interface IBFTNavigatorComponentState {
 })
 export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent {
 
-    
-    
-
     static componentName = 'BreakfreeTradingNavigator';
 
     static previewImgClass = 'crypto-icon-watchlist';
+
+    // private websocketAddress : string = "ws://127.0.0.1:2000"; //test
+    private websocketAddress: string = "wss://fb.breakfreetrading.com"; // production
+    private socket: WebSocket;
     
     constructor(@Inject(GoldenLayoutItemState) protected _state: IBFTNavigatorComponentState, 
         @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
@@ -61,7 +60,7 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         this.socket.onmessage = (event) => {
             console.log(`Data received:`, event.data);
 
-            if(event.data === 'string'){
+            if (event.data === 'string') {
 
                 let d = JSON.parse(event.data);
                 this.objective = d.objective;
@@ -102,17 +101,13 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         }
     }
 
-    //private websocketAddress : string = "ws://127.0.0.1:2000"; //test
-    private websocketAddress : string = "wss://fb.breakfreetrading.com"; //production
-    private socket : WebSocket;
-    private InitWebSocket(){
+    private InitWebSocket() {
         
-        if(!this.socket){
+        if (!this.socket) {
             console.log("Nav Connecting");
             this.socket = new WebSocket(this.websocketAddress);
-        }
-        else {
-            if (this.socket.readyState === WebSocket.CLOSED){
+        } else {
+            if (this.socket.readyState === WebSocket.CLOSED) {
                 console.log("Nav Reconnecting");
                 this.socket = new WebSocket(this.websocketAddress);
             }
@@ -127,7 +122,7 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
                 console.log(`Nav Connection closed cleanly, code=${event.code} reason=${event.reason}`);
             } else {
                 console.log("Nav Connection died.");
-                //this.InitWebSocket();
+                // this.InitWebSocket();
                 this.socket = new WebSocket(this.websocketAddress);
             }
         };
