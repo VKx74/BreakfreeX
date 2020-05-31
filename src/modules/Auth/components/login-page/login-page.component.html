@@ -7,7 +7,7 @@
                 <img  src="assets/img/bftnavigatorlogo.svg" />
             </div>
             <div class="form-wrapper" [ngClass]="{notificationVisible: notification}" [formGroup]="formGroup">
-                <div class="form-header">
+                <div class="form-header hidden">
                     <span class="form-header__title signIn">Sign in </span>
                     <span class="form-header__title"> / </span>
                     <span class="form-header__title signUp" (click)="doRegistration()" >Sign up </span>
@@ -69,6 +69,9 @@
                         <div></div>
                     </div>
                     <span *ngIf="!processing">Log in</span>
+
+
+
                 </button>
 <!--                <div class="socialNetworks-wrapper">
                     <span>Or through social networks</span>
@@ -90,5 +93,7 @@
 <!--                </div>-->
             </div>
         </div>
+
+        <div class="beta"  (click)="doRegistration()" >Sign up for Breakfree Trading Navigator</div>
     </div>
 </div>

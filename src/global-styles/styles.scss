@@ -519,9 +519,15 @@ color: #000;
   display:none !important;
 }
 
-.tcdToolbar-scroll.tcdToolbar-left.tcdPhone {
+.Light-theme .tcdToolbar-scroll.tcdToolbar-left.tcdPhone {
   border-right: 1px solid #eee;
 }
+.Dark-theme .tcdToolbar-scroll.tcdToolbar-left.tcdPhone {
+  border-right: 1px solid #06060d;
+}
+
+
+
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .tcdToolbar-top .tcdToolbar-scroll-wrapper::-webkit-scrollbar {
@@ -727,4 +733,12 @@ span.value2 {
 .bft-p {
 
   border-bottom: 1px solid #000;
+}
+
+
+.mat-autocomplete-panel {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+
 }
