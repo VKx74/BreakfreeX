@@ -35,7 +35,8 @@
     "userprofileREST": "https://rest.yourdomain.com/api/v0.0/userprofile/",
     "historydatacollectorREST": "not used",
     "news": "https://events.breakfreetrading.com/news/",
-    "exchangeManagementREST": "not used"
+    "exchangeManagementREST": "not used",
+    "bftAlgoWS": "wss://fb.breakfreetrading.com"
 
   },
   "systemMonitoringUrls": {

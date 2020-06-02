@@ -1,68 +1,100 @@
 <div class="bftNavigator flex">
-   
-   <div class="bftpanel-status">
-      <div class="row"> 
+   <div class="top-line flex justify-space-between top-line">
+      <div class="column"> 
          <span class="bft-pannel-header">Breakfree Trading Panel</span>
       </div>
-
+      <div class="column">
+         <selector [options]="Items" [placeholder]="'Select BFT Indicator'"
+         [selectedOption]="SelectedItem"
+         [optionCaption]="captionText"
+         (onSelect)="itemSelected($event)"
+         class="watchlist-selector"></selector>
+      </div>
+   </div>
+   <div class="bftpanel-status">
       <div class="row"> 
-         <span class="value1">Objective:</span><span class="value2" id="nav_AlgoObjective">No trade zone</span>
+         <span class="value1">Objective:</span><span class="value2">
+            {{Data?.algo_Info.objective}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">Status:</span><span class="value2" id="nav_AlgoStatus">No trade zone</span>
+         <span class="value1">Status:</span><span class="value2">
+            {{Data?.algo_Info.status}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">Suggested risk:</span><span class="value2" id="nav_AlgoRisk">0% capital</span>
+         <span class="value1">Suggested risk:</span><span class="value2">
+            {{Data?.algo_Info.suggestedrisk}} {{Data?.algo_Info ? "%" : ""}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1" id="nav_AlgoPositionSymbol">Position size ():</span><span class="value2" id="nav_AlgoPositionSize"> 0 : split 0</span>
+         <span class="value1">Position size ({{Data?.algo_Info.n_currencySymbol}}):</span><span class="value2">
+            {{Data?.algo_Info.positionsize}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">PAS:</span><span class="value2" id="nav_PAS"></span>
+         <span class="value1">PAS:</span><span class="value2">
+            {{Data?.algo_Info.pas}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">Macro trend:</span><span class="value2" id="nav_MacroTrend"></span>
+         <span class="value1">Macro trend:</span><span class="value2">
+            {{Data?.algo_Info.macrotrend}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">Market:</span><span class="value2" id="nav_MarketSymbol"></span>
+         <span class="value1">Market:</span><span class="value2">
+            {{Instrument?.symbol}} {{Instrument?.exchange}} {{Timeframe?.interval}}{{Timeframe?.periodicity}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">Entry zones:</span><span class="value2" id="nav_Entry"></span>
+         <span class="value1">Entry zones:</span><span class="value2">
+            {{Data?.algo_Entry?.toFixed("5")}}
+         </span>
       </div>
       <div class="row"> 
-         <span class="value1"></span><span class="value2" id="nav_EntryLow"></span>
+         <span class="value1"></span><span class="value2">
+            {{Data?.algo_Entry_low?.toFixed("5")}}
+         </span>
       </div>
       <div class="row"> 
-         <span class="value1"></span><span class="value2" id="nav_EntryHigh"></span>
-      </div>
-
-      <div class="row"> 
-         <span class="value1">Take Profit #1 zones:</span><span class="value2" id="nav_TP1High"></span>
-      </div>
-      <div class="row"> 
-         <span class="value1"></span><span class="value2" id="nav_TP1Low"></span>
-      </div>
-
-      <div class="row"> 
-         <span class="value1">Take Profit #2 zone:</span><span class="value2" id="nav_TP2"></span>
+         <span class="value1"></span><span class="value2">
+            {{Data?.algo_Entry_high?.toFixed("5")}}
+         </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">Stop Loss:</span><span class="value2" id="nav_StopLoss"></span>
+         <span class="value1">Take Profit #1 zones:</span><span class="value2">
+            {{Data?.algo_TP1_high?.toFixed("5")}}
+         </span>
+      </div>
+      <div class="row"> 
+         <span class="value1"></span><span class="value2">
+            {{Data?.algo_TP1_low?.toFixed("5")}}
+         </span>
+      </div>
+
+      <div class="row"> 
+         <span class="value1">Take Profit #2 zone:</span><span class="value2">
+            {{Data?.algo_TP2?.toFixed("5")}}
+         </span>
+      </div>
+
+      <div class="row"> 
+         <span class="value1">Stop Loss:</span><span class="value2">
+            {{Data?.algo_Stop?.toFixed("5")}}
+         </span>
       </div>
       
   
    </div>
-   
-
-
 
    
 </div>

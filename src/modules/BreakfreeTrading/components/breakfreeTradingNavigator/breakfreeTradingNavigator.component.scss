@@ -4,5 +4,14 @@
 
 
 :host {
-  
+  .bftNavigator {
+    flex-direction: column;
+  }
+
+  .top-line {
+      padding: 10px;
+      .column {
+        
+      }
+  }
 }

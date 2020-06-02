@@ -184,7 +184,11 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
         chart.hideWaiting();
         chart.refreshIndicators();
-        chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
+        if (request.name === RequestKind.BARS) { 
+            chart.refreshAsync(true);
+        } else {
+            chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
+        }
         chart.scaleHorizontal.onCompleteMoreHistoryRequest();
     }
 

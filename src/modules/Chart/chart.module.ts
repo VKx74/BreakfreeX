@@ -13,6 +13,9 @@ import { AutoTradingAlertConfigurationService } from 'modules/AutoTradingAlerts/
 import {sharedProviderResolver} from "../popup-window/functions";
 import {LoaderModule} from "../loader/loader.module";
 import { IndicatorRestrictionService } from './services/indicator-restriction.service';
+import { IndicatorDataProviderService } from './services/indicator-data-provider.service';
+import { BreakfreeTradingModule } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 
 export function sharedTemplatesDataProviderService() {
     return sharedProviderResolver('chartTemplatesDataProviderService');
@@ -30,6 +33,7 @@ export function sharedTemplatesDataProviderService() {
         LoadingModule,
         LinkingModule,
         LoaderModule,
+        BreakfreeTradingModule
     ],
     exports: [
         TcdComponent,
@@ -45,7 +49,9 @@ export function sharedTemplatesDataProviderService() {
             deps: [Injector]
         },
         AutoTradingAlertConfigurationService,
-        IndicatorRestrictionService
+        IndicatorRestrictionService,
+        IndicatorDataProviderService,
+        BreakfreeTradingService
     ]
 })
 export class ChartModule {

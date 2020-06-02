@@ -32,6 +32,7 @@ import {GoldenLayoutItemState} from "angular-golden-layout";
 import { InstrumentService } from '@app/services/instrument.service';
 import { EExchange } from '@app/models/common/exchange';
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
+import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -85,6 +86,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _alertService: AlertService,
                 private _alertChartService: AutoTradingAlertConfigurationService,
                 private _indicatorRestrictionService: IndicatorRestrictionService,
+                private _indicatorDataProviderService: IndicatorDataProviderService,
                 protected _injector: Injector) {
 
         super(_injector);
@@ -159,6 +161,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 timeFrame: state && state.timeFrame,
                 supportedTimeFrames: DataFeedBase.supportedTimeFramesStr,
                 templateDataProvider: this._templateDataProviderService,
+                indicatorsDataProvider: this._indicatorDataProviderService,
                 marketEventsDatafeed: this._calendarEventsDatafeed,
                 indicatorAlertsHandler: new IndicatorAlertHandler(this._alertChartService),
                 indicatorsRestrictionsProvider: this._indicatorRestrictionService,
@@ -167,6 +170,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 locale: this._localizationService.locale,
                 tradeHandler: this.tradeHandler.bind(this),
                 searchInstrumentHandler: this.searchInstrumentHandler.bind(this),
+                
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
@@ -195,7 +199,30 @@ export class TcdComponent extends BaseLayoutItemComponent {
             setTimeout(() => {
                 this.showSpinner = false;
             }, 1000);
+
+            this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_ADDED, this.indicatorAdded.bind(this));
+            this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED, this.indicatorRemoved.bind(this));
         });
+    }
+
+    protected indicatorAdded(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        console.log("Added");
+        const indicator = eventObject.value as TradingChartDesigner.Indicator;
+        console.log(eventObject);
+        if (!this.chart || this.chart.isDestroyed) {
+            return;
+        }
+    }
+    
+    protected indicatorRemoved(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        console.log("Removed");
+        const indicator = eventObject.value as TradingChartDesigner.Indicator;
+        console.log(eventObject);
+        if (!this.chart || this.chart.isDestroyed) {
+            return;
+        }
+
+        this._indicatorDataProviderService.indicatorRemoved(indicator);
     }
 
     protected useDefaultLinker(): boolean {
@@ -389,6 +416,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
         try {
             if (this.chart) {
+                this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_ADDED);
+                this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED);
                 this.chart.destroy();
             }
         } catch (e) {

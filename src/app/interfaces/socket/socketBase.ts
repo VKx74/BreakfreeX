@@ -15,6 +15,7 @@ export abstract class WebsocketBase {
     private _isClosed = false;
     private _socket: WebSocket;
     private _reconnectAttempts = 0;
+    private _interval: any;
 
     onOpen = new Subject();
     onReconnect = new Subject();
@@ -24,6 +25,10 @@ export abstract class WebsocketBase {
 
     get readyState(): number {
         return this._socket ? this._socket.readyState : -1;
+    }
+
+    get usePingPongs(): boolean {
+        return false;
     }
 
     protected reconnectConfig: IWebSocketReconnectConfig = {
@@ -47,6 +52,11 @@ export abstract class WebsocketBase {
             this._isClosed = true;
             this._socket.close();
             this._socket = null;
+        }
+
+        if (this._interval) {
+            clearInterval(this._interval);
+            this._interval = null;
         }
     }
 
@@ -93,6 +103,10 @@ export abstract class WebsocketBase {
                     this.onOpen.next(ev);
                 }
                 this._log(ev);
+
+                if (this.usePingPongs && !this._interval) {
+                    this._interval = setInterval(this._sendPings.bind(this), 30 * 1000); // 30 sec
+                }
             };
 
             this._socket.onmessage = (ev: MessageEvent) => {
@@ -144,12 +158,20 @@ export abstract class WebsocketBase {
     }
 
     private _parseMessage(ev: MessageEvent): any {
-        return JSON.parse(ev.data);
+        try {
+            return JSON.parse(ev.data);
+        } catch (e) {
+            return ev.data;
+        }
     }
 
     private _log(...args: any[]) {
         if (!environment.production) {
             console.log(args);
         }
+    }
+
+    private _sendPings() {
+        this.send("ping");
     }
 }

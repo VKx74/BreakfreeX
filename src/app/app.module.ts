@@ -78,6 +78,7 @@ import {TwelvedataInstrumentService} from "@app/services/twelvedata.exchange/twe
 import {TwelvedataHistoryService} from "@app/services/twelvedata.exchange/twelvedata.history.service";
 import {TwelvedataRealtimeService} from "@app/services/twelvedata.exchange/twelvedata.realtime.service";
 import { SingleSessionService } from './services/single-session.service';
+import { BFTSocketService } from './services/socket/bft.socket.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -247,6 +248,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         BitmexBrokerService,
         BitmexInstrumentService,
         BitmexSocketService,
+        BFTSocketService,
 
         OandaInstrumentService,
         OandaHistoryService,

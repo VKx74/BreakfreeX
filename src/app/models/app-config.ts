@@ -43,6 +43,7 @@ export interface ApiUrls {
     oandabrokerREST: string;
     userprofileREST: string;
     historydatacollectorREST: string;
+    bftAlgoWS: string;
     news: string;
     exchangeOrder: string;
     tradesReporting: string;

@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
-import { BreakfreeTradingNavigatorService } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
+import { BreakfreeTradingNavigatorService, INavigatorItem } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
 import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
+import { BreakfreeTradingService, ITimeFrame } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
+import bind from "bind-decorator";
+import { of, Subscription } from 'rxjs';
+import { IInstrument } from '@app/models/common/instrument';
 
 export interface IBFTNavigatorComponentState {
 }
@@ -19,13 +23,30 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
 
     static previewImgClass = 'crypto-icon-watchlist';
 
-    // private websocketAddress : string = "ws://127.0.0.1:2000"; //test
-    // private websocketAddress: string = "wss://fb.breakfreetrading.com"; // production
-    // private socket: WebSocket;
+    private _itemAdded: Subscription;
+    private _itemRemoved: Subscription;
+
+    public get Items(): INavigatorItem[] {
+        return this._bftNavigatorService.Items;
+    }
+
+    public SelectedItem: INavigatorItem;
+
+    public get Data(): any {
+        return this.SelectedItem ? this.SelectedItem.data : null;
+    }
+    
+    public get Instrument(): IInstrument {
+        return this.SelectedItem ? this.SelectedItem.parameters.instrument : null;
+    } 
+    
+    public get Timeframe(): ITimeFrame {
+        return this.SelectedItem ? this.SelectedItem.parameters.timeframe : null;
+    }
     
     constructor(@Inject(GoldenLayoutItemState) protected _state: IBFTNavigatorComponentState, 
         @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
-        protected _bftService: BreakfreeTradingNavigatorService, protected _injector: Injector) {
+        protected _bftNavigatorService: BreakfreeTradingNavigatorService, protected _injector: Injector) {
         super(_injector);
 
         if (_state) {
@@ -43,35 +64,14 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
     n_currencySymbol: string;
 
     ngOnInit() {
-        // component visible and UI elements accessible
         super.setTitle(
             this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName')
         );
 
-        // this.InitWebSocket();
+        this._selectDefaultItem();
 
-        // this.socket.onmessage = (event) => {
-        //     console.log(`Data received:`, event.data);
-
-        //     if (event.data === 'string') {
-
-        //         let d = JSON.parse(event.data);
-        //         this.objective = d.objective;
-        //         this.status = d.status;
-        //         this.suggestedrisk = d.suggestedrisk;
-        //         this.positionsize = d.positionsize;
-        //         this.pas = d.pas;
-        //         this.macrotrend = d.macrotrend;
-        //         this.n_currencySymbol = d.n_currencySymbol;
-        //     }
-        // };
-
-        // this.socket.onopen = (event) => {
-        //     this.socket.send("info");
-        // };
-
-
-        
+        this._itemAdded = this._bftNavigatorService.onItemAdded.subscribe(this._handleItemAdded.bind(this));
+        this._itemRemoved = this._bftNavigatorService.onItemRemoved.subscribe(this._handleItemRemoved.bind(this));
     }
 
     getComponentState(): IBFTNavigatorComponentState {
@@ -80,41 +80,53 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         };
     }
 
+    @bind
+    captionText(value: INavigatorItem) {
+        const tf = value.parameters.timeframe;
+        const instr = value.parameters.instrument;
+        const params = `${instr.symbol} - ${instr.exchange} - ${tf.interval}${tf.periodicity}`;
+        return of (params);
+    }
+    
+    itemSelected(item: INavigatorItem) {
+        this.SelectedItem = item;
+    }
+
+    ngOnDestroy() {
+        super.ngOnDestroy();
+
+        if (this._itemAdded) {
+            this._itemAdded.unsubscribe();
+        }
+        if (this._itemRemoved) {
+            this._itemRemoved.unsubscribe();
+        }
+    }
+
+    private _handleItemAdded(newItem: INavigatorItem) {
+        if (!this.SelectedItem) {
+            this._selectDefaultItem();
+        }
+    }
+
+    private _handleItemRemoved(removedItem: INavigatorItem) {
+        if (this.SelectedItem.indicatorId === removedItem.indicatorId) {
+            this._selectDefaultItem();
+        }
+    }
+
+    private _selectDefaultItem() {
+        if (this.Items && this.Items.length) {
+            this.SelectedItem = this.Items[0];
+        } else {
+            this.SelectedItem = null;
+        }
+    }
+
     private _loadState(state: IBFTNavigatorComponentState) {
         if (state) {
             // restore your state
         }
     }
-
-    // private InitWebSocket() {
-        
-    //     if (!this.socket) {
-    //         console.log("Nav Connecting");
-    //         this.socket = new WebSocket(this.websocketAddress);
-    //     } else {
-    //         if (this.socket.readyState === WebSocket.CLOSED) {
-    //             console.log("Nav Reconnecting");
-    //             this.socket = new WebSocket(this.websocketAddress);
-    //         }
-    //     }
-
-    //     this.socket.onopen = function(e) {
-    //         console.log("Nav Connection established");
-    //     };
-        
-    //     this.socket.onclose = (event) => {
-    //         if (event.wasClean) {
-    //             console.log(`Nav Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-    //         } else {
-    //             console.log("Nav Connection died.");
-    //             // this.InitWebSocket();
-    //             this.socket = new WebSocket(this.websocketAddress);
-    //         }
-    //     };
-        
-    //     this.socket.onerror = function(error) {
-    //         console.log(`Nav ${error}`);
-    //     };
-    // }
 }
 
