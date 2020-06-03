@@ -64,40 +64,40 @@
 
 
       <div class="row"> 
-         <span class="value1">Entry #1</span><span class="value2 copyable">
+         <span class="value1">Entry #1</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_Entry?.toFixed("5")}}
          </span>
       </div>
       <div class="row"> 
-         <span class="value1">Entry #2</span><span class="value2 copyable">
+         <span class="value1">Entry #2</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_Entry_low?.toFixed("5")}}
          </span>
       </div>
       <div class="row"> 
-         <span class="value1">Entry #3</span><span class="value2 copyable">
+         <span class="value1">Entry #3</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_Entry_high?.toFixed("5")}}
          </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">TP #1</span><span class="value2 copyable">
+         <span class="value1">TP #1</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_TP1_high?.toFixed("5")}}
          </span>
       </div>
       <div class="row"> 
-         <span class="value1">TP #2</span><span class="value2 copyable">
+         <span class="value1">TP #2</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_TP1_low?.toFixed("5")}}
          </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">TP #3:</span><span class="value2 copyable">
+         <span class="value1">TP #3:</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_TP2?.toFixed("5")}}
          </span>
       </div>
 
       <div class="row"> 
-         <span class="value1">Stop Loss:</span><span class="value2 copyable">
+         <span class="value1">Stop Loss:</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_Stop?.toFixed("5")}}
          </span>
      

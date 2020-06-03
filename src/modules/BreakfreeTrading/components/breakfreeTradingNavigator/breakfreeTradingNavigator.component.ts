@@ -102,6 +102,11 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         this._alertService.success("Copied");
     }
 
+    copyToClipboardSingleValue(event: MouseEvent) {
+        this._clipboardService.copy($(event.target).text().trim());
+        this._alertService.success("Copied");
+    }
+
     ngOnDestroy() {
         super.ngOnDestroy();
 
