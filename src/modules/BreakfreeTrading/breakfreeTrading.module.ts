@@ -22,6 +22,7 @@ import { BreakfreeTradingDiscoveryService } from './services/breakfreeTradingDis
 import { BreakfreeTradingNavigatorService } from './services/breakfreeTradingNavigator.service';
 import { BreakfreeTradingProComponent, BreakfreeTradingDiscoveryComponent, BreakfreeTradingNavigatorComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
     // components here
@@ -43,7 +44,8 @@ import { ModuleWithProviders } from '@angular/compiler/src/core';
         SharedModule,
         UIModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ClipboardModule
     ],
     // components here
     entryComponents: [

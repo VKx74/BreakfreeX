@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Injector, Inject, ElementRef, ViewChild } from '@angular/core';
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import { BreakfreeTradingNavigatorService, INavigatorItem } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
 import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
@@ -8,6 +8,8 @@ import { BreakfreeTradingService, ITimeFrame } from 'modules/BreakfreeTrading/se
 import bind from "bind-decorator";
 import { of, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
+import { ClipboardService } from 'ngx-clipboard';
+import {AlertService} from "@alert/services/alert.service";
 
 export interface IBFTNavigatorComponentState {
 }
@@ -22,6 +24,8 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
     static componentName = 'BreakfreeTradingNavigator';
 
     static previewImgClass = 'crypto-icon-watchlist';
+
+    @ViewChild('content', {static: false}) contentBox: ElementRef;
 
     private _itemAdded: Subscription;
     private _itemRemoved: Subscription;
@@ -46,6 +50,7 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
     
     constructor(@Inject(GoldenLayoutItemState) protected _state: IBFTNavigatorComponentState, 
         @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
+        private _clipboardService: ClipboardService, private _alertService: AlertService,
         protected _bftNavigatorService: BreakfreeTradingNavigatorService, protected _injector: Injector) {
         super(_injector);
 
@@ -92,6 +97,11 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         this.SelectedItem = item;
     }
 
+    copyToClipboard() {
+        this._clipboardService.copy(this._getContentText());
+        this._alertService.success("Copied");
+    }
+
     ngOnDestroy() {
         super.ngOnDestroy();
 
@@ -101,6 +111,19 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         if (this._itemRemoved) {
             this._itemRemoved.unsubscribe();
         }
+    }
+
+    private _getContentText(): string {
+        const $contentBox = $(this.contentBox.nativeElement);
+        const items = $contentBox.children();
+        let response = "";
+        for (const item of items) {
+            const title = $(item).find(".value1").text();
+            const value = $(item).find(".value2").text();
+
+            response += `${title} ${value} \n`;
+        }
+        return response;
     }
 
     private _handleItemAdded(newItem: INavigatorItem) {

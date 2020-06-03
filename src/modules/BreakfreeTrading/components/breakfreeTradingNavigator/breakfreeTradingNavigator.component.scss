@@ -14,4 +14,20 @@
         
       }
   }
+
+  .crypto-button {
+    margin: 10px;
+    padding: 4px 14px;
+  }
+}
+
+
+@include themify($themes, true) {
+  .crypto-button {
+    color: themed('valueTextColor');
+  }
+
+  .crypto-button {
+    background-color: themed('inputBackgroundColor');
+  }
 }
