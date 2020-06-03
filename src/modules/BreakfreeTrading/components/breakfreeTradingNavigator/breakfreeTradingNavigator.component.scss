@@ -35,3 +35,200 @@
     background-color: themed('inputBackgroundColor');
   }
 }
+
+
+
+
+.bftpanel-status {
+  padding: 15px 30px;
+  font-size: 12px;
+  width: 100%;
+  border: 1px solid #f4f7fb;
+  border-radius: 15px;
+}
+
+span.value1 {
+  float: left;
+  color: #191919;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  padding-left:5px;
+ 
+}
+
+span.value2 {
+  float: right;
+  padding-right: 5px;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+.bft-p {
+
+  border-bottom: 1px solid #000;
+}
+
+
+
+
+.bftpanel-status .row {
+  border-bottom: 1px solid #f4f7fb;
+}
+
+.Copyvalue-top {
+  padding-top: 10px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.value2.copyable::after {
+  background-size: 10px 20px;
+  float: right;
+  margin-left: 5px !important;
+  margin-right: 0px !important;
+  color: #000;
+  background-image: url(/assets/img/copy.svg);
+  display: inline-block;
+  width: 10px;
+  height: 20px;
+  content: "";
+  background-position: top;
+  margin-top: -4px
+}
+
+span.value2.copyable:hover {
+
+  font-weight:600;
+  
+  }
+
+.bft-panel-top {
+  
+    font-weight: 600;
+
+    margin-bottom: 5px;
+  }
+
+  .bftNavigator{
+    padding:15px;
+
+  }
+
+  span.value.header {
+  
+    font-weight: 600;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+
+
+}
+
+span.value1.entry {
+    padding-left: 5px;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+.row.entries {
+    padding-top: 10px;
+    border-bottom: 0px !important;
+}
+
+.row.targets {
+    padding-top: 10px;
+    border-bottom: 0px !important;
+}
+
+.row.stoploss {
+  padding-top: 10px;
+  border-bottom: 0px !important;
+}
+
+span.value1.target {
+  padding-left: 5px;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+.row.tradeoverview {
+  border-bottom: 0px;
+}
+
+span.leftbord {
+  width: 2px;
+  height: 13px;
+  display: inline-block;
+  margin-bottom: -2px;
+  margin-right: 4px;
+  margin-left: -5px;
+  
+}
+
+
+
+
+.row.targets span.leftbord {
+  background: #2e5e9a;
+
+
+}
+
+.row.entries span.leftbord {
+  background: #629320;
+
+}
+
+.row.tradeoverview span.leftbord {
+  background:#191919;
+
+}
+
+.row.stoploss span.leftbord {
+  background: #d3bb42;
+
+}
+
+span.value.header {}
+
+
+.row.targets .header {
+  color: #2e5e9a;
+
+
+}
+
+.row.entries .header {
+  color: #629320;
+
+}
+
+.row.tradeoverview .header {
+  color:#191919;
+
+}
+
+.row.stoploss .header {
+  color: #d3bb42;
+
+}
+
+.row.ent:hover {
+  background: #6293205e;
+}
+
+.row.ent:hover:hover span.value2.copyable {
+
+  font-weight:600;
+  
+  }
+
+
+.marketoverview-selector {
+  display: inline-block;
+  float: right;
+}
+
+.marketoverview-selector .mat-select-value {
+  font-size: 11px;
+  padding: 0px !important;
+}

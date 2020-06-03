@@ -725,29 +725,6 @@ admin-root .section-label {
 
 // bft loves css
 
-.bftpanel-status {
-  padding: 15px;
-  font-size: 12px;
-  width: 100%;
-  // max-width: 400px;
-}
-
-span.value1 {
-  float: left;
-  color: #191919;
-  padding-left: 15px;
-}
-
-span.value2 {
-  float: right;
-  padding-right: 15px;
-}
-
-.bft-p {
-
-  border-bottom: 1px solid #000;
-}
-
 
 .mat-autocomplete-panel {
   width: 300px !important;
@@ -816,41 +793,3 @@ img.sa-icon {
 
 }
 
-.bftpanel-status .row {
-  border-bottom: 1px solid #ddd;
-}
-
-.Copyvalue-top {
-  padding-top: 10px;
-  font-weight: 600;
-  border-bottom: 1px solid #191919;
-  margin-bottom: 5px;
-}
-
-.value2.copyable::after {
-  /* content:url("assets/img/copy.svg"); */
-  background-size: 10px 20px;
-  float: right;
-  margin-left: 5px !important;
-  margin-right: 0px !important;
-  overflow: hidden;
-  color: #000;
-  background-image: url('/assets/img/copy.svg');
-  display: inline-block;
-  width: 10px; 
-  height: 20px;
-  content:"";
-}
-
-span.value2.copyable:hover {
-
-  font-weight:600;
-  
-  }
-
-.bft-panel-top {
-  
-    font-weight: 600;
-    border-bottom: 1px solid #191919;
-    margin-bottom: 5px;
-  }
