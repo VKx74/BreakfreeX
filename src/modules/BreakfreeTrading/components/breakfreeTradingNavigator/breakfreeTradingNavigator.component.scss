@@ -6,6 +6,11 @@
 :host {
   .bftNavigator {
     flex-direction: column;
+    height: 100%;
+   height: -moz-available;          /* WebKit-based browsers will ignore this. */
+   height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+   height: fill-available;
+   overflow: scroll;
   }
 
   .top-line {
@@ -47,6 +52,9 @@
   border-radius: 15px;
 }
 
+
+
+
 span.value1 {
   float: left;
   color: #191919;
@@ -55,6 +63,7 @@ span.value1 {
   padding-left:5px;
  
 }
+
 
 span.value2 {
   float: right;
@@ -232,3 +241,4 @@ span.value.header {}
   font-size: 11px;
   padding: 0px !important;
 }
+

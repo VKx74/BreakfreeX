@@ -793,3 +793,34 @@ img.sa-icon {
 
 }
 
+// darkmode for bft panel
+
+.Dark-theme span.value1, .Dark-theme span.value2 {
+
+  color: #ffffffd1 !important;
+
+ 
+}
+
+.Dark-theme .row.tradeoverview span.leftbord {
+  background:#ffffffd1 !important;
+
+}
+
+.Dark-theme .row.tradeoverview .header {
+  color:#ffffffd1 !important;
+
+}
+
+.Dark-theme .bftpanel-status .row {
+  border-bottom: 1px solid #2d2b2b !important;
+}
+
+.Dark-theme .bftpanel-status{
+  border: 1px solid #2d2b2b !important;
+}
+
+.Dark-theme .value2.copyable::after {
+  filter: invert(1);
+
+}
