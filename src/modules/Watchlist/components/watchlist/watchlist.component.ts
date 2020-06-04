@@ -89,7 +89,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
     selectedInstrumentVM: WatchlistInstrumentVM = null;
-    viewMode: WatchlistViewMode = WatchlistViewMode.Table;
+    viewMode: WatchlistViewMode = WatchlistViewMode.Tile;
     hiddenColumns: string[] = ["highestPrice", "lowestPrice", "volume24h", "tickTime", "chart"];
 
     intervals: { [symbolName: string]: any } = {};
