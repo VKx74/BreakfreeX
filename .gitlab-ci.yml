@@ -15,8 +15,6 @@ analize-app:
     <<: *npmrc-settings-job
     script:
         - chmod 777 -R ./
-        - echo "NPM Install Chart"
-        - npm i trading-chart-designer 
         - echo "NPM Install"
         - npm i 
         - echo "Analize"
@@ -33,8 +31,6 @@ build-app:
     - echo "NPM Cleanup"
     - rm -rf node_modules
     - npm cache clean --force
-    - echo "NPM Install Chart"
-    - npm i trading-chart-designer 
     - echo "NPM Install"
     - npm i
     - echo "Build"
