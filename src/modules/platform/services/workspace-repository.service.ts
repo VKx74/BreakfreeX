@@ -19,9 +19,9 @@ export const WorkspacesRootPath = './assets/workspaces';
 
 const WorkspacesPaths = [
     `${WorkspacesRootPath}/basic-user.json`,
+    `${WorkspacesRootPath}/advanced-user.json`,
     `${WorkspacesRootPath}/advanced-trader.json`,
     `${WorkspacesRootPath}/institutional.json`,
-    `${WorkspacesRootPath}/advanced-user.json`,
     `${WorkspacesRootPath}/empty.json`
 ];
 

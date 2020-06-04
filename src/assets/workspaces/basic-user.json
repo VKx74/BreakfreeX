@@ -26,7 +26,7 @@
           },
           {
             "type": "column",
-            "width":"25",
+            "width":"30",
             "content": [
               {
                 "type": "stack",
@@ -36,9 +36,17 @@
                     "type": "component",
                     "componentName": "watchlist",
                     "isClosable": true
+                  },
+                  {
+                    "id": "5",
+                    "type": "component",
+                    "componentName": "breakfreeTradingNavigator",
+                    "isClosable": true
                   }
+
                 ]
               }
+             
             ]
           }
         ]

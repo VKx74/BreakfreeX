@@ -1,9 +1,9 @@
 {
   "workspaces": "Workspaces",
   "workspaceNames": {
-    "AdvancedUser": "Mobile view",
+    "AdvancedUser": "Navigator layout (phone)",
     "AdvancedTrader": "Splitchart",
-    "BasicUser": "Chart & Watchlist",
+    "BasicUser": "Navigator Layout",
     "Institutional": "Multichart",
     "Empty": "Reset",
     "saveLayout": "Save Layout",

@@ -30,7 +30,13 @@
                     "id": "2",
                     "type": "component",
                     "componentName": "watchlist",
-                    "isClosable": false
+                    "isClosable": true
+                  },
+                  {
+                    "id": "3",
+                    "type": "component",
+                    "componentName": "breakfreeTradingNavigator",
+                    "isClosable": true
                   }
                   
                 ]

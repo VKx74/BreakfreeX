@@ -824,3 +824,17 @@ img.sa-icon {
   filter: invert(1);
 
 }
+
+
+.Light-theme .lm_header .lm_controls .lm_tabdropdown:before{
+  color:#191919 !important;
+}
+
+.Dark-theme .lm_header .lm_controls .lm_tabdropdown:before{
+  color:#ffffffd1 !important;;
+}
+
+// small hack to remove linker from BFT Panel tab, dont be angry Andriy.
+li.lm_tab.closable-tab.tab-with-linker[title="BFT Panel"] {
+  padding-left: 10px !important;
+}
