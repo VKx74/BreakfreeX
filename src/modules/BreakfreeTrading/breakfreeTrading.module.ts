@@ -22,7 +22,7 @@ import { BreakfreeTradingDiscoveryService } from './services/breakfreeTradingDis
 import { BreakfreeTradingNavigatorService } from './services/breakfreeTradingNavigator.service';
 import { BreakfreeTradingProComponent, BreakfreeTradingDiscoveryComponent, BreakfreeTradingNavigatorComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
-import { ClipboardModule } from 'ngx-clipboard';
+import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 
 @NgModule({
     // components here
@@ -61,6 +61,7 @@ import { ClipboardModule } from 'ngx-clipboard';
     ],
     providers: [
         HistoryService,
+        ClipboardService,
         InstrumentService,
         RealtimeService,
         BreakfreeTradingService,
