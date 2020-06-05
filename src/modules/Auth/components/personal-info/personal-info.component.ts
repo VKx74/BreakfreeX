@@ -52,7 +52,8 @@ export class PersonalInfoComponent implements ResetableComponent {
             country: controls['country'].value,
             address: controls['address'].value,
             city: controls['city'].value,
-            postcode: controls['postcode'].value,
+            // postcode: controls['postcode'].value,
+            postcode: 0, // temp solution DB accept just digits
         };
 
         this.processing = true;
@@ -102,7 +103,7 @@ export class PersonalInfoComponent implements ResetableComponent {
             country: new FormControl('', Validators.required),
             address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
             city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
-            postcode: new FormControl('', [Validators.required, Validators.minLength(2), digitValidator(), Validators.maxLength(9)])
+            postcode: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(9)])
         });
     }
 
