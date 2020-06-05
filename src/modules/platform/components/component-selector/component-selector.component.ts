@@ -97,18 +97,18 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
                 componentIdentifier: ComponentIdentifier.watchlist,
             }, 
-            {
-                component: BreakfreeTradingProComponent,
-                previewImgClass: BreakfreeTradingProComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('breakfreeTradingProComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingPro,
-            },  
-            {
-                component: BreakfreeTradingDiscoveryComponent,
-                previewImgClass: BreakfreeTradingDiscoveryComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
-            }, 
+            // {
+            //     component: BreakfreeTradingProComponent,
+            //     previewImgClass: BreakfreeTradingProComponent.previewImgClass,
+            //     componentName: this._bftTranslateService.stream('breakfreeTradingProComponentName'),
+            //     componentIdentifier: ComponentIdentifier.breakfreeTradingPro,
+            // },  
+            // {
+            //     component: BreakfreeTradingDiscoveryComponent,
+            //     previewImgClass: BreakfreeTradingDiscoveryComponent.previewImgClass,
+            //     componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
+            //     componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
+            // }, 
             {
                 component: BreakfreeTradingNavigatorComponent,
                 previewImgClass: BreakfreeTradingNavigatorComponent.previewImgClass,

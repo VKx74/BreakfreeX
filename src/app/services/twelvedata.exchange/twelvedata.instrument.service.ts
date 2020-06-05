@@ -128,7 +128,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             case ApplicationType.Stock: market = "&Kind=stock"; break;
         }
 
-        let takeAmount = 500;
+        let takeAmount = 300;
         if (!search) {
             takeAmount = 100;
         }
