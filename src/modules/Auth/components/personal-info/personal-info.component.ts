@@ -102,7 +102,7 @@ export class PersonalInfoComponent implements ResetableComponent {
             country: new FormControl('', Validators.required),
             address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
             city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
-            postcode: new FormControl('', [Validators.required, Validators.minLength(2), digitValidator(), Validators.maxLength(9)])
+            postcode: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(10)])
         });
     }
 
