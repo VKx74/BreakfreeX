@@ -31,8 +31,8 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
     static supportedTimeFramesStr: string[] = ['1 Minute', '5 Minutes', '15 Minutes', '1 Hour', '4 Hours', '1 Day', '1 Week'];
     static supportedTimeFrames: ITimeFrame[] = [
-      /**
-     *
+      
+     
           {
             interval: 1,
             periodicity: IPeriodicity.minute
@@ -40,7 +40,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
         {
             interval: 5,
             periodicity: IPeriodicity.minute
-        },*/
+        }
         {
             interval: 15,
             periodicity: IPeriodicity.minute
