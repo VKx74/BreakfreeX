@@ -42,6 +42,7 @@
     background-color: themed('appPanelColor');
     border-radius: 5px;
     color: themed('valueTextColor');
+    border: 1px solid transparent;
 
     .instrument, .price-value, .price-change {
       color: themed('valueTextColor');
@@ -51,6 +52,6 @@
     }
   }
   .selected {
-    background-color: themed('accentColor') !important;
+    border: 1px solid themed('accentColor') !important;
   }
 }
