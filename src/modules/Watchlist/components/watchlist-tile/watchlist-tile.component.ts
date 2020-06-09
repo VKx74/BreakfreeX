@@ -8,6 +8,7 @@ import {TrendDirection, WatchlistInstrumentVM} from "../../models/models";
 })
 export class WatchlistTileComponent implements OnInit {
     @Input() watchlistInstrumentVM: WatchlistInstrumentVM;
+    @Input() isSelected: boolean;
     @Input() chartHistory;
 
     get TrendDirection() {

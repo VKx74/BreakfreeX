@@ -150,6 +150,7 @@
                         [rows]="instrumentsVM" *ngIf="viewMode === ViewMode.Table"
                         [selectable]="true"
                         [expandOnClick]="false"
+                        [selectedRow]="selectedInstrumentVM"
                         [columnCaption]="columnCaption"
                         [allowColumnsVisibilityChange]="true"
                         [expandDetailsTemplate]="details"
@@ -299,6 +300,7 @@
                          (click)="handleInstrumentClick(instrumentVM)"
                          *ngFor="let instrumentVM of instrumentsVM">
                         <watchlist-tile [watchlistInstrumentVM]="instrumentVM"
+                                        [isSelected]="instrumentVM == selectedInstrumentVM"
                                         [chartHistory]="instrumentsPriceHistory[getKeyForInstrumentsPriceHistory(instrumentVM.instrument)]"></watchlist-tile>
 
                         <div class="remove-instrument-button crypto-button-delete"

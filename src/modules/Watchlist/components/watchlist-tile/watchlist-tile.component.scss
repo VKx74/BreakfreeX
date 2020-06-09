@@ -46,9 +46,11 @@
     .instrument, .price-value, .price-change {
       color: themed('valueTextColor');
     }
-
     .name-exchange {
       color: themed('titleTextColor');
     }
+  }
+  .selected {
+    background-color: themed('accentColor') !important;
   }
 }

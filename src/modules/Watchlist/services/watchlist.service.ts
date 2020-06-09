@@ -32,6 +32,8 @@ export class WatchlistService {
     public onWatchlistRemoved: Subject<IWatchlistItem> = new Subject<IWatchlistItem>();
     public onWatchlistUpdated: Subject<IWatchlistItem> = new Subject<IWatchlistItem>();
 
+    public lastActiveWatchlistComponentId: string;
+    
     constructor(private _watchlistStorageService: WatchlistStorageService) { }
 
     public getDefaultWatchlist(): IWatchlistItem[] { 

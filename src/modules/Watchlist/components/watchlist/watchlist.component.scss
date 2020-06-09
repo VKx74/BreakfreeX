@@ -229,13 +229,12 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    font-size: 17px;
+    font-size: 17px;  
     cursor: pointer;
   }
 }
 
 @include themify($themes, true) {
-
   .functional-icons {
     .crypto-icon {
       color: themed('valueTextColor');

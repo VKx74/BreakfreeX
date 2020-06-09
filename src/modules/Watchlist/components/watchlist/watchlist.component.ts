@@ -41,6 +41,7 @@ import {IBarData} from "@app/models/common/barData";
 import { WatchlistService, IWatchlistItem } from 'modules/Watchlist/services/watchlist.service';
 import { WatchlistNameModalComponent, WatchlistNameModalMode } from '../watchlist-name-modal/watchlist-name-modal';
 import { AlertService } from '@alert/services/alert.service';
+import { HostListener } from '@angular/core';
 
 export interface IWatchlistComponentState {
     viewMode: WatchlistViewMode;
@@ -99,6 +100,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     private _watchlistAdded: Subscription;
     private _watchlistRemoved: Subscription;
     private _watchlistUpdated: Subscription;
+    private _myId: string;
 
     get ViewMode() {
         return WatchlistViewMode;
@@ -132,6 +134,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         this.setTitle(
             this._translateService.stream('watchlistComponentName')
         );
+
+        this._myId = new Date().getTime().toString();
 
         if (_state) {
             this._loadState(_state);
@@ -436,6 +440,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     handleInstrumentClick(instrumentVM: WatchlistInstrumentVM) {
+        this.selectVMItem(instrumentVM);
+    }
+
+    selectVMItem(instrumentVM: WatchlistInstrumentVM) {
+        this._watchlistService.lastActiveWatchlistComponentId = this._myId;
         this.selectedInstrumentVM = instrumentVM;
         this._sendInstrumentChange(instrumentVM.instrument);
     }
@@ -771,6 +780,47 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
         for (let interval in this.intervals) {
             clearInterval(this.intervals[interval]);
+        }
+    }
+
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) { 
+        if (!this._container.tab.isActive) {
+            return;
+        }
+
+        try {
+            const allComponents = this._layoutManagerService.layout.getAllComponents();
+            const watchlistComponents = allComponents.filter(p => {
+                const componentName = (p as any).componentName;
+                const isActive = (p as any).tab.isActive;
+                return isActive && componentName && componentName.toLowerCase() === WatchlistComponent.componentName.toLowerCase();
+            });
+
+            if (watchlistComponents.length > 1) {
+                if (this._watchlistService.lastActiveWatchlistComponentId !== this._myId) {
+                    return;
+                }
+            }
+        } catch(e) {}
+
+        let selectedItemIndex = this.instrumentsVM.indexOf(this.selectedInstrumentVM);
+        if (selectedItemIndex === -1) {
+            return;
+        }
+
+        if (event.key === "ArrowUp") {
+            event.preventDefault();
+            event.stopPropagation();
+            if (selectedItemIndex > 0) {
+                this.selectVMItem(this.instrumentsVM[--selectedItemIndex]);
+            }
+        } else if (event.key === "ArrowDown") {
+            event.preventDefault();
+            event.stopPropagation();
+            if (selectedItemIndex < this.instrumentsVM.length - 1) {
+                this.selectVMItem(this.instrumentsVM[++selectedItemIndex]);
+            }
         }
     }
 }

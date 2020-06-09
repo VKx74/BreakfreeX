@@ -1,4 +1,5 @@
 <div class="watchlist-tile w-100 h-100 crypto-text"
+     [class.selected]="isSelected"
      [class.up]="watchlistInstrumentVM.trendDirection === TrendDirection.Up"
      [class.down]="watchlistInstrumentVM.trendDirection === TrendDirection.Down">
     <div class="tile-header flex justify-space-between">
