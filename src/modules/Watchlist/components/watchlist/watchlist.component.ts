@@ -802,7 +802,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                     return;
                 }
             }
-        } catch(e) {}
+        } catch (e) {}
 
         let selectedItemIndex = this.instrumentsVM.indexOf(this.selectedInstrumentVM);
         if (selectedItemIndex === -1) {
