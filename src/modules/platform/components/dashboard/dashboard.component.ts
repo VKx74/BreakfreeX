@@ -48,6 +48,7 @@ import {ComponentPortal} from "@angular/cdk/portal";
 import {ComponentSelectorComponent} from "@platform/components/component-selector/component-selector.component";
 import {Overlay} from "@angular/cdk/overlay";
 import { SingleSessionService } from '@app/services/single-session.service';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -77,6 +78,7 @@ export class DashboardComponent {
 
     constructor(private _store: Store<AppState>,
                 private _actions: Actions,
+                private _intercom: Intercom,
                 private _dialog: MatDialog,
                 private _identityService: IdentityService,
                 private _localizationService: LocalizationService,
@@ -134,6 +136,11 @@ export class DashboardComponent {
                     this.setUpComponentSelectorDialog(parent);
                 }
             });
+        
+        this._intercom.boot({
+            app_id: "sv09ttz9",
+            hide_default_launcher: true
+        });
     }
 
     _processLayoutReady() {

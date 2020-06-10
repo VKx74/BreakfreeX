@@ -16,7 +16,8 @@
     "profileInfo": "Інформація профілю",
     "connect": "Підключити",
     "disconnect": "Відключити",
-    "addAccount": "Добавити брокер акаунт"
+    "addAccount": "Добавити брокер акаунт",
+    "support": "Підтримка"
   },
   "footer": {
     "selectedTZDate": "Часовий пояс",

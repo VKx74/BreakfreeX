@@ -43,6 +43,7 @@
     "luxon": "^1.12.1",
     "memoizee": "^0.4.14",
     "moment": "2.24.0",
+    "ng-intercom": "8.0.2",
     "ngx-captcha": "^7.0.0",
     "ngx-clipboard": "13.0.1",
     "ngx-infinite-scroll": "^8.0.0",

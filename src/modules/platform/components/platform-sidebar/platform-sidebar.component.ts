@@ -16,6 +16,7 @@ import {AppTranslateService} from "@app/localization/token";
 import {ADMIN_ITEMS, ComponentAccessService} from "@app/services/component-access.service";
 import {Roles} from "@app/models/auth/auth.models";
 import {IdentityService} from "@app/services/auth/identity.service";
+import { Intercom } from 'ng-intercom';
 
 @Component({
     selector: 'platform-sidebar',
@@ -46,6 +47,7 @@ export class PlatformSidebarComponent implements OnInit {
                 private _applicationTypeService: ApplicationTypeService,
                 private _userSettingsService: UserSettingsService,
                 private _dialog: MatDialog,
+                private _intercom: Intercom,
                 private _identityService: IdentityService,
                 ) {
     }
@@ -93,6 +95,10 @@ export class PlatformSidebarComponent implements OnInit {
                     this.save();
                 }
             });
+    }
+
+    supportClick() {
+        this._intercom.show();
     }
 
     save() {

@@ -79,6 +79,7 @@ import {TwelvedataHistoryService} from "@app/services/twelvedata.exchange/twelve
 import {TwelvedataRealtimeService} from "@app/services/twelvedata.exchange/twelvedata.realtime.service";
 import { SingleSessionService } from './services/single-session.service';
 import { BFTSocketService } from './services/socket/bft.socket.service';
+import { IntercomModule } from 'ng-intercom';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -109,6 +110,10 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         AppComponent
     ],
     imports: [
+        IntercomModule.forRoot({
+            appId: 'sv09ttz9', // from your Intercom config
+            updateOnRouterChange: true // will automatically run `update` on router event changes. Default: `false`
+        }),
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
