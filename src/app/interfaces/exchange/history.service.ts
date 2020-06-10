@@ -50,7 +50,7 @@ export abstract class HistoryServiceBase implements IHealthable {
 
         const timeDiff = request.endDate.getTime() - request.startDate.getTime();
         const granularity = HistoryHelperService.getGranularity(request.timeFrame);
-        let maxBarAmount = granularity < 3600 ? 10080 : 1000;
+        let maxBarAmount = granularity < 900 ? 5000 : 3000;
         if (timeDiff / 1000 / granularity > maxBarAmount) {
             request.startDate = new Date(request.endDate.getTime() - (granularity * maxBarAmount * 1000));
         }

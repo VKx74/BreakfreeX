@@ -121,29 +121,22 @@ export class DataFeed extends DataFeedBase {
     }
 
     private _getRequestStartDate(request: TradingChartDesigner.IBarsRequest, endDate: Date): Date {
-        const timeFrame = request.chart.timeFrame;
-
         let count = request.count;
-        let type = (request.chart.instrument as any).type;
-
-        if (TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity && type !== EMarketType.Crypto) {
-
-            let backHistory = 60 * 24 * 5;
-            if (count < backHistory)
-                count = backHistory;
-        }
-
-        if (TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity && type === EMarketType.Crypto) {
-
-            let backHistory = 60 * 24 * 1;
-            if (count < backHistory)
-                count = backHistory;
-        }
-
         const endDateTimestamp = TzUtils.dateTimestamp(endDate, this._timeZoneManager.timeZone);
         const startDateTimestamp = endDateTimestamp - (count * request.chart.timeInterval);
+        let startDate = TzUtils.convertDateTz(JsUtil.UTCDate(startDateTimestamp), UTCTimeZone, this._timeZoneManager.timeZone);
+        const day = startDate.getDay();
+        const oneDayTimeShift = 1000 * 60 * 60 * 24;
+        
+        if (day === 0) {
+            // Sunday
+            startDate.setTime(startDate.getTime() - (oneDayTimeShift * 3));
+        } else if (day === 6) {
+            // Saturday
+            startDate.setTime(startDate.getTime() - (oneDayTimeShift * 2));
+        }
 
-        return TzUtils.convertDateTz(JsUtil.UTCDate(startDateTimestamp), UTCTimeZone, this._timeZoneManager.timeZone);
+        return startDate;
     }
 
     private async _mapInstrument(instrument: TradingChartDesigner.IInstrument): Promise<IInstrument> {

@@ -7,16 +7,9 @@ export class HistoryHelperService {
     public static getGranularity(tf: ITimeFrame): number {
         switch (tf.periodicity) {
             case IPeriodicity.minute:
-                if (tf.interval >= 15) {
-                    return 900;
-                } else if (tf.interval >= 5) {
-                    return 300;
-                } else {
-                    return 60;
-                }
-
+                return 60 * tf.interval;
             case IPeriodicity.hour:
-                return 3600;
+                return 3600 * tf.interval;
             case IPeriodicity.day:
             case IPeriodicity.month:
             case IPeriodicity.week:
