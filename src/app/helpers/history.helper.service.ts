@@ -11,8 +11,11 @@ export class HistoryHelperService {
             case IPeriodicity.hour:
                 return 3600 * tf.interval;
             case IPeriodicity.day:
-            case IPeriodicity.month:
+                return 86400;
             case IPeriodicity.week:
+                return 604800;
+            case IPeriodicity.month:
+                return 2629746;
             case IPeriodicity.year:
                 return 86400;
         }
@@ -20,17 +23,17 @@ export class HistoryHelperService {
 
     // combine some lower timeframe into higher because originally some TF is not supported by feed
     public static combineResponse(request: IHistoryRequest, bars: IBarData[]): IBarData[] {
-        if (request.timeFrame.periodicity === IPeriodicity.hour && request.timeFrame.interval === 4) {
-            return this._combineBars(bars, this._4hComparer.bind(this));
-        }
+        // if (request.timeFrame.periodicity === IPeriodicity.hour && request.timeFrame.interval === 4) {
+        //     return this._combineBars(bars, this._4hComparer.bind(this));
+        // }
 
-        if (request.timeFrame.periodicity === IPeriodicity.week && request.timeFrame.interval === 1) {
-            return this._combineBars(bars, this._1weekComparer.bind(this));
-        }
+        // if (request.timeFrame.periodicity === IPeriodicity.week && request.timeFrame.interval === 1) {
+        //     return this._combineBars(bars, this._1weekComparer.bind(this));
+        // }
 
-        if (request.timeFrame.periodicity === IPeriodicity.month && request.timeFrame.interval === 1) {
-            return this._combineBars(bars, this._1monthComparer.bind(this));
-        }
+        // if (request.timeFrame.periodicity === IPeriodicity.month && request.timeFrame.interval === 1) {
+        //     return this._combineBars(bars, this._1monthComparer.bind(this));
+        // }
 
         if (request.timeFrame.periodicity === IPeriodicity.year && request.timeFrame.interval === 1) {
             return this._combineBars(bars, this._1yearComparer.bind(this));
