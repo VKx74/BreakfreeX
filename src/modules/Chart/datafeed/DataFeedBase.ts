@@ -76,19 +76,19 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
 
     constructor(protected _timeZoneManager: TimeZoneManager) {
-        this._interval = setInterval(() => {
-            try {
-                for (let i = 0; i < this.chartForRefresh.length; i++) {
-                    const c = this.chartForRefresh[i];
-                    if (!c.isDestroyed) {
-                        c.invokeValueChanged(TradingChartDesigner.ChartEvent.LAST_BAR_UPDATED, this._getLastBar(c));
-                        c.refreshAsync();
-                    }
-                }
-            } catch (e) {
-            }
-            this.chartForRefresh = [];
-        }, 1500);
+        // this._interval = setInterval(() => {
+        //     try {
+        //         for (let i = 0; i < this.chartForRefresh.length; i++) {
+        //             const c = this.chartForRefresh[i];
+        //             if (!c.isDestroyed) {
+        //                 c.invokeValueChanged(TradingChartDesigner.ChartEvent.LAST_BAR_UPDATED, this._getLastBar(c));
+        //                 c.refreshAsync();
+        //             }
+        //         }
+        //     } catch (e) {
+        //     }
+        //     this.chartForRefresh = [];
+        // }, 1500);
     }
 
     /**
@@ -241,6 +241,9 @@ export abstract class DataFeedBase implements IDatafeedBase {
             } else {
                 this._updateLastBar(lastBar, chart, tick.instrument);
             }
+
+            chart.invokeValueChanged(TradingChartDesigner.ChartEvent.LAST_BAR_UPDATED, lastBar);
+            chart.refreshAsync();
         }
     }
 
