@@ -46,8 +46,8 @@ export class OandaInstrumentService extends InstrumentServiceBase {
                     type: EMarketType.Forex,
                     tickSize: tickSize,
                     pricePrecision: this._getPricePrecision(tickSize),
-                    baseInstrument: this._getBaseInstrument(product.Symbol),
-                    dependInstrument: this._getDependInstrument(product.Symbol),
+                    dependInstrument: this._getDependSymbol(product.Symbol),
+                    baseInstrument: this._getBaseSymbol(product.Symbol),
                     company: desciption,
                     tradable: true
                 };
@@ -60,18 +60,18 @@ export class OandaInstrumentService extends InstrumentServiceBase {
             console.log(ex);
         }
 
-        return this._filterResponse(exchange, search);
+        return this._cachedSymbols;
     }
 
     private _getTickSize(symbol: string): number {
         return 0.00001;
     }
 
-    private _getDependInstrument(symbol: string): string {
+    private _getBaseSymbol(symbol: string): string {
         return symbol.split("_")[0];
     }
 
-    private _getBaseInstrument(symbol: string): string {
+    private _getDependSymbol(symbol: string): string {
         return symbol.split("_")[1];
     }
 }

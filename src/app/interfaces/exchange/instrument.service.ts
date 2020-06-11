@@ -7,10 +7,16 @@ import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import { EExchangeInstance } from './exchange';
 
+interface IInstrumentDelayedRequest {
+    subject: Subject<IInstrument[]>;
+    exchange?: EExchange;
+    search?: string;
+}
+
 export abstract class InstrumentServiceBase implements IHealthable {
     protected _cachedSymbols: IInstrument[] = [];
     protected _request: Observable<IInstrument[]>;
-    protected _subject: Subject<IInstrument[]>;
+    protected _delayedRequests: IInstrumentDelayedRequest[] = [];
     protected _endpoint: string;
     protected _isHealthy: boolean = true;
     protected _supportedMarkets: EMarketType[] = [];
@@ -38,25 +44,36 @@ export abstract class InstrumentServiceBase implements IHealthable {
             return of([]);
         }
 
+        const subject = new Subject<IInstrument[]>();
+        this._delayedRequests.push({
+            subject: subject,
+            exchange: exchange,
+            search: search
+        });
         if (!this._request) {
-            this._subject = new Subject<IInstrument[]>();
             this._request = this._requestInstruments().pipe(map(response => this.mapResponse(response, exchange, search)));
 
             this._request.subscribe(value => {
-                this._subject.next(value);
-                this._subject.complete();
+                for (const request of this._delayedRequests) {
+                    request.subject.next(this._filterResponse(request.exchange, request.search));
+                    request.subject.complete();
+                }
+                this._delayedRequests = [];
                 this._request = null;
             }, error => {
                 console.log('Failed to load symbol from ' + this._http);
                 console.log(error);
                 this._isHealthy = false;
-                this._subject.next([]);
-                this._subject.complete();
+                for (const request of this._delayedRequests) {
+                    request.subject.next([]);
+                    request.subject.complete();
+                }
+                this._delayedRequests = [];
                 this._request = null;
             });
         }
 
-        return this._subject;
+        return subject;
     }
 
     protected _requestInstruments(): Observable<any[]> {

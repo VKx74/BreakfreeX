@@ -16,12 +16,12 @@ import { EMarketType } from '@app/models/common/marketType';
 
 export abstract class DataFeedBase implements IDatafeedBase {
     static DefaultInstrument: IInstrument = {
-        baseInstrument: "Euro",
-        company: "Euro vs US Dollar",
-        datafeed: EExchangeInstance.TwelvedataExchange,
-        dependInstrument: "US Dollar",
-        exchange: EExchange.Forex,
-        id: "EUR/USD",
+        baseInstrument: "EUR",
+        company: "EUR vs USD",
+        datafeed: EExchangeInstance.OandaExchange,
+        dependInstrument: "USD",
+        exchange: EExchange.Oanda,
+        id: "EUR_USD",
         pricePrecision: 5,
         symbol: "EURUSD",
         tickSize: 0.00001,

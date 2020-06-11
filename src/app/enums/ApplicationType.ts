@@ -15,8 +15,8 @@ APP_TYPE_EXCHANGES[ApplicationType.Crypto] = [
 ];
 
 APP_TYPE_EXCHANGES[ApplicationType.Stock]  = [EExchangeInstance.TwelvedataExchange];
-APP_TYPE_EXCHANGES[ApplicationType.Forex] = [EExchangeInstance.TwelvedataExchange, EExchangeInstance.OandaExchange];
-APP_TYPE_EXCHANGES[ApplicationType.All]  = [EExchangeInstance.TwelvedataExchange, EExchangeInstance.OandaExchange];
+APP_TYPE_EXCHANGES[ApplicationType.Forex] = [EExchangeInstance.OandaExchange, EExchangeInstance.TwelvedataExchange];
+APP_TYPE_EXCHANGES[ApplicationType.All]  = [EExchangeInstance.OandaExchange, EExchangeInstance.TwelvedataExchange];
 
 export const APP_TYPE_BROKERS: {[index: string]: EBrokerInstance[]} = {};
 

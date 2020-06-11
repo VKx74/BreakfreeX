@@ -140,20 +140,32 @@ export class DataFeed extends DataFeedBase {
     }
 
     private async _mapInstrument(instrument: TradingChartDesigner.IInstrument): Promise<IInstrument> {
-        for (let i = 0; i < this.instruments.length; i++) {
-            if (this.instruments[i].symbol === instrument.symbol && this.instruments[i].exchange === instrument.exchange) {
-                return this.instruments[i];
-            }
-        }
+        return {
+            baseInstrument: (instrument as any).baseInstrument,
+            dependInstrument: (instrument as any).dependInstrument,
+            company: instrument.company,
+            datafeed: instrument.datafeed as EExchangeInstance,
+            exchange: instrument.exchange as EExchange,
+            id: instrument.id,
+            pricePrecision: (instrument as any).pricePrecision,
+            symbol: instrument.symbol,
+            tickSize: instrument.tickSize,
+            type: (instrument as any).type as EMarketType,
+        };
+        // for (let i = 0; i < this.instruments.length; i++) {
+        //     if (this.instruments[i].symbol === instrument.symbol && this.instruments[i].exchange === instrument.exchange) {
+        //         return this.instruments[i];
+        //     }
+        // }
 
-        const instruments = await this._instrumentService.getInstruments(instrument.datafeed as EExchangeInstance, instrument.symbol).toPromise();
-        for (let i = 0; i < instruments.length; i++) {
-            if (instruments[i].symbol === instrument.symbol && instruments[i].exchange === instrument.exchange) {
-                return instruments[i];
-            }
-        }
+        // const instruments = await this._instrumentService.getInstruments(instrument.datafeed as EExchangeInstance, instrument.symbol).toPromise();
+        // for (let i = 0; i < instruments.length; i++) {
+        //     if (instruments[i].symbol === instrument.symbol && instruments[i].exchange === instrument.exchange) {
+        //         return instruments[i];
+        //     }
+        // }
 
-        return null;
+        // return null;
     }
 
     private _mapTimeFrame(request: TradingChartDesigner.IBarsRequest): ITimeFrame {

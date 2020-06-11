@@ -9,9 +9,15 @@ import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
 import { EMarketType } from '@app/models/common/marketType';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
-import {ForexWatchlist} from './forex';
+
+import {MinorForexWatchlist} from './minorForex';
 import {MajorForexWatchlist} from './majorForex';
+import {ExoticsForexWatchlist} from './exoticForex';
+import {IndicesWatchlist} from './indicaes';
 import {EquitiesWatchlist} from './equities';
+import {CommoditiesWatchlist} from './commodities';
+import {BondsWatchlist} from './bonds';
+import {MetalsWatchlist} from './metals';
 
 export interface IWatchlistItem {
     id: string;
@@ -37,7 +43,7 @@ export class WatchlistService {
     constructor(private _watchlistStorageService: WatchlistStorageService) { }
 
     public getDefaultWatchlist(): IWatchlistItem[] { 
-        return [MajorForexWatchlist, ForexWatchlist, EquitiesWatchlist];
+        return [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
     }
 
     public getWatchlists(): Observable<IWatchlistItem[]> { 
