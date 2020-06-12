@@ -25,7 +25,7 @@ analize-app:
     #     - web
 
 build-app:
-  image: node:12.8.0-alpine
+  image: node:latest
   stage: build
   <<: *npmrc-settings-job
   script:
@@ -91,7 +91,7 @@ build-stable:
         - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
         - docker build --tag $CONTAINER_IMAGE:stable .
         - docker push $CONTAINER_IMAGE:stable
-    tags:
-        - docker
+    # tags:
+    #     - docker
     only:
         - master
