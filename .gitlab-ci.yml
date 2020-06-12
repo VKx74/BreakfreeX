@@ -42,9 +42,6 @@ build-app:
     - npm i
     - echo "Build"
     - npm run build-stage
-  cache:
-        paths:
-            - dist/
   artifacts:
         expire_in: 1 day
         paths:
