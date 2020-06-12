@@ -6,7 +6,7 @@
     "start": "ng serve --port=0",
     "build": "npm run build-stage",
     "build-prod": "ng build -c prod",
-    "build-stage": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng build -c stage",
+    "build-stage": "ng build -c stage",
     "report": "webpack-bundle-analyzer dist/stats.json --port=0",
     "report-prod": "ng build -c prod --sourceMap=false --stats-json",
     "report-build": "ng build --aot --stats-json",
