@@ -91,7 +91,7 @@ build-stable:
         - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
         - docker build --tag $CONTAINER_IMAGE:stable .
         - docker push $CONTAINER_IMAGE:stable
-    # tags:
-    #     - docker
+    tags:
+        - docker
     only:
         - master
