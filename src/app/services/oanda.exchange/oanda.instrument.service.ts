@@ -32,7 +32,8 @@ export class OandaInstrumentService extends InstrumentServiceBase {
             const products = response.Data;
             for (let i = 0; i < products.length; i++) {
                 const product = products[i];
-                const tickSize = this._getTickSize(product.Symbol);
+                const tickSize = this._getTickSize(product.PricePrecision);
+                const type = this._getType(product.Type);
                 let desciption = "";
                 let splitedSymbol = product.Symbol.split("_");
                 if (splitedSymbol.length === 2) {
@@ -43,7 +44,7 @@ export class OandaInstrumentService extends InstrumentServiceBase {
                     symbol: product.Symbol.replace("/", "").replace("_", ""),
                     exchange: EExchange.Oanda,
                     datafeed: EExchangeInstance.OandaExchange,
-                    type: EMarketType.Forex,
+                    type: type,
                     tickSize: tickSize,
                     pricePrecision: this._getPricePrecision(tickSize),
                     dependInstrument: this._getDependSymbol(product.Symbol),
@@ -63,8 +64,19 @@ export class OandaInstrumentService extends InstrumentServiceBase {
         return this._cachedSymbols;
     }
 
-    private _getTickSize(symbol: string): number {
-        return 0.00001;
+    private _getTickSize(pricePrecision: number): number {
+        return 1 / (Math.pow(10, pricePrecision));
+    } 
+    
+    private _getType(type: string): EMarketType {
+        if (type === "CFD") {
+            return EMarketType.CFD;
+        }
+        if (type === "METAL") {
+            return EMarketType.Metals;
+        }
+
+        return EMarketType.Forex;
     }
 
     private _getBaseSymbol(symbol: string): string {

@@ -7,6 +7,8 @@ export enum EMarketType {
     Warrant = 'Warrant',
     Forex = 'Forex',
     Stocks = 'Stocks',
-    Indices = 'Indices'
+    Indices = 'Indices',
+    Metals = 'Metals',
+    CFD = 'CFD'
 }
 
