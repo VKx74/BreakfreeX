@@ -154,7 +154,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 theme: theme,
                 addThemeClass: false,
                 chartType: 'hollowCandle',
-                //  crossHair: "crossBars",
+                crossHair: "crossBars",
                 datafeed: d,
                 hideScrollToLastBar: true,
                 instrument: state ? state.instrument : DataFeedBase.DefaultInstrument,

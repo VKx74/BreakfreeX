@@ -258,6 +258,11 @@ file-info-simple {
 
     .message-text {
       text-align: left;
+      -moz-user-select: text;
+      -khtml-user-select: text;
+      -webkit-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
     }
   }
 }
@@ -284,6 +289,11 @@ file-info-simple {
 
     .message-text {
       //color: themed('primeColor');
+      -moz-user-select: text;
+      -khtml-user-select: text;
+      -webkit-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
     }
   }
 
