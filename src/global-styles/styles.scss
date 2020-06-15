@@ -407,20 +407,35 @@ lm_tab.bftn {
 
 
 
+
 .Dark-theme  .open span.bftsvg {
 
   fill: #ffffffd1 !important;
 }
 
+.tcdToolbarNav a, .tcdToolbarNav li {
+  text-decoration: none;
+}
 
+.Light-theme .tcdToolbar-top {
+  border-top:1px solid #f2f2f2;
+}
+.Dark-theme {
+border-top:1px solid #f8f8f82e;
+}
 
 .Dark-theme  input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
-  border: 1px solid #f8f8f82e;
+  border-left: 1px solid #f8f8f82e;
+  border-right: 1px solid #f8f8f82e;
+  background-color: transparent;
+
 }
 
 .Light-theme  input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
-  border: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
   background-color: transparent;
+
 }
 
 .Light-theme .tcdToolbar.tcdToolbarNav .tcdToolbarInput {
