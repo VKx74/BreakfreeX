@@ -51,7 +51,7 @@
       "MustContainUpperCase": "Password must contain at least one uppercase letter",
       "MustContainLowerCase": "Password must contain at least one lowercase letter"
     },
-    "mismatchPasswords": "Password does`t match",
+    "mismatchPasswords": "Password doesnt match",
     "min": "Min value for this field is: {{ minValue }}",
     "max": "Max value for this field is: {{ maxValue }} ",
     "invalid": "This field is invalid",
