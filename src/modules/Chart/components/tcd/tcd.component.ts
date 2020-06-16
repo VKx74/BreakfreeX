@@ -68,7 +68,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     chart: TradingChartDesigner.Chart;
     // linksList: TradingChartDesigner.IHelpLinks;
-    showSpinner = true;
+    // showSpinner = true;
 
     @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
 
@@ -196,9 +196,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
             }
 
             this.setTitle();
-            setTimeout(() => {
-                this.showSpinner = false;
-            }, 1000);
+            // setTimeout(() => {
+            //     this.showSpinner = false;
+            // }, 1000);
 
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_ADDED, this.indicatorAdded.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED, this.indicatorRemoved.bind(this));

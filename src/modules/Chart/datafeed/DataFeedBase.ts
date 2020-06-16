@@ -261,7 +261,9 @@ export abstract class DataFeedBase implements IDatafeedBase {
      */
     sendRequest(request: IRequest) {
         this._requests.add(request.requestNumber, request);
-        request.chart.showWaitingBar();
+        if (request.name === RequestKind.BARS) {
+            request.chart.showWaitingBar();
+        }
     }
 
     /**
