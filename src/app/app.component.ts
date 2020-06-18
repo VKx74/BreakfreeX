@@ -69,6 +69,14 @@ export class AppComponent {
         });
 
         this._angulartics2Segment.startTracking();
+        // [userId], [traits], [options], [callback]
+
+        if (this._authService.email) {
+            this._angulartics2Segment.setUserProperties({
+                userId: this._authService.email,
+                subscriptions: this._authService.subscriptions.join(";")
+            });
+        }
     }
 
     ngOnInit() {
