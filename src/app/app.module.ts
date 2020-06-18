@@ -80,7 +80,6 @@ import {TwelvedataRealtimeService} from "@app/services/twelvedata.exchange/twelv
 import { SingleSessionService } from './services/single-session.service';
 import { BFTSocketService } from './services/socket/bft.socket.service';
 import { IntercomModule } from 'ng-intercom';
-
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2Segment } from 'angulartics2/segment';
 
@@ -133,7 +132,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         }),
         FileUploaderLocalizationModule,
         // added to imports
-        Angulartics2Module.forRoot([Angulartics2Segment]),
+        Angulartics2Module.forRoot()
     ],
     providers: [
         AuthenticationService,
