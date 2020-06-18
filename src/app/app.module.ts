@@ -136,6 +136,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
     ],
     providers: [
         AuthenticationService,
+        Angulartics2Segment,
         CookieService,
         AppConfigService,
         {
