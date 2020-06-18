@@ -22,6 +22,8 @@ import {UserSettingsService} from "@app/services/user-settings/user-settings.ser
 import {filter, tap} from "rxjs/operators";
 import {AppRoutes} from './app.routes';
 import {ApplicationTypeService} from "@app/services/application-type.service";
+import { Angulartics2Segment } from 'angulartics2/segment';
+
 
 @Component({
     selector: 'app',
@@ -55,6 +57,7 @@ export class AppComponent {
                 private _localizationService: LocalizationService,
                 private _userSettingsService: UserSettingsService,
                 private _applicationTypeService: ApplicationTypeService,
+                private _angulartics2Segment: Angulartics2Segment,
                 @Inject(AppTranslateService) private _translateService: TranslateService
     ) {
 
@@ -65,6 +68,7 @@ export class AppComponent {
             }
         });
 
+        this._angulartics2Segment.startTracking();
     }
 
     ngOnInit() {

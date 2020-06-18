@@ -81,6 +81,9 @@ import { SingleSessionService } from './services/single-session.service';
 import { BFTSocketService } from './services/socket/bft.socket.service';
 import { IntercomModule } from 'ng-intercom';
 
+import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2Segment } from 'angulartics2/segment';
+
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
 const FILE_INPUT_CONFIG_PROVIDER = {
@@ -128,7 +131,9 @@ const FILE_INPUT_CONFIG_PROVIDER = {
                 strictActionImmutability: true
             }
         }),
-        FileUploaderLocalizationModule
+        FileUploaderLocalizationModule,
+        // added to imports
+        Angulartics2Module.forRoot([Angulartics2Segment]),
     ],
     providers: [
         AuthenticationService,
