@@ -180,8 +180,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             if (state && state.chartState) {
                 // locale from app
                 state.chartState.chart.locale = this._localizationService.locale;
-                state.chartState.chart.theme = this._getTheme();
-
+                // state.chartState.chart.theme = this._getTheme();
                 this.chart.applyCopy(state.chartState);
             }
 
