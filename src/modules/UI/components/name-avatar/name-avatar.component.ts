@@ -53,7 +53,7 @@ export class NameAvatarComponent implements OnInit, OnChanges {
     }
 
     setImage() {
-        if (!this.src) {
+        if (!this.src || this.src === FileStorageService.ChatThreadDefaultPhotoId) {
             this.avatarSrc = this._getDefaultAvatar(this.name);
         } else {
             this._fileStorageService.getImageBase64(this.src)
