@@ -76,7 +76,11 @@ export class ChangeUsernameComponent implements OnInit {
             });
         }, error => {
             console.error(error);
-            this._alertService.error(this._translateService.get('usernameChangedFailed'));
+            if (error.error) {
+                this._alertService.error(error.error);
+            } else {
+                this._alertService.error("Failed to set username");
+            }
             this.processing = false;
         });
     }
