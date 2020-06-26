@@ -1,15 +1,4 @@
 <div class="link-selector">
-    <div class="matMenuTrigger" [matMenuTriggerFor]="menu"
-         [ngStyle]="{'background-color': linkingDisabled ? 'transparent' : activeLinking}">
-    </div>
-    <mat-menu #menu="matMenu"
-              class="linkSelectorMenuPanel">
-        <button *ngFor="let color of Colors"
-                class="matMenuButton"
-                mat-menu-item
-                [ngStyle]="{'background-color': color}"
-                (click)="handleColorSelected(color)"></button>
-        <button class="matMenuButton" mat-menu-item (click)="disableLinking()"><i class="fa fa-ban"></i>
-        </button>
-    </mat-menu>
+    <color-selector [activeColor]="activeLinking" (activeColorChange)='handleColorSelected($event)'>
+    </color-selector>
 </div>

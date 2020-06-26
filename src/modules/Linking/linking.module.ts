@@ -2,7 +2,7 @@
 import {ModuleWithProviders, NgModule} from "@angular/core";
 import {LinkingMessagesBus} from "./services";
 import {LinkerFactory} from "./linking-manager";
-import {LinkSelectorComponent} from "./components";
+import {LinkSelectorComponent, ColorSelectorComponent} from "./components";
 import {MatMenuModule} from "@angular/material/menu";
 import {CommonModule} from "@angular/common";
 import {sharedProviderResolver} from "../popup-window/functions";
@@ -17,10 +17,12 @@ export function sharedLinkingMessageBus() {
         MatMenuModule
     ],
     declarations: [
-        LinkSelectorComponent
+        LinkSelectorComponent,
+        ColorSelectorComponent
     ],
     exports: [
-        LinkSelectorComponent
+        LinkSelectorComponent,
+        ColorSelectorComponent
     ],
     entryComponents: [
         LinkSelectorComponent

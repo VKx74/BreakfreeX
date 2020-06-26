@@ -1,0 +1,34 @@
+/deep/ .colorSelectorMenuPanel { // global
+  min-width: 20px !important;
+  width: 30px;
+
+  .mat-menu-content {
+    padding-bottom: 0;
+  }
+}
+
+
+.matMenuTrigger {
+  width: 16px;
+  height: 16px;
+  line-height: 15px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 9px;
+  border-radius: 50%;
+  border: 1px solid #58585887;
+  color: #58585887;
+  cursor: pointer;
+}
+
+.matMenuButton {
+  width: 16px;
+  height: 16px;
+  margin: 5px auto;
+  padding: 0;
+  line-height: 16px;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 9px;
+}

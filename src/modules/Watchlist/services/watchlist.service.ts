@@ -18,6 +18,8 @@ import {EquitiesWatchlist} from './equities';
 import {CommoditiesWatchlist} from './commodities';
 import {BondsWatchlist} from './bonds';
 import {MetalsWatchlist} from './metals';
+import { SettingsStorageService } from '@app/services/settings-storage.servic';
+import { IFeaturedInstruments, IUserSettings } from '@app/models/settings/user-settings';
 
 export interface IWatchlistItem {
     id: string;
@@ -40,7 +42,9 @@ export class WatchlistService {
 
     public lastActiveWatchlistComponentId: string;
     
-    constructor(private _watchlistStorageService: WatchlistStorageService) { }
+    constructor(private _watchlistStorageService: WatchlistStorageService, private _settingsStorageService: SettingsStorageService) { 
+    
+    }
 
     public getDefaultWatchlist(): IWatchlistItem[] { 
         return [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
@@ -70,6 +74,20 @@ export class WatchlistService {
 
         return this._subject;
     } 
+
+    public getFeaturedInstruments(): Observable<IFeaturedInstruments[]>  {
+        return this._settingsStorageService.getSettings().pipe(
+            map((data: IUserSettings) => {
+                if (!data) {
+                    return [];
+                }
+                return data.FeaturedInstruments || [];
+            }));
+    }
+
+    public updateFeaturedInstruments(instruments: IFeaturedInstruments[]): Observable<void>  {
+        return this._settingsStorageService.updateFeaturedInstruments(instruments);
+    }
     
     public addWatchlist(name: string, data: IInstrument[], trackingId?: string): Observable<IWatchlistItem>  { 
         return this._watchlistStorageService.saveWatchlist(name, data).pipe(map((response: IWatchlistItem) => {

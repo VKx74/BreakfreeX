@@ -42,6 +42,7 @@ import { WatchlistService, IWatchlistItem } from 'modules/Watchlist/services/wat
 import { WatchlistNameModalComponent, WatchlistNameModalMode } from '../watchlist-name-modal/watchlist-name-modal';
 import { AlertService } from '@alert/services/alert.service';
 import { HostListener } from '@angular/core';
+import { IFeaturedInstruments } from '@app/models/settings/user-settings';
 
 export interface IWatchlistComponentState {
     viewMode: WatchlistViewMode;
@@ -87,6 +88,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     instrumentsVM: WatchlistInstrumentVM[] = [];
     activeWatchlist: IWatchlistItem;
     existingWatchlists: IWatchlistItem[];
+    featuredInstruments: IFeaturedInstruments[];
 
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
     selectedInstrumentVM: WatchlistInstrumentVM = null;
@@ -169,6 +171,56 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this._watchlistRemoved = this._watchlistService.onWatchlistRemoved.subscribe(this._watchlistRemovedHandler.bind(this));
             this._watchlistUpdated = this._watchlistService.onWatchlistUpdated.subscribe(this._watchlistUpdatedHandler.bind(this));
         });
+
+        this._watchlistService.getFeaturedInstruments().subscribe((data: IFeaturedInstruments[]) => {
+            this.featuredInstruments = data.slice();
+        });
+    }
+
+    public getFeaturedDetails(instrument: IInstrument): string {
+        if (!this.featuredInstruments) {
+            return null;
+        }
+
+        for (let i = 0; i < this.featuredInstruments.length; i++) {
+            if (this.featuredInstruments[i].instrument === instrument.id && this.featuredInstruments[i].exchange === instrument.exchange) {
+                return this.featuredInstruments[i].group;
+            }
+        }
+
+        return null;
+    }
+
+    public handleColorSelected(color: string, instrumentWM: WatchlistInstrumentVM) {
+        const instrument = instrumentWM.instrument;
+        let exits = false;
+        let saveNeeded = false;
+
+        for (let i = 0; i < this.featuredInstruments.length; i++) {
+            if (this.featuredInstruments[i].instrument === instrument.id && this.featuredInstruments[i].exchange === instrument.exchange) {
+                if (color) {
+                    this.featuredInstruments[i].group = color;
+                } else {
+                    this.featuredInstruments.splice(i, 1);
+                }
+                exits = true;
+                saveNeeded = true;
+                break;
+            }
+        }
+
+        if (!exits && color) {
+            this.featuredInstruments.push({
+                exchange: instrument.exchange,
+                instrument: instrument.id,
+                group: color
+            });
+            saveNeeded = true;
+        }
+
+        if (saveNeeded) {
+            this._watchlistService.updateFeaturedInstruments(this.featuredInstruments).subscribe();
+        }
     }
 
     protected _addDefaultWatchlists() {
@@ -822,5 +874,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 this.selectVMItem(this.instrumentsVM[++selectedItemIndex]);
             }
         }
+    }
+
+    public click(event: MouseEvent) {
+        event.preventDefault();
+        event.stopPropagation();
     }
 }

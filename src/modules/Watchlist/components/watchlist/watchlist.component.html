@@ -157,6 +157,11 @@
                         [maxExpandedRows]="5"
                         [hiddenColumns]="hiddenColumns"
                         (onRowSelect)="handleInstrumentClick($event)">
+
+
+                <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="20">
+                </data-table-header-cell>
+
                 <data-table-header-cell columnName="symbol" [sortable]="true">
                     {{'instrument' | translate}}
                 </data-table-header-cell>
@@ -191,9 +196,15 @@
                     {{'chart' | translate}}
                 </data-table-header-cell>
 
-                <data-table-header-cell columnName="remove" [sortable]="false" [columnWidth]="1">
+                <data-table-header-cell columnName="remove" [sortable]="false" [columnWidth]="20">
                 </data-table-header-cell>
 
+                <data-table-cell columnName="featured">
+                    <ng-template let-instrumentVM>
+                        <color-selector [activeColor]="getFeaturedDetails(instrumentVM.instrument)" (activeColorChange)='handleColorSelected($event, instrumentVM)'  (click)="click($event)">
+                        </color-selector>
+                    </ng-template>
+                </data-table-cell>
                 <data-table-cell columnName="symbol">
                     <ng-template let-instrumentVM>{{instrumentVM.instrument.symbol}}
                         : {{instrumentVM.instrument.exchange}}</ng-template>
@@ -250,7 +261,7 @@
                 </data-table-cell>
                 <data-table-cell columnName="remove">
                     <ng-template let-instrumentVM let-rowIndex="index">
-                        <div class="controls-wrapper" style="margin-left: -10px">
+                        <div class="controls-wrapper">
                             <div class="controls-wrapper-inner">
                                 <!-- <div class="control m-right-10"
                                      (click)="$event.stopPropagation(); placeOrder(instrumentVM)">

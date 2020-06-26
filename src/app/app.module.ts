@@ -82,6 +82,7 @@ import { BFTSocketService } from './services/socket/bft.socket.service';
 import { IntercomModule } from 'ng-intercom';
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2Segment } from 'angulartics2/segment';
+import { SettingsStorageService } from './services/settings-storage.servic';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -233,6 +234,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         },
 
         ApplicationTypeService,
+        SettingsStorageService,
         AuthGuard,
         BlockIfPopupWindowGuard,
         BrokerService,

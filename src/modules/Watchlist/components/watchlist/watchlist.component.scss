@@ -25,14 +25,6 @@
     max-width: 120px;
   }
 
-  //.padding-wrapper {
-  //  padding: 4px;
-  //}
-
-  .crypto-button-delete:hover {
-     background-color: transparent !important; 
-    color: #000000 !important;
-}
 
 .crypto-button-delete {
   color: transparent;
@@ -281,7 +273,10 @@ font-weight:600;
     background-color: themed('activeBackgroundColor') !important;
       
 
-
+    .crypto-button-delete {
+      background-color: transparent !important; 
+      color: #000000 !important;
+    }
         
 
     .Light-theme  .mat-cell {
@@ -326,7 +321,16 @@ font-weight:600;
         background-color: themed('activeBackgroundColor');
         opacity: 0.9;
       }
+      .crypto-button-delete {
+        background-color: transparent !important; 
+        color: #000000 !important;
+      }
     }
+
+    // .matMenuTrigger {
+    //   border-right: 1px solid themed('appBackgroundColor') !important;
+    // }
+
   }
 
 }
@@ -342,6 +346,13 @@ font-weight:600;
 
     .mat-column-chart {
       overflow: visible;
+    }
+
+    .matMenuTrigger {
+      width: 10px !important;
+      height: 22px !important;
+      border-radius: 0px !important;
+      margin-left: -13px;
     }
   }
 }

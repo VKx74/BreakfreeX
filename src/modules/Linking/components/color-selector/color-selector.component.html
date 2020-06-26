@@ -1,0 +1,15 @@
+<div class="color-selector">
+    <div class="matMenuTrigger" [matMenuTriggerFor]="menu"
+         [ngStyle]="{'background-color': colorDisabled ? '#80808025' : activeColor}">
+    </div>
+    <mat-menu #menu="matMenu"
+              class="colorSelectorMenuPanel">
+        <button *ngFor="let color of Colors"
+                class="matMenuButton"
+                mat-menu-item
+                [ngStyle]="{'background-color': color}"
+                (click)="handleColorSelected(color)"></button>
+        <button class="matMenuButton" mat-menu-item (click)="disableLinking()"><i class="fa fa-ban"></i>
+        </button>
+    </mat-menu>
+</div>
