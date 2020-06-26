@@ -8,6 +8,11 @@ import {Injectable} from "@angular/core";
 })
 export class EventWebsocketService extends WebsocketBase {
 
+    // TODO: Add support of ping/pong
+    get usePingPongs(): boolean {
+        return false;
+    }
+
     get config(): IWebSocketConfig {
         return {
             url: `${AppConfigService.config.apiUrls.eventConsolidatorWebSocket}`

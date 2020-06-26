@@ -6,6 +6,10 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class UssSocketService extends WebsocketBase {
 
+    get usePingPongs(): boolean {
+        return true;
+    }
+
     get config(): IWebSocketConfig {
         return {
             url: AppConfigService.config.apiUrls.webSocketUrl + '?accesstoken=' + AppConfigService.config.apiKey

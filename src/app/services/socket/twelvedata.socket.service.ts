@@ -5,6 +5,11 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class TwelvedataSocketService extends WebsocketBase {
+
+  get usePingPongs(): boolean {
+    return true;
+  }
+
   get config(): IWebSocketConfig {
     return {
       url: AppConfigService.config.apiUrls.twelvedataWS

@@ -6,6 +6,10 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class NotificationWebSocketService extends WebsocketBase {
 
+    get usePingPongs(): boolean {
+        return true;
+    }
+
     get config(): IWebSocketConfig {
         return {
             url: AppConfigService.config.apiUrls.notificationWebSocketUrl
