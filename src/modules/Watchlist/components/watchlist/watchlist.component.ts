@@ -173,7 +173,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         });
 
         this._watchlistService.getFeaturedInstruments().subscribe((data: IFeaturedInstruments[]) => {
-            this.featuredInstruments = data.slice();
+            this.featuredInstruments = data;
         });
     }
 

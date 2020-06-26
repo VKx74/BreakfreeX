@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of, Observer} from 'rxjs';
+import {Observable, of, Observer, Subject} from 'rxjs';
 import {catchError, map, tap} from "rxjs/operators";
 import {IdentityService} from './auth/identity.service';
 import {AppConfigService} from './app.config.service';
@@ -10,6 +10,7 @@ import { IUserSettings, IFeaturedInstruments } from '@app/models/settings/user-s
 export class SettingsStorageService {
 
     private _settings: IUserSettings;
+    private _loadingSubject: Subject<IUserSettings>;
 
     constructor(private http: HttpClient,
                 private _identity: IdentityService) {
@@ -23,12 +24,37 @@ export class SettingsStorageService {
         if (this._settings) {
             return of(this._settings);
         }
+
+        if (this._loadingSubject) {
+            return this._loadingSubject;
+        }
         
-        return this.http.get<IUserSettings>(this._url).pipe(
+        this._loadingSubject = new Subject<IUserSettings>();
+
+        this.http.get<IUserSettings>(this._url).pipe(
             map((data: any) => {
                 this._settings = JSON.parse(data);
+                if (!this._settings) {
+                    this._settings = {
+                        FeaturedInstruments: []
+                    };
+                }
                 return this._settings;
-            }));
+            })).subscribe((data: IUserSettings) => {
+                this._loadingSubject.next( this._settings);
+                this._loadingSubject.complete();
+                this._loadingSubject = null;
+            }, error => {
+                console.log('Failed to load  featured instruments');
+                this._settings = {
+                    FeaturedInstruments: []
+                };
+                this._loadingSubject.next( this._settings);
+                this._loadingSubject.complete();
+                this._loadingSubject = null;
+            });
+
+        return this._loadingSubject;
     }
 
     public updateFeaturedInstruments(instruments: IFeaturedInstruments[]): Observable<void>  {
@@ -40,7 +66,7 @@ export class SettingsStorageService {
                 }
                 
                 if (instruments && instruments.length) {
-                    existingData.FeaturedInstruments = instruments.slice();
+                    existingData.FeaturedInstruments = instruments;
                     this.saveSettings(existingData).subscribe();
                 }
 
