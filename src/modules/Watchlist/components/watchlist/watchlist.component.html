@@ -321,6 +321,9 @@
                                aria-hidden="true"></i>
                         </div>
 
+                        <color-selector class="tiles_view" [activeColor]="getFeaturedDetails(instrumentVM.instrument)" (activeColorChange)='handleColorSelected($event, instrumentVM)'  (click)="click($event)">
+                        </color-selector>
+
                         <!-- <div class="tiles-trading-controls">
                             <div class="control m-right-10"
                                  (click)="$event.stopPropagation(); placeOrder(instrumentVM)">
