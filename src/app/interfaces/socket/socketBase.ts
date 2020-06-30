@@ -28,7 +28,7 @@ export abstract class WebsocketBase {
     }
 
     get usePingPongs(): boolean {
-        return false;
+        return true;
     }
 
     protected reconnectConfig: IWebSocketReconnectConfig = {
