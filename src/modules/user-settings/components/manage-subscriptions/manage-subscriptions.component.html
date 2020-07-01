@@ -1,0 +1,39 @@
+
+<div class="section flex crypto-form-unit">
+    <div class="form-unit__label">{{"profileInfo.subscriptions" | translate}}</div>
+    <div class="subscription-row justify-space-between flex" *ngFor="let sub of subscriptions">
+        <div class="flex status">
+            {{sub.status}}
+        </div>
+        <div class="flex name">
+            {{sub.name}}
+        </div>
+        <div class="flex price">
+            {{sub.price.toFixed(2)}}({{sub.currency}})
+        </div>
+        <div class="flex interval">
+            {{sub.intervalCount}} {{sub.interval}}(s)
+        </div>
+        <div class="flex date">
+            {{sub.created.toDateString()}}
+        </div>
+    </div>
+    <div *ngIf="subscriptions == null"  class="flex">
+      Loading...
+    </div> 
+    <div *ngIf="subscriptions != null && subscriptions.length == 0" class="flex">
+      No subscriptions
+    </div>
+    <div class="flex btns">
+      <button class="crypto-button crypto-button_success w-100"
+          (click)="manageSubscription()">{{"profileInfo.manageSubscriptions" | translate}}
+      </button>
+    </div>
+    <ng-template *ngIf="!loading; else loader"></ng-template>
+    <ng-template #loader>
+      <loader></loader>
+    </ng-template>
+    <div class="flex description_info">
+      * To get your billing and subscription changes applied to application immediately please re-login. <span class="relogin-now" (click)="relogin()"> Re-login now.</span>
+    </div>
+</div>

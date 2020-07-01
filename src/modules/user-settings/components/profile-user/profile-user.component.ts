@@ -44,7 +44,7 @@ export class ProfileUserComponent implements OnInit {
     avatarId: string;
     username: string;
     personalData: IPersonalData;
-    subscriptions: ISubscription[] = [];
+    subscriptions: ISubscription[];
 
     constructor(private _identityService: IdentityService,
                 private _profileService: UsersProfileService,

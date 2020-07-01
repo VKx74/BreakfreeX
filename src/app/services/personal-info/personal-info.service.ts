@@ -222,6 +222,16 @@ export interface ISubscription {
     currency: string;
 }
 
+export interface IBillingDashboard {
+    id: string;
+    object: string;
+    customer: string;
+    created: number;
+    livemode: boolean;
+    returnUrl: string;
+    url: string;
+}
+
 
 export interface SendCodeViaSMSToAttachPhoneNumberModel {
     email: string;
@@ -370,6 +380,10 @@ export class PersonalInfoService {
                 return subscriptions;
             })
         );
+    } 
+    
+    getUserBillingDashboard(): Observable<IBillingDashboard> {
+        return this._http.get<IBillingDashboard>(`${AppConfigService.config.apiUrls.identityUrl}striple/user_billing_dashboard`, this._httpOptions);
     }
 
     getHealthStatus(): Observable<any> {

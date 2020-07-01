@@ -1,0 +1,85 @@
+@import "../../../../global-styles/variables";
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/mixins/dialog-tab-header";
+
+@include dialogTabHeader();
+
+:host {
+  display: block;
+  height: 100%;
+
+  .btns {
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+
+  .description_info {
+    font-size: 13px;
+
+    .relogin-now {
+      color: #3d61cc;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+  }
+
+  .section {
+    padding: 20px 28px;
+    margin-top: 9px;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+  }
+
+  .subscription-row  {
+    font-size: 13px;
+    width: 100%;
+    margin: 5px 0px;
+    .date, .interval {
+      min-width: 140px;
+    }
+    .price {
+      min-width: 120px;
+    }
+
+    .status {
+      text-transform: capitalize;
+      justify-content: center;
+      align-items: center;
+      margin-right: 12px;
+      width: 140px;
+      border-radius: 10px;
+    }
+    
+    .name {
+      width: 100%;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .section {
+    background-color: themed('appPanelColor');
+    box-shadow: themed('box-shadowPanel');
+    color: themed('valueTextColor');
+  }
+
+  .data, .crypto-button {
+    color: themed('valueTextColor');
+  }
+
+  .crypto-button {
+    background-color: themed('inputBackgroundColor');
+  }
+
+  .change-button {
+    background-color: themed('appPanelColor') !important;
+  }
+
+  .added {
+    color: themed('buyColor');
+  }
+
+}

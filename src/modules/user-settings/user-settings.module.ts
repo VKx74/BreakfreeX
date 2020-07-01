@@ -34,7 +34,7 @@ import {ProfileActivitiesModule} from "./profile-activities.module";
 import {ProfileActivitiesResolver} from "./resolvers/profile-activities.resolver";
 import {ProfileLoginActivitiesResolver} from "./resolvers/login-activities.resolver";
 import {ChangeUsernameComponent} from "./components/change-username/change-username.component";
-import { UserSubscriptionsComponent } from './components/user-subscriptions/user-subscriptions.component';
+import { ManageSubscriptionsComponent } from './components/manage-subscriptions/manage-subscriptions.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +49,8 @@ import { UserSubscriptionsComponent } from './components/user-subscriptions/user
         TradesComponent,
         TableWrapperComponent,
         ChangePhoneComponent,
-        ChangeUsernameComponent
+        ChangeUsernameComponent,
+        ManageSubscriptionsComponent
     ],
     imports: [
         CommonModule,
