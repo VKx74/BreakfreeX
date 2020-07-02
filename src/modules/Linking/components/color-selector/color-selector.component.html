@@ -1,6 +1,9 @@
 <div class="color-selector">
-    <div class="matMenuTrigger" [matMenuTriggerFor]="menu"
-         [ngStyle]="{'background-color': colorDisabled ? '#80808025' : activeColor}">
+    <div class="matMenuTrigger" [matMenuTriggerFor]="menu">
+         <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" [ngStyle]="{'color': colorDisabled ? '#80808025' : activeColor}" fill="currentColor" focusable="false" preserveAspectRatio="none">
+            <path d='M0,6a6,6 0 1,0 12,0a6,6 0 1,0 -12,0' *ngIf="path == 'circle'"/>
+            <path d='M14 12l-4-6 4-6H0v12z'  *ngIf="path == 'flag'"/>
+        </svg>
     </div>
     <mat-menu #menu="matMenu"
               class="colorSelectorMenuPanel">

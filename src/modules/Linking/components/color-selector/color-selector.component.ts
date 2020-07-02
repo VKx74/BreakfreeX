@@ -18,7 +18,10 @@ export const Colors = [
 })
 export class ColorSelectorComponent {
     @Input()  activeColor: string;
+    @Input()  path: string;
     @Output() activeColorChange = new EventEmitter<string>();
+
+
 
     get Colors() {
         return Colors;
