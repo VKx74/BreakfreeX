@@ -22,7 +22,7 @@
         <name-avatar [name]="userName" [src]="userId" [shape]="UserAvatarShape.Rounded"></name-avatar>
     </ng-template>
 
-    <div class="menu-bottom delimiter-top" >
+    <div class="menu-bottom delimiter-top hidden" >
 <!--        <div class="delimiter"></div>-->
 <!--        *ngIf="(activeBroker$ | async)?.userInfo as userInfo"-->
        <ng-container *ngIf="(activeBroker$ | async)?.userInfo as userInfo; else broker_not_connected">
