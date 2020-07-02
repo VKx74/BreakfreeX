@@ -27,7 +27,11 @@ export class ManageSubscriptionsComponent implements OnInit {
         this._personalInfoService.getUserBillingDashboard().subscribe((result: IBillingDashboard) => {
             if (result) {
                 if (result.url) {
-                    window.open(result.url, "_blank");
+                    let popUp = window.open(result.url, "_blank");
+                    if (!popUp || popUp.closed || typeof popUp.closed === 'undefined') { 
+                        // POPUP BLOCKED
+                        window.location.assign(result.url);
+                    }
                 } else {
                     this._alertService.info("Subscriptions not found for current user");    
                 }
