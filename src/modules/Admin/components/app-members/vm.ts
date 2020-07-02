@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
-import {merge, Observable, Subject} from "rxjs";
+import {merge, Observable, Subject, of} from "rxjs";
 import {UserModel} from "@app/models/auth/auth.models";
 import {JsUtil} from "../../../../utils/jsUtil";
 import {AppMemberModel, AppMemberModelFactory} from "./app-member";
@@ -9,7 +9,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {UsersService} from "@app/services/users.service";
 import {map, switchMap, tap} from "rxjs/operators";
 import {IPaginatedDataLoadingResult} from "../../data/models";
-import {PaginationHandler} from "@app/models/pagination.model";
+import {PaginationHandler, IPaginationResponse, PaginationParams} from "@app/models/pagination.model";
 
 export enum PersonalInfoStatusFilter {
     All,
@@ -23,6 +23,8 @@ export enum PersonalInfoStatusFilter {
 export class AppMembersVM {
     paginationHandler: PaginationHandler = new PaginationHandler();
     private _allUsers: UserModel[] = [];
+    private pageSize = 50;
+    private query: string;
     items: AppMemberModel[] = [];
 
     filters: PersonalInfoStatusFilter[] = JsUtil.numericEnumToArray(PersonalInfoStatusFilter);
@@ -60,11 +62,16 @@ export class AppMembersVM {
     }
 
     private _init() {
-        (this._route.snapshot.data['users'] as Observable<UserModel[]>)
+        (this._route.snapshot.data['users'] as Observable<IPaginationResponse<UserModel>>)
             .subscribe({
-                next: (users: UserModel[]) => {
-                    this._allUsers = users;
-                    this.items = this._getFilteredMembers(users);
+                next: (users: IPaginationResponse<UserModel>) => {
+                    this._allUsers = users.items;
+                    this.items = this._getFilteredMembers(this._allUsers);
+                    this.paginationHandler.setPaginationData({
+                        pageIndex: 0,
+                        itemsCount: users.total,
+                        pageSize: this.pageSize
+                    });
                 }
             });
 
@@ -94,17 +101,11 @@ export class AppMembersVM {
                 this.items = this._getFilteredMembers(this._allUsers);
 
                 this.paginationHandler.setPaginationData({
-                    pageIndex: 0,
-                    itemsCount: 10,
-                    pageSize: 1
+                    pageIndex: result.pageIndex,
+                    itemsCount: result.itemsCount,
+                    pageSize: result.pageSize
                 });
             });
-
-        this.paginationHandler.setPaginationData({
-            pageIndex: 0,
-            itemsCount: 10,
-            pageSize: 1
-        });
     }
 
     private _getFilteredMembers(allUsers: UserModel[]): AppMemberModel[] {
@@ -135,28 +136,22 @@ export class AppMembersVM {
     }
 
     private _search(query: string): Observable<IPaginatedDataLoadingResult<UserModel>> {
-        return this._usersService.searchUsers(query)
-            .pipe(
-                map((users: UserModel[]) => {
-                    return {
-                        itemsCount: users.length,
-                        pageIndex: 0,
-                        pageSize: 10,
-                        items: users
-                    };
-                })
-            );
+        this.query = query;
+        return this._loadItems();
     }
 
     private _loadItems(event?: PageEvent): Observable<IPaginatedDataLoadingResult<UserModel>> {
-        return this._usersService.getUsers()
+        const pageIndex = event ? event.pageIndex : 0;
+        const pageSize = event ? event.pageSize : this.pageSize;
+        const skip = pageIndex * pageSize;
+        return this._usersService.getUsers(new PaginationParams(skip, pageSize), { selectQuery: this.query})
             .pipe(
-                map((users: UserModel[]) => {
+                map((users: IPaginationResponse<UserModel>) => {
                     return {
-                        itemsCount: users.length,
-                        pageIndex: 0,
-                        pageSize: event ? event.pageSize : 10,
-                        items: users
+                        itemsCount: users.total,
+                        pageIndex: pageIndex,
+                        pageSize: pageSize,
+                        items: users.items
                     };
                 })
             );

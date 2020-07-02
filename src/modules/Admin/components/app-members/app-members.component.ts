@@ -53,6 +53,10 @@ export class AppMembersComponent {
     Roles = Roles;
     ComponentIdentifier = ComponentIdentifier;
 
+    get viewModel(): AppMembersVM {
+        return this.vm;
+    }
+    
     get members(): AppMemberModel[] {
         return this.vm.items;
     }

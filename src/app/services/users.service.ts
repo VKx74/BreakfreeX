@@ -7,6 +7,9 @@ import {
     UserModel
 } from "../models/auth/auth.models";
 import {AppConfigService} from "./app.config.service";
+import { IPaginationResponse, PaginationParams, PaginationResponse } from '@app/models/pagination.model';
+import { QueryParamsConstructor } from 'modules/Admin/data/models';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -34,21 +37,17 @@ export class UsersService {
     }
 
 
-    public getUsers(): Observable<UserModel[]> {
-        return this._http.get<UserModel[]>(`${AppConfigService.config.apiUrls.identityUrl}User`, this._httpOptions);
+    public getUsers(paginationParams = new PaginationParams(0, 50), filtrationParams = {}): Observable<IPaginationResponse<UserModel>> {
+        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}User`, {
+            params: QueryParamsConstructor.fromObjects(paginationParams.toSkipTake(), filtrationParams), withCredentials: true
+        }).pipe(
+            map((r: any) => {
+                return new PaginationResponse(r.data, r.count);
+            })
+        );
     }
 
     public getUser(id: string): Observable<UserModel> {
-        // return of({
-        //     email: 'zhylavskyibohdan@gmail.com',
-        //     id: '',
-        //     emailConfirmed: true,
-        //     isActive: true,
-        //     password: '',
-        //     role: Roles.PersonalAccount.toString(),
-        //     kycStatus: PersonalInfoStatus.Approve
-        // });
-
         return this._http.get<UserModel>(`${AppConfigService.config.apiUrls.identityUrl}User/${id}`, this._httpOptions);
     }
 
@@ -77,23 +76,6 @@ export class UsersService {
 
     public resetPassword(user: UserModel): Observable<any> {
         return this._http.patch(`${AppConfigService.config.apiUrls.identityUrl}User/ResetPassword/${user.id}`, null, this._httpOptions);
-    }
-
-
-    public searchUsers(query: string): Observable<any> {
-        if (!query && query.trim().length === 0) {
-            return this.getUsers();
-        }
-
-        const params = new HttpParams()
-            .set('selectQuery', query);
-
-        const httpOptions = {
-            withCredentials: true,
-            params: params
-        };
-
-        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}User/Select`, httpOptions);
     }
 
     public updateUser(user: UpdateUserModel): Observable<UserModel> {

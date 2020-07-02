@@ -1,7 +1,7 @@
 <pagination-table-container [noItems]="!members?.length"
                             [title]="'App Members'"
                             [componentIdentifier]="ComponentIdentifier.appMembers"
-                            [loading]="false">
+                        [loading]="viewModel.processing">
     <div class="header-right d-inline-block">
         <button class="crypto-button crypto-button_primary m-right-5"
                 (click)="handleManageTags()"
@@ -14,6 +14,9 @@
             Add member
         </button>
     </div>
+    <paginator-container>
+        <paginator [handler]="viewModel.paginationHandler" [showPageSize]="false"></paginator>
+    </paginator-container>
     <ng-container ngProjectAs=".filters">
         <mat-form-field class="crypto-select m-right-10">
             <mat-select [value]="activeFilter"
