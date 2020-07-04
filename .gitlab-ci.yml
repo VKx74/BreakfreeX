@@ -24,7 +24,7 @@ analize-app:
     # tags:
     #     - web
 
-build-app:
+build-app-stage:
   image: node:latest
   stage: build
   <<: *npmrc-settings-job
@@ -48,8 +48,34 @@ build-app:
             - dist/
   only:
     - develop
-    - master
     - ci-improvements
+#   tags:
+#     - web
+
+build-app-prod:
+  image: node:latest
+  stage: build
+  <<: *npmrc-settings-job
+  variables:
+    # we override the max_old_space_size to prevent OOM errors
+    NODE_OPTIONS: --max_old_space_size=8192
+  script:
+    - chmod 777 -R ./
+    - echo "NPM Cleanup"
+    - rm -rf node_modules
+    - npm cache clean --force
+    - echo "NPM Install Chart"
+    - npm i trading-chart-designer 
+    - echo "NPM Install"
+    - npm i
+    - echo "Build"
+    - npm run build-prod
+  artifacts:
+        expire_in: 1 day
+        paths:
+            - dist/
+  only:
+    - master
 #   tags:
 #     - web
 
