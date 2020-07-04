@@ -2,8 +2,8 @@
   "apiKey": "8e738606c9ba4315aae2ef0ac15d6740",
   "fileStorageApiKey": "123",
   "apiUrls": {
-    "identityUrl": "https://auth.platform.breakfreetrading.com/",
-    "webSocketUrl": "wss://ws.platform.breakfreetrading.com/wsnotification",
+    "identityUrl": "https://auth-platform.breakfreetrading.com/",
+    "webSocketUrl": "wss://ws-platform.breakfreetrading.com/wsnotification",
     "bitmexREST": "https://datafeed.breakfreetrading.com/bitmex/",
     "bitmexWS": "wss://datafeed.breakfreetrading.com/bitmex/subscribe/realtime/", 
     "polygonREST": "https://datafeed.breakfreetrading.com/polygon/",
@@ -15,21 +15,21 @@
     "coinigyWS": "wss://datafeed.breakfreetrading.com/data/vendor/coinigy/ws",
     "historystorageREST": "notused",
     "scriptEngineUrlREST": "https://scripting.breakfreetrading.com/scriptengine/fintasharp/",
-    "personalInfoREST": "https://auth.platform.breakfreetrading.com/KYC/",
+    "personalInfoREST": "https://auth-platform.breakfreetrading.com/KYC/",
     "eventConsolidatorUserApiREST": "https://events.breakfreetrading.com/event/consolidator/user/api/TradingEvent/",
     "eventConsolidatorAdminApiREST": "https://events.breakfreetrading.com/event/consolidator/admin/api/TradingEvent/",
     "eventConsolidatorWebSocket": "wss://events.breakfreetrading.com/event/consolidator/user/TradingEventsSocket/",
-    "eventsLogREST": "https://events.platform.breakfreetrading.com/v1/logs/api/Logs",
+    "eventsLogREST": "https://events.breakfreetrading.com/v1/logs/api/Logs",
     "fileStorageREST": "https://files.breakfreetrading.com/filestore/api/v1/Files/",
     "shuftiproApiRest": "https://platform.breakfreetrading.com/kyc/api/",
     "socialChatREST": "https://platform.breakfreetrading.com/v1/chat/",
     "socialForumREST": "https://platform.breakfreetrading.com/v1/forum/",
-    "notificationREST": "https://ws.platform.breakfreetrading.com/wsnotification/api/",
-    "notificationWebSocketUrl": "wss://ws.platform.breakfreetrading.com/wsnotification/ws",
+    "notificationREST": "https://ws-platform.breakfreetrading.com/wsnotification/api/",
+    "notificationWebSocketUrl": "wss://ws-platform.breakfreetrading.com/wsnotification/ws",
     "cointelegraphRssFeedREST": "https://app.breakfreetrading.com/rss/cointelegraph",
     "coindeskRssFeedREST": "https://app.breakfreetrading.com/rss/coindesk",
     "userDataStoreREST": "https://platform.breakfreetrading.com/userdatastore/api/v1/",
-    "systemNotificationApiRest": "https://system.platform.breakfreetrading.com/v1/sysnotification/api/",
+    "systemNotificationApiRest": "https://system-platform.breakfreetrading.com/v1/sysnotification/api/",
     "scriptEngineREST": "https://scripting.breakfreetrading.com/scriptengine/fintasharp/api/",
     "oandabrokerREST": "https://datafeed.breakfreetrading.com/oanda/",
     "userprofileREST": "https://rest.yourdomain.com/api/v0.0/userprofile/",
@@ -82,11 +82,11 @@
     },
     "identityUrl": {
       "name": "Identity",
-      "url": "https://auth.platform.breakfreetrading.com/"
+      "url": "https://auth-platform.breakfreetrading.com/"
     },
     "notificationREST": {
       "name": "Notifications",
-      "url": "https://ws.platform.breakfreetrading.com/wsnotification/"
+      "url": "https://ws-platform.breakfreetrading.com/wsnotification/"
     },
     "scriptEngineREST": {
       "name": "Script Engine",
@@ -106,13 +106,13 @@
     }
   },
   "endpointsBearerAuthRequired": [
-    "https://auth.breakfreetrading.com",
+    "https://auth-platform.breakfreetrading.com",
     "https://datafeed.breakfreetrading.com",
     "https://scripting.breakfreetrading.com",
     "https://events.breakfreetrading.com",
     "https://app.breakfreetrading.com",
-    "https://system.platform.breakfreetrading.com",
-    "https://ws.platform.breakfreetrading.com",
+    "https://system-platform.breakfreetrading.com",
+    "https://ws-platform.breakfreetrading.com",
     "https://breakfreetrading.com",
     "https://platform.breakfreetrading.com"
   ]
