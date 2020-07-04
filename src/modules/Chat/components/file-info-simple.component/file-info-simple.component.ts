@@ -118,11 +118,13 @@ export class FileInfoSimpleComponent {
         this._fileservice.getFileInfo(fileInfo.id)
             .subscribe(
                 data => {
-                    this._setSize(data.data.size);
-                    this._name = data.data.fileName;
+                    if (data && data.data) {
+                        this._setSize(data.data.size);
+                        this._name = data.data.fileName;
 
-                    if (data.data.mimeType.startsWith('image')) {
-                        this._imageUrl = this._fileservice.getImageUrl(fileInfo.id);
+                        if (data.data.mimeType.startsWith('image')) {
+                            this._imageUrl = this._fileservice.getImageUrl(fileInfo.id);
+                        }
                     }
                 }
             );
