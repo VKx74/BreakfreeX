@@ -199,13 +199,15 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_ADDED, this.indicatorAdded.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED, this.indicatorRemoved.bind(this));
 
-            let isProAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
-            let isDiscoveryAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+            if (!state) {
+                let isProAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
+                let isDiscoveryAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
 
-            if (isProAllowed) {
-                this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingPro());
-            } else if (isDiscoveryAllowed) {
-                this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
+                if (isProAllowed) {
+                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingPro());
+                } else if (isDiscoveryAllowed) {
+                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
+                }
             }
 
         });
