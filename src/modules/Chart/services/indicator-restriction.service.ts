@@ -21,5 +21,15 @@ export class IndicatorRestrictionService {
 
     public getRestrictions(): string[] {
         return this._restrictedIndicators;
+    } 
+    
+    public validate(name: string): boolean {
+        for (const restriction of this._restrictedIndicators) {
+            if (restriction.toUpperCase() === name.toUpperCase()) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
