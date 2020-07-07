@@ -20,9 +20,18 @@ export class CookieService {
         }
         return '';
     }
-
     public deleteCookie(name) {
         this.setCookie(name, '', -1);
+    }  
+    
+    public deleteAllCookie() {
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i];
+            let eqPos = cookie.indexOf("=");
+            let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            this.deleteCookie(name);
+        }
     }
 
     public setCookie(name: string, value: string, expireMinutes: number, path: string = '') {

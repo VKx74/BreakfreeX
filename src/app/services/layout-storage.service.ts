@@ -82,8 +82,8 @@ export class LayoutStorageService {
         }
     }
 
-    removeLayoutState() {
-        this._sendHttpRequestSync("DELETE", null);
+    removeLayoutState(): Observable<any> {
+        return this.http.delete(this._dashboardURL, {});
     }
 
 }

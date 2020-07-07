@@ -132,6 +132,7 @@
   "saveSettingsError": "Не вдалося зберегти налаштування",
   "deleteSessionConfirmation": "Видалити поточну сесію користувача?",
   "changeAppTypeConfirmation": "Зміна типу платформи змінить налаштування до стандартних та перезагрузить сторінку. Ви згідні?",
+  "clearSessionConfirmation": "Очистити сесію користувача та куки сторінки?",
   "passwordChangedSuccess": "Пароль успішно змінено",
   "passwordChangeFailed": "Не вдалося змінити пароль",
   "addWhitelistItem": "Додати запис",

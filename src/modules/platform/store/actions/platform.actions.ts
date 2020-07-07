@@ -4,6 +4,7 @@ import {BottomPanelComponents, RightSidePanelComponent} from "@platform/data/enu
 export enum ActionTypes {
     DeleteSession = '[Platform] Delete Session',
     AppTypeChanged = '[Platform] App Type Changed',
+    ClearSession = '[Platform] Clear Session',
     SelectBottomComponent = '[Platform] Select Bottom Component',
     SelectRightSideComponent = '[Platform] Select Right Side Component',
     ShowCode = '[Platform] Show Code',
@@ -54,9 +55,17 @@ export class AppTypeChangedAction implements Action {
     }
 }
 
+export class ClearSessionAction implements Action {
+    readonly type = ActionTypes.ClearSession;
+
+    constructor() {
+    }
+}
+
 export type PlatformActions = SelectBottomComponentAction
     | SelectRightSideComponentAction
     | ShowCodeAction
     | ResetStoreAction
     | DeleteSessionAction
+    | ClearSessionAction
     | AppTypeChangedAction;

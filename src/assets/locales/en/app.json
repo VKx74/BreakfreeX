@@ -16,7 +16,8 @@
     "connect": "Connect",
     "disconnect": "Disconnect",
     "addAccount": "Add broker account",
-    "support": "Support"
+    "support": "Support",
+    "clearSession": "Clear Session"
   },
   "footer": {
     "selectedTZDate": "Time Zone",
@@ -106,6 +107,7 @@
   "passwordsMismatched": "Passwords mismatched",
   "invalidPassword": "Invalid password",
   "changeAppTypeConfirmation": "Changing of application type will reset you layout to default and reload page. Continue?",
+  "clearSessionConfirmation": "Clear user session, cookies and page cache?",
   "userActivityActionEnum": {
     "0": "Logged In",
     "1": "Login Failed"

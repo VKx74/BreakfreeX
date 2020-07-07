@@ -17,6 +17,11 @@ import {ADMIN_ITEMS, ComponentAccessService} from "@app/services/component-acces
 import {Roles} from "@app/models/auth/auth.models";
 import {IdentityService} from "@app/services/auth/identity.service";
 import { Intercom } from 'ng-intercom';
+import { LayoutStorageService } from '@app/services/layout-storage.service';
+import { CookieService } from '@app/services/сookie.service';
+import {Store} from "@ngrx/store";
+import {AppState} from "@app/store/reducer";
+import { ClearSessionAction } from '@app/store/actions/platform.actions';
 
 @Component({
     selector: 'platform-sidebar',
@@ -48,6 +53,7 @@ export class PlatformSidebarComponent implements OnInit {
                 private _userSettingsService: UserSettingsService,
                 private _dialog: MatDialog,
                 private _intercom: Intercom,
+                private _store: Store<AppState>,
                 private _identityService: IdentityService,
                 ) {
     }
@@ -99,6 +105,20 @@ export class PlatformSidebarComponent implements OnInit {
 
     supportClick() {
         this._intercom.show();
+    }
+    
+    clearSession() {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                message: this._translateService.get(`clearSessionConfirmation`)
+            }
+        } as any)
+            .afterClosed()
+            .subscribe((isConfirmed) => {
+                if (isConfirmed) {
+                    this._store.dispatch(new ClearSessionAction());
+                }
+            });
     }
 
     save() {

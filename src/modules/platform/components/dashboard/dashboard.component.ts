@@ -49,6 +49,7 @@ import {ComponentSelectorComponent} from "@platform/components/component-selecto
 import {Overlay} from "@angular/cdk/overlay";
 import { SingleSessionService } from '@app/services/single-session.service';
 import { Intercom } from 'ng-intercom';
+import { CookieService } from '@app/services/сookie.service';
 
 
 @Component({
@@ -83,6 +84,7 @@ export class DashboardComponent {
                 private _identityService: IdentityService,
                 private _localizationService: LocalizationService,
                 private _router: Router,
+                private _coockieService: CookieService,
                 private _cdr: ChangeDetectorRef,
                 private _layoutStorage: LayoutStorage,
                 private _autoTradingEngine: AutoTradingEngine,
@@ -109,7 +111,22 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._saveLayout = false;
-                this._layoutStorageService.removeLayoutState();
+                this._layoutStorageService.removeLayoutState().subscribe(data => {});
+            });  
+            
+        this._actions
+            .pipe(
+                ofType(ActionTypes.ClearSession),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._saveLayout = false;
+                this._layoutStorageService.removeLayoutState().subscribe(data => {
+                    this._identityService.signOut().subscribe(data1 => {
+                        this._coockieService.deleteAllCookie();
+                        window.location.reload(true);
+                    });
+                });
             });
 
         this._actions

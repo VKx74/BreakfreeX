@@ -132,6 +132,7 @@
   "saveSettingsError": "Failed to save settings",
   "deleteSessionConfirmation": "Do you want delete your session data?",
   "changeAppTypeConfirmation": "Changing of application type will reset you layout to default and reload page. Continue?",
+  "clearSessionConfirmation": "Clear user session, cookies and page cache?",
   "passwordChangedSuccess": "Password was successfully changed",
   "passwordChangeFailed": "Failed to change password",
   "addWhitelistItem": "Add whitelist item",

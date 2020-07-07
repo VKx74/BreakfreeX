@@ -6,6 +6,7 @@ export enum ActionTypes {
     AppTypeChanged = '[Platform] App Type Changed',
     SelectBottomComponent = '[Platform] Select Bottom Component',
     SelectRightSideComponent = '[Platform] Select Right Side Component',
+    ClearSession = '[Platform] Clear Session',
     ShowCode = '[Platform] Show Code',
     ResetStore = '[Platform] Reset Store'
 }
@@ -54,9 +55,16 @@ export class AppTypeChangedAction implements Action {
     }
 }
 
+export class ClearSessionAction implements Action {
+    readonly type = ActionTypes.ClearSession;
+
+    constructor() {
+    }
+}
 export type PlatformActions = SelectBottomComponentAction
     | SelectRightSideComponentAction
     | ShowCodeAction
     | ResetStoreAction
     | DeleteSessionAction
+    | ClearSessionAction
     | AppTypeChangedAction;

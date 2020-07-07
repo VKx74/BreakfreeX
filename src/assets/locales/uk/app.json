@@ -17,7 +17,8 @@
     "connect": "Підключити",
     "disconnect": "Відключити",
     "addAccount": "Добавити брокер акаунт",
-    "support": "Підтримка"
+    "support": "Підтримка",
+    "clearSession": "Очистити сесію"
   },
   "footer": {
     "selectedTZDate": "Часовий пояс",
@@ -123,6 +124,7 @@
   "passwordsMismatched": "Паролі не збігаються",
   "invalidPassword": "Некоректний пароль",
   "changeAppTypeConfirmation": "Зміна типу платформи змінить налаштування до стандартних та перезагрузить сторінку. Ви згідні?",
+  "clearSessionConfirmation": "Очистити сесію користувача та куки сторінки?",
   "userActivityActionEnum": {
     "0": "Вхід в систему",
     "1": "Невдалий вхід в систему"
