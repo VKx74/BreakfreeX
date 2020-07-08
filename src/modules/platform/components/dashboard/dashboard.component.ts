@@ -132,10 +132,10 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 const currentTime = Date.now();
-                const differenceInSeconds = currentTime - this._lastExceptionTime / 1000;
+                const differenceInSeconds = (currentTime - this._lastExceptionTime) / 1000;
 
                 // show every 5 minute
-                if (differenceInSeconds > 60 * 5) {
+                if (differenceInSeconds > 60 * 1) {
                     this.showExceptionPopup = true;
                     this._lastExceptionTime = currentTime;
                 }
