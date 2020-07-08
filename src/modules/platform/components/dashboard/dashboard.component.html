@@ -23,6 +23,7 @@
 </div>
 <div class="exception_handled_popup" *ngIf="showExceptionPopup">
     <div class="close-button crypto-button-delete" (click)="hideExceptionPopup()"><i class="crypto-icon crypto-icon-close" title="Remove"></i></div>
+    <div class="exception_header">Technical issues?</div>
     <div class="exception_description">{{'exceptionDescription' | translate}}</div>
     <button (click)="clearSession()" class="crypto-button">{{'clearSession' | translate}}</button>
 </div>

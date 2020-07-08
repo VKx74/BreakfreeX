@@ -8,5 +8,5 @@
   "openPopupFailed": "Failed to open popup. Please, allow opening popups in your browser",
   "popout": "Open in new window",
   "popin": "Open in main window",
-  "clearSessionConfirmation": "Clear user session, cookies and page cache?"
+  "clearSessionConfirmation": "Confirm Navigator session clearing. This action usually fixes all problems, if you are facing any, but will also clear saved charts, cookies, cache & log you out. Are you ready to clear Navigator session?" 
 }

@@ -106,8 +106,8 @@
   "change": "Change",
   "passwordsMismatched": "Passwords mismatched",
   "invalidPassword": "Invalid password",
-  "clearSession": "Clear Session",
-  "exceptionDescription": "Error detected in chart, if you experiencing issue with chart press the button to Clear Session data.",
+  "clearSession": "Clear Navigator session",
+  "exceptionDescription": "We detected you might be having some technical issues with Navigator, but if everything is working fine you can ignore this message. In case of any problems with Navigator, it's most likely an issue only for you. To fix your current issues, let's begin with a session clearing. Take note that this will reset your chart and log you out.",
   "changeAppTypeConfirmation": "Changing of application type will reset you layout to default and reload page. Continue?",
   "userActivityActionEnum": {
     "0": "Logged In",
