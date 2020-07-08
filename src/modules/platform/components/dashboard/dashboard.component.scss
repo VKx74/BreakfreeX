@@ -7,6 +7,41 @@
 }
 
 :host {
+  .exception_handled_popup {
+    position: absolute;
+    width: 200px;
+    height: 170px;
+    right: 10px;
+    top: 10px;
+    z-index: 1;
+    // background-color: white;
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(239,239,239,1);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(239,239,239,1);
+    box-shadow: 0px 0px 5px 1px rgba(239,239,239,1);
+
+    .close-button {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+    }
+
+    .exception_description {
+      font-size: 12px;
+      color: gray;
+      text-align: justify;
+      position: absolute;
+      width: 86%;
+      left: 7%;
+      top: 30px;
+    }
+
+    .crypto-button {
+      left: calc(50% - 70px);
+      width: 140px;
+      position: absolute;
+      bottom: 10px;
+    }
+  }
   display: flex;
   flex-grow: 1;
   width: 100%;
@@ -82,11 +117,15 @@ golden-layout-root {
 }
 
 @include themify($themes, true) {
-  //.right-widgets-panel {
-  //  background-color: themed('primeBgColor');
-  //}
+  .exception_handled_popup {
+    background-color: themed('componentItemBgColor');
+  }
 
-  //.content-wrapper {
-  //  background-color: themed('dashboardBgColor');
-  //}
+  .crypto-button {
+    color: themed('valueTextColor');
+  }
+
+  .crypto-button {
+    background-color: themed('inputBackgroundColor');
+  }
 }

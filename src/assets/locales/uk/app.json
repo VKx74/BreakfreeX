@@ -123,8 +123,9 @@
   "change": "Змінити",
   "passwordsMismatched": "Паролі не збігаються",
   "invalidPassword": "Некоректний пароль",
+  "clearSession": "Очистити сесію",
+  "exceptionDescription": "Error detected in chart, if you experiencing issue with chart press the button to Clear Session data.",
   "changeAppTypeConfirmation": "Зміна типу платформи змінить налаштування до стандартних та перезагрузить сторінку. Ви згідні?",
-  "clearSessionConfirmation": "Очистити сесію користувача та куки сторінки?",
   "userActivityActionEnum": {
     "0": "Вхід в систему",
     "1": "Невдалий вхід в систему"

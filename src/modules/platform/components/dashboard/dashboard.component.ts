@@ -62,6 +62,7 @@ import { CookieService } from '@app/services/сookie.service';
 })
 export class DashboardComponent {
     private _saveLayout = true;
+    private _lastExceptionTime: number = 0;
     layoutChanged = false;
     readonly openBottomPanel = 260;
     readonly minimizeBottomPanel = 40;
@@ -71,7 +72,7 @@ export class DashboardComponent {
 
     layoutSettings: IGoldenLayoutComponentSettings = {};
     destroy$ = new Subject();
-
+    showExceptionPopup = false;
 
     get bottomPanelMinSize() {
         return 40;
@@ -101,6 +102,7 @@ export class DashboardComponent {
                 public bottomPanelSizeService: ToggleBottomPanelSizeService,
                 private _overlay: Overlay,
     ) {
+        
     }
 
     ngOnInit() {
@@ -120,13 +122,23 @@ export class DashboardComponent {
                 takeUntil(componentDestroyed(this))
             )
             .subscribe(() => {
-                this._saveLayout = false;
-                this._layoutStorageService.removeLayoutState().subscribe(data => {
-                    this._identityService.signOut().subscribe(data1 => {
-                        this._coockieService.deleteAllCookie();
-                        window.location.reload(true);
-                    });
-                });
+                this._clearLayout();
+            }); 
+            
+        this._actions
+            .pipe(
+                ofType(ActionTypes.GlobalError),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                const currentTime = Date.now();
+                const differenceInSeconds = currentTime - this._lastExceptionTime / 1000;
+
+                // show every 5 minute
+                if (differenceInSeconds > 60 * 5) {
+                    this.showExceptionPopup = true;
+                    this._lastExceptionTime = currentTime;
+                }
             });
 
         this._actions
@@ -160,6 +172,33 @@ export class DashboardComponent {
         });
     }
 
+    clearSession() {
+        this._clearLayout();
+    }  
+    
+    hideExceptionPopup() {
+        this.showExceptionPopup = false;
+    }
+
+    _clearLayout() {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                message: this._layoutTranslateService.get(`clearSessionConfirmation`)
+            }
+        } as any)
+            .afterClosed()
+            .subscribe((isConfirmed) => {
+                if (isConfirmed) {
+                    this._saveLayout = false;
+                    this._layoutStorageService.removeLayoutState().subscribe(data => {
+                        this._identityService.signOut().subscribe(data1 => {
+                            this._coockieService.deleteAllCookie();
+                            window.location.reload(true);
+                        });
+                    });
+                }
+            });
+    }
     _processLayoutReady() {
         this._router.events
             .pipe(takeUntil(this.destroy$))

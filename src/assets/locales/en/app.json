@@ -106,8 +106,9 @@
   "change": "Change",
   "passwordsMismatched": "Passwords mismatched",
   "invalidPassword": "Invalid password",
+  "clearSession": "Clear Session",
+  "exceptionDescription": "Error detected in chart, if you experiencing issue with chart press the button to Clear Session data.",
   "changeAppTypeConfirmation": "Changing of application type will reset you layout to default and reload page. Continue?",
-  "clearSessionConfirmation": "Clear user session, cookies and page cache?",
   "userActivityActionEnum": {
     "0": "Logged In",
     "1": "Login Failed"

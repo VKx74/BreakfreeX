@@ -1,4 +1,4 @@
-import {APP_INITIALIZER, InjectionToken, Injector, NgModule} from '@angular/core';
+import {APP_INITIALIZER, InjectionToken, Injector, NgModule, ErrorHandler} from '@angular/core';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from "./app.router";
 import {AuthGuard} from "./services/auth/auth.guard";
@@ -83,6 +83,7 @@ import { IntercomModule } from 'ng-intercom';
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2Segment } from 'angulartics2/segment';
 import { SettingsStorageService } from './services/settings-storage.servic';
+import { GlobalErrorHandler } from './services/GlobalErrorHandler';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -136,6 +137,10 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         Angulartics2Module.forRoot()
     ],
     providers: [
+        {
+            provide: ErrorHandler, 
+            useClass: GlobalErrorHandler
+        },
         AuthenticationService,
         Angulartics2Segment,
         CookieService,

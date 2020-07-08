@@ -108,17 +108,7 @@ export class PlatformSidebarComponent implements OnInit {
     }
     
     clearSession() {
-        this._dialog.open(ConfirmModalComponent, {
-            data: {
-                message: this._translateService.get(`clearSessionConfirmation`)
-            }
-        } as any)
-            .afterClosed()
-            .subscribe((isConfirmed) => {
-                if (isConfirmed) {
-                    this._store.dispatch(new ClearSessionAction());
-                }
-            });
+        this._store.dispatch(new ClearSessionAction());
     }
 
     save() {

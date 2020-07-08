@@ -7,5 +7,6 @@
   "additionalTabs": "Additional tabs",
   "openPopupFailed": "Failed to open popup. Please, allow opening popups in your browser",
   "popout": "Open in new window",
-  "popin": "Open in main window"
+  "popin": "Open in main window",
+  "clearSessionConfirmation": "Clear user session, cookies and page cache?"
 }

@@ -7,6 +7,7 @@ export enum ActionTypes {
     SelectBottomComponent = '[Platform] Select Bottom Component',
     SelectRightSideComponent = '[Platform] Select Right Side Component',
     ClearSession = '[Platform] Clear Session',
+    GlobalError = '[Platform] Global Error',
     ShowCode = '[Platform] Show Code',
     ResetStore = '[Platform] Reset Store'
 }
@@ -61,10 +62,18 @@ export class ClearSessionAction implements Action {
     constructor() {
     }
 }
+
+export class GlobalErrorAction implements Action {
+    readonly type = ActionTypes.GlobalError;
+
+    constructor() {
+    }
+}
 export type PlatformActions = SelectBottomComponentAction
     | SelectRightSideComponentAction
     | ShowCodeAction
     | ResetStoreAction
     | DeleteSessionAction
     | ClearSessionAction
+    | GlobalErrorAction
     | AppTypeChangedAction;
