@@ -27,6 +27,7 @@ export interface IWatchlistItem {
     data: IInstrument[];
     trackingId?: string;
     isDefault?: boolean;
+    isFeatured?: boolean;
 }
 
 @Injectable()
@@ -39,6 +40,9 @@ export class WatchlistService {
     public onWatchlistAdded: Subject<IWatchlistItem> = new Subject<IWatchlistItem>();
     public onWatchlistRemoved: Subject<IWatchlistItem> = new Subject<IWatchlistItem>();
     public onWatchlistUpdated: Subject<IWatchlistItem> = new Subject<IWatchlistItem>();
+    public onFeaturedListChanged: Subject<IFeaturedInstruments[]> = new Subject<IFeaturedInstruments[]>();
+
+    private featuredWatchlists: IWatchlistItem[] = [];
 
     public lastActiveWatchlistComponentId: string;
     
@@ -81,12 +85,107 @@ export class WatchlistService {
                 if (!data) {
                     return [];
                 }
-                return data.FeaturedInstruments || [];
+                const instruments = data.FeaturedInstruments || [];
+                for (let i = 0; i < instruments.length; i++) {
+                    if (!instruments[i].instrument || !instruments[i].instrument.id) {
+                        instruments.splice(i, 1);
+                        i--;
+                    }
+                }
+                return instruments;
             }));
     }
 
+    public updateFeaturedWatchlist(featuredInstruments: IFeaturedInstruments[]): IWatchlistItem[] {
+        this.featuredWatchlists = [];
+        const getWatchlistByGroup = (groupName: string) => {
+            for (const w of this.featuredWatchlists) {
+                if (w.id === groupName) {
+                    return w;
+                }
+            }
+        }; 
+        
+        const getFeaturedGroup = (instrument: IInstrument) => {
+            for (const i of featuredInstruments) {
+                if (i.instrument.id === instrument.id && i.instrument.exchange === instrument.exchange) {
+                    return i;
+                }
+            }
+        };  
+        
+        const generateName = (instruments: IInstrument[]) => {
+            let name = "";
+            for (const i of instruments) {
+                if (!name) {
+                    name += `${i.symbol}:${i.exchange}`;
+                } else {
+                    name += `, ${i.symbol}:${i.exchange}`;
+                }
+
+                if (name.length > 30) {
+                    break;
+                }
+            }
+            return name;
+        };
+
+        for (let i = 0; i < featuredInstruments.length; i++) {
+            const instrument = featuredInstruments[i];
+            let existingWatchlist = getWatchlistByGroup(instrument.group);
+            if (!existingWatchlist) {
+                existingWatchlist = {
+                    data: [],
+                    id: instrument.group,
+                    name: "",
+                    isDefault: true,
+                    isFeatured: true,
+                    trackingId: "Featured Watchlist " + instrument.group
+                };
+                this.featuredWatchlists.push(existingWatchlist);
+            }
+
+            const watchlistInstrument = instrument.instrument;
+            if (watchlistInstrument) {
+                let exists = false;
+                for (const existingInstrument of existingWatchlist.data) {
+                    if (existingInstrument.id === watchlistInstrument.id && existingInstrument.exchange === watchlistInstrument.exchange) {
+                        exists = true;
+                    }
+                }
+
+                if (!exists) {
+                    existingWatchlist.data.push(watchlistInstrument);
+                }
+            }
+        }
+
+        for (let i = 0; i < this.featuredWatchlists.length; i++) {
+            let item = this.featuredWatchlists[i];
+            for (let j = 0; j < item.data.length; j++) {
+                const instrument = item.data[j];
+                const group = getFeaturedGroup(instrument);
+                if (!group || group.group !== item.id) {
+                    item.data.splice(j, 1);
+                    j--;
+                }
+            }
+
+            if (item.data.length) {
+                item.name = generateName(item.data);
+            } else {
+                this.featuredWatchlists.splice(i, 1);
+                i--;
+            }
+        }
+
+        return this.featuredWatchlists;
+    }
+
     public updateFeaturedInstruments(instruments: IFeaturedInstruments[]): Observable<void>  {
-        return this._settingsStorageService.updateFeaturedInstruments(instruments);
+        return this._settingsStorageService.updateFeaturedInstruments(instruments).pipe(map(() => {
+            this.onFeaturedListChanged.next(instruments);
+        }));
     }
     
     public addWatchlist(name: string, data: IInstrument[], trackingId?: string): Observable<IWatchlistItem>  { 

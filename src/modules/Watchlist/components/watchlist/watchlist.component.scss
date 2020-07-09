@@ -3,11 +3,15 @@
 @import "global-styles/themes/themes";
 
 :host {
-  
+
   height: 100%;
   display: flex;
   width: 100%;
   overflow: auto;
+
+  .crypto-select {
+    margin-left: 10px;
+  }
 
   .functional-icons {
     .crypto-button-icon {
@@ -372,3 +376,25 @@ font-weight:600;
   height:1px;
 }
 
+.watchlist-separator {
+  margin: 5px 0px !important;
+}
+
+.featured-instruments-row {
+  display: flex;
+
+  .featured-instruments-row-color {
+    width: 14px;
+    height: 12px;
+    display: flex;
+    margin-right: 5px;
+  } 
+
+  .featured-instruments-row-text {
+    max-width: 220px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 11px !important;
+  }
+}

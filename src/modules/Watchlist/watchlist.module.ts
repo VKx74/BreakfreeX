@@ -22,6 +22,9 @@ import { WatchlistService } from './services/watchlist.service';
 import { UIModule } from 'UI';
 import { WatchlistNameModalComponent } from './components/watchlist-name-modal/watchlist-name-modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [
@@ -43,7 +46,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         SharedModule,
         UIModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatMenuModule,
     ],
     entryComponents: [
         WatchlistComponent,

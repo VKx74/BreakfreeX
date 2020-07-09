@@ -2,21 +2,41 @@
     <div class="top-line bftscroll">
         <div class="top-line flex justify-space-between align-items-center flex-shrink-0 ">
             <instrument-search
-                    [class.disabled]="activeWatchlist?.isDefault"
+                    [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
                     [openPanelOnClick]="true"
                     [resetAfterSelection]="true"
                     (onSelect)="addInstrument($event)"></instrument-search>
-            <selector [options]="existingWatchlists" [title]="'watchlist' | translate"
+            <!-- <selector [options]="existingWatchlists" [title]="'watchlist' | translate"
                 [selectedOption]="activeWatchlist"
                 [optionCaption]="supportedWatchlistCaption"
                 (onSelect)="watchlistSelected($event)"
-                class="watchlist-selector"></selector>
+                class="watchlist-selector"></selector> -->
+            <mat-form-field floatLabel="never" class="crypto-select full-width">
+                <mat-select (selectionChange)="watchlistSelected($event)" [value]="activeWatchlist">
+                    <mat-option *ngFor="let option of existingWatchlists" [value]="option">
+                        {{supportedWatchlistCaption(option) | async }}
+                    </mat-option>
+                    <hr *ngIf="featuredWatchlists?.length > 0" class="watchlist-separator"/>
+                    <mat-option *ngFor="let option of featuredWatchlists" [value]="option">
+                        <div class="featured-instruments-row">
+                            <div class="featured-instruments-row-color">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" [ngStyle]="{'color': option.id}" fill="currentColor" focusable="false" preserveAspectRatio="none">
+                                    <path d='M14 12l-4-6 4-6H0v12z'/>
+                                </svg>
+                            </div>
+                            <div class="featured-instruments-row-text">
+                                {{supportedWatchlistCaption(option) | async }}
+                            </div>
+                        </div>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <div class="right-side flex align-items-center functional-icons">
                 <span class="crypto-button-icon control" (click)="createWatchlist()" [title]=" 'createWatchlist' | translate">
                     <i class="crypto-icon crypto-icon-add"></i>
                 </span>
 
-                <span [class.disabled]="activeWatchlist?.isDefault" class="crypto-button-icon control" (click)="deleteWatchlist()" [title]="'deleteWatchlist' | translate">
+                <span [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured" class="crypto-button-icon control" (click)="deleteWatchlist()" [title]="'deleteWatchlist' | translate">
                     <i class="crypto-icon crypto-icon-remove-records"></i>
                 </span>
             </div>
@@ -288,7 +308,7 @@
                                 </div> -->
 
                                 <div class="remove-instrument-button crypto-button-delete"
-                                    [class.disabled]="activeWatchlist?.isDefault"
+                                    [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
                                      (click)="$event.stopPropagation(); removeInstrument(instrumentVM)">
                                     <i class="crypto-icon crypto-icon-close" title="{{'remove' | translate}}"
                                        aria-hidden="true"></i>
@@ -315,7 +335,7 @@
                                         [chartHistory]="instrumentsPriceHistory[getKeyForInstrumentsPriceHistory(instrumentVM.instrument)]"></watchlist-tile>
 
                         <div class="remove-instrument-button crypto-button-delete"
-                            [class.disabled]="activeWatchlist?.isDefault"
+                            [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
                              (click)="$event.stopPropagation(); removeInstrument(instrumentVM)">
                             <i class="crypto-icon crypto-icon-close" title="{{'remove' | translate}}"
                                aria-hidden="true"></i>

@@ -4,6 +4,7 @@
     "tilesView": "Tiles view",
     "volume24h": "24h Volume",
     "removeSymbol": "Remove symbol?",
+    "unbindInstrument": "Remove instrument from featured?",
     "removeWatchlist": "Remove watchlist",
     "symbol": "Instrument",
     "priceChange": "Change",
