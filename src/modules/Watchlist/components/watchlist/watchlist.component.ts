@@ -444,6 +444,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             });
         }
 
+        if (this.existingWatchlists && this.existingWatchlists.length >= 20) {
+            this._alertManager.error(this._translateService.get("watchList.watchlistMaxAmount"));
+            return false;
+        }
+
         this._dialog.open(WatchlistNameModalComponent, {
             data: {
                 mode: WatchlistNameModalMode.Create,
@@ -602,6 +607,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this._alertManager.error(this._translateService.get("watchList.watchlistMaxLength"));
             return false;
         }
+
         const addedInstrument = this._addInstrument(instrument, fireStateChanged);
         if (addedInstrument) {
             if (this.activeWatchlist) {

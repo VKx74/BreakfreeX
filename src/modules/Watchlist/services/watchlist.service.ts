@@ -189,6 +189,10 @@ export class WatchlistService {
     }
     
     public addWatchlist(name: string, data: IInstrument[], trackingId?: string): Observable<IWatchlistItem>  { 
+        if (this._watchlists && this._watchlists.length >= 20) {
+            return throwError(new Error('Maximum amount of watchlists reached.'));
+        }
+
         return this._watchlistStorageService.saveWatchlist(name, data).pipe(map((response: IWatchlistItem) => {
             if (response && response.id) {
                 if (!this._watchlists) {

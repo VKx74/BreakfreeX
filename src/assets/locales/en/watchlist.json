@@ -20,6 +20,7 @@
     "showOB": "Show Order Book",
     "watchlistWithSameNameAlreadyExists": "Watchlist with same name already exists",
     "watchlistMaxLength": "Watchlist maximum amount of instrument reached",
+    "watchlistMaxAmount": "Maximum amount of created watchlists reached",
     "youCantRemoveLastWatchlist": "You can`t remove last watchlist",
     "youCantRemoveDefaultWatchlist": "You can`t remove default watchlist",
     "failedToCreateWatchlist": "Failed to create watchlist",
