@@ -189,7 +189,21 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         }
 
         return null;
-    }
+    } 
+    
+    // public getFeaturedGroups(): string {
+    //     if (!this.featuredInstruments) {
+    //         return [];
+    //     }
+
+    //     for (let i = 0; i < this.featuredInstruments.length; i++) {
+    //         if (this.featuredInstruments[i].instrument === instrument.id && this.featuredInstruments[i].exchange === instrument.exchange) {
+    //             return this.featuredInstruments[i].group;
+    //         }
+    //     }
+
+    //     return null;
+    // }
 
     public handleColorSelected(color: string, instrumentWM: WatchlistInstrumentVM) {
         const instrument = instrumentWM.instrument;
