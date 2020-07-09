@@ -171,8 +171,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this._watchlistUpdated = this._watchlistService.onWatchlistUpdated.subscribe(this._watchlistUpdatedHandler.bind(this));
             this._featuredChanged = this._watchlistService.onFeaturedListChanged.subscribe(this._featuredListChangedHandler.bind(this));
 
-            this._watchlistService.getFeaturedInstruments().subscribe((data: IFeaturedInstruments[]) => {
-                this.featuredInstruments = data;
+            this._watchlistService.getFeaturedInstruments().subscribe((featuredInstruments: IFeaturedInstruments[]) => {
+                this.featuredInstruments = featuredInstruments;
                 this.featuredWatchlists = this._watchlistService.updateFeaturedWatchlist(this.featuredInstruments);
 
                 if (this._state && this._state.activeWatchlist) {
@@ -294,7 +294,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
     
     protected _featuredListChangedHandler() {
-        var watchlists = this._watchlistService.updateFeaturedWatchlist(this.featuredInstruments);
+        let watchlists = this._watchlistService.updateFeaturedWatchlist(this.featuredInstruments);
 
         for (const watchlist of watchlists) {
             this._mergeWatchlists(watchlist, this.featuredWatchlists);
@@ -430,7 +430,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
     
     watchlistSelected(change: MatSelectChange) {
-        //watchlist: IWatchlistItem
         const watchlist = change.value as IWatchlistItem;
         if (this.activeWatchlist === watchlist) {
             return;
