@@ -65,7 +65,7 @@ export class SettingsStorageService {
                     existingData = {};
                 }
                 
-                if (instruments && instruments.length) {
+                if (instruments && instruments.length >= 0) {
                     existingData.FeaturedInstruments = instruments;
                     this.saveSettings(existingData).subscribe();
                 }
