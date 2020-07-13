@@ -133,7 +133,7 @@ export class DataFeed extends DataFeedBase {
         }
 
         const endDateTimestamp = TzUtils.dateTimestamp(endDate, this._timeZoneManager.timeZone);
-        const startDateTimestamp =endDateTimestamp - (count * request.chart.timeInterval);
+        const startDateTimestamp = endDateTimestamp - (count * request.chart.timeInterval);
         let startDate = TzUtils.convertDateTz(JsUtil.UTCDate(startDateTimestamp), UTCTimeZone, this._timeZoneManager.timeZone);
         const day = startDate.getDay();
         const oneDayTimeShift = 1000 * 60 * 60 * 24;
