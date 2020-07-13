@@ -31,6 +31,7 @@ import {RefreshPasswordComponent} from "../refresh-password/refresh-password.com
 import {RolesHelper} from "@app/helpers/role.helper";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {SystemNotification} from "../../../Notifications/models/models";
+import { LayoutStorageService } from '@app/services/layout-storage.service';
 
 
 @Component({
@@ -83,6 +84,7 @@ export class AppMembersComponent {
                 private _alertService: AlertService,
                 private _rolesHelper: RolesHelper,
                 private _personalInfoService: PersonalInfoService,
+                private _layoutStorageService: LayoutStorageService,
                 public vm: AppMembersVM) {
     }
 
@@ -315,6 +317,29 @@ export class AppMembersComponent {
 
     roleToStr(role: string): Observable<string> {
         return this._rolesHelper.roleLocalizedStr(role as Roles);
+    }
+
+    clearUserSession(user: AppMemberModel) {
+        const id = user.user.id;
+
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Clear user session',
+                message: `Are you sure you want to clear ${user.user.email} session?`,
+                onConfirm: () => {
+                    this._layoutStorageService.removeUserLayoutState(id)
+                        .subscribe({
+                            next: () => {
+                                this._alertService.success('User session cleared');
+                            },
+                            error: (e) => {
+                                console.error(e);
+                                this._alertService.error('Failed to clear user session');
+                            }
+                        });
+                }
+            }
+        });
     }
 
     private _isKycStatusSet(member: AppMemberModel): boolean {

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {catchError, map, tap} from "rxjs/operators";
 import {IdentityService} from './auth/identity.service';
 import {AppConfigService} from './app.config.service';
@@ -84,6 +84,10 @@ export class LayoutStorageService {
 
     removeLayoutState(): Observable<any> {
         return this.http.delete(this._dashboardURL, {});
+    }
+
+    removeUserLayoutState(userId: string): Observable<any> {
+        return this.http.delete(`${AppConfigService.config.apiUrls.userDataStoreREST}Dashboard/${userId}`);
     }
 
 }
