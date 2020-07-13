@@ -122,8 +122,18 @@ export class DataFeed extends DataFeedBase {
 
     private _getRequestStartDate(request: TradingChartDesigner.IBarsRequest, endDate: Date): Date {
         let count = request.count;
+        const timeFrame = request.chart.timeFrame;
+        let type = (request.chart.instrument as any).type;
+
+        if (TradingChartDesigner.Periodicity.MINUTE === timeFrame.periodicity && type !== EMarketType.Crypto) {
+
+            let backHistory = 60 * 24 * 2;
+            if (count < backHistory)
+                count = backHistory;
+        }
+
         const endDateTimestamp = TzUtils.dateTimestamp(endDate, this._timeZoneManager.timeZone);
-        const startDateTimestamp = endDateTimestamp - (count * request.chart.timeInterval);
+        const startDateTimestamp =endDateTimestamp - (count * request.chart.timeInterval);
         let startDate = TzUtils.convertDateTz(JsUtil.UTCDate(startDateTimestamp), UTCTimeZone, this._timeZoneManager.timeZone);
         const day = startDate.getDay();
         const oneDayTimeShift = 1000 * 60 * 60 * 24;
