@@ -118,6 +118,7 @@ import {ChatModuleForAdmin} from "../Chat/chat.module";
 import {UploadFileInputConfig} from "@file-uploader/components/upload-file-input/upload-file-input-config.token";
 import {IUploadFileInputConfig} from "@file-uploader/components/upload-file-input/upload-file-input.component";
 import {UploadFile} from "@file-uploader/data/UploadFIle";
+import { LayoutStorageService } from '@app/services/layout-storage.service';
 
 @NgModule({
     imports: [
@@ -243,6 +244,7 @@ import {UploadFile} from "@file-uploader/data/UploadFIle";
         AdminHelperService,
         EventConsolidatorService,
         UserTagsService,
+        LayoutStorageService,
         // UserSettingsResolver,
         {
             provide: SharedTranslateService,

@@ -147,6 +147,12 @@
                             Refresh password
                         </button>
 
+
+                        <button mat-menu-item *showIfRole="[Roles.Admin, Roles.SupportOfficer]"
+                                (click)="clearUserSession(item)">
+                            Clear user session
+                        </button>
+
                         <ng-container *ngIf="item.user.twoFactorEnabled">
                             <button mat-menu-item *showIfRole="[Roles.Admin, Roles.SupportOfficer]"
                                     (click)="disable2FA(item)">
