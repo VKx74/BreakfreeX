@@ -36,7 +36,8 @@
     "historydatacollectorREST": "not used",
     "news": "https://events.breakfreetrading.com/news/",
     "exchangeManagementREST": "not used",
-    "bftAlgoWS": "wss://fb.breakfreetrading.com"
+    "bftAlgoWS": "wss://fb.breakfreetrading.com",
+    "bftAlgoREST": "https://fb.breakfreetrading.com/algoserver/"
 
   },
   "systemMonitoringUrls": {
@@ -114,6 +115,7 @@
     "https://system-platform.breakfreetrading.com",
     "https://ws-platform.breakfreetrading.com",
     "https://breakfreetrading.com",
-    "https://platform.breakfreetrading.com"
+    "https://platform.breakfreetrading.com",
+    "https://fb.breakfreetrading.com"
   ]
 }

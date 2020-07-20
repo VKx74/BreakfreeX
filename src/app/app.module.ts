@@ -84,6 +84,7 @@ import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2Segment } from 'angulartics2/segment';
 import { SettingsStorageService } from './services/settings-storage.servic';
 import { GlobalErrorHandler } from './services/GlobalErrorHandler';
+import { AlgoService } from './services/algo.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -266,6 +267,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         BitmexInstrumentService,
         BitmexSocketService,
         BFTSocketService,
+        AlgoService,
 
         OandaInstrumentService,
         OandaHistoryService,
