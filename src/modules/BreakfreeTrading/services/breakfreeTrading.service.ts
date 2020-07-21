@@ -25,6 +25,7 @@ export interface IBFTAlgoParameters {
     instrument: IInstrument;
     time: number;
     timenow: number;
+    replay_back?: number;
     timeframe: ITimeFrame;
 }
 
@@ -43,6 +44,7 @@ export class BreakfreeTradingService {
     }
 
     getBftIndicatorCalculation(params: IBFTAlgoParameters): Promise<object> {
+
         return this.alogService.calculate(params).toPromise();
     } 
     
