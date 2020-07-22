@@ -22,10 +22,10 @@ export class IndicatorDataProviderService {
             const replayBack = chart.replayMode.originDataRows[".close"].length - chart.dataContext.dataRows[".close"].length;
             bftParams.replay_back = replayBack;
 
-            if (replayBack > 500) {
+            if (replayBack > 1000) {
                 return of({
                     algo_Info: {
-                        status: "Playback allowed on last 500 candles." 
+                        status: "Playback allowed on last 1000 candles." 
                     }
                 }).toPromise();
             }

@@ -20,14 +20,14 @@
 
       <div class="row "> 
          <span class="value1">Status:</span><span class="value2">
-            {{Data?.algo_Info.status}}
+            {{Data?.algo_Info?.status}}
          </span>
       </div>  
 
 
       <div class="row "> 
          <span class="value1">Objective:</span><span class="value2">
-            {{Data?.algo_Info.objective}}
+            {{Data?.algo_Info?.objective}}
          </span>
       </div>
 
@@ -35,7 +35,7 @@
 
       <div class="row"> 
          <span class="value1">Suggested risk:</span><span class="value2">
-            {{Data?.algo_Info.suggestedrisk}} {{Data?.algo_Info ? "%" : ""}}
+            {{Data?.algo_Info?.suggestedrisk}} {{Data?.algo_Info ? "%" : ""}}
          </span>
       </div>
 
@@ -43,13 +43,13 @@
 
       <div class="row"> 
          <span class="value1">PAS:</span><span class="value2">
-            {{Data?.algo_Info.pas}}
+            {{Data?.algo_Info?.pas}}
          </span>
       </div>
 
       <div class="row"> 
          <span class="value1" >RTD:</span><span class="value2">
-            {{Data?.algo_Info.macrotrend}}
+            {{Data?.algo_Info?.macrotrend}}
          </span>
       </div>
 
@@ -61,8 +61,8 @@
 
 
       <div class="row"> 
-         <span class="value1">Position size ({{Data?.algo_Info.n_currencySymbol}}):</span><span class="value2">
-            {{Data?.algo_Info.positionsize}}
+         <span class="value1">Position size ({{Data?.algo_Info?.n_currencySymbol}}):</span><span class="value2">
+            {{Data?.algo_Info?.positionsize}}
          </span>
       </div>
 
