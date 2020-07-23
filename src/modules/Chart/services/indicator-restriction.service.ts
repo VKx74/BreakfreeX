@@ -5,7 +5,6 @@ import { AlertService } from '@alert/services/alert.service';
 
 @Injectable()
 export class IndicatorRestrictionService {
-
     private _restrictedIndicators: string[] = [];
     private _indicatorSuffix: string = "_indicator";
 
@@ -23,6 +22,14 @@ export class IndicatorRestrictionService {
         return this._restrictedIndicators;
     } 
     
+    public canRunStrategyReplay(): boolean {
+        return this._identity.role ? this._identity.role.toLowerCase() == "admin" : false;
+    }
+    
+    public canRunXModeReplay(): boolean {
+        return true;
+    }
+
     public validate(name: string): boolean {
         for (const restriction of this._restrictedIndicators) {
             if (restriction.toUpperCase() === name.toUpperCase()) {
