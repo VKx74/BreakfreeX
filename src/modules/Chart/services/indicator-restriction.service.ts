@@ -23,7 +23,7 @@ export class IndicatorRestrictionService {
     } 
     
     public canRunStrategyReplay(): boolean {
-        return this._identity.role ? this._identity.role.toLowerCase() == "admin" : false;
+        return this._identity.role ? this._identity.role.toLowerCase() === "admin" : false;
     }
     
     public canRunXModeReplay(): boolean {
