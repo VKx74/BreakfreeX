@@ -43,6 +43,10 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
     public get Instrument(): IInstrument {
         return this.SelectedItem ? this.SelectedItem.parameters.instrument : null;
     } 
+
+    public get ReplayBack(): number {
+        return this.SelectedItem ? this.SelectedItem.parameters.replay_back : null;
+    } 
     
     public get Timeframe(): ITimeFrame {
         return this.SelectedItem ? this.SelectedItem.parameters.timeframe : null;
