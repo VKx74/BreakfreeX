@@ -7,10 +7,10 @@
   .bftNavigator {
     flex-direction: column;
     height: 100%;
-   height: -moz-available;          /* WebKit-based browsers will ignore this. */
-   height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
-   height: fill-available;
-   overflow: scroll;
+  //  height: -moz-available;          /* WebKit-based browsers will ignore this. */
+  //  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  //  height: fill-available;
+   overflow: auto;
   }
 
   .top-line {
@@ -48,6 +48,7 @@
   padding: 15px 30px;
   font-size: 12px;
   width: 100%;
+  min-width: 210px;
   border: 1px solid #f4f7fb;
   border-radius: 15px;
 }
