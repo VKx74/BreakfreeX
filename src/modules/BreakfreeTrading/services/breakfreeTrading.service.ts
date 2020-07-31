@@ -10,24 +10,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { WebsocketBase } from '@app/interfaces/socket/socketBase';
 import { BFTSocketService } from '@app/services/socket/bft.socket.service';
-import { AlgoService } from '@app/services/algo.service';
-
-export interface ITimeFrame {
-    interval: number;
-    periodicity: string;
-}
-
-export interface IBFTAlgoParameters {
-    input_accountsize: number;
-    input_risk: number;
-    input_splitpositions: number;
-    input_stoplossratio: number;
-    instrument: IInstrument;
-    time: number;
-    timenow: number;
-    replay_back?: number;
-    timeframe: ITimeFrame;
-}
+import { AlgoService, IBFTAlgoParameters } from '@app/services/algo.service';
 
 export interface IPoolItem {
     resolve: any;
@@ -47,6 +30,8 @@ export class BreakfreeTradingService {
 
         return this.alogService.calculate(params).toPromise();
     } 
+
+
     
     // getBftIndicatorCalculation(params: IBFTAlgoParameters): Promise<object> {
     //     const id = new Date().getTime() + params.instrument.id + params.instrument.exchange;

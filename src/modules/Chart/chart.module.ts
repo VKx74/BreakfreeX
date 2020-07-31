@@ -16,6 +16,7 @@ import { IndicatorRestrictionService } from './services/indicator-restriction.se
 import { IndicatorDataProviderService } from './services/indicator-data-provider.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
+import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
 
 export function sharedTemplatesDataProviderService() {
     return sharedProviderResolver('chartTemplatesDataProviderService');
@@ -51,7 +52,8 @@ export function sharedTemplatesDataProviderService() {
         AutoTradingAlertConfigurationService,
         IndicatorRestrictionService,
         IndicatorDataProviderService,
-        BreakfreeTradingService
+        BreakfreeTradingService,
+        ChartTrackerService
     ]
 })
 export class ChartModule {

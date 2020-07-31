@@ -4,7 +4,7 @@
 
 
 :host {
-  .bftNavigator {
+  .bftBacktest {
     flex-direction: column;
     height: 100%;
   //  height: -moz-available;          /* WebKit-based browsers will ignore this. */
@@ -119,7 +119,7 @@ span.value2.copyable:hover {
     margin-bottom: 5px;
   }
 
-  .bftNavigator{
+  .bftBacktest{
     padding:15px;
 
   }
@@ -162,6 +162,7 @@ span.value1.target {
 
 .row.tradeoverview {
   border-bottom: 0px !important;
+  margin-bottom: 10px;
 }
 
 span.leftbord {

@@ -17,18 +17,19 @@ import {SharedModule} from "Shared";
 import { UIModule } from 'UI';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreakfreeTradingService } from './services/breakfreeTrading.service';
-import { BreakfreeTradingProService } from './services/breakfreeTradingPro.service';
-import { BreakfreeTradingDiscoveryService } from './services/breakfreeTradingDiscovery.service';
 import { BreakfreeTradingNavigatorService } from './services/breakfreeTradingNavigator.service';
-import { BreakfreeTradingProComponent, BreakfreeTradingDiscoveryComponent, BreakfreeTradingNavigatorComponent } from './components';
+import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
+import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBacktest.service';
+import { ChartTrackerService } from './services/chartTracker.service';
+import { MatInputModule } from '@angular/material/input';
+import { LoaderModule } from 'modules/loader/loader.module';
 
 @NgModule({
     // components here
     declarations: [
-        BreakfreeTradingProComponent,
-        BreakfreeTradingDiscoveryComponent,
+        BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
     ],
     imports: [
@@ -41,22 +42,22 @@ import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
         LinkingModule,
         TimeZonesModule,
         MatMenuModule,
+        MatInputModule,
         SharedModule,
         UIModule,
         FormsModule,
         ReactiveFormsModule,
+        LoaderModule,
         ClipboardModule
     ],
     // components here
     entryComponents: [
-        BreakfreeTradingProComponent,
-        BreakfreeTradingDiscoveryComponent,
+        BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
     ],
     // components here
     exports: [
-        BreakfreeTradingProComponent,
-        BreakfreeTradingDiscoveryComponent,
+        BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
     ],
     providers: [
@@ -65,9 +66,9 @@ import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
         InstrumentService,
         RealtimeService,
         BreakfreeTradingService,
-        BreakfreeTradingProService,
-        BreakfreeTradingDiscoveryService,
         BreakfreeTradingNavigatorService,
+        ChartTrackerService,
+        BreakfreeTradingBacktestService,
         {
             provide: BreakfreeTradingTranslateService,
             useFactory: TranslateServiceFactory('breakfreeTrading'),

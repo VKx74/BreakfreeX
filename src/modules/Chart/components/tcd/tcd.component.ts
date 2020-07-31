@@ -33,6 +33,8 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { EExchange } from '@app/models/common/exchange';
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
 import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
+import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
+import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -87,6 +89,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _alertChartService: AutoTradingAlertConfigurationService,
                 private _indicatorRestrictionService: IndicatorRestrictionService,
                 private _indicatorDataProviderService: IndicatorDataProviderService,
+                private _chartTrackerService: ChartTrackerService,
                 protected _injector: Injector) {
 
         super(_injector);
@@ -209,6 +212,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
                 }
             }
+
+            this._chartTrackerService.addChart(this.chart);
 
         });
     }
@@ -423,6 +428,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         super.ngOnDestroy();
 
         try {
+            this._chartTrackerService.removeChart(this.chart);
             if (this.chart) {
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_ADDED);
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED);

@@ -4,12 +4,13 @@ import { BreakfreeTradingNavigatorService, INavigatorItem } from 'modules/Breakf
 import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
-import { BreakfreeTradingService, ITimeFrame } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
+import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 import bind from "bind-decorator";
 import { of, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import { ClipboardService } from 'ngx-clipboard';
 import {AlertService} from "@alert/services/alert.service";
+import { ITimeFrame } from '@app/services/algo.service';
 
 export interface IBFTNavigatorComponentState {
 }
@@ -29,6 +30,10 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
 
     private _itemAdded: Subscription;
     private _itemRemoved: Subscription;
+
+    protected useLinker(): boolean { 
+        return false;
+    }
 
     public get Items(): INavigatorItem[] {
         return this._bftNavigatorService.Items;

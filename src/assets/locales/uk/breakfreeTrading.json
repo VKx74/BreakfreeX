@@ -2,7 +2,6 @@
   "breakfreeTrading": {
 
   },
-  "breakfreeTradingProComponentName": "BFT Pro",
-  "breakfreeTradingNavigatorComponentName": "BFT Panel",
-  "breakfreeTradingDiscoveryComponentName": "BFT Discovery"
+  "breakfreeTradingBacktestComponentName": "BFT Backtest",
+  "breakfreeTradingNavigatorComponentName": "BFT Panel"
 }

@@ -76,9 +76,8 @@
     "runningScripts": "Running Scripts",
     "tradesReports": "Trades Reports",
     "authentication": "Authentication",
-    "breakfreeTradingPro": "BFT Pro Widget",
     "breakfreeTradingNavigator": "BFT Panel Widget",
-    "breakfreeTradingDiscovery": "BFT Discovery Widget",
+    "breakfreeTradingBacktest": "BFT Backtest Widget",
     "BreakfreeTradingPro_indicator": "BFT Pro Indicator",
     "BreakfreeTradingDiscovery_indicator": "BFT Discovery Indicator"
   }

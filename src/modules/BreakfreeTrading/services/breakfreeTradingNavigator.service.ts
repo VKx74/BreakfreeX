@@ -8,7 +8,8 @@ import { RealtimeService } from '@app/services/realtime.service';
 import { HistoryService } from '@app/services/history.service';
 import { InstrumentService } from '@app/services/instrument.service';
 import { IdentityService } from '@app/services/auth/identity.service';
-import { BreakfreeTradingService, IBFTAlgoParameters } from './breakfreeTrading.service';
+import { BreakfreeTradingService } from './breakfreeTrading.service';
+import { IBFTAlgoParameters } from '@app/services/algo.service';
 
 export interface INavigatorItem {
     parameters: IBFTAlgoParameters;

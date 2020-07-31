@@ -27,7 +27,7 @@ import {takeUntil} from "rxjs/operators";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {ComponentPortal} from "@angular/cdk/portal";
 import {Overlay} from "@angular/cdk/overlay";
-import { BreakfreeTradingProComponent, BreakfreeTradingDiscoveryComponent, BreakfreeTradingNavigatorComponent } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 
 interface IComponent {
@@ -97,12 +97,12 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
                 componentIdentifier: ComponentIdentifier.watchlist,
             }, 
-            // {
-            //     component: BreakfreeTradingProComponent,
-            //     previewImgClass: BreakfreeTradingProComponent.previewImgClass,
-            //     componentName: this._bftTranslateService.stream('breakfreeTradingProComponentName'),
-            //     componentIdentifier: ComponentIdentifier.breakfreeTradingPro,
-            // },  
+            {
+                component: BreakfreeTradingBacktestComponent,
+                previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
+            },  
             // {
             //     component: BreakfreeTradingDiscoveryComponent,
             //     previewImgClass: BreakfreeTradingDiscoveryComponent.previewImgClass,

@@ -59,11 +59,18 @@ export const ADMIN_ITEMS: ComponentIdentifier[] = [
     ComponentIdentifier.tradesReports,
 ];
 
+export const ADMIN_ALLOWED_COMPONENTS: ComponentIdentifier[] = [
+    ComponentIdentifier.breakfreeTradingBacktest
+];
+
 @Injectable({
     providedIn: 'root'
 })
 export class ComponentAccessService {
+
+    private static isAdmin: boolean;
     static config: IComponentsConfig;
+
     COMPONENTS_ACCESS_RESOLVER_STRATEGY = ComponentAccessResolverStrategy.UserTags;
     configurationFile: IComponentsConfig = null;
 
@@ -73,13 +80,24 @@ export class ComponentAccessService {
 
     constructor(private _http: HttpClient,
                 private _identity: IdentityService) {
+        ComponentAccessService.isAdmin = this._identity.isAdmin;
     }
 
     static isAccessible(identifier: ComponentIdentifier): boolean {
+        if (ADMIN_ALLOWED_COMPONENTS.indexOf(identifier) >= 0) {
+            return ComponentAccessService.isAdmin;
+        }
+
         return identifier && ComponentAccessService.config[identifier];
     }
 
     static isAccessibleComponentsArray(identifiers: ComponentIdentifier[]): boolean {
+        for (const item of identifiers) {
+            if (ADMIN_ALLOWED_COMPONENTS.indexOf(item) >= 0 && !ComponentAccessService.isAdmin) {
+                return false;
+            }
+        }
+
         return (identifiers && identifiers.length && identifiers.some((i) => ComponentAccessService.config[i]));
     }
 

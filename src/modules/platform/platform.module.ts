@@ -115,7 +115,7 @@ import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-la
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { SingleSessionService } from '@app/services/single-session.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
-import { BreakfreeTradingProComponent, BreakfreeTradingNavigatorComponent, BreakfreeTradingDiscoveryComponent } from 'modules/BreakfreeTrading/components';
+import { BreakfreeTradingNavigatorComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -394,16 +394,12 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                             component: PrivateChatLayoutWidgetComponent
                         },
                         {
-                            componentName: ComponentIdentifier.breakfreeTradingPro,
-                            component: BreakfreeTradingProComponent
-                        }, 
-                        {
                             componentName: ComponentIdentifier.breakfreeTradingNavigator,
                             component: BreakfreeTradingNavigatorComponent
                         }, 
                         {
-                            componentName: ComponentIdentifier.breakfreeTradingDiscovery,
-                            component: BreakfreeTradingDiscoveryComponent
+                            componentName: ComponentIdentifier.breakfreeTradingBacktest,
+                            component: BreakfreeTradingBacktestComponent
                         },
                     ]
                 } as IGoldenLayoutComponentConfiguration;
