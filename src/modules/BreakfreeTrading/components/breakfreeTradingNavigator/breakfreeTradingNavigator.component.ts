@@ -31,9 +31,14 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
     private _itemAdded: Subscription;
     private _itemRemoved: Subscription;
 
-    protected useLinker(): boolean { 
-        return false;
-    }
+    
+    public objective: string;
+    public status: string;
+    public suggestedrisk: string;
+    public positionsize: string;
+    public pas: string;
+    public macrotrend: string;
+    public n_currencySymbol: string;
 
     public get Items(): INavigatorItem[] {
         return this._bftNavigatorService.Items;
@@ -67,15 +72,6 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
             this._loadState(_state);
         }
     }
-
-    
-    objective: string;
-    status: string;
-    suggestedrisk: string;
-    positionsize: string;
-    pas: string;
-    macrotrend: string;
-    n_currencySymbol: string;
 
     ngOnInit() {
         super.setTitle(
@@ -125,6 +121,10 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         if (this._itemRemoved) {
             this._itemRemoved.unsubscribe();
         }
+    }
+
+    protected useLinker(): boolean { 
+        return false;
     }
 
     private _getContentText(): string {

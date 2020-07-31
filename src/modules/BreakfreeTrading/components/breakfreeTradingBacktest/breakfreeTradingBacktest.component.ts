@@ -26,10 +26,6 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
     
     private _chartRemoved: Subscription;
 
-    protected useLinker(): boolean { 
-        return false;
-    }
-
     public get Charts(): TradingChartDesigner.Chart[] {
         return this._chartTrackerService.availableCharts;
     }
@@ -193,6 +189,10 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
         this.showSpinner = false;
 
         this.infoDateCalculation(backtestResults, chart);
+    }
+    
+    protected useLinker(): boolean { 
+        return false;
     }
 
     private validateInputParameters (params: IBFTAlgoParameters): boolean {
