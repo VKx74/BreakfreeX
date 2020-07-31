@@ -190,7 +190,7 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
 
         this.infoDateCalculation(backtestResults, chart);
     }
-    
+
     protected useLinker(): boolean { 
         return false;
     }
@@ -204,7 +204,7 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
             this._alertService.error("Risk incorrect. Min 1.0 Max 100.0");
             return false;
         }
-        if (!params.input_stoplossratio || params.input_stoplossratio < 0.1 || params.replay_back > 100) {
+        if (!params.input_stoplossratio || params.input_stoplossratio < 0.1 || params.input_stoplossratio > 100) {
             this._alertService.error("SL ratio incorrect. Min 0.1 Max 100.0");
             return false;
         }
