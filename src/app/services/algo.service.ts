@@ -122,6 +122,21 @@ export interface IBFTABacktestResponse {
     orders: IBFTAOrder[];
 }
 
+export interface IBFTAExtHitTestSignal {
+    timestamp: number;
+    data: IBFTAAlgoData;
+    topext1hit: boolean;
+    topext2hit: boolean;
+    bottomext1hit: boolean;
+    bottomext2hit: boolean;
+    backhit: boolean;
+    wentout: boolean;
+}
+
+export interface IBFTAExtHitTestResult {
+    signals: IBFTAExtHitTestSignal[];
+}
+
 @Injectable()
 export class AlgoService {
     private url: string;
@@ -142,5 +157,9 @@ export class AlgoService {
     
     backtest(data: IBFTAlgoParameters): Observable<IBFTABacktestResponse> {
         return this._http.post<IBFTABacktestResponse>(`${this.url}backtest`, data);
+    }
+
+    extHitTest(data: IBFTAlgoParameters): Observable<IBFTAExtHitTestResult> {
+        return this._http.post<IBFTAExtHitTestResult>(`${this.url}hittest_ext`, data);
     }
 }

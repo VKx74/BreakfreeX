@@ -1,0 +1,46 @@
+<div class="bftStrategyBacktest flex">
+   <loader *ngIf="showSpinner"></loader>
+   <div class="flex justify-space-between">
+      <div class="column"> 
+         <span class="bft-pannel-header hidden">Select chart</span>
+      </div>
+    
+   <div class="bftpanel-status" #content>
+      <div class="row"> 
+         <span class="value1"><button class="crypto-button" (click)="clear()">Clear data</button></span>
+         <span class="value2"><button class="crypto-button" (click)="backtest()">Backtest</button></span>
+      </div>   
+      
+      <div class="row"> 
+         <span class="value1">Bars count:</span><span class="value2">
+            <mat-form-field class="crypto-input">
+               <input matInput type="number" [(ngModel)]="barsCount" min="100" max="2000" step="1">
+           </mat-form-field>
+         </span>
+      </div>
+
+      <div class="row entries"> 
+         <span class="value header"> <span class="leftbord"></span>Result</span>
+      </div>
+      
+      <div class="row"> 
+         <span class="value1">Instrument:</span><span class="value2">
+            {{Instrument}}
+         </span>
+      </div>     
+      <div class="row"> 
+         <span class="value1">Signals count:</span><span class="value2">
+            {{SignalsCount}}
+         </span>
+      </div>  
+
+      <div class="row"> 
+         <span class="value1">Win/Loss ratio:</span><span class="value2">
+            {{WinLossRatio}}
+         </span>
+      </div>  
+
+   </div>
+
+   
+</div>

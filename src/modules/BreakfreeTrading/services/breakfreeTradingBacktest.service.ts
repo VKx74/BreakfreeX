@@ -10,7 +10,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { WebsocketBase } from '@app/interfaces/socket/socketBase';
 import { BFTSocketService } from '@app/services/socket/bft.socket.service';
-import { AlgoService, IBFTAlgoParameters, IBFTABacktestResponse } from '@app/services/algo.service';
+import { AlgoService, IBFTAlgoParameters, IBFTABacktestResponse, IBFTAExtHitTestResult } from '@app/services/algo.service';
 
 @Injectable()
 export class BreakfreeTradingBacktestService {
@@ -20,5 +20,10 @@ export class BreakfreeTradingBacktestService {
     public backtest(params: IBFTAlgoParameters): Promise<IBFTABacktestResponse> {
 
         return this.alogService.backtest(params).toPromise();
+    } 
+    
+    public extHitTest(params: IBFTAlgoParameters): Promise<IBFTAExtHitTestResult> {
+
+        return this.alogService.extHitTest(params).toPromise();
     } 
 }

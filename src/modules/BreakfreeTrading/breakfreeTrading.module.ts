@@ -25,10 +25,15 @@ import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBack
 import { ChartTrackerService } from './services/chartTracker.service';
 import { MatInputModule } from '@angular/material/input';
 import { LoaderModule } from 'modules/loader/loader.module';
+import { StrategyModeBacktestComponent } from './components/strategyModeBacktest/strategyModeBacktest.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ExtensionHitTestComponent } from './components/extensionHitTest/extensionHitTest.component';
 
 @NgModule({
     // components here
     declarations: [
+        StrategyModeBacktestComponent,
+        ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
     ],
@@ -44,6 +49,7 @@ import { LoaderModule } from 'modules/loader/loader.module';
         MatMenuModule,
         MatInputModule,
         SharedModule,
+        MatTabsModule,
         UIModule,
         FormsModule,
         ReactiveFormsModule,
@@ -52,11 +58,15 @@ import { LoaderModule } from 'modules/loader/loader.module';
     ],
     // components here
     entryComponents: [
+        StrategyModeBacktestComponent,
+        ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
     ],
     // components here
     exports: [
+        StrategyModeBacktestComponent,
+        ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
     ],
