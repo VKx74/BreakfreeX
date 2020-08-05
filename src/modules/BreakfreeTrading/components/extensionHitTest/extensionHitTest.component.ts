@@ -82,7 +82,14 @@ export class ExtensionHitTestComponent {
         }
 
         this.Processing.emit(true);
-        let backtestResults = await this._bftService.extHitTest(backtestParameters);
+        let backtestResults;
+        try {
+            backtestResults = await this._bftService.extHitTest(backtestParameters);
+        } catch(error) {
+            this._alertService.error("Failed to calculate backtest");
+            this.Processing.emit(false);
+        }
+
         let lastCandleDate = chart.dataContext.dataRows[".date"].lastValue as Date;
         let shapes = [];
         for (let i = 0; i < backtestResults.signals.length; i++) 

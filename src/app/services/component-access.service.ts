@@ -68,7 +68,7 @@ export const ADMIN_ALLOWED_COMPONENTS: ComponentIdentifier[] = [
 })
 export class ComponentAccessService {
 
-    private static isAdmin: boolean;
+    private static _identityService: IdentityService;
     static config: IComponentsConfig;
 
     COMPONENTS_ACCESS_RESOLVER_STRATEGY = ComponentAccessResolverStrategy.UserTags;
@@ -80,12 +80,12 @@ export class ComponentAccessService {
 
     constructor(private _http: HttpClient,
                 private _identity: IdentityService) {
-        ComponentAccessService.isAdmin = this._identity.isAdmin;
+        ComponentAccessService._identityService = this._identity;
     }
 
     static isAccessible(identifier: ComponentIdentifier): boolean {
         if (ADMIN_ALLOWED_COMPONENTS.indexOf(identifier) >= 0) {
-            return ComponentAccessService.isAdmin;
+            return ComponentAccessService._identityService.isAdmin;
         }
 
         return identifier && ComponentAccessService.config[identifier];
@@ -93,7 +93,7 @@ export class ComponentAccessService {
 
     static isAccessibleComponentsArray(identifiers: ComponentIdentifier[]): boolean {
         for (const item of identifiers) {
-            if (ADMIN_ALLOWED_COMPONENTS.indexOf(item) >= 0 && !ComponentAccessService.isAdmin) {
+            if (ADMIN_ALLOWED_COMPONENTS.indexOf(item) >= 0 && !ComponentAccessService._identityService.isAdmin) {
                 return false;
             }
         }

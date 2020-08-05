@@ -39,12 +39,16 @@
   .crypto-button {
     background-color: themed('inputBackgroundColor');
   }
+
+  .bft-strategy-backtest-panel-status .row {
+    border-color: themed('inputBackgroundColor');
+  }
 }
 
 
 
 
-.bftpanel-status {
+.bft-strategy-backtest-panel-status {
   font-size: 12px;
   width: 100%;
   min-width: 210px;
@@ -78,8 +82,8 @@ span.value2 {
 
 
 
-.bftpanel-status .row {
-  border-bottom: 1px solid #f4f7fb;
+.bft-strategy-backtest-panel-status .row {
+  border-bottom: 1px solid;
 }
 
 .Copyvalue-top {

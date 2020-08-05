@@ -90,7 +90,13 @@ export class StrategyModeBacktestComponent {
         }
 
         this.Processing.emit(true);
-        let backtestResults = await this._bftService.backtest(backtestParameters);
+        let backtestResults;
+        try {
+            backtestResults = await this._bftService.backtest(backtestParameters);
+        } catch(error) {
+            this._alertService.error("Failed to calculate backtest");
+            this.Processing.emit(false);
+        }
         let pricePrecision = (chart.instrument as IInstrument).pricePrecision;
         let lastCandleDate = chart.dataContext.dataRows[".date"].lastValue as Date;
         let groupedOrders = this.groupOrders(backtestResults.orders);
