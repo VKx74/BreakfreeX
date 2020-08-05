@@ -85,7 +85,7 @@ export class ExtensionHitTestComponent {
         let backtestResults;
         try {
             backtestResults = await this._bftService.extHitTest(backtestParameters);
-        } catch(error) {
+        } catch (error) {
             this._alertService.error("Failed to calculate backtest");
             this.Processing.emit(false);
         }

@@ -93,7 +93,7 @@ export class StrategyModeBacktestComponent {
         let backtestResults;
         try {
             backtestResults = await this._bftService.backtest(backtestParameters);
-        } catch(error) {
+        } catch (error) {
             this._alertService.error("Failed to calculate backtest");
             this.Processing.emit(false);
         }
