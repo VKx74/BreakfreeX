@@ -30,16 +30,8 @@ export interface IBFTAlgoParameters {
     timeframe: ITimeFrame;
 }
 
-export interface IBFTAlgoParameters {
-    input_accountsize: number;
-    input_risk: number;
-    input_splitpositions: number;
-    input_stoplossratio: number;
-    instrument: IInstrument;
-    time: number;
-    timenow: number;
-    replay_back?: number;
-    timeframe: ITimeFrame;
+export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
+    hma_period: number;
 }
 
 export interface IBFTAAlgoInfo {
@@ -131,6 +123,7 @@ export interface IBFTAExtHitTestSignal {
     bottomext2hit: boolean;
     backhit: boolean;
     wentout: boolean;
+    is_up_tending: boolean;
 }
 
 export interface IBFTAExtHitTestResult {
@@ -155,11 +148,11 @@ export class AlgoService {
             }));
     }
     
-    backtest(data: IBFTAlgoParameters): Observable<IBFTABacktestResponse> {
+    backtest(data: IBFTBacktestAlgoParameters): Observable<IBFTABacktestResponse> {
         return this._http.post<IBFTABacktestResponse>(`${this.url}backtest`, data);
     }
 
-    extHitTest(data: IBFTAlgoParameters): Observable<IBFTAExtHitTestResult> {
+    extHitTest(data: IBFTBacktestAlgoParameters): Observable<IBFTAExtHitTestResult> {
         return this._http.post<IBFTAExtHitTestResult>(`${this.url}hittest_ext`, data);
     }
 }

@@ -18,6 +18,14 @@
          </span>
       </div>
 
+      <div class="row"> 
+         <span class="value1">Trend calc. period:</span><span class="value2">
+            <mat-form-field class="crypto-input">
+               <input matInput type="number" [(ngModel)]="hmaPeriod" min="10" max="250" step="1">
+           </mat-form-field>
+         </span>
+      </div>
+
       <div class="row entries"> 
          <span class="value header"> <span class="leftbord"></span>Result</span>
       </div>

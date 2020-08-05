@@ -16,6 +16,13 @@
                <input matInput type="number" [(ngModel)]="barsCount" min="100" max="2000" step="1">
            </mat-form-field>
          </span>
+      </div>  
+      <div class="row"> 
+         <span class="value1">Trend calc. period:</span><span class="value2">
+            <mat-form-field class="crypto-input">
+               <input matInput type="number" [(ngModel)]="hmaPeriod" min="10" max="250" step="1">
+           </mat-form-field>
+         </span>
       </div>
       <div class="row"> 
          <span class="value1">SL ratio:</span><span class="value2">

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTBacktestAlgoParameters } from '@app/services/algo.service';
 import { of } from 'rxjs';
 import bind from "bind-decorator";
 import { AlertService } from '@alert/services/alert.service';
@@ -23,6 +23,7 @@ export class StrategyModeBacktestComponent {
     public ClearData = new EventEmitter();
 
     public barsCount: number = 100;
+    public hmaPeriod: number = 200;
     public slRatio: number = 1.7;
     public posNumbers: number = 3;
     public risk: number = 3.5;
@@ -78,6 +79,7 @@ export class StrategyModeBacktestComponent {
             input_risk: this.risk,
             input_splitpositions: this.posNumbers,
             replay_back: this.barsCount,
+            hma_period: this.hmaPeriod,
             input_stoplossratio: this.slRatio,
             instrument: chart.instrument as IInstrument,
             timeframe: chart.timeFrame,
@@ -134,9 +136,13 @@ export class StrategyModeBacktestComponent {
         this.infoDateCalculation(backtestResults, chart);
     }
 
-    private validateInputParameters (params: IBFTAlgoParameters): boolean {
+    private validateInputParameters (params: IBFTBacktestAlgoParameters): boolean {
         if (!params.replay_back || params.replay_back < 100 || params.replay_back > 2000) {
             this._alertService.error("Bars count incorrect. Min 100 Max 2000.");
+            return false;
+        } 
+        if (!params.hma_period || params.hma_period < 10 || params.hma_period > 250) {
+            this._alertService.error("Trend calculation period incorrect. Min 10 Max 250.");
             return false;
         }
         if (!params.input_risk || params.input_risk < 1 || params.input_risk > 100) {
