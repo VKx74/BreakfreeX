@@ -156,7 +156,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 height: 'calc( 100% - 66px )',
                 theme: theme,
                 addThemeClass: false,
-                chartType: 'hollowCandle',
+                // chartType: 'hollowCandle',
                 crossHair: "crossBars",
                 datafeed: d,
                 hideScrollToLastBar: true,
@@ -201,6 +201,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_ADDED, this.indicatorAdded.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED, this.indicatorRemoved.bind(this));
+            this.chart.on(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS, this.setDefaultSettings.bind(this));
 
             if (!state) {
                 let isProAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
@@ -236,6 +237,16 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }
 
         this._indicatorDataProviderService.indicatorRemoved(indicator);
+    } 
+    
+    protected setDefaultSettings(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        console.log("Set default");
+        if (!this.chart || this.chart.isDestroyed) {
+            return;
+        }
+
+        this.chart.theme = this._getTheme();
+        this.chart.refreshAsync();
     }
 
     protected useDefaultLinker(): boolean {
@@ -432,6 +443,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             if (this.chart) {
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_ADDED);
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED);
+                this.chart.off(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS);
                 this.chart.destroy();
             }
         } catch (e) {
