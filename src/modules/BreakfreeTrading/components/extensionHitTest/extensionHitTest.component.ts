@@ -187,7 +187,7 @@ export class ExtensionHitTestComponent {
         shape.selectable = false;
         shape.hoverable = false;
         shape.savable = false;
-        shape.text = "\n" + (is_up_tending ? "Up" : "Down");
+        shape.text = "\n" + (is_up_tending ? "U" : "D");
         shape.theme = {
             text: {
                 fontsize: 10,
