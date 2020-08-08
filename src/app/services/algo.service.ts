@@ -88,6 +88,7 @@ export interface IBFTAAlgoData {
 
 export interface IBFTASignal {
     timestamp: number;
+    end_timestamp: number;
     data: IBFTAAlgoData;
 }
 
@@ -116,6 +117,7 @@ export interface IBFTABacktestResponse {
 
 export interface IBFTAExtHitTestSignal {
     timestamp: number;
+    end_timestamp: number;
     data: IBFTAAlgoData;
     topext1hit: boolean;
     topext2hit: boolean;

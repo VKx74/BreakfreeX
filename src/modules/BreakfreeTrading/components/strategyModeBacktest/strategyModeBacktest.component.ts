@@ -109,6 +109,9 @@ export class StrategyModeBacktestComponent {
             let signalNext = backtestResults.signals[i + 1];
             let startDate = new Date(signal.timestamp * 1000);
             let endDate = signalNext ? new Date(signalNext.timestamp * 1000) : lastCandleDate;
+            if (signal.end_timestamp) {
+                endDate = new Date(signal.end_timestamp * 1000);
+            }
             
             // let lineEntry = this.generateLine(startDate, endDate, signal.data.algo_Entry, "#629320");
             let isBuy = signal.data.algo_Entry > signal.data.algo_Stop;
