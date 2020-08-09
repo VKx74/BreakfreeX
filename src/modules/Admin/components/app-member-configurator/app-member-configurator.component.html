@@ -9,7 +9,7 @@
         </div>
         <div class="modal-body">
             <form [formGroup]="formGroup">
-                <div class="crypto-form-unit margin-bottom">
+                <div class="crypto-form-unit margin-bottom" *showIfRole="[Roles.Admin]">
                     <div class="form-unit__label">Role:</div>
                     <mat-form-field class="crypto-select full-width">
                         <mat-select formControlName="role">
@@ -47,7 +47,7 @@
                         <mat-error>Please, enter a valid password</mat-error>
                     </mat-form-field>
                 </div>
-                <div class="crypto-form-unit">
+                <div class="crypto-form-unit" *showIfRole="[Roles.Admin]">
                     <p class="form-unit__label">Tags:</p>
                     <div class="tags-wrapper">
                         <tags-input [mode]="TagsInputMode.Autocomplete"

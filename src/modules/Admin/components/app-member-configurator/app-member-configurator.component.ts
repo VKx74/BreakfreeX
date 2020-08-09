@@ -44,6 +44,7 @@ export type MemberConfiguratorModalResultType = UserModel | boolean;
 })
 export class AppMemberConfiguratorComponent extends Modal<ConfiguratorConfig, MemberConfiguratorModalResultType> {
     roles: Roles[] = [];
+    Roles = Roles;
     formGroup: FormGroup;
 
     get TagsInputMode() {
