@@ -18,6 +18,8 @@ export interface ApiUrls {
     polygonWS: string;
     twelvedataREST: string;
     twelvedataWS: string;
+    kaikoREST: string;
+    kaikoWS: string;
     onadaWS: string;
     coinigyREST: string;
     coinigyWS: string;

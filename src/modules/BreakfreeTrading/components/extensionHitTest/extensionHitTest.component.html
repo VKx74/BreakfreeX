@@ -26,6 +26,14 @@
          </span>
       </div>
 
+      <div class="row"> 
+         <span class="value1">Max objects on chart:</span><span class="value2">
+            <mat-form-field class="crypto-input">
+               <input matInput type="number" [(ngModel)]="maxCount" min="0" max="500" step="1">
+           </mat-form-field>
+         </span>
+      </div>
+
       <div class="row entries"> 
          <span class="value header"> <span class="leftbord"></span>Result</span>
       </div>
@@ -35,6 +43,13 @@
             {{Instrument}}
          </span>
       </div>     
+
+      <div class="row"> 
+         <span class="value1">Start date:</span><span class="value2">
+            {{StartDate}}
+         </span>
+      </div>  
+
       <div class="row"> 
          <span class="value1">Signals count:</span><span class="value2">
             {{SignalsCount}}
@@ -46,6 +61,14 @@
             {{WinLossRatio}}
          </span>
       </div>  
+
+      <div class="row entries"> 
+         <span class="value header"> <span class="leftbord"></span>Status</span>
+      </div>
+      
+      <div class="row"> 
+         <span class="value1">{{Status}}</span>
+      </div>     
 
    </div>
 

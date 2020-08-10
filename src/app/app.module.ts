@@ -85,6 +85,9 @@ import { Angulartics2Segment } from 'angulartics2/segment';
 import { SettingsStorageService } from './services/settings-storage.servic';
 import { GlobalErrorHandler } from './services/GlobalErrorHandler';
 import { AlgoService } from './services/algo.service';
+import { KaikoInstrumentService } from './services/kaiko.exchange/kaiko.instrument.service';
+import { KaikoHistoryService } from './services/kaiko.exchange/kaiko.history.service';
+import { KaikoRealtimeService } from './services/kaiko.exchange/kaiko.realtime.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -284,6 +287,10 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         TwelvedataInstrumentService,
         TwelvedataHistoryService,
         TwelvedataRealtimeService,
+
+        KaikoInstrumentService,
+        KaikoHistoryService,
+        KaikoRealtimeService,
 
         InstrumentService,
         RealtimeService,

@@ -22,6 +22,7 @@ export class ExtensionHitTestComponent {
     @Output() 
     public ClearData = new EventEmitter();
 
+    public maxCount: number = 100;
     public barsCount: number = 100;
     public hmaPeriod: number = 200;
     public slRatio: number = 1.7;
@@ -29,6 +30,8 @@ export class ExtensionHitTestComponent {
     public risk: number = 3.5;
 
     public Instrument: string = "";
+    public Status: string = "-";
+    public StartDate: string = "";
     public SignalsCount: string = "";
     public WinLossRatio: string = "";
     
@@ -49,6 +52,8 @@ export class ExtensionHitTestComponent {
     {
         this.Processing.emit(true);
         this.Instrument = "";
+        this.Status = "-";
+        this.StartDate = "";
         this.SignalsCount = "";
         this.WinLossRatio = "";
         this.ClearData.emit();
@@ -83,6 +88,8 @@ export class ExtensionHitTestComponent {
             return;
         }
 
+        this.Status = "Calculating...";
+
         this.Processing.emit(true);
         let backtestResults;
         try {
@@ -94,8 +101,21 @@ export class ExtensionHitTestComponent {
 
         let lastCandleDate = chart.dataContext.dataRows[".date"].lastValue as Date;
         let shapes = [];
-        for (let i = 0; i < backtestResults.signals.length; i++) 
+        let start = 0;
+        if (this.maxCount < 0) {
+            this.maxCount = 0;
+        }
+        if (backtestResults.signals.length > this.maxCount) {
+            start = backtestResults.signals.length - this.maxCount;
+        }
+
+        this.Status = "Visualization...";
+        
+        for (let i = start; i < backtestResults.signals.length; i++) 
         {
+            let percent = (i - start) / (backtestResults.signals.length - start) * 100;
+            this.Status = `Visualization ${percent.toFixed(2)}% ...`;
+
             let signal = backtestResults.signals[i];
             let signalNext = backtestResults.signals[i + 1];
             let startDate = new Date(signal.timestamp * 1000);
@@ -130,13 +150,13 @@ export class ExtensionHitTestComponent {
         chart.refreshAsync();
         chart.commandController.clearCommands();
         this.Processing.emit(false);
-
         this.infoDateCalculation(backtestResults, chart);
+        this.Status = "Done";
     }
 
     private validateInputParameters (params: IBFTBacktestAlgoParameters): boolean {
-        if (!params.replay_back || params.replay_back < 100 || params.replay_back > 2000) {
-            this._alertService.error("Bars count incorrect. Min 100 Max 2000.");
+        if (!params.replay_back || params.replay_back < 100 || params.replay_back > 10000) {
+            this._alertService.error("Bars count incorrect. Min 100 Max 10000.");
             return false;
         }
 
@@ -149,6 +169,12 @@ export class ExtensionHitTestComponent {
     }
 
     private infoDateCalculation (backtestResults: IBFTAExtHitTestResult, chart: TradingChartDesigner.Chart) {
+        if (backtestResults.signals.length) {
+            this.StartDate = new Date(backtestResults.signals[0].timestamp * 1000).toUTCString();
+        } else {
+            this.StartDate = "";
+        }
+
         this.Instrument = this._captionText(chart);
         this.SignalsCount = backtestResults.signals.length.toString();
         let winRatio = 0;

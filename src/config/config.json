@@ -10,6 +10,8 @@
     "polygonWS": "wss://datafeed-stage.breakfreetrading.com/polygon/subscribe/realtime/",
     "twelvedataREST": "https://datafeed-stage.breakfreetrading.com/twelvedata/",
     "twelvedataWS": "wss://datafeed-stage.breakfreetrading.com/twelvedata/subscribe/realtime/",
+    "kaikoREST": "https://datafeed-stage.breakfreetrading.com/kaiko/",
+    "kaikoWS": "wss://datafeed-stage.breakfreetrading.com/kaiko/subscribe/realtime/",
     "onadaWS": "wss://datafeed-stage.breakfreetrading.com/oanda/subscribe/realtime/",
     "coinigyREST": "https://datafeed-stage.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
     "coinigyWS": "wss://datafeed-stage.breakfreetrading.com/data/vendor/coinigy/ws",
@@ -64,6 +66,10 @@
     "twelvedataREST": {
       "name": "Twelvedata",
       "url": "https://datafeed-stage.breakfreetrading.com/twelvedata/"
+    },
+    "kaikoREST": {
+      "name": "Kaiko",
+      "url": "https://datafeed-stage.breakfreetrading.com/kaiko/"
     },
     "eventConsolidator": {
       "name": "Event Consolidator",

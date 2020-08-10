@@ -27,8 +27,11 @@ export class StrategyModeBacktestComponent {
     public slRatio: number = 1.7;
     public posNumbers: number = 3;
     public risk: number = 3.5;
+    public maxCount: number = 100;
 
+    public Status: string = "-";
     public Instrument: string = "";
+    public StartDate: string = "";
     public SignalsCount: string = "";
     public OrdersCount: string = "";
     public WinTradeCount: string = "";
@@ -52,7 +55,9 @@ export class StrategyModeBacktestComponent {
     clear()
     {
         this.Processing.emit(true);
+        this.Status = "-";
         this.Instrument = "";
+        this.StartDate = "";
         this.SignalsCount = "";
         this.OrdersCount = "";
         this.WinTradeCount = "";
@@ -91,6 +96,7 @@ export class StrategyModeBacktestComponent {
             return;
         }
 
+        this.Status = "Calculating...";
         this.Processing.emit(true);
         let backtestResults;
         try {
@@ -101,10 +107,27 @@ export class StrategyModeBacktestComponent {
         }
         let pricePrecision = (chart.instrument as IInstrument).pricePrecision;
         let lastCandleDate = chart.dataContext.dataRows[".date"].lastValue as Date;
+
+        this.Status = "Grouping orders...";
+
         let groupedOrders = this.groupOrders(backtestResults.orders);
         let shapes = [];
-        for (let i = 0; i < backtestResults.signals.length; i++) 
+        let start = 0;
+
+        if (this.maxCount < 0) {
+            this.maxCount = 0;
+        }
+        if (backtestResults.signals.length > this.maxCount) {
+            start = backtestResults.signals.length - this.maxCount;
+        }
+
+        this.Status = "Visualization...";
+
+        for (let i = start; i < backtestResults.signals.length; i++) 
         {
+            let percent = (i - start) / (backtestResults.signals.length - start) * 100;
+            this.Status = `Visualization ${percent.toFixed(2)}% ...`;
+            
             let signal = backtestResults.signals[i];
             let signalNext = backtestResults.signals[i + 1];
             let startDate = new Date(signal.timestamp * 1000);
@@ -137,11 +160,12 @@ export class StrategyModeBacktestComponent {
         this.Processing.emit(false);
 
         this.infoDateCalculation(backtestResults, chart);
+        this.Status = "Done";
     }
 
     private validateInputParameters (params: IBFTBacktestAlgoParameters): boolean {
-        if (!params.replay_back || params.replay_back < 100 || params.replay_back > 2000) {
-            this._alertService.error("Bars count incorrect. Min 100 Max 2000.");
+        if (!params.replay_back || params.replay_back < 100 || params.replay_back > 10000) {
+            this._alertService.error("Bars count incorrect. Min 100 Max 10000.");
             return false;
         } 
         if (!params.hma_period || params.hma_period < 10 || params.hma_period > 250) {
@@ -166,6 +190,12 @@ export class StrategyModeBacktestComponent {
     }
 
     private infoDateCalculation (backtestResults: IBFTABacktestResponse, chart: TradingChartDesigner.Chart) {
+        if (backtestResults.signals.length) {
+            this.StartDate = new Date(backtestResults.signals[0].timestamp * 1000).toUTCString();
+        } else {
+            this.StartDate = "";
+        }
+
         let pricePrecision = (chart.instrument as IInstrument).pricePrecision;
         this.Instrument = this._captionText(chart);
         this.SignalsCount = backtestResults.signals.length.toString();

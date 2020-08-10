@@ -20,6 +20,10 @@ import { TwelvedataInstrumentService } from '@app/services/twelvedata.exchange/t
 import { TwelvedataHistoryService } from '@app/services/twelvedata.exchange/twelvedata.history.service';
 import { TwelvedataRealtimeService } from '@app/services/twelvedata.exchange/twelvedata.realtime.service';
 
+import { KaikoInstrumentService } from '@app/services/kaiko.exchange/kaiko.instrument.service';
+import { KaikoHistoryService } from '@app/services/kaiko.exchange/kaiko.history.service';
+import { KaikoRealtimeService } from '@app/services/kaiko.exchange/kaiko.realtime.service';
+
 export interface CreateInstrumentServiceActionResult extends ActionResult {
     serviceInstance?: InstrumentServiceBase;
 }
@@ -52,6 +56,9 @@ export class ExchangeFactory {
             case EExchangeInstance.TwelvedataExchange:
                 service = this._injector.get(TwelvedataInstrumentService);
                 break;
+            case EExchangeInstance.KaikoExchange:
+                service = this._injector.get(KaikoInstrumentService);
+                break;
         }
 
         if (service) {
@@ -83,6 +90,9 @@ export class ExchangeFactory {
             case EExchangeInstance.TwelvedataExchange:
                 service = this._injector.get(TwelvedataHistoryService);
                 break;
+            case EExchangeInstance.KaikoExchange:
+                service = this._injector.get(KaikoHistoryService);
+                break;
         }
 
         if (service) {
@@ -113,6 +123,9 @@ export class ExchangeFactory {
                 break;
             case EExchangeInstance.TwelvedataExchange:
                 service = this._injector.get(TwelvedataRealtimeService);
+                break;
+            case EExchangeInstance.KaikoExchange:
+                service = this._injector.get(KaikoRealtimeService);
                 break;
         }
 

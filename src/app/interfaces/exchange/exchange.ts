@@ -7,4 +7,5 @@ export enum EExchangeInstance {
     OandaExchange = 'Oanda',
     PolygonExchange = 'Polygon',
     TwelvedataExchange = 'Twelvedata',
+    KaikoExchange = 'Kaiko'
 }
