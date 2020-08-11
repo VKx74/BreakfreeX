@@ -77,8 +77,8 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
                     type: type,
                     tickSize: tickSize,
                     pricePrecision: this._getPricePrecision(tickSize),
-                    baseInstrument: product.CurrencyBase,
-                    dependInstrument: product.CurrencyQuote,
+                    baseInstrument: product.CurrencyBase ?  product.CurrencyBase.toUpperCase() : "",
+                    dependInstrument: product.CurrencyQuote ?  product.CurrencyQuote.toUpperCase() : "",
                     company: description,
                     tradable: false
                 };
