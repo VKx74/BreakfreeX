@@ -116,6 +116,22 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
     }
     
     private _getDescription(product: any): string {
-        return `${product.CurrencyBase} vs ${product.CurrencyQuote}`;
+        const base = product.CurrencyBase ?  product.CurrencyBase.toUpperCase() : "";
+        const quoted = product.CurrencyQuote ?  product.CurrencyQuote.toUpperCase() : "";
+
+        if (base && quoted) {       
+            return `[KA] ${base} vs ${quoted}`;
+        }
+
+        if (base) {
+            return base;
+        }
+
+        if (quoted) {
+            return quoted;
+        }
+
+        return "";
+        
     }
 }

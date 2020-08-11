@@ -88,6 +88,7 @@ import { AlgoService } from './services/algo.service';
 import { KaikoInstrumentService } from './services/kaiko.exchange/kaiko.instrument.service';
 import { KaikoHistoryService } from './services/kaiko.exchange/kaiko.history.service';
 import { KaikoRealtimeService } from './services/kaiko.exchange/kaiko.realtime.service';
+import { KaikoSocketService } from './services/socket/kaiko.socket.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -279,6 +280,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         OandaSocketService,
         PolygonSocketService,
         TwelvedataSocketService,
+        KaikoSocketService,
 
         PolygonInstrumentService,
         PolygonHistoryService,

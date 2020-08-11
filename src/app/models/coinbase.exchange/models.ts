@@ -32,6 +32,7 @@ export interface IWSResponseBase {
 
 export interface ITickerResponse extends IWSResponseBase {
     Product: string;
+    Market: string;
     Price: number;
     Size: number;
     Side: ESide;
@@ -71,11 +72,13 @@ export interface ILevel2SnapshotData {
 
 export interface ILevel2Response extends IWSResponseBase {
     Product: string;
+    Market: string;
     Updates: ILevel2UpdateAction[];
 }
 
 export interface ILevel2Snapshot extends IWSResponseBase {
     Symbol: string;
+    Market: string;
     Data: ILevel2SnapshotData;
 }
 

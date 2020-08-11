@@ -1,10 +1,9 @@
 import {Inject, Injectable} from "@angular/core";
 import {RealtimeServiceBase} from "../../interfaces/exchange/realtime.service";
-import {EExchange} from "../../models/common/exchange";
 import {WebsocketBase} from "../../interfaces/socket/socketBase";
 import {EMarketType} from "../../models/common/marketType";
-import {TwelvedataSocketService} from "@app/services/socket/twelvedata.socket.service";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { KaikoSocketService } from '../socket/kaiko.socket.service';
 
 @Injectable()
 export class KaikoRealtimeService extends RealtimeServiceBase {
@@ -13,7 +12,7 @@ export class KaikoRealtimeService extends RealtimeServiceBase {
         return EExchangeInstance.KaikoExchange;
     }
 
-    constructor(@Inject(TwelvedataSocketService) private ws: WebsocketBase) {
+    constructor(@Inject(KaikoSocketService) private ws: WebsocketBase) {
         super(ws);
         this._action = 'polygon/subscribe/realtime';
         this. _level2Channel = 'level2';

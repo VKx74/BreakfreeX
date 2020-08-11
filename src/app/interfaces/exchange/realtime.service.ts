@@ -284,11 +284,11 @@ export abstract class RealtimeServiceBase implements IHealthable {
     }
 
     protected _getInstrumentHash(instrument: IInstrument) {
-        return instrument.id.toUpperCase();
+        return instrument.id.toUpperCase() + this.ExchangeInstance + instrument.exchange.toUpperCase();
     }
 
     protected _getInstrumentHashFromTick(tick: ITickerResponse) {
-        return tick.Product.toUpperCase();
+        return tick.Product.toUpperCase() + this.ExchangeInstance + tick.Market.toUpperCase();
     }
 
     protected _getInstrumentHashFromL2(l2: ILevel2Response) {
