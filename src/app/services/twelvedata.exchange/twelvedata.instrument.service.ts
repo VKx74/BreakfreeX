@@ -171,7 +171,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         }
         
         if (type === EMarketType.Crypto) {
-            return `[TW] ${product.CurrencyBase} vs ${product.CurrencyQuote}`;
+            return `${product.CurrencyBase} vs ${product.CurrencyQuote}`;
         }
         
         return `${product.CurrencyBase} vs ${product.CurrencyQuote}`;

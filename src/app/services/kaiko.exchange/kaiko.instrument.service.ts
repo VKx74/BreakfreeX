@@ -120,7 +120,7 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
         const quoted = product.CurrencyQuote ?  product.CurrencyQuote.toUpperCase() : "";
 
         if (base && quoted) {       
-            return `[KA] ${base} vs ${quoted}`;
+            return `${base} vs ${quoted}`;
         }
 
         if (base) {
