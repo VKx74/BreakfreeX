@@ -146,8 +146,18 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     init(state?: ITcdComponentState) {
-        const theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
+        let theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
         // const instrumentsNeeded = !state || !state.instrument;
+        
+        if (state && state.chartState) {
+            if (!state.chartState.version) {
+                console.log("Set default theme");
+                theme = this._getTheme();
+                if (state.chartState.chart) {
+                    state.chartState.chart.theme = theme;
+                }
+            }
+        }
 
         this._datafeed.init(false).then(d => {
             const config = {
@@ -185,6 +195,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 state.chartState.chart.locale = this._localizationService.locale;
                 // state.chartState.chart.theme = this._getTheme();
                 this.chart.applyCopy(state.chartState);
+
+                if (this.chart.chartTypeName === "hollowCandle") {
+                    console.log("Set default type");
+                    this.chart.chartTypeName = "candle";
+                }
             }
 
             (window as any).tcd = this.chart;
