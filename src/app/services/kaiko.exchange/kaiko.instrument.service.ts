@@ -108,11 +108,32 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
     private _getTickSize(currency: string): number {
         
         const c = currency.toLowerCase();
-        if (c.endsWith("usd") || c.endsWith("usdt") || c.endsWith("usdc") || c.endsWith("eur") || c.endsWith("jpy") || c.endsWith("gbp") || c.endsWith("aud") || c.endsWith("cad") || c.endsWith("chf")) {
-            return 0.01;
+        const currencies = [
+            "usd", "usdt", "usdc", "eur", "jpy", "gbp", "aud", "cad", "chf"
+        ];
+
+        for (const i of currencies) {
+            if (c.indexOf(i) !== -1) {
+                return 0.01;
+            }
+        }
+
+        const satoshiAble = [
+            "xrp", "bsv", "ada", "xtz", "cro", "xlm", "trx", "leo", "vet", "iota", "lend", "ont", "xem",
+            "hedg", "snx", "btt", 'doge', 'dgb', 'dai', 'bat', 'ewt', 'algo', 'knc', 'okb', 'zrx', 'theta', 
+            'ftt', 'band', 'erd', 'hyn', 'zil', 'qtum', 'hbar', 'icx', 'pax', 'ren', 'ampl', 'omg', 'waves',
+            'sxp', 'luna', 'tusd', 'lsk', 'busd', 'enj', 'ant', 'ckb', 'lrc', 'bnt', 'stx', 'bal', 'rvn', 'kava',
+            'bcd', 'nano', 'hot', 'mana', 'ocean', 'fxc', 'divi', 'sc', 'rlc', 'husd', 'rune', 'btm', 'mona', 'xvg',
+            'ksm', 'tmtg', 'jst', 'zb', 'dx', 'zen', 'iris', 'snt', 'bts', 'iost', 'kmd'
+        ];
+
+        for (const i of satoshiAble) {
+            if (c.startsWith(i) || c.endsWith(i)) {
+                return 0.00000001;
+            }
         }
         
-        return 0.00001;
+        return 0.000001;
     }
     
     private _getDescription(product: any): string {
