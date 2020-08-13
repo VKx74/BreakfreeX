@@ -1,7 +1,7 @@
  import {Inject, Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
-import {Observable, Observer} from "rxjs";
+import {Observable, Observer, of} from "rxjs";
 import {WebsocketBase} from "@app/interfaces/socket/socketBase";
 import {EventWebsocketService} from "./event-websocket.service";
 import {EconomicEvent, EconomicEventNotification, EconomicEventResponseModel, GetEventsParams} from "../models/models";
@@ -27,15 +27,15 @@ export class EventUserService {
         return new Observable<any>((observer: Observer<any>) => {
             const token = JsUtil.generateGUID();
 
-            this._socket.open()
-                .subscribe({
-                    next: () => {
-                        this._subscribers[token] = observer;
-                    },
-                    error: (error: Error) => {
-                        observer.error(error);
-                    }
-                });
+            // this._socket.open()
+            //     .subscribe({
+            //         next: () => {
+            //             this._subscribers[token] = observer;
+            //         },
+            //         error: (error: Error) => {
+            //             observer.error(error);
+            //         }
+            //     });
 
             return () => {
                 this._unsubscribe(token);
@@ -46,12 +46,13 @@ export class EventUserService {
     private _unsubscribe(token: string) {
         delete this._subscribers[token];
 
-        if (Object.keys(this._subscribers).length === 0) {
-            this._socket.close();
-        }
+        // if (Object.keys(this._subscribers).length === 0) {
+        //     this._socket.close();
+        // }
     }
 
     open(): Observable<any> {
+        return of(null);
         return new Observable((observer: Observer<any>) => {
             this._socket.open().subscribe(value => {
                 observer.next(value);
@@ -62,10 +63,14 @@ export class EventUserService {
     }
 
     close(): void {
-        return this._socket.close();
+        // return this._socket.close();
     }
 
     getEvents(params: GetEventsParams = {}): Observable<EconomicEventResponseModel> {
+        return of({
+            tradingEvents: [],
+            count: 0
+        });
         return this._http.get<EconomicEventResponseModel>(`${AppConfigService.config.apiUrls.eventConsolidatorUserApiREST}`,
             {params: this._convertGetEventsParams(params)}
         );
