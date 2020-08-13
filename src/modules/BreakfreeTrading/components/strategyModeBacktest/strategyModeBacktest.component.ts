@@ -207,10 +207,11 @@ export class StrategyModeBacktestComponent {
         this.OrdersCount = backtestResults.orders.length.toString();
         
         let winTradeCount = this.winTradeCount(backtestResults.orders);
+        let lossTradeCount = this.loosTradeCount(backtestResults.orders);
         let winPerformance = this.winPerformance(backtestResults.orders);
         let lossPerformance = this.lossPerformance(backtestResults.orders);
         this.WinTradeCount = winTradeCount.toString();
-        this.LossTradeCount = (backtestResults.orders.length - winTradeCount).toString();
+        this.LossTradeCount = lossTradeCount.toString();
         this.TotalPerformance = (winPerformance + lossPerformance).toFixed(pricePrecision);
 
         let total =  (Math.abs(winPerformance) + Math.abs(lossPerformance));
@@ -223,6 +224,16 @@ export class StrategyModeBacktestComponent {
         let count = 0;
         for (const order of orders) {
             if (order.pl && order.pl > 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private loosTradeCount (orders: IBFTAOrder[]): number {
+        let count = 0;
+        for (const order of orders) {
+            if (order.pl && order.pl < 0) {
                 count++;
             }
         }
