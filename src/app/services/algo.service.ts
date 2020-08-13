@@ -32,6 +32,12 @@ export interface IBFTAlgoParameters {
 
 export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
     hma_period: number;
+    breakeven_candles: number;
+}
+
+export interface IBFTAHitTestAlgoParameters extends IBFTBacktestAlgoParameters {
+    entry_target_box: number;
+    stoploss_rr: number;
 }
 
 export interface IBFTAAlgoInfo {
@@ -125,7 +131,12 @@ export interface IBFTAExtHitTestSignal {
     bottomext2hit: boolean;
     backhit: boolean;
     wentout: boolean;
+    breakeven: boolean;
     is_up_tending: boolean;
+    top_sl: number;
+    bottom_sl: number;
+    top_entry: number;
+    bottom_entry: number;
 }
 
 export interface IBFTAExtHitTestResult {
@@ -154,7 +165,7 @@ export class AlgoService {
         return this._http.post<IBFTABacktestResponse>(`${this.url}backtest`, data);
     }
 
-    extHitTest(data: IBFTBacktestAlgoParameters): Observable<IBFTAExtHitTestResult> {
+    extHitTest(data: IBFTAHitTestAlgoParameters): Observable<IBFTAExtHitTestResult> {
         return this._http.post<IBFTAExtHitTestResult>(`${this.url}hittest_ext`, data);
     }
 }

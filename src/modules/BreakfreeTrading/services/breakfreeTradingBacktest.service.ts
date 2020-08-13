@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlgoService, IBFTABacktestResponse, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters } from '@app/services/algo.service';
+import { AlgoService, IBFTABacktestResponse, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters, IBFTAHitTestAlgoParameters } from '@app/services/algo.service';
 
 @Injectable()
 export class BreakfreeTradingBacktestService {
@@ -11,7 +11,7 @@ export class BreakfreeTradingBacktestService {
         return this.alogService.backtest(params).toPromise();
     } 
     
-    public extHitTest(params: IBFTBacktestAlgoParameters): Promise<IBFTAExtHitTestResult> {
+    public extHitTest(params: IBFTAHitTestAlgoParameters): Promise<IBFTAExtHitTestResult> {
 
         return this.alogService.extHitTest(params).toPromise();
     } 

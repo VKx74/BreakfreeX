@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTAExtHitTestSignal, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTAExtHitTestSignal, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters, IBFTAHitTestAlgoParameters } from '@app/services/algo.service';
 import { of } from 'rxjs';
 import bind from "bind-decorator";
 import { AlertService } from '@alert/services/alert.service';
@@ -17,9 +17,9 @@ export interface IBFTBacktestComponentState {
 export class ExtensionHitTestComponent {
     @Input()
     public SelectedChart: TradingChartDesigner.Chart;
-    @Output() 
+    @Output()
     public Processing = new EventEmitter<boolean>();
-    @Output() 
+    @Output()
     public ClearData = new EventEmitter();
 
     public maxCount: number = 100;
@@ -28,28 +28,30 @@ export class ExtensionHitTestComponent {
     public slRatio: number = 1.7;
     public posNumbers: number = 3;
     public risk: number = 3.5;
+    public breakevenCandles: number = 5;
+    public entryTargetBox: number = 25;
+    public stoplossRR: number = 25;
 
     public Instrument: string = "";
     public Status: string = "-";
     public StartDate: string = "";
     public SignalsCount: string = "";
     public WinLossRatio: string = "";
-    
+
     constructor(private _alertService: AlertService, protected _bftService: BreakfreeTradingBacktestService) {
     }
 
     @bind
     captionText(value: TradingChartDesigner.Chart) {
-        return of (this._captionText(value));
-    } 
-    
+        return of(this._captionText(value));
+    }
+
 
     itemSelected(item: TradingChartDesigner.Chart) {
         this.SelectedChart = item;
     }
 
-    clear()
-    {
+    clear() {
         this.Processing.emit(true);
         this.Instrument = "";
         this.Status = "-";
@@ -70,7 +72,7 @@ export class ExtensionHitTestComponent {
             this._alertService.error("Chart not selected");
             return;
         }
-        
+
         let backtestParameters = {
             input_accountsize: 1000,
             input_risk: this.risk,
@@ -81,7 +83,11 @@ export class ExtensionHitTestComponent {
             instrument: chart.instrument as IInstrument,
             timeframe: chart.timeFrame,
             time: new Date().getTime(),
-            timenow: new Date().getTime()
+            timenow: new Date().getTime(),
+            breakeven_candles: this.breakevenCandles,
+            entry_target_box: this.entryTargetBox,
+            stoploss_rr: this.stoplossRR
+
         };
 
         if (!this.validateInputParameters(backtestParameters)) {
@@ -110,37 +116,49 @@ export class ExtensionHitTestComponent {
         }
 
         this.Status = "Visualization...";
-        
-        for (let i = start; i < backtestResults.signals.length; i++) 
-        {
+
+        for (let i = start; i < backtestResults.signals.length; i++) {
             let percent = (i - start) / (backtestResults.signals.length - start) * 100;
             this.Status = `Visualization ${percent.toFixed(2)}% ...`;
 
-            let signal = backtestResults.signals[i];
+            let signal = backtestResults.signals[i] as IBFTAExtHitTestSignal;
             let signalNext = backtestResults.signals[i + 1];
             let startDate = new Date(signal.timestamp * 1000);
             let endDate = signalNext ? new Date(signalNext.timestamp * 1000) : lastCandleDate;
             if (signal.end_timestamp) {
                 endDate = new Date(signal.end_timestamp * 1000);
             }
-            
+
             // let lineEntry = this.generateLine(startDate, endDate, signal.data.algo_Entry, "#629320");
             let backColor = this.calculateProfitabilityColor(signal);
             let backArea = this.generateRect(startDate, endDate, signal.data.p28, signal.data.m28, backColor);
             // let topExt2 = this.generateLine(startDate, endDate, signal.data.p28, "#932b20");
-            let topExt1 = this.generateLine(startDate, endDate, signal.data.p18, "#932b20");
+            let topSL = this.generateLine(startDate, endDate, signal.top_sl, "#000000");
             let resistence = this.generateLine(startDate, endDate, signal.data.ee, "#2e5e9a");
+            let topExt1;
+            if (signal.data.p18 === signal.top_entry) {
+                topExt1 = this.generateLine(startDate, endDate, signal.top_entry, "#932b20");
+            } else {
+                topExt1 = this.generateRect(startDate, endDate, signal.data.p18, signal.top_entry, "#932b202f");
+            }
 
             // let bottomExt2 = this.generateLine(startDate, endDate, signal.data.m28, "#3d9320");
-            let bottomExt1 = this.generateLine(startDate, endDate, signal.data.m18, "#3d9320");
+            let bottomSL = this.generateLine(startDate, endDate, signal.bottom_sl, "#000000");
             let support = this.generateLine(startDate, endDate, signal.data.ze, "#2e5e9a");
             let trendText = this.generateText(startDate, signal.data.m28, signal.is_up_tending);
 
+            let bottomExt1;
+            if (signal.data.p18 === signal.top_entry) {
+                bottomExt1 = this.generateLine(startDate, endDate, signal.bottom_entry, "#3d9320");
+            } else {
+                bottomExt1 = this.generateRect(startDate, endDate, signal.data.m18, signal.bottom_entry, "#3d93202f");
+            }
+
             shapes.push(backArea);
-            // shapes.push(topExt2);
+            shapes.push(topSL);
             shapes.push(topExt1);
             shapes.push(resistence);
-            // shapes.push(bottomExt2);
+            shapes.push(bottomSL);
             shapes.push(bottomExt1);
             shapes.push(support);
             shapes.push(trendText);
@@ -154,7 +172,7 @@ export class ExtensionHitTestComponent {
         this.Status = "Done";
     }
 
-    private validateInputParameters (params: IBFTBacktestAlgoParameters): boolean {
+    private validateInputParameters(params: IBFTAHitTestAlgoParameters): boolean {
         if (!params.replay_back || params.replay_back < 100 || params.replay_back > 10000) {
             this._alertService.error("Bars count incorrect. Min 100 Max 10000.");
             return false;
@@ -165,10 +183,25 @@ export class ExtensionHitTestComponent {
             return false;
         }
 
+        if (params.entry_target_box === undefined || params.entry_target_box < -100 || params.entry_target_box > 100) {
+            this._alertService.error("Entry target box incorrect. Min -100 Max 100.");
+            return false;
+        }
+
+        if (params.stoploss_rr === undefined || params.stoploss_rr < -100 || params.stoploss_rr > 100) {
+            this._alertService.error("SL RR incorrect. Min -100 Max 100.");
+            return false;
+        }
+
+        if (params.breakeven_candles === undefined || params.breakeven_candles < 0) {
+            this._alertService.error("Breakeven candles cant be less than 0.");
+            return false;
+        }
+
         return true;
     }
 
-    private infoDateCalculation (backtestResults: IBFTAExtHitTestResult, chart: TradingChartDesigner.Chart) {
+    private infoDateCalculation(backtestResults: IBFTAExtHitTestResult, chart: TradingChartDesigner.Chart) {
         if (backtestResults.signals.length) {
             this.StartDate = new Date(backtestResults.signals[0].timestamp * 1000).toUTCString();
         } else {
@@ -184,7 +217,7 @@ export class ExtensionHitTestComponent {
             if (signal.backhit) {
                 winRatio++;
             }
-            
+
             if (signal.wentout) {
                 loosRatio++;
             }
@@ -193,13 +226,17 @@ export class ExtensionHitTestComponent {
         this.WinLossRatio = `Win: ${winRatio} orders | Loss: ${loosRatio} orders`;
     }
 
-    private calculateProfitabilityColor (signal: IBFTAExtHitTestSignal): string {
+    private calculateProfitabilityColor(signal: IBFTAExtHitTestSignal): string {
         if (signal.backhit) {
             return "#3d93202f";
         }
-        
+
         if (signal.wentout) {
             return "#932b202f";
+        }
+
+        if (signal.breakeven) {
+            return "#fcba032f";
         }
 
         return "#d6d6d62f";
@@ -222,8 +259,8 @@ export class ExtensionHitTestComponent {
         };
         shape["is_backtest"] = true;
         return shape;
-    } 
-    
+    }
+
     private generateLine(date1: Date, date2: Date, value: number, color: any): TradingChartDesigner.ShapeLineSegment {
         const lineSegment = new TradingChartDesigner.ShapeLineSegment();
         lineSegment.visualDataPoints[0].date = date1;
@@ -243,7 +280,7 @@ export class ExtensionHitTestComponent {
         };
         lineSegment["is_backtest"] = true;
         return lineSegment;
-    } 
+    }
 
     private generateRect(date1: Date, date2: Date, value1: number, value2: number, color: any): TradingChartDesigner.ShapeRectangle {
         const rect = new TradingChartDesigner.ShapeRectangle();

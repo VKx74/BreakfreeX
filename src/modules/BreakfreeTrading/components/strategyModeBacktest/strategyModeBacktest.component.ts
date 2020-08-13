@@ -28,6 +28,7 @@ export class StrategyModeBacktestComponent {
     public posNumbers: number = 3;
     public risk: number = 3.5;
     public maxCount: number = 100;
+    public breakevenCandles: number = 5;
 
     public Status: string = "-";
     public Instrument: string = "";
@@ -88,6 +89,7 @@ export class StrategyModeBacktestComponent {
             input_stoplossratio: this.slRatio,
             instrument: chart.instrument as IInstrument,
             timeframe: chart.timeFrame,
+            breakeven_candles: this.breakevenCandles,
             time: new Date().getTime(),
             timenow: new Date().getTime()
         };
@@ -184,7 +186,10 @@ export class StrategyModeBacktestComponent {
             this._alertService.error("Position number incorrect. Min 1 Max 2");
             return false;
         }
-
+        if (params.breakeven_candles === undefined || params.breakeven_candles < 0) {
+            this._alertService.error("Breakeven candles cant be less than 0.");
+            return false;
+        }
 
         return true;
     }
@@ -273,7 +278,7 @@ export class StrategyModeBacktestComponent {
             return "#932b202f";
         }
 
-        return "#d6d6d62f";
+        return neededOrders.length ? "#d6d6d62f" : "#fcba032f";
     }
     
     private getDescription (timestamp: number, orders: { [id: string]: IBFTAOrder[]; }, precision: number): string {

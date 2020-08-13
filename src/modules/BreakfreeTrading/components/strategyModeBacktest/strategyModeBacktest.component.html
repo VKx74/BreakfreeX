@@ -31,6 +31,13 @@
            </mat-form-field>
          </span>
       </div>  
+      <div class="row"> 
+         <span class="value1">Breakeven candles:</span><span class="value2">
+            <mat-form-field class="crypto-input">
+               <input matInput type="number" [(ngModel)]="breakevenCandles" min="0" max="1000" step="1">
+           </mat-form-field>
+         </span>
+      </div>
        <div class="row"> 
          <span class="value1">Position number:</span><span class="value2">
             <mat-form-field class="crypto-input">
