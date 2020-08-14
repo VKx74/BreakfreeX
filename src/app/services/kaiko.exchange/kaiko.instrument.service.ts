@@ -158,8 +158,8 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
             "pln", "sar", "sec", "sgd", "thb", "try", "zar", "xau", "aug"
         ];
 
-        var baseAsset = false;
-        var quotedAsset = false;
+        let baseAsset = false;
+        let quotedAsset = false;
         for (const i of currencies) {
             if (base === i) {
                 baseAsset = true;
