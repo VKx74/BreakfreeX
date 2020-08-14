@@ -91,7 +91,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _indicatorDataProviderService: IndicatorDataProviderService,
                 private _chartTrackerService: ChartTrackerService,
                 protected _injector: Injector) {
-
         super(_injector);
     }
     

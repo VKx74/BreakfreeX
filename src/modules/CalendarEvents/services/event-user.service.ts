@@ -1,4 +1,4 @@
- import {Inject, Injectable} from "@angular/core";
+import {Inject, Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
 import {Observable, Observer, of} from "rxjs";
