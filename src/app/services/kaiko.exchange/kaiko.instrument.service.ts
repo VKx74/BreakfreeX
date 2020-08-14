@@ -65,8 +65,13 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
             const products = response.Data;
             for (let i = 0; i < products.length; i++) {
                 const product = products[i];
-                const type = EMarketType.Crypto;
-                const tickSize = this._getTickSize(product.Symbol);
+                const type = this._getType(product);
+
+                if (type === EMarketType.Forex) {
+                    continue;
+                }
+
+                const tickSize = this._getTickSize(product, type);
                 const description = this._getDescription(product);
         
                 const instrument: IInstrument = {
@@ -105,17 +110,12 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
         return this._http.get<any[]>(`${this._endpoint}?Take=${takeAmount}&Search=${search}`);
     }
 
-    private _getTickSize(currency: string): number {
-        
-        const c = currency.toLowerCase();
-        const currencies = [
-            "usd", "usdt", "usdc", "eur", "jpy", "gbp", "aud", "cad", "chf"
-        ];
+    private _getTickSize(product: any, type: EMarketType): number {
+        const base = product.CurrencyBase ?  product.CurrencyBase.toLowerCase() : "";
+        const quoted = product.CurrencyQuote ?  product.CurrencyQuote.toLowerCase() : "";
 
-        for (const i of currencies) {
-            if (c.indexOf(i) !== -1) {
-                return 0.01;
-            }
+        if (type === EMarketType.Forex) {
+            return 0.00001;
         }
 
         const satoshiAble = [
@@ -128,12 +128,48 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
         ];
 
         for (const i of satoshiAble) {
-            if (c.startsWith(i) || c.endsWith(i)) {
+            if (quoted === i || base === i) {
                 return 0.00000001;
+            }
+        }
+
+        const currencies = [
+            "usd", "usdt", "usdc", "usds", "eur", "jpy", "gbp", "aud", "cad", "chf", "nzd", "rub", "cny", "hkd",
+            "krw", "uah", "czk", "dkk", "brl", "cnh", "huf", "nok", "inr", "mxn", "ron",
+            "pln", "sar", "sec", "sgd", "thb", "try", "zar", "xau", "aug"
+        ];
+
+        for (const i of currencies) {
+            if (quoted === i) {
+                return 0.01;
             }
         }
         
         return 0.000001;
+    }
+    
+    private _getType(product: any): EMarketType {
+        const base = product.CurrencyBase ?  product.CurrencyBase.toLowerCase() : "";
+        const quoted = product.CurrencyQuote ?  product.CurrencyQuote.toLowerCase() : "";
+
+        const currencies = [
+            "usd", "usdt", "usdc", "usds", "eur", "jpy", "gbp", "aud", "cad", "chf", "nzd", "rub", "cny", "hkd",
+            "krw", "uah", "czk", "dkk", "brl", "cnh", "huf", "nok", "inr", "mxn", "ron",
+            "pln", "sar", "sec", "sgd", "thb", "try", "zar", "xau", "aug"
+        ];
+
+        var baseAsset = false;
+        var quotedAsset = false;
+        for (const i of currencies) {
+            if (base === i) {
+                baseAsset = true;
+            } 
+            if (quoted === i) {
+                quotedAsset = true;
+            }
+        }
+
+        return baseAsset && quotedAsset ? EMarketType.Forex : EMarketType.Crypto;
     }
     
     private _getDescription(product: any): string {
