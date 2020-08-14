@@ -124,7 +124,8 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
             'ftt', 'band', 'erd', 'hyn', 'zil', 'qtum', 'hbar', 'icx', 'pax', 'ren', 'ampl', 'omg', 'waves',
             'sxp', 'luna', 'tusd', 'lsk', 'busd', 'enj', 'ant', 'ckb', 'lrc', 'bnt', 'stx', 'bal', 'rvn', 'kava',
             'bcd', 'nano', 'hot', 'mana', 'ocean', 'fxc', 'divi', 'sc', 'rlc', 'husd', 'rune', 'btm', 'mona', 'xvg',
-            'ksm', 'tmtg', 'jst', 'zb', 'dx', 'zen', 'iris', 'snt', 'bts', 'iost', 'kmd'
+            'ksm', 'tmtg', 'jst', 'zb', 'dx', 'zen', 'iris', 'snt', 'bts', 'iost', 'kmd', 'atom', 'eos', 'oxt', 'rep',
+            'link', 'dock'
         ];
 
         for (const i of satoshiAble) {
@@ -133,8 +134,18 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
             }
         }
 
+        const currenciesTokens = [
+            "usdt", "usdc", "usds"
+        ];
+
+        for (const i of currenciesTokens) {
+            if (quoted === i || base === i) {
+                return 0.0001;
+            }
+        }
+
         const currencies = [
-            "usd", "usdt", "usdc", "usds", "eur", "jpy", "gbp", "aud", "cad", "chf", "nzd", "rub", "cny", "hkd",
+            "usd", "eur", "jpy", "gbp", "aud", "cad", "chf", "nzd", "rub", "cny", "hkd",
             "krw", "uah", "czk", "dkk", "brl", "cnh", "huf", "nok", "inr", "mxn", "ron",
             "pln", "sar", "sec", "sgd", "thb", "try", "zar", "xau", "aug"
         ];
@@ -143,7 +154,7 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
             if (quoted === i) {
                 return 0.01;
             }
-        }
+        } 
         
         return 0.000001;
     }
