@@ -111,52 +111,42 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
     }
 
     private _getTickSize(product: any, type: EMarketType): number {
-        const base = product.CurrencyBase ?  product.CurrencyBase.toLowerCase() : "";
+        // const base = product.CurrencyBase ?  product.CurrencyBase.toLowerCase() : "";
         const quoted = product.CurrencyQuote ?  product.CurrencyQuote.toLowerCase() : "";
 
         if (type === EMarketType.Forex) {
             return 0.00001;
         }
 
-        const satoshiAble = [
-            "xrp", "bsv", "ada", "xtz", "cro", "xlm", "trx", "leo", "vet", "iota", "lend", "ont", "xem",
-            "hedg", "snx", "btt", 'doge', 'dgb', 'dai', 'bat', 'ewt', 'algo', 'knc', 'okb', 'zrx', 'theta', 
-            'ftt', 'band', 'erd', 'hyn', 'zil', 'qtum', 'hbar', 'icx', 'pax', 'ren', 'ampl', 'omg', 'waves',
-            'sxp', 'luna', 'tusd', 'lsk', 'busd', 'enj', 'ant', 'ckb', 'lrc', 'bnt', 'stx', 'bal', 'rvn', 'kava',
-            'bcd', 'nano', 'hot', 'mana', 'ocean', 'fxc', 'divi', 'sc', 'rlc', 'husd', 'rune', 'btm', 'mona', 'xvg',
-            'ksm', 'tmtg', 'jst', 'zb', 'dx', 'zen', 'iris', 'snt', 'bts', 'iost', 'kmd', 'atom', 'eos', 'oxt', 'rep',
-            'link', 'dock'
-        ];
+        // const satoshiAble = [
+        //     "xrp", "bsv", "ada", "xtz", "cro", "xlm", "trx", "leo", "vet", "iota", "lend", "ont", "xem",
+        //     "hedg", "snx", "btt", 'doge', 'dgb', 'dai', 'bat', 'ewt', 'algo', 'knc', 'okb', 'zrx', 'theta', 
+        //     'ftt', 'band', 'erd', 'hyn', 'zil', 'qtum', 'hbar', 'icx', 'pax', 'ren', 'ampl', 'omg', 'waves',
+        //     'sxp', 'luna', 'tusd', 'lsk', 'busd', 'enj', 'ant', 'ckb', 'lrc', 'bnt', 'stx', 'bal', 'rvn', 'kava',
+        //     'bcd', 'nano', 'hot', 'mana', 'ocean', 'fxc', 'divi', 'sc', 'rlc', 'husd', 'rune', 'btm', 'mona', 'xvg',
+        //     'ksm', 'tmtg', 'jst', 'zb', 'dx', 'zen', 'iris', 'snt', 'bts', 'iost', 'kmd', 'atom', 'eos', 'oxt', 'rep',
+        //     'link', 'dock'
+        // ];
 
-        for (const i of satoshiAble) {
-            if (quoted === i || base === i) {
-                return 0.00000001;
-            }
-        }
-
-        const currenciesTokens = [
-            "usdt", "usdc", "usds"
-        ];
-
-        for (const i of currenciesTokens) {
-            if (quoted === i || base === i) {
-                return 0.0001;
-            }
-        }
+        // for (const i of satoshiAble) {
+        //     if (quoted === i || base === i) {
+        //         return 0.00000001;
+        //     }
+        // }
 
         const currencies = [
-            "usd", "eur", "jpy", "gbp", "aud", "cad", "chf", "nzd", "rub", "cny", "hkd",
+            "usd", "usdt", "usdc", "usds", "eur", "jpy", "gbp", "aud", "cad", "chf", "nzd", "rub", "cny", "hkd",
             "krw", "uah", "czk", "dkk", "brl", "cnh", "huf", "nok", "inr", "mxn", "ron",
             "pln", "sar", "sec", "sgd", "thb", "try", "zar", "xau", "aug"
         ];
 
         for (const i of currencies) {
             if (quoted === i) {
-                return 0.01;
+                return 0.0001;
             }
         } 
         
-        return 0.000001;
+        return 0.00000001;
     }
     
     private _getType(product: any): EMarketType {
