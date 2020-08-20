@@ -11,19 +11,57 @@
       </div>   
       
       <div class="row"> 
+         <span class="value1">Trend detector:</span><span class="value2">
+            <selector [options]="trendDetectors" [placeholder]="'Select trend'"
+            [selectedOption]="trendDetector"
+            [optionCaption]="captionText"            (onSelect)="trendDetectorSelected($event)"></selector>
+         </span>
+      </div> 
+
+      
+      <div class="row"> 
          <span class="value1">Bars count:</span><span class="value2">
             <mat-form-field class="crypto-input">
                <input matInput type="number" [(ngModel)]="barsCount" min="100" max="2000" step="1">
            </mat-form-field>
          </span>
-      </div>  
+      </div>
+
       <div class="row"> 
-         <span class="value1">Trend calc. period:</span><span class="value2">
+         <span class="value1">HMA period:</span><span class="value2">
             <mat-form-field class="crypto-input">
                <input matInput type="number" [(ngModel)]="hmaPeriod" min="10" max="250" step="1">
            </mat-form-field>
          </span>
       </div>
+
+
+      <div *ngIf="mesaInputVisible">
+         <div class="row"> 
+            <span class="value1">MESA Fast:</span><span class="value2">
+               <mat-form-field class="crypto-input">
+                  <input matInput type="number" [(ngModel)]="mesa_fast" min="0.0001" max="100" step="0.0001">
+            </mat-form-field>
+            </span>
+         </div>   
+         
+         <div class="row"> 
+            <span class="value1">MESA Slow:</span><span class="value2">
+               <mat-form-field class="crypto-input">
+                  <input matInput type="number" [(ngModel)]="mesa_slow" min="0.0001" max="100" step="0.0001">
+            </mat-form-field>
+            </span>
+         </div>   
+         
+         <div class="row"> 
+            <span class="value1">MESA Diff:</span><span class="value2">
+               <mat-form-field class="crypto-input">
+                  <input matInput type="number" [(ngModel)]="mesa_diff" min="0.000001" max="1" step="0.000001">
+            </mat-form-field>
+            </span>
+         </div>  
+      </div>
+
       <div class="row"> 
          <span class="value1">SL ratio:</span><span class="value2">
             <mat-form-field class="crypto-input">

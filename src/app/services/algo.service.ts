@@ -1,17 +1,14 @@
 import {Injectable} from "@angular/core";
 import {IInstrument} from "../models/common/instrument";
-import {EExchange} from "../models/common/exchange";
-import {IHealthable} from "../interfaces/healthcheck/healthable";
-import {BehaviorSubject, Observable, of, Subject, Subscription} from "rxjs";
-import {ApplicationType} from "../enums/ApplicationType";
-import {EBrokerInstance, IBroker, IBrokerState} from "../interfaces/broker/broker";
-import {ActionResult, IBrokerUserInfo, OrderTypes} from "../../modules/Trading/models/models";
-import {map, catchError} from "rxjs/operators";
-import {BrokerFactory, CreateBrokerActionResult} from "../factories/broker.factory";
-import {ApplicationTypeService} from "@app/services/application-type.service";
-import { HttpClient } from '@angular/common/http';
-import { AppConfigService } from './app.config.service';
+import {Observable, of} from "rxjs";
+import {catchError} from "rxjs/operators";
+import {HttpClient} from '@angular/common/http';
+import {AppConfigService} from './app.config.service';
 
+export enum TrendDetectorType {
+    hma = "hma",
+    mesa = "mesa"
+}
 
 export interface ITimeFrame {
     interval: number;
@@ -33,6 +30,10 @@ export interface IBFTAlgoParameters {
 export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
     hma_period: number;
     breakeven_candles: number;
+    mesa_fast?: number;
+    mesa_slow?: number;
+    mesa_diff?: number;
+    trend_detector: TrendDetectorType;
 }
 
 export interface IBFTAHitTestAlgoParameters extends IBFTBacktestAlgoParameters {
@@ -121,6 +122,12 @@ export interface IBFTABacktestResponse {
     orders: IBFTAOrder[];
 }
 
+export enum IBFTATrend {
+    Up = "Up",
+    Down = "Down",
+    Undefined = "Undefined"
+}
+
 export interface IBFTAExtHitTestSignal {
     timestamp: number;
     end_timestamp: number;
@@ -132,7 +139,7 @@ export interface IBFTAExtHitTestSignal {
     backhit: boolean;
     wentout: boolean;
     breakeven: boolean;
-    is_up_tending: boolean;
+    trend: IBFTATrend;
     top_sl: number;
     bottom_sl: number;
     top_entry: number;

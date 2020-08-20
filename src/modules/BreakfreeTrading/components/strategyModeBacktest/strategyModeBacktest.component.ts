@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTBacktestAlgoParameters } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTBacktestAlgoParameters, TrendDetectorType } from '@app/services/algo.service';
 import { of } from 'rxjs';
 import bind from "bind-decorator";
 import { AlertService } from '@alert/services/alert.service';
@@ -22,6 +22,16 @@ export class StrategyModeBacktestComponent {
     @Output() 
     public ClearData = new EventEmitter();
 
+    public trendDetector: TrendDetectorType = TrendDetectorType.hma;
+
+    public get trendDetectors(): TrendDetectorType[] {
+        return [TrendDetectorType.hma, TrendDetectorType.mesa];
+    }
+
+    public get mesaInputVisible(): boolean {
+        return this.trendDetector === TrendDetectorType.mesa;
+    }
+
     public barsCount: number = 100;
     public hmaPeriod: number = 200;
     public slRatio: number = 1.7;
@@ -29,6 +39,9 @@ export class StrategyModeBacktestComponent {
     public risk: number = 3.5;
     public maxCount: number = 100;
     public breakevenCandles: number = 5;
+    public mesa_fast: number = 0.5;
+    public mesa_slow: number = 0.05;
+    public mesa_diff: number = 0.005;
 
     public Status: string = "-";
     public Instrument: string = "";
@@ -43,14 +56,23 @@ export class StrategyModeBacktestComponent {
     constructor(private _alertService: AlertService, protected _bftService: BreakfreeTradingBacktestService) {
     }
 
+    
     @bind
-    captionText(value: TradingChartDesigner.Chart) {
-        return of (this._captionText(value));
+    captionText(value: TrendDetectorType) {
+        return of(this._trendCaptionText(value));
     } 
     
+    _trendCaptionText(value: TrendDetectorType): string {
+        switch (value) {
+            case TrendDetectorType.hma: return "HMA";
+            case TrendDetectorType.mesa: return "MESA";
+        }
 
-    itemSelected(item: TradingChartDesigner.Chart) {
-        this.SelectedChart = item;
+        return "Udefined";
+    }
+    
+    trendDetectorSelected(item: TrendDetectorType) {
+        this.trendDetector = item;
     }
 
     clear()
@@ -91,7 +113,11 @@ export class StrategyModeBacktestComponent {
             timeframe: chart.timeFrame,
             breakeven_candles: this.breakevenCandles,
             time: new Date().getTime(),
-            timenow: new Date().getTime()
+            timenow: new Date().getTime(),
+            mesa_fast: this.mesa_fast,
+            mesa_slow: this.mesa_slow,
+            mesa_diff: this.mesa_diff,
+            trend_detector: this.trendDetector
         };
 
         if (!this.validateInputParameters(backtestParameters)) {
@@ -188,6 +214,22 @@ export class StrategyModeBacktestComponent {
         }
         if (params.breakeven_candles === undefined || params.breakeven_candles < 0) {
             this._alertService.error("Breakeven candles cant be less than 0.");
+            return false;
+        }
+        if (params.mesa_fast <= 0) {
+            this._alertService.error("Mesa Fast must be greater than 0.");
+            return false;
+        }  
+        if (params.mesa_slow <= 0) {
+            this._alertService.error("Mesa Slow must be greater than 0.");
+            return false;
+        }  
+        if (params.mesa_diff <= 0) {
+            this._alertService.error("Mesa Diff must be greater than 0.");
+            return false;
+        }
+        if (!params.trend_detector) {
+            this._alertService.error("Trend detector not selected.");
             return false;
         }
 

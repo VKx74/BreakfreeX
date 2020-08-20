@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTAExtHitTestSignal, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters, IBFTAHitTestAlgoParameters } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTAExtHitTestSignal, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters, IBFTAHitTestAlgoParameters, TrendDetectorType, IBFTATrend } from '@app/services/algo.service';
 import { of } from 'rxjs';
 import bind from "bind-decorator";
 import { AlertService } from '@alert/services/alert.service';
@@ -22,12 +22,25 @@ export class ExtensionHitTestComponent {
     @Output()
     public ClearData = new EventEmitter();
 
+    public trendDetector: TrendDetectorType = TrendDetectorType.hma;
+
+    public get trendDetectors(): TrendDetectorType[] {
+        return [TrendDetectorType.hma, TrendDetectorType.mesa];
+    }
+
+    public get mesaInputVisible(): boolean {
+        return this.trendDetector === TrendDetectorType.mesa;
+    }
+
     public maxCount: number = 100;
     public barsCount: number = 100;
     public hmaPeriod: number = 200;
     public slRatio: number = 1.7;
     public posNumbers: number = 3;
     public risk: number = 3.5;
+    public mesa_fast: number = 0.5;
+    public mesa_slow: number = 0.05;
+    public mesa_diff: number = 0.005;
     public breakevenCandles: number = 5;
     public entryTargetBox: number = 25;
     public stoplossRR: number = 25;
@@ -42,13 +55,21 @@ export class ExtensionHitTestComponent {
     }
 
     @bind
-    captionText(value: TradingChartDesigner.Chart) {
-        return of(this._captionText(value));
+    captionText(value: TrendDetectorType) {
+        return of(this._trendCaptionText(value));
     }
 
+    _trendCaptionText(value: TrendDetectorType): string {
+        switch (value) {
+            case TrendDetectorType.hma: return "HMA";
+            case TrendDetectorType.mesa: return "MESA";
+        }
 
-    itemSelected(item: TradingChartDesigner.Chart) {
-        this.SelectedChart = item;
+        return "Udefined";
+    }
+
+    trendDetectorSelected(item: TrendDetectorType) {
+        this.trendDetector = item;
     }
 
     clear() {
@@ -86,7 +107,11 @@ export class ExtensionHitTestComponent {
             timenow: new Date().getTime(),
             breakeven_candles: this.breakevenCandles,
             entry_target_box: this.entryTargetBox,
-            stoploss_rr: this.stoplossRR
+            stoploss_rr: this.stoplossRR,
+            mesa_fast: this.mesa_fast,
+            mesa_slow: this.mesa_slow,
+            mesa_diff: this.mesa_diff,
+            trend_detector: this.trendDetector
 
         };
 
@@ -145,7 +170,7 @@ export class ExtensionHitTestComponent {
             // let bottomExt2 = this.generateLine(startDate, endDate, signal.data.m28, "#3d9320");
             let bottomSL = this.generateLine(startDate, endDate, signal.bottom_sl, "#000000");
             let support = this.generateLine(startDate, endDate, signal.data.ze, "#2e5e9a");
-            let trendText = this.generateText(startDate, signal.data.m28, signal.is_up_tending);
+            let trendText = this.generateText(startDate, signal.data.m28, signal.trend);
 
             let bottomExt1;
             if (signal.data.p18 === signal.top_entry) {
@@ -197,6 +222,22 @@ export class ExtensionHitTestComponent {
             this._alertService.error("Breakeven candles cant be less than 0.");
             return false;
         }
+        if (params.mesa_fast <= 0) {
+            this._alertService.error("Mesa Fast must be greater than 0.");
+            return false;
+        }
+        if (params.mesa_slow <= 0) {
+            this._alertService.error("Mesa Slow must be greater than 0.");
+            return false;
+        }
+        if (params.mesa_diff <= 0) {
+            this._alertService.error("Mesa Diff must be greater than 0.");
+            return false;
+        }
+        if (!params.trend_detector) {
+            this._alertService.error("Trend detector not selected.");
+            return false;
+        }
 
         return true;
     }
@@ -242,7 +283,7 @@ export class ExtensionHitTestComponent {
         return "#d6d6d62f";
     }
 
-    private generateText(date: Date, value: number, is_up_tending: boolean): TradingChartDesigner.ShapeText {
+    private generateText(date: Date, value: number, tending: IBFTATrend): TradingChartDesigner.ShapeText {
         const shape = new TradingChartDesigner.ShapeText();
         shape.visualDataPoints[0].date = date;
         shape.visualDataPoints[0].value = value;
@@ -250,11 +291,26 @@ export class ExtensionHitTestComponent {
         shape.selectable = false;
         shape.hoverable = false;
         shape.savable = false;
-        shape.text = "\n" + (is_up_tending ? "U" : "D");
+
+        let fillColor = "#888888";
+        if (tending === IBFTATrend.Up) {
+            shape.text = "\n | \n U";
+            fillColor = "#3d9320";
+        }
+
+        if (tending === IBFTATrend.Down) {
+            shape.text = "\n | \n | \n D";
+            fillColor = "#932b20";
+        }
+
+        if (tending === IBFTATrend.Undefined) {
+            shape.text = "\n | \n | \n | \n N";
+        }
+
         shape.theme = {
             text: {
                 fontsize: 10,
-                fillColor: is_up_tending ? "#3d9320" : "#932b20"
+                fillColor: fillColor
             }
         };
         shape["is_backtest"] = true;
