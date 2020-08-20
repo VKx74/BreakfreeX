@@ -340,6 +340,33 @@ export class AppMembersComponent {
                 }
             }
         });
+    }  
+    
+    confirmUserEmail(user: AppMemberModel) {
+        const id = user.user.id;
+
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Approve user email',
+                message: `Are you sure you want to approve user email '${user.user.email}'?`,
+                onConfirm: () => {
+                    this.vm.processing = true;
+                    this._usersService.confirmUserEmail(id)
+                        .subscribe({
+                            next: () => {
+                                this.vm.processing = false;
+                                user.user.emailConfirmed = true;
+                                this._alertService.success('User email approved');
+                            },
+                            error: (e) => {
+                                this.vm.processing = false;
+                                console.error(e);
+                                this._alertService.error('Failed to approved user email');
+                            }
+                        });
+                }
+            }
+        });
     }
 
     private _isKycStatusSet(member: AppMemberModel): boolean {

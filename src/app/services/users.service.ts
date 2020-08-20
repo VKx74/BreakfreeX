@@ -68,6 +68,10 @@ export class UsersService {
 
     public disable2FactorAuth(email: string): Observable<any> {
         return this._http.post<any>(`${AppConfigService.config.apiUrls.identityUrl}2fa/support/disable`, {email: email},  this._httpOptions);
+    } 
+    
+    public confirmUserEmail(user_id: string): Observable<any> {
+        return this._http.post<any>(`${AppConfigService.config.apiUrls.identityUrl}User/ApproveEmail`, {user_id: user_id},  this._httpOptions);
     }
 
     public refreshPassword(resetPasswordModel: ResetPasswordBySupportModel): Observable<any> {

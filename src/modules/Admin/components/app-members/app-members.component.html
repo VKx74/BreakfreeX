@@ -153,6 +153,13 @@
                             Clear user session
                         </button>
 
+                        <ng-container *ngIf="!item.user.emailConfirmed">
+                            <button mat-menu-item *showIfRole="[Roles.Admin, Roles.SupportOfficer]"
+                                    (click)="confirmUserEmail(item)">
+                                Approve Email
+                            </button>
+                        </ng-container>
+                        
                         <ng-container *ngIf="item.user.twoFactorEnabled">
                             <button mat-menu-item *showIfRole="[Roles.Admin, Roles.SupportOfficer]"
                                     (click)="disable2FA(item)">
