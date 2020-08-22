@@ -39,7 +39,7 @@
     "news": "https://events-stage.breakfreetrading.com/news/",
     "exchangeManagementREST": "not used",
     "bftAlgoWS": "wss://fb.breakfreetrading.com",
-    "bftAlgoREST": "https://localhost:5001/algoserver/"
+    "bftAlgoREST": "https://algoserver-stage.breakfreetrading.com/algoserver/"
 
   },
   "systemMonitoringUrls": {
@@ -122,6 +122,6 @@
     "https://ws-platform-stage.breakfreetrading.com",
     "https://breakfreetrading.com",
     "https://platform-stage.breakfreetrading.com",
-    "https://localhost:5001"
+    "https://algoserver-stage.breakfreetrading.com"
   ]
 }
