@@ -155,6 +155,17 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 if (state.chartState.chart) {
                     state.chartState.chart.theme = theme;
                 }
+            } else {
+                const chartOptions = state.chartState.chart;
+
+                // backward compatibility for price line settings
+                if (chartOptions && chartOptions.theme && !chartOptions.theme.priceLine) {
+                    const defaultTheme = theme = this._getTheme();
+                    if (defaultTheme && defaultTheme.priceLine) {
+                        chartOptions.theme.priceLine = defaultTheme.priceLine;
+                        console.log("Set default price line theme");
+                    }
+                }
             }
         }
 
