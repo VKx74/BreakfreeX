@@ -160,9 +160,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
                 // backward compatibility for price line settings
                 if (chartOptions && chartOptions.theme && !chartOptions.theme.priceLine) {
-                    const defaultTheme = theme = this._getTheme();
-                    if (defaultTheme && defaultTheme.priceLine) {
-                        chartOptions.theme.priceLine = defaultTheme.priceLine;
+                    const defaultChartTheme = theme = this._getTheme();
+                    if (defaultChartTheme && defaultChartTheme.priceLine) {
+                        chartOptions.theme.priceLine = defaultChartTheme.priceLine;
                         console.log("Set default price line theme");
                     }
                 }
