@@ -85,7 +85,8 @@ export class ComponentAccessService {
 
     static isAccessible(identifier: ComponentIdentifier): boolean {
         if (ADMIN_ALLOWED_COMPONENTS.indexOf(identifier) >= 0) {
-            return ComponentAccessService._identityService.isAdmin;
+            return false;
+            // return ComponentAccessService._identityService.isAdmin;
         }
 
         return identifier && ComponentAccessService.config[identifier];
@@ -93,9 +94,12 @@ export class ComponentAccessService {
 
     static isAccessibleComponentsArray(identifiers: ComponentIdentifier[]): boolean {
         for (const item of identifiers) {
-            if (ADMIN_ALLOWED_COMPONENTS.indexOf(item) >= 0 && !ComponentAccessService._identityService.isAdmin) {
+            if (ADMIN_ALLOWED_COMPONENTS.indexOf(item) >= 0) {
                 return false;
             }
+            // if (ADMIN_ALLOWED_COMPONENTS.indexOf(item) >= 0 && !ComponentAccessService._identityService.isAdmin) {
+            //     return false;
+            // }
         }
 
         return (identifiers && identifiers.length && identifiers.some((i) => ComponentAccessService.config[i]));
