@@ -39,9 +39,9 @@ export class StrategyModeBacktestComponent {
     public risk: number = 3.5;
     public maxCount: number = 100;
     public breakevenCandles: number = 5;
-    public mesa_fast: number = 0.5;
+    public mesa_fast: number = 0.25;
     public mesa_slow: number = 0.05;
-    public mesa_diff: number = 0.005;
+    public mesa_diff: number = 0.1;
 
     public Status: string = "-";
     public Instrument: string = "";
