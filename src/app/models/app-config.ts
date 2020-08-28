@@ -82,6 +82,7 @@ export enum ComponentIdentifier {
     watchlist = "watchlist",
     breakfreeTradingBacktest = "breakfreeTradingBacktest",
     breakfreeTradingNavigator = "breakfreeTradingNavigator",
+    forexTradeManager = "forexTradeManager",
     level2View = "level2View",
     news = "news",
     marketView = "marketView",
@@ -123,6 +124,7 @@ export enum ComponentIdentifier {
     generalSettings = "generalSettings",
     profileSettings = "profileSettings",
     brokerSettings = "brokerSettings",
+    someTestIdentifier="SomeIdentifier"
 }
 
 export type IComponentsConfig<T = boolean> = {

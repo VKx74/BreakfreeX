@@ -116,6 +116,8 @@ import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.co
 import { SingleSessionService } from '@app/services/single-session.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingNavigatorComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
+import { ForexTradeManagerComponent } from '../Trading/components/forex.components/forex-trade-manager.component';
+import { TestOandaComponent } from '../Trading/components/forex.components/test-oanda/test-oanda.component';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -400,6 +402,10 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,
                             component: BreakfreeTradingBacktestComponent
+                        },
+                        {
+                            componentName: ComponentIdentifier.forexTradeManager,
+                            component: TestOandaComponent
                         },
                     ]
                 } as IGoldenLayoutComponentConfiguration;

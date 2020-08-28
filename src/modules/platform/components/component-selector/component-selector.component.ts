@@ -29,6 +29,7 @@ import {ComponentPortal} from "@angular/cdk/portal";
 import {Overlay} from "@angular/cdk/overlay";
 import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
+import { TestOandaComponent } from "../../../Trading/components/forex.components/test-oanda/test-oanda.component";
 
 interface IComponent {
     component: Type<any>;
@@ -115,13 +116,19 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
                 componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
             },
-           /* {
+            /*{
                 component: Level2Component,
                 previewImgClass: Level2Component.previewImgClass,
                 componentName: this._tradingTranslateService.stream('level2ComponentName'),
                 componentIdentifier: ComponentIdentifier.level2View,
-            },
+            },*/
             {
+                component: TestOandaComponent,
+                previewImgClass: TestOandaComponent.previewImgClass,
+                componentName: this._tradingTranslateService.stream('tradeManagerComponentName'),                
+                componentIdentifier: ComponentIdentifier.forexTradeManager,                         
+            },            
+            /*{
                 component: NewsRootComponent,
                 previewImgClass: NewsRootComponent.previewImgClass,
                 componentName: this._newsTranslateService.stream('newsComponentName'),

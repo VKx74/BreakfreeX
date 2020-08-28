@@ -214,6 +214,7 @@ export class ForexOrderConfiguratorComponent implements OnInit {
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
         }
+        console.log(instrument);
 
         this.instrument = instrument;
 
@@ -271,7 +272,8 @@ export class ForexOrderConfiguratorComponent implements OnInit {
     private _placeOrder(config: OrderConfig) {
         const broker = this._brokerService.activeBroker as OandaBrokerService;
         const placeOrderData: IForexPlaceOrderAction = {
-            symbol: config.instrument.symbol,
+            //symbol: config.instrument.symbol,
+            symbol: config.instrument.id,
             side: config.side,
             size: config.amount,
             type: config.type,

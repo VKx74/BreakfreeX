@@ -52,6 +52,7 @@ import {LoaderModule} from "../loader/loader.module";
 import { OrderSideComponent } from './components/order-side/order-side.component';
 import { TradingCloseButtonComponent } from './components/trading-close-button/trading-close-button.component';
 import {TimeZoneManager, TimeZonesModule} from "TimeZones";
+import { TestOandaComponent } from './components/forex.components/test-oanda/test-oanda.component';
 
 const components = [
     TradeManagerComponent,
@@ -74,6 +75,7 @@ const components = [
     OandaPositionsComponent,
     ForexOrderConfiguratorModalComponent,
     ForexOrderConfiguratorComponent,
+    TestOandaComponent,
     
     OandaAccountInfoComponent,
     OandaOpenOrdersComponent,

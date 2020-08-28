@@ -79,6 +79,7 @@
     "breakfreeTradingNavigator": "BFT Panel Widget",
     "breakfreeTradingBacktest": "BFT Backtest Widget",
     "BreakfreeTradingPro_indicator": "BFT Pro Indicator",
-    "BreakfreeTradingDiscovery_indicator": "BFT Discovery Indicator"
+    "BreakfreeTradingDiscovery_indicator": "BFT Discovery Indicator",
+    "forexTradeManager":"Trade Manager"
   }
 }

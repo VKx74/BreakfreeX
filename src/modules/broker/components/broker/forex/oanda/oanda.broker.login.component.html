@@ -1,9 +1,46 @@
 <div class="flex justify-content-center align-items-center svg-image">
     <a href="https://www1.oanda.com" target="_blank">
         <img src="assets/img/oanda-vector-logo.svg" alt="Oanda broker">
+        <!--<img src="https://2013download.com/wp-content/uploads/2017/03/metatrader.png">-->
     </a>
 </div>
+<!-- MT Tmp 
 
+<div class="connected-broker-area">
+    <form [formGroup]="addAccountForm">
+        <div class="mat-form-field-wrapper crypto-form-unit">
+            <span class="form-unit__label">Broker:</span>
+            <selector class="dropdown"
+                  [disabled]="!tradingAccounts.length"
+                  [title]="!tradingAccounts.length ? 'Please connect to broker account' : ''"
+                  [options]="brokers"
+                  [selectedOption]="selectedBroker"></selector>
+        </div>
+        <div class="mat-form-field-wrapper crypto-form-unit">
+            <span class="form-unit__label">Server:</span>
+            <selector class="dropdown"
+                  [disabled]="!tradingAccounts.length"
+                  [title]="!tradingAccounts.length ? 'Please connect to broker account' : ''"
+                  [options]="servers"
+                  [selectedOption]="selectedServer"></selector>
+        </div>
+        <div class="mat-form-field-wrapper crypto-form-unit">
+            <span class="form-unit__label">Login:</span>
+            <input type="text" class="full-width crypto-input oandaTokenInput" formControlName="accessToken"
+                   placeholder="Login">
+            <span *ngIf="brokerConnected">{{activeAccount}}</span>
+        </div>
+        <div class="mat-form-field-wrapper crypto-form-unit">
+            <span class="form-unit__label">Password:</span>
+            <input type="text" class="full-width crypto-input oandaTokenInput" formControlName="accessToken"
+                   placeholder="Password">
+            <span *ngIf="brokerConnected">{{activeAccount}}</span>
+        </div>
+    </form>
+</div>
+
+ MT Tmp -->
+ 
 <div class="connected-broker-area">
     <form [formGroup]="addAccountForm">
         <div class="mat-form-field-wrapper crypto-form-unit">
@@ -14,6 +51,7 @@
         </div>
     </form>
 </div>
+
 
 <div class="connectBrokerBlock">
     <button class="crypto-button crypto-button_primary w-100" (click)="connect()" *ngIf="!brokerConnected">
@@ -26,7 +64,7 @@
 
 <hr  *ngIf="brokerConnected">
 
-<div class="connected-broker-area" *ngIf="brokerConnected">
+<!--<div class="connected-broker-area" *ngIf="brokerConnected">
     <div class="forex-broker-settings-row flex">
         <span class="title rightAlignedTitle">{{'broker.selectedAccount' | translate}}:</span>
         <selector class="dropdown"
@@ -43,7 +81,7 @@
             {{'broker.activeAccount' | translate}}
         </button>
     </div>
-</div>
+</div>-->
 
 <!--<ngx-loading [show]="showSpinner"></ngx-loading>-->
 <loader *ngIf="showSpinner"></loader>

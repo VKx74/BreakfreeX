@@ -18,6 +18,16 @@ export class OandaBrokerLoginComponent implements OnInit {
     showSpinner = false;
     newSelectedAccount: string;
 
+    selectedBroker: string;
+    get brokers(): string[] {
+        return ["Oanda"];
+    }    
+
+    selectedServer: string;
+    get servers(): string[] {
+        return ["Oanda-v20 Live-4"];
+    }    
+
     get selectedSubAccount(): string {
         return this.brokerConnected ? 
             (this._brokerService.activeBroker as OandaBrokerService).activeSubAccount : "";
@@ -43,9 +53,15 @@ export class OandaBrokerLoginComponent implements OnInit {
                 private _alertService: AlertService) {
 
         this.newSelectedAccount = this.selectedSubAccount;
+
+        this.addAccountForm = new FormGroup({
+            accessToken: new FormControl('', [Validators.minLength(2)])
+        });
+            this.selectedBroker="Oanda";
+            this.selectedServer="Oanda-v20 Live-4";
     }
 
-    ngOnInit() {
+    ngOnInit() {        
         this.addAccountForm = new FormGroup({
             accessToken: new FormControl('', [Validators.minLength(2)])
         });
@@ -69,9 +85,9 @@ export class OandaBrokerLoginComponent implements OnInit {
         this.newSelectedAccount = account;
     }
 
-    connect() {
+    connect() {        
         if (this.addAccountForm.invalid) {
-            this._notifyError(this._translateService.get('broker.createAccountError'));
+            this._notifyError(this._translateService.get('broker.createAccountError'));           
             return;
         }
 

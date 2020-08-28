@@ -75,7 +75,7 @@ export class DashboardComponent {
     showExceptionPopup = false;
 
     get bottomPanelMinSize() {
-        return 40;
+        return 80;
     }
 
     constructor(private _store: Store<AppState>,

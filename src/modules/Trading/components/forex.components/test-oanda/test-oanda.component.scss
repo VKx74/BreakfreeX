@@ -1,0 +1,21 @@
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  height: 100%;
+  width: 100%;
+  display: block;
+
+  .notConnected {
+    font-size: 12px;
+  }
+}
+
+@include themify($themes, true) {
+  .caption {
+    color: themed('valueTextColor');
+  }
+  .notConnected {
+    color: themed('titleTextColor');
+  }
+}

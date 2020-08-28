@@ -5,10 +5,9 @@ import {BehaviorSubject, Subject} from "rxjs";
 @Injectable()
 export class ApplicationTypeService {
     // private _applicationType: ApplicationType;
-    applicationTypeChanged = new BehaviorSubject(ApplicationType.All);
+    applicationTypeChanged = new BehaviorSubject(ApplicationType.Forex);
 
-    get applicationType() {
-        return ApplicationType.All;
+    get applicationType() {        
         return this.applicationTypeChanged.value;
     }
 

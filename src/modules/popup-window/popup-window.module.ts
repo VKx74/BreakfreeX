@@ -66,6 +66,7 @@ import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingNavigatorComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
+import { ForexTradeManagerComponent } from '../Trading/components/forex.components/forex-trade-manager.component';
 
 
 export function sharedThemeService() {
@@ -289,6 +290,10 @@ export function sharedEducationalTipsService() {
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,
                             component: BreakfreeTradingBacktestComponent
+                        },
+                        {
+                            componentName: ComponentIdentifier.forexTradeManager,
+                            component: ForexTradeManagerComponent
                         },
                     ]
                 } as IGoldenLayoutComponentConfiguration;
