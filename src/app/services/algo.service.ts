@@ -36,6 +36,18 @@ export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
     trend_detector: TrendDetectorType;
 }
 
+export interface IBFTBacktestV2AlgoParameters extends IBFTAlgoParameters {
+    breakeven_candles: number;
+    risk_reward: number;
+    mesa_fast: number;
+    mesa_slow: number;
+    mesa_diff: number;
+    stoploss_rr: number;
+    place_on_ex1: boolean;
+    place_on_sr: boolean;
+    trend_detector: TrendDetectorType;
+}
+
 export interface IBFTAHitTestAlgoParameters extends IBFTBacktestAlgoParameters {
     entry_target_box: number;
     stoploss_rr: number;
@@ -49,6 +61,27 @@ export interface IBFTAAlgoInfo {
     pas: string;
     macrotrend: string;
     n_currencySymbol: string;
+}
+
+export interface IBFTAStrategyV2Entry { 
+    entry: number;
+    stop: number;
+    limit: number;
+    is_buy: boolean;
+}
+
+export interface IBFTAStrategyV2Response { 
+    trade_sr: IBFTAStrategyV2Entry;
+    trade_ex1: IBFTAStrategyV2Entry;
+    hourly_trend: IBFTATrend;
+    daily_trend: IBFTATrend;
+    top_ex2: number;
+    top_ex1: number;
+    r: number;
+    n: number;
+    s: number;
+    bottom_ex1: number;
+    bottom_ex2: number;
 }
 
 export interface IBFTAAlgoData {
@@ -99,6 +132,12 @@ export interface IBFTASignal {
     data: IBFTAAlgoData;
 }
 
+export interface IBFTASignalV2 {
+    timestamp: number;
+    end_timestamp: number;
+    data: IBFTAStrategyV2Response;
+}
+
 export interface IBFTAOrder {
     id: string;
     open_timestamp: number;
@@ -109,6 +148,7 @@ export interface IBFTAOrder {
     type: string;
     side: string;
     status: string;
+    comment?: string;
     qty: number;
     current_price: number;
     price: number;
@@ -119,6 +159,11 @@ export interface IBFTAOrder {
 
 export interface IBFTABacktestResponse {
     signals: IBFTASignal[];
+    orders: IBFTAOrder[];
+}
+
+export interface IBFTABacktestV2Response {
+    signals: IBFTASignalV2[];
     orders: IBFTAOrder[];
 }
 
@@ -170,6 +215,10 @@ export class AlgoService {
     
     backtest(data: IBFTBacktestAlgoParameters): Observable<IBFTABacktestResponse> {
         return this._http.post<IBFTABacktestResponse>(`${this.url}backtest`, data);
+    } 
+    
+    backtestV2(data: IBFTBacktestV2AlgoParameters): Observable<IBFTABacktestV2Response> {
+        return this._http.post<IBFTABacktestV2Response>(`${this.url}strategy_v2_backtest`, data);
     }
 
     extHitTest(data: IBFTAHitTestAlgoParameters): Observable<IBFTAExtHitTestResult> {

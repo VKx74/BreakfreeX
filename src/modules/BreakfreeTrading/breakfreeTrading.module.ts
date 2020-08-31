@@ -28,11 +28,14 @@ import { LoaderModule } from 'modules/loader/loader.module';
 import { StrategyModeBacktestComponent } from './components/strategyModeBacktest/strategyModeBacktest.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ExtensionHitTestComponent } from './components/extensionHitTest/extensionHitTest.component';
+import { StrategyV2ModeBacktestComponent } from './components/strategyV2ModeBacktest/strategyV2ModeBacktest.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     // components here
     declarations: [
         StrategyModeBacktestComponent,
+        StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
@@ -48,6 +51,7 @@ import { ExtensionHitTestComponent } from './components/extensionHitTest/extensi
         TimeZonesModule,
         MatMenuModule,
         MatInputModule,
+        MatSlideToggleModule,
         SharedModule,
         MatTabsModule,
         UIModule,
@@ -59,6 +63,7 @@ import { ExtensionHitTestComponent } from './components/extensionHitTest/extensi
     // components here
     entryComponents: [
         StrategyModeBacktestComponent,
+        StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
@@ -66,6 +71,7 @@ import { ExtensionHitTestComponent } from './components/extensionHitTest/extensi
     // components here
     exports: [
         StrategyModeBacktestComponent,
+        StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,

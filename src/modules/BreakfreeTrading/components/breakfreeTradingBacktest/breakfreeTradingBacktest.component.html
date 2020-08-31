@@ -18,10 +18,13 @@
       </div>
 
       <mat-tab-group class="full-height tabs">
-         <mat-tab label="Strategy Backtest"> 
+         <mat-tab label="Strategy"> 
             <BreakfreeStrategyBacktest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)" (ClearData)="clearData()"></BreakfreeStrategyBacktest>
+         </mat-tab> 
+         <mat-tab label="Strategy V2"> 
+            <BreakfreeStrategyV2Backtest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)" (ClearData)="clearData()"></BreakfreeStrategyV2Backtest>
          </mat-tab>
-         <mat-tab label="Extensions Hit Test">
+         <mat-tab label="Extensions">
             <ExtensionHitTest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)" (ClearData)="clearData()"></ExtensionHitTest>
          </mat-tab>
      </mat-tab-group>
