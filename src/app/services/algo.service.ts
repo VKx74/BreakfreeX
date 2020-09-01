@@ -42,7 +42,12 @@ export interface IBFTBacktestV2AlgoParameters extends IBFTAlgoParameters {
     mesa_fast: number;
     mesa_slow: number;
     mesa_diff: number;
+    hourly_mesa_fast: number;
+    hourly_mesa_slow: number;
+    hourly_mesa_diff: number;
     stoploss_rr: number;
+    use_hourly_trend: boolean;
+    use_daily_trend: boolean;
     place_on_ex1: boolean;
     place_on_sr: boolean;
     trend_detector: TrendDetectorType;

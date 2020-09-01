@@ -29,8 +29,13 @@ export class StrategyV2ModeBacktestComponent {
     public mesa_fast: number = 0.25;
     public mesa_slow: number = 0.05;
     public mesa_diff: number = 0.1;
+    public hourly_mesa_fast: number = 0.25;
+    public hourly_mesa_slow: number = 0.05;
+    public hourly_mesa_diff: number = 0.1;
     public place_on_ex1: boolean = true;
     public place_on_sr: boolean = true;
+    public use_hourly_trend: boolean = true;
+    public use_daily_trend: boolean = true;
     public stoplossRR: number = 25;
 
     public Status: string = "-";
@@ -103,6 +108,11 @@ export class StrategyV2ModeBacktestComponent {
             mesa_fast: this.mesa_fast,
             mesa_slow: this.mesa_slow,
             mesa_diff: this.mesa_diff,
+            hourly_mesa_fast: this.hourly_mesa_fast,
+            hourly_mesa_slow: this.hourly_mesa_slow,
+            hourly_mesa_diff: this.hourly_mesa_diff,
+            use_hourly_trend: this.use_hourly_trend,
+            use_daily_trend: this.use_daily_trend,
             place_on_ex1: this.place_on_ex1,
             place_on_sr: this.place_on_sr,
             stoploss_rr: this.stoplossRR,
@@ -238,6 +248,18 @@ export class StrategyV2ModeBacktestComponent {
             return false;
         }  
         if (params.mesa_diff <= 0) {
+            this._alertService.error("Mesa Diff must be greater than 0.");
+            return false;
+        } 
+        if (params.hourly_mesa_fast <= 0) {
+            this._alertService.error("Mesa Fast must be greater than 0.");
+            return false;
+        }  
+        if (params.hourly_mesa_slow <= 0) {
+            this._alertService.error("Mesa Slow must be greater than 0.");
+            return false;
+        }  
+        if (params.hourly_mesa_diff <= 0) {
             this._alertService.error("Mesa Diff must be greater than 0.");
             return false;
         }
