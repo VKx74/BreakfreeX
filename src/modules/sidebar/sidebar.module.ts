@@ -16,6 +16,7 @@ import {SharedModule} from "Shared";
 import { BaseSidebarComponent } from './components/base-sidebar/base-sidebar.component';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {LoaderModule} from "../loader/loader.module";
+import { FormsModule } from '@angular/forms';
 
 const COMPONENTS = [
     LanguageSelectComponent,
@@ -46,6 +47,7 @@ const COMPONENTS = [
         SharedModule,
         MatSidenavModule,
         LoaderModule,
+        FormsModule
     ]
 })
 export class SidebarModule {

@@ -64,8 +64,8 @@ export class DashboardComponent {
     private _saveLayout = true;
     private _lastExceptionTime: number = 0;
     layoutChanged = false;
-    readonly openBottomPanel = 260;
-    readonly minimizeBottomPanel = 40;
+    readonly openBottomPanel = 150;
+    readonly minimizeBottomPanel = 26;
 
     @ViewChild(GoldenLayoutComponent, {static: true}) layout: GoldenLayoutComponent;
     @ViewChild('verticalSplit', {read: SplitComponent, static: false}) verticalSplit: SplitComponent;

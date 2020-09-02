@@ -3,14 +3,9 @@
 
 @include themify($themes, true) {
   .close-order-button {
-    width: 60px;
-    height: 26px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
-    background-color: themed('rejectButtonBackgroundColor');
+    color: themed('valueTextColor');
+    font-size: 9px;
   }
 
   ::ng-deep mat-cell:last-of-type {

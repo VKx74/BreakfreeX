@@ -1,23 +1,30 @@
 <!--Depend to broker type show specific component-->
 <ng-container *ngIf="activeBroker$ | async; else noBrokerConnected">
     <div [ngSwitch]="applicationType$ | async" class="trade-manager h-100 flex" style="position: relative">
+
+        <ng-template #accountInfo>
+            <div class="account-info-panel flex-grow-1 flex justify-flex-end align-items-center">
+                <oanda-account-info-bar class="date-container"></oanda-account-info-bar>
+            </div>
+        </ng-template>
+
         <div class="top-panel w-100 flex-grow-1 flex justify-flex-end align-items-center">
-            <div class="date-container">{{date}}</div>
-            <i *ngIf="isOpen" class="crypto-icon crypto-icon-layout-minimise" (click)="minimize()"></i>
-            <i *ngIf="isMinimized" class="crypto-icon crypto-icon-layout-maximise" (click)="open()"></i>
+            <div class="date-container over-head">{{date}}</div>
+            <i *ngIf="isOpen" class="crypto-icon crypto-icon-layout-minimise over-head" (click)="minimize()"></i>
+            <i *ngIf="isMinimized" class="crypto-icon crypto-icon-layout-maximise over-head" (click)="open()"></i>
         </div>
-        <div class="flex trade-managers-wrapper">
+        <div class="flex trade-managers-wrapper" *ngIf="isOpen; else accountInfo">
             <crypto-trade-manager *ngSwitchCase="ApplicationType.Crypto" class="h-100"></crypto-trade-manager>
             <forex-trade-manager *ngSwitchCase="ApplicationType.Forex" class="h-100"></forex-trade-manager>
         </div>
-        <div class="sell-buy">
+        <!-- <div class="sell-buy" *ngIf="isOpen">
             <order></order>
-        </div>
+        </div> -->
     </div>
 </ng-container>
 <ng-template #noBrokerConnected>
     <div class="h-100" [ngClass]="{'h-auto': isMinimized, 'h-100': !isMinimized}">
-        <div class="trade-manager flex" style="position: relative; height: 40px">
+        <div class="trade-manager flex" style="position: relative; height: 26px">
             <div class="top-panel w-100 flex-grow-1 flex justify-flex-end align-items-center">
                 <div class="date-container">{{date}}</div>
                 <i *ngIf="isOpen" class="crypto-icon crypto-icon-layout-minimise" (click)="minimize()"></i>

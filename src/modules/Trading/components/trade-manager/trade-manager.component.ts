@@ -32,8 +32,9 @@ export class TradeManagerComponent implements OnDestroy {
     brokerInitialized$ = this._brokerService.brokerInitializationState$;
     applicationType$ = this._applicationTypeService.applicationTypeChanged;
     ApplicationType = ApplicationType;
-    readonly openBottomPanel = 260;
-    readonly minimizeBottomPanel = 40;
+    readonly openBottomPanel = 150;
+    readonly openBottomPanelHeight = 250;
+    readonly minimizeBottomPanel = 26;
 
     get isOpen () {
         return this._bottomPanelSizeService.sizeBottomPanel() >= this.openBottomPanel;
@@ -81,7 +82,7 @@ export class TradeManagerComponent implements OnDestroy {
     }
 
     open() {
-        this._bottomPanelSizeService.setBottomPanelSize(this.openBottomPanel);
+        this._bottomPanelSizeService.setBottomPanelSize(this.openBottomPanelHeight);
         EventsHelper.triggerWindowResize();
     }
 

@@ -21,13 +21,13 @@ import { ForexOrderConfiguratorModalComponent } from "../forex-order-configurato
     ]
 })
 export class TestOandaComponent extends BaseLayoutItemComponent {
-    EBrokerInstance = EBrokerInstance;
-
     static componentName = 'Test Oanda Component';
     static previewImgClass = 'crypto-icon-trade-manager';
-    private _brokerConnected:boolean;
+    private _brokerConnected: boolean;
 
-    get brokerConnected(){
+    EBrokerInstance = EBrokerInstance;
+
+    get brokerConnected() {
         return this._brokerConnected;
     }
 
@@ -41,7 +41,7 @@ export class TestOandaComponent extends BaseLayoutItemComponent {
         return null;
     }
 
-    connect() : void {
+    connect(): void {
         const ref = this._dialog.open<BrokerDialogComponent, BrokerDialogData>(BrokerDialogComponent, {
             data: {
                 brokerType: EBrokerInstance.OandaBroker
@@ -50,7 +50,7 @@ export class TestOandaComponent extends BaseLayoutItemComponent {
             .pipe(
                 tap(() => {
                     if (!this._brokerService.activeBroker) {
-                        //this.clearSelectedBroker();
+                        // this.clearSelectedBroker();
                     }
                 })
             )
@@ -72,7 +72,7 @@ export class TestOandaComponent extends BaseLayoutItemComponent {
 
     constructor(private _brokerService: BrokerService,
         @Inject(TradingTranslateService) private _tradingTranslateService: TranslateService,
-        //private _tradingTranslateService:TradingTranslateService,        
+        // private _tradingTranslateService:TradingTranslateService,        
         private _dialog: MatDialog,
         protected _injector: Injector) {
             super(_injector);
@@ -84,10 +84,10 @@ export class TestOandaComponent extends BaseLayoutItemComponent {
         );
         this._brokerService.activeBroker$
         .subscribe((broker) => {
-            if (broker){
-                this._brokerConnected=true;
-            } else{
-                this._brokerConnected=false;
+            if (broker) {
+                this._brokerConnected = true;
+            } else {
+                this._brokerConnected = false;
             }
 
         });        

@@ -99,18 +99,18 @@
             <div class="item-text">{{'tools.privateChat' | translate}}</div>
         </div>
     </sidebar-section>
-    <!-- <sidebar-section>
+    <sidebar-section>
         <div class="section-label">{{'app.type&broker' | translate}}</div>
-        <div class="app-type-select m-bottom-10">
+        <!-- <div class="app-type-select m-bottom-10">
             <selector class="bordered"
                       [options]="appTypes"
                       [selectedOption]="selectedApplicationType"
                       [optionCaption]="appTypeCaption"
                       (onSelect)="setApplicationType($event)"></selector>
-        </div>
-        <broker-select [applicationType]="applicationType$ | async"></broker-select>
+        </div> -->
+        <broker-select class="full-width" [applicationType]="applicationType$ | async"></broker-select> 
     </sidebar-section>
-    <sidebar-section class="relative-wrapper buy-app-section">
+    <!-- <sidebar-section class="relative-wrapper buy-app-section">
         <buy-app></buy-app>
     </sidebar-section> -->
     <sidebar-section [noPadding]="true">

@@ -272,7 +272,7 @@ export class ForexOrderConfiguratorComponent implements OnInit {
     private _placeOrder(config: OrderConfig) {
         const broker = this._brokerService.activeBroker as OandaBrokerService;
         const placeOrderData: IForexPlaceOrderAction = {
-            //symbol: config.instrument.symbol,
+            // symbol: config.instrument.symbol,
             symbol: config.instrument.id,
             side: config.side,
             size: config.amount,

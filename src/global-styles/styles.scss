@@ -113,10 +113,6 @@ body.Dark-theme.thmFintatechDarkTheme {
   font-size: 12px;
 }
 
-.broker-not-connected {
-  display:none !important;
-}
-
 .mat-menu-panel.ng-trigger {
   margin-top: 8px;
 }
@@ -202,15 +198,15 @@ span.logo__img {
   border-right: 0px !important;
 }
 
-// kill bottom split
-.as-split-gutter.ng-star-inserted {
-  display: none !important;
-}
+// // kill bottom split
+// .as-split-gutter.ng-star-inserted {
+//   display: none !important;
+// }
 
-// kill maximize window icon
-i.crypto-icon.crypto-icon-layout-maximise.ng-star-inserted {
-  display: none !important;
-}
+// // kill maximize window icon
+// i.crypto-icon.crypto-icon-layout-maximise.ng-star-inserted {
+//   display: none !important;
+// }
 
 
 //menu
@@ -736,12 +732,11 @@ a.wrapper-link[href="#/platform/settings/withdraws"],a.wrapper-link[href="#/plat
 
 
 
-.Light-theme .item-icon {
- 
-  background:#edeff2 ;
-  border:1px solid #ddddddb3;
+// .Light-theme .item-icon {
+//   background:#edeff2 ;
+//   border:1px solid #ddddddb3;
   
-}
+// }
 
 
 .Light-theme .section-item:hover {

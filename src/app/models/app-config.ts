@@ -124,7 +124,7 @@ export enum ComponentIdentifier {
     generalSettings = "generalSettings",
     profileSettings = "profileSettings",
     brokerSettings = "brokerSettings",
-    someTestIdentifier="SomeIdentifier"
+    someTestIdentifier = "SomeIdentifier"
 }
 
 export type IComponentsConfig<T = boolean> = {

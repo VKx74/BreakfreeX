@@ -21,6 +21,6 @@ APP_TYPE_EXCHANGES[ApplicationType.All]  = [EExchangeInstance.OandaExchange, EEx
 export const APP_TYPE_BROKERS: {[index: string]: EBrokerInstance[]} = {};
 
 APP_TYPE_BROKERS[ApplicationType.Crypto] = [];
-APP_TYPE_BROKERS[ApplicationType.All] = [];
+APP_TYPE_BROKERS[ApplicationType.All] = [EBrokerInstance.OandaBroker];
 APP_TYPE_BROKERS[ApplicationType.Stock]  = [];
-APP_TYPE_BROKERS[ApplicationType.Forex]  = [];
+APP_TYPE_BROKERS[ApplicationType.Forex]  = [EBrokerInstance.OandaBroker];

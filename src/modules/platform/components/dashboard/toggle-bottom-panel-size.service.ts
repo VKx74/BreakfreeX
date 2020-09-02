@@ -3,7 +3,7 @@ import {IOutputAreaSizes} from "angular-split";
 
 @Injectable()
 export class ToggleBottomPanelSizeService {
-  public splitVerticalAreaSizes: IOutputAreaSizes = [null, 40];
+  public splitVerticalAreaSizes: IOutputAreaSizes = [null, 26];
 
   constructor() { }
 

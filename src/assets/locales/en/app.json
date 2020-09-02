@@ -2,6 +2,7 @@
   "app": {
     "adminPanel": "Admin panel",
     "type&broker": "type & broker",
+    "server": "Server",
     "menu": "Menu",
     "scripting": "Scripting",
     "general": "General",
@@ -15,6 +16,7 @@
     "toPlatform": "Chart",
     "connect": "Connect",
     "disconnect": "Disconnect",
+    "connectMT5": "Connect MT5",
     "addAccount": "Add broker account",
     "support": "Support",
     "clearSession": "Clear Session"

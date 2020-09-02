@@ -9,6 +9,25 @@
   overflow: auto;
   flex-direction: column;
 
+  .crypto-button {
+    padding: 0px 10px !important;
+    height: 22px;
+    margin: 0px !important;
+  }
+
+  /deep/ .mat-tab-body-wrapper { 
+    height: 100% !important;
+  } 
+  /deep/ .mat-tab-label { 
+    height: 26px !important;
+  }
+  /deep/ mat-header-cell {
+    height: 25px;
+  }
+  /deep/ mat-row {
+    height: 25px;
+  }
+
   .selectAccount {
     selector {
       display: inline-block;
@@ -40,7 +59,7 @@
   .controls {
     padding: 10px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 }
 

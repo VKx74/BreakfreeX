@@ -3,6 +3,9 @@
 
 :host {
   height: 100%;
+  .over-head {
+    z-index: 2;
+  }
 }
 
 object {
@@ -10,12 +13,13 @@ object {
 }
 
 .trade-managers-wrapper {
-  width: calc(100% - 415px);
+  // width: calc(100% - 260px);
+  width: 100%;
 }
 
 .sell-buy {
-  width: 415px;
-  margin-top: 40px;
+  width: 260px;
+  margin-top: 26px;
   position: relative;
   overflow: auto;
 }
@@ -23,7 +27,7 @@ object {
 .top-panel {
   i {
     position: relative;
-    left: 6px;
+    left: 10px;
     bottom: 2px;
     cursor: pointer;
   }
@@ -31,8 +35,6 @@ object {
     font-size: 11px;
     bottom: 1px;
   }
-
-
 }
 
 @include themify($themes, true) {
@@ -46,12 +48,19 @@ object {
 
   .top-panel {
     position: absolute;
-    height: 40px;
-    padding-right: 20px;
+    height: 26px;
+    padding-right: 26px;
     background-color: themed('noactiveTabs');
     i {
       color: themed('valueTextColor');
     }
+  }
+  
+  .account-info-panel {
+    position: absolute;
+    height: 26px;
+    padding-left: 20px;
+    background-color: themed('noactiveTabs');
   }
 
   .date-container {

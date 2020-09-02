@@ -26,7 +26,7 @@ export interface BrokerDialogData {
 export class BrokerDialogComponent extends Modal implements OnInit {
     EBrokerInstance = EBrokerInstance;
     ApplicationType = ApplicationType;
-    private _initialized:boolean;
+    private _initialized: boolean;
 
     get applicationType() {
         return this._appTypeService.applicationType;
@@ -48,11 +48,11 @@ export class BrokerDialogComponent extends Modal implements OnInit {
             .subscribe((broker) => {       
                 console.log("BROKER:");
                 console.log(broker);                
-                if (this._initialized){
+                if (this._initialized) {
                     this.close();                
                 }
             });
-            this._initialized=true;
+            this._initialized = true;
     }
 
 }

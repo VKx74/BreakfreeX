@@ -1,4 +1,4 @@
-<div class="trade-manager">
+<div class="trade-manager full-height">
     <mat-tab-group class="full-height">
         <mat-tab label="{{'tradeManager.positions' | translate}}">
             <oanda-positions></oanda-positions>
@@ -15,9 +15,11 @@
     </mat-tab-group>
 </div>
 
-<!--<div class="controls">-->
-<!--    <button (click)="placeOrder()"-->
-<!--            [disabled]="!brokerConnected"-->
-<!--            class="crypto-button crypto-button_action">{{'tradeManager.placeOrder' | translate}}-->
-<!--    </button>-->
-<!--</div>-->
+<div class="controls">
+    <oanda-account-info-bar></oanda-account-info-bar>
+    <button (click)="placeOrder()"
+            style="margin:10px"
+            [disabled]="!brokerConnected"
+            class="crypto-button crypto-button_action">Place Order
+    </button>
+</div>

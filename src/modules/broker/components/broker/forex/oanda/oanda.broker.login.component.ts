@@ -57,8 +57,8 @@ export class OandaBrokerLoginComponent implements OnInit {
         this.addAccountForm = new FormGroup({
             accessToken: new FormControl('', [Validators.minLength(2)])
         });
-            this.selectedBroker="Oanda";
-            this.selectedServer="Oanda-v20 Live-4";
+            this.selectedBroker = "Oanda";
+            this.selectedServer = "Oanda-v20 Live-4";
     }
 
     ngOnInit() {        

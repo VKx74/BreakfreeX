@@ -1,6 +1,7 @@
 {
   "app": {
     "type&broker": "тип & брокер",
+    "server": "Сервер",
     "menu": "Меню",
     "scripting": "Скриптинг",
     "general": "Загальні",
@@ -16,6 +17,7 @@
     "profileInfo": "Інформація профілю",
     "connect": "Підключити",
     "disconnect": "Відключити",
+    "connectMT5": "Підключити MT5",
     "addAccount": "Добавити брокер акаунт",
     "support": "Підтримка",
     "clearSession": "Очистити сесію"

@@ -1,11 +1,18 @@
 <div class="broker-select-container m-top-10">
-    <selector class="bordered"
+    <selector *ngIf="!isBrokerConnected"
+              class="bordered"
               [options]="availableBrokers"
               [selectedOption]="selectedBroker"
               [placeholder]="'app.addAccount' | translate"
               (optionClick)="onBrokerSelect($event)"></selector>
-    <div class="disconnect-broker" *ngIf="selectedBroker">
-        <button class="crypto-button crypto-button_primary cursor-pointer"
+
+    <div class="disconnect-broker" *ngIf="!isBrokerConnected" [class.disabled]="!selectedBroker">
+        <button class="crypto-button crypto-button_action cursor-pointer"
+                (click)="connectCurrentBroker()">{{'app.connect' | translate}}</button>
+    </div>
+    <div class="disconnect-broker" *ngIf="isBrokerConnected">
+        <div class="section-title">{{brokerType}} broker connected</div>
+        <button class="crypto-button crypto-button_danger cursor-pointer"
                 (click)="disconnectCurrentBroker()">{{'app.disconnect' | translate}}</button>
     </div>
 </div>

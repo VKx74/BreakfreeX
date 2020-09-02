@@ -7,7 +7,7 @@
         <data-table-header-cell columnName="lastPrice" [sortable]="true" [dataAccessor]="lastPriceDataAccessor">{{'tradeManager.last' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="lastUpl" [sortable]="true" [dataAccessor]="unrealizedDataAccessor">{{'tradeManager.unrealized' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="pl" [sortable]="true">{{'tradeManager.realized' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="close" [columnWidth]="80"></data-table-header-cell>
+        <data-table-header-cell columnName="close" [columnWidth]="30"></data-table-header-cell>
 
 
         <data-table-cell columnName="symbol"><ng-template let-item>{{item.symbol}}</ng-template></data-table-cell>
