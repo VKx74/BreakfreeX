@@ -38,9 +38,9 @@ export class ExtensionHitTestComponent {
     public slRatio: number = 1.7;
     public posNumbers: number = 3;
     public risk: number = 3.5;
-    public mesa_fast: number = 0.5;
+    public mesa_fast: number = 0.25;
     public mesa_slow: number = 0.05;
-    public mesa_diff: number = 0.005;
+    public mesa_diff: number = 0.1;
     public breakevenCandles: number = 5;
     public entryTargetBox: number = 25;
     public stoplossRR: number = 25;

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTBacktestAlgoParameters, TrendDetectorType } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTBacktestAlgoParameters, TrendDetectorType, IBFTBacktestV2AlgoParameters, IBFTABacktestV2Response, IBFTATrend } from '@app/services/algo.service';
 import { of } from 'rxjs';
 import bind from "bind-decorator";
 import { AlertService } from '@alert/services/alert.service';
@@ -10,11 +10,11 @@ export interface IBFTBacktestComponentState {
 }
 
 @Component({
-    selector: 'BreakfreeStrategyBacktest',
-    templateUrl: './strategyModeBacktest.component.html',
-    styleUrls: ['./strategyModeBacktest.component.scss']
+    selector: 'BreakfreeStrategyV2Backtest',
+    templateUrl: './strategyV2ModeBacktest.component.html',
+    styleUrls: ['./strategyV2ModeBacktest.component.scss']
 })
-export class StrategyModeBacktestComponent {
+export class StrategyV2ModeBacktestComponent {
     @Input()
     public SelectedChart: TradingChartDesigner.Chart;
     @Output() 
@@ -22,26 +22,21 @@ export class StrategyModeBacktestComponent {
     @Output() 
     public ClearData = new EventEmitter();
 
-    public trendDetector: TrendDetectorType = TrendDetectorType.hma;
-
-    public get trendDetectors(): TrendDetectorType[] {
-        return [TrendDetectorType.hma, TrendDetectorType.mesa];
-    }
-
-    public get mesaInputVisible(): boolean {
-        return this.trendDetector === TrendDetectorType.mesa;
-    }
-
     public barsCount: number = 100;
-    public hmaPeriod: number = 200;
     public slRatio: number = 1.7;
-    public posNumbers: number = 3;
-    public risk: number = 3.5;
     public maxCount: number = 100;
     public breakevenCandles: number = 5;
     public mesa_fast: number = 0.25;
     public mesa_slow: number = 0.05;
     public mesa_diff: number = 0.1;
+    public hourly_mesa_fast: number = 0.25;
+    public hourly_mesa_slow: number = 0.05;
+    public hourly_mesa_diff: number = 0.1;
+    public place_on_ex1: boolean = true;
+    public place_on_sr: boolean = true;
+    public use_hourly_trend: boolean = true;
+    public use_daily_trend: boolean = true;
+    public stoplossRR: number = 25;
 
     public Status: string = "-";
     public Instrument: string = "";
@@ -69,10 +64,6 @@ export class StrategyModeBacktestComponent {
         }
 
         return "Udefined";
-    }
-    
-    trendDetectorSelected(item: TrendDetectorType) {
-        this.trendDetector = item;
     }
 
     clear()
@@ -102,13 +93,13 @@ export class StrategyModeBacktestComponent {
             return;
         }
         
-        let backtestParameters = {
+        let backtestParameters: IBFTBacktestV2AlgoParameters = {
             input_accountsize: 1000,
-            input_risk: this.risk,
-            input_splitpositions: this.posNumbers,
+            input_risk: 3.5,
+            input_splitpositions: 1,
             replay_back: this.barsCount,
-            hma_period: this.hmaPeriod,
             input_stoplossratio: this.slRatio,
+            risk_reward: this.slRatio,
             instrument: chart.instrument as IInstrument,
             timeframe: chart.timeFrame,
             breakeven_candles: this.breakevenCandles,
@@ -117,7 +108,15 @@ export class StrategyModeBacktestComponent {
             mesa_fast: this.mesa_fast,
             mesa_slow: this.mesa_slow,
             mesa_diff: this.mesa_diff,
-            trend_detector: this.trendDetector
+            hourly_mesa_fast: this.hourly_mesa_fast,
+            hourly_mesa_slow: this.hourly_mesa_slow,
+            hourly_mesa_diff: this.hourly_mesa_diff,
+            use_hourly_trend: this.use_hourly_trend,
+            use_daily_trend: this.use_daily_trend,
+            place_on_ex1: this.place_on_ex1,
+            place_on_sr: this.place_on_sr,
+            stoploss_rr: this.stoplossRR,
+            trend_detector: TrendDetectorType.mesa
         };
 
         if (!this.validateInputParameters(backtestParameters)) {
@@ -126,9 +125,9 @@ export class StrategyModeBacktestComponent {
 
         this.Status = "Calculating...";
         this.Processing.emit(true);
-        let backtestResults;
+        let backtestResults: IBFTABacktestV2Response;
         try {
-            backtestResults = await this._bftService.backtest(backtestParameters);
+            backtestResults = await this._bftService.backtestV2(backtestParameters);
         } catch (error) {
             this._alertService.error("Failed to calculate backtest");
             this.Processing.emit(false);
@@ -165,21 +164,57 @@ export class StrategyModeBacktestComponent {
             }
             
             // let lineEntry = this.generateLine(startDate, endDate, signal.data.algo_Entry, "#629320");
-            let isBuy = signal.data.algo_Entry > signal.data.algo_Stop;
-            let backColor = this.calculateProfitabilityColor(signal.timestamp, groupedOrders);
-            let backArea = this.generateRect(startDate, endDate, signal.data.algo_TP2, signal.data.algo_Stop, backColor);
-            let entryRect = this.generateRect(startDate, endDate, signal.data.algo_Entry_high, signal.data.algo_Entry_low, isBuy ? "#3d93204f" : "#932b204f");
-            let tpRect = this.generateRect(startDate, endDate, signal.data.algo_TP1_high, signal.data.algo_TP1_low, "#2e5e9a4f");
-            let lineTP2 = this.generateLine(startDate, endDate, signal.data.algo_TP2, "#2e5e9a");
-            let lineSL = this.generateLine(startDate, endDate, signal.data.algo_Stop, "#d3bb42");
-            
-            backArea.tooltip.text = this.getDescription(signal.timestamp, groupedOrders, pricePrecision);
+            // let isUpTrend = signal.data.daily_trend == IBFTATrend.Up && signal.data.hourly_trend != IBFTATrend.Down;
+            // let isDownTrend = signal.data.daily_trend == IBFTATrend.Down && signal.data.hourly_trend != IBFTATrend.Up;
 
+            let backColor = this.calculateProfitabilityColor(signal.timestamp, groupedOrders);
+            let backArea = this.generateRect(startDate, endDate, signal.data.top_ex2, signal.data.bottom_ex2, backColor);
             shapes.push(backArea);
-            shapes.push(entryRect);
-            shapes.push(tpRect);
-            shapes.push(lineTP2);
-            shapes.push(lineSL);
+
+            // if (isDownTrend) {
+            //     let lineTopExt2 = this.generateLine(startDate, endDate, signal.data.top_ex2, "#2e5e9a");
+            //     let lineTopExt1 = this.generateLine(startDate, endDate, signal.data.top_ex1, "#2e5e9a");
+            //     let lineResistance = this.generateLine(startDate, endDate, signal.data.r, "#2e5e9a");
+            //     shapes.push(lineTopExt2);
+            //     shapes.push(lineTopExt1);
+            //     shapes.push(lineResistance);
+            // }
+
+            // if (isUpTrend) {
+            //     let lineBottomExt2 = this.generateLine(startDate, endDate, signal.data.bottom_ex2, "#d3bb42");
+            //     let lineBottomExt1 = this.generateLine(startDate, endDate, signal.data.bottom_ex1, "#d3bb42");
+            //     let lineSupport = this.generateLine(startDate, endDate, signal.data.s, "#d3bb42");
+            //     shapes.push(lineBottomExt2);
+            //     shapes.push(lineBottomExt1);
+            //     shapes.push(lineSupport);
+            // }
+
+            if (signal.data.trade_sr) {
+                let trade = signal.data.trade_sr;
+                let limitLine = this.generateLine(startDate, endDate, trade.limit, "#22FF22", 1);
+                shapes.push(limitLine);
+                let stopLine = this.generateLine(startDate, endDate, trade.stop, "#d3bb42", 1);
+                shapes.push(stopLine);
+                let entryLine = this.generateLine(startDate, endDate, trade.entry, "#2e5e9a", 1);
+                shapes.push(entryLine);
+            } 
+            
+            if (signal.data.trade_ex1) {
+                let trade = signal.data.trade_ex1;
+                let limitLine = this.generateLine(startDate, endDate, trade.limit, "#22FF22", 1);
+                shapes.push(limitLine);
+                let stopLine = this.generateLine(startDate, endDate, trade.stop, "#d3bb42", 1);
+                shapes.push(stopLine);
+                let entryLine = this.generateLine(startDate, endDate, trade.entry, "#2e5e9a", 1);
+                shapes.push(entryLine);
+            }
+            
+            let description = this.getDescription(signal.timestamp, groupedOrders, pricePrecision);
+            description += "\n----------- \n";
+            description += `Daily trend: ${signal.data.daily_trend}; \n`;
+            description += `Hourly trend: ${signal.data.daily_trend};`;
+
+            backArea.tooltip.text = description;
         }
 
         chart.primaryPane.addShapes(shapes);
@@ -191,25 +226,13 @@ export class StrategyModeBacktestComponent {
         this.Status = "Done";
     }
 
-    private validateInputParameters (params: IBFTBacktestAlgoParameters): boolean {
+    private validateInputParameters (params: IBFTBacktestV2AlgoParameters): boolean {
         if (!params.replay_back || params.replay_back < 100 || params.replay_back > 10000) {
             this._alertService.error("Bars count incorrect. Min 100 Max 10000.");
             return false;
         } 
-        if (!params.hma_period || params.hma_period < 10 || params.hma_period > 250) {
-            this._alertService.error("Trend calculation period incorrect. Min 10 Max 250.");
-            return false;
-        }
-        if (!params.input_risk || params.input_risk < 1 || params.input_risk > 100) {
-            this._alertService.error("Risk incorrect. Min 1.0 Max 100.0");
-            return false;
-        }
-        if (!params.input_stoplossratio || params.input_stoplossratio < 0.1 || params.input_stoplossratio > 100) {
-            this._alertService.error("SL ratio incorrect. Min 0.1 Max 100.0");
-            return false;
-        }
-        if (!params.input_splitpositions || params.input_splitpositions < 1 || params.input_splitpositions > 3) {
-            this._alertService.error("Position number incorrect. Min 1 Max 2");
+        if (!params.risk_reward || params.risk_reward < 0.1 || params.risk_reward > 100) {
+            this._alertService.error("Risk ratio incorrect. Min 0.1 Max 100.0");
             return false;
         }
         if (params.breakeven_candles === undefined || params.breakeven_candles < 0) {
@@ -227,16 +250,24 @@ export class StrategyModeBacktestComponent {
         if (params.mesa_diff <= 0) {
             this._alertService.error("Mesa Diff must be greater than 0.");
             return false;
-        }
-        if (!params.trend_detector) {
-            this._alertService.error("Trend detector not selected.");
+        } 
+        if (params.hourly_mesa_fast <= 0) {
+            this._alertService.error("Mesa Fast must be greater than 0.");
+            return false;
+        }  
+        if (params.hourly_mesa_slow <= 0) {
+            this._alertService.error("Mesa Slow must be greater than 0.");
+            return false;
+        }  
+        if (params.hourly_mesa_diff <= 0) {
+            this._alertService.error("Mesa Diff must be greater than 0.");
             return false;
         }
 
         return true;
     }
 
-    private infoDateCalculation (backtestResults: IBFTABacktestResponse, chart: TradingChartDesigner.Chart) {
+    private infoDateCalculation (backtestResults: IBFTABacktestV2Response, chart: TradingChartDesigner.Chart) {
         if (backtestResults.signals.length) {
             this.StartDate = new Date(backtestResults.signals[0].timestamp * 1000).toUTCString();
         } else {
@@ -339,11 +370,12 @@ export class StrategyModeBacktestComponent {
         let description = "";
         let totalPl = 0;
         for (const order of neededOrders) {
-            description += `# ${order.side} order, entry: ${order.price.toFixed(precision)}, sl: ${order.sl_price.toFixed(precision)}, tp: ${order.tp_price.toFixed(precision)}, status - ${order.status}`;
+            description += `# ${order.side} order (${order.comment}), entry: ${order.price.toFixed(precision)}, sl: ${order.sl_price.toFixed(precision)}, tp: ${order.tp_price.toFixed(precision)}, status - ${order.status}`;
 
             if (order.pl) {
                 description += ` pl: ${order.pl.toFixed(precision)}`;
             }
+
             description += "\n";
 
             totalPl += order.pl ? order.pl : 0;
@@ -359,7 +391,7 @@ export class StrategyModeBacktestComponent {
         return description;
     }
 
-    private generateLine(date1: Date, date2: Date, value: number, color: any): TradingChartDesigner.ShapeLineSegment {
+    private generateLine(date1: Date, date2: Date, value: number, color: any, width: number = 2): TradingChartDesigner.ShapeLineSegment {
         const lineSegment = new TradingChartDesigner.ShapeLineSegment();
         lineSegment.visualDataPoints[0].date = date1;
         lineSegment.visualDataPoints[0].value = value;
@@ -372,7 +404,7 @@ export class StrategyModeBacktestComponent {
         lineSegment.savable = false;
         lineSegment.theme = {
             line: {
-                width: 2,
+                width: width,
                 strokeColor: color
             }
         };
