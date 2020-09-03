@@ -120,7 +120,20 @@
     },
     "buttons": {
       "place": "Розмістити"
-    }
+    },
+    "equity": "Equity",
+    "marginUsable": "Usable Mr",
+    "pl": "PL",
+    "pipPl": "Pip PL",
+    "netPl": "Net PL",
+    "openPrice": "Ціна Відкриття",
+    "closePrice": "Ціна Закриття",
+    "openTime": "Час Відкриття",
+    "closeTime": "Час Закриття",
+    "comment": "Коментар",
+    "currentPrice": "Поточна",
+    "SL": "SL",
+    "TP": "TP"
   },
   "periodicity": {
     "minute": "Хвилина",

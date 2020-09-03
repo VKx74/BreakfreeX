@@ -4,19 +4,24 @@ $primaryFontFamily: "Open Sans";
 /* Buttons */
 
 $primaryBtnColor: #fff;
-$primaryBtnBgColor: #3d61cc;
-$primaryBtnHoveredBgColor: #0069d9;
+$primaryBtnBgColor: #6785de;
+$primaryBtnHoveredBgColor: #5076e6;
 $primaryBtnDisabledBgColor: transparentize($primaryBtnBgColor, 0.5);
-;
+
+$redColor: #dc3445;
+$greenColor: #27cf6d;
+$lightRedColor: #bd5b6a;
+$lightGreenColor: #5eaf80;
+$yellowColor: #ebd22c;
 
 $dangerBtnColor: #fff;
-$dangerBtnBgColor: #dc3545;
-$dangerBtnHoveredBgColor: #c82333;
+$dangerBtnBgColor: #bd5b6a;
+$dangerBtnHoveredBgColor: #c75768;
 $dangerBtnDisabledBgColor: transparentize($dangerBtnBgColor, 0.5);
 
 $successBtnColor: #fff;
-$successBtnBgColor: #27cf6d;
-$successBtnHoveredBgColor: #26be65;
+$successBtnBgColor: #5eaf80;
+$successBtnHoveredBgColor: #58b880;
 $successBtnDisabledBgColor: transparentize($successBtnBgColor, 0.5);
 
 $actionBtnColor: #fff;
@@ -24,9 +29,6 @@ $actionBtnBgColor: #4e5865;
 $actionBtnHoveredBgColor: #58626f;
 $actionBtnDisabledBgColor: transparentize($actionBtnBgColor, 0.5);
 
-$redColor: #f02645;
-$greenColor: #27cf6d;
-$yellowColor: #ebd22c;
 
 /* End Buttons */
 

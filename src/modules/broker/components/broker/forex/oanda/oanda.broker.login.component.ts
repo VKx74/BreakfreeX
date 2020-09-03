@@ -21,12 +21,7 @@ export class OandaBrokerLoginComponent implements OnInit {
     selectedBroker: string;
     get brokers(): string[] {
         return ["Oanda"];
-    }    
-
-    selectedServer: string;
-    get servers(): string[] {
-        return ["Oanda-v20 Live-4"];
-    }    
+    } 
 
     get selectedSubAccount(): string {
         return this.brokerConnected ? 
@@ -57,8 +52,6 @@ export class OandaBrokerLoginComponent implements OnInit {
         this.addAccountForm = new FormGroup({
             accessToken: new FormControl('', [Validators.minLength(2)])
         });
-            this.selectedBroker = "Oanda";
-            this.selectedServer = "Oanda-v20 Live-4";
     }
 
     ngOnInit() {        

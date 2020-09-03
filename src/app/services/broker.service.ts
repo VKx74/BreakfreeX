@@ -34,10 +34,6 @@ export class BrokerService implements IHealthable {
         return this._isConnected;
     }
 
-    get userInfo(): IBrokerUserInfo {
-        return this._activeBroker ? this._activeBroker.userInfo : null;
-    }
-
     public get isHealthy(): boolean {
         return true;
     }

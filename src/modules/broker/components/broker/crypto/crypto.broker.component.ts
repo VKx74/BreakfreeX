@@ -24,8 +24,8 @@ export class CryptoBrokerComponent implements OnInit {
     }
 
     get connectedBrokerDescription(): string {
-        if (this._brokerService.activeBroker && this._brokerService.userInfo) {
-            return this._brokerService.activeBroker.instanceType + " Username: " + this._brokerService.userInfo.username;
+        if (this._brokerService.activeBroker) {
+            return this._brokerService.activeBroker.instanceType;
         }
     }
 

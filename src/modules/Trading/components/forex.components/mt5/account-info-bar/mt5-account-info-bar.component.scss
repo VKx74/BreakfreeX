@@ -1,0 +1,16 @@
+@import "../../../../styles/themes/themes";
+@import "mixins/themify";
+
+.accountInfoRow{
+  //margin-top: 10px;
+  font-size: 12px;
+  padding-top: 5px;
+}
+
+
+@include themify($themes, true) {
+  .accountInfoRow {
+    color: themed('titleTextColor');
+  }
+}
+

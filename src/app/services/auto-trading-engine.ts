@@ -52,7 +52,7 @@ export class AutoTradingEngine {
         }
 
         const activeBroker = this._brokerService.activeBroker;
-        if (activeBroker.instanceType !== EBrokerInstance.ZenithBroker) {
+        if (activeBroker.instanceType === EBrokerInstance.BitmexBroker) {
             const broker = activeBroker as CryptoBroker;
 
             if (value.TradeActionType === TradeActionType.Place) {

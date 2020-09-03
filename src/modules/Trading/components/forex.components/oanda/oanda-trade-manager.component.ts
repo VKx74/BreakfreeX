@@ -5,6 +5,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
 import {BrokerService} from "@app/services/broker.service";
 import { ForexOrderConfiguratorModalComponent } from '../forex-order-configurator-modal/forex-order-configurator-modal.component';
+import { MT5OrderConfiguratorModalComponent } from '../mt5/order-configurator-modal/mt5-order-configurator-modal.component';
 
 @Component({
     selector: 'oanda-trade-manager',
@@ -32,6 +33,7 @@ export class OandaTradeManagerComponent {
     }
 
     placeOrder() {
-        this._dialog.open(ForexOrderConfiguratorModalComponent);
+        // this._dialog.open(ForexOrderConfiguratorModalComponent);
+        this._dialog.open(MT5OrderConfiguratorModalComponent);
     }
 }

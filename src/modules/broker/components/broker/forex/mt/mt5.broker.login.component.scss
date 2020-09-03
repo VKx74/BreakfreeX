@@ -1,0 +1,63 @@
+@import "../forex.broker.component";
+.disconnect-btn-wrapper,
+.connect-btn-wrapper {
+  justify-content: flex-end;
+
+  button {
+    min-width: 150px;
+  }
+}
+
+.connect-broker-area,
+.connected-broker-area {
+  width: 100%;
+}
+
+.forex-broker-settings-row {
+  width: 100%;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: space-between;
+
+  selector.dropdown {
+    width: 200px;
+
+    ::ng-deep mat-form-field {
+      width: 100%;
+    }
+
+  }
+}
+
+.add-broker-button {
+  margin-left: auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.disconnect {
+  display: flex;
+  align-items: center;
+
+  .fa-trash {
+    margin-left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+}
+
+.mt-image {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+hr {
+  border-top: 1px solid #3c3c3c;
+}
+
+@include themify($themes, true) {
+  .mtInput {
+    color: themed('valueTextColor');
+    background-color: themed('inputInModalsBackgroundColor');
+  }
+}

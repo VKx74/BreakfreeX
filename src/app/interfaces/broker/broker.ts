@@ -6,11 +6,9 @@ import {IInstrument} from "../../models/common/instrument";
 import { EExchangeInstance } from '../exchange/exchange';
 
 export enum EBrokerInstance {
-    ZenithBroker = 'Zenith',
     BitmexBroker = 'Bitmex',
-    OKExBroker = 'OKEx',
-    BinanceBroker = "Binance",
     OandaBroker = "Oanda",
+    MT5 = "MT5"
 }
 
 export interface IBrokerState<T = any> {
@@ -20,11 +18,11 @@ export interface IBrokerState<T = any> {
 
 export interface IBroker {
     accessToken: string;
-    supportedMarkets: EMarketType[];
+    // supportedMarkets: EMarketType[];
     instanceType: EBrokerInstance;
-    userInfo: IBrokerUserInfo;
+    // userInfo: IBrokerUserInfo;
     onSaveStateRequired: Subject<void>;
-    ExchangeInstance: EExchangeInstance;
+    // ExchangeInstance: EExchangeInstance;
 
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]>;
 

@@ -28,9 +28,6 @@
         </div>
         <div [ngSwitch]="selectedBroker">
             <bitmex-broker-login-component *ngSwitchCase="EBrokerInstance.BitmexBroker"></bitmex-broker-login-component>
-            <okex-broker-login-component *ngSwitchCase="EBrokerInstance.OKExBroker"></okex-broker-login-component>
-            <switch-broker-login-component *ngSwitchCase="EBrokerInstance.SwitchBroker"></switch-broker-login-component>
-            <binance-broker-login *ngSwitchCase="EBrokerInstance.BinanceBroker"></binance-broker-login>
         </div>
     </div>
 

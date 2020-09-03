@@ -37,7 +37,7 @@ export class CryptoTradeManagerComponent {
 
     get showInstrumentSearch(): boolean {
         return this._brokerService.activeBroker
-            && this._brokerService.activeBroker.instanceType === EBrokerInstance.BinanceBroker;
+            && this._brokerService.activeBroker.instanceType === EBrokerInstance.BitmexBroker;
     }
 
     // get selectedOrderStatus(): EOrderStatus {

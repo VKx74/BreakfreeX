@@ -11,9 +11,6 @@ import {LoadingModule} from "ngx-loading";
 import {SharedModule} from "Shared";
 import {CryptoBrokerComponent} from "./components/broker/crypto/crypto.broker.component";
 import {BitmexBrokerLoginComponent} from "./components/broker/crypto/bitmex/bitmex.broker.login.component";
-import {OkexBrokerLoginComponent} from "./components/broker/crypto/okex/okex.broker.login.component";
-import {SwitchBrokerLoginComponent} from "./components/broker/crypto/switch/switch.broker.login.component";
-import {BinanceBrokerLoginComponent} from './components/broker/crypto/binance/binance.broker.login.component';
 import {MatInputModule} from "@angular/material/input";
 import {MatTabsModule} from "@angular/material/tabs";
 import {FormErrorDirectiveModule} from "@form-error-directive/form-error-directive.module";
@@ -27,6 +24,7 @@ import {SharedTranslateService} from "@app/localization/shared.token";
 import {MatMenuModule} from "@angular/material/menu";
 import { BrokerDialogComponent } from './components/broker/broker-dialog/broker-dialog.component';
 import {LoaderModule} from "../loader/loader.module";
+import { MT5BrokerLoginComponent } from './components/broker/forex/mt/mt5.broker.login.component';
 
 
 @NgModule({
@@ -56,11 +54,9 @@ import {LoaderModule} from "../loader/loader.module";
         BrokerComponent,
         CryptoBrokerComponent,
         BitmexBrokerLoginComponent,
-        OkexBrokerLoginComponent,
-        SwitchBrokerLoginComponent,
-        BinanceBrokerLoginComponent,
         ForexBrokerComponent,
         OandaBrokerLoginComponent,
+        MT5BrokerLoginComponent,
         BrokerDialogComponent,
     ],
     entryComponents: [

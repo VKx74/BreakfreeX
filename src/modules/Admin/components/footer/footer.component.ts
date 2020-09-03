@@ -39,11 +39,6 @@ export class FooterComponent implements OnInit {
         return this._translateService.get(`footer.${this._applicationTypeService.applicationType}`);
     }
 
-    get username(): string {
-        return this._brokerService.userInfo ?
-            this._brokerService.userInfo.username : 'Not connected';
-    }
-
     get exchange(): string {
         return this._brokerService.activeBroker ?
             this._brokerService.activeBroker.instanceType : 'Not connected';

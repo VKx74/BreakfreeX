@@ -1,0 +1,13 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'tradeManager.orderDialogTitle' | translate}}</h4>
+        </div>
+        <div class="modal-body">
+            <mt5-order-configurator [config]="orderConfig"
+                                       [submitHandler]="submitHandler"
+                                       (onSubmitted)="hide()"></mt5-order-configurator>
+        </div>
+    </div>
+</div>

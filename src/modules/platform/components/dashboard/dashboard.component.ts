@@ -74,6 +74,10 @@ export class DashboardComponent {
     destroy$ = new Subject();
     showExceptionPopup = false;
 
+    get isBrokerConnected(): boolean {
+        return this._brokerService.isConnected;
+    }
+
     get bottomPanelMinSize() {
         return 80;
     }

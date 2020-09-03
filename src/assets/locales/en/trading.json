@@ -89,7 +89,7 @@
     "sharesFilled": "Shares Filled",
     "message": "Message",
     "marginRate": "Margin rate",
-    "marginUsed": "Margin used",
+    "marginUsed": "Used Mr",
     "margin": "Margin",
     "demo": "Demo",
     "closePosition": "Close",
@@ -120,7 +120,20 @@
     },
     "buttons": {
       "place": "Place"
-    }
+    },
+    "equity": "Equity",
+    "marginUsable": "Usable Mr",
+    "pl": "PL",
+    "pipPl": "Pip PL",
+    "netPl": "Net PL",
+    "openPrice": "Open Price",
+    "closePrice": "Close Price",
+    "openTime": "Open Time",
+    "closeTime": "Close Time",
+    "comment": "Comment",
+    "currentPrice": "Current Price",
+    "SL": "SL",
+    "TP": "TP"
   },
   "periodicity": {
     "minute": "Minute",

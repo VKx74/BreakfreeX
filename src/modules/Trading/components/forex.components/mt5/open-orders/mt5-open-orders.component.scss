@@ -1,0 +1,40 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+
+/deep/ .mat-cell {
+  @include themify($themes, true) {
+    color: themed('valueTextColor') !important;
+  }
+}
+
+:host {
+  height: 100%;
+
+  /deep/ {
+    .close-order-column {
+      width: 70px;
+    }
+  }
+
+  .open-orders {
+    //margin-top: 10px;
+  }
+
+  .order-item {
+    cursor: pointer;
+  }
+
+  .tableActions {
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+
+    i {
+      font-size: 19px;
+      position: relative;
+      top: 3px;
+    }
+  }
+
+}

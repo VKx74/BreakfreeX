@@ -1,5 +1,6 @@
 <div [ngSwitch]="instanceType" class="h-100">    
     <oanda-trade-manager *ngSwitchCase="EBrokerInstance.OandaBroker" class="h-100"></oanda-trade-manager>
+    <mt5-trade-manager *ngSwitchCase="EBrokerInstance.MT5" class="h-100"></mt5-trade-manager>
     <div *ngSwitchDefault class="flex align-items-center justify-content-center w-100 h-100">
         <span class="notConnected caption">{{"tradeManager.connectToBroker" | translate}}</span>
     </div>

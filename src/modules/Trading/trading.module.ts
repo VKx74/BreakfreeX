@@ -54,6 +54,15 @@ import { TradingCloseButtonComponent } from './components/trading-close-button/t
 import {TimeZoneManager, TimeZonesModule} from "TimeZones";
 import { TestOandaComponent } from './components/forex.components/test-oanda/test-oanda.component';
 import { OandaAccountInfoBarComponent } from './components/forex.components/oanda/account-info-bar/oanda-account-info-bar.component';
+import { MT5TradeManagerComponent } from './components/forex.components/mt5/mt5-trade-manager.component';
+import { MT5AccountInfoComponent } from './components/forex.components/mt5/account-info/mt5-account-info.component';
+import { MT5AccountInfoBarComponent } from './components/forex.components/mt5/account-info-bar/mt5-account-info-bar.component';
+import { MT5OpenOrdersComponent } from './components/forex.components/mt5/open-orders/mt5-open-orders.component';
+import { MT5HistoryOrdersComponent } from './components/forex.components/mt5/history-orders/mt5-history-orders.component';
+import { MT5PositionsComponent } from './components/forex.components/mt5/positions/mt5-positions.component';
+import { MT5OrderConfiguratorModalComponent } from './components/forex.components/mt5/order-configurator-modal/mt5-order-configurator-modal.component';
+import { MT5OrderConfiguratorComponent } from './components/forex.components/mt5/order-configurator/mt5-order-configurator.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const components = [
     TradeManagerComponent,
@@ -73,15 +82,24 @@ const components = [
 
     ForexTradeManagerComponent,
     OandaTradeManagerComponent,
-    OandaPositionsComponent,
     ForexOrderConfiguratorModalComponent,
     ForexOrderConfiguratorComponent,
     TestOandaComponent,
+    MT5TradeManagerComponent,
+    MT5OrderConfiguratorModalComponent,
+    MT5OrderConfiguratorComponent,
     
     OandaAccountInfoComponent,
     OandaAccountInfoBarComponent,
     OandaOpenOrdersComponent,
     OandaHistoryOrdersComponent,
+    OandaPositionsComponent,
+    
+    MT5AccountInfoComponent,
+    MT5AccountInfoBarComponent,
+    MT5OpenOrdersComponent,
+    MT5HistoryOrdersComponent,
+    MT5PositionsComponent,
 ];
 
 @NgModule({
@@ -117,6 +135,7 @@ const components = [
         MatTableModule,
         FormErrorDirectiveModule,
         LoaderModule,
+        MatSlideToggleModule
         // TimeZonesModule,
     ],
     exports: [

@@ -1,0 +1,20 @@
+<div class="accountInfo">
+    <data-table [rows]="activeAccount ? [activeAccount] : []">
+        <data-table-header-cell columnName="Account" [sortable]="true">{{'tradeManager.account' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Currency" [sortable]="true">{{'currency' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Balance" [sortable]="true">{{'balance' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Pl" [sortable]="true">{{'tradeManager.pl' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Equity" [sortable]="true">{{'tradeManager.equity' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="MarginUsed" [sortable]="true">{{'tradeManager.marginUsed' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="MarginUsable" [sortable]="true">{{'tradeManager.marginUsable' | translate}}</data-table-header-cell>
+
+
+        <data-table-cell columnName="Account"><ng-template let-item>{{item.Account}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Currency"><ng-template let-item>{{item.Currency}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Balance"><ng-template let-item>{{item.Balance}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Pl"><ng-template let-item>{{item.Pl}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Equity"><ng-template let-item>{{item.Equity}}</ng-template></data-table-cell>
+        <data-table-cell columnName="MarginUsed"><ng-template let-item>{{item.MarginUsed}}</ng-template></data-table-cell>
+        <data-table-cell columnName="MarginUsable"><ng-template let-item>{{item.MarginUsable}}</ng-template></data-table-cell>
+    </data-table>
+</div>

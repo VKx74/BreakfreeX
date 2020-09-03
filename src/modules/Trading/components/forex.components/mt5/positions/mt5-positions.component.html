@@ -1,0 +1,36 @@
+<div class="positions">
+    <data-table [rows]="items">
+        <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.openPrice' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="CurrentPrice" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="pipPl" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="OpenTime" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
+    
+        <data-table-cell columnName="Symbol">
+            <ng-template let-item>{{item.Symbol}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Side">
+            <ng-template let-item>
+                <order-side [side]="item.Side"></order-side>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Size">
+            <ng-template let-item>{{item.Size}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Price">
+            <ng-template let-item>{{item.Price}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="CurrentPrice">
+            <ng-template let-item>{{item.CurrentPrice}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="pipPl">
+            <ng-template let-item>{{item.PipPL}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="OpenTime">
+            <ng-template let-item>{{item.Time | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
+        </data-table-cell>
+    </data-table>
+    
+</div>

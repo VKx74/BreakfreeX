@@ -59,10 +59,10 @@ i {
 
 @include themify($themes, true) {
   .section-item {
-   // color: themed('titleTextColor');
+   color: themed('titleTextColor');
   }
 
   .section-label {
-    //color: themed('valueTextColor');
+    color: themed('valueTextColor');
   }
 }

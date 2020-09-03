@@ -1,0 +1,35 @@
+<div class="flex justify-content-center align-items-center svg-image">
+    <img src="assets/img/metatrader.png" class="mt-image">
+</div>
+
+<div class="connected-broker-area" *ngIf="!brokerConnected">
+    <div class="mat-form-field-wrapper crypto-form-unit">
+        <span class="form-unit__label">Server:</span>
+        <selector class="dropdown"
+                [title]="'Select server'"
+                [options]="servers"
+                [selectedOption]="selectedServer"></selector>
+    </div>
+    <div class="mat-form-field-wrapper crypto-form-unit">
+        <span class="form-unit__label">Login:</span>
+        <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="login"
+                placeholder="Login">
+    </div>
+    <div class="mat-form-field-wrapper crypto-form-unit">
+        <span class="form-unit__label">Password:</span>
+        <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="password"
+                placeholder="Password">
+    </div>
+</div>
+
+<div class="connectBrokerBlock">
+    <button class="crypto-button crypto-button_primary w-100" (click)="connect()" *ngIf="!brokerConnected">
+        {{'broker.connect' | translate}}
+    </button>
+    <button class="crypto-button crypto-button_primary w-100" (click)="disconnect()" *ngIf="brokerConnected">
+        {{'broker.disconnect' | translate}}
+    </button>
+</div>
+
+<loader *ngIf="showSpinner"></loader>
+

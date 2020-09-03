@@ -1,47 +1,5 @@
 @import "../forex.broker.component";
 
-/*@import "mixins/themify";
-@import "themes/themes";
-
-.brokers-accounts {
-  display: flex;
-  justify-content: space-between;
-
-  .account,
-  .title {
-    margin-top: 5px;
-  }
-
-  .accounts {
-    max-width: 50%;
-    width: 100%;
-  }
-
-  .account {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-}
-
-.oandaTokenInput {
-    width: 250px;
-    margin-left: 10px;
-}
-
-.oandaAccessToken {
-  font-size: 13px;
-  width: 180px;
-}*/
-
-/*.connectBrokerBlock, .activateAccountBlock {
-  display: flex;
-  justify-content: flex-end;
-  button {
-    margin-top: 14px;
-  }
-}*/
-
 .disconnect-btn-wrapper,
 .connect-btn-wrapper {
   justify-content: flex-end;

@@ -9,15 +9,12 @@
                     <ng-container [ngSwitch]="brokerType">
                         <bitmex-broker-login-component
                                 *ngSwitchCase="EBrokerInstance.BitmexBroker"></bitmex-broker-login-component>
-                        <okex-broker-login-component *ngSwitchCase="EBrokerInstance.OKExBroker"></okex-broker-login-component>
-                        <switch-broker-login-component
-                                *ngSwitchCase="EBrokerInstance.SwitchBroker"></switch-broker-login-component>
-                        <binance-broker-login *ngSwitchCase="EBrokerInstance.BinanceBroker"></binance-broker-login>
                     </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="ApplicationType.Forex">
                     <ng-container [ngSwitch]="brokerType">
                         <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
+                        <mt5-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt5-broker-login>
                     </ng-container>
                 </ng-container>
             </ng-container>
