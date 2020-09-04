@@ -4,6 +4,7 @@ import {map} from 'rxjs/operators';
 import {OandaOrder} from 'modules/Trading/models/forex/oanda/oanda.models';
 import {OrderSide} from "../../../../models/models";
 import { MT5ItemsComponent } from '../mt5-items.component';
+import { MT5Order } from 'modules/Trading/models/forex/mt/mt.models';
 
 
 @Component({
@@ -11,30 +12,22 @@ import { MT5ItemsComponent } from '../mt5-items.component';
     templateUrl: './mt5-open-orders.component.html',
     styleUrls: ['./mt5-open-orders.component.scss']
 })
-export class MT5OpenOrdersComponent extends MT5ItemsComponent<OandaOrder> {
+export class MT5OpenOrdersComponent extends MT5ItemsComponent<MT5Order> {
     OrderSide = OrderSide;
 
-    protected loadItems(): Observable<OandaOrder[]> {
-        if (!this._oandaBrokerService.userInfo) {
-            return of([]);
-        }
-        return this._oandaBrokerService.getOrders().pipe(map((orders: OandaOrder[]) => {
-            // this._resubscribe(orders);
-            return orders;
-        }));
+    protected loadItems(): Observable<MT5Order[]> {
+       return of(this._mt5Broker.orders)
     }
 
     protected _subscribeOnUpdates(): Subscription {
-        return this._oandaBrokerService.onOrderUpdated.subscribe(() => {
+        return this._mt5Broker.onOrdersUpdated.subscribe(() => {
             this.updateItems();
         });
     }
 
-    closeOrder(selectedItem: OandaOrder) {
+    closeOrder(selectedItem: MT5Order) {
         if (selectedItem) {
-            this._oandaBrokerService.cancelOrder({
-                Id: selectedItem.id
-            }).subscribe(
+            this._mt5Broker.cancelOrder(selectedItem.Id).subscribe(
                 () => {
                 },
                 () => {

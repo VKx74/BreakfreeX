@@ -1,4 +1,4 @@
-import { IBrokerUserInfo, OrderSide, OrderTypes } from 'modules/Trading/models/models';
+import { OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 
 export interface MT5TradingAccount {
@@ -75,4 +75,16 @@ export interface MT5Position {
     NetPL?: number;
     PipPL?: number;
     Side: OrderSide;
+}
+
+export interface MT5Server {
+    Broker: string;
+    Name: string;
+    IsDemo: boolean;
+}
+
+export interface MT5ConnectionData {
+    ServerName: string;
+    Login: string;
+    Password: string;
 }

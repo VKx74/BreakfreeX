@@ -51,6 +51,7 @@ export interface ApiUrls {
     exchangeOrder: string;
     tradesReporting: string;
     exchangeUserApi: string;
+    MT5WS: string;
 }
 
 export interface AppConfig {

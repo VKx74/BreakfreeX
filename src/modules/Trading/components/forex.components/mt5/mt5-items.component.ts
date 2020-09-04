@@ -4,6 +4,7 @@ import {Observable, Subscription} from "rxjs";
 import {AlertService} from "@alert/services/alert.service";
 import {RealtimeService} from '@app/services/realtime.service';
 import {InstrumentService} from '@app/services/instrument.service';
+import { MT5Broker } from '@app/services/mt5/mt5.broker';
 
 export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     private _subscription: Subscription;
@@ -16,7 +17,7 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
         this.selectedItem = item;
     }
 
-    constructor(@Inject(OandaBrokerService) protected _oandaBrokerService: OandaBrokerService,
+    constructor(@Inject(MT5Broker) protected _mt5Broker: MT5Broker,
                 @Inject(AlertService) protected _alertService: AlertService) {
 
     }
@@ -29,7 +30,7 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     protected updateItems(): void {
         this.loadItems()
             .subscribe(
-                items => this.items = items,
+                items => this.items = items.slice(),
                 e => this._handleLoadingError(e)
             );
     }

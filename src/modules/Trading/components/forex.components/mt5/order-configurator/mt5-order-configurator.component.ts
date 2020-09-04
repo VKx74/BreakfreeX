@@ -18,6 +18,8 @@ import bind from "bind-decorator";
 import { floatNumberRangeValidator } from "Validators";
 import { OandaBrokerService } from '@app/services/oanda.exchange/oanda.broker.service';
 import { IForexPlaceOrderAction } from 'modules/Trading/models/forex/forex.models';
+import { MT5Broker } from '@app/services/mt5/mt5.broker';
+import { MT5PlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 
 export class MT5OrderConfig {
     instrument: IInstrument;
@@ -94,12 +96,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
     }
 
     ngOnInit() {
-        const broker: OandaBrokerService = this._brokerService.activeBroker as OandaBrokerService;
-
-        this.allowedOrderTypes = broker
-            ? JsUtil.stringEnumToArray<OrderTypes>(OrderTypes).filter((t) => broker.supportedOrderTypes.indexOf(t) !== -1)
-            : [];
-
+        this.allowedOrderTypes = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
 
         if (!this.config.instrument) {
             this._brokerService.getInstruments().subscribe({
@@ -170,24 +167,6 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         }
     }
 
-    private _handleOrderTypeChanged(type: OrderTypes) {
-        // const controls = this.form.controls;
-        // const limitControl = controls['limitPrice'];
-        // const stopControl = controls['stopPrice'];
-
-        // if (this._useLimitPrice(type)) {
-        //     limitControl.enable();
-        // } else {
-        //     limitControl.disable();
-        // }
-
-        // if (this._useStopPrice(type)) {
-        //     stopControl.enable();
-        // } else {
-        //     stopControl.disable();
-        // }
-    }
-
     submit() {
         if (this.submitHandler) {
             this.submitHandler(this.config);
@@ -198,31 +177,33 @@ export class MT5OrderConfiguratorComponent implements OnInit {
     }
 
     private _placeOrder(config: MT5OrderConfig) {
-        // const broker = this._brokerService.activeBroker as OandaBrokerService;
-        // const placeOrderData: IForexPlaceOrderAction = {
-        //     // symbol: config.instrument.symbol,
-        //     symbol: config.instrument.id,
-        //     side: config.side,
-        //     size: config.amount,
-        //     type: config.type,
-        //     price: config.price || config.stopPrice
-        // };
+        const broker = this._brokerService.activeBroker as MT5Broker;
+        const placeOrderData: MT5PlaceOrder = {
+            Comment: this.config.comment,
+            Side: this.config.side,
+            Size: this.config.amount,
+            Symbol: this.config.instrument.id,
+            Type: this.config.type,
+            Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
+            SL: this.config.useSL ? this.config.sl : null,
+            TP: this.config.useTP ? this.config.tp : null
+        };
 
-        // this.processingSubmit = true;
-        // broker.placeOrder(placeOrderData)
-        //     .pipe(finalize(() => {
-        //         this.processingSubmit = false;
-        //         this.onSubmitted.emit();
-        //     }))
-        //     .subscribe(value => {
-        //         if (value.result) {
-        //             this._alertService.success(this._translateService.get('tradeManager.orderPlaced'));
-        //         } else {
-        //             this._alertService.error(value.msg);
-        //         }
-        //     }, error => {
-        //         this._alertService.error(error.message);
-        //     });
+        this.processingSubmit = true;
+        broker.placeOrder(placeOrderData)
+            .pipe(finalize(() => {
+                this.processingSubmit = false;
+                this.onSubmitted.emit();
+            }))
+            .subscribe(value => {
+                if (value.result) {
+                    this._alertService.success(this._translateService.get('tradeManager.orderPlaced'));
+                } else {
+                    this._alertService.error(value.msg);
+                }
+            }, error => {
+                this._alertService.error(error.message);
+            });
     }
 
     setBuyMode() {

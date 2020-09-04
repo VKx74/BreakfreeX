@@ -39,6 +39,7 @@
     "news": "https://events-stage.breakfreetrading.com/news/",
     "exchangeManagementREST": "not used",
     "bftAlgoWS": "wss://fb.breakfreetrading.com",
+    "MT5WS": "wss://test.com",
     "bftAlgoREST": "https://localhost:5001/algoserver/"
 
   },

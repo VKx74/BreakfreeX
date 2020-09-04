@@ -5,6 +5,7 @@ import {ActionResult} from "../../modules/Trading/models/models";
 import {map} from "rxjs/operators";
 import {BitmexBrokerService} from "../services/bitmex.exchange/bitmex.broker.service";
 import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
+import { MT5Broker } from '@app/services/mt5/mt5.broker';
 
 export interface CreateBrokerActionResult extends ActionResult {
     brokerInstance?: IBroker;
@@ -61,6 +62,8 @@ export class BrokerFactory {
                 return this._injector.get(BitmexBrokerService);
             case EBrokerInstance.OandaBroker:
                 return this._injector.get(OandaBrokerService);
+            case EBrokerInstance.MT5:
+                return this._injector.get(MT5Broker);
             default:
                 return null;
         }

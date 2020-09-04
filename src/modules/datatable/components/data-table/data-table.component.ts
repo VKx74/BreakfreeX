@@ -122,7 +122,7 @@ export class DataTableComponent {
 
     }
 
-    trackBy(index: number, item: IdentityActivityLogInfo) {
+    trackBy(index: number, item: any) {
         return index;
     }
 

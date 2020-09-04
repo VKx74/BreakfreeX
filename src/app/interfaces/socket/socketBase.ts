@@ -49,7 +49,6 @@ export abstract class WebsocketBase {
 
     public close(): void {
         if (this._socket) {
-            this._isClosed = true;
             this._socket.close();
             this._socket = null;
         }
@@ -58,6 +57,8 @@ export abstract class WebsocketBase {
             clearInterval(this._interval);
             this._interval = null;
         }
+
+        this._isClosed = true;
     }
 
     public open(): Observable<void> {

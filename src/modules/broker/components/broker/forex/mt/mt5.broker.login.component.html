@@ -4,10 +4,19 @@
 
 <div class="connected-broker-area" *ngIf="!brokerConnected">
     <div class="mat-form-field-wrapper crypto-form-unit">
+        <span class="form-unit__label">Broker:</span>
+        <selector class="dropdown"
+                [title]="'Select broker'"
+                [options]="brokers"
+                (onSelect)="onBrokerSelected($event)"
+                [selectedOption]="selectedBroker"></selector>
+    </div> <div class="mat-form-field-wrapper crypto-form-unit">
         <span class="form-unit__label">Server:</span>
         <selector class="dropdown"
                 [title]="'Select server'"
-                [options]="servers"
+                [optionCaption]="captionText"
+                [options]="getServerBySelectedBroker()"
+                (onSelect)="onServerSelected($event)"
                 [selectedOption]="selectedServer"></selector>
     </div>
     <div class="mat-form-field-wrapper crypto-form-unit">

@@ -89,6 +89,9 @@ import { KaikoInstrumentService } from './services/kaiko.exchange/kaiko.instrume
 import { KaikoHistoryService } from './services/kaiko.exchange/kaiko.history.service';
 import { KaikoRealtimeService } from './services/kaiko.exchange/kaiko.realtime.service';
 import { KaikoSocketService } from './services/socket/kaiko.socket.service';
+import { MT5SocketService } from './services/socket/mt5.socket.service';
+import { MT5Broker } from './services/mt5/mt5.broker';
+import { MT5BrokerServersProvider } from './services/mt5/mt5.servers.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -271,6 +274,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         BitmexInstrumentService,
         BitmexSocketService,
         BFTSocketService,
+        MT5SocketService,
         AlgoService,
 
         OandaInstrumentService,
@@ -281,6 +285,8 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         PolygonSocketService,
         TwelvedataSocketService,
         KaikoSocketService,
+        MT5BrokerServersProvider,
+        MT5Broker,
 
         PolygonInstrumentService,
         PolygonHistoryService,

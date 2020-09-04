@@ -20,7 +20,7 @@
     "agreeUser": "I understand that fees may vary with the actual demand and text and more text",
     "bitcoinTransactionRecommendation": "We recommended a minimum fee of 0.003 abd require at least 0.0002",
     "bitcoinTransactionMessage": "Bitcoin transaction are prioritized on the network by fee.",
-    "orderDialogTitle": "Order Form",
+    "orderDialogTitle": "Order",
     "depositAddressMessage": "Your Personal Multisignature Deposit Address",
     "withdrawAll": "Withdraw all",
     "destinationAddress": "Destination Address",
