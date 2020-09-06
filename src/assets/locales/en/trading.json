@@ -133,7 +133,13 @@
     "comment": "Comment",
     "currentPrice": "Current Price",
     "SL": "SL",
-    "TP": "TP"
+    "TP": "TP",
+    "expirationType": "Expiration Type",
+    "fillPolicy": "Fill Policy",
+    "comment": "Comment",
+    "expirationDate": "Expiration Date",
+    "expirationTime": "Expiration Time",
+    "comment": "Comment"
   },
   "periodicity": {
     "minute": "Minute",

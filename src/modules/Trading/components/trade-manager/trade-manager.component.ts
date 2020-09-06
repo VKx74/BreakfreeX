@@ -15,6 +15,7 @@ import moment = require('moment');
 import {IOutputAreaSizes} from "angular-split";
 import {ToggleBottomPanelSizeService} from "@platform/components/dashboard/toggle-bottom-panel-size.service";
 import {EventsHelper} from "@app/helpers/events.helper";
+import { EBrokerInstance } from '@app/interfaces/broker/broker';
 @Component({
     selector: 'trade-manager',
     templateUrl: 'trade-manager.component.html',
@@ -32,9 +33,15 @@ export class TradeManagerComponent implements OnDestroy {
     brokerInitialized$ = this._brokerService.brokerInitializationState$;
     applicationType$ = this._applicationTypeService.applicationTypeChanged;
     ApplicationType = ApplicationType;
+    EBrokerInstance = EBrokerInstance;
     readonly openBottomPanel = 150;
     readonly openBottomPanelHeight = 250;
     readonly minimizeBottomPanel = 26;
+
+    get instanceType() {
+        const broker = this._brokerService.activeBroker;
+        return broker ? broker.instanceType : null;
+    }
 
     get isOpen () {
         return this._bottomPanelSizeService.sizeBottomPanel() >= this.openBottomPanel;

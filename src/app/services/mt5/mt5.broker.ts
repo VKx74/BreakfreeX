@@ -1,4 +1,4 @@
-import {Observable, Subject, Observer, of, Subscription} from "rxjs";
+import { Observable, Subject, Observer, of, Subscription } from "rxjs";
 import { IMT5Broker } from '@app/interfaces/broker/mt5.broker';
 import { Injectable } from '@angular/core';
 import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5HistoricalOrder, MT5Position, MT5Server, MT5ConnectionData } from 'modules/Trading/models/forex/mt/mt.models';
@@ -11,10 +11,12 @@ import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, MT5LogoutRequ
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { EMarketType } from '@app/models/common/marketType';
+import { IMT5Tick } from '@app/models/common/tick';
 
 @Injectable()
 export class MT5Broker implements IMT5Broker {
 
+    private _tickSubscribers: { [symbol: string]: Subject<IMT5Tick>; } = {};
     private _onAccountInfoUpdated: Subject<MT5TradingAccount> = new Subject<MT5TradingAccount>();
     private _onOrdersUpdated: Subject<MT5Order[]> = new Subject<MT5Order[]>();
     private _onHistoricalOrdersUpdated: Subject<MT5HistoricalOrder[]> = new Subject<MT5HistoricalOrder[]>();
@@ -27,16 +29,15 @@ export class MT5Broker implements IMT5Broker {
     private _ordersHistory: MT5HistoricalOrder[] = [];
     private _positions: MT5Position[] = [];
     private _accountInfo: MT5TradingAccount;
-    private _onMessageSubscription: Subscription;
 
     public get onSaveStateRequired(): Subject<void> {
         return this._onSaveStateRequired;
     }
-    
+
     public get accessToken(): string {
         return this._accessToken;
     }
-    
+
     public get instanceType(): EBrokerInstance {
         return EBrokerInstance.MT5;
     }
@@ -64,7 +65,7 @@ export class MT5Broker implements IMT5Broker {
     public get ordersHistory(): MT5HistoricalOrder[] {
         return this._ordersHistory;
     }
-    
+
     public get positions(): MT5Position[] {
         return this._positions;
     }
@@ -73,7 +74,7 @@ export class MT5Broker implements IMT5Broker {
         return this._accountInfo;
     }
 
-    constructor(private ws: MT5SocketService) { 
+    constructor(private ws: MT5SocketService) {
 
     }
 
@@ -143,43 +144,39 @@ export class MT5Broker implements IMT5Broker {
     }
     init(initData: MT5ConnectionData): Observable<ActionResult> {
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+
+            // test 
+            this._initData = initData;
             observer.next({
                 result: true
             });
             this._initialize();
             return;
-            let request: MT5LoginRequest;
-            this._onMessageSubscription = this.ws.onMessage.subscribe(value => {
-                try {
-                    const msgData = value as MT5ResponseMessageBase;
-                    if (msgData.MessageId === request.MessageId) {
-                       if (msgData.IsSuccess) {
-                            this._initData = initData;
-                            observer.next({
-                                result: true
-                            });
-                            this._initialize();
-                       } else {
-                            observer.error(msgData.ErrorMessage);
-                       }
-                    }
-                    observer.complete();
-                } catch (e) {
-                    console.log('Failed to parse ws message in MT5BrokerServersProvider');
-                    console.log(e);
-                    observer.error(e);
-                    observer.complete();
-                }
-            });
+            // test
 
             this.ws.open().subscribe(value => {
-                request = new MT5LoginRequest(EMT5MessageType.Login);
+                const request = new MT5LoginRequest();
                 request.Data = {
                     Password: initData.Password,
                     User: initData.Login,
                     ServerName: initData.ServerName
                 };
-                this.ws.send(request);
+                this.ws.login(request).subscribe((data: MT5ResponseMessageBase) => {
+                    if (data.IsSuccess) {
+                        this._initData = initData;
+                        observer.next({
+                            result: true
+                        });
+                        this._initialize();
+                    } else {
+                        observer.error(data.ErrorMessage);
+                    }
+                    observer.complete();
+                }, (error) => {
+                    observer.error(error);
+                    observer.complete();
+                 });
+
             }, error => {
                 observer.error(error);
                 this.ws.close();
@@ -193,16 +190,11 @@ export class MT5Broker implements IMT5Broker {
         });
     }
     dispose(): Observable<ActionResult> {
-        if (this._onMessageSubscription) {
-            this._onMessageSubscription.unsubscribe();
-        }
-
-        this.ws.send(new MT5LogoutRequest(EMT5MessageType.Logout));
-        this.ws.close();
+        this.ws.dispose();
 
         return of({
             result: true
-        })
+        });
     }
     saveState(): Observable<IBrokerState<any>> {
         return of({
@@ -210,15 +202,29 @@ export class MT5Broker implements IMT5Broker {
             state: this._initData
         });
     }
+
     loadSate(state: IBrokerState<any>): Observable<ActionResult> {
+        if (state.brokerType === EBrokerInstance.MT5 && state.state) {
+            return this.init(state.state as MT5ConnectionData);
+        }
         return of({
             result: false
-        })
+        });
+    }
+
+    subscribeToTicks(symbol: string, subscription: (value: IMT5Tick) => void): Subscription {
+        if (!this._tickSubscribers[symbol]) {
+            this._tickSubscribers[symbol] = new Subject<IMT5Tick>();
+
+
+        }
+
+        return this._tickSubscribers[symbol].subscribe(subscription);
     }
 
     private _initialize() {
         this._orders = [];
-        
+
         for (let i = 0; i < 15; i++) {
             this._orders.push({
                 Account: "3435345",
@@ -235,7 +241,7 @@ export class MT5Broker implements IMT5Broker {
                 NetPL: 200,
                 PipPL: 0.2,
                 SL: 95.00
-            })
+            });
         }
 
         this._accountInfo = {

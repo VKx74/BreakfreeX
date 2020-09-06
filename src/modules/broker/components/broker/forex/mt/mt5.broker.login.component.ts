@@ -45,7 +45,7 @@ export class MT5BrokerLoginComponent implements OnInit {
                 this._servers.push(server);
 
                 if (this._brokers.indexOf(server.Broker) === -1) {
-                    this._brokers.push(server.Broker)
+                    this._brokers.push(server.Broker);
                 }
             }
 

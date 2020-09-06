@@ -14,11 +14,8 @@
                     <div class="crypto-form-unit control-date">
                         <span class="form-unit__label">Date</span>
                         <mat-form-field class="crypto-date-input with-hint full-width">
-                            <input matInput readonly [matDatepicker]="date"
-                                   placeholder="Date of event"
-                                   formControlName="date"
-                                   (click)="date.open()"
-                            >
+                            <input matInput readonly [matDatepicker]="date" placeholder="Date of event"
+                                formControlName="date" (click)="date.open()">
                             <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                             <mat-datepicker #date></mat-datepicker>
                             <mat-error>Required field</mat-error>
@@ -27,12 +24,8 @@
                     <div class="crypto-form-unit control-time">
                         <span class="form-unit__label">Time</span>
                         <mat-form-field class="crypto-date-input with-hint full-width">
-                            <input matInput
-                                   [ngxTimepicker]="time"
-                                   placeholder="Time" [disableClick]="true"
-                                   (click)="time.open()"
-                                   formControlName="time"
-                                   readonly>
+                            <input matInput [ngxTimepicker]="time" placeholder="Time" [disableClick]="true"
+                                (click)="time.open()" formControlName="time" readonly>
                             <ngx-material-timepicker-toggle [for]="time"></ngx-material-timepicker-toggle>
                             <ngx-material-timepicker #time></ngx-material-timepicker>
                             <mat-error>Required field</mat-error>
@@ -62,8 +55,8 @@
                         <span class="form-unit__label">Volatility</span>
                         <mat-form-field class="crypto-select with-hint full-width">
                             <mat-select formControlName="volatility">
-                                <mat-option *ngFor="let volatility of volatilityList"
-                                            [value]="volatility">{{EEventVolatility[volatility]}}</mat-option>
+                                <mat-option *ngFor="let volatility of volatilityList" [value]="volatility">
+                                    {{EEventVolatility[volatility]}}</mat-option>
                             </mat-select>
                             <mat-error>Required field</mat-error>
                         </mat-form-field>
@@ -98,11 +91,8 @@
                     <div class="crypto-form-unit margin-bottom">
                         <span class="form-unit__label">Symbols</span>
                         <div class="tags-wrapper">
-                            <tags-input [tags]="symbols"
-                                        [mode]="TagsInputMode.Manual"
-                                        placeholder="Add symbols..."
-                                        (onAddTag)="addSymbol($event)"
-                                        (onRemoveTag)="removeSymbol($event)">
+                            <tags-input [tags]="symbols" [mode]="TagsInputMode.Manual" placeholder="Add symbols..."
+                                (onAddTag)="addSymbol($event)" (onRemoveTag)="removeSymbol($event)">
                             </tags-input>
                         </div>
                     </div>
@@ -122,18 +112,15 @@
         <div class="modal-footer">
             <div class="btns-wrapper">
                 <ng-container>
-                    <button class="crypto-button crypto-button_primary full-width"
-                            [disabled]="formGroup.invalid"
-                            [ngClass]="processing ? 'is-loading' : ''"
-                            *ngIf="mode === EventEditorAction.Create"
-                            (click)="createEvent()">
+                    <button class="crypto-button crypto-button_primary full-width" [disabled]="formGroup.invalid"
+                        [ngClass]="processing ? 'is-loading' : ''" *ngIf="mode === EventEditorAction.Create"
+                        (click)="createEvent()">
                         Create
                     </button>
-                    <button class="crypto-button crypto-button_primary full-width"
-                            [disabled]="formGroup.invalid"
-                            [ngClass]="processing ? 'is-loading' : ''"
-                            *ngIf="mode === EventEditorAction.Update || mode === EventEditorAction.SetActual"
-                            (click)="updateEvent(mode)">
+                    <button class="crypto-button crypto-button_primary full-width" [disabled]="formGroup.invalid"
+                        [ngClass]="processing ? 'is-loading' : ''"
+                        *ngIf="mode === EventEditorAction.Update || mode === EventEditorAction.SetActual"
+                        (click)="updateEvent(mode)">
                         Update
                     </button>
                 </ng-container>

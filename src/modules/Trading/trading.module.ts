@@ -63,6 +63,7 @@ import { MT5PositionsComponent } from './components/forex.components/mt5/positio
 import { MT5OrderConfiguratorModalComponent } from './components/forex.components/mt5/order-configurator-modal/mt5-order-configurator-modal.component';
 import { MT5OrderConfiguratorComponent } from './components/forex.components/mt5/order-configurator/mt5-order-configurator.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 
 const components = [
     TradeManagerComponent,
@@ -135,7 +136,8 @@ const components = [
         MatTableModule,
         FormErrorDirectiveModule,
         LoaderModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        NgxMaterialTimepickerModule
         // TimeZonesModule,
     ],
     exports: [

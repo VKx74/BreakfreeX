@@ -20,6 +20,18 @@ export enum OrderSide {
     Sell = 'Sell'
 }
 
+export enum OrderFillPolicy {
+    FOK = 'FOK',
+    IOC = 'Sell',
+    FF = 'FF'
+}
+
+export enum OrderExpirationType {
+    GTC = 'GTC',
+    Today = 'Today',
+    Specified = 'Specified'
+}
+
 export interface ActionResult {
     result: boolean;
     msg?: string;

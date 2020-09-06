@@ -9,6 +9,14 @@ export interface ITick {
     time: number;
 }
 
+export interface IMT5Tick {
+    symbol: string;
+    volume: number;
+    last: number;
+    bid: number;
+    ask: number;
+}
+
 export interface ILevel2 {
     instrument: IInstrument;
     buys: ITick[];

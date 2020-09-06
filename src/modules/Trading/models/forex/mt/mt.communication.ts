@@ -1,7 +1,15 @@
 export enum EMT5MessageType {
     GetBrokers = "GetBrokers",
     Login = "Login",
-    Logout = "Logout"
+    Logout = "Logout",
+    SubscribeQuote = "SubscribeQuote",
+    OrdersHistory = "OrdersHistory",
+    Quote = "Quote",
+    AccountUpdate = "AccountUpdate",
+    OrdersUpdate = "OrdersUpdate",
+    PlaceOrder = "PlaceOrder",
+    CloseOrder = "CloseOrder",
+    EditOrder = "EditOrder",
 }
 
 export abstract class MT5RequestMessageBase {
@@ -21,6 +29,7 @@ export abstract class MT5ResponseMessageBase {
     public IsSuccess: boolean;
     public Data?: any;
     public ErrorMessage?: string;
+    public Type?: string;
 }
 
 export interface IMT5Server {
@@ -34,14 +43,187 @@ export interface IMT5LoginData {
     ServerName: string;
 }
 
-export class MT5GetServersRequest extends MT5RequestMessageBase {}
+export interface IMT5SubscriptionData {
+    Subscribe: boolean;
+    Symbol: string;
+}
+
+export interface IMT5QuoteData {
+    Symbol: string;
+    Bid: number;
+    Ask: number;
+    Last: number;
+    Volume: number;
+    Time: number;
+}
+
+export interface IMT5AccountUpdatedData {
+    Currency: string;
+    CompanyName: string;
+    Profit: number;
+    Margin: number;
+    FreeMargin: number;
+    Equity: number;
+    Balance: number;
+}
+
+export interface IMT5OrderData {
+    Ticket: number;
+    Profit: number;
+    Swap: number;
+    Commission: number;
+    ClosePrice: number;
+    CloseTime: number;
+    CloseVolume: number;
+    OpenPrice: number;
+    OpenTime: number;
+    Lots: number;
+    ContractSize: number;
+    ExpertId: number;
+    Side: string;
+    Type: string;
+    Symbol: string;
+    Comment: string;
+    State: string;
+    StopLoss: number;
+    TakeProfit: number;
+    Digits: number;
+    ProfitRate: number;
+    StopLimitPrice: number;
+    ExpirationType: string;
+    ExpirationDate: number;
+}
+
+export interface IMT5PlaceOrderData {
+    Symbol: string;
+    Lots: number;
+    Price: number;
+    Side: string;
+    Type: string;
+    StopLoss: number;
+    TakeProfit: number;
+    Deviation: number;
+    Comment: string;
+    ExpertID: number;
+    FillPolicy: string;
+    StopLimit: number;
+    ExpirationType: string;
+    ExpirationDate: number;
+    CloseByTicket: number;
+}
+
+export interface IMT5CloseOrderData {
+    Ticket: number;
+    Symbol: string;
+    Price: number;
+    Lots: number;
+    Side: string;
+    Type: string;
+    Deviation: number;
+    FillPolicy: string;
+    ExpertID: number;
+    Comment: string;
+    CloseByTicket: number;
+}
+
+export interface IMT5EditOrderData {
+    Ticket: number;
+    Symbol: string;
+    Lots: number;
+    Price: number;
+    Side: string;
+    Type: string;
+    StopLoss: number;
+    TakeProfit: number;
+    ExpertId: number;
+    StopLimitPrice: number;
+    ExpirationType: string;
+    ExpirationDate: number;
+    Comment: string;
+}
+
+export interface IMT5DateRangeData {
+    From: number;
+    To: number;
+}
+
+// Responses
 
 export class MT5GetServersResponse extends MT5ResponseMessageBase {
     public Data: IMT5Server[];
 }
 
-export class MT5LoginRequest extends MT5RequestMessageBase {
-    public Data: IMT5LoginData;
+export class MT5QuoteResponse extends MT5ResponseMessageBase {
+    public Data: IMT5QuoteData;
 }
 
-export class MT5LogoutRequest extends MT5RequestMessageBase {}
+export class MT5AccountUpdateResponse extends MT5ResponseMessageBase {
+    public Data: IMT5AccountUpdatedData;
+}
+
+export class MT5LoginResponse extends MT5ResponseMessageBase {
+    public Data: string[];
+}
+
+
+// Requests
+
+export class MT5LoginRequest extends MT5RequestMessageBase {
+    public Data: IMT5LoginData;
+
+    constructor() {
+        super(EMT5MessageType.Login);
+    }
+}
+
+export class MT5GetServersRequest extends MT5RequestMessageBase {
+    constructor() {
+        super(EMT5MessageType.GetBrokers);
+    }
+}
+
+export class MT5LogoutRequest extends MT5RequestMessageBase {
+    constructor() {
+        super(EMT5MessageType.Logout);
+    }
+}
+
+export class SubscribeQuote extends MT5RequestMessageBase {
+    public Data: IMT5SubscriptionData;
+
+    constructor() {
+        super(EMT5MessageType.SubscribeQuote);
+    }
+}
+
+export class MT5PlaceOrderRequest extends MT5RequestMessageBase {
+    public Data: IMT5PlaceOrderData;
+
+    constructor() {
+        super(EMT5MessageType.PlaceOrder);
+    }
+}
+
+export class MT5CloseOrderRequest extends MT5RequestMessageBase {
+    public Data: IMT5CloseOrderData;
+
+    constructor() {
+        super(EMT5MessageType.CloseOrder);
+    }
+}
+
+export class MT5EditOrderRequest extends MT5RequestMessageBase {
+    public Data: IMT5EditOrderData;
+
+    constructor() {
+        super(EMT5MessageType.EditOrder);
+    }
+}
+
+export class MT5GetOrderHistoryRequest extends MT5RequestMessageBase {
+    public Data: IMT5DateRangeData;
+
+    constructor() {
+        super(EMT5MessageType.OrdersHistory);
+    }
+}

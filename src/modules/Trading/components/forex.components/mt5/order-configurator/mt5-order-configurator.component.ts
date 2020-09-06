@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
 import { ITick } from "@app/models/common/tick";
-import { OrderSide, OrderTypes } from "../../../../models/models";
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from "../../../../models/models";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
@@ -26,6 +26,9 @@ export class MT5OrderConfig {
     side: OrderSide;
     amount: number;
     type: OrderTypes;
+    fillPolicy: OrderFillPolicy;
+    expirationType: OrderExpirationType;
+    expirationDate?: number;
     price?: number; // Limit price
     sl?: number; // Stop price
     tp?: number; // Stop price
@@ -40,7 +43,9 @@ export class MT5OrderConfig {
             amount: 1,
             type: OrderTypes.Market,
             useSL: false,
-            useTP: false
+            useTP: false,
+            expirationType: OrderExpirationType.GTC,
+            fillPolicy: OrderFillPolicy.FF
         };
     }
 }
@@ -60,6 +65,9 @@ export type MT5OrderComponentSubmitHandler = (config: MT5OrderConfig) => void;
 })
 export class MT5OrderConfiguratorComponent implements OnInit {
     private _config: MT5OrderConfig = MT5OrderConfig.create();
+    private _oneDayPlus = new Date(new Date().getTime() + (1000 * 24 * 60 * 60));
+    private _selectedTime: string = `${this._oneDayPlus.getUTCHours()}:${this._oneDayPlus.getUTCMinutes()}`;
+    private _selectedDate: Date = this._oneDayPlus;
     private marketSubscription: Subscription;
 
     @Input()
@@ -75,12 +83,32 @@ export class MT5OrderConfiguratorComponent implements OnInit {
     @Input() submitHandler: MT5OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
 
+    set selectedTime(value: string) {
+        if (value) {
+            this._selectedTime = value;
+        }
+    }
+    get selectedTime(): string {
+        return this._selectedTime;
+    } 
+    
+    set selectedDate(value: Date) {
+        if (value) {
+            this._selectedDate = value;
+        }
+    }
+    get selectedDate(): Date {
+        return this._selectedDate;
+    }
+
     minAmountValue: number = 0.0001;
     minPriceValue: number = 0.0001;
     priceStep: number = 0.00001;
     amountStep: number = 0.00001;
     lastTick: ITick;
     allowedOrderTypes: OrderTypes[] = [];
+    orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
+    expirationTypes: OrderExpirationType[] = [OrderExpirationType.GTC, OrderExpirationType.Specified, OrderExpirationType.Today];
     processingSubmit: boolean;
 
     get instrumentSearchCallback(): (e?: EExchange, s?: string) => Observable<IInstrument[]> {
@@ -133,12 +161,24 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.Stop;
     }
 
+    isExpirationVisible() {
+        return this.config.expirationType === OrderExpirationType.Specified;
+    }
+
     handleInstrumentChange(instrument: IInstrument) {
         this._selectInstrument(instrument);
     }
 
     handleTypeSelected(type: OrderTypes) {
         this.config.type = type;
+    }
+
+    handleExpirationTypeSelected(type: OrderExpirationType) {
+        this.config.expirationType = type;
+    }
+
+    handleFillPolicySelected(type: OrderFillPolicy) {
+        this.config.fillPolicy = type;
     }
 
     private _selectInstrument(instrument: IInstrument) {

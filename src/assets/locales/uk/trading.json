@@ -133,7 +133,12 @@
     "comment": "Коментар",
     "currentPrice": "Поточна",
     "SL": "SL",
-    "TP": "TP"
+    "TP": "TP",
+    "expirationType": "Expiration Type",
+    "fillPolicy": "Fill Policy",
+    "comment": "Comment",
+    "expirationDate": "Expiration Date",
+    "expirationTime": "Expiration Time",
   },
   "periodicity": {
     "minute": "Хвилина",

@@ -43,7 +43,7 @@ export class MT5BrokerServersProvider {
     
                         for (const serverResponse of response.Data) {
                             for (const server of serverResponse.Servers) {
-                                const is_demo = server.indexOf("Demo") != -1;
+                                const is_demo = server.indexOf("Demo") !== -1;
                                 this._servers.push({
                                     Broker: serverResponse.BrokerName,
                                     Name: server,
@@ -66,7 +66,7 @@ export class MT5BrokerServersProvider {
             });
 
             this.ws.open().subscribe(value => {
-                request = new MT5GetServersRequest(EMT5MessageType.GetBrokers);
+                request = new MT5GetServersRequest();
                 this.ws.send(request);
             }, error => {
                 observer.error(error);

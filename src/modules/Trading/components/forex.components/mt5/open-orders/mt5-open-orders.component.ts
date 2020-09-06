@@ -16,7 +16,7 @@ export class MT5OpenOrdersComponent extends MT5ItemsComponent<MT5Order> {
     OrderSide = OrderSide;
 
     protected loadItems(): Observable<MT5Order[]> {
-       return of(this._mt5Broker.orders)
+       return of(this._mt5Broker.orders);
     }
 
     protected _subscribeOnUpdates(): Subscription {

@@ -32,7 +32,8 @@
                 <div class="crypto-form-unit margin-bottom">
                     <div class="form-unit__label">{{'amount' | translate}}</div>
                     <mat-form-field class="crypto-input full-width">
-                        <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number" [step]="priceStep" [(ngModel)]="config.amount">
+                        <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
+                            [step]="priceStep" [(ngModel)]="config.amount">
                     </mat-form-field>
                 </div>
             </div>
@@ -50,7 +51,8 @@
                 <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
                     <div class="form-unit__label">{{'limitPrice' | translate}}</div>
                     <mat-form-field class="crypto-input full-width">
-                        <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep" [range]="{min: minPriceValue}" [(ngModel)]="config.price">
+                        <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                            [range]="{min: minPriceValue}" [(ngModel)]="config.price">
                     </mat-form-field>
                 </div>
             </div>
@@ -60,22 +62,76 @@
         <div class="flex-row">
             <div class="flex-column">
                 <div class="crypto-form-unit margin-bottom">
-                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL">{{'tradeManager.stop' | translate}}</mat-slide-toggle>
+                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL">
+                        {{'tradeManager.stop' | translate}}</mat-slide-toggle>
                     <mat-form-field class="crypto-input full-width" *ngIf="config.useSL">
-                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}" [step]="priceStep" [(ngModel)]="config.sl">
+                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                            [step]="priceStep" [(ngModel)]="config.sl">
                     </mat-form-field>
                 </div>
             </div>
             <div class="flex-column">
                 <div class="crypto-form-unit margin-bottom">
-                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">{{'tradeManager.limit' | translate}}</mat-slide-toggle>
+                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">
+                        {{'tradeManager.limit' | translate}}</mat-slide-toggle>
                     <mat-form-field class="crypto-input full-width" *ngIf="config.useTP">
-                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}" [step]="priceStep"
-                            placeholder="0.0" [(ngModel)]="config.tp">
+                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                            [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
                     </mat-form-field>
                 </div>
             </div>
 
+        </div>
+
+        <div class="flex-row">
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
+                    <selector [selectedOption]="config.expirationType" [options]="expirationTypes"
+                        (onSelect)="handleExpirationTypeSelected($event)"></selector>
+                </div>
+            </div>
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'tradeManager.fillPolicy' | translate}}</div>
+                    <selector [selectedOption]="config.fillPolicy" [options]="orderFillPolicies"
+                        (onSelect)="handleFillPolicySelected($event)"></selector>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-row" [class.disabled]="!isExpirationVisible()">
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
+                    <mat-form-field class="crypto-input full-width">
+                        <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime" [ngxTimepicker]="time">
+                        <ngx-material-timepicker #time></ngx-material-timepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
+                    <mat-form-field class="crypto-input full-width">
+                        <input matInput readonly [matDatepicker]="end"
+                            [(ngModel)]="selectedDate"
+                            (click)="end.open()" placeholder="Date">
+                        <mat-datepicker #end></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-row">
+            <div class="crypto-form-unit margin-bottom">
+                <div class="form-unit__label">{{'tradeManager.comment' | translate}}</div>
+                <mat-form-field class="crypto-input full-width">
+                    <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
+                        [(ngModel)]="config.comment">
+            </textarea>
+                </mat-form-field>
+            </div>
         </div>
 
         <div class="buttons-wrapper flex justify-flex-end">
