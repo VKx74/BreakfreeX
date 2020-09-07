@@ -42,6 +42,14 @@
     margin-bottom: 15px;
   }
 
+  .bid-text {
+    color: $lightRedColor;
+  }
+
+  .ask-text {
+    color: $lightGreenColor;
+  }
+
   .submit-btn.order-side-buy {
     background: $lightGreenColor;
     color: #fff;

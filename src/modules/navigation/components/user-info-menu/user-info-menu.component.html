@@ -28,7 +28,7 @@
        <ng-container *ngIf="(activeBroker$ | async)?.userInfo as userInfo; else broker_not_connected">
            <ng-container *ngIf="(applicationType$ | async) as applicationType">
                <ng-container *ngIf="applicationType === ApplicationType.Forex">
-                   <div class="flex justify-space-between item">
+                   <!-- <div class="flex justify-space-between item">
                        <div class="item-name">{{'userInfoMenu.balance' | translate}}</div>
                        <div class="item-value" numberColor>{{userInfo?.Balance}}</div>
                    </div>
@@ -47,7 +47,7 @@
                    <div class="flex justify-space-between item">
                        <div class="item-name">{{'userInfoMenu.availableMargin' | translate}}</div>
                        <div class="item-value" numberColor>{{userInfo?.MarginAvailable}}</div>
-                   </div>
+                   </div> -->
                </ng-container>
                <ng-container *ngIf="applicationType === ApplicationType.Crypto">
                    <div class="flex justify-space-between item">

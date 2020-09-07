@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
-import { ITick } from "@app/models/common/tick";
+import { ITick, IMT5Tick } from "@app/models/common/tick";
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from "../../../../models/models";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IInstrument } from "@app/models/common/instrument";
@@ -74,6 +74,11 @@ export class MT5OrderConfiguratorComponent implements OnInit {
     set config(value: MT5OrderConfig) {
         if (value) {
             this._config = value;
+
+            if (this._config.expirationDate) {
+                this._selectedDate = new Date(this._config.expirationDate);
+                this._selectedTime = `${this._selectedDate.getUTCHours()}:${this._selectedDate.getUTCMinutes()}`;
+            }
         }
     }
     get config(): MT5OrderConfig {
@@ -105,7 +110,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
     minPriceValue: number = 0.0001;
     priceStep: number = 0.00001;
     amountStep: number = 0.00001;
-    lastTick: ITick;
+    lastTick: IMT5Tick;
     allowedOrderTypes: OrderTypes[] = [];
     orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
     expirationTypes: OrderExpirationType[] = [OrderExpirationType.GTC, OrderExpirationType.Specified, OrderExpirationType.Today];
@@ -117,8 +122,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         };
     }
 
-    constructor(private _realtimeService: RealtimeService,
-        private _alertService: AlertService,
+    constructor(private _alertService: AlertService,
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
     }
@@ -190,18 +194,18 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         this.config.instrument = instrument;
 
         if (instrument) {
-            this.lastTick = this._realtimeService.getLastTick(instrument);
-            this.marketSubscription = this._realtimeService.subscribeToTicks(instrument, (tick: ITick) => {
+            const broker = this._brokerService.activeBroker as MT5Broker;
+            this.marketSubscription = broker.subscribeToTicks(instrument.symbol, (tick: IMT5Tick) => {
                 this.lastTick = tick;
 
                 if (tick && !this._config.price) {
-                    this._config.price = tick.price;
+                    this._config.price = tick.last;
                 }
                 if (tick && !this._config.sl) {
-                    this._config.sl = tick.price;
+                    this._config.sl = tick.last;
                 }
                 if (tick && !this._config.tp) {
-                    this._config.tp = tick.price;
+                    this._config.tp = tick.last;
                 }
             });
         }
@@ -212,11 +216,17 @@ export class MT5OrderConfiguratorComponent implements OnInit {
             this.submitHandler(this.config);
             this.onSubmitted.emit();
         } else {
-            this._placeOrder(this.config);
+            this._placeOrder();
         }
     }
 
-    private _placeOrder(config: MT5OrderConfig) {
+    private _getSetupDate(): number {
+        const dateString = this._selectedDate.toISOString().split("T")[0];
+        const timeString = `${this._selectedTime}:00.500Z`;
+        return new Date(`${dateString}T${timeString}`).getTime() / 1000;
+    }
+
+    private _placeOrder() {
         const broker = this._brokerService.activeBroker as MT5Broker;
         const placeOrderData: MT5PlaceOrder = {
             Comment: this.config.comment,
@@ -226,7 +236,10 @@ export class MT5OrderConfiguratorComponent implements OnInit {
             Type: this.config.type,
             Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
             SL: this.config.useSL ? this.config.sl : null,
-            TP: this.config.useTP ? this.config.tp : null
+            TP: this.config.useTP ? this.config.tp : null,
+            FillPolicy: this.config.fillPolicy,
+            ExpirationType: this.config.expirationType,
+            ExpirationDate: this._getSetupDate()
         };
 
         this.processingSubmit = true;

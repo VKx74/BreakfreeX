@@ -122,12 +122,12 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._tradingTranslateService.stream('level2ComponentName'),
                 componentIdentifier: ComponentIdentifier.level2View,
             },*/
-            {
+            /* {
                 component: TestOandaComponent,
                 previewImgClass: TestOandaComponent.previewImgClass,
                 componentName: this._tradingTranslateService.stream('tradeManagerComponentName'),                
                 componentIdentifier: ComponentIdentifier.forexTradeManager,                         
-            },            
+            }, */           
             /*{
                 component: NewsRootComponent,
                 previewImgClass: NewsRootComponent.previewImgClass,

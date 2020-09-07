@@ -6,7 +6,10 @@
         <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.openPrice' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="CurrentPrice" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="pipPl" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="OpenTime" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="netPl" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Commission" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="close" [columnWidth]="30"></data-table-header-cell>
     
         <data-table-cell columnName="Symbol">
             <ng-template let-item>{{item.Symbol}}</ng-template>
@@ -28,8 +31,21 @@
         <data-table-cell columnName="pipPl">
             <ng-template let-item>{{item.PipPL}}</ng-template>
         </data-table-cell>
-        <data-table-cell columnName="OpenTime">
-            <ng-template let-item>{{item.Time | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
+        <data-table-cell columnName="netPl">
+            <ng-template let-item>{{item.NetPl}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Commission">
+            <ng-template let-item>{{item.Commission}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Swap">
+            <ng-template let-item>{{item.Swap}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="close">
+            <ng-template let-item>
+                <div class="flex justify-content-center">
+                    <trading-close-button  (click)="closePosition(item)"></trading-close-button>
+                </div>
+            </ng-template>
         </data-table-cell>
     </data-table>
     

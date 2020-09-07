@@ -67,8 +67,8 @@
     "balance": "Balance",
     "realized": "Realized",
     "unrealized": "Unrealized",
-    "usedMargin": "Used Margin",
-    "availableMargin": "Available Margin",
+    "usedMargin": "Margin",
+    "availableMargin": "Free Margin",
     "username": "Username",
     "notConnectedBroker": "Broker is not connected"
   },

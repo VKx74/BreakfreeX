@@ -122,7 +122,8 @@
       "place": "Розмістити"
     },
     "equity": "Equity",
-    "marginUsable": "Usable Mr",
+    "marginUsable": "Free margin",
+    "freeMargin": "Free Margin",
     "pl": "PL",
     "pipPl": "Pip PL",
     "netPl": "Net PL",
@@ -136,9 +137,10 @@
     "TP": "TP",
     "expirationType": "Expiration Type",
     "fillPolicy": "Fill Policy",
-    "comment": "Comment",
+    "swap": "Swap",
+    "commission": "Commission",
     "expirationDate": "Expiration Date",
-    "expirationTime": "Expiration Time",
+    "expirationTime": "Expiration Time"
   },
   "periodicity": {
     "minute": "Хвилина",

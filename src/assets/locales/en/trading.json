@@ -89,7 +89,7 @@
     "sharesFilled": "Shares Filled",
     "message": "Message",
     "marginRate": "Margin rate",
-    "marginUsed": "Used Mr",
+    "marginUsed": "Used",
     "margin": "Margin",
     "demo": "Demo",
     "closePosition": "Close",
@@ -123,6 +123,7 @@
     },
     "equity": "Equity",
     "marginUsable": "Usable Mr",
+    "freeMargin": "Free Margin",
     "pl": "PL",
     "pipPl": "Pip PL",
     "netPl": "Net PL",
@@ -136,10 +137,10 @@
     "TP": "TP",
     "expirationType": "Expiration Type",
     "fillPolicy": "Fill Policy",
-    "comment": "Comment",
+    "swap": "Swap",
+    "commission": "Commission",
     "expirationDate": "Expiration Date",
-    "expirationTime": "Expiration Time",
-    "comment": "Comment"
+    "expirationTime": "Expiration Time"
   },
   "periodicity": {
     "minute": "Minute",

@@ -19,6 +19,7 @@
         <div class="flex trade-managers-wrapper" *ngIf="isOpen; else accountInfo">
             <crypto-trade-manager *ngSwitchCase="ApplicationType.Crypto" class="h-100"></crypto-trade-manager>
             <forex-trade-manager *ngSwitchCase="ApplicationType.Forex" class="h-100"></forex-trade-manager>
+            <forex-trade-manager *ngSwitchCase="ApplicationType.All" class="h-100"></forex-trade-manager>
         </div>
         <!-- <div class="sell-buy" *ngIf="isOpen">
             <order></order>

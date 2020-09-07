@@ -41,7 +41,7 @@ export class MT5PositionsComponent extends MT5ItemsComponent<MT5Position> {
         super.ngOnDestroy();
     }
 
-    trackById(index, item: OandaPosition) {
-        return index;
+    trackById(index, item: MT5Position) {
+        return 1;
     }
 }

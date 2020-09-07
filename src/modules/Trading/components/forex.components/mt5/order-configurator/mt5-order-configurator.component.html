@@ -2,9 +2,17 @@
 
     <div class="total">
         <div class="flex justify-space-between">
-            <div class="crypto-text is-secondary is-small">{{config.instrument?.symbol}} {{'lastPrice' | translate}}
+            <div class="crypto-text  is-secondary  is-small">
+                <div>Ask</div>
+                <div class="ask-text">1.12321</div>
+                <!-- <div>{{lastTick?.ask}}</div> -->
             </div>
-            <div class="crypto-text is-small">{{lastTick?.price}}</div>
+            <div class="crypto-text is-secondary">{{config.instrument?.symbol}}</div>
+            <div class="crypto-text is-secondary is-small">
+                <div>Bid</div>
+                <div class="bid-text">1.12321</div>
+                <!-- <div>{{lastTick?.bid}}</div> -->
+            </div>
         </div>
     </div>
 
@@ -105,7 +113,7 @@
                 <div class="crypto-form-unit margin-bottom">
                     <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
                     <mat-form-field class="crypto-input full-width">
-                        <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime" [ngxTimepicker]="time">
+                        <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime" [ngxTimepicker]="time" [format]='24'>
                         <ngx-material-timepicker #time></ngx-material-timepicker>
                     </mat-form-field>
                 </div>

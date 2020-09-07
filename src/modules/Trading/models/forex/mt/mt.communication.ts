@@ -90,6 +90,7 @@ export interface IMT5OrderData {
     Digits: number;
     ProfitRate: number;
     StopLimitPrice: number;
+    FillPolicy: string;
     ExpirationType: string;
     ExpirationDate: number;
 }
@@ -97,19 +98,19 @@ export interface IMT5OrderData {
 export interface IMT5PlaceOrderData {
     Symbol: string;
     Lots: number;
-    Price: number;
+    Price?: number;
     Side: string;
     Type: string;
-    StopLoss: number;
-    TakeProfit: number;
-    Deviation: number;
+    StopLoss?: number;
+    TakeProfit?: number;
+    Deviation?: number;
     Comment: string;
-    ExpertID: number;
+    ExpertID?: number;
     FillPolicy: string;
-    StopLimit: number;
+    StopLimit?: number;
     ExpirationType: string;
-    ExpirationDate: number;
-    CloseByTicket: number;
+    ExpirationDate?: number;
+    CloseByTicket?: number;
 }
 
 export interface IMT5CloseOrderData {
@@ -119,26 +120,26 @@ export interface IMT5CloseOrderData {
     Lots: number;
     Side: string;
     Type: string;
-    Deviation: number;
+    Deviation?: number;
     FillPolicy: string;
-    ExpertID: number;
+    ExpertID?: number;
     Comment: string;
-    CloseByTicket: number;
+    CloseByTicket?: number;
 }
 
 export interface IMT5EditOrderData {
     Ticket: number;
     Symbol: string;
     Lots: number;
-    Price: number;
+    Price?: number;
     Side: string;
     Type: string;
-    StopLoss: number;
-    TakeProfit: number;
-    ExpertId: number;
-    StopLimitPrice: number;
+    StopLoss?: number;
+    TakeProfit?: number;
+    ExpertId?: number;
+    StopLimitPrice?: number;
     ExpirationType: string;
-    ExpirationDate: number;
+    ExpirationDate?: number;
     Comment: string;
 }
 
@@ -161,8 +162,28 @@ export class MT5AccountUpdateResponse extends MT5ResponseMessageBase {
     public Data: IMT5AccountUpdatedData;
 }
 
+export class MT5OrdersUpdateResponse extends MT5ResponseMessageBase {
+    public Data: IMT5OrderData[];
+}
+
 export class MT5LoginResponse extends MT5ResponseMessageBase {
     public Data: string[];
+}
+
+export class MT5PlaceOrderResponse extends MT5ResponseMessageBase {
+    public Data: IMT5OrderData;
+}
+
+export class MT5EditOrderResponse extends MT5ResponseMessageBase {
+    public Data: IMT5OrderData;
+}
+
+export class MT5CloseOrderResponse extends MT5ResponseMessageBase {
+    public Data: IMT5OrderData;
+}
+
+export class MT5GetOrderHistoryResponse extends MT5ResponseMessageBase {
+    public Data: IMT5OrderData[];
 }
 
 
