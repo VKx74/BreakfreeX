@@ -86,6 +86,7 @@
   "add": "Add",
   "confirm": "Confirm",
   "close": "Close",
+  "resetAmount": "Reset Amount",
   "verify": "Verify",
   "login": "Login",
   "verificationCode": "Verification Code",

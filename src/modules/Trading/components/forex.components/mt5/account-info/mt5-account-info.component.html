@@ -12,9 +12,33 @@
         <data-table-cell columnName="Account"><ng-template let-item>{{item.Account}}</ng-template></data-table-cell>
         <data-table-cell columnName="Currency"><ng-template let-item>{{item.Currency}}</ng-template></data-table-cell>
         <data-table-cell columnName="Balance"><ng-template let-item>{{item.Balance}}</ng-template></data-table-cell>
-        <data-table-cell columnName="Pl"><ng-template let-item>{{item.Pl}}</ng-template></data-table-cell>
-        <data-table-cell columnName="Equity"><ng-template let-item>{{item.Equity}}</ng-template></data-table-cell>
-        <data-table-cell columnName="Margin"><ng-template let-item>{{item.Margin}}</ng-template></data-table-cell>
-        <data-table-cell columnName="FreeMargin"><ng-template let-item>{{item.FreeMargin}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Pl">
+            <ng-template let-item>
+                <span [ngClass]="{'positive-value': item.Pl > 0, 'negative-value': item.Pl < 0}">
+                    {{item.Pl}}
+                </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Equity">
+            <ng-template let-item>
+                <span [ngClass]="{'positive-value': item.Equity > 0, 'negative-value': item.Equity < 0}">
+                    {{item.Equity}}
+                </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Margin">
+            <ng-template let-item>
+                <span [ngClass]="{'positive-value': item.Margin > 0, 'negative-value': item.Margin < 0}">
+                    {{item.Margin}}
+                </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="FreeMargin">
+            <ng-template let-item>
+                <span [ngClass]="{'positive-value': item.FreeMargin > 0, 'negative-value': item.FreeMargin < 0}">
+                    {{item.FreeMargin}}
+                </span>
+            </ng-template>
+        </data-table-cell>
     </data-table>
 </div>

@@ -28,6 +28,14 @@
 }
 
 :host {
+  .positive-value {
+    color: $lightGreenColor;
+  }
+
+  .negative-value {
+    color: $lightRedColor;
+  }
+
   .close-position-column {
     box-sizing: content-box;
     width: 26px;

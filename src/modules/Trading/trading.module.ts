@@ -64,6 +64,8 @@ import { MT5OrderConfiguratorModalComponent } from './components/forex.component
 import { MT5OrderConfiguratorComponent } from './components/forex.components/mt5/order-configurator/mt5-order-configurator.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import { MT5OrderCloseModalComponent } from './components/forex.components/mt5/order-close-modal/mt5-order-close-modal.component';
+import { MT5PendingOrdersComponent } from './components/forex.components/mt5/pending-orders/mt5-pending-orders.component';
 
 const components = [
     TradeManagerComponent,
@@ -89,6 +91,7 @@ const components = [
     MT5TradeManagerComponent,
     MT5OrderConfiguratorModalComponent,
     MT5OrderConfiguratorComponent,
+    MT5OrderCloseModalComponent,
     
     OandaAccountInfoComponent,
     OandaAccountInfoBarComponent,
@@ -99,6 +102,7 @@ const components = [
     MT5AccountInfoComponent,
     MT5AccountInfoBarComponent,
     MT5OpenOrdersComponent,
+    MT5PendingOrdersComponent,
     MT5HistoryOrdersComponent,
     MT5PositionsComponent,
 ];

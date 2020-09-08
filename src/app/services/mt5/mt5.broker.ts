@@ -1,4 +1,4 @@
-import { Observable, Subject, Observer, of, Subscription, throwError } from "rxjs";
+import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
 import { IMT5Broker } from '@app/interfaces/broker/mt5.broker';
 import { Injectable } from '@angular/core';
 import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5Position, MT5Server, MT5ConnectionData } from 'modules/Trading/models/forex/mt/mt.models';
@@ -63,6 +63,14 @@ export class MT5Broker implements IMT5Broker {
 
     public get orders(): MT5Order[] {
         return this._orders;
+    }
+    
+    public get marketOrders(): MT5Order[] {
+        return this._orders.filter(order => order.Type === OrderTypes.Market);
+    }
+
+    public get pendingOrders(): MT5Order[] {
+        return this._orders.filter(order => order.Type !== OrderTypes.Market);
     }
 
     public get ordersHistory(): MT5Order[] {
@@ -144,7 +152,47 @@ export class MT5Broker implements IMT5Broker {
             });
         });
     }
-    closeOrder(order_id: any): Observable<ActionResult> {
+
+    closePosition(symbol: string): Observable<ActionResult> {
+        let orders: MT5Order[] = [];
+
+        for (const o of this._orders) {
+            if (o.Symbol === symbol) {
+                orders.push(o);
+            }
+        }
+
+        if (!orders.length) {
+            return throwError("Orders not found for symbol");
+        }
+
+        const awaiters: Observable<ActionResult>[] = [];
+
+        for (const order of orders) {
+            const awaiter = this.closeOrder(order.Id);
+            awaiters.push(awaiter);
+        }
+
+        return new Observable<ActionResult>(subscriber => {
+            forkJoin(awaiters).subscribe(results => {
+                for (const result of results) {
+                    if (!result.result) {
+                        subscriber.error(result.msg);
+                        subscriber.complete();
+                        return;
+                    }
+                }
+
+                subscriber.next({ result: true });
+                subscriber.complete();
+            }, error => {
+                subscriber.error(error);
+                subscriber.complete();
+            });
+        });
+    }
+
+    closeOrder(order_id: any, amount: number = null): Observable<ActionResult> {
         let order = null;
 
         for (const o of this._orders) {
@@ -163,7 +211,7 @@ export class MT5Broker implements IMT5Broker {
             Comment: order.Comment,
             Price: order.Price,
             Side: order.Side,
-            Lots: order.Size,
+            Lots: amount ? amount : order.Size,
             Symbol: order.Symbol,
             Type: order.Type,
             Ticket: order.Ticket,
@@ -185,6 +233,7 @@ export class MT5Broker implements IMT5Broker {
         });
 
     }
+
     cancelOrder(order_id: any): Observable<ActionResult> {
         let order = null;
 
@@ -367,8 +416,8 @@ export class MT5Broker implements IMT5Broker {
                 Time: new Date().getTime() / 1000,
                 Type: OrderTypes.Market,
                 CurrentPrice: 1.22,
-                NetPL: 200,
-                PipPL: 0.2,
+                NetPL: -200,
+                PipPL: -0.2,
                 SL: 95.00,
                 Commission: 1.5,
                 Swap: 0.1,

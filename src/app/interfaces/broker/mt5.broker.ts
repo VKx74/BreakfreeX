@@ -18,6 +18,7 @@ export interface IMT5Broker extends IBroker {
     placeOrder(order: MT5PlaceOrder): Observable<ActionResult>;
     editOrder(order: MT5EditOrder): Observable<ActionResult>;
     closeOrder(order: string): Observable<ActionResult>;
+    closePosition(symbol: string): Observable<ActionResult>;
     cancelOrder(order: string): Observable<ActionResult>;
     subscribeToTicks(instrument: string, subscription: (value: IMT5Tick) => void): Subscription;
 }

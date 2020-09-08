@@ -5,6 +5,7 @@ import {AlertService} from "@alert/services/alert.service";
 import {RealtimeService} from '@app/services/realtime.service';
 import {InstrumentService} from '@app/services/instrument.service';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
+import {MatDialog} from "@angular/material/dialog";
 
 export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     private _subscription: Subscription;
@@ -18,7 +19,8 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     }
 
     constructor(@Inject(MT5Broker) protected _mt5Broker: MT5Broker,
-                @Inject(AlertService) protected _alertService: AlertService) {
+                @Inject(AlertService) protected _alertService: AlertService,
+                protected _dialog: MatDialog) {
 
     }
 

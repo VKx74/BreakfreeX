@@ -113,8 +113,17 @@ export class MT5SocketService extends WebsocketBase {
 
   public closeOrder(data: MT5CloseOrderRequest): Observable<MT5CloseOrderResponse> {
     return new Observable<MT5CloseOrderResponse>(subscriber => {
-      this._subscribers[data.MessageId] = subscriber;
-      this.send(data);
+      try {
+        this._subscribers[data.MessageId] = subscriber;
+        const sent = this.send(data);
+        if (!sent) {
+          subscriber.error("Failed to send message");
+          subscriber.complete();
+        }
+      } catch (error) {
+        subscriber.error(error.message);
+        subscriber.complete();
+      }
     });
   }
 

@@ -29,10 +29,18 @@
             <ng-template let-item>{{item.CurrentPrice}}</ng-template>
         </data-table-cell>
         <data-table-cell columnName="pipPl">
-            <ng-template let-item>{{item.PipPL}}</ng-template>
+            <ng-template let-item>
+                <span [ngClass]="{'positive-value': item.PipPL > 0, 'negative-value': item.PipPL < 0}">
+                    {{item.PipPL}}
+                </span>
+            </ng-template>
         </data-table-cell>
         <data-table-cell columnName="netPl">
-            <ng-template let-item>{{item.NetPl}}</ng-template>
+            <ng-template let-item>
+                <span [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}">
+                    {{item.NetPL}}
+                </span>
+            </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Commission">
             <ng-template let-item>{{item.Commission}}</ng-template>

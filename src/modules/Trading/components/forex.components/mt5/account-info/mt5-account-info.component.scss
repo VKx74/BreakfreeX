@@ -1,2 +1,14 @@
-.accountInfo{
+@import "themes/themes";
+@import "mixins/themify";
+@import "variables";
+
+:host {
+
+  .positive-value {
+    color: $lightGreenColor;
+  }
+
+  .negative-value {
+    color: $lightRedColor;
+  }
 }

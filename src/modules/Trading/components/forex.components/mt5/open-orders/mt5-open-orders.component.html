@@ -2,7 +2,7 @@
     <data-table-header-cell columnName="Id" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Type" [sortable]="true">{{'type' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="Type" [sortable]="true">{{'type' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.openPrice' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="CurrentPrice" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
@@ -11,8 +11,8 @@
     <data-table-header-cell columnName="pipPl" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="netPl" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="OpenTime" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="ExpirationType" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="ExpirationDate" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="ExpirationType" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="ExpirationDate" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Commission" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
@@ -30,9 +30,9 @@
             <order-side [side]="item.Side"></order-side>
         </ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Type">
+    <!-- <data-table-cell columnName="Type">
         <ng-template let-item>{{item.Type}}</ng-template>
-    </data-table-cell>
+    </data-table-cell> -->
     <data-table-cell columnName="Size">
         <ng-template let-item>{{item.Size}}</ng-template>
     </data-table-cell>
@@ -49,15 +49,23 @@
         <ng-template let-item>{{item.TP}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="pipPl">
-        <ng-template let-item>{{item.PipPL}}</ng-template>
+        <ng-template let-item>
+            <span [ngClass]="{'positive-value': item.PipPL > 0, 'negative-value': item.PipPL < 0}">
+                {{item.PipPL}}
+            </span>
+        </ng-template>
     </data-table-cell>
     <data-table-cell columnName="netPl">
-        <ng-template let-item>{{item.NetPL}}</ng-template>
+        <ng-template let-item>
+            <span [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}">
+                {{item.NetPL}}
+            </span>
+        </ng-template>
     </data-table-cell>
     <data-table-cell columnName="OpenTime">
         <ng-template let-item>{{item.Time | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="ExpirationType">
+    <!-- <data-table-cell columnName="ExpirationType">
         <ng-template let-item>{{item.ExpirationType}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="ExpirationDate">
@@ -69,7 +77,7 @@
                 -
             </ng-template>
         </ng-template>
-    </data-table-cell>
+    </data-table-cell> -->
     <data-table-cell columnName="Status">
         <ng-template let-item>{{item.Status}}</ng-template>
     </data-table-cell>
