@@ -23,7 +23,7 @@
     "bitcoinTransactionRecommendation": "Ми рекомендуємо мінімальну плату в 0.003 та вимагаємо принаймні 0.0002",
     "bitcoinTransactionMessage": "Bitcoin транзакції є пріоритетними в мережі за плату.",
     "orderDialogTitle": "Форма Замовлення",
-    "closeOrderDialogTitle": "Закриття Ордера",
+    "closePositionDialogTitle": "Закриття Позиції",
     "depositAddressMessage": "Ваша особиста адреса багатопозиційного депозиту",
     "withdrawAll": "Вивести все",
     "destinationAddress": "Адреса призначення",

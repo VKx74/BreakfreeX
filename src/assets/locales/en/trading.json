@@ -24,6 +24,7 @@
     "bitcoinTransactionMessage": "Bitcoin transaction are prioritized on the network by fee.",
     "orderDialogTitle": "Order",
     "closeOrderDialogTitle": "Close Order",
+    "closePositionDialogTitle": "Close Position",
     "depositAddressMessage": "Your Personal Multisignature Deposit Address",
     "withdrawAll": "Withdraw all",
     "destinationAddress": "Destination Address",
