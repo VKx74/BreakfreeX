@@ -60,6 +60,7 @@
                  [class.selected]="row === selectedRow"
                  [class.expand-row-header]="expandable"
                  [class.is-expanded]="isRowExpanded(row)"
+                 (dblclick)="handleRowDoubleClick(row, $event)"
                  (click)="handleRowSelected(row, $event)"></mat-row>
 
         <ng-container *ngIf="expandable">
@@ -69,7 +70,7 @@
         </ng-container>
     </mat-table>
 
-    <div class="settings-wrapper hidden" *ngIf="allowColumnsVisibilityChange">
+    <div class="settings-wrapper" *ngIf="allowColumnsVisibilityChange">
         <div class="crypto-button-icon settings-btn"
              [matMenuTriggerFor]="menu">
             <i class="crypto-icon crypto-icon-switch-settings"></i>

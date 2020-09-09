@@ -25,4 +25,5 @@ export class MT5HistoryOrdersComponent extends MT5ItemsComponent<MT5Order> {
             this.updateItems();
         });
     }
+    
 }

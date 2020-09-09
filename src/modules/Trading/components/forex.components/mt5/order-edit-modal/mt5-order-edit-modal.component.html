@@ -1,0 +1,137 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'tradeManager.editOrderDialogTitle' | translate}}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="total">
+                <div class="flex justify-space-between">
+                    <div class="crypto-text  is-secondary  is-small">
+                        <div>Ask</div>
+                        <div class="ask-text">1.12321</div>
+                        <!-- <div>{{lastTick?.ask.toFixed(decimals)}}</div> -->
+                    </div>
+                    <div class="crypto-text is-secondary">{{config.symbol}}</div>
+                    <div class="crypto-text is-secondary is-small">
+                        <div>Bid</div>
+                        <div class="bid-text">1.12321</div>
+                        <!-- <div>{{lastTick?.bid.toFixed(decimals)}}</div> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-row">
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'ticket' | translate}}</div>
+                        <div class="crypto-text is-secondary is-small">#{{config.id}}</div>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'amount' | translate}}</div>
+                        <mat-form-field class="crypto-input full-width" [class.disabled]="!isPending()">
+                            <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
+                                type="number" [step]="priceStep" [(ngModel)]="config.amount">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-row">
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'type' | translate}}</div>
+                        <div class="crypto-text is-secondary is-small">{{config.type}}</div>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPending()">
+                        <div class="form-unit__label">{{'limitPrice' | translate}}</div>
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                                [range]="{min: minPriceValue}" [(ngModel)]="config.price">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-row">
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL">
+                            {{'tradeManager.stop' | translate}}</mat-slide-toggle>
+                        <mat-form-field class="crypto-input full-width" [class.disabled]="!config.useSL">
+                            <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                                [step]="priceStep" [(ngModel)]="config.sl">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">
+                            {{'tradeManager.limit' | translate}}</mat-slide-toggle>
+                        <mat-form-field class="crypto-input full-width" [class.disabled]="!config.useTP">
+                            <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                                [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex-row">
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
+                        <selector [selectedOption]="config.expirationType" [options]="expirationTypes" [class.disabled]="!isPending()"
+                            (onSelect)="handleExpirationTypeSelected($event)"></selector>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-row" *ngIf="isExpirationVisible()" [class.disabled]="!isPending()">
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime"
+                                [ngxTimepicker]="time" [format]='24'>
+                            <ngx-material-timepicker #time></ngx-material-timepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput readonly [matDatepicker]="end" [(ngModel)]="selectedDate"
+                                (click)="end.open()" placeholder="Date">
+                            <mat-datepicker #end></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-row comment-area">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'tradeManager.comment' | translate}}</div>
+                    <mat-form-field class="crypto-input full-width">
+                        <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
+                            [(ngModel)]="config.comment">
+                </textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper flex" [class.disabled]="showSpinner">
+                <button class="crypto-button crypto-button_primary" (click)="submit()">
+                    {{'edit' | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+    <loader *ngIf="showSpinner"></loader>
+</div>

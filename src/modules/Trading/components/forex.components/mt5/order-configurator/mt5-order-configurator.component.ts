@@ -106,10 +106,12 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         return this._selectedDate;
     }
 
-    minAmountValue: number = 0.0001;
-    minPriceValue: number = 0.0001;
+    minAmountValue: number = 0.01;
+    minPriceValue: number = 0.000001;
     priceStep: number = 0.00001;
-    amountStep: number = 0.00001;
+    amountStep: number = 0.01;
+    decimals: number = 5;
+
     lastTick: IMT5Tick;
     allowedOrderTypes: OrderTypes[] = [];
     orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
@@ -192,20 +194,28 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         console.log(instrument);
 
         this.config.instrument = instrument;
+        const broker = this._brokerService.activeBroker as MT5Broker;
+        const symbol = instrument.symbol;
+
+        this.amountStep = broker.instrumentAmountStep(symbol);
+        this.minAmountValue = broker.instrumentMinAmount(symbol);
+        this.priceStep = broker.instrumentTickSize(symbol);
+        this.minPriceValue = broker.instrumentTickSize(symbol);
+        this.decimals = broker.instrumentDecimals(symbol);
 
         if (instrument) {
-            const broker = this._brokerService.activeBroker as MT5Broker;
-            this.marketSubscription = broker.subscribeToTicks(instrument.symbol, (tick: IMT5Tick) => {
+            this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
                 this.lastTick = tick;
+                const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
 
                 if (tick && !this._config.price) {
-                    this._config.price = tick.last;
+                    this._config.price = price;
                 }
                 if (tick && !this._config.sl) {
-                    this._config.sl = tick.last;
+                    this._config.sl = price;
                 }
                 if (tick && !this._config.tp) {
-                    this._config.tp = tick.last;
+                    this._config.tp = price;
                 }
             });
         }
@@ -245,17 +255,18 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         this.processingSubmit = true;
         broker.placeOrder(placeOrderData)
             .pipe(finalize(() => {
-                this.processingSubmit = false;
-                this.onSubmitted.emit();
             }))
             .subscribe(value => {
+                this.processingSubmit = false;
                 if (value.result) {
-                    this._alertService.success(this._translateService.get('tradeManager.orderPlaced'));
+                    this._alertService.success("Order sent");
+                    this.onSubmitted.emit();
                 } else {
                     this._alertService.error(value.msg);
                 }
             }, error => {
-                this._alertService.error(error.message);
+                this.processingSubmit = false;
+                this._alertService.error(error);
             });
     }
 

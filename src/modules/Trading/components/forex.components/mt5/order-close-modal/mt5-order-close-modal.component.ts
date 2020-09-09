@@ -33,6 +33,9 @@ export class MT5OrderCloseModalComponent extends Modal<MT5Order> implements OnIn
 
     ngOnInit() {
         this.amountToClose = this.order.Size;
+        const symbol = this.order.Symbol;
+        this.sizeStep =  this._mt5Broker.instrumentAmountStep(symbol);
+        this.minAmountValue =  this._mt5Broker.instrumentMinAmount(symbol);
     }
 
     ngOnDestroy() {

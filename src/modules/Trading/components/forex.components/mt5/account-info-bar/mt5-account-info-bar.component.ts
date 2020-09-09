@@ -10,6 +10,7 @@ import { MT5TradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
     styleUrls: ['./mt5-account-info-bar.component.scss']
 })
 export class MT5AccountInfoBarComponent {
+    decimals = 2;
     get activeAccount(): MT5TradingAccount {
         return this._broker.accountInfo;
     }

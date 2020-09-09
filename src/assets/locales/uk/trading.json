@@ -24,6 +24,8 @@
     "bitcoinTransactionMessage": "Bitcoin транзакції є пріоритетними в мережі за плату.",
     "orderDialogTitle": "Форма Замовлення",
     "closePositionDialogTitle": "Закриття Позиції",
+    "closeOrderDialogTitle": "Закрити ордер",
+    "editOrderDialogTitle": "Змінити ордер",
     "depositAddressMessage": "Ваша особиста адреса багатопозиційного депозиту",
     "withdrawAll": "Вивести все",
     "destinationAddress": "Адреса призначення",

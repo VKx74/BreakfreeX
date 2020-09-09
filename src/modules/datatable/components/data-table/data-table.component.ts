@@ -73,6 +73,7 @@ export class DataTableComponent {
     @Input() columnCaption: ColumnCaption;
 
     @Output() onRowSelect = new EventEmitter();
+    @Output() onDoubleClick = new EventEmitter();
     viewMode: DataTableViewMode = DataTableViewMode.Default;
     DataTableViewMode = DataTableViewMode;
 
@@ -455,6 +456,16 @@ export class DataTableComponent {
         this.onRowSelect.emit(row);
     }
 
+    handleRowDoubleClick(row: any, event: any) {
+        const target = event.target;
+
+        if (target.classList.contains(ResizeHandleClass)) { // resize handle clicked
+            return;
+        }
+
+        this.onDoubleClick.emit(row);
+    }
+
     isRowExpanded(row): boolean {
         return this._expandedRows.indexOf(row) !== -1;
     }
@@ -509,7 +520,7 @@ export class DataTableComponent {
     }
 
     private _getColumnCellClass(columnName: string): string {
-        return `mat-column-${columnName.replace('*', '-').replace('!', '-')}`;
+        return `mat-column-${columnName.replace('*', '-').replace('!', '-').replace(' ', '-')}`;
     }
 
     private _getColumnSortDataAccessor(columnName: string): ColumnSortDataAccessor {

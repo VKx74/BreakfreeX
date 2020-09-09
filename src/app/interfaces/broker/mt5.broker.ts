@@ -21,4 +21,8 @@ export interface IMT5Broker extends IBroker {
     closePosition(symbol: string): Observable<ActionResult>;
     cancelOrder(order: string): Observable<ActionResult>;
     subscribeToTicks(instrument: string, subscription: (value: IMT5Tick) => void): Subscription;
+    instrumentDecimals(symbol: string): number;
+    instrumentTickSize(symbol: string): number;
+    instrumentMinAmount(symbol: string): number;
+    instrumentAmountStep(symbol: string): number;
 }

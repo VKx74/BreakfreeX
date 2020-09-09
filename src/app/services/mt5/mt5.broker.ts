@@ -16,6 +16,8 @@ import { IMT5Tick } from '@app/models/common/tick';
 @Injectable()
 export class MT5Broker implements IMT5Broker {
     private _tickSubscribers: { [symbol: string]: Subject<IMT5Tick>; } = {};
+    private _instrumentDecimals: { [symbol: string]: number; } = {};
+    private _instrumentTickSize: { [symbol: string]: number; } = {};
 
     private _onAccountInfoUpdated: Subject<MT5TradingAccount> = new Subject<MT5TradingAccount>();
     private _onOrdersUpdated: Subject<MT5Order[]> = new Subject<MT5Order[]>();
@@ -358,9 +360,8 @@ export class MT5Broker implements IMT5Broker {
     subscribeToTicks(symbol: string, subscription: (value: IMT5Tick) => void): Subscription {
         if (!this._tickSubscribers[symbol]) {
             this._tickSubscribers[symbol] = new Subject<IMT5Tick>();
+            this.ws.subscribeOnQuotes(symbol).subscribe();
         }
-
-        this.ws.subscribeOnQuotes(symbol).subscribe();
 
         return this._tickSubscribers[symbol].subscribe(subscription);
     }
@@ -466,6 +467,30 @@ export class MT5Broker implements IMT5Broker {
             }
             this._buildPositions();
         }, 1000);
+    }
+
+    public instrumentDecimals(symbol: string): number {
+        if (this._instrumentDecimals[symbol]) {
+            return this._instrumentDecimals[symbol];
+        }
+
+        return 5;
+    }
+
+    public instrumentTickSize(symbol: string): number {
+        if (this._instrumentTickSize[symbol]) {
+            return this._instrumentTickSize[symbol];
+        }
+
+        return 0.00001;
+    }
+
+    public instrumentMinAmount(symbol: string): number {
+        return 0.01;
+    }
+
+    public instrumentAmountStep(symbol: string): number {
+        return 0.01;
     }
 
     private _handleQuotes(quote: IMT5Tick) {

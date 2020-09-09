@@ -10,6 +10,8 @@ import { MT5TradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
     styleUrls: ['./mt5-account-info.component.scss']
 })
 export class MT5AccountInfoComponent {
+    decimals = 2;
+    
     get activeAccount(): MT5TradingAccount {
         return this._mt5Broker.accountInfo;
     }

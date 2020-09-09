@@ -1,0 +1,79 @@
+@import "../../../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  .crypto-modal {
+    min-width: 350px;
+    max-width: 600px;
+  }
+
+  .btns-wrapper {
+    justify-content: flex-end;
+  }
+
+  .total {
+    margin-bottom: 12px;
+    padding: 0px 5px;
+  }
+
+  .comment-area {
+    padding: 0px 5px;
+  }
+
+  .crypto-button {
+    width: 120px;
+    padding: 8px 0px;
+  }
+
+  .disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  display: block;
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    width: 120px;
+    padding: 0px 5px;
+  }
+
+  .bid-text {
+    color: $lightRedColor;
+  }
+
+  .ask-text {
+    color: $lightGreenColor;
+  }
+
+  .buttons-wrapper {
+    position: relative;
+  }
+}
+
+hr {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+:host-context(.#{$classPrefix}-modal) {
+  padding: 0;
+}
+
+
+.modal-body {
+  @include themify($themes, true) {
+    color: themed('order-modal-color');
+  }
+}

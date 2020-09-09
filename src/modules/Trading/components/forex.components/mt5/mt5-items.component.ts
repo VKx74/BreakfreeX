@@ -6,9 +6,11 @@ import {RealtimeService} from '@app/services/realtime.service';
 import {InstrumentService} from '@app/services/instrument.service';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
 import {MatDialog} from "@angular/material/dialog";
+import { MT5OrderEditModalComponent } from './order-edit-modal/mt5-order-edit-modal.component';
 
 export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     private _subscription: Subscription;
+    private _instrumentDecimals: { [symbol: string]: number; } = {};
 
     items: T[] = [];
 
@@ -16,6 +18,15 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
 
     selectItem(item: T) {
         this.selectedItem = item;
+    } 
+    
+    doubleClicked(item: T) {
+        this.selectedItem = item;
+        if (this.selectedItem) {
+            this._dialog.open(MT5OrderEditModalComponent, {
+                data: this.selectedItem
+            });
+        }
     }
 
     constructor(@Inject(MT5Broker) protected _mt5Broker: MT5Broker,
@@ -27,6 +38,16 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.updateItems();
         this._subscription = this._subscribeOnUpdates();
+    }
+
+    public getDecimals(symbol: string): number {
+        if (this._instrumentDecimals[symbol]) {
+            return this._instrumentDecimals[symbol];
+        }
+
+        const decimals = this._mt5Broker.instrumentDecimals(symbol);
+        this._instrumentDecimals[symbol] = decimals;
+        return decimals;
     }
 
     protected updateItems(): void {

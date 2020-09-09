@@ -1,6 +1,6 @@
 <div class="accountInfoRow">
   <span>Account: {{activeAccount?.Account}}, </span>
   <span>Currency: {{activeAccount?.Currency}}, </span>
-  <span>Balance: {{activeAccount?.Balance}}, </span>
-  <span>PL: {{activeAccount?.Pl}}</span>
+  <span>Balance: {{activeAccount?.Balance.toFixed(decimals)}}, </span>
+  <span>PL: {{activeAccount?.Pl.toFixed(decimals)}}</span>
 </div>

@@ -1,42 +1,42 @@
 <div class="accountInfo">
-    <data-table [rows]="activeAccount ? [activeAccount] : []">
+    <data-table [rows]="activeAccount ? [activeAccount] : []" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false">
         <data-table-header-cell columnName="Account" [sortable]="true">{{'tradeManager.account' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Currency" [sortable]="true">{{'currency' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Balance" [sortable]="true">{{'balance' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Pl" [sortable]="true">{{'tradeManager.pl' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Equity" [sortable]="true">{{'tradeManager.equity' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Margin" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="FreeMargin" [sortable]="true">{{'tradeManager.freeMargin' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Free Margin" [columnWidth]="120" [sortable]="true">{{'tradeManager.freeMargin' | translate}}</data-table-header-cell>
 
 
         <data-table-cell columnName="Account"><ng-template let-item>{{item.Account}}</ng-template></data-table-cell>
         <data-table-cell columnName="Currency"><ng-template let-item>{{item.Currency}}</ng-template></data-table-cell>
-        <data-table-cell columnName="Balance"><ng-template let-item>{{item.Balance}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Balance"><ng-template let-item>{{item.Balance.toFixed(decimals)}}</ng-template></data-table-cell>
         <data-table-cell columnName="Pl">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.Pl > 0, 'negative-value': item.Pl < 0}">
-                    {{item.Pl}}
+                    {{item.Pl.toFixed(decimals)}}
                 </span>
             </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Equity">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.Equity > 0, 'negative-value': item.Equity < 0}">
-                    {{item.Equity}}
+                    {{item.Equity.toFixed(decimals)}}
                 </span>
             </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Margin">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.Margin > 0, 'negative-value': item.Margin < 0}">
-                    {{item.Margin}}
+                    {{item.Margin.toFixed(decimals)}}
                 </span>
             </ng-template>
         </data-table-cell>
-        <data-table-cell columnName="FreeMargin">
+        <data-table-cell columnName="Free Margin">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.FreeMargin > 0, 'negative-value': item.FreeMargin < 0}">
-                    {{item.FreeMargin}}
+                    {{item.FreeMargin.toFixed(decimals)}}
                 </span>
             </ng-template>
         </data-table-cell>

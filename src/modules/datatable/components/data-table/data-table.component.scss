@@ -64,6 +64,10 @@ $defaultModeRowHeight: 32px;
     min-height: 0;
     //border-bottom-width: 0 !important;
     //border: none;
+
+    :hover {
+      
+    }
   }
 
   mat-table.selectable {
@@ -127,7 +131,7 @@ $defaultModeRowHeight: 32px;
     transform: translateX(-100%);
     z-index: 223;
     height: $defaultModeRowHeight;
-    width: $defaultModeRowHeight;
+    // width: $defaultModeRowHeight;
 
     .settings-btn {
       background-color: transparent !important;

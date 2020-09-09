@@ -1,23 +1,24 @@
-<data-table [rows]="items">
+<data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
+            [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)">
     <data-table-header-cell columnName="Id" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Type" [sortable]="true">{{'type' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.openPrice' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="CurrentPrice" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Current Price" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="SL" [sortable]="true">{{'tradeManager.SL' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="TP" [sortable]="true">{{'tradeManager.TP' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="pipPl" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="netPl" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell> -->
-    <data-table-header-cell columnName="OpenTime" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="ExpirationType" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="ExpirationDate" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Open Time" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Expiration Type" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Expiration Date" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="Commission" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Comment" [sortable]="false">{{'tradeManager.comment' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="close" [columnWidth]="30"></data-table-header-cell>
+    <data-table-header-cell columnName="Close" [columnWidth]="36"></data-table-header-cell>
 
     <data-table-cell columnName="Id">
         <ng-template let-item>{{item.Id}}</ng-template>
@@ -37,16 +38,16 @@
         <ng-template let-item>{{item.Size}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="Price">
-        <ng-template let-item>{{item.Price}}</ng-template>
+        <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="CurrentPrice">
-        <ng-template let-item>{{item.CurrentPrice}}</ng-template>
+    <data-table-cell columnName="Current Price">
+        <ng-template let-item>{{item.CurrentPrice?.toFixed(getDecimals(item.Symbol))}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="SL">
-        <ng-template let-item>{{item.SL}}</ng-template>
+        <ng-template let-item>{{item.SL?.toFixed(getDecimals(item.Symbol))}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="TP">
-        <ng-template let-item>{{item.TP}}</ng-template>
+        <ng-template let-item>{{item.TP?.toFixed(getDecimals(item.Symbol))}}</ng-template>
     </data-table-cell>
     <!-- <data-table-cell columnName="pipPl">
         <ng-template let-item>
@@ -62,13 +63,13 @@
             </span>
         </ng-template>
     </data-table-cell> -->
-    <data-table-cell columnName="OpenTime">
+    <data-table-cell columnName="Open Time">
         <ng-template let-item>{{item.Time | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="ExpirationType">
+    <data-table-cell columnName="Expiration Type">
         <ng-template let-item>{{item.ExpirationType}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="ExpirationDate">
+    <data-table-cell columnName="Expiration Date">
         <ng-template let-item>
             <span *ngIf="item.ExpirationDate; else noDate">
                 {{item.ExpirationDate | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}
@@ -90,7 +91,7 @@
     <data-table-cell columnName="Comment">
         <ng-template let-item>{{item.Comment}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="close">
+    <data-table-cell columnName="Close">
         <ng-template let-item>
             <div class="flex justify-content-center">
                 <trading-close-button  (click)="cancelOrder(item)"></trading-close-button>

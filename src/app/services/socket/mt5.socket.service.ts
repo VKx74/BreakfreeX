@@ -76,54 +76,39 @@ export class MT5SocketService extends WebsocketBase {
     this.close();
   }
 
-  public login(login: MT5LoginRequest): Observable<MT5LoginResponse> {
+  public login(data: MT5LoginRequest): Observable<MT5LoginResponse> {
     return new Observable<MT5LoginResponse>(subscriber => {
-      this._subscribers[login.MessageId] = subscriber;
-      this.send(login);
+      this._send(data, subscriber);
     });
   }
 
   public logout(data: MT5LogoutRequest): Observable<MT5ResponseMessageBase> {
     return new Observable<MT5ResponseMessageBase>(subscriber => {
-      this._subscribers[data.MessageId] = subscriber;
-      this.send(data);
+      this._send(data, subscriber);
     });
   }
 
   public getOrderHistory(data: MT5GetOrderHistoryRequest): Observable<MT5GetOrderHistoryResponse> {
     return new Observable<MT5GetOrderHistoryResponse>(subscriber => {
-      this._subscribers[data.MessageId] = subscriber;
-      this.send(data);
+      this._send(data, subscriber);
     });
   }
 
   public placeOrder(data: MT5PlaceOrderRequest): Observable<MT5PlaceOrderResponse> {
     return new Observable<MT5PlaceOrderResponse>(subscriber => {
-      this._subscribers[data.MessageId] = subscriber;
-      this.send(data);
+      this._send(data, subscriber);
     });
   }
 
   public editOrder(data: MT5EditOrderRequest): Observable<MT5EditOrderResponse> {
     return new Observable<MT5EditOrderResponse>(subscriber => {
-      this._subscribers[data.MessageId] = subscriber;
-      this.send(data);
+      this._send(data, subscriber);
     });
   }
 
   public closeOrder(data: MT5CloseOrderRequest): Observable<MT5CloseOrderResponse> {
     return new Observable<MT5CloseOrderResponse>(subscriber => {
-      try {
-        this._subscribers[data.MessageId] = subscriber;
-        const sent = this.send(data);
-        if (!sent) {
-          subscriber.error("Failed to send message");
-          subscriber.complete();
-        }
-      } catch (error) {
-        subscriber.error(error.message);
-        subscriber.complete();
-      }
+      this._send(data, subscriber);
     });
   }
 
@@ -134,8 +119,7 @@ export class MT5SocketService extends WebsocketBase {
         Subscribe: true,
         Symbol: symbol
       };
-      this._subscribers[message.MessageId] = subscriber;
-      this.send(message);
+      this._send(message, subscriber);
     });
   }
   
@@ -146,8 +130,7 @@ export class MT5SocketService extends WebsocketBase {
         Subscribe: true,
         Symbol: symbol
       };
-      this._subscribers[message.MessageId] = subscriber;
-      this.send(message);
+      this._send(message, subscriber);
     });
   }
 
@@ -160,6 +143,20 @@ export class MT5SocketService extends WebsocketBase {
       volume: quoteMessage.Data.Volume,
       symbol: quoteMessage.Data.Symbol
     });
+  }
+
+  private _send(data: MT5RequestMessageBase, subscriber: Subscriber<MT5ResponseMessageBase>) {
+    try {
+      this._subscribers[data.MessageId] = subscriber;
+      const sent = this.send(data);
+      if (!sent) {
+        subscriber.error("Failed to send message");
+        subscriber.complete();
+      }
+    } catch (error) {
+      subscriber.error(error.message);
+      subscriber.complete();
+    }
   }
   
   private _processAccountUpdate(msgData: MT5ResponseMessageBase) {
