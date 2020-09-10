@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header"></div>
         <div class="modal-body">
-            <ng-container [ngSwitch]="applicationType">
+            <!-- <ng-container [ngSwitch]="applicationType">
                 <ng-container *ngSwitchCase="ApplicationType.Stock">
                 </ng-container>
                 <ng-container *ngSwitchCase="ApplicationType.Crypto">
@@ -17,6 +17,10 @@
                         <mt5-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt5-broker-login>
                     </ng-container>
                 </ng-container>
+            </ng-container> -->
+            <ng-container [ngSwitch]="brokerType">
+                <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
+                <mt5-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt5-broker-login>
             </ng-container>
         </div>
     </div>
