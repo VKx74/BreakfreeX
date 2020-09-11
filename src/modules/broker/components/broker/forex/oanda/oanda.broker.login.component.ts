@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "@alert/services/alert.service";
 import {TranslateService} from "@ngx-translate/core";
@@ -19,6 +19,10 @@ export class OandaBrokerLoginComponent implements OnInit {
     newSelectedAccount: string;
 
     selectedBroker: string;
+
+    @Input()
+    public policyAccepted: boolean;
+    
     get brokers(): string[] {
         return ["Oanda"];
     } 
@@ -79,6 +83,10 @@ export class OandaBrokerLoginComponent implements OnInit {
     }
 
     connect() {        
+        if (!this.policyAccepted) {
+            return;
+        }
+        
         if (this.addAccountForm.invalid) {
             this._notifyError(this._translateService.get('broker.createAccountError'));           
             return;

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "@alert/services/alert.service";
 import {TranslateService} from "@ngx-translate/core";
@@ -25,6 +25,9 @@ export class MT5BrokerLoginComponent implements OnInit {
     public selectedBroker: string;
     public _brokers: string[] = [];
     public _servers: MT5Server[] = [];
+
+    @Input()
+    public policyAccepted: boolean;
 
     public get brokers(): string[] {
         return this._brokers;
@@ -96,6 +99,10 @@ export class MT5BrokerLoginComponent implements OnInit {
     }
 
     connect() {        
+        if (!this.policyAccepted) {
+            return;
+        }
+        
         const initData: IMT5LoginData = {
             Password: this.password,
             ServerName: this.selectedServer.Name,

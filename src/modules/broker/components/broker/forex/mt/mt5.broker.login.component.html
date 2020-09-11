@@ -31,7 +31,7 @@
     </div>
 </div>
 
-<div class="connectBrokerBlock">
+<div class="connectBrokerBlock" [class.disabled]="!policyAccepted">
     <button class="crypto-button crypto-button_primary w-100" (click)="connect()" *ngIf="!brokerConnected">
         {{'broker.connect' | translate}}
     </button>

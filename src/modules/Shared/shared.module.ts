@@ -35,6 +35,7 @@ import {SvgEmptyComponent} from "./components/svg-empty/svg-empty.component";
 import {BreadcrumbsComponent} from "./components/breadcrumbs/breadcrumbs.component";
 import {LoadingModule} from "ngx-loading";
 import {LoaderModule} from "../loader/loader.module";
+import { PrivacyPolicyTradingModalComponent } from './components/privacy-policy-trading/privacy-policy-trading.component';
 
 const PIPES = [
     DateFormatPipe,
@@ -72,6 +73,7 @@ const COMPONENTS = [
     ComponentPreloaderComponent,
     NoItemsPlaceholderComponent,
     SvgEmptyComponent,
+    PrivacyPolicyTradingModalComponent
 ];
 
 @NgModule({

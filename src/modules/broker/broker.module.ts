@@ -25,6 +25,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import { BrokerDialogComponent } from './components/broker/broker-dialog/broker-dialog.component';
 import {LoaderModule} from "../loader/loader.module";
 import { MT5BrokerLoginComponent } from './components/broker/forex/mt/mt5.broker.login.component';
+import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { MT5BrokerLoginComponent } from './components/broker/forex/mt/mt5.broker
     ],
     entryComponents: [
         BrokerDialogComponent,
+        PrivacyPolicyTradingModalComponent
     ],
     exports: [
         BrokerComponent,

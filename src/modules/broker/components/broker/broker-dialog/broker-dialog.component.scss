@@ -1,5 +1,46 @@
-.crypto-modal {
-  div.modal-body {
-    position: static;
+@import "mixins/themify";
+@import "themes/themes";
+@import "global-styles/variables";
+
+:host {
+  .crypto-modal {
+    div.modal-body {
+      position: static;
+    }
+  }
+  .policy-agreement-wrapper {
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+
+    input[type=checkbox] {
+      margin: 0 10px 0 0;
+    }
+
+    label, a {
+      font-size: 0.85em;
+      font-family: $primaryFontFamily;
+
+    }
+    a {
+      text-decoration: none;
+      color: #3d61cc;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+  }
+
+  /deep/ .disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+}
+
+@include themify($themes, true) {
+
+  .policy-agreement-wrapper {
+    label {
+      color: themed('valueTextColor');
+    }
   }
 }
