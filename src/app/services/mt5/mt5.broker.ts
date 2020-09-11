@@ -279,7 +279,7 @@ export class MT5Broker implements IMT5Broker {
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
         return of(this._instruments);
     }
-    isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes): boolean {
+    isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes = null): boolean {
         for (const i of this._instruments) {
             if (i.symbol === instrument.symbol) {
                 return true;

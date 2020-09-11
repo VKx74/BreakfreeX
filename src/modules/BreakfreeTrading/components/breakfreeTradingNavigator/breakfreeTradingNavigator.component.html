@@ -73,18 +73,36 @@
 
    
       <div class="row"> 
-         <span class="value1 entry">#Entry 1</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
+         <span class="value1 entry">#Entry 1</span>
+
+         <span class="value2 place-order" *ngIf="tradePossible() && Data?.algo_Entry_low" (click)="placeOrder(1)">
+            <i _ngcontent-uqy-c4="" class="crypto-icon crypto-icon-buy-arrow"></i>
+         </span>
+
+         <span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_Entry_low?.toFixed("5")}}
          </span>
       </div>
 
       <div class="row"> 
-         <span class="value1 entry">#Entry 2</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
+         <span class="value1 entry">#Entry 2</span>
+
+         <span class="value2 place-order" *ngIf="tradePossible() && Data?.algo_Entry" (click)="placeOrder(2)">
+            <i _ngcontent-uqy-c4="" class="crypto-icon crypto-icon-buy-arrow"></i>
+         </span>
+
+         <span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_Entry?.toFixed("5")}}
          </span>
       </div>
       <div class="row"> 
-         <span class="value1 entry">#Entry 3</span><span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
+         <span class="value1 entry">#Entry 3</span>
+
+         <span class="value2 place-order" *ngIf="tradePossible() && Data?.algo_Entry_high"(click)="placeOrder(3)">
+            <i _ngcontent-uqy-c4="" class="crypto-icon crypto-icon-buy-arrow"></i>
+         </span>
+
+         <span class="value2 copyable" (click)="copyToClipboardSingleValue($event)">
             {{Data?.algo_Entry_high?.toFixed("5")}}
          </span>
       </div>

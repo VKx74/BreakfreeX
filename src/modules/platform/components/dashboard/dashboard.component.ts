@@ -1,52 +1,52 @@
-import {ChangeDetectorRef, Component, Inject, Injector, ViewChild} from "@angular/core";
-import {of, Subject} from "rxjs";
-import {IdentityService} from "@app/services/auth/identity.service";
-import {TranslateService} from "@ngx-translate/core";
-import {LayoutTranslateService} from "@layout/localization/token";
-import {LocalizationService} from "Localization";
-import {catchError, first, map, takeUntil} from "rxjs/operators";
-import {MatDialog} from "@angular/material/dialog";
-import {ActivatedRoute, NavigationStart, Router} from "@angular/router";
-import {SplitComponent} from "angular-split";
-import {EventsHelper} from "@app/helpers/events.helper";
-import {DefaultState} from "@platform/components/dashboard/default-layout-state";
-import {LayoutStorage} from "@app/services/layout.storage";
-import {Store} from "@ngrx/store";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {ActionTypes} from "@platform/store/actions/platform.actions";
-import {AppState} from "@app/store/reducer";
-import {Actions, ofType} from "@ngrx/effects";
-import {AppActionTypes, LogoutSuccessAction} from "@app/store/actions";
-import {LayoutStorageService} from '@app/services/layout-storage.service';
-import {ConfirmModalComponent, IConfirmModalConfig} from 'UI';
-import {AutoTradingEngine} from '@app/services/auto-trading-engine';
-import {WorkspaceRepository} from "@platform/services/workspace-repository.service";
-import {Workspace} from "@platform/data/workspaces";
-import {AlertService} from "@alert/services/alert.service";
-import {ThemeService} from "@app/services/theme.service";
-import {LinkingMessagesBus} from "@linking/services";
-import {TemplatesStorageService} from "@chart/services/templates-storage.service";
-import {PopupWindowSharedProvidersKey} from "../../../popup-window/constants";
-import {ISharedProviders} from "../../../popup-window/interfaces";
-import {TimeZoneManager} from "TimeZones";
-import {TemplatesDataProviderService} from "@chart/services/templates-data-provider.service";
-import {NewsConfigService} from "../../../News/services/news.config.service";
-import {EducationalTipsService} from "@app/services/educational-tips.service";
-import {BrokerService} from "@app/services/broker.service";
-import {InstrumentService} from "@app/services/instrument.service";
-import {RealtimeService} from "@app/services/realtime.service";
-import {HistoryService} from "@app/services/history.service";
-import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
-import {ToggleBottomPanelSizeService} from "@platform/components/dashboard/toggle-bottom-panel-size.service";
+import { ChangeDetectorRef, Component, Inject, Injector, ViewChild } from "@angular/core";
+import { of, Subject } from "rxjs";
+import { IdentityService } from "@app/services/auth/identity.service";
+import { TranslateService } from "@ngx-translate/core";
+import { LayoutTranslateService } from "@layout/localization/token";
+import { LocalizationService } from "Localization";
+import { catchError, first, map, takeUntil } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
+import { SplitComponent } from "angular-split";
+import { EventsHelper } from "@app/helpers/events.helper";
+import { DefaultState } from "@platform/components/dashboard/default-layout-state";
+import { LayoutStorage } from "@app/services/layout.storage";
+import { Store } from "@ngrx/store";
+import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
+import { ActionTypes } from "@platform/store/actions/platform.actions";
+import { AppState } from "@app/store/reducer";
+import { Actions, ofType } from "@ngrx/effects";
+import { AppActionTypes, LogoutSuccessAction } from "@app/store/actions";
+import { LayoutStorageService } from '@app/services/layout-storage.service';
+import { ConfirmModalComponent, IConfirmModalConfig } from 'UI';
+import { AutoTradingEngine } from '@app/services/auto-trading-engine';
+import { WorkspaceRepository } from "@platform/services/workspace-repository.service";
+import { Workspace } from "@platform/data/workspaces";
+import { AlertService } from "@alert/services/alert.service";
+import { ThemeService } from "@app/services/theme.service";
+import { LinkingMessagesBus } from "@linking/services";
+import { TemplatesStorageService } from "@chart/services/templates-storage.service";
+import { PopupWindowSharedProvidersKey } from "../../../popup-window/constants";
+import { ISharedProviders } from "../../../popup-window/interfaces";
+import { TimeZoneManager } from "TimeZones";
+import { TemplatesDataProviderService } from "@chart/services/templates-data-provider.service";
+import { NewsConfigService } from "../../../News/services/news.config.service";
+import { EducationalTipsService } from "@app/services/educational-tips.service";
+import { BrokerService } from "@app/services/broker.service";
+import { InstrumentService } from "@app/services/instrument.service";
+import { RealtimeService } from "@app/services/realtime.service";
+import { HistoryService } from "@app/services/history.service";
+import { UserSettingsService } from "@app/services/user-settings/user-settings.service";
+import { ToggleBottomPanelSizeService } from "@platform/components/dashboard/toggle-bottom-panel-size.service";
 import {
     GoldenLayoutComponent,
     IGoldenLayoutComponentSettings,
     IGoldenLayoutComponentState,
     LayoutManagerService
 } from "angular-golden-layout";
-import {ComponentPortal} from "@angular/cdk/portal";
-import {ComponentSelectorComponent} from "@platform/components/component-selector/component-selector.component";
-import {Overlay} from "@angular/cdk/overlay";
+import { ComponentPortal } from "@angular/cdk/portal";
+import { ComponentSelectorComponent } from "@platform/components/component-selector/component-selector.component";
+import { Overlay } from "@angular/cdk/overlay";
 import { SingleSessionService } from '@app/services/single-session.service';
 import { Intercom } from 'ng-intercom';
 import { CookieService } from '@app/services/сookie.service';
@@ -67,8 +67,8 @@ export class DashboardComponent {
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 26;
 
-    @ViewChild(GoldenLayoutComponent, {static: true}) layout: GoldenLayoutComponent;
-    @ViewChild('verticalSplit', {read: SplitComponent, static: false}) verticalSplit: SplitComponent;
+    @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
+    @ViewChild('verticalSplit', { read: SplitComponent, static: false }) verticalSplit: SplitComponent;
 
     layoutSettings: IGoldenLayoutComponentSettings = {};
     destroy$ = new Subject();
@@ -83,30 +83,30 @@ export class DashboardComponent {
     }
 
     constructor(private _store: Store<AppState>,
-                private _actions: Actions,
-                private _intercom: Intercom,
-                private _dialog: MatDialog,
-                private _identityService: IdentityService,
-                private _localizationService: LocalizationService,
-                private _router: Router,
-                private _coockieService: CookieService,
-                private _cdr: ChangeDetectorRef,
-                private _layoutStorage: LayoutStorage,
-                private _autoTradingEngine: AutoTradingEngine,
-                private _layoutStorageService: LayoutStorageService,
-                private _brokerService: BrokerService,
-                @Inject(LayoutTranslateService) private _layoutTranslateService: TranslateService,
-                private _layoutManager: LayoutManagerService,
-                private _injector: Injector,
-                private _workspaceRepository: WorkspaceRepository,
-                private _route: ActivatedRoute,
-                private _userSettingsService: UserSettingsService,
-                private _alertService: AlertService,
-                private _singleSessionService: SingleSessionService,
-                public bottomPanelSizeService: ToggleBottomPanelSizeService,
-                private _overlay: Overlay,
+        private _actions: Actions,
+        private _intercom: Intercom,
+        private _dialog: MatDialog,
+        private _identityService: IdentityService,
+        private _localizationService: LocalizationService,
+        private _router: Router,
+        private _coockieService: CookieService,
+        private _cdr: ChangeDetectorRef,
+        private _layoutStorage: LayoutStorage,
+        private _autoTradingEngine: AutoTradingEngine,
+        private _layoutStorageService: LayoutStorageService,
+        private _brokerService: BrokerService,
+        @Inject(LayoutTranslateService) private _layoutTranslateService: TranslateService,
+        private _layoutManager: LayoutManagerService,
+        private _injector: Injector,
+        private _workspaceRepository: WorkspaceRepository,
+        private _route: ActivatedRoute,
+        private _userSettingsService: UserSettingsService,
+        private _alertService: AlertService,
+        private _singleSessionService: SingleSessionService,
+        public bottomPanelSizeService: ToggleBottomPanelSizeService,
+        private _overlay: Overlay,
     ) {
-        
+
     }
 
     ngOnInit() {
@@ -117,9 +117,18 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._saveLayout = false;
-                this._layoutStorageService.removeLayoutState().subscribe(data => {});
-            });  
-            
+                this._layoutStorageService.removeLayoutState().subscribe(data => { });
+            });
+
+        this._actions
+            .pipe(
+                ofType(ActionTypes.SaveState),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._saveLayoutState();
+            });
+
         this._actions
             .pipe(
                 ofType(ActionTypes.ClearSession),
@@ -127,8 +136,8 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._clearLayout();
-            }); 
-            
+            });
+
         this._actions
             .pipe(
                 ofType(ActionTypes.GlobalError),
@@ -169,7 +178,7 @@ export class DashboardComponent {
                     this.setUpComponentSelectorDialog(parent);
                 }
             });
-        
+
         this._intercom.boot({
             app_id: "sv09ttz9",
             hide_default_launcher: true
@@ -178,8 +187,8 @@ export class DashboardComponent {
 
     clearSession() {
         this._clearLayout();
-    }  
-    
+    }
+
     hideExceptionPopup() {
         this.showExceptionPopup = false;
     }
@@ -240,13 +249,13 @@ export class DashboardComponent {
     }
 
     private _saveLayoutState(async: boolean = true) {
-
         if (this._identityService.isAuthorized && this._saveLayout) {
             const layoutState = this.layout.saveState();
             this._layoutStorageService.saveLayoutState(layoutState, async)
                 .subscribe(
                     (data) => {
                         this.layoutChanged = true;
+                        this._alertService.success(this._layoutTranslateService.get("savedLayout"));
                     });
         }
     }

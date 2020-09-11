@@ -35,6 +35,10 @@ import { IndicatorRestrictionService } from '@chart/services/indicator-restricti
 import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
+import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
+import {Store} from "@ngrx/store";
+import {AppState} from "@app/store/reducer";
+import { SaveStateAction } from '@app/store/actions/platform.actions';
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -89,7 +93,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _alertChartService: AutoTradingAlertConfigurationService,
                 private _indicatorRestrictionService: IndicatorRestrictionService,
                 private _indicatorDataProviderService: IndicatorDataProviderService,
+                private _tradingFromChartHandler: TradeFromChartService,
                 private _chartTrackerService: ChartTrackerService,
+                private _store: Store<AppState>,
                 protected _injector: Injector) {
         super(_injector);
     }
@@ -193,12 +199,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 locale: this._localizationService.locale,
                 tradeHandler: this.tradeHandler.bind(this),
                 searchInstrumentHandler: this.searchInstrumentHandler.bind(this),
-                
+                tradingFromChartHandler: this._tradingFromChartHandler
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
             this.chart.showInstrumentWatermark = false;
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
+            this._tradingFromChartHandler.setChart(this.chart);
 
             if (state && state.chartState) {
                 // locale from app
@@ -227,6 +234,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_ADDED, this.indicatorAdded.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED, this.indicatorRemoved.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS, this.setDefaultSettings.bind(this));
+            this.chart.on(TradingChartDesigner.ChartEvent.SAVE_SESSION, this.saveSession.bind(this));
 
             if (!state) {
                 let isProAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
@@ -272,6 +280,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
         this.chart.theme = this._getTheme();
         this.chart.refreshAsync();
+    }
+
+    protected saveSession(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        this._store.dispatch(new SaveStateAction());
     }
 
     protected useDefaultLinker(): boolean {
@@ -469,6 +481,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_ADDED);
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED);
                 this.chart.off(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS);
+                this.chart.off(TradingChartDesigner.ChartEvent.SAVE_SESSION);
                 this.chart.destroy();
             }
         } catch (e) {

@@ -13,6 +13,11 @@
    overflow: auto;
   }
 
+  .place-order {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
   .top-line {
       padding: 10px;
       .column {
@@ -38,6 +43,11 @@
 
   .crypto-button {
     background-color: themed('inputBackgroundColor');
+  }
+  .place-order {
+    &:hover { 
+      color: themed('accentColor');
+    }
   }
 }
 

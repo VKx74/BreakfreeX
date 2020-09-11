@@ -29,7 +29,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     private _saveLayout = true;
     private _workspacesSubscription: Subscription;
     private _intervalLink: any;
-    private _updateInterval = 1000 * 60 * 2;
+    private _updateInterval = 1000 * 60 * 5;
     WorkspaceIds = WorkspaceIds;
     workspaces: Workspace[];
     layout: GoldenLayoutComponent;

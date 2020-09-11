@@ -9,7 +9,8 @@ export enum ActionTypes {
     SelectBottomComponent = '[Platform] Select Bottom Component',
     SelectRightSideComponent = '[Platform] Select Right Side Component',
     ShowCode = '[Platform] Show Code',
-    ResetStore = '[Platform] Reset Store'
+    ResetStore = '[Platform] Reset Store',
+    SaveState = '[Platform] Save State',
 }
 
 export class SelectBottomComponentAction implements Action {
@@ -49,6 +50,13 @@ export class DeleteSessionAction implements Action {
     }
 }
 
+export class SaveStateAction implements Action {
+    readonly type = ActionTypes.SaveState;
+
+    constructor() {
+    }
+}
+
 export class AppTypeChangedAction implements Action {
     readonly type = ActionTypes.AppTypeChanged;
 
@@ -75,6 +83,7 @@ export type PlatformActions = SelectBottomComponentAction
     | ShowCodeAction
     | ResetStoreAction
     | DeleteSessionAction
+    | SaveStateAction
     | ClearSessionAction
     | GlobalErrorAction
     | AppTypeChangedAction;

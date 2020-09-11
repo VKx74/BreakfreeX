@@ -17,6 +17,7 @@ import { IndicatorDataProviderService } from './services/indicator-data-provider
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
+import { TradeFromChartService } from './services/trade-from-chart.service';
 
 export function sharedTemplatesDataProviderService() {
     return sharedProviderResolver('chartTemplatesDataProviderService');
@@ -53,7 +54,8 @@ export function sharedTemplatesDataProviderService() {
         IndicatorRestrictionService,
         IndicatorDataProviderService,
         BreakfreeTradingService,
-        ChartTrackerService
+        ChartTrackerService,
+        TradeFromChartService
     ]
 })
 export class ChartModule {

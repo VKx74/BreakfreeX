@@ -11,6 +11,12 @@ import { IInstrument } from '@app/models/common/instrument';
 import { ClipboardService } from 'ngx-clipboard';
 import {AlertService} from "@alert/services/alert.service";
 import { ITimeFrame } from '@app/services/algo.service';
+import { BrokerService } from '@app/services/broker.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MT5Broker } from '@app/services/mt5/mt5.broker';
+import { MT5OrderConfig } from 'modules/Trading/components/forex.components/mt5/order-configurator/mt5-order-configurator.component';
+import { OrderTypes, OrderSide } from 'modules/Trading/models/models';
+import { MT5OrderConfiguratorModalComponent } from 'modules/Trading/components/forex.components/mt5/order-configurator-modal/mt5-order-configurator-modal.component';
 
 export interface IBFTNavigatorComponentState {
 }
@@ -65,6 +71,7 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
     constructor(@Inject(GoldenLayoutItemState) protected _state: IBFTNavigatorComponentState, 
         @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
         private _clipboardService: ClipboardService, private _alertService: AlertService,
+        private _brokerService: BrokerService, private _dialog: MatDialog,
         protected _bftNavigatorService: BreakfreeTradingNavigatorService, protected _injector: Injector) {
         super(_injector);
 
@@ -120,6 +127,55 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
         }
         if (this._itemRemoved) {
             this._itemRemoved.unsubscribe();
+        }
+    }
+
+    tradePossible() {
+        if (!this._brokerService.activeBroker || !this.Data) {
+            return false;
+        }
+        
+        if (this._brokerService.activeBroker instanceof MT5Broker) {
+            const mt5Broker = this._brokerService.activeBroker as MT5Broker;
+            return mt5Broker.isInstrumentAvailable(this.SelectedItem.parameters.instrument);
+        } else {
+            return false;
+        }
+    }
+
+    placeOrder(entry_number: number) { 
+        if (!this.Data) {
+            return;
+        }
+
+        if (this._brokerService.activeBroker instanceof MT5Broker) {
+            const mt5Broker = this._brokerService.activeBroker as MT5Broker;
+            const orderConfig = MT5OrderConfig.create();
+            const pricePrecision = mt5Broker.instrumentDecimals(this.SelectedItem.parameters.instrument.symbol);
+            orderConfig.type = OrderTypes.Limit;
+            orderConfig.instrument = this.SelectedItem.parameters.instrument;
+            orderConfig.useTP = true;
+            orderConfig.useSL = true;
+            orderConfig.side = this.Data.algo_Entry > this.Data.algo_TP2 ? OrderSide.Sell : OrderSide.Buy;
+
+            if (entry_number === 1) {
+                orderConfig.price = Math.roundToDecimals(this.Data.algo_Entry_low, pricePrecision);
+                orderConfig.tp = Math.roundToDecimals(this.Data.algo_TP1_low, pricePrecision);
+            } else if (entry_number === 2) {
+                orderConfig.price = Math.roundToDecimals(this.Data.algo_Entry, pricePrecision);
+                orderConfig.tp = Math.roundToDecimals(this.Data.algo_TP1_high, pricePrecision);
+            } else {
+                orderConfig.price = Math.roundToDecimals(this.Data.algo_Entry_high, pricePrecision);
+                orderConfig.tp = Math.roundToDecimals(this.Data.algo_TP2, pricePrecision);
+            }
+
+            orderConfig.sl = Math.roundToDecimals(this.Data.algo_Stop, pricePrecision);
+            
+            this._dialog.open(MT5OrderConfiguratorModalComponent, {
+                data: {
+                    tradeConfig: orderConfig
+                }
+            });
         }
     }
 

@@ -81,6 +81,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
             }
         }
     }
+    
     get config(): MT5OrderConfig {
         return this._config;
     }
