@@ -21,7 +21,7 @@
             </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Size">
-            <ng-template let-item>{{item.Size}}</ng-template>
+            <ng-template let-item>{{item.Size.toFixed(2)}}</ng-template>
         </data-table-cell>
         <data-table-cell columnName="Price">
             <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>

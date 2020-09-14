@@ -251,6 +251,12 @@ export class BrokerService implements IHealthable {
                         subscriber.next(value);
                         subscriber.complete();
                     }
+                }, (error) => {
+                    subscriber.next({
+                        result: false,
+                        msg: 'Failed to restore broker from saved state'
+                    });
+                    subscriber.complete();
                 });
         });
     }

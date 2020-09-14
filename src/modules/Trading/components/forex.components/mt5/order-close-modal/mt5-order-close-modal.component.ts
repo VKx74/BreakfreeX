@@ -5,6 +5,7 @@ import { Modal } from "Shared";
 import { MT5Order } from 'modules/Trading/models/forex/mt/mt.models';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
 import { AlertService } from '@alert/services/alert.service';
+import { OrderFillPolicy } from 'modules/Trading/models/models';
 
 @Component({
     selector: 'mt5-order-close-modal',
@@ -26,6 +27,8 @@ export class MT5OrderCloseModalComponent extends Modal<MT5Order> implements OnIn
     public minAmountValue: number = 0.01;
     public sizeStep: number = 0.01;
     public showSpinner: boolean = false;
+    public fillPolicy: OrderFillPolicy = OrderFillPolicy.IOC;
+    public orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
 
     constructor(injector: Injector, protected _mt5Broker: MT5Broker, protected _alertService: AlertService) {
         super(injector);
@@ -45,10 +48,14 @@ export class MT5OrderCloseModalComponent extends Modal<MT5Order> implements OnIn
     hide() {
         this.close();
     }
+
+    handleFillPolicySelected(type: OrderFillPolicy) {
+        this.fillPolicy = type;
+    }
     
     submit() {
         this.showSpinner = true;
-        this._mt5Broker.closeOrder(this.order.Id, this.amountToClose).subscribe(
+        this._mt5Broker.closeOrder(this.order.Id, this.fillPolicy, this.amountToClose).subscribe(
             (result) => {
                 this.showSpinner = false;
                 if (result.result) {

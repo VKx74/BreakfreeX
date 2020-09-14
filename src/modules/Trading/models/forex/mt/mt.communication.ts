@@ -37,8 +37,15 @@ export interface IMT5Server {
     Servers: string[];
 }
 
+export interface IMT5SymbolData {
+    Digits: number;
+    Name: string;
+    CalculatioType: string;
+    Description: string;
+}
+
 export interface IMT5LoginData {
-    User: string;
+    User: number;
     Password: string;
     ServerName: string;
 }
@@ -167,7 +174,7 @@ export class MT5OrdersUpdateResponse extends MT5ResponseMessageBase {
 }
 
 export class MT5LoginResponse extends MT5ResponseMessageBase {
-    public Data: string[];
+    public Data: IMT5SymbolData[];
 }
 
 export class MT5PlaceOrderResponse extends MT5ResponseMessageBase {

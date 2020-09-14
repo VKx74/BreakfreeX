@@ -8,7 +8,7 @@ import { BrokerFactory, CreateBrokerActionResult } from '@app/factories/broker.f
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { BrokerService } from '@app/services/broker.service';
 import { MT5BrokerServersProvider } from '@app/services/mt5/mt5.servers.service';
-import { MT5Server } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5ConnectionData, MT5Server } from 'modules/Trading/models/forex/mt/mt.models';
 import bind from "bind-decorator";
 import { IMT5LoginData } from 'modules/Trading/models/forex/mt/mt.communication';
 
@@ -103,10 +103,10 @@ export class MT5BrokerLoginComponent implements OnInit {
             return;
         }
         
-        const initData: IMT5LoginData = {
+        const initData: MT5ConnectionData = {
             Password: this.password,
             ServerName: this.selectedServer.Name,
-            User: this.login
+            Login: Number(this.login)
         };
 
         this.showSpinner = true;

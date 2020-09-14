@@ -19,29 +19,17 @@ export class DashboardResolver implements Resolve<any> {
     }
 
     resolve(route: ActivatedRouteSnapshot): Observable<any> {
-        const obsList: Observable<any>[] = [
-            this._initializeBroker()
-                .pipe(
-                    switchMap(state => {
-                        if (state && state.result) {
-                            this._brokerService.setBrokerInitializationState(true);
-                        } else {
-                            this._brokerService.setBrokerInitializationState(false);
-                        }
-                        return of(true);
-                    })
-                )
-        ];
+        this._initializeBroker().subscribe(state => {
+                if (state && state.result) {
+                    this._brokerService.setBrokerInitializationState(true);
+                } else {
+                    this._brokerService.setBrokerInitializationState(false);
+                }
+        }, error => {
+            this._brokerService.setBrokerInitializationState(false);
+        });
 
-
-        if (this._appTypeService.applicationType === ApplicationType.Crypto) {
-            const activeBroker = this._brokerService.activeBroker as CryptoBroker;
-            if (activeBroker) {
-                obsList.push(activeBroker.getWallets());
-            }
-        }
-
-        return forkJoin(obsList);
+        return of(true);
     }
 
     private _initializeBroker(): Observable<any> {

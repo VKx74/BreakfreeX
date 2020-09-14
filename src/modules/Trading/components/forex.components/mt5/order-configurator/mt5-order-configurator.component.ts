@@ -45,7 +45,7 @@ export class MT5OrderConfig {
             useSL: false,
             useTP: false,
             expirationType: OrderExpirationType.GTC,
-            fillPolicy: OrderFillPolicy.FF
+            fillPolicy: OrderFillPolicy.IOC
         };
     }
 }
@@ -178,6 +178,12 @@ export class MT5OrderConfiguratorComponent implements OnInit {
 
     handleTypeSelected(type: OrderTypes) {
         this.config.type = type;
+
+        if (this.config.type === OrderTypes.Market) {
+            this.config.fillPolicy = OrderFillPolicy.IOC;
+        } else {
+            this.config.fillPolicy = OrderFillPolicy.FF;
+        }
     }
 
     handleExpirationTypeSelected(type: OrderExpirationType) {
@@ -205,6 +211,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         this.decimals = broker.instrumentDecimals(symbol);
 
         if (instrument) {
+            this._config.price = 0;
             this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
                 this.lastTick = tick;
                 const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
@@ -234,24 +241,29 @@ export class MT5OrderConfiguratorComponent implements OnInit {
     private _getSetupDate(): number {
         const dateString = this._selectedDate.toISOString().split("T")[0];
         const timeString = `${this._selectedTime}:00.500Z`;
-        return new Date(`${dateString}T${timeString}`).getTime() / 1000;
+        const exp = new Date(`${dateString}T${timeString}`).getTime() / 1000;
+        return Math.roundToDecimals(exp, 0);
     }
 
     private _placeOrder() {
         const broker = this._brokerService.activeBroker as MT5Broker;
         const placeOrderData: MT5PlaceOrder = {
-            Comment: this.config.comment,
+            Comment: this.config.comment || "",
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
             Type: this.config.type,
-            Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
-            SL: this.config.useSL ? this.config.sl : null,
-            TP: this.config.useTP ? this.config.tp : null,
+            Price: this.config.type !== OrderTypes.Market ? this.config.price : 0,
+            SL: this.config.useSL ? this.config.sl : 0,
+            TP: this.config.useTP ? this.config.tp : 0,
             FillPolicy: this.config.fillPolicy,
             ExpirationType: this.config.expirationType,
             ExpirationDate: this._getSetupDate()
         };
+
+        // if (this.config.type === OrderTypes.Market) {
+        //     placeOrderData.Price = placeOrderData.Side === OrderSide.Buy ? this.lastTick.ask : this.lastTick.bid;
+        // }
 
         this.processingSubmit = true;
         broker.placeOrder(placeOrderData)

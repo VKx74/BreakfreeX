@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import {map} from 'rxjs/operators';
 import {OandaOrder} from 'modules/Trading/models/forex/oanda/oanda.models';
-import {OrderSide} from "../../../../models/models";
+import {OrderFillPolicy, OrderSide} from "../../../../models/models";
 import { MT5ItemsComponent } from '../mt5-items.component';
 import { MT5Order } from 'modules/Trading/models/forex/mt/mt.models';
 import { MT5OrderCloseModalComponent } from '../order-close-modal/mt5-order-close-modal.component';
@@ -34,7 +34,7 @@ export class MT5PendingOrdersComponent extends MT5ItemsComponent<MT5Order> {
                     title: 'Cancel order',
                     message: `Are you sure you want cancel #'${selectedItem.Id}' order?`,
                     onConfirm: () => {
-                        this._mt5Broker.cancelOrder(selectedItem.Id)
+                        this._mt5Broker.cancelOrder(selectedItem.Id, OrderFillPolicy.FOK)
                             .subscribe( (result) => {
                                 if (result.result) {
                                     this._alertService.success("Order canceled");

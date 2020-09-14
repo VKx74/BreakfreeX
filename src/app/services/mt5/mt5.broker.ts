@@ -7,7 +7,7 @@ import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
 import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy } from 'modules/Trading/models/models';
 import { MT5SocketService } from '../socket/mt5.socket.service';
-import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, MT5LogoutRequest, MT5LoginResponse, IMT5PlaceOrderData, MT5PlaceOrderRequest, MT5EditOrderRequest, MT5CloseOrderRequest, IMT5AccountUpdatedData, IMT5OrderData, MT5GetOrderHistoryRequest } from 'modules/Trading/models/forex/mt/mt.communication';
+import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, MT5LogoutRequest, MT5LoginResponse, IMT5PlaceOrderData, MT5PlaceOrderRequest, MT5EditOrderRequest, MT5CloseOrderRequest, IMT5AccountUpdatedData, IMT5OrderData, MT5GetOrderHistoryRequest, IMT5SymbolData } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { EMarketType } from '@app/models/common/marketType';
@@ -31,7 +31,17 @@ export class MT5Broker implements IMT5Broker {
     private _orders: MT5Order[] = [];
     private _ordersHistory: MT5Order[] = [];
     private _positions: MT5Position[] = [];
-    private _accountInfo: MT5TradingAccount;
+    private _accountInfo: MT5TradingAccount = {
+        Account: "",
+        Balance: 0,
+        Currency: "",
+        CompanyName: "",
+        Equity: 0,
+        FreeMargin: 0,
+        Margin: 0,
+        Pl: 0
+    };
+
     private _endHistory: number = Math.round(new Date().getTime() / 1000);
     private _startHistory: number = this._endHistory - (60 * 60 * 24 * 14);
 
@@ -66,7 +76,7 @@ export class MT5Broker implements IMT5Broker {
     public get orders(): MT5Order[] {
         return this._orders;
     }
-    
+
     public get marketOrders(): MT5Order[] {
         return this._orders.filter(order => order.Type === OrderTypes.Market);
     }
@@ -88,9 +98,9 @@ export class MT5Broker implements IMT5Broker {
     }
 
     constructor(private ws: MT5SocketService) {
-        this.ws.tickSubject.subscribe(this._handleQuotes);
-        this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate);
-        this.ws.ordersUpdatedSubject.subscribe(this._handleOrdersUpdate);
+        this.ws.tickSubject.subscribe(this._handleQuotes.bind(this));
+        this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate.bind(this));
+        this.ws.ordersUpdatedSubject.subscribe(this._handleOrdersUpdate.bind(this));
     }
 
     placeOrder(order: MT5PlaceOrder): Observable<ActionResult> {
@@ -155,7 +165,7 @@ export class MT5Broker implements IMT5Broker {
         });
     }
 
-    closePosition(symbol: string): Observable<ActionResult> {
+    closePosition(symbol: string, fillPolicy: OrderFillPolicy): Observable<ActionResult> {
         let orders: MT5Order[] = [];
 
         for (const o of this._orders) {
@@ -171,7 +181,7 @@ export class MT5Broker implements IMT5Broker {
         const awaiters: Observable<ActionResult>[] = [];
 
         for (const order of orders) {
-            const awaiter = this.closeOrder(order.Id);
+            const awaiter = this.closeOrder(order.Id, fillPolicy);
             awaiters.push(awaiter);
         }
 
@@ -194,8 +204,8 @@ export class MT5Broker implements IMT5Broker {
         });
     }
 
-    closeOrder(order_id: any, amount: number = null): Observable<ActionResult> {
-        let order = null;
+    closeOrder(order_id: any, fillPolicy: OrderFillPolicy, amount: number = null): Observable<ActionResult> {
+        let order: MT5Order = null;
 
         for (const o of this._orders) {
             if (o.Id === order_id) {
@@ -216,8 +226,8 @@ export class MT5Broker implements IMT5Broker {
             Lots: amount ? amount : order.Size,
             Symbol: order.Symbol,
             Type: order.Type,
-            Ticket: order.Ticket,
-            FillPolicy: order.FillPolicy
+            Ticket: order.Id,
+            FillPolicy: fillPolicy
         };
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
@@ -236,7 +246,7 @@ export class MT5Broker implements IMT5Broker {
 
     }
 
-    cancelOrder(order_id: any): Observable<ActionResult> {
+    cancelOrder(order_id: any, fillPolicy: OrderFillPolicy): Observable<ActionResult> {
         let order = null;
 
         for (const o of this._orders) {
@@ -258,8 +268,8 @@ export class MT5Broker implements IMT5Broker {
             Lots: order.Size,
             Symbol: order.Symbol,
             Type: order.Type,
-            Ticket: order.Ticket,
-            FillPolicy: order.FillPolicy
+            Ticket: order.Id,
+            FillPolicy: fillPolicy
         };
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
@@ -277,7 +287,16 @@ export class MT5Broker implements IMT5Broker {
         });
     }
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
-        return of(this._instruments);
+        if (!search) {
+            return of(this._instruments);
+        }
+
+        const filtered = this._instruments.filter(i => { 
+            const s = i.symbol.replace("/", "").replace("_", "").toLowerCase();
+            return s.indexOf(search.toLowerCase()) !== -1;
+        });
+
+        return of(filtered);
     }
     isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes = null): boolean {
         for (const i of this._instruments) {
@@ -289,16 +308,6 @@ export class MT5Broker implements IMT5Broker {
     }
     init(initData: MT5ConnectionData): Observable<ActionResult> {
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
-
-            // test 
-            this._initData = initData;
-            observer.next({
-                result: true
-            });
-            this._initialize(["EURUSD", "AUDCAD"]);
-            return;
-            // test
-
             this.ws.open().subscribe(value => {
                 const request = new MT5LoginRequest();
                 request.Data = {
@@ -366,107 +375,30 @@ export class MT5Broker implements IMT5Broker {
         return this._tickSubscribers[symbol].subscribe(subscription);
     }
 
-    private _initialize(instruments: string[]) {
+    private _initialize(instruments: IMT5SymbolData[]) {
         for (const instrument of instruments) {
+            const tickSize = 1 / Math.pow(10, instrument.Digits);
             this._instruments.push({
-                id: instrument,
-                symbol: instrument,
+                id: instrument.Name,
+                symbol: instrument.Name,
+                company: instrument.Description,
                 exchange: null,
                 datafeed: null,
-                type: null,
-                tickSize: 0.00001,
+                type: instrument.CalculatioType as EMarketType,
+                tickSize: tickSize,
                 baseInstrument: "",
                 dependInstrument: "",
-                pricePrecision: 5,
+                pricePrecision: instrument.Digits,
                 tradable: true
             });
+
+            this._instrumentDecimals[instrument.Name] = instrument.Digits;
+            this._instrumentTickSize[instrument.Name] = tickSize;
         }
 
         this._orders = [];
-
-        for (let i = 0; i < 15; i++) {
-            this._orders.push({
-                Comment: "Test",
-                Id: "123234",
-                Price: 100.00,
-                Side: OrderSide.Buy,
-                Size: 1.2,
-                Status: EOrderStatus.Open,
-                Symbol: "EURUSD",
-                Time: new Date().getTime() / 1000,
-                Type: OrderTypes.Limit,
-                CurrentPrice: 1.22,
-                NetPL: 200,
-                PipPL: 0.2,
-                SL: 95.00,
-                Commission: 1.5,
-                Swap: 0.1,
-                ExpirationType: OrderExpirationType.GTC
-            });
-        }
-        
-        for (let i = 0; i < 15; i++) {
-            this._orders.push({
-                Comment: "Test",
-                Id: "123234",
-                Price: 100.00,
-                Side: OrderSide.Buy,
-                Size: 1.2,
-                Status: EOrderStatus.Open,
-                Symbol: "EURUSD_" + i,
-                Time: new Date().getTime() / 1000,
-                Type: OrderTypes.Market,
-                CurrentPrice: 1.22,
-                NetPL: -200,
-                PipPL: -0.2,
-                SL: 95.00,
-                Commission: 1.5,
-                Swap: 0.1,
-                ExpirationType: OrderExpirationType.GTC
-            });
-        }
-        for (let i = 0; i < 5; i++) {
-            this._orders.push({
-                Comment: "Test",
-                Id: "123234",
-                Price: 100.00,
-                Side: OrderSide.Sell,
-                Size: 1.5,
-                Status: EOrderStatus.Open,
-                Symbol: "AUDCAD",
-                Time: new Date().getTime() / 1000,
-                Type: OrderTypes.Market,
-                CurrentPrice: 1.22,
-                NetPL: 200,
-                PipPL: 0.2,
-                SL: 95.00,
-                Commission: 1.5,
-                Swap: 0.1,
-                ExpirationType: OrderExpirationType.GTC
-            });
-        }
-
-        this._accountInfo = {
-            Account: "3435345",
-            Balance: 556.85,
-            Currency: "USD",
-            Equity: 112.22,
-            Margin: 0,
-            FreeMargin: 0,
-            Pl: 77.45
-        };
-        
-        this._buildPositions();
-
-        setInterval(() => {
-            for (const order of this._orders) {
-                if (!order.CurrentPrice) {
-                    order.CurrentPrice = 0;
-                }
-                order.CurrentPrice += 0.001;
-            }
-            this._buildPositions();
-        }, 1000);
+        this._accountInfo.Account = this._initData.Login.toString();
+        this._loadHistory();
     }
 
     public instrumentDecimals(symbol: string): number {
@@ -513,8 +445,20 @@ export class MT5Broker implements IMT5Broker {
         this._accountInfo.FreeMargin = data.FreeMargin;
         this._accountInfo.Margin = data.Margin;
         this._accountInfo.Pl = data.Profit;
+        this._accountInfo.CompanyName = data.CompanyName;
 
         this.onAccountInfoUpdated.next(this._accountInfo);
+    }
+
+    private _calculatePipPL(order: MT5Order) {
+
+        if (!order.Price || !order.CurrentPrice) {
+            return;
+        }
+        const priceDiff = order.Side === OrderSide.Buy ? order.CurrentPrice - order.Price : order.Price - order.CurrentPrice;
+        const pipSize = this.instrumentTickSize(order.Symbol) * 10;
+
+        order.PipPL = priceDiff / pipSize;
     }
 
     private _handleOrdersUpdate(data: IMT5OrderData[]) {
@@ -523,7 +467,7 @@ export class MT5Broker implements IMT5Broker {
         for (const newOrder of data) {
             let exists = false;
             for (const existingOrder of this._orders) {
-                if (existingOrder.Id === newOrder.Ticket.toString()) {
+                if (existingOrder.Id === newOrder.Ticket) {
                     existingOrder.CurrentPrice = newOrder.ClosePrice;
                     existingOrder.SL = newOrder.StopLoss ? newOrder.StopLoss : null;
                     existingOrder.TP = newOrder.TakeProfit ? newOrder.TakeProfit : null;
@@ -532,13 +476,13 @@ export class MT5Broker implements IMT5Broker {
                     existingOrder.Commission = newOrder.Commission ? newOrder.Commission : null;
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
                     existingOrder.Size = newOrder.Lots;
-                    existingOrder.Type = newOrder.Type as OrderTypes;
+                    existingOrder.Type = this._getOrderType(newOrder.Type);
                     existingOrder.Time = newOrder.OpenTime;
                     existingOrder.NetPL = newOrder.Profit;
                     existingOrder.Status = newOrder.State;
                     existingOrder.ExpirationType = newOrder.ExpirationType as OrderExpirationType;
                     existingOrder.ExpirationDate = newOrder.ExpirationDate ? newOrder.ExpirationDate : null;
-                    existingOrder.PipPL = newOrder.OpenPrice - newOrder.ClosePrice;
+                    this._calculatePipPL(existingOrder);
                     exists = true;
                     break;
                 }
@@ -547,6 +491,7 @@ export class MT5Broker implements IMT5Broker {
             if (!exists) {
                 updateRequired = true;
                 const ord = this._addOrder(newOrder);
+                this._calculatePipPL(ord);
                 this._orders.push(ord);
             }
         }
@@ -555,7 +500,7 @@ export class MT5Broker implements IMT5Broker {
             let existingOrder = this._orders[i];
             let exists = false;
             for (const newOrder of data) {
-                if (existingOrder.Id === newOrder.Ticket.toString()) {
+                if (existingOrder.Id === newOrder.Ticket) {
                     exists = true;
                     break;
                 }
@@ -578,7 +523,7 @@ export class MT5Broker implements IMT5Broker {
 
     private _addOrder(data: IMT5OrderData): MT5Order {
         const ord: MT5Order = {
-            Id: data.Ticket.toString(),
+            Id: data.Ticket,
             CurrentPrice: data.ClosePrice,
             SL: data.StopLoss ? data.StopLoss : null,
             TP: data.TakeProfit ? data.TakeProfit : null,
@@ -587,13 +532,13 @@ export class MT5Broker implements IMT5Broker {
             Commission: data.Commission ? data.Commission : null,
             Swap: data.Swap ? data.Swap : null,
             Size: data.Lots,
-            Type: data.Type as OrderTypes,
+            Type: this._getOrderType(data.Type),
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
             ExpirationType: data.ExpirationType as OrderExpirationType,
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
-            Side: data.Side as OrderSide,
+            Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
             PipPL: data.OpenPrice - data.ClosePrice
         };
@@ -652,7 +597,7 @@ export class MT5Broker implements IMT5Broker {
 
             } else {
                 updateRequired = true;
-                this._orders.splice(i, 1);
+                this._positions.splice(i, 1);
                 i--;
             }
         }
@@ -719,5 +664,33 @@ export class MT5Broker implements IMT5Broker {
             PipPL: order.PipPL,
             CurrentPrice: order.CurrentPrice
         };
+    }
+
+    private _getOrderType(type: string): OrderTypes {
+        if (OrderTypes.Market.toLowerCase() === type.toLowerCase()) {
+            return OrderTypes.Market;
+        }
+        if (OrderTypes.Limit.toLowerCase() === type.toLowerCase()) {
+            return OrderTypes.Limit;
+        }
+        if (OrderTypes.Stop.toLowerCase() === type.toLowerCase()) {
+            return OrderTypes.Stop;
+        }
+        if (OrderTypes.StopLimit.toLowerCase() === type.toLowerCase()) {
+            return OrderTypes.StopLimit;
+        }
+
+        return type as OrderTypes;
+    }
+
+    private _getOrderSide(side: string): OrderSide {
+        if (OrderSide.Buy.toLowerCase() === side.toLowerCase()) {
+            return OrderSide.Buy;
+        }
+        if (OrderSide.Sell.toLowerCase() === side.toLowerCase()) {
+            return OrderSide.Sell;
+        }
+
+        return side as OrderSide;
     }
 }

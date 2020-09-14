@@ -4,6 +4,7 @@ import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 export interface MT5TradingAccount {
     Account: string;
     Currency: string;
+    CompanyName: string;
     Balance: number;
     Margin: number;
     FreeMargin: number;
@@ -12,7 +13,7 @@ export interface MT5TradingAccount {
 }
 
 export interface MT5Order {
-    Id: string;
+    Id: number;
     Symbol: string;
     Size: number;
     Price: number;
@@ -80,6 +81,6 @@ export interface MT5Server {
 
 export interface MT5ConnectionData {
     ServerName: string;
-    Login: string;
+    Login: number;
     Password: string;
 }

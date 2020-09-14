@@ -14,14 +14,18 @@ export class MT5SocketService extends WebsocketBase {
   private _accountUpdatedSubject: Subject<IMT5AccountUpdatedData> = new Subject<IMT5AccountUpdatedData>();
   private _ordersUpdatedSubject: Subject<IMT5OrderData[]> = new Subject<IMT5OrderData[]>();
 
+  get usePingPongs(): boolean {
+    return false;
+  }
+
   get tickSubject(): Subject<IMT5Tick> {
     return this._tickSubject;
-  } 
-  
+  }
+
   get accountUpdatedSubject(): Subject<IMT5AccountUpdatedData> {
     return this._accountUpdatedSubject;
   }
-  
+
   get ordersUpdatedSubject(): Subject<IMT5OrderData[]> {
     return this._ordersUpdatedSubject;
   }
@@ -37,18 +41,19 @@ export class MT5SocketService extends WebsocketBase {
     this._onMessageSubscription = this.onMessage.subscribe(value => {
       try {
         const msgData = value as MT5ResponseMessageBase;
+        const msgTypeString = msgData && msgData.Type ? msgData.Type.toLowerCase() : "";
 
-        if (msgData.Type === EMT5MessageType.Quote) {
+        if (msgTypeString === EMT5MessageType.Quote.toLowerCase()) {
           this._processNewQuote(msgData);
           return;
         }
-        
-        if (msgData.Type === EMT5MessageType.AccountUpdate) {
+
+        if (msgTypeString === EMT5MessageType.AccountUpdate.toLowerCase()) {
           this._processAccountUpdate(msgData);
           return;
-        } 
-        
-        if (msgData.Type === EMT5MessageType.OrdersUpdate) {
+        }
+
+        if (msgTypeString === EMT5MessageType.OrdersUpdate.toLowerCase()) {
           this._processOrdersUpdate(msgData);
           return;
         }
@@ -70,7 +75,7 @@ export class MT5SocketService extends WebsocketBase {
   public dispose() {
     if (this._onMessageSubscription) {
       this._onMessageSubscription.unsubscribe();
-  }
+    }
 
     this.send(new MT5LoginRequest());
     this.close();
@@ -122,12 +127,12 @@ export class MT5SocketService extends WebsocketBase {
       this._send(message, subscriber);
     });
   }
-  
+
   public unsubscribeFromQuotes(symbol: string): Observable<MT5ResponseMessageBase> {
     return new Observable<MT5ResponseMessageBase>(subscriber => {
       const message = new SubscribeQuote();
       message.Data = {
-        Subscribe: true,
+        Subscribe: false,
         Symbol: symbol
       };
       this._send(message, subscriber);
@@ -158,7 +163,7 @@ export class MT5SocketService extends WebsocketBase {
       subscriber.complete();
     }
   }
-  
+
   private _processAccountUpdate(msgData: MT5ResponseMessageBase) {
     const quoteMessage = msgData as MT5AccountUpdateResponse;
     this._accountUpdatedSubject.next(quoteMessage.Data);

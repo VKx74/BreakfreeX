@@ -28,8 +28,12 @@
   }
 
   .input-control, .crypto-button {
-    width: 120px;
+    width: 120px !important;
     padding: 8px 0px;
+  }
+
+  /deep/ .crypto-select {
+    width: 120px !important;
   }
 
   .disabled {

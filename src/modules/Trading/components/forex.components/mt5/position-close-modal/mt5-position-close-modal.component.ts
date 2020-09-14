@@ -5,6 +5,7 @@ import { Modal } from "Shared";
 import { MT5Order, MT5Position } from 'modules/Trading/models/forex/mt/mt.models';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
 import { AlertService } from '@alert/services/alert.service';
+import { OrderFillPolicy } from 'modules/Trading/models/models';
 
 @Component({
     selector: 'mt5-position-close-modal',
@@ -41,7 +42,7 @@ export class MT5PositionCloseModalComponent extends Modal<MT5Order> implements O
     
     submit() {
         this.showSpinner = true;
-        this._mt5Broker.closePosition(this.position.Symbol)
+        this._mt5Broker.closePosition(this.position.Symbol, OrderFillPolicy.IOC)
         .subscribe( (result) => {
             if (result.result) {
                 this._alertService.success("Position closed");

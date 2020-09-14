@@ -21,8 +21,8 @@ export enum OrderSide {
 }
 
 export enum OrderFillPolicy {
+    IOC = 'IOC',
     FOK = 'FOK',
-    IOC = 'Sell',
     FF = 'FF'
 }
 

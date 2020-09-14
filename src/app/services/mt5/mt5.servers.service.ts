@@ -6,23 +6,7 @@ import { MT5Server } from 'modules/Trading/models/forex/mt/mt.models';
 
 @Injectable()
 export class MT5BrokerServersProvider { 
-    private _servers: MT5Server[] = [{
-        Broker: "Oanda",
-        IsDemo: true,
-        Name: "Oanda15-Demo"
-    }, {
-        Broker: "Oanda",
-        IsDemo: false,
-        Name: "Oanda15"
-    }, {
-        Broker: "FOREX.com",
-        IsDemo: true,
-        Name: "FOREX.com-Demo"
-    }, {
-        Broker: "FOREX.com",
-        IsDemo: false,
-        Name: "FOREX.com"
-    }];
+    private _servers: MT5Server[] = [];
 
     constructor(private ws: MT5SocketService) { 
 
