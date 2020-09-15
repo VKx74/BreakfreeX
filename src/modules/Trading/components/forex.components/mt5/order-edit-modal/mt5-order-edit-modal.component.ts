@@ -11,7 +11,7 @@ import { IMT5Tick } from '@app/models/common/tick';
 
 export class MT5OrderEditConfig {
     symbol: string;
-    id: string;
+    id: number;
     side: OrderSide;
     amount: number;
     type: OrderTypes;
