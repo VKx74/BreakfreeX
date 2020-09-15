@@ -288,15 +288,15 @@ export class MT5Broker implements IMT5Broker {
     }
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
         if (!search) {
-            return of(this._instruments);
+            return of(this._instruments.slice());
         }
 
         const filtered = this._instruments.filter(i => { 
-            const s = i.symbol.replace("/", "").replace("_", "").toLowerCase();
+            const s = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
             return s.indexOf(search.toLowerCase()) !== -1;
         });
 
-        return of(filtered);
+        return of(filtered.slice());
     }
     isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes = null): boolean {
         for (const i of this._instruments) {
@@ -373,6 +373,19 @@ export class MT5Broker implements IMT5Broker {
         }
 
         return this._tickSubscribers[symbol].subscribe(subscription);
+    }
+
+    instrumentToBrokerFormat(symbol: string): IInstrument {
+        const s1 = symbol.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
+
+        for (const i of this._instruments) {
+            const s2 = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
+            if (s2 === s1) {
+                return i;
+            }
+        }
+
+        return null;
     }
 
     private _initialize(instruments: IMT5SymbolData[]) {
@@ -463,25 +476,39 @@ export class MT5Broker implements IMT5Broker {
 
     private _handleOrdersUpdate(data: IMT5OrderData[]) {
         let updateRequired = false;
+        let dataChanged = false;
 
         for (const newOrder of data) {
             let exists = false;
             for (const existingOrder of this._orders) {
                 if (existingOrder.Id === newOrder.Ticket) {
                     existingOrder.CurrentPrice = newOrder.ClosePrice;
-                    existingOrder.SL = newOrder.StopLoss ? newOrder.StopLoss : null;
-                    existingOrder.TP = newOrder.TakeProfit ? newOrder.TakeProfit : null;
-                    existingOrder.Price = newOrder.OpenPrice ? newOrder.OpenPrice : null;
                     existingOrder.Comment = newOrder.Comment ? newOrder.Comment : null;
                     existingOrder.Commission = newOrder.Commission ? newOrder.Commission : null;
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
                     existingOrder.Size = newOrder.Lots;
-                    existingOrder.Type = this._getOrderType(newOrder.Type);
                     existingOrder.Time = newOrder.OpenTime;
                     existingOrder.NetPL = newOrder.Profit;
-                    existingOrder.Status = newOrder.State;
                     existingOrder.ExpirationType = newOrder.ExpirationType as OrderExpirationType;
                     existingOrder.ExpirationDate = newOrder.ExpirationDate ? newOrder.ExpirationDate : null;
+
+                    const type = this._getOrderType(newOrder.Type);
+                    const status = newOrder.State;
+                    const sl = newOrder.StopLoss ? newOrder.StopLoss : null;
+                    const tp = newOrder.TakeProfit ? newOrder.TakeProfit : null;
+                    const price = newOrder.OpenPrice ? newOrder.OpenPrice : null;
+
+                    if (existingOrder.Type !== type || existingOrder.Status !== status || existingOrder.SL !== sl ||
+                        existingOrder.TP !== tp || existingOrder.Price !== price) {
+                        dataChanged = true;
+                    }
+
+                    existingOrder.Type = type;
+                    existingOrder.Status = status;
+                    existingOrder.SL = sl;
+                    existingOrder.TP = tp;
+                    existingOrder.Price = price;
+
                     this._calculatePipPL(existingOrder);
                     exists = true;
                     break;
@@ -513,8 +540,10 @@ export class MT5Broker implements IMT5Broker {
             }
         }
 
-        if (updateRequired) {
+        if (updateRequired || dataChanged) {
             this.onOrdersUpdated.next(this._orders);
+        }
+        if (updateRequired) {
             this._loadHistory();
         }
 

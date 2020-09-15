@@ -64,7 +64,8 @@ declare let fintatechDarkTheme: any;
             provide: TranslateService,
             useExisting: ChartTranslateService
         },
-        CalendarEventsDatafeed
+        CalendarEventsDatafeed,
+        TradeFromChartService
     ]
 })
 export class TcdComponent extends BaseLayoutItemComponent {
@@ -166,10 +167,18 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
                 // backward compatibility for price line settings
                 if (chartOptions && chartOptions.theme && !chartOptions.theme.priceLine) {
-                    const defaultChartTheme = theme = this._getTheme();
+                    const defaultChartTheme = this._getTheme();
                     if (defaultChartTheme && defaultChartTheme.priceLine) {
                         chartOptions.theme.priceLine = defaultChartTheme.priceLine;
                         console.log("Set default price line theme");
+                    }
+                } 
+                
+                if (chartOptions && chartOptions.theme && !chartOptions.theme.orders) {
+                    const defaultChartTheme = this._getTheme();
+                    if (defaultChartTheme && defaultChartTheme.orders) {
+                        chartOptions.theme.orders = defaultChartTheme.orders;
+                        console.log("Set default orders line theme");
                     }
                 }
             }
@@ -235,6 +244,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED, this.indicatorRemoved.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS, this.setDefaultSettings.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.SAVE_SESSION, this.saveSession.bind(this));
+            this.chart.on(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED, this.instrumentChanged.bind(this));
 
             if (!state) {
                 let isProAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
@@ -284,6 +294,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     protected saveSession(eventObject: TradingChartDesigner.IValueChangedEvent) {
         this._store.dispatch(new SaveStateAction());
+    }
+
+    protected instrumentChanged(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        this._tradingFromChartHandler.refresh();
     }
 
     protected useDefaultLinker(): boolean {
@@ -479,11 +493,18 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this._chartTrackerService.removeChart(this.chart);
             if (this.chart) {
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_ADDED);
+                this.chart.off(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED);
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED);
                 this.chart.off(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS);
                 this.chart.off(TradingChartDesigner.ChartEvent.SAVE_SESSION);
                 this.chart.destroy();
             }
+        } catch (e) {
+            console.log(e);
+        } 
+        
+        try {
+            this._tradingFromChartHandler.dispose();
         } catch (e) {
             console.log(e);
         }

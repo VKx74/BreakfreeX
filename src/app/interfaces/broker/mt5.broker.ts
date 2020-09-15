@@ -3,6 +3,7 @@ import {IBroker} from "./broker";
 import { MT5TradingAccount, MT5Order, MT5Position, MT5PlaceOrder, MT5EditOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult, OrderFillPolicy } from 'modules/Trading/models/models';
 import { ITick, IMT5Tick } from '@app/models/common/tick';
+import { IInstrument } from '@app/models/common/instrument';
 
 export interface IMT5Broker extends IBroker {
     onAccountInfoUpdated: Subject<MT5TradingAccount>;
@@ -25,4 +26,5 @@ export interface IMT5Broker extends IBroker {
     instrumentTickSize(symbol: string): number;
     instrumentMinAmount(symbol: string): number;
     instrumentAmountStep(symbol: string): number;
+    instrumentToBrokerFormat(symbol: string): IInstrument;
 }
