@@ -482,7 +482,7 @@ export class MT5Broker implements IMT5Broker {
             let exists = false;
             for (const existingOrder of this._orders) {
                 if (existingOrder.Id === newOrder.Ticket) {
-                    existingOrder.CurrentPrice = newOrder.ClosePrice;
+                    existingOrder.CurrentPrice = newOrder.ClosePrice ? newOrder.ClosePrice : null;
                     existingOrder.Comment = newOrder.Comment ? newOrder.Comment : null;
                     existingOrder.Commission = newOrder.Commission ? newOrder.Commission : null;
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
@@ -518,7 +518,6 @@ export class MT5Broker implements IMT5Broker {
             if (!exists) {
                 updateRequired = true;
                 const ord = this._addOrder(newOrder);
-                this._calculatePipPL(ord);
                 this._orders.push(ord);
             }
         }
@@ -553,7 +552,7 @@ export class MT5Broker implements IMT5Broker {
     private _addOrder(data: IMT5OrderData): MT5Order {
         const ord: MT5Order = {
             Id: data.Ticket,
-            CurrentPrice: data.ClosePrice,
+            CurrentPrice: data.ClosePrice ?  data.ClosePrice : null,
             SL: data.StopLoss ? data.StopLoss : null,
             TP: data.TakeProfit ? data.TakeProfit : null,
             Price: data.OpenPrice ? data.OpenPrice : null,
@@ -569,8 +568,10 @@ export class MT5Broker implements IMT5Broker {
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
-            PipPL: data.OpenPrice - data.ClosePrice
+            PipPL: null
         };
+
+        this._calculatePipPL(ord);
 
         return ord;
     }
