@@ -14,7 +14,7 @@
     <data-table-header-cell columnName="Open Time" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="ExpirationType" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="ExpirationDate" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell> -->
-    <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Commission" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Comment" [sortable]="false">{{'tradeManager.comment' | translate}}</data-table-header-cell>
@@ -79,9 +79,9 @@
             </ng-template>
         </ng-template>
     </data-table-cell> -->
-    <data-table-cell columnName="Status">
+    <!-- <data-table-cell columnName="Status">
         <ng-template let-item>{{item.Status}}</ng-template>
-    </data-table-cell>
+    </data-table-cell> -->
     <data-table-cell columnName="Commission">
         <ng-template let-item>{{item.Commission?.toFixed(2)}}</ng-template>
     </data-table-cell>

@@ -239,8 +239,23 @@ export class MT5OrderConfiguratorComponent implements OnInit {
     }
 
     private _getSetupDate(): number {
+        if (this.config.expirationType !== OrderExpirationType.Specified) {
+            return 0;
+        }
+
+        const hourMin = this._selectedTime.split(":");
+        let h = hourMin[0];
+        let m = hourMin[1];
+
+        if (h.length === 1) {
+            h = `0${h}`;
+        }
+        if (m.length === 1) {
+            m = `0${m}`;
+        }
+
         const dateString = this._selectedDate.toISOString().split("T")[0];
-        const timeString = `${this._selectedTime}:00.500Z`;
+        const timeString = `${h}:${m}:00.500Z`;
         const exp = new Date(`${dateString}T${timeString}`).getTime() / 1000;
         return Math.roundToDecimals(exp, 0);
     }

@@ -517,7 +517,7 @@ export class MT5Broker implements IMT5Broker {
 
             if (!exists) {
                 updateRequired = true;
-                const ord = this._addOrder(newOrder);
+                const ord = this._createOrder(newOrder);
                 this._orders.push(ord);
             }
         }
@@ -549,7 +549,7 @@ export class MT5Broker implements IMT5Broker {
         this._buildPositions();
     }
 
-    private _addOrder(data: IMT5OrderData): MT5Order {
+    private _createOrder(data: IMT5OrderData): MT5Order {
         const ord: MT5Order = {
             Id: data.Ticket,
             CurrentPrice: data.ClosePrice ?  data.ClosePrice : null,
@@ -586,7 +586,12 @@ export class MT5Broker implements IMT5Broker {
         this.ws.getOrderHistory(request).subscribe((data) => {
             this._ordersHistory = [];
             for (const order of data.Data) {
-                const ord = this._addOrder(order);
+                const ord = this._createOrder(order);
+
+                if (ord.Type !== OrderTypes.Market) {
+                    continue;
+                }
+
                 this._ordersHistory.push(ord);
             }
             this._onHistoricalOrdersUpdated.next(this._ordersHistory);
