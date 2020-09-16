@@ -482,7 +482,7 @@ export class MT5Broker implements IMT5Broker {
             let exists = false;
             for (const existingOrder of this._orders) {
                 if (existingOrder.Id === newOrder.Ticket) {
-                    existingOrder.CurrentPrice = newOrder.ClosePrice ? newOrder.ClosePrice : null;
+                    existingOrder.CurrentPrice = newOrder.CurrentPrice ? newOrder.CurrentPrice : null;
                     existingOrder.Comment = newOrder.Comment ? newOrder.Comment : null;
                     existingOrder.Commission = newOrder.Commission ? newOrder.Commission : null;
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
@@ -552,7 +552,7 @@ export class MT5Broker implements IMT5Broker {
     private _createOrder(data: IMT5OrderData): MT5Order {
         const ord: MT5Order = {
             Id: data.Ticket,
-            CurrentPrice: data.ClosePrice ?  data.ClosePrice : null,
+            CurrentPrice: data.CurrentPrice ?  data.CurrentPrice : null,
             SL: data.StopLoss ? data.StopLoss : null,
             TP: data.TakeProfit ? data.TakeProfit : null,
             Price: data.OpenPrice ? data.OpenPrice : null,

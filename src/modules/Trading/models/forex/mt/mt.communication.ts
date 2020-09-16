@@ -79,7 +79,7 @@ export interface IMT5OrderData {
     Profit: number;
     Swap: number;
     Commission: number;
-    ClosePrice: number;
+    CurrentPrice: number;
     CloseTime: number;
     CloseVolume: number;
     OpenPrice: number;
