@@ -36,29 +36,29 @@ export interface MT5Order {
 export interface MT5PlaceOrder {
     Symbol: string;
     Size: number;
-    Price?: number;
-    SL?: number;
-    TP?: number;
+    Price: number;
+    SL: number;
+    TP: number;
     Side: OrderSide;
     Type: OrderTypes;
     Comment: string;
     FillPolicy: OrderFillPolicy;
     ExpirationType: OrderExpirationType;
-    ExpirationDate?: number;
+    ExpirationDate: number;
 }
 
 export interface MT5EditOrder {
     Ticket: any;
     Symbol: string;
     Size: number;
-    Price?: number;
-    SL?: number;
-    TP?: number;
+    Price: number;
+    SL: number;
+    TP: number;
     Side: OrderSide;
     Type: OrderTypes;
     Comment: string;
     ExpirationType: OrderExpirationType;
-    ExpirationDate?: number;
+    ExpirationDate: number;
 }
 
 export interface MT5Position {

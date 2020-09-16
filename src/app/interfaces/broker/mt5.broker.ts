@@ -8,6 +8,7 @@ import { IInstrument } from '@app/models/common/instrument';
 export interface IMT5Broker extends IBroker {
     onAccountInfoUpdated: Subject<MT5TradingAccount>;
     onOrdersUpdated: Subject<MT5Order[]>;
+    onOrdersParametersUpdated: Subject<MT5Order[]>;
     onHistoricalOrdersUpdated: Subject<MT5Order[]>;
     onPositionsUpdated: Subject<MT5Position[]>;
 

@@ -24,7 +24,9 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
         this.selectedItem = item;
         if (this.selectedItem) {
             this._dialog.open(MT5OrderEditModalComponent, {
-                data: this.selectedItem
+                data: {
+                    order: this.selectedItem
+                }
             });
         }
     }

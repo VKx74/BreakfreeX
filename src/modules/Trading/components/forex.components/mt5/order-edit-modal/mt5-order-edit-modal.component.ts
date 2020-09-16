@@ -9,6 +9,11 @@ import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from 'mod
 import { Subscription } from 'rxjs';
 import { IMT5Tick } from '@app/models/common/tick';
 
+export interface IEDitDialogInputParameters { 
+    order: MT5Order;
+    updateParams: object;
+}
+
 export class MT5OrderEditConfig {
     symbol: string;
     id: number;
@@ -35,7 +40,7 @@ export class MT5OrderEditConfig {
         }
     ]
 })
-export class MT5OrderEditModalComponent extends Modal<MT5Order> implements OnInit {
+export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters> implements OnInit {
     private _oneDayPlus = new Date(new Date().getTime() + (1000 * 24 * 60 * 60));
     private _config: MT5OrderEditConfig = new MT5OrderEditConfig();
     private _marketSubscription: Subscription;
@@ -43,7 +48,7 @@ export class MT5OrderEditModalComponent extends Modal<MT5Order> implements OnIni
     private _selectedDate: Date;
 
     public get order(): MT5Order {
-        return this.data;
+        return this.data.order;
     }   
     
     public get config(): MT5OrderEditConfig {
@@ -92,9 +97,7 @@ export class MT5OrderEditModalComponent extends Modal<MT5Order> implements OnIni
         this._config.expirationType = this.order.ExpirationType;
         this._config.price = this.order.Price;
         this._config.sl = this.order.SL;
-        this._config.useSL = this.order.SL ? true : false;
         this._config.tp = this.order.TP;
-        this._config.useTP = this.order.TP ? true : false;
         this._config.comment = this.order.Comment;
 
         if (this.order.ExpirationDate) {
@@ -129,11 +132,24 @@ export class MT5OrderEditModalComponent extends Modal<MT5Order> implements OnIni
         }
 
         const symbol = this._config.symbol;
-        this.amountStep =  this._mt5Broker.instrumentAmountStep(symbol);
-        this.minAmountValue =  this._mt5Broker.instrumentMinAmount(symbol);
-        this.priceStep =  this._mt5Broker.instrumentTickSize(symbol);
-        this.minPriceValue =  this._mt5Broker.instrumentTickSize(symbol);
-        this.decimals =  this._mt5Broker.instrumentDecimals(symbol);
+        this.amountStep = this._mt5Broker.instrumentAmountStep(symbol);
+        this.minAmountValue = this._mt5Broker.instrumentMinAmount(symbol);
+        this.priceStep = this._mt5Broker.instrumentTickSize(symbol);
+        this.minPriceValue = this._mt5Broker.instrumentTickSize(symbol);
+        this.decimals = this._mt5Broker.instrumentDecimals(symbol);
+
+        if (this.data.updateParams["sl"]) {
+            this._config.sl = this.data.updateParams["sl"].toFixed(this.decimals);
+        }
+        if (this.data.updateParams["tp"]) {
+            this._config.tp = this.data.updateParams["tp"].toFixed(this.decimals);
+        }
+        if (this.data.updateParams["price"]) {
+            this._config.price = this.data.updateParams["price"].toFixed(this.decimals);
+        }
+
+        this._config.useSL = this._config.sl ? true : false;
+        this._config.useTP = this._config.tp ? true : false;
     }
 
     ngOnDestroy() {
@@ -173,16 +189,16 @@ export class MT5OrderEditModalComponent extends Modal<MT5Order> implements OnIni
         this.showSpinner = true;
         const request: MT5EditOrder = {
             Ticket: this.config.id,
-            Comment: this.config.comment,
+            Comment: this.config.comment || "",
             ExpirationType: this.config.expirationType,
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.symbol,
             Type: this.config.type,
             ExpirationDate: this._getSetupDate(),
-            Price: this.config.price,
-            SL: this.config.useSL ? this.config.sl : null,
-            TP: this.config.useTP ? this.config.tp : null
+            Price: this.config.type !== OrderTypes.Market ? this.config.price : 0,
+            SL: this.config.useSL ? this.config.sl : 0,
+            TP: this.config.useTP ? this.config.tp : 0
         };
         this._mt5Broker.editOrder(request).subscribe(
             (result) => {
@@ -203,11 +219,27 @@ export class MT5OrderEditModalComponent extends Modal<MT5Order> implements OnIni
 
     private _getSetupDate(): number {
         if (!this._selectedDate || !this._selectedTime) {
-            return null;
+            return 0;
+        }
+
+        if (this.config.expirationType !== OrderExpirationType.Specified) {
+            return 0;
+        }
+
+        const hourMin = this._selectedTime.split(":");
+        let h = hourMin[0];
+        let m = hourMin[1];
+
+        if (h.length === 1) {
+            h = `0${h}`;
+        }
+        if (m.length === 1) {
+            m = `0${m}`;
         }
 
         const dateString = this._selectedDate.toISOString().split("T")[0];
-        const timeString = `${this._selectedTime}:00.500Z`;
-        return new Date(`${dateString}T${timeString}`).getTime() / 1000;
+        const timeString = `${h}:${m}:00.500Z`;
+        const exp = new Date(`${dateString}T${timeString}`).getTime() / 1000;
+        return Math.roundToDecimals(exp, 0);
     }
 }

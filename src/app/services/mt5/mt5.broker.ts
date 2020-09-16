@@ -22,6 +22,7 @@ export class MT5Broker implements IMT5Broker {
     private _onAccountInfoUpdated: Subject<MT5TradingAccount> = new Subject<MT5TradingAccount>();
     private _onOrdersUpdated: Subject<MT5Order[]> = new Subject<MT5Order[]>();
     private _onHistoricalOrdersUpdated: Subject<MT5Order[]> = new Subject<MT5Order[]>();
+    private _onOrdersParametersUpdated: Subject<MT5Order[]> = new Subject<MT5Order[]>();
     private _onPositionsUpdated: Subject<MT5Position[]> = new Subject<MT5Position[]>();
     private _instruments: IInstrument[] = [];
 
@@ -67,6 +68,10 @@ export class MT5Broker implements IMT5Broker {
 
     public get onHistoricalOrdersUpdated(): Subject<MT5Order[]> {
         return this._onHistoricalOrdersUpdated;
+    }
+
+    public get onOrdersParametersUpdated(): Subject<MT5Order[]> {
+        return this._onOrdersParametersUpdated;
     }
 
     public get onPositionsUpdated(): Subject<MT5Position[]> {
@@ -476,7 +481,7 @@ export class MT5Broker implements IMT5Broker {
 
     private _handleOrdersUpdate(data: IMT5OrderData[]) {
         let updateRequired = false;
-        let dataChanged = false;
+        let changedOrders: MT5Order[] = [];
 
         for (const newOrder of data) {
             let exists = false;
@@ -486,10 +491,9 @@ export class MT5Broker implements IMT5Broker {
                     existingOrder.Comment = newOrder.Comment ? newOrder.Comment : null;
                     existingOrder.Commission = newOrder.Commission ? newOrder.Commission : null;
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
-                    existingOrder.Size = newOrder.Lots;
+                    
                     existingOrder.Time = newOrder.OpenTime;
-                    existingOrder.NetPL = newOrder.Profit;
-                    existingOrder.ExpirationType = newOrder.ExpirationType as OrderExpirationType;
+                    existingOrder.ExpirationType = this._getOrderExpiration(newOrder.ExpirationType);
                     existingOrder.ExpirationDate = newOrder.ExpirationDate ? newOrder.ExpirationDate : null;
 
                     const type = this._getOrderType(newOrder.Type);
@@ -497,10 +501,16 @@ export class MT5Broker implements IMT5Broker {
                     const sl = newOrder.StopLoss ? newOrder.StopLoss : null;
                     const tp = newOrder.TakeProfit ? newOrder.TakeProfit : null;
                     const price = newOrder.OpenPrice ? newOrder.OpenPrice : null;
+                    const size = newOrder.Lots;
+                    const netPl = newOrder.Profit;
 
-                    if (existingOrder.Type !== type || existingOrder.Status !== status || existingOrder.SL !== sl ||
-                        existingOrder.TP !== tp || existingOrder.Price !== price) {
-                        dataChanged = true;
+                    if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Price !== price ||
+                        existingOrder.Size !== size || existingOrder.NetPL !== netPl || existingOrder.Type !== type || existingOrder.Status !== status) {
+                        changedOrders.push(existingOrder);
+                    }
+
+                    if (existingOrder.Type !== type || existingOrder.Status !== status) {
+                        updateRequired = true;
                     }
 
                     existingOrder.Type = type;
@@ -508,6 +518,8 @@ export class MT5Broker implements IMT5Broker {
                     existingOrder.SL = sl;
                     existingOrder.TP = tp;
                     existingOrder.Price = price;
+                    existingOrder.Size = size;
+                    existingOrder.NetPL = netPl;
 
                     this._calculatePipPL(existingOrder);
                     exists = true;
@@ -539,10 +551,12 @@ export class MT5Broker implements IMT5Broker {
             }
         }
 
-        if (updateRequired || dataChanged) {
-            this.onOrdersUpdated.next(this._orders);
+        if (changedOrders.length) {
+            this.onOrdersParametersUpdated.next(changedOrders);
         }
+
         if (updateRequired) {
+            this.onOrdersUpdated.next(this._orders);
             this._loadHistory();
         }
 
@@ -564,7 +578,7 @@ export class MT5Broker implements IMT5Broker {
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
-            ExpirationType: data.ExpirationType as OrderExpirationType,
+            ExpirationType: this._getOrderExpiration(data.ExpirationType),
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
@@ -727,5 +741,19 @@ export class MT5Broker implements IMT5Broker {
         }
 
         return side as OrderSide;
+    }
+    
+    private _getOrderExpiration(expiration: string): OrderExpirationType {
+        if (OrderExpirationType.GTC.toLowerCase() === expiration.toLowerCase()) {
+            return OrderExpirationType.GTC;
+        }
+        if (OrderExpirationType.Specified.toLowerCase() === expiration.toLowerCase()) {
+            return OrderExpirationType.Specified;
+        }    
+        if (OrderExpirationType.Today.toLowerCase() === expiration.toLowerCase()) {
+            return OrderExpirationType.Today;
+        }
+
+        return expiration as OrderExpirationType;
     }
 }
