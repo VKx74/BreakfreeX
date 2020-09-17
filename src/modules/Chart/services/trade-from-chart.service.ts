@@ -6,11 +6,10 @@ import { MT5OrderConfig } from 'modules/Trading/components/forex.components/mt5/
 import { OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
 import { Subscription } from 'rxjs';
-import { MT5Order } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5EditOrderPrice, MT5Order } from 'modules/Trading/models/forex/mt/mt.models';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { AlertService } from "@alert/services/alert.service";
 import { MT5OrderCloseModalComponent } from 'modules/Trading/components/forex.components/mt5/order-close-modal/mt5-order-close-modal.component';
-import { MT5OrderEditModalComponent } from 'modules/Trading/components/forex.components/mt5/order-edit-modal/mt5-order-edit-modal.component';
 
 @Injectable()
 export class TradeFromChartService implements TradingChartDesigner.ITradingFromChartHandler {
@@ -28,7 +27,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 }); 
                 
                 this._onOrdersParametersUpdated = this._brokerService.activeBroker.onOrdersParametersUpdated.subscribe((orders: MT5Order[]) => {
-                    this.updatePL(orders);
+                    this.handleOrdersParametersChanged(orders);
                 });
             } else {
                 if (this._ordersUpdatedSubscription) {
@@ -69,53 +68,47 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        let isSL = false;
-        let isTP = false;
-
-        if (id.toString().startsWith("sl_")) {
-            isSL = true;
-        } 
-        
-        if (id.toString().startsWith("tp_")) {
-            isTP = true;
-        }
-
         const orderId = Number(id.toString().replace("sl_", "").replace("tp_", ""));
-        let order: MT5Order;
-
-        for (const o of mt5Broker.orders) {
-            if (o.Id === orderId) {
-                order = o;
-                break;
-            }
-        }
-
+        const order = mt5Broker.getOrderById(orderId);
         if (!order) {
             callback();
             return;
         }
 
-        const updateData = {};
+        const editRequest: MT5EditOrderPrice = {
+            Ticket: order.Id,
+            Price: order.Price,
+            SL: order.SL,
+            TP: order.TP
+        };
 
-        if (isSL) {
-            updateData["sl"] = price;
-        }
-        if (isTP) {
-            updateData["tp"] = price;
-        }
-
-        if (!isSL && !isTP) {
-            updateData["price"] = price;
+        if (id.toString().startsWith("sl_")) {
+            editRequest.SL = price;
+        } else if (id.toString().startsWith("tp_")) {
+            editRequest.TP = price;
+        } else {
+            editRequest.Price = price;
         }
 
-        this._dialog.open(MT5OrderEditModalComponent, {
-            data: {
-                order: order,
-                updateParams: updateData
+        this.setLinePendingState(id.toString(), price);
+
+        mt5Broker.editOrderPrice(editRequest).subscribe(
+            (result) => {
+                callback();
+                if (result.result) {
+                    this._alertService.success("Order modified");
+                } else {
+                    this._alertService.error("Failed to modify order: " + result.msg);
+                    this.refresh();
+                }
+            },
+            (error) => {
+                callback();
+                this._alertService.error("Failed to modify order: " + error);
+                this.refresh();
             }
-        }).afterClosed().subscribe(() => {
-            callback();
-        });
+        );
+       
     }
 
     public IsTradingEnabledHandler(): boolean {
@@ -353,7 +346,24 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         shape.boxText = order.NetPL ? order.NetPL.toFixed(2) : "-";
     }
 
-    private updatePL(orders: MT5Order[]) {
+    private setLinePendingState(shapeId: string, price?: number) {
+        if (!this._chart) {
+            return;
+        }
+        for (const shape of this._chart.primaryPane.shapes) {
+            if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
+                const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
+                if (shapeId === orderLine.lineId) {
+                    orderLine.boxText = "amending...";
+                    if (price) {
+                        orderLine.linePrice = price;
+                    }
+                } 
+            }
+        }
+    }
+
+    private handleOrdersParametersChanged(orders: MT5Order[]) {
         if (!this._chart) {
             return;
         }

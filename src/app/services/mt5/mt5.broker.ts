@@ -1,7 +1,7 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
 import { IMT5Broker } from '@app/interfaces/broker/mt5.broker';
 import { Injectable } from '@angular/core';
-import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5Position, MT5Server, MT5ConnectionData } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5Position, MT5Server, MT5ConnectionData, MT5EditOrderPrice } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
@@ -152,6 +152,43 @@ export class MT5Broker implements IMT5Broker {
             TakeProfit: order.TP,
             ExpirationType: order.ExpirationType,
             ExpirationDate: order.ExpirationDate,
+            Ticket: order.Ticket
+        };
+
+        return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+            this.ws.editOrder(request).subscribe((response) => {
+                if (response.IsSuccess) {
+                    observer.next({ result: true });
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
+    }
+    
+    editOrderPrice(order: MT5EditOrderPrice): Observable<ActionResult> {
+        const request = new MT5EditOrderRequest();
+        const orderData = this.getOrderById(order.Ticket);
+
+        if (!orderData) {
+            return throwError("Orders not found by Id");
+        }
+
+        request.Data = {
+            Comment: orderData.Comment || "",
+            Price: order.Price || 0,
+            Side: orderData.Side,
+            Lots: orderData.Size,
+            Symbol: orderData.Symbol,
+            Type: orderData.Type,
+            StopLoss: order.SL || 0,
+            TakeProfit: order.TP || 0,
+            ExpirationType: orderData.ExpirationType,
+            ExpirationDate: orderData.ExpirationDate || 0,
             Ticket: order.Ticket
         };
 
@@ -391,6 +428,14 @@ export class MT5Broker implements IMT5Broker {
         }
 
         return null;
+    }
+
+    getOrderById(orderId: number): MT5Order {
+        for (const o of this._orders) {
+            if (o.Id === orderId) {
+                return o;
+            }
+        }
     }
 
     private _initialize(instruments: IMT5SymbolData[]) {

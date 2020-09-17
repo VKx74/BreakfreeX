@@ -61,6 +61,13 @@ export interface MT5EditOrder {
     ExpirationDate: number;
 }
 
+export interface MT5EditOrderPrice {
+    Ticket: any;
+    Price: number;
+    SL: number;
+    TP: number;
+}
+
 export interface MT5Position {
     Symbol: string;
     Size: number;
