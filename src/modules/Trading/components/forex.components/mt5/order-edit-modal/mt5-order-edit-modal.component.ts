@@ -9,7 +9,7 @@ import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from 'mod
 import { Subscription } from 'rxjs';
 import { IMT5Tick } from '@app/models/common/tick';
 
-export interface IEDitDialogInputParameters { 
+export interface IEDitDialogInputParameters {
     order: MT5Order;
     updateParams: object;
 }
@@ -49,11 +49,11 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
 
     public get order(): MT5Order {
         return this.data.order;
-    }   
-    
+    }
+
     public get config(): MT5OrderEditConfig {
         return this._config;
-    }  
+    }
 
     set selectedTime(value: string) {
         if (value) {
@@ -62,8 +62,8 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
     }
     get selectedTime(): string {
         return this._selectedTime;
-    } 
-    
+    }
+
     set selectedDate(value: Date) {
         if (value) {
             this._selectedDate = value;
@@ -72,7 +72,7 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
     get selectedDate(): Date {
         return this._selectedDate;
     }
-    
+
     public lastTick: IMT5Tick;
     public minAmountValue: number = 0.01;
     public minPriceValue: number = 0.000001;
@@ -106,14 +106,6 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
             this._selectedTime = `${this._selectedDate.getUTCHours()}:${this._selectedDate.getUTCMinutes()}`;
         }
 
-        if (!this._config.sl) {
-            this._config.sl = this.order.Price;
-        } 
-        
-        if (!this._config.tp) {
-            this._config.tp = this.order.Price;
-        }
-
         if (this._config.symbol) {
             this._marketSubscription = this._mt5Broker.subscribeToTicks(this._config.symbol, (tick: IMT5Tick) => {
                 this.lastTick = tick;
@@ -138,18 +130,28 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
         this.minPriceValue = this._mt5Broker.instrumentTickSize(symbol);
         this.decimals = this._mt5Broker.instrumentDecimals(symbol);
 
-        if (this.data.updateParams["sl"]) {
-            this._config.sl = this.data.updateParams["sl"].toFixed(this.decimals);
-        }
-        if (this.data.updateParams["tp"]) {
-            this._config.tp = this.data.updateParams["tp"].toFixed(this.decimals);
-        }
-        if (this.data.updateParams["price"]) {
-            this._config.price = this.data.updateParams["price"].toFixed(this.decimals);
+        if (this.data.updateParams) {
+            if (this.data.updateParams["sl"] !== undefined) {
+                this._config.sl = this.data.updateParams["sl"] ? this.data.updateParams["sl"].toFixed(this.decimals) : 0;
+            }
+            if (this.data.updateParams["tp"] !== undefined) {
+                this._config.tp = this.data.updateParams["tp"] ? this.data.updateParams["tp"].toFixed(this.decimals) : 0;
+            }
+            if (this.data.updateParams["price"] !== undefined) {
+                this._config.price = this.data.updateParams["price"] ? this.data.updateParams["price"].toFixed(this.decimals) : 0;
+            }
         }
 
         this._config.useSL = this._config.sl ? true : false;
         this._config.useTP = this._config.tp ? true : false;
+
+        if (!this._config.sl) {
+            this._config.sl = this.order.Price;
+        }
+
+        if (!this._config.tp) {
+            this._config.tp = this.order.Price;
+        }
     }
 
     ngOnDestroy() {
@@ -170,7 +172,7 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
 
     isPending() {
         return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.Stop;
-    } 
+    }
 
     isExpirationVisible() {
         return this.config.expirationType === OrderExpirationType.Specified;
@@ -184,7 +186,7 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
             this._selectedDate = this._oneDayPlus;
         }
     }
-    
+
     submit() {
         this.showSpinner = true;
         const request: MT5EditOrder = {
@@ -192,14 +194,15 @@ export class MT5OrderEditModalComponent extends Modal<IEDitDialogInputParameters
             Comment: this.config.comment || "",
             ExpirationType: this.config.expirationType,
             Side: this.config.side,
-            Size: this.config.amount,
+            Size:  Number(this.config.amount),
             Symbol: this.config.symbol,
             Type: this.config.type,
             ExpirationDate: this._getSetupDate(),
-            Price: this.config.type !== OrderTypes.Market ? this.config.price : 0,
-            SL: this.config.useSL ? this.config.sl : 0,
-            TP: this.config.useTP ? this.config.tp : 0
+            Price: this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0,
+            SL: this.config.useSL ?  Number(this.config.sl) : 0,
+            TP: this.config.useTP ?  Number(this.config.tp) : 0
         };
+
         this._mt5Broker.editOrder(request).subscribe(
             (result) => {
                 this.showSpinner = false;

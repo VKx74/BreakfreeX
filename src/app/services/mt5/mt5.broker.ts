@@ -509,7 +509,7 @@ export class MT5Broker implements IMT5Broker {
                         changedOrders.push(existingOrder);
                     }
 
-                    if (existingOrder.Type !== type || existingOrder.Status !== status) {
+                    if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Type !== type || existingOrder.Status !== status) {
                         updateRequired = true;
                     }
 
@@ -551,7 +551,7 @@ export class MT5Broker implements IMT5Broker {
             }
         }
 
-        if (changedOrders.length) {
+        if (changedOrders.length && !updateRequired) {
             this.onOrdersParametersUpdated.next(changedOrders);
         }
 

@@ -268,9 +268,9 @@ export class MT5OrderConfiguratorComponent implements OnInit {
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
             Type: this.config.type,
-            Price: this.config.type !== OrderTypes.Market ? this.config.price : 0,
-            SL: this.config.useSL ? this.config.sl : 0,
-            TP: this.config.useTP ? this.config.tp : 0,
+            Price: this.config.type !== OrderTypes.Market ?  Number(this.config.price) : 0,
+            SL: this.config.useSL ?  Number(this.config.sl) : 0,
+            TP: this.config.useTP ?  Number(this.config.tp) : 0,
             FillPolicy: this.config.fillPolicy,
             ExpirationType: this.config.expirationType,
             ExpirationDate: this._getSetupDate()

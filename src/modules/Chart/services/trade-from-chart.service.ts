@@ -49,6 +49,16 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public CloseOrder(id: any, callback: () => void): void {
+        if (id.toString().startsWith("sl_")) {
+            this.OrderPriceChange(id, null, callback);
+            return;
+        } 
+        
+        if (id.toString().startsWith("tp_")) {
+            this.OrderPriceChange(id, null, callback);
+            return;
+        }
+
         this.cancelOrder(Number(id), callback);
     }
 
@@ -182,35 +192,18 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 const shape = this.createBaseShape(order);
                 shape.lineId = order.Id.toString();
                 shape.lineText = `#${order.Id}`;
-                shape.linePrice = order.Price;
                 shape.lineType = this.getType(order);
                 shapes.push(shape);
 
-                if (order.Type === OrderTypes.Market) {
-                    this.setLinePL(shape, order);
-                    shape.isEditable = false;
-                }
-
-                if (order.Type === OrderTypes.Limit) {
-                    shape.boxText = `L: ${order.Price}`;
-                }
-
-                if (order.Type === OrderTypes.Stop) {
-                    shape.boxText = `S: ${order.Price}`;
-                }
+                this.setShapePriceAndBox(shape, order);
 
                 if (order.SL) {
                     const sl_shape = this.createBaseShape(order);
                     sl_shape.lineId = `sl_${order.Id.toString()}`;
                     sl_shape.lineText = `#${order.Id}`;
-                    sl_shape.linePrice = order.SL;
                     sl_shape.lineType = "sl";
 
-                    if (order.Side === OrderSide.Buy) {
-                        sl_shape.boxText = `SL: Trigger <= ${order.SL}`;
-                    } else {
-                        sl_shape.boxText = `SL: Trigger >= ${order.SL}`;
-                    }
+                    this.setShapeSL(sl_shape, order);
 
                     shapes.push(sl_shape);
                 }
@@ -219,14 +212,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     const tp_shape = this.createBaseShape(order);
                     tp_shape.lineId = `tp_${order.Id.toString()}`;
                     tp_shape.lineText = `#${order.Id}`;
-                    tp_shape.linePrice = order.TP;
                     tp_shape.lineType = "tp";
 
-                    if (order.Side === OrderSide.Buy) {
-                        tp_shape.boxText = `TP: Trigger >= ${order.TP}`;
-                    } else {
-                        tp_shape.boxText = `TP: Trigger <= ${order.TP}`;
-                    }
+                    this.setShapeTP(tp_shape, order);
 
                     shapes.push(tp_shape);
                 }
@@ -235,6 +223,41 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             if (shapes.length) {
                 this._chart.primaryPane.addShapes(shapes);
             }
+        }
+    }
+
+    private setShapeSL(sl_shape: TradingChartDesigner.ShapeOrderLine, order: MT5Order) {
+        sl_shape.linePrice = order.SL;
+        if (order.Side === OrderSide.Buy) {
+            sl_shape.boxText = `SL: Trigger <= ${order.SL}`;
+        } else {
+            sl_shape.boxText = `SL: Trigger >= ${order.SL}`;
+        }
+    }
+    
+    private setShapeTP(tp_shape: TradingChartDesigner.ShapeOrderLine, order: MT5Order) {
+        tp_shape.linePrice = order.TP;
+        if (order.Side === OrderSide.Buy) {
+            tp_shape.boxText = `TP: Trigger >= ${order.TP}`;
+        } else {
+            tp_shape.boxText = `TP: Trigger <= ${order.TP}`;
+        }
+    }
+
+    private setShapePriceAndBox(shape: TradingChartDesigner.ShapeOrderLine, order: MT5Order) {
+        shape.linePrice = order.Price;
+
+        if (order.Type === OrderTypes.Market) {
+            this.setLinePL(shape, order);
+            shape.isEditable = false;
+        }
+
+        if (order.Type === OrderTypes.Limit) {
+            shape.boxText = `L: ${order.Price}`;
+        }
+
+        if (order.Type === OrderTypes.Stop) {
+            shape.boxText = `S: ${order.Price}`;
         }
     }
 
@@ -338,15 +361,21 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         for (const shape of this._chart.primaryPane.shapes) {
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
                 const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
-                if (orderLine.lineType !== "market_buy" && orderLine.lineType !== "market_sell") {
-                    continue;
-                }
                 for (const order of orders) {
-                    if (order.Type === OrderTypes.Market && order.Id !== Number(orderLine.lineId)) {
-                        continue;
+                    if (order.Id === Number(orderLine.lineId)) {
+                        this.setShapePriceAndBox(orderLine, order);
+                    } 
+
+                    const slId = `sl_${order.Id.toString()}`;
+                    const tpId = `tp_${order.Id.toString()}`;
+                    
+                    if (slId === orderLine.lineId) {
+                        this.setShapeSL(orderLine, order);
                     }
 
-                    this.setLinePL(orderLine, order);
+                    if (tpId === orderLine.lineId) {
+                        this.setShapeTP(orderLine, order);
+                    }
                 }
             }
         }
