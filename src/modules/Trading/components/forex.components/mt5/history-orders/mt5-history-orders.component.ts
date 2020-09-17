@@ -11,7 +11,6 @@ import { MT5Order } from 'modules/Trading/models/forex/mt/mt.models';
     styleUrls: ['./mt5-history-orders.component.scss']
 })
 export class MT5HistoryOrdersComponent extends MT5ItemsComponent<MT5Order> {
-    OrderSide = OrderSide;
     protected loadItems(): Observable<MT5Order[]> {
         return of(this._mt5Broker.ordersHistory);
     }

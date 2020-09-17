@@ -2,15 +2,15 @@
             [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)">
     <data-table-header-cell columnName="Id" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Type" [sortable]="true">{{'type' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Type" [sortable]="true">{{'type' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.openPrice' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Current Price" [sortable]="true">{{'tradeManager.closePrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Last Price" [sortable]="true">{{'tradeManager.closePrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Net PL" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="SL" [sortable]="true">{{'tradeManager.SL' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="TP" [sortable]="true">{{'tradeManager.TP' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Pip PL" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Net PL" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="Pip PL" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Open Time" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="ExpirationType" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell> -->
     <!-- <data-table-header-cell columnName="ExpirationDate" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell> -->
@@ -26,35 +26,24 @@
     <data-table-cell columnName="Symbol">
         <ng-template let-item>{{item.Symbol}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Side">
+    <!-- <data-table-cell columnName="Side">
         <ng-template let-item>
             <order-side [side]="item.Side"></order-side>
+        </ng-template>
+    </data-table-cell> -->
+    <data-table-cell columnName="Size">
+        <ng-template let-item>
+            <div [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">{{item.Size.toFixed(2)}}</div>
         </ng-template>
     </data-table-cell>
     <data-table-cell columnName="Type">
         <ng-template let-item>{{item.Type}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Size">
-        <ng-template let-item>{{item.Size}}</ng-template>
-    </data-table-cell>
     <data-table-cell columnName="Price">
         <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Current Price">
+    <data-table-cell columnName="Last Price">
         <ng-template let-item>{{item.CurrentPrice?.toFixed(getDecimals(item.Symbol))}}</ng-template>
-    </data-table-cell>
-    <data-table-cell columnName="SL">
-        <ng-template let-item>{{item.SL?.toFixed(getDecimals(item.Symbol))}}</ng-template>
-    </data-table-cell>
-    <data-table-cell columnName="TP">
-        <ng-template let-item>{{item.TP?.toFixed(getDecimals(item.Symbol))}}</ng-template>
-    </data-table-cell>
-    <data-table-cell columnName="Pip PL">
-        <ng-template let-item>
-            <span [ngClass]="{'positive-value': item.PipPL > 0, 'negative-value': item.PipPL < 0}">
-                {{item.PipPL?.toFixed(1)}}
-            </span>
-        </ng-template>
     </data-table-cell>
     <data-table-cell columnName="Net PL">
         <ng-template let-item>
@@ -63,6 +52,19 @@
             </span>
         </ng-template>
     </data-table-cell>
+    <data-table-cell columnName="SL">
+        <ng-template let-item>{{item.SL?.toFixed(getDecimals(item.Symbol))}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="TP">
+        <ng-template let-item>{{item.TP?.toFixed(getDecimals(item.Symbol))}}</ng-template>
+    </data-table-cell>
+    <!-- <data-table-cell columnName="Pip PL">
+        <ng-template let-item>
+            <span [ngClass]="{'positive-value': item.PipPL > 0, 'negative-value': item.PipPL < 0}">
+                {{item.PipPL?.toFixed(1)}}
+            </span>
+        </ng-template>
+    </data-table-cell> -->
     <data-table-cell columnName="Open Time">
         <ng-template let-item>{{item.Time | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
     </data-table-cell>

@@ -15,7 +15,6 @@ import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confi
     styleUrls: ['./mt5-pending-orders.component.scss']
 })
 export class MT5PendingOrdersComponent extends MT5ItemsComponent<MT5Order> {
-    OrderSide = OrderSide;
 
     protected loadItems(): Observable<MT5Order[]> {
        return of(this._mt5Broker.pendingOrders);

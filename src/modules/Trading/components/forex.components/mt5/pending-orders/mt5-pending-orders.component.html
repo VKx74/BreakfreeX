@@ -2,9 +2,9 @@
             [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)">
     <data-table-header-cell columnName="Id" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Type" [sortable]="true">{{'type' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Type" [sortable]="true">{{'type' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.openPrice' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Current Price" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="SL" [sortable]="true">{{'tradeManager.SL' | translate}}</data-table-header-cell>
@@ -26,16 +26,18 @@
     <data-table-cell columnName="Symbol">
         <ng-template let-item>{{item.Symbol}}</ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Side">
+    <!-- <data-table-cell columnName="Side">
         <ng-template let-item>
             <order-side [side]="item.Side"></order-side>
+        </ng-template>
+    </data-table-cell> -->
+    <data-table-cell columnName="Size">
+        <ng-template let-item>
+            <div [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">{{item.Size.toFixed(2)}}</div>
         </ng-template>
     </data-table-cell>
     <data-table-cell columnName="Type">
         <ng-template let-item>{{item.Type}}</ng-template>
-    </data-table-cell>
-    <data-table-cell columnName="Size">
-        <ng-template let-item>{{item.Size.toFixed(2)}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="Price">
         <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>

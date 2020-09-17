@@ -1,12 +1,12 @@
 <div class="trade-manager full-height">
     <mat-tab-group class="full-height">
-        <mat-tab label="{{'tradeManager.positions' | translate}}">
+        <mat-tab label="{{'tradeManager.positions' | translate}} {{positionsAmount ? '[' + positionsAmount + ']' : ''}}">
             <mt5-positions></mt5-positions>
         </mat-tab>
-        <mat-tab label="{{'tradeManager.openOrders' | translate}}">
+        <mat-tab label="{{'tradeManager.openOrders' | translate}} {{ordersAmount ? '[' + ordersAmount + ']' : ''}}">
             <mt5-open-orders></mt5-open-orders>
         </mat-tab> 
-         <mat-tab label="{{'tradeManager.pendingOrders' | translate}}">
+         <mat-tab label="{{'tradeManager.pendingOrders' | translate}} {{pendingAmount ? '[' + pendingAmount + ']' : ''}}">
             <mt5-pending-orders></mt5-pending-orders>
         </mat-tab>
         <mat-tab label="{{'tradeManager.orderHistory' | translate}}">

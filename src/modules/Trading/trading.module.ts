@@ -52,6 +52,7 @@ import {LoaderModule} from "../loader/loader.module";
 import { OrderSideComponent } from './components/order-side/order-side.component';
 import { TradingCloseButtonComponent } from './components/trading-close-button/trading-close-button.component';
 import {TimeZoneManager, TimeZonesModule} from "TimeZones";
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TestOandaComponent } from './components/forex.components/test-oanda/test-oanda.component';
 import { OandaAccountInfoBarComponent } from './components/forex.components/oanda/account-info-bar/oanda-account-info-bar.component';
 import { MT5TradeManagerComponent } from './components/forex.components/mt5/mt5-trade-manager.component';
@@ -145,7 +146,8 @@ const components = [
         FormErrorDirectiveModule,
         LoaderModule,
         MatSlideToggleModule,
-        NgxMaterialTimepickerModule
+        NgxMaterialTimepickerModule,
+        DragDropModule
         // TimeZonesModule,
     ],
     exports: [

@@ -14,7 +14,6 @@ import { MT5OrderCloseModalComponent } from '../order-close-modal/mt5-order-clos
     styleUrls: ['./mt5-open-orders.component.scss']
 })
 export class MT5OpenOrdersComponent extends MT5ItemsComponent<MT5Order> {
-    OrderSide = OrderSide;
 
     protected loadItems(): Observable<MT5Order[]> {
        return of(this._mt5Broker.marketOrders);

@@ -7,6 +7,7 @@ import {InstrumentService} from '@app/services/instrument.service';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
 import {MatDialog} from "@angular/material/dialog";
 import { MT5OrderEditModalComponent } from './order-edit-modal/mt5-order-edit-modal.component';
+import { OrderSide } from 'modules/Trading/models/models';
 
 export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     private _subscription: Subscription;
@@ -15,11 +16,12 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     items: T[] = [];
 
     selectedItem: T;
+    OrderSide = OrderSide;
 
     selectItem(item: T) {
         this.selectedItem = item;
     } 
-    
+
     doubleClicked(item: T) {
         this.selectedItem = item;
         if (this.selectedItem) {
