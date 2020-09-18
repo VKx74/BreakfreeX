@@ -134,7 +134,7 @@
     "pl": "PL",
     "pipPl": "Pip PL",
     "netPl": "Net PL",
-    "openPrice": "Ціна Відкриття",
+    "entryPrice": "Ціна Відкриття",
     "closePrice": "Ціна Закриття",
     "openTime": "Час Відкриття",
     "closeTime": "Час Закриття",

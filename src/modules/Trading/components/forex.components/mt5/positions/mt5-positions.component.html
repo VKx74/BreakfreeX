@@ -5,7 +5,7 @@
         <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.openPrice' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Current Price" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Pip PL" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="Net PL" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
@@ -20,7 +20,7 @@
             </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Symbol">
-            <ng-template let-item>{{item.Symbol}}</ng-template>
+            <ng-template let-item><span class="symbol-column">{{item.Symbol}}</span></ng-template>
         </data-table-cell>
         <!-- <data-table-cell columnName="Side">
             <ng-template let-item>

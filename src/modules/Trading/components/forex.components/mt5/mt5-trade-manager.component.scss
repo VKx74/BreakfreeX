@@ -20,9 +20,13 @@
   
   /deep/ .color-column { 
     width: 10px;
-    height: 25px;
+    height: 24px;
     position: relative;
     left: -10px;
+  }
+  
+  /deep/ .symbol-column { 
+    font-weight: bolder;
   }
 
   /deep/ .color-column.side-buy {
@@ -102,5 +106,9 @@
 @include themify($themes, true) {
   .control .caption {
     color: themed('valueTextColor');
+  }
+
+  /deep/ mat-row:nth-child(even) {
+    background-color: themed('nthChild') !important;
   }
 }
