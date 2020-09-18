@@ -1,6 +1,7 @@
 <div class="positions">
     <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
         [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)">
+        <data-table-header-cell columnName="Side" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
         <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
@@ -12,6 +13,12 @@
         <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnWidth]="36"></data-table-header-cell>
     
+
+        <data-table-cell columnName="Side">
+            <ng-template let-item>
+                <div class="color-column" [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}"></div>
+            </ng-template>
+        </data-table-cell>
         <data-table-cell columnName="Symbol">
             <ng-template let-item>{{item.Symbol}}</ng-template>
         </data-table-cell>

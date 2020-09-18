@@ -17,6 +17,21 @@
   /deep/ .side-sell {
     color: $lightRedColor;
   }
+  
+  /deep/ .color-column { 
+    width: 10px;
+    height: 25px;
+    position: relative;
+    left: -10px;
+  }
+
+  /deep/ .color-column.side-buy {
+    background-color: $lightGreenColor;
+  }
+
+  /deep/ .color-column.side-sell {
+    background-color: $lightRedColor;
+  }
 
   /deep/ .positive-value {
     color: $lightGreenColor;
