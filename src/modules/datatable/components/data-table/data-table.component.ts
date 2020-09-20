@@ -24,7 +24,8 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {BehaviorSubject, combineLatest, Observable} from "rxjs";
 import {DataTableViewMode} from "../../viewmode";
 import {DataTableViewModeToken} from "../../data-table-view-mode.token";
-import {IdentityActivityLogInfo} from "@app/services/identity-logs.service";
+import { DataTableMenuItemComponent } from '../data-table-menu-item/data-table-menu-item.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 export interface IColumnsWidth {
     [columnName: string]: number;
@@ -74,6 +75,7 @@ export class DataTableComponent {
 
     @Output() onRowSelect = new EventEmitter();
     @Output() onDoubleClick = new EventEmitter();
+    @Output() onContextMenuSelected = new EventEmitter<any>();
     viewMode: DataTableViewMode = DataTableViewMode.Default;
     DataTableViewMode = DataTableViewMode;
 
@@ -82,21 +84,25 @@ export class DataTableComponent {
     visibleColumns$ = new BehaviorSubject<string[]>([]);
     sortableColumnsObj: { [columnName: string]: boolean } = {};
 
+    @ViewChild("trigger", {static: false}) contextMenu: MatMenuTrigger;
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatTable, {read: ElementRef, static: false}) table: ElementRef;
 
     @ContentChildren(DataTableHeaderCellComponent) headerCells: QueryList<DataTableHeaderCellComponent>;
     @ContentChildren(DataTableCellComponent) cells: QueryList<DataTableCellComponent>;
+    @ContentChildren(DataTableMenuItemComponent) menuItems: QueryList<DataTableMenuItemComponent>;
     dataSource: MatTableDataSource<any>;
 
     headerCellsObj: { [columnName: string]: DataTableHeaderCellComponent } = {};
     columnCellTemplates: { [columnName: string]: TemplateRef<any> } = {};
+    menuItemsComponents: DataTableMenuItemComponent[] = [];
     columnHeaderCellTemplates: { [columnName: string]: TemplateRef<any> } = {};
 
     pressed = false;
     currentResizeColumn: string;
     startX: number;
     startWidth: number;
+    contextMenuPosition = { x: '0px', y: '0px' };
     resizableMousemove: () => void;
     resizableTouchMove: () => void;
     resizableMouseup: () => void;
@@ -151,6 +157,11 @@ export class DataTableComponent {
             acc[cell.columnName] = cell.template;
             return acc;
         }, {});
+        
+        this.menuItemsComponents = [];
+        this.menuItems.forEach((item: DataTableMenuItemComponent) => {
+            this.menuItemsComponents.push(item);
+        });
 
         this.columnHeaderCellTemplates = this.headerCells.reduce((acc, cell: DataTableHeaderCellComponent) => {
             acc[cell.columnName] = cell.template;
@@ -507,6 +518,27 @@ export class DataTableComponent {
 
         if (this.isRowExpanded(row)) {
             this._collapseRow(row);
+        }
+    }
+
+    onContextMenu(row: any, event: MouseEvent) {
+        event.preventDefault();
+        this.handleRowSelected(row, event);
+
+        if (!this.menuItemsComponents || !this.menuItemsComponents.length) {
+            return;
+        }
+
+        this.contextMenuPosition.x = event.clientX + 'px';
+        this.contextMenuPosition.y = event.clientY + 'px';
+        // this.contextMenu.menuData = { 'item': item };
+        this.contextMenu.menu.focusFirstItem('mouse');
+        this.contextMenu.openMenu();
+    }
+
+    onContextMenuAction(id: any) {
+        if (id) {
+            this.onContextMenuSelected.next(id);
         }
     }
 

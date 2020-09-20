@@ -21,8 +21,6 @@ export class ColorSelectorComponent {
     @Input()  path: string;
     @Output() activeColorChange = new EventEmitter<string>();
 
-
-
     get Colors() {
         return Colors;
     }

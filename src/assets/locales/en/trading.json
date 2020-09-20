@@ -98,8 +98,6 @@
     "marginUsed": "Used",
     "margin": "Margin",
     "demo": "Demo",
-    "closePosition": "Close",
-    "closeOrder": "Close",
     "closeAllOrders": "Close All",
     "closeAllPositions": "Close All",
     "success": "Success",
@@ -147,7 +145,12 @@
     "swap": "Swap",
     "commission": "Commission",
     "expirationDate": "Expiration Date",
-    "expirationTime": "Expiration Time"
+    "expirationTime": "Expiration Time",
+    "editOrder": "Edit Order",
+    "cancelOrder": "Cancel Order",
+    "closeOrder": "Close Order",
+    "closePosition": "Close Position",
+    "viewChart": "View Chart"
   },
   "periodicity": {
     "minute": "Minute",

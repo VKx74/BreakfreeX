@@ -10,6 +10,12 @@
   overflow: auto;
   flex-direction: column;
 
+  .color-selector {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+  }
+
   /deep/ .side-buy {
     color: $lightGreenColor;
   }
@@ -19,7 +25,7 @@
   }
   
   /deep/ .color-column { 
-    width: 10px;
+    width: 6px;
     height: 24px;
     position: relative;
     left: -10px;
@@ -43,6 +49,10 @@
 
   /deep/ .negative-value {
     color: $lightRedColor;
+  }
+
+  /deep/ .mat-tab-header {
+    margin-left: 32px;
   }
 
   .crypto-button {

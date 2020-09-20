@@ -1,6 +1,7 @@
 <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
             [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
-            [hiddenColumns]="['Id', 'Open Time', 'Expiration Type', 'Expiration Date', 'Comment']">
+            [hiddenColumns]="['Id', 'Open Time', 'Expiration Type', 'Expiration Date', 'Comment']"
+            (onContextMenuSelected)="handleContextMenuSelected($event)">
         <data-table-header-cell columnName="Side" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
     <data-table-header-cell columnName="Id" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
@@ -107,4 +108,21 @@
             </div>
         </ng-template>
     </data-table-cell>
+
+
+    <data-table-menu-item [id]="'edit'">
+        <ng-template>
+            {{'tradeManager.editOrder' | translate}}
+        </ng-template>
+    </data-table-menu-item>
+    <data-table-menu-item [id]="'cancelOrder'">
+        <ng-template>
+            {{'tradeManager.cancelOrder' | translate}}
+        </ng-template>
+    </data-table-menu-item>
+    <data-table-menu-item [id]="'view'">
+        <ng-template>
+            {{'tradeManager.viewChart' | translate}}
+        </ng-template>
+    </data-table-menu-item>
 </data-table>

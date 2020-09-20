@@ -13,11 +13,13 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatMenuModule} from "@angular/material/menu";
 import {LocalizationModule} from "Localization";
+import { DataTableMenuItemComponent } from './components/data-table-menu-item/data-table-menu-item.component';
 
 @NgModule({
     declarations: [
         DataTableComponent,
         DataTableCellComponent,
+        DataTableMenuItemComponent,
         DataTableHeaderCellComponent,
         CdkDetailRowDirective,
         ColumnsVisibilityToggleComponent,
@@ -36,6 +38,7 @@ import {LocalizationModule} from "Localization";
     exports: [
         DataTableComponent,
         DataTableCellComponent,
+        DataTableMenuItemComponent,
         DataTableHeaderCellComponent,
         ColumnsVisibilityToggleComponent
     ]

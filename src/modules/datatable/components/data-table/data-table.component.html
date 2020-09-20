@@ -1,34 +1,29 @@
 <div class="wrapper flex">
-    <mat-table [dataSource]="dataSource" matSort="" class="mat-elevation-z8" multiTemplateDataRows
-               [trackBy]="trackBy"
-               [ngClass]="{
+    <mat-table [dataSource]="dataSource" matSort="" class="mat-elevation-z8" multiTemplateDataRows [trackBy]="trackBy"
+        [ngClass]="{
                     'default-mode': viewMode === DataTableViewMode.Default,
-                    'stripped-mode': viewMode === DataTableViewMode.Striped}"
-               [class.selectable]="selectable"
-               [class.is-expandable]="expandable"
-               [class.columns-configurable]="allowColumnsVisibilityChange">
+                    'stripped-mode': viewMode === DataTableViewMode.Striped}" [class.selectable]="selectable"
+        [class.is-expandable]="expandable" [class.columns-configurable]="allowColumnsVisibilityChange">
 
         <ng-container *ngIf="(visibleColumns$ | async) as visibleColumns">
 
             <ng-container *ngFor="let column of visibleColumns; let i = index; let last = last">
                 <ng-container matColumnDef="{{column}}">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header
-                                     class="header-cell"
-                                     [disabled]="!sortableColumnsObj[column]">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header class="header-cell"
+                        [disabled]="!sortableColumnsObj[column]">
                         <div class="header-cell-content-wrapper">
                             <ng-container *ngTemplateOutlet="columnHeaderCellTemplates[column]"></ng-container>
                         </div>
 
-                        <div class="resize-handle"
-                             *ngIf="!last"
-                             (touchstart)="onResizeColumn($event, column)"
-                             (mousedown)="onResizeColumn($event, column)"></div>
+                        <div class="resize-handle" *ngIf="!last" (touchstart)="onResizeColumn($event, column)"
+                            (mousedown)="onResizeColumn($event, column)"></div>
                     </mat-header-cell>
 
                     <mat-cell *matCellDef="let element; let rowIndex = dataIndex;">
                         <ng-container *ngIf="columnCellTemplates[column]; else no_template_provided">
                             <ng-container
-                                    *ngTemplateOutlet="columnCellTemplates[column]; context: {$implicit: element, index: rowIndex}"></ng-container>
+                                *ngTemplateOutlet="columnCellTemplates[column]; context: {$implicit: element, index: rowIndex}">
+                            </ng-container>
                         </ng-container>
                         <ng-template #no_template_provided>
                             {{element[column]}}
@@ -45,8 +40,8 @@
             <ng-container matColumnDef="expandedDetail">
                 <mat-cell *matCellDef="let element" class="expanded-detail">
                     <div [@detailExpand]="isRowExpanded(element) ? 'expanded' : 'collapsed'">
-                        <ng-container
-                                *ngTemplateOutlet="expandDetailsTemplate; context:{$implicit: element}"></ng-container>
+                        <ng-container *ngTemplateOutlet="expandDetailsTemplate; context:{$implicit: element}">
+                        </ng-container>
                     </div>
                 </mat-cell>
                 >
@@ -56,23 +51,19 @@
         <mat-header-row *matHeaderRowDef="(visibleColumns$ | async); sticky: true">
         </mat-header-row>
 
-        <mat-row *matRowDef="let row; columns: (visibleColumns$ | async)"
-                 [class.selected]="row === selectedRow"
-                 [class.expand-row-header]="expandable"
-                 [class.is-expanded]="isRowExpanded(row)"
-                 (dblclick)="handleRowDoubleClick(row, $event)"
-                 (click)="handleRowSelected(row, $event)"></mat-row>
+        <mat-row *matRowDef="let row; columns: (visibleColumns$ | async)" [class.selected]="row === selectedRow"
+            [class.expand-row-header]="expandable" [class.is-expanded]="isRowExpanded(row)"
+            (contextmenu)="onContextMenu(row, $event)" (dblclick)="handleRowDoubleClick(row, $event)"
+            (click)="handleRowSelected(row, $event)"></mat-row>
 
         <ng-container *ngIf="expandable">
-            <mat-row *matRowDef="let row; columns: ['expandedDetail'];"
-                     [class.is-expanded]="isRowExpanded(row)"
-                     class="expanded-row-details"></mat-row>
+            <mat-row *matRowDef="let row; columns: ['expandedDetail'];" [class.is-expanded]="isRowExpanded(row)"
+                class="expanded-row-details"></mat-row>
         </ng-container>
     </mat-table>
 
     <div class="settings-wrapper" *ngIf="allowColumnsVisibilityChange">
-        <div class="crypto-button-icon settings-btn"
-             [matMenuTriggerFor]="menu">
+        <div class="crypto-button-icon settings-btn" [matMenuTriggerFor]="menu">
             <i class="crypto-icon crypto-icon-switch-settings"></i>
         </div>
     </div>
@@ -81,7 +72,7 @@
 <mat-menu #menu="matMenu" class="column-selector-menu">
     <div *ngFor="let column of (columns$ | async)">
         <div class="flex align-items-center justify-space-between mat-menu-item"
-             (click)="$event.stopPropagation(); toggleColumn(column)">
+            (click)="$event.stopPropagation(); toggleColumn(column)">
             <span class="">{{columnCaption ? (columnCaption(column) | async) : column}}</span>
 
             <ng-container *ngIf="!isColumnVisible(column)">
@@ -89,11 +80,24 @@
             </ng-container>
 
             <ng-container *ngIf="isColumnVisible(column)">
-                                                <span class="checked-checkbox">
-                                                    <i class="fa fa-check checked-mark"></i>
-                                                </span>
+                <span class="checked-checkbox">
+                    <i class="fa fa-check checked-mark"></i>
+                </span>
             </ng-container>
         </div>
     </div>
 </mat-menu>
 
+<div style="visibility: hidden; position: fixed" #trigger="matMenuTrigger" [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <ng-container *ngFor="let menuItem of menuItemsComponents;">
+            <button mat-menu-item (click)="onContextMenuAction(menuItem.id)">
+                <ng-container *ngTemplateOutlet="menuItem.template"></ng-container>
+            </button>
+        </ng-container>
+    </ng-template>
+</mat-menu>

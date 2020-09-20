@@ -98,8 +98,6 @@
     "marginUsed": "Margin used",
     "margin": "Margin",
     "demo": "Демонстрація",
-    "closePosition": "Закрити позицію",
-    "closeOrder": "Закрити ордер",
     "closeAllOrders": "Закрити всі ордера",
     "closeAllPositions": "Закрити всі позиції",
     "success": "Успішно",
@@ -147,7 +145,10 @@
     "swap": "Swap",
     "commission": "Commission",
     "expirationDate": "Expiration Date",
-    "expirationTime": "Expiration Time"
+    "expirationTime": "Expiration Time",
+    "closePosition": "Закрити Позицію",
+    "closeOrder": "Закрити Ордер",
+    "viewChart": "Перглянути Чарт"
   },
   "periodicity": {
     "minute": "Хвилина",

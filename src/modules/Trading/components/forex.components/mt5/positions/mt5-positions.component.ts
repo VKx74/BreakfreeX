@@ -27,9 +27,7 @@ export class MT5PositionsComponent extends MT5ItemsComponent<MT5Position> {
 
     closePosition(position: MT5Position) {
         if (position) {
-            this._dialog.open(MT5PositionCloseModalComponent, {
-                data: position
-            });
+            this.raisePositionClose(position);
         }
     }
 

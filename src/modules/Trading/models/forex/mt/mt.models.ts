@@ -90,4 +90,5 @@ export interface MT5ConnectionData {
     ServerName: string;
     Login: number;
     Password: string;
+    Linker?: string;
 }

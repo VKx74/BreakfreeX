@@ -1,6 +1,7 @@
 <div class="positions">
     <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
-        [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)">
+        [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
+        (onContextMenuSelected)="handleContextMenuSelected($event)">
         <data-table-header-cell columnName="Side" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
         <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->
@@ -65,6 +66,17 @@
                 </div>
             </ng-template>
         </data-table-cell>
+
+        <data-table-menu-item [id]="'closePosition'">
+            <ng-template>
+                {{'tradeManager.closePosition' | translate}}
+            </ng-template>
+        </data-table-menu-item>
+        <data-table-menu-item [id]="'view'">
+            <ng-template>
+                {{'tradeManager.viewChart' | translate}}
+            </ng-template>
+        </data-table-menu-item>
     </data-table>
     
 </div>

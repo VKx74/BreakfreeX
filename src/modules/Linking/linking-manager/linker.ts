@@ -29,7 +29,7 @@ export class Linker {
         if (this._linkingId) {
             return;
         }
-        this.setLinking("#098BB8");
+        this.setLinking("#74D3C1");
     }
 
     setLinking(linkingId: string) {

@@ -27,9 +27,7 @@ export class MT5OpenOrdersComponent extends MT5ItemsComponent<MT5Order> {
 
     closeOrder(selectedItem: MT5Order) {
         if (selectedItem) {
-            this._dialog.open(MT5OrderCloseModalComponent, {
-                data: selectedItem
-            });
+            this.raiseOrderClose(selectedItem);
         }
     }
 

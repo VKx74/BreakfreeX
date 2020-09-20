@@ -28,25 +28,7 @@ export class MT5PendingOrdersComponent extends MT5ItemsComponent<MT5Order> {
 
     cancelOrder(selectedItem: MT5Order) {
         if (selectedItem) {
-            this._dialog.open(ConfirmModalComponent, {
-                data: {
-                    title: 'Cancel order',
-                    message: `Are you sure you want cancel #'${selectedItem.Id}' order?`,
-                    onConfirm: () => {
-                        this._mt5Broker.cancelOrder(selectedItem.Id, OrderFillPolicy.FOK)
-                            .subscribe( (result) => {
-                                if (result.result) {
-                                    this._alertService.success("Order canceled");
-                                } else {
-                                    this._alertService.error("Failed to cancel order: " + result.msg);
-                                }
-                            },
-                            (error) => {
-                                this._alertService.error("Failed to cancel order: " + error);
-                            });
-                    }
-                }
-            });
+            this.raiseOrderClose(selectedItem);
         }
     }
 
