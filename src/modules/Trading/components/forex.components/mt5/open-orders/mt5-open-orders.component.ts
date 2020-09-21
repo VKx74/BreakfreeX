@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import {map} from 'rxjs/operators';
 import {OandaOrder} from 'modules/Trading/models/forex/oanda/oanda.models';
@@ -11,7 +11,8 @@ import { MT5OrderCloseModalComponent } from '../order-close-modal/mt5-order-clos
 @Component({
     selector: 'mt5-open-orders',
     templateUrl: './mt5-open-orders.component.html',
-    styleUrls: ['./mt5-open-orders.component.scss']
+    styleUrls: ['./mt5-open-orders.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MT5OpenOrdersComponent extends MT5ItemsComponent<MT5Order> {
 
@@ -35,7 +36,7 @@ export class MT5OpenOrdersComponent extends MT5ItemsComponent<MT5Order> {
         super.ngOnDestroy();
     }
 
-    trackById(index, item: OandaOrder) {
-        return item.id;
+    protected ordersUpdated() {
+        this.refresh();
     }
 }

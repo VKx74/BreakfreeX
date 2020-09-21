@@ -1,5 +1,5 @@
 import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
-import {EventEmitter, Inject, OnDestroy, OnInit, Output} from "@angular/core";
+import {ChangeDetectorRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output} from "@angular/core";
 import {Observable, Subscription} from "rxjs";
 import {AlertService} from "@alert/services/alert.service";
 import {RealtimeService} from '@app/services/realtime.service';
@@ -11,9 +11,17 @@ import { OrderSide } from 'modules/Trading/models/models';
 
 export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     private _subscription: Subscription;
+    private _subscriptionOnOrderDataChanged: Subscription;
     private _instrumentDecimals: { [symbol: string]: number; } = {};
 
-
+    protected _selectedTabIndex: number;
+    @Input() set selectedTabIndex(value: number) {
+        this._selectedTabIndex = value;
+        if (this._selectedTabIndex !== undefined && this.tabIndex !== undefined && this._selectedTabIndex === this.tabIndex) {
+            this.cdr.detectChanges();
+        }
+    }
+    @Input() tabIndex: number;
     @Output() onOrderEdit = new EventEmitter<T>();
     @Output() onOrderClose = new EventEmitter<T>();
     @Output() onPositionClose = new EventEmitter<T>();
@@ -43,13 +51,16 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
 
     constructor(@Inject(MT5Broker) protected _mt5Broker: MT5Broker,
                 @Inject(AlertService) protected _alertService: AlertService,
-                protected _dialog: MatDialog) {
+                protected _dialog: MatDialog, private cdr: ChangeDetectorRef) {
 
     }
 
     ngOnInit(): void {
         this.updateItems();
         this._subscription = this._subscribeOnUpdates();
+        this._subscriptionOnOrderDataChanged = this._mt5Broker.onOrdersParametersUpdated.subscribe(() => {
+            this.ordersUpdated();
+        });
     }
 
     public raiseEdit(item: T) {
@@ -78,15 +89,27 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
         return decimals;
     }
 
+    protected refresh(): void {
+        if (this._selectedTabIndex !== this.tabIndex) {
+            return;
+        }
+
+        this.cdr.detectChanges();
+    }
+
     protected updateItems(): void {
         this.loadItems()
             .subscribe(
-                items => this.items = items.slice(),
+                items => {
+                    this.items = items.slice();
+                },
                 e => this._handleLoadingError(e)
             );
     }
 
     protected abstract loadItems(): Observable<T[]>;
+
+    protected abstract ordersUpdated();
 
     protected _subscribeOnUpdates(): Subscription {
         return null;
@@ -103,5 +126,7 @@ export abstract class MT5ItemsComponent<T> implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         if (this._subscription)
             this._subscription.unsubscribe();
+        if (this._subscriptionOnOrderDataChanged)
+            this._subscriptionOnOrderDataChanged.unsubscribe();
     }
 }

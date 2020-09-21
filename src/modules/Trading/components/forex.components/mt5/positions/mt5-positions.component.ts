@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import { map } from 'rxjs/operators';
 import {OandaPosition} from 'modules/Trading/models/forex/oanda/oanda.models';
@@ -11,7 +11,8 @@ import { MT5PositionCloseModalComponent } from '../position-close-modal/mt5-posi
 @Component({
     selector: 'mt5-positions',
     templateUrl: './mt5-positions.component.html',
-    styleUrls: ['./mt5-positions.component.scss']
+    styleUrls: ['./mt5-positions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MT5PositionsComponent extends MT5ItemsComponent<MT5Position> {
 
@@ -35,7 +36,7 @@ export class MT5PositionsComponent extends MT5ItemsComponent<MT5Position> {
         super.ngOnDestroy();
     }
 
-    trackById(index, item: MT5Position) {
-        return 1;
+    protected ordersUpdated() {
+        this.refresh();
     }
 }

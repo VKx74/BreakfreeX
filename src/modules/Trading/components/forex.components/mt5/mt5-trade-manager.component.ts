@@ -1,8 +1,7 @@
-import { Component, Injector } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Injector } from "@angular/core";
 import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
-import { OandaBrokerService } from "@app/services/oanda.exchange/oanda.broker.service";
 import { BrokerService } from "@app/services/broker.service";
 import { MT5OrderConfiguratorModalComponent } from './order-configurator-modal/mt5-order-configurator-modal.component';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
@@ -17,6 +16,7 @@ import { MT5PositionCloseModalComponent } from './position-close-modal/mt5-posit
 import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     selector: 'mt5-trade-manager',
@@ -31,6 +31,8 @@ import { Actions, LinkingAction } from '@linking/models/models';
 })
 export class MT5TradeManagerComponent {
     protected linker: Linker;
+    
+    selectedTabIndex: number;
 
     get linkerColor(): string {
         return this.linker.getLinkingId();
@@ -77,8 +79,8 @@ export class MT5TradeManagerComponent {
     }
 
 
-    private get _broker(): OandaBrokerService {
-        return this.brokerService.activeBroker as OandaBrokerService;
+    private get _broker(): MT5Broker {
+        return this.brokerService.activeBroker as MT5Broker;
     }
 
     constructor(private _dialog: MatDialog,
@@ -93,6 +95,10 @@ export class MT5TradeManagerComponent {
 
     placeOrder() {
         this._dialog.open(MT5OrderConfiguratorModalComponent);
+    }
+
+    tabChanged(data: MatTabChangeEvent) {
+        this.selectedTabIndex = data.index;
     }
 
     public handleColorSelected(color: string) {

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import {map} from 'rxjs/operators';
 import {OandaOrder} from 'modules/Trading/models/forex/oanda/oanda.models';
@@ -12,7 +12,8 @@ import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confi
 @Component({
     selector: 'mt5-pending-orders',
     templateUrl: './mt5-pending-orders.component.html',
-    styleUrls: ['./mt5-pending-orders.component.scss']
+    styleUrls: ['./mt5-pending-orders.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MT5PendingOrdersComponent extends MT5ItemsComponent<MT5Order> {
 
@@ -38,5 +39,9 @@ export class MT5PendingOrdersComponent extends MT5ItemsComponent<MT5Order> {
 
     trackById(index, item: OandaOrder) {
         return item.id;
+    }
+
+    protected ordersUpdated() {
+        this.refresh();
     }
 }

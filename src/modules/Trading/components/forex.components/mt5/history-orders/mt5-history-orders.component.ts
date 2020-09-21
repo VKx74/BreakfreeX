@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import { OandaOrder } from 'modules/Trading/models/forex/oanda/oanda.models';
 import {OrderSide} from "../../../../models/models";
@@ -8,7 +8,8 @@ import { MT5Order } from 'modules/Trading/models/forex/mt/mt.models';
 @Component({
     selector: 'mt5-history-orders',
     templateUrl: './mt5-history-orders.component.html',
-    styleUrls: ['./mt5-history-orders.component.scss']
+    styleUrls: ['./mt5-history-orders.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MT5HistoryOrdersComponent extends MT5ItemsComponent<MT5Order> {
     protected loadItems(): Observable<MT5Order[]> {
@@ -23,6 +24,10 @@ export class MT5HistoryOrdersComponent extends MT5ItemsComponent<MT5Order> {
         return this._mt5Broker.onHistoricalOrdersUpdated.subscribe(orderResp => {
             this.updateItems();
         });
+    }
+
+    protected ordersUpdated() {
+        // this.cdr.detectChanges();
     }
     
 }

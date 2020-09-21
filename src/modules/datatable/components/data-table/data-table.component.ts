@@ -270,6 +270,7 @@ export class DataTableComponent {
     }
 
     ngAfterViewChecked() {
+
         if (this._needSetDimensions) {
             if (this._columnsDimensions) {
                 this.setColumnsDimensions(this._columnsDimensions);

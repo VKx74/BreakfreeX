@@ -43,7 +43,7 @@ export class MT5Broker implements IMT5Broker {
         Pl: 0
     };
 
-    private _endHistory: number = Math.round(new Date().getTime() / 1000);
+    private _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
     private _startHistory: number = this._endHistory - (60 * 60 * 24 * 14);
 
     public get onSaveStateRequired(): Subject<void> {
