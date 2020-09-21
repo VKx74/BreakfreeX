@@ -478,7 +478,9 @@ export abstract class CryptoBroker implements IBroker {
                             refreshToken: responseData.RefreshToken,
                             secretKey: brokerState.activeBrokerState.state.secretKey,
                             token: responseData.AccessToken,
-                        }
+                        },
+                        account: brokerState.activeBrokerState.state.apiKey,
+                        server: brokerState.activeBrokerState.brokerType
                     }
                 };
 

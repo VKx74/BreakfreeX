@@ -5,7 +5,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {Observable, of} from "rxjs";
 import {OandaBrokerService, IOandaLoginAction} from "@app/services/oanda.exchange/oanda.broker.service";
 import { BrokerFactory, CreateBrokerActionResult } from '@app/factories/broker.factory';
-import { EBrokerInstance } from '@app/interfaces/broker/broker';
+import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { BrokerService } from '@app/services/broker.service';
 import { MT5BrokerServersProvider } from '@app/services/mt5/mt5.servers.service';
 import { MT5ConnectionData, MT5Server } from 'modules/Trading/models/forex/mt/mt.models';
@@ -98,6 +98,24 @@ export class MT5BrokerLoginComponent implements OnInit {
     ngOnInit() {     
     }
 
+    brokerSelected(account: IBrokerState) {
+        for (const server of this._servers) {
+            if (server.Name === account.server) {
+                this.selectedServer = server;
+                this.selectedBroker = server.Broker;
+                break;
+            }
+        }
+
+        if (account.state && account.state.Login) {
+            this.login = (account.state as MT5ConnectionData).Login.toString();
+        }
+
+        if (account.state && account.state.Password) {
+            this.password = (account.state as MT5ConnectionData).Password;
+        }
+    }
+
     connect() {        
         if (!this.policyAccepted) {
             return;
@@ -140,6 +158,11 @@ export class MT5BrokerLoginComponent implements OnInit {
                 this.showSpinner = false;
                 this._alertService.error(this._translateService.get('broker.createFailed'), this._translateService.get('broker.broker'));
             });
+    }
+
+    savedAccountExists(): boolean {
+        const brokers = this._brokerService.getSavedBroker();
+        return brokers && brokers.length > 0;
     }
 
     disconnect(): void {

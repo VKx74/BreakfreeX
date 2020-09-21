@@ -73,11 +73,10 @@ export class MT5SocketService extends WebsocketBase {
   }
 
   public dispose() {
-    if (this._onMessageSubscription) {
-      this._onMessageSubscription.unsubscribe();
-    }
-
-    this.send(new MT5LoginRequest());
+    // if (this._onMessageSubscription) {
+    //   this._onMessageSubscription.unsubscribe();
+    // }
+    this.send(new MT5LogoutRequest());
     this.close();
   }
 

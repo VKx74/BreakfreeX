@@ -130,6 +130,8 @@ export class BitmexBrokerService extends CryptoBroker {
     saveState(): Observable<IBrokerState> {
         return of({
             brokerType: EBrokerInstance.BitmexBroker,
+            account: this._apiKey,
+            server: EBrokerInstance.BitmexBroker,
             state: {
                 apiKey: this._apiKey,
                 secretKey: this._secretKey,

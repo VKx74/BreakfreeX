@@ -395,7 +395,9 @@ export class MT5Broker implements IMT5Broker {
     saveState(): Observable<IBrokerState<any>> {
         return of({
             brokerType: EBrokerInstance.MT5,
-            state: this._initData
+            state: this._initData,
+            account: this._initData.Login.toString(),
+            server: this._initData.ServerName
         });
     }
 

@@ -262,10 +262,15 @@ export class OandaBrokerService implements IBroker {
     }
 
     saveState(): Observable<IBrokerState<OandaBrokerState>> {
-        return of({brokerType: EBrokerInstance.OandaBroker, state: {
-            ApiToken: this._apiToken,
-            AccountKey: this._accountKey
-        }});
+        return of({
+            brokerType: EBrokerInstance.OandaBroker,
+             state: {
+                ApiToken: this._apiToken,
+                AccountKey: this._accountKey
+            },
+            account: this._accountKey,
+            server: EBrokerInstance.OandaBroker
+        });
     }
 
     isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes): boolean {

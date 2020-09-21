@@ -150,7 +150,9 @@
     "cancelOrder": "Cancel Order",
     "closeOrder": "Close Order",
     "closePosition": "Close Position",
-    "viewChart": "View Chart"
+    "viewChart": "View Chart",
+    "account": "Account",
+    "server": "Server"
   },
   "periodicity": {
     "minute": "Minute",

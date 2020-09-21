@@ -58,7 +58,7 @@ export class AppDataResolver implements Resolve<any> {
 
     private _initializeBroker(): Observable<any> {
         let brokerState: IBrokerServiceState = this._brokerStorage.getBrokerState();
-        if (brokerState && brokerState.activeBrokerState) {
+        if (brokerState) {
             return this._brokerService.loadState(brokerState);
         }
 

@@ -26,6 +26,9 @@ import { BrokerDialogComponent } from './components/broker/broker-dialog/broker-
 import {LoaderModule} from "../loader/loader.module";
 import { MT5BrokerLoginComponent } from './components/broker/forex/mt/mt5.broker.login.component';
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
+import { ConnectedAccountInfoComponent } from './components/broker/forex/mt/connected-account-info/connected-account-info.component';
+import { DatatableModule } from 'modules/datatable/datatable.module';
+import { MatTableModule } from '@angular/material/table';
 
 
 @NgModule({
@@ -47,7 +50,9 @@ import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/pr
         MatInputModule,
         MatTabsModule,
         MatMenuModule,
-        LoaderModule
+        LoaderModule,
+        DatatableModule,
+        MatTableModule
     ],
     declarations: [
         // AlertWidgetComponent,
@@ -59,6 +64,7 @@ import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/pr
         OandaBrokerLoginComponent,
         MT5BrokerLoginComponent,
         BrokerDialogComponent,
+        ConnectedAccountInfoComponent
     ],
     entryComponents: [
         BrokerDialogComponent,

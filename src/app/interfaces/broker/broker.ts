@@ -13,6 +13,8 @@ export enum EBrokerInstance {
 
 export interface IBrokerState<T = any> {
     brokerType: EBrokerInstance;
+    account: string;
+    server: string;
     state: T;
 }
 

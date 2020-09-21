@@ -3,32 +3,54 @@
 </div>
 
 <div class="connected-broker-area" *ngIf="!brokerConnected">
-    <div class="mat-form-field-wrapper crypto-form-unit">
-        <span class="form-unit__label">Broker:</span>
-        <selector class="dropdown"
-                [title]="'Select broker'"
-                [options]="brokers"
-                (onSelect)="onBrokerSelected($event)"
-                [selectedOption]="selectedBroker"></selector>
-    </div> <div class="mat-form-field-wrapper crypto-form-unit">
-        <span class="form-unit__label">Server:</span>
-        <selector class="dropdown"
-                [title]="'Select server'"
-                [optionCaption]="captionText"
-                [options]="getServerBySelectedBroker()"
-                (onSelect)="onServerSelected($event)"
-                [selectedOption]="selectedServer"></selector>
+    <div class="flex-row" *ngIf="savedAccountExists()">
+        <div class="connected-accounts">
+            <connected-account-info (onBrokerSelected)="brokerSelected($event)"></connected-account-info>
+        </div>
     </div>
-    <div class="mat-form-field-wrapper crypto-form-unit">
-        <span class="form-unit__label">Login:</span>
-        <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="login"
-                placeholder="Login">
+
+    <div class="flex-row">
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit">
+                <span class="form-unit__label">Broker:</span>
+                <selector class="dropdown"
+                        [title]="'Select broker'"
+                        [options]="brokers"
+                        (onSelect)="onBrokerSelected($event)"
+                        [selectedOption]="selectedBroker"></selector>
+            </div>
+        </div>
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit is-secondary">
+                <span class="form-unit__label">Server:</span>
+                <selector class="dropdown"
+                        [title]="'Select server'"
+                        [optionCaption]="captionText"
+                        [options]="getServerBySelectedBroker()"
+                        (onSelect)="onServerSelected($event)"
+                        [selectedOption]="selectedServer"></selector>
+            </div>
+        </div>
     </div>
-    <div class="mat-form-field-wrapper crypto-form-unit">
-        <span class="form-unit__label">Password:</span>
-        <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="password"
-                placeholder="Password">
+
+    <div class="flex-row">
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit">
+                <span class="form-unit__label">Login:</span>
+                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="login"
+                        placeholder="Login">
+            </div>
+        </div>
+        
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit">
+                <span class="form-unit__label">Password:</span>
+                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="password"
+                        placeholder="Password">
+            </div>
+        </div>
     </div>
+    
 </div>
 
 <div class="connectBrokerBlock" [class.disabled]="!policyAccepted">

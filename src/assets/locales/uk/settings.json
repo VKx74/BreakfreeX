@@ -99,7 +99,7 @@
   },
   "broker": {
     "title": "Підключити брокер",
-    "account": "Активний",
+    "account": "Акаунт",
     "accountType": "Тип рахунку",
     "accountNickname": "Назва рахунку",
     "apiKey": "Ключ API",
@@ -127,7 +127,8 @@
     "selectedAccountSuccess": "Акаунт вибрано",
     "selectedAccountError": "Неможливо вибрати акаунт",
     "brokerDeleted": "Брокера успішно видалено",
-    "brokerDeletedFailed": "Неможливо видалити брокера"
+    "brokerDeletedFailed": "Неможливо видалити брокера",
+    "server": "Сервер"
   },
   "saveSettingsError": "Не вдалося зберегти налаштування",
   "deleteSessionConfirmation": "Видалити поточну сесію користувача?",

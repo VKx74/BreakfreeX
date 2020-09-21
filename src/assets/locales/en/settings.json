@@ -127,7 +127,8 @@
     "selectedAccountSuccess": "Account selected",
     "selectedAccountError": "Can't select account",
     "brokerDeleted": "Broker deleted",
-    "brokerDeletedFailed": "Can't delete broker"
+    "brokerDeletedFailed": "Can't delete broker",
+    "server": "Server"
   },
   "saveSettingsError": "Failed to save settings",
   "deleteSessionConfirmation": "Do you want delete your session data?",

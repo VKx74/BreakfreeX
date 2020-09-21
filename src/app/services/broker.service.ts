@@ -12,11 +12,13 @@ import {ApplicationTypeService} from "@app/services/application-type.service";
 
 export interface IBrokerServiceState {
     activeBrokerState?: IBrokerState;
+    previousConnected?: IBrokerState[];
 }
 
 @Injectable()
 export class BrokerService implements IHealthable {
     // if initialization failed - false, succeed - true, otherwise - null
+    private _activeState: IBrokerServiceState = {};
     private _brokerInitializationState$ = new BehaviorSubject<boolean>(null);
     public brokerInitializationState$ = this._brokerInitializationState$.asObservable();
 
@@ -114,6 +116,28 @@ export class BrokerService implements IHealthable {
         }
     }
 
+    removeSavedBroker(state: IBrokerState) {
+        if (this._activeState.previousConnected) {
+            const index = this._activeState.previousConnected.indexOf(state);
+            if (index !== -1) {
+                this._activeState.previousConnected.splice(index, 1);
+                this.onSaveStateRequired.next();
+            }
+        }
+    }
+    
+    getSavedBroker(): IBrokerState[] {
+        if (this._activeState.previousConnected) {
+            return this._activeState.previousConnected;
+        }
+
+        return [];
+    }  
+    
+    getActiveBroker(): IBrokerState {
+        return this._activeState.activeBrokerState;
+    }
+
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
         if (this._activeBroker) {
             return this._activeBroker.getInstruments(exchange, search);
@@ -150,15 +174,14 @@ export class BrokerService implements IHealthable {
 
     saveState(): Observable<IBrokerServiceState> {
         if (!this._activeBroker) {
-            return of({
-                activeBrokerState: null
-            });
+            this._activeState.activeBrokerState = null;
+            return of(this._activeState);
         }
 
         return this._activeBroker.saveState().pipe(map((value: IBrokerState) => {
-            return {
-                activeBrokerState: value
-            };
+            this._activeState.activeBrokerState = value;
+            this._setSavedAccounts();
+            return this._activeState;
         }));
     }
 
@@ -169,6 +192,9 @@ export class BrokerService implements IHealthable {
                 msg: 'Broker state is empty'
             });
         }
+
+        this._activeState.previousConnected = state.previousConnected || [];
+        this._activeState.activeBrokerState = state.activeBrokerState;
 
         if (!state.activeBrokerState) {
             return of({
@@ -193,8 +219,6 @@ export class BrokerService implements IHealthable {
         } else {
             return this._restoreBrokerFromState(state.activeBrokerState);
         }
-
-        // return this._restoreBrokerFromState(state.activeBrokerState);
     }
 
     setDefaultBroker(): Observable<ActionResult> {
@@ -218,6 +242,30 @@ export class BrokerService implements IHealthable {
 
     public setBrokerInitializationState(state = true) {
         this._brokerInitializationState$.next(state);
+    }
+
+    private _setSavedAccounts() {
+        if (!this._activeState.previousConnected) {
+            this._activeState.previousConnected = [];
+        }
+        
+        const currentState = this._activeState.activeBrokerState;
+
+        if (!currentState) {
+            return;
+        }
+
+        let acctExist = false;
+        for (const acct of this._activeState.previousConnected) {
+            if (acct.account === currentState.account && acct.server === currentState.server) {
+                acctExist = true;
+                break;
+            }
+        }
+
+        if (!acctExist) {
+            this._activeState.previousConnected.push(currentState);
+        }
     }
 
     private _restoreBrokerFromState(activeBrokerState: IBrokerState): Observable<ActionResult> {

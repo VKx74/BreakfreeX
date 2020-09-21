@@ -148,7 +148,9 @@
     "expirationTime": "Expiration Time",
     "closePosition": "Закрити Позицію",
     "closeOrder": "Закрити Ордер",
-    "viewChart": "Перглянути Чарт"
+    "viewChart": "Перглянути Чарт",
+    "account": "Акаунт",
+    "server": "Сервер"
   },
   "periodicity": {
     "minute": "Хвилина",
