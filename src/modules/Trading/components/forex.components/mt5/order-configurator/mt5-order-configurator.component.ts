@@ -144,6 +144,8 @@ export class MT5OrderConfiguratorComponent implements OnInit {
                     console.error('Failed to load instrument', e);
                 }
             });
+        } else {
+            this._selectInstrument(this.config.instrument, false);
         }
     }
 
@@ -194,7 +196,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         this.config.fillPolicy = type;
     }
 
-    private _selectInstrument(instrument: IInstrument) {
+    private _selectInstrument(instrument: IInstrument, resetPrice = true) {
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
         }
@@ -211,7 +213,10 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         this.decimals = broker.instrumentDecimals(symbol);
 
         if (instrument) {
-            this._config.price = 0;
+
+            if (resetPrice) {
+                this._config.price = 0;
+            }
             this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
                 this.lastTick = tick;
                 const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;

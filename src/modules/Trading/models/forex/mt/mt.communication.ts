@@ -1,5 +1,6 @@
 export enum EMT5MessageType {
     GetBrokers = "GetBrokers",
+    Auth = "Auth",
     Login = "Login",
     Logout = "Logout",
     SubscribeQuote = "SubscribeQuote",
@@ -48,6 +49,10 @@ export interface IMT5LoginData {
     User: number;
     Password: string;
     ServerName: string;
+}
+
+export interface IMT5Auth {
+    Token: string;
 }
 
 export interface IMT5SubscriptionData {
@@ -193,7 +198,6 @@ export class MT5GetOrderHistoryResponse extends MT5ResponseMessageBase {
     public Data: IMT5OrderData[];
 }
 
-
 // Requests
 
 export class MT5LoginRequest extends MT5RequestMessageBase {
@@ -201,6 +205,14 @@ export class MT5LoginRequest extends MT5RequestMessageBase {
 
     constructor() {
         super(EMT5MessageType.Login);
+    }
+}
+
+export class MT5AuthRequest extends MT5RequestMessageBase {
+    public Data: IMT5Auth;
+
+    constructor() {
+        super(EMT5MessageType.Auth);
     }
 }
 

@@ -5,7 +5,7 @@ import { AlertService } from '@alert/services/alert.service';
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 import { BreakfreeTradingNavigatorService } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
 import { of } from 'rxjs';
-import { IBFTAlgoParameters } from '@app/services/algo.service';
+import { IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
 
 @Injectable()
 export class IndicatorDataProviderService {
@@ -34,6 +34,21 @@ export class IndicatorDataProviderService {
 
         return this._bftService.getBftIndicatorCalculation(bftParams).then(data => {
             this._bftPanel.indicatorDataLoaded(bftParams, indicator.id, data);
+            return data;
+        });
+    }
+
+    getRTD(indicator: TradingChartDesigner.Indicator, params?: any): Promise<IRTDPayload> {
+        const interval = indicator.chart.timeInterval / 1000;
+        const dailyInterval = 86400;
+
+        if (params.barsCount && interval < dailyInterval) {
+            const diff = interval / dailyInterval;
+            params.barsCount = params.barsCount * diff;
+            params.barsCount = Math.round(params.barsCount);
+        }
+
+        return this._bftService.getRTDCalculation(params).then(data => {
             return data;
         });
     }

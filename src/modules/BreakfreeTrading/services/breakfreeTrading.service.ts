@@ -10,7 +10,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { WebsocketBase } from '@app/interfaces/socket/socketBase';
 import { BFTSocketService } from '@app/services/socket/bft.socket.service';
-import { AlgoService, IBFTAlgoParameters } from '@app/services/algo.service';
+import { AlgoService, IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
 
 export interface IPoolItem {
     resolve: any;
@@ -27,8 +27,11 @@ export class BreakfreeTradingService {
     }
 
     getBftIndicatorCalculation(params: IBFTAlgoParameters): Promise<object> {
-
         return this.alogService.calculate(params).toPromise();
+    }  
+    
+    getRTDCalculation(params: any): Promise<IRTDPayload> {
+        return this.alogService.calculateRTD(params).toPromise();
     } 
 
 

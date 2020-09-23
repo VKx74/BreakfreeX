@@ -17,6 +17,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _brokerStateChangedSubscription: Subscription;
     private _ordersUpdatedSubscription: Subscription;
     private _onOrdersParametersUpdated: Subscription;
+    private _orderConfig: MT5OrderConfig;
 
     constructor(private _brokerService: BrokerService, private _dialog: MatDialog, @Inject(AlertService) protected _alertService: AlertService) {
         this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
@@ -40,6 +41,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 }
             }
         });
+    }
+
+    public IsTradePlaced(): boolean {
+        return this._orderConfig ? true : false;
     }
 
     public setChart(chart: TradingChartDesigner.Chart) {
@@ -124,6 +129,24 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
     }
 
+    public RepeatLimitOrder(price: number): void {
+        if (this._brokerService.activeBroker instanceof MT5Broker) {
+            const mt5Broker = this._brokerService.activeBroker as MT5Broker;
+            const orderConfig = this._orderConfig;
+            const pricePrecision = mt5Broker.instrumentDecimals(this._chart.instrument.symbol);
+            orderConfig.instrument = mt5Broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+            orderConfig.price = Math.roundToDecimals(price, pricePrecision);
+
+            this._dialog.open(MT5OrderConfiguratorModalComponent, {
+                data: {
+                    tradeConfig: orderConfig
+                }
+            });
+
+            this._orderConfig = orderConfig;
+        }
+    }
+
     public PlaceLimitOrder(price: number): void {
         if (this._brokerService.activeBroker instanceof MT5Broker) {
             const mt5Broker = this._brokerService.activeBroker as MT5Broker;
@@ -133,11 +156,15 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             orderConfig.fillPolicy = OrderFillPolicy.FF;
             orderConfig.instrument = mt5Broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(price, pricePrecision);
+            orderConfig.sl = orderConfig.price;
+            orderConfig.tp = orderConfig.price;
             this._dialog.open(MT5OrderConfiguratorModalComponent, {
                 data: {
                     tradeConfig: orderConfig
                 }
             });
+
+            this._orderConfig = orderConfig;
         }
     }
 

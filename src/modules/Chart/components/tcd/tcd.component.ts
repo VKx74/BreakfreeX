@@ -255,6 +255,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 } else if (isDiscoveryAllowed) {
                     this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
                 }
+
+                if ((isProAllowed || isDiscoveryAllowed) && this.chart.RTDMode) {
+                    this.chart.addIndicators(new TradingChartDesigner.RTD());
+                }
             }
 
             this._chartTrackerService.addChart(this.chart);

@@ -200,6 +200,14 @@ export interface IBFTAExtHitTestResult {
     signals: IBFTAExtHitTestSignal[];
 }
 
+export interface IRTDPayload {
+    dates: number[];
+    fast: number[];
+    fast_2: number[];
+    slow: number[];
+    slow_2: number[];
+}
+
 @Injectable()
 export class AlgoService {
     private url: string;
@@ -228,5 +236,9 @@ export class AlgoService {
 
     extHitTest(data: IBFTAHitTestAlgoParameters): Observable<IBFTAExtHitTestResult> {
         return this._http.post<IBFTAExtHitTestResult>(`${this.url}hittest_ext`, data);
+    } 
+    
+    calculateRTD(data: any): Observable<IRTDPayload> {
+        return this._http.post<IRTDPayload>(`${this.url}rtd`, data);
     }
 }
