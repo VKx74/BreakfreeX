@@ -16,6 +16,12 @@ export class IndicatorRestrictionService {
                 this._restrictedIndicators.push(restrictions.replace(this._indicatorSuffix, ""));
             }
         }
+
+        if (!this._identity.subscriptions || !this._identity.subscriptions.length) {
+            if (!this.isAdmin) {
+                this._restrictedIndicators.push("RTD");
+            }
+        }
     }
 
     public getRestrictions(): string[] {
@@ -23,7 +29,7 @@ export class IndicatorRestrictionService {
     } 
     
     public canRunStrategyReplay(): boolean {
-        return this._identity.role ? this._identity.role.toLowerCase() === "admin" : false;
+        return this.isAdmin();
     }
     
     public canRunXModeReplay(): boolean {
@@ -38,5 +44,9 @@ export class IndicatorRestrictionService {
         }
         
         return true;
+    }
+
+    private isAdmin() {
+        return this._identity.role ? this._identity.role.toLowerCase() === "admin" : false;
     }
 }
