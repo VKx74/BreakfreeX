@@ -3,6 +3,12 @@
 @import "global-styles/variables";
 
 :host {
+  .out-of-access{ 
+    .text {
+      margin: 50px 0px;
+      text-align: center;
+    }
+  }
   .crypto-modal {
     div.modal-body {
       position: static;

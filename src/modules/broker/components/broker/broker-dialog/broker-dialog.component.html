@@ -18,19 +18,33 @@
                     </ng-container>
                 </ng-container>
             </ng-container> -->
-            <ng-container [ngSwitch]="brokerType">
-                <oanda-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
-                <mt5-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT5"></mt5-broker-login>
-            </ng-container>
-            <div class="policy-agreement-wrapper">
-                <div>
-                    <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
-                    <label for="accept-broker-policy">I accept the</label>
-                </div>
-                <div>
-                    <a (click)="privacyPolicy()">Privacy Policy</a>
+            <div *ngIf="isTradingAllowed; else outOfAccess">
+                <ng-container [ngSwitch]="brokerType">
+                    <oanda-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.OandaBroker">
+                    </oanda-broker-login>
+                    <mt5-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT5">
+                    </mt5-broker-login>
+                </ng-container>
+                <div class="policy-agreement-wrapper">
+                    <div>
+                        <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
+                        <label for="accept-broker-policy">I accept the</label>
+                    </div>
+                    <div>
+                        <a (click)="privacyPolicy()">Privacy Policy</a>
+                    </div>
                 </div>
             </div>
+            <ng-template #outOfAccess>
+                <div class="out-of-access">
+                    <div class="image">
+                        <img src="assets/img/bftnavigatorlogo.svg">
+                    </div>
+                    <div class="text">
+                        Please upgrade your subscription to get access for trading.
+                    </div>
+                </div>
+            </ng-template>
         </div>
     </div>
 </div>

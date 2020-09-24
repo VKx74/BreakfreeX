@@ -54,7 +54,7 @@ export class IdentityService {
     }
 
     get isAdmin(): boolean {
-        return this.role === Roles.Admin;
+        return this.role.toLowerCase() === Roles.Admin.toLowerCase();
     }
 
     constructor(private _authService: AuthenticationService,

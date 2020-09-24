@@ -39,6 +39,10 @@ export class BrokerDialogComponent extends Modal implements OnInit {
         return this.data.brokerType;
     }
 
+    get isTradingAllowed(): boolean {
+        return this._brokerService.isTradingAllowed;
+    }
+
     constructor(private _injector: Injector,                
                 @Inject(MAT_DIALOG_DATA) public data: BrokerDialogData,
                 private _appTypeService: ApplicationTypeService,

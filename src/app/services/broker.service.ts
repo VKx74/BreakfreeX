@@ -9,6 +9,7 @@ import {ActionResult, IBrokerUserInfo, OrderTypes} from "../../modules/Trading/m
 import {map} from "rxjs/operators";
 import {BrokerFactory, CreateBrokerActionResult} from "../factories/broker.factory";
 import {ApplicationTypeService} from "@app/services/application-type.service";
+import { IdentityService } from './auth/identity.service';
 
 export interface IBrokerServiceState {
     activeBrokerState?: IBrokerState;
@@ -38,6 +39,16 @@ export class BrokerService implements IHealthable {
 
     public get isHealthy(): boolean {
         return true;
+    } 
+    
+    public get isTradingAllowed(): boolean {
+        if (this._identityService.isAdmin) {
+            return true;
+        }
+        if (!this._identityService.subscriptions || !this._identityService.subscriptions.length) {
+            return false;
+        }
+        return true;
     }
 
     private _applicationType: ApplicationType;
@@ -53,6 +64,7 @@ export class BrokerService implements IHealthable {
     onSaveStateRequired: Subject<void> = new Subject<void>();
 
     constructor(private _brokerFactory: BrokerFactory,
+                private _identityService: IdentityService,
                 private _applicationTypeService: ApplicationTypeService) {
         // Todo review
         this._applicationType = this._applicationTypeService.applicationType;
@@ -92,6 +104,13 @@ export class BrokerService implements IHealthable {
     }
 
     setActiveBroker(broker: IBroker): Observable<ActionResult> {
+        if (!this.isTradingAllowed) {
+            return of({
+                result: false,
+                msg: 'Trading not allowed'
+            });
+        }
+
         if (!this._activeBroker) {
             this._activeBroker = broker;
             this._isConnected = true;
@@ -269,6 +288,12 @@ export class BrokerService implements IHealthable {
     }
 
     private _restoreBrokerFromState(activeBrokerState: IBrokerState): Observable<ActionResult> {
+        if (!this.isTradingAllowed) {
+            return of({
+                result: false,
+                msg: 'Trading not allowed'
+            });
+        }
         return new Observable<ActionResult>(subscriber => {
             this._brokerFactory.tryRestoreInstance(activeBrokerState.brokerType, activeBrokerState)
                 .subscribe((value: CreateBrokerActionResult) => {
