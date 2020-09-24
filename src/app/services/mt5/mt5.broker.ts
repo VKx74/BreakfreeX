@@ -1,15 +1,13 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
 import { IMT5Broker } from '@app/interfaces/broker/mt5.broker';
 import { Injectable } from '@angular/core';
-import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5Position, MT5Server, MT5ConnectionData, MT5EditOrderPrice } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5Position, MT5ConnectionData, MT5EditOrderPrice } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
 import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy } from 'modules/Trading/models/models';
 import { MT5SocketService } from '../socket/mt5.socket.service';
-import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, MT5LogoutRequest, MT5LoginResponse, IMT5PlaceOrderData, MT5PlaceOrderRequest, MT5EditOrderRequest, MT5CloseOrderRequest, IMT5AccountUpdatedData, IMT5OrderData, MT5GetOrderHistoryRequest, IMT5SymbolData } from 'modules/Trading/models/forex/mt/mt.communication';
-import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
-import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { MT5LoginRequest, MT5LoginResponse, MT5PlaceOrderRequest, MT5EditOrderRequest, MT5CloseOrderRequest, IMT5AccountUpdatedData, IMT5OrderData, MT5GetOrderHistoryRequest, IMT5SymbolData } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
 import { IMT5Tick } from '@app/models/common/tick';
 
@@ -25,6 +23,10 @@ export class MT5Broker implements IMT5Broker {
     private _onOrdersParametersUpdated: Subject<MT5Order[]> = new Subject<MT5Order[]>();
     private _onPositionsUpdated: Subject<MT5Position[]> = new Subject<MT5Position[]>();
     private _instruments: IInstrument[] = [];
+    private _onReconnectSubscription: Subscription;
+    private _onTickSubscription: Subscription;
+    private _onAccountUpdateSubscription: Subscription;
+    private _onOrdersUpdateSubscription: Subscription;
 
     private _onSaveStateRequired: Subject<void> = new Subject();
     private _initData: MT5ConnectionData;
@@ -103,9 +105,7 @@ export class MT5Broker implements IMT5Broker {
     }
 
     constructor(private ws: MT5SocketService) {
-        this.ws.tickSubject.subscribe(this._handleQuotes.bind(this));
-        this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate.bind(this));
-        this.ws.ordersUpdatedSubject.subscribe(this._handleOrdersUpdate.bind(this));
+      
     }
 
     placeOrder(order: MT5PlaceOrder): Observable<ActionResult> {
@@ -348,7 +348,15 @@ export class MT5Broker implements IMT5Broker {
         }
         return false;
     }
+    
     init(initData: MT5ConnectionData): Observable<ActionResult> {
+        this._onTickSubscription = this.ws.tickSubject.subscribe(this._handleQuotes.bind(this));
+        this._onAccountUpdateSubscription = this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate.bind(this));
+        this._onOrdersUpdateSubscription = this.ws.ordersUpdatedSubject.subscribe(this._handleOrdersUpdate.bind(this));
+        this._onReconnectSubscription = this.ws.onReconnect.subscribe(() => {
+            this._reconnect();
+        });
+
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
             this.ws.open().subscribe(value => {
                 const request = new MT5LoginRequest();
@@ -386,6 +394,19 @@ export class MT5Broker implements IMT5Broker {
         });
     }
     dispose(): Observable<ActionResult> {
+        if (this._onTickSubscription) {
+            this._onTickSubscription.unsubscribe();
+        }
+        if (this._onAccountUpdateSubscription) {
+            this._onAccountUpdateSubscription.unsubscribe();
+        }
+        if (this._onOrdersUpdateSubscription) {
+            this._onOrdersUpdateSubscription.unsubscribe();
+        }
+        if (this._onReconnectSubscription) {
+            this._onReconnectSubscription.unsubscribe();
+        }
+
         this.ws.dispose();
 
         return of({
@@ -488,6 +509,29 @@ export class MT5Broker implements IMT5Broker {
 
     public instrumentAmountStep(symbol: string): number {
         return 0.01;
+    }
+
+    private _reconnect() {
+        if (!this._initData) {
+            return;
+        }
+
+        const initData = this._initData;
+        const request = new MT5LoginRequest();
+        request.Data = {
+            Password: initData.Password,
+            User: initData.Login,
+            ServerName: initData.ServerName
+        };
+        this.ws.login(request).subscribe((data: MT5LoginResponse) => {
+            if (data.IsSuccess) {
+                console.log("Reconnected");
+            } else {
+                console.error("Failed to Reconnected");
+            }
+        }, (error) => {
+            console.error("Failed to Reconnected");
+        });
     }
 
     private _handleQuotes(quote: IMT5Tick) {

@@ -2,7 +2,7 @@
     <img src="assets/img/metatrader.png" class="mt-image">
 </div>
 
-<div class="connected-broker-area" *ngIf="!brokerConnected">
+<div class="connected-broker-area" *ngIf="!brokerConnected" [class.disabled]="showSpinner">
     <div class="flex-row" *ngIf="savedAccountExists()">
         <div class="connected-accounts">
             <connected-account-info (onBrokerSelected)="brokerSelected($event)"></connected-account-info>

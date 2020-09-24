@@ -12,10 +12,10 @@ export enum SocketState {
 }
 
 export abstract class WebsocketBase {
-    private _isClosed = false;
-    private _socket: WebSocket;
-    private _reconnectAttempts = 0;
-    private _interval: any;
+    protected _isClosed = false;
+    protected _socket: WebSocket;
+    protected _reconnectAttempts = 0;
+    protected _interval: any;
 
     onOpen = new Subject();
     onReconnect = new Subject();

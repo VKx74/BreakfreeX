@@ -87,6 +87,7 @@ export class MT5SocketService extends WebsocketBase {
     return new Observable<void>(subscriber => {
       if (this.readyState === ReadyStateConstants.OPEN) {
           subscriber.next();
+          return;
       }
       super.open().subscribe((res) => {
         const authRequest = new MT5AuthRequest();

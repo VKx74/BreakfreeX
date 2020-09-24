@@ -43,7 +43,9 @@ export class MT5BrokerLoginComponent implements OnInit {
                 private _serversProvider: MT5BrokerServersProvider,
                 private _alertService: AlertService) {
 
+        this.showSpinner = true;
         this._serversProvider.loadServers().subscribe((servers: MT5Server[]) => {
+            this.showSpinner = false;
             for (const server of servers) {
                 this._servers.push(server);
 
@@ -58,7 +60,7 @@ export class MT5BrokerLoginComponent implements OnInit {
 
             this.selectDefaultServer();
         }, (error) => {
-
+            this.showSpinner = false;
         });
 
         // this.selectedServer = this.servers[0];
