@@ -40,7 +40,7 @@
     "exchangeManagementREST": "not used",
     "bftAlgoWS": "wss://fb.breakfreetrading.com",
     "MT5WS": "wss://mtapi-stage.breakfreetrading.com/mt5/websocket",
-    "bftAlgoREST": "https://localhost:5001/algoserver/"
+    "bftAlgoREST": "https://algoserver-stage.breakfreetrading.com/algoserver/"
 
   },
   "systemMonitoringUrls": {
@@ -123,6 +123,6 @@
     "https://ws-platform-stage.breakfreetrading.com",
     "https://breakfreetrading.com",
     "https://platform-stage.breakfreetrading.com",
-    "https://localhost:5001/algoserver"
+    "https://algoserver-stage.breakfreetrading.com"
   ]
 }
