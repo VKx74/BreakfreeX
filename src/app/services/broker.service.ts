@@ -41,7 +41,14 @@ export class BrokerService implements IHealthable {
         return true;
     } 
     
+    public get showTradingPanel(): boolean {
+        return true;
+    }
+
     public get isTradingAllowed(): boolean {
+        if (!this.showTradingPanel) {
+            return false;
+        }
         if (this._identityService.isAdmin) {
             return true;
         }

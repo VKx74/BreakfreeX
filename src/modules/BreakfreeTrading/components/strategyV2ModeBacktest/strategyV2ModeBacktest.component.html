@@ -20,55 +20,44 @@
 
          <div>
             <div class="row">
-               <span class="value1">Daily MESA Fast:</span><span class="value2">
+               <span class="value1">MESA Global Fast:</span><span class="value2">
                   <mat-form-field class="crypto-input">
-                     <input matInput type="number" [(ngModel)]="mesa_fast" min="0.0001" max="100" step="0.0001">
+                     <input matInput type="number" [(ngModel)]="global_fast" min="0.0001" max="100" step="0.0001">
                   </mat-form-field>
                </span>
             </div>
 
             <div class="row">
-               <span class="value1">Daily MESA Slow:</span><span class="value2">
+               <span class="value1">MESA Global Slow:</span><span class="value2">
                   <mat-form-field class="crypto-input">
-                     <input matInput type="number" [(ngModel)]="mesa_slow" min="0.0001" max="100" step="0.0001">
+                     <input matInput type="number" [(ngModel)]="global_slow" min="0.0001" max="100" step="0.0001">
                   </mat-form-field>
                </span>
             </div>
 
             <div class="row">
-               <span class="value1">Daily MESA Diff:</span><span class="value2">
+               <span class="value1">MESA Local Fast:</span><span class="value2">
+                  <mat-form-field class="crypto-input">
+                     <input matInput type="number" [(ngModel)]="local_fast" min="0.0001" max="100" step="0.0001">
+                  </mat-form-field>
+               </span>
+            </div>
+
+            <div class="row">
+               <span class="value1">MESA Local Slow:</span><span class="value2">
+                  <mat-form-field class="crypto-input">
+                     <input matInput type="number" [(ngModel)]="local_slow" min="0.0001" max="100" step="0.0001">
+                  </mat-form-field>
+               </span>
+            </div>
+
+            <div class="row">
+               <span class="value1">MESA Diff:</span><span class="value2">
                   <mat-form-field class="crypto-input">
                      <input matInput type="number" [(ngModel)]="mesa_diff" min="0.000001" max="1" step="0.000001">
                   </mat-form-field>
                </span>
             </div>
-
-            <div class="row">
-               <span class="value1">Hourly MESA Fast:</span>
-               <span class="value2">
-                  <mat-form-field class="crypto-input">
-                     <input matInput type="number" [(ngModel)]="hourly_mesa_fast" min="0.0001" max="100" step="0.0001">
-                  </mat-form-field>
-               </span>
-            </div>
-
-            <div class="row">
-               <span class="value1">Hourly MESA Slow:</span><span class="value2">
-                  <mat-form-field class="crypto-input">
-                     <input matInput type="number" [(ngModel)]="hourly_mesa_slow" min="0.0001" max="100" step="0.0001">
-                  </mat-form-field>
-               </span>
-            </div>
-
-            <div class="row">
-               <span class="value1">Hourly MESA Diff:</span><span class="value2">
-                  <mat-form-field class="crypto-input">
-                     <input matInput type="number" [(ngModel)]="hourly_mesa_diff" min="0.000001" max="1"
-                        step="0.000001">
-                  </mat-form-field>
-               </span>
-            </div>
-
          </div>
 
          <div class="row">
@@ -79,20 +68,6 @@
             </span>
          </div>
          
-         <div class="row">
-            <span class="value1">Use Daily trend:</span><span class="value2">
-               <div class="crypto-input">
-                  <mat-slide-toggle [(ngModel)]="use_daily_trend"></mat-slide-toggle>
-               </div>
-            </span>
-         </div>
-         <div class="row">
-            <span class="value1">Use Hourly trend:</span><span class="value2">
-               <div class="crypto-input">
-                  <mat-slide-toggle [(ngModel)]="use_hourly_trend"></mat-slide-toggle>
-               </div>
-            </span>
-         </div>
          <div class="row">
             <span class="value1">Place on S/R:</span><span class="value2">
                <div class="crypto-input">

@@ -30,8 +30,10 @@ export interface IBFTAlgoParameters {
 export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
     hma_period: number;
     breakeven_candles: number;
-    mesa_fast?: number;
-    mesa_slow?: number;
+    global_fast?: number;
+    global_slow?: number;
+    local_fast?: number;
+    local_slow?: number;
     mesa_diff?: number;
     trend_detector: TrendDetectorType;
 }
@@ -39,15 +41,12 @@ export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
 export interface IBFTBacktestV2AlgoParameters extends IBFTAlgoParameters {
     breakeven_candles: number;
     risk_reward: number;
-    mesa_fast: number;
-    mesa_slow: number;
+    global_fast: number;
+    global_slow: number;
+    local_fast?: number;
+    local_slow?: number;
     mesa_diff: number;
-    hourly_mesa_fast: number;
-    hourly_mesa_slow: number;
-    hourly_mesa_diff: number;
     stoploss_rr: number;
-    use_hourly_trend: boolean;
-    use_daily_trend: boolean;
     place_on_ex1: boolean;
     place_on_sr: boolean;
     trend_detector: TrendDetectorType;
@@ -78,8 +77,7 @@ export interface IBFTAStrategyV2Entry {
 export interface IBFTAStrategyV2Response { 
     trade_sr: IBFTAStrategyV2Entry;
     trade_ex1: IBFTAStrategyV2Entry;
-    hourly_trend: IBFTATrend;
-    daily_trend: IBFTATrend;
+    trend: IBFTATrend;
     top_ex2: number;
     top_ex1: number;
     r: number;

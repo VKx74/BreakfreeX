@@ -45,6 +45,10 @@ export class PlatformSidebarComponent implements OnInit {
     appTypeCaption = (appType: ApplicationType) => this._translateService.get(`footer.${appType}`)
         .pipe(map(caption => caption.toUpperCase()))
 
+    public get showTradingPanel(): boolean {
+        return this._brokerService.showTradingPanel;
+    }
+
     constructor(private _translateService: TranslateService,
                 private _themeService: ThemeService,
                 private _brokerService: BrokerService,

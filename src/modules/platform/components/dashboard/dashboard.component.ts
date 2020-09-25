@@ -82,6 +82,10 @@ export class DashboardComponent {
         return 80;
     }
 
+    public get showTradingPanel(): boolean {
+        return this._brokerService.showTradingPanel;
+    }
+
     constructor(private _store: Store<AppState>,
         private _actions: Actions,
         private _intercom: Intercom,

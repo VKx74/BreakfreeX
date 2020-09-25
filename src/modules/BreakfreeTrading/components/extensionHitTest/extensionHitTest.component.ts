@@ -38,8 +38,10 @@ export class ExtensionHitTestComponent {
     public slRatio: number = 1.7;
     public posNumbers: number = 3;
     public risk: number = 3.5;
-    public mesa_fast: number = 0.25;
-    public mesa_slow: number = 0.05;
+    public global_fast: number = 0.25;
+    public global_slow: number = 0.05;
+    public local_fast: number = 1.2;
+    public local_slow: number = 0.6;
     public mesa_diff: number = 0.1;
     public breakevenCandles: number = 5;
     public entryTargetBox: number = 25;
@@ -108,8 +110,10 @@ export class ExtensionHitTestComponent {
             breakeven_candles: this.breakevenCandles,
             entry_target_box: this.entryTargetBox,
             stoploss_rr: this.stoplossRR,
-            mesa_fast: this.mesa_fast,
-            mesa_slow: this.mesa_slow,
+            global_fast: this.global_fast,
+            global_slow: this.global_slow,
+            local_fast: this.local_fast,
+            local_slow: this.local_slow,
             mesa_diff: this.mesa_diff,
             trend_detector: this.trendDetector
 
@@ -222,14 +226,22 @@ export class ExtensionHitTestComponent {
             this._alertService.error("Breakeven candles cant be less than 0.");
             return false;
         }
-        if (params.mesa_fast <= 0) {
-            this._alertService.error("Mesa Fast must be greater than 0.");
+        if (params.global_fast <= 0) {
+            this._alertService.error("Global Fast must be greater than 0.");
             return false;
-        }
-        if (params.mesa_slow <= 0) {
-            this._alertService.error("Mesa Slow must be greater than 0.");
+        }  
+        if (params.global_slow <= 0) {
+            this._alertService.error("Global Slow must be greater than 0.");
             return false;
-        }
+        }  
+        if (params.local_fast <= 0) {
+            this._alertService.error("Local Fast must be greater than 0.");
+            return false;
+        }  
+        if (params.local_slow <= 0) {
+            this._alertService.error("Local Slow must be greater than 0.");
+            return false;
+        }  
         if (params.mesa_diff <= 0) {
             this._alertService.error("Mesa Diff must be greater than 0.");
             return false;

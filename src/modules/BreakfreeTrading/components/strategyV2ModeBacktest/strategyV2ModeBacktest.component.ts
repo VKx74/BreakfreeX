@@ -26,16 +26,13 @@ export class StrategyV2ModeBacktestComponent {
     public slRatio: number = 1.7;
     public maxCount: number = 100;
     public breakevenCandles: number = 5;
-    public mesa_fast: number = 0.25;
-    public mesa_slow: number = 0.05;
+    public global_fast: number = 0.25;
+    public global_slow: number = 0.05;
+    public local_fast: number = 1.2;
+    public local_slow: number = 0.6;
     public mesa_diff: number = 0.1;
-    public hourly_mesa_fast: number = 0.25;
-    public hourly_mesa_slow: number = 0.05;
-    public hourly_mesa_diff: number = 0.1;
     public place_on_ex1: boolean = true;
     public place_on_sr: boolean = true;
-    public use_hourly_trend: boolean = true;
-    public use_daily_trend: boolean = true;
     public stoplossRR: number = 25;
 
     public Status: string = "-";
@@ -105,14 +102,11 @@ export class StrategyV2ModeBacktestComponent {
             breakeven_candles: this.breakevenCandles,
             time: new Date().getTime(),
             timenow: new Date().getTime(),
-            mesa_fast: this.mesa_fast,
-            mesa_slow: this.mesa_slow,
             mesa_diff: this.mesa_diff,
-            hourly_mesa_fast: this.hourly_mesa_fast,
-            hourly_mesa_slow: this.hourly_mesa_slow,
-            hourly_mesa_diff: this.hourly_mesa_diff,
-            use_hourly_trend: this.use_hourly_trend,
-            use_daily_trend: this.use_daily_trend,
+            global_fast: this.global_fast,
+            global_slow: this.global_slow,
+            local_fast: this.local_fast,
+            local_slow: this.local_slow,
             place_on_ex1: this.place_on_ex1,
             place_on_sr: this.place_on_sr,
             stoploss_rr: this.stoplossRR,
@@ -211,8 +205,7 @@ export class StrategyV2ModeBacktestComponent {
             
             let description = this.getDescription(signal.timestamp, groupedOrders, pricePrecision);
             description += "\n----------- \n";
-            description += `Daily trend: ${signal.data.daily_trend}; \n`;
-            description += `Hourly trend: ${signal.data.daily_trend};`;
+            description += `Trend: ${signal.data.trend};`;
 
             backArea.tooltip.text = description;
         }
@@ -239,30 +232,26 @@ export class StrategyV2ModeBacktestComponent {
             this._alertService.error("Breakeven candles cant be less than 0.");
             return false;
         }
-        if (params.mesa_fast <= 0) {
-            this._alertService.error("Mesa Fast must be greater than 0.");
+        if (params.global_fast <= 0) {
+            this._alertService.error("Global Fast must be greater than 0.");
             return false;
         }  
-        if (params.mesa_slow <= 0) {
-            this._alertService.error("Mesa Slow must be greater than 0.");
+        if (params.global_slow <= 0) {
+            this._alertService.error("Global Slow must be greater than 0.");
+            return false;
+        }  
+        if (params.local_fast <= 0) {
+            this._alertService.error("Local Fast must be greater than 0.");
+            return false;
+        }  
+        if (params.local_slow <= 0) {
+            this._alertService.error("Local Slow must be greater than 0.");
             return false;
         }  
         if (params.mesa_diff <= 0) {
             this._alertService.error("Mesa Diff must be greater than 0.");
             return false;
         } 
-        if (params.hourly_mesa_fast <= 0) {
-            this._alertService.error("Mesa Fast must be greater than 0.");
-            return false;
-        }  
-        if (params.hourly_mesa_slow <= 0) {
-            this._alertService.error("Mesa Slow must be greater than 0.");
-            return false;
-        }  
-        if (params.hourly_mesa_diff <= 0) {
-            this._alertService.error("Mesa Diff must be greater than 0.");
-            return false;
-        }
 
         return true;
     }
