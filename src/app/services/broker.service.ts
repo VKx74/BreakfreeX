@@ -42,7 +42,7 @@ export class BrokerService implements IHealthable {
     } 
     
     public get showTradingPanel(): boolean {
-        return false;
+        return true;
     }
 
     public get isTradingAllowed(): boolean {
