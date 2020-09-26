@@ -35,17 +35,17 @@ export class SystemNotificationsService {
                 private _identityService: IdentityService) {
         this.userId = this._identityService.id;
         this.userTags = this._identityService.tags;
-        this._checkIsUnreadNotification();
-        this.getExchangeStatus()
-            .subscribe(status => {
-                this.exchangeStatus = status;
-            }, error1 => {
-                this.exchangeStatus = ExchangeStatus.Closed;
-            });
+        // this._checkIsUnreadNotification();
+        // this.getExchangeStatus()
+        //     .subscribe(status => {
+        //         this.exchangeStatus = status;
+        //     }, error1 => {
+        //         this.exchangeStatus = ExchangeStatus.Closed;
+        //     });
 
-        setInterval(() => {
-            this._checkIsUnreadNotification();
-        }, this._interval);
+        // setInterval(() => {
+        //     this._checkIsUnreadNotification();
+        // }, this._interval);
     }
 
     getNotifications(paginationParams = new PaginationParams()): Observable<SystemNotificationsResponseModel> {
