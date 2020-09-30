@@ -29,6 +29,8 @@ import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/pr
 import { ConnectedAccountInfoComponent } from './components/broker/forex/mt/connected-account-info/connected-account-info.component';
 import { DatatableModule } from 'modules/datatable/datatable.module';
 import { MatTableModule } from '@angular/material/table';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -52,7 +54,10 @@ import { MatTableModule } from '@angular/material/table';
         MatMenuModule,
         LoaderModule,
         DatatableModule,
-        MatTableModule
+        MatTableModule,
+
+        MatFormFieldModule,
+        MatAutocompleteModule
     ],
     declarations: [
         // AlertWidgetComponent,

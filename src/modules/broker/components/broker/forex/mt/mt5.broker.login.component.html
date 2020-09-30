@@ -13,17 +13,33 @@
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">Broker:</span>
-                <selector class="dropdown"
+
+            <mat-form-field>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onBrokerSelected($event)">
+                    <mat-option *ngFor="let option of filteredBrokers" [value]="option">
+                      {{option}}
+                    </mat-option>
+                </mat-autocomplete>
+                <input type="text" 
+                    class="full-width crypto-input mtInput" 
+                    placeholder="Search broker"
+                    (click)="inputClicked($event)"
+                    (focus)="inputClicked($event)"
+                    matInput
+                    [formControl]="brokerFormControl"
+                    [matAutocomplete]="auto">
+                </mat-form-field>
+                <!-- <selector class="dropdown"
                         [title]="'Select broker'"
                         [options]="brokers"
                         (onSelect)="onBrokerSelected($event)"
-                        [selectedOption]="selectedBroker"></selector>
+                        [selectedOption]="selectedBroker"></selector> -->
             </div>
         </div>
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit is-secondary">
                 <span class="form-unit__label">Server:</span>
-                <selector class="dropdown"
+                <selector class="dropdown"  
                         [title]="'Select server'"
                         [optionCaption]="captionText"
                         [options]="getServerBySelectedBroker()"
