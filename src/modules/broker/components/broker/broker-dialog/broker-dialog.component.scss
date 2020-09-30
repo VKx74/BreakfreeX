@@ -12,6 +12,7 @@
   .crypto-modal {
     div.modal-body {
       position: static;
+      margin-top:0px !important;
     }
   }
   .policy-agreement-wrapper {
@@ -50,3 +51,14 @@
     }
   }
 }
+
+
+
+.modal-header.mtbheader {
+  background: url(/assets/img/mtb_bg2.png);
+  height: 100px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
