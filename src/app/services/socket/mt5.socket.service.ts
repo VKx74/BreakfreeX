@@ -3,7 +3,7 @@ import { IWebSocketConfig, ReadyStateConstants } from "../../interfaces/socket/W
 import { AppConfigService } from '../app.config.service';
 import { Injectable } from "@angular/core";
 import { Observable, Subscriber, Subscription, Subject } from 'rxjs';
-import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, SubscribeQuote, MT5QuoteResponse, MT5PlaceOrderRequest, MT5PlaceOrderResponse, MT5LoginResponse, MT5EditOrderRequest, MT5EditOrderResponse, MT5CloseOrderRequest, MT5CloseOrderResponse, MT5LogoutRequest, MT5RequestMessageBase, MT5GetOrderHistoryRequest, MT5AccountUpdateResponse, IMT5AccountUpdatedData, IMT5OrderData, MT5OrdersUpdateResponse, MT5GetOrderHistoryResponse, MT5AuthRequest } from 'modules/Trading/models/forex/mt/mt.communication';
+import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, SubscribeQuote, MT5QuoteResponse, MT5PlaceOrderRequest, MT5PlaceOrderResponse, MT5LoginResponse, MT5EditOrderRequest, MT5EditOrderResponse, MT5CloseOrderRequest, MT5CloseOrderResponse, MT5LogoutRequest, MT5RequestMessageBase, MT5GetOrderHistoryRequest, MT5AccountUpdateResponse, IMT5AccountUpdatedData, IMT5OrderData, MT5OrdersUpdateResponse, MT5GetOrderHistoryResponse, MT5AuthRequest, GetQuote } from 'modules/Trading/models/forex/mt/mt.communication';
 import { IMT5Tick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 
@@ -152,6 +152,16 @@ export class MT5SocketService extends WebsocketBase {
   public closeOrder(data: MT5CloseOrderRequest): Observable<MT5CloseOrderResponse> {
     return new Observable<MT5CloseOrderResponse>(subscriber => {
       this._send(data, subscriber);
+    });
+  }
+
+  public getPrice(symbol: string): Observable<MT5CloseOrderResponse> {
+    return new Observable<MT5CloseOrderResponse>(subscriber => {
+      const message = new GetQuote();
+      message.Data = {
+        Symbol: symbol
+      };
+      this._send(message, subscriber);
     });
   }
 

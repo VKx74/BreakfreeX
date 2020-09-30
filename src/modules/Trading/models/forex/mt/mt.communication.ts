@@ -4,6 +4,7 @@ export enum EMT5MessageType {
     Login = "Login",
     Logout = "Logout",
     SubscribeQuote = "SubscribeQuote",
+    GetQuote = "GetQuote",
     OrdersHistory = "OrdersHistory",
     Quote = "Quote",
     AccountUpdate = "AccountUpdate",
@@ -57,6 +58,11 @@ export interface IMT5Auth {
 
 export interface IMT5SubscriptionData {
     Subscribe: boolean;
+    Symbol: string;
+}
+
+
+export interface IMT5GetQuoteDate {
     Symbol: string;
 }
 
@@ -233,6 +239,14 @@ export class SubscribeQuote extends MT5RequestMessageBase {
 
     constructor() {
         super(EMT5MessageType.SubscribeQuote);
+    }
+}
+
+export class GetQuote extends MT5RequestMessageBase {
+    public Data: IMT5GetQuoteDate;
+
+    constructor() {
+        super(EMT5MessageType.GetQuote);
     }
 }
 

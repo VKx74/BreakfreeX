@@ -8,7 +8,8 @@ export class ToasterAlertService extends AlertService {
 
     defaultOptions: ToastrOptions = {
         positionClass: 'toast-top-right',
-        toastClass: 'toast-custom'
+        toastClass: 'toast-custom',
+        timeOut: 1000 * 10
     };
 
     constructor(config?: AlertServiceConfig) {

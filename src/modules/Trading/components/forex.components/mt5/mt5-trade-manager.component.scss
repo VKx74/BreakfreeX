@@ -10,6 +10,10 @@
   overflow: auto;
   flex-direction: column;
 
+  .info-bar {
+    padding-top: 5px;
+  } 
+
   .color-selector {
     position: absolute;
     top: 6px;
@@ -55,10 +59,10 @@
     margin-left: 32px;
   }
 
-  .crypto-button {
+  .crypto-button { 
     padding: 0px 10px !important;
     height: 26px;
-    margin: 0px !important;
+    margin: 0px 0px 0px 12px !important;
   }
 
   /deep/ .mat-tab-body-wrapper { 

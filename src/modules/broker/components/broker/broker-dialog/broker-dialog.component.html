@@ -36,14 +36,26 @@
                 </div>
             </div>
             <ng-template #outOfAccess>
-                <div class="out-of-access">
-                    <div class="image">
-                        <img src="assets/img/bftnavigatorlogo.svg">
-                    </div>
-                    <div class="text">
-                        Please upgrade your subscription to get access for trading.
+                <div *ngIf="isDemoAllowed; else upgradeSubscription">
+                    <div class="out-of-access">
+                        <div class="image">
+                            <img src="assets/img/bftnavigatorlogo.svg">
+                        </div>
+                        <div class="text">
+                            Please connect with to get early beta testing access...... text
+                        </div>
                     </div>
                 </div>
+                <ng-template #upgradeSubscription>
+                    <div class="out-of-access">
+                        <div class="image">
+                            <img src="assets/img/bftnavigatorlogo.svg">
+                        </div>
+                        <div class="text">
+                            Upgrade your subscription to get access for trading.
+                        </div>
+                    </div>
+                </ng-template>
             </ng-template>
         </div>
     </div>

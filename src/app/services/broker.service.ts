@@ -48,10 +48,20 @@ export class BrokerService implements IHealthable {
     public get isTradingAllowed(): boolean {
         if (!this.showTradingPanel) {
             return false;
-        }
+        } 
         if (this._identityService.isAdmin) {
             return true;
         }
+        if (!this._identityService.subscriptions || !this._identityService.subscriptions.length) {
+            return false;
+        }
+        if (!this._identityService.tags || this._identityService.tags.indexOf("beta") === -1) {
+            return false;
+        }
+        return true;
+    }  
+    
+    public get isDemoAllowed(): boolean {
         if (!this._identityService.subscriptions || !this._identityService.subscriptions.length) {
             return false;
         }
@@ -207,7 +217,9 @@ export class BrokerService implements IHealthable {
         return this._activeBroker.saveState().pipe(map((value: IBrokerState) => {
             this._activeState.activeBrokerState = value;
             this._setSavedAccounts();
-            return this._activeState;
+            return {
+                ...this._activeState
+            };
         }));
     }
 
@@ -245,6 +257,32 @@ export class BrokerService implements IHealthable {
         } else {
             return this._restoreBrokerFromState(state.activeBrokerState);
         }
+    }
+
+    reconnect(): Observable<ActionResult> {
+        return new Observable<ActionResult>(subscriber => {
+            this.setBrokerInitializationState(null);
+            this.saveState().subscribe((state) => {
+                this.loadState(state).subscribe((loadStateResult) => {
+                    subscriber.next(loadStateResult);
+                    subscriber.complete();
+
+                    if (loadStateResult.result) {
+                        this.setBrokerInitializationState(true);
+                    } else {
+                        this.setBrokerInitializationState(false);
+                    }
+                }, (error) => {
+                    this.setBrokerInitializationState(false);
+                    subscriber.error(error);
+                    subscriber.complete();
+                });
+            }, (error) => {
+                this.setBrokerInitializationState(false);
+                subscriber.error(error);
+                subscriber.complete();
+            });
+        });
     }
 
     setDefaultBroker(): Observable<ActionResult> {

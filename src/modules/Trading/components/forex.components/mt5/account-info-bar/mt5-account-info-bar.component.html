@@ -1,6 +1,11 @@
 <div class="accountInfoRow">
-  <span>Account: {{activeAccount?.Account}}, </span>
-  <span>Company: {{activeAccount?.CompanyName}}, </span>
+  <span>
+    <svg class="status-img" [ngClass]="{'connected': status === MTStatus.Connected, 'pending': status === MTStatus.Pending, 'not_connected': status === MTStatus.NoConnection}">
+      <path class="path-data" d="M0,6a6,6 0 1,0 12,0a6,6 0 1,0 -12,0"></path>
+    </svg>
+  </span>
+  <span>Acct: {{activeAccount?.Account}}, </span>
+  <span>{{activeAccount?.CompanyName}}, </span>
   <span>Currency: {{activeAccount?.Currency}}, </span>
   <span>Balance: {{activeAccount?.Balance.toFixed(decimals)}}, </span>
   <span>PL: {{activeAccount?.Pl.toFixed(decimals)}}</span>

@@ -213,23 +213,24 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         this.decimals = broker.instrumentDecimals(symbol);
 
         if (instrument) {
-
             if (resetPrice) {
                 this._config.price = 0;
             }
-            this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
-                this.lastTick = tick;
-                const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
 
-                if (tick && !this._config.price) {
-                    this._config.price = price;
+            // broker.getPrice(symbol).subscribe((tick: IMT5Tick) => {
+            //     if (!tick || tick.symbol !== this.config.instrument.symbol) {
+            //         return;
+            //     }
+                
+            //     this._setTick(tick);
+            // });
+
+            this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
+                if (tick.symbol !== this.config.instrument.symbol) {
+                    return;
                 }
-                if (tick && !this._config.sl) {
-                    this._config.sl = price;
-                }
-                if (tick && !this._config.tp) {
-                    this._config.tp = price;
-                }
+
+                this._setTick(tick);
             });
         }
     }
@@ -240,6 +241,21 @@ export class MT5OrderConfiguratorComponent implements OnInit {
             this.onSubmitted.emit();
         } else {
             this._placeOrder();
+        }
+    }
+
+    private _setTick(tick: IMT5Tick) {
+        this.lastTick = tick;
+        const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
+
+        if (tick && !this._config.price) {
+            this._config.price = price;
+        }
+        if (tick && !this._config.sl) {
+            this._config.sl = price;
+        }
+        if (tick && !this._config.tp) {
+            this._config.tp = price;
         }
     }
 

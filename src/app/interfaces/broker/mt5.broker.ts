@@ -1,6 +1,6 @@
 import {Observable, Subject, Subscription} from "rxjs";
 import {IBroker} from "./broker";
-import { MT5TradingAccount, MT5Order, MT5Position, MT5PlaceOrder, MT5EditOrder, MT5EditOrderPrice } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5TradingAccount, MT5Order, MT5Position, MT5PlaceOrder, MT5EditOrder, MT5EditOrderPrice, MTStatus } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult, OrderFillPolicy } from 'modules/Trading/models/models';
 import { ITick, IMT5Tick } from '@app/models/common/tick';
 import { IInstrument } from '@app/models/common/instrument';
@@ -12,6 +12,7 @@ export interface IMT5Broker extends IBroker {
     onHistoricalOrdersUpdated: Subject<MT5Order[]>;
     onPositionsUpdated: Subject<MT5Position[]>;
 
+    status: MTStatus;
     orders: MT5Order[];
     ordersHistory: MT5Order[];
     positions: MT5Position[];
@@ -30,4 +31,5 @@ export interface IMT5Broker extends IBroker {
     instrumentAmountStep(symbol: string): number;
     instrumentToBrokerFormat(symbol: string): IInstrument;
     getOrderById(orderId: number): MT5Order;
+    getPrice(symbol: string): Observable<IMT5Tick>;
 }
