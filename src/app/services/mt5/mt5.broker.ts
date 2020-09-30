@@ -483,7 +483,13 @@ export class MT5Broker implements IMT5Broker {
         return new Observable<IMT5Tick>((observer: Observer<IMT5Tick>) => {
             this.ws.getPrice(symbol).subscribe((response) => {
                 if (response.IsSuccess) {
-                    observer.next(null);
+                    observer.next({
+                        ask: response.Data.Ask,
+                        bid: response.Data.Bid,
+                        last: response.Data.Last,
+                        symbol: response.Data.Symbol,
+                        volume: response.Data.Volume
+                    });
                 } else {
                     observer.error(response.ErrorMessage);
                 }

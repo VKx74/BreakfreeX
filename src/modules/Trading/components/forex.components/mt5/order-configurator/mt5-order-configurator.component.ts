@@ -219,13 +219,13 @@ export class MT5OrderConfiguratorComponent implements OnInit {
                 this._config.price = 0;
             }
 
-            // broker.getPrice(symbol).subscribe((tick: IMT5Tick) => {
-            //     if (!tick || tick.symbol !== this.config.instrument.symbol) {
-            //         return;
-            //     }
+            broker.getPrice(symbol).subscribe((tick: IMT5Tick) => {
+                if (!tick || tick.symbol !== this.config.instrument.symbol) {
+                    return;
+                }
                 
-            //     this._setTick(tick);
-            // });
+                this._setTick(tick);
+            });
 
             this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
                 if (tick.symbol !== this.config.instrument.symbol) {

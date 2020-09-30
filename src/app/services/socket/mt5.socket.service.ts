@@ -90,7 +90,7 @@ export class MT5SocketService extends WebsocketBase {
           subscriber.next();
           return;
       }
-      super.open().subscribe((res) => {
+      super.open().subscribe(() => {
         const authRequest = new MT5AuthRequest();
         authRequest.Data = {
           Token: this._token
@@ -174,8 +174,8 @@ export class MT5SocketService extends WebsocketBase {
     });
   }
 
-  public getPrice(symbol: string): Observable<MT5CloseOrderResponse> {
-    return new Observable<MT5CloseOrderResponse>(subscriber => {
+  public getPrice(symbol: string): Observable<MT5QuoteResponse> {
+    return new Observable<MT5QuoteResponse>(subscriber => {
       const message = new GetQuote();
       message.Data = {
         Symbol: symbol
