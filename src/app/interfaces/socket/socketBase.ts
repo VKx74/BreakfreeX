@@ -140,7 +140,7 @@ export abstract class WebsocketBase {
         this.onMessage.next(ev);
     }
 
-    private _reconnect() {
+    protected _reconnect() {
         console.log("Socket reconnect");
         setTimeout(() => {
             this._connect(true);

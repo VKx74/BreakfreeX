@@ -10,6 +10,7 @@ import { IdentityService } from '../auth/identity.service';
 @Injectable()
 export class MT5SocketService extends WebsocketBase {
   private _subscribers: { [id: string]: Subscriber<MT5ResponseMessageBase>; } = {};
+  private _authSucceeded: boolean;
   private _token: string;
   private _onMessageSubscription: Subscription;
   private _tickSubject: Subject<IMT5Tick> = new Subject<IMT5Tick>();
@@ -95,22 +96,40 @@ export class MT5SocketService extends WebsocketBase {
           Token: this._token
         }; 
 
-        subscriber.next();
-        subscriber.complete();
+        // subscriber.next();
+        // subscriber.complete();
 
-        // this.auth(authRequest).subscribe((res) => {
-        //   subscriber.next();
-        //   subscriber.complete();
-        // }, (error1) => {
-        //   subscriber.error(error1);
-        //   subscriber.complete();
-        // });
+        this.auth(authRequest).subscribe((res) => {
+
+          if (res.IsSuccess) {
+            this._authSucceeded = true;
+            subscriber.next();
+            subscriber.complete();
+          } else {
+            this._authSucceeded = false;
+            this.close();
+            subscriber.error(res.ErrorMessage);
+            subscriber.complete();
+          }
+        }, (error1) => {
+          this._authSucceeded = false;
+          this.close();
+          subscriber.error(error1);
+          subscriber.complete();
+        });
 
       }, (error) => {
         subscriber.error(error);
         subscriber.complete();
       });
     });
+  }
+
+  protected _reconnect() {
+    if (!this._authSucceeded) {
+      return;
+    }
+    super._reconnect();
   }
 
   protected auth(data: MT5AuthRequest): Observable<MT5ResponseMessageBase> {
