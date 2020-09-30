@@ -19,7 +19,7 @@ import { floatNumberRangeValidator } from "Validators";
 import { OandaBrokerService } from '@app/services/oanda.exchange/oanda.broker.service';
 import { IForexPlaceOrderAction } from 'modules/Trading/models/forex/forex.models';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
-import { MT5PlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5Order, MT5PlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 
 export class MT5OrderConfig {
     instrument: IInstrument;
@@ -51,6 +51,7 @@ export class MT5OrderConfig {
 }
 
 export type MT5OrderComponentSubmitHandler = (config: MT5OrderConfig) => void;
+export type MT5OrderSubmitHandler = (config: MT5PlaceOrder) => void;
 
 @Component({
     selector: 'mt5-order-configurator',
@@ -88,6 +89,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
 
     @Input() submitHandler: MT5OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
+    @Output() onOrderPlaced = new EventEmitter<MT5PlaceOrder>();
 
     set selectedTime(value: string) {
         if (value) {
@@ -309,6 +311,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
                 this.processingSubmit = false;
                 if (value.result) {
                     this._alertService.success("Order sent");
+                    this.onOrderPlaced.emit(placeOrderData);
                     this.onSubmitted.emit();
                 } else {
                     this._alertService.error(value.msg);
