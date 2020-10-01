@@ -91,7 +91,7 @@
   "orderStatusFilled": "Filled",
   "orderStatusCanceled": "Canceled",
   "stopPrice": "Stop Price",
-  "limitPrice": "Limit Price",
+  "limitPrice": "Entry Price",
   "lastPrice": "Last Price",
   "type": "Type",
   "tradeId": "Trade Id",

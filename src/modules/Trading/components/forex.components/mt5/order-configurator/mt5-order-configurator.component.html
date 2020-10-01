@@ -69,7 +69,7 @@
             <div class="flex-column">
                 <div class="crypto-form-unit margin-bottom">
                     <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL">
-                        {{'tradeManager.stop' | translate}}</mat-slide-toggle>
+                        {{'tradeManager.stoploss' | translate}}</mat-slide-toggle>
                     <mat-form-field class="crypto-input full-width" *ngIf="config.useSL">
                         <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                             [step]="priceStep" [(ngModel)]="config.sl">
@@ -79,7 +79,7 @@
             <div class="flex-column">
                 <div class="crypto-form-unit margin-bottom">
                     <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">
-                        {{'tradeManager.limit' | translate}}</mat-slide-toggle>
+                        {{'tradeManager.takeprofit' | translate}}</mat-slide-toggle>
                     <mat-form-field class="crypto-input full-width" *ngIf="config.useTP">
                         <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                             [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
