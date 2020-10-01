@@ -4,9 +4,9 @@
       <path class="path-data" d="M0,6a6,6 0 1,0 12,0a6,6 0 1,0 -12,0"></path>
     </svg>
   </span>
-  <span>Acct: {{activeAccount?.Account}}, </span>
-  <span>{{activeAccount?.CompanyName}}, </span>
-  <span>Currency: {{activeAccount?.Currency}}, </span>
-  <span>Balance: {{activeAccount?.Balance.toFixed(decimals)}}, </span>
-  <span>PL: {{activeAccount?.Pl.toFixed(decimals)}}</span>
+  <span>Acct: {{activeAccount?.Account}}</span>
+  <span class="additional-info">, {{activeAccount?.CompanyName}}, </span>
+  <span class="additional-info">Currency: {{activeAccount?.Currency}}, </span>
+  <span class="additional-info">Balance: {{activeAccount?.Balance.toFixed(decimals)}}, </span>
+  <span class="additional-info">PL: {{activeAccount?.Pl.toFixed(decimals)}}</span>
 </div>

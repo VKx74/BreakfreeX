@@ -37,5 +37,11 @@
       fill: $lightRedColor; 
     }
   }
+
+  @media (max-width: 768px) { 
+    .additional-info {
+      display: none;
+    }
+  }
 }
 

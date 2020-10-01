@@ -6,6 +6,12 @@
   .over-head {
     z-index: 2;
   }
+
+  @media (max-width: 768px) { 
+    .data-ticker {
+      display: none;
+    }
+  }
 }
 
 object {

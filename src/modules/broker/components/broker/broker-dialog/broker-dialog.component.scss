@@ -37,6 +37,13 @@
     }
   }
 
+  @media (max-width: 768px) { 
+    .policy-agreement-wrapper {
+      display: inline-block;
+      font-size: 14px;
+    }
+  }
+
   /deep/ .disabled {
     opacity: 0.35;
     pointer-events: none;

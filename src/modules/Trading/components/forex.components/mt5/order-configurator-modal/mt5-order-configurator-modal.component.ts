@@ -43,6 +43,12 @@ export class MT5OrderConfiguratorModalComponent extends Modal<IMT5OrderFormConfi
     }
 
     ngOnInit() {
+        const innerWidth = window.innerWidth;
+        const innerHeight = window.innerHeight;
+
+        if (innerWidth > 600 && innerHeight > 600) {
+            this.dialogRef.updatePosition({ top: '150px', left: '70px' });
+        }
     }
 
     ngOnDestroy() {

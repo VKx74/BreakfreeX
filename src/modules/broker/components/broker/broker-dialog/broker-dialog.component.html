@@ -35,13 +35,13 @@
                     </mt5-broker-login>
                 </ng-container>
                 <div class="policy-agreement-wrapper">
-                    <div>
+                    <span>
                         <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
                         <label for="accept-broker-policy">I accept the</label>
-                    </div>
-                    <div>
+                    </span>
+                    <span>
                         <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
-                    </div>
+                    </span>
                 </div>
             </div>
             <ng-template #outOfAccess>
