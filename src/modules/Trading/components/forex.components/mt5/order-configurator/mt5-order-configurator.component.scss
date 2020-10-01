@@ -72,12 +72,14 @@
 
   .submit-btn.order-side-buy {
     background: $lightGreenColor;
-    color: #fff;
+    color: #fff; 
+    font-weight: bold;
   }
 
   .submit-btn.order-side-sell {
     background: $lightRedColor;
     color: #fff;
+    font-weight: bold;
   }
 
   .order-side-btn {
@@ -85,10 +87,12 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     font-family: $primaryFontFamily;
     height: 32px;
+    font-weight:bold;
     text-align: center;
+    
 
     &.active.order-side-buy {
       background: $lightGreenColor;
@@ -162,4 +166,9 @@ hr {
   @include themify($themes, true) {
     color: themed('order-modal-color');
   }
+}
+
+ .crypto-form-unit .form-unit__label {
+
+  font-weight: bold;
 }
