@@ -4,6 +4,26 @@
 
 :host {
 
+  /deep/ .mat-expansion-panel-body {
+    padding: 0px !important;
+  }  
+  
+  /deep/ mat-expansion-panel, mat-expansion-panel {
+    border-radius: 0px;
+    box-shadow: none;
+  }
+
+  mat-expansion-panel-header {
+    border-radius: 0px;
+    height: 30px !important;
+    font-size: 12px;
+    box-shadow: none;
+    // border: none;
+    padding: 0px 10px;
+    border-bottom: solid 1px #f1f3f4;
+    margin-bottom: 12px;
+  }
+
   /deep/ .instrument-search {
     padding: 0px !important;
     width: 100% !important;
@@ -127,8 +147,16 @@ hr {
   hr {
     border-color: themed('appBackgroundColor');
   }
-}
 
+  mat-expansion-panel-header {
+    color: themed('order-modal-color');
+    border-color: themed('appBackgroundColor');
+  }
+
+  /deep/ mat-expansion-panel, mat-expansion-panel, mat-expansion-panel-header {
+   background-color: themed('appModalsPanelColor');
+  }
+}
 
 .modal-body {
   @include themify($themes, true) {

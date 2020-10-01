@@ -69,6 +69,7 @@ import { MT5OrderCloseModalComponent } from './components/forex.components/mt5/o
 import { MT5PendingOrdersComponent } from './components/forex.components/mt5/pending-orders/mt5-pending-orders.component';
 import { MT5PositionCloseModalComponent } from './components/forex.components/mt5/position-close-modal/mt5-position-close-modal.component';
 import { MT5OrderEditModalComponent } from './components/forex.components/mt5/order-edit-modal/mt5-order-edit-modal.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const components = [
     TradeManagerComponent,
@@ -147,7 +148,8 @@ const components = [
         LoaderModule,
         MatSlideToggleModule,
         NgxMaterialTimepickerModule,
-        DragDropModule
+        DragDropModule,
+        MatExpansionModule
         // TimeZonesModule,
     ],
     exports: [

@@ -150,7 +150,8 @@
     "closeOrder": "Закрити Ордер",
     "viewChart": "Перглянути Чарт",
     "account": "Акаунт",
-    "server": "Сервер"
+    "server": "Сервер",
+    "advancedSettings": "Розширені налаштування"
   },
   "periodicity": {
     "minute": "Хвилина",

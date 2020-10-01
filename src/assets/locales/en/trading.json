@@ -152,7 +152,8 @@
     "closePosition": "Close Position",
     "viewChart": "View Chart",
     "account": "Account",
-    "server": "Server"
+    "server": "Server",
+    "advancedSettings": "Advanced settings"
   },
   "periodicity": {
     "minute": "Minute",
