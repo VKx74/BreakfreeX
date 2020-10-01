@@ -29,7 +29,7 @@
         <div class="flex-row">
             <div class="flex-column">
                 <div class="crypto-form-unit margin-bottom">
-                    <div class="form-unit__label">{{'symbol' | translate}}</div>
+                    <div class="form-unit__label">{{'symbol' | translate}} from your MT</div>
                     <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
                         [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
                 </div>

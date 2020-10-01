@@ -267,9 +267,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         sl_shape.linePrice = order.SL;
         const p = Math.roundToDecimals(order.SL, this._decimals);
         if (order.Side === OrderSide.Buy) {
-            sl_shape.boxText = `SL: Trigger <= ${p}`;
+            sl_shape.boxText = `SL`;
         } else {
-            sl_shape.boxText = `SL: Trigger >= ${p}`;
+            sl_shape.boxText = `SL`;
         }
     }
     
@@ -277,9 +277,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         tp_shape.linePrice = order.TP;
         const p = Math.roundToDecimals(order.TP, this._decimals);
         if (order.Side === OrderSide.Buy) {
-            tp_shape.boxText = `TP: Trigger >= ${p}`;
+            tp_shape.boxText = `TP`;
         } else {
-            tp_shape.boxText = `TP: Trigger <= ${p}`;
+            tp_shape.boxText = `TP`;
         }
     }
 
@@ -294,11 +294,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         const p = Math.roundToDecimals(order.Price, this._decimals);
 
         if (order.Type === OrderTypes.Limit) {
-            shape.boxText = `L: ${p}`;
+            shape.boxText = `L`;
         }
 
         if (order.Type === OrderTypes.Stop) {
-            shape.boxText = `S: ${p}`;
+            shape.boxText = `Stop sell: ${p}`;
         }
     }
 
