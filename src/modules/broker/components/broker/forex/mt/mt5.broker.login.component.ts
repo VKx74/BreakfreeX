@@ -137,7 +137,7 @@ export class MT5BrokerLoginComponent implements OnInit {
     }
 
     connect() {        
-        if (!this.policyAccepted) {
+        if (!this.policyAccepted || !this.selectedServer) {
             return;
         }
         

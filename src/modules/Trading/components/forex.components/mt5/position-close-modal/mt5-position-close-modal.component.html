@@ -1,14 +1,9 @@
-<div class="crypto-modal bftorderpanel">
-
-
-    <div class="modal-header bftorderheader">
-        <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
-        <h4 class="modal-title">{{'tradeManager.closePositionDialogTitle' | translate}}</h4>
-    </div>
-
-
-    <div class="modal-content bftordermodal">
-       
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'tradeManager.closePositionDialogTitle' | translate}}</h4>
+        </div>
         <div class="modal-body">
            <div class="message-wrapper">Are you sure you want close all Market order related to '{{position.Symbol}}' position?</div>
         </div>
