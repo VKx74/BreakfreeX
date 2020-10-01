@@ -1,16 +1,17 @@
 @import "../mixins/themify";
 @import "../themes/themes";
+@import "global-styles/variables";
 
 #toast-container > .toast-custom {
   background-image: none !important;
   padding: 5px 15px 10px 50px;
-  opacity: 0.9;
-  border-radius: 6px;
-  box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, 0.15);
+  opacity: 1;
+  border-radius: 0px;
+  box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.25);
 
   .toast-title {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 2.38;
   }
 
@@ -32,22 +33,22 @@
 
 #toast-container > .toast-warning:before {
   content: "\f06a";
-  color: #ebd22c;
+  color: $lightYellowColor;
 }
 
 #toast-container > .toast-error:before {
   content: "\f057";
-  color: #f02645;
+  color: $lightRedColor;
 }
 
 #toast-container > .toast-info:before {
   content: "\f05a";
-  color: #2196f3;
+  color: $lightBlueColor;
 }
 
 #toast-container > .toast-success:before {
   content: "\f058";
-  color: #27cf6d;
+  color: $lightGreenColor;
 }
 
 .toast-custom {
