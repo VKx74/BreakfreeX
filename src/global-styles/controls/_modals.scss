@@ -82,13 +82,14 @@ mat-dialog-container.mat-dialog-container {
     }
 
     .modal-body {
-      padding: 25px 25px 18px;
+      padding: 15px;
       max-height: calc(80vh - 130px);
       overflow-y: auto;
     }
 
     .modal-footer {
       border-top: none;
+      padding-top: 0px;
       padding-bottom: 15px;
     }
   }
