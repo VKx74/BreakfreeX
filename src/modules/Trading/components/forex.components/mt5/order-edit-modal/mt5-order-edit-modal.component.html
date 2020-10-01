@@ -81,11 +81,11 @@
 
             </div>
 
-            <div class="flex-row">
+            <div class="flex-row" *ngIf="isPending()">
                 <div class="flex-column">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
-                        <selector [selectedOption]="config.expirationType" [options]="expirationTypes" [class.disabled]="!isPending()"
+                        <selector [selectedOption]="config.expirationType" [options]="expirationTypes"
                             (onSelect)="handleExpirationTypeSelected($event)"></selector>
                     </div>
                 </div>
