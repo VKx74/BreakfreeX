@@ -84,6 +84,20 @@ export class MT5SocketService extends WebsocketBase {
     this.close();
   }
 
+  sendAuth(): Observable<void> {
+    return new Observable<void>(subscriber => {
+      if (this._identityService.isExpired) {
+          this._identityService.refreshTokens().subscribe(() => {
+            this._open(subscriber);
+          }, (error) => {
+            this._open(subscriber);
+          });
+      } else {
+        this._open(subscriber);
+      }
+    });
+  }
+
   open(): Observable<void> {
     return new Observable<void>(subscriber => {
       if (this.readyState === ReadyStateConstants.OPEN) {
@@ -115,7 +129,6 @@ export class MT5SocketService extends WebsocketBase {
       // subscriber.complete();
 
       this.auth(authRequest).subscribe((res) => {
-
         if (res.IsSuccess) {
           this._authSucceeded = true;
           subscriber.next();

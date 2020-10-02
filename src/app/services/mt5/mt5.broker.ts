@@ -563,15 +563,21 @@ export class MT5Broker implements IMT5Broker {
             User: initData.Login,
             ServerName: initData.ServerName
         };
-        this.ws.login(request).subscribe((data: MT5LoginResponse) => {
-            if (data.IsSuccess) {
-                console.log("Reconnected");
-            } else {
+
+        this.ws.sendAuth().subscribe(() => {
+            this.ws.login(request).subscribe((data: MT5LoginResponse) => {
+                if (data.IsSuccess) {
+                    console.log("Reconnected");
+                } else {
+                    console.error("Failed to Reconnected");
+                }
+            }, (error) => {
                 console.error("Failed to Reconnected");
-            }
+            });
         }, (error) => {
-            console.error("Failed to Reconnected");
+            console.error("Failed to Reconnected[Re-login]");
         });
+       
     }
 
     private _handleQuotes(quote: IMT5Tick) {
