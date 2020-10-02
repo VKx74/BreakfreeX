@@ -90,38 +90,52 @@ export class MT5SocketService extends WebsocketBase {
           subscriber.next();
           return;
       }
-      super.open().subscribe(() => {
-        const authRequest = new MT5AuthRequest();
-        authRequest.Data = {
-          Token: this._token
-        }; 
 
-        // subscriber.next();
-        // subscriber.complete();
+      if (this._identityService.isExpired) {
+          this._identityService.refreshTokens().subscribe(() => {
+            this._open(subscriber);
+          }, (error) => {
+            this._open(subscriber);
+          });
+      } else {
+        this._open(subscriber);
+      }
 
-        this.auth(authRequest).subscribe((res) => {
+    });
+  }
 
-          if (res.IsSuccess) {
-            this._authSucceeded = true;
-            subscriber.next();
-            subscriber.complete();
-          } else {
-            this._authSucceeded = false;
-            this.close();
-            subscriber.error(res.ErrorMessage);
-            subscriber.complete();
-          }
-        }, (error1) => {
+  protected _open(subscriber: Subscriber<void>) {
+    super.open().subscribe(() => {
+      const authRequest = new MT5AuthRequest();
+      authRequest.Data = {
+        Token: "Bearer " + this._identityService.token
+      }; 
+
+      // subscriber.next();
+      // subscriber.complete();
+
+      this.auth(authRequest).subscribe((res) => {
+
+        if (res.IsSuccess) {
+          this._authSucceeded = true;
+          subscriber.next();
+          subscriber.complete();
+        } else {
           this._authSucceeded = false;
           this.close();
-          subscriber.error(error1);
+          subscriber.error(res.ErrorMessage);
           subscriber.complete();
-        });
-
-      }, (error) => {
-        subscriber.error(error);
+        }
+      }, (error1) => {
+        this._authSucceeded = false;
+        this.close();
+        subscriber.error(error1);
         subscriber.complete();
       });
+
+    }, (error) => {
+      subscriber.error(error);
+      subscriber.complete();
     });
   }
 
