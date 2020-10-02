@@ -286,11 +286,11 @@ $defaultModeRowHeight: 32px;
 
   mat-row {
     &.selected {
-      background-color: themed('accentColor') !important;
+      background-color: themed('accentLightColor') !important;
 
-      .mat-cell {
-        color: #fff;
-      }
+      // .mat-cell {
+      //   color: #fff;
+      // }
     }
   }
 
@@ -357,11 +357,11 @@ $defaultModeRowHeight: 32px;
       }
 
       &.selected {
-        background-color: themed('accentColor') !important;
+        background-color: themed('accentLightColor') !important;
 
-        .mat-cell {
-          color: #fff;
-        }
+          // .mat-cell {
+          //   color: #fff;
+          // }
       }
     }
 

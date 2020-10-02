@@ -12,6 +12,7 @@
   .crypto-modal {
     div.modal-body {
       position: static;
+      margin-top:0px !important;
     }
   }
   .policy-agreement-wrapper {
@@ -36,6 +37,13 @@
     }
   }
 
+  @media (max-width: 768px) { 
+    .policy-agreement-wrapper {
+      display: inline-block;
+      font-size: 14px;
+    }
+  }
+
   /deep/ .disabled {
     opacity: 0.35;
     pointer-events: none;
@@ -50,3 +58,14 @@
     }
   }
 }
+
+
+
+.modal-header.mtbheader {
+  background: url(/assets/img/mtb_bg2.png);
+  height: 100px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+

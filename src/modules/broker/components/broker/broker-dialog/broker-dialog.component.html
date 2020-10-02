@@ -1,6 +1,15 @@
 <div class="crypto-modal">
+
+
+    <div class="modal-header mtbheader">
+           
+
+
+    </div>
+
     <div class="modal-content">
-        <div class="modal-header"></div>
+     
+
         <div class="modal-body">
             <!-- <ng-container [ngSwitch]="applicationType">
                 <ng-container *ngSwitchCase="ApplicationType.Stock">
@@ -26,24 +35,34 @@
                     </mt5-broker-login>
                 </ng-container>
                 <div class="policy-agreement-wrapper">
-                    <div>
+                    <span>
                         <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
                         <label for="accept-broker-policy">I accept the</label>
-                    </div>
-                    <div>
-                        <a (click)="privacyPolicy()">Privacy Policy</a>
-                    </div>
+                    </span>
+                    <span>
+                        <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
+                    </span>
                 </div>
             </div>
             <ng-template #outOfAccess>
-                <div class="out-of-access">
-                    <div class="image">
-                        <img src="assets/img/bftnavigatorlogo.svg">
-                    </div>
-                    <div class="text">
-                        Please upgrade your subscription to get access for trading.
+                <div *ngIf="isDemoAllowed; else upgradeSubscription">
+                    <div class="out-of-access">
+                      
+                        <div class="text">
+                            <a class="typeform-share button" href="https://form.typeform.com/to/MxuaQLwU" data-mode="popup" style="display:inline-block;text-decoration:none;background-color:#000000;color:white;cursor:pointer;font-family:Helvetica,Arial,sans-serif;font-size:21px;line-height:52.5px;text-align:center;margin:0;height:52.5px;padding:0px 35px;border-radius:4px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;" target="_blank">Apply for Beta Program </a> <script> (function() { var qs,js,q,s,d=document, gi=d.getElementById, ce=d.createElement, gt=d.getElementsByTagName, id="typef_orm_share", b="https://embed.typeform.com/"; if(!gi.call(d,id)){ js=ce.call(d,"script"); js.id=id; js.src=b+"embed.js"; q=gt.call(d,"script")[0]; q.parentNode.insertBefore(js,q) } })() </script>
+                        </div>
                     </div>
                 </div>
+                <ng-template #upgradeSubscription>
+                    <div class="out-of-access">
+                        <div class="image">
+                            <img src="assets/img/bftnavigatorlogo.svg">
+                        </div>
+                        <div class="text">
+                            Upgrade your subscription to get access for trading.
+                        </div>
+                    </div>
+                </ng-template>
             </ng-template>
         </div>
     </div>

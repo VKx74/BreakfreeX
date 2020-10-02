@@ -37,6 +37,7 @@ export class MT5BrokerServersProvider {
                         }   
                         observer.next(this._servers);
                         observer.complete();
+                        onMessageSubscription.unsubscribe();
                     }
                 } catch (e) {
                     console.log('Failed to parse ws message in MT5BrokerServersProvider');
@@ -45,8 +46,6 @@ export class MT5BrokerServersProvider {
                     observer.error(e);
                     observer.complete();
                 }
-    
-                onMessageSubscription.unsubscribe();
             });
 
             this.ws.open().subscribe(value => {

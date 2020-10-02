@@ -19,7 +19,7 @@ import { floatNumberRangeValidator } from "Validators";
 import { OandaBrokerService } from '@app/services/oanda.exchange/oanda.broker.service';
 import { IForexPlaceOrderAction } from 'modules/Trading/models/forex/forex.models';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
-import { MT5PlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5Order, MT5PlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 
 export class MT5OrderConfig {
     instrument: IInstrument;
@@ -51,6 +51,7 @@ export class MT5OrderConfig {
 }
 
 export type MT5OrderComponentSubmitHandler = (config: MT5OrderConfig) => void;
+export type MT5OrderSubmitHandler = (config: MT5PlaceOrder) => void;
 
 @Component({
     selector: 'mt5-order-configurator',
@@ -88,6 +89,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
 
     @Input() submitHandler: MT5OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
+    @Output() onOrderPlaced = new EventEmitter<MT5PlaceOrder>();
 
     set selectedTime(value: string) {
         if (value) {
@@ -213,23 +215,24 @@ export class MT5OrderConfiguratorComponent implements OnInit {
         this.decimals = broker.instrumentDecimals(symbol);
 
         if (instrument) {
-
             if (resetPrice) {
                 this._config.price = 0;
             }
-            this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
-                this.lastTick = tick;
-                const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
 
-                if (tick && !this._config.price) {
-                    this._config.price = price;
+            broker.getPrice(symbol).subscribe((tick: IMT5Tick) => {
+                if (!tick || tick.symbol !== this.config.instrument.symbol) {
+                    return;
                 }
-                if (tick && !this._config.sl) {
-                    this._config.sl = price;
+                
+                this._setTick(tick);
+            });
+
+            this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMT5Tick) => {
+                if (tick.symbol !== this.config.instrument.symbol) {
+                    return;
                 }
-                if (tick && !this._config.tp) {
-                    this._config.tp = price;
-                }
+
+                this._setTick(tick);
             });
         }
     }
@@ -240,6 +243,21 @@ export class MT5OrderConfiguratorComponent implements OnInit {
             this.onSubmitted.emit();
         } else {
             this._placeOrder();
+        }
+    }
+
+    private _setTick(tick: IMT5Tick) {
+        this.lastTick = tick;
+        const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
+
+        if (tick && !this._config.price) {
+            this._config.price = price;
+        }
+        if (tick && !this._config.sl) {
+            this._config.sl = price;
+        }
+        if (tick && !this._config.tp) {
+            this._config.tp = price;
         }
     }
 
@@ -293,6 +311,7 @@ export class MT5OrderConfiguratorComponent implements OnInit {
                 this.processingSubmit = false;
                 if (value.result) {
                     this._alertService.success("Order sent");
+                    this.onOrderPlaced.emit(placeOrderData);
                     this.onSubmitted.emit();
                 } else {
                     this._alertService.error(value.msg);

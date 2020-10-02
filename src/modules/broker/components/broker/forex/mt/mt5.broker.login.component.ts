@@ -11,6 +11,7 @@ import { MT5BrokerServersProvider } from '@app/services/mt5/mt5.servers.service'
 import { MT5ConnectionData, MT5Server } from 'modules/Trading/models/forex/mt/mt.models';
 import bind from "bind-decorator";
 import { IMT5LoginData } from 'modules/Trading/models/forex/mt/mt.communication';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
     selector: 'mt5-broker-login',
@@ -25,12 +26,22 @@ export class MT5BrokerLoginComponent implements OnInit {
     public selectedBroker: string;
     public _brokers: string[] = [];
     public _servers: MT5Server[] = [];
+    public brokerFormControl: FormControl = new FormControl();
 
     @Input()
     public policyAccepted: boolean;
 
     public get brokers(): string[] {
         return this._brokers;
+    }
+    
+    public get filteredBrokers(): string[] {
+        const filterText = this.brokerFormControl.value;
+        if (!filterText) {
+            return this._brokers;
+        }
+        
+        return this._brokers.filter(_ => _.toLowerCase().indexOf(filterText.toLowerCase()) !== -1);
     }
 
     get brokerConnected(): boolean {
@@ -54,11 +65,11 @@ export class MT5BrokerLoginComponent implements OnInit {
                 }
             }
 
-            if (this._brokers.length) {
-                this.selectedBroker = this._brokers[0];
-            }
+            // if (this._brokers.length) {
+            //     this.selectedBroker = this._brokers[0];
+            // }
 
-            this.selectDefaultServer();
+            // this.selectDefaultServer();
         }, (error) => {
             this.showSpinner = false;
         });
@@ -80,9 +91,9 @@ export class MT5BrokerLoginComponent implements OnInit {
         }
         return res;
     }
-
-    onBrokerSelected(broker: string) { 
-        this.selectedBroker = broker;
+    
+    onBrokerSelected(event: MatAutocompleteSelectedEvent) { 
+        this.selectedBroker = event.option.value;
         this.selectDefaultServer();
     }
 
@@ -100,11 +111,18 @@ export class MT5BrokerLoginComponent implements OnInit {
     ngOnInit() {     
     }
 
+    inputClicked(event: any) {
+        // setTimeout(() => {
+        //     event.srcElement.select();
+        // }, 1);
+    }
+
     brokerSelected(account: IBrokerState) {
         for (const server of this._servers) {
             if (server.Name === account.server) {
                 this.selectedServer = server;
                 this.selectedBroker = server.Broker;
+                this.brokerFormControl.setValue(this.selectedBroker);
                 break;
             }
         }
@@ -119,7 +137,7 @@ export class MT5BrokerLoginComponent implements OnInit {
     }
 
     connect() {        
-        if (!this.policyAccepted) {
+        if (!this.policyAccepted || !this.selectedServer) {
             return;
         }
         

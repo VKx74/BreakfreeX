@@ -1,7 +1,7 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
 import { IMT5Broker } from '@app/interfaces/broker/mt5.broker';
 import { Injectable } from '@angular/core';
-import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5Position, MT5ConnectionData, MT5EditOrderPrice } from 'modules/Trading/models/forex/mt/mt.models';
+import { MT5TradingAccount, MT5PlaceOrder, MT5EditOrder, MT5Order, MT5Position, MT5ConnectionData, MT5EditOrderPrice, MTStatus } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
@@ -10,6 +10,7 @@ import { MT5SocketService } from '../socket/mt5.socket.service';
 import { MT5LoginRequest, MT5LoginResponse, MT5PlaceOrderRequest, MT5EditOrderRequest, MT5CloseOrderRequest, IMT5AccountUpdatedData, IMT5OrderData, MT5GetOrderHistoryRequest, IMT5SymbolData } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
 import { IMT5Tick } from '@app/models/common/tick';
+import { ReadyStateConstants } from '@app/interfaces/socket/WebSocketConfig';
 
 @Injectable()
 export class MT5Broker implements IMT5Broker {
@@ -44,9 +45,26 @@ export class MT5Broker implements IMT5Broker {
         Margin: 0,
         Pl: 0
     };
+    
+    private _lastUpdate: number;
 
     private _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
     private _startHistory: number = this._endHistory - (60 * 60 * 24 * 14);
+
+    public get status(): MTStatus {
+        if (!this._lastUpdate || this.ws.readyState !== ReadyStateConstants.OPEN) {
+            return MTStatus.NoConnection;
+        }
+
+        const diff = (new Date().getTime() - this._lastUpdate) / 1000;
+        if (diff < 10) {
+            return MTStatus.Connected;
+        }
+        if (diff > 10 && diff < 60) {
+            return MTStatus.Pending;
+        }
+        return MTStatus.NoConnection;
+    }
 
     public get onSaveStateRequired(): Subject<void> {
         return this._onSaveStateRequired;
@@ -461,6 +479,28 @@ export class MT5Broker implements IMT5Broker {
         }
     }
 
+    getPrice(symbol: string): Observable<IMT5Tick> {
+        return new Observable<IMT5Tick>((observer: Observer<IMT5Tick>) => {
+            this.ws.getPrice(symbol).subscribe((response) => {
+                if (response.IsSuccess) {
+                    observer.next({
+                        ask: response.Data.Ask,
+                        bid: response.Data.Bid,
+                        last: response.Data.Last,
+                        symbol: response.Data.Symbol,
+                        volume: response.Data.Volume
+                    });
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
+    }
+    
     private _initialize(instruments: IMT5SymbolData[]) {
         for (const instrument of instruments) {
             const tickSize = 1 / Math.pow(10, instrument.Digits);
@@ -555,6 +595,7 @@ export class MT5Broker implements IMT5Broker {
         this._accountInfo.Margin = data.Margin;
         this._accountInfo.Pl = data.Profit;
         this._accountInfo.CompanyName = data.CompanyName;
+        this._lastUpdate = new Date().getTime();
 
         this.onAccountInfoUpdated.next(this._accountInfo);
     }

@@ -23,10 +23,17 @@
 </div>
 
 <div class="controls">
-    <mt5-account-info-bar></mt5-account-info-bar>
-    <button (click)="placeOrder()"
-            style="margin:10px"
-            [disabled]="!brokerConnected"
-            class="crypto-button crypto-button_success">Place Order
-    </button>
+    <mt5-account-info-bar class="info-bar"></mt5-account-info-bar>
+    <div>
+        <button (click)="placeOrder()"
+                style="margin:10px"
+                [disabled]="!brokerConnected"
+                class="crypto-button crypto-button_success">Place Order
+        </button> 
+        <button (click)="reconnect()"
+                style="margin:10px"
+                [disabled]="!brokerConnected"
+                class="crypto-button crypto-button_danger">Reconnect
+        </button>
+    </div>
 </div>

@@ -71,6 +71,9 @@ hr {
 }
 
 :host {
+  /deep/ mat-form-field {
+    width: 100%;
+  }
   .flex-row {
     display: flex;
     flex-direction: row;

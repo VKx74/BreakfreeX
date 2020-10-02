@@ -7,8 +7,8 @@
   },
   "tradeManager": {
     "title": "Trade Widget",
-    "resetAmount": "Reset Amount",
-    "amountToClose": "Amount To Close",
+    "resetAmount": "Reset size",
+    "amountToClose": "Size to close",
     "compleatedAt": "Compl. At",
     "address": "Address",
     "market": "Market",
@@ -51,7 +51,9 @@
     "qtyFilled": "Qty Filled",
     "qtyLeft": "Qty Left",
     "stop": "Stop",
+    "stoploss": "Stoploss",
     "limit": "Limit",
+    "takeprofit": "Take Profit",
     "stopLimit": "Stop Limit",
     "filledPrice": "Filled Price",
     "placeOrder": "Place Order",
@@ -152,7 +154,8 @@
     "closePosition": "Close Position",
     "viewChart": "View Chart",
     "account": "Account",
-    "server": "Server"
+    "server": "Server",
+    "advancedSettings": "Advanced settings"
   },
   "periodicity": {
     "minute": "Minute",

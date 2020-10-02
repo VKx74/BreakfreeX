@@ -1,6 +1,12 @@
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from 'modules/Trading/models/models';
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 
+export enum MTStatus {
+    Connected,
+    Pending,
+    NoConnection
+}
+
 export interface MT5TradingAccount {
     Account: string;
     Currency: string;

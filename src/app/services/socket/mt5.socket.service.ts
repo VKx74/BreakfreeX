@@ -3,13 +3,14 @@ import { IWebSocketConfig, ReadyStateConstants } from "../../interfaces/socket/W
 import { AppConfigService } from '../app.config.service';
 import { Injectable } from "@angular/core";
 import { Observable, Subscriber, Subscription, Subject } from 'rxjs';
-import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, SubscribeQuote, MT5QuoteResponse, MT5PlaceOrderRequest, MT5PlaceOrderResponse, MT5LoginResponse, MT5EditOrderRequest, MT5EditOrderResponse, MT5CloseOrderRequest, MT5CloseOrderResponse, MT5LogoutRequest, MT5RequestMessageBase, MT5GetOrderHistoryRequest, MT5AccountUpdateResponse, IMT5AccountUpdatedData, IMT5OrderData, MT5OrdersUpdateResponse, MT5GetOrderHistoryResponse, MT5AuthRequest } from 'modules/Trading/models/forex/mt/mt.communication';
+import { MT5ResponseMessageBase, MT5LoginRequest, EMT5MessageType, SubscribeQuote, MT5QuoteResponse, MT5PlaceOrderRequest, MT5PlaceOrderResponse, MT5LoginResponse, MT5EditOrderRequest, MT5EditOrderResponse, MT5CloseOrderRequest, MT5CloseOrderResponse, MT5LogoutRequest, MT5RequestMessageBase, MT5GetOrderHistoryRequest, MT5AccountUpdateResponse, IMT5AccountUpdatedData, IMT5OrderData, MT5OrdersUpdateResponse, MT5GetOrderHistoryResponse, MT5AuthRequest, GetQuote } from 'modules/Trading/models/forex/mt/mt.communication';
 import { IMT5Tick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 
 @Injectable()
 export class MT5SocketService extends WebsocketBase {
   private _subscribers: { [id: string]: Subscriber<MT5ResponseMessageBase>; } = {};
+  private _authSucceeded: boolean;
   private _token: string;
   private _onMessageSubscription: Subscription;
   private _tickSubject: Subject<IMT5Tick> = new Subject<IMT5Tick>();
@@ -89,28 +90,46 @@ export class MT5SocketService extends WebsocketBase {
           subscriber.next();
           return;
       }
-      super.open().subscribe((res) => {
+      super.open().subscribe(() => {
         const authRequest = new MT5AuthRequest();
         authRequest.Data = {
           Token: this._token
         }; 
 
-        subscriber.next();
-        subscriber.complete();
+        // subscriber.next();
+        // subscriber.complete();
 
-        // this.auth(authRequest).subscribe((res) => {
-        //   subscriber.next();
-        //   subscriber.complete();
-        // }, (error1) => {
-        //   subscriber.error(error1);
-        //   subscriber.complete();
-        // });
+        this.auth(authRequest).subscribe((res) => {
+
+          if (res.IsSuccess) {
+            this._authSucceeded = true;
+            subscriber.next();
+            subscriber.complete();
+          } else {
+            this._authSucceeded = false;
+            this.close();
+            subscriber.error(res.ErrorMessage);
+            subscriber.complete();
+          }
+        }, (error1) => {
+          this._authSucceeded = false;
+          this.close();
+          subscriber.error(error1);
+          subscriber.complete();
+        });
 
       }, (error) => {
         subscriber.error(error);
         subscriber.complete();
       });
     });
+  }
+
+  protected _reconnect() {
+    if (!this._authSucceeded) {
+      return;
+    }
+    super._reconnect();
   }
 
   protected auth(data: MT5AuthRequest): Observable<MT5ResponseMessageBase> {
@@ -152,6 +171,16 @@ export class MT5SocketService extends WebsocketBase {
   public closeOrder(data: MT5CloseOrderRequest): Observable<MT5CloseOrderResponse> {
     return new Observable<MT5CloseOrderResponse>(subscriber => {
       this._send(data, subscriber);
+    });
+  }
+
+  public getPrice(symbol: string): Observable<MT5QuoteResponse> {
+    return new Observable<MT5QuoteResponse>(subscriber => {
+      const message = new GetQuote();
+      message.Data = {
+        Symbol: symbol
+      };
+      this._send(message, subscriber);
     });
   }
 

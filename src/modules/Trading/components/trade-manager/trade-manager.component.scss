@@ -6,6 +6,12 @@
   .over-head {
     z-index: 2;
   }
+
+  @media (max-width: 768px) { 
+    .data-ticker {
+      display: none;
+    }
+  }
 }
 
 object {
@@ -59,7 +65,7 @@ object {
   .account-info-panel {
     position: absolute;
     height: 26px;
-    padding-left: 20px;
+    padding-left: 10px;
     background-color: themed('noactiveTabs');
   }
 

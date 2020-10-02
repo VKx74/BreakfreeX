@@ -97,6 +97,18 @@ export class MT5TradeManagerComponent {
         this._dialog.open(MT5OrderConfiguratorModalComponent);
     }
 
+    reconnect() {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Reconnect',
+                message: `Reconnect to current broker account?`,
+                onConfirm: () => {
+                   this._reconnect();
+                }
+            }
+        });
+    }
+
     tabChanged(data: MatTabChangeEvent) {
         this.selectedTabIndex = data.index;
     }
@@ -160,6 +172,19 @@ export class MT5TradeManagerComponent {
             this.linker.sendAction(linkAction);
         }, (error) => {
             this._alertService.warning("Failed to view chart by order symbol");
+        });
+    }
+
+    private _reconnect() {
+        this._alertService.info("Reconnecting");
+        this.brokerService.reconnect().subscribe((res) => {
+            if (res.result) {
+                this._alertService.success("Broker reconnected");
+            } else {
+                this._alertService.warning("Failed to reconnect to broker");
+            }
+        }, (error) => {
+            this._alertService.warning("Failed to reconnect to broker");
         });
     }
 }

@@ -7,7 +7,7 @@
         <div class="modal-body">
             <mt5-order-configurator [config]="orderConfig"
                                        [submitHandler]="submitHandler"
-                                       (onSubmitted)="hide()"></mt5-order-configurator>
+                                       (onSubmitted)="hide()" (onOrderPlaced)="orderPlaced($event)"></mt5-order-configurator>
         </div>
     </div>
 </div>
