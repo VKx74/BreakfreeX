@@ -15,7 +15,7 @@ import { BrokerService } from '@app/services/broker.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MT5Broker } from '@app/services/mt5/mt5.broker';
 import { MT5OrderConfig } from 'modules/Trading/components/forex.components/mt5/order-configurator/mt5-order-configurator.component';
-import { OrderTypes, OrderSide } from 'modules/Trading/models/models';
+import { OrderTypes, OrderSide, OrderFillPolicy } from 'modules/Trading/models/models';
 import { MT5OrderConfiguratorModalComponent } from 'modules/Trading/components/forex.components/mt5/order-configurator-modal/mt5-order-configurator-modal.component';
 
 export interface IBFTNavigatorComponentState {
@@ -153,7 +153,12 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
             const orderConfig = MT5OrderConfig.create();
             const pricePrecision = mt5Broker.instrumentDecimals(this.SelectedItem.parameters.instrument.symbol);
             orderConfig.type = OrderTypes.Limit;
-            orderConfig.instrument = this.SelectedItem.parameters.instrument;
+            orderConfig.fillPolicy = OrderFillPolicy.FF;
+            const instrument = mt5Broker.instrumentToBrokerFormat(this.SelectedItem.parameters.instrument.symbol);
+            if (!instrument) {
+                return;
+            }
+            orderConfig.instrument = instrument;
             orderConfig.useTP = true;
             orderConfig.useSL = true;
             orderConfig.side = this.Data.algo_Entry > this.Data.algo_TP2 ? OrderSide.Sell : OrderSide.Buy;

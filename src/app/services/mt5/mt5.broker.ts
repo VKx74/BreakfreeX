@@ -502,6 +502,7 @@ export class MT5Broker implements IMT5Broker {
     }
     
     private _initialize(instruments: IMT5SymbolData[]) {
+        this._instruments = [];
         for (const instrument of instruments) {
             const tickSize = 1 / Math.pow(10, instrument.Digits);
             this._instruments.push({
