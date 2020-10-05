@@ -40,6 +40,7 @@
     "exchangeManagementREST": "not used",
     "bftAlgoWS": "wss://fb.breakfreetrading.com",
     "MT5WS": "wss://mtapi-stage.breakfreetrading.com/mt5/websocket",
+    "MT4WS": "wss://mtapi-stage.breakfreetrading.com/mt4/websocket",
     "bftAlgoREST": "https://algoserver-stage.breakfreetrading.com/algoserver/"
 
   },

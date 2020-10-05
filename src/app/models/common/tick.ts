@@ -9,7 +9,7 @@ export interface ITick {
     time: number;
 }
 
-export interface IMT5Tick {
+export interface IMTTick {
     symbol: string;
     volume: number;
     last: number;

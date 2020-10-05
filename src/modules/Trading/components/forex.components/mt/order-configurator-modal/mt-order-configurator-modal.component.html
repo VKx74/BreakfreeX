@@ -1,0 +1,13 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="modal-content">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'tradeManager.orderDialogTitle' | translate}}</h4>
+        </div>
+        <div class="modal-body">
+            <mt-order-configurator [config]="orderConfig"
+                                       [submitHandler]="submitHandler"
+                                       (onSubmitted)="hide()" (onOrderPlaced)="orderPlaced($event)"></mt-order-configurator>
+        </div>
+    </div>
+</div>

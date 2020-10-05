@@ -8,7 +8,8 @@ import { EExchangeInstance } from '../exchange/exchange';
 export enum EBrokerInstance {
     BitmexBroker = 'Bitmex',
     OandaBroker = "Oanda",
-    MT5 = "MT5"
+    MT5 = "MT5",
+    MT4 = "MT4"
 }
 
 export interface IBrokerState<T = any> {

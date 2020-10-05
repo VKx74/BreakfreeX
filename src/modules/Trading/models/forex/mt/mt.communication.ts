@@ -1,4 +1,4 @@
-export enum EMT5MessageType {
+export enum EMTMessageType {
     GetBrokers = "GetBrokers",
     Auth = "Auth",
     Login = "Login",
@@ -14,19 +14,19 @@ export enum EMT5MessageType {
     EditOrder = "EditOrder",
 }
 
-export abstract class MT5RequestMessageBase {
+export abstract class MTRequestMessageBase {
     private static counter = 1;
 
     public MessageId: string;
-    public Type: EMT5MessageType;
+    public Type: EMTMessageType;
 
-    constructor(type: EMT5MessageType) {
+    constructor(type: EMTMessageType) {
         this.Type = type;
-        this.MessageId = `${new Date().getTime()}_${MT5RequestMessageBase.counter++}`;
+        this.MessageId = `${new Date().getTime()}_${MTRequestMessageBase.counter++}`;
     }
 }
 
-export abstract class MT5ResponseMessageBase {
+export abstract class MTResponseMessageBase {
     public MessageId: string;
     public IsSuccess: boolean;
     public Data?: any;
@@ -34,39 +34,39 @@ export abstract class MT5ResponseMessageBase {
     public Type?: string;
 }
 
-export interface IMT5Server {
+export interface IMTServer {
     BrokerName: string;
     Servers: string[];
 }
 
-export interface IMT5SymbolData {
+export interface IMTSymbolData {
     Digits: number;
     Name: string;
     CalculatioType: string;
     Description: string;
 }
 
-export interface IMT5LoginData {
+export interface IMTLoginData {
     User: number;
     Password: string;
     ServerName: string;
 }
 
-export interface IMT5Auth {
+export interface IMTAuth {
     Token: string;
 }
 
-export interface IMT5SubscriptionData {
+export interface IMTSubscriptionData {
     Subscribe: boolean;
     Symbol: string;
 }
 
 
-export interface IMT5GetQuoteDate {
+export interface IMTGetQuoteDate {
     Symbol: string;
 }
 
-export interface IMT5QuoteData {
+export interface IMTQuoteData {
     Symbol: string;
     Bid: number;
     Ask: number;
@@ -75,7 +75,7 @@ export interface IMT5QuoteData {
     Time: number;
 }
 
-export interface IMT5AccountUpdatedData {
+export interface IMTAccountUpdatedData {
     Currency: string;
     CompanyName: string;
     Profit: number;
@@ -85,7 +85,7 @@ export interface IMT5AccountUpdatedData {
     Balance: number;
 }
 
-export interface IMT5OrderData {
+export interface IMTOrderData {
     Ticket: number;
     Profit: number;
     Swap: number;
@@ -113,7 +113,7 @@ export interface IMT5OrderData {
     ExpirationDate: number;
 }
 
-export interface IMT5PlaceOrderData {
+export interface IMTPlaceOrderData {
     Symbol: string;
     Lots: number;
     Price?: number;
@@ -124,14 +124,14 @@ export interface IMT5PlaceOrderData {
     Deviation?: number;
     Comment: string;
     ExpertID?: number;
-    FillPolicy: string;
+    FillPolicy?: string;
     StopLimit?: number;
-    ExpirationType: string;
+    ExpirationType?: string;
     ExpirationDate?: number;
     CloseByTicket?: number;
 }
 
-export interface IMT5CloseOrderData {
+export interface IMTCloseOrderData {
     Ticket: number;
     Symbol: string;
     Price: number;
@@ -139,13 +139,13 @@ export interface IMT5CloseOrderData {
     Side: string;
     Type: string;
     Deviation?: number;
-    FillPolicy: string;
+    FillPolicy?: string;
     ExpertID?: number;
     Comment: string;
     CloseByTicket?: number;
 }
 
-export interface IMT5EditOrderData {
+export interface IMTEditOrderData {
     Ticket: number;
     Symbol: string;
     Lots: number;
@@ -156,128 +156,128 @@ export interface IMT5EditOrderData {
     TakeProfit?: number;
     ExpertId?: number;
     StopLimitPrice?: number;
-    ExpirationType: string;
+    ExpirationType?: string;
     ExpirationDate?: number;
     Comment: string;
 }
 
-export interface IMT5DateRangeData {
+export interface IMTDateRangeData {
     From: number;
     To: number;
 }
 
 // Responses
 
-export class MT5GetServersResponse extends MT5ResponseMessageBase {
-    public Data: IMT5Server[];
+export class MTGetServersResponse extends MTResponseMessageBase {
+    public Data: IMTServer[];
 }
 
-export class MT5QuoteResponse extends MT5ResponseMessageBase {
-    public Data: IMT5QuoteData;
+export class MTQuoteResponse extends MTResponseMessageBase {
+    public Data: IMTQuoteData;
 }
 
-export class MT5AccountUpdateResponse extends MT5ResponseMessageBase {
-    public Data: IMT5AccountUpdatedData;
+export class MTAccountUpdateResponse extends MTResponseMessageBase {
+    public Data: IMTAccountUpdatedData;
 }
 
-export class MT5OrdersUpdateResponse extends MT5ResponseMessageBase {
-    public Data: IMT5OrderData[];
+export class MTOrdersUpdateResponse extends MTResponseMessageBase {
+    public Data: IMTOrderData[];
 }
 
-export class MT5LoginResponse extends MT5ResponseMessageBase {
-    public Data: IMT5SymbolData[];
+export class MTLoginResponse extends MTResponseMessageBase {
+    public Data: IMTSymbolData[];
 }
 
-export class MT5PlaceOrderResponse extends MT5ResponseMessageBase {
-    public Data: IMT5OrderData;
+export class MTPlaceOrderResponse extends MTResponseMessageBase {
+    public Data: IMTOrderData;
 }
 
-export class MT5EditOrderResponse extends MT5ResponseMessageBase {
-    public Data: IMT5OrderData;
+export class MTEditOrderResponse extends MTResponseMessageBase {
+    public Data: IMTOrderData;
 }
 
-export class MT5CloseOrderResponse extends MT5ResponseMessageBase {
-    public Data: IMT5OrderData;
+export class MTCloseOrderResponse extends MTResponseMessageBase {
+    public Data: IMTOrderData;
 }
 
-export class MT5GetOrderHistoryResponse extends MT5ResponseMessageBase {
-    public Data: IMT5OrderData[];
+export class MTGetOrderHistoryResponse extends MTResponseMessageBase {
+    public Data: IMTOrderData[];
 }
 
 // Requests
 
-export class MT5LoginRequest extends MT5RequestMessageBase {
-    public Data: IMT5LoginData;
+export class MTLoginRequest extends MTRequestMessageBase {
+    public Data: IMTLoginData;
 
     constructor() {
-        super(EMT5MessageType.Login);
+        super(EMTMessageType.Login);
     }
 }
 
-export class MT5AuthRequest extends MT5RequestMessageBase {
-    public Data: IMT5Auth;
+export class MTAuthRequest extends MTRequestMessageBase {
+    public Data: IMTAuth;
 
     constructor() {
-        super(EMT5MessageType.Auth);
+        super(EMTMessageType.Auth);
     }
 }
 
-export class MT5GetServersRequest extends MT5RequestMessageBase {
+export class MTGetServersRequest extends MTRequestMessageBase {
     constructor() {
-        super(EMT5MessageType.GetBrokers);
+        super(EMTMessageType.GetBrokers);
     }
 }
 
-export class MT5LogoutRequest extends MT5RequestMessageBase {
+export class MTLogoutRequest extends MTRequestMessageBase {
     constructor() {
-        super(EMT5MessageType.Logout);
+        super(EMTMessageType.Logout);
     }
 }
 
-export class SubscribeQuote extends MT5RequestMessageBase {
-    public Data: IMT5SubscriptionData;
+export class SubscribeQuote extends MTRequestMessageBase {
+    public Data: IMTSubscriptionData;
 
     constructor() {
-        super(EMT5MessageType.SubscribeQuote);
+        super(EMTMessageType.SubscribeQuote);
     }
 }
 
-export class GetQuote extends MT5RequestMessageBase {
-    public Data: IMT5GetQuoteDate;
+export class GetQuote extends MTRequestMessageBase {
+    public Data: IMTGetQuoteDate;
 
     constructor() {
-        super(EMT5MessageType.GetQuote);
+        super(EMTMessageType.GetQuote);
     }
 }
 
-export class MT5PlaceOrderRequest extends MT5RequestMessageBase {
-    public Data: IMT5PlaceOrderData;
+export class MTPlaceOrderRequest extends MTRequestMessageBase {
+    public Data: IMTPlaceOrderData;
 
     constructor() {
-        super(EMT5MessageType.PlaceOrder);
+        super(EMTMessageType.PlaceOrder);
     }
 }
 
-export class MT5CloseOrderRequest extends MT5RequestMessageBase {
-    public Data: IMT5CloseOrderData;
+export class MTCloseOrderRequest extends MTRequestMessageBase {
+    public Data: IMTCloseOrderData;
 
     constructor() {
-        super(EMT5MessageType.CloseOrder);
+        super(EMTMessageType.CloseOrder);
     }
 }
 
-export class MT5EditOrderRequest extends MT5RequestMessageBase {
-    public Data: IMT5EditOrderData;
+export class MTEditOrderRequest extends MTRequestMessageBase {
+    public Data: IMTEditOrderData;
 
     constructor() {
-        super(EMT5MessageType.EditOrder);
+        super(EMTMessageType.EditOrder);
     }
 }
 
-export class MT5GetOrderHistoryRequest extends MT5RequestMessageBase {
-    public Data: IMT5DateRangeData;
+export class MTGetOrderHistoryRequest extends MTRequestMessageBase {
+    public Data: IMTDateRangeData;
 
     constructor() {
-        super(EMT5MessageType.OrdersHistory);
+        super(EMTMessageType.OrdersHistory);
     }
 }

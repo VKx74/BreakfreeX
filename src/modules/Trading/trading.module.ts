@@ -51,25 +51,24 @@ import { OrderComponent } from './components/order/order.component';
 import {LoaderModule} from "../loader/loader.module";
 import { OrderSideComponent } from './components/order-side/order-side.component';
 import { TradingCloseButtonComponent } from './components/trading-close-button/trading-close-button.component';
-import {TimeZoneManager, TimeZonesModule} from "TimeZones";
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TestOandaComponent } from './components/forex.components/test-oanda/test-oanda.component';
 import { OandaAccountInfoBarComponent } from './components/forex.components/oanda/account-info-bar/oanda-account-info-bar.component';
-import { MT5TradeManagerComponent } from './components/forex.components/mt5/mt5-trade-manager.component';
-import { MT5AccountInfoComponent } from './components/forex.components/mt5/account-info/mt5-account-info.component';
-import { MT5AccountInfoBarComponent } from './components/forex.components/mt5/account-info-bar/mt5-account-info-bar.component';
-import { MT5OpenOrdersComponent } from './components/forex.components/mt5/open-orders/mt5-open-orders.component';
-import { MT5HistoryOrdersComponent } from './components/forex.components/mt5/history-orders/mt5-history-orders.component';
-import { MT5PositionsComponent } from './components/forex.components/mt5/positions/mt5-positions.component';
-import { MT5OrderConfiguratorModalComponent } from './components/forex.components/mt5/order-configurator-modal/mt5-order-configurator-modal.component';
-import { MT5OrderConfiguratorComponent } from './components/forex.components/mt5/order-configurator/mt5-order-configurator.component';
+import { MTAccountInfoComponent } from './components/forex.components/mt/account-info/mt-account-info.component';
+import { MTAccountInfoBarComponent } from './components/forex.components/mt/account-info-bar/mt-account-info-bar.component';
+import { MTOpenOrdersComponent } from './components/forex.components/mt/open-orders/mt-open-orders.component';
+import { MTHistoryOrdersComponent } from './components/forex.components/mt/history-orders/mt-history-orders.component';
+import { MTPositionsComponent } from './components/forex.components/mt/positions/mt-positions.component';
+import { MTOrderConfiguratorModalComponent } from './components/forex.components/mt/order-configurator-modal/mt-order-configurator-modal.component';
+import { MTOrderConfiguratorComponent } from './components/forex.components/mt/order-configurator/mt-order-configurator.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import { MT5OrderCloseModalComponent } from './components/forex.components/mt5/order-close-modal/mt5-order-close-modal.component';
-import { MT5PendingOrdersComponent } from './components/forex.components/mt5/pending-orders/mt5-pending-orders.component';
-import { MT5PositionCloseModalComponent } from './components/forex.components/mt5/position-close-modal/mt5-position-close-modal.component';
-import { MT5OrderEditModalComponent } from './components/forex.components/mt5/order-edit-modal/mt5-order-edit-modal.component';
+import { MTOrderCloseModalComponent } from './components/forex.components/mt/order-close-modal/mt-order-close-modal.component';
+import { MTPendingOrdersComponent } from './components/forex.components/mt/pending-orders/mt-pending-orders.component';
+import { MTPositionCloseModalComponent } from './components/forex.components/mt/position-close-modal/mt-position-close-modal.component';
+import { MTOrderEditModalComponent } from './components/forex.components/mt/order-edit-modal/mt-order-edit-modal.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MTTradeManagerComponent } from './components/forex.components/mt/mt-trade-manager.component';
 
 const components = [
     TradeManagerComponent,
@@ -92,12 +91,12 @@ const components = [
     ForexOrderConfiguratorModalComponent,
     ForexOrderConfiguratorComponent,
     TestOandaComponent,
-    MT5TradeManagerComponent,
-    MT5OrderConfiguratorModalComponent,
-    MT5OrderConfiguratorComponent,
-    MT5OrderCloseModalComponent,
-    MT5PositionCloseModalComponent,
-    MT5OrderEditModalComponent,
+    MTTradeManagerComponent,
+    MTOrderConfiguratorModalComponent,
+    MTOrderConfiguratorComponent,
+    MTOrderCloseModalComponent,
+    MTPositionCloseModalComponent,
+    MTOrderEditModalComponent,
     
     OandaAccountInfoComponent,
     OandaAccountInfoBarComponent,
@@ -105,12 +104,12 @@ const components = [
     OandaHistoryOrdersComponent,
     OandaPositionsComponent,
     
-    MT5AccountInfoComponent,
-    MT5AccountInfoBarComponent,
-    MT5OpenOrdersComponent,
-    MT5PendingOrdersComponent,
-    MT5HistoryOrdersComponent,
-    MT5PositionsComponent,
+    MTAccountInfoComponent,
+    MTAccountInfoBarComponent,
+    MTOpenOrdersComponent,
+    MTPendingOrdersComponent,
+    MTHistoryOrdersComponent,
+    MTPositionsComponent,
 ];
 
 @NgModule({

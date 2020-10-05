@@ -7,7 +7,7 @@ export enum MTStatus {
     NoConnection
 }
 
-export interface MT5TradingAccount {
+export interface MTTradingAccount {
     Account: string;
     Currency: string;
     CompanyName: string;
@@ -18,7 +18,7 @@ export interface MT5TradingAccount {
     Equity: number;
 }
 
-export interface MT5Order {
+export interface MTOrder {
     Id: number;
     Symbol: string;
     Size: number;
@@ -35,11 +35,11 @@ export interface MT5Order {
     Status: string;
     Time: number;
     Comment: string;
-    ExpirationType: OrderExpirationType;
+    ExpirationType?: OrderExpirationType;
     ExpirationDate?: number;
 }
 
-export interface MT5PlaceOrder {
+export interface MTPlaceOrder {
     Symbol: string;
     Size: number;
     Price: number;
@@ -48,12 +48,12 @@ export interface MT5PlaceOrder {
     Side: OrderSide;
     Type: OrderTypes;
     Comment: string;
-    FillPolicy: OrderFillPolicy;
-    ExpirationType: OrderExpirationType;
+    FillPolicy?: OrderFillPolicy;
+    ExpirationType?: OrderExpirationType;
     ExpirationDate: number;
 }
 
-export interface MT5EditOrder {
+export interface MTEditOrder {
     Ticket: any;
     Symbol: string;
     Size: number;
@@ -63,18 +63,18 @@ export interface MT5EditOrder {
     Side: OrderSide;
     Type: OrderTypes;
     Comment: string;
-    ExpirationType: OrderExpirationType;
+    ExpirationType?: OrderExpirationType;
     ExpirationDate: number;
 }
 
-export interface MT5EditOrderPrice {
+export interface MTEditOrderPrice {
     Ticket: any;
     Price: number;
     SL: number;
     TP: number;
 }
 
-export interface MT5Position {
+export interface MTPosition {
     Symbol: string;
     Size: number;
     Price: number;
@@ -86,13 +86,13 @@ export interface MT5Position {
     Side: OrderSide;
 }
 
-export interface MT5Server {
+export interface MTServer {
     Broker: string;
     Name: string;
     IsDemo: boolean;
 }
 
-export interface MT5ConnectionData {
+export interface MTConnectionData {
     ServerName: string;
     Login: number;
     Password: string;

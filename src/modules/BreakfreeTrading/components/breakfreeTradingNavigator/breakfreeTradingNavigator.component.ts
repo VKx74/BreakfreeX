@@ -13,10 +13,10 @@ import {AlertService} from "@alert/services/alert.service";
 import { ITimeFrame } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MT5Broker } from '@app/services/mt5/mt5.broker';
-import { MT5OrderConfig } from 'modules/Trading/components/forex.components/mt5/order-configurator/mt5-order-configurator.component';
+import { MTBroker } from '@app/services/mt/mt.broker';
+import { MTOrderConfig } from 'modules/Trading/components/forex.components/mt/order-configurator/mt-order-configurator.component';
 import { OrderTypes, OrderSide, OrderFillPolicy } from 'modules/Trading/models/models';
-import { MT5OrderConfiguratorModalComponent } from 'modules/Trading/components/forex.components/mt5/order-configurator-modal/mt5-order-configurator-modal.component';
+import { MTOrderConfiguratorModalComponent } from 'modules/Trading/components/forex.components/mt/order-configurator-modal/mt-order-configurator-modal.component';
 
 export interface IBFTNavigatorComponentState {
 }
@@ -135,9 +135,9 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
             return false;
         }
         
-        if (this._brokerService.activeBroker instanceof MT5Broker) {
-            const mt5Broker = this._brokerService.activeBroker as MT5Broker;
-            return mt5Broker.isInstrumentAvailable(this.SelectedItem.parameters.instrument);
+        if (this._brokerService.activeBroker instanceof MTBroker) {
+            const mtBroker = this._brokerService.activeBroker as MTBroker;
+            return mtBroker.isInstrumentAvailable(this.SelectedItem.parameters.instrument);
         } else {
             return false;
         }
@@ -148,13 +148,11 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
             return;
         }
 
-        if (this._brokerService.activeBroker instanceof MT5Broker) {
-            const mt5Broker = this._brokerService.activeBroker as MT5Broker;
-            const orderConfig = MT5OrderConfig.create();
-            const pricePrecision = mt5Broker.instrumentDecimals(this.SelectedItem.parameters.instrument.symbol);
-            orderConfig.type = OrderTypes.Limit;
-            orderConfig.fillPolicy = OrderFillPolicy.FF;
-            const instrument = mt5Broker.instrumentToBrokerFormat(this.SelectedItem.parameters.instrument.symbol);
+        if (this._brokerService.activeBroker instanceof MTBroker) {
+            const mtBroker = this._brokerService.activeBroker as MTBroker;
+            const orderConfig = MTOrderConfig.createLimit(mtBroker.instanceType);
+            const pricePrecision = mtBroker.instrumentDecimals(this.SelectedItem.parameters.instrument.symbol);
+            const instrument = mtBroker.instrumentToBrokerFormat(this.SelectedItem.parameters.instrument.symbol);
             if (!instrument) {
                 return;
             }
@@ -176,7 +174,7 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
 
             orderConfig.sl = Math.roundToDecimals(this.Data.algo_Stop, pricePrecision);
             
-            this._dialog.open(MT5OrderConfiguratorModalComponent, {
+            this._dialog.open(MTOrderConfiguratorModalComponent, {
                 data: {
                     tradeConfig: orderConfig
                 }

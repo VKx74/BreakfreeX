@@ -24,13 +24,13 @@ import {SharedTranslateService} from "@app/localization/shared.token";
 import {MatMenuModule} from "@angular/material/menu";
 import { BrokerDialogComponent } from './components/broker/broker-dialog/broker-dialog.component';
 import {LoaderModule} from "../loader/loader.module";
-import { MT5BrokerLoginComponent } from './components/broker/forex/mt/mt5.broker.login.component';
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 import { ConnectedAccountInfoComponent } from './components/broker/forex/mt/connected-account-info/connected-account-info.component';
 import { DatatableModule } from 'modules/datatable/datatable.module';
 import { MatTableModule } from '@angular/material/table';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MTBrokerLoginComponent } from './components/broker/forex/mt/mt.broker.login.component';
 
 
 @NgModule({
@@ -67,7 +67,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         BitmexBrokerLoginComponent,
         ForexBrokerComponent,
         OandaBrokerLoginComponent,
-        MT5BrokerLoginComponent,
+        MTBrokerLoginComponent,
         BrokerDialogComponent,
         ConnectedAccountInfoComponent
     ],

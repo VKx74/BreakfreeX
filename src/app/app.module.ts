@@ -90,8 +90,14 @@ import { KaikoHistoryService } from './services/kaiko.exchange/kaiko.history.ser
 import { KaikoRealtimeService } from './services/kaiko.exchange/kaiko.realtime.service';
 import { KaikoSocketService } from './services/socket/kaiko.socket.service';
 import { MT5SocketService } from './services/socket/mt5.socket.service';
-import { MT5Broker } from './services/mt5/mt5.broker';
-import { MT5BrokerServersProvider } from './services/mt5/mt5.servers.service';
+import { MTBroker } from './services/mt/mt.broker';
+import { MT5BrokerServersProvider } from './services/mt/mt5.servers.service';
+import { MT4SocketService } from './services/socket/mt4.socket.service';
+import { MTSocketService } from './services/socket/mt.socket.service';
+import { MTBrokerServersProvider } from './services/mt/mt.servers.service';
+import { MT4BrokerServersProvider } from './services/mt/mt4.servers.service';
+import { MT4Broker } from './services/mt/mt4.broker';
+import { MT5Broker } from './services/mt/mt5.broker';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -275,6 +281,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         BitmexSocketService,
         BFTSocketService,
         MT5SocketService,
+        MT4SocketService,
         AlgoService,
 
         OandaInstrumentService,
@@ -285,7 +292,9 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         PolygonSocketService,
         TwelvedataSocketService,
         KaikoSocketService,
+        MT4BrokerServersProvider,
         MT5BrokerServersProvider,
+        MT4Broker,
         MT5Broker,
 
         PolygonInstrumentService,

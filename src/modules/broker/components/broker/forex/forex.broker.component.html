@@ -2,7 +2,8 @@
     <div *ngIf="brokerConnected">
         <div [ngSwitch]="broker" class="broker-container">
             <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
-            <mt5-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt5-broker-login>
+            <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" *ngSwitchCase="EBrokerInstance.MT5"></mt-broker-login>
+            <mt-broker-login [brokerInstance]="EBrokerInstance.MT4" *ngSwitchCase="EBrokerInstance.MT4"></mt-broker-login>
         </div>      
     </div>
     <div *ngIf="!brokerConnected">
@@ -15,7 +16,8 @@
 
         <div [ngSwitch]="broker" class="broker-container">
             <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
-            <mt5-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt5-broker-login>
+            <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" *ngSwitchCase="EBrokerInstance.MT5"></mt-broker-login>
+            <mt-broker-login [brokerInstance]="EBrokerInstance.MT4" *ngSwitchCase="EBrokerInstance.MT4"></mt-broker-login>
         </div>
     </div>
 </div>

@@ -23,7 +23,7 @@
                 <ng-container *ngSwitchCase="ApplicationType.Forex">
                     <ng-container [ngSwitch]="brokerType">
                         <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
-                        <mt5-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt5-broker-login>
+                        <mt-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt-broker-login>
                     </ng-container>
                 </ng-container>
             </ng-container> -->
@@ -31,8 +31,10 @@
                 <ng-container [ngSwitch]="brokerType">
                     <oanda-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.OandaBroker">
                     </oanda-broker-login>
-                    <mt5-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT5">
-                    </mt5-broker-login>
+                    <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT5">
+                    </mt-broker-login>
+                    <mt-broker-login [brokerInstance]="EBrokerInstance.MT4" [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT4">
+                    </mt-broker-login>
                 </ng-container>
                 <div class="policy-agreement-wrapper">
                     <span>

@@ -6,7 +6,8 @@
             <div class="account-info-panel flex-grow-1 flex justify-flex-end align-items-center">
                 <div [ngSwitch]="instanceType" class="h-100">    
                     <oanda-account-info-bar *ngSwitchCase="EBrokerInstance.OandaBroker" class="date-container"></oanda-account-info-bar>
-                    <mt5-account-info-bar *ngSwitchCase="EBrokerInstance.MT5" class="date-container"></mt5-account-info-bar>
+                    <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT4" class="date-container"></mt-account-info-bar>
+                    <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT5" class="date-container"></mt-account-info-bar>
                 </div>
             </div>
         </ng-template>

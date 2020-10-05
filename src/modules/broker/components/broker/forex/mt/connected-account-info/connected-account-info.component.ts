@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
 import { OandaTradingAccount } from 'modules/Trading/models/forex/oanda/oanda.models';
-import { MT5Broker } from '@app/services/mt5/mt5.broker';
-import { MT5TradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTBroker } from '@app/services/mt/mt.broker';
+import { MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
 import { BrokerService } from '@app/services/broker.service';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 
@@ -14,7 +14,8 @@ import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 export class ConnectedAccountInfoComponent {
     private _accounts: IBrokerState[];
     @Output() onBrokerSelected = new EventEmitter<IBrokerState>();
-    
+    @Input() brokerInstance: EBrokerInstance;
+
     selectedItem: IBrokerState;
 
     get accounts(): IBrokerState[] {
@@ -22,12 +23,11 @@ export class ConnectedAccountInfoComponent {
     }
 
     constructor(private _brokerService: BrokerService) {
-        this._accounts = this._brokerService.getSavedBroker().filter(_ => _.brokerType === EBrokerInstance.MT5);
     }
 
     removeSavedAccount(account: IBrokerState) {
        this._brokerService.removeSavedBroker(account);
-       this._accounts = this._brokerService.getSavedBroker().filter(_ => _.brokerType === EBrokerInstance.MT5);
+       this._accounts = this._brokerService.getSavedBroker().filter(_ => _.brokerType === this.brokerInstance);
     }
 
     selectItem(account: IBrokerState) {
@@ -46,5 +46,8 @@ export class ConnectedAccountInfoComponent {
         }
 
         return activeAccount.account === account.account && activeAccount.server === account.server;
+    }
+    ngOnInit() {
+        this._accounts = this._brokerService.getSavedBroker().filter(_ => _.brokerType === this.brokerInstance);
     }
 }

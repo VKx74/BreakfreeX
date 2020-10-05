@@ -1,0 +1,157 @@
+<div class="form-wrapper">
+
+    <div class="total">
+        <div class="flex justify-space-between">
+            <div class="crypto-text  is-secondary  is-small">
+                <div>Ask</div>
+                <div class="ask-text">{{lastTick?.ask.toFixed(decimals)}}</div>
+            </div>
+            <div class="crypto-text is-secondary">{{config.instrument?.symbol}}</div>
+            <div class="crypto-text is-secondary is-small">
+                <div>Bid</div>
+                <div class="bid-text">{{lastTick?.bid.toFixed(decimals)}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-side-buttons flex">
+        <div class="order-side-btn order-side-buy flex-grow-1" (click)="setBuyMode()"
+            [ngClass]="{'active': isBuyMode()}">
+            {{'buy' | translate}}
+        </div>
+        <div class="order-side-btn order-side-sell flex-grow-1" (click)="setSellMode()"
+            [ngClass]="{'active': !isBuyMode()}">
+            {{'sell' | translate}}
+        </div>
+    </div>
+
+    <div class="form-wrapper">
+        <div class="flex-row">
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'symbol' | translate}} from MT</div>
+                    <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
+                        [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
+                </div>
+            </div>
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'amount' | translate}}</div>
+                    <mat-form-field class="crypto-input full-width">
+                        <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
+                            [step]="priceStep" [(ngModel)]="config.amount">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-row">
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <div class="form-unit__label">{{'type' | translate}}</div>
+                    <selector [selectedOption]="config.type" [options]="allowedOrderTypes"
+                        [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
+                </div>
+            </div>
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
+                    <div class="form-unit__label">{{'limitPrice' | translate}}</div>
+                    <mat-form-field class="crypto-input full-width">
+                        <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                            [range]="{min: minPriceValue}" [(ngModel)]="config.price">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="flex-row">
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL">
+                        {{'tradeManager.stoploss' | translate}}</mat-slide-toggle>
+                    <mat-form-field class="crypto-input full-width" *ngIf="config.useSL">
+                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                            [step]="priceStep" [(ngModel)]="config.sl">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex-column">
+                <div class="crypto-form-unit margin-bottom">
+                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">
+                        {{'tradeManager.takeprofit' | translate}}</mat-slide-toggle>
+                    <mat-form-field class="crypto-input full-width" *ngIf="config.useTP">
+                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                            [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex-row">
+            <div class="crypto-form-unit margin-bottom">
+                <div class="form-unit__label">{{'tradeManager.comment' | translate}}</div>
+                <mat-form-field class="crypto-input full-width">
+                    <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
+                        [(ngModel)]="config.comment">
+            </textarea>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-expansion-panel [expanded]="false" *ngIf="isAdditionalInfoUsed">
+            <mat-expansion-panel-header [@.disabled]="true">
+                {{'tradeManager.advancedSettings' | translate}}
+            </mat-expansion-panel-header>
+
+            <ng-template matExpansionPanelContent>
+            <div class="flex-row">
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
+                        <selector [selectedOption]="config.expirationType" [options]="expirationTypes"
+                            (onSelect)="handleExpirationTypeSelected($event)"></selector>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.fillPolicy' | translate}}</div>
+                        <selector [selectedOption]="config.fillPolicy" [options]="orderFillPolicies"
+                            (onSelect)="handleFillPolicySelected($event)"></selector>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-row" [class.disabled]="!isExpirationVisible()">
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime" [ngxTimepicker]="time" [format]='24'>
+                            <ngx-material-timepicker #time></ngx-material-timepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex-column">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
+                        <mat-form-field class="crypto-input full-width">
+                            <input matInput readonly [matDatepicker]="end"
+                                [(ngModel)]="selectedDate"
+                                (click)="end.open()" placeholder="Date">
+                            <mat-datepicker #end></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        </mat-expansion-panel>
+
+        <div class="buttons-wrapper flex justify-flex-end">
+            <button class="full-width crypto-button submit-btn" [ngClass]="{'order-side-buy': isBuyMode(),
+                        'order-side-sell': !isBuyMode(),
+                        'is-loading': processingSubmit}" (click)="submit()">
+                {{submitHandler ? ('tradeManager.applyOrder' | translate) : ('tradeManager.placeOrder' | translate)}}
+            </button>
+        </div>
