@@ -365,6 +365,19 @@ export abstract class MTBroker implements IMTBroker {
     }
     
     init(initData: MTConnectionData): Observable<ActionResult> {
+        if (this._onTickSubscription) {
+            this._onTickSubscription.unsubscribe();
+        }
+        if (this._onAccountUpdateSubscription) {
+            this._onAccountUpdateSubscription.unsubscribe();
+        }
+        if (this._onOrdersUpdateSubscription) {
+            this._onOrdersUpdateSubscription.unsubscribe();
+        }
+        if (this._onReconnectSubscription) {
+            this._onReconnectSubscription.unsubscribe();
+        }
+
         this._onTickSubscription = this.ws.tickSubject.subscribe(this._handleQuotes.bind(this));
         this._onAccountUpdateSubscription = this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate.bind(this));
         this._onOrdersUpdateSubscription = this.ws.ordersUpdatedSubject.subscribe(this._handleOrdersUpdate.bind(this));
@@ -448,6 +461,13 @@ export abstract class MTBroker implements IMTBroker {
         for (const i of this._instruments) {
             const s2 = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
             if (s2 === s1) {
+                return i;
+            }
+        }
+
+        for (const i of this._instruments) {
+            const s2 = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
+            if (s2.startsWith(s1)) {
                 return i;
             }
         }
@@ -867,6 +887,10 @@ export abstract class MTBroker implements IMTBroker {
     }
     
     protected _getOrderExpiration(expiration: string): OrderExpirationType {
+        if (!expiration) {
+            return OrderExpirationType.GTC;
+        }
+
         if (OrderExpirationType.GTC.toLowerCase() === expiration.toLowerCase()) {
             return OrderExpirationType.GTC;
         }
