@@ -15,6 +15,20 @@ export interface ITimeFrame {
     periodicity: string;
 }
 
+export interface IBFTScanInstrumentParameters {
+    instrument: IInstrument;
+}
+
+export interface IBFTScanInstrumentResponse {
+    trend: IBFTATrend;
+    tte_15: number;
+    tte_60: number;
+    tte_240: number;
+    tp_15: number;
+    tp_60: number;
+    tp_240: number;
+}
+
 export interface IBFTAlgoParameters {
     input_accountsize: number;
     input_risk: number;
@@ -238,5 +252,9 @@ export class AlgoService {
     
     calculateRTD(data: any): Observable<IRTDPayload> {
         return this._http.post<IRTDPayload>(`${this.url}rtd`, data);
+    }
+
+    scanInstrument(data: IBFTScanInstrumentParameters): Observable<IBFTScanInstrumentResponse> {
+        return this._http.post<IBFTScanInstrumentResponse>(`${this.url}scan_instrument`, data);
     }
 }

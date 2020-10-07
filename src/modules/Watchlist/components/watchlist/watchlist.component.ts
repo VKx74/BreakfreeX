@@ -2,25 +2,21 @@ import {Component, Inject, Injector, ViewChild} from "@angular/core";
 import {TrendDirection, WatchlistInstrumentVM} from "../../models/models";
 import {ConfirmModalComponent} from "UI";
 import {IInstrument} from "@app/models/common/instrument";
-import {EMPTY, forkJoin, Subscription, of} from "rxjs";
+import {Subscription, of} from "rxjs";
 import {RealtimeService} from "@app/services/realtime.service";
 import {ILevel2, ITick} from "@app/models/common/tick";
 import {JsUtil} from "../../../../utils/jsUtil";
-import {catchError, map} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {WatchListTranslateService} from "../../localization/token";
 import {TranslateService} from "@ngx-translate/core";
-import {LocalizationService} from "Localization";
 import {InstrumentSearchComponent} from "@instrument-search/components/instrument-search/instrument-search.component";
 import {MatDialog} from "@angular/material/dialog";
 import {Actions, LinkingAction} from "../../../Linking/models";
-import {LinkerFactory} from "../../../Linking/linking-manager";
 import {IHistoryRequest} from "@app/models/common/historyRequest";
 import {IPeriodicity} from "@app/models/common/periodicity";
 import {IHistoryResponse} from "@app/models/common/historyResponse";
 import {DataFeedBase} from "@chart/datafeed/DataFeedBase";
 import {DataFeed} from "@chart/datafeed/DataFeed";
-import {InstrumentService} from "@app/services/instrument.service";
-import {EExchange} from "@app/models/common/exchange";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {
     ColumnSortDataAccessor,
@@ -44,6 +40,7 @@ import { AlertService } from '@alert/services/alert.service';
 import { HostListener } from '@angular/core';
 import { IFeaturedInstruments } from '@app/models/settings/user-settings';
 import { MatSelectChange } from '@angular/material/select';
+import { AlgoService, IBFTScanInstrumentResponse } from '@app/services/algo.service';
 
 export interface IWatchlistComponentState {
     viewMode: WatchlistViewMode;
@@ -132,6 +129,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 private _layoutManagerService: LayoutManagerService,
                 private _watchlistService: WatchlistService,
                 private _alertManager: AlertService,
+                private _alogService: AlgoService,
                 protected _injector: Injector) {
 
         super(_injector);
@@ -546,9 +544,9 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             if (this.intervals[key]) {
                 clearInterval(this.intervals[key]);
             }
-            this.intervals[key] = setInterval(() => {
-                this._getHistory(instrumentVM, d);
-            }, 3600000); 
+            // this.intervals[key] = setInterval(() => {
+            //     this._getHistory(instrumentVM, d);
+            // }, 3600000); 
         });
     }
 
@@ -581,6 +579,27 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this.instrumentsVM = [...this.instrumentsVM];
             const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
             this.instrumentsPriceHistory[key] = data.map(value => value.close);
+
+            this._alogService.scanInstrument({
+                instrument: instrumentVM.instrument
+            }).subscribe((scanning_data: IBFTScanInstrumentResponse) => {
+                instrumentVM.trend = scanning_data.trend;
+                if (scanning_data.tp_15 && scanning_data.tte_15) {
+                    instrumentVM.scanning_15 = `TTE: ${scanning_data.tte_15}, TP: ${scanning_data.tp_15}%`;
+                } else {
+                    instrumentVM.scanning_15 = "-";
+                }
+                if (scanning_data.tp_60 && scanning_data.tte_60) {
+                    instrumentVM.scanning_60 = `TTE: ${scanning_data.tte_60}, TP: ${scanning_data.tp_60}%`;
+                } else {
+                    instrumentVM.scanning_60 = "-";
+                }
+                if (scanning_data.tp_240 && scanning_data.tte_240) {
+                    instrumentVM.scanning_240 = `TTE: ${scanning_data.tte_240}, TP: ${scanning_data.tp_240}%`;
+                } else {
+                    instrumentVM.scanning_240 = "-";
+                }
+            });
         }
     }
 
