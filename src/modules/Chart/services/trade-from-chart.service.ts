@@ -19,12 +19,14 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _onOrdersParametersUpdated: Subscription;
     private _orderConfig: MTPlaceOrder;
     private _decimals: number = 5;
+    private _pendingEdit: { [id: string]: MTEditOrderPrice; } = {};
 
     constructor(private _brokerService: BrokerService, private _dialog: MatDialog, @Inject(AlertService) protected _alertService: AlertService) {
         this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
             this.refresh();
             if (this._brokerService.activeBroker instanceof MTBroker) {
                 this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
+                    this._pendingEdit = {};
                     this.refresh();
                 }); 
                 
@@ -77,6 +79,38 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         this.cancelOrder(Number(id), callback);
     }
 
+    public OrderSLTPChange(id: any, price: number, callback: () => void): void {
+        const mtBroker = this._brokerService.activeBroker as MTBroker;
+        if (!mtBroker) {
+            callback();
+            return;
+        }
+
+        const order = mtBroker.getOrderById(Number(id));
+        if (!order) {
+            callback();
+            return;
+        }
+
+        const editRequest = this._getEditOrder(order);
+
+        if (order.Side === OrderSide.Buy) {
+            if (price > order.Price) {
+                editRequest.TP = price;
+            } else {
+                editRequest.SL = price;
+            }
+        } else {
+            if (price < order.Price) {
+                editRequest.TP = price;
+            } else {
+                editRequest.SL = price;
+            }
+        }
+
+        this._editOrder(editRequest, callback);
+    }
+
     public OrderPriceChange(id: any, price: number, callback: () => void): void {
         const mtBroker = this._brokerService.activeBroker as MTBroker;
         if (!mtBroker) {
@@ -91,12 +125,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        const editRequest: MTEditOrderPrice = {
-            Ticket: order.Id,
-            Price: order.Price,
-            SL: order.SL,
-            TP: order.TP
-        };
+        const editRequest = this._getEditOrder(order);
 
         if (id.toString().startsWith("sl_")) {
             editRequest.SL = price;
@@ -106,25 +135,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             editRequest.Price = price;
         }
 
-        this.setLinePendingState(id.toString(), price);
-
-        mtBroker.editOrderPrice(editRequest).subscribe(
-            (result) => {
-                callback();
-                if (result.result) {
-                    this._alertService.success("Order modified");
-                } else {
-                    this._alertService.error("Failed to modify order: " + result.msg);
-                    this.refresh();
-                }
-            },
-            (error) => {
-                callback();
-                this._alertService.error("Failed to modify order: " + error);
-                this.refresh();
-            }
-        );
-       
+        this._editOrder(editRequest, callback);
     }
 
     public IsTradingEnabledHandler(): boolean {
@@ -225,6 +236,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     continue;
                 }
                 const shape = this.createBaseShape(order);
+                shape.showSLTP = true;
                 shape.lineId = order.Id.toString();
                 shape.lineText = `#${order.Id}`;
                 shape.lineType = this.getType(order);
@@ -286,7 +298,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
         if (order.Type === OrderTypes.Market) {
             this.setLinePL(shape, order);
-            shape.isEditable = false;
+            // shape.isEditable = false;
         }
 
         const p = Math.roundToDecimals(order.Price, this._decimals);
@@ -418,6 +430,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
                 const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
                 for (const order of orders) {
+            
                     if (order.Id === Number(orderLine.lineId)) {
                         this.setShapePriceAndBox(orderLine, order);
                     } 
@@ -435,5 +448,41 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 }
             }
         }
+    }
+
+    private _getEditOrder(order: MTOrder): MTEditOrderPrice  {
+        if (this._pendingEdit[order.Id.toString()]) {
+            return this._pendingEdit[order.Id.toString()];
+        }
+
+        return {
+            Ticket: order.Id,
+            Price: order.Price,
+            SL: order.SL,
+            TP: order.TP
+        };
+    }
+
+    private _editOrder(editRequest: MTEditOrderPrice, callback: () => void) {
+        const mtBroker = this._brokerService.activeBroker as MTBroker;
+        this.setLinePendingState(editRequest.Ticket.toString());
+        this._pendingEdit[editRequest.Ticket] = editRequest;
+        
+        mtBroker.editOrderPrice(editRequest).subscribe(
+            (result) => {
+                callback();
+                if (result.result) {
+                    this._alertService.success("Order modified");
+                } else {
+                    this._alertService.error("Failed to modify order: " + result.msg);
+                    this.refresh();
+                }
+            },
+            (error) => {
+                callback();
+                this._alertService.error("Failed to modify order: " + error);
+                this.refresh();
+            }
+        );
     }
 }
