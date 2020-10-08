@@ -40,7 +40,6 @@ import { AlertService } from '@alert/services/alert.service';
 import { HostListener } from '@angular/core';
 import { IFeaturedInstruments } from '@app/models/settings/user-settings';
 import { MatSelectChange } from '@angular/material/select';
-import { AlgoService, IBFTScanInstrumentResponse } from '@app/services/algo.service';
 
 export interface IWatchlistComponentState {
     viewMode: WatchlistViewMode;
@@ -129,7 +128,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 private _layoutManagerService: LayoutManagerService,
                 private _watchlistService: WatchlistService,
                 private _alertManager: AlertService,
-                private _alogService: AlgoService,
                 protected _injector: Injector) {
 
         super(_injector);
@@ -579,27 +577,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this.instrumentsVM = [...this.instrumentsVM];
             const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
             this.instrumentsPriceHistory[key] = data.map(value => value.close);
-
-            this._alogService.scanInstrument({
-                instrument: instrumentVM.instrument
-            }).subscribe((scanning_data: IBFTScanInstrumentResponse) => {
-                instrumentVM.trend = scanning_data.trend;
-                if (scanning_data.tp_15 && scanning_data.tte_15) {
-                    instrumentVM.scanning_15 = `TTE: ${scanning_data.tte_15}, TP: ${scanning_data.tp_15}%`;
-                } else {
-                    instrumentVM.scanning_15 = "-";
-                }
-                if (scanning_data.tp_60 && scanning_data.tte_60) {
-                    instrumentVM.scanning_60 = `TTE: ${scanning_data.tte_60}, TP: ${scanning_data.tp_60}%`;
-                } else {
-                    instrumentVM.scanning_60 = "-";
-                }
-                if (scanning_data.tp_240 && scanning_data.tte_240) {
-                    instrumentVM.scanning_240 = `TTE: ${scanning_data.tte_240}, TP: ${scanning_data.tp_240}%`;
-                } else {
-                    instrumentVM.scanning_240 = "-";
-                }
-            });
         }
     }
 

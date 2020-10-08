@@ -29,6 +29,19 @@ export interface IBFTScanInstrumentResponse {
     tp_240: number;
 }
 
+export interface IBFTScanInstrumentsResponseItem {
+    symbol: string;
+    exchange: string;
+    timeframe: number;
+    trend: IBFTATrend;
+    tte: number;
+    tp: number;
+}
+
+export interface IBFTScanInstrumentsResponse {
+    items: IBFTScanInstrumentsResponseItem[];
+}
+
 export interface IBFTAlgoParameters {
     input_accountsize: number;
     input_risk: number;
@@ -256,5 +269,9 @@ export class AlgoService {
 
     scanInstrument(data: IBFTScanInstrumentParameters): Observable<IBFTScanInstrumentResponse> {
         return this._http.post<IBFTScanInstrumentResponse>(`${this.url}scan_instrument`, data);
+    }
+
+    scanInstruments(segment: string): Observable<IBFTScanInstrumentsResponse> {
+        return this._http.get<IBFTScanInstrumentsResponse>(`${this.url}scan_instruments?segment=${segment}`);
     }
 }

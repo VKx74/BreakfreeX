@@ -22,11 +22,6 @@ export class WatchlistInstrumentVM {
     trendDirection = TrendDirection.Unknown;
     tickTime: string;
 
-    // temp
-    trend: string;
-    scanning_15: string;
-    scanning_60: string;
-    scanning_240: string;
 
     get volume(): number {
         return this.tick ? this.tick.volume : 0;
@@ -56,10 +51,6 @@ export class WatchlistInstrumentVM {
 
     constructor(instrument: IInstrument) {
         this.instrument = instrument;
-        this.trend = "Calculating";
-        this.scanning_15 = "Calculating";
-        this.scanning_60 = "Calculating";
-        this.scanning_240 = "Calculating";
     }
 
     handleTick(tick: ITick) {

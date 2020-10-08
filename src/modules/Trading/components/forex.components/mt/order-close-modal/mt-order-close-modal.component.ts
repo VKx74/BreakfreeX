@@ -6,6 +6,7 @@ import { MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { AlertService } from '@alert/services/alert.service';
 import { OrderFillPolicy } from 'modules/Trading/models/models';
+import { BrokerService } from '@app/services/broker.service';
 
 @Component({
     selector: 'mt-order-close-modal',
@@ -19,6 +20,10 @@ import { OrderFillPolicy } from 'modules/Trading/models/models';
     ]
 })
 export class MTOrderCloseModalComponent extends Modal<MTOrder> implements OnInit {
+    protected get _mtBroker(): MTBroker {
+        return this._broker.activeBroker as MTBroker;
+    }
+    
     public get order(): MTOrder {
         return this.data;
     }  
@@ -30,7 +35,7 @@ export class MTOrderCloseModalComponent extends Modal<MTOrder> implements OnInit
     public fillPolicy: OrderFillPolicy = OrderFillPolicy.IOC;
     public orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
 
-    constructor(injector: Injector, protected _mtBroker: MTBroker, protected _alertService: AlertService) {
+    constructor(injector: Injector, protected _broker: BrokerService, protected _alertService: AlertService) {
         super(injector);
     }
 

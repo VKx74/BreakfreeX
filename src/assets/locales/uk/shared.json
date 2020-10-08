@@ -182,5 +182,9 @@
     "close": "Закр.",
     "volume": "Обсяг"
   },
-  "date": "Дата"
+  "date": "Дата",
+  "timeframe": "Time Frame",
+  "trend": "Trend",
+  "tte": "Time To Entry",
+  "tp": "Trade Probability"
 }

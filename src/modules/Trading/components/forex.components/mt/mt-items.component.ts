@@ -103,6 +103,7 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
             .subscribe(
                 items => {
                     this.items = items.slice();
+                    this.refresh();
                 },
                 e => this._handleLoadingError(e)
             );

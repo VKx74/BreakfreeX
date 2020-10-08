@@ -8,6 +8,7 @@ import { AlertService } from '@alert/services/alert.service';
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from 'modules/Trading/models/models';
 import { Subscription } from 'rxjs';
 import { IMTTick } from '@app/models/common/tick';
+import { BrokerService } from '@app/services/broker.service';
 
 export interface IEDitDialogInputParameters {
     order: MTOrder;
@@ -46,6 +47,10 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
     private _marketSubscription: Subscription;
     private _selectedTime: string;
     private _selectedDate: Date;
+    
+    protected get _mtBroker(): MTBroker {
+        return this._broker.activeBroker as MTBroker;
+    }
 
     public get order(): MTOrder {
         return this.data.order;
@@ -84,7 +89,7 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
     public orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
     public expirationTypes: OrderExpirationType[] = [OrderExpirationType.GTC, OrderExpirationType.Specified, OrderExpirationType.Today];
 
-    constructor(injector: Injector, protected _mtBroker: MTBroker, protected _alertService: AlertService) {
+    constructor(injector: Injector, protected _broker: BrokerService, protected _alertService: AlertService) {
         super(injector);
     }
 

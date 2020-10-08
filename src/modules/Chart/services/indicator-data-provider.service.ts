@@ -1,7 +1,4 @@
 import { Injectable } from "@angular/core";
-import { IdentityService } from "../../../app/services/auth/identity.service";
-import { TemplatesStorageService } from './templates-storage.service';
-import { AlertService } from '@alert/services/alert.service';
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 import { BreakfreeTradingNavigatorService } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
 import { of } from 'rxjs';

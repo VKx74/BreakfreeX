@@ -1,5 +1,6 @@
 export enum Actions {
-    ChangeInstrument
+    ChangeInstrument,
+    ChangeInstrumentAndTimeframe
 }
 
 export abstract class LinkingAction {

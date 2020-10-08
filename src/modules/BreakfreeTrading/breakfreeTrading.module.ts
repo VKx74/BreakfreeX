@@ -18,7 +18,7 @@ import { UIModule } from 'UI';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreakfreeTradingService } from './services/breakfreeTrading.service';
 import { BreakfreeTradingNavigatorService } from './services/breakfreeTradingNavigator.service';
-import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent } from './components';
+import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent, BreakfreeTradingScannerComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBacktest.service';
@@ -30,6 +30,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ExtensionHitTestComponent } from './components/extensionHitTest/extensionHitTest.component';
 import { StrategyV2ModeBacktestComponent } from './components/strategyV2ModeBacktest/strategyV2ModeBacktest.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     // components here
@@ -39,6 +41,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingScannerComponent
     ],
     imports: [
         CommonModule,
@@ -58,7 +61,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         FormsModule,
         ReactiveFormsModule,
         LoaderModule,
-        ClipboardModule
+        ClipboardModule,
+        MatFormFieldModule,
+        MatSelectModule
     ],
     // components here
     entryComponents: [
@@ -67,6 +72,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingScannerComponent
     ],
     // components here
     exports: [
@@ -75,6 +81,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingScannerComponent
     ],
     providers: [
         HistoryService,

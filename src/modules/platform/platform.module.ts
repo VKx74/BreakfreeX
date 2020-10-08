@@ -109,15 +109,14 @@ import {IdentityService} from "@app/services/auth/identity.service";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {OrderBookComponent} from "@order-book/components/order-book/order-book.component";
 import {MarketTradesComponent} from "@market-trades/components/market-trades/market-trades.component";
-import {NewsRootComponent} from "News";
 import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-layout-widget/private-chat-layout-widget.component";
 import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-layout-widget/public-chat-layout-widget.component";
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { SingleSessionService } from '@app/services/single-session.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingNavigatorComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
-import { ForexTradeManagerComponent } from '../Trading/components/forex.components/forex-trade-manager.component';
 import { TestOandaComponent } from '../Trading/components/forex.components/test-oanda/test-oanda.component';
+import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -398,6 +397,10 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         {
                             componentName: ComponentIdentifier.breakfreeTradingNavigator,
                             component: BreakfreeTradingNavigatorComponent
+                        }, 
+                        {
+                            componentName: ComponentIdentifier.breakfreeTradingScanner,
+                            component: BreakfreeTradingScannerComponent
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,

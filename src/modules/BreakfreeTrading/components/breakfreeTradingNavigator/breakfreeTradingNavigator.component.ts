@@ -1,10 +1,9 @@
-import { Component, EventEmitter, Input, Output, Injector, Inject, ElementRef, ViewChild } from '@angular/core';
+import { Component, Injector, Inject, ElementRef, ViewChild } from '@angular/core';
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import { BreakfreeTradingNavigatorService, INavigatorItem } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
-import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
+import {GoldenLayoutItemState} from "angular-golden-layout";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
-import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 import bind from "bind-decorator";
 import { of, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';

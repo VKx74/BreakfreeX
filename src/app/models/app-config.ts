@@ -84,6 +84,7 @@ export enum ComponentIdentifier {
     watchlist = "watchlist",
     breakfreeTradingBacktest = "breakfreeTradingBacktest",
     breakfreeTradingNavigator = "breakfreeTradingNavigator",
+    breakfreeTradingScanner = "breakfreeTradingScanner",
     forexTradeManager = "forexTradeManager",
     level2View = "level2View",
     news = "news",

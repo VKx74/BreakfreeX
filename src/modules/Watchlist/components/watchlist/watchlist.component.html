@@ -216,19 +216,6 @@
                     {{'chart' | translate}}
                 </data-table-header-cell>
 
-                <data-table-header-cell columnName="trend" [sortable]="false">
-                    Trend
-                </data-table-header-cell>
-                <data-table-header-cell columnName="scanner_15" [sortable]="false">
-                    15 Min
-                </data-table-header-cell>
-                <data-table-header-cell columnName="scanner_60" [sortable]="false">
-                    1 Hour
-                </data-table-header-cell>
-                <data-table-header-cell columnName="scanner_240" [sortable]="false">
-                    4 Hours
-                </data-table-header-cell>
-
                 <data-table-header-cell columnName="remove" [sortable]="false" [columnWidth]="20">
                 </data-table-header-cell>
 
@@ -290,27 +277,6 @@
                                     [chartHistory]="instrumentsPriceHistory[getKeyForInstrumentsPriceHistory(instrumentVM.instrument)]"
                                     [trendDirection]="instrumentVM.trendDirection"></watchlist-chart>
                         </div>
-                    </ng-template>
-                </data-table-cell>
-
-                <data-table-cell columnName="trend">
-                    <ng-template let-instrumentVM>
-                        {{instrumentVM.trend}}
-                    </ng-template>
-                </data-table-cell>
-                <data-table-cell columnName="scanner_15">
-                    <ng-template let-instrumentVM>
-                        {{instrumentVM.scanning_15}}
-                    </ng-template>
-                </data-table-cell>
-                <data-table-cell columnName="scanner_60">
-                    <ng-template let-instrumentVM>
-                        {{instrumentVM.scanning_60}}
-                    </ng-template>
-                </data-table-cell>
-                <data-table-cell columnName="scanner_240">
-                    <ng-template let-instrumentVM>
-                        {{instrumentVM.scanning_240}}
                     </ng-template>
                 </data-table-cell>
 

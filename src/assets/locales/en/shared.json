@@ -176,5 +176,9 @@
     "close": "Close",
     "volume": "Volume"
   },
-  "date": "Date"
+  "date": "Date",
+  "timeframe": "Time Frame",
+  "trend": "Trend",
+  "tte": "Time To Entry",
+  "tp": "Trade Probability"
 }

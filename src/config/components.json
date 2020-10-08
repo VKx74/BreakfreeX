@@ -49,5 +49,6 @@
   "authenticationSettings": true,
   "breakfreeTradingBacktest": true,
   "breakfreeTradingNavigator": true,
+  "breakfreeTradingScanner": true,
   "forexTradeManager": true
 }

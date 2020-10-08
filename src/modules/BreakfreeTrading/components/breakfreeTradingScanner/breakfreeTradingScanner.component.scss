@@ -1,0 +1,52 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+
+:host {
+
+  .output {
+    position: relative;
+    text-align: center;
+    top: 40px;
+  }
+  .top-line {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 50px;
+    flex-shrink: 0;
+    padding-left: 10px;
+  }
+
+}
+
+
+@include themify($themes, true) {
+  .top-line {
+    background-color: themed('appPanelColor');
+    border-bottom: 1px solid themed('appBackgroundColor');
+  }
+
+  .output {
+    color: themed('titleTextColor');
+  }
+
+
+  // .crypto-button {
+  //   color: themed('valueTextColor');
+  // }
+
+  // .crypto-button {
+  //   background-color: themed('inputBackgroundColor');
+  // }
+  // .place-order {
+  //   &:hover { 
+  //     color: themed('accentColor');
+  //   }
+  // }
+}

@@ -3,5 +3,6 @@
 
   },
   "BreakfreeTradingBacktestComponentName": "BFT Backtest",
-  "breakfreeTradingNavigatorComponentName": "BFT Panel"
+  "breakfreeTradingNavigatorComponentName": "BFT Panel",
+  "breakfreeTradingScannerComponentName": "BFT Scanner"
 }

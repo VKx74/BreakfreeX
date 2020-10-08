@@ -1,0 +1,81 @@
+<div class="bftScanner">
+   <div class="top-line flex justify-space-between">
+      <div>
+         <mat-form-field floatLabel="never" class="crypto-select full-width">
+            <mat-select (selectionChange)="segmentSelected($event.value)" [value]="activeSegment">
+               <mat-option *ngFor="let option of segments" [value]="option">
+                  {{option}}
+               </mat-option>
+            </mat-select>
+         </mat-form-field>
+      </div>
+      <div>
+         <div class="crypto-button-icon">
+            <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
+         </div>
+         <mat-menu #menu="matMenu">
+            <!-- <button [class.active]="viewMode === ViewMode.Table" mat-menu-item
+                      (click)="setViewMode(ViewMode.Table)">
+                  {{'watchList.tableView' | translate}}
+              </button>
+
+              <button [class.active]="viewMode === ViewMode.Tile" mat-menu-item (click)="setViewMode(ViewMode.Tile)">
+                  {{'watchList.tilesView' | translate}}
+              </button> -->
+         </mat-menu>
+      </div>
+   </div>
+   <div class="content-wrapper flex-grow-1 h-0">
+      <div class="full-height padding-wrapper">
+         <data-table #dataTableComponent [rows]="scannerResults" [selectable]="true" [expandOnClick]="false"
+            [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
+            (onRowSelect)="handleScannerResultsClick($event)">
+            <data-table-header-cell columnName="symbol" [sortable]="true">
+               {{'instrument' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="timeframe" [sortable]="false">
+               {{'timeframe' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="trend" [sortable]="false">
+               {{'trend' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="tte" [sortable]="false">
+               {{'tte' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="tp" [sortable]="false">
+               {{'tp' | translate}}
+            </data-table-header-cell>
+
+
+            <data-table-cell columnName="symbol">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.symbol}} : {{instrumentVM.exchange}}
+               </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="timeframe">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.timeframe}}
+               </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="trend">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.trend}}
+               </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="tte">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.tte}}
+               </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="tp">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.tp}}
+               </ng-template>
+            </data-table-cell>
+         </data-table>
+         <div *ngIf="output" class="output">
+            {{output}}
+         </div>
+      </div>
+   </div>
+</div>
