@@ -55,9 +55,9 @@ export class BrokerService implements IHealthable {
         if (!this._identityService.subscriptions || !this._identityService.subscriptions.length) {
             return false;
         }
-        if (!this._identityService.tags || this._identityService.tags.indexOf("beta") === -1) {
-            return false;
-        }
+        // if (!this._identityService.tags || this._identityService.tags.indexOf("beta") === -1) {
+        //     return false;
+        // }
         return true;
     }  
     
