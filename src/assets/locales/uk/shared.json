@@ -71,6 +71,7 @@
   "example": "Приклад",
   "change": "Зміна",
   "changePercent": "Зміна (%)",
+  "open": "Відкриття",
   "high": "Максимальна",
   "low": "Мінімальна",
   "remove": "Видалити",
@@ -185,6 +186,6 @@
   "date": "Дата",
   "timeframe": "Time Frame",
   "trend": "Trend",
-  "tte": "Time To Entry",
-  "tp": "Trade Probability"
+  "tte": "TTE",
+  "tp": "TP"
 }

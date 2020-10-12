@@ -14,9 +14,14 @@ interface IScannerResults {
     symbol: string;
     exchange: string;
     timeframe: string;
+    timeInterval: number;
     trend: string;
     tte: string;
     tp: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
 }
 
 @Component({
@@ -27,18 +32,23 @@ interface IScannerResults {
 export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     static componentName = 'BreakfreeTradingScanner';
-
     static previewImgClass = 'crypto-icon-watchlist';
 
+    private _timer: any;
+
     public segments: string[] = ["Forex", "Stoks"];
+    public scanningTime: string;
     public activeSegment: string;
     public scannerResults: IScannerResults[] = [];
     public selectedScannerResult: IScannerResults;
     public output: string;
     
     @ViewChild('content', {static: false}) contentBox: ElementRef;
-
     
+    protected useDefaultLinker(): boolean {
+        return true;
+    }
+
     constructor(@Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
         private _alertService: AlertService,
         protected _instrumentService: InstrumentService,
@@ -48,6 +58,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
+        this._timer = setInterval(() => {
+            this.scanMarkets();
+        }, 1000 * 60 * 2);
+
         super.setTitle(
             this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
         );
@@ -62,6 +76,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     segmentSelected(item: string) {
         this.activeSegment = item;
+        this.scanMarkets();
+    }
+
+    scanMarkets() {
+        if (!this.activeSegment) {
+            return;
+        }
+
         this.output = "Scanning...";
         this.scannerResults = [];
 
@@ -72,6 +94,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 this.output = null;
             }
 
+            this.scanningTime = new Date(data.scanning_time * 1000).toUTCString();
             this._processData(data.items);
         }, (error) => {
             this.output = "Failed to scan";
@@ -92,17 +115,26 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._sendInstrumentChange(instrumentVM);
     }
 
+    ngOnDestroy() {
+        super.ngOnDestroy();
+
+        if (this._timer) {
+            clearInterval(this._timer);
+            this._timer = null;
+        }
+    }
+
     private _sendInstrumentChange(instrumentVM: IScannerResults) {
-        this._instrumentService.getInstrumentsBySymbol(instrumentVM.symbol).subscribe((data: IInstrument[]) => {
+        this._instrumentService.getInstruments(null, instrumentVM.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
-                this._alertService.warning("Failed to view chart by order symbol");
+                this._alertService.warning("Failed to view chart by symbol");
                 return;
             }
 
             let instrument = data[0];
 
             for (const i of data) {
-                if (i.exchange.toLowerCase() === instrumentVM.exchange.toLowerCase()) {
+                if (i.exchange.toLowerCase() === instrumentVM.exchange.toLowerCase() && i.id.toLowerCase() === instrumentVM.symbol.toLowerCase()) {
                     instrument = i;
                 }
             }
@@ -111,26 +143,37 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 type: Actions.ChangeInstrumentAndTimeframe,
                 data: {
                     instrument: instrument,
-                    timeframe: instrumentVM.timeframe
+                    timeframe: instrumentVM.timeInterval
                 }
             };
             this.linker.sendAction(linkAction);
         }, (error) => {
-            this._alertService.warning("Failed to view chart by order symbol");
+            this._alertService.warning("Failed to view chart by symbol");
         });
     }
     
     private _processData(items: IBFTScanInstrumentsResponseItem[]) {
+        const res = [];
         for (const i of items) {
-            this.scannerResults.push({
+            if (i.tte > 50) {
+                continue;
+            }
+            res.push({
                 exchange: i.exchange,
                 symbol: i.symbol,
                 trend: i.trend,
                 timeframe: this._toTimeframe(i.timeframe),
+                timeInterval: i.timeframe,
                 tp: this._toTP(i.tp),
                 tte: this._toTTE(i.tte),
+                open: i.open,
+                high: i.high,
+                low: i.low,
+                close: i.close
             });
         }
+
+        this.scannerResults = res;
     }
 
     private _toTP(tp: number): string {
@@ -141,7 +184,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (tp < -20) {
             probability = "Low";
         }
-        return `${probability} (Vol. ${tp})`;
+        const sign = tp > 0 ? "+" : "-";
+        return `${probability} (Vol. ${sign}${Math.abs(tp)} %)`;
     }
 
     private _toTTE(tte: number): string {
@@ -150,11 +194,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     private _toTimeframe(tf: number): string {
         switch (tf) {
-            case 1: return "1 MIn";
-            case 5: return "5 MIn";
-            case 15: return "15 MIn";
-            case 60: return "60 MIn";
-            case 240: return "240 MIn";
+            case 1 * 60: return "1 Min";
+            case 5 * 60: return "5 Min";
+            case 15 * 60: return "15 Min";
+            case 60 * 60: return "1 Hour";
+            case 240 * 60: return "4 Hours";
         }
         return "Undefined";
     }

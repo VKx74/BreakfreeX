@@ -398,6 +398,19 @@ export class TcdComponent extends BaseLayoutItemComponent {
                         chart.sendBarsRequest();
                     }
                 }
+            } else if (action.type === Actions.ChangeInstrumentAndTimeframe) {
+                if (this.chart) {
+                    const chart = this.chart;
+                    const instrument = action.data.instrument as IChartInstrument;
+                    const timeInterval = (action.data.timeframe as number) * 1000;
+                    const chartInstrument = chart.instrument;
+
+                    if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
+                        chart.instrument = Object.assign({}, instrument);
+                        chart.timeFrame = TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval);
+                        chart.sendBarsRequest();
+                    }
+                }
             }
         });
     }

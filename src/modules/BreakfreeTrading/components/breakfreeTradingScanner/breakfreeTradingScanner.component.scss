@@ -10,7 +10,12 @@
     text-align: center;
     top: 40px;
   }
+  .scanning-time {
+    font-size: 11px;
+    margin: 2px 8px;
+  }
   .top-line {
+    display: none !important;
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
@@ -32,7 +37,7 @@
     border-bottom: 1px solid themed('appBackgroundColor');
   }
 
-  .output {
+  .output, .scanning-time {
     color: themed('titleTextColor');
   }
 

@@ -97,10 +97,11 @@ export abstract class InstrumentServiceBase implements IHealthable {
 
             if (search) {
                 search = search.toUpperCase();
+                let id = instrument.id.toUpperCase();
                 let symbol = instrument.symbol.toUpperCase();
                 let company = instrument.company.toUpperCase();
 
-                if (symbol.indexOf(search) === -1 && company.indexOf(search) === -1) {
+                if (id.indexOf(search) === -1 && symbol.indexOf(search) === -1 && company.indexOf(search) === -1) {
                     continue;
                 }
 

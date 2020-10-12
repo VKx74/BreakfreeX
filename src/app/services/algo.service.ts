@@ -33,13 +33,19 @@ export interface IBFTScanInstrumentsResponseItem {
     symbol: string;
     exchange: string;
     timeframe: number;
+    timeInterval: number;
     trend: IBFTATrend;
     tte: number;
     tp: number;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
 }
 
 export interface IBFTScanInstrumentsResponse {
     items: IBFTScanInstrumentsResponseItem[];
+    scanning_time: number;
 }
 
 export interface IBFTAlgoParameters {
@@ -272,6 +278,6 @@ export class AlgoService {
     }
 
     scanInstruments(segment: string): Observable<IBFTScanInstrumentsResponse> {
-        return this._http.get<IBFTScanInstrumentsResponse>(`${this.url}scan_instruments?segment=${segment}`);
+        return this._http.get<IBFTScanInstrumentsResponse>(`${this.url}scanner_results?segment=${segment}`);
     }
 }

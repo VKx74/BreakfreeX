@@ -71,6 +71,7 @@
   "example": "Example",
   "change": "Change",
   "changePercent": "Change (%)",
+  "open": "Open",
   "high": "High",
   "low": "Low",
   "remove": "Remove",
@@ -179,6 +180,6 @@
   "date": "Date",
   "timeframe": "Time Frame",
   "trend": "Trend",
-  "tte": "Time To Entry",
-  "tp": "Trade Probability"
+  "tte": "TTE",
+  "tp": "TP"
 }

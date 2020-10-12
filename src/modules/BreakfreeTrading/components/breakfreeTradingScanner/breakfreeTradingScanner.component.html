@@ -9,7 +9,8 @@
             </mat-select>
          </mat-form-field>
       </div>
-      <div>
+      <div class="flex justify-flex-end">
+         <div class="scanning-time">Scanned: {{scanningTime}}</div>
          <div class="crypto-button-icon">
             <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
          </div>
@@ -25,6 +26,7 @@
          </mat-menu>
       </div>
    </div>
+   <div class="scanning-time">Scanned: {{scanningTime}}</div>
    <div class="content-wrapper flex-grow-1 h-0">
       <div class="full-height padding-wrapper">
          <data-table #dataTableComponent [rows]="scannerResults" [selectable]="true" [expandOnClick]="false"
@@ -44,6 +46,18 @@
             </data-table-header-cell>
             <data-table-header-cell columnName="tp" [sortable]="false">
                {{'tp' | translate}}
+            </data-table-header-cell>
+            <!-- <data-table-header-cell columnName="open" [sortable]="false">
+               {{'open' | translate}}
+            </data-table-header-cell> -->
+            <data-table-header-cell columnName="high" [sortable]="false">
+               {{'high' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="low" [sortable]="false">
+               {{'low' | translate}}
+            </data-table-header-cell>
+            <data-table-header-cell columnName="close" [sortable]="false">
+               {{'close' | translate}}
             </data-table-header-cell>
 
 
@@ -70,6 +84,24 @@
             <data-table-cell columnName="tp">
                <ng-template let-instrumentVM>
                   {{instrumentVM.tp}}
+               </ng-template>
+            </data-table-cell>
+            <!-- <data-table-cell columnName="open">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.open}}
+               </ng-template>
+            </data-table-cell>  -->
+            <data-table-cell columnName="high">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.high}}
+               </ng-template>
+            </data-table-cell> <data-table-cell columnName="low">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.low}}
+               </ng-template>
+            </data-table-cell> <data-table-cell columnName="close">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.close}}
                </ng-template>
             </data-table-cell>
          </data-table>
