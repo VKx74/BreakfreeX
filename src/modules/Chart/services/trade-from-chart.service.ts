@@ -475,12 +475,14 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     this._alertService.success("Order modified");
                 } else {
                     this._alertService.error("Failed to modify order: " + result.msg);
+                    this._pendingEdit = {};
                     this.refresh();
                 }
             },
             (error) => {
                 callback();
                 this._alertService.error("Failed to modify order: " + error);
+                this._pendingEdit = {};
                 this.refresh();
             }
         );
