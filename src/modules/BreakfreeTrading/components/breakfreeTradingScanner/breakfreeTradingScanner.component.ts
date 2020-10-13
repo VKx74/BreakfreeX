@@ -88,14 +88,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this.scannerResults = [];
 
         this._alogService.scanInstruments(this.activeSegment).subscribe((data: IBFTScanInstrumentsResponse) => {
-            if (!data.items || !data.items.length) {
+            this.scanningTime = new Date(data.scanning_time * 1000).toUTCString();
+            this._processData(data.items);
+            if (!this.scannerResults.length) {
                 this.output = "No Results";
             } else {
                 this.output = null;
             }
-
-            this.scanningTime = new Date(data.scanning_time * 1000).toUTCString();
-            this._processData(data.items);
         }, (error) => {
             this.output = "Failed to scan";
         });

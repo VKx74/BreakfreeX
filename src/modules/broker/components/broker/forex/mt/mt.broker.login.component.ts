@@ -21,6 +21,8 @@ import { MTBrokerServersProvider } from '@app/services/mt/mt.servers.service';
     styleUrls: ['./mt.broker.login.component.scss']
 })
 export class MTBrokerLoginComponent implements OnInit {
+    private _allBrokers = "All brokers";
+
     public showSpinner = false;
     public login = "";
     public password = "";
@@ -29,6 +31,7 @@ export class MTBrokerLoginComponent implements OnInit {
     public _brokers: string[] = [];
     public _servers: MTServer[] = [];
     public brokerFormControl: FormControl = new FormControl();
+    public serverFormControl: FormControl = new FormControl();
 
     @Input()
     public policyAccepted: boolean;
@@ -48,6 +51,31 @@ export class MTBrokerLoginComponent implements OnInit {
         
         return this._brokers.filter(_ => _.toLowerCase().indexOf(filterText.toLowerCase()) !== -1);
     }
+    
+    public get filteredServers(): MTServer[] {
+        let filterText = "";
+        const filterObject = this.serverFormControl.value;
+        const selectedBroker = this.brokerFormControl.value;
+        const filteredByBrokers = this._servers.filter(_ => {
+            return !selectedBroker || selectedBroker === this._allBrokers || selectedBroker === _.Broker
+        });
+
+        if (!filterObject) {
+            return filteredByBrokers;
+        }
+
+        if (filterObject.Name && filterObject.Broker) {
+            return [filterObject];
+        } else {
+            filterText = this.serverFormControl.value;
+        }
+
+        if (!filterText) {
+            return filteredByBrokers;
+        }
+
+        return filteredByBrokers.filter(_ => _.Name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1);
+    }
 
     get brokerConnected(): boolean {
         return this._brokerService.activeBroker !== null && this._brokerService.activeBroker !== undefined;
@@ -66,31 +94,39 @@ export class MTBrokerLoginComponent implements OnInit {
         return of (value.Name);
     } 
 
-    getServerBySelectedBroker(): MTServer[] { 
-        const res: MTServer[] = [];
-        for (const server of this._servers) {
-            if (server.Broker === this.selectedBroker) {
-                res.push(server);
-            }
-        }
-        return res;
-    }
+    // getServerBySelectedBroker(): MTServer[] { 
+    //     const res: MTServer[] = [];
+    //     for (const server of this._servers) {
+    //         if (server.Broker === this.selectedBroker || this.selectedBroker === this._allBrokers) {
+    //             res.push(server);
+    //         }
+    //     }
+    //     return res;
+    // }
     
     onBrokerSelected(event: MatAutocompleteSelectedEvent) { 
-        this.selectedBroker = event.option.value;
-        this.selectDefaultServer();
-    }
-
-    onServerSelected(server: MTServer) {
-        this.selectedServer = server; 
-    }
-
-    selectDefaultServer() { 
-        const availableServers = this.getServerBySelectedBroker();
-        if (availableServers.length) {
-            this.selectedServer = availableServers[0];
+        if (this.selectedBroker !== event.option.value) {
+            this.selectedBroker = event.option.value;
+            this.selectedServer = null;
+            this.serverFormControl.setValue(this.selectedServer);
         }
+        // this.selectDefaultServer();
     }
+
+    onServerSelected(event: MatAutocompleteSelectedEvent) {
+        this.selectedServer = event.option.value; 
+    }
+
+    serverTitle(server: MTServer) {
+        return server ? server.Name : "";
+    }
+
+    // selectDefaultServer() { 
+    //     const availableServers = this.getServerBySelectedBroker();
+    //     if (availableServers.length) {
+    //         this.selectedServer = availableServers[0];
+    //     }
+    // }
 
     ngOnInit() {    
         this.showSpinner = true;
@@ -105,6 +141,7 @@ export class MTBrokerLoginComponent implements OnInit {
         if (provider) {
             provider.loadServers().subscribe((servers: MTServer[]) => {
                 this.showSpinner = false;
+                this._brokers.push(this._allBrokers);
                 for (const server of servers) {
                     this._servers.push(server);
 
@@ -112,6 +149,9 @@ export class MTBrokerLoginComponent implements OnInit {
                         this._brokers.push(server.Broker);
                     }
                 }
+                this.selectedBroker = this._allBrokers;
+                this.brokerFormControl.setValue(this.selectedBroker);
+                // this.selectDefaultServer();
             }, (error) => {
                 this.showSpinner = false;
             });
@@ -121,12 +161,16 @@ export class MTBrokerLoginComponent implements OnInit {
     inputClicked(event: any) {
     }
 
+    inputServerClicked(event: any) {
+    }
+
     brokerSelected(account: IBrokerState) {
         for (const server of this._servers) {
             if (server.Name === account.server) {
                 this.selectedServer = server;
                 this.selectedBroker = server.Broker;
                 this.brokerFormControl.setValue(this.selectedBroker);
+                this.serverFormControl.setValue(this.selectedServer);
                 break;
             }
         }

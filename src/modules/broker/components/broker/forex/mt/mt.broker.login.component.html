@@ -1,9 +1,8 @@
-
-
 <div class="connected-broker-area" *ngIf="!brokerConnected" [class.disabled]="showSpinner">
     <div class="flex-row" *ngIf="savedAccountExists()">
         <div class="connected-accounts">
-            <connected-account-info [brokerInstance]="brokerInstance" (onBrokerSelected)="brokerSelected($event)"></connected-account-info>
+            <connected-account-info [brokerInstance]="brokerInstance" (onBrokerSelected)="brokerSelected($event)">
+            </connected-account-info>
         </div>
     </div>
 
@@ -12,20 +11,15 @@
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">{{brokerInstance}} Broker:</span>
 
-            <mat-form-field>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onBrokerSelected($event)">
-                    <mat-option *ngFor="let option of filteredBrokers" [value]="option">
-                      {{option}}
-                    </mat-option>
-                </mat-autocomplete>
-                <input type="text" 
-                    class="full-width crypto-input mtInput" 
-                    placeholder="Search broker"
-                    (click)="inputClicked($event)"
-                    (focus)="inputClicked($event)"
-                    matInput
-                    [formControl]="brokerFormControl"
-                    [matAutocomplete]="auto">
+                <mat-form-field>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onBrokerSelected($event)">
+                        <mat-option *ngFor="let option of filteredBrokers" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <input type="text" class="full-width crypto-input mtInput" placeholder="Search broker"
+                        (click)="inputClicked($event)" (focus)="inputClicked($event)" matInput
+                        [formControl]="brokerFormControl" [matAutocomplete]="auto">
                 </mat-form-field>
                 <!-- <selector class="dropdown"
                         [title]="'Select broker'"
@@ -37,12 +31,19 @@
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit is-secondary">
                 <span class="form-unit__label">Server:</span>
-                <selector class="dropdown"  
-                        [title]="'Select server'"
-                        [optionCaption]="captionText"
-                        [options]="getServerBySelectedBroker()"
-                        (onSelect)="onServerSelected($event)"
-                        [selectedOption]="selectedServer"></selector>
+                <!-- <selector class="dropdown" [title]="'Select server'" [optionCaption]="captionText"
+                    [options]="getServerBySelectedBroker()" (onSelect)="onServerSelected($event)"
+                    [selectedOption]="selectedServer"></selector> -->
+                <mat-form-field>
+                    <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onServerSelected($event)" [displayWith]="serverTitle">
+                        <mat-option *ngFor="let option of filteredServers" [value]="option">
+                            {{option.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <input type="text" class="full-width crypto-input mtInput" placeholder="Search server"
+                        (click)="inputServerClicked($event)" (focus)="inputServerClicked($event)" matInput
+                        [formControl]="serverFormControl" [matAutocomplete]="auto1">
+                </mat-form-field>
             </div>
         </div>
     </div>
@@ -51,20 +52,20 @@
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">Login:</span>
-                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="login"
-                        placeholder="Login" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="login" placeholder="Login"
+                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             </div>
         </div>
-        
+
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">Password:</span>
                 <input type="password" class="full-width crypto-input mtInput" [(ngModel)]="password"
-                        placeholder="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                    placeholder="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             </div>
         </div>
     </div>
-    
+
 </div>
 
 <div class="connectBrokerBlock" [class.disabled]="!policyAccepted">
@@ -77,4 +78,3 @@
 </div>
 
 <loader *ngIf="showSpinner"></loader>
-
