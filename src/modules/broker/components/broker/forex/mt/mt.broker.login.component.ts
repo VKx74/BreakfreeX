@@ -57,7 +57,7 @@ export class MTBrokerLoginComponent implements OnInit {
         const filterObject = this.serverFormControl.value;
         const selectedBroker = this.brokerFormControl.value;
         const filteredByBrokers = this._servers.filter(_ => {
-            return !selectedBroker || selectedBroker === this._allBrokers || selectedBroker === _.Broker
+            return !selectedBroker || selectedBroker === this._allBrokers || selectedBroker === _.Broker;
         });
 
         if (!filterObject) {
