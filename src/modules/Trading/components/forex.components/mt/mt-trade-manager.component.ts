@@ -159,7 +159,13 @@ export class MTTradeManagerComponent {
     }
 
     public handleOpenChart(order: MTOrder | MTPosition) { 
-        this._instrumentService.getInstrumentsBySymbol(order.Symbol).subscribe((data: IInstrument[]) => {
+        const mt5Broker = this.brokerService.activeBroker as MTBroker;
+        if (!mt5Broker) {
+            return;
+        }
+
+        const symbol = mt5Broker.instrumentToChartFormat(order.Symbol);
+        this._instrumentService.getInstruments(null, symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
                 this._alertService.warning("Failed to view chart by order symbol");
                 return;

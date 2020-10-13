@@ -173,6 +173,17 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
 
             orderConfig.sl = Math.roundToDecimals(this.Data.algo_Stop, pricePrecision);
             
+            if (this.Data && this.Data.algo_Info && this.Data.algo_Info.positionsize) {
+                let posSizeParts = this.Data.algo_Info.positionsize.split("|");
+                if (posSizeParts.length === 2) {
+                    const sizeString = posSizeParts[1].replace("Split:", "");
+                    const sizeNumber = Number(sizeString);
+                    if (sizeNumber) {
+                        orderConfig.amount = sizeNumber;
+                    }
+                }
+            }
+            
             this._dialog.open(MTOrderConfiguratorModalComponent, {
                 data: {
                     tradeConfig: orderConfig

@@ -9,6 +9,7 @@ import {AlertService} from "@alert/services/alert.service";
 import { AlgoService, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem } from '@app/services/algo.service';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { InstrumentService } from '@app/services/instrument.service';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 interface IScannerResults {
     symbol: string;
@@ -124,7 +125,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     private _sendInstrumentChange(instrumentVM: IScannerResults) {
-        this._instrumentService.getInstruments(null, instrumentVM.symbol).subscribe((data: IInstrument[]) => {
+        // just oanda supported
+        this._instrumentService.getInstruments(EExchangeInstance.OandaExchange, instrumentVM.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
                 this._alertService.warning("Failed to view chart by symbol");
                 return;

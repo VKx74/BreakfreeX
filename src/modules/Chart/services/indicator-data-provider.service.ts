@@ -3,11 +3,13 @@ import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/break
 import { BreakfreeTradingNavigatorService } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
 import { of } from 'rxjs';
 import { IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
+import { BrokerService } from '@app/services/broker.service';
+import { MTBroker } from '@app/services/mt/mt.broker';
 
 @Injectable()
 export class IndicatorDataProviderService {
 
-    constructor(protected _bftService: BreakfreeTradingService, protected _bftPanel: BreakfreeTradingNavigatorService) {
+    constructor(protected _bftService: BreakfreeTradingService, protected _bftPanel: BreakfreeTradingNavigatorService, protected _broker: BrokerService) {
        
     }
 
@@ -26,6 +28,13 @@ export class IndicatorDataProviderService {
                         status: "Playback allowed on last 5000 candles." 
                     }
                 }).toPromise();
+            }
+        }
+
+        if (this._broker.activeBroker) {
+            const broker = this._broker.activeBroker as MTBroker;
+            if (!bftParams.input_accountsize && broker.accountInfo && broker.accountInfo.Balance) {
+                bftParams.input_accountsize = broker.accountInfo.Balance;
             }
         }
 

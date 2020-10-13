@@ -30,6 +30,7 @@ export interface IMT5Broker extends IBroker {
     instrumentMinAmount(symbol: string): number;
     instrumentAmountStep(symbol: string): number;
     instrumentToBrokerFormat(symbol: string): IInstrument;
+    instrumentToChartFormat(symbol: string): string;
     getOrderById(orderId: number): MTOrder;
     getPrice(symbol: string): Observable<IMTTick>;
 }

@@ -455,6 +455,15 @@ export abstract class MTBroker implements IMTBroker {
         return this._tickSubscribers[symbol].subscribe(subscription);
     }
 
+    instrumentToChartFormat(symbol: string): string {
+        let s = symbol;
+        if (s.length > 6 && s[s.length - 2] === '-') {
+            s = s.slice(0, s.length - 2);
+        }
+        s = s.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
+        return s;
+    }
+
     instrumentToBrokerFormat(symbol: string): IInstrument {
         const s1 = symbol.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
 
