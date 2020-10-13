@@ -2,7 +2,6 @@
 @import "global-styles/mixins/themify";
 @import "global-styles/variables";
 
-
 :host {
 
   .output {
@@ -28,6 +27,32 @@
     padding-left: 10px;
   }
 
+  /deep/ .mat-tab-label { 
+    height: 26px !important;
+  }
+  /deep/ mat-header-cell {
+    height: 25px;
+  }
+  /deep/ mat-row {
+    height: 25px;
+  }
+
+  .high {
+    color: $lightGreenColor;
+  }
+
+  .medium {
+    color: $lightBlueColor;
+  }
+
+  .low {
+    color: $lightRedColor;
+  }
+  
+  // .symbol-column { 
+  //   font-weight: bolder;
+  // }
+
 }
 
 
@@ -39,6 +64,10 @@
 
   .output, .scanning-time {
     color: themed('titleTextColor');
+  }
+
+  /deep/ mat-row:nth-child(even) {
+    background-color: themed('nthChild') !important;
   }
 
 

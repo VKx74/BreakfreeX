@@ -23,6 +23,7 @@ interface IScannerResults {
     high: number;
     low: number;
     close: number;
+    volatility: string;
 }
 
 @Component({
@@ -167,6 +168,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 timeInterval: i.timeframe,
                 tp: this._toTP(i.tp),
                 tte: this._toTTE(i.tte),
+                volatility: this._toVolatility(i.tp),
                 open: i.open,
                 high: i.high,
                 low: i.low,
@@ -177,7 +179,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this.scannerResults = res;
     }
 
-    private _toTP(tp: number): string {
+    private _toVolatility(tp: number): string {
         let probability = "Mid";
         if (tp > 50) {
             probability = "High";
@@ -185,8 +187,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (tp < -20) {
             probability = "Low";
         }
+        return probability;
+    }
+
+    private _toTP(tp: number): string {
+        let volatility = this._toVolatility(tp);
         const sign = tp > 0 ? "+" : "-";
-        return `${probability} (Vol. ${sign}${Math.abs(tp)} %)`;
+        return `${volatility} (Vol. ${sign}${Math.abs(tp)} %)`;
     }
 
     private _toTTE(tte: number): string {

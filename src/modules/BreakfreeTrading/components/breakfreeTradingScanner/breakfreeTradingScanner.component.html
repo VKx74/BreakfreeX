@@ -63,7 +63,9 @@
 
             <data-table-cell columnName="symbol">
                <ng-template let-instrumentVM>
-                  {{instrumentVM.symbol}} : {{instrumentVM.exchange}}
+                  <div class="symbol-column">
+                     {{instrumentVM.symbol}} : <span style = "text-transform:capitalize;">{{instrumentVM.exchange}}</span>
+                  </div>
                </ng-template>
             </data-table-cell>
             <data-table-cell columnName="timeframe">
@@ -83,7 +85,9 @@
             </data-table-cell>
             <data-table-cell columnName="tp">
                <ng-template let-instrumentVM>
-                  {{instrumentVM.tp}}
+                  <div [ngClass]="{'high':instrumentVM.volatility == 'High', 'medium':instrumentVM.volatility == 'Mid', 'low':instrumentVM.volatility == 'Low'}">
+                     {{instrumentVM.tp}}
+                  </div>
                </ng-template>
             </data-table-cell>
             <!-- <data-table-cell columnName="open">
