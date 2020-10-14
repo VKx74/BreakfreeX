@@ -61,6 +61,8 @@ export class DataTableComponent {
     @Input() groups: string[];
     @Input() selectedRow: any;
     @Input() selectable: boolean = false;
+    @Input() trackByIndex: boolean = true;
+    @Input() trackByName: string;
 
     @Input() expandOnClick = true;
     @Input() maxExpandedRows: number = 1;
@@ -131,7 +133,15 @@ export class DataTableComponent {
     }
 
     trackBy(index: number, item: any) {
-        return index;
+        if (this.trackByName && item[this.trackByName]) {
+            return item[this.trackByName];
+        }  
+        
+        if (this.trackByIndex) {
+            return index;
+        }
+
+        return item;
     }
 
     ngOnInit() {
@@ -322,7 +332,6 @@ export class DataTableComponent {
     }
 
     ngAfterViewChecked() {
-
         if (this._needSetDimensions) {
             if (this._columnsDimensions) {
                 this.setColumnsDimensions(this._columnsDimensions);
@@ -343,7 +352,6 @@ export class DataTableComponent {
 
     getColumnWidth(columnName: string): number {
         const columnEls = Array.from(this.elRef.nativeElement.getElementsByClassName(this._getColumnCellClass(columnName)));
-
         return (columnEls[0] as any).clientWidth;
     }
 

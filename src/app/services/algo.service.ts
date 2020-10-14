@@ -33,7 +33,6 @@ export interface IBFTScanInstrumentsResponseItem {
     symbol: string;
     exchange: string;
     timeframe: number;
-    timeInterval: number;
     trend: IBFTATrend;
     type: IBFTATradeType;
     tte: number;

@@ -52,6 +52,12 @@
   // .symbol-column { 
   //   font-weight: bolder;
   // }
+  /deep/ .mat-row {
+    .matMenuTrigger {
+      height: 14px !important;
+      margin-left: -13px;
+    }
+  }
 
 }
 

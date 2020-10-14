@@ -1,5 +1,5 @@
 <div class="wrapper flex">
-    <mat-table [dataSource]="dataSource" matSort="" class="mat-elevation-z8" multiTemplateDataRows [trackBy]="trackBy"
+    <mat-table [dataSource]="dataSource" matSort="" class="mat-elevation-z8" multiTemplateDataRows [trackBy]="trackBy.bind(this)"
         [ngClass]="{
                     'default-mode': viewMode === DataTableViewMode.Default,
                     'stripped-mode': viewMode === DataTableViewMode.Striped}" [class.selectable]="selectable"

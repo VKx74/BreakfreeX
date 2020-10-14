@@ -30,17 +30,14 @@
    <div class="content-wrapper flex-grow-1 h-0">
       <div class="full-height padding-wrapper">
          <data-table #dataTableComponent [rows]="scannerResults" [selectable]="true" [expandOnClick]="false"
-            [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
+            [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
             (onRowSelect)="handleScannerResultsClick($event)" [groups]="groups" [groupingField]="groupingField">
+
+            <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="20">
+            </data-table-header-cell>
             <data-table-header-cell columnName="symbol" [sortable]="true">
                {{'instrument' | translate}}
             </data-table-header-cell>
-            <!-- <data-table-header-cell columnName="timeframe" [sortable]="false">
-               {{'timeframe' | translate}}
-            </data-table-header-cell>
-            <data-table-header-cell columnName="trend" [sortable]="false">
-               {{'trend' | translate}}
-            </data-table-header-cell> -->
             <data-table-header-cell columnName="type" [sortable]="false">
                {{'type' | translate}}
             </data-table-header-cell> 
@@ -50,72 +47,37 @@
             <data-table-header-cell columnName="tp" [sortable]="false">
                {{'tp' | translate}}
             </data-table-header-cell>
-            <!-- <data-table-header-cell columnName="open" [sortable]="false">
-               {{'open' | translate}}
-            </data-table-header-cell> 
-            <data-table-header-cell columnName="high" [sortable]="false">
-               {{'high' | translate}}
-            </data-table-header-cell>
-            <data-table-header-cell columnName="low" [sortable]="false">
-               {{'low' | translate}}
-            </data-table-header-cell>
-            <data-table-header-cell columnName="close" [sortable]="false">
-               {{'close' | translate}}
-            </data-table-header-cell> -->
 
-
+         <data-table-cell columnName="featured">
+               <ng-template let-scannerVM>
+                   <color-selector [activeColor]="getFeaturedDetails(scannerVM)" (activeColorChange)='handleColorSelected($event, scannerVM)'  (click)="click($event)" [path]="'flag'">
+                   </color-selector>
+               </ng-template>
+           </data-table-cell>
             <data-table-cell columnName="symbol">
-               <ng-template let-instrumentVM>
+               <ng-template let-scannerVM>
                   <div class="symbol-column">
-                     {{instrumentVM.symbol}} : <span style = "text-transform:capitalize;">{{instrumentVM.exchange}}</span>
+                     {{scannerVM.symbol}} : <span style = "text-transform:capitalize;">{{scannerVM.exchange}}</span>
                   </div>
                </ng-template>
             </data-table-cell>
-            <!-- <data-table-cell columnName="timeframe">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.timeframe}}
-               </ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="trend">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.trend}}
-               </ng-template>
-            </data-table-cell> -->
             <data-table-cell columnName="type">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.type}}
+               <ng-template let-scannerVM>
+                  {{scannerVM.type}}
                </ng-template>
             </data-table-cell>
             <data-table-cell columnName="tte">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.tte}}
+               <ng-template let-scannerVM>
+                  {{scannerVM.tte}}
                </ng-template>
             </data-table-cell>
             <data-table-cell columnName="tp">
-               <ng-template let-instrumentVM>
-                  <div [ngClass]="{'high':instrumentVM.volatility == 'High', 'medium':instrumentVM.volatility == 'Mid', 'low':instrumentVM.volatility == 'Low'}">
-                     {{instrumentVM.tp}}
+               <ng-template let-scannerVM>
+                  <div [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
+                     {{scannerVM.tp}}
                   </div>
                </ng-template>
             </data-table-cell>
-            <!-- <data-table-cell columnName="open">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.open}}
-               </ng-template>
-            </data-table-cell> 
-            <data-table-cell columnName="high">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.high}}
-               </ng-template>
-            </data-table-cell> <data-table-cell columnName="low">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.low}}
-               </ng-template>
-            </data-table-cell> <data-table-cell columnName="close">
-               <ng-template let-instrumentVM>
-                  {{instrumentVM.close}}
-               </ng-template>
-            </data-table-cell> -->
          </data-table>
          <div *ngIf="output" class="output">
             {{output}}
