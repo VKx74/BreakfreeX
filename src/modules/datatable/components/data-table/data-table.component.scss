@@ -12,6 +12,10 @@ $defaultModeRowHeight: 32px;
   overflow-x: initial;
   position: relative;
 
+  /deep/ .mat-table-group {
+    font-weight: bolder;
+    cursor: default;
+  }
   /deep/ mat-cell,
   /deep/ mat-header-cell {
     flex-grow: 1;

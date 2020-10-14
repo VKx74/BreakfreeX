@@ -31,16 +31,19 @@
       <div class="full-height padding-wrapper">
          <data-table #dataTableComponent [rows]="scannerResults" [selectable]="true" [expandOnClick]="false"
             [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
-            (onRowSelect)="handleScannerResultsClick($event)">
+            (onRowSelect)="handleScannerResultsClick($event)" [groups]="groups" [groupingField]="groupingField">
             <data-table-header-cell columnName="symbol" [sortable]="true">
                {{'instrument' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="timeframe" [sortable]="false">
+            <!-- <data-table-header-cell columnName="timeframe" [sortable]="false">
                {{'timeframe' | translate}}
             </data-table-header-cell>
             <data-table-header-cell columnName="trend" [sortable]="false">
                {{'trend' | translate}}
-            </data-table-header-cell>
+            </data-table-header-cell> -->
+            <data-table-header-cell columnName="type" [sortable]="false">
+               {{'type' | translate}}
+            </data-table-header-cell> 
             <data-table-header-cell columnName="tte" [sortable]="false">
                {{'tte' | translate}}
             </data-table-header-cell>
@@ -68,7 +71,7 @@
                   </div>
                </ng-template>
             </data-table-cell>
-            <data-table-cell columnName="timeframe">
+            <!-- <data-table-cell columnName="timeframe">
                <ng-template let-instrumentVM>
                   {{instrumentVM.timeframe}}
                </ng-template>
@@ -76,6 +79,11 @@
             <data-table-cell columnName="trend">
                <ng-template let-instrumentVM>
                   {{instrumentVM.trend}}
+               </ng-template>
+            </data-table-cell> -->
+            <data-table-cell columnName="type">
+               <ng-template let-instrumentVM>
+                  {{instrumentVM.type}}
                </ng-template>
             </data-table-cell>
             <data-table-cell columnName="tte">

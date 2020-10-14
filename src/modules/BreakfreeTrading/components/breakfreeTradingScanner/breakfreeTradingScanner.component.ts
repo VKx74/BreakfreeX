@@ -6,14 +6,32 @@ import bind from "bind-decorator";
 import { Observable } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import {AlertService} from "@alert/services/alert.service";
-import { AlgoService, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem } from '@app/services/algo.service';
+import { AlgoService, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem } from '@app/services/algo.service';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { InstrumentService } from '@app/services/instrument.service';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { IWatchlistItem } from 'modules/Watchlist/services/watchlist.service';
+import { MajorForexWatchlist } from 'modules/Watchlist/services/majorForex';
+import { MinorForexWatchlist } from 'modules/Watchlist/services/minorForex';
+import { ExoticsForexWatchlist } from 'modules/Watchlist/services/exoticForex';
+import { IndicesWatchlist } from 'modules/Watchlist/services/indicaes';
+import { CommoditiesWatchlist } from 'modules/Watchlist/services/commodities';
+import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
+import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
+import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
+
+// import {MajorForexWatchlist} from './majorForex';
+// import {ExoticsForexWatchlist} from './exoticForex';
+// import {IndicesWatchlist} from './indicaes';
+// import {EquitiesWatchlist} from './equities';
+// import {CommoditiesWatchlist} from './commodities';
+// import {BondsWatchlist} from './bonds';
+// import {MetalsWatchlist} from './metals';
 
 interface IScannerResults {
     symbol: string;
     exchange: string;
+    type: string;
     timeframe: string;
     timeInterval: number;
     trend: string;
@@ -24,6 +42,7 @@ interface IScannerResults {
     low: number;
     close: number;
     volatility: string;
+    marketType: string;
 }
 
 @Component({
@@ -37,8 +56,12 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     static previewImgClass = 'crypto-icon-watchlist';
 
     private _timer: any;
+    private _otherGroupName: string = "Other";
+    private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
 
     public segments: string[] = ["Forex", "Stoks"];
+    public groupingField: string = "marketType";
+    public groups: string[] = [];
     public scanningTime: string;
     public activeSegment: string;
     public scannerResults: IScannerResults[] = [];
@@ -57,6 +80,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         private _alogService: AlgoService,
         protected _injector: Injector) {
         super(_injector);
+
+        this._types.forEach(_ => {
+            this.groups.push(_.name);
+        });
+        this.groups.push(this._otherGroupName);
     }
 
     ngOnInit() {
@@ -169,6 +197,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 tp: this._toTP(i.tp),
                 tte: this._toTTE(i.tte),
                 volatility: this._toVolatility(i.tp),
+                marketType: this._getMarketType(i.symbol),
+                type: this._getType(i),
                 open: i.open,
                 high: i.high,
                 low: i.low,
@@ -176,7 +206,39 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             });
         }
 
+        // for (let i = 0; i < 10; i++) {
+        //     res.push({
+        //         exchange: "Oanda",
+        //         symbol: i + "Symbol",
+        //         trend: "Up",
+        //         timeframe: "TF",
+        //         timeInterval: 90000,
+        //         tp: "sd",
+        //         tte: "sdf",
+        //         volatility: "sd",
+        //         type: "sad",
+        //         marketType: i < 5 ? "Forex Majors" : "Forex Minors"
+        //     });
+        // }
+
         this.scannerResults = res;
+    }
+
+    private _getType(item: IBFTScanInstrumentsResponseItem): string {
+        const tf = this._toTimeframe(item.timeframe);
+        const ud = item.trend === IBFTATrend.Up ? "U" : "D";
+        return `${item.type}_${ud}_${tf}`;
+    }
+
+    private _getMarketType(symbol: string): string {
+        for (const type of this._types) {
+            for (const inst of type.data) {
+                if (inst.id === symbol || inst.symbol === symbol) {
+                    return type.name;
+                }
+            }
+        }
+        return this._otherGroupName;
     }
 
     private _toVolatility(tp: number): string {

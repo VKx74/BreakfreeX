@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { map } from "rxjs/operators";
-import { IdentityService } from '@app/services/auth/identity.service';
-import { AppConfigService } from '@app/services/app.config.service';
 import { WatchlistStorageService } from './watchlist-storage.service';
-import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
-import { EMarketType } from '@app/models/common/marketType';
-import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 import {MinorForexWatchlist} from './minorForex';
 import {MajorForexWatchlist} from './majorForex';

@@ -35,6 +35,7 @@ export interface IBFTScanInstrumentsResponseItem {
     timeframe: number;
     timeInterval: number;
     trend: IBFTATrend;
+    type: IBFTATradeType;
     tte: number;
     tp: number;
     open: number;
@@ -207,6 +208,11 @@ export enum IBFTATrend {
     Up = "Up",
     Down = "Down",
     Undefined = "Undefined"
+}
+
+export enum IBFTATradeType {
+    EXT = "EXT",
+    Swing = "Swing"
 }
 
 export interface IBFTAExtHitTestSignal {

@@ -51,7 +51,13 @@
         <mat-header-row *matHeaderRowDef="(visibleColumns$ | async); sticky: true">
         </mat-header-row>
 
-        <mat-row *matRowDef="let row; columns: (visibleColumns$ | async)" [class.selected]="row === selectedRow"
+        <!-- Group header -->
+        <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"> </mat-row>
+        <ng-container matColumnDef="groupHeader">
+            <mat-cell *matCellDef="let group" class="mat-table-group">{{group.group}}</mat-cell>
+        </ng-container>
+
+        <mat-row *matRowDef="let row; columns: (visibleColumns$ | async); when: isNotGroup" [class.selected]="row === selectedRow"
             [class.expand-row-header]="expandable" [class.is-expanded]="isRowExpanded(row)"
             (contextmenu)="onContextMenu(row, $event)" (dblclick)="handleRowDoubleClick(row, $event)"
             (click)="handleRowSelected(row, $event)"></mat-row>

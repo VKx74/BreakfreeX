@@ -57,6 +57,8 @@ const ResizeHandleClass = 'resize-handle';
 })
 export class DataTableComponent {
     @Input() rows: any[];
+    @Input() groupingField: string;
+    @Input() groups: string[];
     @Input() selectedRow: any;
     @Input() selectable: boolean = false;
 
@@ -126,7 +128,6 @@ export class DataTableComponent {
         }
 
         this.dataSource = new MatTableDataSource([]);
-
     }
 
     trackBy(index: number, item: any) {
@@ -174,15 +175,58 @@ export class DataTableComponent {
             return acc;
         }, {});
 
-        this.dataSource.sortingDataAccessor = (data: any, columnName: string): string | number => {
-            const accessor = this._getColumnSortDataAccessor(columnName);
+        if (this.groupingField) {
+            this.dataSource.sortData = (data: any[], sort: MatSort): any[] => {
+                if (!sort.active) {
+                    return data;
+                }
+                // debugger
+                // for (let i = 0; i < data.length; i++) {
+                //     // removing groups
+                //     if (data[i].group !== undefined) {
+                //         data.splice(i, 1);
+                //         i--;
+                //     }
+                // }
+                
+                const newArray = this.rows.sort((a, b) => {
+                    let aVal, bVal;
+                    const accessor = this._getColumnSortDataAccessor(sort.active);
+                    if (accessor) {
+                        aVal = accessor(a, sort.active);
+                        bVal = accessor(b, sort.active);
+                    } else {
+                        aVal = this._originSortingDataAccessor(a, sort.active);
+                        bVal = this._originSortingDataAccessor(b, sort.active);
+                    }
 
-            if (accessor) {
-                return accessor(data, columnName);
-            } else {
-                return this._originSortingDataAccessor(data, columnName);
-            }
-        };
+                    if (typeof aVal === "number") {
+                        if (sort.direction === 'asc') {
+                            return aVal - bVal;
+                        } else {
+                            return bVal - aVal;
+                        }
+                    } else {
+                        if (sort.direction === 'asc') {
+                            return aVal.toString().localeCompare(bVal.toString());
+                        } else {
+                            return bVal.toString().localeCompare(aVal.toString());
+                        }
+                    }
+                });
+                return this._toGroup(newArray);
+            };
+        } else {
+            this.dataSource.sortingDataAccessor = (data: any, columnName: string): string | number => {
+                const accessor = this._getColumnSortDataAccessor(columnName);
+
+                if (accessor) {
+                    return accessor(data, columnName);
+                } else {
+                    return this._originSortingDataAccessor(data, columnName);
+                }
+            };
+        }
 
         this.minColumnWidth = Math.min(
             this.minColumnWidth,
@@ -240,15 +284,23 @@ export class DataTableComponent {
         });
     }
 
+    isGroup(index, item): boolean {
+        return item.group !== undefined;
+    }
+
+    isNotGroup(index, item): boolean {
+        return item.group === undefined;
+    }
+
     updateDataSource() {
-        this.dataSource.data = this.rows;
+        this.dataSource.data = this._toGroup(this.rows);
     }
 
     ngOnChanges(changes: SimpleChanges) {
         const rowChanges: SimpleChange = changes['rows'];
 
         if (rowChanges) {
-            this.dataSource.data = rowChanges.currentValue;
+            this.dataSource.data = this._toGroup(rowChanges.currentValue);
             this._needSetDimensions = true;
         }
 
@@ -562,6 +614,29 @@ export class DataTableComponent {
 
     private _getEventPageX(event: any): number {
         return event.touches ? event.touches[0].pageX : event.pageX;
+    }
+
+    private _toGroup(rows: any[]): any[] {
+        if (!this.groupingField || !this.groups || !this.groups.length) {
+            return rows;
+        }
+        const res = [];
+        this.groups.forEach(group => {
+            const filteredRows = [];
+            rows.forEach(row => {
+                if (row[this.groupingField] === group) {
+                    filteredRows.push(row);
+                }
+            });
+
+            if (filteredRows.length) {
+                res.push({
+                    group: group
+                });
+                filteredRows.forEach(_ => res.push(_));
+            }
+        });
+        return res;
     }
 
     ngOnDestroy() {
