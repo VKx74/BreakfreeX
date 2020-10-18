@@ -99,12 +99,12 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
                 componentIdentifier: ComponentIdentifier.watchlist,
             }, 
-            {
-                component: BreakfreeTradingBacktestComponent,
-                previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
-            },  
+            // {
+            //     component: BreakfreeTradingBacktestComponent,
+            //     previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
+            //     componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
+            //     componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
+            // },  
             // {
             //     component: BreakfreeTradingDiscoveryComponent,
             //     previewImgClass: BreakfreeTradingDiscoveryComponent.previewImgClass,
@@ -117,12 +117,12 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
                 componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
             },
-            {
-                component: BreakfreeTradingScannerComponent,
-                previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('breakfreeTradingScannerComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingScanner,
-            },
+            // {
+            //     component: BreakfreeTradingScannerComponent,
+            //     previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,
+            //     componentName: this._bftTranslateService.stream('breakfreeTradingScannerComponentName'),
+            //     componentIdentifier: ComponentIdentifier.breakfreeTradingScanner,
+            // },
             /*{
                 component: Level2Component,
                 previewImgClass: Level2Component.previewImgClass,
