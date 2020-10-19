@@ -9,7 +9,7 @@ import { of, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import { ClipboardService } from 'ngx-clipboard';
 import {AlertService} from "@alert/services/alert.service";
-import { ITimeFrame } from '@app/services/algo.service';
+import { IBFTAAlgoResponse, IBFTATrade, ITimeFrame } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MTBroker } from '@app/services/mt/mt.broker';
@@ -51,8 +51,8 @@ export class BreakfreeTradingNavigatorComponent extends BaseLayoutItemComponent 
 
     public SelectedItem: INavigatorItem;
 
-    public get Data(): any {
-        return this.SelectedItem ? this.SelectedItem.data : null;
+    public get Data(): IBFTATrade {
+        return this.SelectedItem ? (this.SelectedItem.data as IBFTAAlgoResponse).trade : null;
     }
     
     public get Instrument(): IInstrument {

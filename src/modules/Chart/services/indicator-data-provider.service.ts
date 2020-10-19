@@ -38,7 +38,7 @@ export class IndicatorDataProviderService {
             }
         }
 
-        return this._bftService.getBftIndicatorCalculation(bftParams).then(data => {
+        return this._bftService.getBftIndicatorCalculationV2(bftParams).then(data => {
             this._bftPanel.indicatorDataLoaded(bftParams, indicator.id, data);
             return data;
         });

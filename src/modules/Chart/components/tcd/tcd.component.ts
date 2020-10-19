@@ -1,7 +1,6 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Inject, Injector, ViewChild} from "@angular/core";
+import { Component, ElementRef, Inject, Injector, ViewChild} from "@angular/core";
 import {ThemeService} from "@app/services/theme.service";
 import {Theme} from "@app/enums/Theme";
-import {of} from "rxjs";
 import {takeUntil, tap} from "rxjs/operators";
 import {DataFeedBase} from "../../datafeed/DataFeedBase";
 import {DataFeed} from "../../datafeed/DataFeed";
@@ -11,7 +10,6 @@ import {LocalizationService} from "Localization";
 import {TranslateService} from "@ngx-translate/core";
 import {ChartTranslateService} from "../../localization/token";
 import {Actions, LinkingAction} from "../../../Linking/models";
-import {LinkerFactory} from "../../../Linking/linking-manager";
 import {CalendarEventsDatafeed} from "../../calendarEvents/CalendarEventsDatafeed";
 import {IndicatorAlertHandler} from 'modules/Chart/indicatorAlertHandler/indicatorAlertHandler';
 import {AutoTradingAlertConfigurationService} from 'modules/AutoTradingAlerts/services/auto-trading-alert-configuration.service';
@@ -30,10 +28,8 @@ import {OrderSide, OrderTypes} from "../../../Trading/models/models";
 import {AlertService} from "@alert/services/alert.service";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { InstrumentService } from '@app/services/instrument.service';
-import { EExchange } from '@app/models/common/exchange';
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
 import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
-import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
 import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
 import {Store} from "@ngrx/store";
@@ -179,6 +175,15 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     if (defaultChartTheme && defaultChartTheme.orders) {
                         chartOptions.theme.orders = defaultChartTheme.orders;
                         console.log("Set default orders line theme");
+                    }
+                }
+                
+                // extTrade
+                if (chartOptions && chartOptions.theme && chartOptions.theme.shape && !chartOptions.theme.shape.extTrade) {
+                    const dt = this._getTheme();
+                    if (dt && dt.shape && dt.shape.extTrade) {
+                        chartOptions.theme.shape.extTrade = dt.shape.extTrade;
+                        console.log("Set default extTrade");
                     }
                 }
             }

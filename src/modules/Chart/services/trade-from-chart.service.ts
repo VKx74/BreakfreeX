@@ -65,6 +65,42 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         this.refresh();
     }
 
+    public PlaceOrder(params: TradingChartDesigner.OrderParameters, callback: () => void): void {
+        if (this._brokerService.activeBroker instanceof MTBroker) {
+            const mtBroker = this._brokerService.activeBroker as MTBroker;
+            const orderConfig = MTOrderConfig.createLimit(mtBroker.instanceType);
+            const pricePrecision = mtBroker.instrumentDecimals(this._chart.instrument.symbol);
+            orderConfig.instrument = mtBroker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+
+            if (params.price) {
+                orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
+            }
+
+            if (params.sl) {
+                orderConfig.sl =  Math.roundToDecimals(params.sl, pricePrecision);
+                orderConfig.useSL = true;
+            }
+
+            if (params.tp) {
+                orderConfig.tp =  Math.roundToDecimals(params.tp, pricePrecision);
+                orderConfig.useTP = true;
+            }
+            
+            orderConfig.amount = params.size;
+            orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
+            this._dialog.open(MTOrderConfiguratorModalComponent, {
+                data: {
+                    tradeConfig: orderConfig,
+                    orderPlacedHandler: (order: MTPlaceOrder) => {
+                        if (callback) {
+                            callback();
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     public CloseOrder(id: any, callback: () => void): void {
         if (id.toString().startsWith("sl_")) {
             this.OrderPriceChange(id, null, callback);

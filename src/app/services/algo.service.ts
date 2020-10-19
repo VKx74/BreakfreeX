@@ -120,8 +120,7 @@ export interface IBFTAStrategyV2Response {
     bottom_ex2: number;
 }
 
-export interface IBFTAAlgoData {
-    clean: boolean;
+export interface IBFTALevels {
     ee: number;
     ee1: number;
     ee2: number;
@@ -151,6 +150,19 @@ export interface IBFTAAlgoData {
     m28: number;
     p18: number;
     p28: number;
+}
+
+export interface IBFTAAlgoInfo {
+    objective: string;
+    status: string;
+    suggestedrisk: string;
+    positionsize: string;
+    pas: string;
+    macrotrend: string;
+    n_currencySymbol: string;
+}
+
+export interface IBFTATrade {
     algo_TP2: number;
     algo_TP1_high: number;
     algo_TP1_low: number;
@@ -162,10 +174,27 @@ export interface IBFTAAlgoData {
     algo_Info: IBFTAAlgoInfo;
 }
 
+export interface IBFTATradeV2 {
+    trend: IBFTATrend;
+    type: IBFTATradeType;
+    tte: number;
+    tp: number;
+}
+
+export interface IBFTAAlgoResponse {
+    levels: IBFTALevels;
+    trade: IBFTATrade;
+}
+
+export interface IBFTAAlgoResponseV2 {
+    levels: IBFTALevels;
+    trade: IBFTATradeV2;
+}
+
 export interface IBFTASignal {
     timestamp: number;
     end_timestamp: number;
-    data: IBFTAAlgoData;
+    data: IBFTAAlgoResponse;
 }
 
 export interface IBFTASignalV2 {
@@ -217,7 +246,7 @@ export enum IBFTATradeType {
 export interface IBFTAExtHitTestSignal {
     timestamp: number;
     end_timestamp: number;
-    data: IBFTAAlgoData;
+    data: IBFTAAlgoResponse;
     topext1hit: boolean;
     topext2hit: boolean;
     bottomext1hit: boolean;
@@ -252,14 +281,12 @@ export class AlgoService {
         this.url = AppConfigService.config.apiUrls.bftAlgoREST;
     }
 
-    calculate(data: IBFTAlgoParameters): Observable<object> {
-        return this._http.post(`${this.url}calculate`, data).pipe(
-            catchError(error => {
-                return of({
-                    errorCode: error.status,
-                    description: error.error
-                });
-            }));
+    calculate(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponse> {
+        return this._http.post<IBFTAAlgoResponse>(`${this.url}calculate`, data);
+    }
+
+    calculateV2(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {
+        return this._http.post<IBFTAAlgoResponseV2>(`${this.url}calculate_v2`, data);
     }
     
     backtest(data: IBFTBacktestAlgoParameters): Observable<IBFTABacktestResponse> {

@@ -160,27 +160,27 @@ export class ExtensionHitTestComponent {
 
             // let lineEntry = this.generateLine(startDate, endDate, signal.data.algo_Entry, "#629320");
             let backColor = this.calculateProfitabilityColor(signal);
-            let backArea = this.generateRect(startDate, endDate, signal.data.p28, signal.data.m28, backColor);
+            let backArea = this.generateRect(startDate, endDate, signal.data.levels.p28, signal.data.levels.m28, backColor);
             // let topExt2 = this.generateLine(startDate, endDate, signal.data.p28, "#932b20");
             let topSL = this.generateLine(startDate, endDate, signal.top_sl, "#000000");
-            let resistence = this.generateLine(startDate, endDate, signal.data.ee, "#2e5e9a");
+            let resistence = this.generateLine(startDate, endDate, signal.data.levels.ee, "#2e5e9a");
             let topExt1;
-            if (signal.data.p18 === signal.top_entry) {
+            if (signal.data.levels.p18 === signal.top_entry) {
                 topExt1 = this.generateLine(startDate, endDate, signal.top_entry, "#932b20");
             } else {
-                topExt1 = this.generateRect(startDate, endDate, signal.data.p18, signal.top_entry, "#932b202f");
+                topExt1 = this.generateRect(startDate, endDate, signal.data.levels.p18, signal.top_entry, "#932b202f");
             }
 
             // let bottomExt2 = this.generateLine(startDate, endDate, signal.data.m28, "#3d9320");
             let bottomSL = this.generateLine(startDate, endDate, signal.bottom_sl, "#000000");
-            let support = this.generateLine(startDate, endDate, signal.data.ze, "#2e5e9a");
-            let trendText = this.generateText(startDate, signal.data.m28, signal.trend);
+            let support = this.generateLine(startDate, endDate, signal.data.levels.ze, "#2e5e9a");
+            let trendText = this.generateText(startDate, signal.data.levels.m28, signal.trend);
 
             let bottomExt1;
-            if (signal.data.p18 === signal.top_entry) {
+            if (signal.data.levels.p18 === signal.top_entry) {
                 bottomExt1 = this.generateLine(startDate, endDate, signal.bottom_entry, "#3d9320");
             } else {
-                bottomExt1 = this.generateRect(startDate, endDate, signal.data.m18, signal.bottom_entry, "#3d93202f");
+                bottomExt1 = this.generateRect(startDate, endDate, signal.data.levels.m18, signal.bottom_entry, "#3d93202f");
             }
 
             shapes.push(backArea);
