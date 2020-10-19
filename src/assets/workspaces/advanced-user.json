@@ -35,7 +35,7 @@
                   {
                     "id": "3",
                     "type": "component",
-                    "componentName": "breakfreeTradingNavigator",
+                    "componentName": "breakfreeTradingScanner",
                     "isClosable": true
                   }
                   

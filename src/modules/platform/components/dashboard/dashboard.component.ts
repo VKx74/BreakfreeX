@@ -23,19 +23,7 @@ import { AutoTradingEngine } from '@app/services/auto-trading-engine';
 import { WorkspaceRepository } from "@platform/services/workspace-repository.service";
 import { Workspace } from "@platform/data/workspaces";
 import { AlertService } from "@alert/services/alert.service";
-import { ThemeService } from "@app/services/theme.service";
-import { LinkingMessagesBus } from "@linking/services";
-import { TemplatesStorageService } from "@chart/services/templates-storage.service";
-import { PopupWindowSharedProvidersKey } from "../../../popup-window/constants";
-import { ISharedProviders } from "../../../popup-window/interfaces";
-import { TimeZoneManager } from "TimeZones";
-import { TemplatesDataProviderService } from "@chart/services/templates-data-provider.service";
-import { NewsConfigService } from "../../../News/services/news.config.service";
-import { EducationalTipsService } from "@app/services/educational-tips.service";
 import { BrokerService } from "@app/services/broker.service";
-import { InstrumentService } from "@app/services/instrument.service";
-import { RealtimeService } from "@app/services/realtime.service";
-import { HistoryService } from "@app/services/history.service";
 import { UserSettingsService } from "@app/services/user-settings/user-settings.service";
 import { ToggleBottomPanelSizeService } from "@platform/components/dashboard/toggle-bottom-panel-size.service";
 import {
@@ -248,8 +236,30 @@ export class DashboardComponent {
     }
 
     private _initializeLayout(state: IGoldenLayoutComponentState) {
+        try {
+            this._replaceBFTPanelWithSonar(state.content);
+        } catch (e) {
+
+        }
         this.layout.loadState(state);
         this._processLayoutReady();
+    }
+
+    private _replaceBFTPanelWithSonar(content: any) {
+        if (content instanceof Array) {
+            content.forEach((item) => {
+                this._replaceBFTPanelWithSonar(item);
+            });
+        } else {
+            if (content.type !== "component" && content.content instanceof Array) {
+                content.content.forEach((item) => {
+                    this._replaceBFTPanelWithSonar(item);
+                });
+            } else if (content.type === "component" && content.componentName === "breakfreeTradingNavigator") {
+                content.componentName = "breakfreeTradingScanner";
+                content.componentState = null;
+            }
+        }
     }
 
     private _saveLayoutState(async: boolean = true) {

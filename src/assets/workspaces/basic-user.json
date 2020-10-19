@@ -40,7 +40,7 @@
                   {
                     "id": "5",
                     "type": "component",
-                    "componentName": "breakfreeTradingNavigator",
+                    "componentName": "breakfreeTradingScanner",
                     "isClosable": true
                   }
 
