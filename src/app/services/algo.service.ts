@@ -189,6 +189,7 @@ export interface IBFTAAlgoResponse {
 export interface IBFTAAlgoResponseV2 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
+    size: number;
 }
 
 export interface IBFTASignal {
