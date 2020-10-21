@@ -373,7 +373,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             const history = data.items;
             this.scannerHistoryResults = [];
             for (const i of history) {
-                this.scannerHistoryResults.push({
+                this.scannerHistoryResults.unshift({
                     exchange: i.responseItem.exchange,
                     symbol: i.responseItem.symbol,
                     timeframe: i.responseItem.timeframe,
