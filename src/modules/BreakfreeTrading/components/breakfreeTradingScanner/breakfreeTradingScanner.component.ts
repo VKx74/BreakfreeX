@@ -354,6 +354,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     private _toTTE(tte: number): string {
+        if (!tte || !Number(tte)) {
+            return "Target hit";
+        }
         return `${tte} candles`;
     }
 
