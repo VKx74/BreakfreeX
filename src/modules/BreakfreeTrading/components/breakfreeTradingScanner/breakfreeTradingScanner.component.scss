@@ -4,6 +4,9 @@
 
 :host {
 
+  .bftScanner {
+    height: 100%;
+  }
   .output {
     position: relative;
     text-align: center;
@@ -27,6 +30,10 @@
     padding-left: 10px;
   }
 
+  /deep/ .mat-tab-body-wrapper { 
+    height: 100%;
+  }
+  
   /deep/ .mat-tab-label { 
     height: 26px !important;
   }

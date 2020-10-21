@@ -37,15 +37,22 @@ export interface IBFTScanInstrumentsResponseItem {
     type: IBFTATradeType;
     tte: number;
     tp: number;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
+}
+
+export interface IBFTScannerResponseHistoryItem
+{
+    responseItem: IBFTScanInstrumentsResponseItem;
+    time: number;
+    avgEntry: number;
 }
 
 export interface IBFTScanInstrumentsResponse {
     items: IBFTScanInstrumentsResponseItem[];
     scanning_time: number;
+}
+
+export interface IBFTScannerHistoryResponse {
+    items: IBFTScannerResponseHistoryItem[];
 }
 
 export interface IBFTAlgoParameters {
@@ -312,5 +319,9 @@ export class AlgoService {
 
     scanInstruments(segment: string): Observable<IBFTScanInstrumentsResponse> {
         return this._http.get<IBFTScanInstrumentsResponse>(`${this.url}scanner_results?segment=${segment}`);
+    }
+
+    scannerHistory(segment: string): Observable<IBFTScannerHistoryResponse> {
+        return this._http.get<IBFTScannerHistoryResponse>(`${this.url}scanner_history_results?segment=${segment}`);
     }
 }

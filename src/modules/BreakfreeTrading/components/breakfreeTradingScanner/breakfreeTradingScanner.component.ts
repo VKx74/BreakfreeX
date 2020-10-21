@@ -7,7 +7,7 @@ import bind from "bind-decorator";
 import { Observable } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import {AlertService} from "@alert/services/alert.service";
-import { AlgoService, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem } from '@app/services/algo.service';
+import { AlgoService, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem } from '@app/services/algo.service';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { InstrumentService } from '@app/services/instrument.service';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
@@ -20,14 +20,6 @@ import { CommoditiesWatchlist } from 'modules/Watchlist/services/commodities';
 import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
 import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
 import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
-
-// import {MajorForexWatchlist} from './majorForex';
-// import {ExoticsForexWatchlist} from './exoticForex';
-// import {IndicesWatchlist} from './indicaes';
-// import {EquitiesWatchlist} from './equities';
-// import {CommoditiesWatchlist} from './commodities';
-// import {BondsWatchlist} from './bonds';
-// import {MetalsWatchlist} from './metals';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -56,6 +48,10 @@ interface IScannerResults {
     trend: IBFTATrend;
 }
 
+interface IScannerHistoryResults extends IScannerResults {
+    time: string;
+}
+
 @Component({
     selector: 'BreakfreeTradingScanner',
     templateUrl: './breakfreeTradingScanner.component.html',
@@ -79,6 +75,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public scanningTime: string;
     public activeSegment: string;
     public scannerResults: IScannerResults[] = [];
+    public scannerHistoryResults: IScannerHistoryResults[] = [];
     public selectedScannerResult: IScannerResults;
     public output: string;
     
@@ -139,7 +136,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             }
         }, (error) => {
             this.output = "Failed to scan";
-        });
+        }); 
+        
+        this._loadHistory();
     }
 
     @bind
@@ -303,7 +302,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 type: this._getType(i),
                 trend: i.trend
             });
-        }
+        }  
 
         this.scannerResults = res;
     }
@@ -317,23 +316,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             this._loaded.push(i);
             
         }
-
-        // test
-        // for (let i = 0; i < 10; i++) {
-        //     this._loaded.push({
-        //         exchange: "Oanda",
-        //         symbol: i + "Symbol",
-        //         trend: IBFTATrend.Down,
-        //         timeframe: 900,
-        //         tp: 7,
-        //         tte: 15,
-        //         type: IBFTATradeType.EXT,
-        //         close: 0,
-        //         open: 0,
-        //         high: 0,
-        //         low: 0
-        //     });
-        // }
         this._reloadData();
     }
 
@@ -384,6 +366,29 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             case 240 * 60: return "4 Hours";
         }
         return "Undefined";
+    }
+
+    private _loadHistory() {
+        this._alogService.scannerHistory(this.activeSegment).subscribe((data: IBFTScannerHistoryResponse) => {
+            const history = data.items;
+            this.scannerHistoryResults = [];
+            for (const i of history) {
+                this.scannerHistoryResults.push({
+                    exchange: i.responseItem.exchange,
+                    symbol: i.responseItem.symbol,
+                    timeframe: i.responseItem.timeframe,
+                    tp: this._toTP(i.responseItem.tp),
+                    tte: this._toTTE(i.responseItem.tte),
+                    volatility: this._toVolatility(i.responseItem.tp),
+                    marketType: this._getMarketType(i.responseItem.symbol),
+                    type: this._getType(i.responseItem),
+                    trend: i.responseItem.trend,
+                    time: new Date(i.time * 1000).toLocaleString()
+                });
+            }
+        }, (error) => {
+            // this.output = "Failed to scan";
+        });
     }
 }
 
