@@ -15,19 +15,6 @@ export interface ITimeFrame {
     periodicity: string;
 }
 
-export interface IBFTScanInstrumentParameters {
-    instrument: IInstrument;
-}
-
-export interface IBFTScanInstrumentResponse {
-    trend: IBFTATrend;
-    tte_15: number;
-    tte_60: number;
-    tte_240: number;
-    tp_15: number;
-    tp_60: number;
-    tp_240: number;
-}
 
 export interface IBFTScanInstrumentsResponseItem {
     symbol: string;
@@ -37,6 +24,8 @@ export interface IBFTScanInstrumentsResponseItem {
     type: IBFTATradeType;
     tte: number;
     tp: number;
+    entry: number;
+    stop: number;
 }
 
 export interface IBFTScannerResponseHistoryItem
@@ -248,7 +237,8 @@ export enum IBFTATrend {
 
 export enum IBFTATradeType {
     EXT = "EXT",
-    Swing = "Swing"
+    Swing = "Swing",
+    BRC = "BRC"
 }
 
 export interface IBFTAExtHitTestSignal {
@@ -311,10 +301,6 @@ export class AlgoService {
     
     calculateRTD(data: any): Observable<IRTDPayload> {
         return this._http.post<IRTDPayload>(`${this.url}rtd`, data);
-    }
-
-    scanInstrument(data: IBFTScanInstrumentParameters): Observable<IBFTScanInstrumentResponse> {
-        return this._http.post<IBFTScanInstrumentResponse>(`${this.url}scan_instrument`, data);
     }
 
     scanInstruments(segment: string): Observable<IBFTScanInstrumentsResponse> {
