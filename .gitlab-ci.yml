@@ -7,7 +7,7 @@ stages:
     before_script:
         - cp ./.npmrc.template ./.npmrc;
         - sed -i -e "s~TOKEN~$NPM_TOKEN~g" .npmrc;
-        - cat .npmrc
+        #- cat .npmrc
 
 analize-app:
     image: node:12.8.0-alpine
@@ -33,6 +33,9 @@ build-app-stage:
     NODE_OPTIONS: --max_old_space_size=8192
   script:
     - chmod 777 -R ./
+    - echo "NPM Cleanup"
+    - rm -rf node_modules
+    - npm cache clean --force
     - echo "NPM Install Chart"
     - npm i trading-chart-designer 
     - echo "NPM Install"
@@ -50,7 +53,7 @@ build-app-stage:
 #     - web
 
 build-app-prod:
-  image: node:latest
+  image: node:12.8.0-alpine
   stage: build
   <<: *npmrc-settings-job
   variables:
