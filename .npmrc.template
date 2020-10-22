@@ -1,3 +1,4 @@
 registry=https://nexus.breakfreetrading.com/repository/bft_npm
 save-exact=true
-//nexus.breakfreetrading.com/repository/:_authToken=TOKEN
+email=npm_user@test.com
+_auth=bnBtX3VzZXI6enNkZmpoc2EyMzRhc2Q=
