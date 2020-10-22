@@ -6,8 +6,8 @@ stages:
 .npmrc-settings-job: &npmrc-settings-job
     before_script:
         - cp ./.npmrc.template ./.npmrc;
-        - sed -i -e "s~TOKEN~$NPM_TOKEN~g" .npmrc;
-        #- cat .npmrc
+        # - sed -i -e "s~TOKEN~$NPM_TOKEN~g" .npmrc;
+        - cat .npmrc
 
 analize-app:
     image: node:12.8.0-alpine
