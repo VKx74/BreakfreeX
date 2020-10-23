@@ -703,6 +703,8 @@ export abstract class MTBroker implements IMTBroker {
             }
         }
 
+        this._buildPositions();
+
         if (changedOrders.length && !updateRequired) {
             this.onOrdersParametersUpdated.next(changedOrders);
         }
@@ -711,8 +713,6 @@ export abstract class MTBroker implements IMTBroker {
             this.onOrdersUpdated.next(this._orders);
             this._loadHistory();
         }
-
-        this._buildPositions();
     }
 
     protected _createOrder(data: IMTOrderData): MTOrder {
