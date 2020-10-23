@@ -25,6 +25,12 @@
 <div class="controls">
     <mt-account-info-bar class="info-bar"></mt-account-info-bar>
     <div>
+        <button (click)="cancelAllPending()"
+                style="margin:10px"
+                [disabled]="!brokerConnected"
+                *ngIf="this.selectedTabIndex === 2"
+                class="crypto-button crypto-button_success">Cancel All
+        </button> 
         <button (click)="placeOrder()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"

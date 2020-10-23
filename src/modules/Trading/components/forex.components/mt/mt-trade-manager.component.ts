@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Injector, ViewChild } from "@angular/core";
 import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
@@ -17,6 +17,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'mt-trade-manager',
@@ -33,14 +34,14 @@ export class MTTradeManagerComponent {
     protected linker: Linker;
     
     selectedTabIndex: number;
-
+    
     get linkerColor(): string {
         return this.linker.getLinkingId();
     }
 
     get brokerConnected(): boolean {
         return this._broker != null;
-    }
+    }  
 
     get positionsAmount(): number {
         const mt5Broker = this.brokerService.activeBroker as MTBroker;
@@ -91,6 +92,18 @@ export class MTTradeManagerComponent {
 
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();
+    }
+
+    cancelAllPending() {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Cancel orders',
+                message: `Do you want to cancel all pending orders?`,
+                onConfirm: () => {
+                   this._cancelAllPending();
+                }
+            }
+        });
     }
 
     placeOrder() {
@@ -191,6 +204,21 @@ export class MTTradeManagerComponent {
             }
         }, (error) => {
             this._alertService.warning("Failed to reconnect to broker");
+        });
+    }
+
+    private _cancelAllPending() {
+        this._alertService.info("Canceling");
+        const pending =  this._broker.pendingOrders;
+        const subjects = [];
+        for (const order of pending) {
+            const subj = this._broker.cancelOrder(order.Id, OrderFillPolicy.FOK);
+            subjects.push(subj);
+        }
+        combineLatest(subjects).subscribe((response) => {
+            this._alertService.success("Canceled");
+          }, (error) => {
+            // this._alertService.info("Error to cancel one of the orders");
         });
     }
 }
