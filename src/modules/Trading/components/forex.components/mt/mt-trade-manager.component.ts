@@ -41,6 +41,10 @@ export class MTTradeManagerComponent {
 
     get brokerConnected(): boolean {
         return this._broker != null;
+    }   
+    
+    get showCancelAll(): boolean {
+        return this.selectedTabIndex === 2 && this._broker.pendingOrders && this._broker.pendingOrders.length > 0;
     }  
 
     get positionsAmount(): number {

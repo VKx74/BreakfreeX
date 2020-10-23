@@ -28,7 +28,7 @@
         <button (click)="cancelAllPending()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                *ngIf="this.selectedTabIndex === 2"
+                *ngIf="showCancelAll"
                 class="crypto-button crypto-button_success">Cancel All
         </button> 
         <button (click)="placeOrder()"
