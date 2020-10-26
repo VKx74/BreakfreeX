@@ -322,7 +322,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _getType(item: IBFTScanInstrumentsResponseItem | IFeaturedResult): string {
         const tf = this._toTimeframe(item.timeframe);
         const ud = item.trend === IBFTATrend.Up ? "U" : "D";
-        return `${item.type}_${ud}_${tf}`;
+        let type = item.type.toString();
+        if (type === IBFTATradeType.SwingExt || type === IBFTATradeType.SwingN) {
+            type = "SWING";
+        }
+        return `${type}_${ud}_${tf}`;
     }
 
     private _getMarketType(symbol: string): string {
@@ -367,6 +371,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             case 15 * 60: return "15 Min";
             case 60 * 60: return "1 Hour";
             case 240 * 60: return "4 Hours";
+            case 24 * 60 * 60: return "Daily";
         }
         return "Undefined";
     }

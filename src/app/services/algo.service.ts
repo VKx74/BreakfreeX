@@ -242,7 +242,8 @@ export enum IBFTATrend {
 
 export enum IBFTATradeType {
     EXT = "EXT",
-    Swing = "Swing",
+    SwingN = "SwingN",
+    SwingExt = "SwingExt",
     BRC = "BRC"
 }
 
