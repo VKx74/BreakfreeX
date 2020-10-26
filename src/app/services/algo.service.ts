@@ -285,24 +285,24 @@ class AlgoServiceEncryptionHelper {
 
 
     static encrypt(msg) {
-        var salt = CryptoJS.lib.WordArray.random(this.saltSize / 8);
+        let salt = CryptoJS.lib.WordArray.random(this.saltSize / 8);
 
-        var key = CryptoJS.PBKDF2(this.password, salt, {
+        let key = CryptoJS.PBKDF2(this.password, salt, {
             keySize: this.keySize / 32,
             iterations: this.iterations
         });
 
-        var iv = CryptoJS.lib.WordArray.random(this.ivSize / 8);
+        let iv = CryptoJS.lib.WordArray.random(this.ivSize / 8);
 
-        var encrypted = CryptoJS.AES.encrypt(msg, key, {
+        let encrypted = CryptoJS.AES.encrypt(msg, key, {
             iv: iv,
             padding: CryptoJS.pad.Pkcs7,
             mode: CryptoJS.mode.CBC
 
         });
 
-        var encryptedHex = this.base64ToHex(encrypted.toString());
-        var base64result = this.hexToBase64(salt + iv + encryptedHex);
+        let encryptedHex = this.base64ToHex(encrypted.toString());
+        let base64result = this.hexToBase64(salt + iv + encryptedHex);
 
 
         return base64result;
@@ -310,23 +310,23 @@ class AlgoServiceEncryptionHelper {
 
     static decrypt(transitmessage) {
 
-        var hexResult = this.base64ToHex(transitmessage)
+        let hexResult = this.base64ToHex(transitmessage);
 
-        var salt = CryptoJS.enc.Hex.parse(hexResult.substr(0, 64));
-        var iv = CryptoJS.enc.Hex.parse(hexResult.substr(64, 32));
-        var encrypted = this.hexToBase64(hexResult.substring(96));
+        let salt = CryptoJS.enc.Hex.parse(hexResult.substr(0, 64));
+        let iv = CryptoJS.enc.Hex.parse(hexResult.substr(64, 32));
+        let encrypted = this.hexToBase64(hexResult.substring(96));
 
-        var key = CryptoJS.PBKDF2(this.password, salt, {
+        let key = CryptoJS.PBKDF2(this.password, salt, {
             keySize: this.keySize / 32,
             iterations: this.iterations
         });
 
-        var decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+        let decrypted = CryptoJS.AES.decrypt(encrypted, key, {
             iv: iv,
             padding: CryptoJS.pad.Pkcs7,
             mode: CryptoJS.mode.CBC
 
-        })
+        });
 
         return decrypted.toString(CryptoJS.enc.Utf8);
     }
@@ -341,8 +341,8 @@ class AlgoServiceEncryptionHelper {
     }
 
     static base64ToHex(str) {
-        for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; ++i) {
-            var tmp = bin.charCodeAt(i).toString(16);
+        for (let i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; ++i) {
+            let tmp = bin.charCodeAt(i).toString(16);
             if (tmp.length === 1) tmp = "0" + tmp;
             hex[hex.length] = tmp;
         }
