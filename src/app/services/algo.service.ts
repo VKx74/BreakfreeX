@@ -1,9 +1,11 @@
-import {Injectable} from "@angular/core";
-import {IInstrument} from "../models/common/instrument";
-import {Observable, of} from "rxjs";
-import {catchError} from "rxjs/operators";
-import {HttpClient} from '@angular/common/http';
-import {AppConfigService} from './app.config.service';
+import { Injectable } from "@angular/core";
+import { IInstrument } from "../models/common/instrument";
+import { Observable, of } from "rxjs";
+import { catchError, map } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
+import { AppConfigService } from './app.config.service';
+
+import * as CryptoJS from 'crypto-js';
 
 export enum TrendDetectorType {
     hma = "hma",
@@ -28,8 +30,7 @@ export interface IBFTScanInstrumentsResponseItem {
     stop: number;
 }
 
-export interface IBFTScannerResponseHistoryItem
-{
+export interface IBFTScannerResponseHistoryItem {
     responseItem: IBFTScanInstrumentsResponseItem;
     time: number;
     avgEntry: number;
@@ -96,14 +97,14 @@ export interface IBFTAAlgoInfo {
     n_currencySymbol: string;
 }
 
-export interface IBFTAStrategyV2Entry { 
+export interface IBFTAStrategyV2Entry {
     entry: number;
     stop: number;
     limit: number;
     is_buy: boolean;
 }
 
-export interface IBFTAStrategyV2Response { 
+export interface IBFTAStrategyV2Response {
     trade_sr: IBFTAStrategyV2Entry;
     trade_ex1: IBFTAStrategyV2Entry;
     trend: IBFTATrend;
@@ -186,6 +187,10 @@ export interface IBFTAAlgoResponseV2 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
     size: number;
+}
+
+export interface IBFTAEncryptedResponse {
+    data: string;
 }
 
 export interface IBFTASignal {
@@ -271,6 +276,80 @@ export interface IRTDPayload {
     slow_2: number[];
 }
 
+class AlgoServiceEncryptionHelper {
+    private static keySize = 256;
+    private static ivSize = 128;
+    private static saltSize = 256;
+    private static iterations = 1000;
+    private static password = "Adfwe2fsdf";
+
+
+    static encrypt(msg) {
+        var salt = CryptoJS.lib.WordArray.random(this.saltSize / 8);
+
+        var key = CryptoJS.PBKDF2(this.password, salt, {
+            keySize: this.keySize / 32,
+            iterations: this.iterations
+        });
+
+        var iv = CryptoJS.lib.WordArray.random(this.ivSize / 8);
+
+        var encrypted = CryptoJS.AES.encrypt(msg, key, {
+            iv: iv,
+            padding: CryptoJS.pad.Pkcs7,
+            mode: CryptoJS.mode.CBC
+
+        });
+
+        var encryptedHex = this.base64ToHex(encrypted.toString());
+        var base64result = this.hexToBase64(salt + iv + encryptedHex);
+
+
+        return base64result;
+    }
+
+    static decrypt(transitmessage) {
+
+        var hexResult = this.base64ToHex(transitmessage)
+
+        var salt = CryptoJS.enc.Hex.parse(hexResult.substr(0, 64));
+        var iv = CryptoJS.enc.Hex.parse(hexResult.substr(64, 32));
+        var encrypted = this.hexToBase64(hexResult.substring(96));
+
+        var key = CryptoJS.PBKDF2(this.password, salt, {
+            keySize: this.keySize / 32,
+            iterations: this.iterations
+        });
+
+        var decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+            iv: iv,
+            padding: CryptoJS.pad.Pkcs7,
+            mode: CryptoJS.mode.CBC
+
+        })
+
+        return decrypted.toString(CryptoJS.enc.Utf8);
+    }
+
+    static hexToBase64(str) {
+        const d =  str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ");
+        let s = "";
+        for (const i of d) {
+            s += String.fromCharCode(i);
+        }
+        return btoa(s);
+    }
+
+    static base64ToHex(str) {
+        for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; ++i) {
+            var tmp = bin.charCodeAt(i).toString(16);
+            if (tmp.length === 1) tmp = "0" + tmp;
+            hex[hex.length] = tmp;
+        }
+        return hex.join("");
+    }
+}
+
 @Injectable()
 export class AlgoService {
     private url: string;
@@ -280,34 +359,39 @@ export class AlgoService {
     }
 
     calculate(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponse> {
-        return this._http.post<IBFTAAlgoResponse>(`${this.url}calculate`, data);
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate`, data).pipe(map(this._decrypt));
     }
 
     calculateV2(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {
-        return this._http.post<IBFTAAlgoResponseV2>(`${this.url}calculate_v2`, data);
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v2`, data).pipe(map(this._decrypt));
     }
-    
+
     backtest(data: IBFTBacktestAlgoParameters): Observable<IBFTABacktestResponse> {
-        return this._http.post<IBFTABacktestResponse>(`${this.url}backtest`, data);
-    } 
-    
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}backtest`, data).pipe(map(this._decrypt));
+    }
+
     backtestV2(data: IBFTBacktestV2AlgoParameters): Observable<IBFTABacktestV2Response> {
-        return this._http.post<IBFTABacktestV2Response>(`${this.url}strategy_v2_backtest`, data);
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}strategy_v2_backtest`, data).pipe(map(this._decrypt));
     }
 
     extHitTest(data: IBFTAHitTestAlgoParameters): Observable<IBFTAExtHitTestResult> {
-        return this._http.post<IBFTAExtHitTestResult>(`${this.url}hittest_ext`, data);
-    } 
-    
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}hittest_ext`, data).pipe(map(this._decrypt));
+    }
+
     calculateRTD(data: any): Observable<IRTDPayload> {
-        return this._http.post<IRTDPayload>(`${this.url}rtd`, data);
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
     }
 
     scanInstruments(segment: string): Observable<IBFTScanInstrumentsResponse> {
-        return this._http.get<IBFTScanInstrumentsResponse>(`${this.url}scanner_results?segment=${segment}`);
+        return this._http.get<IBFTAEncryptedResponse>(`${this.url}scanner_results?segment=${segment}`).pipe(map(this._decrypt));
     }
 
     scannerHistory(segment: string): Observable<IBFTScannerHistoryResponse> {
-        return this._http.get<IBFTScannerHistoryResponse>(`${this.url}scanner_history_results?segment=${segment}`);
+        return this._http.get<IBFTAEncryptedResponse>(`${this.url}scanner_history_results?segment=${segment}`).pipe(map(this._decrypt));
+    }
+
+    private _decrypt(encrypted: IBFTAEncryptedResponse): any {
+        const decrypted = AlgoServiceEncryptionHelper.decrypt(encrypted.data);
+        return JSON.parse(decrypted);
     }
 }
