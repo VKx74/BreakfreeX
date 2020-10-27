@@ -3,6 +3,9 @@
 @import "global-styles/variables";
 
 :host {
+  .tf-select {
+    margin-left: 20px;
+  }
 
   .bftScanner {
     height: 100%;
@@ -14,26 +17,29 @@
   }
   .scanning-time {
     font-size: 11px;
-    margin: 2px 8px;
+    margin: 4px 8px;
+    text-align: right;
   }
   .top-line {
-    display: none !important;
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-
     height: 50px;
     flex-shrink: 0;
     padding-left: 10px;
+    border: none;
   }
 
   /deep/ .mat-tab-body-wrapper { 
     height: 100%;
   }
   
+  /deep/ .mat-tab-labels { 
+    background-color: transparent;
+  }
+
   /deep/ .mat-tab-label { 
     height: 26px !important;
   }

@@ -1,37 +1,32 @@
 <div class="bftScanner">
+   <div class="top-line flex justify-content-left">
+      <div class="segment-select">
+         <mat-form-field floatLabel="never" class="crypto-select full-width">
+            <mat-select (selectionChange)="segmentSelected($event.value)" [value]="activeSegment">
+               <mat-option *ngFor="let option of segments" [value]="option">
+                  {{option}}
+               </mat-option>
+            </mat-select>
+         </mat-form-field>
+      </div>
+      <div class="tf-select">
+         <mat-form-field floatLabel="never" class="crypto-select full-width">
+            <mat-select (selectionChange)="timeframeSelected($event.value)" [value]="activeTimeframe">
+               <mat-option *ngFor="let option of timeframes" [value]="option">
+                  {{option}}
+               </mat-option>
+            </mat-select>
+         </mat-form-field>
+      </div>
+   </div>
+
+   <div class="scanning-time">Scanned: {{scanningTime}}</div>
+
    <mat-tab-group class="full-height tabs">
       <mat-tab label="Realtime"> 
-         <div class="top-line flex justify-space-between">
-            <div>
-               <mat-form-field floatLabel="never" class="crypto-select full-width">
-                  <mat-select (selectionChange)="segmentSelected($event.value)" [value]="activeSegment">
-                     <mat-option *ngFor="let option of segments" [value]="option">
-                        {{option}}
-                     </mat-option>
-                  </mat-select>
-               </mat-form-field>
-            </div>
-            <div class="flex justify-flex-end">
-               <div class="scanning-time">Scanned: {{scanningTime}}</div>
-               <div class="crypto-button-icon">
-                  <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
-               </div>
-               <mat-menu #menu="matMenu">
-                  <!-- <button [class.active]="viewMode === ViewMode.Table" mat-menu-item
-                            (click)="setViewMode(ViewMode.Table)">
-                        {{'watchList.tableView' | translate}}
-                    </button>
-      
-                    <button [class.active]="viewMode === ViewMode.Tile" mat-menu-item (click)="setViewMode(ViewMode.Tile)">
-                        {{'watchList.tilesView' | translate}}
-                    </button> -->
-               </mat-menu>
-            </div>
-         </div>
-         <div class="scanning-time">Scanned: {{scanningTime}}</div>
          <div class="content-wrapper flex-grow-1 h-0">
             <div class="full-height padding-wrapper">
-               <data-table #dataTableComponent [rows]="scannerResults" [selectable]="true" [expandOnClick]="false"
+               <data-table #dataTableComponent [rows]="scannerResultsFiltered" [selectable]="true" [expandOnClick]="false"
                   [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
                   (onRowSelect)="handleScannerResultsClick($event)" [groups]="groups" [groupingField]="groupingField">
       
@@ -89,7 +84,7 @@
       </mat-tab> 
       <mat-tab label="History"> 
          <div class="full-height padding-wrapper">
-            <data-table #dataTableComponent [rows]="scannerHistoryResults" [selectable]="true" [expandOnClick]="false"
+            <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true" [expandOnClick]="false"
                [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
                (onRowSelect)="handleScannerResultsClick($event)">
    

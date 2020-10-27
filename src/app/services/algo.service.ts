@@ -385,12 +385,12 @@ export class AlgoService {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
     }
 
-    scanInstruments(segment: string): Observable<IBFTScanInstrumentsResponse> {
-        return this._http.get<IBFTAEncryptedResponse>(`${this.url}scanner_results?segment=${segment}`).pipe(map(this._decrypt));
+    scanInstruments(): Observable<IBFTScanInstrumentsResponse> {
+        return this._http.get<IBFTAEncryptedResponse>(`${this.url}scanner_results`).pipe(map(this._decrypt));
     }
 
-    scannerHistory(segment: string): Observable<IBFTScannerHistoryResponse> {
-        return this._http.get<IBFTAEncryptedResponse>(`${this.url}scanner_history_results?segment=${segment}`).pipe(map(this._decrypt));
+    scannerHistory(): Observable<IBFTScannerHistoryResponse> {
+        return this._http.get<IBFTAEncryptedResponse>(`${this.url}scanner_history_results`).pipe(map(this._decrypt));
     }
 
     private _decrypt(encrypted: IBFTAEncryptedResponse): any {

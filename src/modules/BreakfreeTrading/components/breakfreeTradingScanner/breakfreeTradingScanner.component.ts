@@ -33,6 +33,7 @@ interface IFeaturedResult {
     marketType: string;
     color: string;
     trend: IBFTATrend;
+    origType: IBFTATradeType;
 }
 
 interface IScannerResults {
@@ -46,10 +47,25 @@ interface IScannerResults {
     volatility: string;
     marketType: string;
     trend: IBFTATrend;
+    origType: IBFTATradeType;
 }
 
 interface IScannerHistoryResults extends IScannerResults {
     time: string;
+}
+
+enum TimeFrames {
+    All = "All",
+    Min15 = "15 Min",
+    Hour1 = "1 Hour",
+    Hour4 = "4 Hours",
+    Day = "Daily",
+}
+enum TradeTypes {
+    All = "All",
+    Ext = "Extensions",
+    BRC = "Break retest continuation", 
+    Swing = "Swing"
 }
 
 @Component({
@@ -58,7 +74,6 @@ interface IScannerHistoryResults extends IScannerResults {
     styleUrls: ['./breakfreeTradingScanner.component.scss']
 })
 export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
-
     static componentName = 'BreakfreeTradingScanner';
     static previewImgClass = 'crypto-icon-watchlist';
 
@@ -69,13 +84,18 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _otherGroupName: string = "Other";
     private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
 
-    public segments: string[] = ["Forex", "Stoks"];
+    public SWING = 'SWING';
+    public segments: TradeTypes[] = [TradeTypes.All, TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
+    public timeframes: TimeFrames[] = [TimeFrames.All, TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
     public groupingField: string = "marketType";
     public groups: string[] = [];
     public scanningTime: string;
-    public activeSegment: string;
+    public activeSegment: TradeTypes = TradeTypes.All;
+    public activeTimeframe: TimeFrames = TimeFrames.All;
     public scannerResults: IScannerResults[] = [];
+    public scannerResultsFiltered: IScannerResults[] = [];
     public scannerHistoryResults: IScannerHistoryResults[] = [];
+    public scannerHistoryResultsFiltered: IScannerHistoryResults[] = [];
     public selectedScannerResult: IScannerResults;
     public output: string;
     
@@ -103,6 +123,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
+        this.scanMarkets();
         this._timer = setInterval(() => {
             this.scanMarkets();
         }, 1000 * 60 * 2);
@@ -110,23 +131,25 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         super.setTitle(
             this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
         );
-        this.segmentSelected(this.segments[0]);
     }
 
-    segmentSelected(item: string) {
+    segmentSelected(item: TradeTypes) {
         this.activeSegment = item;
-        this.scanMarkets();
+        this._filterResults(false);
+        this._filterResults(true);
+    }
+
+    timeframeSelected(item: TimeFrames) {
+        this.activeTimeframe = item;
+        this._filterResults(false);
+        this._filterResults(true);
     }
 
     scanMarkets() {
-        if (!this.activeSegment) {
-            return;
-        }
-
         this.output = "Scanning...";
         this.scannerResults = [];
 
-        this._alogService.scanInstruments(this.activeSegment).subscribe((data: IBFTScanInstrumentsResponse) => {
+        this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
             this.scanningTime = new Date(data.scanning_time * 1000).toUTCString();
             this._processData(data.items);
             if (!this.scannerResults.length) {
@@ -226,6 +249,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             timeframe: loaded.timeframe,
             type: loaded.type,
             trend: loaded.trend,
+            origType: loaded.type
         });
     }
     
@@ -282,7 +306,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 marketType: this._featuredGroupName,
                 type: loaded ? this._getType(loaded) : this._getType(i),
                 trend: loaded ? loaded.trend : i.trend,
-                color: i.color
+                color: i.color,
+                origType: i.origType
             });
         }  
         
@@ -300,19 +325,62 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 volatility: this._toVolatility(i.tp),
                 marketType: this._getMarketType(i.symbol),
                 type: this._getType(i),
-                trend: i.trend
+                trend: i.trend,
+                origType: i.type
             });
         }  
 
         this.scannerResults = res;
+        this._filterResults(false);
+    }
+
+    private _filterResults(isHistory: boolean) {
+        const filteringData = isHistory ? this.scannerHistoryResults : this.scannerResults;
+        const filteredBySegments = [];
+        for (const i of filteringData) {
+            if (this.activeSegment === TradeTypes.All) {
+                filteredBySegments.push(i);
+            } else if (this.activeSegment === TradeTypes.Ext && i.origType === IBFTATradeType.EXT) {
+                filteredBySegments.push(i);
+            } else if (this.activeSegment === TradeTypes.BRC && i.origType === IBFTATradeType.BRC) {
+                filteredBySegments.push(i);
+            } else if (this.activeSegment === TradeTypes.Swing && (i.origType === IBFTATradeType.SwingExt || i.origType === IBFTATradeType.SwingN)) {
+                filteredBySegments.push(i);
+            }
+        }
+        const filteredByTimeframes = [];
+        for (const i of filteredBySegments) {
+            if (this.activeTimeframe === TimeFrames.All) {
+                filteredByTimeframes.push(i);
+            } else {
+                const tfValue = this._getTfValue();
+
+                if (tfValue === i.timeframe) {
+                    filteredByTimeframes.push(i);
+                }
+            }
+        }
+
+        if (isHistory) {
+            this.scannerHistoryResultsFiltered = filteredByTimeframes;
+        } else {
+            this.scannerResultsFiltered = filteredByTimeframes;
+        }
+    }
+
+    private _getTfValue(): number {
+        const min = 60;
+        switch (this.activeTimeframe) {
+            case TimeFrames.Min15: return min * 15;
+            case TimeFrames.Hour1: return min * 60;
+            case TimeFrames.Hour4: return min * 60 * 4;
+            case TimeFrames.Day: return min * 60 * 24;
+        }
     }
     
     private _processData(items: IBFTScanInstrumentsResponseItem[]) {
         this._loaded = [];
         for (const i of items) {
-            if (i.tte > 50) {
-                continue;
-            }
             this._loaded.push(i);
             
         }
@@ -324,7 +392,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         const ud = item.trend === IBFTATrend.Up ? "U" : "D";
         let type = item.type.toString();
         if (type === IBFTATradeType.SwingExt || type === IBFTATradeType.SwingN) {
-            type = "SWING";
+            type = this.SWING;
         }
         return `${type}_${ud}_${tf}`;
     }
@@ -377,7 +445,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     private _loadHistory() {
-        this._alogService.scannerHistory(this.activeSegment).subscribe((data: IBFTScannerHistoryResponse) => {
+        this._alogService.scannerHistory().subscribe((data: IBFTScannerHistoryResponse) => {
             const history = data.items;
             this.scannerHistoryResults = [];
             for (const i of history) {
@@ -391,9 +459,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                     marketType: this._getMarketType(i.responseItem.symbol),
                     type: this._getType(i.responseItem),
                     trend: i.responseItem.trend,
-                    time: new Date(i.time * 1000).toLocaleString()
+                    time: new Date(i.time * 1000).toLocaleString(),
+                    origType: i.responseItem.type
                 });
             }
+            this._filterResults(true);
         }, (error) => {
             // this.output = "Failed to scan";
         });
