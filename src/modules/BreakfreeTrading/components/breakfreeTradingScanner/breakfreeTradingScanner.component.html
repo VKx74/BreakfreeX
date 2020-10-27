@@ -86,7 +86,7 @@
          <div class="full-height padding-wrapper">
             <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true" [expandOnClick]="false"
                [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
-               (onRowSelect)="handleScannerResultsClick($event)">
+               (onRowSelect)="handleScannerResultsClick($event, true)">
    
                <data-table-header-cell columnName="symbol" [sortable]="true">
                   {{'instrument' | translate}}

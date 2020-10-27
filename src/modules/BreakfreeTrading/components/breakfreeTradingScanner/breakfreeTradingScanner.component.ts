@@ -52,6 +52,7 @@ interface IScannerResults {
 
 interface IScannerHistoryResults extends IScannerResults {
     time: string;
+    date: Date;
 }
 
 enum TimeFrames {
@@ -169,13 +170,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         return this._bftTranslateService.get(columnName);
     }
 
-    handleScannerResultsClick(scannerVM: IScannerResults) {
-        this.selectVMItem(scannerVM);
+    handleScannerResultsClick(scannerVM: IScannerResults, isHistoricalRecord: boolean = false) {
+        this.selectVMItem(scannerVM, isHistoricalRecord);
     }
 
-    selectVMItem(scannerVM: IScannerResults) {
+    selectVMItem(scannerVM: IScannerResults, isHistoricalRecord: boolean) {
         this.selectedScannerResult = scannerVM;
-        this._sendInstrumentChange(scannerVM);
+        this._sendInstrumentChange(scannerVM, isHistoricalRecord);
     }
 
     ngOnDestroy() {
@@ -263,7 +264,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._featured.splice(index, 1);
     }
 
-    private _sendInstrumentChange(scannerVM: IScannerResults) {
+    private _sendInstrumentChange(scannerVM: IScannerResults, isHistoricalRecord: boolean) {
         // just oanda supported
         this._instrumentService.getInstruments(EExchangeInstance.OandaExchange, scannerVM.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
@@ -279,11 +280,17 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 }
             }
 
+            let date = null;
+            if (isHistoricalRecord && (scannerVM as any).date) {
+                date = (scannerVM as any).date;
+            }
+
             const linkAction: LinkingAction = {
                 type: Actions.ChangeInstrumentAndTimeframe,
                 data: {
                     instrument: instrument,
-                    timeframe: scannerVM.timeframe
+                    timeframe: scannerVM.timeframe,
+                    replayDate: date
                 }
             };
             this.linker.sendAction(linkAction);
@@ -449,6 +456,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             const history = data.items;
             this.scannerHistoryResults = [];
             for (const i of history) {
+                const date = new Date(i.time * 1000);
                 this.scannerHistoryResults.unshift({
                     exchange: i.responseItem.exchange,
                     symbol: i.responseItem.symbol,
@@ -459,8 +467,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                     marketType: this._getMarketType(i.responseItem.symbol),
                     type: this._getType(i.responseItem),
                     trend: i.responseItem.trend,
-                    time: new Date(i.time * 1000).toLocaleString(),
-                    origType: i.responseItem.type
+                    time: date.toLocaleString(),
+                    origType: i.responseItem.type,
+                    date: date
                 });
             }
             this._filterResults(true);

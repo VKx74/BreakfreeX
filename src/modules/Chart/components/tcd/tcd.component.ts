@@ -46,6 +46,12 @@ declare let defaultTheme: any;
 declare let darkTheme: any;
 declare let fintatechDarkTheme: any;
 
+interface ReplayWaiter {
+    instrument: string;
+    tf: number;
+    date: any;
+}
+
 @Component({
     selector: 'tcd',
     templateUrl: 'tcd.component.html',
@@ -68,6 +74,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
     
     static componentName = 'Trading Chart Designer';
     static previewImgClass = 'crypto-icon-chart';
+
+    private replayWaiter: ReplayWaiter;
 
     chart: TradingChartDesigner.Chart;
     // linksList: TradingChartDesigner.IHelpLinks;
@@ -250,6 +258,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS, this.setDefaultSettings.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.SAVE_SESSION, this.saveSession.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED, this.instrumentChanged.bind(this));
+            this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barsLoaded.bind(this));
 
             if (!state) {
                 let isProAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
@@ -307,6 +316,20 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     protected instrumentChanged(eventObject: TradingChartDesigner.IValueChangedEvent) {
         this._tradingFromChartHandler.refresh();
+    }
+
+    protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        if (this.replayWaiter) {
+            if (this.chart.instrument.id === this.replayWaiter.instrument && this.chart.timeInterval === this.replayWaiter.tf) {
+
+                this.chart.refresh();
+                this.chart.refreshIndicators();
+
+                this.chart.setReplayByDate(this.replayWaiter.date);
+            }
+        }
+
+        this.replayWaiter = null;
     }
 
     protected useDefaultLinker(): boolean {
@@ -406,14 +429,34 @@ export class TcdComponent extends BaseLayoutItemComponent {
             } else if (action.type === Actions.ChangeInstrumentAndTimeframe) {
                 if (this.chart) {
                     const chart = this.chart;
+                    const replayDate = action.data.replayDate;
                     const instrument = action.data.instrument as IChartInstrument;
                     const timeInterval = (action.data.timeframe as number) * 1000;
                     const chartInstrument = chart.instrument;
-
+                    
                     if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
+
+                        chart.switchOffReplayMode();
+                        chart.refresh();
+                        chart.refreshIndicators();
+
                         chart.instrument = Object.assign({}, instrument);
                         chart.timeFrame = TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval);
+
+                        if (replayDate) {
+                            this.replayWaiter = {
+                                instrument: instrument.id,
+                                tf: timeInterval,
+                                date: replayDate
+                            };
+                        }
                         chart.sendBarsRequest();
+                    } else {
+                        if (replayDate) {
+                            chart.setReplayByDate(replayDate);
+                        } else {
+                            chart.switchOffReplayMode();
+                        }
                     }
                 }
             }
@@ -519,6 +562,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED);
                 this.chart.off(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS);
                 this.chart.off(TradingChartDesigner.ChartEvent.SAVE_SESSION);
+                this.chart.off(TradingChartDesigner.ChartEvent.BARS_SETTED);
                 this.chart.destroy();
             }
         } catch (e) {
