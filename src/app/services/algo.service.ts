@@ -25,7 +25,7 @@ export interface IBFTScanInstrumentsResponseItem {
     trend: IBFTATrend;
     type: IBFTATradeType;
     tte: number;
-    tp: number;
+    tp: IBFTATradeProbability;
     entry: number;
     stop: number;
 }
@@ -175,7 +175,7 @@ export interface IBFTATradeV2 {
     trend: IBFTATrend;
     type: IBFTATradeType;
     tte: number;
-    tp: number;
+    tp: IBFTATradeProbability;
 }
 
 export interface IBFTAAlgoResponse {
@@ -245,6 +245,12 @@ export enum IBFTATradeType {
     SwingN = "SwingN",
     SwingExt = "SwingExt",
     BRC = "BRC"
+}
+
+export enum IBFTATradeProbability {
+    Low = "Low",
+    Mid = "Mid",
+    High = "High",
 }
 
 export interface IBFTAExtHitTestSignal {
@@ -333,7 +339,7 @@ class AlgoServiceEncryptionHelper {
     }
 
     static hexToBase64(str) {
-        const d =  str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ");
+        const d = str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ");
         let s = "";
         for (const i of d) {
             s += String.fromCharCode(i);

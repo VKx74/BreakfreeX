@@ -7,7 +7,7 @@ import bind from "bind-decorator";
 import { Observable } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import {AlertService} from "@alert/services/alert.service";
-import { AlgoService, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem } from '@app/services/algo.service';
+import { AlgoService, IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem } from '@app/services/algo.service';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { InstrumentService } from '@app/services/instrument.service';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
@@ -415,21 +415,19 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         return this._otherGroupName;
     }
 
-    private _toVolatility(tp: number): string {
+    private _toVolatility(tp: IBFTATradeProbability): string {
         let probability = "Mid";
-        if (tp > 50) {
+        if (tp === IBFTATradeProbability.High) {
             probability = "High";
         }
-        if (tp < -20) {
+        if (tp === IBFTATradeProbability.Low) {
             probability = "Low";
         }
         return probability;
     }
 
-    private _toTP(tp: number): string {
-        let volatility = this._toVolatility(tp);
-        const sign = tp > 0 ? "+" : "-";
-        return `${volatility} (Vol. ${sign}${Math.abs(tp)} %)`;
+    private _toTP(tp: IBFTATradeProbability): string {
+        return tp;
     }
 
     private _toTTE(tte: number): string {
