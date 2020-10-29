@@ -266,7 +266,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     private _sendInstrumentChange(scannerVM: IScannerResults, isHistoricalRecord: boolean) {
         // just oanda supported
-        this._instrumentService.getInstruments(EExchangeInstance.OandaExchange, scannerVM.symbol).subscribe((data: IInstrument[]) => {
+        this._instrumentService.getInstruments(null, scannerVM.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
                 this._alertService.warning("Failed to view chart by symbol");
                 return;
