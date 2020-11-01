@@ -23,6 +23,7 @@ import {filter, tap} from "rxjs/operators";
 import {AppRoutes} from './app.routes';
 import {ApplicationTypeService} from "@app/services/application-type.service";
 import { Angulartics2Segment } from 'angulartics2/segment';
+import { Angulartics2GoSquared } from 'angulartics2/gosquared';
 
 
 @Component({
@@ -58,6 +59,7 @@ export class AppComponent {
                 private _userSettingsService: UserSettingsService,
                 private _applicationTypeService: ApplicationTypeService,
                 private _angulartics2Segment: Angulartics2Segment,
+                private _angulartics2GoSquared: Angulartics2GoSquared,
                 @Inject(AppTranslateService) private _translateService: TranslateService
     ) {
 
@@ -69,12 +71,24 @@ export class AppComponent {
         });
 
         this._angulartics2Segment.startTracking();
+        this._angulartics2GoSquared.startTracking();
         // [userId], [traits], [options], [callback]
 
         if (this._authService.email) {
+            const name = `${this._authService.firstName} ${this._authService.lastName}`;
+            const email = this._authService.email;
+            const subscriptions = this._authService.subscriptions.join(";");
             this._angulartics2Segment.setUserProperties({
-                userId: this._authService.email,
-                subscriptions: this._authService.subscriptions.join(";")
+                userId: email,
+                email: email,
+                subscriptions: subscriptions,
+                name: name
+            });
+            this._angulartics2GoSquared.setUserProperties({
+                userId: email,
+                email: email,
+                subscriptions: subscriptions,
+                name: name
             });
         }
     }
