@@ -32,6 +32,8 @@ import { Angulartics2GoSquared } from 'angulartics2/gosquared';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+    static isGAInitialized = false;
+
     readonly SHOW_LOADER_MODULES = [
         `${AppRoutes.Platform}/settings`,
         `${AppRoutes.Platform}/scripting`,
@@ -71,10 +73,11 @@ export class AppComponent {
         });
 
         this._angulartics2Segment.startTracking();
-        this._angulartics2GoSquared.startTracking();
+        // this._angulartics2GoSquared.startTracking();
         // [userId], [traits], [options], [callback]
 
-        if (this._authService.email) {
+        if (this._authService.email && !AppComponent.isGAInitialized) {
+            AppComponent.isGAInitialized = true;
             const name = `${this._authService.firstName} ${this._authService.lastName}`;
             const email = this._authService.email;
             const subscriptions = this._authService.subscriptions.join(";");
@@ -90,19 +93,6 @@ export class AppComponent {
                 subscriptions: subscriptions,
                 name: name
             });
-
-            // try {
-            //     (window as any)._gs('identify', {
-            //         email: email,
-            //         name: name,
-            //         custom: {
-            //             subscriptions: subscriptions,
-            //             userId: email
-            //         }
-            //     });
-            // } catch(ex) {
-
-            // }
         }
     }
 
