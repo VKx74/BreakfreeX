@@ -90,6 +90,19 @@ export class AppComponent {
                 subscriptions: subscriptions,
                 name: name
             });
+
+            // try {
+            //     (window as any)._gs('identify', {
+            //         email: email,
+            //         name: name,
+            //         custom: {
+            //             subscriptions: subscriptions,
+            //             userId: email
+            //         }
+            //     });
+            // } catch(ex) {
+
+            // }
         }
     }
 
