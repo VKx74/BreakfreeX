@@ -98,6 +98,7 @@ import { MTBrokerServersProvider } from './services/mt/mt.servers.service';
 import { MT4BrokerServersProvider } from './services/mt/mt4.servers.service';
 import { MT4Broker } from './services/mt/mt4.broker';
 import { MT5Broker } from './services/mt/mt5.broker';
+import { Angulartics2GoSquared } from 'angulartics2/gosquared';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -157,6 +158,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         },
         AuthenticationService,
         Angulartics2Segment,
+        Angulartics2GoSquared,
         CookieService,
         AppConfigService,
         {
