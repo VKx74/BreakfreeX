@@ -47,7 +47,7 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
     private _marketSubscription: Subscription;
     private _selectedTime: string;
     private _selectedDate: Date;
-    
+
     protected get _mtBroker(): MTBroker {
         return this._broker.activeBroker as MTBroker;
     }
@@ -112,19 +112,13 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
         }
 
         if (this._config.symbol) {
-            this._marketSubscription = this._mtBroker.subscribeToTicks(this._config.symbol, (tick: IMTTick) => {
-                this.lastTick = tick;
-                const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
 
-                if (tick && !this._config.price) {
-                    this._config.price = price;
-                }
-                if (tick && !this._config.sl) {
-                    this._config.sl = price;
-                }
-                if (tick && !this._config.tp) {
-                    this._config.tp = price;
-                }
+            this._mtBroker.getPrice(this._config.symbol).subscribe((tick: IMTTick) => {
+                this._setTick(tick);
+            });
+
+            this._marketSubscription = this._mtBroker.subscribeToTicks(this._config.symbol, (tick: IMTTick) => {
+                this._setTick(tick);
             });
         }
 
@@ -156,6 +150,24 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
 
         if (!this._config.tp) {
             this._config.tp = this.order.Price;
+        }
+    }
+    private _setTick(tick: IMTTick) {
+        if (!tick || tick.symbol !== this._config.symbol) {
+            return;
+        }
+        
+        this.lastTick = tick;
+        const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
+
+        if (tick && !this._config.price) {
+            this._config.price = price;
+        }
+        if (tick && !this._config.sl) {
+            this._config.sl = price;
+        }
+        if (tick && !this._config.tp) {
+            this._config.tp = price;
         }
     }
 
@@ -199,13 +211,13 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
             Comment: this.config.comment || "",
             ExpirationType: this.config.expirationType,
             Side: this.config.side,
-            Size:  Number(this.config.amount),
+            Size: Number(this.config.amount),
             Symbol: this.config.symbol,
             Type: this.config.type,
             ExpirationDate: this._getSetupDate(),
             Price: this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0,
-            SL: this.config.useSL ?  Number(this.config.sl) : 0,
-            TP: this.config.useTP ?  Number(this.config.tp) : 0
+            SL: this.config.useSL ? Number(this.config.sl) : 0,
+            TP: this.config.useTP ? Number(this.config.tp) : 0
         };
 
         this._mtBroker.editOrder(request).subscribe(

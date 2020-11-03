@@ -14,6 +14,8 @@ import bind from "bind-decorator";
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { MTPlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
+import { ConfirmModalComponent } from 'UI';
+import { MatDialog } from '@angular/material/dialog';
 
 export class MTOrderConfig {
     instrument: IInstrument;
@@ -84,6 +86,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _selectedTime: string = `${this._oneDayPlus.getUTCHours()}:${this._oneDayPlus.getUTCMinutes()}`;
     private _selectedDate: Date = this._oneDayPlus;
     private marketSubscription: Subscription;
+    public risk: number = 0;
 
     @Input()
     set config(value: MTOrderConfig) {
@@ -141,7 +144,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
         };
     }
 
-    constructor(private _alertService: AlertService,
+    constructor(private _dialog: MatDialog,
+        private _alertService: AlertService,
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
         this._config = MTOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
@@ -213,16 +217,20 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this.config.fillPolicy = type;
     }
 
+    showRisk() {
+        return this.risk > 1;
+    }
+
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
         }
-        console.log(instrument);
 
         this.config.instrument = instrument;
         const broker = this._brokerService.activeBroker as MTBroker;
         const symbol = instrument.symbol;
 
+        this._calculateRisk();
         this.amountStep = broker.instrumentAmountStep(symbol);
         this.minAmountValue = broker.instrumentMinAmount(symbol);
         this.priceStep = broker.instrumentTickSize(symbol);
@@ -251,13 +259,29 @@ export class MTOrderConfiguratorComponent implements OnInit {
             });
         }
     }
+    private _calculateRisk() {
+        const broker = this._brokerService.activeBroker as MTBroker;
+        this.risk = broker.getRelatedPositionsRisk(this.config.instrument.symbol, this.config.side) / broker.accountInfo.Balance * 100;
+    }
 
     submit() {
         if (this.submitHandler) {
             this.submitHandler(this.config);
             this.onSubmitted.emit();
         } else {
-            this._placeOrder();
+            if (this.risk > 10) {
+                this._dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: 'Risk alert',
+                        message: `Existing risk by related to "${this.config.instrument.symbol}" positions - "${this.risk.toFixed(2)}%" of your account balance. Do you want to continue place this tarde?`,
+                        onConfirm: () => {
+                            this._placeOrder();
+                        }
+                    }
+                });
+            } else {
+                this._placeOrder();
+            }
         }
     }
 
@@ -339,10 +363,12 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
     setBuyMode() {
         this.config.side = OrderSide.Buy;
+        this._calculateRisk();
     }
 
     setSellMode() {
         this.config.side = OrderSide.Sell;
+        this._calculateRisk();
     }
 
     ngOnDestroy() {

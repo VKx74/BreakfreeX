@@ -69,6 +69,7 @@ import { MTPositionCloseModalComponent } from './components/forex.components/mt/
 import { MTOrderEditModalComponent } from './components/forex.components/mt/order-edit-modal/mt-order-edit-modal.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MTTradeManagerComponent } from './components/forex.components/mt/mt-trade-manager.component';
+import { MTCurrencyRiskComponent } from './components/forex.components/mt/currency-risk/mt-currency-risk.component';
 
 const components = [
     TradeManagerComponent,
@@ -107,6 +108,7 @@ const components = [
     MTAccountInfoComponent,
     MTAccountInfoBarComponent,
     MTOpenOrdersComponent,
+    MTCurrencyRiskComponent,
     MTPendingOrdersComponent,
     MTHistoryOrdersComponent,
     MTPositionsComponent,

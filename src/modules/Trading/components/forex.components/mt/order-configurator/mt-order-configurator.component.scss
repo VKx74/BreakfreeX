@@ -29,6 +29,17 @@
     width: 100% !important;
   }
 
+  .risk-overview {
+    font-size: 12px;
+    text-decoration: underline;
+    margin-bottom: 13px;
+    padding-left: 5px;
+  }
+
+  .risk-value {
+    font-weight: bolder;
+  }
+
   .disabled {
     opacity: 0.35;
     pointer-events: none;
@@ -146,6 +157,14 @@ hr {
   .order-side-btn {
     background-color: themed('activeBackgroundColor');
     color: themed('valueTextColor');
+  }
+
+  .risk-overview {
+    color: themed('valueTextColor');
+  }
+
+  .risk-overview.critical{
+    color: $lightRedColor;
   }
 
   hr {

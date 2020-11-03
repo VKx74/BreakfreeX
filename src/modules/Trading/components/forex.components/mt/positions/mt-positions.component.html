@@ -1,6 +1,7 @@
 <div class="positions">
     <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
         [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
+        [hiddenColumns]="['Net Risk']"
         (onContextMenuSelected)="handleContextMenuSelected($event)">
         <data-table-header-cell columnName="Side" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
         <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
@@ -12,6 +13,8 @@
         <data-table-header-cell columnName="Net PL" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Commission" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnWidth]="36"></data-table-header-cell>
     
 
@@ -58,6 +61,12 @@
         </data-table-cell>
         <data-table-cell columnName="Swap">
             <ng-template let-item>{{item.Swap?.toFixed(2)}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Net Risk">
+            <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Risk (%)">
+            <ng-template let-item>{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}}</ng-template>
         </data-table-cell>
         <data-table-cell columnName="Close">
             <ng-template let-item>

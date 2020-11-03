@@ -1,5 +1,5 @@
 <div class="accountInfo">
-    <data-table [rows]="activeAccount ? [activeAccount] : []" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false">
+    <data-table [rows]="activeAccount ? [activeAccount] : []" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" [hiddenColumns]="['Net Risk']">
         <data-table-header-cell columnName="Account" [sortable]="true">{{'tradeManager.account' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Company Name" [sortable]="false">{{'tradeManager.companyName' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Currency" [sortable]="true">{{'currency' | translate}}</data-table-header-cell>
@@ -7,8 +7,9 @@
         <data-table-header-cell columnName="Pl" [sortable]="true">{{'tradeManager.pl' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Equity" [sortable]="true">{{'tradeManager.equity' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Margin" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Free Margin" [columnWidth]="120" [sortable]="true">{{'tradeManager.freeMargin' | translate}}</data-table-header-cell>
-
+        <data-table-header-cell columnName="Free Margin" [sortable]="true">{{'tradeManager.freeMargin' | translate}}</data-table-header-cell>
+        <!-- <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell> -->
 
         <data-table-cell columnName="Account"><ng-template let-item>{{item.Account}}</ng-template></data-table-cell>
         <data-table-cell columnName="Company Name"><ng-template let-item>{{item.CompanyName}}</ng-template></data-table-cell>
@@ -42,5 +43,11 @@
                 </span>
             </ng-template>
         </data-table-cell>
+        <!-- <data-table-cell columnName="Net Risk">
+            <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Risk (%)">
+            <ng-template let-item>{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}}</ng-template>
+        </data-table-cell> -->
     </data-table>
 </div>

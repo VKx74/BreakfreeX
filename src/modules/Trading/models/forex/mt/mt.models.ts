@@ -16,6 +16,8 @@ export interface MTTradingAccount {
     FreeMargin: number;
     Pl: number;
     Equity: number;
+    Risk?: number;
+    RiskPercentage?: number;
 }
 
 export interface MTOrder {
@@ -29,6 +31,10 @@ export interface MTOrder {
     SL?: number;
     TP?: number;
     NetPL?: number;
+    ProfitRate?: number;
+    ContractSize?: number;
+    Risk?: number;
+    RiskPercentage?: number;
     PipPL?: number;
     Side: OrderSide;
     Type: OrderTypes;
@@ -83,7 +89,16 @@ export interface MTPosition {
     PipPL?: number;
     Swap?: number;
     Commission?: number;
+    Risk?: number;
+    RiskPercentage?: number;
     Side: OrderSide;
+}
+
+export interface MTCurrencyRisk {
+    Currency: string;
+    OrdersCount: number;
+    Risk?: number;
+    RiskPercentage?: number;
 }
 
 export interface MTServer {

@@ -43,6 +43,7 @@ export interface IMTSymbolData {
     Digits: number;
     Name: string;
     CalculatioType: string;
+    ProfitMode?: string;
     Description: string;
 }
 

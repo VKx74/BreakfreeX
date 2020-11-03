@@ -45,6 +45,14 @@
             </div>
         </div>
 
+        <div class="flex-row" *ngIf="showRisk()">
+            <div class="risk-overview" [ngClass]="{'critical': risk > 7}">
+                Existing risk by related positions 
+                <span class="risk-value">{{risk?.toFixed(2)}}%</span>
+                of balance
+            </div>
+        </div>
+
         <div class="flex-row">
             <div class="flex-column">
                 <div class="crypto-form-unit margin-bottom">

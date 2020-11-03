@@ -1,0 +1,22 @@
+<data-table [rows]="items" [selectable]="false" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" >
+    <data-table-header-cell columnName="Currency" [sortable]="true" >{{'tradeManager.currency' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Orders Count" [sortable]="true">{{'tradeManager.ordersCount' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
+
+    <data-table-cell columnName="Currency">
+        <ng-template let-item><span class="symbol-column">{{item.Currency}}</span></ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Orders Count">
+        <ng-template let-item>{{item.OrdersCount}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Net Risk">
+        <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Risk (%)">
+        <ng-template let-item>
+            <span class="{{expirationClass(item)}}">{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}}</span>
+        </ng-template>
+    </data-table-cell>
+
+</data-table>

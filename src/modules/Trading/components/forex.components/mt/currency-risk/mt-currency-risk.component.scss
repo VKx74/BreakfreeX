@@ -1,0 +1,27 @@
+@import "themes/themes";
+@import "mixins/themify";
+@import "variables";
+
+
+/deep/ .mat-cell {
+  @include themify($themes, true) {
+    color: themed('valueTextColor') !important;
+  }
+}
+
+:host {
+  height: 100%;
+  
+  .tableActions {
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+
+    i {
+      font-size: 19px;
+      position: relative;
+      top: 3px;
+    }
+  }
+
+}
