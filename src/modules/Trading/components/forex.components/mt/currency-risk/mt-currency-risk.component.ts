@@ -11,13 +11,15 @@ import { MTCurrencyRisk, MTOrder } from 'modules/Trading/models/forex/mt/mt.mode
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
+    public groups: string[] = ["Actual", "Pending"];
+    public groupingField: string = "Type";
 
     protected loadItems(): Observable<MTCurrencyRisk[]> {
        return of(this._mtBroker.currencyRisks);
     }
 
     protected _subscribeOnUpdates(): Subscription {
-        return this._mtBroker.onOrdersUpdated.subscribe(() => {
+        return this._mtBroker.onOrdersParametersUpdated.subscribe(() => {
             this.updateItems();
         });
     }
@@ -26,7 +28,7 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
         super.ngOnDestroy();
     }
 
-    expirationClass(item: MTCurrencyRisk) {
+    riskClass(item: MTCurrencyRisk) {
         if (item.RiskPercentage < 3) {
             return "low-risk";
         }

@@ -20,6 +20,8 @@
     <!-- <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell> -->
     <!-- <data-table-header-cell columnName="Commission" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell> -->
+    <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Comment" [sortable]="false">{{'tradeManager.comment' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Close" [columnWidth]="36"></data-table-header-cell>
 
@@ -98,6 +100,12 @@
     <data-table-cell columnName="Swap">
         <ng-template let-item>{{item.Swap}}</ng-template>
     </data-table-cell> -->
+    <data-table-cell columnName="Net Risk">
+        <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Risk (%)">
+        <ng-template let-item>{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}}</ng-template>
+    </data-table-cell>
     <data-table-cell columnName="Comment">
         <ng-template let-item>{{item.Comment}}</ng-template>
     </data-table-cell>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, Injector, ViewChild } from "@angular/core";
 import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
@@ -16,7 +16,7 @@ import { MTPositionCloseModalComponent } from './position-close-modal/mt-positio
 import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -32,8 +32,8 @@ import { combineLatest } from 'rxjs';
 })
 export class MTTradeManagerComponent {
     protected linker: Linker;
-    
     selectedTabIndex: number;
+    @ViewChild('tabGroup', {static: true}) tabGroup: MatTabGroup;
     
     get linkerColor(): string {
         return this.linker.getLinkingId();
@@ -96,6 +96,12 @@ export class MTTradeManagerComponent {
 
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();
+    }
+
+    ngAfterContentChecked() {
+        if (this.tabGroup) {
+            this.selectedTabIndex = this.tabGroup.selectedIndex;
+        }
     }
 
     cancelAllPending() {

@@ -94,11 +94,21 @@ export interface MTPosition {
     Side: OrderSide;
 }
 
+export enum MTCurrencyRiskType {
+    Actual = "Actual",
+    Pending = "Pending"
+}
+
 export interface MTCurrencyRisk {
     Currency: string;
+    Type: MTCurrencyRiskType;
     OrdersCount: number;
     Risk?: number;
     RiskPercentage?: number;
+    Side: OrderSide;
+    // PendingOrdersCount: number;
+    // PendingRisk?: number;
+    // PendingRiskPercentage?: number;
 }
 
 export interface MTServer {

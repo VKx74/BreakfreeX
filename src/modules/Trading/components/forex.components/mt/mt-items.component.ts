@@ -91,9 +91,9 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
     }
 
     protected refresh(): void {
-        // if (this._selectedTabIndex !== this.tabIndex) {
-        //     return;
-        // }
+        if (this._selectedTabIndex !== this.tabIndex) {
+            return;
+        }
 
         this.cdr.detectChanges();
     }

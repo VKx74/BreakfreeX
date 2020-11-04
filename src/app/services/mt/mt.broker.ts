@@ -1,7 +1,7 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
 import { Injectable } from '@angular/core';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
@@ -47,7 +47,7 @@ export abstract class MTBroker implements IMTBroker {
         Margin: 0,
         Pl: 0
     };
-    
+
     protected _lastUpdate: number;
 
     protected _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
@@ -127,7 +127,7 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     constructor(protected ws: MTSocketService) {
-      
+
     }
 
     placeOrder(order: MTPlaceOrder): Observable<ActionResult> {
@@ -191,7 +191,7 @@ export abstract class MTBroker implements IMTBroker {
             });
         });
     }
-    
+
     editOrderPrice(order: MTEditOrderPrice): Observable<ActionResult> {
         const request = new MTEditOrderRequest();
         const orderData = this.getOrderById(order.Ticket);
@@ -355,7 +355,7 @@ export abstract class MTBroker implements IMTBroker {
             return of(this._instruments.slice());
         }
 
-        const filtered = this._instruments.filter(i => { 
+        const filtered = this._instruments.filter(i => {
             const s = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
             return s.indexOf(search.toLowerCase()) !== -1;
         });
@@ -370,7 +370,7 @@ export abstract class MTBroker implements IMTBroker {
         }
         return false;
     }
-    
+
     init(initData: MTConnectionData): Observable<ActionResult> {
         if (this._onTickSubscription) {
             this._onTickSubscription.unsubscribe();
@@ -467,7 +467,7 @@ export abstract class MTBroker implements IMTBroker {
         const s1 = this.instrumentToChartFormat(symbol);
         const s1Part1 = s1.substring(0, 3);
         const s1Part2 = s1.substring(3, 6);
-        
+
         for (const order of this.orders) {
             const s2 = this.instrumentToChartFormat(order.Symbol);
             if (s2 === s1) {
@@ -556,7 +556,7 @@ export abstract class MTBroker implements IMTBroker {
             });
         });
     }
-    
+
     protected _initialize(instruments: IMTSymbolData[]) {
         this._instruments = [];
         for (const instrument of instruments) {
@@ -638,7 +638,7 @@ export abstract class MTBroker implements IMTBroker {
         }, (error) => {
             console.error("Failed to Reconnected[Re-login]");
         });
-       
+
     }
 
     protected _handleQuotes(quote: IMTTick) {
@@ -692,7 +692,7 @@ export abstract class MTBroker implements IMTBroker {
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
                     existingOrder.ProfitRate = newOrder.ProfitRate;
                     existingOrder.ContractSize = newOrder.ContractSize;
-                    
+
                     existingOrder.Time = newOrder.OpenTime;
                     existingOrder.ExpirationType = this._getOrderExpiration(newOrder.ExpirationType);
                     existingOrder.ExpirationDate = newOrder.ExpirationDate ? newOrder.ExpirationDate : null;
@@ -769,7 +769,7 @@ export abstract class MTBroker implements IMTBroker {
     protected _createOrder(data: IMTOrderData): MTOrder {
         const ord: MTOrder = {
             Id: data.Ticket,
-            CurrentPrice: data.CurrentPrice ?  data.CurrentPrice : null,
+            CurrentPrice: data.CurrentPrice ? data.CurrentPrice : null,
             SL: data.StopLoss ? data.StopLoss : null,
             TP: data.TakeProfit ? data.TakeProfit : null,
             Price: data.OpenPrice ? data.OpenPrice : null,
@@ -824,7 +824,7 @@ export abstract class MTBroker implements IMTBroker {
                 order.Risk = 0;
                 order.RiskPercentage = 0;
                 continue;
-            }   
+            }
 
             if (order.SL) {
                 const diff = Math.abs(order.Price - order.SL);
@@ -851,59 +851,99 @@ export abstract class MTBroker implements IMTBroker {
         }
     }
 
+    protected _createEmptyRisk(currency: string, type: MTCurrencyRiskType): MTCurrencyRisk {
+        return {
+            Currency: currency,
+            OrdersCount: 0,
+            Risk: 0,
+            RiskPercentage: 0,
+            Type: type,
+            Side: OrderSide.Buy
+        };
+    }
+
     protected _buildCurrencyRisks() {
-        const risks: { [symbol: string]: MTCurrencyRisk } = {};
+        const actualRisks: { [symbol: string]: MTCurrencyRisk } = {};
+        const pendingRisks: { [symbol: string]: MTCurrencyRisk } = {};
         for (const order of this._orders) {
-            if (order.Type !== OrderTypes.Market) {
+            if (!order.Risk) {
                 continue;
             }
-            
+
             const s1 = this.instrumentToChartFormat(order.Symbol).toUpperCase();
             const s1Part1 = s1.substring(0, 3).toUpperCase();
             const s1Part2 = s1.substring(3, 6).toUpperCase();
 
+            const riskRef = order.Type === OrderTypes.Market ? actualRisks : pendingRisks;
+            const type = order.Type === OrderTypes.Market ? MTCurrencyRiskType.Actual : MTCurrencyRiskType.Pending;
+
             if (this._instrumentType[order.Symbol] && this._instrumentType[order.Symbol].toLowerCase() === 'forex') {
-                if (!risks[s1Part1]) {
-                    risks[s1Part1] = { Currency: s1Part1, OrdersCount: 0, Risk: 0, RiskPercentage: 0 };
-                } 
-                if (!risks[s1Part2]) {
-                    risks[s1Part2] = { Currency: s1Part2, OrdersCount: 0, Risk: 0, RiskPercentage: 0 };
-                } 
-                risks[s1Part1].Risk += order.Side === OrderSide.Buy ? order.Risk : order.Risk * -1;
-                risks[s1Part2].Risk += order.Side === OrderSide.Sell ? order.Risk : order.Risk * -1;
-                risks[s1Part1].OrdersCount++;
-                risks[s1Part2].OrdersCount++;
+                if (!riskRef[s1Part1]) {
+                    riskRef[s1Part1] = this._createEmptyRisk(s1Part1, type);
+                }
+                if (!riskRef[s1Part2]) {
+                    riskRef[s1Part2] = this._createEmptyRisk(s1Part2, type);
+                }
+
+                const r1 = order.Side === OrderSide.Buy ? order.Risk : order.Risk * -1;
+                const r2 = order.Side === OrderSide.Sell ? order.Risk : order.Risk * -1;
+                riskRef[s1Part1].Risk += r1;
+                riskRef[s1Part2].Risk += r2;
+                riskRef[s1Part1].OrdersCount++;
+                riskRef[s1Part2].OrdersCount++;
+
             } else {
-                if (!risks[s1]) {
-                    risks[s1] = { Currency: s1, OrdersCount: 0, Risk: 0, RiskPercentage: 0 };
-                } 
-                risks[s1].Risk += order.Side === OrderSide.Buy ? order.Risk : order.Risk * -1;
-                risks[s1].OrdersCount++;
+                if (!riskRef[s1]) {
+                    riskRef[s1] = this._createEmptyRisk(s1, type);
+                }
+
+                const r = order.Side === OrderSide.Buy ? order.Risk : order.Risk * -1;
+                riskRef[s1].Risk += r;
+                riskRef[s1].OrdersCount++;
             }
         }
 
         for (let i = 0; i < this._currencyRisks.length; i++) {
             let currencyRisk = this._currencyRisks[i];
-            if (risks[currencyRisk.Currency]) {
-                const risk = risks[currencyRisk.Currency];
-                delete risks[currencyRisk.Currency];
-                currencyRisk.OrdersCount = risk.OrdersCount;
-                currencyRisk.Risk = risk.Risk;
+
+            if (currencyRisk.Type === MTCurrencyRiskType.Actual) {
+                if (actualRisks[currencyRisk.Currency] && actualRisks[currencyRisk.Currency].Risk) {
+                    const risk = actualRisks[currencyRisk.Currency];
+                    delete actualRisks[currencyRisk.Currency];
+                    currencyRisk.OrdersCount = risk.OrdersCount;
+                    currencyRisk.Risk = risk.Risk;
+                } else {
+                    this._currencyRisks.splice(i, 1);
+                    i--;
+                }
             } else {
-                this._currencyRisks.splice(i, 1);
-                i--;
+                if (pendingRisks[currencyRisk.Currency] && pendingRisks[currencyRisk.Currency].Risk) {
+                    const risk = pendingRisks[currencyRisk.Currency];
+                    delete pendingRisks[currencyRisk.Currency];
+                    currencyRisk.OrdersCount = risk.OrdersCount;
+                    currencyRisk.Risk = risk.Risk;
+                } else {
+                    this._currencyRisks.splice(i, 1);
+                    i--;
+                }
+            }
+        } 
+
+        for (const i in actualRisks) {
+            if (actualRisks[i] && actualRisks[i].Risk) {
+                this._currencyRisks.push(actualRisks[i]);
             }
         }
 
-        for (const i in risks) {
-            if (risks[i]) {
-                this._currencyRisks.push(risks[i]);
+        for (const i in pendingRisks) {
+            if (pendingRisks[i] && pendingRisks[i].Risk) {
+                this._currencyRisks.push(pendingRisks[i]);
             }
         }
 
         for (const risk of this._currencyRisks) {
+            risk.Side = risk.Risk > 0 ? OrderSide.Buy : OrderSide.Sell;
             risk.Risk = Math.abs(risk.Risk);
-
             risk.RiskPercentage = Math.roundToDecimals(risk.Risk / this.accountInfo.Balance * 100, 2);
             risk.Risk = Math.roundToDecimals(risk.Risk, 2);
         }
@@ -917,14 +957,14 @@ export abstract class MTBroker implements IMTBroker {
             if (order.Type !== OrderTypes.Market) {
                 continue;
             }
-            
+
             if (order.Risk) {
                 if (!this.accountInfo.Risk) {
                     this.accountInfo.Risk = 0;
                 }
                 this.accountInfo.Risk += order.Risk;
             }
-    
+
             if (order.RiskPercentage) {
                 if (!this.accountInfo.RiskPercentage) {
                     this.accountInfo.RiskPercentage = 0;
@@ -1073,7 +1113,7 @@ export abstract class MTBroker implements IMTBroker {
 
         return side as OrderSide;
     }
-    
+
     protected _getOrderExpiration(expiration: string): OrderExpirationType {
         if (!expiration) {
             return OrderExpirationType.GTC;
@@ -1084,7 +1124,7 @@ export abstract class MTBroker implements IMTBroker {
         }
         if (OrderExpirationType.Specified.toLowerCase() === expiration.toLowerCase()) {
             return OrderExpirationType.Specified;
-        }    
+        }
         if (OrderExpirationType.Today.toLowerCase() === expiration.toLowerCase()) {
             return OrderExpirationType.Today;
         }

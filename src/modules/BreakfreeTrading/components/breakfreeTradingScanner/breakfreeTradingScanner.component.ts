@@ -1,4 +1,4 @@
-import { Component, Injector, Inject, ElementRef, ViewChild } from '@angular/core';
+import { Component, Injector, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
@@ -72,7 +72,8 @@ enum TradeTypes {
 @Component({
     selector: 'BreakfreeTradingScanner',
     templateUrl: './breakfreeTradingScanner.component.html',
-    styleUrls: ['./breakfreeTradingScanner.component.scss']
+    styleUrls: ['./breakfreeTradingScanner.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     static componentName = 'BreakfreeTradingScanner';
@@ -111,6 +112,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         private _alertService: AlertService,
         protected _instrumentService: InstrumentService,
         private _alogService: AlgoService,
+        private _cdr: ChangeDetectorRef,
         protected _injector: Injector) {
         super(_injector);
 
@@ -145,7 +147,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._filterResults(false);
         this._filterResults(true);
     }
-
+    
     scanMarkets() {
         this.output = "Scanning...";
         this.scannerResults = [];
@@ -158,8 +160,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             } else {
                 this.output = null;
             }
+            this._refresh();
         }, (error) => {
             this.output = "Failed to scan";
+            this._refresh();
         }); 
         
         this._loadHistory();
@@ -373,6 +377,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         } else {
             this.scannerResultsFiltered = filteredByTimeframes;
         }
+
+        this._refresh();
     }
 
     private _getTfValue(): number {
@@ -451,11 +457,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     private _loadHistory() {
         this._alogService.scannerHistory().subscribe((data: IBFTScannerHistoryResponse) => {
-            const history = data.items;
+            const history = data.items.reverse().slice(0, 100);
             this.scannerHistoryResults = [];
             for (const i of history) {
                 const date = new Date(i.time * 1000);
-                this.scannerHistoryResults.unshift({
+                this.scannerHistoryResults.push({
                     exchange: i.responseItem.exchange,
                     symbol: i.responseItem.symbol,
                     timeframe: i.responseItem.timeframe,
@@ -471,9 +477,15 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 });
             }
             this._filterResults(true);
+            this._refresh();
         }, (error) => {
             // this.output = "Failed to scan";
         });
     }
+
+    private _refresh() {
+        this._cdr.detectChanges();
+    }
+
 }
 
