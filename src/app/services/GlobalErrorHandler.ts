@@ -8,9 +8,11 @@ import { GlobalErrorAction } from '@app/store/actions/platform.actions';
 export class GlobalErrorHandler implements ErrorHandler {
     constructor(private _store: Store<AppState>) { }
     handleError(error) {
-        const tcdInCallStack = error.stack.indexOf("TradingChartDesigne");
-        if (tcdInCallStack >= 0) {
-            this._store.dispatch(new GlobalErrorAction());
+        if (error && error.stack) {
+            const tcdInCallStack = error.stack.indexOf("TradingChartDesigne");
+            if (tcdInCallStack >= 0) {
+                this._store.dispatch(new GlobalErrorAction());
+            }
         }
         // IMPORTANT: Rethrow the error otherwise it gets swallowed
         throw error;

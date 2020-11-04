@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
 import { IMTTick } from "@app/models/common/tick";
@@ -88,6 +88,9 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private marketSubscription: Subscription;
     public risk: number = 0;
 
+    @ViewChild("riskArrow", {static: false}) riskArrow: ElementRef;
+    @ViewChild("riskGraph", {static: false}) riskGraph: ElementRef;
+
     @Input()
     set config(value: MTOrderConfig) {
         if (value) {
@@ -170,6 +173,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
         }
     }
 
+    ngAfterViewInit() {
+        this._setRiskArrowPosition();
+    }
+
     @bind
     @memoize({ primitive: true })
     orderTypeStr(type: OrderTypes): Observable<string> {
@@ -218,7 +225,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     showRisk() {
-        return this.risk > 1;
+        return true;
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
@@ -259,9 +266,39 @@ export class MTOrderConfiguratorComponent implements OnInit {
             });
         }
     }
+
+    private _setRiskArrowPosition() {
+        if (!this.riskArrow || !this.riskGraph) {
+            return;
+        }
+
+        const min = 0;
+        const max = 10;
+        const border = 1;
+        const padding = 10 - border;
+        const width = this.riskGraph.nativeElement.clientWidth - border * 2;
+
+        let riskPercentage = this.risk / max;
+        if (riskPercentage < 0) {
+            riskPercentage = 0;
+        }
+        if (riskPercentage > 1) {
+            riskPercentage = 1;
+        }
+
+        const margin = Math.round(width * riskPercentage) - padding;
+
+        this.riskArrow.nativeElement.style["margin-left"] = `${margin}px`;
+        this.riskArrow.nativeElement.style["fill"] = margin < width / 2 ? "#5eaf80" : "#dc3445";
+    }
+
     private _calculateRisk() {
         const broker = this._brokerService.activeBroker as MTBroker;
         this.risk = broker.getRelatedPositionsRisk(this.config.instrument.symbol, this.config.side) / broker.accountInfo.Balance * 100;
+        if (this.risk < 0) {
+            this.risk = 0;
+        }
+        this._setRiskArrowPosition();
     }
 
     submit() {

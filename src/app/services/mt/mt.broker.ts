@@ -491,6 +491,14 @@ export abstract class MTBroker implements IMTBroker {
                 } else {
                     res -= order.Risk || 0;
                 }
+            } 
+            
+            if (s2Part1 === s1Part2 || s2Part2 === s1Part1) {
+                if (side === order.Side) {
+                    res -= order.Risk || 0;
+                } else {
+                    res += order.Risk || 0;
+                }
             }
         }
 
