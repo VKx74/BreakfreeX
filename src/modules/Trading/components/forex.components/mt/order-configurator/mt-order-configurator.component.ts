@@ -272,11 +272,9 @@ export class MTOrderConfiguratorComponent implements OnInit {
             return;
         }
 
-        const min = 0;
         const max = 10;
-        const border = 1;
-        const padding = 10 - border;
-        const width = this.riskGraph.nativeElement.clientWidth - border * 2;
+        const padding = 0;
+        const width = this.riskGraph.nativeElement.clientWidth - 4;
 
         let riskPercentage = this.risk / max;
         if (riskPercentage < 0) {
