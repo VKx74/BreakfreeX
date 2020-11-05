@@ -139,3 +139,11 @@
     background-color: themed('nthChild') !important;
   }
 }
+
+/deep/  .positions .mat-cell {
+    max-width:140px;
+  }
+
+  /deep/ .positions mat-header-cell {
+    max-width:140px !important;
+  }

@@ -48,22 +48,22 @@
         <div class="flex-row" *ngIf="showRisk()">
             <div class="indicator-graph" #riskGraph>
             </div>
-            <span class="start-point">0.00%</span>
-            <span class="start-excl">
+            <span class="start-point">Open correlated risk: {{risk?.toFixed(2)}}%</span>
+            <!--  <span class="start-excl">
                 <img src="./assets/img/svg-icons/exclamation-mark.svg" />
-            </span>
-            <span class="risk-text">R I S K</span>
-            <svg #riskArrow class="svg-arrow" width="22px" height="22px" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            </span> -->
+           <!-- <span class="risk-text">Open risk</span>-->
+             <svg #riskArrow class="svg-arrow" width="15px" height="15px" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
                 <path 
                       d="M 100 100 L 300 100 L 200 300 z"
                       stroke-width="2"/>
                
               </svg>
-            <div class="risk-overview" [ngClass]="{'critical': risk > 7}">
+            <!--  <div class="risk-overview" [ngClass]="{'critical': risk > 7}">
                 Existing risk by related positions 
                 <span class="risk-value">{{risk?.toFixed(2)}}%</span>
                 of balance
-            </div>
+            </div>-->
         </div>
 
         <div class="flex-row">
