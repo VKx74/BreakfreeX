@@ -167,31 +167,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     state.chartState.chart.theme = theme;
                 }
             } else {
-                const chartOptions = state.chartState.chart;
-
-                // backward compatibility for price line settings
-                if (chartOptions && chartOptions.theme && !chartOptions.theme.priceLine) {
-                    const defaultChartTheme = this._getTheme();
-                    if (defaultChartTheme && defaultChartTheme.priceLine) {
-                        chartOptions.theme.priceLine = defaultChartTheme.priceLine;
-                        console.log("Set default price line theme");
-                    }
-                } 
-                
-                if (chartOptions && chartOptions.theme && !chartOptions.theme.orders) {
-                    const defaultChartTheme = this._getTheme();
-                    if (defaultChartTheme && defaultChartTheme.orders) {
-                        chartOptions.theme.orders = defaultChartTheme.orders;
-                        console.log("Set default orders line theme");
-                    }
-                }
-                
-                // extTrade
-                if (chartOptions && chartOptions.theme && chartOptions.theme.shape && !chartOptions.theme.shape.extTrade) {
-                    const dt = this._getTheme();
-                    if (dt && dt.shape && dt.shape.extTrade) {
-                        chartOptions.theme.shape.extTrade = dt.shape.extTrade;
-                        console.log("Set default extTrade");
+                if (state.chartState.version !== 5) {
+                    console.log("Set default theme");
+                    theme = this._getTheme();
+                    if (state.chartState.chart) {
+                        state.chartState.chart.theme = theme;
                     }
                 }
             }
