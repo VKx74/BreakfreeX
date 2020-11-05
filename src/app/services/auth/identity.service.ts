@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, ReplaySubject} from "rxjs";
-import {GrantTokenResponse, Roles, SignInRequestModel} from '../../models/auth/auth.models';
+import {GrantTokenResponse, Roles, SignInRequestModel, SignInWithThirdPartyRequestModel} from '../../models/auth/auth.models';
 import {CookieService} from '../сookie.service';
 import {ComponentIdentifier} from "@app/models/app-config";
 import {IdentityTokenParser} from "@app/models/auth/identity-token-parser";
@@ -66,6 +66,18 @@ export class IdentityService {
         );
     }
 
+    signInWithThirdPartyProvider(model: SignInWithThirdPartyRequestModel): Observable<any> {
+        this._clearCookies();
+        return this._authService.signInWithThirdPartyProvider(model)
+            .pipe(
+                tap((resp: GrantTokenResponse) => {
+                    this.insert(resp.accessToken, resp.refreshToken);
+                    this._setCookies(resp.accessToken, resp.refreshToken, true);
+                    this._isAuthorized$.next(true);
+                })
+            );
+    }
+
     signIn(model: SignInRequestModel): Observable<any> {
         this._clearCookies();
         return this._authService.signIn(model)
@@ -76,6 +88,16 @@ export class IdentityService {
                     this._isAuthorized$.next(true);
                 })
             );
+    }
+
+    signInWithGoogle(): Observable<any> {
+        this._clearCookies();
+        return this._authService.signInWithGoogle();
+    }
+
+    signInWithFB(): Observable<any> {
+        this._clearCookies();
+        return this._authService.signInWithFB();
     }
 
     signOut(): Observable<any> {

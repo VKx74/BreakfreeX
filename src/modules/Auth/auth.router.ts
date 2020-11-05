@@ -12,6 +12,7 @@ import {BusinessAccountRegisterPageComponent} from "./components/business-accoun
 import {InstitutionalAccountRegisterPageComponent} from "./components/institutional-account-register-page/institutional-account-register-page.component";
 import {ResetTwoStepAuthComponent} from "./components/reset-two-step-auth/reset-two-step-auth.component";
 import {LoginPageComponent} from "./components/login-page/login-page.component";
+import { LoginWithPageComponent } from './components/login-with-page/login-with-page.component';
 
 @NgModule({
     imports: [
@@ -28,6 +29,10 @@ import {LoginPageComponent} from "./components/login-page/login-page.component";
                     {
                         path: AuthRoutes.Login,
                         component: LoginPageComponent
+                    },
+                    {
+                        path: AuthRoutes.LoginWith,
+                        component: LoginWithPageComponent
                     },
                     {
                         path: AuthRoutes.Registration,

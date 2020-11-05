@@ -32,6 +32,8 @@ import {LocalizationModule} from "Localization";
 import {ErrorProviderToken} from "@form-error-directive/error-provider.token";
 import {FormErrorProviderFactory} from "@app/helpers/form-error-provider.factory";
 import {SharedTranslateService} from "@app/localization/shared.token";
+import { LoginWithPageComponent } from './components/login-with-page/login-with-page.component';
+import { LoadingModule } from 'ngx-loading';
 
 @NgModule({
     declarations: [
@@ -50,6 +52,7 @@ import {SharedTranslateService} from "@app/localization/shared.token";
         KycDocumentsComponent,
         ResetTwoStepAuthComponent,
         LoginPageComponent,
+        LoginWithPageComponent
     ],
     imports: [
         CommonModule,
@@ -59,6 +62,7 @@ import {SharedTranslateService} from "@app/localization/shared.token";
         UIModule,
         NgxCaptchaModule,
         SharedModule,
+        LoadingModule,
 
         MatRadioModule,
         MatStepperModule,

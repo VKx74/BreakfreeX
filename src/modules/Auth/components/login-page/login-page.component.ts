@@ -97,6 +97,14 @@ export class LoginPageComponent {
             });
     }
 
+    doLoginWithGoogle() {
+        this._clearNotifications();
+    }
+
+    doLoginWithFB() {
+        this._clearNotifications();
+    }
+
     doLogin() {
         if (this.formGroup.invalid || this.processing) {
             return;
@@ -110,10 +118,7 @@ export class LoginPageComponent {
         //     return;
         // }
 
-        this.notification = null;
-        this.processing = true;
-        this.showFillInfoButton = false;
-        this.showReconfirmButton = false;
+        this._clearNotifications();
 
         const model = this._getFormData();
         this.pwd = model.password;
@@ -200,6 +205,13 @@ export class LoginPageComponent {
 
     resetTwoStepAuth() {
         this._router.navigate([AuthRoutes.ResetTwoStepAuth], {relativeTo: this._activatedRoute.parent});
+    }
+
+    private _clearNotifications() {
+        this.notification = null;
+        this.processing = true;
+        this.showFillInfoButton = false;
+        this.showReconfirmButton = false;
     }
 
     private _getNotification(params: Params): Notification {

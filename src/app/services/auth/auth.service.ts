@@ -14,7 +14,8 @@ import {
     RegisterUserModel,
     Restore2FactorAuthRequest,
     RestorePasswordModel,
-    UserModel
+    UserModel,
+    SignInWithThirdPartyRequestModel
 } from '../../models/auth/auth.models';
 import {AppConfigService} from "../app.config.service";
 import {GrantTokenResponse} from "@app/models/auth/auth.models";
@@ -46,6 +47,21 @@ export class AuthenticationService {
             .pipe(
                 switchMap(() => this._getTokens())
             );
+    }
+
+    public signInWithThirdPartyProvider(model: SignInWithThirdPartyRequestModel): Observable<GrantTokenResponse> {
+        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/signin`, model, this._httpOptions)
+            .pipe(
+                switchMap(() => this._getTokens())
+            );
+    }
+
+    public signInWithGoogle(): Observable<any> {
+        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-google`, this._httpOptions);
+    }
+
+    public signInWithFB(): Observable<any> {
+        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-facebook`, this._httpOptions);
     }
 
     public signOut(): Observable<any> {

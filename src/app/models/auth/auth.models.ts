@@ -11,6 +11,13 @@ export class SignInRequestModel {
     public rememberMe: boolean;
 }
 
+export class SignInWithThirdPartyRequestModel {
+
+    public authCode: string;
+
+    public authProvider: string;
+}
+
 export class GrantTokenResponse {
     accessToken: string;
     refreshToken: string;

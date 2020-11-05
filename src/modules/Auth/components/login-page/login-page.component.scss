@@ -9,6 +9,36 @@
   display: block;
   overflow: auto;
 
+  .login-with-google, .login-with-fb {
+    width: 100px;
+    height: 40px;
+    line-height: 24px;
+    font-size: 16px;
+    width: 160px;
+    background-color: #fff;
+    border: 1px solid #e0e3eb;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    &:hover {
+      background-color: #f0f3fa;
+    }
+    svg {
+      margin-top: 6px;
+    }
+  }
+
+  .third-party-capture {
+    line-height: 40px;
+  }
+
+  .third-party-login {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+
   .captcha {
     display: none;
   }
@@ -59,7 +89,6 @@
   }
 
   .login-btn {
-    
     margin-top: 15px;
   }
 

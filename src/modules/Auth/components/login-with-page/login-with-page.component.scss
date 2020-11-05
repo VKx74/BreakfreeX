@@ -1,0 +1,17 @@
+@import "../../themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+
+:host {
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: auto;
+
+  .login-page {
+    display: flex;
+    margin: 20vh 0;
+    align-items: center;
+  }
+}
