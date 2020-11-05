@@ -1,12 +1,9 @@
 <data-table [rows]="items" [selectable]="false" [allowColumnsVisibilityChange]="false" [expandOnClick]="false" [trackByIndex]="false" [groups]="groups" [groupingField]="groupingField">
     <data-table-header-cell columnName="Side" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
-    <data-table-header-cell columnName="Currency" [sortable]="true" >{{'tradeManager.currency' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Orders Count" [sortable]="true">{{'tradeManager.ordersCount' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
-    <!-- <data-table-header-cell columnName="Pending Orders Count" [sortable]="true">{{'tradeManager.pendingOrdersCount' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Pending Net Risk" [sortable]="true">{{'tradeManager.riskPending' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Pending Risk (%)" [sortable]="true">{{'tradeManager.riskPPending' | translate}}</data-table-header-cell> -->
+    <data-table-header-cell columnName="Currency" [columnWidth]="140" [columnMinWidth]="80" [sortable]="true" >{{'tradeManager.currency' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Orders Count" [columnWidth]="140" [columnMinWidth]="80" [sortable]="true">{{'tradeManager.ordersCount' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="80" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="80" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
 
     <data-table-cell columnName="Side">
         <ng-template let-item>
@@ -27,16 +24,5 @@
             <span class="{{riskClass(item)}}">{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}}</span>
         </ng-template>
     </data-table-cell>
-    <!-- <data-table-cell columnName="Pending Orders Count">
-        <ng-template let-item>{{item.PendingOrdersCount}}</ng-template>
-    </data-table-cell>
-    <data-table-cell columnName="Pending Net Risk">
-        <ng-template let-item>{{item.PendingRisk ? item.PendingRisk.toFixed(2) : '-'}}</ng-template>
-    </data-table-cell>
-    <data-table-cell columnName="Pending Risk (%)">
-        <ng-template let-item>
-            <span class="{{pendingRiskClass(item)}}">{{item.PendingRiskPercentage ? item.PendingRiskPercentage.toFixed(2) + '%' : '-'}}</span>
-        </ng-template>
-    </data-table-cell> -->
 
 </data-table>

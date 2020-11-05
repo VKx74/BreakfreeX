@@ -139,11 +139,3 @@
     background-color: themed('nthChild') !important;
   }
 }
-
-/deep/  .trade-manager .mat-cell {
-    max-width:140px;
-  }
-
-  /deep/ .trade-manager mat-header-cell {
-    max-width:140px !important;
-  }

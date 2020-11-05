@@ -9,6 +9,7 @@ import {ColumnSortDataAccessor} from "../data-table/data-table.component";
 export class DataTableHeaderCellComponent implements OnInit {
     @Input() columnName: string;
     @Input() columnWidth: number;
+    @Input() columnMinWidth: number;
     @Input() sortable: boolean;
     @Input() dataAccessor: ColumnSortDataAccessor;
     @ViewChild(TemplateRef, {static: true}) template: TemplateRef<any>;
