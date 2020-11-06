@@ -1,4 +1,4 @@
-<div class="root">
+<div class="root"  *ngIf="isAuthorizedCustomer; else outOfAccess">
     <div class="top-line bftscroll">
         <div class="top-line flex justify-space-between align-items-center flex-shrink-0 ">
             <instrument-search
@@ -367,3 +367,14 @@
 
     </div>
 </div>
+
+<ng-template #outOfAccess>
+    <div class="out-of-access">
+       <div class="image">
+          <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
+       </div>
+       <div class="text">
+          Upgrade your subscription to get access to Watchlists.
+       </div>
+    </div>
+ </ng-template>

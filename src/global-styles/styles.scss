@@ -858,6 +858,9 @@ img.sa-icon {
 
 }
 
+.Dark-theme .BFTimage {
+  filter: invert(1);
+}
 
 .Light-theme .lm_header .lm_controls .lm_tabdropdown:before{
   color:#191919 !important;

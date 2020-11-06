@@ -3,6 +3,28 @@
 @import "global-styles/themes/themes";
 
 :host {
+  .out-of-access { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    height: 100%;
+    width: 100%;
+
+    .text {
+      margin: 20px 10px;
+      display: flex;
+      text-align: center;
+    }
+  
+    .image {
+      display: flex;
+      justify-content: center;
+    }
+    img {
+      width: 200px;
+    }
+  }
 
   height: 100%;
   display: flex;
@@ -245,6 +267,9 @@
 
   }
 
+  .text {
+    color: themed('valueTextColor');
+  }
 
   .top-line {
     background-color: themed('appPanelColor');

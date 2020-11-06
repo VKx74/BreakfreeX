@@ -55,6 +55,34 @@ export class IdentityService {
 
     get isAdmin(): boolean {
         return this.role.toLowerCase() === Roles.Admin.toLowerCase();
+    }  
+    
+    get isAuthorizedCustomer(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            return true;
+        }
+
+        return false;
+    } 
+    
+    get isPro(): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("Pro") !== -1) {
+                    return true;    
+                }
+            }
+        }
+        
+        return false;
     }
 
     constructor(private _authService: AuthenticationService,

@@ -20,6 +20,7 @@ import { CommoditiesWatchlist } from 'modules/Watchlist/services/commodities';
 import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
 import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
 import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
+import { IdentityService } from '@app/services/auth/identity.service';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -100,6 +101,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public scannerHistoryResultsFiltered: IScannerHistoryResults[] = [];
     public selectedScannerResult: IScannerResults;
     public output: string;
+
+    public get isAuthorizedCustomer(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }  
+
+    public get isPro(): boolean {
+        return this._identityService.isPro;
+    }  
     
     @ViewChild('content', {static: false}) contentBox: ElementRef;
     
@@ -111,12 +120,16 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         @Inject(GoldenLayoutItemState) protected _state: IScannerState,
         private _alertService: AlertService,
         protected _instrumentService: InstrumentService,
+        private _identityService: IdentityService,
         private _alogService: AlgoService,
         private _cdr: ChangeDetectorRef,
         protected _injector: Injector) {
         super(_injector);
-
+        super.setTitle(
+            this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
+        );
         this._loadState(_state);
+        
 
         this.groups.push(this._featuredGroupName);
         this._types.forEach(_ => {
@@ -126,14 +139,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
+        if (!this._identityService.isAuthorizedCustomer) {
+            return;
+        }
+
         this.scanMarkets();
         this._timer = setInterval(() => {
             this.scanMarkets();
         }, 1000 * 60 * 2);
-
-        super.setTitle(
-            this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
-        );
     }
 
     segmentSelected(item: TradeTypes) {
@@ -361,6 +374,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         }
         const filteredByTimeframes = [];
         for (const i of filteredBySegments) {
+            if (!this._isTFAllowed(i.timeframe)) {
+                continue;
+            }
+
             if (this.activeTimeframe === TimeFrames.All) {
                 filteredByTimeframes.push(i);
             } else {
@@ -453,6 +470,15 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             case 24 * 60 * 60: return "Daily";
         }
         return "Undefined";
+    }
+
+    private _isTFAllowed(tf: number): boolean {
+       // less than 1h
+       if (!this.isPro && tf < 60 * 60) {
+            return false;
+       }
+
+       return true;
     }
 
     private _loadHistory() {

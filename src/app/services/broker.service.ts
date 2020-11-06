@@ -49,16 +49,8 @@ export class BrokerService implements IHealthable {
         if (!this.showTradingPanel) {
             return false;
         } 
-        if (this._identityService.isAdmin) {
-            return true;
-        }
-        if (!this._identityService.subscriptions || !this._identityService.subscriptions.length) {
-            return false;
-        }
-        // if (!this._identityService.tags || this._identityService.tags.indexOf("beta") === -1) {
-        //     return false;
-        // }
-        return true;
+
+        return this._identityService.isAuthorizedCustomer;
     }  
     
     public get isDemoAllowed(): boolean {

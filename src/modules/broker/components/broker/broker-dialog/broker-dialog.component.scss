@@ -5,7 +5,7 @@
 :host {
   .out-of-access{ 
     .text {
-      margin: 50px 0px;
+      margin: 20px 0px;
       text-align: center;
     }
   }
@@ -51,6 +51,10 @@
 }
 
 @include themify($themes, true) {
+
+  .text {
+    color: themed('valueTextColor');
+  }
 
   .policy-agreement-wrapper {
     label {

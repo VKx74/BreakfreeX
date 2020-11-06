@@ -40,6 +40,7 @@ import { AlertService } from '@alert/services/alert.service';
 import { HostListener } from '@angular/core';
 import { IFeaturedInstruments } from '@app/models/settings/user-settings';
 import { MatSelectChange } from '@angular/material/select';
+import { IdentityService } from '@app/services/auth/identity.service';
 
 export interface IWatchlistComponentState {
     viewMode: WatchlistViewMode;
@@ -106,6 +107,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     private _changesDetected: boolean;
     private _updateInterval: any;
 
+    get isAuthorizedCustomer(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }  
+
     get ViewMode() {
         return WatchlistViewMode;
     }
@@ -132,6 +137,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 private _watchlistService: WatchlistService,
                 private _alertManager: AlertService,
                 private _cdr: ChangeDetectorRef,
+                private _identityService: IdentityService,
                 protected _injector: Injector) {
 
         super(_injector);
@@ -148,6 +154,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
+        if (!this._identityService.isAuthorizedCustomer) {
+            return;
+        }
+        
         this._updateInterval = setInterval(() => {
             if (this._changesDetected) {
                 this._cdr.markForCheck();

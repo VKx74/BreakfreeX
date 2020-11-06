@@ -7,6 +7,36 @@
     margin-left: 20px;
   }
 
+  .out-of-access {
+    height: 100%;
+  }
+
+  .out-of-subscription {
+    margin-top: 30px;
+  }
+  
+  .out-of-access, .out-of-subscription { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    width: 100%;
+
+    .text {
+      margin: 20px 10px;
+      display: flex;
+      text-align: center;
+    }
+  
+    .image {
+      display: flex;
+      justify-content: center;
+    }
+    img {
+      width: 200px;
+    }
+  }
+
   .bftScanner {
     height: 100%;
   }
@@ -83,6 +113,10 @@
 
   .output, .scanning-time {
     color: themed('titleTextColor');
+  }
+
+  .text {
+    color: themed('valueTextColor');
   }
 
   // /deep/ mat-row:nth-child(even) {

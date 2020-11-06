@@ -103,7 +103,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
     
     autoSave() {
-        if (this._identityService.isAuthorized && this._saveLayout) {
+        if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
             const layoutState = this.layout.saveState();
             this._layoutStorageService.saveLayoutState(layoutState, true).subscribe((data) => { this._layoutStateChanged = false; });
         }
