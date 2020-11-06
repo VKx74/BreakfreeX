@@ -1,6 +1,6 @@
 <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
             [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)">
-    <data-table-header-cell columnName="Side" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
+    <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false"></data-table-header-cell>
     <data-table-header-cell columnName="Id" [columnWidth]="140" [columnMinWidth]="80" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="80" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->

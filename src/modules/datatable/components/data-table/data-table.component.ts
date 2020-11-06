@@ -397,45 +397,22 @@ export class DataTableComponent {
         const dx = width - prevWidth;
 
         if (dx !== 0) {
-            const nextColumnName = this._getNextColumnName(columnName);
             const newWidth = width;
-            const nextNewWidth = this.getColumnWidth(nextColumnName) - dx;
-            const columnsWidth = this._getColumnsWidth();
+            const minWidth = this.headerCellsObj[columnName].columnMinWidth || this.minColumnWidth;
 
-            if (newWidth < this.minColumnWidth || nextNewWidth < this.minColumnWidth) {
-                return;
-            }
-
-            let dimensionsRecalculated = false;
-
-            if (this._getColumnSpecifiedWidth(columnName) != null) {
-                this._getHeaderCell(columnName).columnWidth = null;
-                columnsWidth[columnName] = newWidth;
-                this._columnsDimensions = this._updateColumnsDimensions(columnsWidth, newWidth);
-
-                dimensionsRecalculated = true;
-            }
-
-            if (this._getColumnSpecifiedWidth(nextColumnName) != null) {
-                this._getHeaderCell(nextColumnName).columnWidth = null;
-                columnsWidth[nextColumnName] = nextNewWidth;
-                this._columnsDimensions = this._updateColumnsDimensions(columnsWidth, nextNewWidth);
-
-                dimensionsRecalculated = true;
-            }
-
-            if (dimensionsRecalculated) {
-                this.setColumnsDimensions(this._columnsDimensions);
-
+            if (newWidth < minWidth) {
                 return;
             }
 
             const ratio = width / prevWidth;
+            const widthDiff = width - prevWidth;
             const prevFlexGrow = this._columnsDimensions[columnName].flexGrow;
             const newFlexGrow = prevFlexGrow * ratio;
-
-            this._columnsDimensions[columnName].flexGrow = newFlexGrow;
-            this._columnsDimensions[nextColumnName].flexGrow += prevFlexGrow - newFlexGrow;
+            if (this._getColumnSpecifiedWidth(columnName) != null) {
+                this.headerCellsObj[columnName].columnWidth += widthDiff;
+            } else {
+                this._columnsDimensions[columnName].flexGrow = newFlexGrow;
+            } 
 
             this.setColumnsDimensions(this._columnsDimensions);
         }
