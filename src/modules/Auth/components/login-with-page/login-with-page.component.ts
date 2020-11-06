@@ -33,7 +33,7 @@ export class LoginWithPageComponent {
     }
 
     doLogin() {
-        if (this.provider || !this.code) {
+        if (this.provider && !this.code) {
             this._router.navigate([AppRoutes.Auth], {
                 relativeTo: this._route.root
             });

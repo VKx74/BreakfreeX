@@ -99,10 +99,12 @@ export class LoginPageComponent {
 
     doLoginWithGoogle() {
         this._clearNotifications();
+        // this._authService.signInWithGoogle();
     }
 
     doLoginWithFB() {
         this._clearNotifications();
+        // this._authService.signInWithFB();
     }
 
     doLogin() {

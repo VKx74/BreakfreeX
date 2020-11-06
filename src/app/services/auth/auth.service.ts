@@ -20,6 +20,7 @@ import {
 import {AppConfigService} from "../app.config.service";
 import {GrantTokenResponse} from "@app/models/auth/auth.models";
 import {AuthInterceptorSkipHeader} from "@app/services/auth/constants";
+import { APP_BASE_HREF } from '@angular/common';
 
 @Injectable()
 export class AuthenticationService {
@@ -28,6 +29,14 @@ export class AuthenticationService {
     };
 
     constructor(private _http: HttpClient) {
+    }
+
+    public get signInWithGoogleEndpoint(): string {
+        return `${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-google`;
+    }
+
+    public get signInWithFBEndpoint(): string {
+        return `${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-facebook`;
     }
 
     public changePassword(model: ChangePasswordModel): Observable<any> {
@@ -56,13 +65,13 @@ export class AuthenticationService {
             );
     }
 
-    public signInWithGoogle(): Observable<any> {
-        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-google`, this._httpOptions);
-    }
+    // public signInWithGoogle(): Observable<any> {
+    //     return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-google`, this._httpOptions);
+    // }
 
-    public signInWithFB(): Observable<any> {
-        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-facebook`, this._httpOptions);
-    }
+    // public signInWithFB(): Observable<any> {
+    //     return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-facebook`, this._httpOptions);
+    // }
 
     public signOut(): Observable<any> {
         return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signout`, this._httpOptions)

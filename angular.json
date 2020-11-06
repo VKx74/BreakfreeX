@@ -21,7 +21,8 @@
               "src/libs",
               "src/styles.css",
               "src/config/config.json",
-              "src/config/components.json",
+			  "src/config/components.json",
+			  "src/auth",
               {
                 "glob": "**/*",
                 "input": "node_modules/ngx-monaco-editor/assets/monaco",
