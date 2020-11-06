@@ -308,7 +308,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 this._dialog.open(ConfirmModalComponent, {
                     data: {
                         title: 'Risk alert',
-                        message: `Existing risk by related to "${this.config.instrument.symbol}" positions - "${this.risk.toFixed(2)}%" of your account balance. Do you want to continue place this tarde?`,
+                        message: `You have already exceeded reasonable risk limitations with current open positions. Adding a position on ${this.config.instrument.symbol} will only increase current risk and lead to overleverage. Are you sure you wish to increase risk beyond ${this.risk.toFixed(2)}% ?`,
                         onConfirm: () => {
                             this._placeOrder();
                         }
