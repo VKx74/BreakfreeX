@@ -74,6 +74,10 @@ export class IdentityService {
             return false;
         }
 
+        if (this.isAdmin) {
+            return true;
+        }
+
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Pro") !== -1) {
