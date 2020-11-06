@@ -11,6 +11,10 @@
 
 :host {
   height: 100%;
+
+  /deep/ mat-table {
+    min-width: 400px;
+  }
   
   .tableActions {
     width: 20px;
