@@ -90,16 +90,6 @@ export class IdentityService {
             );
     }
 
-    // signInWithGoogle(): Observable<any> {
-    //     this._clearCookies();
-    //     return this._authService.signInWithGoogle();
-    // }
-
-    // signInWithFB(): Observable<any> {
-    //     this._clearCookies();
-    //     return this._authService.signInWithFB();
-    // }
-
     signOut(): Observable<any> {
         return this._authService.signOut()
             .pipe(tap(() => {

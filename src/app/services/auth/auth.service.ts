@@ -65,14 +65,6 @@ export class AuthenticationService {
             );
     }
 
-    // public signInWithGoogle(): Observable<any> {
-    //     return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-google`, this._httpOptions);
-    // }
-
-    // public signInWithFB(): Observable<any> {
-    //     return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-facebook`, this._httpOptions);
-    // }
-
     public signOut(): Observable<any> {
         return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}Account/signout`, this._httpOptions)
             .pipe(
