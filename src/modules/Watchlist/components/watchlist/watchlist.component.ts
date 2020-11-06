@@ -1,4 +1,4 @@
-import {Component, Inject, Injector, ViewChild} from "@angular/core";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewChild} from "@angular/core";
 import {TrendDirection, WatchlistInstrumentVM} from "../../models/models";
 import {ConfirmModalComponent} from "UI";
 import {IInstrument} from "@app/models/common/instrument";
@@ -65,6 +65,7 @@ interface IInstrumentOrderBookInfo {
     selector: 'watchlist',
     templateUrl: 'watchlist.component.html',
     styleUrls: ['watchlist.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         {
             provide: DataFeedBase,
@@ -102,6 +103,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     private _watchlistUpdated: Subscription;
     private _featuredChanged: Subscription;
     private _myId: string;
+    private _changesDetected: boolean;
+    private _updateInterval: any;
 
     get ViewMode() {
         return WatchlistViewMode;
@@ -128,6 +131,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 private _layoutManagerService: LayoutManagerService,
                 private _watchlistService: WatchlistService,
                 private _alertManager: AlertService,
+                private _cdr: ChangeDetectorRef,
                 protected _injector: Injector) {
 
         super(_injector);
@@ -144,6 +148,13 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
+        this._updateInterval = setInterval(() => {
+            if (this._changesDetected) {
+                this._cdr.markForCheck();
+            }
+            this._changesDetected = false;
+        }, 500);
+
         this._watchlistService.getWatchlists().subscribe((data: IWatchlistItem[]) => {
             if (!data || !data.length) {
                 this.existingWatchlists = [];
@@ -564,6 +575,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         datafeed._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
            this._processHistory(response, instrumentVM);
         });
+
+        this._changesDetected = true;
     }
 
     private _processHistory(response: IHistoryResponse, instrumentVM: WatchlistInstrumentVM) {
@@ -578,6 +591,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
             this.instrumentsPriceHistory[key] = data.map(value => value.close);
         }
+
+        this._changesDetected = true;
     }
 
     private _sendInstrumentChange(instrument: IInstrument) {
@@ -765,6 +780,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         if (this.isOrderBookVisible(instrumentVM.instrument)) {
             this.hideOrderBook(instrumentVM.instrument);
         }
+
+        this._changesDetected = true;
     }
 
     private _subscribeOnInstrumentTick(instrumentVM: WatchlistInstrumentVM) {
@@ -777,11 +794,13 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         const subscription = this._realtimeService.subscribeToTicks(instrumentVM.instrument, (tick: ITick) => {
             this._updateWatchlistChartHistory(instrumentVM.instrument, tick.price);
             instrumentVM.handleTick(tick);
-            this.instrumentsVM = [...this.instrumentsVM];
+            this._changesDetected = true;
+            // this.instrumentsVM = [...this.instrumentsVM];
         });
 
         const hash = JsUtil.getInstrumentHash(instrumentVM.instrument);
         this._realtimeSubscriptions[hash] = subscription;
+        this._changesDetected = true;
     }
 
     private _unsubscribeFromInstrumentTick(instrumentVM: WatchlistInstrumentVM) {
@@ -797,6 +816,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         if (this.instrumentsPriceHistory[key]) {
             delete this.instrumentsPriceHistory[key];
         }
+
+        this._changesDetected = true;
     }
 
     private _addInstrument(instrument: IInstrument, fireStateChanged: boolean = true): WatchlistInstrumentVM {
@@ -819,6 +840,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         if (this.instrumentSearch) {
             this.instrumentSearch.reset();
         }
+
+        this._changesDetected = true;
 
         return instrumentVM;
     }
@@ -948,6 +971,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
         for (let interval in this.intervals) {
             clearInterval(this.intervals[interval]);
+        }
+
+        if (this._updateInterval) {
+            clearInterval(this._updateInterval);
         }
     }
 

@@ -70,6 +70,7 @@ export class DataTableComponent {
 
 
     @Input() minColumnWidth: number = 50;
+    @Input() preferredInitColumnsWidth: number;
     @Input() sortHandler: (data: Sort) => any;
     @Input() excludedColumns: string[] = [];
     @Input() hiddenColumns: string[] = [];
@@ -115,6 +116,7 @@ export class DataTableComponent {
     private _columnsDimensions: IColumnsDimensions = {};
     private _expandedRows: any[] = [];
     private _needSetDimensions: boolean = false;
+    private _initialized: boolean = false;
 
     get expandable(): boolean {
         return this.expandDetailsTemplate != null;
@@ -238,10 +240,10 @@ export class DataTableComponent {
             };
         }
 
-        this.minColumnWidth = Math.min(
-            this.minColumnWidth,
-            ...this.headerCells.map(c => c.columnWidth == null ? Number.MAX_SAFE_INTEGER : c.columnWidth)
-        );
+        // this.minColumnWidth = Math.min(
+        //     this.minColumnWidth,
+        //     ...this.headerCells.map(c => c.columnWidth == null ? Number.MAX_SAFE_INTEGER : c.columnWidth)
+        // );
 
         this.columns$ = new BehaviorSubject(this.headerCells.map(c => c.columnName).filter(name => !this.excludedColumns.includes(name)));
         this.hiddenColumns$ = new BehaviorSubject(this.hiddenColumns);
@@ -288,10 +290,11 @@ export class DataTableComponent {
                 if (c.sortable) {
                     acc[c.columnName] = true;
                 }
-
                 return acc;
             }, {});
         });
+
+        this._initialized = true;
     }
 
     isGroup(index, item): boolean {
@@ -394,45 +397,22 @@ export class DataTableComponent {
         const dx = width - prevWidth;
 
         if (dx !== 0) {
-            const nextColumnName = this._getNextColumnName(columnName);
             const newWidth = width;
-            const nextNewWidth = this.getColumnWidth(nextColumnName) - dx;
-            const columnsWidth = this._getColumnsWidth();
+            const minWidth = this.headerCellsObj[columnName].columnMinWidth || this.minColumnWidth;
 
-            if (newWidth < this.minColumnWidth || nextNewWidth < this.minColumnWidth) {
-                return;
-            }
-
-            let dimensionsRecalculated = false;
-
-            if (this._getColumnSpecifiedWidth(columnName) != null) {
-                this._getHeaderCell(columnName).columnWidth = null;
-                columnsWidth[columnName] = newWidth;
-                this._columnsDimensions = this._updateColumnsDimensions(columnsWidth, newWidth);
-
-                dimensionsRecalculated = true;
-            }
-
-            if (this._getColumnSpecifiedWidth(nextColumnName) != null) {
-                this._getHeaderCell(nextColumnName).columnWidth = null;
-                columnsWidth[nextColumnName] = nextNewWidth;
-                this._columnsDimensions = this._updateColumnsDimensions(columnsWidth, nextNewWidth);
-
-                dimensionsRecalculated = true;
-            }
-
-            if (dimensionsRecalculated) {
-                this.setColumnsDimensions(this._columnsDimensions);
-
+            if (newWidth < minWidth) {
                 return;
             }
 
             const ratio = width / prevWidth;
+            const widthDiff = width - prevWidth;
             const prevFlexGrow = this._columnsDimensions[columnName].flexGrow;
             const newFlexGrow = prevFlexGrow * ratio;
-
-            this._columnsDimensions[columnName].flexGrow = newFlexGrow;
-            this._columnsDimensions[nextColumnName].flexGrow += prevFlexGrow - newFlexGrow;
+            if (this._getColumnSpecifiedWidth(columnName) != null) {
+                this.headerCellsObj[columnName].columnWidth += widthDiff;
+            } else {
+                this._columnsDimensions[columnName].flexGrow = newFlexGrow;
+            } 
 
             this.setColumnsDimensions(this._columnsDimensions);
         }
@@ -455,7 +435,7 @@ export class DataTableComponent {
 
         this.visibleColumns$.getValue().reduce((acc, columnName) => {
             const elements = this.elRef.nativeElement.getElementsByClassName(`header-cell ${this._getColumnCellClass(columnName)}`);
-
+            
             acc[columnName] = elements[0].clientWidth;
 
             return acc;
@@ -493,19 +473,20 @@ export class DataTableComponent {
     setColumnDimension(columnName: string, dimensions: IColumnsDimensions) {
         const columnEls = Array.from(this.elRef.nativeElement.getElementsByClassName(this._getColumnCellClass(columnName)));
 
+        const minWidth = this.headerCellsObj[columnName].columnMinWidth || this.minColumnWidth;
         if (this.headerCellsObj[columnName].columnWidth != null) {
             columnEls.forEach((el: HTMLDivElement) => {
                 el.style.flexGrow = "0";
-                el.style.flexShrink = "0";
+                el.style.flexShrink = "1";
                 el.style.flexBasis = `${this.headerCellsObj[columnName].columnWidth}px`;
-                el.style.minWidth = `${this.minColumnWidth}px`;
+                el.style.minWidth = `${minWidth}px`;
             });
         } else {
             columnEls.forEach((el: HTMLDivElement) => {
                 el.style.flexGrow = dimensions[columnName].flexGrow.toString();
                 el.style.flexShrink = "1";
                 el.style.flexBasis = "0";
-                el.style.minWidth = `${this.minColumnWidth}px`;
+                el.style.minWidth = `${minWidth}px`;
             });
         }
     }
@@ -613,7 +594,7 @@ export class DataTableComponent {
     }
 
     private _getColumnCellClass(columnName: string): string {
-        return `mat-column-${columnName.replace('*', '-').replace('!', '-').replace(' ', '-')}`;
+        return `mat-column-${columnName.replace('*', '-').replace('!', '-').replace(' ', '-').replace('(', '-').replace(')', '-').replace('%', '-')}`;
     }
 
     private _getColumnSortDataAccessor(columnName: string): ColumnSortDataAccessor {

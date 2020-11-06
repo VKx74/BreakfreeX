@@ -90,6 +90,9 @@
   /deep/ mat-row {
     height: 25px;
   }
+  /deep/ mat-table {
+    min-width: 600px;
+  }
 
   .selectAccount {
     selector {

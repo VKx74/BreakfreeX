@@ -3,19 +3,19 @@
         [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
         [hiddenColumns]="['Net Risk']"
         (onContextMenuSelected)="handleContextMenuSelected($event)">
-        <data-table-header-cell columnName="Side" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
-        <data-table-header-cell columnName="Symbol" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false"></data-table-header-cell>
+        <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->
-        <data-table-header-cell columnName="Size" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Price" [sortable]="true">{{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Current Price" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Current Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Pip PL" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell> -->
-        <data-table-header-cell columnName="Net PL" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Commission" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Swap" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Close" [columnWidth]="36"></data-table-header-cell>
+        <data-table-header-cell columnName="Net PL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Commission" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Swap" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
     
 
         <data-table-cell columnName="Side">
@@ -70,7 +70,7 @@
         </data-table-cell>
         <data-table-cell columnName="Close">
             <ng-template let-item>
-                <div class="flex justify-content-center">
+                <div class="flex justify-flex-end">
                     <trading-close-button  (click)="closePosition(item)"></trading-close-button>
                 </div>
             </ng-template>

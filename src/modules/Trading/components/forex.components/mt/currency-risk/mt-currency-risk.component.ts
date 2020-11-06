@@ -13,6 +13,7 @@ import { MTCurrencyRisk, MTOrder } from 'modules/Trading/models/forex/mt/mt.mode
 export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
     public groups: string[] = ["Actual", "Pending"];
     public groupingField: string = "Type";
+    public maxRisk: number = 5;
 
     protected loadItems(): Observable<MTCurrencyRisk[]> {
        return of(this._mtBroker.currencyRisks);
@@ -29,11 +30,11 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
     }
 
     riskClass(item: MTCurrencyRisk) {
-        if (item.RiskPercentage < 3) {
+        if (item.RiskPercentage < 3.5) {
             return "low-risk";
         }
 
-        if (item.RiskPercentage < 7) {
+        if (item.RiskPercentage < this.maxRisk) {
             return "mid-risk";
         }
 

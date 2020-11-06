@@ -30,7 +30,7 @@
                   [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
                   (onRowSelect)="handleScannerResultsClick($event)" [groups]="groups" [groupingField]="groupingField">
       
-                  <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="20">
+                  <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="20" [columnMinWidth]="20">
                   </data-table-header-cell>
                   <data-table-header-cell columnName="symbol" [sortable]="true">
                      {{'instrument' | translate}}

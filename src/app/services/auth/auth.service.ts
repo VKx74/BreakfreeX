@@ -20,7 +20,6 @@ import {
 import {AppConfigService} from "../app.config.service";
 import {GrantTokenResponse} from "@app/models/auth/auth.models";
 import {AuthInterceptorSkipHeader} from "@app/services/auth/constants";
-import { APP_BASE_HREF } from '@angular/common';
 
 @Injectable()
 export class AuthenticationService {
