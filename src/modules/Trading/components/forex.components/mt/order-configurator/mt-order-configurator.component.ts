@@ -86,6 +86,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _selectedTime: string = `${this._oneDayPlus.getUTCHours()}:${this._oneDayPlus.getUTCMinutes()}`;
     private _selectedDate: Date = this._oneDayPlus;
     private marketSubscription: Subscription;
+    private _maxRisk: number = 5;
+    private _normaRisk: number = 5;
     public risk: number = 0;
 
     @ViewChild("riskArrow", {static: false}) riskArrow: ElementRef;
@@ -272,11 +274,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
             return;
         }
 
-        const max = 10;
         const padding = 0;
         const width = this.riskGraph.nativeElement.clientWidth - 4;
 
-        let riskPercentage = this.risk / max;
+        let riskPercentage = this.risk / this._maxRisk;
         if (riskPercentage < 0) {
             riskPercentage = 0;
         }
@@ -287,7 +288,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         const margin = Math.round(width * riskPercentage) - padding;
 
         this.riskArrow.nativeElement.style["margin-left"] = `${margin}px`;
-        this.riskArrow.nativeElement.style["fill"] = margin < width / 2 ? "#5eaf80" : "#dc3445";
+        this.riskArrow.nativeElement.style["fill"] = this.risk < this._normaRisk ? "#5eaf80" : "#dc3445";
     }
 
     private _calculateRisk() {
@@ -304,7 +305,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.submitHandler(this.config);
             this.onSubmitted.emit();
         } else {
-            if (this.risk > 10) {
+            if (this.risk > this._maxRisk) {
                 this._dialog.open(ConfirmModalComponent, {
                     data: {
                         title: 'Risk alert',
