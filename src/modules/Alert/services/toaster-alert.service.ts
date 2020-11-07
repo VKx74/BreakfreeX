@@ -10,6 +10,7 @@ export class ToasterAlertService extends AlertService {
         positionClass: 'toast-top-right',
         toastClass: 'toast-custom',
         timeOut: 1000 * 10
+
     };
 
     constructor(config?: AlertServiceConfig) {

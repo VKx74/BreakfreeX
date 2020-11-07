@@ -242,20 +242,17 @@ select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
   font-size:12px;
+  font-weight:600;
 }
 
 .mat-form-field-flex {
   background-color: #fff !important;
 }
 
-.emailfield {
 
 
-   transition-duration: 0.22s;
-}
+.lds-ellipsis div {
 
-.passwordfield {
-
-
+  background:#000 !important;;
   transition-duration: 0.22s;
 }
