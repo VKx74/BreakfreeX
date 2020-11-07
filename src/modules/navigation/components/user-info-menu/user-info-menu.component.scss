@@ -12,17 +12,20 @@
 }
 
 .avatar {
-  min-width: 70px;
-  max-width: 70px;
-  height: 70px;
+  min-width: 20px;
+  max-width: 30px;
+  height: 30px;
+  padding-left:5px;
+    vertical-align: middle;
 }
 
 .menu-top {
-  padding: 15px 18px 18px 18px;
+  padding: 15px;
+  
 }
 
 .menu-bottom {
-  padding: 18px 18px 0px 18px;
+  padding: 18px;
 }
 
 .mat-menu-panel {
@@ -32,9 +35,8 @@
   position: relative;
 
   .user-settings {
-    margin-right: 60px;
-    margin-left: -4px;
-    margin-top: -4px;
+
+    
   }
 
   .log-out {
@@ -44,15 +46,13 @@
   }
 
   .user-name {
-    padding-top: 18px;
-    font-size: 16px;
-    //font-family: Rubik;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.19;
-    letter-spacing: normal;
-    text-align: left;
+
+    font-size:12px;
+    text-transform: capitalize;
+    padding-left:5px;
+    vertical-align: middle;
+
+
 
     @include themify($themes, true) {
       color: themed('titleTextColor');
@@ -77,5 +77,66 @@
       line-height: 1.15;
     }
   }
+} 
+
+
+.topnewmenu {
+  overflow: hidden;
+  width: 200px;
+  height: 25px;
+  font-size:12px;
+  font-weight:600;
+  transition-duration: 0.22s;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition-duration: 0.22s;
+  vertical-align: middle;
+  @include themify($themes, true) {
+    color: themed('titleTextColor');
+    
+  }
+}
+
+
+.topnewmenu.onx:hover .innertext{
+  transition-duration: 0.22s;
+  font-size:13px;
+  @include themify($themes, true) {
+    color: themed('accentColor');
+    
+  }
+
+
+  
+}
+
+.topnewmenu.onx:hover .innericon .fa{
+  transition-duration: 0.22s;
+  font-size:17px;
+  @include themify($themes, true) {
+    color: themed('accentColor');
+    
+  }
+
+
+}
+
+.topnewmenu .username .innertext{
+text-transform: capitalize;
+
+}
+.topnewmenu .innericon .fa {
+  font-size: 16px;
+  align-content: normal;
+      vertical-align: top;
+}
+
+.topnewmenu span.innericon {
+  padding-right: 5px;
+      vertical-align: middle;
+}
+
+.fa {
+transition-duration: 0.22s;
 }
 

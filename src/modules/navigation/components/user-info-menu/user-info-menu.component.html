@@ -1,21 +1,43 @@
 <div class="user-info-menu">
-    <div class="menu-top flex flex-direction-column justify-content-center">
-        <div class="flex justify-space-between w-100">
-            <div class="crypto-button-icon user-settings" routerLink="/platform/settings">
-                <span class="crypto-icon crypto-icon-settings" title="{{'app.settings' | translate}}"></span>
-            </div>
+    <div class="menu-top">
+   
 
-           <div class="avatar">
-               <ng-container *ngTemplateOutlet="avatarTemplate || avatar"></ng-container>
+
+
+
+
+        
+
+        <div class="topnewmenu" >
+          <div class="inner username">  
+           
+              <span class="innertext">Welcome {{userName}}  </span>
+         </div>
+        
+         </div>
+
+         <div class="topnewmenu onx" >
+            <div class="inner usersettings" routerLink="/platform/settings">  
+                <span class="innericon"><i class="fa fa-cog" aria-hidden="true"></i>  </span>
+                <span class="innertext">User Settings </span>
+           </div>
+          
            </div>
 
-            <div class="crypto-button-icon log-out" (click)="onLogoutClick()">
-                <span class="crypto-icon crypto-icon-logout" title="{{'app.logout' | translate}}"></span>
-            </div>
-        </div>
-        <div class="user-name flex justify-content-center crypto-text is-large">
-            {{userName}}
-        </div>
+           <div class="topnewmenu onx" >
+            <div class="inner logout" (click)="onLogoutClick()">  
+                <span class="innericon"><i class="fa fa-sign-out" aria-hidden="true"></i>  </span>
+                <span class="innertext">Log Out </span>
+           </div>
+          
+           </div>
+        
+        
+        
+        
+        
+       
+
     </div>
 
     <ng-template #avatar>
