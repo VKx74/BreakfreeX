@@ -9,35 +9,7 @@
   display: block;
   overflow: auto;
 
-  .login-with-google, .login-with-fb {
-    width: 100px;
-    height: 40px;
-    line-height: 24px;
-    font-size: 16px;
-    width: 160px;
-    background-color: #fff;
-    border: 1px solid #e0e3eb;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    &:hover {
-      background-color: #f0f3fa;
-    }
-    svg {
-      margin-top: 6px;
-    }
-  }
 
-  .third-party-capture {
-    line-height: 40px;
-  }
-
-  .third-party-login {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-  }
 
   .captcha {
     display: none;
@@ -85,7 +57,7 @@
   }
 
   .crypto-button {
-    font-family: 'PT Sans';
+    
   }
 
   .login-btn {
@@ -144,10 +116,27 @@
 }
 
 button.btn.crypto-button.crypto-button-full-width.button_success.login-btn {
-  background-color: black;
-  opacity: 0.8;
+  border:1px solid black;
+  border-radius:5px;
   font-weight: bold;
+  font-size:12px;
+  background:#fff;
+  color:#000;
+  padding:5px;
+  transition-duration: 0.22s;
+  opacity: 1;
 }
+
+button.btn.crypto-button.crypto-button-full-width.button_success.login-btn:hover {
+  background-color: black;
+  color:#fff;
+  font-weight: bold;
+  font-size:14px;
+  transition-duration: 0.22s;
+  padding:10px;
+  opacity: 1;
+}
+
 
 
 body.Light-theme.thmLightTheme {
@@ -200,13 +189,13 @@ span.form-header__title.signIn {
 
 
 .beta {
-  margin-top: 15px;
+  margin-top: 10px;
   background: #ffffff;
-  padding: 15px;
+  padding: 10px;
   border-radius: 5px;
   color: #1a1a1a;
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
   box-shadow: 0 10px 19.1px 1.9px rgba(0, 0, 0, 0.2);
   position: relative;
   font-weight: 600;
@@ -222,8 +211,51 @@ span.form-header__title.signIn {
   color: #fff;
   text-align: center;
   font-size: 14px;
-
   position: relative;
-
   font-weight: 600;
+}
+
+.beta svg {
+  vertical-align: middle;
+  float: left;
+  height: 20px;
+  width: 20px;
+  overflow: visible;
+}
+
+.beta:hover .beta.svg {
+  height: 30px !important;
+  width: 30px !important;
+  fill:white;
+}
+
+.beta span {
+  vertical-align: middle;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  font-size:12px;
+}
+
+.mat-form-field-flex {
+  background-color: #fff !important;
+}
+
+.emailfield {
+
+
+   transition-duration: 0.22s;
+}
+
+.passwordfield {
+
+
+  transition-duration: 0.22s;
 }
