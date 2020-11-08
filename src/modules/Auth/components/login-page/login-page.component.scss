@@ -8,6 +8,8 @@
   width: 100%;
   display: block;
   overflow: auto;
+  background:#191919;
+  font-family:  $primaryFontFamily;
 
 
 
@@ -15,11 +17,7 @@
     display: none;
   }
   
-  .login-page {
-    display: flex;
-    margin: 20vh 0;
-    align-items: center;
-  }
+
 
   .form-header {
     &__title.signIn {
@@ -107,8 +105,15 @@
 }
 
 
+span#actualquote {
+  padding: 15px;
+  color: #fff;
+}
+
+.quoteholder {display: block;position: relative;margin-top: 60vh;margin-left: 10vh;}
+
 .overlay-wrapper {
-  margin: 0 auto !important;
+
 }
 
 .spc {
@@ -153,6 +158,7 @@ body.Light-theme.thmLightTheme {
 
 .form-wrapper {
   padding:15px;
+  width:290px !important;
 
 }
 
@@ -196,7 +202,7 @@ span.form-header__title.signIn {
   color: #1a1a1a;
   text-align: center;
   font-size: 12px;
-  box-shadow: 0 10px 19.1px 1.9px rgba(0, 0, 0, 0.2);
+  border: 1px solid #000;
   position: relative;
   font-weight: 600;
   transition-duration: 0.22s;
@@ -255,4 +261,75 @@ select:-webkit-autofill:focus {
 
   background:#000 !important;;
   transition-duration: 0.22s;
+}
+
+.full-height {
+  display:block;
+  height:100%;
+  transform: translateY(0px);
+}
+
+.full-height.background {
+ background-image: url(https://images.unsplash.com/photo-1604724434236-a7cebeaa13e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80);
+}
+
+
+
+.login-page {
+
+  background: #fff;
+  height: 1010px;
+}
+
+.left {
+  padding: 50px;
+  max-width: 400px;
+  margin:0 auto;
+}
+
+span.splitter {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: block;
+  height: 0.01rem;
+  background: #19191963;
+}
+
+.navimgholder {
+  width: 100px;
+  height: 100px;
+  background: #191919;
+}
+
+.navimgholder img {
+  padding: 20px;
+}
+
+a.createuserbyemail {
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+span.continuewith {
+  text-align: center;
+  width: 100%;
+  display: block;
+  font-size: 12px;
+}
+
+.margintop20 {
+margin-top:20px !important;
+}
+.marginbottom-5 {
+  margin-bottom:-5px !important;
+  }
+
+label.labeln {
+  font-size: 12px;
+  font-family: inherit;
+  margin-bottom: 5px;
+  display: block;
+  font-weight: bold;
 }
