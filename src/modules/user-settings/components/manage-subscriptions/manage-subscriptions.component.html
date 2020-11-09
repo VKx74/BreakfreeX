@@ -31,7 +31,7 @@
     </div>
     <ng-template *ngIf="!loading; else loader"></ng-template>
     <ng-template #loader>
-      <loader></loader>
+      <bft-loader></bft-loader>
     </ng-template>
     <div class="flex description_info">
       * To get your billing and subscription changes applied to application immediately please re-login. <span class="relogin-now" (click)="relogin()"> Re-login now.</span>

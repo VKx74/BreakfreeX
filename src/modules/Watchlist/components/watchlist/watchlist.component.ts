@@ -89,6 +89,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     existingWatchlists: IWatchlistItem[];
     featuredWatchlists: IWatchlistItem[] = [];
     featuredInstruments: IFeaturedInstruments[];
+    loading: boolean;
 
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
     selectedInstrumentVM: WatchlistInstrumentVM = null;
@@ -141,6 +142,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 protected _injector: Injector) {
 
         super(_injector);
+        this.loading = true;
 
         this.setTitle(
             this._translateService.stream('watchlistComponentName')
@@ -166,6 +168,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         }, 500);
 
         this._watchlistService.getWatchlists().subscribe((data: IWatchlistItem[]) => {
+            this.loading = false;
+            
             if (!data || !data.length) {
                 this.existingWatchlists = [];
             } else {

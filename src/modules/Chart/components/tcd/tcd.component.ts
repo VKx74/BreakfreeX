@@ -145,14 +145,18 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     ngAfterViewInit() {
-        this._educationalTipsService.getLinkForComponent(ComponentIdentifier.chart)
-            .subscribe(links => {
-                // this.linksList = links;
-                this.init(this._state);
-            }, e => {
-                console.log(e);
-                this.init(this._state);
-            });
+        // this._educationalTipsService.getLinkForComponent(ComponentIdentifier.chart)
+        //     .subscribe(links => {
+        //         // this.linksList = links;
+        //         this.init(this._state);
+        //     }, e => {
+        //         console.log(e);
+        //         this.init(this._state);
+        //     });
+
+        setTimeout(() => {
+            this.init(this._state);
+        }, 1);
     }
 
     init(state?: ITcdComponentState) {
@@ -186,7 +190,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 addThemeClass: false,
                 // chartType: 'hollowCandle',
                 crossHair: "crossBars",
-                datafeed: d,
+                datafeed: this._datafeed,
                 hideScrollToLastBar: true,
                 instrument: state ? state.instrument : DataFeedBase.DefaultInstrument,
                 timeFrame: state && state.timeFrame,

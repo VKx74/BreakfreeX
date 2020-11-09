@@ -1,7 +1,7 @@
 <div class="caption-wrapper text-center" *ngIf="processState.isPending() || processState.isFailed()">
     <span class="caption" *ngIf="processState.isPending()">
 <!--        {{getPendingCaption() | async}}-->
-        <loader></loader>
+        <bft-loader></bft-loader>
     </span>
     <span class="caption" *ngIf="processState.isFailed()">
         {{getErrorCaption() | async}}

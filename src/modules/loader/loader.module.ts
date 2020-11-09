@@ -1,9 +1,10 @@
 import {NgModule} from '@angular/core';
 import {LoaderComponent} from "./loader/loader.component";
 import {LoadingModule} from "ngx-loading";
+import { BFTLoaderComponent } from './bft-loader/bft-loader.component';
 
 @NgModule({
-  declarations: [LoaderComponent],
+  declarations: [LoaderComponent, BFTLoaderComponent],
     imports: [
         LoadingModule.forRoot({
             backdropBackgroundColour: 'inherit',
@@ -12,6 +13,6 @@ import {LoadingModule} from "ngx-loading";
             tertiaryColour: '#3d61cc'
         })
     ],
-  exports: [LoaderComponent]
+  exports: [LoaderComponent, BFTLoaderComponent]
 })
 export class LoaderModule { }

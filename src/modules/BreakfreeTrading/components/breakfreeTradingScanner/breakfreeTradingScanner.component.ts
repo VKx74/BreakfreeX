@@ -101,6 +101,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public scannerHistoryResultsFiltered: IScannerHistoryResults[] = [];
     public selectedScannerResult: IScannerResults;
     public output: string;
+    public loading: boolean;
 
     public get isAuthorizedCustomer(): boolean {
         return this._identityService.isAuthorizedCustomer;
@@ -128,6 +129,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         super.setTitle(
             this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
         );
+        this.loading = true;
         this._loadState(_state);
         
 
@@ -162,11 +164,12 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
     
     scanMarkets() {
-        this.output = "Scanning...";
+        this.loading = true;
         this.scannerResults = [];
 
         this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
             this.scanningTime = new Date(data.scanning_time * 1000).toUTCString();
+            this.loading = false;
             this._processData(data.items);
             if (!this.scannerResults.length) {
                 this.output = "No Results";
@@ -175,6 +178,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             }
             this._refresh();
         }, (error) => {
+            this.loading = false;
             this.output = "Failed to scan";
             this._refresh();
         }); 

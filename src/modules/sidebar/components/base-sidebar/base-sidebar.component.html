@@ -7,7 +7,7 @@
     </div>
   </mat-sidenav>
   <mat-sidenav-content class="mat-sidenav-content">
-    <loader *ngIf="loading$ | async"></loader>
+    <bft-loader *ngIf="loading$ | async"></bft-loader>
 <!--    <loader [hidden]="!(loading$ | async)"></loader>-->
 <!--    <component-preloader *ngIf="loading$ | async"></component-preloader>-->
     <div class="flex flex-grow-1 w-100 flex-direction-column content">
