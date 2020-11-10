@@ -41,6 +41,7 @@ import { HostListener } from '@angular/core';
 import { IFeaturedInstruments } from '@app/models/settings/user-settings';
 import { MatSelectChange } from '@angular/material/select';
 import { IdentityService } from '@app/services/auth/identity.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 export interface IWatchlistComponentState {
     viewMode: WatchlistViewMode;
@@ -142,7 +143,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 protected _injector: Injector) {
 
         super(_injector);
-        this.loading = true;
 
         this.setTitle(
             this._translateService.stream('watchlistComponentName')
@@ -159,6 +159,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         if (!this._identityService.isAuthorizedCustomer) {
             return;
         }
+
+        this.loading = true;
         
         this._updateInterval = setInterval(() => {
             if (this._changesDetected) {
@@ -558,6 +560,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 }
             }
         } as any).afterClosed();
+    }
+
+    processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _initDatafeed(instrumentVM: WatchlistInstrumentVM) {

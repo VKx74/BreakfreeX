@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {AppConfigService} from "../app.config.service";
 import {map} from "rxjs/operators";
 import {AccountType, StrategyMix} from 'modules/Auth/models/models';
+import { AlertService } from '@alert/services/alert.service';
 
 export enum PersonalInfoStatus {
     None = 0,
@@ -277,7 +278,7 @@ export class PersonalInfoService {
         withCredentials: true
     };
 
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, private _alertService: AlertService) {
     }
 
     getPersonalInfo(userId: string): Observable<AccountInfoModel> {
@@ -381,6 +382,26 @@ export class PersonalInfoService {
             })
         );
     } 
+
+    processUserBillingDashboard() {
+        this.getUserBillingDashboard().subscribe((result: IBillingDashboard) => {
+            if (result) {
+                if (result.url) {
+                    let popUp = window.open(result.url, "_blank");
+                    if (!popUp || popUp.closed || typeof popUp.closed === 'undefined') { 
+                        // POPUP BLOCKED
+                        window.location.assign(result.url);
+                    }
+                } else {
+                    this._alertService.info("Subscriptions not found for current user");    
+                }
+            } else {
+                this._alertService.info("Subscriptions not found for current user");    
+            }
+        }, (error) => {
+            this._alertService.error("Failed to get subscription details");
+        });
+    }
     
     getUserBillingDashboard(): Observable<IBillingDashboard> {
         return this._http.get<IBillingDashboard>(`${AppConfigService.config.apiUrls.identityUrl}striple/user_billing_dashboard`, this._httpOptions);

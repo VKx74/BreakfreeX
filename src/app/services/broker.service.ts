@@ -52,13 +52,6 @@ export class BrokerService implements IHealthable {
 
         return this._identityService.isAuthorizedCustomer;
     }  
-    
-    public get isDemoAllowed(): boolean {
-        if (!this._identityService.subscriptions || !this._identityService.subscriptions.length) {
-            return false;
-        }
-        return true;
-    }
 
     private _applicationType: ApplicationType;
 

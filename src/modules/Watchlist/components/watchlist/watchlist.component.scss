@@ -10,11 +10,13 @@
     flex-flow: column;
     height: 100%;
     width: 100%;
+    cursor: pointer;
 
     .text {
       margin: 20px 10px;
       display: flex;
       text-align: center;
+      text-decoration: underline;
     }
   
     .image {

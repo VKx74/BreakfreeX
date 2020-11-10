@@ -81,7 +81,7 @@
                </div>
 
                <ng-template #subscriptionOutput>
-                  <div class="out-of-subscription" *ngIf="!isPro">
+                  <div class="out-of-subscription" *ngIf="!isPro" (click)="manageSubscriptions()">
                      <div class="image">
                         <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
                      </div>
@@ -152,7 +152,7 @@
 </div>
 
 <ng-template #outOfAccess>
-   <div class="out-of-access">
+   <div class="out-of-access" (click)="processCheckout()">
       <div class="image">
          <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
       </div>

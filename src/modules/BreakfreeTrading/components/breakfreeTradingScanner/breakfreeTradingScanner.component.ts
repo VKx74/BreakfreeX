@@ -21,6 +21,9 @@ import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
 import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
 import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
 import { IdentityService } from '@app/services/auth/identity.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CheckoutComponent } from '../checkout/checkout.component';
+import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -119,17 +122,18 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     constructor(@Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
         @Inject(GoldenLayoutItemState) protected _state: IScannerState,
+        private _dialog: MatDialog,
         private _alertService: AlertService,
         protected _instrumentService: InstrumentService,
         private _identityService: IdentityService,
         private _alogService: AlgoService,
         private _cdr: ChangeDetectorRef,
+        private _personalInfoService: PersonalInfoService,
         protected _injector: Injector) {
         super(_injector);
         super.setTitle(
             this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
         );
-        this.loading = true;
         this._loadState(_state);
         
 
@@ -144,6 +148,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (!this._identityService.isAuthorizedCustomer) {
             return;
         }
+        this.loading = true;
 
         this.scanMarkets();
         this._timer = setInterval(() => {
@@ -207,6 +212,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             clearInterval(this._timer);
             this._timer = null;
         }
+    }
+
+    manageSubscriptions() {
+        this._personalInfoService.processUserBillingDashboard();
+    }
+
+    processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     public getFeaturedDetails(scannerVM: IScannerResults): string {

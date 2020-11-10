@@ -32,6 +32,7 @@ import { StrategyV2ModeBacktestComponent } from './components/strategyV2ModeBack
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 @NgModule({
     // components here
@@ -41,7 +42,8 @@ import { MatSelectModule } from '@angular/material/select';
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
-        BreakfreeTradingScannerComponent
+        BreakfreeTradingScannerComponent,
+        CheckoutComponent
     ],
     imports: [
         CommonModule,
@@ -72,7 +74,8 @@ import { MatSelectModule } from '@angular/material/select';
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
-        BreakfreeTradingScannerComponent
+        BreakfreeTradingScannerComponent,
+        CheckoutComponent
     ],
     // components here
     exports: [
@@ -81,7 +84,8 @@ import { MatSelectModule } from '@angular/material/select';
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
-        BreakfreeTradingScannerComponent
+        BreakfreeTradingScannerComponent,
+        CheckoutComponent
     ],
     providers: [
         HistoryService,

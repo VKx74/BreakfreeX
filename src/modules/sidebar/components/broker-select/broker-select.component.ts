@@ -9,6 +9,8 @@ import {
 import {MatDialog} from "@angular/material/dialog";
 import {AlertService} from "@alert/services/alert.service";
 import {tap} from "rxjs/operators";
+import { IdentityService } from '@app/services/auth/identity.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 @Component({
     selector: 'broker-select',
@@ -36,17 +38,13 @@ export class BrokerSelectComponent implements OnInit, OnChanges {
     }
 
     constructor(private _brokerService: BrokerService,
-                private _alertsService: AlertService,
-                // private _brokerStorage: BrokerStorage,
+                private _identityService: IdentityService,
                 private _dialog: MatDialog) {
     }
 
     ngOnInit() {
         this.availableBrokers = APP_TYPE_BROKERS[this.applicationType];
         this.selectedBroker = this.availableBrokers[0];
-        // debugger
-        // this._brokerService.activeBroker$
-        //     .subscribe(() =>  this.selectedBroker = this.currentBrokerInstance);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -62,6 +60,11 @@ export class BrokerSelectComponent implements OnInit, OnChanges {
     }
     
     connectCurrentBroker() {
+        if (!this._identityService.isAuthorizedCustomer) {
+            this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+            return;
+        }
+
         const ref = this._dialog.open<BrokerDialogComponent, BrokerDialogData>(BrokerDialogComponent, {
             data: {
                 brokerType: this.selectedBroker
@@ -75,17 +78,6 @@ export class BrokerSelectComponent implements OnInit, OnChanges {
                 })
             )
             .subscribe(res => {
-                // console.log('BROKER', res);
-                // if (res) {
-                //     this._brokerService.saveState()
-                //         .subscribe(state => {
-                //             console.log('SAVE BROKER STATE', state);
-                //             this._brokerStorage.saveBrokerState(state);
-                //         });
-                //
-                // } else {
-                //     this.selectedBroker = null;
-                // }
             });
     }
 
