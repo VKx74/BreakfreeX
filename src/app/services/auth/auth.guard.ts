@@ -26,7 +26,6 @@ export class AuthGuard implements CanActivate, CanLoad {
         };
 
         settings.redirectUrl = route.data['redirectUrl'] || DefaultRedirect;
-
         if (this._identityService.isAuthorized) {
             if ( this._identityService.isExpired) {
                 return this._identityService.refreshTokens()

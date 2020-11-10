@@ -32,6 +32,13 @@ const routes: Routes = [
                 canActivate: [AuthGuard]
             },
             {
+                path: AppRoutes.ClearSession,
+                pathMatch: 'full',
+                loadChildren: () => import('../modules/platform/platform.module').then(m => m.PlatformModule),
+                canLoad: [AuthGuard, ComponentsGuard],
+                canActivate: [AuthGuard]
+            },
+            {
                 path: AppRoutes.Platform,
                 // pathMatch: 'full',
                 loadChildren: () => import('../modules/platform/platform.module').then(m => m.PlatformModule),

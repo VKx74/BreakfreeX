@@ -52,20 +52,12 @@ export class AppComponent {
     constructor(private _authService: IdentityService,
                 private _router: Router,
                 private _route: ActivatedRoute,
-                private _brokerService: BrokerService,
                 private _ss: SidebarService,
                 private _loaderService: LoaderService,
-                private _componentsAccessService: ComponentAccessService,
-                private _themeService: ThemeService,
-                private _localizationService: LocalizationService,
-                private _userSettingsService: UserSettingsService,
-                private _applicationTypeService: ApplicationTypeService,
                 private _angulartics2Segment: Angulartics2Segment,
                 private _angulartics2GoSquared: Angulartics2GoSquared,
                 @Inject(AppTranslateService) private _translateService: TranslateService
     ) {
-
-
         this._authService.isAuthorizedChange$.subscribe(value => {
             if (!value) {
                 window.location.reload();
@@ -97,9 +89,10 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        // this._userSettingsService.applySettings(
-        //     this._route.snapshot.data['userSettings']
-        // );
+        const url = this._router.routerState.snapshot.url;
+        if (url && url.endsWith(AppRoutes.ClearSession)) {
+            this._authService.signOut().subscribe();
+        }
 
         let currModule;
         let prevModule;
