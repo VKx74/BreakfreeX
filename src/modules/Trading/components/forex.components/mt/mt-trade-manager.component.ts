@@ -132,7 +132,7 @@ export class MTTradeManagerComponent {
         });
     }
 
-    disconnect(){        
+    disconnect() {        
         this.brokerService.disposeActiveBroker()
         .subscribe(() => {});      
     }

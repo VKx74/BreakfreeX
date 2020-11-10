@@ -48,7 +48,7 @@ export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
             .subscribe(() => this.clearSelectedBroker());
     }
 
-    onBrokerSelect(broker:EBrokerInstance) {
+    onBrokerSelect(broker: EBrokerInstance) {
        this.selectedBroker = broker;
     }
     

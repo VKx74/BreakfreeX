@@ -17,7 +17,7 @@ import { Component } from "@angular/core";
 })
 export class ForexBrokerConnectorComponent {
     applicationType$ = this._applicationTypeService.applicationTypeChanged;
-    //EBrokerInstance = EBrokerInstance;
+    // EBrokerInstance = EBrokerInstance;
 
     get instanceType() {
         const brokerService = this.brokerService;
