@@ -67,7 +67,7 @@ export class DashboardComponent {
     }
 
     get bottomPanelMinSize() {
-        return 80;
+        return 160;
     }
 
     public get showTradingPanel(): boolean {

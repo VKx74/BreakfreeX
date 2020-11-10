@@ -160,10 +160,13 @@
     "cancelOrder": "Cancel Order",
     "closeOrder": "Close Order",
     "closePosition": "Close Position",
-    "viewChart": "View Chart",
-    "account": "Account",
+    "viewChart": "View Chart",    
     "server": "Server",
-    "advancedSettings": "Advanced settings"
+    "advancedSettings": "Advanced settings",
+    "brokerType": "Broker Type",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "addAccount": "Add broker account"
   },
   "periodicity": {
     "minute": "Minute",
@@ -182,5 +185,5 @@
   "level2ComponentName": "Level 2 View",
   "marketTradesComponentName": "Market Trades",
   "orderBookComponentName": "Order Book",
-  "cancelOrderConfirmation": "Do you want cancel order"
+  "cancelOrderConfirmation": "Do you want cancel order"  
 }

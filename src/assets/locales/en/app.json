@@ -29,7 +29,7 @@
     "Crypto": "Crypto",
     "Stock": "Stock",
     "Forex": "Forex",
-    "All": "All"
+    "All": "All"    
   },
   "alertWidget": {
     "title": "Alerts Widget",

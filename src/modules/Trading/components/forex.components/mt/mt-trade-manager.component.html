@@ -44,5 +44,10 @@
                 [disabled]="!brokerConnected"
                 class="crypto-button crypto-button_danger">Reconnect
         </button>
+        <button (click)="disconnect()"
+                style="margin:10px"
+                [disabled]="!brokerConnected"
+                class="crypto-button crypto-button_danger">Disconnect
+        </button>
     </div>
 </div>

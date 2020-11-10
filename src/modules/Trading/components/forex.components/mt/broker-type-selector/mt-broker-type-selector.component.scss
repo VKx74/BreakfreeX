@@ -1,0 +1,28 @@
+@import "mixins/themify";
+@import "themes/themes";
+
+.disconnect-broker {
+  margin-top: 20px;
+  button {
+    width: 100%;
+  }
+}
+
+
+.section-title { 
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+
+@include themify($themes, true) {
+
+  .section-title {
+    color: themed('valueTextColor');
+  }
+}
