@@ -11,6 +11,7 @@ import {UserSettingsService} from "@app/services/user-settings/user-settings.ser
 import {ActivatedRoute} from "@angular/router";
 import {ApplicationTypeService} from "@app/services/application-type.service";
 import {GoldenLayoutPopupComponent} from "angular-golden-layout";
+import { IdentityService } from '@app/services/auth/identity.service';
 
 @Component({
     selector: 'checkout-component',
@@ -19,7 +20,7 @@ import {GoldenLayoutPopupComponent} from "angular-golden-layout";
 })
 export class CheckoutComponent extends Modal<CheckoutComponent> implements OnInit {
 
-    constructor(private _injector: Injector) {
+    constructor(private _injector: Injector, private _identityService: IdentityService) {
         super(_injector);
     }
 
@@ -62,6 +63,7 @@ export class CheckoutComponent extends Modal<CheckoutComponent> implements OnIni
             mode: 'subscription',
             successUrl: window.location.origin + "/auth/clear-session",
             cancelUrl: window.location.origin,
+            customerEmail: this._identityService.email || ""
           })
           .then(function (result) {
            
