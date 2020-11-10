@@ -32,17 +32,17 @@
                 style="margin:10px"
                 [disabled]="!brokerConnected"
                 *ngIf="showCancelAll"
-                class="crypto-button crypto-button_success">Cancel All
+                class="crypto-button crypto-button_success">Cancel all Active Orders
         </button> 
         <button (click)="placeOrder()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_success">Place Order
+                class="crypto-button crypto-button_success">Manual Order
         </button> 
         <button (click)="reconnect()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger">Reconnect
+                class="crypto-button crypto-button_danger"><i class="fa fa-wifi" aria-hidden="true"></i> Reconnect
         </button>
         <button (click)="disconnect()"
                 style="margin:10px"
