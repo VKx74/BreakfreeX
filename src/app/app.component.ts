@@ -89,8 +89,8 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        const url = this._router.routerState.snapshot.url;
-        if (url && url.endsWith(AppRoutes.ClearSession)) {
+        const currentRoute = this._router.routerState.snapshot.url;
+        if (currentRoute && currentRoute.endsWith(AppRoutes.ClearSession)) {
             this._authService.signOut().subscribe();
         }
 
