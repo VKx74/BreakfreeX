@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { BrokerDialogComponent, BrokerDialogData } from '../../../../../broker/components/broker/broker-dialog/broker-dialog.component';
 import { tap } from 'rxjs/operators';
 import {AlertService} from "@alert/services/alert.service";
+import { IdentityService } from '@app/services/auth/identity.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 @Component({
     selector: 'mt-broker-type-selector',
@@ -31,7 +33,8 @@ export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
         return this._brokerService.activeBroker ? this._brokerService.activeBroker.instanceType : "None";
     }
 
-    constructor(private _brokerService: BrokerService,                
+    constructor(private _brokerService: BrokerService,    
+                private _identityService: IdentityService,            
                 private _dialog: MatDialog) {
     }
 
@@ -53,6 +56,11 @@ export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
     }
     
     connectCurrentBroker() {
+        if (!this._identityService.isAuthorizedCustomer) {
+            this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+            return;
+        }
+
         const ref = this._dialog.open<BrokerDialogComponent, BrokerDialogData>(BrokerDialogComponent, {
             data: {
                 brokerType: this.selectedBroker
