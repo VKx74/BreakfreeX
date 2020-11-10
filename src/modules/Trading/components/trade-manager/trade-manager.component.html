@@ -40,9 +40,10 @@
             </div>
         </div>
         <div class="broker-not-connected flex align-items-center justify-content-center h-100 w-100 relative-wrapper">
-            <no-items-placeholder *ngIf="((brokerInitialized$ | async) !== null); else loader"
-                                   text="{{'tradeManager.connectToBroker' | translate}}">
-            </no-items-placeholder>
+            <div *ngIf="((brokerInitialized$ | async) !== null); else loader" class="shiftup">
+                <!-- <div class="section-label">{{'tradeManager.brokerType' | translate}}</div> -->
+                <forex-broker-connector></forex-broker-connector>
+            </div>           
             <ng-template #loader>
                 <bft-loader *ngIf="!isMinimized"></bft-loader>
             </ng-template>

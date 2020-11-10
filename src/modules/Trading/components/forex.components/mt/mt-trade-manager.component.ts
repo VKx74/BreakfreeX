@@ -132,6 +132,11 @@ export class MTTradeManagerComponent {
         });
     }
 
+    disconnect() {        
+        this.brokerService.disposeActiveBroker()
+        .subscribe(() => {});      
+    }
+
     tabChanged(data: MatTabChangeEvent) {
         this.selectedTabIndex = data.index;
     }

@@ -46,7 +46,8 @@ export class PlatformSidebarComponent implements OnInit {
         .pipe(map(caption => caption.toUpperCase()))
 
     public get showTradingPanel(): boolean {
-        return this._brokerService.showTradingPanel;
+        // return this._brokerService.showTradingPanel;
+        return false;
     }
 
     constructor(private _translateService: TranslateService,

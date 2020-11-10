@@ -142,3 +142,38 @@
     background-color: themed('nthChild') !important;
   }
 }
+
+.controls button {
+  background: none;
+  border-radius: 5px;
+  font-size: 11px;
+  opacity: 0.8;
+  transition-duration: 0.22s;
+  border:1px solid transparent;
+}
+
+
+  @include themify($themes, true) {
+    .controls button {
+      color: themed('titleTextColor');
+    
+  
+} }
+
+.controls button:hover {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 11px;
+  opacity: 1;
+  transition-duration: 0.22s;
+}
+
+  
+
+  @include themify($themes, true) {
+    .controls button:hover {
+      color: themed('titleTextColor');
+      border: 1px solid themed('titleTextColor');
+    
+}}

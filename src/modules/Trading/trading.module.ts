@@ -70,6 +70,8 @@ import { MTOrderEditModalComponent } from './components/forex.components/mt/orde
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MTTradeManagerComponent } from './components/forex.components/mt/mt-trade-manager.component';
 import { MTCurrencyRiskComponent } from './components/forex.components/mt/currency-risk/mt-currency-risk.component';
+import { ForexBrokerConnectorComponent } from './components/forex.components/forex-broker-connector/forex-broker-connector.component';
+import { MTBrokerTypeSelectorComponent } from './components/forex.components/mt/broker-type-selector/mt-broker-type-selector.component';
 
 const components = [
     TradeManagerComponent,
@@ -91,7 +93,9 @@ const components = [
     OandaTradeManagerComponent,
     ForexOrderConfiguratorModalComponent,
     ForexOrderConfiguratorComponent,
+    ForexBrokerConnectorComponent,
     TestOandaComponent,
+    MTBrokerTypeSelectorComponent,
     MTTradeManagerComponent,
     MTOrderConfiguratorModalComponent,
     MTOrderConfiguratorComponent,
@@ -111,7 +115,7 @@ const components = [
     MTCurrencyRiskComponent,
     MTPendingOrdersComponent,
     MTHistoryOrdersComponent,
-    MTPositionsComponent,
+    MTPositionsComponent    
 ];
 
 @NgModule({
@@ -150,7 +154,7 @@ const components = [
         MatSlideToggleModule,
         NgxMaterialTimepickerModule,
         DragDropModule,
-        MatExpansionModule
+        MatExpansionModule        
         // TimeZonesModule,
     ],
     exports: [
