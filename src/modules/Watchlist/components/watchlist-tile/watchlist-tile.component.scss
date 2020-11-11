@@ -17,12 +17,15 @@
 }
 
 .tile-header {
-  padding: 20px 0;
-  margin: 0 auto;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  
 }
 
 .tile-footer {
-  height: 80px;
+  height: 60px;
+
+
 }
 
 .instrument, .price-column {
@@ -30,19 +33,26 @@
 }
 
 .price-value {
-  font-size: 14px;
+  font-size: 11px;
 }
 
 .name-symbol {
-  font-size: 14px;
+  font-size: 11px;
 }
+
+.price-change, .name-exchange {
+  font-size: 10px;
+}
+
 
 @include themify($themes, true) {
   .watchlist-tile {
     background-color: themed('appPanelColor');
-    border-radius: 5px;
+    border-radius: 10px;
     color: themed('valueTextColor');
     border: 1px solid transparent;
+    overflow:hidden;
+
 
     .instrument, .price-value, .price-change {
       color: themed('valueTextColor');
@@ -55,3 +65,59 @@
     border: 1px solid themed('accentColor') !important;
   }
 }
+
+
+
+.watchlist-tile-wrapper
+
+{
+ border: 2px solid transparent;
+}
+
+
+.watchlist-tile-wrapper:hover
+
+{
+ border: 2px solid #fff;
+}
+
+.tile-footer {
+ 
+}
+
+
+.tile-header .name-symbol {
+  display: inline-block;
+  font-size: 10px;
+  float: left;
+  font-weight: 600;
+  padding-left: 10px;
+  padding-top: 10px;
+  max-width: 30%;
+  overflow: hidden;
+}
+
+.tile-header .price-value {
+  display: inline-block;
+  font-size: 10px;
+  max-width: 25%;
+  overflow: hidden;
+  text-align: center;
+  padding-top: 10px;
+  padding-left: 5px;
+}
+
+.tile-header .price-change {
+  display: inline-block;
+  font-size: 10px;
+  float: right;
+  max-width: 25%;
+  padding-top: 10px;
+  padding-right: 10px;
+  font-weight: 600;
+}
+
+canvas.chartjs-render-monitor {
+  background-color: #000;
+}
+

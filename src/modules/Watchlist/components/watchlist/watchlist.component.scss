@@ -120,14 +120,16 @@
 
   .tiles-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     grid-auto-rows: auto;
+    padding: 5px;
 
     .watchlist-tile-wrapper {
-      margin: 5px;
+      
       border-radius: 5px;
       position: relative;
       cursor: pointer;
+      margin:2px;
 
       &:hover {
         .remove-instrument-button {
@@ -153,8 +155,9 @@
       .remove-instrument-button {
         display: none;
         position: absolute;
-        top: 20px;
-        right: calc((100% - 22px) / 2);
+        top: 1px;
+        right: calc((100% - 194px) / 2);
+        opacity: 0.6;
       }
     }
   }
@@ -386,12 +389,13 @@ font-weight:600;
   }
   /deep/ .tiles_view {
     position: absolute;
-    top: 3px;
+    top: 33px;
     left: 3px;
 
     .matMenuTrigger {
       width: 14px !important;
       height: 14px !important;
+
     }
   }
 }
@@ -425,3 +429,5 @@ font-weight:600;
     font-size: 11px !important;
   }
 }
+
+
