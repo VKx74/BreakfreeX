@@ -2,25 +2,28 @@
      [class.selected]="isSelected"
      [class.up]="watchlistInstrumentVM.trendDirection === TrendDirection.Up"
      [class.down]="watchlistInstrumentVM.trendDirection === TrendDirection.Down">
-    <div class="tile-header flex justify-space-between">
-        <div class="instrument crypto-text is-small">
+    <div class="tile-header">
+
+ 
             <div class="name-symbol">
                 {{watchlistInstrumentVM.instrument.symbol}}
             </div>
-            <div class="name-exchange">
-                {{watchlistInstrumentVM.instrument.exchange}}
-            </div>
-        </div>
-
-        <div class="price-column crypto-text is-small t-align-right">
             <div class="price-value">
                 {{(watchlistInstrumentVM.price?.toFixed(watchlistInstrumentVM.pricePrecision)) || '-'}}
             </div>
             <div class="price-change">
                 {{watchlistInstrumentVM.priceChange | percent: '1.2-2'}}
             </div>
-        </div>
+
+       
+
+
+
+       
+
+     
     </div>
+    
     <div class="tile-footer">
         <watchlist-chart [chartHistory]="chartHistory"
                          [trendDirection]="watchlistInstrumentVM.trendDirection"></watchlist-chart>
