@@ -32,16 +32,8 @@
   margin: 0 30px;
 }
 
-.price-value {
+.tile-header {
   font-size: 11px;
-}
-
-.name-symbol {
-  font-size: 11px;
-}
-
-.price-change, .name-exchange {
-  font-size: 10px;
 }
 
 
@@ -88,19 +80,17 @@
 
 .tile-header .name-symbol {
   display: inline-block;
-  font-size: 10px;
   float: left;
   font-weight: 600;
   padding-left: 10px;
   padding-top: 10px;
-  max-width: 30%;
+  max-width: 35%;
   overflow: hidden;
 }
 
 .tile-header .price-value {
   display: inline-block;
-  font-size: 10px;
-  max-width: 25%;
+  // width: 40%;
   overflow: hidden;
   text-align: center;
   padding-top: 10px;
@@ -109,7 +99,6 @@
 
 .tile-header .price-change {
   display: inline-block;
-  font-size: 10px;
   float: right;
   max-width: 25%;
   padding-top: 10px;

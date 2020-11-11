@@ -3,8 +3,14 @@
 @import "global-styles/variables";
 
 :host {
+  /deep/ {
+    mat-form-field {
+      max-width: 140px !important;
+    }
+  }
+
   .tf-select {
-    margin-left: 20px;
+    margin-left: 10px;
   }
 
   .out-of-access {
