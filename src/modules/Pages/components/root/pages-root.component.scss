@@ -1,0 +1,89 @@
+@import "../../themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+
+:host {
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: auto;
+  background:#191919;
+  font-family:  $primaryFontFamily;
+
+  .logo:before {
+    vertical-align: unset;
+  }
+}
+
+span#actualquote {
+  padding: 15px;
+  color: #fff;
+}
+
+.quoteholder {display: block;position: relative;margin-top: 60vh;margin-left: 10vh;}
+
+
+.form-header-bft {
+  background:#191919;
+  color:#fff;
+  font-size:12px;
+  padding-top:10px;
+  padding-bottom:10px;
+  text-align:center;
+  
+}
+
+
+.form-header-bft img {
+  width: 200px;
+  filter: invert(1);
+}
+
+.lds-ellipsis div {
+
+  background:#000 !important;;
+  transition-duration: 0.22s;
+}
+
+.full-height {
+  display:block;
+  height:100%;
+  transform: translateY(0px);
+}
+
+.full-height.background {
+ background-image: url(https://images.unsplash.com/photo-1604724434236-a7cebeaa13e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80);
+}
+
+
+
+.page {
+
+  background: #fff;
+  height: 1010px;
+}
+
+.left {
+  padding: 50px;
+  margin:0 auto;
+}
+
+span.splitter {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: block;
+  height: 0.01rem;
+  background: #19191963;
+}
+
+.navimgholder {
+  width: 100px;
+  height: 100px;
+  background: #191919;
+}
+
+.navimgholder img {
+  padding: 20px;
+}

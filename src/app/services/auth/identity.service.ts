@@ -130,6 +130,13 @@ export class IdentityService {
             }));
     }
 
+    signOutSilently(): Observable<any> {
+        return this._authService.signOut()
+            .pipe(tap(() => {
+                this._clearCookies();
+            }));
+    }
+
     refreshTokens(): Observable<any> {
         if (this._refreshToken$) {
             return this._refreshToken$.asObservable();
