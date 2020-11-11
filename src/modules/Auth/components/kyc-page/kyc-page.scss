@@ -1,176 +1,29 @@
 @import "../../themes/themes";
 @import "mixins/themify";
-@import "variables";
+@import "global-styles/variables";
 
 :host {
-  display: block;
-  overflow: auto;
-  width: 100%;
   height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  font-family:  $primaryFontFamily;
 
-  .register-page {
-    display: flex;
-    margin: 10vh 0;
-    align-items: center;
+  .content {
+    max-width: 300px;
   }
 
-  .overlay {
-    flex-direction: column;
-  }
-
-  .sub-header {
-    padding: 0 24px;
-
-    .title {
-      color: #3d61cc;
-      text-transform: uppercase;
-      font-family: 'PT Sans';
-    }
-  }
-
-  .custom-stepper-header {
-    .step-name {
-      align-self: center;
-      color: #757575;
-    }
-
-    .step-1, .step-2 {
-      width: 24px;
-      height: 24px;
-      background-color: #dddddd;
-      color: #fff;
-      border-radius: 50%;
-      margin-left: 6px;
-      padding: 0;
-
-      &.active {
-        background-color: #3d61cc;
-        cursor: default;
-      }
-
-      &.completed {
-        background-color: $greenColor;
-      }
-    }
-
-    .step-2 {
-      cursor: default;
-    }
-  }
-
-  // Mat stepper region
-
-  /deep/ .mat-horizontal-stepper-header-container {
+  /deep/.mat-horizontal-stepper-header-container {
     display: none;
   }
-
-  .stepper {
-    background: transparent;
+  /deep/.mat-horizontal-content-container {
+    padding: 0px;
   }
-  // End Mat stepper region
-}
-
-/deep/ .kyc-page-country-dropdown {
-    background: rgb(255, 255, 255) !important;
-
-    .mat-option:hover:not(.mat-option-disabled),
-    .mat-option:focus:not(.mat-option-disabled) {
-      background: rgba(0, 0, 0, 0.04);
-    }
-}
-
-/deep/ .kyc-page-document-dropdown {
-  background: rgb(255, 255, 255) !important;
-
-  .mat-option:hover:not(.mat-option-disabled),
-  .mat-option:focus:not(.mat-option-disabled) {
-    background: rgba(0, 0, 0, 0.04);
+  /deep/.mat-datepicker-toggle-default-icon {
+    fill: #000000b5;
   }
-}
-
-/deep/ personal-info-page,
-/deep/ kyc-documents {
-  mat-select {
-    .mat-select-value {
-      color: #000 !important;
-    }
+  /deep/.form-wrapper {
+    padding: 0px !important;
   }
-}
-
-
-  ///deep/ .mat-option:hover:not(.mat-option-disabled),
-  ///deep/ .mat-option:focus:not(.mat-option-disabled) {
-  //  background: rgba(0, 0, 0, 0.04);
-  //}
-
-  // Themes
-  /deep/ .mat-step-icon-selected,
-  .mat-step-icon-state-done,
-  .mat-step-icon-state-edit {
-    @include themify($themes, true) {
-      background-color: themed('accentColor');
-    }
-  }
-
-
-  
-button.btn.crypto-button.crypto-button-full-width.button_success.login-btn {
-  background-color: black;
-  opacity: 0.8;
-  font-weight: bold;
-}
-
-
-
-
-.overlay {
-  background: #fff !important;
-  display:block ;
-  padding:0px;
-  border-radius:5px;
-  overflow:hidden;
-}
-
-.form-wrapper {
-  padding:15px;
-
-}
-
-.form-header-bft {
-  background:#191919;
-  color:#fff;
-  font-size:12px;
-  padding-top:10px;
-  padding-bottom:10px;
-  text-align:center;
-  
-}
-
-
-.form-header-bft img {
-
-  width: 200px;
-  filter: invert(1);
-}
-
-
-
-::before {
-  color: #000000b5;
-}
-
-span.form-header__title.signIn {
-  color: black !important;
-}
-
-.form-header {
-  padding-top:10px;
-}
-
-.full-width.sub-header.m-bottom-10 {
-  display: none;
-}
-
-.register-btn {
-  background: #191919 !important;
 }

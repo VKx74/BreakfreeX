@@ -6,23 +6,24 @@
 :host {
   height: 100%;
   width: 100%;
-  display: block;
+  display: flex;
+  justify-content: center;
   overflow: auto;
-  background:#191919;
   font-family:  $primaryFontFamily;
 
 
-
-  .captcha {
-    display: none;
+  .createuserbyemail, .forgotPassword {
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
   }
-  
 
+  .content {
+    max-width: 300px;
+  }
 
-  .form-header {
-    &__title.signIn {
-      color: #3d61cc;
-    }
+  ::before {
+    color: #000000b5;
   }
 
   .remember-wrapper {
@@ -54,18 +55,6 @@
     vertical-align: unset;
   }
 
-  .crypto-button {
-    
-  }
-
-  .login-btn {
-    margin-top: 15px;
-  }
-
-  .notificationVisible .login-btn {
-    margin-top: 5px;
-  }
-
   .button-on-error {
     font-size: 12px;
     margin: 5px 0;
@@ -77,20 +66,6 @@
   /deep/ pin-input .input-wrapper {
     margin-bottom: 0;
   }
-}
-
-.button_success:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-//.remember-wrapper {
-//  span {
-//    @include themify($themes, true) {
-//      color: themed('regularColor');
-//    }
-//  }
-//}
 
 .notification {
   @include themify($themes, true) {
@@ -105,94 +80,24 @@
 }
 
 
-span#actualquote {
-  padding: 15px;
-  color: #fff;
-}
+// span#actualquote {
+//   padding: 15px;
+//   color: #fff;
+// }
 
 .quoteholder {display: block;position: relative;margin-top: 60vh;margin-left: 10vh;}
 
-.overlay-wrapper {
+// .spc {
+//   display: none !important;
+// }
 
-}
-
-.spc {
-  display: none !important;
-}
-
-button.btn.crypto-button.crypto-button-full-width.button_success.login-btn {
-  border:1px solid black;
-  border-radius:5px;
-  font-weight: bold;
-  font-size:12px;
-  background:#fff;
-  color:#000;
-  padding:5px;
-  transition-duration: 0.22s;
-  opacity: 1;
-}
-
-button.btn.crypto-button.crypto-button-full-width.button_success.login-btn:hover {
-  background-color: black;
-  color:#fff;
-  font-weight: bold;
-  font-size:14px;
-  transition-duration: 0.22s;
-  padding:10px;
-  opacity: 1;
-}
-
-
-
-body.Light-theme.thmLightTheme {
-  background-color: #f2f2f2;
-}
-
-.overlay {
-  background: #fff !important;
-  display:block ;
-  padding:0px;
-  border-radius:5px;
-  overflow:hidden;
-}
-
-.form-wrapper {
-  padding:15px;
-  width:290px !important;
-
-}
-
-.form-header-bft {
-  background:#191919;
-  color:#fff;
-  font-size:12px;
-  padding-top:10px;
-  padding-bottom:10px;
-  text-align:center;
-  
-}
-
-
-.form-header-bft img {
-
-  width: 200px;
-  filter: invert(1);
-}
-
-
-
-::before {
-  color: #000000b5;
-}
-
-span.form-header__title.signIn {
+.signIn {
   color: black !important;
 }
 
 .form-header {
   margin-bottom: 20px !important;
 }
-
 
 .beta {
   margin-top: 10px;
@@ -251,43 +156,16 @@ select:-webkit-autofill:focus {
   font-weight:600;
 }
 
-.mat-form-field-flex {
-  background-color: #fff !important;
-}
-
-
+// .mat-form-field-flex {
+//   background-color: #fff !important;
+// }
 
 .lds-ellipsis div {
-
   background:#000 !important;;
   transition-duration: 0.22s;
 }
 
-.full-height {
-  display:block;
-  height:100%;
-  transform: translateY(0px);
-}
-
-.full-height.background {
- background-image: url(https://images.unsplash.com/photo-1604724434236-a7cebeaa13e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80);
-}
-
-
-
-.login-page {
-
-  background: #fff;
-  height: 1010px;
-}
-
-.left {
-  padding: 50px;
-  max-width: 400px;
-  margin:0 auto;
-}
-
-span.splitter {
+.splitter {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -306,13 +184,7 @@ span.splitter {
   padding: 20px;
 }
 
-a.createuserbyemail {
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-span.continuewith {
+.continuewith {
   text-align: center;
   width: 100%;
   display: block;
@@ -320,7 +192,7 @@ span.continuewith {
 }
 
 .margintop20 {
-margin-top:20px !important;
+  margin-top:20px !important;
 }
 .marginbottom-5 {
   margin-bottom:-5px !important;
@@ -332,4 +204,5 @@ label.labeln {
   margin-bottom: 5px;
   display: block;
   font-weight: bold;
+}
 }
