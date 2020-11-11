@@ -46,6 +46,13 @@ const routes: Routes = [
                 canActivate: [AuthGuard]
             },
             {
+                path: AppRoutes.Pages,
+                // pathMatch: 'full',
+                loadChildren: () => import('../modules/Pages/pages.module').then(m => m.PagesModule),
+                // canLoad: [ComponentsGuard],
+                // canActivate: [AuthGuard]
+            },
+            {
                 path: AppRoutes.Admin,
                 loadChildren: () => import('../modules/Admin/admin.module').then(m => m.AdminModule),
                 canLoad: [AuthGuard, ComponentsGuard],
