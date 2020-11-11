@@ -8,6 +8,7 @@
   width: 100%;
   display: block;
   overflow: auto;
+  background: #191919;
 
   .login-page {
     display: flex;
@@ -15,3 +16,71 @@
     align-items: center;
   }
 }
+
+login-with-page {
+  background: #191919;
+}
+
+
+
+.app-loading .logo img{
+  display: block;
+  width: 50px;
+  transition-duration: 0.22s;
+  }
+  
+  .app-loading {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background:#191919 ;
+    transition-duration: 0.22s;
+  
+  }
+  
+  .app-loading .spinner {
+    height: 200px;
+    width: 200px;
+    animation: rotate 2s linear infinite;
+    transform-origin: center center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    transition-duration: 0.22s;
+  }
+  
+  .app-loading .spinner .path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite;
+    stroke-linecap: round;
+    stroke: #ddd;
+    transition-duration: 0.22s;
+  }
+  
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -35px;
+    }
+    100% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -124px;
+    }
+  }
