@@ -8,13 +8,7 @@
             <div class="name-symbol">
                 {{watchlistInstrumentVM.instrument.symbol}}
             </div>
-            <div class="price-value">
-                {{(watchlistInstrumentVM.price?.toFixed(watchlistInstrumentVM.pricePrecision)) || '-'}}
-            </div>
-            <div class="price-change">
-                {{watchlistInstrumentVM.priceChange | percent: '1.2-2'}}
-            </div>
-
+          
        
 
 
@@ -28,4 +22,12 @@
         <watchlist-chart [chartHistory]="chartHistory"
                          [trendDirection]="watchlistInstrumentVM.trendDirection"></watchlist-chart>
     </div>
+
+    <div class="price-value">
+        {{(watchlistInstrumentVM.price?.toFixed(watchlistInstrumentVM.pricePrecision)) || '-'}}
+    </div>
+    <div class="price-change">
+        {{watchlistInstrumentVM.priceChange | percent: '1.2-2'}}
+    </div>
+
 </div>
