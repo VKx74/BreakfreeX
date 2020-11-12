@@ -173,7 +173,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this.scannerResults = [];
 
         this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
-            this.scanningTime = new Date(data.scanning_time * 1000).toUTCString();
+            this.scanningTime = new Date(data.scanning_time * 1000).toLocaleTimeString();
             this.loading = false;
             this._processData(data.items);
             if (!this.scannerResults.length) {
