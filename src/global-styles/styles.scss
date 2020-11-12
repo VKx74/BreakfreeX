@@ -384,8 +384,6 @@ lm_tab.bftn {
 }
 
 .matMenuTrigger {
-  width: 10px !important;
-  height: 10px !important;
   line-height: 15px;
   text-align: center;
   vertical-align: middle;
@@ -395,15 +393,6 @@ lm_tab.bftn {
   color: #58585887;
   cursor: pointer;
 }
-
-
-.lm_tab.tab-with-linker .link-selector {
-  position: absolute;
-  z-index: 2;
-  left: 11px !important;
-  top: 10px !important;
-}
-
 
 
 

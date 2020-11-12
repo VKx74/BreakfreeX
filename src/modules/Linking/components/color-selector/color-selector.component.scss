@@ -9,14 +9,14 @@
 
 
 .matMenuTrigger {
-  width: 16px;
-  height: 16px;
+  width: 100%;
+  // height: 16px;
   cursor: pointer;
 }
 
 .svg-icon {
-  width: 14px;
-  height: 14px;
+ // width: 14px;
+  //  height: 14px;
 }
 
 .matMenuButton {
@@ -30,3 +30,4 @@
   vertical-align: middle;
   font-size: 9px;
 }
+
