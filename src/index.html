@@ -167,7 +167,28 @@
     insertBefore(d,q)}(window,document,'script','_gs');
     _gs('GSN-101912-A');
 </script>
-  
+
+<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+  var isLocalhost = window.location.href.indexOf("localhost") != -1 || window.location.href.indexOf("127.0.0.1") != -1;
+  var isStage = window.location.href.indexOf("stage") != -1;
+  var appId = "11e83020-c0cf-4c44-b6ed-4b17665f8b17"; // localhost app id for test
+
+  if (isStage) {
+    appId = "dafe29a8-c2b4-4eb6-ab92-376dd85c9822"; // staging app id for test
+  } else if (!isLocalhost) {
+    appId = ""; // prod app id for test
+  }
+
+  console.log(appId);
+
+  window.OneSignal = window.OneSignal || [];
+  OneSignal.push(function() {
+    OneSignal.init({
+      appId: appId,
+    });
+  });
+</script>
 
 </body>
 </html>
