@@ -22,27 +22,22 @@
   
 }
 
-.tile-footer {
-  height: 60px;
-
-
-}
 
 .instrument, .price-column {
   margin: 0 30px;
 }
 
 .tile-header {
-  font-size: 11px;
+  font-size: 10px;
+  font-weight:700;
 }
 
 
 @include themify($themes, true) {
   .watchlist-tile {
-    background-color: themed('appPanelColor');
-    border-radius: 10px;
+   background-color: themed('tableBorders');
+    border-radius: 5px;
     color: themed('valueTextColor');
-    border: 1px solid transparent;
     overflow:hidden;
 
 
@@ -73,40 +68,51 @@
  border: 2px solid #fff;
 }
 
-.tile-footer {
- 
-}
+
 
 
 .tile-header .name-symbol {
   display: inline-block;
   float: left;
-  font-weight: 600;
-  padding-left: 10px;
-  padding-top: 10px;
-  max-width: 35%;
-  overflow: hidden;
-}
-
-.tile-header .price-value {
-  display: inline-block;
-  // width: 40%;
-  overflow: hidden;
-  text-align: center;
-  padding-top: 10px;
+      font-weight: bold;
   padding-left: 5px;
+  padding-top: 5px;
+  overflow: hidden;
+  max-width:100%;
 }
 
-.tile-header .price-change {
-  display: inline-block;
-  float: right;
-  max-width: 25%;
-  padding-top: 10px;
-  padding-right: 10px;
-  font-weight: 600;
-}
+
 
 canvas.chartjs-render-monitor {
   background-color: #000;
 }
 
+
+.price-change {
+  float: right;
+  font-size: 10px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  max-width: 42%;
+  font-weight: bold;
+}
+
+.price-value {
+  float: left;
+  font-size: 10px;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  max-width: 58%;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+.tile-footer {
+
+  height: 30px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  margin-top: 45px;
+}
+
+  
