@@ -185,7 +185,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             const config = {
                 chartContainer: this.chartContainer.nativeElement,
                 width: '100%',
-                height: 'calc( 100% - 66px )',
+                height: '100%',
                 theme: theme,
                 addThemeClass: false,
                 // chartType: 'hollowCandle',
@@ -205,7 +205,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 locale: this._localizationService.locale,
                 tradeHandler: this.tradeHandler.bind(this),
                 searchInstrumentHandler: this.searchInstrumentHandler.bind(this),
-                tradingFromChartHandler: this._tradingFromChartHandler
+                tradingFromChartHandler: this._tradingFromChartHandler,
+                showScrollbar: false
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
