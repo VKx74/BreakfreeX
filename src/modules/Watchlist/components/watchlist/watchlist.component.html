@@ -1,17 +1,8 @@
 <div class="root"  *ngIf="isAuthorizedCustomer; else outOfAccess">
-    <div class="top-line bftscroll">
-        <div class="top-line flex justify-space-between align-items-center flex-shrink-0 ">
-            <instrument-search
-                    [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
-                    [openPanelOnClick]="true"
-                    [resetAfterSelection]="true"
-                    (onSelect)="addInstrument($event)"></instrument-search>
-            <!-- <selector [options]="existingWatchlists" [title]="'watchlist' | translate"
-                [selectedOption]="activeWatchlist"
-                [optionCaption]="supportedWatchlistCaption"
-                (onSelect)="watchlistSelected($event)"
-                class="watchlist-selector"></selector> -->
-            <mat-form-field floatLabel="never" class="crypto-select full-width">
+    <div>
+        <div class="top-line ">
+            
+            <mat-form-field floatLabel="never" class="crypto-select full-width watchlistholder" >
                 <mat-select (selectionChange)="watchlistSelected($event)" [value]="activeWatchlist">
                     <mat-option *ngFor="let option of existingWatchlists" [value]="option">
                         {{supportedWatchlistCaption(option) | async }}
@@ -31,6 +22,18 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+
+            <instrument-search
+            [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
+            [openPanelOnClick]="true"
+            [resetAfterSelection]="true"
+            (onSelect)="addInstrument($event)"></instrument-search>
+    <!-- <selector [options]="existingWatchlists" [title]="'watchlist' | translate"
+        [selectedOption]="activeWatchlist"
+        [optionCaption]="supportedWatchlistCaption"
+        (onSelect)="watchlistSelected($event)"
+        class="watchlist-selector"></selector> -->
+
             <div class="right-side flex align-items-center functional-icons">
                 <span class="crypto-button-icon control" (click)="createWatchlist()" [title]=" 'createWatchlist' | translate">
                     <i class="crypto-icon crypto-icon-add"></i>
@@ -39,23 +42,27 @@
                 <span [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured" class="crypto-button-icon control" (click)="deleteWatchlist()" [title]="'deleteWatchlist' | translate">
                     <i class="crypto-icon crypto-icon-remove-records"></i>
                 </span>
-            </div>
-        </div>
-        <div>
-            <div class="crypto-button-icon">
-                <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
-            </div>
-            <mat-menu #menu="matMenu">
-                <button [class.active]="viewMode === ViewMode.Table" mat-menu-item
-                        (click)="setViewMode(ViewMode.Table)">
-                    {{'watchList.tableView' | translate}}
-                </button>
+                <div>
+                    <div class="crypto-button-icon">
+                        <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
+                    </div>
+                    <mat-menu #menu="matMenu">
+                        <button [class.active]="viewMode === ViewMode.Table" mat-menu-item
+                                (click)="setViewMode(ViewMode.Table)">
+                            {{'watchList.tableView' | translate}}
+                        </button>
+        
+                        <button [class.active]="viewMode === ViewMode.Tile" mat-menu-item (click)="setViewMode(ViewMode.Tile)">
+                            {{'watchList.tilesView' | translate}}
+                        </button>
+                    </mat-menu>
+                </div>
 
-                <button [class.active]="viewMode === ViewMode.Tile" mat-menu-item (click)="setViewMode(ViewMode.Tile)">
-                    {{'watchList.tilesView' | translate}}
-                </button>
-            </mat-menu>
+
+
+            </div>
         </div>
+       
     </div>
     <div class="content-wrapper flex-grow-1 h-0">
         <div class="full-height padding-wrapper">

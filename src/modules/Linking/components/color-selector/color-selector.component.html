@@ -1,7 +1,7 @@
 <div class="color-selector ">
     <div class="matMenuTrigger" [matMenuTriggerFor]="menu">
          <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" height="12" width="100%" [ngStyle]="{'color': colorDisabled ? '#80808025' : activeColor}" fill="currentColor" focusable="false" preserveAspectRatio="none">
-            <path d='M 0 0 H 150 V 2 H 0 L 0 ' *ngIf="path == 'circle'"/>
+            <path d='M0 0 H 150 V 2 H 0 L 0 0' *ngIf="path == 'circle'"/>
             <path d='M14 12l-4-6 4-6H0v12z'  *ngIf="path == 'flag'"/>
         </svg>
     </div>
