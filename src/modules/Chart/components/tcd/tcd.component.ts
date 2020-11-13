@@ -171,7 +171,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     state.chartState.chart.theme = theme;
                 }
             } else {
-                if (state.chartState.version !== 5) {
+                if (state.chartState.version !== 6) {
                     console.log("Set default theme");
                     theme = this._getTheme();
                     if (state.chartState.chart) {

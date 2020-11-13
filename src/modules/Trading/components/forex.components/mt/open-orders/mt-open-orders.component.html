@@ -76,7 +76,7 @@
         </ng-template>
     </data-table-cell>
     <data-table-cell columnName="Open Time">
-        <ng-template let-item>{{item.Time | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
+        <ng-template let-item>{{item.Time | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
     </data-table-cell>
     <!-- <data-table-cell columnName="ExpirationType">
         <ng-template let-item>{{item.ExpirationType}}</ng-template>

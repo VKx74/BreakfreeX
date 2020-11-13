@@ -272,6 +272,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     continue;
                 }
                 const shape = this.createBaseShape(order);
+                const shapeOrderBox = this.createBaseOrderShape(order);
+                if (shapeOrderBox) {
+                    shapes.push(shapeOrderBox);
+                }
                 shape.showSLTP = true;
                 shape.lineId = order.Id.toString();
                 shape.lineText = `#${order.Id}`;
@@ -348,11 +352,33 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
     }
 
+    private updatePositionShape(shape: TradingChartDesigner.ShapeSimpleTrade, order: MTOrder) {
+        shape.sl = order.SL;
+        shape.tp = order.TP;
+        shape.entry = order.Price;
+    }
+
     private createBaseShape(order: MTOrder): TradingChartDesigner.ShapeOrderLine {
         const shape = new TradingChartDesigner.ShapeOrderLine();
         shape.showClose = true;
         shape.isEditable = true;
         shape.boxSize = order.Size.toString();
+        return shape;
+    }
+
+    private createBaseOrderShape(order: MTOrder): TradingChartDesigner.ShapeSimpleTrade {
+        if (!order.SL && !order.TP) {
+            return null;
+        }
+
+        const shape = new TradingChartDesigner.ShapeSimpleTrade();
+        shape.locked = false;
+        shape.removable = false;
+        shape.savable = false;
+        shape.sl = order.SL;
+        shape.tp = order.TP;
+        shape.entry = order.Price;
+        shape.orderId = order.Id;
         return shape;
     }
 
@@ -370,7 +396,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
         let shapes = [];
         for (const shape of this._chart.primaryPane.shapes) {
-            if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
+            if (shape instanceof TradingChartDesigner.ShapeOrderLine || shape instanceof TradingChartDesigner.ShapeSimpleTrade) {
                 shape.locked = false;
                 shape.selectable = true;
                 shape.removable = true;
@@ -461,7 +487,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (!this._chart) {
             return;
         }
-
+        
         for (const shape of this._chart.primaryPane.shapes) {
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
                 const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
@@ -481,6 +507,13 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     if (tpId === orderLine.lineId) {
                         this.setShapeTP(orderLine, order);
                     }
+                }
+            } else if (shape instanceof TradingChartDesigner.ShapeSimpleTrade) {
+                const orderShape = shape as TradingChartDesigner.ShapeSimpleTrade;
+                for (const order of orders) {
+                    if (order.Id === Number(orderShape.orderId)) {
+                        this.updatePositionShape(orderShape, order);
+                    } 
                 }
             }
         }
