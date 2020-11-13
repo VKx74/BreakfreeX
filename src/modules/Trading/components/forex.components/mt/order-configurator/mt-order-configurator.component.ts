@@ -56,7 +56,7 @@ export class MTOrderConfig {
         return {
             instrument: null,
             side: OrderSide.Buy,
-            amount: 1,
+            amount: 0.1,
             type: OrderTypes.Market,
             useSL: false,
             useTP: false,

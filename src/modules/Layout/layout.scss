@@ -2,9 +2,7 @@
 @import "global-styles/mixins/themify";
 
 .lm_tab {
-  height: 27px !important;
-  padding-bottom: 0 !important;
-  padding-top: 6px !important;
+  height: 28px !important;
   .lm_title {
     font-family: 'Open Sans', sans-serif;
     font-size: 13px;
@@ -13,7 +11,7 @@
 }
 
 .lm_add-component {
-  height: 32px !important;
+  height: 24px !important;
   margin-top: 0 !important;
 }
 
@@ -25,11 +23,11 @@
 
 .lm_tab.tab-with-linker {
   height: 27px;
-  padding: 6px 15px 0 15px !important;
+  padding: 0px 15px 0 15px !important;
   box-sizing: border-box !important;
 
   &.closable-tab {
-    padding: 6px 15px 0 15px !important;
+    padding: 0px 15px 0 15px !important;
   }
 
   .link-selector {
@@ -84,7 +82,6 @@
   }
 
   .lm_header {
-    height: 34px !important;
     background-color: themed('headerBgColor');
 
     .lm_tab {
@@ -167,6 +164,7 @@
   font-weight:700;
   white-space: nowrap;
   max-width: 100px;
+  margin-top: 6px;
 }
 
 .lm_close_tab i{
