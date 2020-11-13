@@ -2,7 +2,7 @@
 @import "global-styles/mixins/themify";
 
 .lm_tab {
-  height: 22px !important;
+  height: 27px !important;
   padding-bottom: 0 !important;
   padding-top: 6px !important;
   .lm_title {
@@ -13,7 +13,7 @@
 }
 
 .lm_add-component {
-  height: 28px !important;
+  height: 32px !important;
   margin-top: 0 !important;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .lm_controls {
-  margin-top: -4px !important;
+  margin-top: -2px !important;
 
   .crypto-icon {
     font-size: 10px;
@@ -84,7 +84,7 @@
   }
 
   .lm_header {
-    height: 28px !important;
+    height: 34px !important;
     background-color: themed('headerBgColor');
 
     .lm_tab {
@@ -186,7 +186,8 @@ font-size: 7px !important;
 li.lm_tab.closable-tab.tab-with-linker:hover .lm_close_tab{
   opacity:1 !important;
   transition-duration: 0.22s;
-
+  transition-delay: 0.25s;
+  animation-delay: 0.25s;
   
 }
 
