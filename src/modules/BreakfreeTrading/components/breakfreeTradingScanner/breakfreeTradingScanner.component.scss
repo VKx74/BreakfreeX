@@ -55,26 +55,41 @@
   }
   .scanning-time {
     font-size: 11px;
-    margin: 4px 8px;
     text-align: right;
     width: 100%;
     overflow: hidden;
+    padding-top:5px;
+    opacity:0;
+    transition-duration: 0.22s;
+    transition-delay: 0.75s;
+    animation-delay: 0.75s;
+    font-weight:bold;
   }
   .top-line {
-    width: 100%;
-    overflow-x: auto;
     overflow-y: hidden;
     display: flex;
-    align-items: center;
-    height: 42px;
     flex-shrink: 0;
-    padding-left: 10px;
-    border: none;
+    padding: 5px;
+  }
+
+
+  .top-line:hover .scanning-time
+  {
+    opacity:1;
+    transition-duration: 0.22s;
+    transition-delay: 0.25s;
+    animation-delay: 0.25s;
   }
 
   /deep/ .mat-tab-body-wrapper { 
     height: 100%;
+    padding-top: 5px;
   }
+
+  /deep/ .mat-tab-group { 
+    padding-top: 5px;
+  }
+
   
   /deep/ .mat-tab-labels { 
     background-color: transparent;
@@ -118,7 +133,7 @@
 @include themify($themes, true) {
   .top-line {
     background-color: themed('appPanelColor');
-    border-bottom: 1px solid themed('appBackgroundColor');
+    border-bottom: 1px solid themed('rejectButtonBackgroundColor');
   }
 
   .output, .scanning-time {
@@ -145,4 +160,67 @@
   //     color: themed('accentColor');
   //   }
   // }
+}
+
+
+.mat-select-value {
+
+  font-size: 11px !important;
+
+}
+
+
+
+
+.bftScanner .top-line div  {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  height: 25px !important;
+  max-height: 25px;
+  overflow: hidden;
+  min-width: 60px;
+  width: 100%;
+  max-width: 125px;
+
+}
+
+/deep/ .bftScanner mat-select .mat-select-value{
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  vertical-align: initial;
+  padding-top: 8px;
+}
+
+/deep/ .bftScanner mat-select .mat-select-arrow-wrapper {
+  padding-right: 2px  !important;
+  padding-left: 2px  !important;
+
+}
+
+/deep/.bftScanner mat-select .mat-select-arrow-wrapper .mat-select-arrow {
+  margin-top: -5px !important;
+}
+
+/deep/ .mat-tab-label-content {
+  font-size: 10px !important;
+}
+
+/deep/.mat-tab-group .mat-tab-list .mat-tab-labels .mat-tab-label {
+ 
+  padding: 0 8px 0px !important;
+
+}
+
+/deep/ .mat-tab-group .mat-tab-list .mat-tab-labels .mat-tab-label.mat-tab-label-active {
+  padding:0 8px 0px !important;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 0px !important;
+  font-weight: 600;
+}
+/deep/ .header-cell-content-wrapper {
+  font-size: 10px !important;
+}
+
+/deep/ mat-header-cell {
+  height: 25px !important;
 }

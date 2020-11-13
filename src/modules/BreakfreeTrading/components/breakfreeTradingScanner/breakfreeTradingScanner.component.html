@@ -1,5 +1,5 @@
 <div class="bftScanner" *ngIf="isAuthorizedCustomer; else outOfAccess">
-   <div class="top-line flex justify-content-left">
+   <div class="top-line">
       <div class="segment-select">
          <mat-form-field floatLabel="never" class="crypto-select full-width">
             <mat-select (selectionChange)="segmentSelected($event.value)" [value]="activeSegment">
@@ -18,7 +18,7 @@
             </mat-select>
          </mat-form-field>
       </div>
-      <div class="scanning-time">Scanned: {{scanningTime}}</div>
+      <div class="scanning-time">Last: {{scanningTime}}</div>
    </div>
 
    <mat-tab-group class="full-height tabs">
