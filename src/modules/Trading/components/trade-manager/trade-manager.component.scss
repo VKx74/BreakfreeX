@@ -43,6 +43,18 @@ object {
   }
 }
 
+//smartphone fix so users can click corner on rounded screen devices.
+@media (max-width: 500px) {
+  .crypto-icon-layout-maximise {
+    padding-right:10px !important;
+  }
+}
+
+.crypto-icon-layout-maximise {
+  font-size: 11px;
+  bottom: 1px;
+}
+
 .shiftup{
   padding-bottom: 25px;
 }
