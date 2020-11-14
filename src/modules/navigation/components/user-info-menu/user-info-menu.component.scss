@@ -92,7 +92,8 @@
 
   .user-name {
     font-size: 12px;
-    text-transform: capitalize;
+    // text-transform: capitalize;
+    word-wrap: break-word;
     vertical-align: middle;
     height: fit-content;
     border-bottom: 1px solid;
