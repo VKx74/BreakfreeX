@@ -34,16 +34,16 @@
                   <data-table-header-cell columnName="symbol" [sortable]="true">
                      {{'instrument' | translate}}
                   </data-table-header-cell>
-                  <data-table-header-cell columnName="type" [sortable]="false">
+                    <data-table-header-cell columnName="type" [sortable]="false">
                      {{'type' | translate}}
                   </data-table-header-cell> 
-                  <data-table-header-cell columnName="tte" [sortable]="false">
+                   <data-table-header-cell columnName="tte" [sortable]="false">
                      {{'tte' | translate}}
-                  </data-table-header-cell>
+                  </data-table-header-cell> 
                   <data-table-header-cell columnName="tp" [sortable]="false">
                      {{'tp' | translate}}
                   </data-table-header-cell>
-      
+
                <data-table-cell columnName="featured">
                      <ng-template let-scannerVM>
                          <color-selector [activeColor]="getFeaturedDetails(scannerVM)" (activeColorChange)='handleColorSelected($event, scannerVM)'  (click)="click($event)" [path]="'flag'">
@@ -53,28 +53,32 @@
                   <data-table-cell columnName="symbol">
                      <ng-template let-scannerVM>
                         <div class="symbol-column">
-                           {{scannerVM.symbol}} : <span style = "text-transform:capitalize;">{{scannerVM.exchange}}</span>
+                           {{scannerVM.symbol}}<span class="exchange" style = "text-transform:capitalize;"> : {{scannerVM.exchange}}</span>
                         </div>
                      </ng-template>
                   </data-table-cell>
                   <data-table-cell columnName="type">
                      <ng-template let-scannerVM>
-                        {{scannerVM.type}}
+                        <object class="svgfiller" type="image/svg+xml" data="assets/img/EXT2.svg"></object>
+                       <!--  <object class="svgfiller" type="image/svg+xml" data="assets/img/SWING2.svg"></object>
+                        <object class="svgfiller" type="image/svg+xml" data="assets/img/BRC2.svg"></object> -->
+          
                      </ng-template>
                   </data-table-cell>
-                  <data-table-cell columnName="tte">
+                     <data-table-cell columnName="tte">
                      <ng-template let-scannerVM>
-                        {{scannerVM.tte}}
+                       15m
+                       <!-- Insert timeframe of trade here -->
                      </ng-template>
                   </data-table-cell>
                   <data-table-cell columnName="tp">
                      <ng-template let-scannerVM>
                         <div [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
-                           {{scannerVM.tp}}
+                           {{scannerVM.tp}} VOL
                         </div>
                      </ng-template>
                   </data-table-cell>
-               </data-table>
+               </data-table> 
                <div *ngIf="output; else subscriptionOutput" class="output">
                   {{output}}
                </div>

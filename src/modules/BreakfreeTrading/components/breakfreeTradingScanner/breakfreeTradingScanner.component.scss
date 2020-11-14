@@ -102,8 +102,25 @@
     height: 25px;
   }
   /deep/ mat-row {
-    height: 25px;
+    
   }
+
+
+  /deep/  mat-cell.mat-cell.cdk-column-symbol.mat-column-symbol{
+
+}
+
+/deep/ mat-row.mat-row {
+  border-radius: 5px;
+  overflow: hidden;
+
+  max-height: 50px;
+
+  margin: 5px;
+
+}
+
+mat-row.mat-row.ng-tns-c42-10.ng-star-inserted {}
 
   .high {
     color: $lightGreenColor;
@@ -143,6 +160,14 @@
   .text {
     color: themed('valueTextColor');
   }
+
+  /deep/ mat-row.mat-row{
+  background-color: themed('tableBorders') !important;  
+}
+
+/deep/ .mat-column-groupHeader {
+  background-color: themed('appPanelColor') !important;
+}
 
   // /deep/ mat-row:nth-child(even) {
   //   background-color: themed('nthChild') !important;
@@ -223,4 +248,44 @@
 
 /deep/ mat-header-cell {
   height: 25px !important;
+}
+
+/deep/.Dark-theme .svgfiller { 
+    max-height: 8px;
+    height:8px;
+    padding-right: 5px;
+    filter: invert(98%) sepia(0%) saturate(7493%) hue-rotate(140deg) brightness(100%) contrast(105%);
+    vertical-align: middle;
+    opacity:0.9
+  }
+
+  /deep/.Light-theme   .svgfiller { 
+    max-height: 8px;
+    height:8px;
+    padding-right: 5px;
+       vertical-align: middle;
+  }
+
+  .symbol-column {
+    font-weight: 700;
+    font-size: 10px;
+}
+
+/deep/ mat-cell.mat-cell.cdk-column-tp.mat-column-tp {
+  font-weight: 700;
+  font-size: 10px;
+}
+
+
+/deep/ mat-header-row.mat-header-row {
+  display: none;
+}
+
+.exchange {
+  display: none;
+}
+
+/deep/  mat-cell.mat-cell.cdk-column-tte {
+  font-weight: 700;
+  font-size: 10px;
 }
