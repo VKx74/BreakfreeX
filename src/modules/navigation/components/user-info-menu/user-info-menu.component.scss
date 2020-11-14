@@ -12,16 +12,18 @@
 }
 
 .avatar {
-  min-width: 20px;
-  max-width: 30px;
-  height: 30px;
-  padding-left:5px;
-    vertical-align: middle;
+  max-width: 80px;
+  max-height: 80px;
+  margin-left: 10px;
+  vertical-align: middle;
+
+  /deep/.rounded {
+    border-radius: 50% !important;
+  }
 }
 
 .menu-top {
-  padding: 15px;
-  
+  padding: 15px 15px 0px 15px;
 }
 
 .menu-bottom {
@@ -34,29 +36,71 @@
 .menu-top {
   position: relative;
 
-  .user-settings {
+  .experiance {
+    display: flex;
+    flex-direction: column;
 
-    
+    .experiance-points, .experiance-level {
+      display: flex;
+      margin-top: 5px;
+    }
+
+    .ico {
+      width: 25px;
+      height: 25px;
+      background-color: #707d90;
+      border-radius: 50%;
+      display: block;
+      font-size: 12px;
+      color: white;
+      font-weight: bold;
+      padding: 4px 5px;
+      margin-right: 10px;
+    }
+
+    .ico-text {
+      font-size: 12px;
+      line-height: 25px;
+    }
   }
 
-  .log-out {
-    margin-left: 60px;
-    margin-right: -4px;
-    margin-top: -4px;
-  }
-
-  .user-name {
-
-    font-size:12px;
-    text-transform: capitalize;
-    padding-left:5px;
-    vertical-align: middle;
-
-
-
+  .user-settings, .log-out {
     @include themify($themes, true) {
       color: themed('titleTextColor');
     }
+    ::before {
+      font-size: 16px;
+      margin-right: 5px;
+    }
+    font-size: 12px;
+    line-height: 16px;
+    cursor: pointer;
+  }
+
+  .functiona-menu {
+      justify-content: space-between;
+      margin-top: 10px;
+  }
+
+  .info {
+    padding: 0px 15px;
+    min-width: 120px;
+    @include themify($themes, true) {
+      color: themed('titleTextColor');
+    }
+  }
+
+  .user-name {
+    font-size: 12px;
+    text-transform: capitalize;
+    vertical-align: middle;
+    height: fit-content;
+    border-bottom: 1px solid;
+    padding-bottom: 5px;
+    @include themify($themes, true) {
+      border-bottom-color: themed('accentLightColor');
+    }
+  
   }
 }
 
@@ -133,7 +177,7 @@ text-transform: capitalize;
 
 .topnewmenu span.innericon {
   padding-right: 5px;
-      vertical-align: middle;
+  vertical-align: middle;
 }
 
 .fa {

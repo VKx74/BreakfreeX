@@ -1,88 +1,36 @@
 <div class="user-info-menu">
-    <div class="menu-top">
-   
-
-
-
-
-
-        
-
-        <div class="topnewmenu" >
-          <div class="inner username">  
-           
-              <span class="innertext">Welcome {{userName}}  </span>
-         </div>
-        
-         </div>
-
-         <div class="topnewmenu onx" >
-            <div class="inner usersettings" routerLink="/platform/settings">  
-                <span class="innericon"><i class="fa fa-cog" aria-hidden="true"></i>  </span>
-                <span class="innertext">User Settings </span>
+    <div class="menu-top flex flex-direction-column justify-content-center">
+        <div class="flex justify-space-between w-100">
+           <div class="avatar">
+               <ng-container *ngTemplateOutlet="avatarTemplate || avatar"></ng-container>
            </div>
-          
-           </div>
-
-           <div class="topnewmenu onx" >
-            <div class="inner logout" (click)="onLogoutClick()">  
-                <span class="innericon"><i class="fa fa-sign-out" aria-hidden="true"></i>  </span>
-                <span class="innertext">Log Out </span>
-           </div>
-          
-           </div>
-        
-        
-        
-        
-        
-       
-
+           <div class="info">
+                <div class="user-name">
+                    {{userName}}
+                </div>
+                <div class="experiance">
+                    <div class="experiance-points">
+                        <span class="ico">XP</span>
+                        <span class="ico-text">89/100</span>
+                    </div>  
+                    <div class="experiance-level">
+                        <span class="ico">LV</span>
+                        <span class="ico-text">7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="functiona-menu flex justify-content-center crypto-text is-large">
+            <div class="user-settings" routerLink="/platform/settings">
+                <span class="crypto-icon crypto-icon-settings" title="{{'app.settings' | translate}}">{{'app.settings' | translate}}</span>
+            </div>
+            <div class="log-out" (click)="onLogoutClick()">
+                <span class="crypto-icon crypto-icon-logout" title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
+            </div>
+        </div>
     </div>
 
     <ng-template #avatar>
         <name-avatar [name]="userName" [src]="userId" [shape]="UserAvatarShape.Rounded"></name-avatar>
     </ng-template>
-
-    <div class="menu-bottom delimiter-top hidden" >
-<!--        <div class="delimiter"></div>-->
-<!--        *ngIf="(activeBroker$ | async)?.userInfo as userInfo"-->
-       <ng-container *ngIf="(activeBroker$ | async)?.userInfo as userInfo; else broker_not_connected">
-           <ng-container *ngIf="(applicationType$ | async) as applicationType">
-               <ng-container *ngIf="applicationType === ApplicationType.Forex">
-                   <!-- <div class="flex justify-space-between item">
-                       <div class="item-name">{{'userInfoMenu.balance' | translate}}</div>
-                       <div class="item-value" numberColor>{{userInfo?.Balance}}</div>
-                   </div>
-                   <div class="flex justify-space-between item">
-                       <div class="item-name">{{'userInfoMenu.realized' | translate}} P/L</div>
-                       <div class="item-value" numberColor>{{userInfo?.Pl}}</div>
-                   </div>
-                   <div class="flex justify-space-between item">
-                       <div class="item-name">{{'userInfoMenu.unrealized' | translate}} P/L</div>
-                       <div class="item-value" numberColor>{{userInfo?.UnrealizedPL}}</div>
-                   </div>
-                   <div class="flex justify-space-between item">
-                       <div class="item-name">{{'userInfoMenu.usedMargin' | translate}}</div>
-                       <div class="item-value" numberColor>{{userInfo?.MarginUsed}}</div>
-                   </div>
-                   <div class="flex justify-space-between item">
-                       <div class="item-name">{{'userInfoMenu.availableMargin' | translate}}</div>
-                       <div class="item-value" numberColor>{{userInfo?.MarginAvailable}}</div>
-                   </div> -->
-               </ng-container>
-               <ng-container *ngIf="applicationType === ApplicationType.Crypto">
-                   <div class="flex justify-space-between item">
-                       <div class="item-name">{{'userInfoMenu.username' | translate}}</div>
-                       <div class="item-value">{{userInfo?.username}}</div>
-                   </div>
-               </ng-container>
-           </ng-container>
-       </ng-container>
-        <ng-template #broker_not_connected>
-            <div class="flex justify-content-center item">
-                <div class="item-name">{{'userInfoMenu.notConnectedBroker' | translate}}</div>
-            </div>
-        </ng-template>
-    </div>
 </div>
