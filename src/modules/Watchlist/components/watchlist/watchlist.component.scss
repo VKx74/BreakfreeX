@@ -351,6 +351,18 @@
       }
     }
 
+    .watchlist-tile:hover {
+      border: 1px solid themed('valueTextColor');
+     
+       transition-duration: 0.22s;
+    }
+
+    .watchlist-tile {
+      border: 1px solid transparent;
+    
+       transition-duration: 0.22s;
+    }
+
     .control, .crypto-button-icon  {
       color: themed('valueTextColor');
       background-color: themed('tableBorders');
