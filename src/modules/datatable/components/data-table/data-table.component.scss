@@ -60,6 +60,12 @@ $defaultModeRowHeight: 32px;
     text-align: left;
   }
 
+  .mat-header-row {
+    mat-header-cell {
+      height: 25px;
+    }
+  }
+
   .mat-header-row,
   .mat-row {
     line-height: $rowLineHeight;

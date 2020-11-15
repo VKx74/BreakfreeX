@@ -22,63 +22,80 @@
    </div>
 
    <mat-tab-group class="full-height tabs">
-      <mat-tab label="Realtime"> 
+      <mat-tab label="Realtime">
          <div class="content-wrapper flex-grow-1 h-0">
             <div class="full-height padding-wrapper">
-               <data-table #dataTableComponent [rows]="scannerResultsFiltered" [selectable]="true" [expandOnClick]="false"
-                  [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
-                  (onRowSelect)="handleScannerResultsClick($event)" [groups]="groups" [groupingField]="groupingField">
-      
-                  <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="24" [columnMinWidth]="24">
+               <data-table #dataTableComponent [rows]="scannerResultsFiltered" [selectable]="true"
+                  [expandOnClick]="false" [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
+                  [trackByIndex]="false" (onRowSelect)="handleScannerResultsClick($event)" [groups]="groups"
+                  [groupingField]="groupingField">
+
+                  <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="24"
+                     [columnMinWidth]="24">
                   </data-table-header-cell>
                   <data-table-header-cell columnName="symbol" [sortable]="true">
                      {{'instrument' | translate}}
                   </data-table-header-cell>
-                    <data-table-header-cell columnName="type" [sortable]="false">
+                  <data-table-header-cell columnName="timeframe" [sortable]="false">
+                     {{'timeframe' | translate}}
+                  </data-table-header-cell>
+                  <data-table-header-cell columnName="type" [sortable]="false">
                      {{'type' | translate}}
-                  </data-table-header-cell> 
-                   <data-table-header-cell columnName="tte" [sortable]="false">
-                     {{'tte' | translate}}
-                  </data-table-header-cell> 
+                  </data-table-header-cell>
                   <data-table-header-cell columnName="tp" [sortable]="false">
                      {{'tp' | translate}}
                   </data-table-header-cell>
 
-               <data-table-cell columnName="featured">
+                  <data-table-cell columnName="featured">
                      <ng-template let-scannerVM>
-                         <color-selector [activeColor]="getFeaturedDetails(scannerVM)" (activeColorChange)='handleColorSelected($event, scannerVM)'  (click)="click($event)" [path]="'flag'">
-                         </color-selector>
+                        <color-selector [activeColor]="getFeaturedDetails(scannerVM)"
+                           (activeColorChange)='handleColorSelected($event, scannerVM)' (click)="click($event)"
+                           [path]="'flag'">
+                        </color-selector>
                      </ng-template>
-                 </data-table-cell>
+                  </data-table-cell>
                   <data-table-cell columnName="symbol">
                      <ng-template let-scannerVM>
-                        <div class="symbol-column">
-                           {{scannerVM.symbol}}<span class="exchange" style = "text-transform:capitalize;"> : {{scannerVM.exchange}}</span>
+                        <div class="symbol-column cell-data">
+                           {{scannerVM.symbol}}
+                        </div>
+                     </ng-template>
+                  </data-table-cell>
+                  <data-table-cell columnName="timeframe">
+                     <ng-template let-scannerVM>
+                        <div class="cell-data">
+                           {{toTimeframe(scannerVM.timeframe)}}
                         </div>
                      </ng-template>
                   </data-table-cell>
                   <data-table-cell columnName="type">
                      <ng-template let-scannerVM>
-                        <object class="svgfiller" type="image/svg+xml" data="assets/img/EXT2.svg"></object>
-                       <!--  <object class="svgfiller" type="image/svg+xml" data="assets/img/SWING2.svg"></object>
-                        <object class="svgfiller" type="image/svg+xml" data="assets/img/BRC2.svg"></object> -->
-          
-                     </ng-template>
-                  </data-table-cell>
-                     <data-table-cell columnName="tte">
-                     <ng-template let-scannerVM>
-                       15m
-                       <!-- Insert timeframe of trade here -->
+                        <div class="cell-data">
+                        <ng-container [ngSwitch]="scannerVM.origType">
+                           <ng-container *ngSwitchCase="origType.EXT">
+                              <img class="svgfiller"  src="assets/img/EXT2.svg"/>
+                           </ng-container>
+                           <ng-container *ngSwitchCase="origType.BRC">
+                              <img class="svgfiller"  src="assets/img/BRC2.svg"/>
+                           </ng-container>
+                           <ng-container *ngSwitchCase="origType.SwingExt">
+                              <img class="svgfiller"  src="assets/img/SWING2.svg"/>
+                           </ng-container>
+                           <ng-container *ngSwitchCase="origType.SwingN">
+                              <img class="svgfiller"  src="assets/img/SWING2.svg"/>
+                           </ng-container>
+                        </ng-container>
+                     </div>
                      </ng-template>
                   </data-table-cell>
                   <data-table-cell columnName="tp">
                      <ng-template let-scannerVM>
-                        <div [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
+                        <div class="cell-data" [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
                            {{scannerVM.tp}} VOL
                         </div>
                      </ng-template>
                   </data-table-cell>
-               </data-table> 
+               </data-table>
                <div *ngIf="output; else subscriptionOutput" class="output">
                   {{output}}
                </div>
@@ -93,24 +110,24 @@
                      </div>
                   </div>
                </ng-template>
-               
+
             </div>
          </div>
-      </mat-tab> 
-      <mat-tab label="History"> 
+      </mat-tab>
+      <mat-tab label="History">
          <div class="full-height padding-wrapper">
-            <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true" [expandOnClick]="false"
-               [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
+            <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true"
+               [expandOnClick]="false" [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
                (onRowSelect)="handleScannerResultsClick($event, true)">
-   
+
                <data-table-header-cell columnName="symbol" [sortable]="true">
                   {{'instrument' | translate}}
                </data-table-header-cell>
+               <data-table-header-cell columnName="timeframe" [sortable]="false">
+                  {{'timeframe' | translate}}
+               </data-table-header-cell>
                <data-table-header-cell columnName="type" [sortable]="false">
                   {{'type' | translate}}
-               </data-table-header-cell> 
-               <data-table-header-cell columnName="tte" [sortable]="false">
-                  {{'tte' | translate}}
                </data-table-header-cell>
                <data-table-header-cell columnName="tp" [sortable]="false">
                   {{'tp' | translate}}
@@ -118,40 +135,59 @@
                <data-table-header-cell columnName="time" [sortable]="false">
                   {{'time' | translate}}
                </data-table-header-cell>
-   
+
                <data-table-cell columnName="symbol">
                   <ng-template let-scannerVM>
-                     <div class="symbol-column">
-                        {{scannerVM.symbol}} : <span style = "text-transform:capitalize;">{{scannerVM.exchange}}</span>
+                     <div class="symbol-column cell-data">
+                        {{scannerVM.symbol}}
+                     </div>
+                  </ng-template>
+               </data-table-cell>
+               <data-table-cell columnName="timeframe">
+                  <ng-template let-scannerVM>
+                     <div class="cell-data">
+                        {{toTimeframe(scannerVM.timeframe)}}
                      </div>
                   </ng-template>
                </data-table-cell>
                <data-table-cell columnName="type">
                   <ng-template let-scannerVM>
-                     {{scannerVM.type}}
-                  </ng-template>
-               </data-table-cell>
-               <data-table-cell columnName="tte">
-                  <ng-template let-scannerVM>
-                     {{scannerVM.tte}}
+                     <div class="cell-data">
+                     <ng-container [ngSwitch]="scannerVM.origType">
+                        <ng-container *ngSwitchCase="origType.EXT">
+                           <img class="svgfiller"  src="assets/img/EXT2.svg"/>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="origType.BRC">
+                           <img class="svgfiller"  src="assets/img/BRC2.svg"/>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="origType.SwingExt">
+                           <img class="svgfiller"  src="assets/img/SWING2.svg"/>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="origType.SwingN">
+                           <img class="svgfiller"  src="assets/img/SWING2.svg"/>
+                        </ng-container>
+                     </ng-container>
+                  </div>
                   </ng-template>
                </data-table-cell>
                <data-table-cell columnName="tp">
                   <ng-template let-scannerVM>
-                     <div [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
-                        {{scannerVM.tp}}
+                     <div class="cell-data" [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
+                        {{scannerVM.tp}} VOL
                      </div>
                   </ng-template>
                </data-table-cell>
                <data-table-cell columnName="time">
                   <ng-template let-scannerVM>
-                     {{scannerVM.time}}
+                     <div class="cell-data">
+                        {{scannerVM.time}}
+                     </div>
                   </ng-template>
                </data-table-cell>
             </data-table>
          </div>
       </mat-tab>
-  </mat-tab-group>
+   </mat-tab-group>
 </div>
 
 <ng-template #outOfAccess>

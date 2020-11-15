@@ -32,7 +32,6 @@ interface IScannerState {
 interface IFeaturedResult {
     symbol: string;
     exchange: string;
-    type: string;
     timeframe: number;
     marketType: string;
     color: string;
@@ -43,7 +42,6 @@ interface IFeaturedResult {
 interface IScannerResults {
     symbol: string;
     exchange: string;
-    type: string;
     timeframe: number;
     tte: string;
     tp: string;
@@ -105,6 +103,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public selectedScannerResult: IScannerResults;
     public output: string;
     public loading: boolean;
+
+    public get origType() {
+        return IBFTATradeType;
+    }
 
     public get isAuthorizedCustomer(): boolean {
         return this._identityService.isAuthorizedCustomer;
@@ -222,6 +224,18 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
+    toTimeframe(tf: number): string {
+        switch (tf) {
+            case 1 * 60: return "1 Min";
+            case 5 * 60: return "5 Min";
+            case 15 * 60: return "15 Min";
+            case 60 * 60: return "1 Hour";
+            case 240 * 60: return "4 Hours";
+            case 24 * 60 * 60: return "Daily";
+        }
+        return "Undefined";
+    }
+
     public getFeaturedDetails(scannerVM: IScannerResults): string {
         return scannerVM.color;
     }
@@ -282,7 +296,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             marketType: this._getMarketType(loaded.symbol),
             symbol: loaded.symbol,
             timeframe: loaded.timeframe,
-            type: loaded.type,
             trend: loaded.trend,
             origType: loaded.type
         });
@@ -345,7 +358,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 tte: loaded ? this._toTTE(loaded.tte) : "Expired",
                 volatility:  loaded ? this._toVolatility(loaded.tp) : null,
                 marketType: this._featuredGroupName,
-                type: loaded ? this._getType(loaded) : this._getType(i),
                 trend: loaded ? loaded.trend : i.trend,
                 color: i.color,
                 origType: i.origType
@@ -365,7 +377,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 tte: this._toTTE(i.tte),
                 volatility: this._toVolatility(i.tp),
                 marketType: this._getMarketType(i.symbol),
-                type: this._getType(i),
                 trend: i.trend,
                 origType: i.type
             });
@@ -434,16 +445,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._reloadData();
     }
 
-    private _getType(item: IBFTScanInstrumentsResponseItem | IFeaturedResult): string {
-        const tf = this._toTimeframe(item.timeframe);
-        const ud = item.trend === IBFTATrend.Up ? "U" : "D";
-        let type = item.type.toString();
-        if (type === IBFTATradeType.SwingExt || type === IBFTATradeType.SwingN) {
-            type = this.SWING;
-        }
-        return `${type}_${ud}_${tf}`;
-    }
-
     private _getMarketType(symbol: string): string {
         for (const type of this._types) {
             for (const inst of type.data) {
@@ -477,18 +478,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         return `${tte} candles`;
     }
 
-    private _toTimeframe(tf: number): string {
-        switch (tf) {
-            case 1 * 60: return "1 Min";
-            case 5 * 60: return "5 Min";
-            case 15 * 60: return "15 Min";
-            case 60 * 60: return "1 Hour";
-            case 240 * 60: return "4 Hours";
-            case 24 * 60 * 60: return "Daily";
-        }
-        return "Undefined";
-    }
-
     private _isTFAllowed(tf: number): boolean {
        // less than 1h
        if (!this.isPro && tf < 60 * 60) {
@@ -512,7 +501,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                     tte: this._toTTE(i.responseItem.tte),
                     volatility: this._toVolatility(i.responseItem.tp),
                     marketType: this._getMarketType(i.responseItem.symbol),
-                    type: this._getType(i.responseItem),
                     trend: i.responseItem.trend,
                     time: date.toLocaleString(),
                     origType: i.responseItem.type,
