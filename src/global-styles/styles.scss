@@ -318,6 +318,12 @@ span.bftsvg {
   margin-left: 10px;
 }
 
+.Dark-theme {
+  .svgfiller { 
+    filter: invert(98%) sepia(0%) saturate(7493%) hue-rotate(140deg) brightness(100%) contrast(105%);
+    opacity:0.9
+  }
+}
 
 .Light-theme .open .flex.BFTN img {
   width: 170px;
