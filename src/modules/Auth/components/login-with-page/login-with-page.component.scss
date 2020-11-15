@@ -10,6 +10,7 @@
   overflow: auto;
   background: #191919;
 
+ 
   .login-page {
     display: flex;
     margin: 20vh 0;
@@ -21,6 +22,13 @@ login-with-page {
   background: #191919;
 }
 
+.page{
+  background: #191919;
+}
+
+.left {
+  padding:50px 0px 0px 0px !important;
+}
 
 
 .app-loading .logo img{
@@ -39,7 +47,7 @@ login-with-page {
     background:#191919 ;
     transition-duration: 0.22s;
     width: 100%;
-    margin-top: 50vh;
+    margin-top: 0vh !important;
   
   }
   
