@@ -64,7 +64,16 @@
     transition-delay: 0.75s;
     animation-delay: 0.75s;
     font-weight:bold;
+    max-height: 24px;
+    margin-left: 5px;
+    &:hover {
+      opacity:1;
+      transition-duration: 0.22s;
+      transition-delay: 0.25s;
+      animation-delay: 0.25s;
+    }
   }
+
   .top-line {
     overflow-y: hidden;
     display: flex;
@@ -73,41 +82,22 @@
   }
 
 
-  .top-line:hover .scanning-time
-  {
-    opacity:1;
-    transition-duration: 0.22s;
-    transition-delay: 0.25s;
-    animation-delay: 0.25s;
+  /deep/  {
+    .mat-tab-body-wrapper { 
+      height: 100%;
+    }
+    .mat-row {
+      border-radius: 5px;
+      overflow: hidden;
+      height: 32px !important;
+      margin: 5px;
+    }
+
+    .row-group-header {
+      background-color: transparent;
+      border: none;
+    }
   }
-
-  /deep/ .mat-tab-body-wrapper { 
-    height: 100%;
-    padding-top: 5px;
-  }
-
-  /deep/ .mat-tab-group { 
-    padding-top: 5px;
-  }
-
-  
-  /deep/ .mat-tab-labels { 
-    background-color: transparent;
-  }
-
-  /deep/ .mat-tab-label { 
-    height: 26px !important;
-  }
-
-/deep/ mat-row.mat-row {
-  border-radius: 5px;
-  overflow: hidden;
-
-  max-height: 50px;
-
-  margin: 5px;
-
-}
 
   .high {
     color: $lightGreenColor;
@@ -121,88 +111,20 @@
     color: $lightRedColor;
   }
 
-  .mat-select-value{
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    vertical-align: initial;
-    padding-top: 8px;
-  }
-
   /deep/ {
-    mat-header-row.mat-header-row {
-      display: none;
+    .svgfiller { 
+      max-height: 8px;
+      height:8px;
+      padding-right: 5px;
+      vertical-align: middle;
     }
 
-    .cell-data {
+    .symbol-column {
       font-weight: 700;
       font-size: 10px;
     }
-
-    .mat-tab-label {
-      padding: 0 8px 0px !important;
-    }
-
-    .mat-select-arrow {
-      margin-top: -5px !important;
-    }
-
-    .mat-select-arrow-wrapper {
-      padding-right: 2px  !important;
-      padding-left: 2px  !important;
-    
-    }
-
-    .mat-row {
-      .matMenuTrigger {
-        height: 14px !important;
-        margin-left: -10px;
-      }
-    }
-
-    .mat-select-value {
-      font-size: 11px !important;
-    }
-    
-    .mat-tab-label.mat-tab-label-active {
-      padding:0 8px 0px !important;
-      border-top-right-radius: 3px;
-      border-top-left-radius: 0px !important;
-      font-weight: 600;
-    }
-
-    .top-line {
-      div {
-        font-size: 10px !important;
-        font-weight: 700 !important;
-        height: 25px !important;
-        max-height: 25px;
-        overflow: hidden;
-        min-width: 60px;
-        width: 100%;
-        max-width: 125px;
-      }
-    }
-
-    .header-cell-content-wrapper {
-      font-size: 10px !important;
-    }
-
-  .svgfiller { 
-    max-height: 8px;
-    height:8px;
-    padding-right: 5px;
-    vertical-align: middle;
   }
-
-  .symbol-column {
-    font-weight: 700;
-    font-size: 10px;
-  }
-
-  }
-
 }
-
 
 @include themify($themes, true) {
   .top-line {
@@ -218,11 +140,7 @@
     color: themed('valueTextColor');
   }
 
-  /deep/ mat-row.mat-row{
-  background-color: themed('tableBorders') !important;  
-}
-
-/deep/ .mat-column-groupHeader {
-  background-color: themed('appPanelColor') !important;
-}
+  /deep/ mat-row.mat-row:not(.row-group-header) {
+    background-color: themed('tableBorders') !important;
+  }
 }

@@ -52,7 +52,7 @@
         </mat-header-row>
 
         <!-- Group header -->
-        <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"> </mat-row>
+        <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" class="row-group-header"> </mat-row>
         <ng-container matColumnDef="groupHeader">
             <mat-cell *matCellDef="let group" class="mat-table-group">{{group.group}}</mat-cell>
         </ng-container>

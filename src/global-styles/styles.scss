@@ -249,18 +249,6 @@ button.crypto-button.crypto-button_default {
 }
 
 
-.lm_header .lm_tab {
-  height: 18px;
-  padding-bottom: 4px;
-  padding-top: 5px;
-  padding-right: 35px;
-  margin-right: 1px;
-  box-shadow: none;
-  border-top-right-radius: 5px !important;
-  border-top-left-radius: 5px !important;
-}
-
-
 //DARK THEME
 
 .Dark-theme .lm_header .lm_tab {
@@ -909,6 +897,36 @@ transition-duration: 0.22s;
   stroke-linecap: round;
   stroke: #ddd;
   transition-duration: 0.22s;
+}
+
+.bft-form-select {
+  /deep/ {
+    .mat-form-field-flex {
+      height: 24px !important;
+      mat-select {
+        height: 24px !important;
+      }
+    }
+    .mat-select-value, input {
+      font-size: 10px !important;
+      font-weight: 700 !important;
+    }
+  }
+}
+
+.bft-form-input {
+  /deep/ {
+    .mat-form-field-flex {
+      height: 24px !important;
+      input {
+        height: 24px !important;
+      }
+    }
+    input {
+      font-size: 10px !important;
+      font-weight: 700 !important;
+    }
+  }
 }
 
 @keyframes rotate {
