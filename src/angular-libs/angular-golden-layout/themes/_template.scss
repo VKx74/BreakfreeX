@@ -92,11 +92,8 @@ $baseIconPath: '../icons/';
       background-position: center center;
       background-repeat: no-repeat;
       top: 5px !important;
-      right: 5px !important;
-      opacity: 0.2;
-      i {
-        font-size: 7px;
-      }
+      right: 11px;
+      opacity: 0.4;
 
       &:hover {
         opacity: 1;
@@ -112,10 +109,7 @@ $baseIconPath: '../icons/';
       //padding-bottom: 3px;
 
       .lm_close_tab {
-        opacity: 0.8;
-        &:hover {
-          opacity: 1;
-        }
+        opacity: 1;
       }
     }
   }
