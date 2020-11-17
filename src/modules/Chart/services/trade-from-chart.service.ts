@@ -10,6 +10,7 @@ import { MTEditOrderPrice, MTOrder, MTPlaceOrder } from 'modules/Trading/models/
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { AlertService } from "@alert/services/alert.service";
 import { MTOrderCloseModalComponent } from 'modules/Trading/components/forex.components/mt/order-close-modal/mt-order-close-modal.component';
+import { MTOrderEditModalComponent } from 'modules/Trading/components/forex.components/mt/order-edit-modal/mt-order-edit-modal.component';
 
 @Injectable()
 export class TradeFromChartService implements TradingChartDesigner.ITradingFromChartHandler {
@@ -113,6 +114,34 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         this.cancelOrder(Number(id), callback);
+    }
+
+    public EditOrder(id: any, callback: () => void): void {
+        if (!(this._brokerService.activeBroker instanceof MTBroker)) {
+            callback();
+            return;
+        }
+
+        const mtBroker = this._brokerService.activeBroker as MTBroker;
+        let order: MTOrder;
+
+        for (const o of mtBroker.orders) {
+            if (o.Id === id) {
+                order = o;
+                break;
+            }
+        }
+
+        if (!order) {
+            callback();
+            return;
+        }
+        
+        this._dialog.open(MTOrderEditModalComponent, {
+            data: {
+                order: order
+            }
+        });
     }
 
     public OrderSLTPChange(id: any, price: number, callback: () => void): void {
@@ -353,9 +382,22 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private updatePositionShape(shape: TradingChartDesigner.ShapeSimpleTrade, order: MTOrder) {
-        shape.sl = order.SL;
-        shape.tp = order.TP;
-        shape.entry = order.Price;
+        shape.sl = order.SL ? order.SL.toFixed(this._decimals) : order.SL;
+        shape.tp = order.TP ? order.TP.toFixed(this._decimals) : order.TP;
+        shape.entry = order.Price.toFixed(this._decimals);
+        shape.risk = order.RiskPercentage ? order.RiskPercentage.toFixed(2) + "%" : "Unknown";
+        shape.side = order.Side;
+        shape.posSize = order.Size.toFixed(2);
+        shape.netPL = order.NetPL ?  order.NetPL.toFixed(2) : "-";
+        shape.orderId = order.Id;
+
+        if (order.SL && order.TP) {
+            const diffSL = Math.abs(order.SL - order.Price);
+            const diffTP = Math.abs(order.TP - order.Price);
+            shape.slRatio = Number(diffTP / diffSL).toFixed(1);
+        } else {
+            shape.slRatio = "Unknown";
+        }
     }
 
     private createBaseShape(order: MTOrder): TradingChartDesigner.ShapeOrderLine {
@@ -375,10 +417,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         shape.locked = false;
         shape.removable = false;
         shape.savable = false;
-        shape.sl = order.SL;
-        shape.tp = order.TP;
-        shape.entry = order.Price;
-        shape.orderId = order.Id;
+        this.updatePositionShape(shape, order);
+
         return shape;
     }
 
