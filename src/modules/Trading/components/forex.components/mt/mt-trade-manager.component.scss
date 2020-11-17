@@ -10,10 +10,6 @@
   overflow: auto;
   flex-direction: column;
 
-  .info-bar {
-    padding-top: 5px;
-  } 
-
   .color-selector {
     position: absolute;
     top: 6px;
@@ -78,9 +74,9 @@
   //   margin: 0px 0px 0px 12px !important;
   // }
 
-  // /deep/ .mat-tab-body-wrapper { 
-  //   height: 100% !important;
-  // } 
+  /deep/ .mat-tab-body-wrapper { 
+    height: 100% !important;
+  } 
   // /deep/ .mat-tab-label { 
   //   height: 26px !important;
   // }
@@ -90,9 +86,9 @@
   // /deep/ mat-row {
   //   height: 25px;
   // }
-  // /deep/ mat-table {
-  //   min-width: 600px;
-  // }
+  /deep/ mat-table {
+    min-width: 650px;
+  }
 
   .selectAccount {
     selector {
@@ -163,19 +159,15 @@
   /deep/ mat-row:nth-child(even) {
     background-color: themed('nthChild') !important;
   }
-}
 
-
-
-  @include themify($themes, true) {
-    .controls button {
-      color: themed('titleTextColor');
+  /deep/ .mat-tab-header-pagination-chevron {
+    border-color: themed('valueTextColor');
   }
-}
-  @include themify($themes, true) {
-    .controls button:hover {
+  .controls button {
+    color: themed('titleTextColor');
+    &:hover {
       color: themed('titleTextColor');
       border: 1px solid themed('titleTextColor');
-    
+    }
   }
 }

@@ -5,8 +5,20 @@
 :host {
   /deep/ {
     mat-form-field {
-      max-width: 140px !important;
+      max-width: 110px !important;
     }
+    .mat-tab-body-wrapper { 
+      height: 100% !important;
+    } 
+    // mat-table {
+    //   min-width: 250px;
+    // }
+  }
+  .content {
+    min-width: 250px; 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .tf-select {
@@ -47,6 +59,7 @@
 
   .bftScanner {
     height: 100%;
+    overflow: auto;
   }
   .output {
     position: relative;

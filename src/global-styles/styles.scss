@@ -899,36 +899,6 @@ transition-duration: 0.22s;
   transition-duration: 0.22s;
 }
 
-.bft-form-select {
-  /deep/ {
-    .mat-form-field-flex {
-      height: 24px !important;
-      mat-select {
-        height: 24px !important;
-      }
-    }
-    .mat-select-value, input {
-      font-size: 10px !important;
-      font-weight: 700 !important;
-    }
-  }
-}
-
-.bft-form-input {
-  /deep/ {
-    .mat-form-field-flex {
-      height: 24px !important;
-      input {
-        height: 24px !important;
-      }
-    }
-    input {
-      font-size: 10px !important;
-      font-weight: 700 !important;
-    }
-  }
-}
-
 @keyframes rotate {
   100% {
     transform: rotate(360deg);
@@ -948,4 +918,30 @@ transition-duration: 0.22s;
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -124px;
   }
+}
+
+.bft-form-select {
+    .mat-form-field-flex {
+      height: 24px !important;
+      mat-select {
+        height: 24px !important;
+      }
+    }
+    .mat-select-value, input {
+      font-size: 10px !important;
+      font-weight: 700 !important;
+    }
+}
+
+.bft-form-input {
+    .mat-form-field-flex {
+      height: 24px !important;
+      input {
+        height: 24px !important;
+      }
+    }
+    input {
+      font-size: 10px !important;
+      font-weight: 700 !important;
+    }
 }
