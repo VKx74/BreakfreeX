@@ -5,31 +5,17 @@ import {TranslateService} from "@ngx-translate/core";
 import {ChartTranslateService} from "../../../Chart/localization/token";
 import {TradingTranslateService} from "../../../Trading/localization/token";
 import {OrderBookChartTranslateService} from "../../../OrderBookChart/localization/token";
-import {OrderBookChartComponent} from "../../../OrderBookChart/components/orderBookChart/orderBookChart.component";
-import {Level2Component} from "Trading";
-import {OrderBookComponent} from '@order-book/components/order-book/order-book.component';
 import {WatchlistComponent} from "Watchlist";
 import {WatchListTranslateService} from "../../../Watchlist/localization/token";
-// import {NewsComponent} from "News";
 import {PublicChatComponent} from "../../../Chat/components/public-chat/public-chat.component";
 import {ChatTranslateService} from "../../../Chat/localization/token";
-import {MarketTradesComponent} from "@market-trades/components/market-trades/market-trades.component";
 import {MarketTradesTranslateService} from "@market-trades/localization/token";
 import {OrderBookTranslateService} from "@order-book/localization/token";
-import {PrivateChatComponent} from "../../../Chat/components/private-chat/private-chat.component";
 import {ComponentAccessService} from "@app/services/component-access.service";
 import {ComponentIdentifier} from "@app/models/app-config";
-import {NewsRootComponent} from "News";
 import {NewsTranslateService} from "../../../News/localization/news.token";
-import {LocalizationService} from "Localization";
-import {AddComponentData, LayoutManagerService} from "angular-golden-layout";
-import {takeUntil} from "rxjs/operators";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {ComponentPortal} from "@angular/cdk/portal";
-import {Overlay} from "@angular/cdk/overlay";
 import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
-import { TestOandaComponent } from "../../../Trading/components/forex.components/test-oanda/test-oanda.component";
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 
 interface IComponent {
@@ -111,12 +97,12 @@ export class ComponentSelectorComponent implements OnDestroy {
             //     componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
             //     componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
             // }, 
-            {
-                component: BreakfreeTradingNavigatorComponent,
-                previewImgClass: BreakfreeTradingNavigatorComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
-            },
+            // {
+            //     component: BreakfreeTradingNavigatorComponent,
+            //     previewImgClass: BreakfreeTradingNavigatorComponent.previewImgClass,
+            //     componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
+            //     componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
+            // },
             {
                 component: BreakfreeTradingScannerComponent,
                 previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,
