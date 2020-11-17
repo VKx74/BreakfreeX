@@ -29,7 +29,7 @@
                 <div class="flex-column">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'amount' | translate}}</div>
-                        <mat-form-field class="crypto-input full-width" [class.disabled]="!isPending()">
+                        <mat-form-field class="crypto-input bft-form-input full-width" [class.disabled]="!isPending()">
                             <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
                                 type="number" [step]="priceStep" [(ngModel)]="config.amount">
                         </mat-form-field>
@@ -47,7 +47,7 @@
                 <div class="flex-column">
                     <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPending()">
                         <div class="form-unit__label">{{'limitPrice' | translate}}</div>
-                        <mat-form-field class="crypto-input full-width">
+                        <mat-form-field class="crypto-input bft-form-input full-width">
                             <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
                                 [range]="{min: minPriceValue}" [(ngModel)]="config.price">
                         </mat-form-field>
@@ -60,7 +60,7 @@
                     <div class="crypto-form-unit margin-bottom">
                         <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL">
                             {{'tradeManager.stop' | translate}}</mat-slide-toggle>
-                        <mat-form-field class="crypto-input full-width" [class.disabled]="!config.useSL">
+                        <mat-form-field class="crypto-input bft-form-input full-width" [class.disabled]="!config.useSL">
                             <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                                 [step]="priceStep" [(ngModel)]="config.sl">
                         </mat-form-field>
@@ -70,7 +70,7 @@
                     <div class="crypto-form-unit margin-bottom">
                         <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">
                             {{'tradeManager.limit' | translate}}</mat-slide-toggle>
-                        <mat-form-field class="crypto-input full-width" [class.disabled]="!config.useTP">
+                        <mat-form-field class="crypto-input bft-form-input full-width" [class.disabled]="!config.useTP">
                             <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                                 [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
                         </mat-form-field>
@@ -93,7 +93,7 @@
                 <div class="flex-column">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
-                        <mat-form-field class="crypto-input full-width">
+                        <mat-form-field class="crypto-input bft-form-input full-width">
                             <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime"
                                 [ngxTimepicker]="time" [format]='24'>
                             <ngx-material-timepicker #time></ngx-material-timepicker>
@@ -103,7 +103,7 @@
                 <div class="flex-column">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
-                        <mat-form-field class="crypto-input full-width">
+                        <mat-form-field class="crypto-input bft-form-input full-width">
                             <input matInput readonly [matDatepicker]="end" [(ngModel)]="selectedDate"
                                 (click)="end.open()" placeholder="Date">
                             <mat-datepicker #end></mat-datepicker>
@@ -115,7 +115,7 @@
             <div class="flex-row comment-area">
                 <div class="crypto-form-unit margin-bottom">
                     <div class="form-unit__label">{{'tradeManager.comment' | translate}}</div>
-                    <mat-form-field class="crypto-input full-width">
+                    <mat-form-field class="crypto-input bft-form-input full-width">
                         <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
                             [(ngModel)]="config.comment">
                 </textarea>

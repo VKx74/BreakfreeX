@@ -1,7 +1,7 @@
 <div class="bftScanner" *ngIf="isAuthorizedCustomer; else outOfAccess">
    <div class="top-line">
       <div class="segment-select">
-         <mat-form-field floatLabel="never" class="crypto-select full-width">
+         <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
             <mat-select (selectionChange)="segmentSelected($event.value)" [value]="activeSegment">
                <mat-option *ngFor="let option of segments" [value]="option">
                   {{option}}
@@ -10,7 +10,7 @@
          </mat-form-field>
       </div>
       <div class="tf-select">
-         <mat-form-field floatLabel="never" class="crypto-select full-width">
+         <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
             <mat-select (selectionChange)="timeframeSelected($event.value)" [value]="activeTimeframe">
                <mat-option *ngFor="let option of timeframes" [value]="option">
                   {{option}}

@@ -16,13 +16,14 @@
             <selector [options]="trendDetectors" [placeholder]="'Select trend'"
             [selectedOption]="trendDetector"
             [optionCaption]="captionText"
+            class="bft-form-select"
             (onSelect)="trendDetectorSelected($event)"></selector>
          </span>
       </div> 
       
       <div class="row"> 
          <span class="value1">Bars count:</span><span class="value2">
-            <mat-form-field class="crypto-input">
+            <mat-form-field class="crypto-input bft-form-input">
                <input matInput type="number" [(ngModel)]="barsCount" min="100" max="2000" step="1">
            </mat-form-field>
          </span>
@@ -30,7 +31,7 @@
       
       <div class="row"> 
          <span class="value1">HMA period:</span><span class="value2">
-            <mat-form-field class="crypto-input">
+            <mat-form-field class="crypto-input bft-form-input">
                <input matInput type="number" [(ngModel)]="hmaPeriod" min="10" max="250" step="1">
            </mat-form-field>
          </span>
@@ -39,7 +40,7 @@
       <div *ngIf="mesaInputVisible">
          <div class="row"> 
             <span class="value1">MESA Global Fast:</span><span class="value2">
-               <mat-form-field class="crypto-input">
+               <mat-form-field class="crypto-input bft-form-input">
                   <input matInput type="number" [(ngModel)]="global_fast" min="0.0001" max="100" step="0.0001">
             </mat-form-field>
             </span>
@@ -47,7 +48,7 @@
          
          <div class="row"> 
             <span class="value1">MESA Global Slow:</span><span class="value2">
-               <mat-form-field class="crypto-input">
+               <mat-form-field class="crypto-input bft-form-input">
                   <input matInput type="number" [(ngModel)]="global_slow" min="0.0001" max="100" step="0.0001">
             </mat-form-field>
             </span>
@@ -55,7 +56,7 @@
          
          <div class="row"> 
             <span class="value1">MESA Local Fast:</span><span class="value2">
-               <mat-form-field class="crypto-input">
+               <mat-form-field class="crypto-input bft-form-input">
                   <input matInput type="number" [(ngModel)]="local_fast" min="0.0001" max="100" step="0.0001">
             </mat-form-field>
             </span>
@@ -63,7 +64,7 @@
          
          <div class="row"> 
             <span class="value1">MESA Local Slow:</span><span class="value2">
-               <mat-form-field class="crypto-input">
+               <mat-form-field class="crypto-input bft-form-input">
                   <input matInput type="number" [(ngModel)]="local_slow" min="0.0001" max="100" step="0.0001">
             </mat-form-field>
             </span>
@@ -71,7 +72,7 @@
          
          <div class="row"> 
             <span class="value1">MESA Diff:</span><span class="value2">
-               <mat-form-field class="crypto-input">
+               <mat-form-field class="crypto-input bft-form-input">
                   <input matInput type="number" [(ngModel)]="mesa_diff" min="0.000001" max="1" step="0.000001">
             </mat-form-field>
             </span>
@@ -82,21 +83,21 @@
       <!---->
       <div class="row"> 
          <span class="value1">Breakeven candles:</span><span class="value2">
-            <mat-form-field class="crypto-input">
+            <mat-form-field class="crypto-input bft-form-input">
                <input matInput type="number" [(ngModel)]="breakevenCandles" min="0" max="1000" step="1">
            </mat-form-field>
          </span>
       </div>
       <div class="row"> 
          <span class="value1">Target Box(%):</span><span class="value2">
-            <mat-form-field class="crypto-input">
+            <mat-form-field class="crypto-input bft-form-input">
                <input matInput type="number" [(ngModel)]="entryTargetBox" min="-100" max="100" step="1">
            </mat-form-field>
          </span>
       </div>
       <div class="row"> 
          <span class="value1">SL RR(%):</span><span class="value2">
-            <mat-form-field class="crypto-input">
+            <mat-form-field class="crypto-input bft-form-input">
                <input matInput type="number" [(ngModel)]="stoplossRR" min="-100" max="100" step="1">
            </mat-form-field>
          </span>
@@ -105,7 +106,7 @@
 
       <div class="row"> 
          <span class="value1">Max objects on chart:</span><span class="value2">
-            <mat-form-field class="crypto-input">
+            <mat-form-field class="crypto-input bft-form-input">
                <input matInput type="number" [(ngModel)]="maxCount" min="0" max="500" step="1">
            </mat-form-field>
          </span>

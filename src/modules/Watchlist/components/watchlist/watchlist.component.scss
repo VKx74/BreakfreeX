@@ -7,7 +7,9 @@
     mat-form-field {
       max-width: 110px !important;
     }
+    
   }
+
   .out-of-access { 
     display: flex;
     align-items: center;
@@ -38,11 +40,6 @@
   width: 100%;
   overflow: auto;
 
-  .crypto-select {
-   
-
-  }
-
   .functional-icons {
     .crypto-button-icon {
       margin-left: 6px;
@@ -64,9 +61,8 @@
   }
 
 
-.crypto-button-delete {
-  color: transparent;
-  background-color: transparent;
+.crypto-button-delete, .remove-instrument-button {
+  background-color: transparent !important;
 }
 
   .root {
@@ -103,17 +99,9 @@
       float: right;
     }
 
-  tr {
     .remove-instrument-button {
       display: none;
     }
-
-    &:hover {
-      .remove-instrument-button {
-        display: flex;
-      }
-    }
-  }
 
   .small-column {
     width: 30px;
@@ -130,7 +118,6 @@
     padding: 2px;
 
     .watchlist-tile-wrapper {
-      
       border-radius: 5px;
       position: relative;
       cursor: pointer;
@@ -160,9 +147,8 @@
       .remove-instrument-button {
         display: none;
         position: absolute;
-        top: 77px;
+        top: 20px;
         opacity: 0.5;
-        margin-left: 46%;
         transition-duration: 0.22s;
         transition-delay: 0.25s;
         animation-delay: 0.25s;
@@ -266,6 +252,9 @@
     cursor: pointer;
   }
 
+  .watchlist-separator {
+    margin: 5px 0px !important;
+  }
   
 }
 
@@ -274,6 +263,13 @@
     .crypto-icon {
       color: themed('valueTextColor');
     }
+  }
+  .crypto-button-delete, .remove-instrument-button {
+    &:hover {
+      color: themed('valueTextColor');
+    }
+    color: themed('valueTextColor');
+    background-color: transparent !important;
   }
 
   .underlay {
@@ -307,53 +303,22 @@
     }
   }
 
-  /deep/ .mat-column-remove {
+  // .mat-cell  {
+  //   font-weight:600;
+  // }
 
-  }
-  .mat-cell  {
-    font-weight:600;
-  }
   /deep/ {
     mat-row {
       &:hover {
         background-color: themed('activeBackgroundColor') !important;
-    .crypto-button-delete {
-      background-color: transparent !important; 
-      color: #000000 !important;
-    }
-        
-
-    .Light-theme  .mat-cell {
-          color: #191919;
-          font-weight:800;
-          
-          
-        }
-
-       .Dark-theme .mat-cell {
-          color: #ffffff;
-          font-weight:800;
-          
-          
-        }
-
-        .mat-column-remove {
-          overflow: visible;
-        }
-
-        .mat-column-remove .controls-wrapper {
-          overflow: visible;
-        }
-
-        .expanded-detail {
-          color: themed('valueTextColor');
+        .remove-instrument-button {
+          display: flex;
         }
       }
     }
 
     .watchlist-tile:hover {
       border: 1px solid themed('valueTextColor');
-     
        transition-duration: 0.22s;
     }
 
@@ -375,22 +340,6 @@
 
       }
     }
-
-    .watchlist-tile-wrapper:hover {
-      .watchlist-tile {
-        // background-color: themed('activeBackgroundColor');
-        // opacity: 0.9;
-      }
-      .crypto-button-delete {
-        background-color: transparent !important; 
-        color: #000000 !important;
-      }
-    }
-
-    // .matMenuTrigger {
-    //   border-right: 1px solid themed('appBackgroundColor') !important;
-    // }
-
   }
 
 }
@@ -424,17 +373,9 @@
 
     }
   }
-}
-
-
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.bftscroll::-webkit-scrollbar {
-  height:1px;
-}
-
-.watchlist-separator {
-  margin: 5px 0px !important;
+  .watchlist-separator {
+    margin: 5px 0px;
+  }
 }
 
 .featured-instruments-row {
@@ -454,49 +395,4 @@
     text-overflow: ellipsis;
     font-size: 11px !important;
   }
-}
-
-
-.mat-select-value {
-
-  font-size: 11px !important;
-
-}
-
-
-
-
-.watchlistholder  {
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  height:25px !important;
-  max-height:25px;
-  overflow:hidden;
-  min-width: 60px;
-
-}
-
-/deep/ .watchlistholder mat-select .mat-select-value{
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  vertical-align: initial;
-  padding-top: 8px;
-}
-
-
-/deep/ .watchlistholder input{
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  vertical-align: initial;
-  padding-top: 8px;
-}
-
-/deep/ mat-select .mat-select-arrow-wrapper {
-  padding-right: 2px  !important;
-  padding-left: 2px  !important;
-
-}
-
-/deep/ mat-select .mat-select-arrow-wrapper .mat-select-arrow {
-  margin-top: -5px !important;
 }

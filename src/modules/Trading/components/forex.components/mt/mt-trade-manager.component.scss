@@ -72,27 +72,27 @@
     margin-right: 32px;
   }
 
-  .crypto-button { 
-    padding: 0px 10px !important;
-    height: 26px;
-    margin: 0px 0px 0px 12px !important;
-  }
+  // .crypto-button { 
+  //   padding: 0px 10px !important;
+  //   height: 26px;
+  //   margin: 0px 0px 0px 12px !important;
+  // }
 
-  /deep/ .mat-tab-body-wrapper { 
-    height: 100% !important;
-  } 
-  /deep/ .mat-tab-label { 
-    height: 26px !important;
-  }
-  /deep/ mat-header-cell {
-    height: 25px;
-  }
-  /deep/ mat-row {
-    height: 25px;
-  }
-  /deep/ mat-table {
-    min-width: 600px;
-  }
+  // /deep/ .mat-tab-body-wrapper { 
+  //   height: 100% !important;
+  // } 
+  // /deep/ .mat-tab-label { 
+  //   height: 26px !important;
+  // }
+  // /deep/ mat-header-cell {
+  //   height: 25px;
+  // }
+  // /deep/ mat-row {
+  //   height: 25px;
+  // }
+  // /deep/ mat-table {
+  //   min-width: 600px;
+  // }
 
   .selectAccount {
     selector {
@@ -127,11 +127,33 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .controls button {
+    background: none;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight:700;
+    padding: 0px 5px !important;
+    height: 25px;
+    margin: 0px 0px 0px 0px !important;
+    opacity: 0.8;
+    transition-duration: 0.22s;
+    border: 1px solid transparent;
+    &:hover {
+      border: 1px solid #ddd;
+      opacity: 1;
+      transition-duration: 0.22s;
+    }
+  }
+  
+  .color-selector {
+    width: 15px;
+  } 
 }
 
-.tabs-wrapper {
-  padding: 10px 5px;
-}
+// .tabs-wrapper {
+//   padding: 10px 5px;
+// }
 
 @include themify($themes, true) {
   .control .caption {
@@ -143,49 +165,17 @@
   }
 }
 
-.controls button {
-  background: none;
-  border-radius: 5px;
-  font-size: 10px;
-  font-weight:700;
-  padding: 0px 5px !important;
-  height: 25px;
-  margin: 0px 0px 0px 0px !important;
-  opacity: 0.8;
-  transition-duration: 0.22s;
-  border:1px solid transparent;
-}
 
 
   @include themify($themes, true) {
     .controls button {
       color: themed('titleTextColor');
-    
-  
-} }
-
-.controls button:hover {
-  background: none;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 10px;
-  font-weight:700;
-  padding: 0px 5px !important;
-  height: 25px;
-  margin: 0px 0px 0px 0px !important;
-  opacity: 1;
-  transition-duration: 0.22s;
+  }
 }
-
-  
-
   @include themify($themes, true) {
     .controls button:hover {
       color: themed('titleTextColor');
       border: 1px solid themed('titleTextColor');
     
-}}
-
-.color-selector {
-  width: 15px;
-} 
+  }
+}

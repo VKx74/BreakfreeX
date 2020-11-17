@@ -2,7 +2,7 @@
     <div>
         <div class="top-line ">
             
-            <mat-form-field floatLabel="never" class="crypto-select full-width watchlistholder" >
+            <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select" >
                 <mat-select (selectionChange)="watchlistSelected($event)" [value]="activeWatchlist">
                     <mat-option *ngFor="let option of existingWatchlists" [value]="option">
                         {{supportedWatchlistCaption(option) | async }}
@@ -176,12 +176,9 @@
             <data-table #dataTableComponent
                         [rows]="instrumentsVM" *ngIf="viewMode === ViewMode.Table"
                         [selectable]="true"
-                        [expandOnClick]="false"
                         [selectedRow]="selectedInstrumentVM"
                         [columnCaption]="columnCaption"
                         [allowColumnsVisibilityChange]="false"
-                        [expandDetailsTemplate]="details"
-                        [maxExpandedRows]="5"
                         [hiddenColumns]="hiddenColumns"
                         (onRowSelect)="handleInstrumentClick($event)">
 

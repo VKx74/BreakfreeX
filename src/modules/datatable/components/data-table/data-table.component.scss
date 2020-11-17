@@ -63,12 +63,14 @@ $defaultModeRowHeight: 32px;
   .mat-header-row {
     mat-header-cell {
       height: 25px;
+      font-size: $rowFontSize;
     }
   }
 
   .mat-header-row,
   .mat-row {
-    line-height: $rowLineHeight;
+    // line-height: $rowLineHeight;
+    height: 25px;
     font-family: $primaryFontFamily;
     font-size: $rowFontSize;
     min-height: 0;
@@ -140,13 +142,14 @@ $defaultModeRowHeight: 32px;
     top: 0;
     transform: translateX(-100%);
     z-index: 223;
-    height: $defaultModeRowHeight;
+    // height: $defaultModeRowHeight;
     // width: $defaultModeRowHeight;
 
     .settings-btn {
       background-color: transparent !important;
       opacity: 0.6;
       height: 24px;
+      font-size: 22px;
     }
   }
 }
