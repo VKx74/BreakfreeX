@@ -10,7 +10,6 @@ import {AlertService} from "@alert/services/alert.service";
 import { AlgoService, IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem } from '@app/services/algo.service';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { InstrumentService } from '@app/services/instrument.service';
-import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { IWatchlistItem } from 'modules/Watchlist/services/watchlist.service';
 import { MajorForexWatchlist } from 'modules/Watchlist/services/majorForex';
 import { MinorForexWatchlist } from 'modules/Watchlist/services/minorForex';

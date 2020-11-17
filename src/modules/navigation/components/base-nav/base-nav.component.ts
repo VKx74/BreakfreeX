@@ -8,6 +8,7 @@ import {SidebarService} from "@app/services/sidebar.service";
 import {ActivatedRoute} from "@angular/router";
 import {debounceTime, takeUntil} from "rxjs/operators";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'base-nav',
@@ -28,6 +29,7 @@ export class BaseNavComponent implements OnInit {
     firstName = this._identityService.firstName;
     role = this._identityService.role;
     email = this._identityService.email;
+    opened: Subject<void> = new Subject<void>();
     // login: string;
     // role: string;
 
@@ -81,6 +83,10 @@ export class BaseNavComponent implements OnInit {
                 this.avatarId = '';
                 console.log(e);
             });
+    }
+
+    onMenuOpen() {
+        this.opened.next();
     }
 
     logout() {

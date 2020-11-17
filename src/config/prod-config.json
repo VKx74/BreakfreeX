@@ -41,8 +41,8 @@
     "bftAlgoWS": "wss://fb.breakfreetrading.com",
     "MT5WS": "wss://mtapi.breakfreetrading.com/mt5/websocket",
     "MT4WS": "wss://mtapi.breakfreetrading.com/mt4/websocket",
-    "bftAlgoREST": "https://algoserver.breakfreetrading.com/algoserver/"
-
+    "bftAlgoREST": "https://algoserver.breakfreetrading.com/algoserver/",
+    "bftTradingProfilesREST": "https://mtapi.breakfreetrading.com/portfolio/"
   },
   "systemMonitoringUrls": {
     "platform": {
@@ -124,6 +124,7 @@
     "https://ws-platform.breakfreetrading.com",
     "https://breakfreetrading.com",
     "https://platform.breakfreetrading.com",
-    "https://algoserver.breakfreetrading.com"
+    "https://algoserver.breakfreetrading.com",
+    "https://mtapi.breakfreetrading.com"
   ]
 }

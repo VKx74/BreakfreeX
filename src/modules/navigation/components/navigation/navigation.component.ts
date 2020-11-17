@@ -21,7 +21,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Roles} from "@app/models/auth/auth.models";
 import {RolesHelper} from "@app/helpers/role.helper";
-import {forkJoin, Observable, of} from "rxjs";
+import {forkJoin, Observable, of, Subject} from "rxjs";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {UsersProfileService} from "@app/services/users-profile.service";
 import {ExchangeStatusConfiguratorComponent} from "../exchange-status-configurator/exchange-status-configurator.component";
@@ -76,6 +76,7 @@ export class NavigationComponent implements OnInit {
     WorkspaceIds = WorkspaceIds;
     ApplicationType = ApplicationType;
     workspaces: Workspace[];
+    opened: Subject<void> = new Subject<void>();
 
     avatarId: string;
     logoRedirectRoute = `/${AppRoutes.Admin}`;
@@ -225,6 +226,10 @@ export class NavigationComponent implements OnInit {
                     }
                 });
         }
+    }
+
+    onMenuOpen() {
+        this.opened.next();
     }
 
     logout() {

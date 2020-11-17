@@ -94,9 +94,10 @@
                          class="cursor-pointer"
                          [shape]="UserAvatarShape.Rounded"
                          [matMenuTriggerFor]="menu"
+                         (menuOpened)="onMenuOpen()"
             ></name-avatar>
             <mat-menu #menu="matMenu" xPosition="before">
-                <user-info-menu (logOut)="logout()"></user-info-menu>
+                <user-info-menu (logOut)="logout()" [opened]="opened"></user-info-menu>
             </mat-menu>
         </div>
     </div>

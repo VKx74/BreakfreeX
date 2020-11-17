@@ -47,6 +47,7 @@ export interface ApiUrls {
     historydatacollectorREST: string;
     bftAlgoWS: string;
     bftAlgoREST: string;
+    bftTradingProfilesREST: string;
     news: string;
     exchangeOrder: string;
     tradesReporting: string;
