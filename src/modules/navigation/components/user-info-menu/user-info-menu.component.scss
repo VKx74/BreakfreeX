@@ -12,9 +12,9 @@
 }
 
 .avatar {
-  max-width: 80px;
-  max-height: 80px;
-  margin-left: 10px;
+  max-width: 90px;
+  max-height: 90px;
+  margin-left: 15px;
   vertical-align: middle;
 
   /deep/.rounded {
@@ -64,7 +64,7 @@
     }
   }
 
-  .user-settings, .log-out {
+  .user-settings, .log-out, .reset-layout {
     @include themify($themes, true) {
       color: themed('titleTextColor');
     }
@@ -78,7 +78,13 @@
 
   .functiona-menu {
       justify-content: space-between;
-      margin-top: 10px;
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 1px solid;
+      line-height: 20px;
+      @include themify($themes, true) {
+        border-top-color: themed('accentLightColor');
+      }
   }
 
   .info {

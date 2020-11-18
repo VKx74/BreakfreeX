@@ -31,12 +31,6 @@
                     "type": "component",
                     "componentName": "watchlist",
                     "isClosable": true
-                  },
-                  {
-                    "id": "3",
-                    "type": "component",
-                    "componentName": "breakfreeTradingScanner",
-                    "isClosable": true
                   }
                   
                 ]

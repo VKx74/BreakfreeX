@@ -68,6 +68,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
     public PlaceOrder(params: TradingChartDesigner.OrderParameters, callback: () => void): void {
         if (this._brokerService.activeBroker instanceof MTBroker) {
+            if (!this.IsTradingEnabledHandler()) {
+                this._alertService.info(`${this._chart.instrument.symbol} not exist in connected broker`);
+                return;
+            }
+            
             const mtBroker = this._brokerService.activeBroker as MTBroker;
             const orderConfig = MTOrderConfig.createLimit(mtBroker.instanceType);
             const pricePrecision = mtBroker.instrumentDecimals(this._chart.instrument.symbol);

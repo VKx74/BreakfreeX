@@ -1,18 +1,16 @@
 <base-nav [showUserAvatar]="true">
     <!--    LAYOUT   -->
     <ng-container *ngIf="isPlatformRoot$ | async">
-        <nav-section [paddingRight]="false">
+        <!-- <nav-section [paddingRight]="false">
             <div class="crypto-button crypto-button_default workspaces cursor-pointer"
                  [matMenuTriggerFor]="workspacesMenu"
                  [title]="'workspaces' | translate">
                 <span class="crypto-icon crypto-icon-layout"></span>
             </div>
             <mat-menu #workspacesMenu="matMenu" xPosition="before" class="workspaces-menu">
-<!--                <ng-template matMenuContent>-->
-                    <workspaces></workspaces>
-<!--                </ng-template>-->
+                <workspaces></workspaces>
             </mat-menu>
-        </nav-section>
+        </nav-section> -->
         <!--    /LAYOUT  -->
 
         <nav-section>

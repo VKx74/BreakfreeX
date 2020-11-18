@@ -95,6 +95,8 @@
   "limitPrice": "Ліміт ціна",
   "lastPrice": "Остання ціна",
   "type": "Тип",
+  "setup": "Налаштування",
+  "volume": "Обсяг",
   "tradeId": "Id трейда",
   "orderId": "Id ордера",
   "orderID": "ID ордера",

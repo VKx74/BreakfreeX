@@ -113,9 +113,6 @@
     <!-- <sidebar-section class="relative-wrapper buy-app-section">
         <buy-app></buy-app>
     </sidebar-section> -->
-    <sidebar-section [noPadding]="true">
-        <theme-language-select></theme-language-select>
-    </sidebar-section>
     <sidebar-section>
         
         <div class="section-item flex-child" (click)="supportClick()">
@@ -129,6 +126,9 @@
             <div class="item-text">{{'app.clearSession' | translate}}</div>
         </div>
       
+    </sidebar-section>
+    <sidebar-section [noPadding]="true">
+        <theme-language-select></theme-language-select>
     </sidebar-section>
 </sidebar-container>
 

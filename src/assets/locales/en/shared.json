@@ -95,6 +95,8 @@
   "limitPrice": "Entry Price",
   "lastPrice": "Last Price",
   "type": "Type",
+  "setup": "Setup",
+  "volume": "Volume",
   "tradeId": "Trade Id",
   "orderId": "Order Id",
   "orderID": "Order ID",

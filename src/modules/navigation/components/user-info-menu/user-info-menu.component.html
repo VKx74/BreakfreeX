@@ -22,10 +22,13 @@
         </div>
         <div class="functiona-menu flex justify-content-center crypto-text is-large">
             <div class="user-settings" routerLink="/platform/settings">
-                <span class="crypto-icon crypto-icon-settings" title="{{'app.settings' | translate}}">{{'app.settings' | translate}}</span>
+                <span title="{{'app.settings' | translate}}">{{'app.settings' | translate}}</span>
+            </div> 
+            <div class="reset-layout" (click)="resetLayout()">
+                <span title="{{'app.resetLayout' | translate}}">{{'app.resetLayout' | translate}}</span>
             </div>
             <div class="log-out" (click)="onLogoutClick()">
-                <span class="crypto-icon crypto-icon-logout" title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
+                <span title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
             </div>
         </div>
     </div>

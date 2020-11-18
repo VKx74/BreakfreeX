@@ -102,6 +102,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public selectedScannerResult: IScannerResults;
     public output: string;
     public loading: boolean;
+    public trends: any = IBFTATrend;
 
     public get origType() {
         return IBFTATradeType;
@@ -225,12 +226,12 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     toTimeframe(tf: number): string {
         switch (tf) {
-            case 1 * 60: return "1 Min";
-            case 5 * 60: return "5 Min";
-            case 15 * 60: return "15 Min";
-            case 60 * 60: return "1 Hour";
-            case 240 * 60: return "4 Hours";
-            case 24 * 60 * 60: return "Daily";
+            case 1 * 60: return "1M";
+            case 5 * 60: return "5M";
+            case 15 * 60: return "15M";
+            case 60 * 60: return "1H";
+            case 240 * 60: return "4H";
+            case 24 * 60 * 60: return "1D";
         }
         return "Undefined";
     }

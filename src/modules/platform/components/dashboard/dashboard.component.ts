@@ -49,6 +49,9 @@ import { CookieService } from '@app/services/сookie.service';
     ]
 })
 export class DashboardComponent {
+    private _updateInterval = 1000 * 60 * 5;
+    private _autoSaveChecker = 1000 * 10;
+    private _intervalLink: any;
     private _saveLayout = true;
     private _lastExceptionTime: number = 0;
     layoutChanged = false;
@@ -158,6 +161,8 @@ export class DashboardComponent {
         if (!this._identityService.isAdmin) {
             this._singleSessionService.watchSessions();
         }
+
+        this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
     }
 
     ngAfterViewInit() {
@@ -356,5 +361,16 @@ export class DashboardComponent {
         this.destroy$.next();
         this.destroy$.complete();
         this.layout.destroy();
+
+        if (this._intervalLink) {
+            clearInterval(this._intervalLink);
+        }
+    }
+
+    private _autoSave() {
+        if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
+            const layoutState = this.layout.saveState();
+            this._layoutStorageService.saveLayoutState(layoutState, true).subscribe();
+        }
     }
 }

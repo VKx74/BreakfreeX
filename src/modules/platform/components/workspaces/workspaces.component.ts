@@ -28,8 +28,8 @@ import {GoldenLayoutComponent, LayoutManagerService} from "angular-golden-layout
 export class WorkspacesComponent implements OnInit, OnDestroy {
     private _saveLayout = true;
     private _workspacesSubscription: Subscription;
-    private _intervalLink: any;
-    private _updateInterval = 1000 * 60 * 5;
+    // private _intervalLink: any;
+    // private _updateInterval = 1000 * 60 * 5;
     WorkspaceIds = WorkspaceIds;
     workspaces: Workspace[];
     layout: GoldenLayoutComponent;
@@ -73,7 +73,8 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
             });
 
         
-        this._intervalLink = setInterval(this.autoSave.bind(this), this._updateInterval);       
+        // moved in dashboard
+        // this._intervalLink = setInterval(this.autoSave.bind(this), this._updateInterval); 
     }
 
     ngOnDestroy() {
@@ -81,9 +82,9 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
             this._workspacesSubscription.unsubscribe();
         }
 
-        if (this._intervalLink) {
-            clearInterval(this._intervalLink);
-        }
+        // if (this._intervalLink) {
+        //     clearInterval(this._intervalLink);
+        // }
     }
 
     applyWorkspace(workspace: Workspace) {
@@ -102,10 +103,10 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
     }
     
-    autoSave() {
-        if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
-            const layoutState = this.layout.saveState();
-            this._layoutStorageService.saveLayoutState(layoutState, true).subscribe((data) => { this._layoutStateChanged = false; });
-        }
-    }
+    // autoSave() {
+    //     if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
+    //         const layoutState = this.layout.saveState();
+    //         this._layoutStorageService.saveLayoutState(layoutState, true).subscribe((data) => { this._layoutStateChanged = false; });
+    //     }
+    // }
 }
