@@ -1,8 +1,6 @@
-window.onload = function() {
-    $(".checkout").on("click", () => {
-        toCheckout();
-    });
-};
+$(".checkout").click(function() {
+    toCheckout();
+});
 
 function toCheckout() {
     window.stripe.redirectToCheckout({

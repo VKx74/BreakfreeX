@@ -1,8 +1,6 @@
-window.onload = function() {
-    setInterval(() => {
-        updateEndDate();
-    }, 1000);
-};
+setInterval(() => {
+    updateEndDate();
+}, 1000);
 
 function updateEndDate() {
     // GTM time
