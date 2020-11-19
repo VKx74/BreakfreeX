@@ -6,11 +6,10 @@ import { LayoutTranslateService } from "@layout/localization/token";
 import { LocalizationService } from "Localization";
 import { catchError, first, map, takeUntil } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
+import { NavigationStart, Router } from "@angular/router";
 import { SplitComponent } from "angular-split";
 import { EventsHelper } from "@app/helpers/events.helper";
 import { DefaultState } from "@platform/components/dashboard/default-layout-state";
-import { LayoutStorage } from "@app/services/layout.storage";
 import { Store } from "@ngrx/store";
 import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
 import { ActionTypes } from "@platform/store/actions/platform.actions";
@@ -19,12 +18,10 @@ import { Actions, ofType } from "@ngrx/effects";
 import { AppActionTypes, LogoutSuccessAction } from "@app/store/actions";
 import { LayoutStorageService } from '@app/services/layout-storage.service';
 import { ConfirmModalComponent, IConfirmModalConfig } from 'UI';
-import { AutoTradingEngine } from '@app/services/auto-trading-engine';
 import { WorkspaceRepository } from "@platform/services/workspace-repository.service";
 import { Workspace } from "@platform/data/workspaces";
 import { AlertService } from "@alert/services/alert.service";
 import { BrokerService } from "@app/services/broker.service";
-import { UserSettingsService } from "@app/services/user-settings/user-settings.service";
 import { ToggleBottomPanelSizeService } from "@platform/components/dashboard/toggle-bottom-panel-size.service";
 import {
     GoldenLayoutComponent,
@@ -82,20 +79,13 @@ export class DashboardComponent {
         private _intercom: Intercom,
         private _dialog: MatDialog,
         private _identityService: IdentityService,
-        private _localizationService: LocalizationService,
         private _router: Router,
         private _coockieService: CookieService,
-        private _cdr: ChangeDetectorRef,
-        private _layoutStorage: LayoutStorage,
-        private _autoTradingEngine: AutoTradingEngine,
         private _layoutStorageService: LayoutStorageService,
         private _brokerService: BrokerService,
         @Inject(LayoutTranslateService) private _layoutTranslateService: TranslateService,
         private _layoutManager: LayoutManagerService,
-        private _injector: Injector,
         private _workspaceRepository: WorkspaceRepository,
-        private _route: ActivatedRoute,
-        private _userSettingsService: UserSettingsService,
         private _alertService: AlertService,
         private _singleSessionService: SingleSessionService,
         public bottomPanelSizeService: ToggleBottomPanelSizeService,
@@ -122,6 +112,15 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._saveLayoutState();
+            });  
+            
+        this._actions
+            .pipe(
+                ofType(ActionTypes.ResetLayout),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._resetLayout();
             });
 
         this._actions
@@ -277,6 +276,23 @@ export class DashboardComponent {
                         this._alertService.success(this._layoutTranslateService.get("savedLayout"));
                     });
         }
+    }
+
+    private _resetLayout() {
+        this._workspaceRepository.loadWorkspaces()
+        .subscribe({
+            next: (workspaces: Workspace[]) => {
+                for (const w of workspaces) {
+                    if (w.id === "empty") {
+                        this._layoutManager.loadState(w.layoutState, true);
+                        break;
+                    }
+                }
+            },
+            error: (e) => {
+                console.error(e);
+            }
+        });
     }
 
     needSaveConfirm() {

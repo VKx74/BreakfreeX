@@ -7,18 +7,15 @@ import {
     Input,
     OnInit,
     Output,
-    Type,
-    ViewChild
 } from "@angular/core";
 import {Theme} from "@app/enums/Theme";
 import {IdentityService} from "@app/services/auth/identity.service";
 import {AppRoutes} from "@app/app.routes";
-import {AuthenticationService} from "@app/services/auth/auth.service";
 import {HealthCheckService} from "@app/services/health-check.service";
 import {TranslateService} from "@ngx-translate/core";
 import {AppTranslateService} from "@app/localization/token";
 import {MatDialog} from "@angular/material/dialog";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {Roles} from "@app/models/auth/auth.models";
 import {RolesHelper} from "@app/helpers/role.helper";
 import {forkJoin, Observable, of, Subject} from "rxjs";
@@ -28,7 +25,6 @@ import {ExchangeStatusConfiguratorComponent} from "../exchange-status-configurat
 import {ExchangeStatus, SystemNotificationsService} from "../../../Notifications/services/system-notifications.service";
 import {ThemeService} from "@app/services/theme.service";
 import {UserAvatarShape} from "../../../UI/components/name-avatar/name-avatar.component";
-import {ComponentSelectorComponent} from "@platform/components/component-selector/component-selector.component";
 import {Workspace} from "@platform/data/workspaces";
 import {WorkspaceIds, WorkspaceRepository} from "@platform/services/workspace-repository.service";
 import {ProcessState} from "@app/helpers/ProcessState";
@@ -46,7 +42,6 @@ import {catchError, delay} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 import {SidebarService} from "@app/services/sidebar.service";
 import {ApplicationTypeService} from "@app/services/application-type.service";
-import {AddComponentData, LayoutManagerService} from "angular-golden-layout";
 
 export enum NavigationMode {
     User,
@@ -167,16 +162,12 @@ export class NavigationComponent implements OnInit {
 
     constructor(private _injector: Injector,
                 private _identityService: IdentityService,
-                private _authenticationService: AuthenticationService,
                 private _systemNotificationsService: SystemNotificationsService,
                 private _usersProfileService: UsersProfileService,
                 private _dialog: MatDialog,
                 private _router: Router,
-                private _route: ActivatedRoute,
                 public _themeService: ThemeService,
                 private _brokerService: BrokerService,
-                private _layoutManager: LayoutManagerService,
-                private _layoutService: LayoutManagerService,
                 private _personalInfoService: PersonalInfoService,
                 private _workspaceRepository: WorkspaceRepository,
                 private _sidebarService: SidebarService,

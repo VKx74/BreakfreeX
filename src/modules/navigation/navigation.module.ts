@@ -43,7 +43,7 @@ import { NavSectionComponent } from './components/nav-section/nav-section.compon
         MatDividerModule,
         MatRadioModule,
         ReactiveFormsModule,
-        TradingDialogModule,
+        TradingDialogModule
     ],
     entryComponents: [
         ExchangeStatusConfiguratorComponent

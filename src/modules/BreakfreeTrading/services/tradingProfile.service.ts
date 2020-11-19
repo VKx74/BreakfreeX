@@ -50,9 +50,9 @@ export class TradingProfileService {
     }
 
     updateTradingProfile() {
-        this._getTradingProfile().subscribe((data: IBFTTradingProfile) => {
-            this._updateTradingProfile(data);
-        });
+        // this._getTradingProfile().subscribe((data: IBFTTradingProfile) => {
+        //     this._updateTradingProfile(data);
+        // });
     } 
     
     private _updateTradingProfile(data: IBFTTradingProfile) {

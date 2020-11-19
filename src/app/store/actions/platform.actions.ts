@@ -11,6 +11,7 @@ export enum ActionTypes {
     ShowCode = '[Platform] Show Code',
     ResetStore = '[Platform] Reset Store',
     SaveState = '[Platform] Save State',
+    ResetLayout = '[Platform] Reset Layout'
 }
 
 export class SelectBottomComponentAction implements Action {
@@ -71,9 +72,15 @@ export class GlobalErrorAction implements Action {
     }
 }
 
-
 export class SaveStateAction implements Action {
     readonly type = ActionTypes.SaveState;
+
+    constructor() {
+    }
+}
+
+export class ResetLayoutAction implements Action {
+    readonly type = ActionTypes.ResetLayout;
 
     constructor() {
     }
@@ -85,6 +92,7 @@ export type PlatformActions = SelectBottomComponentAction
     | ResetStoreAction
     | DeleteSessionAction
     | SaveStateAction
+    | ResetLayoutAction
     | ClearSessionAction
     | GlobalErrorAction
     | AppTypeChangedAction;
