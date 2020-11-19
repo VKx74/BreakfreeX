@@ -45,6 +45,10 @@ export interface MTOrder {
     ExpirationDate?: number;
 }
 
+export interface MTHistoricalOrder extends MTOrder {
+    CloseTime: number;
+}
+
 export interface MTPlaceOrder {
     Symbol: string;
     Size: number;

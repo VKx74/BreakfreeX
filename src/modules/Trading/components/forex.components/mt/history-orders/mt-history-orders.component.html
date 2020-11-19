@@ -1,5 +1,6 @@
 <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
-            [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)">
+            [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
+            [hiddenColumns]="['Id', 'Open Time']">
     <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false"></data-table-header-cell>
     <data-table-header-cell columnName="Id" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
@@ -13,6 +14,7 @@
     <data-table-header-cell columnName="Net PL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="Pip PL" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Open Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Close Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.closeTime' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="ExpirationType" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell> -->
     <!-- <data-table-header-cell columnName="ExpirationDate" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell> -->
     <!-- <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell> -->
@@ -73,6 +75,9 @@
     </data-table-cell> -->
     <data-table-cell columnName="Open Time">
         <ng-template let-item>{{item.Time | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Close Time">
+        <ng-template let-item>{{item.CloseTime | utcSecondsToLocal | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
     </data-table-cell>
     <!-- <data-table-cell columnName="ExpirationType">
         <ng-template let-item>{{item.ExpirationType}}</ng-template>

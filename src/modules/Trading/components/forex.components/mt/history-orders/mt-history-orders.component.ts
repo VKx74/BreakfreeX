@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import { OandaOrder } from 'modules/Trading/models/forex/oanda/oanda.models';
 import { MTItemsComponent } from '../mt-items.component';
-import { MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTHistoricalOrder } from 'modules/Trading/models/forex/mt/mt.models';
 
 @Component({
     selector: 'mt-history-orders',
@@ -10,8 +10,8 @@ import { MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
     styleUrls: ['./mt-history-orders.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MTHistoryOrdersComponent extends MTItemsComponent<MTOrder> {
-    protected loadItems(): Observable<MTOrder[]> {
+export class MTHistoryOrdersComponent extends MTItemsComponent<MTHistoricalOrder> {
+    protected loadItems(): Observable<MTHistoricalOrder[]> {
         return of(this._mtBroker.ordersHistory);
     }
 

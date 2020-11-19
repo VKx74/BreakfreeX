@@ -1,7 +1,7 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
 import { Injectable } from '@angular/core';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
@@ -34,7 +34,7 @@ export abstract class MTBroker implements IMTBroker {
     protected _initData: MTConnectionData;
     protected _accessToken: string = "";
     protected _orders: MTOrder[] = [];
-    protected _ordersHistory: MTOrder[] = [];
+    protected _ordersHistory: MTHistoricalOrder[] = [];
     protected _positions: MTPosition[] = [];
     protected _currencyRisks: MTCurrencyRisk[] = [];
     protected _accountInfo: MTTradingAccount = {
@@ -110,7 +110,7 @@ export abstract class MTBroker implements IMTBroker {
         return this._orders.filter(order => order.Type !== OrderTypes.Market);
     }
 
-    public get ordersHistory(): MTOrder[] {
+    public get ordersHistory(): MTHistoricalOrder[] {
         return this._ordersHistory;
     }
 
@@ -799,6 +799,34 @@ export abstract class MTBroker implements IMTBroker {
         this._calculatePipPL(ord);
 
         return ord;
+    } 
+    
+    protected _createHistoricalOrder(data: IMTOrderData): MTHistoricalOrder {
+        const ord: MTHistoricalOrder = {
+            Id: data.Ticket,
+            CurrentPrice: data.CurrentPrice ? data.CurrentPrice : null,
+            SL: data.StopLoss ? data.StopLoss : null,
+            TP: data.TakeProfit ? data.TakeProfit : null,
+            Price: data.OpenPrice ? data.OpenPrice : null,
+            Comment: data.Comment ? data.Comment : null,
+            Commission: data.Commission ? data.Commission : null,
+            Swap: data.Swap ? data.Swap : null,
+            Size: data.Lots,
+            Type: this._getOrderType(data.Type),
+            Time: data.OpenTime,
+            NetPL: data.Profit,
+            Status: data.State,
+            ExpirationType: this._getOrderExpiration(data.ExpirationType),
+            ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
+            Side: this._getOrderSide(data.Side),
+            Symbol: data.Symbol,
+            PipPL: null,
+            CloseTime: data.CloseTime
+        };
+
+        this._calculatePipPL(ord);
+
+        return ord;
     }
 
     protected _loadHistory() {
@@ -811,7 +839,7 @@ export abstract class MTBroker implements IMTBroker {
         this.ws.getOrderHistory(request).subscribe((data) => {
             this._ordersHistory = [];
             for (const order of data.Data) {
-                const ord = this._createOrder(order);
+                const ord = this._createHistoricalOrder(order);
 
                 if (ord.Type !== OrderTypes.Market) {
                     continue;
@@ -819,6 +847,7 @@ export abstract class MTBroker implements IMTBroker {
 
                 this._ordersHistory.push(ord);
             }
+            this._ordersHistory.sort((a, b) => b.CloseTime - a.CloseTime);
             this._onHistoricalOrdersUpdated.next(this._ordersHistory);
         });
     }
