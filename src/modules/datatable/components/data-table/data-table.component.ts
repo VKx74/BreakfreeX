@@ -117,6 +117,7 @@ export class DataTableComponent {
     private _expandedRows: any[] = [];
     private _needSetDimensions: boolean = false;
     private _initialized: boolean = false;
+    private _prevRowClicked: any = null;
 
     get expandable(): boolean {
         return this.expandDetailsTemplate != null;
@@ -507,10 +508,21 @@ export class DataTableComponent {
         }
 
         this.onRowSelect.emit(row);
+
+        if (this._prevRowClicked === row) {
+            this.onDoubleClick.emit(row);
+        } else {
+            this._prevRowClicked = row
+        }
+
+        setTimeout(() => {
+            this._prevRowClicked = null;
+        }, 600);
     }
 
     handleRowDoubleClick(row: any, event: any) {
         const target = event.target;
+        this._prevRowClicked = null;
 
         if (target.classList.contains(ResizeHandleClass)) { // resize handle clicked
             return;
