@@ -512,7 +512,7 @@ export class DataTableComponent {
         if (this._prevRowClicked === row) {
             this.onDoubleClick.emit(row);
         } else {
-            this._prevRowClicked = row
+            this._prevRowClicked = row;
         }
 
         setTimeout(() => {
