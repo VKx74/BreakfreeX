@@ -85,24 +85,24 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
                 componentIdentifier: ComponentIdentifier.watchlist,
             }, 
-            {
-                component: BreakfreeTradingBacktestComponent,
-                previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
-            },  
+            // {
+            //     component: BreakfreeTradingBacktestComponent,
+            //     previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
+            //     componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
+            //     componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
+            // },  
             // {
             //     component: BreakfreeTradingDiscoveryComponent,
             //     previewImgClass: BreakfreeTradingDiscoveryComponent.previewImgClass,
             //     componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
             //     componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
             // }, 
-            {
-                component: BreakfreeTradingNavigatorComponent,
-                previewImgClass: BreakfreeTradingNavigatorComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
-            },
+            // {
+            //     component: BreakfreeTradingNavigatorComponent,
+            //     previewImgClass: BreakfreeTradingNavigatorComponent.previewImgClass,
+            //     componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
+            //     componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
+            // },
             {
                 component: BreakfreeTradingScannerComponent,
                 previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,

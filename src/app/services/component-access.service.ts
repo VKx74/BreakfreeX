@@ -63,6 +63,10 @@ export const ADMIN_ALLOWED_COMPONENTS: ComponentIdentifier[] = [
     ComponentIdentifier.breakfreeTradingBacktest
 ];
 
+export const BETA_ALLOWED_COMPONENTS: ComponentIdentifier[] = [
+    ComponentIdentifier.breakfreeTradingScanner
+];
+
 @Injectable({
     providedIn: 'root'
 })
@@ -86,6 +90,10 @@ export class ComponentAccessService {
     static isAccessible(identifier: ComponentIdentifier): boolean {
         if (ADMIN_ALLOWED_COMPONENTS.indexOf(identifier) >= 0) {
             return ComponentAccessService._identityService.isAdmin;
+        } 
+        
+        if (BETA_ALLOWED_COMPONENTS.indexOf(identifier) >= 0) {
+            return ComponentAccessService._identityService.isBeta;
         }
 
         return identifier && ComponentAccessService.config[identifier];
@@ -94,6 +102,10 @@ export class ComponentAccessService {
     static isAccessibleComponentsArray(identifiers: ComponentIdentifier[]): boolean {
         for (const item of identifiers) {
             if (ADMIN_ALLOWED_COMPONENTS.indexOf(item) >= 0 && !ComponentAccessService._identityService.isAdmin) {
+                return false;
+            } 
+            
+            if (BETA_ALLOWED_COMPONENTS.indexOf(item) >= 0 && !ComponentAccessService._identityService.isBeta) {
                 return false;
             }
         }

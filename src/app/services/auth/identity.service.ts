@@ -57,6 +57,22 @@ export class IdentityService {
         return this.role.toLowerCase() === Roles.Admin.toLowerCase();
     }  
     
+    get isBeta(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+        
+        if (!this.tags || !this.tags.length) {
+            return false;
+        }
+
+        for (const tag of this.tags) {
+            if (tag.toLowerCase() === "beta") {
+                return true;
+            }
+        }
+    }  
+    
     get isAuthorizedCustomer(): boolean {
         if (this.isAdmin) {
             return true;
