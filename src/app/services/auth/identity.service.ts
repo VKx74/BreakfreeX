@@ -61,14 +61,20 @@ export class IdentityService {
         if (this.isAdmin) {
             return true;
         }
-        
-        if (!this.tags || !this.tags.length) {
-            return false;
+
+        if (this.tags && this.tags.length) {
+            for (const tag of this.tags) {
+                if (tag.toLowerCase() === "beta") {
+                    return true;
+                }
+            }
         }
 
-        for (const tag of this.tags) {
-            if (tag.toLowerCase() === "beta") {
-                return true;
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("Friday") !== -1) {
+                    return true;    
+                }
             }
         }
     }  

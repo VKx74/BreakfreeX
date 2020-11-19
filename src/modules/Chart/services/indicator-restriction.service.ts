@@ -17,10 +17,8 @@ export class IndicatorRestrictionService {
             }
         }
 
-        if (!this._identity.subscriptions || !this._identity.subscriptions.length) {
-            if (!this.isAdmin) {
-                this._restrictedIndicators.push("RTD");
-            }
+        if (!this._identity.isAuthorizedCustomer) {
+            this._restrictedIndicators.push("RTD");
         }
     }
 
@@ -47,6 +45,6 @@ export class IndicatorRestrictionService {
     }
 
     private isAdmin() {
-        return this._identity.role ? this._identity.role.toLowerCase() === "admin" : false;
+        return this._identity.isAdmin;
     }
 }
