@@ -699,7 +699,6 @@ export abstract class MTBroker implements IMTBroker {
                     existingOrder.Commission = newOrder.Commission ? newOrder.Commission : null;
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
                     existingOrder.ProfitRate = newOrder.ProfitRate;
-                    existingOrder.ContractSize = newOrder.ContractSize;
 
                     existingOrder.Time = newOrder.OpenTime;
                     existingOrder.ExpirationType = this._getOrderExpiration(newOrder.ExpirationType);
@@ -712,9 +711,11 @@ export abstract class MTBroker implements IMTBroker {
                     const price = newOrder.OpenPrice ? newOrder.OpenPrice : null;
                     const size = newOrder.Lots;
                     const netPl = newOrder.Profit;
+                    const contractSize = newOrder.ContractSize;
 
                     if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Price !== price ||
-                        existingOrder.Size !== size || existingOrder.NetPL !== netPl || existingOrder.Type !== type || existingOrder.Status !== status) {
+                        existingOrder.Size !== size || existingOrder.NetPL !== netPl || existingOrder.Type !== type ||
+                        existingOrder.Status !== status || existingOrder.ContractSize !== contractSize) {
                         changedOrders.push(existingOrder);
                     }
 
@@ -722,6 +723,7 @@ export abstract class MTBroker implements IMTBroker {
                         updateRequired = true;
                     }
 
+                    existingOrder.ContractSize = contractSize;
                     existingOrder.Type = type;
                     existingOrder.Status = status;
                     existingOrder.SL = sl;
