@@ -12,8 +12,8 @@
 }
 
 .avatar {
-  max-width: 70px;
-  max-height: 70px;
+  max-width: 50px;
+  max-height: 50px;
   margin-left: 15px;
   vertical-align: middle;
 
@@ -97,7 +97,7 @@
 
   .user-name {
     font-size: 12px;
-    // text-transform: capitalize;
+    text-transform: capitalize;
     word-wrap: break-word;
     vertical-align: middle;
     height: fit-content;
