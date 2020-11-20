@@ -7,6 +7,6 @@ function toCheckout() {
         lineItems: [{price: "price_1HpDGDBI1GhkUGQtrut15Ibq", quantity: 1}],
         mode: 'subscription',
         successUrl: window.location.origin + "/#/pages/success-checkout",
-        cancelUrl: window.location.origin
+        cancelUrl: "https://blackfriday.breakfreetrading.com/"
       });
 }
