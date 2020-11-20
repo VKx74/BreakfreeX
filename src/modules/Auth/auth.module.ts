@@ -34,6 +34,7 @@ import {FormErrorProviderFactory} from "@app/helpers/form-error-provider.factory
 import {SharedTranslateService} from "@app/localization/shared.token";
 import { LoginWithPageComponent } from './components/login-with-page/login-with-page.component';
 import { LoadingModule } from 'ngx-loading';
+import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 
 @NgModule({
     declarations: [
@@ -81,7 +82,9 @@ import { LoadingModule } from 'ngx-loading';
             deps: [SharedTranslateService]
         },
     ],
-    entryComponents: []
+    entryComponents: [
+        PrivacyPolicyTradingModalComponent
+    ],
 })
 export class AuthModule {
 }

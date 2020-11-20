@@ -7,6 +7,8 @@ import { AuthRoutes } from "../../auth.routes";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "@app/services/auth/auth.service";
 import { CrossFieldErrorMatcher } from "@app/Utils/crossFieldErrorMatcher";
+import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'credentials-page',
@@ -22,6 +24,7 @@ export class CredentialsPageComponent implements OnInit {
   constructor(private _router: Router,
     private _route: ActivatedRoute,
     private _formBuilder: FormBuilder,
+    protected _dialog: MatDialog,
     private _authService: AuthenticationService) {
 
     this.registerFormGroup = this._formBuilder.group({
@@ -75,5 +78,11 @@ export class CredentialsPageComponent implements OnInit {
   doLoginWithFB() {
     window.location.href = this._authService.signInWithFBEndpoint;
   }
+  
+  privacyPolicy() {
+    this._dialog.open(PrivacyPolicyTradingModalComponent, {
+        backdropClass: 'backdrop-background'
+    });
+}
 
 }
