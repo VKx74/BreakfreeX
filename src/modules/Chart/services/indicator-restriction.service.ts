@@ -6,19 +6,26 @@ import { AlertService } from '@alert/services/alert.service';
 @Injectable()
 export class IndicatorRestrictionService {
     private _restrictedIndicators: string[] = [];
-    private _indicatorSuffix: string = "_indicator";
 
     constructor(protected _identity: IdentityService) {
-        const restrictedComponents = this._identity.restrictedComponents;
+        // const restrictedComponents = this._identity.restrictedComponents;
 
-        for (const restrictions of restrictedComponents) {
-            if (restrictions.endsWith(this._indicatorSuffix)) {
-                this._restrictedIndicators.push(restrictions.replace(this._indicatorSuffix, ""));
-            }
-        }
+        // for (const restrictions of restrictedComponents) {
+        //     if (restrictions.endsWith(this._indicatorSuffix)) {
+        //         this._restrictedIndicators.push(restrictions.replace(this._indicatorSuffix, ""));
+        //     }
+        // }
 
         if (!this._identity.isAuthorizedCustomer) {
-            this._restrictedIndicators.push("RTD");
+            this._restrictedIndicators.push(TradingChartDesigner.RTD.instanceTypeName);
+            this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
+            this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+        } else {
+            if (!this._identity.isPro) {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
+            } else {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+            }
         }
     }
 
