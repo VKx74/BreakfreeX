@@ -16,6 +16,10 @@ export class IndicatorRestrictionService {
         //     }
         // }
 
+        if (this._identity.isAdmin) {
+            return;
+        }
+
         if (!this._identity.isAuthorizedCustomer) {
             this._restrictedIndicators.push(TradingChartDesigner.RTD.instanceTypeName);
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
