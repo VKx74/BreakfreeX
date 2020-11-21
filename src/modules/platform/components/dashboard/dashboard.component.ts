@@ -250,6 +250,7 @@ export class DashboardComponent {
     }
 
     private _replaceBFTPanelWithSonar(content: any) {
+        return;
         if (content instanceof Array) {
             content.forEach((item) => {
                 this._replaceBFTPanelWithSonar(item);
