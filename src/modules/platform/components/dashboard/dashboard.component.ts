@@ -250,7 +250,6 @@ export class DashboardComponent {
     }
 
     private _replaceBFTPanelWithSonar(content: any) {
-        return;
         if (content instanceof Array) {
             content.forEach((item) => {
                 this._replaceBFTPanelWithSonar(item);
@@ -260,8 +259,8 @@ export class DashboardComponent {
                 content.content.forEach((item) => {
                     this._replaceBFTPanelWithSonar(item);
                 });
-            } else if (content.type === "component" && content.componentName === "breakfreeTradingNavigator") {
-                content.componentName = "breakfreeTradingScanner";
+            } else if (content.type === "component" && content.componentName === "breakfreeTradingScanner") {
+                content.componentName = "breakfreeTradingNavigator";
                 content.componentState = null;
             }
         }
