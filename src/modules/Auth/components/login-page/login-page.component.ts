@@ -375,9 +375,13 @@ export class LoginPageComponent {
                 }
             }
         } else {
+            let e = error.error;
+            if (!e) {
+                e = error.message;
+            }
             this.notification = {
                 isError: true,
-                message: 'Authorization failed' + (typeof (error.error) === 'string' ? error.error + ': ' : '.')
+                message: 'Authorization failed' + (typeof (e) === 'string' ? e + ': ' : '.')
             };
             console.log(error);
         }
