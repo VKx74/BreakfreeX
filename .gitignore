@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+/dist-app
 /*.zip
 /tmp
 /out-tsc

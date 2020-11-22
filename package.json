@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=0",
+    "start:4200": "ng serve --port=4200",
     "build": "npm run build-stage",
     "build-prod": "ng build -c prod",
     "build-stage": "ng build -c stage",
@@ -14,7 +15,10 @@
     "docker-lint": "npm i && ng lint",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-app-local": "node nativefier-local.js",
+    "build-app-prod": "node nativefier-prod.js ./dist-app/prod/",
+    "build-app-stage": "node nativefier-stage.js ./dist-app/stage/"
   },
   "private": true,
   "dependencies": {
@@ -90,6 +94,7 @@
     "ts-node": "~8.0.2",
     "tslint": "~5.12.1",
     "typescript": "3.5.3",
-    "webpack-bundle-analyzer": "^3.3.2"
+    "webpack-bundle-analyzer": "^3.3.2",
+    "nativefier": "8.0.7"
   }
 }
