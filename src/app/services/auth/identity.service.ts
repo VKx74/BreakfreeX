@@ -77,6 +77,8 @@ export class IdentityService {
                 }
             }
         }
+
+        return false;
     }  
     
     get isAuthorizedCustomer(): boolean {

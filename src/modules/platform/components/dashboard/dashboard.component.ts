@@ -241,7 +241,9 @@ export class DashboardComponent {
 
     private _initializeLayout(state: IGoldenLayoutComponentState) {
         try {
-            this._replaceBFTPanelWithSonar(state.content);
+            if (!this._identityService.isBeta) {
+                this._replaceBFTPanelWithSonar(state.content);
+            }
         } catch (e) {
 
         }
