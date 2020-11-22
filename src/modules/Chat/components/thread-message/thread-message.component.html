@@ -4,14 +4,14 @@
    
     <ng-container >
         <div class="creator-avatar">
-            <name-avatar [src]="message.creator.avatarId" [name]="message.creator.userName"
+            <name-avatar [src]="message.creator?.avatarId" [name]="message.creator?.userName"
                          (onColorSet)="onAvatarColorSet($event)"></name-avatar>
         </div>
     </ng-container>
 
     <div class="message-body flex flex-direction-column">
         <div class="top-line flex align-items-center justify-flex-end">
-            <span class="creator-name t-overflow-ellipsis">{{message.creator.userName}}</span>
+            <span class="creator-name t-overflow-ellipsis">{{message.creator?.userName}}</span>
 
             <span *ngIf="isUserMessage">
                 <span class="message-sending-status">
