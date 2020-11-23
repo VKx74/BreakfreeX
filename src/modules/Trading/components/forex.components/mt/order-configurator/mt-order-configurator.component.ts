@@ -160,16 +160,16 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this.allowedOrderTypes = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
 
         if (!this.config.instrument) {
-            this._brokerService.getInstruments().subscribe({
-                next: (value: IInstrument[]) => {
-                    if (value && value.length) {
-                        this._selectInstrument(value[0]);
-                    }
-                },
-                error: (e) => {
-                    console.error('Failed to load instrument', e);
-                }
-            });
+            // this._brokerService.getInstruments().subscribe({
+            //     next: (value: IInstrument[]) => {
+            //         if (value && value.length) {
+            //             this._selectInstrument(value[0]);
+            //         }
+            //     },
+            //     error: (e) => {
+            //         console.error('Failed to load instrument', e);
+            //     }
+            // });
         } else {
             this._selectInstrument(this.config.instrument, false);
         }
@@ -359,6 +359,11 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     private _placeOrder() {
+        if (!this.config.instrument) {
+            this._alertService.info("Select instrument");
+            return;
+        }
+        
         const broker = this._brokerService.activeBroker as MTBroker;
         const placeOrderData: MTPlaceOrder = {
             Comment: this.config.comment || "",

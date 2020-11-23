@@ -55,6 +55,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (this._brokerService.activeBroker instanceof MTBroker) {
             const mtBroker = this._brokerService.activeBroker as MTBroker;
             const instrument = mtBroker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+            if (!instrument) {
+                return false;        
+            }
+            
             return this._orderConfig.Symbol === instrument.id;
         }
         
@@ -70,7 +74,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (this._brokerService.activeBroker instanceof MTBroker) {
             if (!this.IsTradingEnabledHandler()) {
                 this._alertService.info(`${this._chart.instrument.symbol} not exist in connected broker`);
-                return;
+                // return;
             }
             
             const mtBroker = this._brokerService.activeBroker as MTBroker;
