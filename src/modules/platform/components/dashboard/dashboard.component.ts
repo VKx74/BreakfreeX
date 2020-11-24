@@ -179,6 +179,11 @@ export class DashboardComponent {
             app_id: "sv09ttz9",
             hide_default_launcher: true
         });
+
+        const loader = document.getElementById("initial-loader");
+        if (loader) {
+            loader.remove();
+        }
     }
 
     clearSession() {

@@ -20,7 +20,7 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
     }
 
     protected _subscribeOnUpdates(): Subscription {
-        return this._mtBroker.onOrdersParametersUpdated.subscribe(() => {
+        return this._mtBroker.onOrdersUpdated.subscribe(() => {
             this.updateItems();
         });
     }
@@ -42,6 +42,6 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
     }
 
     protected ordersUpdated() {
-        this.refresh();
+        this.updateItems();
     }
 }
