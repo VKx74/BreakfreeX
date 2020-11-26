@@ -41,6 +41,7 @@ export interface IMTServer {
 
 export interface IMTSymbolData {
     Digits: number;
+    ContractSize?: number;
     Name: string;
     CalculatioType: string;
     ProfitMode?: string;

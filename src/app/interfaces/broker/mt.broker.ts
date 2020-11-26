@@ -28,6 +28,7 @@ export interface IMT5Broker extends IBroker {
     subscribeToTicks(instrument: string, subscription: (value: IMTTick) => void): Subscription;
     instrumentDecimals(symbol: string): number;
     instrumentTickSize(symbol: string): number;
+    instrumentContractSize(symbol: string): number;
     instrumentMinAmount(symbol: string): number;
     instrumentAmountStep(symbol: string): number;
     instrumentToBrokerFormat(symbol: string): IInstrument;

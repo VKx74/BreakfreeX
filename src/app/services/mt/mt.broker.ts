@@ -18,6 +18,7 @@ export abstract class MTBroker implements IMTBroker {
     protected _instrumentTickSize: { [symbol: string]: number; } = {};
     protected _instrumentType: { [symbol: string]: string; } = {};
     protected _instrumentProfitMode: { [symbol: string]: string; } = {};
+    protected _instrumentContractSizes: { [symbol: string]: number; } = {};
 
     protected _onAccountInfoUpdated: Subject<MTTradingAccount> = new Subject<MTTradingAccount>();
     protected _onOrdersUpdated: Subject<MTOrder[]> = new Subject<MTOrder[]>();
@@ -566,7 +567,13 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     protected _initialize(instruments: IMTSymbolData[]) {
+        this._instrumentDecimals = {};
+        this._instrumentTickSize = {};
+        this._instrumentType = {};
+        this._instrumentProfitMode = {};
+        this._instrumentContractSizes = {};
         this._instruments = [];
+
         for (const instrument of instruments) {
             let tickSize = 1 / Math.pow(10, instrument.Digits);
             if (instrument.Digits === 0) {
@@ -590,6 +597,10 @@ export abstract class MTBroker implements IMTBroker {
             this._instrumentTickSize[instrument.Name] = tickSize;
             this._instrumentType[instrument.Name] = instrument.CalculatioType;
             this._instrumentProfitMode[instrument.Name] = instrument.ProfitMode;
+
+            if (instrument.ContractSize) {
+                this._instrumentContractSizes[instrument.Name] = instrument.ContractSize;
+            }
         }
 
         this._orders = [];
@@ -610,6 +621,12 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         return 0.00001;
+    }
+
+    public instrumentContractSize(symbol: string): number {
+        if (this._instrumentContractSizes[symbol]) {
+            return this._instrumentContractSizes[symbol];
+        }
     }
 
     public instrumentMinAmount(symbol: string): number {

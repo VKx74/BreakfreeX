@@ -46,6 +46,7 @@ export interface IBFTScannerHistoryResponse {
 }
 
 export interface IBFTAlgoParameters {
+    contract_size?: number;
     input_accountsize: number;
     input_risk: number;
     input_splitpositions: number;

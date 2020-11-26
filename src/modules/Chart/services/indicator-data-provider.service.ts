@@ -36,6 +36,17 @@ export class IndicatorDataProviderService {
             if (!bftParams.input_accountsize && broker.accountInfo && broker.accountInfo.Balance) {
                 bftParams.input_accountsize = broker.accountInfo.Balance;
             }
+
+            const brokerInstrument = broker.instrumentToBrokerFormat(bftParams.instrument.symbol);
+
+            if (brokerInstrument) {
+                const contract_size = broker.instrumentContractSize(brokerInstrument.symbol);
+                if  (contract_size) {
+                    bftParams.contract_size = contract_size;
+                }
+            }
+
+            console.log(">>> Contract size: " + bftParams.contract_size);
         }
 
         return this._bftService.getBftIndicatorCalculationV2(bftParams).then(data => {
