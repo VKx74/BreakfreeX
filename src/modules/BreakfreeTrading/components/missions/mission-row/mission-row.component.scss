@@ -5,7 +5,7 @@
   .content {
     height: 40px;
     display: flex;
-    border-top: 1px solid #cfd8dc;
+    border-top: 1px solid;
     margin: 10px 0px;
 
     /deep/ .mat-progress-bar {
@@ -45,5 +45,7 @@
 }
 
 @include themify($themes, true) {
-  
+  .content {
+    border-top-color: themed('missionMenu');
+  }
 }
