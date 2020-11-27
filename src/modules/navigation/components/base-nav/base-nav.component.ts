@@ -9,6 +9,8 @@ import {ActivatedRoute} from "@angular/router";
 import {debounceTime, takeUntil} from "rxjs/operators";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import { Subject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
 
 @Component({
     selector: 'base-nav',
@@ -49,6 +51,7 @@ export class BaseNavComponent implements OnInit {
                 private _systemNotificationsService: SystemNotificationsService,
                 private _usersProfileService: UsersProfileService,
                 private _cdRef: ChangeDetectorRef,
+                private _dialog: MatDialog,
                 private _sidebarService: SidebarService,
                 private _route: ActivatedRoute) {
     }
@@ -85,6 +88,10 @@ export class BaseNavComponent implements OnInit {
             });
     }
 
+    openMissionDialog() {
+        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background' });
+    } 
+    
     onMenuOpen() {
         this.opened.next();
     }

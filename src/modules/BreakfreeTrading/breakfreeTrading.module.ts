@@ -33,6 +33,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { MissionsComponent } from './components/missions/missions.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DailyMissionsComponent } from './components/missions/daily-missions/daily-missions.component';
+import { MissionRowComponent } from './components/missions/mission-row/mission-row.component';
+import { WeeklyMissionsComponent } from './components/missions/weekly-missions/weekly-missions.component';
 
 @NgModule({
     // components here
@@ -43,7 +48,11 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
         BreakfreeTradingScannerComponent,
-        CheckoutComponent
+        CheckoutComponent,
+        MissionsComponent,
+        DailyMissionsComponent,
+        WeeklyMissionsComponent,
+        MissionRowComponent
     ],
     imports: [
         CommonModule,
@@ -57,6 +66,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
         MatMenuModule,
         MatInputModule,
         MatSlideToggleModule,
+        MatProgressBarModule,
         SharedModule,
         MatTabsModule,
         UIModule,
@@ -75,7 +85,8 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
         BreakfreeTradingScannerComponent,
-        CheckoutComponent
+        CheckoutComponent,
+        MissionsComponent
     ],
     // components here
     exports: [
@@ -85,7 +96,8 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingNavigatorComponent,
         BreakfreeTradingScannerComponent,
-        CheckoutComponent
+        CheckoutComponent,
+        MissionsComponent
     ],
     providers: [
         HistoryService,

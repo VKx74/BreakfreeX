@@ -1,0 +1,93 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .content {
+    display: flex;
+    min-height: 300px;
+    min-width: 300px;
+
+    .left-side {
+      width: 130px;
+      display: flex;
+      flex-direction: column;
+
+      .period {
+        width: 100px;
+        height: 24px;
+        font-size: 15px;
+        margin-left: 15px;
+        margin-top: 22px;
+        font-weight: 700;
+        cursor: pointer;
+
+        &.selected {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .progress-bar-area {
+      width: 100%;
+    }
+
+    .center {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .header {
+        height: 50px;
+        display: flex;
+
+        /deep/ .mat-progress-bar {
+          height: 7px;
+        }
+
+        .experiance-levels {
+          min-width: 120px;
+          .experiance-levels-text {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 50px;
+            text-align: center;
+          }
+        }
+
+        .experiance-points {
+          display: flex;
+          flex-direction: column;
+          font-size: 12px;
+          width: 100%;
+          padding: 15px;
+
+          .experiance-points-text {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+        }
+      }
+
+      .mission-content {
+        margin: 10px 0px 10px 10px;
+        height: 100%;
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .content {
+    background-color: themed('appBackgroundColor');
+  } 
+  .left-side {
+    background-color: themed('missionMenu');
+  } 
+  .content {
+    color: themed('valueTextColor');
+  }
+  .experiance-levels {
+    background-color: themed('missionMenu');
+  }
+}

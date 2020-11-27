@@ -1,0 +1,38 @@
+<div class="crypto-modal">
+    <div class="content">
+        <div class="left-side">
+            <div class="period" [ngClass]="{'selected': selectedMissionPeriod == MissionPeriod.Daily}" (click)="selectPeriod(MissionPeriod.Daily)">Daily</div>
+            <div class="period" [ngClass]="{'selected': selectedMissionPeriod == MissionPeriod.Weekly}" (click)="selectPeriod(MissionPeriod.Weekly)">Weekly</div>
+        </div>
+        <div class="center">
+            <div class="header">
+                <div class="experiance-points">
+                    <div class="experiance-points-text">
+                        <div class="experiance-points-text-lable">
+                            Experience
+                        </div>
+                        <div class="experiance-points-text-value">
+                            100/1000
+                        </div>
+                    </div>
+                    <div class="progress-bar-area">
+                        <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+                    </div>
+                </div>
+                <div class="experiance-levels">
+                    <div class="experiance-levels-text">Level 50</div>
+                </div>
+            </div>
+            <div class="mission-content">
+                <ng-container [ngSwitch]="selectedMissionPeriod">
+                    <ng-container *ngSwitchCase="MissionPeriod.Daily">
+                        <daily-missions-component></daily-missions-component>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="MissionPeriod.Weekly">
+                        <weekly-missions-component></weekly-missions-component>
+                    </ng-container>
+                 </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
