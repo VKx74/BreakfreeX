@@ -292,6 +292,27 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
     }
 
+    private getOrderPriceDiff(order: MTOrder): number {
+        if (!order.SL && !order.TP) {
+            return 0;
+        }
+
+        let min = order.Price;
+        let max = order.Price;
+
+        if (order.SL) {
+            min = Math.min(min, order.SL);
+            max = Math.max(max, order.SL);
+        } 
+        
+        if (order.TP) {
+            min = Math.min(min, order.TP);
+            max = Math.max(max, order.TP);
+        }
+
+        return max - min;
+    }
+
     private fillOrderLines() {
         if (!this._chart) {
             return;
@@ -305,10 +326,17 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             }
 
             const shapes = [];
-            for (const order of mtBroker.orders) {
+            let orders = mtBroker.orders.slice().filter((order) => {
                 if (order.Symbol !== symbol.symbol || !order.Price) {
-                    continue;
+                    return false;
                 }
+                return true;
+            }).sort((order1, order2) => {
+                return this.getOrderPriceDiff(order1) - this.getOrderPriceDiff(order2);
+            });
+
+            for (const order of orders) {
+                
                 const shape = this.createBaseShape(order);
                 const shapeOrderBox = this.createBaseOrderShape(order);
                 if (shapeOrderBox) {
