@@ -97,6 +97,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             }
             
             orderConfig.amount = params.size;
+            orderConfig.timeframe = params.timeframe;
+            orderConfig.placedFrom = params.placedFrom;
+            orderConfig.tradeType = params.tradeType;
             orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
             this._dialog.open(MTOrderConfiguratorModalComponent, {
                 data: {

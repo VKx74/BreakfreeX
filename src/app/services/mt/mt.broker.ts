@@ -144,7 +144,10 @@ export abstract class MTBroker implements IMTBroker {
             TakeProfit: order.TP,
             ExpirationType: order.ExpirationType,
             FillPolicy: order.FillPolicy,
-            ExpirationDate: order.ExpirationDate
+            ExpirationDate: order.ExpirationDate,
+            Timeframe: order.Timeframe,
+            TradeType: order.TradeType,
+            PlacedFrom: order.PlacedFrom
         };
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
