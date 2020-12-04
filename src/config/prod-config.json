@@ -4,17 +4,17 @@
   "apiUrls": {
     "identityUrl": "https://auth-platform.breakfreetrading.com/",
     "webSocketUrl": "wss://ws-platform.breakfreetrading.com/wsnotification",
-    "bitmexREST": "https://datafeed.breakfreetrading.com/bitmex/",
-    "bitmexWS": "wss://datafeed.breakfreetrading.com/bitmex/subscribe/realtime/", 
-    "polygonREST": "https://datafeed.breakfreetrading.com/polygon/",
-    "polygonWS": "wss://datafeed.breakfreetrading.com/polygon/subscribe/realtime/",
-    "twelvedataREST": "https://datafeed.breakfreetrading.com/twelvedata/",
-    "twelvedataWS": "wss://datafeed.breakfreetrading.com/twelvedata/subscribe/realtime/",
-    "kaikoREST": "https://datafeed.breakfreetrading.com/kaiko/",
-    "kaikoWS": "wss://datafeed.breakfreetrading.com/kaiko/subscribe/realtime/",
-    "onadaWS": "wss://datafeed.breakfreetrading.com/oanda/subscribe/realtime/",
-    "coinigyREST": "https://datafeed.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
-    "coinigyWS": "wss://datafeed.breakfreetrading.com/data/vendor/coinigy/ws",
+    "bitmexREST": "https://feed.breakfreetrading.com/bitmex/",
+    "bitmexWS": "wss://feed.breakfreetrading.com/bitmex/subscribe/realtime/", 
+    "polygonREST": "https://feed.breakfreetrading.com/polygon/",
+    "polygonWS": "wss://feed.breakfreetrading.com/polygon/subscribe/realtime/",
+    "twelvedataREST": "https://feed.breakfreetrading.com/twelvedata/",
+    "twelvedataWS": "wss://feed.breakfreetrading.com/twelvedata/subscribe/realtime/",
+    "kaikoREST": "https://feed.breakfreetrading.com/kaiko/",
+    "kaikoWS": "wss://feed.breakfreetrading.com/kaiko/subscribe/realtime/",
+    "onadaWS": "wss://feed.breakfreetrading.com/oanda/subscribe/realtime/",
+    "coinigyREST": "https://feed.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
+    "coinigyWS": "wss://feed.breakfreetrading.com/data/vendor/coinigy/ws",
     "historystorageREST": "notused",
     "scriptEngineUrlREST": "https://scripting.breakfreetrading.com/scriptengine/fintasharp/",
     "personalInfoREST": "https://auth-platform.breakfreetrading.com/KYC/",
@@ -33,7 +33,7 @@
     "userDataStoreREST": "https://platform.breakfreetrading.com/userdatastore/api/v1/",
     "systemNotificationApiRest": "https://system-platform.breakfreetrading.com/v1/sysnotification/api/",
     "scriptEngineREST": "https://scripting.breakfreetrading.com/scriptengine/fintasharp/api/",
-    "oandabrokerREST": "https://datafeed.breakfreetrading.com/oanda/",
+    "oandabrokerREST": "https://feed.breakfreetrading.com/oanda/",
     "userprofileREST": "https://rest.yourdomain.com/api/v0.0/userprofile/",
     "historydatacollectorREST": "not used",
     "news": "https://events.breakfreetrading.com/news/",
@@ -59,19 +59,19 @@
   "servicesHealthCheckUrls": {
     "bitmexREST": {
       "name": "Bitmex",
-      "url": "https://datafeed.breakfreetrading.com/bitmex/"
+      "url": "https://feed.breakfreetrading.com/bitmex/"
     },
     "polygonREST": {
       "name": "Polygon",
-      "url": "https://datafeed.breakfreetrading.com/polygon/"
+      "url": "https://feed.breakfreetrading.com/polygon/"
     }, 
     "twelvedataREST": {
       "name": "Twelvedata",
-      "url": "https://datafeed.breakfreetrading.com/twelvedata/"
+      "url": "https://feed.breakfreetrading.com/twelvedata/"
     },
     "kaikoREST": {
       "name": "Kaiko",
-      "url": "https://datafeed.breakfreetrading.com/kaiko/"
+      "url": "https://feed.breakfreetrading.com/kaiko/"
     },
     "eventConsolidator": {
       "name": "Event Consolidator",
@@ -116,7 +116,7 @@
   },
   "endpointsBearerAuthRequired": [
     "https://auth-platform.breakfreetrading.com",
-    "https://datafeed.breakfreetrading.com",
+    "https://feed.breakfreetrading.com",
     "https://scripting.breakfreetrading.com",
     "https://events.breakfreetrading.com",
     "https://app.breakfreetrading.com",
