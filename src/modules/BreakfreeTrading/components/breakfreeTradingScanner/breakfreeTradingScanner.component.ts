@@ -38,6 +38,16 @@ interface IFeaturedResult {
     origType: IBFTATradeType;
 }
 
+interface IGrouped {
+    marketType: string;
+    data: IScannerResults[];
+}
+
+interface IGroupedResults {
+    timeframe: string;
+    data: IGrouped[];
+}
+
 interface IScannerResults {
     symbol: string;
     exchange: string;
@@ -86,6 +96,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _featuredGroupName: string = "Featured";
     private _otherGroupName: string = "Other";
     private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
+    private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.All, TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
@@ -103,7 +114,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public output: string;
     public loading: boolean;
     public trends: any = IBFTATrend;
-
+    
     public get origType() {
         return IBFTATradeType;
     }
@@ -156,6 +167,60 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._timer = setInterval(() => {
             this.scanMarkets();
         }, 1000 * 60 * 2);
+    }
+
+    dataExistsInGroup(group: IGroupedResults): boolean {
+        for (const marketTypes of group.data) {
+            if (marketTypes.data && marketTypes.data.length) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    groupedResults(): IGroupedResults[] {
+        const res: IGroupedResults[] = [];
+
+        for (const tf of this._supportedTimeframes) {
+            const item: IGroupedResults = {
+                timeframe: this.toTimeframe(tf),
+                data: []
+            };
+
+            item.data.push({
+                data: [],
+                marketType: this._featuredGroupName
+            });
+
+            for (const marketType of this._types) {
+                item.data.push({
+                    marketType: marketType.name,
+                    data: []
+                });
+            }
+
+            item.data.push({
+                data: [],
+                marketType: this._otherGroupName
+            });
+
+            res.push(item);
+        }
+
+        for (const scannerResult of this.scannerResultsFiltered) {
+            for (const responseItem of res) {
+                const tfString = this.toTimeframe(scannerResult.timeframe);
+                if (responseItem.timeframe === tfString) {
+                    for (const group of responseItem.data) {
+                        if (group.marketType === scannerResult.marketType) {
+                            group.data.push(scannerResult);
+                        }
+                    }
+                }
+            }
+        }
+
+        return res;
     }
 
     segmentSelected(item: TradeTypes) {
@@ -226,14 +291,26 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     toTimeframe(tf: number): string {
         switch (tf) {
-            case 1 * 60: return "1M";
-            case 5 * 60: return "5M";
-            case 15 * 60: return "15M";
-            case 60 * 60: return "1H";
-            case 240 * 60: return "4H";
-            case 24 * 60 * 60: return "1D";
+            case 1 * 60: return "1 Min";
+            case 5 * 60: return "5 Min";
+            case 15 * 60: return "15 Min";
+            case 60 * 60: return "1 Hour";
+            case 240 * 60: return "4 Hours";
+            case 24 * 60 * 60: return "1 Day";
         }
         return "Undefined";
+    }
+
+    trackByTimeframe(index, group: IGroupedResults) {
+        return group.timeframe;
+    }
+
+    trackByMarketType(index, group: IGrouped) {
+        return group.marketType;
+    }
+
+    trackByResult(index, res: IScannerResults) {
+        return res.symbol + res.exchange + res.timeframe + res.origType;
     }
 
     public getFeaturedDetails(scannerVM: IScannerResults): string {
