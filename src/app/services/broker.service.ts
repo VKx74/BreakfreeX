@@ -50,6 +50,8 @@ export class BrokerService implements IHealthable {
             return false;
         } 
 
+        // show MT Bridge for all users even without subscriptions
+        return true;
         return this._identityService.isAuthorizedCustomer;
     }  
 
