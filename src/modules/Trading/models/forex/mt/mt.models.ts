@@ -1,4 +1,4 @@
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from 'modules/Trading/models/models';
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from 'modules/Trading/models/models';
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 
 export enum MTStatus {
@@ -61,6 +61,9 @@ export interface MTPlaceOrder {
     FillPolicy?: OrderFillPolicy;
     ExpirationType?: OrderExpirationType;
     ExpirationDate: number;
+    Timeframe?: number;
+    TradeType?: OrderTradeType;
+    PlacedFrom?: OrderPlacedFrom;
 }
 
 export interface MTEditOrder {

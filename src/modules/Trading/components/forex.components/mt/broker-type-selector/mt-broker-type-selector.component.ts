@@ -56,10 +56,11 @@ export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
     }
     
     connectCurrentBroker() {
-        if (!this._identityService.isAuthorizedCustomer) {
-            this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
-            return;
-        }
+        // show MT Bridge for all users even without subscriptions
+        // if (!this._identityService.isAuthorizedCustomer) {
+        //     this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+        //     return;
+        // }
 
         const ref = this._dialog.open<BrokerDialogComponent, BrokerDialogData>(BrokerDialogComponent, {
             data: {

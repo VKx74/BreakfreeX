@@ -131,6 +131,9 @@ export interface IMTPlaceOrderData {
     ExpirationType?: string;
     ExpirationDate?: number;
     CloseByTicket?: number;
+    Timeframe: number;
+    TradeType: string;
+    PlacedFrom: string;
 }
 
 export interface IMTCloseOrderData {

@@ -177,6 +177,15 @@ export interface IBFTATradeV2 {
     type: IBFTATradeType;
     tte: number;
     tp: IBFTATradeProbability;
+    entry: number;
+    entry_h: number;
+    entry_l: number;
+    take_profit: number;
+    take_profit_h: number;
+    take_profit_l: number;
+    stop: number;
+    risk: number;
+    sl_ratio: number;
 }
 
 export interface IBFTAAlgoResponse {

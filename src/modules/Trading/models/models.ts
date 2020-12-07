@@ -32,6 +32,17 @@ export enum OrderExpirationType {
     Specified = 'Specified'
 }
 
+export enum OrderTradeType {
+    BRC = 'BRC',
+    SWING = 'SWING',
+    EXT = 'EXT'
+}
+
+export enum OrderPlacedFrom {
+    Sonar = 'Sonar',
+    Manually = 'Manually'
+}
+
 export interface ActionResult {
     result: boolean;
     msg?: string;

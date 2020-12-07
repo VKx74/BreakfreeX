@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
 import { IMTTick } from "@app/models/common/tick";
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from "../../../../models/models";
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from "../../../../models/models";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
 import { Observable, Subscription } from "rxjs";
@@ -31,6 +31,9 @@ export class MTOrderConfig {
     useSL: boolean; // Stop price
     useTP: boolean; // Stop price
     comment?: string; // Stop price
+    timeframe?: number;
+    tradeType?: OrderTradeType;
+    placedFrom?: OrderPlacedFrom;
 
     static createLimit(brokerType: EBrokerInstance): MTOrderConfig {
         const order = this.create();
@@ -376,7 +379,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
             TP: this.config.useTP ?  Number(this.config.tp) : 0,
             FillPolicy: this.config.fillPolicy,
             ExpirationType: this.config.expirationType,
-            ExpirationDate: this._getSetupDate()
+            ExpirationDate: this._getSetupDate(),
+            PlacedFrom: this.config.placedFrom,
+            Timeframe: this.config.timeframe,
+            TradeType: this.config.tradeType
         };
 
         // if (this.config.type === OrderTypes.Market) {

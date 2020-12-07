@@ -35,6 +35,7 @@ import { Overlay } from "@angular/cdk/overlay";
 import { SingleSessionService } from '@app/services/single-session.service';
 import { Intercom } from 'ng-intercom';
 import { CookieService } from '@app/services/сookie.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 
 @Component({
@@ -48,7 +49,9 @@ import { CookieService } from '@app/services/сookie.service';
 export class DashboardComponent {
     private _updateInterval = 1000 * 60 * 5;
     private _autoSaveChecker = 1000 * 10;
+    private _freeUserPopup = 1000 * 60 * 4;
     private _intervalLink: any;
+    private _freeUserPopupTimer: any;
     private _saveLayout = true;
     private _lastExceptionTime: number = 0;
     layoutChanged = false;
@@ -162,6 +165,7 @@ export class DashboardComponent {
         }
 
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
+        this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
     }
 
     ngAfterViewInit() {
@@ -387,6 +391,9 @@ export class DashboardComponent {
 
         if (this._intervalLink) {
             clearInterval(this._intervalLink);
+        }  
+        if (this._freeUserPopupTimer) {
+            clearTimeout(this._freeUserPopupTimer);
         }
     }
 
@@ -394,6 +401,12 @@ export class DashboardComponent {
         if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
             const layoutState = this.layout.saveState();
             this._layoutStorageService.saveLayoutState(layoutState, true).subscribe();
+        }
+    }
+
+    private _showFreeUserPopup() {
+        if (!this._identityService.isAuthorizedCustomer) {
+            this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
         }
     }
 }

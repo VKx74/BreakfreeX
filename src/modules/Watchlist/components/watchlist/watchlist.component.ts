@@ -110,6 +110,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     private _updateInterval: any;
 
     get isAuthorizedCustomer(): boolean {
+        // show watchlist for all users even without subscriptions
+        return true;
         return this._identityService.isAuthorizedCustomer;
     }  
 
@@ -156,7 +158,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
-        if (!this._identityService.isAuthorizedCustomer) {
+        if (!this.isAuthorizedCustomer) {
             return;
         }
 

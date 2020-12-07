@@ -144,7 +144,10 @@ export abstract class MTBroker implements IMTBroker {
             TakeProfit: order.TP,
             ExpirationType: order.ExpirationType,
             FillPolicy: order.FillPolicy,
-            ExpirationDate: order.ExpirationDate
+            ExpirationDate: order.ExpirationDate,
+            Timeframe: order.Timeframe,
+            TradeType: order.TradeType,
+            PlacedFrom: order.PlacedFrom
         };
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
@@ -718,7 +721,7 @@ export abstract class MTBroker implements IMTBroker {
                     existingOrder.ProfitRate = newOrder.ProfitRate;
 
                     existingOrder.Time = newOrder.OpenTime;
-                    existingOrder.ExpirationType = this._getOrderExpiration(newOrder.ExpirationType);
+                    existingOrder.ExpirationType = this._getOrderExpiration(newOrder.ExpirationType, newOrder.ExpirationDate);
                     existingOrder.ExpirationDate = newOrder.ExpirationDate ? newOrder.ExpirationDate : null;
 
                     const type = this._getOrderType(newOrder.Type);
@@ -808,7 +811,7 @@ export abstract class MTBroker implements IMTBroker {
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
-            ExpirationType: this._getOrderExpiration(data.ExpirationType),
+            ExpirationType: this._getOrderExpiration(data.ExpirationType, data.ExpirationDate),
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
@@ -835,7 +838,7 @@ export abstract class MTBroker implements IMTBroker {
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
-            ExpirationType: this._getOrderExpiration(data.ExpirationType),
+            ExpirationType: this._getOrderExpiration(data.ExpirationType, data.ExpirationDate),
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
@@ -857,6 +860,11 @@ export abstract class MTBroker implements IMTBroker {
 
         this.ws.getOrderHistory(request).subscribe((data) => {
             this._ordersHistory = [];
+
+            if (!data.Data) {
+                return;
+            }
+            
             for (const order of data.Data) {
                 const ord = this._createHistoricalOrder(order);
 
@@ -1170,7 +1178,11 @@ export abstract class MTBroker implements IMTBroker {
         return side as OrderSide;
     }
 
-    protected _getOrderExpiration(expiration: string): OrderExpirationType {
+    protected _getOrderExpiration(expiration: string, expValue: number): OrderExpirationType {
+        if (!expiration && expValue) {
+            return OrderExpirationType.Specified;
+        }
+
         if (!expiration) {
             return OrderExpirationType.GTC;
         }
