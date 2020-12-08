@@ -12,24 +12,24 @@
                             Experience
                         </div>
                         <div class="experiance-points-text-value">
-                            100/1000
+                            {{score}}/{{scoreForLevel}}
                         </div>
                     </div>
                     <div class="progress-bar-area">
-                        <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+                        <mat-progress-bar mode="determinate" value="{{score/scoreForLevel * 100}}" ></mat-progress-bar>
                     </div>
                 </div>
                 <div class="experiance-levels">
-                    <div class="experiance-levels-text">Level 50</div>
+                    <div class="experiance-levels-text">Level {{level}}</div>
                 </div>
             </div>
             <div class="mission-content">
                 <ng-container [ngSwitch]="selectedMissionPeriod">
                     <ng-container *ngSwitchCase="MissionPeriod.Daily">
-                        <daily-missions-component></daily-missions-component>
+                        <daily-missions-component [missions]="missions"></daily-missions-component>
                     </ng-container>
                     <ng-container *ngSwitchCase="MissionPeriod.Weekly">
-                        <weekly-missions-component></weekly-missions-component>
+                        <weekly-missions-component [missions]="missions"></weekly-missions-component>
                     </ng-container>
                  </ng-container>
             </div>

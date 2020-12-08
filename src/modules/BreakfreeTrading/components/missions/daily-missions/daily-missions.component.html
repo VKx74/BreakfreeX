@@ -1,9 +1,5 @@
 <div class="content">
-    <mission-row-component Name="Visit Navigator" Points="10" Needed="1" Current="1"></mission-row-component>
-    <mission-row-component Name="Find 2 '15min' Sonar setups" Points="50" Needed="2" Current="1"></mission-row-component>
-    <mission-row-component Name="Find 1 hourly Sonar setup" Points="50" Needed="1" Current="1"></mission-row-component>
-    <mission-row-component Name="Place at lease 3 orders from bridge" Points="20" Needed="3" Current="2"></mission-row-component>
-    <mission-row-component Name="Place BRC trade" Points="20" Needed="1" Current="0"></mission-row-component>
-    <mission-row-component Name="Place SWING trade" Points="20" Needed="1" Current="0"></mission-row-component>
-    <mission-row-component Name="Place EXT trade" Points="20" Needed="1" Current="1"></mission-row-component>
+    <ng-container *ngFor="let mission of missions?.daily">
+        <mission-row-component Name='{{mission.name}}' Points='{{mission.points}}' Needed='{{mission.requiredValue}}' Current='{{mission.currentValue}}'></mission-row-component>
+    </ng-container>
 </div>

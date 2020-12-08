@@ -13,55 +13,70 @@ export interface IBFTTradingProfile {
     totalProfitable: number;
 }
 
+export interface IBFTDailyMission {
+    internalId: string;
+    name: string;
+    requiredValue: number;
+    currentValue: number;
+    points: number;
+}
+
+export interface IBFTWeeklyMission {
+    internalId: string;
+    name: string;
+    requiredValue: number;
+    currentValue: number;
+    points: number;
+}
+
+export interface IBFTMissions {
+    daily: IBFTDailyMission[];
+    weekly: IBFTWeeklyMission[];
+    totalPoints: number;
+    calculationTimestamp: number;
+}
+
 @Injectable()
 export class TradingProfileService {
     private url: string;
-    private _scoreForOrder = 5;
-    private _scoreForProfitableOrder = 20;
-    private _scoreForLevel = 100;
-    private _userScore = 0;
-
-    public get scoreForOrder(): number {
-        return this._scoreForOrder;
-    }
+    private _scoreForLevel = 1000;
+    private _missions: IBFTMissions;
     
-    public get scoreForProfitableOrder(): number {
-        return this._scoreForProfitableOrder;
-    }
+    public get missions(): IBFTMissions {
+        return this._missions;
+    } 
     
     public get scoreForLevel(): number {
         return this._scoreForLevel;
     } 
     
     public get userScore(): number {
-        return this._userScore;
+        if (!this.missions) {
+            return 0;
+        }
+
+        return this.missions.totalPoints;
     } 
     
     public get score(): number {
-        return this._userScore % this._scoreForLevel;
+        return this.userScore % this._scoreForLevel;
     }
     
     public get level(): number {
-        return Math.floor(this._userScore / this._scoreForLevel) + 1;
+        return Math.floor(this.userScore / this._scoreForLevel) + 1;
     }
 
     constructor(private _http: HttpClient) {
         this.url = AppConfigService.config.apiUrls.bftTradingProfilesREST;
     }
 
-    updateTradingProfile() {
-        // this._getTradingProfile().subscribe((data: IBFTTradingProfile) => {
-        //     this._updateTradingProfile(data);
-        // });
+    updateMissions() {
+        this._getTradingMissions().subscribe((data: IBFTMissions) => {
+            this._missions = data;
+        });
     } 
-    
-    private _updateTradingProfile(data: IBFTTradingProfile) {
-        this._userScore = 0;
-        this._userScore += data.totalBridgedActivated * this._scoreForOrder;
-        this._userScore += data.totalBridgedProfitable * this._scoreForProfitableOrder;
-    }
 
-    private _getTradingProfile(): Observable<IBFTTradingProfile> {
-        return this._http.get<IBFTTradingProfile>(`${this.url}UserStats/OrderPerformance`);
+    private _getTradingMissions(): Observable<IBFTMissions> {
+        return this._http.get<IBFTMissions>(`${this.url}UserStats/Missions`);
     }
 }

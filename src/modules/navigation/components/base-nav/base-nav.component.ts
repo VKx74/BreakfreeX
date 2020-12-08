@@ -11,6 +11,7 @@ import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
+import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 
 @Component({
     selector: 'base-nav',
@@ -32,28 +33,37 @@ export class BaseNavComponent implements OnInit {
     role = this._identityService.role;
     email = this._identityService.email;
     opened: Subject<void> = new Subject<void>();
-    // login: string;
-    // role: string;
+    
+    
+    public get score(): number {
+        return this._tradingProfileService.score;
+    }
 
-    // get exchangeStatus() {
-    //     return this._systemNotificationsService.exchangeStatus;
-    // }
+    public get isLoaded(): boolean {
+        return !!this._tradingProfileService.missions;
+    }
+
+    public get scoreForLevel(): number {
+        return this._tradingProfileService.scoreForLevel;
+    }
+
+    public get level(): number {
+        return this._tradingProfileService.level;
+    }
 
     get currentUserFullName() {
         return this._identityService.fullName;
     }
 
-    // get sidebarOpen() {
-    //     return this._sidebarService.shown;
-    // }
-
     constructor(private _identityService: IdentityService,
                 private _systemNotificationsService: SystemNotificationsService,
+                private _tradingProfileService: TradingProfileService,
                 private _usersProfileService: UsersProfileService,
                 private _cdRef: ChangeDetectorRef,
                 private _dialog: MatDialog,
                 private _sidebarService: SidebarService,
                 private _route: ActivatedRoute) {
+        this._tradingProfileService.updateMissions();
     }
 
     toggleSidebar() {

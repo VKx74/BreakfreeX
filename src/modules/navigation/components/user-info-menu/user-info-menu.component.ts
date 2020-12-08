@@ -48,34 +48,15 @@ export class UserInfoMenuComponent implements OnInit {
     userId = this._identity.id;
     @Output() logOut = new EventEmitter();
 
-
-    public get score(): number {
-        return this._tradingProfileService.score;
-    }
-
-    public get scoreForLevel(): number {
-        return this._tradingProfileService.scoreForLevel;
-    }
-
-    public get level(): number {
-        return this._tradingProfileService.level;
-    }
-
     constructor(private _identity: IdentityService,
         private _appTypeService: ApplicationTypeService,
-        private _tradingProfileService: TradingProfileService,
         private _dialog: MatDialog,
         private _store: Store<AppState>,
         private _brokerService: BrokerService) {
-        this._tradingProfileService.updateTradingProfile();
     }
 
     ngAfterViewInit() {
-        if (this.opened) {
-            this.opened.subscribe(() => {
-                this._tradingProfileService.updateTradingProfile();
-            });
-        }
+       
     }
 
     ngOnInit() {

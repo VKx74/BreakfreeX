@@ -12,6 +12,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ApplicationTypeService} from "@app/services/application-type.service";
 import {GoldenLayoutPopupComponent} from "angular-golden-layout";
 import { IdentityService } from '@app/services/auth/identity.service';
+import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 
 enum MissionPeriod {
     Daily,
@@ -27,8 +28,27 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
     public MissionPeriod = MissionPeriod;
     public selectedMissionPeriod = MissionPeriod.Daily;
 
-    constructor(private _injector: Injector, private _identityService: IdentityService) {
+    public get missions(): IBFTMissions {
+        return this._tradingProfileService.missions;
+    }
+
+    public get score(): number {
+        return this._tradingProfileService.score;
+    }
+
+    public get scoreForLevel(): number {
+        return this._tradingProfileService.scoreForLevel;
+    }
+
+    public get level(): number {
+        return this._tradingProfileService.level;
+    }
+
+    constructor(private _injector: Injector,
+                private _identityService: IdentityService,
+                private _tradingProfileService: TradingProfileService) {
         super(_injector);
+        this._tradingProfileService.updateMissions();
     }
 
     selectPeriod(period: MissionPeriod) {

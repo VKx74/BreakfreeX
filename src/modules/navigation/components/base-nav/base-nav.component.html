@@ -20,13 +20,19 @@
                 <div class="xp-toolbar">
                     <div class="experiance-points">
                         <span class="ico">XP</span>
-                        <span class="ico-text">100/1000</span>
+                        <span class="ico-text" *ngIf="isLoaded; else loading1">{{score}}/{{scoreForLevel}}</span>
+                        <ng-template #loading1>
+                            <span class="ico-text">Calculating...</span>
+                        </ng-template>
                     </div>  
                 </div>
                 <div class="lv-toolbar">
                     <div class="experiance-level">
                         <span class="ico">LV</span>
-                        <span class="ico-text">50</span>
+                        <span *ngIf="isLoaded; else loading2" class="ico-text">{{level}}</span>
+                        <ng-template #loading2>
+                            <span class="ico-text">...</span>
+                        </ng-template>
                     </div>
                 </div>
             </div>
