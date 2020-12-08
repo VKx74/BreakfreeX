@@ -48,7 +48,7 @@ interface IGroupedResults {
     data: IGrouped[];
 }
 
-interface IScannerResults {
+export interface IScannerResults {
     symbol: string;
     exchange: string;
     timeframe: number;

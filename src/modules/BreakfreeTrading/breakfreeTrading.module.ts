@@ -38,6 +38,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DailyMissionsComponent } from './components/missions/daily-missions/daily-missions.component';
 import { MissionRowComponent } from './components/missions/mission-row/mission-row.component';
 import { WeeklyMissionsComponent } from './components/missions/weekly-missions/weekly-missions.component';
+import { ScannerCardComponent } from './components/breakfreeTradingScanner/scanner-card/scanner-card.component';
 
 @NgModule({
     // components here
@@ -52,7 +53,8 @@ import { WeeklyMissionsComponent } from './components/missions/weekly-missions/w
         MissionsComponent,
         DailyMissionsComponent,
         WeeklyMissionsComponent,
-        MissionRowComponent
+        MissionRowComponent,
+        ScannerCardComponent
     ],
     imports: [
         CommonModule,

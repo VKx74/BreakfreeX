@@ -1,26 +1,15 @@
-<div class="watchlist-tile w-100 h-100 crypto-text"
-     [class.selected]="isSelected"
-     [class.up]="watchlistInstrumentVM.trendDirection === TrendDirection.Up"
-     [class.down]="watchlistInstrumentVM.trendDirection === TrendDirection.Down">
+<div class="watchlist-tile w-100 h-100 crypto-text" [class.selected]="isSelected"
+    [class.up]="watchlistInstrumentVM.trendDirection === TrendDirection.Up"
+    [class.down]="watchlistInstrumentVM.trendDirection === TrendDirection.Down">
     <div class="tile-header">
-
- 
-            <div class="name-symbol">
-                {{watchlistInstrumentVM.instrument.symbol}}
-            </div>
-          
-       
-
-
-
-       
-
-     
+        <div class="name-symbol">
+            {{watchlistInstrumentVM.instrument.symbol}}
+        </div>
     </div>
-    
+
     <div class="tile-footer">
-        <watchlist-chart [chartHistory]="chartHistory"
-                         [trendDirection]="watchlistInstrumentVM.trendDirection"></watchlist-chart>
+        <watchlist-chart [chartHistory]="chartHistory" [trendDirection]="watchlistInstrumentVM.trendDirection">
+        </watchlist-chart>
     </div>
 
     <div class="price-value">

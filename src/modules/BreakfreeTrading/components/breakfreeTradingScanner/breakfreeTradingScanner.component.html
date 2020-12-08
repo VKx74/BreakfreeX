@@ -29,49 +29,14 @@
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
                      <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container">
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
-                        <ng-container *ngFor="let group of groupedResult.data; trackBy: trackByMarketType">
-                           <div *ngIf="group.data.length > 0" class="markettype-container">
-                              <div class="markettype-name">{{group.marketType}}</div>
-                              <ng-container *ngFor="let result of group.data; trackBy: trackByResult">
-                                 <div class="scanner-result-row" (click)="handleScannerResultsClick(result)">
-                                    <color-selector [activeColor]="getFeaturedDetails(result)"
-                                       class="featured-selector result-data"
-                                       (activeColorChange)='handleColorSelected($event, result)' (click)="click($event)"
-                                       [path]="'flag'">
-                                    </color-selector>
-                                    <div class="symbol-column result-data">
-                                       {{result.symbol}}
-                                    </div>
-                                    <div class="result-data">
-                                       {{result.trend == trends.Up ? "Long" : "Short"}}
-                                    </div>
-                                    <div class="type result-data">
-                                       <ng-container [ngSwitch]="result.origType">
-                                          <ng-container *ngSwitchCase="origType.EXT">
-                                             <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
-                                             <span>EXT</span>
-                                          </ng-container>
-                                          <ng-container *ngSwitchCase="origType.BRC">
-                                             <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
-                                             <span>BRC</span>
-                                          </ng-container>
-                                          <ng-container *ngSwitchCase="origType.SwingExt">
-                                             <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
-                                             <span>SWING</span>
-                                          </ng-container>
-                                          <ng-container *ngSwitchCase="origType.SwingN">
-                                             <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
-                                             <span>SWING</span>
-                                          </ng-container>
-                                       </ng-container>
-                                    </div>
-                                    <div class="result-data" [ngClass]="{'high':result.volatility == 'High', 'medium':result.volatility == 'Mid', 'low':result.volatility == 'Low'}">
-                                       {{result.tp}} vol
-                                    </div>
-                                 </div>
-                              </ng-container>
-                           </div>
-                        </ng-container>
+                        <div class="timeframe-wrapper tiles-wrapper w-100">
+                           <ng-container *ngFor="let group of groupedResult.data; trackBy: trackByMarketType">
+                              <div class="sonar-tile-wrapper"
+                                 *ngFor="let result of group.data; trackBy: trackByResult">
+                                 <scanner-card [result]="result"></scanner-card>
+                              </div>
+                           </ng-container>
+                        </div>
                      </div>
                   </ng-container>
 

@@ -3,17 +3,34 @@
 @import "global-styles/variables";
 
 :host {
+  // tiles
+  .tiles-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-auto-rows: auto;
+    padding: 2px;
+
+    .sonar-tile-wrapper {
+      border-radius: 5px;
+      position: relative;
+      cursor: pointer;
+      margin: 2px;
+      border: solid 1px transparent;
+      &:hover {
+        border-color: black;
+      }
+    }
+  }
+
   /deep/ {
     mat-form-field {
       max-width: 110px !important;
     }
     .mat-tab-body-wrapper { 
       height: 100% !important;
-    } 
-    // mat-table {
-    //   min-width: 250px;
-    // }
+    }
   }
+
   .content {
     min-width: 250px; 
     height: 100%;
@@ -61,11 +78,13 @@
     height: 100%;
     overflow: auto;
   }
+
   .output {
     position: relative;
     text-align: center;
     top: 40px;
   }
+
   .scanning-time {
     font-size: 11px;
     text-align: right;
@@ -110,21 +129,19 @@
       background-color: transparent;
       border: none;
     }
-  }
 
-  .high {
-    color: $lightGreenColor;
-  }
+    .high {
+      color: $lightGreenColor;
+    }
 
-  .medium {
-    color: $lightBlueColor;
-  }
+    .medium {
+      color: $lightBlueColor;
+    }
 
-  .low {
-    color: $lightRedColor;
-  }
+    .low {
+      color: $lightRedColor;
+    }
 
-  /deep/ {
     .svgfiller { 
       max-height: 8px;
       height:8px;
@@ -138,43 +155,20 @@
     }
   }
 
+  .timeframe-container {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid;
+    border-radius: 5px;
+  }
+
+  .timeframe-wrapper {
+    border-radius: 5px;
+  }
+
   .timeframe-name {
     font-size: 11px;
     font-weight: 700;
-    border-bottom: 1px solid;
-  }
-  
-  .markettype-name {
-    font-size: 11px;
-    font-weight: 700;
-    margin: 5px 0px 5px 10px;
-  }
-
-  .timeframe-container {
-    padding: 5px;
-  }
-
-  .scanner-result-row {
-    height: 28px;
-    line-height: 28px;
-    margin: 3px 0px;
-    border-radius: 5px;
-    font-size: 10px;
-    font-weight: 700;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    cursor: pointer;
-
-    .featured-selector {
-      max-width: 32px !important;
-      padding-top: 8px;
-    }
-    
-    .result-data {
-      width: 100%;
-      max-width: 150px;
-    }
   }
 }
 
@@ -206,12 +200,16 @@
       background-color: themed('activeBackgroundColor');
     }
   }
-  
-  .timeframe-name {
-    border-bottom-color: themed('tableBorders') !important;
-  }
 
   .markettype-name {
     color: themed('titleTextColor') !important;
+  }
+
+  .timeframe-container {
+    border-color: themed('tableBorders') !important;
+  }
+
+  .timeframe-name { 
+    color: themed('valueTextColor') !important;
   }
 }

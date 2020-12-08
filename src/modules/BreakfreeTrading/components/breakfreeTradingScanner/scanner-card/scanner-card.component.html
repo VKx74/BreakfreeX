@@ -1,0 +1,40 @@
+<div class="sonar-tile w-100 h-100 crypto-text">
+    <div class="symbol">
+        {{result?.symbol}}
+    </div>
+
+    <div class="type">
+        {{result.marketType}}
+    </div>
+
+    <div class="body">
+        <div class="side">
+            {{result.trend == trends.Up ? "Long" : "Short"}}
+        </div> 
+        <div class="result-data" [ngClass]="{'high':result.volatility == 'High', 'medium':result.volatility == 'Mid', 'low':result.volatility == 'Low'}">
+            {{result.tp}} vol
+        </div>
+    </div>
+
+    <div class="setup">
+        <ng-container [ngSwitch]="result.origType">
+            <ng-container *ngSwitchCase="origType.EXT">
+                <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
+                <span>EXT</span>
+            </ng-container>
+            <ng-container *ngSwitchCase="origType.BRC">
+                <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
+                <span>BRC</span>
+            </ng-container>
+            <ng-container *ngSwitchCase="origType.SwingExt">
+                <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
+                <span>SWING</span>
+            </ng-container>
+            <ng-container *ngSwitchCase="origType.SwingN">
+                <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
+                <span>SWING</span>
+            </ng-container>
+            </ng-container>
+    </div>
+
+</div>
