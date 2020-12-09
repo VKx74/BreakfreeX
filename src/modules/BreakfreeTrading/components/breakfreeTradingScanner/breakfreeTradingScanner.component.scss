@@ -22,6 +22,11 @@
     }
   }
 
+  .featured-settings {
+    position: absolute;
+    top: 7px;
+  }
+
   /deep/ {
     mat-form-field {
       max-width: 110px !important;

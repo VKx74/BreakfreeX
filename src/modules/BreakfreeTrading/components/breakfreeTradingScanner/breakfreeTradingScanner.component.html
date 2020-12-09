@@ -31,9 +31,15 @@
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
                         <div class="timeframe-wrapper tiles-wrapper w-100">
                            <ng-container *ngFor="let group of groupedResult.data; trackBy: trackByMarketType">
-                              <div class="sonar-tile-wrapper"
-                                 *ngFor="let result of group.data; trackBy: trackByResult">
-                                 <scanner-card [result]="result"></scanner-card>
+                              <div class="sonar-tile-wrapper" *ngFor="let result of group.data; trackBy: trackByResult">
+                                 <scanner-card [result]="result" (click)="handleScannerResultsClick(result)"></scanner-card>
+                                 <div class="featured-settings">
+                                    <color-selector [activeColor]="getFeaturedDetails(result)"
+                                       class="featured-selector result-data"
+                                       (activeColorChange)='handleColorSelected($event, result)' (click)="click($event)"
+                                       [path]="'flag'">
+                                    </color-selector>
+                                 </div>
                               </div>
                            </ng-container>
                         </div>
