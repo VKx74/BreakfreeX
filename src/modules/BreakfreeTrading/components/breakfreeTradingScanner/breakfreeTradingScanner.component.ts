@@ -23,6 +23,7 @@ import { IdentityService } from '@app/services/auth/identity.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
+import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -93,13 +94,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _timer: any;
     private _featuredGroupName: string = "Featured";
     private _otherGroupName: string = "Other";
-    private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
+    private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
     public timeframes: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
-    public types: string[] = [this._featuredGroupName, MajorForexWatchlist.name, MinorForexWatchlist.name, ExoticsForexWatchlist.name, IndicesWatchlist.name, CommoditiesWatchlist.name, MetalsWatchlist.name, BondsWatchlist.name, EquitiesWatchlist.name, this._otherGroupName];
+    public types: string[] = [this._featuredGroupName, MajorForexWatchlist.name, MinorForexWatchlist.name, ExoticsForexWatchlist.name, IndicesWatchlist.name, CommoditiesWatchlist.name, MetalsWatchlist.name, BondsWatchlist.name, EquitiesWatchlist.name, CryptoWatchlist.name, this._otherGroupName];
     public groupingField: string = "marketType";
     public groups: string[] = [];
     public scanningTime: string;
