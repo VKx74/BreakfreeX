@@ -2,6 +2,10 @@
 @import "global-styles/mixins/themify";
 @import "global-styles/variables";
 
+/deep/.mat-pseudo-checkbox {
+  border-radius: 50% !important;
+}
+
 :host {
   // tiles
   .tiles-wrapper {
@@ -31,6 +35,7 @@
     mat-form-field {
       max-width: 110px !important;
     }
+    
     .mat-tab-body-wrapper { 
       height: 100% !important;
     }
@@ -44,6 +49,10 @@
   }
 
   .tf-select {
+    // margin-left: 10px;
+  }
+
+  .type-select {
     margin-left: 10px;
   }
 

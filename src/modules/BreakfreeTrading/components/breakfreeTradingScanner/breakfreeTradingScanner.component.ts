@@ -67,14 +67,12 @@ interface IScannerHistoryResults extends IScannerResults {
 }
 
 enum TimeFrames {
-    All = "All",
     Min15 = "15 Min",
     Hour1 = "1 Hour",
     Hour4 = "4 Hours",
     Day = "Daily",
 }
 enum TradeTypes {
-    All = "All",
     Ext = "Extensions",
     BRC = "Break retest continuation", 
     Swing = "Swing"
@@ -99,13 +97,15 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
 
     public SWING = 'SWING';
-    public segments: TradeTypes[] = [TradeTypes.All, TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
-    public timeframes: TimeFrames[] = [TimeFrames.All, TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
+    public timeframes: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public types: string[] = [this._featuredGroupName, MajorForexWatchlist.name, MinorForexWatchlist.name, ExoticsForexWatchlist.name, IndicesWatchlist.name, CommoditiesWatchlist.name, MetalsWatchlist.name, BondsWatchlist.name, EquitiesWatchlist.name, this._otherGroupName];
     public groupingField: string = "marketType";
     public groups: string[] = [];
     public scanningTime: string;
-    public activeSegment: TradeTypes = TradeTypes.All;
-    public activeTimeframe: TimeFrames = TimeFrames.All;
+    public activeSegments: TradeTypes[] = this.segments.slice();
+    public activeTimeframes: TimeFrames[] = this.timeframes.slice();
+    public activeTypes: string[] = this.types.slice();
     public scannerResults: IScannerResults[] = [];
     public scannerResultsFiltered: IScannerResults[] = [];
     public scannerHistoryResults: IScannerHistoryResults[] = [];
@@ -223,14 +223,20 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         return res;
     }
 
-    segmentSelected(item: TradeTypes) {
-        this.activeSegment = item;
+    segmentSelected(item: any) {
+        this.activeSegments = item;
         this._filterResults(false);
         this._filterResults(true);
     }
 
-    timeframeSelected(item: TimeFrames) {
-        this.activeTimeframe = item;
+    timeframeSelected(item: any) {
+        this.activeTimeframes = item;
+        this._filterResults(false);
+        this._filterResults(true);
+    }
+
+    typeSelected(item: any) {
+        this.activeTypes = item;
         this._filterResults(false);
         this._filterResults(true);
     }
@@ -463,34 +469,43 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._filterResults(false);
     }
 
+    private _isTypeSelected(type: string): boolean {
+        for (const activeType of this.activeTypes) {
+            if (activeType.toLowerCase() === type.toLowerCase()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private _isTimeframeSelected(timeframe: number): boolean {
+        for (const activeTimeframe of this.activeTimeframes) {
+            const tfValue = this._getTfValue(activeTimeframe);
+            if (timeframe === tfValue) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private _filterResults(isHistory: boolean) {
         const filteringData = isHistory ? this.scannerHistoryResults : this.scannerResults;
         const filteredBySegments = [];
         for (const i of filteringData) {
-            if (this.activeSegment === TradeTypes.All) {
-                filteredBySegments.push(i);
-            } else if (this.activeSegment === TradeTypes.Ext && i.origType === IBFTATradeType.EXT) {
-                filteredBySegments.push(i);
-            } else if (this.activeSegment === TradeTypes.BRC && i.origType === IBFTATradeType.BRC) {
-                filteredBySegments.push(i);
-            } else if (this.activeSegment === TradeTypes.Swing && (i.origType === IBFTATradeType.SwingExt || i.origType === IBFTATradeType.SwingN)) {
+            if (this._isTypeSelected(i.marketType)) {
                 filteredBySegments.push(i);
             }
         }
+
         const filteredByTimeframes = [];
         for (const i of filteredBySegments) {
             if (!this._isTFAllowed(i.timeframe)) {
                 continue;
             }
-
-            if (this.activeTimeframe === TimeFrames.All) {
+            if (this._isTimeframeSelected(i.timeframe)) {
                 filteredByTimeframes.push(i);
-            } else {
-                const tfValue = this._getTfValue();
-
-                if (tfValue === i.timeframe) {
-                    filteredByTimeframes.push(i);
-                }
             }
         }
 
@@ -503,9 +518,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this._refresh();
     }
 
-    private _getTfValue(): number {
+    private _getTfValue(activeTimeframe: string): number {
         const min = 60;
-        switch (this.activeTimeframe) {
+        switch (activeTimeframe) {
             case TimeFrames.Min15: return min * 15;
             case TimeFrames.Hour1: return min * 60;
             case TimeFrames.Hour4: return min * 60 * 4;
