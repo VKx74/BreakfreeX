@@ -14,8 +14,10 @@
 .avatar {
   max-width: 50px;
   max-height: 50px;
-  margin-left: 15px;
+  margin-left: auto;
+  margin-right: auto;
   vertical-align: middle;
+  margin-bottom:15px;
 
   /deep/.rounded {
     border-radius: 50% !important;
@@ -99,13 +101,15 @@
     font-size: 12px;
     text-transform: capitalize;
     word-wrap: break-word;
+    font-weight:700;
     vertical-align: middle;
     height: fit-content;
-    border-bottom: 1px solid;
+   //  border-bottom: 1px solid;
+    text-align:center;
     padding-bottom: 5px;
-    @include themify($themes, true) {
-      border-bottom-color: themed('accentLightColor');
-    }
+   // @include themify($themes, true) {
+   //    border-bottom-color: themed('accentLightColor');
+   //   }
   
   }
 }
