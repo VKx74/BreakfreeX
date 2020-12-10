@@ -17,28 +17,28 @@
             <ng-container *ngSwitchCase="origType.EXT">
                 <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
                 <span>
-                    <i class="fa" [ngClass]="{'fa-angle-double-up': (result.trend == trends.Up), 'fa-angle-double-down': (result.trend == trends.Down)}"></i> 
+                    <i class="fa" [ngClass]="{'fas fa-arrow-up': (result.trend == trends.Up), 'fas fa-arrow-down': (result.trend == trends.Down)}"></i> 
                     {{result.trend == trends.Up ? "Long" : "Short"}} EXT
                 </span>
             </ng-container>
             <ng-container *ngSwitchCase="origType.BRC">
                 <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
                 <span>
-                    <i class="fa" [ngClass]="{'fa-angle-double-up': (result.trend == trends.Up), 'fa-angle-double-down': (result.trend == trends.Down)}"></i> 
+                    <i class="fa" [ngClass]="{'fas fa-arrow-up': (result.trend == trends.Up), 'fas fa-arrow-down': (result.trend == trends.Down)}"></i> 
                     {{result.trend == trends.Up ? "Long" : "Short"}} BRC
                 </span>
             </ng-container>
             <ng-container *ngSwitchCase="origType.SwingExt">
                 <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
                 <span>
-                    <i class="fa" [ngClass]="{'fa-angle-double-up': (result.trend == trends.Up), 'fa-angle-double-down': (result.trend == trends.Down)}"></i> 
+                    <i class="fa" [ngClass]="{'fas fa-arrow-up': (result.trend == trends.Up), 'fas fa-arrow-down': (result.trend == trends.Down)}"></i> 
                     {{result.trend == trends.Up ? "Long" : "Short"}} SWING 
                 </span>
             </ng-container>
             <ng-container *ngSwitchCase="origType.SwingN">
                 <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
                 <span>
-                    <i class="fa" [ngClass]="{'fa-angle-double-up': (result.trend == trends.Up), 'fa-angle-double-down': (result.trend == trends.Down)}"></i> 
+                    <i class="fa" [ngClass]="{'fas fa-arrow-up': (result.trend == trends.Up), 'fas fa-arrow-down': (result.trend == trends.Down)}"></i> 
                     {{result.trend == trends.Up ? "Long" : "Short"}} SWING
                 </span>
             </ng-container>
