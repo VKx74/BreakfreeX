@@ -10,8 +10,6 @@ import {debounceTime, takeUntil} from "rxjs/operators";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
-import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 
 @Component({
     selector: 'base-nav',
@@ -33,23 +31,6 @@ export class BaseNavComponent implements OnInit {
     role = this._identityService.role;
     email = this._identityService.email;
     opened: Subject<void> = new Subject<void>();
-    
-    
-    public get score(): number {
-        return this._tradingProfileService.score;
-    }
-
-    public get isLoaded(): boolean {
-        return !!this._tradingProfileService.missions;
-    }
-
-    public get scoreForLevel(): number {
-        return this._tradingProfileService.scoreForLevel;
-    }
-
-    public get level(): number {
-        return this._tradingProfileService.level;
-    }
 
     get currentUserFullName() {
         return this._identityService.fullName;
@@ -57,13 +38,11 @@ export class BaseNavComponent implements OnInit {
 
     constructor(private _identityService: IdentityService,
                 private _systemNotificationsService: SystemNotificationsService,
-                private _tradingProfileService: TradingProfileService,
                 private _usersProfileService: UsersProfileService,
                 private _cdRef: ChangeDetectorRef,
                 private _dialog: MatDialog,
                 private _sidebarService: SidebarService,
                 private _route: ActivatedRoute) {
-        this._tradingProfileService.updateMissions();
     }
 
     toggleSidebar() {
@@ -97,10 +76,6 @@ export class BaseNavComponent implements OnInit {
                 console.log(e);
             });
     }
-
-    openMissionDialog() {
-        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background' });
-    } 
     
     onMenuOpen() {
         this.opened.next();

@@ -9,11 +9,56 @@
   /deep/ name-avatar {
     cursor: default !important;
   }
+  .user-info-menu {
+    width: 280px;
+  }
+  .progress-bar-area {
+    width: 100%;
+  }
+  .user-level-slider-line {
+    flex-direction: column;
+    font-size: 11px;
+  }
+  .progress-bar-text {
+    margin-top: 5px;
+  }
+
+  .user-rank-line {
+    margin-bottom: 20px;
+    font-size: 12px;
+  }
+
+  .level-container {
+    font-size: 16px;
+    font-weight: 700;
+    padding: 10px;
+    border-radius: 5px;
+    min-width: 42px;
+    text-align: center;
+  }
+
+  .experiance-container {
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .avatar-line {
+    margin-top: -20px;
+  }
+
+  /deep/ {
+    .mat-progress-bar {
+      height: 10px;
+    }
+    .mat-progress-bar-fill::after {
+      background-color: #c43939;
+    }
+  }
 }
 
 .avatar {
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 70px;
+  max-height: 70px;
   margin-left: auto;
   margin-right: auto;
   vertical-align: middle;
@@ -67,130 +112,53 @@
   }
 
   .user-settings, .log-out, .reset-layout {
-    @include themify($themes, true) {
-      color: themed('titleTextColor');
-    }
     ::before {
       font-size: 16px;
       margin-right: 5px;
     }
     font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 5px;
     cursor: pointer;
   }
 
   .functiona-menu {
       justify-content: space-between;
       margin-top: 15px;
-      padding-top: 10px;
-      border-top: 1px solid;
       line-height: 20px;
-      @include themify($themes, true) {
-        border-top-color: themed('accentLightColor');
-      }
   }
 
   .info {
     padding: 0px 15px;
     min-width: 120px;
-    @include themify($themes, true) {
-      color: themed('titleTextColor');
-    }
   }
 
   .user-name {
-    font-size: 12px;
+    font-size: 14px;
     text-transform: capitalize;
     word-wrap: break-word;
     font-weight:700;
     vertical-align: middle;
     height: fit-content;
-   //  border-bottom: 1px solid;
     text-align:center;
     padding-bottom: 5px;
-   // @include themify($themes, true) {
-   //    border-bottom-color: themed('accentLightColor');
-   //   }
-  
   }
 }
 
-.menu-bottom {
-  .item {
-    @include themify($themes, true) {
-      color: themed('titleTextColor');
-    }
-    margin-bottom: 10px;
-
-    .item-name {
-      font-size: 12px;
-      line-height: 1.17;
-    }
-
-    .item-value {
-      font-size: 13px;
-      line-height: 1.15;
-    }
-  }
-} 
-
-
-.topnewmenu {
-  overflow: hidden;
-  width: 200px;
-  height: 25px;
-  font-size:12px;
-  font-weight:600;
-  transition-duration: 0.22s;
-  cursor: pointer;
-  margin-bottom: 2px;
-  transition-duration: 0.22s;
-  vertical-align: middle;
-  @include themify($themes, true) {
+@include themify($themes, true) {
+  .level-container, .experiance-container, .functiona-menu {
     color: themed('titleTextColor');
-    
-  }
-}
-
-
-.topnewmenu.onx:hover .innertext{
-  transition-duration: 0.22s;
-  font-size:13px;
-  @include themify($themes, true) {
-    color: themed('accentColor');
-    
-  }
-
-
+  } 
   
-}
+  .user-info-menu {
+    color: themed('valueTextColor');
+  } 
 
-.topnewmenu.onx:hover .innericon .fa{
-  transition-duration: 0.22s;
-  font-size:17px;
-  @include themify($themes, true) {
-    color: themed('accentColor');
-    
+  .level-container {
+    background-color: themed('tableBorders');
   }
 
-
+  .user-settings, .log-out, .reset-layout {
+    background-color: themed('tableBorders');
+  }
 }
-
-.topnewmenu .username .innertext{
-text-transform: capitalize;
-
-}
-.topnewmenu .innericon .fa {
-  font-size: 16px;
-  align-content: normal;
-      vertical-align: top;
-}
-
-.topnewmenu span.innericon {
-  padding-right: 5px;
-  vertical-align: middle;
-}
-
-.fa {
-transition-duration: 0.22s;
-}
-
