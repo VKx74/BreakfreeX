@@ -17,13 +17,9 @@
     font-size: 10px;
     text-align: left;
     margin-bottom: 20px;
-    // background: #37333a80;
     border-radius: 3px;
-    // margin-left: 5px;
-   //  margin-right: 5px;
     overflow: hidden;
     padding: 5px;
-    display: inline-block;
     font-weight: 700;
   }
 
@@ -38,7 +34,6 @@
     padding: 3px;
     display: inline-block;
     font-weight: 700;
-    color: #DDAF0B;
   }
 
   .setup {
@@ -50,16 +45,6 @@
     font-size: 10px;
     margin-left: 5px;
     margin-bottom: 5px;
-  }
-
-  .setup-long {
-    background: #94fac726;
-    color: #94fabeb3;
-  }
-
-  .setup-short {
-    background: #fa949426;
-    color: #fa9494b3;
   }
 
   .symbol {
@@ -74,7 +59,6 @@
     border-radius: 5px;
     padding:5px;
     overflow:hidden;
-    background-color: #191919;
   }
 }
 
@@ -84,12 +68,19 @@
     color: themed('valueTextColor');
   }
 
-  .symbol {
-   // border-bottom: 1px solid themed('appPanelColor');
+  .setup-short {
+    background-color: themed('scanner-card-setup-short-background');
+    color: themed('scanner-card-setup-short-color');
   }
 
-  .setup {
-   // border-top: 1px solid themed('appPanelColor');
+  .setup-long {
+    background-color: themed('scanner-card-setup-long-background');
+    color: themed('scanner-card-setup-long-color');
+  }
+
+  .tradetf {
+    border-color: themed('scanner-card-tf-border');
+    color: themed('scanner-card-tf-color');
   }
 }
 
