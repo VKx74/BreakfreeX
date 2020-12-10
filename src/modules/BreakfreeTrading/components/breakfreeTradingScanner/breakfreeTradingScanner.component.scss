@@ -10,7 +10,7 @@
   // tiles
   .tiles-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     grid-auto-rows: auto;
     padding: 2px;
 
@@ -28,7 +28,7 @@
 
   .featured-settings {
     position: absolute;
-    top: 7px;
+    top: 12px;
   }
 
   /deep/ {
@@ -183,6 +183,12 @@
   .timeframe-name {
     font-size: 11px;
     font-weight: 700;
+    padding-left: 5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    border-bottom: 1px solid #191919;
+    padding-bottom: 10px;
   }
 }
 
@@ -195,6 +201,7 @@
   .output, .scanning-time {
     color: themed('titleTextColor');
   }
+  
 
   .text {
     color: themed('valueTextColor');
