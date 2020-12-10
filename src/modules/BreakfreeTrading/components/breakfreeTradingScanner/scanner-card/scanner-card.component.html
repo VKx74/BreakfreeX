@@ -3,9 +3,15 @@
         {{result?.symbol.toUpperCase()}}
     </div>
 
+  
+
     <div class="type">
         {{result.marketType}}
     </div>
+
+    <div class="tradetf">15m Setup
+    </div>
+   
 
     <div class="body">
         <div class="side">
@@ -20,19 +26,19 @@
         <ng-container [ngSwitch]="result.origType">
             <ng-container *ngSwitchCase="origType.EXT">
                 <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
-                <span>EXT</span>
+                <span><i class="fas fa-angle-double-up"></i> {{result.trend == trends.Up ? "Long" : "Short"}} EXT</span>
             </ng-container>
             <ng-container *ngSwitchCase="origType.BRC">
                 <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
-                <span>BRC</span>
+                <span><i class="fas fa-angle-double-up"></i> {{result.trend == trends.Up ? "Long" : "Short"}} BRC</span>
             </ng-container>
             <ng-container *ngSwitchCase="origType.SwingExt">
                 <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
-                <span>SWING</span>
+                <span><i class="fas fa-angle-double-up"></i> {{result.trend == trends.Up ? "Long" : "Short"}} SWING </span>
             </ng-container>
             <ng-container *ngSwitchCase="origType.SwingN">
                 <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
-                <span>SWING</span>
+                <span><i class="fas fa-angle-double-up"></i> {{result.trend == trends.Up ? "Long" : "Short"}} SWING</span>
             </ng-container>
             </ng-container>
     </div>

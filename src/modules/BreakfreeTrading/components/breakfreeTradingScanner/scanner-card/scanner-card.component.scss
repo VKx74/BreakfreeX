@@ -8,34 +8,80 @@
     justify-content: space-between;
     font-size: 11px;
     font-weight: 700;
-    padding: 0px 5px 5px 5px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-right: 10px;
   }
 
   .type {
-    font-size: 11px;
-    text-align: center;
+    font-size: 10px;
+    text-align: left;
+    margin-bottom: 25px;
+    // background: #37333a80;
+    border-radius: 3px;
+    // margin-left: 5px;
+   //  margin-right: 5px;
+    overflow: hidden;
     padding: 5px;
+    display: inline-block;
+    font-weight: 700;
   }
 
-  .setup {
-    color: #8798ad;
-    font-size: 11px;
+  .tradetf {
+    font-size: 10px;
+    text-align: left;
+    border: 1px solid #ddaf0bad;
+    border-radius: 3px;
+    margin-left: 5px;
+    margin-right: 5px;
+    overflow: hidden;
+    padding: 3px;
+    display: inline-block;
     font-weight: 700;
-    text-align: center;
+    color: #DDAF0B;
+  }
+
+  .result-data {
+    display: none; 
+  }
+  .side {
+    display: none; 
+  }
+
+  .body {
+    display: none; 
+  }
+  
+  
+
+
+  .setup {
+
+    font-weight: 700;
+    text-align: left;
     padding: 5px;
+    border-radius: 3px;
+    background: #fa949426;
+    display: inline-block;
+    font-size: 10px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    color: #fa9494b3;
   }
 
   .symbol {
-    color: #8798ad;
     font-size: 11px;
     font-weight: 700;
-    text-align: center;
-    padding: 5px;
+    text-align: left;
+    padding: 5px 10px 0px 5px;
+
   }
 
   .sonar-tile {
     border-radius: 5px;
+    padding:5px;
     overflow:hidden;
+    background-color: #191919;
   }
 }
 
@@ -46,10 +92,11 @@
   }
 
   .symbol {
-    border-bottom: 1px solid themed('appPanelColor');
+   // border-bottom: 1px solid themed('appPanelColor');
   }
 
   .setup {
-    border-top: 1px solid themed('appPanelColor');
+   // border-top: 1px solid themed('appPanelColor');
   }
 }
+

@@ -183,6 +183,12 @@
   .timeframe-name {
     font-size: 11px;
     font-weight: 700;
+    padding-left: 5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    border-bottom: 1px solid #191919;
+    padding-bottom: 10px;
   }
 }
 
@@ -195,6 +201,7 @@
   .output, .scanning-time {
     color: themed('titleTextColor');
   }
+  
 
   .text {
     color: themed('valueTextColor');
