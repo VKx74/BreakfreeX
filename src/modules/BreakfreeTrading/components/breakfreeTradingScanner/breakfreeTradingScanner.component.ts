@@ -27,6 +27,8 @@ import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 
 interface IScannerState {
     featured: IFeaturedResult[];
+    timeframes: TimeFrames[];
+    types: string[];
 }
 
 interface IFeaturedResult {
@@ -340,13 +342,23 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     protected getComponentState(): IScannerState {
         return {
-            featured: this._featured.slice()
+            featured: this._featured.slice(),
+            timeframes: this.activeTimeframes.slice(),
+            types: this.activeTypes.slice()
         };
     }
 
     private _loadState(_state: IScannerState) {
         if (_state && _state.featured && _state.featured.length) {
             this._featured = _state.featured.slice();
+        }  
+        
+        if (_state && _state.timeframes && _state.timeframes.length) {
+            this.activeTimeframes = _state.timeframes.slice();
+        }  
+        
+        if (_state && _state.types && _state.types.length) {
+            this.activeTypes = _state.types.slice();
         }
     }
 
