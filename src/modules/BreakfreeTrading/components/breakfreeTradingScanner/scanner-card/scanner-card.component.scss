@@ -42,16 +42,23 @@
   }
 
   .setup {
-
     font-weight: 700;
     text-align: left;
     padding: 5px;
     border-radius: 3px;
-    background: #fa949426;
     display: inline-block;
     font-size: 10px;
     margin-left: 5px;
     margin-bottom: 5px;
+  }
+
+  .setup-long {
+    background: #94fac726;
+    color: #94fabeb3;
+  }
+
+  .setup-short {
+    background: #fa949426;
     color: #fa9494b3;
   }
 

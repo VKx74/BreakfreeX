@@ -12,7 +12,7 @@
         {{toTimeframe(result.timeframe)}} Setup
     </div>
 
-    <div class="setup">
+    <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}">
         <ng-container [ngSwitch]="result.origType">
             <ng-container *ngSwitchCase="origType.EXT">
                 <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
