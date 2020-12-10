@@ -16,26 +16,6 @@
 
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
             <ng-content></ng-content>
-            <div class="mission-toolbar" (click)="openMissionDialog()">
-                <div class="xp-toolbar">
-                    <div class="experiance-points">
-                        <span class="ico">XP</span>
-                        <span class="ico-text" *ngIf="isLoaded; else loading1">{{score}}/{{scoreForLevel}}</span>
-                        <ng-template #loading1>
-                            <span class="ico-text">Calculating...</span>
-                        </ng-template>
-                    </div>  
-                </div>
-                <div class="lv-toolbar">
-                    <div class="experiance-level">
-                        <span class="ico">LV</span>
-                        <span *ngIf="isLoaded; else loading2" class="ico-text">{{level}}</span>
-                        <ng-template #loading2>
-                            <span class="ico-text">...</span>
-                        </ng-template>
-                    </div>
-                </div>
-            </div>
             <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="true">
                 <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()">
                     <ng-container *ngTemplateOutlet="avatar"></ng-container>
