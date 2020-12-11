@@ -19,6 +19,8 @@
       position: relative;
       cursor: pointer;
       margin: 3px;
+      -webkit-animation: slidein-bft 0.2s cubic-bezier(.17,.67,.83,.67);
+      animation: slidein-bft 0.2s cubic-bezier(.17,.67,.83,.67);
      // border: solid 1px transparent;
       &:hover {
        // border-color: black;
@@ -243,4 +245,28 @@
     color: themed('valueTextColor') !important;
     background-color:themed('tableBorders') !important;
   }
+}
+
+
+
+@-webkit-keyframes slidein-bft {
+	0% {
+		height: 0;
+		opacity: 0
+	}
+	to {
+		height: 110px;
+		opacity: 1
+	}
+}
+
+@keyframes slidein-bft {
+	0% {
+		height: 0;
+		opacity: 0
+	}
+	to {
+		height: 100%;
+		opacity: 1
+	}
 }
