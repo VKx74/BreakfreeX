@@ -105,7 +105,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public types: string[] = [this._featuredGroupName, MajorForexWatchlist.name, MinorForexWatchlist.name, ExoticsForexWatchlist.name, IndicesWatchlist.name, CommoditiesWatchlist.name, MetalsWatchlist.name, BondsWatchlist.name, EquitiesWatchlist.name, CryptoWatchlist.name, this._otherGroupName];
     public groupingField: string = "marketType";
     public groups: string[] = [];
-    public scanningTime: string;
     public activeSegments: TradeTypes[] = this.segments.slice();
     public activeTimeframes: TimeFrames[] = this.timeframes.slice();
     public activeTypes: string[] = this.types.slice();
@@ -249,7 +248,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this.scannerResults = [];
 
         this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
-            this.scanningTime = new Date(data.scanning_time * 1000).toLocaleTimeString();
             this.loading = false;
             this._processData(data.items);
             if (!this.scannerResults.length) {
