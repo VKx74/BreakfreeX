@@ -2,13 +2,13 @@
   "marketViewComponentComponentName": "Market View",
   "column": {
     "pair": "Pair",
-    "oneWeek": "1wk",
-    "oneDay": "1day",
-    "fourHours": "4hrs",
-    "oneHour": "1hr",
-    "fifteenMins": "15min",
-    "fiveMins": "5min",
-    "oneMinute": "1min",
+    "oneWeek": "1W",
+    "oneDay": "1D",
+    "fourHours": "4H",
+    "oneHour": "1H",
+    "fifteenMins": "15M",
+    "fiveMins": "5M",
+    "oneMinute": "1M",
     "numberOfTrades": "No.Trades"
   },
   "settings": {
@@ -20,11 +20,11 @@
     "column": {
       "oneWeek": "1 Week",
       "oneDay": "1 Day",
-      "fourHours": "4 Hours",
+      "fourHours": "4 Hour",
       "oneHour": "1 Hour",
-      "fifteenMins": "15 Minutes",
-      "fiveMins": "5 Minute",
-      "oneMinute": "1 Minute",
+      "fifteenMins": "15 Min",
+      "fiveMins": "5 Min",
+      "oneMinute": "1 Min",
       "numberOfTrades": "No.Trades"
     }
   },

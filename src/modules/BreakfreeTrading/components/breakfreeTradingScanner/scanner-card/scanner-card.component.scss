@@ -59,6 +59,8 @@
     border-radius: 5px;
     padding:5px;
     overflow:hidden;
+
+    
   }
 }
 
@@ -66,6 +68,17 @@
   .sonar-tile {
     background-color: themed('tableBorders');
     color: themed('valueTextColor');
+  }
+
+  .sonar-tile:hover {
+    border: 1px solid themed('valueTextColor');
+     transition-duration: 0.22s;
+  }
+
+  .sonar-tile {
+    border: 1px solid transparent;
+  
+     transition-duration: 0.22s;
   }
 
   .setup-short {
