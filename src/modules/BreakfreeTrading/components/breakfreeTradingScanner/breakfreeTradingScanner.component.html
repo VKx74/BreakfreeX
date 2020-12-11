@@ -79,19 +79,19 @@
                      [expandOnClick]="false" [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
                      (onRowSelect)="handleScannerResultsClick($event, true)">
 
-                     <data-table-header-cell columnName="symbol" [sortable]="true">
+                     <data-table-header-cell columnName="symbol" [columnMinWidth]="40" [sortable]="true">
                         {{'instrument' | translate}}
                      </data-table-header-cell>
-                     <data-table-header-cell columnName="timeframe" [sortable]="false">
+                     <data-table-header-cell columnName="timeframe" [columnMinWidth]="75" [sortable]="false">
                         {{'timeframe' | translate}}
                      </data-table-header-cell>
-                     <data-table-header-cell columnName="setup" [sortable]="false">
+                     <data-table-header-cell columnName="setup" [columnMinWidth]="40" [sortable]="false">
                         {{'setup' | translate}}
                      </data-table-header-cell>
-                     <data-table-header-cell columnName="volume" [sortable]="false">
+                     <data-table-header-cell columnName="volume" [columnMinWidth]="40" [sortable]="false">
                         {{'volume' | translate}}
                      </data-table-header-cell>
-                     <data-table-header-cell columnName="time" [sortable]="false">
+                     <data-table-header-cell columnName="time" [columnMinWidth]="120" [sortable]="false">
                         {{'time' | translate}}
                      </data-table-header-cell>
 
