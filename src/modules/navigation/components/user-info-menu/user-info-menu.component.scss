@@ -14,6 +14,8 @@
   }
   .progress-bar-area {
     width: 100%;
+    border-radius:3px;
+    overflow:hidden;
   }
   .user-level-slider-line {
     flex-direction: column;
@@ -21,6 +23,7 @@
   }
   .progress-bar-text {
     margin-top: 5px;
+    font-weight: 700;
   }
 
   .user-rank-line {
