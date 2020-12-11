@@ -68,6 +68,17 @@
     color: themed('valueTextColor');
   }
 
+  .sonar-tile:hover {
+    border: 1px solid themed('valueTextColor');
+     transition-duration: 0.22s;
+  }
+
+  .sonar-tile {
+    border: 1px solid transparent;
+  
+     transition-duration: 0.22s;
+  }
+
   .setup-short {
     background-color: themed('scanner-card-setup-short-background');
     color: themed('scanner-card-setup-short-color');

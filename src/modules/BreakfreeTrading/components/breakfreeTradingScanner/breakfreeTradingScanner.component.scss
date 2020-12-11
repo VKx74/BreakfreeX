@@ -18,10 +18,10 @@
       border-radius: 5px;
       position: relative;
       cursor: pointer;
-      margin: 2px;
-      border: solid 1px transparent;
+      margin: 3px;
+     // border: solid 1px transparent;
       &:hover {
-        border-color: black;
+       // border-color: black;
       }
     }
   }
@@ -35,6 +35,10 @@
     mat-form-field {
       max-width: 110px !important;
     }
+
+    .featured-selector .color-selector {
+      width: 25px;
+  }
     
     .mat-tab-body-wrapper { 
       height: 100% !important;
@@ -170,24 +174,30 @@
   }
 
   .timeframe-container {
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid;
-    border-radius: 5px;
+   // padding: 5px;
+   // margin: 5px;
+   // border: 1px solid;
+   // border-radius: 5px;
   }
 
   .timeframe-wrapper {
-    border-radius: 5px;
+   // border-radius: 5px;
   }
 
   .timeframe-name {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    padding-left: 5px;
     text-transform: uppercase;
-    margin-bottom: 5px;
-    margin-top: 5px;
-    padding-bottom: 10px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    padding-left: 10px;
+    text-align: left;
+    padding-right: 10px;
+    display: inline-block;
+    border-radius: 3px;
+    margin-left: 5px;
+    margin-bottom: 3px;
+   
   }
 }
 
@@ -231,5 +241,6 @@
 
   .timeframe-name { 
     color: themed('valueTextColor') !important;
+    background-color:themed('tableBorders') !important;
   }
 }
