@@ -72,12 +72,12 @@ interface IScannerHistoryResults extends IScannerResults {
 enum TimeFrames {
     Min15 = "15 Min",
     Hour1 = "1 Hour",
-    Hour4 = "4 Hours",
+    Hour4 = "4 Hour",
     Day = "Daily",
 }
 enum TradeTypes {
-    Ext = "Extensions",
-    BRC = "Break retest continuation", 
+    Ext = "Extension",
+    BRC = "Break Retest & Continuation", 
     Swing = "Swing"
 }
 
