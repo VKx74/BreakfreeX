@@ -64,7 +64,7 @@ export const ADMIN_ALLOWED_COMPONENTS: ComponentIdentifier[] = [
 ];
 
 export const BETA_ALLOWED_COMPONENTS: ComponentIdentifier[] = [
-    ComponentIdentifier.breakfreeTradingScanner
+    // ComponentIdentifier.breakfreeTradingScanner
 ];
 
 @Injectable({

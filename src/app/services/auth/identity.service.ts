@@ -70,13 +70,13 @@ export class IdentityService {
             }
         }
 
-        if (this.subscriptions && this.subscriptions.length) {
-            for (const sub of this.subscriptions) {
-                if (sub.indexOf("Friday") !== -1) {
-                    return true;    
-                }
-            }
-        }
+        // if (this.subscriptions && this.subscriptions.length) {
+        //     for (const sub of this.subscriptions) {
+        //         if (sub.indexOf("Friday") !== -1) {
+        //             return true;    
+        //         }
+        //     }
+        // }
 
         return false;
     }  
