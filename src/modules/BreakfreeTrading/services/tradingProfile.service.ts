@@ -32,38 +32,53 @@ export interface IBFTWeeklyMission {
 export interface IBFTMissions {
     daily: IBFTDailyMission[];
     weekly: IBFTWeeklyMission[];
+    level: number;
+    levelName: string;
+    levelPoints: number;
     totalPoints: number;
+    nextLevelPoints: number;
     calculationTimestamp: number;
 }
 
 @Injectable()
 export class TradingProfileService {
     private url: string;
-    private _scoreForLevel = 1000;
     private _missions: IBFTMissions;
     
     public get missions(): IBFTMissions {
         return this._missions;
     } 
     
+    public get levelName(): string {
+        if (!this.missions) {
+            return null;
+        }
+        
+        return this._missions.levelName;
+    }  
+    
     public get scoreForLevel(): number {
-        return this._scoreForLevel;
+        if (!this.missions) {
+            return 0;
+        }
+        
+        return this._missions.nextLevelPoints - (this._missions.totalPoints - this._missions.levelPoints);
     } 
     
-    public get userScore(): number {
+    public get score(): number {
         if (!this.missions) {
             return 0;
         }
 
-        return this.missions.totalPoints;
-    } 
-    
-    public get score(): number {
-        return this.userScore % this._scoreForLevel;
+        return this._missions.levelPoints;
     }
     
     public get level(): number {
-        return Math.floor(this.userScore / this._scoreForLevel) + 1;
+        if (!this.missions) {
+            return 0;
+        }
+
+        return this._missions.level;
     }
 
     constructor(private _http: HttpClient) {

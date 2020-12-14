@@ -1,7 +1,7 @@
 <div class="user-info-menu">
     <div class="menu-top flex flex-direction-column">
         <div class="top-line flex justify-space-between">
-            <div class="level-container">
+            <div class="level-container" [ngClass]="getLevelStyleClassName()">
                 {{level}}
             </div> 
             <div class="experiance-container" (click)="openMissionDialog()">
@@ -20,7 +20,7 @@
         </div>  
         <div class="user-rank-line flex justify-space-around">
             <div class="user-rank">
-                Epic User
+                {{levelName}}
             </div>
         </div> 
         <div class="user-level-slider-line flex">
