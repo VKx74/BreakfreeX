@@ -35,9 +35,13 @@
     font-size: 16px;
     font-weight: 700;
     padding: 10px;
-    border-radius: 5px;
-    min-width: 42px;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
     text-align: center;
+    margin-left: 10px;
+    -webkit-box-shadow: 2px 2px 5px 2px #FF8080AA, -3px 2px 5px 2px #FFE488AA, -2px -2px 5px 2px #8CFF85AA, 2px -2px 5px 2px #80C7FFAA, 2px 2px 5px 2px #E488FFAA, -2px 2px 5px 2px #FF616BAA, -2px -2px 5px 2px #8E5CFFAA, 0px 2px 1px 5px rgba(0, 0, 0, 0);
+    box-shadow: 2px 2px 5px 2px #FF8080AA, -3px 2px 5px 2px #FFE488AA, -2px -2px 5px 2px #8CFF85AA, 2px -2px 5px 2px #80C7FFAA, 2px 2px 5px 2px #E488FFAA, -2px 2px 5px 2px #FF616BAA, -2px -2px 5px 2px #8E5CFFAA, 0px 2px 1px 5px rgba(0, 0, 0, 0);
   }
 
   .experiance-container {
@@ -56,6 +60,33 @@
     .mat-progress-bar-fill::after {
       background-color: #c43939;
     }
+  }
+
+  .newbie-rank {
+  }
+
+  .bronze-rank {
+    color: #cd7f32 !important;
+  }
+
+  .silver-rank {
+    color: silver !important;
+  }
+
+  .gold-rank {
+    color: gold !important;
+  }
+
+  .platinum-rank {
+    color: #e5e4e2 !important;
+  }
+
+  .master-rank {
+    color: #327dcd !important;
+  }
+
+  .legend-rank {
+    color: #32cdaa !important;
   }
 }
 
