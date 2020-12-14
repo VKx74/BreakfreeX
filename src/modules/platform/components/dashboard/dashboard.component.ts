@@ -249,13 +249,13 @@ export class DashboardComponent {
     }
 
     private _initializeLayout(state: IGoldenLayoutComponentState) {
-        try {
-            if (!this._identityService.isBeta) {
-                this._replaceBFTPanelWithSonar(state.content);
-            }
-        } catch (e) {
+        // try {
+        //     if (!this._identityService.isBeta) {
+        //         this._replaceBFTPanelWithSonar(state.content);
+        //     }
+        // } catch (e) {
 
-        }
+        // }
         this.layout.loadState(state);
         this._processLayoutReady();
     }

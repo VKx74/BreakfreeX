@@ -34,6 +34,9 @@
   }
 
   /deep/ {
+    mat-table {
+      min-width: 350px;
+    }
     mat-form-field {
       max-width: 110px !important;
     }
@@ -81,7 +84,6 @@
     .text {
       margin: 20px 10px;
       display: flex;
-      text-decoration: underline;
       text-align: center;
     }
   
