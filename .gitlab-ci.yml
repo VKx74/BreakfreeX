@@ -48,6 +48,7 @@ build-app-stage:
             - dist/
   only:
     - develop
+    - feature/user-info-popup
     - ci-improvements
 #   tags:
 #     - web
@@ -99,6 +100,7 @@ build-latest:
     #     - docker
     only:
         - develop
+        - feature/user-info-popup
         - ci-improvements
 
 build-stable:
