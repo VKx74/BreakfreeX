@@ -44,6 +44,10 @@ export interface IBFTMissions {
 export class TradingProfileService {
     private url: string;
     private _missions: IBFTMissions;
+    private _callbacks: (() => void)[] = [];
+    private _loading: boolean = false;
+    private _canLoad: boolean = true;
+    private _timeInterval: number = 1000 * 60 * 1; // 10 min
     
     public get missions(): IBFTMissions {
         return this._missions;
@@ -77,7 +81,7 @@ export class TradingProfileService {
         if (!this.missions) {
             return 0;
         }
-
+        
         return this._missions.level;
     }
 
@@ -85,11 +89,46 @@ export class TradingProfileService {
         this.url = AppConfigService.config.apiUrls.bftTradingProfilesREST;
     }
 
-    updateMissions() {
+    updateMissions(callback: () => void = null) {
+        if (callback) {
+            this._callbacks.push(callback);
+        }
+
+        if (!this._canLoad) {
+            if (!this._loading) {
+                this._raiseCallbacks();
+            }
+            return;
+        }
+
+        this._loading = true;
+        this._canLoad = false;
         this._getTradingMissions().subscribe((data: IBFTMissions) => {
             this._missions = data;
+            this._loading = false;
+            this._raiseCallbacks();
+            setTimeout(() => {
+                this._canLoad = true;
+            }, this._timeInterval);
+        }, () => {
+            this._loading = false;
+            this._raiseCallbacks();
+            setTimeout(() => {
+                this._canLoad = true;
+            }, this._timeInterval);
         });
     } 
+
+    private _raiseCallbacks() {
+        for (const c of this._callbacks) {
+            if (c) {
+                try {
+                    c();
+                } catch (error) {}
+            }
+        }
+        this._callbacks = [];
+    }
 
     private _getTradingMissions(): Observable<IBFTMissions> {
         return this._http.get<IBFTMissions>(`${this.url}UserStats/Missions`);

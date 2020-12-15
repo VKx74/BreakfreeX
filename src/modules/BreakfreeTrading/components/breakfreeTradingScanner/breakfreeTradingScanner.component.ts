@@ -24,6 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
+import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -98,6 +99,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _otherGroupName: string = "Other";
     private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
+    private _loadingProfile: boolean = true;
+    private _levelRestriction: number = 4;
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
@@ -144,19 +147,54 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         private _alogService: AlgoService,
         private _cdr: ChangeDetectorRef,
         private _personalInfoService: PersonalInfoService,
+        private _tradingProfileService: TradingProfileService,
         protected _injector: Injector) {
         super(_injector);
         super.setTitle(
             this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
         );
         this._loadState(_state);
-        
-
         this.groups.push(this._featuredGroupName);
         this._types.forEach(_ => {
             this.groups.push(_.name);
         });
         this.groups.push(this._otherGroupName);
+        
+        if (!this._tradingProfileService.missions) {
+            this._tradingProfileService.updateMissions(() => {
+                this._loadingProfile = false;
+                this._filterResults(false);
+                this._filterResults(true);
+            });
+        }
+    }
+
+    show15MinLevelRestriction() {
+        const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        let level = this._tradingProfileService.level;
+        if (this.isPro && level < this._levelRestriction && is15MinSelected) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show1HLevelRestriction() {
+        const is1HSelected = this.activeTimeframes.indexOf(TimeFrames.Hour1) !== -1;
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        let level = this._tradingProfileService.level;
+        if (!this.isPro && level < this._levelRestriction && is1HSelected) {
+            return true;
+        }
+        
+        return false;
     }
 
     ngOnInit() {
@@ -171,13 +209,38 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         }, 1000 * 60 * 2);
     }
 
+    isOutOfAccess(group: IGroupedResults): boolean {
+        const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
+        const tfValue15Min = this.toTimeframe(60 * 15);
+        if (group.timeframe === tfValue15Min && is15MinSelected && !this.isPro) {
+            return true;
+        }
+        return false;
+    }
+
+    showRestrictions(group: IGroupedResults): boolean {
+        const tfValue15Min = this.toTimeframe(60 * 15);
+        if (group.timeframe === tfValue15Min && this.show15MinLevelRestriction()) {
+            return true;
+        }
+        
+        const tfValue1H = this.toTimeframe(60 * 60);
+        if (group.timeframe === tfValue1H && this.show1HLevelRestriction()) {
+            return true;
+        }
+
+        return this.isOutOfAccess(group);
+    }
+
     dataExistsInGroup(group: IGroupedResults): boolean {
         for (const marketTypes of group.data) {
             if (marketTypes.data && marketTypes.data.length) {
                 return true;
             }
         }
-        return false;
+
+       
+        return this.showRestrictions(group);
     }
 
     groupedResults(): IGroupedResults[] {
@@ -582,9 +645,15 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     private _isTFAllowed(tf: number): boolean {
-       // less than 1h
-       if (!this.isPro && tf < 60 * 60) {
-            return false;
+       let level = this._tradingProfileService.level;
+       if (this.isPro) {
+            if (tf < 60 * 60 && level < this._levelRestriction) {
+                return false;
+            }
+       } else {
+            if (tf < 60 * 60 * 4 && level < this._levelRestriction) {
+                return false;
+            }
        }
 
        return true;

@@ -37,37 +37,48 @@
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
                      <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container">
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
-                        <div class="timeframe-wrapper tiles-wrapper w-100">
-                           <ng-container *ngFor="let group of groupedResult.data; trackBy: trackByMarketType">
-                              <div class="sonar-tile-wrapper" *ngFor="let result of group.data; trackBy: trackByResult">
-                                 <scanner-card [result]="result" (click)="handleScannerResultsClick(result)"></scanner-card>
-                                 <div class="featured-settings">
-                                    <color-selector [activeColor]="getFeaturedDetails(result)"
-                                       class="featured-selector result-data"
-                                       (activeColorChange)='handleColorSelected($event, result)' (click)="click($event)"
-                                       [path]="'flag'">
-                                    </color-selector>
-                                 </div>
+                        <div *ngIf="showRestrictions(groupedResult); else dataContainer">
+                           <div class="access-restrictions" (click)="manageSubscriptions()" *ngIf="isOutOfAccess(groupedResult); else restrictionTemplate">
+                              Upgrade to Pro for access this Sonar setups.
+                           </div>  
+                           <ng-template #restrictionTemplate>
+                              <div class="timeframe-restrictions">
+                                 Increase your Level to get access to this Sonar results.
                               </div>
-                           </ng-container>
+                           </ng-template>
                         </div>
+                        <ng-template #dataContainer>
+                           <div class="timeframe-wrapper tiles-wrapper w-100">
+                              <ng-container *ngFor="let group of groupedResult.data; trackBy: trackByMarketType">
+                                 <div class="sonar-tile-wrapper"
+                                    *ngFor="let result of group.data; trackBy: trackByResult">
+                                    <scanner-card [result]="result" (click)="handleScannerResultsClick(result)">
+                                    </scanner-card>
+                                    <div class="featured-settings">
+                                       <color-selector [activeColor]="getFeaturedDetails(result)"
+                                          class="featured-selector result-data"
+                                          (activeColorChange)='handleColorSelected($event, result)'
+                                          (click)="click($event)" [path]="'flag'">
+                                       </color-selector>
+                                    </div>
+                                 </div>
+                              </ng-container>
+                           </div>
+                        </ng-template>
                      </div>
                   </ng-container>
 
-                  <div *ngIf="output; else subscriptionOutput" class="output">
+                  <div *ngIf="output" class="output">
                      {{output}}
                   </div>
 
-                  <ng-template #subscriptionOutput>
+                  <!-- <ng-template #subscriptionOutput>
                      <div class="out-of-subscription" *ngIf="!isPro" (click)="manageSubscriptions()">
-                        <!-- <div class="image">
-                           <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
-                        </div> -->
-                        <div class="text">
+                        <div class="access-restrictions">
                            Upgrade to Pro for access to 15m Sonar setups.
                         </div>
                      </div>
-                  </ng-template>
+                  </ng-template> -->
 
                </div>
             </div>
@@ -76,8 +87,8 @@
             <div class="content-wrapper flex-grow-1 h-0">
                <div class="full-height padding-wrapper">
                   <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true"
-                     [expandOnClick]="false" [selectedRow]="selectedScannerResult" [allowColumnsVisibilityChange]="false"
-                     (onRowSelect)="handleScannerResultsClick($event, true)">
+                     [expandOnClick]="false" [selectedRow]="selectedScannerResult"
+                     [allowColumnsVisibilityChange]="false" (onRowSelect)="handleScannerResultsClick($event, true)">
 
                      <data-table-header-cell columnName="symbol" [columnMinWidth]="40" [sortable]="true">
                         {{'instrument' | translate}}
@@ -112,30 +123,31 @@
                      <data-table-cell columnName="setup">
                         <ng-template let-scannerVM>
                            <div class="cell-data">
-                           <ng-container [ngSwitch]="scannerVM.origType">
-                              <ng-container *ngSwitchCase="origType.EXT">
-                                 <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
-                                 <span>EXT</span>
+                              <ng-container [ngSwitch]="scannerVM.origType">
+                                 <ng-container *ngSwitchCase="origType.EXT">
+                                    <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
+                                    <span>EXT</span>
+                                 </ng-container>
+                                 <ng-container *ngSwitchCase="origType.BRC">
+                                    <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
+                                    <span>BRC</span>
+                                 </ng-container>
+                                 <ng-container *ngSwitchCase="origType.SwingExt">
+                                    <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
+                                    <span>SWING</span>
+                                 </ng-container>
+                                 <ng-container *ngSwitchCase="origType.SwingN">
+                                    <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
+                                    <span>SWING</span>
+                                 </ng-container>
                               </ng-container>
-                              <ng-container *ngSwitchCase="origType.BRC">
-                                 <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
-                                 <span>BRC</span>
-                              </ng-container>
-                              <ng-container *ngSwitchCase="origType.SwingExt">
-                                 <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
-                                 <span>SWING</span>
-                              </ng-container>
-                              <ng-container *ngSwitchCase="origType.SwingN">
-                                 <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
-                                 <span>SWING</span>
-                              </ng-container>
-                           </ng-container>
-                        </div>
+                           </div>
                         </ng-template>
                      </data-table-cell>
                      <data-table-cell columnName="volume">
                         <ng-template let-scannerVM>
-                           <div class="cell-data" [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
+                           <div class="cell-data"
+                              [ngClass]="{'high':scannerVM.volatility == 'High', 'medium':scannerVM.volatility == 'Mid', 'low':scannerVM.volatility == 'Low'}">
                               {{scannerVM.tp}} vol
                            </div>
                         </ng-template>

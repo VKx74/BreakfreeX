@@ -1,8 +1,9 @@
 <div class="crypto-modal">
     <div class="content">
         <div class="left-side">
-            <div class="period" [ngClass]="{'selected': selectedMissionPeriod == MissionPeriod.Daily}" (click)="selectPeriod(MissionPeriod.Daily)">Daily</div>
-            <div class="period" [ngClass]="{'selected': selectedMissionPeriod == MissionPeriod.Weekly}" (click)="selectPeriod(MissionPeriod.Weekly)">Weekly</div>
+            <div class="period" [ngClass]="{'selected': selectedSection == Sections.Daily}" (click)="selectPeriod(Sections.Daily)">Daily</div>
+            <div class="period" [ngClass]="{'selected': selectedSection == Sections.Weekly}" (click)="selectPeriod(Sections.Weekly)">Weekly</div>
+            <div class="period" [ngClass]="{'selected': selectedSection == Sections.Info}" (click)="selectPeriod(Sections.Info)">Info</div>
         </div>
         <div class="center">
             <div class="header">
@@ -24,12 +25,15 @@
                 </div>
             </div>
             <div class="mission-content">
-                <ng-container [ngSwitch]="selectedMissionPeriod">
-                    <ng-container *ngSwitchCase="MissionPeriod.Daily">
+                <ng-container [ngSwitch]="selectedSection">
+                    <ng-container *ngSwitchCase="Sections.Daily">
                         <daily-missions-component [missions]="missions"></daily-missions-component>
                     </ng-container>
-                    <ng-container *ngSwitchCase="MissionPeriod.Weekly">
+                    <ng-container *ngSwitchCase="Sections.Weekly">
                         <weekly-missions-component [missions]="missions"></weekly-missions-component>
+                    </ng-container>  
+                    <ng-container *ngSwitchCase="Sections.Info">
+                        <missions-info-component></missions-info-component>
                     </ng-container>
                  </ng-container>
             </div>

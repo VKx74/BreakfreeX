@@ -28,6 +28,20 @@
     }
   }
 
+  .timeframe-restrictions, .access-restrictions {
+    font-size: 12px;
+    text-align: center;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-animation: slidein-bft 0.2s cubic-bezier(.17,.67,.83,.67);
+    animation: slidein-bft 0.2s cubic-bezier(.17,.67,.83,.67);
+  }
+
+  .access-restrictions {
+    cursor: pointer;
+  }
+
   .featured-settings {
     position: absolute;
     top: 12px;
@@ -70,10 +84,10 @@
   }
 
   .out-of-subscription {
-    margin-top: 30px;
+    cursor: pointer;
   }
   
-  .out-of-access, .out-of-subscription { 
+  .out-of-access { 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -225,6 +239,11 @@
     &:hover {
       background-color: themed('activeBackgroundColor') !important;
     }
+  }
+
+  .timeframe-restrictions, .access-restrictions {
+    background-color: themed('tableBorders');
+    color: themed('valueTextColor');
   }
 
   .scanner-result-row {

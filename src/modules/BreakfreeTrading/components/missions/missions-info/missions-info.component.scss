@@ -1,0 +1,15 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .content {
+   font-size: 12px;
+  }
+  .definition {
+    font-weight: 700;
+  }
+}
+
+@include themify($themes, true) {
+  
+}

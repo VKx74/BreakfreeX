@@ -14,9 +14,10 @@ import {GoldenLayoutPopupComponent} from "angular-golden-layout";
 import { IdentityService } from '@app/services/auth/identity.service';
 import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 
-enum MissionPeriod {
+enum Sections {
     Daily,
-    Weekly
+    Weekly,
+    Info
 }
 
 @Component({
@@ -25,8 +26,8 @@ enum MissionPeriod {
     styleUrls: ['./missions.component.scss']
 })
 export class MissionsComponent extends Modal<MissionsComponent> implements OnInit {
-    public MissionPeriod = MissionPeriod;
-    public selectedMissionPeriod = MissionPeriod.Daily;
+    public Sections = Sections;
+    public selectedSection = Sections.Daily;
 
     public get missions(): IBFTMissions {
         return this._tradingProfileService.missions;
@@ -51,8 +52,8 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
         // this._tradingProfileService.updateMissions();
     }
 
-    selectPeriod(period: MissionPeriod) {
-        this.selectedMissionPeriod = period;
+    selectPeriod(period: Sections) {
+        this.selectedSection = period;
     }
 
     ngOnInit() {

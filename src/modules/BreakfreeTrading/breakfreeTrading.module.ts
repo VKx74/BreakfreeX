@@ -39,6 +39,7 @@ import { DailyMissionsComponent } from './components/missions/daily-missions/dai
 import { MissionRowComponent } from './components/missions/mission-row/mission-row.component';
 import { WeeklyMissionsComponent } from './components/missions/weekly-missions/weekly-missions.component';
 import { ScannerCardComponent } from './components/breakfreeTradingScanner/scanner-card/scanner-card.component';
+import { MissionsInfoComponent } from './components/missions/missions-info/missions-info.component';
 
 @NgModule({
     // components here
@@ -54,6 +55,7 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         DailyMissionsComponent,
         WeeklyMissionsComponent,
         MissionRowComponent,
+        MissionsInfoComponent,
         ScannerCardComponent
     ],
     imports: [
@@ -88,7 +90,8 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         BreakfreeTradingNavigatorComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
-        MissionsComponent
+        MissionsComponent,
+        MissionsInfoComponent
     ],
     // components here
     exports: [
@@ -99,6 +102,7 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         BreakfreeTradingNavigatorComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
+        MissionsInfoComponent,
         MissionsComponent
     ],
     providers: [
