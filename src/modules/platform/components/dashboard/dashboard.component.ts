@@ -3,7 +3,6 @@ import { of, Subject } from "rxjs";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LayoutTranslateService } from "@layout/localization/token";
-import { LocalizationService } from "Localization";
 import { catchError, first, map, takeUntil } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { NavigationStart, Router } from "@angular/router";
@@ -36,6 +35,7 @@ import { SingleSessionService } from '@app/services/single-session.service';
 import { Intercom } from 'ng-intercom';
 import { CookieService } from '@app/services/сookie.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
+import { MissionTrackingService } from "@app/services/missions-tracking.service";
 
 
 @Component({
@@ -91,6 +91,7 @@ export class DashboardComponent {
         private _workspaceRepository: WorkspaceRepository,
         private _alertService: AlertService,
         private _singleSessionService: SingleSessionService,
+        private _missionTrackingService: MissionTrackingService,
         public bottomPanelSizeService: ToggleBottomPanelSizeService,
         private _overlay: Overlay,
     ) {
@@ -162,6 +163,10 @@ export class DashboardComponent {
 
         if (!this._identityService.isAdmin) {
             this._singleSessionService.watchSessions();
+        } 
+        
+        if (this._identityService.isAuthorizedCustomer) {
+            this._missionTrackingService.watchMissions();
         }
 
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);

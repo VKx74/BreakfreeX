@@ -117,6 +117,7 @@ import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTradin
 import { BreakfreeTradingNavigatorComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
 import { TestOandaComponent } from '../Trading/components/forex.components/test-oanda/test-oanda.component';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
+import { MissionTrackingService } from '@app/services/missions-tracking.service';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -258,6 +259,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         AlertCloudRepositoryService,
         SignalService,
         SingleSessionService,
+        MissionTrackingService,
 
         NotificationService,
         NotificationWebSocketService,

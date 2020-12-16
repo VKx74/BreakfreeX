@@ -25,6 +25,7 @@ import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { NotificationsService } from '@alert/services/notifications.service';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -166,6 +167,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 this._filterResults(false);
                 this._filterResults(true);
             });
+        } else {
+            this._loadingProfile = false;
         }
     }
 

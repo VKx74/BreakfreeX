@@ -13,25 +13,18 @@ export interface IBFTTradingProfile {
     totalProfitable: number;
 }
 
-export interface IBFTDailyMission {
+export interface IBFTMission {
     internalId: string;
     name: string;
     requiredValue: number;
     currentValue: number;
     points: number;
-}
-
-export interface IBFTWeeklyMission {
-    internalId: string;
-    name: string;
-    requiredValue: number;
-    currentValue: number;
-    points: number;
+    wasJustReached: boolean;
 }
 
 export interface IBFTMissions {
-    daily: IBFTDailyMission[];
-    weekly: IBFTWeeklyMission[];
+    daily: IBFTMission[];
+    weekly: IBFTMission[];
     level: number;
     levelName: string;
     levelPoints: number;
@@ -47,7 +40,7 @@ export class TradingProfileService {
     private _callbacks: (() => void)[] = [];
     private _loading: boolean = false;
     private _canLoad: boolean = true;
-    private _timeInterval: number = 1000 * 60 * 1; // 10 min
+    private _timeInterval: number = 1000 * 60 * 10; // 10 min
     
     public get missions(): IBFTMissions {
         return this._missions;
@@ -66,7 +59,7 @@ export class TradingProfileService {
             return 0;
         }
         
-        return this._missions.nextLevelPoints - (this._missions.totalPoints - this._missions.levelPoints);
+        return this._missions.nextLevelPoints;
     } 
     
     public get score(): number {
@@ -89,6 +82,29 @@ export class TradingProfileService {
         this.url = AppConfigService.config.apiUrls.bftTradingProfilesREST;
     }
 
+    setProcessedState() {
+        if (!this.missions) {
+            return;
+        }
+
+        if (this.missions.daily) {
+            for (const mission of this.missions.daily) {
+                if (mission.wasJustReached) {
+                    mission.wasJustReached = false;
+                }
+            }
+        }
+
+
+        if (this.missions.weekly) {
+            for (const mission of this.missions.weekly) {
+                if (mission.wasJustReached) {
+                    mission.wasJustReached = false;
+                }
+            }
+        }
+    }
+
     updateMissions(callback: () => void = null) {
         if (callback) {
             this._callbacks.push(callback);
@@ -105,14 +121,15 @@ export class TradingProfileService {
         this._canLoad = false;
         this._getTradingMissions().subscribe((data: IBFTMissions) => {
             this._missions = data;
-            this._loading = false;
+            // this._missions.daily.forEach((v) => v.wasJustReached = true);
             this._raiseCallbacks();
+            this._loading = false;
             setTimeout(() => {
                 this._canLoad = true;
             }, this._timeInterval);
         }, () => {
-            this._loading = false;
             this._raiseCallbacks();
+            this._loading = false;
             setTimeout(() => {
                 this._canLoad = true;
             }, this._timeInterval);

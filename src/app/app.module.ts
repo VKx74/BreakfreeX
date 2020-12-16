@@ -100,6 +100,9 @@ import { MT4Broker } from './services/mt/mt4.broker';
 import { MT5Broker } from './services/mt/mt5.broker';
 import { Angulartics2GoSquared } from 'angulartics2/gosquared';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { NotificationsService } from '@alert/services/notifications.service';
+import { ToasterNotificationsService } from '@alert/services/toaster-notifications.service';
+import { MissionTrackingService } from './services/missions-tracking.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -274,6 +277,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         UserSettingsResolver,
         UserSettingsService,
         SingleSessionService,
+        MissionTrackingService,
 
 
         ExchangeFactory,
@@ -325,6 +329,13 @@ const FILE_INPUT_CONFIG_PROVIDER = {
                         return appTranslateService.get(type);
                     }
                 });
+            },
+            deps: [AppTranslateService]
+        }, 
+        {
+            provide: NotificationsService,
+            useFactory: (appTranslateService: any) => {
+                return new ToasterNotificationsService();
             },
             deps: [AppTranslateService]
         },
