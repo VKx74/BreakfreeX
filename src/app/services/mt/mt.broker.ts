@@ -732,10 +732,11 @@ export abstract class MTBroker implements IMTBroker {
                     const size = newOrder.Lots;
                     const netPl = newOrder.Profit;
                     const contractSize = newOrder.ContractSize;
+                    const VAR = newOrder.VarRisk;
 
                     if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Price !== price ||
                         existingOrder.Size !== size || existingOrder.NetPL !== netPl || existingOrder.Type !== type ||
-                        existingOrder.Status !== status || existingOrder.ContractSize !== contractSize) {
+                        existingOrder.Status !== status || existingOrder.ContractSize !== contractSize || existingOrder.VAR !== VAR) {
                         changedOrders.push(existingOrder);
                     }
 
@@ -751,6 +752,7 @@ export abstract class MTBroker implements IMTBroker {
                     existingOrder.Price = price;
                     existingOrder.Size = size;
                     existingOrder.NetPL = netPl;
+                    existingOrder.VAR = VAR;
 
                     this._calculatePipPL(existingOrder);
                     exists = true;
@@ -811,6 +813,7 @@ export abstract class MTBroker implements IMTBroker {
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
+            VAR: data.VarRisk,
             ExpirationType: this._getOrderExpiration(data.ExpirationType, data.ExpirationDate),
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
@@ -838,6 +841,7 @@ export abstract class MTBroker implements IMTBroker {
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
+            VAR: data.VarRisk,
             ExpirationType: this._getOrderExpiration(data.ExpirationType, data.ExpirationDate),
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
@@ -1094,6 +1098,13 @@ export abstract class MTBroker implements IMTBroker {
             }
             position.Risk += order.Risk;
         }
+        
+        if (order.VAR) {
+            if (!position.VAR) {
+                position.VAR = 0;
+            }
+            position.VAR += order.VAR;
+        }
 
         if (order.RiskPercentage) {
             if (!position.RiskPercentage) {
@@ -1146,7 +1157,8 @@ export abstract class MTBroker implements IMTBroker {
             PipPL: order.PipPL,
             Risk: order.Risk,
             RiskPercentage: order.RiskPercentage,
-            CurrentPrice: order.CurrentPrice
+            CurrentPrice: order.CurrentPrice,
+            VAR: order.VAR || 0
         };
     }
 

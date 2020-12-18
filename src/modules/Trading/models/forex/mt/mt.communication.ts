@@ -106,6 +106,7 @@ export interface IMTOrderData {
     Comment: string;
     State: string;
     StopLoss: number;
+    VarRisk?: number;
     TakeProfit: number;
     Digits: number;
     ProfitRate: number;

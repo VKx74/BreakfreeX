@@ -148,6 +148,7 @@
     "swap": "Swap",
     "risk": "Net Risk",
     "riskP": "Risk (%)",
+    "VAR": "VAR",
     "riskPending": "Pending Net Risk",
     "riskPPending": "Pending Risk (%)",
     "commission": "Commission",

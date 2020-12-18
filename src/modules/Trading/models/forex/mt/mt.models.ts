@@ -40,6 +40,7 @@ export interface MTOrder {
     Type: OrderTypes;
     Status: string;
     Time: number;
+    VAR: number;
     Comment: string;
     ExpirationType?: OrderExpirationType;
     ExpirationDate?: number;
@@ -99,6 +100,7 @@ export interface MTPosition {
     Risk?: number;
     RiskPercentage?: number;
     Side: OrderSide;
+    VAR: number;
 }
 
 export enum MTCurrencyRiskType {

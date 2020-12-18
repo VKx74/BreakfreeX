@@ -20,6 +20,7 @@
     <!-- <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Commission" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Swap" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="VAR" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.VAR' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Comment" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.comment' | translate}}</data-table-header-cell>
@@ -99,6 +100,9 @@
     </data-table-cell>
     <data-table-cell columnName="Swap">
         <ng-template let-item>{{item.Swap?.toFixed(2)}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="VAR">
+        <ng-template let-item>{{item.VAR ? item.VAR.toFixed(2) : '-'}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="Net Risk">
         <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
