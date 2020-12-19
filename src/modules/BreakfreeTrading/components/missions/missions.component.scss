@@ -35,7 +35,7 @@
     .progress-bar-area {
       width: 100%;
     }
-
+    
     .center {
       width: 100%;
       display: flex;
@@ -47,6 +47,7 @@
 
         /deep/ .mat-progress-bar {
           height: 7px;
+          overflow:hidden;
         }
 
         .experiance-levels {

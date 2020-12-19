@@ -15,13 +15,28 @@
     .experiance-points-points {
       font-size: 12px;
       line-height: 40px;
-      padding: 3px 15px 0px 10px;
+      margin-left: 15px;
+      font-weight: 700;
+      min-width: 50px;
     }
 
     .experiance-points-claimed {
-      min-width: 40px;
-      line-height: 40px;
+      
     }
+    .experiance-points-claimed img {
+      width: 20px;
+      margin: 0 auto;
+      margin-top: 14px;
+    }
+    .experiance-points-text-value {
+     font-weight:700;
+    }
+    .experiance-points-text-lable {
+      font-weight:700;
+     }
+ 
+
+    
 
     .experiance-points {
       display: flex;
@@ -29,7 +44,8 @@
       font-size: 11px;
       width: 100%;
       line-height: 40px;
-      padding: 0px 15px;
+      padding-left: 15px;
+      max-width: 300px;
 
       .progress-bar-area {
         margin-top: -5px;
