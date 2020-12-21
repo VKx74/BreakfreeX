@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" [ngClass]="{'failed': failed}" [matTooltip]="failedDescription">
     <div class="experiance-points">
         <div class="experiance-points-text">
             <div class="experiance-points-text-lable">
@@ -16,6 +16,7 @@
         {{Points}}  XP
     </div>
     <div class="experiance-points-claimed">
-        <img src="./assets/img/target.png" *ngIf="claimed" />
+        <img src="./assets/img/target.png" *ngIf="claimed && !failed" />
+        <img src="./assets/img/sad.png" *ngIf="failed" />
     </div>    
 </div>

@@ -166,6 +166,7 @@ export class DashboardComponent {
         } 
         
         if (this._identityService.isAuthorizedCustomer) {
+            this._missionTrackingService.initMissions();
             this._missionTrackingService.watchMissions();
         }
 

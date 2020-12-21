@@ -18,6 +18,7 @@ export interface MTTradingAccount {
     Equity: number;
     Risk?: number;
     RiskPercentage?: number;
+    VAR?: number;
 }
 
 export interface MTOrder {

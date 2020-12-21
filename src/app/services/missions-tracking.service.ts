@@ -2,26 +2,74 @@ import { Injectable } from "@angular/core";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { NotificationsService } from "@alert/services/notifications.service";
 import { IBFTMission, TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
+import { Subject, Subscription } from "rxjs";
+import { BrokerService } from "./broker.service";
+import { MTBroker } from "./mt/mt.broker";
 
 @Injectable()
 export class MissionTrackingService {
+    private _brokerStateChangedSubscription: Subscription;
+    private _ordersUpdatedSubscription: Subscription;
+    private _onOrdersParametersUpdated: Subscription;
     private _timeInterval: number = 1000 * 60 * 13; // 13 min
-    private _interval: any;
+    private _timeout: number = 1000 * 60 * 1; // 1 min
+    private _recalculateRequired: boolean = true;
+
     constructor(private _identity: IdentityService,
         private _notificationService: NotificationsService,
+        private _brokerService: BrokerService,
         private _tradingProfileService: TradingProfileService) {
+        
+        this._tradingProfileService.MissionChanged.subscribe(() => {
+            this._processMissions();
+        });
+        this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
+            if (this._brokerService.activeBroker instanceof MTBroker) {
+                this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
+                    this._recalculate();
+                }); 
+                
+                this._onOrdersParametersUpdated = this._brokerService.activeBroker.onOrdersParametersUpdated.subscribe(() => {
+                    this._recalculate();
+                });
+            } else {
+                this._recalculateRequired = true;
+                if (this._ordersUpdatedSubscription) {
+                    this._ordersUpdatedSubscription.unsubscribe();
+                    this._ordersUpdatedSubscription = null;
+                } 
+                if (this._onOrdersParametersUpdated) {
+                    this._onOrdersParametersUpdated.unsubscribe();
+                    this._onOrdersParametersUpdated = null;
+                }
+            }
+        });
+    }
+
+    public _recalculate() {
+        if (!this._recalculateRequired) {
+            return;
+        }
+        let activeBroker = this._brokerService.activeBroker as MTBroker;
+        if (activeBroker && activeBroker.canCalculateTotalVAR()) {
+            this._recalculateRequired = false;
+            this._updateMissions();
+        }
+    }
+
+    public initMissions() {
+        this._tradingProfileService.initMissions();
+
+        setTimeout(() => {
+            if (!this._recalculateRequired) {
+                return;
+            }
+            this._updateMissions();
+        }, this._timeout);
     }
 
     public watchMissions() {
-        try {
-            this._updateMissions();
-        } catch (error) {}
-
-        if (this._interval) {
-            return;
-        }
-
-        this._interval = setInterval(() => {
+        setInterval(() => {
             try {
                 this._updateMissions();
             } catch (error) {}
@@ -31,13 +79,15 @@ export class MissionTrackingService {
     private _updateMissions() {
         if (!this._identity.isAuthorizedCustomer) {
             return;
+        }   
+        
+        let varRisk = null;
+        let activeBroker = this._brokerService.activeBroker as MTBroker;
+        if (this._brokerService.isConnected && activeBroker) {
+            varRisk = activeBroker.calculateTotalVarRisk();
         }
 
-        this._tradingProfileService.updateMissions(() => {
-            try {
-                this._processMissions();
-            } catch (error) {}
-        });
+        this._tradingProfileService.updateMissions(varRisk);
     }
 
     private _processMissions() {

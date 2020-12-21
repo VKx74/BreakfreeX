@@ -83,7 +83,6 @@ export class UserInfoMenuComponent implements OnInit {
 
     ngAfterViewInit() {
        this._subscriptionToMenuOpen = this.opened.subscribe(() => {
-            this._tradingProfileService.updateMissions();
        });
     }
 

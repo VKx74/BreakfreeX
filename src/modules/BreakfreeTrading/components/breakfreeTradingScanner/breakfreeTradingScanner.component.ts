@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import bind from "bind-decorator";
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import {AlertService} from "@alert/services/alert.service";
 import { AlgoService, IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem } from '@app/services/algo.service';
@@ -120,6 +120,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public output: string;
     public loading: boolean;
     public trends: any = IBFTATrend;
+    private _missionsChangedSubscription: Subscription;
     
     public get origType() {
         return IBFTATradeType;
@@ -160,14 +161,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             this.groups.push(_.name);
         });
         this.groups.push(this._otherGroupName);
+        this._missionsChangedSubscription = this._tradingProfileService.MissionChanged.subscribe(() => {
+            this._loadingProfile = false;
+            this._filterResults(false);
+            this._filterResults(true);
+        });
         
-        if (!this._tradingProfileService.missions) {
-            this._tradingProfileService.updateMissions(() => {
-                this._loadingProfile = false;
-                this._filterResults(false);
-                this._filterResults(true);
-            });
-        } else {
+        if (this._tradingProfileService.missions) {
             this._loadingProfile = false;
         }
     }
@@ -351,6 +351,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (this._timer) {
             clearInterval(this._timer);
             this._timer = null;
+        }
+
+        if (this._missionsChangedSubscription) {
+            this._missionsChangedSubscription.unsubscribe();
         }
     }
 

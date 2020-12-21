@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from '@app/services/app.config.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 export interface IBFTTradingProfile {
     accountsCount: number;
@@ -16,10 +16,12 @@ export interface IBFTTradingProfile {
 export interface IBFTMission {
     internalId: string;
     name: string;
+    faileDescription: string;
     requiredValue: number;
     currentValue: number;
     points: number;
     wasJustReached: boolean;
+    conditionsFailed: boolean;
 }
 
 export interface IBFTMissions {
@@ -37,10 +39,10 @@ export interface IBFTMissions {
 export class TradingProfileService {
     private url: string;
     private _missions: IBFTMissions;
-    private _callbacks: (() => void)[] = [];
-    private _loading: boolean = false;
     private _canLoad: boolean = true;
     private _timeInterval: number = 1000 * 60 * 10; // 10 min
+
+    public MissionChanged: Subject<void> = new Subject();
     
     public get missions(): IBFTMissions {
         return this._missions;
@@ -105,46 +107,30 @@ export class TradingProfileService {
         }
     }
 
-    updateMissions(callback: () => void = null) {
-        if (callback) {
-            this._callbacks.push(callback);
-        }
-
-        if (!this._canLoad) {
-            if (!this._loading) {
-                this._raiseCallbacks();
-            }
-            return;
-        }
-
-        this._loading = true;
-        this._canLoad = false;
+    initMissions() {
         this._getTradingMissions().subscribe((data: IBFTMissions) => {
             this._missions = data;
-            // this._missions.daily.forEach((v) => v.wasJustReached = true);
             this._raiseCallbacks();
-            this._loading = false;
-            setTimeout(() => {
-                this._canLoad = true;
-            }, this._timeInterval);
         }, () => {
+        });
+    }
+
+    updateMissions(varRisk: number) {
+        this._updateTradingMissions(varRisk).subscribe((data: IBFTMissions) => {
+            this._missions = data;
             this._raiseCallbacks();
-            this._loading = false;
-            setTimeout(() => {
-                this._canLoad = true;
-            }, this._timeInterval);
+        }, () => {
         });
     } 
 
     private _raiseCallbacks() {
-        for (const c of this._callbacks) {
-            if (c) {
-                try {
-                    c();
-                } catch (error) {}
-            }
-        }
-        this._callbacks = [];
+        this.MissionChanged.next();
+    }
+
+    private _updateTradingMissions(varRisk: number): Observable<IBFTMissions> {
+        return this._http.post<IBFTMissions>(`${this.url}UserStats/Missions`, {
+            var: varRisk
+        });
     }
 
     private _getTradingMissions(): Observable<IBFTMissions> {

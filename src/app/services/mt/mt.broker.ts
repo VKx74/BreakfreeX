@@ -46,7 +46,8 @@ export abstract class MTBroker implements IMTBroker {
         Equity: 0,
         FreeMargin: 0,
         Margin: 0,
-        Pl: 0
+        Pl: 0,
+        VAR: 0
     };
 
     protected _lastUpdate: number;
@@ -640,6 +641,23 @@ export abstract class MTBroker implements IMTBroker {
         return 0.01;
     }
 
+    public calculateTotalVarRisk(): number {
+        let risk = 0;
+        for (const order of this.orders) {
+            risk += order.VAR;
+        }
+        return risk;
+    }
+
+    public canCalculateTotalVAR(): boolean {
+        for (const order of this.orders) {
+            if (!order.VAR) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected _reconnect() {
         if (!this._initData) {
             return;
@@ -690,6 +708,7 @@ export abstract class MTBroker implements IMTBroker {
         this._accountInfo.Margin = data.Margin;
         this._accountInfo.Pl = data.Profit;
         this._accountInfo.CompanyName = data.CompanyName;
+        this._accountInfo.VAR = this.calculateTotalVarRisk();
         this._lastUpdate = new Date().getTime();
 
         this.onAccountInfoUpdated.next(this._accountInfo);

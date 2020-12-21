@@ -8,6 +8,7 @@
         <data-table-header-cell columnName="Equity" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.equity' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Free Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.freeMargin' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="VAR" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.VAR' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell> -->
 
@@ -40,6 +41,13 @@
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.FreeMargin > 0, 'negative-value': item.FreeMargin < 0}">
                     {{item.FreeMargin.toFixed(decimals)}}
+                </span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="VAR">
+            <ng-template let-item>
+                <span>
+                    {{item.VAR.toFixed(decimals)}}
                 </span>
             </ng-template>
         </data-table-cell>

@@ -10,6 +10,8 @@ export class MissionRowComponent {
     @Input() Points: number;
     @Input() Needed: number;
     @Input() Current: number;
+    @Input() Failed: boolean;
+    @Input() FailedDescription: string;
 
     public get current(): number {
         if (this.Current > this.Needed) {
@@ -32,6 +34,14 @@ export class MissionRowComponent {
         }
 
         return this.Current >= this.Needed;
+    }
+
+    public get failed(): boolean {
+        return this.Failed;
+    }
+
+    public get failedDescription(): string {
+        return this.FailedDescription;
     }
 
     constructor() {

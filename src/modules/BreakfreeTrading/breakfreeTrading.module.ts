@@ -40,6 +40,7 @@ import { MissionRowComponent } from './components/missions/mission-row/mission-r
 import { WeeklyMissionsComponent } from './components/missions/weekly-missions/weekly-missions.component';
 import { ScannerCardComponent } from './components/breakfreeTradingScanner/scanner-card/scanner-card.component';
 import { MissionsInfoComponent } from './components/missions/missions-info/missions-info.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     // components here
@@ -79,7 +80,8 @@ import { MissionsInfoComponent } from './components/missions/missions-info/missi
         LoaderModule,
         ClipboardModule,
         MatFormFieldModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTooltipModule
     ],
     // components here
     entryComponents: [
