@@ -72,6 +72,11 @@ import { MTTradeManagerComponent } from './components/forex.components/mt/mt-tra
 import { MTCurrencyRiskComponent } from './components/forex.components/mt/currency-risk/mt-currency-risk.component';
 import { ForexBrokerConnectorComponent } from './components/forex.components/forex-broker-connector/forex-broker-connector.component';
 import { MTBrokerTypeSelectorComponent } from './components/forex.components/mt/broker-type-selector/mt-broker-type-selector.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TradeGuardRiskPipe } from './components/forex.components/mt/pipes/tradeGuardRisk.pipe';
+import { AccountGuardRiskPipe } from './components/forex.components/mt/pipes/accountGuardRisk.pipe';
+import { TradeGuardRiskClassPipe } from './components/forex.components/mt/pipes/tradeGuardRiskClass.pipe';
+import { AccountGuardRiskClassPipe } from './components/forex.components/mt/pipes/accountGuardRiskClass.pipe';
 
 const components = [
     TradeManagerComponent,
@@ -126,6 +131,10 @@ const components = [
         OrderComponent,
         OrderSideComponent,
         TradingCloseButtonComponent,
+        TradeGuardRiskPipe,
+        AccountGuardRiskPipe,
+        TradeGuardRiskClassPipe,
+        AccountGuardRiskClassPipe
     ],
     imports: [
         CommonModule,
@@ -154,7 +163,8 @@ const components = [
         MatSlideToggleModule,
         NgxMaterialTimepickerModule,
         DragDropModule,
-        MatExpansionModule        
+        MatExpansionModule,
+        MatTooltipModule     
         // TimeZonesModule,
     ],
     exports: [

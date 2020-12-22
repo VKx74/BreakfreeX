@@ -1085,6 +1085,7 @@ export abstract class MTBroker implements IMTBroker {
                 existingPosition.Size = pos.Size;
                 existingPosition.RiskPercentage = pos.RiskPercentage;
                 existingPosition.Risk = pos.Risk;
+                existingPosition.VAR = pos.VAR;
 
             } else {
                 updateRequired = true;
@@ -1110,7 +1111,7 @@ export abstract class MTBroker implements IMTBroker {
 
         const totalPrice = (position.Size * position.Price) + (order.Size * order.Price);
         const avgPrice = totalPrice / (position.Size + order.Size);
-
+        
         if (order.Risk) {
             if (!position.Risk) {
                 position.Risk = 0;

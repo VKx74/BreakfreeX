@@ -8,7 +8,7 @@
         <data-table-header-cell columnName="Equity" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.equity' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Free Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.freeMargin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="VAR" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.VAR' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Trade Guard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell> -->
 
@@ -44,11 +44,11 @@
                 </span>
             </ng-template>
         </data-table-cell>
-        <data-table-cell columnName="VAR">
+        <data-table-cell columnName="Trade Guard">
             <ng-template let-item>
-                <span>
-                    {{item.VAR.toFixed(decimals)}}
-                </span>
+                <div matTooltip='Account risk - {{item.VAR}}%' class="{{item.VAR | accountGuardRiskClassPipe}}">
+                    {{item.VAR | accountGuardRiskPipe}}
+                </div>
             </ng-template>
         </data-table-cell>
         <!-- <data-table-cell columnName="Net Risk">

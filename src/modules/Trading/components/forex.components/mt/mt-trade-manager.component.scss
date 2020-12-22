@@ -16,6 +16,24 @@
     left: 10px;
   }
 
+  /deep/ {
+    .low-risk {
+      color: $lightGreenColor;
+    }
+
+    .mid-risk {
+      color: $lightBlueColor;
+    }
+
+    .extreme-risk {
+      color: $yellowColor;
+    }
+
+    .high-risk {
+      color: $lightRedColor;
+    }
+  }
+
   /deep/ .side-buy {
     color: $lightGreenColor;
   }

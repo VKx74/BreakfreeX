@@ -146,7 +146,7 @@
     "swap": "Зміна",
     "risk": "Ризик",
     "riskP": "Ризик (%)",
-    "VAR": "VAR",
+    "tradeGuard": "Trade Guard",
     "riskPending": "Відкладений Ризик",
     "riskPPending": "Відкладений Ризик (%)",
     "pendingOrdersCount": "Відкладена кількість ордерів",
