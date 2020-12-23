@@ -54,7 +54,7 @@
                                     *ngFor="let result of group.data; trackBy: trackByResult">
                                     <scanner-card [result]="result" (click)="handleScannerResultsClick(result)">
                                     </scanner-card>
-                                    <div class="featured-settings">
+                                    <div class="featured-settings" matTooltip="Featured description">
                                        <color-selector [activeColor]="getFeaturedDetails(result)"
                                           class="featured-selector result-data"
                                           (activeColorChange)='handleColorSelected($event, result)'

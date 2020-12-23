@@ -151,6 +151,7 @@
     "riskPPending": "Відкладений Ризик (%)",
     "pendingOrdersCount": "Відкладена кількість ордерів",
     "ordersCount": "Кількість ордерів",
+    "riskStatus": "Ризик",
     "currency": "Валюта",
     "commission": "Комісія",
     "expirationDate": "Термін дії (дата)",

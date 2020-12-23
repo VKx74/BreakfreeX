@@ -1,7 +1,7 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
 import { Injectable } from '@angular/core';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
@@ -38,6 +38,7 @@ export abstract class MTBroker implements IMTBroker {
     protected _ordersHistory: MTHistoricalOrder[] = [];
     protected _positions: MTPosition[] = [];
     protected _currencyRisks: MTCurrencyRisk[] = [];
+    protected _currencyVARRisks: MTCurrencyVarRisk[] = [];
     protected _accountInfo: MTTradingAccount = {
         Account: "",
         Balance: 0,
@@ -122,6 +123,10 @@ export abstract class MTBroker implements IMTBroker {
 
     public get currencyRisks(): MTCurrencyRisk[] {
         return this._currencyRisks;
+    }
+
+    public get currencyVARRisks(): MTCurrencyVarRisk[] {
+        return this._currencyVARRisks;
     }
 
     public get accountInfo(): MTTradingAccount {
@@ -649,9 +654,28 @@ export abstract class MTBroker implements IMTBroker {
         return risk;
     }
 
+    public calculateTotalVarRiskByOrdersType(type: OrderTypes): number {
+        let risk = 0;
+        for (const order of this.orders) {
+            if (order.Type === type) {
+                risk += order.VAR;
+            }
+        }
+        return risk;
+    }
+
     public canCalculateTotalVAR(): boolean {
         for (const order of this.orders) {
             if (!order.VAR) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public canCalculateVARByOrdersType(type: OrderTypes): boolean {
+        for (const order of this.orders) {
+            if (order.Type === type && !order.VAR) {
                 return false;
             }
         }
@@ -806,6 +830,7 @@ export abstract class MTBroker implements IMTBroker {
         this._buildPositions();
         this._buildRates();
         this._buildCurrencyRisks();
+        this._buildCurrencyVARRisks();
 
         if (changedOrders.length && !updateRequired) {
             this.onOrdersParametersUpdated.next(changedOrders);
@@ -947,6 +972,64 @@ export abstract class MTBroker implements IMTBroker {
             Type: type,
             Side: OrderSide.Buy
         };
+    }
+
+
+    protected _buildCurrencyVARRisks() {
+        let result: MTCurrencyVarRisk[] = [];
+        for (const order of this.orders) {
+            let exists = false;
+            let type = order.Type === OrderTypes.Market ? MTCurrencyRiskType.Actual : MTCurrencyRiskType.Pending;
+            for (const r of result) {
+                if (r.Currency === order.Symbol && type === r.Type) {
+                    exists = true;
+                    r.Risk += order.VAR;
+                    r.OrdersCount++;
+                }
+            }
+
+            if (!exists) {
+                result.push({
+                    Currency: order.Symbol,
+                    Risk: order.VAR,
+                    Type: type,
+                    OrdersCount: 1
+                });
+            }
+        }
+
+        for (let i = 0; i < this._currencyVARRisks.length; i++) {
+            const currencyRisk = this._currencyVARRisks[i];
+            let existing = false;
+            for (let j = 0; j < result.length; j++) {
+                const r = result[j];
+                if (r.Currency === currencyRisk.Currency && currencyRisk.Type === r.Type) {
+                    existing = true;
+                    currencyRisk.Risk = r.Risk;
+                    currencyRisk.OrdersCount = r.OrdersCount;
+                }
+            }
+
+            if (!existing) {
+                this._currencyVARRisks.splice(i, 1);
+                i--;
+            }
+        } 
+
+        for (let j = 0; j < result.length; j++) {
+            const r = result[j];
+            let existing = false;
+            for (let i = 0; i < this._currencyVARRisks.length; i++) {
+                const currencyRisk = this._currencyVARRisks[i];
+                if (r.Currency === currencyRisk.Currency && currencyRisk.Type === r.Type) {
+                    existing = true;
+                }
+
+            }
+            if (!existing) {
+                this._currencyVARRisks.push(r);
+            }
+        }
     }
 
     protected _buildCurrencyRisks() {

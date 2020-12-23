@@ -13,14 +13,17 @@
          <mat-tab label="{{'tradeManager.pendingOrders' | translate}} {{pendingAmount ? '[' + pendingAmount + ']' : ''}}">
             <mt-pending-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="2"  (onOrderClose)="handleOrderClose($event)" (onOrderEdit)="handleOrderEdit($event)" (onOpenChart)="handleOpenChart($event)"></mt-pending-orders>
         </mat-tab>
-        <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
-            <mt-history-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="3"  (onOpenChart)="handleOpenChart($event)"></mt-history-orders>
+        <mat-tab label="{{'tradeManager.tradeGuard' | translate}}">
+            <mt-currency-var-risk [selectedTabIndex]="selectedTabIndex" [tabIndex]="3"></mt-currency-var-risk>
         </mat-tab>
-        <mat-tab label="{{'tradeManager.accountInfo' | translate}}" [tabIndex]="4">
+        <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
+            <mt-history-orders [selectedTabIndex]="selectedTabIndex" [selectedTabIndex]="selectedTabIndex" [tabIndex]="4"  (onOpenChart)="handleOpenChart($event)"></mt-history-orders>
+        </mat-tab>
+        <mat-tab label="{{'tradeManager.accountInfo' | translate}}">
             <mt-account-info></mt-account-info>
         </mat-tab>
-        <mat-tab label="{{'tradeManager.currencyRisk' | translate}}" [tabIndex]="5">
-            <mt-currency-risk></mt-currency-risk>
+        <mat-tab label="{{'tradeManager.currencyRisk' | translate}}">
+            <mt-currency-risk [selectedTabIndex]="selectedTabIndex" [tabIndex]="6"></mt-currency-risk>
         </mat-tab>
     </mat-tab-group>
 </div>

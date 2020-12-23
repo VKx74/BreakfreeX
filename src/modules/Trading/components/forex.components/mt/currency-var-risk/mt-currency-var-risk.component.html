@@ -1,0 +1,24 @@
+<data-table [rows]="items" [selectable]="false" [allowColumnsVisibilityChange]="false" [expandOnClick]="false"
+    [trackByIndex]="false" [groups]="groups" [groupingField]="groupingField">
+    <data-table-header-cell columnName="Currency" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.currency' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Orders Count" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.ordersCount' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Risk Status" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.riskStatus' | translate}}</data-table-header-cell>
+
+    <data-table-cell columnName="Currency">
+        <ng-template let-item><span>{{item.Currency}}</span></ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Orders Count">
+        <ng-template let-item>{{item.OrdersCount}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Risk Status">
+        <ng-template let-item>
+            <div matTooltip='Trade risk - {{item.Risk.toFixed(2)}}%' class="{{item.Risk | tradeGuardRiskClassPipe}}">
+                {{item.Risk | tradeGuardRiskPipe}}
+            </div>
+        </ng-template>
+    </data-table-cell>
+
+</data-table>

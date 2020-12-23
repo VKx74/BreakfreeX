@@ -133,3 +133,10 @@ export interface MTConnectionData {
     Password: string;
     Linker?: string;
 }
+
+export interface MTCurrencyVarRisk {
+    Currency: string;
+    Risk: number;
+    Type: MTCurrencyRiskType;
+    OrdersCount: number;
+}

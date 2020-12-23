@@ -5,6 +5,7 @@ import { IBFTMission, TradingProfileService } from "modules/BreakfreeTrading/ser
 import { Subject, Subscription } from "rxjs";
 import { BrokerService } from "./broker.service";
 import { MTBroker } from "./mt/mt.broker";
+import { OrderTypes } from "modules/Trading/models/models";
 
 @Injectable()
 export class MissionTrackingService {
@@ -12,7 +13,7 @@ export class MissionTrackingService {
     private _ordersUpdatedSubscription: Subscription;
     private _onOrdersParametersUpdated: Subscription;
     private _timeInterval: number = 1000 * 60 * 13; // 13 min
-    private _timeout: number = 1000 * 60 * 1; // 1 min
+    private _timeout: number = 1000 * 60 * 1.5; // 1.5 min
     private _recalculateRequired: boolean = true;
 
     constructor(private _identity: IdentityService,
@@ -51,7 +52,7 @@ export class MissionTrackingService {
             return;
         }
         let activeBroker = this._brokerService.activeBroker as MTBroker;
-        if (activeBroker && activeBroker.canCalculateTotalVAR()) {
+        if (activeBroker && activeBroker.canCalculateVARByOrdersType(OrderTypes.Market)) {
             this._recalculateRequired = false;
             this._updateMissions();
         }
@@ -82,12 +83,19 @@ export class MissionTrackingService {
         }   
         
         let varRisk = null;
+        let currencyVarRisk = null;
         let activeBroker = this._brokerService.activeBroker as MTBroker;
         if (this._brokerService.isConnected && activeBroker) {
-            varRisk = activeBroker.calculateTotalVarRisk();
+            varRisk = activeBroker.calculateTotalVarRiskByOrdersType(OrderTypes.Market);
+            const risks = activeBroker.currencyVARRisks;
+            for (const risk of risks) {
+                if (!currencyVarRisk || currencyVarRisk < risk.Risk) {
+                    currencyVarRisk = risk.Risk;
+                }
+            }
         }
 
-        this._tradingProfileService.updateMissions(varRisk);
+        this._tradingProfileService.updateMissions(varRisk, currencyVarRisk);
     }
 
     private _processMissions() {

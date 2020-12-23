@@ -7,15 +7,15 @@ export class TradeGuardRiskClassPipe implements PipeTransform {
         return "";
     }
     
-    if (value < 2) {
+    if (value < 4) {
       return "low-risk";
     }
 
-    if (value < 4) {
+    if (value < 7) {
       return "mid-risk";
     }
 
-    if (value < 7.5) {
+    if (value < 10) {
       return "high-risk";
     }
 

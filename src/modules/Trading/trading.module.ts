@@ -77,6 +77,7 @@ import { TradeGuardRiskPipe } from './components/forex.components/mt/pipes/trade
 import { AccountGuardRiskPipe } from './components/forex.components/mt/pipes/accountGuardRisk.pipe';
 import { TradeGuardRiskClassPipe } from './components/forex.components/mt/pipes/tradeGuardRiskClass.pipe';
 import { AccountGuardRiskClassPipe } from './components/forex.components/mt/pipes/accountGuardRiskClass.pipe';
+import { MTCurrencyVARRiskComponent } from './components/forex.components/mt/currency-var-risk/mt-currency-var-risk.component';
 
 const components = [
     TradeManagerComponent,
@@ -118,6 +119,7 @@ const components = [
     MTAccountInfoBarComponent,
     MTOpenOrdersComponent,
     MTCurrencyRiskComponent,
+    MTCurrencyVARRiskComponent,
     MTPendingOrdersComponent,
     MTHistoryOrdersComponent,
     MTPositionsComponent    

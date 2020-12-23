@@ -8,7 +8,7 @@
         <data-table-header-cell columnName="Equity" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.equity' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Free Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.freeMargin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Trade Guard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell>
+        <!-- <data-table-header-cell columnName="Trade Guard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell> -->
         <!-- <data-table-header-cell columnName="Net Risk" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Risk (%)" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell> -->
 
@@ -44,13 +44,13 @@
                 </span>
             </ng-template>
         </data-table-cell>
-        <data-table-cell columnName="Trade Guard">
+        <!-- <data-table-cell columnName="Trade Guard">
             <ng-template let-item>
-                <div matTooltip='Account risk - {{item.VAR}}%' class="{{item.VAR | accountGuardRiskClassPipe}}">
+                <div matTooltip='Account risk calculated by Filled orders - {{item.VAR.toFixed(2)}}%' class="{{item.VAR | accountGuardRiskClassPipe}}">
                     {{item.VAR | accountGuardRiskPipe}}
                 </div>
             </ng-template>
-        </data-table-cell>
+        </data-table-cell> -->
         <!-- <data-table-cell columnName="Net Risk">
             <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
         </data-table-cell>

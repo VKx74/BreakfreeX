@@ -115,8 +115,8 @@ export class TradingProfileService {
         });
     }
 
-    updateMissions(varRisk: number) {
-        this._updateTradingMissions(varRisk).subscribe((data: IBFTMissions) => {
+    updateMissions(varRisk: number, currencyVarRisk: number) {
+        this._updateTradingMissions(varRisk, currencyVarRisk).subscribe((data: IBFTMissions) => {
             this._missions = data;
             this._raiseCallbacks();
         }, () => {
@@ -127,9 +127,10 @@ export class TradingProfileService {
         this.MissionChanged.next();
     }
 
-    private _updateTradingMissions(varRisk: number): Observable<IBFTMissions> {
+    private _updateTradingMissions(varRisk: number, currencyVarRisk: number): Observable<IBFTMissions> {
         return this._http.post<IBFTMissions>(`${this.url}UserStats/Missions`, {
-            var: varRisk
+            var: varRisk,
+            assetVar: currencyVarRisk
         });
     }
 

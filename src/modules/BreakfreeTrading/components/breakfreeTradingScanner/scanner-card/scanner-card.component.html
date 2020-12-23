@@ -8,14 +8,15 @@
     </div>
 
     <div>
-        <div class="tradetf">
+        <div class="tradetf" matTooltip="Timeframe description">
             <i class="fa fa-clock-o"></i>
             {{toTimeframe(result.timeframe)}} Setup
         </div>
     </div>
 
     <div>
-        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}">
+        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}"
+            matTooltip="Setup description">
             <ng-container [ngSwitch]="result.origType">
                 <ng-container *ngSwitchCase="origType.EXT">
                     <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->

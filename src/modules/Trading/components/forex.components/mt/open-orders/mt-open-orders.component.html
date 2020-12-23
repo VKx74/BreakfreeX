@@ -103,7 +103,7 @@
     </data-table-cell>
     <data-table-cell columnName="Trade Guard">
         <ng-template let-item>
-            <div matTooltip='Trade risk - {{item.VAR}}%' class="{{item.VAR | tradeGuardRiskClassPipe}}">
+            <div matTooltip='Trade risk - {{item.VAR.toFixed(2)}}%' class="{{item.VAR | tradeGuardRiskClassPipe}}">
                 {{item.VAR | tradeGuardRiskPipe}}
             </div>
         </ng-template>

@@ -153,6 +153,7 @@
     "riskPPending": "Pending Risk (%)",
     "commission": "Commission",
     "ordersCount": "Orders Count",
+    "riskStatus": "Risk Status",
     "pendingOrdersCount": "Pending Orders Count",
     "currency": "Currency",
     "expirationDate": "Expiration Date",
