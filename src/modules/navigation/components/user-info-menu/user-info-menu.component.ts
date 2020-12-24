@@ -54,6 +54,10 @@ export class UserInfoMenuComponent implements OnInit {
 
     public get score(): number {
         return this._tradingProfileService.score;
+    } 
+    
+    public get isAuthorizedCustomer(): boolean {
+        return this._identity.isAuthorizedCustomer;
     }
 
     public get levelName(): string {

@@ -1,6 +1,6 @@
 <div class="user-info-menu">
     <div class="menu-top flex flex-direction-column">
-        <div class="top-line flex justify-space-between">
+        <div class="top-line flex justify-space-between" *ngIf="isAuthorizedCustomer">
             <div class="level-container" [ngClass]="getLevelStyleClassName()">
                 {{level}}
             </div> 
@@ -8,7 +8,7 @@
                 See Levels
             </div>
         </div>
-        <div class="avatar-line flex">
+        <div class="avatar-line flex" [ngClass]="{'margin-top-negative': isAuthorizedCustomer}">
             <div class="avatar">
                 <ng-container *ngTemplateOutlet="avatarTemplate || avatar"></ng-container>
             </div>
@@ -18,12 +18,12 @@
                 {{userName}}
             </div>
         </div>  
-        <div class="user-rank-line flex justify-space-around">
+        <div class="user-rank-line flex justify-space-around" *ngIf="isAuthorizedCustomer">
             <div class="user-rank">
                 {{levelName}}
             </div>
         </div> 
-        <div class="user-level-slider-line flex">
+        <div class="user-level-slider-line flex" *ngIf="isAuthorizedCustomer">
             <div class="progress-bar-area flex">
                 <mat-progress-bar mode="determinate" value="{{score/scoreForLevel * 100}}" ></mat-progress-bar>
             </div>
