@@ -34,6 +34,12 @@
     }
   }
 
+  .high-risk-label {
+    color: $lightRedColor;
+    font-weight: 700;
+    margin-left: 5px;
+  }
+
   /deep/ .side-buy {
     color: $lightGreenColor;
   }

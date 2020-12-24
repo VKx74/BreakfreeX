@@ -13,7 +13,10 @@
          <mat-tab label="{{'tradeManager.pendingOrders' | translate}} {{pendingAmount ? '[' + pendingAmount + ']' : ''}}">
             <mt-pending-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="2"  (onOrderClose)="handleOrderClose($event)" (onOrderEdit)="handleOrderEdit($event)" (onOpenChart)="handleOpenChart($event)"></mt-pending-orders>
         </mat-tab>
-        <mat-tab label="{{'tradeManager.tradeGuard' | translate}}">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span>{{'tradeManager.tradeGuard' | translate}}<i *ngIf="isHighRiskDetected" class="fa fa-exclamation high-risk-label" aria-hidden="true" matTooltip="High Risk trades detected"></i></span>
+            </ng-template>
             <mt-currency-var-risk [selectedTabIndex]="selectedTabIndex" [tabIndex]="3"></mt-currency-var-risk>
         </mat-tab>
         <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
