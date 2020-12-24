@@ -17,8 +17,7 @@ import {SharedModule} from "Shared";
 import { UIModule } from 'UI';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreakfreeTradingService } from './services/breakfreeTrading.service';
-import { BreakfreeTradingNavigatorService } from './services/breakfreeTradingNavigator.service';
-import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent, BreakfreeTradingScannerComponent } from './components';
+import { BreakfreeTradingBacktestComponent, BreakfreeTradingAcademyComponent, BreakfreeTradingScannerComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBacktest.service';
@@ -49,7 +48,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
-        BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
         MissionsComponent,
@@ -89,7 +88,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
-        BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
         MissionsComponent,
@@ -101,7 +100,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
-        BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
         MissionsInfoComponent,
@@ -113,7 +112,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         InstrumentService,
         RealtimeService,
         BreakfreeTradingService,
-        BreakfreeTradingNavigatorService,
         ChartTrackerService,
         BreakfreeTradingBacktestService,
         {

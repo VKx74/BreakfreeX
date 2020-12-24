@@ -255,32 +255,8 @@ export class DashboardComponent {
     }
 
     private _initializeLayout(state: IGoldenLayoutComponentState) {
-        // try {
-        //     if (!this._identityService.isBeta) {
-        //         this._replaceBFTPanelWithSonar(state.content);
-        //     }
-        // } catch (e) {
-
-        // }
         this.layout.loadState(state);
         this._processLayoutReady();
-    }
-
-    private _replaceBFTPanelWithSonar(content: any) {
-        if (content instanceof Array) {
-            content.forEach((item) => {
-                this._replaceBFTPanelWithSonar(item);
-            });
-        } else {
-            if (content.type !== "component" && content.content instanceof Array) {
-                content.content.forEach((item) => {
-                    this._replaceBFTPanelWithSonar(item);
-                });
-            } else if (content.type === "component" && content.componentName === "breakfreeTradingScanner") {
-                content.componentName = "breakfreeTradingNavigator";
-                content.componentState = null;
-            }
-        }
     }
 
     private _saveLayoutState(async: boolean = true) {

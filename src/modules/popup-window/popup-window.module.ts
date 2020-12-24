@@ -62,7 +62,7 @@ import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-la
 import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-layout-widget/private-chat-layout-widget.component";
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
-import { BreakfreeTradingNavigatorComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
 import { ForexTradeManagerComponent } from '../Trading/components/forex.components/forex-trade-manager.component';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 
@@ -282,8 +282,8 @@ export function sharedEducationalTipsService() {
                             component: PrivateChatLayoutWidgetComponent
                         },
                         {
-                            componentName: ComponentIdentifier.breakfreeTradingNavigator,
-                            component: BreakfreeTradingNavigatorComponent
+                            componentName: ComponentIdentifier.breakfreeTradingAcademy,
+                            component: BreakfreeTradingAcademyComponent
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingScanner,

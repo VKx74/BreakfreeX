@@ -91,7 +91,7 @@ enum TradeTypes {
 })
 export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     static componentName = 'BreakfreeTradingScanner';
-    static previewImgClass = 'crypto-icon-watchlist';
+    static previewImgClass = 'crypto-icon-news';
 
     private _featured: IFeaturedResult[] = [];
     private _loaded: IBFTScanInstrumentsResponseItem[] = [];

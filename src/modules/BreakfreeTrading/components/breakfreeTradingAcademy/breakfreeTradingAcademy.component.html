@@ -1,0 +1,13 @@
+<div class="academy">
+   <embed src="https://fast.wistia.net/embed/channel/kc3lu27hox" *ngIf="isAuthorizedCustomer; else outOfAccess">
+   <ng-template #outOfAccess>
+      <div class="out-of-access" (click)="processCheckout()">
+         <div class="image">
+            <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
+         </div>
+         <div class="text">
+            Upgrade your subscription to get access to Academy.
+         </div>
+      </div>
+   </ng-template>
+</div>

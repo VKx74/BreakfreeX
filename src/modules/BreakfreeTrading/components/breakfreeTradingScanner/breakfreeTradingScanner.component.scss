@@ -79,15 +79,12 @@
     margin-left: 10px;
   }
 
-  .out-of-access {
-    height: 100%;
-  }
-
   .out-of-subscription {
     cursor: pointer;
   }
   
   .out-of-access { 
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
