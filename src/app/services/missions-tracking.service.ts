@@ -6,6 +6,7 @@ import { Subject, Subscription } from "rxjs";
 import { BrokerService } from "./broker.service";
 import { MTBroker } from "./mt/mt.broker";
 import { OrderTypes } from "modules/Trading/models/models";
+import { MTCurrencyRiskType } from "modules/Trading/models/forex/mt/mt.models";
 
 @Injectable()
 export class MissionTrackingService {
@@ -89,6 +90,10 @@ export class MissionTrackingService {
             varRisk = activeBroker.calculateTotalVarRiskByOrdersType(OrderTypes.Market);
             const risks = activeBroker.currencyVARRisks;
             for (const risk of risks) {
+                if(risk.Type !== MTCurrencyRiskType.Actual) {
+                    continue;
+                }
+                
                 if (!currencyVarRisk || currencyVarRisk < risk.Risk) {
                     currencyVarRisk = risk.Risk;
                 }
