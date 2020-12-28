@@ -21,7 +21,8 @@
     "connectMT5": "Підключити MT5",
     "addAccount": "Добавити брокер акаунт",
     "support": "Підтримка",
-    "clearSession": "Очистити сесію"
+    "clearSession": "Очистити сесію",
+    "academy": "Академія"
   },
   "footer": {
     "selectedTZDate": "Часовий пояс",

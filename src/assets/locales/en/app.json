@@ -20,7 +20,8 @@
     "connectMT5": "Connect MT5",
     "addAccount": "Add broker account",
     "support": "Support",
-    "clearSession": "Clear Session"
+    "clearSession": "Clear Session",
+    "academy": "Academy"
   },
   "footer": {
     "selectedTZDate": "Time Zone",

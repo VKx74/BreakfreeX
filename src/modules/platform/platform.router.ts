@@ -33,7 +33,11 @@ const routes: Routes = [
             {
                 path: 'scripting',
                 loadChildren: () => import('../scripting-page/scripting-page.module').then(m => m.ScriptingPageModule),
-            }
+            },
+            {
+                path: "academy",
+                loadChildren: () => import('../Academy/academy.module').then(m => m.AcademyModule)
+            },
         ]
     },
     {

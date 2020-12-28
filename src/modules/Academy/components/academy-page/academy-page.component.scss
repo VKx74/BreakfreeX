@@ -1,0 +1,15 @@
+@import "../../themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+
+:host {
+  .root {
+    width: 100%;
+    height: 100%;
+  }
+  embed {
+    width:  100%;
+    height: 100%;
+  }
+}

@@ -90,10 +90,10 @@ export class MissionTrackingService {
             varRisk = activeBroker.calculateTotalVarRiskByOrdersType(OrderTypes.Market);
             const risks = activeBroker.currencyVARRisks;
             for (const risk of risks) {
-                if(risk.Type !== MTCurrencyRiskType.Actual) {
+                if (risk.Type !== MTCurrencyRiskType.Actual) {
                     continue;
                 }
-                
+
                 if (!currencyVarRisk || currencyVarRisk < risk.Risk) {
                     currencyVarRisk = risk.Risk;
                 }

@@ -1,4 +1,11 @@
 <div class="academy">
+   <!-- <div class="wistia_channel wistia_async_kc3lu27hox mode=inline" style="min-height:100vh;position:relative;width:100%;"></div> -->
+   <!-- <div class="wistia_responsive_padding" style="padding:100.0% 0 0 0;position:relative;">
+      <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+         <div class="wistia_channel wistia_async_kc3lu27hox mode=popover"
+            style="height:100%;position:absolute;width:100%;"></div>
+      </div>
+   </div> -->
    <embed src="https://fast.wistia.net/embed/channel/kc3lu27hox" *ngIf="isAuthorizedCustomer; else outOfAccess">
    <ng-template #outOfAccess>
       <div class="out-of-access" (click)="processCheckout()">
