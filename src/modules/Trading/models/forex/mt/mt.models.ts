@@ -1,5 +1,6 @@
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from 'modules/Trading/models/models';
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
+import { IBFTATrend } from '@app/services/algo.service';
 
 export enum MTStatus {
     Connected,
@@ -18,7 +19,6 @@ export interface MTTradingAccount {
     Equity: number;
     Risk?: number;
     RiskPercentage?: number;
-    VAR?: number;
 }
 
 export interface MTOrder {
@@ -139,4 +139,27 @@ export interface MTCurrencyVarRisk {
     Risk: number;
     Type: MTCurrencyRiskType;
     OrdersCount: number;
+}
+
+export interface MTOrderValidationChecklistInput {
+    Symbol: string;
+    Side: OrderSide;
+    Size: number;
+    Price?: number;
+    SL?: number;
+}
+
+export interface MTOrderValidationChecklist {
+    GlobalRTD?: boolean;
+    LocalRTD?: boolean;
+    Levels?: boolean;
+    Risk?: boolean;
+    SpreadRisk?: boolean;
+    CorrelatedRisk?: boolean;
+
+    GlobalRTDValue?: IBFTATrend;
+    LocalRTDValue?: IBFTATrend;
+    RiskValue?: number;
+    SpreadRiskValue?: number;
+    CorrelatedRiskValue?: number;
 }

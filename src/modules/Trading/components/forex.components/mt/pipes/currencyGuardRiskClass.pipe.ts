@@ -1,21 +1,21 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'accountGuardRiskClassPipe'})
-export class AccountGuardRiskClassPipe implements PipeTransform {
+@Pipe({name: 'currencyGuardRiskClassPipe'})
+export class CurrencyGuardRiskClassPipe implements PipeTransform {
   transform(value: number): string {
     if (!value) {
         return "";
     }
     
-    if (value < 15) {
+    if (value < 4) {
       return "low-risk";
     }
 
-    if (value < 30) {
+    if (value < 7) {
       return "mid-risk";
     }
 
-    if (value < 45) {
+    if (value < 10) {
       return "high-risk";
     }
 

@@ -53,7 +53,7 @@ export class MissionTrackingService {
             return;
         }
         let activeBroker = this._brokerService.activeBroker as MTBroker;
-        if (activeBroker && activeBroker.canCalculateVARByOrdersType(OrderTypes.Market)) {
+        if (activeBroker && activeBroker.canCalculateTotalVAR(OrderTypes.Market)) {
             this._recalculateRequired = false;
             this._updateMissions();
         }
@@ -87,15 +87,15 @@ export class MissionTrackingService {
         let currencyVarRisk = null;
         let activeBroker = this._brokerService.activeBroker as MTBroker;
         if (this._brokerService.isConnected && activeBroker) {
-            varRisk = activeBroker.calculateTotalVarRiskByOrdersType(OrderTypes.Market);
-            const risks = activeBroker.currencyVARRisks;
+            varRisk = activeBroker.calculateTotalVAR(OrderTypes.Market);
+            const risks = activeBroker.currencyRisks;
             for (const risk of risks) {
                 if (risk.Type !== MTCurrencyRiskType.Actual) {
                     continue;
                 }
 
-                if (!currencyVarRisk || currencyVarRisk < risk.Risk) {
-                    currencyVarRisk = risk.Risk;
+                if (!currencyVarRisk || currencyVarRisk < risk.RiskPercentage) {
+                    currencyVarRisk = risk.RiskPercentage;
                 }
             }
         }

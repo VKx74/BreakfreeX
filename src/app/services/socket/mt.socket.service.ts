@@ -3,7 +3,7 @@ import { IWebSocketConfig, ReadyStateConstants } from "../../interfaces/socket/W
 import { AppConfigService } from '../app.config.service';
 import { Injectable } from "@angular/core";
 import { Observable, Subscriber, Subscription, Subject } from 'rxjs';
-import { MTResponseMessageBase, MTLoginRequest, EMTMessageType, SubscribeQuote, MTQuoteResponse, MTPlaceOrderRequest, MTPlaceOrderResponse, MTLoginResponse, MTEditOrderRequest, MTEditOrderResponse, MTCloseOrderRequest, MTCloseOrderResponse, MTLogoutRequest, MTRequestMessageBase, MTGetOrderHistoryRequest, MTAccountUpdateResponse, IMTAccountUpdatedData, IMTOrderData, MTOrdersUpdateResponse, MTGetOrderHistoryResponse, MTAuthRequest, GetQuote } from 'modules/Trading/models/forex/mt/mt.communication';
+import { MTResponseMessageBase, MTLoginRequest, EMTMessageType, SubscribeQuote, MTQuoteResponse, MTPlaceOrderRequest, MTPlaceOrderResponse, MTLoginResponse, MTEditOrderRequest, MTEditOrderResponse, MTCloseOrderRequest, MTCloseOrderResponse, MTLogoutRequest, MTRequestMessageBase, MTGetOrderHistoryRequest, MTAccountUpdateResponse, IMTAccountUpdatedData, IMTOrderData, MTOrdersUpdateResponse, MTGetOrderHistoryResponse, MTAuthRequest, GetQuote, GetSymbolTradeInfo, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { IMTTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 
@@ -206,6 +206,14 @@ export abstract class MTSocketService extends WebsocketBase {
       message.Data = {
         Symbol: symbol
       };
+      this._send(message, subscriber);
+    });
+  }
+
+  public getSymbolTradeInfo(symbol: string): Observable<MTSymbolTradeInfoResponse> {
+    return new Observable<MTSymbolTradeInfoResponse>(subscriber => {
+      const message = new GetSymbolTradeInfo();
+      message.Data = symbol;
       this._send(message, subscriber);
     });
   }

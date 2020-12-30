@@ -3,6 +3,8 @@ import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { MTConnectionData } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult } from 'modules/Trading/models/models';
 import { Observable, of } from 'rxjs';
+import { AlgoService } from '../algo.service';
+import { InstrumentService } from '../instrument.service';
 import { MTSocketService } from '../socket/mt.socket.service';
 import { MT4SocketService } from '../socket/mt4.socket.service';
 import { MTBroker } from './mt.broker';
@@ -13,8 +15,8 @@ export class MT4Broker extends MTBroker {
         return EBrokerInstance.MT4;
     }
   
-    constructor(@Inject(MT4SocketService) private _ws: MTSocketService) {
-      super(_ws);
+    constructor(@Inject(MT4SocketService) private _ws: MTSocketService, protected _algoService: AlgoService) {
+      super(_ws, _algoService);
     }
     
     saveState(): Observable<IBrokerState<any>> {

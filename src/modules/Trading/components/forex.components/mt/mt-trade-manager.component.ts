@@ -41,19 +41,7 @@ export class MTTradeManagerComponent {
 
     get brokerConnected(): boolean {
         return this._broker != null;
-    }   
-
-    get isHighRiskDetected(): boolean {
-        if (!this._broker) {
-            return false;
-        }
-
-        const assetsHighRisks = this._broker.currencyVARRisks.find((value) => {
-            return value.Risk > 10;
-        });
-
-        return assetsHighRisks ? true : false;
-    }   
+    }
     
     get showCancelAll(): boolean {
         return this.selectedTabIndex === 2 && this._broker.pendingOrders && this._broker.pendingOrders.length > 0;

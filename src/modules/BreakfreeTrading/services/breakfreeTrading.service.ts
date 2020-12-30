@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
 import { WebsocketBase } from '@app/interfaces/socket/socketBase';
 import { BFTSocketService } from '@app/services/socket/bft.socket.service';
-import { AlgoService, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
+import { AlgoService, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAlgoParameters, IBFTAMarketInfo, IRTDPayload } from '@app/services/algo.service';
+import { IInstrument } from '@app/models/common/instrument';
 
 export interface IPoolItem {
     resolve: any;
@@ -24,5 +25,9 @@ export class BreakfreeTradingService {
     
     getRTDCalculation(params: any): Promise<IRTDPayload> {
         return this.alogService.calculateRTD(params).toPromise();
+    } 
+    
+    getMarketInfo(instrument: IInstrument): Promise<IBFTAMarketInfo> {
+        return this.alogService.getMarketInfo(instrument).toPromise();
     } 
 }

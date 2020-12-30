@@ -73,11 +73,9 @@ import { MTCurrencyRiskComponent } from './components/forex.components/mt/curren
 import { ForexBrokerConnectorComponent } from './components/forex.components/forex-broker-connector/forex-broker-connector.component';
 import { MTBrokerTypeSelectorComponent } from './components/forex.components/mt/broker-type-selector/mt-broker-type-selector.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TradeGuardRiskPipe } from './components/forex.components/mt/pipes/tradeGuardRisk.pipe';
-import { AccountGuardRiskPipe } from './components/forex.components/mt/pipes/accountGuardRisk.pipe';
-import { TradeGuardRiskClassPipe } from './components/forex.components/mt/pipes/tradeGuardRiskClass.pipe';
-import { AccountGuardRiskClassPipe } from './components/forex.components/mt/pipes/accountGuardRiskClass.pipe';
-import { MTCurrencyVARRiskComponent } from './components/forex.components/mt/currency-var-risk/mt-currency-var-risk.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CurrencyGuardRiskClassPipe } from './components/forex.components/mt/pipes/currencyGuardRiskClass.pipe';
+import { CurrencyGuardRiskPipe } from './components/forex.components/mt/pipes/currencyGuardRisk.pipe';
 
 const components = [
     TradeManagerComponent,
@@ -119,10 +117,9 @@ const components = [
     MTAccountInfoBarComponent,
     MTOpenOrdersComponent,
     MTCurrencyRiskComponent,
-    MTCurrencyVARRiskComponent,
     MTPendingOrdersComponent,
     MTHistoryOrdersComponent,
-    MTPositionsComponent    
+    MTPositionsComponent
 ];
 
 @NgModule({
@@ -133,10 +130,8 @@ const components = [
         OrderComponent,
         OrderSideComponent,
         TradingCloseButtonComponent,
-        TradeGuardRiskPipe,
-        AccountGuardRiskPipe,
-        TradeGuardRiskClassPipe,
-        AccountGuardRiskClassPipe
+        CurrencyGuardRiskClassPipe,
+        CurrencyGuardRiskPipe
     ],
     imports: [
         CommonModule,
@@ -166,7 +161,8 @@ const components = [
         NgxMaterialTimepickerModule,
         DragDropModule,
         MatExpansionModule,
-        MatTooltipModule     
+        MatTooltipModule,
+        MatProgressBarModule
         // TimeZonesModule,
     ],
     exports: [

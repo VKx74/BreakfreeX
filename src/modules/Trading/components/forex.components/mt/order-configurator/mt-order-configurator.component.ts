@@ -1,21 +1,91 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
-import { IMTTick } from "@app/models/common/tick";
+import { IMTTick, ITick } from "@app/models/common/tick";
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from "../../../../models/models";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 import { BrokerService } from "@app/services/broker.service";
-import { finalize} from "rxjs/operators";
+import { debounceTime, finalize, takeUntil} from "rxjs/operators";
 import { AlertService } from "@alert/services/alert.service";
 import { memoize } from "@decorators/memoize";
 import bind from "bind-decorator";
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTPlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTOrderValidationChecklist, MTPlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { ConfirmModalComponent } from 'UI';
 import { MatDialog } from '@angular/material/dialog';
+import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
+
+interface ChecklistItem {
+    name: string;
+    valid: boolean;
+    value?: string;
+}
+
+interface ChecklistItemDescription {
+    calculate: (data: MTOrderValidationChecklist, tick?: IMTTick) => ChecklistItem;
+}
+
+const checklist: ChecklistItemDescription[] = [
+    {
+        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+            return {
+                name: "Local Trend",
+                // value: data.LocalRTDValue,
+                valid: data.LocalRTD
+            };
+        }
+    },
+    {
+        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+            return {
+                name: "Global Trend",
+                // value: data.GlobalRTDValue,
+                valid: data.GlobalRTD
+            };
+        }
+    },
+    {
+        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+            return {
+                name: "S&R Tolerance",
+                valid: data.Levels
+            };
+        }
+    },
+    {
+        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+            let value = data.RiskValue || 0;
+            return {
+                name: "Order Risk",
+                valid: data.Risk,
+                value: value.toFixed(2) + "%"
+            };
+        }
+    },
+    {
+        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+            let value = data.CorrelatedRiskValue || 0;
+            return {
+                name: "Related Risk",
+                valid: data.CorrelatedRisk,
+                value: value.toFixed(2) + "%"
+            };
+        }
+    },
+    {
+        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+            let value = data.SpreadRiskValue || 0;
+            return {
+                name: "High Spread",
+                valid: data.SpreadRisk,
+                value: value.toFixed(2) + "%"
+            };
+        }
+    }
+];
 
 export class MTOrderConfig {
     instrument: IInstrument;
@@ -89,12 +159,9 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _selectedTime: string = `${this._oneDayPlus.getUTCHours()}:${this._oneDayPlus.getUTCMinutes()}`;
     private _selectedDate: Date = this._oneDayPlus;
     private marketSubscription: Subscription;
-    private _maxRisk: number = 5;
-    private _normaRisk: number = 5;
-    public risk: number = 0;
-
-    @ViewChild("riskArrow", {static: false}) riskArrow: ElementRef;
-    @ViewChild("riskGraph", {static: false}) riskGraph: ElementRef;
+    private _checklistSubject: Subject<void> = new Subject();
+    private _recalculatePossible = true;
+    private _recalculateTimeout: any;
 
     @Input()
     set config(value: MTOrderConfig) {
@@ -139,8 +206,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
     priceStep: number = 0.00001;
     amountStep: number = 0.01;
     decimals: number = 5;
+    calculatingChecklist: boolean = false;
 
-    lastTick: IMTTick;
+    checklistItems: ChecklistItem[] = [];
+    lastTick: IMTTick = null;
     allowedOrderTypes: OrderTypes[] = [];
     orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
     expirationTypes: OrderExpirationType[] = [OrderExpirationType.GTC, OrderExpirationType.Specified, OrderExpirationType.Today];
@@ -157,29 +226,23 @@ export class MTOrderConfiguratorComponent implements OnInit {
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
         this._config = MTOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
+        
+        this._checklistSubject.pipe(
+            debounceTime(500),
+            takeUntil(componentDestroyed(this))
+        ).subscribe(() => {
+            this._calculateChecklist();
+        });
     }
 
     ngOnInit() {
         this.allowedOrderTypes = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
-
-        if (!this.config.instrument) {
-            // this._brokerService.getInstruments().subscribe({
-            //     next: (value: IInstrument[]) => {
-            //         if (value && value.length) {
-            //             this._selectInstrument(value[0]);
-            //         }
-            //     },
-            //     error: (e) => {
-            //         console.error('Failed to load instrument', e);
-            //     }
-            // });
-        } else {
+        if (this.config.instrument) {
             this._selectInstrument(this.config.instrument, false);
         }
     }
 
     ngAfterViewInit() {
-        this._setRiskArrowPosition();
     }
 
     @bind
@@ -213,6 +276,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
     handleTypeSelected(type: OrderTypes) {
         this.config.type = type;
+        this._raiseCalculateChecklist();
 
         if (this.config.type === OrderTypes.Market) {
             this.config.fillPolicy = OrderFillPolicy.IOC;
@@ -229,11 +293,12 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this.config.fillPolicy = type;
     }
 
-    showRisk() {
-        return true;
+    valueChanged() {
+        this._raiseCalculateChecklist();
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
+        this.lastTick = null;
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
         }
@@ -242,7 +307,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
         const broker = this._brokerService.activeBroker as MTBroker;
         const symbol = instrument.symbol;
 
-        this._calculateRisk();
         this.amountStep = broker.instrumentAmountStep(symbol);
         this.minAmountValue = broker.instrumentMinAmount(symbol);
         this.priceStep = broker.instrumentTickSize(symbol);
@@ -254,11 +318,14 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 this._config.price = 0;
             }
 
+            this.checklistItems = [];
+            this.calculatingChecklist = true;
+            this._recalculatePossible = true;
+
             broker.getPrice(symbol).subscribe((tick: IMTTick) => {
                 if (!tick || tick.symbol !== this.config.instrument.symbol) {
                     return;
                 }
-                
                 this._setTick(tick);
             });
 
@@ -272,35 +339,63 @@ export class MTOrderConfiguratorComponent implements OnInit {
         }
     }
 
-    private _setRiskArrowPosition() {
-        if (!this.riskArrow || !this.riskGraph) {
+    private _buildCalculateChecklistResults(data: MTOrderValidationChecklist) {
+        this.checklistItems = [];
+
+        if (!data) {
             return;
         }
 
-        const padding = 0;
-        const width = this.riskGraph.nativeElement.clientWidth - 4;
+        let recalculateNeeded = false;
 
-        let riskPercentage = this.risk / this._maxRisk;
-        if (riskPercentage < 0) {
-            riskPercentage = 0;
+        for (const i of checklist) {
+            const res = i.calculate(data);
+            if (res.valid === undefined || res.valid === null) {
+                recalculateNeeded = true;
+                continue;
+            }
+            this.checklistItems.push(res);
         }
-        if (riskPercentage > 1) {
-            riskPercentage = 1;
+
+        if (recalculateNeeded && this._recalculatePossible) {
+            this.calculatingChecklist = true;
+            this._recalculatePossible = false;
+            this._recalculateTimeout = setTimeout(() => {
+                this._recalculateTimeout = null;
+                this._raiseCalculateChecklist();
+            }, 3000);
         }
-
-        const margin = Math.round(width * riskPercentage) - padding;
-
-        this.riskArrow.nativeElement.style["margin-left"] = `${margin}px`;
-        this.riskArrow.nativeElement.style["fill"] = this.risk < this._normaRisk ? "#5eaf80" : "#dc3445";
     }
 
-    private _calculateRisk() {
-        const broker = this._brokerService.activeBroker as MTBroker;
-        this.risk = broker.getRelatedPositionsRisk(this.config.instrument.symbol, this.config.side) / broker.accountInfo.Balance * 100;
-        if (this.risk < 0) {
-            this.risk = 0;
+    private _calculateChecklist() {
+        this.calculatingChecklist = true;
+        if (!this.lastTick) {
+            return;
         }
-        this._setRiskArrowPosition();
+
+        const broker = this._brokerService.activeBroker as MTBroker;
+        broker.calculateOrderChecklist({
+            Side: this.config.side,
+            Size: this.config.amount,
+            Symbol: this.config.instrument.id,
+            Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
+            SL: this.config.useSL ? this.config.sl : null
+        }).subscribe((res) => {
+            this.calculatingChecklist = false;
+            this._buildCalculateChecklistResults(res);
+        }, (error) => {
+            this.calculatingChecklist = false;
+            this._buildCalculateChecklistResults(null);
+        });
+    }
+
+    private _raiseCalculateChecklist() {
+        if (!this.config.instrument) {
+            return;
+        }
+        
+        this.calculatingChecklist = true;
+        this._checklistSubject.next();
     }
 
     submit() {
@@ -308,23 +403,28 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.submitHandler(this.config);
             this.onSubmitted.emit();
         } else {
-            if (this.risk > this._maxRisk) {
-                this._dialog.open(ConfirmModalComponent, {
-                    data: {
-                        title: 'Risk alert',
-                        message: `You have already exceeded reasonable risk limitations with current open positions. Adding a position on ${this.config.instrument.symbol} will only increase current risk and lead to overleverage. Are you sure you wish to increase risk beyond ${this.risk.toFixed(2)}% ?`,
-                        onConfirm: () => {
-                            this._placeOrder();
-                        }
-                    }
-                });
-            } else {
+            // if (this.risk > this._maxRisk) {
+            //     this._dialog.open(ConfirmModalComponent, {
+            //         data: {
+            //             title: 'Risk alert',
+            //             message: `You have already exceeded reasonable risk limitations with current open positions. Adding a position on ${this.config.instrument.symbol} will only increase current risk and lead to overleverage. Are you sure you wish to increase risk beyond ${this.risk.toFixed(2)}% ?`,
+            //             onConfirm: () => {
+            //                 this._placeOrder();
+            //             }
+            //         }
+            //     });
+            // } else {
                 this._placeOrder();
-            }
+            // }
         }
     }
 
     private _setTick(tick: IMTTick) {
+        let needLoad = false;
+        if (!this.lastTick) {
+            needLoad = true;
+        }
+
         this.lastTick = tick;
         const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
 
@@ -336,6 +436,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
         }
         if (tick && !this._config.tp) {
             this._config.tp = price;
+        }
+
+        if (needLoad) {
+            this._raiseCalculateChecklist();
         }
     }
 
@@ -410,17 +514,21 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
     setBuyMode() {
         this.config.side = OrderSide.Buy;
-        this._calculateRisk();
+        this._raiseCalculateChecklist();
     }
 
     setSellMode() {
         this.config.side = OrderSide.Sell;
-        this._calculateRisk();
+        this._raiseCalculateChecklist();
     }
 
     ngOnDestroy() {
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
+        }
+
+        if (this._recalculateTimeout) {
+            clearTimeout(this._recalculateTimeout);
         }
     }
 }

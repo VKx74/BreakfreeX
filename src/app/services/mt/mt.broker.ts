@@ -1,16 +1,19 @@
-import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
+import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
 import { Injectable } from '@angular/core';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
 import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy } from 'modules/Trading/models/models';
-import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData } from 'modules/Trading/models/forex/mt/mt.communication';
+import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
 import { IMTTick } from '@app/models/common/tick';
 import { ReadyStateConstants } from '@app/interfaces/socket/WebSocketConfig';
 import { MTSocketService } from '../socket/mt.socket.service';
+import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
+import { InstrumentService } from "../instrument.service";
+import { map } from "rxjs/operators";
 
 export abstract class MTBroker implements IMTBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<IMTTick>; } = {};
@@ -19,6 +22,8 @@ export abstract class MTBroker implements IMTBroker {
     protected _instrumentType: { [symbol: string]: string; } = {};
     protected _instrumentProfitMode: { [symbol: string]: string; } = {};
     protected _instrumentContractSizes: { [symbol: string]: number; } = {};
+    protected _symbolTradeInfoCache: { [symbol: string]: MTSymbolTradeInfoResponse; } = {};
+    protected _marketInfoCache: { [symbol: string]: IBFTAMarketInfo; } = {};
 
     protected _onAccountInfoUpdated: Subject<MTTradingAccount> = new Subject<MTTradingAccount>();
     protected _onOrdersUpdated: Subject<MTOrder[]> = new Subject<MTOrder[]>();
@@ -38,7 +43,6 @@ export abstract class MTBroker implements IMTBroker {
     protected _ordersHistory: MTHistoricalOrder[] = [];
     protected _positions: MTPosition[] = [];
     protected _currencyRisks: MTCurrencyRisk[] = [];
-    protected _currencyVARRisks: MTCurrencyVarRisk[] = [];
     protected _accountInfo: MTTradingAccount = {
         Account: "",
         Balance: 0,
@@ -47,8 +51,7 @@ export abstract class MTBroker implements IMTBroker {
         Equity: 0,
         FreeMargin: 0,
         Margin: 0,
-        Pl: 0,
-        VAR: 0
+        Pl: 0
     };
 
     protected _lastUpdate: number;
@@ -125,15 +128,11 @@ export abstract class MTBroker implements IMTBroker {
         return this._currencyRisks;
     }
 
-    public get currencyVARRisks(): MTCurrencyVarRisk[] {
-        return this._currencyVARRisks;
-    }
-
     public get accountInfo(): MTTradingAccount {
         return this._accountInfo;
     }
 
-    constructor(protected ws: MTSocketService) {
+    constructor(protected ws: MTSocketService, protected algoService: AlgoService) {
 
     }
 
@@ -646,40 +645,148 @@ export abstract class MTBroker implements IMTBroker {
         return 0.01;
     }
 
-    public calculateTotalVarRisk(): number {
-        let risk = 0;
-        for (const order of this.orders) {
-            risk += order.VAR;
-        }
-        return risk;
-    }
+    public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
+        const symbol = this.instrumentToChartFormat(parameters.Symbol);
 
-    public calculateTotalVarRiskByOrdersType(type: OrderTypes): number {
-        let risk = 0;
-        for (const order of this.orders) {
-            if (order.Type === type) {
-                risk += order.VAR;
+        let marketInfo = this._tryGetMarketInfoFromCache(symbol);
+        if (!marketInfo) {
+            marketInfo = this.algoService.getMarketInfo(symbol);
+        }
+
+        let symbolTradeInfo = this._tryGetSymbolTradeInfoFromCache(parameters.Symbol);
+        if (!symbolTradeInfo) {
+            symbolTradeInfo = this.ws.getSymbolTradeInfo(parameters.Symbol);
+        }
+
+        return combineLatest([marketInfo, symbolTradeInfo]).pipe(map(([res1, res2]) => {
+            if (res1) {
+                this._tryAddMarketInfoToCache(symbol, res1);
+            } 
+            
+            if (res2 && res2.Data && res2.Data.CVaR && res2.Data.ContractSize && res2.Data.Rate) {
+                this._tryAddSymbolTradeInfoToCache(parameters.Symbol, res2);
             }
-        }
-        return risk;
+
+            return this._calculateOrderChecklist(res1, res2, parameters);
+        }));
     }
 
-    public canCalculateTotalVAR(): boolean {
+    public canCalculateTotalVAR(orderType?: OrderTypes): boolean {
         for (const order of this.orders) {
-            if (!order.VAR) {
+            if (orderType && orderType !== order.Type) {
+                continue;
+            }
+
+            if (!order.Risk) {
                 return false;
             }
         }
         return true;
     }
 
-    public canCalculateVARByOrdersType(type: OrderTypes): boolean {
+    public calculateTotalVAR(orderType?: OrderTypes): number {
+        let res = 0;
         for (const order of this.orders) {
-            if (order.Type === type && !order.VAR) {
-                return false;
+            if (orderType && orderType !== order.Type) {
+                continue;
+            }
+            
+            if (order.RiskPercentage) {
+                res += order.RiskPercentage;
             }
         }
-        return true;
+
+        return res;
+    }
+
+    private _calculateOrderChecklist(marketInfo: IBFTAMarketInfo, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
+        let result: MTOrderValidationChecklist = {};
+
+        if (marketInfo) {
+            let allowedDiff = Math.abs(marketInfo.natural - marketInfo.support) / 5;
+            if (parameters.Side === OrderSide.Buy) {
+                result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Up;
+                result.LocalRTD = marketInfo.local_trend === IBFTATrend.Up;
+
+                let priceToTargetDiff = Math.abs(marketInfo.resistance - marketInfo.last_price);
+                if (marketInfo.last_price >= marketInfo.resistance || allowedDiff > priceToTargetDiff) {
+                    result.Levels = false;
+                } else {
+                    result.Levels = true;
+                }
+            } else {
+                result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Down;
+                result.LocalRTD = marketInfo.local_trend === IBFTATrend.Down;
+
+                let priceToTargetDiff = Math.abs(marketInfo.support - marketInfo.last_price);
+                if (marketInfo.last_price <= marketInfo.support || allowedDiff > priceToTargetDiff) {
+                    result.Levels = false;
+                } else {
+                    result.Levels = true;
+                }
+            }
+
+            result.GlobalRTDValue = marketInfo.global_trend;
+            result.LocalRTDValue = marketInfo.local_trend;
+        }
+
+        if (symbolTradeInfo && symbolTradeInfo.Data) {
+            let price = parameters.Price || (symbolTradeInfo.Data.Bid + symbolTradeInfo.Data.Ask) / 2;
+            let contractSize = symbolTradeInfo.Data.ContractSize;
+            let rate = symbolTradeInfo.Data.Rate;
+            let cvar = symbolTradeInfo.Data.CVaR;
+            let bid = symbolTradeInfo.Data.Bid;
+            let ask = symbolTradeInfo.Data.Ask;
+            if (price) {
+                if (parameters.SL) {
+                    result.RiskValue = this._buildRiskByPrice(contractSize, rate, parameters.Size, price, parameters.SL);
+                } else if (cvar) {
+                    result.RiskValue = this._buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar);
+                }
+            }
+            
+            if (bid && ask) {
+                result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
+                result.SpreadRisk = result.SpreadRiskValue < 0.1;
+            } else {
+                result.SpreadRisk = null;
+            }
+
+            if (result.RiskValue) {
+                result.Risk = result.RiskValue < 15;
+            } else {
+                result.Risk = null;
+            }
+        }
+
+        let correlatedRisk = Math.abs(this.getRelatedPositionsRisk(parameters.Symbol, parameters.Side));
+        result.CorrelatedRiskValue = correlatedRisk / this.accountInfo.Balance * 100;
+        result.CorrelatedRisk = result.CorrelatedRiskValue < 15;
+        return result;
+    }
+
+    protected _tryGetSymbolTradeInfoFromCache(instrument: string): Observable<MTSymbolTradeInfoResponse> {
+        if (this._symbolTradeInfoCache[instrument]) {
+            return of(this._symbolTradeInfoCache[instrument]);
+        }
+
+        return null;
+    }
+
+    protected _tryAddSymbolTradeInfoToCache(instrument: string, data: MTSymbolTradeInfoResponse) {
+        this._symbolTradeInfoCache[instrument] = data;
+    }
+
+    protected _tryGetMarketInfoFromCache(instrument: string): Observable<IBFTAMarketInfo> {
+        if (this._marketInfoCache[instrument]) {
+            return of(this._marketInfoCache[instrument]);
+        }
+
+        return null;
+    }
+
+    protected _tryAddMarketInfoToCache(instrument: string, data: IBFTAMarketInfo) {
+        this._marketInfoCache[instrument] = data;
     }
 
     protected _reconnect() {
@@ -732,7 +839,6 @@ export abstract class MTBroker implements IMTBroker {
         this._accountInfo.Margin = data.Margin;
         this._accountInfo.Pl = data.Profit;
         this._accountInfo.CompanyName = data.CompanyName;
-        this._accountInfo.VAR = this.calculateTotalVarRisk();
         this._lastUpdate = new Date().getTime();
 
         this.onAccountInfoUpdated.next(this._accountInfo);
@@ -830,7 +936,6 @@ export abstract class MTBroker implements IMTBroker {
         this._buildPositions();
         this._buildRates();
         this._buildCurrencyRisks();
-        this._buildCurrencyVARRisks();
 
         if (changedOrders.length && !updateRequired) {
             this.onOrdersParametersUpdated.next(changedOrders);
@@ -927,9 +1032,33 @@ export abstract class MTBroker implements IMTBroker {
         });
     }
 
+    protected _buildRiskByVAR(contractSize: number, profitRate: number, size: number, price: number, cvar: number) {
+        let diff = price / 100 * cvar;
+        let riskNet = diff * size * contractSize;
+        // if (profitRate === 0) {
+        //     riskNet = riskNet / price;
+        // } else 
+        if (profitRate) {
+            riskNet = riskNet * profitRate;
+        }
+        return riskNet / this.accountInfo.Balance * 100;
+    } 
+    
+    protected _buildRiskByPrice(contractSize: number, profitRate: number, size: number, price1: number, price2: number) {
+        let diff = Math.abs(price1 - price2);
+        let riskNet = diff * size * contractSize;
+        // if (profitRate === 0) {
+        //     riskNet = riskNet / price;
+        // } else 
+        if (profitRate) {
+            riskNet = riskNet * profitRate;
+        }
+        return riskNet / this.accountInfo.Balance * 100;
+    }
+
     protected _buildRates() {
         for (const order of this._orders) {
-            let riskNet = 0;
+            let risk = 0;
             let contractSize = order.ContractSize;
 
             if (!contractSize) {
@@ -939,27 +1068,19 @@ export abstract class MTBroker implements IMTBroker {
             }
 
             if (order.SL) {
-                const diff = Math.abs(order.Price - order.SL);
-                riskNet = diff * order.Size * contractSize;
-                if (order.ProfitRate === 0) {
-                    riskNet = riskNet / order.Price;
-                } else {
-                    if (order.ProfitRate) {
-                        riskNet = riskNet * order.ProfitRate;
-                    }
-                }
-            } else if (order.NetPL < 0) {
-                riskNet = Math.abs(order.NetPL);
+                risk = this._buildRiskByPrice(contractSize, order.ProfitRate, order.Size, order.Price, order.SL);
+            } else if (order.VAR) {
+                risk = order.VAR;
             }
 
-            if (!riskNet) {
+            if (!risk) {
                 order.Risk = 0;
                 order.RiskPercentage = 0;
                 continue;
             }
 
-            order.Risk = Math.roundToDecimals(riskNet, 2);
-            order.RiskPercentage = Math.roundToDecimals(riskNet / this.accountInfo.Balance * 100, 2);
+            order.Risk = Math.roundToDecimals(this.accountInfo.Balance / 100 * risk, 2);
+            order.RiskPercentage = Math.roundToDecimals(risk, 2);
         }
     }
 
@@ -972,64 +1093,6 @@ export abstract class MTBroker implements IMTBroker {
             Type: type,
             Side: OrderSide.Buy
         };
-    }
-
-
-    protected _buildCurrencyVARRisks() {
-        let result: MTCurrencyVarRisk[] = [];
-        for (const order of this.orders) {
-            let exists = false;
-            let type = order.Type === OrderTypes.Market ? MTCurrencyRiskType.Actual : MTCurrencyRiskType.Pending;
-            for (const r of result) {
-                if (r.Currency === order.Symbol && type === r.Type) {
-                    exists = true;
-                    r.Risk += order.VAR;
-                    r.OrdersCount++;
-                }
-            }
-
-            if (!exists) {
-                result.push({
-                    Currency: order.Symbol,
-                    Risk: order.VAR,
-                    Type: type,
-                    OrdersCount: 1
-                });
-            }
-        }
-
-        for (let i = 0; i < this._currencyVARRisks.length; i++) {
-            const currencyRisk = this._currencyVARRisks[i];
-            let existing = false;
-            for (let j = 0; j < result.length; j++) {
-                const r = result[j];
-                if (r.Currency === currencyRisk.Currency && currencyRisk.Type === r.Type) {
-                    existing = true;
-                    currencyRisk.Risk = r.Risk;
-                    currencyRisk.OrdersCount = r.OrdersCount;
-                }
-            }
-
-            if (!existing) {
-                this._currencyVARRisks.splice(i, 1);
-                i--;
-            }
-        } 
-
-        for (let j = 0; j < result.length; j++) {
-            const r = result[j];
-            let existing = false;
-            for (let i = 0; i < this._currencyVARRisks.length; i++) {
-                const currencyRisk = this._currencyVARRisks[i];
-                if (r.Currency === currencyRisk.Currency && currencyRisk.Type === r.Type) {
-                    existing = true;
-                }
-
-            }
-            if (!existing) {
-                this._currencyVARRisks.push(r);
-            }
-        }
     }
 
     protected _buildCurrencyRisks() {

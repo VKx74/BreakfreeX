@@ -5,6 +5,7 @@ export enum EMTMessageType {
     Logout = "Logout",
     SubscribeQuote = "SubscribeQuote",
     GetQuote = "GetQuote",
+    SymbolTradeInfo = "SymbolTradeInfo",
     OrdersHistory = "OrdersHistory",
     Quote = "Quote",
     AccountUpdate = "AccountUpdate",
@@ -66,6 +67,15 @@ export interface IMTSubscriptionData {
 
 export interface IMTGetQuoteDate {
     Symbol: string;
+}
+
+export interface IMTSymbolTradeInfoData {
+    Symbol: string;
+    ContractSize: number;
+    CVaR: number;
+    Rate: number;
+    Bid: number;
+    Ask: number;
 }
 
 export interface IMTQuoteData {
@@ -182,6 +192,10 @@ export class MTQuoteResponse extends MTResponseMessageBase {
     public Data: IMTQuoteData;
 }
 
+export class MTSymbolTradeInfoResponse extends MTResponseMessageBase {
+    public Data: IMTSymbolTradeInfoData;
+}
+
 export class MTAccountUpdateResponse extends MTResponseMessageBase {
     public Data: IMTAccountUpdatedData;
 }
@@ -253,6 +267,14 @@ export class GetQuote extends MTRequestMessageBase {
 
     constructor() {
         super(EMTMessageType.GetQuote);
+    }
+}
+
+export class GetSymbolTradeInfo extends MTRequestMessageBase {
+    public Data: string;
+
+    constructor() {
+        super(EMTMessageType.SymbolTradeInfo);
     }
 }
 

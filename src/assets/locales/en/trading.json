@@ -6,6 +6,7 @@
     "time": "Time"
   },
   "tradeManager": {
+    "validationChecklist": "Validation Checklist",
     "title": "Trade Widget",
     "resetAmount": "Reset size",
     "amountToClose": "Size to close",

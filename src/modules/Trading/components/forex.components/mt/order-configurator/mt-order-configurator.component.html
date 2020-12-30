@@ -4,12 +4,12 @@
         <div class="flex justify-space-between">
             <div class="crypto-text  is-secondary  is-small">
                 <div>Ask</div>
-                <div class="ask-text">{{lastTick?.ask.toFixed(decimals)}}</div>
+                <div class="ask-text">{{lastTick ? lastTick.ask.toFixed(decimals) : '-'}}</div>
             </div>
             <div class="crypto-text is-secondary">{{config.instrument?.symbol}}</div>
             <div class="crypto-text is-secondary is-small">
                 <div>Bid</div>
-                <div class="bid-text">{{lastTick?.bid.toFixed(decimals)}}</div>
+                <div class="bid-text">{{lastTick ? lastTick?.bid.toFixed(decimals) : '-'}}</div>
             </div>
         </div>
     </div>
@@ -39,107 +39,117 @@
                     <div class="form-unit__label">{{'amount' | translate}}</div>
                     <mat-form-field class="crypto-input bft-form-input full-width">
                         <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
-                            [step]="priceStep" [(ngModel)]="config.amount">
+                            [step]="priceStep" [(ngModel)]="config.amount" (ngModelChange)="valueChanged($event)">
                     </mat-form-field>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="flex-row" *ngIf="showRisk()">
-            <div class="indicator-graph" #riskGraph>
-            </div>
-            <span class="start-point">Open correlated risk: {{risk?.toFixed(2)}}%</span>
-            <!--  <span class="start-excl">
-                <img src="./assets/img/svg-icons/exclamation-mark.svg" />
-            </span> -->
-           <!-- <span class="risk-text">Open risk</span>-->
-             <svg #riskArrow class="svg-arrow" width="15px" height="15px" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-                <path 
-                      d="M 100 100 L 300 100 L 200 300 z"
-                      stroke-width="2"/>
-               
-              </svg>
-            <!--  <div class="risk-overview" [ngClass]="{'critical': risk > 7}">
-                Existing risk by related positions 
-                <span class="risk-value">{{risk?.toFixed(2)}}%</span>
-                of balance
-            </div>-->
-        </div>
-
-        <div class="flex-row">
-            <div class="flex-column">
-                <div class="crypto-form-unit margin-bottom">
-                    <div class="form-unit__label">{{'type' | translate}}</div>
-                    <selector class="bft-form-select" [selectedOption]="config.type" [options]="allowedOrderTypes"
-                        [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
-                </div>
-            </div>
-            <div class="flex-column">
-                <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
-                    <div class="form-unit__label">{{'limitPrice' | translate}}</div>
-                    <mat-form-field class="crypto-input bft-form-input full-width">
-                        <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
-                            [range]="{min: minPriceValue}" [(ngModel)]="config.price">
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="flex-row">
-            <div class="flex-column">
-                <div class="crypto-form-unit margin-bottom">
-                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL">
-                        {{'tradeManager.stoploss' | translate}}</mat-slide-toggle>
-                    <mat-form-field class="crypto-input bft-form-input full-width" *ngIf="config.useSL">
-                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
-                            [step]="priceStep" [(ngModel)]="config.sl">
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="flex-column">
-                <div class="crypto-form-unit margin-bottom">
-                    <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">
-                        {{'tradeManager.takeprofit' | translate}}</mat-slide-toggle>
-                    <mat-form-field class="crypto-input bft-form-input full-width" *ngIf="config.useTP">
-                        <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
-                            [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
-                    </mat-form-field>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="flex-row">
+    <div class="flex-row">
+        <div class="flex-column">
             <div class="crypto-form-unit margin-bottom">
-                <div class="form-unit__label">{{'tradeManager.comment' | translate}}</div>
+                <div class="form-unit__label">{{'type' | translate}}</div>
+                <selector class="bft-form-select" [selectedOption]="config.type" [options]="allowedOrderTypes"
+                    [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
+            </div>
+        </div>
+        <div class="flex-column">
+            <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
+                <div class="form-unit__label">{{'limitPrice' | translate}}</div>
                 <mat-form-field class="crypto-input bft-form-input full-width">
-                    <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
-                        [(ngModel)]="config.comment">
-            </textarea>
+                    <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                        [range]="{min: minPriceValue}" [(ngModel)]="config.price"
+                        (ngModelChange)="valueChanged($event)">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex-row">
+        <div class="flex-column">
+            <div class="crypto-form-unit margin-bottom">
+                <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL"
+                    (ngModelChange)="valueChanged($event)">
+                    {{'tradeManager.stoploss' | translate}}</mat-slide-toggle>
+                <mat-form-field class="crypto-input bft-form-input full-width" *ngIf="config.useSL">
+                    <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                        [step]="priceStep" [(ngModel)]="config.sl" (ngModelChange)="valueChanged($event)">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex-column">
+            <div class="crypto-form-unit margin-bottom">
+                <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useTP">
+                    {{'tradeManager.takeprofit' | translate}}</mat-slide-toggle>
+                <mat-form-field class="crypto-input bft-form-input full-width" *ngIf="config.useTP">
+                    <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                        [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
                 </mat-form-field>
             </div>
         </div>
 
-        <mat-expansion-panel [expanded]="false">
-            <mat-expansion-panel-header [@.disabled]="true">
-                {{'tradeManager.advancedSettings' | translate}}
-            </mat-expansion-panel-header>
+    </div>
 
-            <ng-template matExpansionPanelContent>
+    <div class="flex-row">
+        <div class="crypto-form-unit margin-bottom">
+            <div class="checklist-row">
+                <div class="form-unit__label">{{'tradeManager.validationChecklist' | translate}}</div>
+                <mat-progress-bar mode="indeterminate" class="loader" *ngIf="calculatingChecklist"></mat-progress-bar>
+                <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
+                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" matTooltip="Checklist Item description">
+                        <span class="icon">
+                            <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
+                                aria-hidden="true"></i>
+                        </span>
+                        <span class="name">
+                            {{item.name}}
+                        </span>
+                        <span class="value" *ngIf="item.value">
+                            {{item.value}}
+                        </span>
+                    </span>
+                </div>
+                <ng-template #noData>
+                    <span class="no-data">
+                        No data for calculations
+                    </span>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="crypto-form-unit margin-bottom">
+            <div class="form-unit__label">{{'tradeManager.comment' | translate}}</div>
+            <mat-form-field class="crypto-input bft-form-input full-width">
+                <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
+                    [(ngModel)]="config.comment">
+            </textarea>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <mat-expansion-panel [expanded]="false">
+        <mat-expansion-panel-header [@.disabled]="true">
+            {{'tradeManager.advancedSettings' | translate}}
+        </mat-expansion-panel-header>
+
+        <ng-template matExpansionPanelContent>
             <div class="flex-row">
                 <div class="flex-column">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
-                        <selector class="bft-form-select" [selectedOption]="config.expirationType" [options]="expirationTypes"
-                            (onSelect)="handleExpirationTypeSelected($event)"></selector>
+                        <selector class="bft-form-select" [selectedOption]="config.expirationType"
+                            [options]="expirationTypes" (onSelect)="handleExpirationTypeSelected($event)"></selector>
                     </div>
                 </div>
                 <div class="flex-column">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.fillPolicy' | translate}}</div>
-                        <selector class="bft-form-select" [selectedOption]="config.fillPolicy" [options]="orderFillPolicies"
-                            (onSelect)="handleFillPolicySelected($event)"></selector>
+                        <selector class="bft-form-select" [selectedOption]="config.fillPolicy"
+                            [options]="orderFillPolicies" (onSelect)="handleFillPolicySelected($event)"></selector>
                     </div>
                 </div>
             </div>
@@ -149,7 +159,8 @@
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
                         <mat-form-field class="crypto-input bft-form-input full-width">
-                            <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime" [ngxTimepicker]="time" [format]='24'>
+                            <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime"
+                                [ngxTimepicker]="time" [format]='24'>
                             <ngx-material-timepicker #time></ngx-material-timepicker>
                         </mat-form-field>
                     </div>
@@ -158,8 +169,7 @@
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
                         <mat-form-field class="crypto-input bft-form-input full-width">
-                            <input matInput readonly [matDatepicker]="end"
-                                [(ngModel)]="selectedDate"
+                            <input matInput readonly [matDatepicker]="end" [(ngModel)]="selectedDate"
                                 (click)="end.open()" placeholder="Date">
                             <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
@@ -167,12 +177,12 @@
                 </div>
             </div>
         </ng-template>
-        </mat-expansion-panel>
+    </mat-expansion-panel>
 
-        <div class="buttons-wrapper flex justify-flex-end">
-            <button class="full-width crypto-button submit-btn" [ngClass]="{'order-side-buy': isBuyMode(),
+    <div class="buttons-wrapper flex justify-flex-end">
+        <button class="full-width crypto-button submit-btn" [ngClass]="{'order-side-buy': isBuyMode(),
                         'order-side-sell': !isBuyMode(),
                         'is-loading': processingSubmit}" (click)="submit()">
-                {{submitHandler ? ('tradeManager.applyOrder' | translate) : ('tradeManager.placeOrder' | translate)}}
-            </button>
-        </div>
+            {{submitHandler ? ('tradeManager.applyOrder' | translate) : ('tradeManager.placeOrder' | translate)}}
+        </button>
+    </div>

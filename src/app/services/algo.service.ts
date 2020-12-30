@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { IInstrument } from "../models/common/instrument";
-import { Observable, of } from "rxjs";
+import { Observable, Observer, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app.config.service';
 
 import * as CryptoJS from 'crypto-js';
+import { InstrumentService } from "./instrument.service";
 
 export enum TrendDetectorType {
     hma = "hma",
@@ -193,6 +194,15 @@ export interface IBFTAAlgoResponse {
     trade: IBFTATrade;
 }
 
+export interface IBFTAMarketInfo {
+    support: number;
+    resistance: number;
+    natural: number;
+    last_price: number;
+    local_trend: IBFTATrend;
+    global_trend: IBFTATrend;
+}
+
 export interface IBFTAAlgoResponseV2 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
@@ -300,7 +310,6 @@ class AlgoServiceEncryptionHelper {
     private static iterations = 1000;
     private static password = "Adfwe2fsdf";
 
-
     static encrypt(msg) {
         let salt = CryptoJS.lib.WordArray.random(this.saltSize / 8);
 
@@ -373,7 +382,7 @@ class AlgoServiceEncryptionHelper {
 export class AlgoService {
     private url: string;
 
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, private _instrumentService: InstrumentService) {
         this.url = AppConfigService.config.apiUrls.bftAlgoREST;
     }
 
@@ -399,6 +408,49 @@ export class AlgoService {
 
     calculateRTD(data: any): Observable<IRTDPayload> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
+    }
+
+    private _replaceSpecCharset(str: string): string {
+        return str.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
+    }
+
+    getMarketInfo(instrument: IInstrument | string): Observable<IBFTAMarketInfo> {
+        let data = instrument;
+        if (typeof (instrument) === 'string') {
+            return new Observable<IBFTAMarketInfo>((observer: Observer<IBFTAMarketInfo>) => {
+                this._instrumentService.getInstruments(null, instrument).subscribe((instruments: IInstrument[]) => {
+                    if (!instruments || !instruments.length) {
+                        observer.next(null);
+                        return;
+                    }
+                    let matchedInstrument = null;
+                    let searchingString = this._replaceSpecCharset(instrument);
+                    for (const i of instruments) {
+                        let instrumentID = this._replaceSpecCharset(i.id);
+                        let instrumentSymbol = this._replaceSpecCharset(i.symbol);
+                        if (searchingString === instrumentID || searchingString === instrumentSymbol) {
+                            matchedInstrument = i;
+                        }
+                    }
+
+                    if (!matchedInstrument) {
+                        observer.next(null);
+                        return;
+                    }
+
+                    this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, matchedInstrument).pipe(map(this._decrypt)).subscribe((res) => {
+                        observer.next(res);
+                    });
+                }, (error) => {
+                    observer.next(null);
+                });
+            });
+        }
+
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, data).pipe(map((encryptedData) => {
+            const decryptedData = this._decrypt(encryptedData);
+            return decryptedData;
+        }));
     }
 
     scanInstruments(): Observable<IBFTScanInstrumentsResponse> {

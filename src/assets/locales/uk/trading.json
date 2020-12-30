@@ -6,6 +6,7 @@
     "time": "Час"
   },
   "tradeManager": {
+    "validationChecklist": "Список перевірок",
     "title": "Торговий Віджет",
     "resetAmount": "Скинути суму",
     "amountToClose": "Кількість закриття",

@@ -4,6 +4,43 @@
 
 :host {
 
+  .checklist-row {
+    position: relative;
+    /deep/ .mat-progress-bar {
+      position: absolute;
+    }
+
+    .no-data {
+      font-size: 11px;
+      padding: 3px 5px;
+    }
+  }
+
+  .tiles-wrapper {
+    padding: 2px;
+    max-width: 290px;
+    .checklist-tile-wrapper {
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 3px;
+      font-size: 11px;
+      padding: 3px 5px;
+      float: left;
+      &:hover {
+       // border-color: black;
+      }
+      .image {
+        margin: 0px 3px;
+      }
+      .fa-check {
+        color: $lightGreenColor;
+      }
+      .fa-exclamation {
+        color: $lightRedColor;
+      }
+    }
+  }
+
   .svg-arrow {
     position: absolute;
     margin-top: -15px;
@@ -201,12 +238,22 @@ hr {
 
 
 @include themify($themes, true) {
+
+  .checklist-tile-wrapper {
+    background-color: themed('appBackgroundColor');
+    color: themed('titleTextColor');
+  }
+
   .indicator-graph {
     border-color: themed('appBackgroundColor');
   }
 
   .svg-arrow {
     fill: themed('titleTextColor');
+  }
+
+  .no-data {
+    color: themed('valueTextColor');
   }
 
   .order-side-btn {
