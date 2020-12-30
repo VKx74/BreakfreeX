@@ -430,6 +430,7 @@ export class AlgoService {
                         let instrumentSymbol = this._replaceSpecCharset(i.symbol);
                         if (searchingString === instrumentID || searchingString === instrumentSymbol) {
                             matchedInstrument = i;
+                            break;
                         }
                     }
 
