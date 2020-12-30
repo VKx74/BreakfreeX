@@ -39,7 +39,7 @@
                     <div class="form-unit__label">{{'amount' | translate}}</div>
                     <mat-form-field class="crypto-input bft-form-input full-width">
                         <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
-                            [step]="priceStep" [(ngModel)]="config.amount" (ngModelChange)="valueChanged($event)">
+                            [step]="priceStep" [(ngModel)]="config.amount" (ngModelChange)="valueChanged()">
                     </mat-form-field>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 <mat-form-field class="crypto-input bft-form-input full-width">
                     <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
                         [range]="{min: minPriceValue}" [(ngModel)]="config.price"
-                        (ngModelChange)="valueChanged($event)">
+                        (ngModelChange)="valueChanged()">
                 </mat-form-field>
             </div>
         </div>
@@ -71,11 +71,11 @@
         <div class="flex-column">
             <div class="crypto-form-unit margin-bottom">
                 <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL"
-                    (ngModelChange)="valueChanged($event)">
+                    (ngModelChange)="valueChanged()">
                     {{'tradeManager.stoploss' | translate}}</mat-slide-toggle>
                 <mat-form-field class="crypto-input bft-form-input full-width" *ngIf="config.useSL">
                     <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
-                        [step]="priceStep" [(ngModel)]="config.sl" (ngModelChange)="valueChanged($event)">
+                        [step]="priceStep" [(ngModel)]="config.sl" (ngModelChange)="valueChanged()">
                 </mat-form-field>
             </div>
         </div>
