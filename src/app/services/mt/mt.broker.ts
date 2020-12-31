@@ -759,8 +759,8 @@ export abstract class MTBroker implements IMTBroker {
             }
         }
 
-        let correlatedRisk = Math.abs(this.getRelatedPositionsRisk(parameters.Symbol, parameters.Side));
-        result.CorrelatedRiskValue = correlatedRisk / this.accountInfo.Balance * 100;
+        let correlatedRisk = this.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
+        result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.accountInfo.Balance * 100) + result.RiskValue);
         result.CorrelatedRisk = result.CorrelatedRiskValue < 15;
         return result;
     }
