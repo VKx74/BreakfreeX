@@ -14,7 +14,6 @@ import bind from "bind-decorator";
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { MTOrderValidationChecklist, MTPlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
-import { ConfirmModalComponent } from 'UI';
 import { MatDialog } from '@angular/material/dialog';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 
@@ -22,6 +21,7 @@ interface ChecklistItem {
     name: string;
     valid: boolean;
     value?: string;
+    minusScore: number;
 }
 
 interface ChecklistItemDescription {
@@ -33,8 +33,8 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
             return {
                 name: "Local Trend",
-                // value: data.LocalRTDValue,
-                valid: data.LocalRTD
+                valid: data.LocalRTD,
+                minusScore: data.LocalRTD ? 0 : 1
             };
         }
     },
@@ -42,8 +42,8 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
             return {
                 name: "Global Trend",
-                // value: data.GlobalRTDValue,
-                valid: data.GlobalRTD
+                valid: data.GlobalRTD,
+                minusScore: data.GlobalRTD ? 0 : 2
             };
         }
     },
@@ -51,7 +51,8 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
             return {
                 name: "S&R Tolerance",
-                valid: data.Levels
+                valid: data.Levels,
+                minusScore: data.Levels ? 0 : 1
             };
         }
     },
@@ -61,7 +62,8 @@ const checklist: ChecklistItemDescription[] = [
             return {
                 name: "Order Risk",
                 valid: data.Risk,
-                value: value.toFixed(2) + "%"
+                value: value.toFixed(2) + "%",
+                minusScore: data.Risk ? 0 : 2
             };
         }
     },
@@ -71,7 +73,8 @@ const checklist: ChecklistItemDescription[] = [
             return {
                 name: "Related Risk",
                 valid: data.CorrelatedRisk,
-                value: value.toFixed(2) + "%"
+                value: value.toFixed(2) + "%",
+                minusScore: data.CorrelatedRisk ? 0 : 1
             };
         }
     },
@@ -81,7 +84,8 @@ const checklist: ChecklistItemDescription[] = [
             return {
                 name: "High Spread",
                 valid: data.SpreadRisk,
-                value: value.toFixed(2) + "%"
+                value: value.toFixed(2) + "%",
+                minusScore: data.SpreadRisk ? 0 : 1
             };
         }
     }
@@ -209,6 +213,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
     calculatingChecklist: boolean = false;
 
     checklistItems: ChecklistItem[] = [];
+    orderScore: number = 0;
+
     lastTick: IMTTick = null;
     allowedOrderTypes: OrderTypes[] = [];
     orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
@@ -341,6 +347,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
     private _buildCalculateChecklistResults(data: MTOrderValidationChecklist) {
         this.checklistItems = [];
+        this.orderScore = 5;
 
         if (!data) {
             return;
@@ -354,6 +361,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 recalculateNeeded = true;
                 continue;
             }
+            this.orderScore -= res.minusScore;
             this.checklistItems.push(res);
         }
 

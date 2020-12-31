@@ -1,0 +1,5 @@
+<div class="order-score">
+    <div class="score-item" *ngFor="let item of ScoreItems">
+        <i class="fa" aria-hidden="true"  [ngClass]="{'fa-star': item.IsHit, 'fa-star-o': !item.IsHit}"></i>
+    </div>
+</div>

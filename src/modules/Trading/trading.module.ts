@@ -76,6 +76,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CurrencyGuardRiskClassPipe } from './components/forex.components/mt/pipes/currencyGuardRiskClass.pipe';
 import { CurrencyGuardRiskPipe } from './components/forex.components/mt/pipes/currencyGuardRisk.pipe';
+import { MTOrderScoreComponent } from './components/forex.components/mt/order-score/mt-order-score.component';
 
 const components = [
     TradeManagerComponent,
@@ -131,7 +132,8 @@ const components = [
         OrderSideComponent,
         TradingCloseButtonComponent,
         CurrencyGuardRiskClassPipe,
-        CurrencyGuardRiskPipe
+        CurrencyGuardRiskPipe,
+        MTOrderScoreComponent
     ],
     imports: [
         CommonModule,

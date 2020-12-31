@@ -14,6 +14,16 @@
       font-size: 11px;
       padding: 3px 5px;
     }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .score-container {
+      font-size: 13px;
+      color: goldenrod;
+    }
   }
 
   .tiles-wrapper {
