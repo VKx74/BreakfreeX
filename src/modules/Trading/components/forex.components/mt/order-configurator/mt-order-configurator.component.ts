@@ -16,6 +16,7 @@ import { MTOrderValidationChecklist, MTPlaceOrder } from 'modules/Trading/models
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { MatDialog } from '@angular/material/dialog';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 
 interface ChecklistItem {
     name: string;
@@ -25,12 +26,12 @@ interface ChecklistItem {
 }
 
 interface ChecklistItemDescription {
-    calculate: (data: MTOrderValidationChecklist, tick?: IMTTick) => ChecklistItem;
+    calculate: (data: MTOrderValidationChecklist, config?: MTOrderConfig) => ChecklistItem;
 }
 
 const checklist: ChecklistItemDescription[] = [
     {
-        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             return {
                 name: "Local Trend",
                 valid: data.LocalRTD,
@@ -39,7 +40,7 @@ const checklist: ChecklistItemDescription[] = [
         }
     },
     {
-        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             return {
                 name: "Global Trend",
                 valid: data.GlobalRTD,
@@ -48,7 +49,7 @@ const checklist: ChecklistItemDescription[] = [
         }
     },
     {
-        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             return {
                 name: "S&R Tolerance",
                 valid: data.Levels,
@@ -57,7 +58,7 @@ const checklist: ChecklistItemDescription[] = [
         }
     },
     {
-        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = data.RiskValue || 0;
             return {
                 name: "Order Risk",
@@ -68,7 +69,7 @@ const checklist: ChecklistItemDescription[] = [
         }
     },
     {
-        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = data.CorrelatedRiskValue || 0;
             return {
                 name: "Related Risk",
@@ -79,13 +80,23 @@ const checklist: ChecklistItemDescription[] = [
         }
     },
     {
-        calculate: (data: MTOrderValidationChecklist): ChecklistItem => {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = data.SpreadRiskValue || 0;
             return {
                 name: "High Spread",
                 valid: data.SpreadRisk,
                 value: value.toFixed(2) + "%",
                 minusScore: data.SpreadRisk ? 0 : 1
+            };
+        }
+    },
+    {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
+            const isValid = config.useSL && !!(config.sl);
+            return {
+                name: "SL Not Set",
+                valid: isValid,
+                minusScore: isValid ? 0 : 1
             };
         }
     }
@@ -213,7 +224,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     calculatingChecklist: boolean = false;
 
     checklistItems: ChecklistItem[] = [];
-    orderScore: number = 0;
+    orderScore: number = 5;
 
     lastTick: IMTTick = null;
     allowedOrderTypes: OrderTypes[] = [];
@@ -356,7 +367,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         let recalculateNeeded = false;
 
         for (const i of checklist) {
-            const res = i.calculate(data);
+            const res = i.calculate(data, this.config);
             if (res.valid === undefined || res.valid === null) {
                 recalculateNeeded = true;
                 continue;
@@ -411,19 +422,19 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.submitHandler(this.config);
             this.onSubmitted.emit();
         } else {
-            // if (this.risk > this._maxRisk) {
-            //     this._dialog.open(ConfirmModalComponent, {
-            //         data: {
-            //             title: 'Risk alert',
-            //             message: `You have already exceeded reasonable risk limitations with current open positions. Adding a position on ${this.config.instrument.symbol} will only increase current risk and lead to overleverage. Are you sure you wish to increase risk beyond ${this.risk.toFixed(2)}% ?`,
-            //             onConfirm: () => {
-            //                 this._placeOrder();
-            //             }
-            //         }
-            //     });
-            // } else {
+            if (this.orderScore < 4) {
+                this._dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: 'Risk alert',
+                        message: `Your order setup have multiple risks. Do you want to continue?`,
+                        onConfirm: () => {
+                            this._placeOrder();
+                        }
+                    }
+                });
+            } else {
                 this._placeOrder();
-            // }
+            }
         }
     }
 
