@@ -1,15 +1,15 @@
- import IBar = TradingChartDesigner.IBar;
+import IBar = TradingChartDesigner.IBar;
 import Environment = TradingChartDesigner.UserAgent;
 import IRequest = TradingChartDesigner.IRequest;
 import IBarsRequest = TradingChartDesigner.IBarsRequest;
 import Dictionary = TradingChartDesigner.Dictionary;
 import IDatafeedBase = TradingChartDesigner.IDatafeedBase;
-import {RequestKind} from "./models";
-import {IInstrument} from "../../../app/models/common/instrument";
-import {ITick} from "../../../app/models/common/tick";
-import {TimeZoneManager} from "TimeZones";
-import {ITimeFrame} from "@app/models/common/timeFrame";
-import {IPeriodicity} from "@app/models/common/periodicity";
+import { RequestKind } from "./models";
+import { IInstrument } from "../../../app/models/common/instrument";
+import { ITick } from "../../../app/models/common/tick";
+import { TimeZoneManager } from "TimeZones";
+import { ITimeFrame } from "@app/models/common/timeFrame";
+import { IPeriodicity } from "@app/models/common/periodicity";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { EExchange } from '@app/models/common/exchange';
 import { EMarketType } from '@app/models/common/marketType';
@@ -31,8 +31,8 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
     static supportedTimeFramesStr: string[] = ['1 Minute', '5 Minutes', '15 Minutes', '1 Hour', '4 Hours', '1 Day', '1 Week'];
     static supportedTimeFrames: ITimeFrame[] = [
-      
-          {
+
+        {
             interval: 1,
             periodicity: IPeriodicity.minute
         },
@@ -67,7 +67,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
     private MAX_BARS_PER_CHART = 2000;
 
     private _requests = new Dictionary<number, IRequest>();
-    
+
     private _interval: any;
 
     public instruments: IInstrument[] = [];
@@ -129,6 +129,14 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
         const isChartMainSeries = !instrument || (instrument.symbol === chart.instrument.symbol && instrument.exchange === chart.instrument.exchange);
 
+        // if (isChartMainSeries) {
+        //     let pricePrecision = this._calculatePricePrecision(bars);
+        //     chart.instrument.tickSize = this._buildTickSizeByPricePrecision(pricePrecision);
+        //     chart.invokeValueChanged(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED);
+        //     console.log(`price precision: ${pricePrecision}`);
+        //     console.log(`tick size: ${chart.instrument.tickSize}`);
+        // }
+
         switch (request.name) {
             case RequestKind.BARS:
                 dataManager.clearBarDataRows(instrument);
@@ -183,7 +191,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
         chart.hideWaiting();
         chart.refreshIndicators();
-        if (request.name === RequestKind.BARS) { 
+        if (request.name === RequestKind.BARS) {
             chart.refreshAsync(true);
         } else {
             chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
@@ -352,9 +360,9 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
         this._addChartToRefresh(chart);
     }
-    
+
     private _addChartToRefresh(chart: TradingChartDesigner.Chart) {
-        if (chart.isDestroyed) 
+        if (chart.isDestroyed)
             return;
 
         for (let i = 0; i < this.chartForRefresh.length; i++) {

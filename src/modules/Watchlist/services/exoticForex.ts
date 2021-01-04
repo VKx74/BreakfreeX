@@ -19,7 +19,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "SGD",
         "dependInstrument": "AUD",
         "company": "AUD vs SGD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_DKK",
@@ -32,7 +33,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "DKK",
         "dependInstrument": "EUR",
         "company": "EUR vs DKK",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_HKD",
@@ -45,7 +47,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "HKD",
         "dependInstrument": "EUR",
         "company": "EUR vs HKD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_NOK",
@@ -58,7 +61,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "NOK",
         "dependInstrument": "EUR",
         "company": "EUR vs NOK",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_PLN",
@@ -71,7 +75,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "PLN",
         "dependInstrument": "EUR",
         "company": "EUR vs PLN",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_SEK",
@@ -84,7 +89,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "SEK",
         "dependInstrument": "EUR",
         "company": "EUR vs SEK",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_SGD",
@@ -97,7 +103,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "SGD",
         "dependInstrument": "EUR",
         "company": "EUR vs SGD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_TRY",
@@ -110,7 +117,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "TRY",
         "dependInstrument": "EUR",
         "company": "EUR vs TRY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_ZAR",
@@ -123,7 +131,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "ZAR",
         "dependInstrument": "EUR",
         "company": "EUR vs ZAR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "SGD_JPY",
@@ -136,7 +145,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "JPY",
         "dependInstrument": "SGD",
         "company": "SGD vs JPY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_CNH",
@@ -149,7 +159,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CNH",
         "dependInstrument": "USD",
         "company": "USD vs CNH",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_CZK",
@@ -162,7 +173,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CZK",
         "dependInstrument": "USD",
         "company": "USD vs CZK",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_DKK",
@@ -175,7 +187,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "DKK",
         "dependInstrument": "USD",
         "company": "USD vs DKK",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_HKD",
@@ -188,7 +201,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "HKD",
         "dependInstrument": "USD",
         "company": "USD vs HKD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_MXN",
@@ -201,7 +215,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "MXN",
         "dependInstrument": "USD",
         "company": "USD vs MXN",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_NOK",
@@ -214,7 +229,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "NOK",
         "dependInstrument": "USD",
         "company": "USD vs NOK",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_PLN",
@@ -227,7 +243,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "PLN",
         "dependInstrument": "USD",
         "company": "USD vs PLN",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD/RUB",
@@ -253,7 +270,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "SEK",
         "dependInstrument": "USD",
         "company": "USD vs SEK",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_THB",
@@ -266,7 +284,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "THB",
         "dependInstrument": "USD",
         "company": "USD vs THB",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_TRY",
@@ -279,7 +298,8 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "TRY",
         "dependInstrument": "USD",
         "company": "USD vs TRY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_ZAR",
@@ -292,6 +312,7 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "baseInstrument": "ZAR",
         "dependInstrument": "USD",
         "company": "USD vs ZAR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };

@@ -100,10 +100,10 @@ export class DataFeed extends DataFeedBase {
 
         this._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
             if (!response) {
-                this._processResult([], request, requestMsg.instrument);
+                this._processResult(response, request, requestMsg.instrument);
             } else {
                 if (this.requestBusy(request)) {
-                    this._processResult(response.data, request, requestMsg.instrument);
+                    this._processResult(response, request, requestMsg.instrument);
                 }
             }
         }, (error) => {
@@ -161,6 +161,7 @@ export class DataFeed extends DataFeedBase {
             symbol: instrument.symbol,
             tickSize: instrument.tickSize,
             type: (instrument as any).type as EMarketType,
+            tickSizeCorrect: (instrument as any).tickSizeCorrect
         };
         // for (let i = 0; i < this.instruments.length; i++) {
         //     if (this.instruments[i].symbol === instrument.symbol && this.instruments[i].exchange === instrument.exchange) {
@@ -203,9 +204,27 @@ export class DataFeed extends DataFeedBase {
         return res;
     }
 
-    private _processResult(data: IBarData[], request: TradingChartDesigner.IBarsRequest, instrument: IInstrument) {
-        this.onRequestCompleted(request, data);
+    private _processResult(response: IHistoryResponse, request: TradingChartDesigner.IBarsRequest, instrument: IInstrument) {
+        const chart = request.chart;
+        const isChartMainSeries = !instrument || (instrument.symbol === chart.instrument.symbol && instrument.exchange === chart.instrument.exchange);
+
+        if (isChartMainSeries && response.pricePrecision && !instrument.tickSizeCorrect) {
+            chart.instrument.pricePrecision = response.pricePrecision;
+            chart.instrument.tickSize = this._buildTickSizeByPricePrecision(response.pricePrecision);
+            chart.invokeValueChanged(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED);
+        }
+
+        this.onRequestCompleted(request, response.data);
         this._subscribeToRealtime(instrument, request.chart);
+    }
+
+    protected _buildTickSizeByPricePrecision(pricePrecision: number) {
+        let tickSize = "0.";
+        for (let i = 0; i < pricePrecision - 1; i++) {
+            tickSize += "0";
+        }
+        tickSize += "1";
+        return Number.parseFloat(tickSize);
     }
 
     private _subscribeToRealtime(instrument: IInstrument, chart: TradingChartDesigner.Chart) {

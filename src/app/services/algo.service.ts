@@ -415,15 +415,14 @@ export class AlgoService {
     }
 
     getMarketInfo(instrument: IInstrument | string): Observable<IBFTAMarketInfo> {
-        let data = instrument;
         if (typeof (instrument) === 'string') {
             return new Observable<IBFTAMarketInfo>((observer: Observer<IBFTAMarketInfo>) => {
-                this._instrumentService.instrumentToDatafeedFormat(instrument).subscribe((instrument: IInstrument) => {
-                    if (!instrument) {
+                this._instrumentService.instrumentToDatafeedFormat(instrument).subscribe((mappedInstrument: IInstrument) => {
+                    if (!mappedInstrument) {
                         observer.next(null);
                         return;
                     }
-                    this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, instrument).pipe(map(this._decrypt)).subscribe((res) => {
+                    this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, mappedInstrument).pipe(map(this._decrypt)).subscribe((res) => {
                         observer.next(res);
                     });
                 }, (error) => {
@@ -432,7 +431,7 @@ export class AlgoService {
             });
         }
 
-        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, data).pipe(map((encryptedData) => {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, instrument).pipe(map((encryptedData) => {
             const decryptedData = this._decrypt(encryptedData);
             return decryptedData;
         }));

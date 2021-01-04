@@ -19,7 +19,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "ETH",
         "dependInstrument": "BTC",
         "company": "ETH vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "xrp-btc",
@@ -32,7 +33,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "XRP",
         "dependInstrument": "BTC",
         "company": "XRP vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "xlm-btc",
@@ -45,7 +47,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "XLM",
         "dependInstrument": "BTC",
         "company": "XLM vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "ltc-btc",
@@ -58,7 +61,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "LTC",
         "dependInstrument": "BTC",
         "company": "LTC vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "link-btc",
@@ -71,7 +75,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "LINK",
         "dependInstrument": "BTC",
         "company": "LINK vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "yfi-btc",
@@ -84,7 +89,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "YFI",
         "dependInstrument": "BTC",
         "company": "YFI vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "ada-btc",
@@ -97,7 +103,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "ADA",
         "dependInstrument": "BTC",
         "company": "ADA vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "xem-btc",
@@ -110,7 +117,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "XEM",
         "dependInstrument": "BTC",
         "company": "XEM vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "xmr-btc",
@@ -123,7 +131,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "XMR",
         "dependInstrument": "BTC",
         "company": "XMR vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "bch-btc",
@@ -136,7 +145,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "BCH",
         "dependInstrument": "BTC",
         "company": "BCH vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "eos-btc",
@@ -149,7 +159,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "EOS",
         "dependInstrument": "BTC",
         "company": "EOS vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "trx-btc",
@@ -162,7 +173,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "TRX",
         "dependInstrument": "BTC",
         "company": "TRX vs BTC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "eth-usdt",
@@ -175,7 +187,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "ETH",
         "dependInstrument": "USDT",
         "company": "ETH vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "btc-usdt",
@@ -188,7 +201,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "BTC",
         "dependInstrument": "USDT",
         "company": "BTC vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "bch-usdt",
@@ -201,7 +215,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "BCH",
         "dependInstrument": "USDT",
         "company": "BCH vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "xrp-usdt",
@@ -214,7 +229,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "XRP",
         "dependInstrument": "USDT",
         "company": "XRP vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "ltc-usdt",
@@ -227,7 +243,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "LTC",
         "dependInstrument": "USDT",
         "company": "LTC vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "link-usdt",
@@ -240,7 +257,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "LINK",
         "dependInstrument": "USDT",
         "company": "LINK vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "ada-usdt",
@@ -253,7 +271,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "ADA",
         "dependInstrument": "USDT",
         "company": "ADA vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "yfi-usdt",
@@ -266,7 +285,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "YFI",
         "dependInstrument": "USDT",
         "company": "YFI vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "xmr-usdt",
@@ -279,7 +299,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "XMR",
         "dependInstrument": "USDT",
         "company": "XMR vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "trx-usdt",
@@ -292,7 +313,8 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "TRX",
         "dependInstrument": "USDT",
         "company": "TRX vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      },
      {
         "id": "eos-usdt",
@@ -305,6 +327,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "baseInstrument": "EOS",
         "dependInstrument": "USDT",
         "company": "EOS vs USDT",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
      }]
 };

@@ -19,7 +19,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Apple Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "AMD",
@@ -32,7 +33,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Advanced Micro Devices Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "AMZN",
@@ -45,7 +47,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Amazon.com Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "ATVI",
@@ -58,7 +61,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Activision Blizzard Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "BA",
@@ -71,7 +75,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Boeing Co-The",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "BAC-A",
@@ -84,7 +89,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Bank of America Corp",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "BIDU",
@@ -97,7 +103,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Baidu Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "C-J",
@@ -110,7 +117,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Citigroup Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "FB",
@@ -123,7 +131,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Facebook Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "FCX",
@@ -136,7 +145,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Freeport-McMoRan Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "FSLR",
@@ -149,7 +159,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "First Solar Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "GM",
@@ -162,7 +173,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "General Motors Co",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "GOOG",
@@ -175,7 +187,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Alphabet Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "GOOGL",
@@ -188,7 +201,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Alphabet Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "GS",
@@ -201,7 +215,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Goldman Sachs Group Inc-The",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "GWPH",
@@ -214,7 +229,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "GW Pharmaceuticals PLC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "JPM",
@@ -227,7 +243,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "JPMorgan Chase & Co",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "MCD",
@@ -240,7 +257,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "McDonald's Corp",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "MSFT",
@@ -253,7 +271,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Microsoft Corp",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "NFLX",
@@ -266,7 +285,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Netflix Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "NKE",
@@ -279,7 +299,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "NIKE Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "NVDA",
@@ -292,7 +313,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "NVIDIA Corp",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "PFE",
@@ -305,7 +327,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Pfizer Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "PGHH",
@@ -318,7 +341,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Procter & Gamble Hygiene and Health Care Limited",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "PTON",
@@ -331,7 +355,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Peloton Interactive Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "QCOM",
@@ -344,7 +369,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "QUALCOMM Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "RACE",
@@ -357,7 +383,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Ferrari NV",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "SNAP",
@@ -370,7 +397,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Snap Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "TLRY",
@@ -383,7 +411,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Tilray Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "BYND",
@@ -396,7 +425,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Beyond Meat Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "TSLA",
@@ -409,7 +439,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Tesla Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "TWTR",
@@ -422,7 +453,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Twitter Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "UBER",
@@ -435,7 +467,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Uber Technologies Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "WMT",
@@ -448,7 +481,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Walmart Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "XOM",
@@ -461,7 +495,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Exxon Mobil Corp",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "ZM",
@@ -474,7 +509,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Zoom Video Communications Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "GE",
@@ -487,7 +523,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "General Electric Co",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "AAL",
@@ -500,7 +537,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "American Airlines Group Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "DELTA",
@@ -513,7 +551,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Delta Industrial Resources Limited",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "GPRO",
@@ -526,7 +565,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "GoPro Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "ACB",
@@ -539,7 +579,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Aurora Cannabis Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "CUK",
@@ -552,7 +593,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Carnival PLC",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "CCL",
@@ -565,7 +607,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "CCL Products ",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "NCLH",
@@ -578,7 +621,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Norwegian Cruise Line Holdings Ltd",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "FIT",
@@ -591,7 +635,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Fitbit Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "PLUG",
@@ -604,7 +649,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Plug Power Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "UAL",
@@ -617,7 +663,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "United Airlines Holdings Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "WEED",
@@ -630,7 +677,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Canopy Growth Corp",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     },
     {
         "id": "CSCO",
@@ -643,6 +691,7 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Cisco Systems Inc",
-        "tradable": false
+        "tradable": false,
+        "tickSizeCorrect": true
     }]
 };

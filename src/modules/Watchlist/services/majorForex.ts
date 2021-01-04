@@ -19,7 +19,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "AUD",
         "company": "AUD vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_CHF",
@@ -32,7 +33,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CHF",
         "dependInstrument": "EUR",
         "company": "EUR vs CHF",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_JPY",
@@ -45,7 +47,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "JPY",
         "dependInstrument": "EUR",
         "company": "EUR vs JPY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_USD",
@@ -58,7 +61,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "EUR",
         "company": "EUR vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "GBP_JPY",
@@ -71,7 +75,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "JPY",
         "dependInstrument": "GBP",
         "company": "GBP vs JPY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "GBP_USD",
@@ -84,7 +89,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "GBP",
         "company": "GBP vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "NZD_USD",
@@ -97,7 +103,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "NZD",
         "company": "NZD vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_CAD",
@@ -110,7 +117,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CAD",
         "dependInstrument": "USD",
         "company": "USD vs CAD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_CHF",
@@ -123,7 +131,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CHF",
         "dependInstrument": "USD",
         "company": "USD vs CHF",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_JPY",
@@ -136,6 +145,7 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "JPY",
         "dependInstrument": "USD",
         "company": "USD vs JPY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };

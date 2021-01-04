@@ -14,6 +14,7 @@ export interface IInstrument {
     pricePrecision: number;
     company?: string;
     tradable?: boolean;
+    tickSizeCorrect?: boolean;
 }
 
 export interface IZenithInstrument extends IInstrument {

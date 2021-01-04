@@ -96,7 +96,7 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
             console.log(ex);
         }
 
-        if (search !== undefined && this._cachedSymbols.length) {
+        if (search !== undefined) {
             this._cacheBySearch[search] = this._cachedSymbols.slice();
         }
         return this._filterResponse(exchange, search);

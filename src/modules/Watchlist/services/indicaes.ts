@@ -19,7 +19,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "AUD",
         "dependInstrument": "AU200",
         "company": "AU200 vs AUD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "CN50_USD",
@@ -32,7 +33,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "CN50",
         "company": "CN50 vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EU50_EUR",
@@ -45,7 +47,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "EUR",
         "dependInstrument": "EU50",
         "company": "EU50 vs EUR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "FR40_EUR",
@@ -58,7 +61,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "EUR",
         "dependInstrument": "FR40",
         "company": "FR40 vs EUR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "DE30_EUR",
@@ -71,7 +75,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "EUR",
         "dependInstrument": "DE30",
         "company": "DE30 vs EUR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "HK33_HKD",
@@ -84,7 +89,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "HKD",
         "dependInstrument": "HK33",
         "company": "HK33 vs HKD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "IN50_USD",
@@ -97,7 +103,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "IN50",
         "company": "IN50 vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "JP225_USD",
@@ -110,7 +117,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "JP225",
         "company": "JP225 vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "NL25_EUR",
@@ -123,7 +131,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "EUR",
         "dependInstrument": "NL25",
         "company": "NL25 vs EUR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "SG30_SGD",
@@ -136,7 +145,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "SGD",
         "dependInstrument": "SG30",
         "company": "SG30 vs SGD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "TWIX_USD",
@@ -149,7 +159,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "TWIX",
         "company": "TWIX vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "UK100_GBP",
@@ -162,7 +173,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "GBP",
         "dependInstrument": "UK100",
         "company": "UK100 vs GBP",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "NAS100_USD",
@@ -175,7 +187,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "NAS100",
         "company": "NAS100 vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "US2000_USD",
@@ -188,7 +201,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "US2000",
         "company": "US2000 vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "SPX500_USD",
@@ -201,7 +215,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "SPX500",
         "company": "SPX500 vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "US30_USD",
@@ -214,6 +229,7 @@ export const IndicesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "US30",
         "company": "US30 vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };
