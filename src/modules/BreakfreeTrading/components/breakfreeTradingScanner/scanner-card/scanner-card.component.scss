@@ -13,6 +13,8 @@
     padding-right: 10px;
   }
 
+
+
   .type {
     font-size: 10px;
     text-align: left;
@@ -61,6 +63,11 @@
     overflow:hidden;
   }
 }
+
+::ng-deep .sonartt{
+  white-space: pre-line;
+
+  }
 
 @include themify($themes, true) {
   .sonar-tile {
