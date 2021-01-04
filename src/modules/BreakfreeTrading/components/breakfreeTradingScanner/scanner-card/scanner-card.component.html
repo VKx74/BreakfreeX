@@ -1,22 +1,36 @@
-<div class="sonar-tile w-100 h-100 crypto-text">
-    <div class="symbol">
+<div class="sonar-tile w-100 h-100 crypto-text" >
+    <div class="symbol"  matTooltip="This is a fresh Sonar trade setup found 
+    by Breakfree Trading Algorithm. 
+    
+    If you click on it, it will take you directly to the opportunity in the market." matTooltipClass="sonartt">
         {{result?.symbol.toUpperCase()}}
     </div>
 
-    <div class="type">
+    <div class="type"  matTooltip="This is the market category of the specific trade." matTooltipClass="sonartt">
         {{result.marketType}}
     </div>
 
     <div>
-        <div class="tradetf" matTooltip="Timeframe description">
+        <div class="tradetf" matTooltip="This shows the timeframe of the trade setup. 
+        Anything below 4h timeframe should be actively monitored every few minutes after trade opens." matTooltipClass="sonartt">
             <i class="fa fa-clock-o"></i>
             {{toTimeframe(result.timeframe)}} Setup
         </div>
     </div>
 
     <div>
-        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}"
-            matTooltip="Setup description">
+        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}"  matTooltipClass="sonartt"
+            matTooltip="This is the type of trade setup. 
+
+            Theres 3 different setups: BRC, EXT & Swing. 
+            -----------------------------------------------------
+            BRC is short for Break, retest & continuation setup.
+            
+            EXT = Extension trade setup.
+            
+            Swing = Swing trade setup.
+            ----------------------------------------------------- 
+">
             <ng-container [ngSwitch]="result.origType">
                 <ng-container *ngSwitchCase="origType.EXT">
                     <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
@@ -25,19 +39,19 @@
                         {{result.trend == trends.Up ? "Long" : "Short"}} EXT
                     </span>
                 </ng-container>
-                <ng-container *ngSwitchCase="origType.BRC">
+                <ng-container *ngSwitchCase="origType.BRC" matTooltip="This is a BRC Trade setup. It means Break, retest & continuation. Often this trade happen in trending markets as it breaks above a keylevel and eventually retest same level.">
                     <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
                     <span>
                         <i class="fa" [ngClass]="{'fas fa-arrow-up': (result.trend == trends.Up), 'fas fa-arrow-down': (result.trend == trends.Down)}"></i> 
                         {{result.trend == trends.Up ? "Long" : "Short"}} BRC
                     </span>
                 </ng-container>
-                <ng-container *ngSwitchCase="origType.SwingExt">
+                <ng-container *ngSwitchCase="origType.SwingExt" >
                     <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
                     <span>
                         <i class="fa" [ngClass]="{'fas fa-arrow-up': (result.trend == trends.Up), 'fas fa-arrow-down': (result.trend == trends.Down)}"></i> 
                         {{result.trend == trends.Up ? "Long" : "Short"}} SWING 
-                    </span>
+                    </span> 
                 </ng-container>
                 <ng-container *ngSwitchCase="origType.SwingN">
                     <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->

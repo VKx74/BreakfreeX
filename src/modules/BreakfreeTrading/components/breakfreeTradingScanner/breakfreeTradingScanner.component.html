@@ -39,11 +39,12 @@
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
                         <div *ngIf="showRestrictions(groupedResult); else dataContainer">
                            <div class="access-restrictions" (click)="manageSubscriptions()" *ngIf="isOutOfAccess(groupedResult); else restrictionTemplate">
-                              Upgrade to Pro for access this Sonar setups.
+                              Upgrade to Pro for access to 15m Sonar setups.
                            </div>  
                            <ng-template #restrictionTemplate>
                               <div class="timeframe-restrictions">
-                                 Increase your Level to get access to this Sonar results.
+                                 Before Sonar will show you trades on this timeframe, you need to achieve level 4. 
+                                 This to make sure you know what you are doing before you trade lower timeframes.
                               </div>
                            </ng-template>
                         </div>
@@ -54,7 +55,7 @@
                                     *ngFor="let result of group.data; trackBy: trackByResult">
                                     <scanner-card [result]="result" (click)="handleScannerResultsClick(result)">
                                     </scanner-card>
-                                    <div class="featured-settings" matTooltip="Featured description">
+                                    <div class="featured-settings" matTooltip="If you click the flag and select a color, Sonar will keep this trade in the top list even if it clears.">
                                        <color-selector [activeColor]="getFeaturedDetails(result)"
                                           class="featured-selector result-data"
                                           (activeColorChange)='handleColorSelected($event, result)'
@@ -173,7 +174,7 @@
          <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
       </div>
       <div class="text">
-         Upgrade your subscription to get access to Sonar.
+         Click to upgrade to Discovery or Pro to utilize the Sonar Algorithm.
       </div>
    </div>
 </ng-template>
