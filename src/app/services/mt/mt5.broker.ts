@@ -4,7 +4,7 @@ import { MTConnectionData } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult } from 'modules/Trading/models/models';
 import { Observable, of } from 'rxjs';
 import { AlgoService } from '../algo.service';
-import { InstrumentService } from '../instrument.service';
+import { InstrumentMappingService } from '../instrument-mapping.service';
 import { MTSocketService } from '../socket/mt.socket.service';
 import { MT5SocketService } from '../socket/mt5.socket.service';
 import { MTBroker } from './mt.broker';
@@ -14,11 +14,11 @@ export class MT5Broker extends MTBroker {
     public get instanceType(): EBrokerInstance {
         return EBrokerInstance.MT5;
     }
-  
-    constructor(@Inject(MT5SocketService) private _ws: MTSocketService, protected _algoService: AlgoService) {
-      super(_ws, _algoService);
+
+    constructor(@Inject(MT5SocketService) private _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        super(_ws, _algoService, _instrumentMappingService);
     }
-    
+
     saveState(): Observable<IBrokerState<any>> {
         return of({
             brokerType: EBrokerInstance.MT5,

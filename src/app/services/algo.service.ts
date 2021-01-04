@@ -418,28 +418,12 @@ export class AlgoService {
         let data = instrument;
         if (typeof (instrument) === 'string') {
             return new Observable<IBFTAMarketInfo>((observer: Observer<IBFTAMarketInfo>) => {
-                this._instrumentService.getInstruments(null, instrument).subscribe((instruments: IInstrument[]) => {
-                    if (!instruments || !instruments.length) {
+                this._instrumentService.instrumentToDatafeedFormat(instrument).subscribe((instrument: IInstrument) => {
+                    if (!instrument) {
                         observer.next(null);
                         return;
                     }
-                    let matchedInstrument = null;
-                    let searchingString = this._replaceSpecCharset(instrument);
-                    for (const i of instruments) {
-                        let instrumentID = this._replaceSpecCharset(i.id);
-                        let instrumentSymbol = this._replaceSpecCharset(i.symbol);
-                        if (searchingString === instrumentID || searchingString === instrumentSymbol) {
-                            matchedInstrument = i;
-                            break;
-                        }
-                    }
-
-                    if (!matchedInstrument) {
-                        observer.next(null);
-                        return;
-                    }
-
-                    this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, matchedInstrument).pipe(map(this._decrypt)).subscribe((res) => {
+                    this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, instrument).pipe(map(this._decrypt)).subscribe((res) => {
                         observer.next(res);
                     });
                 }, (error) => {

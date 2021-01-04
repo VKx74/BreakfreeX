@@ -14,6 +14,7 @@ import { MTSocketService } from '../socket/mt.socket.service';
 import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
 import { InstrumentService } from "../instrument.service";
 import { map } from "rxjs/operators";
+import { InstrumentMappingService } from "../instrument-mapping.service";
 
 export abstract class MTBroker implements IMTBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<IMTTick>; } = {};
@@ -132,7 +133,7 @@ export abstract class MTBroker implements IMTBroker {
         return this._accountInfo;
     }
 
-    constructor(protected ws: MTSocketService, protected algoService: AlgoService) {
+    constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
 
     }
 
@@ -473,12 +474,12 @@ export abstract class MTBroker implements IMTBroker {
 
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number {
         let res = 0;
-        const s1 = this.instrumentToChartFormat(symbol);
+        const s1 = this._normalizeInstrument(symbol);
         const s1Part1 = s1.substring(0, 3);
         const s1Part2 = s1.substring(3, 6);
 
         for (const order of this.orders) {
-            const s2 = this.instrumentToChartFormat(order.Symbol);
+            const s2 = this._normalizeInstrument(order.Symbol);
             if (s2 === s1) {
                 if (side === order.Side) {
                     res += order.Risk || 0;
@@ -515,28 +516,34 @@ export abstract class MTBroker implements IMTBroker {
 
     }
 
-    instrumentToChartFormat(symbol: string): string {
-        let s = symbol;
-        if (s.length > 6 && s[s.length - 2] === '-') {
-            s = s.slice(0, s.length - 2);
-        }
-        s = s.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
-        return s;
-    }
-
     instrumentToBrokerFormat(symbol: string): IInstrument {
-        const s1 = symbol.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
+        let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol);
+        let isMapped = !!(searchingString);
+        if (!searchingString) {
+            searchingString = this._normalizeInstrument(symbol);
+        }
 
         for (const i of this._instruments) {
-            const s2 = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
-            if (s2 === s1) {
-                return i;
+            if (!isMapped) {
+                let instrumentID = this._normalizeInstrument(i.id);
+                let instrumentSymbol = this._normalizeInstrument(i.symbol);
+                if (searchingString === instrumentID || searchingString === instrumentSymbol) {
+                    return i;
+                }
+            } else {
+                if (searchingString === i.id || searchingString === i.symbol) {
+                    return i;
+                }
             }
         }
 
+        if (isMapped) {
+            return null;
+        }
+
         for (const i of this._instruments) {
-            const s2 = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
-            if (s2.startsWith(s1)) {
+            const instrumentSymbol = this._normalizeInstrument(i.symbol);
+            if (instrumentSymbol.startsWith(searchingString)) {
                 return i;
             }
         }
@@ -646,7 +653,7 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
-        const symbol = this.instrumentToChartFormat(parameters.Symbol);
+        const symbol = this._normalizeInstrument(parameters.Symbol);
 
         let marketInfo = this._tryGetMarketInfoFromCache(symbol);
         if (!marketInfo) {
@@ -763,6 +770,15 @@ export abstract class MTBroker implements IMTBroker {
         result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.accountInfo.Balance * 100) + result.RiskValue);
         result.CorrelatedRisk = result.CorrelatedRiskValue < 15;
         return result;
+    }
+
+    protected _normalizeInstrument(symbol: string): string {
+        let s = symbol;
+        if (s.length > 6 && s[s.length - 2] === '-') {
+            s = s.slice(0, s.length - 2);
+        }
+        s = s.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
+        return s;
     }
 
     protected _tryGetSymbolTradeInfoFromCache(instrument: string): Observable<MTSymbolTradeInfoResponse> {
@@ -1103,7 +1119,7 @@ export abstract class MTBroker implements IMTBroker {
                 continue;
             }
 
-            const s1 = this.instrumentToChartFormat(order.Symbol).toUpperCase();
+            const s1 = this._normalizeInstrument(order.Symbol).toUpperCase();
             const s1Part1 = s1.substring(0, 3).toUpperCase();
             const s1Part2 = s1.substring(3, 6).toUpperCase();
 

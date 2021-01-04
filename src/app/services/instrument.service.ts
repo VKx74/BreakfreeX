@@ -1,15 +1,16 @@
-import {forkJoin, Observable, of} from "rxjs";
-import {catchError, map} from 'rxjs/operators';
-import {Injectable} from "@angular/core";
-import {IInstrument} from "../models/common/instrument";
-import {EExchange} from "../models/common/exchange";
-import {JsUtil} from "../../utils/jsUtil";
-import {IHealthable} from "../interfaces/healthcheck/healthable";
-import {ApplicationTypeService} from "./application-type.service";
-import {ExchangeFactory} from "../factories/exchange.factory";
-import {APP_TYPE_EXCHANGES} from "../enums/ApplicationType";
-import {InstrumentServiceBase} from "@app/interfaces/exchange/instrument.service";
+import { forkJoin, Observable, of } from "rxjs";
+import { catchError, map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { IInstrument } from "../models/common/instrument";
+import { EExchange } from "../models/common/exchange";
+import { JsUtil } from "../../utils/jsUtil";
+import { IHealthable } from "../interfaces/healthcheck/healthable";
+import { ApplicationTypeService } from "./application-type.service";
+import { ExchangeFactory } from "../factories/exchange.factory";
+import { APP_TYPE_EXCHANGES } from "../enums/ApplicationType";
+import { InstrumentServiceBase } from "@app/interfaces/exchange/instrument.service";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { InstrumentMappingService } from "./instrument-mapping.service";
 
 @Injectable()
 export class InstrumentService implements IHealthable {
@@ -29,7 +30,8 @@ export class InstrumentService implements IHealthable {
     }
 
     constructor(private exchangeFactory: ExchangeFactory,
-                private applicationTypeService: ApplicationTypeService) {
+        private applicationTypeService: ApplicationTypeService,
+        private _instrumentMappingService: InstrumentMappingService) {
         this._init();
     }
 
@@ -49,8 +51,56 @@ export class InstrumentService implements IHealthable {
                 });
             }
         });
-}
+    }
 
+    instrumentToDatafeedFormat(instrument: string): Observable<IInstrument> {
+        let searchingString = this._instrumentMappingService.tryMapInstrumentToDatafeedFormat(instrument);
+        let isMapped = !!(searchingString);
+        if (!searchingString) {
+            searchingString = this._normalizeInstrument(instrument);
+        }
+
+        const observables: Observable<IInstrument[]>[] = this.services.map(s => s.getInstruments(undefined, searchingString));
+
+        return forkJoin(observables).pipe(
+            catchError(error => of(null)),
+            map((responses: IInstrument[][]) => {
+                if (!responses || !responses.length) {
+                    return null;
+                }
+
+                let instruments = JsUtil.flattenArray<IInstrument>(responses);
+                for (const i of instruments) {
+                    if (!isMapped) {
+                        let instrumentID = this._normalizeInstrument(i.id);
+                        let instrumentSymbol = this._normalizeInstrument(i.symbol);
+                        if (searchingString === instrumentID || searchingString === instrumentSymbol) {
+                            return i;
+                        }
+                    } else {
+                        if (searchingString === i.id || searchingString === i.symbol) {
+                            return i;
+                        }
+                    }
+                }
+                
+                if (isMapped) {
+                    return null;
+                }
+
+                for (const i of instruments) {
+                    let instrumentID = this._normalizeInstrument(i.id);
+                    let instrumentSymbol = this._normalizeInstrument(i.symbol);
+                    if (searchingString.startsWith(instrumentID) || searchingString.startsWith(instrumentSymbol)) {
+                        return i;
+                    }
+                }
+                
+                return null;
+            })
+        );
+    } 
+    
     getInstruments(datafeed?: EExchangeInstance, search?: string): Observable<IInstrument[]> {
         const observables: Observable<IInstrument[]>[] = [] = datafeed
             ? [this._getServiceByDatafeed(datafeed).getInstruments(undefined, search)]
@@ -83,6 +133,16 @@ export class InstrumentService implements IHealthable {
                     return JsUtil.flattenArray<IInstrument>(responses).filter(i => i.symbol === symbol);
                 })
             );
+    }
+
+
+    protected _normalizeInstrument(symbol: string): string {
+        let s = symbol;
+        if (s.length > 6 && s[s.length - 2] === '-') {
+            s = s.slice(0, s.length - 2);
+        }
+        s = s.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
+        return s;
     }
 
     private _getServiceByDatafeed(datafeed: EExchangeInstance): InstrumentServiceBase {

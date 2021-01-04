@@ -192,13 +192,12 @@ export class MTTradeManagerComponent {
             return;
         }
 
-        const symbol = mt5Broker.instrumentToChartFormat(order.Symbol);
-        this._instrumentService.getInstruments(null, symbol).subscribe((data: IInstrument[]) => {
-            if (!data || !data.length) {
+        const symbol = order.Symbol;
+        this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
+            if (!instrument) {
                 this._alertService.warning("Failed to view chart by order symbol");
                 return;
             }
-            const instrument = data[0];
             const linkAction: LinkingAction = {
                 type: Actions.ChangeInstrument,
                 data: instrument

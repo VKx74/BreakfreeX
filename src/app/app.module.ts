@@ -103,6 +103,7 @@ import { TradingProfileService } from 'modules/BreakfreeTrading/services/trading
 import { NotificationsService } from '@alert/services/notifications.service';
 import { ToasterNotificationsService } from '@alert/services/toaster-notifications.service';
 import { MissionTrackingService } from './services/missions-tracking.service';
+import { InstrumentMappingService } from './services/instrument-mapping.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -320,6 +321,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         InstrumentService,
         RealtimeService,
         HistoryService,
+        InstrumentMappingService,
         UssSocketService,
         {
             provide: AlertService,
