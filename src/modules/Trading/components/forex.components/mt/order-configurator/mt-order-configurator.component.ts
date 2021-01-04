@@ -22,6 +22,7 @@ interface ChecklistItem {
     name: string;
     valid: boolean;
     value?: string;
+    tooltip: string;
     minusScore: number;
 }
 
@@ -32,19 +33,50 @@ interface ChecklistItemDescription {
 const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
+            let minusScore = data.LocalRTD ? 0 : 2;
+            let tooltip = data.LocalRTD ? "Local RTD Trend in correct direction." :  "Local RTD Trend in wrong direction.";
+            if (data.LocalRTDSpread !== null && data.LocalRTDSpread !== undefined) {
+                if (data.LocalRTDSpread > 0.2) {
+                    minusScore = 3;
+                    tooltip = "Strong " + tooltip;
+                } else if (data.LocalRTDSpread > 0.1) {
+                    minusScore = 2;
+                } else {
+                    minusScore = 1;
+                    tooltip = "Weak " + tooltip;
+                }
+            }
             return {
                 name: "Local Trend",
                 valid: data.LocalRTD,
-                minusScore: data.LocalRTD ? 0 : 1
+                minusScore: data.LocalRTD ? 0 : minusScore,
+                tooltip: tooltip
             };
         }
     },
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
+            let minusScore = data.GlobalRTD ? 0 : 4;
+            let tooltip = data.LocalRTD ? "Global RTD Trend in correct direction." :  "Global RTD Trend in wrong direction.";
+            if (data.GlobalRTDSpread !== null && data.GlobalRTDSpread !== undefined) {
+                if (data.GlobalRTDSpread > 1.5) {
+                    minusScore = 5;
+                    tooltip = "Strong " + tooltip;
+                } else if (data.GlobalRTDSpread > 0.5) {
+                    minusScore = 4;
+                    tooltip = "Good " + tooltip;
+                } else if (data.GlobalRTDSpread > 0.2) {
+                    minusScore = 3;
+                } else {
+                    minusScore = 2;
+                    tooltip = "Weak " + tooltip;
+                }
+            }
             return {
                 name: "Global Trend",
                 valid: data.GlobalRTD,
-                minusScore: data.GlobalRTD ? 0 : 2
+                minusScore: data.GlobalRTD ? 0 : minusScore,
+                tooltip: tooltip
             };
         }
     },
@@ -53,40 +85,91 @@ const checklist: ChecklistItemDescription[] = [
             return {
                 name: "1D S/R",
                 valid: data.Levels,
-                minusScore: data.Levels ? 0 : 1
+                minusScore: data.Levels ? 0 : 2,
+                tooltip: data.Levels ? "1D Support and Resistance in correct distance to current market price." : "1D Support or Resistance is too close to current market price."
             };
         }
     },
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let value = data.RiskValue || 0;
+            let value = "";
+            let valid = null;
+            let minusScore = 0;
+            let tooltip = "";
+            if (data.RiskValue !== null && data.RiskValue !== undefined) {
+                value = data.RiskValue.toFixed(2) + "%";
+                valid = data.RiskValue < 15;
+                tooltip = valid ? "You have correct order Size and Risk in relation to your account balance." :  "You have to high order Size and Risk in relation to your account balance.";
+
+                if (data.RiskValue > 40) {
+                    minusScore = 5;
+                } else if (data.RiskValue > 25) {
+                    minusScore = 4;
+                } else if (data.RiskValue > 15) {
+                    minusScore = 3;
+                }
+            }
+
             return {
                 name: "Leverage",
-                valid: data.Risk,
-                value: value.toFixed(2) + "%",
-                minusScore: data.Risk ? 0 : 2
+                valid: valid,
+                value: value,
+                minusScore: valid ? 0 : minusScore,
+                tooltip: tooltip
             };
         }
     },
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let value = data.CorrelatedRiskValue || 0;
+            let value = "";
+            let valid = null;
+            let minusScore = 0;
+            let tooltip = "";
+            if (data.CorrelatedRiskValue !== null && data.CorrelatedRiskValue !== undefined) {
+                value = data.CorrelatedRiskValue.toFixed(2) + "%";
+                valid = data.CorrelatedRiskValue < 15;
+                tooltip = valid ? "You have correct order Side and Risk in relation to other orders in your portfolio." :  "You have high Risk by same currencies in your portfolio.";
+
+                if (data.CorrelatedRiskValue > 40) {
+                    minusScore = 4;
+                } else if (data.CorrelatedRiskValue > 25) {
+                    minusScore = 3;
+                } else if (data.CorrelatedRiskValue > 15) {
+                    minusScore = 2;
+                }
+            }
             return {
                 name: "Correlated Risk",
-                valid: data.CorrelatedRisk,
-                value: value.toFixed(2) + "%",
-                minusScore: data.CorrelatedRisk ? 0 : 1
+                valid: valid,
+                value: value,
+                minusScore: valid ? 0 : minusScore,
+                tooltip: tooltip
             };
         }
     },
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let value = data.SpreadRiskValue || 0;
+            let value = "";
+            let valid = null;
+            let minusScore = 0;
+            if (data.SpreadRiskValue !== null && data.SpreadRiskValue !== undefined) {
+                value = data.SpreadRiskValue.toFixed(2) + "%";
+                valid = data.SpreadRiskValue < 0.1;
+
+                if (data.CorrelatedRiskValue > 0.2) {
+                    minusScore = 3;
+                } else if (data.CorrelatedRiskValue > 0.15) {
+                    minusScore = 2;
+                } else if (data.CorrelatedRiskValue > 0.1) {
+                    minusScore = 1;
+                }
+            }
             return {
                 name: "Spread",
-                valid: data.SpreadRisk,
-                value: value.toFixed(2) + "%",
-                minusScore: data.SpreadRisk ? 0 : 1
+                valid: valid,
+                value: value,
+                minusScore: valid ? 0 : minusScore,
+                tooltip: valid ? "Low Instrument Bid/Ask spread" :  "High Instrument Bid/Ask spread - that can cause unexpected loses"
             };
         }
     },
@@ -96,7 +179,8 @@ const checklist: ChecklistItemDescription[] = [
             return {
                 name: "Stoploss",
                 valid: isValid,
-                minusScore: isValid ? 0 : 1
+                minusScore: isValid ? 0 : 2,
+                tooltip: isValid ? "Stoploss set for order" :  "Stoploss Not set for order - that can cause unmanaged loses"
             };
         }
     }
@@ -224,7 +308,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     calculatingChecklist: boolean = false;
 
     checklistItems: ChecklistItem[] = [];
-    orderScore: number = 5;
+    orderScore: number = 10;
 
     lastTick: IMTTick = null;
     allowedOrderTypes: OrderTypes[] = [];
@@ -314,6 +398,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this._raiseCalculateChecklist();
     }
 
+    calculateOrderStarts() {
+        return Math.floor(this.orderScore / 2);
+    }
+
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
         this.lastTick = null;
         if (this.marketSubscription) {
@@ -358,7 +446,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
     private _buildCalculateChecklistResults(data: MTOrderValidationChecklist) {
         this.checklistItems = [];
-        this.orderScore = 5;
+        this.orderScore = 10;
 
         if (!data) {
             return;
@@ -422,7 +510,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.submitHandler(this.config);
             this.onSubmitted.emit();
         } else {
-            if (this.orderScore < 4) {
+            if (this.orderScore < 7) {
                 this._dialog.open(ConfirmModalComponent, {
                     data: {
                         title: 'Overleverage detected',

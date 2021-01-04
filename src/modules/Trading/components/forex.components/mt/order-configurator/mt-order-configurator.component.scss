@@ -23,6 +23,13 @@
     .score-container {
       font-size: 13px;
       color: goldenrod;
+      display: flex;
+    }
+
+    .score-text {
+      margin-right: 10px;
+      margin-top: 1px;
+      font-size: 11px;
     }
   }
 

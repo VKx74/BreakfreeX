@@ -27,6 +27,14 @@ export class MTOrderScoreComponent {
         this._recalculateScore();
     }
 
+    get maxScore(): number {
+        return this._maxScore;
+    }
+
+    get score(): number {
+        return this._score;
+    }
+
     public get ScoreItems(): IScoreItem[] {
         return this._res;
     }

@@ -292,19 +292,19 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     segmentSelected(item: any) {
-        this.activeSegments = item;
+        // this.activeSegments = item;
         this._filterResults(false);
         this._filterResults(true);
     }
 
     timeframeSelected(item: any) {
-        this.activeTimeframes = item;
+        // this.activeTimeframes = item;
         this._filterResults(false);
         this._filterResults(true);
     }
 
     typeSelected(item: any) {
-        this.activeTypes = item;
+        // this.activeTypes = item;
         this._filterResults(false);
         this._filterResults(true);
     }

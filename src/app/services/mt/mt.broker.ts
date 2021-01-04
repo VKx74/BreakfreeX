@@ -735,6 +735,8 @@ export abstract class MTBroker implements IMTBroker {
 
             result.GlobalRTDValue = marketInfo.global_trend;
             result.LocalRTDValue = marketInfo.local_trend;
+            result.LocalRTDSpread = marketInfo.local_trend_spread;
+            result.GlobalRTDSpread = marketInfo.global_trend_spread;
         }
 
         if (symbolTradeInfo && symbolTradeInfo.Data) {
@@ -754,21 +756,11 @@ export abstract class MTBroker implements IMTBroker {
             
             if (bid && ask) {
                 result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
-                result.SpreadRisk = result.SpreadRiskValue < 0.1;
-            } else {
-                result.SpreadRisk = null;
-            }
-
-            if (result.RiskValue) {
-                result.Risk = result.RiskValue < 15;
-            } else {
-                result.Risk = null;
             }
         }
 
         let correlatedRisk = this.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
         result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.accountInfo.Balance * 100) + result.RiskValue);
-        result.CorrelatedRisk = result.CorrelatedRiskValue < 15;
         return result;
     }
 

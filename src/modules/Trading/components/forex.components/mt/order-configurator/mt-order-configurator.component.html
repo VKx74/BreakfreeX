@@ -97,13 +97,14 @@
             <div class="checklist-row">
                 <div class="section-header">
                     <div class="form-unit__label">{{'tradeManager.validationChecklist' | translate}}</div>
-                    <div class="score-container">
-                        <mt-order-score [MaxScore]="5" [Score]="orderScore" *ngIf="!calculatingChecklist && config.instrument"></mt-order-score>
+                    <div class="score-container" *ngIf="!calculatingChecklist && config.instrument">
+                        <div class="score-text">{{orderScore}}/10</div>
+                        <mt-order-score [MaxScore]="5" [Score]="calculateOrderStarts()"></mt-order-score>
                     </div>
                 </div>
                 <mat-progress-bar mode="indeterminate" class="loader" *ngIf="calculatingChecklist"></mat-progress-bar>
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
-                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" matTooltip="Checklist Item description">
+                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" [matTooltip]="item.tooltip">
                         <span class="icon">
                             <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
                                 aria-hidden="true"></i>

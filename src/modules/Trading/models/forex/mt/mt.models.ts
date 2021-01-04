@@ -153,12 +153,11 @@ export interface MTOrderValidationChecklist {
     GlobalRTD?: boolean;
     LocalRTD?: boolean;
     Levels?: boolean;
-    Risk?: boolean;
-    SpreadRisk?: boolean;
-    CorrelatedRisk?: boolean;
 
     GlobalRTDValue?: IBFTATrend;
     LocalRTDValue?: IBFTATrend;
+    LocalRTDSpread?: number;
+    GlobalRTDSpread?: number;
     RiskValue?: number;
     SpreadRiskValue?: number;
     CorrelatedRiskValue?: number;

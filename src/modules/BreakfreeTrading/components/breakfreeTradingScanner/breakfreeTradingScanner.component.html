@@ -12,7 +12,7 @@
          </div> -->
          <div class="tf-select">
             <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
-               <mat-select (selectionChange)="timeframeSelected($event.value)" [value]="activeTimeframes" multiple>
+               <mat-select (selectionChange)="timeframeSelected($event.value)" [(ngModel)]="activeTimeframes" multiple>
                   <mat-option *ngFor="let option of timeframes" [value]="option">
                      {{option}}
                   </mat-option>
@@ -21,7 +21,7 @@
          </div>
          <div class="type-select">
             <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
-               <mat-select (selectionChange)="typeSelected($event.value)" [value]="activeTypes" multiple>
+               <mat-select (selectionChange)="typeSelected($event.value)" [(ngModel)]="activeTypes" multiple>
                   <mat-option *ngFor="let option of types" [value]="option">
                      {{option}}
                   </mat-option>
