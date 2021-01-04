@@ -51,7 +51,7 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             return {
-                name: "S&R Tolerance",
+                name: "1D S/R",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 1
             };
@@ -61,7 +61,7 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = data.RiskValue || 0;
             return {
-                name: "Order Risk",
+                name: "Leverage",
                 valid: data.Risk,
                 value: value.toFixed(2) + "%",
                 minusScore: data.Risk ? 0 : 2
@@ -72,7 +72,7 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = data.CorrelatedRiskValue || 0;
             return {
-                name: "Related Risk",
+                name: "Correlated Risk",
                 valid: data.CorrelatedRisk,
                 value: value.toFixed(2) + "%",
                 minusScore: data.CorrelatedRisk ? 0 : 1
@@ -83,7 +83,7 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = data.SpreadRiskValue || 0;
             return {
-                name: "High Spread",
+                name: "Spread",
                 valid: data.SpreadRisk,
                 value: value.toFixed(2) + "%",
                 minusScore: data.SpreadRisk ? 0 : 1
@@ -94,7 +94,7 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             const isValid = config.useSL && !!(config.sl);
             return {
-                name: "SL Not Set",
+                name: "Stoploss",
                 valid: isValid,
                 minusScore: isValid ? 0 : 1
             };
@@ -425,8 +425,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
             if (this.orderScore < 4) {
                 this._dialog.open(ConfirmModalComponent, {
                     data: {
-                        title: 'Risk alert',
-                        message: `Your order setup have multiple risks. Do you want to continue?`,
+                        title: 'Overleverage detected',
+                        message: `You are already overleveraged. Reduce your position size or remove active orders. If you place this trade, you will be very overleveraged. Most Likely you will loss your entire account. Place order?`,
                         onConfirm: () => {
                             this._placeOrder();
                         }
