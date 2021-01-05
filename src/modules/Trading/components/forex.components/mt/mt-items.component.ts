@@ -13,6 +13,7 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
     
     private _subscription: Subscription;
     private _subscriptionOnOrderDataChanged: Subscription;
+    private _brokerStateChangedSubscription: Subscription;
     private _instrumentDecimals: { [symbol: string]: number; } = {};
 
     protected _selectedTabIndex: number;
@@ -61,6 +62,11 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
         this._subscription = this._subscribeOnUpdates();
         this._subscriptionOnOrderDataChanged = this._mtBroker.onOrdersParametersUpdated.subscribe(() => {
             this.ordersUpdated();
+        });
+        this._brokerStateChangedSubscription = this._broker.activeBroker$.subscribe((data) => {
+            if (this._mtBroker) {
+                this.updateItems();
+            }
         });
     }
 
@@ -130,5 +136,7 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
             this._subscription.unsubscribe();
         if (this._subscriptionOnOrderDataChanged)
             this._subscriptionOnOrderDataChanged.unsubscribe();
+        if (this._brokerStateChangedSubscription)
+            this._brokerStateChangedSubscription.unsubscribe();
     }
 }

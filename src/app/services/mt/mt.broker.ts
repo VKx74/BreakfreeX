@@ -607,6 +607,8 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         this._orders = [];
+        this._positions = [];
+        this._currencyRisks = [];
         this._accountInfo.Account = this._initData.Login.toString();
         this._loadHistory();
     }
