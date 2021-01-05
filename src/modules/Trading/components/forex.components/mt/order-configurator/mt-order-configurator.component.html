@@ -28,7 +28,7 @@
     <div class="form-wrapper">
         <div class="flex-row">
             <div class="flex-column">
-                <div class="crypto-form-unit margin-bottom">
+                <div class="crypto-form-unit margin-bottom" [ngClass]="{'disabled': !canChangeInstrument}">
                     <div class="form-unit__label">{{'symbol' | translate}} from MT</div>
                     <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
                         [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
@@ -59,8 +59,7 @@
                 <div class="form-unit__label">{{'limitPrice' | translate}}</div>
                 <mat-form-field class="crypto-input bft-form-input full-width">
                     <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
-                        [range]="{min: minPriceValue}" [(ngModel)]="config.price"
-                        (ngModelChange)="valueChanged()">
+                        [range]="{min: minPriceValue}" [(ngModel)]="config.price" (ngModelChange)="valueChanged()">
                 </mat-form-field>
             </div>
         </div>
@@ -70,8 +69,7 @@
     <div class="flex-row">
         <div class="flex-column">
             <div class="crypto-form-unit margin-bottom">
-                <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL"
-                    (ngModelChange)="valueChanged()">
+                <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useSL" (ngModelChange)="valueChanged()">
                     {{'tradeManager.stoploss' | translate}}</mat-slide-toggle>
                 <mat-form-field class="crypto-input bft-form-input full-width" *ngIf="config.useSL">
                     <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
@@ -104,7 +102,8 @@
                 </div>
                 <mat-progress-bar mode="indeterminate" class="loader" *ngIf="calculatingChecklist"></mat-progress-bar>
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
-                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" [matTooltip]="item.tooltip">
+                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems"
+                        [matTooltip]="item.tooltip">
                         <span class="icon">
                             <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
                                 aria-hidden="true"></i>
@@ -128,12 +127,14 @@
 
     <div class="flex-row">
         <div class="crypto-form-unit margin-bottom">
-            <div class="form-unit__label">{{'tradeManager.comment' | translate}}</div>
-            <mat-form-field class="crypto-input bft-form-input full-width">
-                <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
-                    [(ngModel)]="config.comment">
-            </textarea>
-            </mat-form-field>
+            <div class="form-unit__label">{{'tradeManager.comment' | translate}} ({{commentLengthUsed}}/{{maxCommentLength - technicalCommentLengthUsed}})</div>
+            <div class="comment-area">
+                <mat-form-field class="crypto-input bft-form-input full-width">
+                    <textarea matInput class="crypto-textarea comment-textarea" placeholder="Comment"
+                        [(ngModel)]="config.comment" [maxlength]="maxCommentLength-technicalCommentLengthUsed">
+                    </textarea>
+                </mat-form-field>
+            </div>
         </div>
     </div>
 

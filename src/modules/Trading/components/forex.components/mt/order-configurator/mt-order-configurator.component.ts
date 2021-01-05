@@ -261,7 +261,12 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _checklistSubject: Subject<void> = new Subject();
     private _recalculatePossible = true;
     private _recalculateTimeout: any;
+    private _technicalComment: string;
+    private _canChangeInstrument: boolean = true;
 
+    @Input() submitHandler: MTOrderComponentSubmitHandler;
+    @Output() onSubmitted = new EventEmitter<any>();
+    @Output() onOrderPlaced = new EventEmitter<MTPlaceOrder>();
     @Input()
     set config(value: MTOrderConfig) {
         if (value) {
@@ -278,10 +283,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
         return this._config;
     }
 
-    @Input() submitHandler: MTOrderComponentSubmitHandler;
-    @Output() onSubmitted = new EventEmitter<any>();
-    @Output() onOrderPlaced = new EventEmitter<MTPlaceOrder>();
-
     set selectedTime(value: string) {
         if (value) {
             this._selectedTime = value;
@@ -296,8 +297,29 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this._selectedDate = value;
         }
     }
+
     get selectedDate(): Date {
         return this._selectedDate;
+    }
+
+    get technicalComment(): string {
+        return this._technicalComment;
+    }
+
+    get technicalCommentLengthUsed(): number {
+        return this._technicalComment ? this._technicalComment.length : 0;
+    }
+
+    get commentLengthUsed(): number {
+        return this.config && this.config.comment ? this.config.comment.length : 0;
+    }
+
+    get maxCommentLength(): number {
+        return 30;
+    }
+
+    get canChangeInstrument(): boolean {
+        return this._canChangeInstrument;
     }
 
     minAmountValue: number = 0.01;
@@ -340,6 +362,12 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this.allowedOrderTypes = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
         if (this.config.instrument) {
             this._selectInstrument(this.config.instrument, false);
+            this._technicalComment = this._buildTechnicalComment();
+
+            // tech comment exists if it is strategy setup
+            if (this._technicalComment) {
+                this._canChangeInstrument = false;
+            }
         }
     }
 
@@ -406,6 +434,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this.lastTick = null;
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
+        }
+
+        if (this._technicalComment) {
+            this._technicalComment = "";
         }
 
         this.config.instrument = instrument;
@@ -579,8 +611,9 @@ export class MTOrderConfiguratorComponent implements OnInit {
         }
         
         const broker = this._brokerService.activeBroker as MTBroker;
+        let comment = (this.technicalComment || "") +  (this.config.comment || "");
         const placeOrderData: MTPlaceOrder = {
-            Comment: this.config.comment || "",
+            Comment: comment,
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
@@ -617,6 +650,32 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 this.processingSubmit = false;
                 this._alertService.error(error);
             });
+    }
+
+    private _buildTechnicalComment(): string {
+        let comment = "";
+        switch (this.config.tradeType) {
+            case OrderTradeType.BRC: comment += "B"; break;
+            case OrderTradeType.EXT: comment += "E"; break;
+            case OrderTradeType.SWING: comment += "S"; break;
+            default: return "";
+        }
+
+        if (!this.config.timeframe) {
+            return "";
+        }
+
+        let tf = this.config.timeframe / 60;
+
+        if (tf < 60) {
+            comment += `_${tf}M`;
+        } else if (tf < 60 * 24) {
+            comment += `_${tf / 60}H`;
+        } else {
+            comment += `_${tf / 60 / 24}D`;
+        }
+
+        return `[${comment}]`;
     }
 
     setBuyMode() {
