@@ -522,13 +522,13 @@ export class DataTableComponent {
 
     handleRowDoubleClick(row: any, event: any) {
         const target = event.target;
-        this._prevRowClicked = null;
+        // this._prevRowClicked = null;
 
         if (target.classList.contains(ResizeHandleClass)) { // resize handle clicked
             return;
         }
 
-        this.onDoubleClick.emit(row);
+        // this.onDoubleClick.emit(row);
     }
 
     isRowExpanded(row): boolean {

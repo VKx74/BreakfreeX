@@ -39,3 +39,7 @@
   }
 
 }
+
+::ng-deep .tooltip-with-line-break {
+  white-space: pre-line;
+}

@@ -17,6 +17,7 @@ import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { MatDialog } from '@angular/material/dialog';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
+import { MTHelper } from '@app/services/mt/mt.helper';
 
 interface ChecklistItem {
     name: string;
@@ -38,13 +39,15 @@ const checklist: ChecklistItemDescription[] = [
             if (data.LocalRTDSpread !== null && data.LocalRTDSpread !== undefined) {
                 if (data.LocalRTDSpread > 0.2) {
                     minusScore = 3;
-                    tooltip = "Strong " + tooltip;
+                    // tooltip = "Strong " + tooltip;
                 } else if (data.LocalRTDSpread > 0.1) {
                     minusScore = 2;
                 } else {
                     minusScore = 1;
-                    tooltip = "Weak " + tooltip;
+                    // tooltip = "Weak " + tooltip;
                 }
+
+                tooltip = MTHelper.getLocalTrendPerformanceDescription(data.GlobalRTDSpread) + " " + tooltip;
             }
             return {
                 name: "Local Trend",
@@ -61,16 +64,17 @@ const checklist: ChecklistItemDescription[] = [
             if (data.GlobalRTDSpread !== null && data.GlobalRTDSpread !== undefined) {
                 if (data.GlobalRTDSpread > 1.5) {
                     minusScore = 5;
-                    tooltip = "Strong " + tooltip;
+                    // tooltip = "Strong " + tooltip;
                 } else if (data.GlobalRTDSpread > 0.5) {
                     minusScore = 4;
-                    tooltip = "Good " + tooltip;
+                    // tooltip = "Good " + tooltip;
                 } else if (data.GlobalRTDSpread > 0.2) {
                     minusScore = 3;
                 } else {
                     minusScore = 2;
-                    tooltip = "Weak " + tooltip;
                 }
+
+                tooltip = MTHelper.getGlobalTrendPerformanceDescription(data.GlobalRTDSpread) + " " + tooltip;
             }
             return {
                 name: "Global Trend",
@@ -362,12 +366,12 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this.allowedOrderTypes = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
         if (this.config.instrument) {
             this._selectInstrument(this.config.instrument, false);
-            this._technicalComment = this._buildTechnicalComment();
+            this._technicalComment = MTHelper.buildTechnicalComment(this.config.tradeType, this.config.timeframe);
 
             // tech comment exists if it is strategy setup
-            if (this._technicalComment) {
-                this._canChangeInstrument = false;
-            }
+            // if (this._technicalComment) {
+            //     this._canChangeInstrument = false;
+            // }
         }
     }
 
@@ -436,9 +440,9 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.marketSubscription.unsubscribe();
         }
 
-        if (this._technicalComment) {
-            this._technicalComment = "";
-        }
+        // if (this._technicalComment) {
+        //     this._technicalComment = "";
+        // }
 
         this.config.instrument = instrument;
         const broker = this._brokerService.activeBroker as MTBroker;
@@ -650,32 +654,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 this.processingSubmit = false;
                 this._alertService.error(error);
             });
-    }
-
-    private _buildTechnicalComment(): string {
-        let comment = "";
-        switch (this.config.tradeType) {
-            case OrderTradeType.BRC: comment += "B"; break;
-            case OrderTradeType.EXT: comment += "E"; break;
-            case OrderTradeType.SWING: comment += "S"; break;
-            default: return "";
-        }
-
-        if (!this.config.timeframe) {
-            return "";
-        }
-
-        let tf = this.config.timeframe / 60;
-
-        if (tf < 60) {
-            comment += `_${tf}M`;
-        } else if (tf < 60 * 24) {
-            comment += `_${tf / 60}H`;
-        } else {
-            comment += `_${tf / 60 / 24}D`;
-        }
-
-        return `[${comment}]`;
     }
 
     setBuyMode() {

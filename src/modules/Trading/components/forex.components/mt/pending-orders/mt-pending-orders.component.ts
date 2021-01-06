@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
-import {OandaOrder} from 'modules/Trading/models/forex/oanda/oanda.models';
 import { MTItemsComponent } from '../mt-items.component';
-import { MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTOrder, MTOrderRecommendation, MTPEndingOrderRecommendation } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTHelper } from '@app/services/mt/mt.helper';
 
 
 @Component({
@@ -33,8 +33,63 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
         super.ngOnDestroy();
     }
 
-    trackById(index, item: OandaOrder) {
-        return item.id;
+    trackById(index, item: MTOrder) {
+        return item.Id;
+    }
+
+    getRecommendationsText(rec: MTPEndingOrderRecommendation) {
+        if (rec === undefined) {
+            return "Calculating...";
+        }
+        
+        if (!rec) {
+            return "No recommendations";
+        }
+
+        if (rec.CancelNeeded) {
+            return "Cancel this order";
+        }
+
+        return "Keep this order";
+    }
+    
+    getRecommendationsTooltip(rec: MTPEndingOrderRecommendation) {
+        if (!rec) {
+            return "";
+        }
+
+        let globalTrendPerformance = "";
+        let localTrendPerformance = "";
+        if (rec.GlobalRTDSpread) {
+            globalTrendPerformance = MTHelper.getGlobalTrendPerformanceDescription(rec.GlobalRTDSpread);
+        }
+        if (rec.LocalRTDSpread) {
+            localTrendPerformance = MTHelper.getLocalTrendPerformanceDescription(rec.LocalRTDSpread);
+        }
+        let desc = "";
+        desc += `${globalTrendPerformance} Global RTD trend - ${rec.GlobalRTDValue}\n\r`;
+        desc += `${localTrendPerformance} Local RTD trend - ${rec.LocalRTDValue}\n\r`;
+
+        if (rec.Timeframe || rec.OrderTradeType) {
+            desc += `-------------------------\n\r`;
+
+            if (rec.Timeframe) {
+                const tfText = MTHelper.toGranularityToTimeframeText(rec.Timeframe);
+                desc += `Trade Timeframe - ${tfText}\n\r`;
+            }
+
+            if (rec.OrderTradeType) {
+                desc += `Trade Setup - ${rec.OrderTradeType}\n\r`;
+            }
+        } 
+        
+        if (rec.CancelNeeded) {
+            desc += `-------------------------\n\r`;
+            desc += `Cancel Reason - ${rec.CancelReason}\n\r`;
+        }
+
+        return desc;
+
     }
 
     protected ordersUpdated() {
