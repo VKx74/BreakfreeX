@@ -838,10 +838,6 @@ export abstract class MTBroker implements IMTBroker {
         this._buildCurrencyRisks();
         
         for (const o of this._orders) {
-            if (o.Recommendations) {
-                continue;
-            }
-
             if (o.Type !== OrderTypes.Market) {
                 o.Recommendations = this._tradeRatingService.calculatePendingOrderRecommendations(o);
             } 
@@ -854,11 +850,6 @@ export abstract class MTBroker implements IMTBroker {
         if (updateRequired) {
             this.onOrdersUpdated.next(this._orders);
             this._loadHistory();
-            for (const o of this._orders) {
-                if (o.Type !== OrderTypes.Market) {
-                    o.Recommendations = this._tradeRatingService.calculatePendingOrderRecommendations(o);
-                }
-            }
         }
     }
 

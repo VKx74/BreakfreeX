@@ -7,13 +7,40 @@ import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
 import { MTBroker } from "./mt.broker";
 import { MTHelper } from "./mt.helper";
 
+interface CacheItem<T> {
+    Data: T;
+    Time: number;
+}
+
 export class MTTradeRatingService {
-    protected _symbolTradeInfoCache: { [symbol: string]: MTSymbolTradeInfoResponse; } = {};
-    protected _marketInfoCache: { [symbol: string]: IBFTAMarketInfo; } = {};
+    protected _symbolTradeInfoCache: { [symbol: string]: CacheItem<MTSymbolTradeInfoResponse>; } = {};
+    protected _marketInfoCache: { [symbol: string]: CacheItem<IBFTAMarketInfo>; } = {};
     protected _marketInfoLoading: { [symbol: string]: boolean; } = {};
+    protected _timeInterval: any;
 
     constructor(protected mtBroker: MTBroker, protected algoService: AlgoService) {
-        
+        this._timeInterval = setInterval(() => {
+            const dtNow = new Date().getTime();
+
+            for (const key of Object.keys(this._marketInfoCache)) {
+                if (this._marketInfoCache[key] && this._marketInfoCache[key].Time) {
+                    const minDiff = (dtNow - this._marketInfoCache[key].Time) / 1000 / 60;
+                    if (minDiff > 10) {
+                        delete this._marketInfoCache[key];
+                    }
+                }
+            }
+
+            for (const key of Object.keys(this._symbolTradeInfoCache)) {
+                if (this._symbolTradeInfoCache[key] && this._symbolTradeInfoCache[key].Time) {
+                    const minDiff = (dtNow - this._symbolTradeInfoCache[key].Time) / 1000 / 60;
+                    if (minDiff > 10) {
+                        delete this._symbolTradeInfoCache[key];
+                    }
+                }
+            }
+        }, 1000 * 60 * 1);
+
     }
 
     public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
@@ -30,7 +57,7 @@ export class MTTradeRatingService {
 
         return combineLatest([marketInfo, symbolTradeInfo]).pipe(map(([res1, res2]) => {
             this._tryAddMarketInfoToCache(symbol, res1 || null);
-            
+
             if (res2 && res2.Data && res2.Data.CVaR && res2.Data.ContractSize && res2.Data.Rate) {
                 this._tryAddSymbolTradeInfoToCache(parameters.Symbol, res2);
             }
@@ -45,7 +72,7 @@ export class MTTradeRatingService {
         if (!marketInfo) {
             return marketInfo === undefined ? undefined : null;
         }
-        
+
         const tradeType = MTHelper.getTradeTypeFromTechnicalComment(order.Comment);
         const timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
         const globalRTDValue = marketInfo.global_trend;
@@ -85,25 +112,25 @@ export class MTTradeRatingService {
             res.CancelNeeded = true;
             res.CancelReason = "Local RTD trend - reversed direction";
             return res;
-        } 
-        
-        if (order.Price && order.SL && order.TP && order.CurrentPrice) {
-            const logicalOrderBounds = Math.abs(order.SL -  order.TP);
-            const priceDiff = Math.abs(order.Price -  order.CurrentPrice);
-            if (logicalOrderBounds < priceDiff) {
-                res.CancelNeeded = true;
-                res.CancelReason = "Price too far from entry point";
-                return res;
-            }
         }
-        
-        if (order.Price && order.SL && order.CurrentPrice) {
-            const logicalOrderBounds = Math.abs(order.SL -  order.Price) * 2;
-            const priceDiff = Math.abs(order.Price -  order.CurrentPrice);
-            if (logicalOrderBounds < priceDiff) {
-                res.CancelNeeded = true;
-                res.CancelReason = "Price too far from entry point";
-                return res;
+
+        if (order.ProfitRate) {
+            if (order.Price && order.SL && order.TP && order.CurrentPrice) {
+                const logicalOrderBounds = Math.abs(order.SL - order.TP) * 1.3;
+                const priceDiff = Math.abs(order.Price - order.CurrentPrice);
+                if (logicalOrderBounds < priceDiff) {
+                    res.CancelNeeded = true;
+                    res.CancelReason = "Price too far from entry point";
+                    return res;
+                }
+            } else if (order.Price && order.SL && order.CurrentPrice) {
+                const logicalOrderBounds = Math.abs(order.SL - order.Price) * 2;
+                const priceDiff = Math.abs(order.Price - order.CurrentPrice);
+                if (logicalOrderBounds < priceDiff) {
+                    res.CancelNeeded = true;
+                    res.CancelReason = "Price too far from entry point";
+                    return res;
+                }
             }
         }
 
@@ -111,7 +138,7 @@ export class MTTradeRatingService {
     }
 
     private _getOrLoadMarketInfo(symbol: string): IBFTAMarketInfo {
-        if (this._marketInfoCache[symbol] === undefined) {
+        if (!this._marketInfoCache[symbol]) {
             if (!this._marketInfoLoading[symbol]) {
                 this._marketInfoLoading[symbol] = true;
                 this.algoService.getMarketInfo(symbol).subscribe((data) => {
@@ -119,8 +146,9 @@ export class MTTradeRatingService {
                     this._marketInfoLoading[symbol] = false;
                 });
             }
+            return undefined;
         }
-        return this._marketInfoCache[symbol];
+        return this._marketInfoCache[symbol].Data;
     }
 
     private _calculateOrderChecklist(marketInfo: IBFTAMarketInfo, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
@@ -170,7 +198,7 @@ export class MTTradeRatingService {
                     result.RiskValue = MTHelper.buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar, this.mtBroker.accountInfo.Balance);
                 }
             }
-            
+
             if (bid && ask) {
                 result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
             }
@@ -186,25 +214,31 @@ export class MTTradeRatingService {
 
     protected _tryGetSymbolTradeInfoFromCache(instrument: string): Observable<MTSymbolTradeInfoResponse> {
         if (this._symbolTradeInfoCache[instrument]) {
-            return of(this._symbolTradeInfoCache[instrument]);
+            return of(this._symbolTradeInfoCache[instrument].Data);
         }
 
         return null;
     }
 
     protected _tryAddSymbolTradeInfoToCache(instrument: string, data: MTSymbolTradeInfoResponse) {
-        this._symbolTradeInfoCache[instrument] = data;
+        this._symbolTradeInfoCache[instrument] = {
+            Data: data,
+            Time: new Date().getTime()
+        };
     }
 
     protected _tryGetMarketInfoFromCache(instrument: string): Observable<IBFTAMarketInfo> {
-        if (this._marketInfoCache[instrument] !== undefined) {
-            return of(this._marketInfoCache[instrument]);
+        if (this._marketInfoCache[instrument]) {
+            return of(this._marketInfoCache[instrument].Data);
         }
 
         return null;
     }
 
     protected _tryAddMarketInfoToCache(instrument: string, data: IBFTAMarketInfo) {
-        this._marketInfoCache[instrument] = data;
+        this._marketInfoCache[instrument] = {
+            Data: data,
+            Time: new Date().getTime()
+        };
     }
 }
