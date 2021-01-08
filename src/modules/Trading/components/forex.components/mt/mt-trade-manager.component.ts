@@ -139,7 +139,7 @@ export class MTTradeManagerComponent {
         .subscribe(() => {});      
     }
 
-    showSymbolMapping(){    
+    showSymbolMapping() {    
         this._dialog.open(SymbolMappingComponent);    
     }
 

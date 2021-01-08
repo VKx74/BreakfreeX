@@ -1,32 +1,29 @@
 import { Injectable } from "@angular/core";
 import { Observable, of, throwError } from "rxjs";
 import { IBrokerState } from "../interfaces/broker/broker";
-//import { BrokerService } from "./broker.service";
 import { ISymbolMappingItem, PatchAction, PatchRequest, SymbolMappingStorageService } from "./instrument-mapping-storage.service";
 
 @Injectable()
 export class InstrumentMappingService {
-    private allItems:{ [key: string]:{[key: string]:string}} = {};
-    //private _mapping: { [datafeedSymbol: string]: string } = {};
+    private allItems: { [key: string]: {[key: string]: string}} = {};    
     private _brokerState: IBrokerState;
 
-    constructor(private _symbolMappingStorageService: SymbolMappingStorageService){
-        //private _brokerService: BrokerService){
+    constructor(private _symbolMappingStorageService: SymbolMappingStorageService) {        
     }
 
-    public setActiveBroker(brokerState: IBrokerState):void{
+    public setActiveBroker(brokerState: IBrokerState): void {
         this._brokerState = brokerState;
     }
 
-    public getAllMapping(){
+    public getAllMapping() {
         return this._symbolMappingStorageService.getAllMapping()
-        .subscribe((result:ISymbolMappingItem[])=>{            
+        .subscribe((result: ISymbolMappingItem[]) => {            
             console.log('allItems result:');
             console.log(result);
-            if (result){
-                result.forEach((value:ISymbolMappingItem)=>{
-                    var key = this.createKeyFrom(value.brokerName, value.login);                    
-                    let mapping:{[key: string]:string}={};                    
+            if (result) {
+                result.forEach((value: ISymbolMappingItem) => {
+                    let key = this.createKeyFrom(value.brokerName, value.login);                    
+                    let mapping: {[key: string]: string} = {};                    
                     let mapKeys = Object.keys(value.mapping);
                     mapKeys.forEach(element => {
                         mapping[element] = value.mapping[element];
@@ -39,44 +36,44 @@ export class InstrumentMappingService {
         });
     }
 
-    public getSymbolMapping(): Observable<{[key: string]:string}> {
+    public getSymbolMapping(): Observable<{[key: string]: string}> {
         let key = this.createKey();
         let result = this.allItems[key];
-        if(!result) result = {};
+        if (!result) result = {};
         return of(result);        
     }
 
-    public addSymbolMapping(feedSymbol:string, brokerSymbol:string): Observable<any> {
-        var key = this.createKey();
-        let res:Observable<any>;
-        if (this.allItems[key]){
-            var patchRequest = new PatchRequest(PatchAction.Add);
+    public addSymbolMapping(feedSymbol: string, brokerSymbol: string): Observable<any> {
+        let key = this.createKey();
+        let res: Observable<any>;
+        if (this.allItems[key]) {
+            let patchRequest = new PatchRequest(PatchAction.Add);
             patchRequest.AddMapping(feedSymbol, brokerSymbol);
-            res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account), patchRequest);            
+            res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest);            
         } else {
             this.allItems[key] = {};
-            var payload = <ISymbolMappingItem> {
+            let payload = <ISymbolMappingItem> {
                 brokerName: this._brokerState.server,
-                login: parseInt(this._brokerState.account),
+                login: parseInt(this._brokerState.account, 10),
                 mapping: {}
             };            
             payload.mapping[feedSymbol] = brokerSymbol;            
             res = this._symbolMappingStorageService.postSymbolMapping(payload);            
         }
-        res.subscribe((res:any)=>{
+        res.subscribe((ress: any) => {
             this.allItems[key][feedSymbol] = brokerSymbol;
-        }, (error:any)=>{
+        }, (error: any) => {
 
         });
         return res;
     }
 
-    public removeSymbolMapping(feedSymbol:string):Observable<any>{        
+    public removeSymbolMapping(feedSymbol: string): Observable<any> {        
         let key = this.createKey();
-        if (this.allItems[key]){
+        if (this.allItems[key]) {
             let patchRequest = new PatchRequest(PatchAction.Remove);            
-            let res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account), patchRequest);
-            res.subscribe((res:any)=>{
+            let res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest);
+            res.subscribe((ress: any) => {
                 delete this.allItems[key][feedSymbol];
             });
             return res;
@@ -85,7 +82,7 @@ export class InstrumentMappingService {
         }        
     }
 
-    private getBrokerMapping(){        
+    private getBrokerMapping() {        
         let key = this.createKey();
         return this.allItems[key];
     }
@@ -112,12 +109,12 @@ export class InstrumentMappingService {
         }
     }
 
-    private createKeyFrom(brokerName:string, login:number):string{
+    private createKeyFrom(brokerName: string, login: number): string {
         return `${brokerName}_${login}`;
     }
 
-    private createKey():string{
-        if(!this._brokerState){
+    private createKey(): string {
+        if (!this._brokerState) {
             console.log('state is nuull');
             return '';
         }

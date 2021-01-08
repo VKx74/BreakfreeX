@@ -32,8 +32,7 @@ export class InstrumentService implements IHealthable {
 
     constructor(private exchangeFactory: ExchangeFactory,
         private applicationTypeService: ApplicationTypeService,
-        private _instrumentMappingService: InstrumentMappingService){
-        //private _brokerService: BrokerService){
+        private _instrumentMappingService: InstrumentMappingService) {        
         this._init();
     }
 

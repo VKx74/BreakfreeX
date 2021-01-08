@@ -8,7 +8,7 @@ export interface ISymbolMappingItem {
     userID: string;
     brokerName: string;
     login: number;
-    mapping: {[key: string]:string};
+    mapping: {[key: string]: string};
 }
 
 export enum PatchAction {
@@ -17,22 +17,21 @@ export enum PatchAction {
     Remove = 2
   }
 
-export class PatchRequest{
-    constructor(patchAction: PatchAction){
+export class PatchRequest {
+    constructor(patchAction: PatchAction) {
         this.Action = patchAction;
         this.jObject = {};
     }
-    public AddMapping(feedSymbol:string, brokerSymbol:string):void{
-        this.jObject[feedSymbol] = brokerSymbol;
-    }
     public Action: PatchAction;
-    public jObject:{[key: string]:string};    
+    public jObject: {[key: string]: string};
+
+    public AddMapping(feedSymbol: string, brokerSymbol: string): void {
+        this.jObject[feedSymbol] = brokerSymbol;
+    }    
 }
 
 @Injectable()
-export class SymbolMappingStorageService{
-
-    private localUrl='http://localhost:5000/api/v1/';
+export class SymbolMappingStorageService {
 
     private get _templatesURL(): string {        
         return `${AppConfigService.config.apiUrls.userDataStoreREST}SymbolMapping`; 
@@ -40,29 +39,25 @@ export class SymbolMappingStorageService{
 
     constructor(private http: HttpClient) { }
 
-    public getAllMapping(): Observable<ISymbolMappingItem[]>{
+    public getAllMapping(): Observable<ISymbolMappingItem[]> {
         return this.http.get<ISymbolMappingItem[]>(this._templatesURL + '/GetAll');        
     }
 
-    public getSymbolMapping(brokerName:string, login:number): Observable<ISymbolMappingItem> {        
+    public getSymbolMapping(brokerName: string, login: number): Observable<ISymbolMappingItem> {        
         let params = new HttpParams();
         params = params.append("brokerName", brokerName);
         params = params.append("login", login.toString());
         return this.http.get<ISymbolMappingItem>(this._templatesURL, { params: params });
     }
 
-    public patchSymbolMapping(brokerName:string, login:number, patchRequest:PatchRequest): Observable<any>{
-        /*console.log('Patch:');
-        console.log(patchRequest);*/
+    public patchSymbolMapping(brokerName: string, login: number, patchRequest: PatchRequest): Observable<any> {        
         let params = new HttpParams();
         params = params.append("brokerName", brokerName);
         params = params.append("login", login.toString());
         return this.http.patch(this._templatesURL, patchRequest, { params: params });
     }
 
-    public postSymbolMapping(symbolMappingItems:ISymbolMappingItem): Observable<any>{
-        /*console.log('Post');
-        console.log(symbolMappingItems);*/
+    public postSymbolMapping(symbolMappingItems: ISymbolMappingItem): Observable<any> {        
         return this.http.post(this._templatesURL, symbolMappingItems);
     }
 }
