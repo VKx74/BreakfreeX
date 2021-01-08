@@ -3,6 +3,16 @@
 @import "global-styles/variables";
 
 :host {
+    .remove-mapping {
+        cursor: pointer;
+        font-size: 9px;
+        margin-left: 10px;
+    }
+
+    .add-mapping {
+        cursor: pointer;
+        margin: 0px 10px;
+    }
 
     .table-wrapper{
         max-height: 150px;
@@ -32,17 +42,6 @@
         margin-left: 5px;
     }
 
-    .hidden-wrapper{
-        button{
-            visibility: hidden;
-        }
-        &:hover {
-            button{
-                visibility: visible;
-            }
-        }
-    }
-
     .left{
         float: left;
     }
@@ -57,5 +56,15 @@
     .crypto-icon-remove-records{
         border: transparent;
         background: transparent;
+    }
+}
+
+@include themify($themes, true) {
+    .remove-mapping {
+        color: themed('valueTextColor') !important;
+    }
+    
+    .add-mapping {
+        color: themed('valueTextColor') !important;
     }
 }

@@ -40,65 +40,74 @@ export class SymbolMappingComponent extends Modal<any> implements OnInit {
         private _symbolMappingService: InstrumentMappingService) {
         super(injector);
     }
-    
-    @ViewChild('feedInstrumentSearch', {static: false}) feedInstrumentSearch: InstrumentSearchComponent;
-    @ViewChild('brokerInstrumentSearch', {static: false}) brokerInstrumentSearch: InstrumentSearchComponent;
-    @ViewChild(DataTableComponent, {static: false}) table: DataTableComponent;
+
+    @ViewChild('feedInstrumentSearch', { static: false }) feedInstrumentSearch: InstrumentSearchComponent;
+    @ViewChild('brokerInstrumentSearch', { static: false }) brokerInstrumentSearch: InstrumentSearchComponent;
+    @ViewChild(DataTableComponent, { static: false }) table: DataTableComponent;
 
     private feedSymbol: string;
-    private brokerSymbol: string;    
+    private brokerSymbol: string;
     public MappedAray: Array<MapPair>;
+    public loading: boolean = false;
 
-    ngOnInit(): void {                
+    ngOnInit(): void {
+        this.loading = true;
         this._symbolMappingService.getSymbolMapping()
-        .subscribe((data: {[key: string]: string}) => {
-            this.MappedAray = new Array();
-            let keys = Object.keys(data);
-            keys.forEach(key => {
-                this.MappedAray.push(new MapPair(key, data[key]));
-            });            
-        });
+            .subscribe((data: { [key: string]: string }) => {
+                this.MappedAray = new Array();
+                let keys = Object.keys(data);
+                keys.forEach(key => {
+                    this.MappedAray.push(new MapPair(key, data[key]));
+                });
+                this.loading = false;
+            }, () => {
+                this.loading = false;
+            });
     }
 
-    handleDFeedInstrumentChange(instrument: IInstrument) {        
+    handleDFeedInstrumentChange(instrument: IInstrument) {
         this.feedSymbol = instrument.symbol;
     }
 
-    handleBrokerInstrumentChange(instrument: IInstrument) {        
+    handleBrokerInstrumentChange(instrument: IInstrument) {
         this.brokerSymbol = instrument.symbol;
     }
 
     get instrumentDFeedSearchCallback(): (e?: EExchange, s?: string) => Observable<IInstrument[]> {
-        return (e, s) => {            
-            return this._instrumentService.getInstruments(null, s);            
+        return (e, s) => {
+            return this._instrumentService.getInstruments(null, s);
         };
     }
 
     get instrumentBrokerSearchCallback(): (e?: EExchange, s?: string) => Observable<IInstrument[]> {
-        return (e, s) => {            
+        return (e, s) => {
             return this._brokerService.getInstruments(e, s);
         };
     }
 
     Remove(item: MapPair): void {
-        let index = this.MappedAray.indexOf(item, 0);        
-        if (index > -1) {            
+        let index = this.MappedAray.indexOf(item, 0);
+        if (index > -1) {
+            this.loading = true;
             this._symbolMappingService.removeSymbolMapping(this.MappedAray[index].Item1)
-            .subscribe((res: any) => {
-                this.MappedAray.splice(index, 1);
-                let arr = this.MappedAray;
-                this.MappedAray = new Array();
-                arr.forEach(element => {
-                    this.MappedAray.push(element);
+                .subscribe((res: any) => {
+                    this.MappedAray.splice(index, 1);
+                    let arr = this.MappedAray;
+                    this.MappedAray = new Array();
+                    arr.forEach(element => {
+                        this.MappedAray.push(element);
+                    });
+                    this.loading = false;
+                }, () => {
+                    this.loading = false;
                 });
-            });
-        }        
-            
+        }
+
         this.table.updateDataSource();
     }
 
     Add(): void {
-        let activeBroker = this._brokerService.getActiveBroker();        
+        let activeBroker = this._brokerService.getActiveBroker();
         let errorMessage: string = '';
         if (!this.feedSymbol) {
             errorMessage = `Data feed symbol not set`;
@@ -118,23 +127,26 @@ export class SymbolMappingComponent extends Modal<any> implements OnInit {
             return;
         }
 
+        this.loading = true;
         this._symbolMappingService
-        .addSymbolMapping(this.feedSymbol, this.brokerSymbol)
-        .subscribe((res: any) => {
-            let item = new MapPair(this.feedSymbol, this.brokerSymbol);
-            this.MappedAray.push(item);
-            this.brokerInstrumentSearch.reset();
-            this.feedInstrumentSearch.reset();
-            this.feedSymbol = '';
-            this.brokerSymbol = '';
-            let arr = this.MappedAray;
-            this.MappedAray = new Array();
-            arr.forEach(element => {
-                this.MappedAray.push(element);
+            .addSymbolMapping(this.feedSymbol, this.brokerSymbol)
+            .subscribe((res: any) => {
+                let item = new MapPair(this.feedSymbol, this.brokerSymbol);
+                this.MappedAray.push(item);
+                this.brokerInstrumentSearch.reset();
+                this.feedInstrumentSearch.reset();
+                this.feedSymbol = '';
+                this.brokerSymbol = '';
+                let arr = this.MappedAray;
+                this.MappedAray = new Array();
+                arr.forEach(element => {
+                    this.MappedAray.push(element);
+                });
+                this.loading = false;
+            }, (err: any) => {
+                console.log('post error:');
+                console.log(err);
+                this.loading = false;
             });
-        }, (err: any) => {
-            console.log('post error:');
-            console.log(err);
-        });     
     }
 }

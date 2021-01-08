@@ -5,6 +5,7 @@
             <h4 class="modal-title">Symbol Mapping</h4>
         </div>
         <div class="modal-body">
+            <bft-loader *ngIf="loading"></bft-loader>
             <div class="table-wrapper">
                 <data-table [rows]="MappedAray" table>
                     <data-table-header-cell columnName="feedName">
@@ -28,8 +29,8 @@
                     </data-table-cell>
                     <data-table-cell columnName="remove" >
                         <ng-template let-item>
-                            <div class="hidden-wrapper">
-                                <button type="button" title="Remove" class="icon-btn" (click)="Remove(item)"><i class="crypto-icon crypto-icon-remove-records"></i></button>
+                            <div class="remove-mapping">
+                                <i class="crypto-icon crypto-icon-close" title="Remove" (click)="Remove(item)"></i>
                             </div>
                         </ng-template>
                     </data-table-cell>
@@ -42,15 +43,16 @@
                 
                 <instrument-search  (onSelect)="handleBrokerInstrumentChange($event)" #brokerInstrumentSearch            
                 [instrumentSearchCallback]="instrumentBrokerSearchCallback" class="left"></instrument-search>
-    
-                <button type="button" title="Add" class="left icon-btn add-btn" (click)="Add(item)"><i class="crypto-icon crypto-icon-add"></i></button>
+                <div class="add-mapping">
+                    <i (click)="Add(item)" class="crypto-icon crypto-icon-add"></i>
+                </div>
             </div>
             
-            <div class="button-wrapper justify-flex-end">
+            <!-- <div class="button-wrapper justify-flex-end">
                 <button class="full-width crypto-button crypto-button_success submit-btn" (click)="close()">
                     Close
                 </button>
-            </div>
+            </div> -->
         </div>        
     </div>
 </div>
