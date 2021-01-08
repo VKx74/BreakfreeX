@@ -104,6 +104,7 @@ import { NotificationsService } from '@alert/services/notifications.service';
 import { ToasterNotificationsService } from '@alert/services/toaster-notifications.service';
 import { MissionTrackingService } from './services/missions-tracking.service';
 import { InstrumentMappingService } from './services/instrument-mapping.service';
+import { SymbolMappingStorageService } from './services/instrument-mapping-storage.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -322,6 +323,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         RealtimeService,
         HistoryService,
         InstrumentMappingService,
+        SymbolMappingStorageService,
         UssSocketService,
         {
             provide: AlertService,

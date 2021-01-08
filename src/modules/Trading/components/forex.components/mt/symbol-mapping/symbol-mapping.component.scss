@@ -1,0 +1,61 @@
+@import "../../../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+
+    .table-wrapper{
+        max-height: 150px;
+        overflow: auto;
+    }
+
+    .footer-wrapper{
+        display:flex;
+        align-items:center;
+        padding-top: 9px;        
+    }
+
+    .button-wrapper{
+        padding-top: 10px;        
+    }
+
+    .submit-btn{
+        background-color: gray;
+    }
+
+    .icon-btn{
+        border: none;
+        background: transparent;
+    }
+
+    .add-btn{
+        margin-left: 5px;
+    }
+
+    .hidden-wrapper{
+        button{
+            visibility: hidden;
+        }
+        &:hover {
+            button{
+                visibility: visible;
+            }
+        }
+    }
+
+    .left{
+        float: left;
+    }
+
+    .modal-body {
+        @include themify($themes, true) {
+          color: themed('order-modal-color');
+          background-color: hotpink;
+        }
+    }
+
+    .crypto-icon-remove-records{
+        border: transparent;
+        background: transparent;
+    }
+}

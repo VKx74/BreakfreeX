@@ -36,6 +36,7 @@ import { Intercom } from 'ng-intercom';
 import { CookieService } from '@app/services/сookie.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { MissionTrackingService } from "@app/services/missions-tracking.service";
+import { InstrumentMappingService } from "../../../../app/services/instrument-mapping.service";
 
 
 @Component({
@@ -94,6 +95,7 @@ export class DashboardComponent {
         private _missionTrackingService: MissionTrackingService,
         public bottomPanelSizeService: ToggleBottomPanelSizeService,
         private _overlay: Overlay,
+        private _instrumentMappingService: InstrumentMappingService
     ) {
 
     }
@@ -176,6 +178,7 @@ export class DashboardComponent {
 
     ngAfterViewInit() {
         this._loadLayoutState();
+        this._instrumentMappingService.getAllMapping();
 
         this._layoutManager.layout.$onAddComponent
             .pipe(takeUntil(componentDestroyed(this)))

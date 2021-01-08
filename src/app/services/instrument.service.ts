@@ -11,6 +11,7 @@ import { APP_TYPE_EXCHANGES } from "../enums/ApplicationType";
 import { InstrumentServiceBase } from "@app/interfaces/exchange/instrument.service";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { InstrumentMappingService } from "./instrument-mapping.service";
+import { BrokerService } from "./broker.service";
 
 @Injectable()
 export class InstrumentService implements IHealthable {
@@ -31,7 +32,8 @@ export class InstrumentService implements IHealthable {
 
     constructor(private exchangeFactory: ExchangeFactory,
         private applicationTypeService: ApplicationTypeService,
-        private _instrumentMappingService: InstrumentMappingService) {
+        private _instrumentMappingService: InstrumentMappingService){
+        //private _brokerService: BrokerService){
         this._init();
     }
 

@@ -1,0 +1,56 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane" style="min-width:400px">
+    <div class="modal-content">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">Symbol Mapping</h4>
+        </div>
+        <div class="modal-body">
+            <div class="table-wrapper">
+                <data-table [rows]="MappedAray" table>
+                    <data-table-header-cell columnName="feedName">
+                        Feed Symbol
+                    </data-table-header-cell>
+                    <data-table-header-cell columnName="brokerName">
+                        Broker Symbol
+                    </data-table-header-cell>
+                    <data-table-header-cell columnName="remove" [columnWidth]="10">
+                    </data-table-header-cell>
+
+                    <data-table-cell columnName="feedName">
+                        <ng-template let-item>
+                            <span>{{item.Item1}}</span>
+                        </ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="brokerName" >
+                        <ng-template let-item>
+                            <span>{{item.Item2}}</span>
+                        </ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="remove" >
+                        <ng-template let-item>
+                            <div class="hidden-wrapper">
+                                <button type="button" title="Remove" class="icon-btn" (click)="Remove(item)"><i class="crypto-icon crypto-icon-remove-records"></i></button>
+                            </div>
+                        </ng-template>
+                    </data-table-cell>
+                </data-table>
+            </div>
+            <div class="footer-wrapper">
+
+                <instrument-search  (onSelect)="handleDFeedInstrumentChange($event)" #feedInstrumentSearch
+                [instrumentSearchCallback]="instrumentDFeedSearchCallback" class="left"></instrument-search>
+                
+                <instrument-search  (onSelect)="handleBrokerInstrumentChange($event)" #brokerInstrumentSearch            
+                [instrumentSearchCallback]="instrumentBrokerSearchCallback" class="left"></instrument-search>
+    
+                <button type="button" title="Add" class="left icon-btn add-btn" (click)="Add(item)"><i class="crypto-icon crypto-icon-add"></i></button>
+            </div>
+            
+            <div class="button-wrapper justify-flex-end">
+                <button class="full-width crypto-button crypto-button_success submit-btn" (click)="close()">
+                    Close
+                </button>
+            </div>
+        </div>        
+    </div>
+</div>

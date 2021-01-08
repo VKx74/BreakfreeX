@@ -54,6 +54,7 @@ export abstract class MTBroker implements IMTBroker {
         Margin: 0,
         Pl: 0
     };
+    protected _serverName: string;
 
     protected _lastUpdate: number;
 
@@ -517,7 +518,7 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     instrumentToBrokerFormat(symbol: string): IInstrument {
-        let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol);
+        let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol/*, this._serverName, this._accountInfo.Account*/);
         let isMapped = !!(searchingString);
         if (!searchingString) {
             searchingString = this._normalizeInstrument(symbol);
@@ -620,6 +621,8 @@ export abstract class MTBroker implements IMTBroker {
 
         this._orders = [];
         this._accountInfo.Account = this._initData.Login.toString();
+        this._serverName = this._initData.ServerName;
+
         this._loadHistory();
     }
 

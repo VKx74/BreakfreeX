@@ -10,6 +10,7 @@ import {map} from "rxjs/operators";
 import {BrokerFactory, CreateBrokerActionResult} from "../factories/broker.factory";
 import {ApplicationTypeService} from "@app/services/application-type.service";
 import { IdentityService } from './auth/identity.service';
+import { InstrumentMappingService } from "./instrument-mapping.service";
 
 export interface IBrokerServiceState {
     activeBrokerState?: IBrokerState;
@@ -69,6 +70,7 @@ export class BrokerService implements IHealthable {
 
     constructor(private _brokerFactory: BrokerFactory,
                 private _identityService: IdentityService,
+                private _instrumentMappingService: InstrumentMappingService,
                 private _applicationTypeService: ApplicationTypeService) {
         // Todo review
         this._applicationType = this._applicationTypeService.applicationType;
@@ -198,11 +200,13 @@ export class BrokerService implements IHealthable {
     saveState(): Observable<IBrokerServiceState> {
         if (!this._activeBroker) {
             this._activeState.activeBrokerState = null;
+            this._instrumentMappingService.setActiveBroker(null);
             return of(this._activeState);
         }
 
         return this._activeBroker.saveState().pipe(map((value: IBrokerState) => {
             this._activeState.activeBrokerState = value;
+            this._instrumentMappingService.setActiveBroker(value);
             this._setSavedAccounts();
             return {
                 ...this._activeState
@@ -220,6 +224,7 @@ export class BrokerService implements IHealthable {
 
         this._activeState.previousConnected = state.previousConnected || [];
         this._activeState.activeBrokerState = state.activeBrokerState;
+        this._instrumentMappingService.setActiveBroker(state.activeBrokerState);
 
         if (!state.activeBrokerState) {
             return of({

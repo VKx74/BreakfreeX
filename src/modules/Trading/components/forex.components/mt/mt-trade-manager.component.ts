@@ -18,6 +18,7 @@ import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { combineLatest } from 'rxjs';
+import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
 
 @Component({
     selector: 'mt-trade-manager',
@@ -135,6 +136,10 @@ export class MTTradeManagerComponent {
     disconnect() {        
         this.brokerService.disposeActiveBroker()
         .subscribe(() => {});      
+    }
+
+    showSymbolMapping(){    
+        this._dialog.open(SymbolMappingComponent);    
     }
 
     tabChanged(data: MatTabChangeEvent) {
