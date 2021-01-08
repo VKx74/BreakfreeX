@@ -45,6 +45,7 @@ export interface MTOrder {
     Comment: string;
     ExpirationType?: OrderExpirationType;
     ExpirationDate?: number;
+    Recommendations?: MTOrderRecommendation;
 }
 
 export interface MTHistoricalOrder extends MTOrder {
@@ -161,4 +162,27 @@ export interface MTOrderValidationChecklist {
     RiskValue?: number;
     SpreadRiskValue?: number;
     CorrelatedRiskValue?: number;
+}
+
+
+export enum MTOrderRecommendationType {
+    Active,
+    Pending
+}
+
+export interface MTOrderRecommendation {
+    Type: MTOrderRecommendationType;
+    GlobalRTD: boolean;
+    LocalRTD: boolean;
+    GlobalRTDValue: IBFTATrend;
+    LocalRTDValue: IBFTATrend;
+    LocalRTDSpread: number;
+    GlobalRTDSpread: number;
+    OrderTradeType: OrderTradeType;
+    Timeframe: number;
+}
+
+export interface MTPEndingOrderRecommendation extends MTOrderRecommendation {
+    CancelNeeded: boolean;
+    CancelReason: string;
 }

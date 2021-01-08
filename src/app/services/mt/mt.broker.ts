@@ -15,6 +15,8 @@ import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
 import { InstrumentService } from "../instrument.service";
 import { map } from "rxjs/operators";
 import { InstrumentMappingService } from "../instrument-mapping.service";
+import { MTHelper } from "./mt.helper";
+import { MTTradeRatingService } from "./mt.trade-rating.service";
 
 export abstract class MTBroker implements IMTBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<IMTTick>; } = {};
@@ -23,8 +25,6 @@ export abstract class MTBroker implements IMTBroker {
     protected _instrumentType: { [symbol: string]: string; } = {};
     protected _instrumentProfitMode: { [symbol: string]: string; } = {};
     protected _instrumentContractSizes: { [symbol: string]: number; } = {};
-    protected _symbolTradeInfoCache: { [symbol: string]: MTSymbolTradeInfoResponse; } = {};
-    protected _marketInfoCache: { [symbol: string]: IBFTAMarketInfo; } = {};
 
     protected _onAccountInfoUpdated: Subject<MTTradingAccount> = new Subject<MTTradingAccount>();
     protected _onOrdersUpdated: Subject<MTOrder[]> = new Subject<MTOrder[]>();
@@ -56,6 +56,7 @@ export abstract class MTBroker implements IMTBroker {
     };
     protected _serverName: string;
 
+    protected _tradeRatingService: MTTradeRatingService;
     protected _lastUpdate: number;
 
     protected _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
@@ -135,7 +136,7 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-
+        this._tradeRatingService = new MTTradeRatingService(this, algoService);
     }
 
     placeOrder(order: MTPlaceOrder): Observable<ActionResult> {
@@ -475,12 +476,12 @@ export abstract class MTBroker implements IMTBroker {
 
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number {
         let res = 0;
-        const s1 = this._normalizeInstrument(symbol);
+        const s1 = MTHelper.normalizeInstrument(symbol);
         const s1Part1 = s1.substring(0, 3);
         const s1Part2 = s1.substring(3, 6);
 
         for (const order of this.orders) {
-            const s2 = this._normalizeInstrument(order.Symbol);
+            const s2 = MTHelper.normalizeInstrument(order.Symbol);
             if (s2 === s1) {
                 if (side === order.Side) {
                     res += order.Risk || 0;
@@ -521,13 +522,13 @@ export abstract class MTBroker implements IMTBroker {
         let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol/*, this._serverName, this._accountInfo.Account*/);
         let isMapped = !!(searchingString);
         if (!searchingString) {
-            searchingString = this._normalizeInstrument(symbol);
+            searchingString = MTHelper.normalizeInstrument(symbol);
         }
 
         for (const i of this._instruments) {
             if (!isMapped) {
-                let instrumentID = this._normalizeInstrument(i.id);
-                let instrumentSymbol = this._normalizeInstrument(i.symbol);
+                let instrumentID = MTHelper.normalizeInstrument(i.id);
+                let instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
                 if (searchingString === instrumentID || searchingString === instrumentSymbol) {
                     return i;
                 }
@@ -543,7 +544,7 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         for (const i of this._instruments) {
-            const instrumentSymbol = this._normalizeInstrument(i.symbol);
+            const instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
             if (instrumentSymbol.startsWith(searchingString)) {
                 return i;
             }
@@ -580,6 +581,10 @@ export abstract class MTBroker implements IMTBroker {
                 observer.complete();
             });
         });
+    }
+    
+    public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
+        return this._tradeRatingService.calculateOrderChecklist(parameters);
     }
 
     protected _initialize(instruments: IMTSymbolData[]) {
@@ -655,32 +660,6 @@ export abstract class MTBroker implements IMTBroker {
         return 0.01;
     }
 
-    public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
-        const symbol = this._normalizeInstrument(parameters.Symbol);
-
-        let marketInfo = this._tryGetMarketInfoFromCache(symbol);
-        if (!marketInfo) {
-            marketInfo = this.algoService.getMarketInfo(symbol);
-        }
-
-        let symbolTradeInfo = this._tryGetSymbolTradeInfoFromCache(parameters.Symbol);
-        if (!symbolTradeInfo) {
-            symbolTradeInfo = this.ws.getSymbolTradeInfo(parameters.Symbol);
-        }
-
-        return combineLatest([marketInfo, symbolTradeInfo]).pipe(map(([res1, res2]) => {
-            if (res1) {
-                this._tryAddMarketInfoToCache(symbol, res1);
-            } 
-            
-            if (res2 && res2.Data && res2.Data.CVaR && res2.Data.ContractSize && res2.Data.Rate) {
-                this._tryAddSymbolTradeInfoToCache(parameters.Symbol, res2);
-            }
-
-            return this._calculateOrderChecklist(res1, res2, parameters);
-        }));
-    }
-
     public canCalculateTotalVAR(orderType?: OrderTypes): boolean {
         for (const order of this.orders) {
             if (orderType && orderType !== order.Type) {
@@ -709,95 +688,8 @@ export abstract class MTBroker implements IMTBroker {
         return res;
     }
 
-    private _calculateOrderChecklist(marketInfo: IBFTAMarketInfo, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
-        let result: MTOrderValidationChecklist = {};
-
-        if (marketInfo) {
-            let allowedDiff = Math.abs(marketInfo.natural - marketInfo.support) / 5;
-            if (parameters.Side === OrderSide.Buy) {
-                result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Up;
-                result.LocalRTD = marketInfo.local_trend === IBFTATrend.Up;
-
-                let priceToTargetDiff = Math.abs(marketInfo.resistance - marketInfo.last_price);
-                if (marketInfo.last_price >= marketInfo.resistance || allowedDiff > priceToTargetDiff) {
-                    result.Levels = false;
-                } else {
-                    result.Levels = true;
-                }
-            } else {
-                result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Down;
-                result.LocalRTD = marketInfo.local_trend === IBFTATrend.Down;
-
-                let priceToTargetDiff = Math.abs(marketInfo.support - marketInfo.last_price);
-                if (marketInfo.last_price <= marketInfo.support || allowedDiff > priceToTargetDiff) {
-                    result.Levels = false;
-                } else {
-                    result.Levels = true;
-                }
-            }
-
-            result.GlobalRTDValue = marketInfo.global_trend;
-            result.LocalRTDValue = marketInfo.local_trend;
-            result.LocalRTDSpread = marketInfo.local_trend_spread;
-            result.GlobalRTDSpread = marketInfo.global_trend_spread;
-        }
-
-        if (symbolTradeInfo && symbolTradeInfo.Data) {
-            let price = parameters.Price || (symbolTradeInfo.Data.Bid + symbolTradeInfo.Data.Ask) / 2;
-            let contractSize = symbolTradeInfo.Data.ContractSize;
-            let rate = symbolTradeInfo.Data.Rate;
-            let cvar = symbolTradeInfo.Data.CVaR;
-            let bid = symbolTradeInfo.Data.Bid;
-            let ask = symbolTradeInfo.Data.Ask;
-            if (price) {
-                if (parameters.SL) {
-                    result.RiskValue = this._buildRiskByPrice(contractSize, rate, parameters.Size, price, parameters.SL);
-                } else if (cvar) {
-                    result.RiskValue = this._buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar);
-                }
-            }
-            
-            if (bid && ask) {
-                result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
-            }
-        }
-
-        let correlatedRisk = this.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
-        result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.accountInfo.Balance * 100) + result.RiskValue);
-        return result;
-    }
-
-    protected _normalizeInstrument(symbol: string): string {
-        let s = symbol;
-        if (s.length > 6 && s[s.length - 2] === '-') {
-            s = s.slice(0, s.length - 2);
-        }
-        s = s.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
-        return s;
-    }
-
-    protected _tryGetSymbolTradeInfoFromCache(instrument: string): Observable<MTSymbolTradeInfoResponse> {
-        if (this._symbolTradeInfoCache[instrument]) {
-            return of(this._symbolTradeInfoCache[instrument]);
-        }
-
-        return null;
-    }
-
-    protected _tryAddSymbolTradeInfoToCache(instrument: string, data: MTSymbolTradeInfoResponse) {
-        this._symbolTradeInfoCache[instrument] = data;
-    }
-
-    protected _tryGetMarketInfoFromCache(instrument: string): Observable<IBFTAMarketInfo> {
-        if (this._marketInfoCache[instrument]) {
-            return of(this._marketInfoCache[instrument]);
-        }
-
-        return null;
-    }
-
-    protected _tryAddMarketInfoToCache(instrument: string, data: IBFTAMarketInfo) {
-        this._marketInfoCache[instrument] = data;
+    public getSymbolTradeInfo(symbol: string): Observable<MTSymbolTradeInfoResponse> {
+        return this.ws.getSymbolTradeInfo(symbol);
     }
 
     protected _reconnect() {
@@ -947,6 +839,12 @@ export abstract class MTBroker implements IMTBroker {
         this._buildPositions();
         this._buildRates();
         this._buildCurrencyRisks();
+        
+        for (const o of this._orders) {
+            if (o.Type !== OrderTypes.Market) {
+                o.Recommendations = this._tradeRatingService.calculatePendingOrderRecommendations(o);
+            } 
+        }
 
         if (changedOrders.length && !updateRequired) {
             this.onOrdersParametersUpdated.next(changedOrders);
@@ -1043,30 +941,6 @@ export abstract class MTBroker implements IMTBroker {
         });
     }
 
-    protected _buildRiskByVAR(contractSize: number, profitRate: number, size: number, price: number, cvar: number) {
-        let diff = price / 100 * cvar;
-        let riskNet = diff * size * contractSize;
-        // if (profitRate === 0) {
-        //     riskNet = riskNet / price;
-        // } else 
-        if (profitRate) {
-            riskNet = riskNet * profitRate;
-        }
-        return riskNet / this.accountInfo.Balance * 100;
-    } 
-    
-    protected _buildRiskByPrice(contractSize: number, profitRate: number, size: number, price1: number, price2: number) {
-        let diff = Math.abs(price1 - price2);
-        let riskNet = diff * size * contractSize;
-        // if (profitRate === 0) {
-        //     riskNet = riskNet / price;
-        // } else 
-        if (profitRate) {
-            riskNet = riskNet * profitRate;
-        }
-        return riskNet / this.accountInfo.Balance * 100;
-    }
-
     protected _buildRates() {
         for (const order of this._orders) {
             let risk = 0;
@@ -1079,7 +953,7 @@ export abstract class MTBroker implements IMTBroker {
             }
 
             if (order.SL) {
-                risk = this._buildRiskByPrice(contractSize, order.ProfitRate, order.Size, order.Price, order.SL);
+                risk = MTHelper.buildRiskByPrice(contractSize, order.ProfitRate, order.Size, order.Price, order.SL, this.accountInfo.Balance);
             } else if (order.VAR) {
                 risk = order.VAR;
             }
@@ -1114,7 +988,7 @@ export abstract class MTBroker implements IMTBroker {
                 continue;
             }
 
-            const s1 = this._normalizeInstrument(order.Symbol).toUpperCase();
+            const s1 = MTHelper.normalizeInstrument(order.Symbol).toUpperCase();
             const s1Part1 = s1.substring(0, 3).toUpperCase();
             const s1Part2 = s1.substring(3, 6).toUpperCase();
 

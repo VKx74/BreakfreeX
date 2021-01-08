@@ -1,22 +1,22 @@
 <div class="sonar-tile w-100 h-100 crypto-text" >
     <div class="symbol"  [matTooltip]="'This is a fresh Sonar trade setup found by Breakfree Trading Algorithm. \n\rIf you click on it, it will take you directly to the opportunity in the market.'"
-    matTooltipClass="sonartt">
+    matTooltipClass="tooltip-with-line-break">
         {{result?.symbol.toUpperCase()}}
     </div>
 
-    <div class="type"  [matTooltip]="'This is the market category of the specific trade.'" matTooltipClass="sonartt">
+    <div class="type"  [matTooltip]="'This is the market category of the specific trade.'" matTooltipClass="tooltip-with-line-break">
         {{result.marketType}}
     </div>
 
     <div>
-        <div class="tradetf" [matTooltip]="'This shows the timeframe of the trade setup. \n\rAnything below 4h timeframe should be actively monitored every few minutes after trade opens.'" matTooltipClass="sonartt">
+        <div class="tradetf" [matTooltip]="'This shows the timeframe of the trade setup. \n\rAnything below 4h timeframe should be actively monitored every few minutes after trade opens.'" matTooltipClass="tooltip-with-line-break">
             <i class="fa fa-clock-o"></i>
             {{toTimeframe(result.timeframe)}} Setup
         </div>
     </div>
 
     <div>
-        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}"  matTooltipClass="sonartt"
+        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}"  matTooltipClass="tooltip-with-line-break"
         [matTooltip]="'This is the type of trade setup.\n\rTheres 3 different setups: BRC, EXT & Swing.\n\r-----------------------------------------------------\n\rBRC is short for Break, retest & continuation setup.\n\r\n\rEXT = Extension trade setup.\n\r\n\rSwing = Swing trade setup. \n\r-----------------------------------------------------'">
             <ng-container [ngSwitch]="result.origType">
                 <ng-container *ngSwitchCase="origType.EXT">

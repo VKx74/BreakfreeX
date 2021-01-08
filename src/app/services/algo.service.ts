@@ -303,6 +303,8 @@ export interface IRTDPayload {
     fast_2: number[];
     slow: number[];
     slow_2: number[];
+    global_trend_spread: number;
+    local_trend_spread: number;
 }
 
 class AlgoServiceEncryptionHelper {

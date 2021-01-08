@@ -171,10 +171,6 @@
   } 
 }
 
-// .tabs-wrapper {
-//   padding: 10px 5px;
-// }
-
 @include themify($themes, true) {
   .control .caption {
     color: themed('valueTextColor');

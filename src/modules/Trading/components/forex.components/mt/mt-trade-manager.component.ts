@@ -18,6 +18,7 @@ import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { combineLatest } from 'rxjs';
+import { MTHelper } from "@app/services/mt/mt.helper";
 import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
 
 @Component({
@@ -198,6 +199,11 @@ export class MTTradeManagerComponent {
         }
 
         const symbol = order.Symbol;
+        let tf: number = null;
+        if ((order as any).Comment) {
+            const comment = (order as any).Comment;
+            tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+        }
         this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
             if (!instrument) {
                 this._alertService.warning("Failed to view chart by order symbol");
@@ -207,6 +213,14 @@ export class MTTradeManagerComponent {
                 type: Actions.ChangeInstrument,
                 data: instrument
             };
+
+            if (tf) {
+                linkAction.type = Actions.ChangeInstrumentAndTimeframe;
+                linkAction.data = {
+                    instrument: instrument,
+                    timeframe: tf
+                };
+            }
             this.linker.sendAction(linkAction);
         }, (error) => {
             this._alertService.warning("Failed to view chart by order symbol");

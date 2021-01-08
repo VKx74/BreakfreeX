@@ -232,6 +232,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (this._brokerService.activeBroker instanceof MTBroker) {
             const mtBroker = this._brokerService.activeBroker as MTBroker;
             this._orderConfig.Price = Math.roundToDecimals(price, this._decimals);
+            this._orderConfig.Timeframe = this._chart.timeInterval / 1000;
             this._alertService.info("Processing order");
     
             mtBroker.placeOrder(this._orderConfig)
@@ -256,6 +257,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             orderConfig.price = Math.roundToDecimals(price, pricePrecision);
             orderConfig.sl = orderConfig.price;
             orderConfig.tp = orderConfig.price;
+            orderConfig.timeframe = this._chart.timeInterval / 1000;
             this._dialog.open(MTOrderConfiguratorModalComponent, {
                 data: {
                     tradeConfig: orderConfig,

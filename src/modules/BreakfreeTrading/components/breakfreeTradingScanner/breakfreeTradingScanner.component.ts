@@ -495,7 +495,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             if (isHistoricalRecord && (scannerVM as any).date) {
                 date = (scannerVM as any).date;
             }
-
+            
             const linkAction: LinkingAction = {
                 type: Actions.ChangeInstrumentAndTimeframe,
                 data: {
