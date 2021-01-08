@@ -126,9 +126,9 @@ export class MTHelper {
         if (value) {
             if (value > 1.5) {
                 return "Strong";
-            } else if (value > 0.5) {
+            } else if (value > 0.7) {
                 return "Medium";
-            } else if (value > 0.2) {
+            } else if (value > 0.4) {
                 return "Low";
             } else {
                 return "Weak";
@@ -142,8 +142,10 @@ export class MTHelper {
                 return "Strong";
             } else if (value > 0.1) {
                 return "Medium";
-            } else {
+            } else if (value > 0.05) {
                 return "Low";
+            } else {
+                return "Weak";
             }
         }
     }
