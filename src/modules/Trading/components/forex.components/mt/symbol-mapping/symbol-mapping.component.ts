@@ -47,7 +47,7 @@ export class SymbolMappingComponent extends Modal<any> implements OnInit {
 
     private feedSymbol: string;
     private brokerSymbol: string;    
-    private MappedAray: Array<MapPair>;    
+    public MappedAray: Array<MapPair>;
 
     ngOnInit(): void {                
         this._symbolMappingService.getSymbolMapping()
