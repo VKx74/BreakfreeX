@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {UserAvatarShape} from "../../../UI/components/name-avatar/name-avatar.component";
 import {AppRoutes} from "AppRoutes";
-import {SystemNotificationsService} from "../../../Notifications/services/system-notifications.service";
 import {IdentityService} from "@app/services/auth/identity.service";
 import {UsersProfileService} from "@app/services/users-profile.service";
 import {SidebarService} from "@app/services/sidebar.service";
@@ -10,6 +9,8 @@ import {debounceTime, takeUntil} from "rxjs/operators";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
 
 @Component({
     selector: 'base-nav',
@@ -36,11 +37,35 @@ export class BaseNavComponent implements OnInit {
         return this._identityService.fullName;
     }
 
+    public get score(): number {
+        return this._tradingProfileService.score;
+    } 
+    
+    public get isAuthorizedCustomer(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }
+
+    public get levelName(): string {
+        return this._tradingProfileService.levelName || "";
+    }
+
+    public get isLoaded(): boolean {
+        return !!this._tradingProfileService.missions;
+    }
+
+    public get scoreForLevel(): number {
+        return this._tradingProfileService.scoreForLevel;
+    }
+
+    public get level(): number {
+        return this._tradingProfileService.level;
+    }
+
     constructor(private _identityService: IdentityService,
-                private _systemNotificationsService: SystemNotificationsService,
                 private _usersProfileService: UsersProfileService,
                 private _cdRef: ChangeDetectorRef,
                 private _dialog: MatDialog,
+                private _tradingProfileService: TradingProfileService,
                 private _sidebarService: SidebarService,
                 private _route: ActivatedRoute) {
     }
@@ -103,4 +128,8 @@ export class BaseNavComponent implements OnInit {
 
     ngOnDestroy() {
     }
+
+    openMissionDialog() {
+        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background' });
+    } 
 }

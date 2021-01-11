@@ -88,8 +88,6 @@ export class MTTradeRatingService {
         }
 
         let res: MTPEndingOrderRecommendation = {
-            CancelNeeded: false,
-            CancelReason: "",
             GlobalRTD: globalRTD,
             LocalRTD: localRTD,
             GlobalRTDValue: globalRTDValue,
@@ -98,19 +96,24 @@ export class MTTradeRatingService {
             LocalRTDSpread: localRTDSpread,
             Timeframe: timeframe,
             OrderTradeType: tradeType,
-            Type: MTOrderRecommendationType.Pending
+            Type: MTOrderRecommendationType.Pending,
+            FailedChecks: []
         };
 
         if (!globalRTD) {
-            res.CancelNeeded = true;
-            res.CancelReason = "Global RTD trend - reversed direction";
+            res.FailedChecks.push({
+                Issue: "Global RTD trend - reversed direction",
+                Recommendation: "Cancel Order"
+            });
             return res;
         }
 
         // 1h
         if (timeframe <= 60 * 60 && !localRTDValue) {
-            res.CancelNeeded = true;
-            res.CancelReason = "Local RTD trend - reversed direction";
+            res.FailedChecks.push({
+                Issue: "Local RTD trend - reversed direction",
+                Recommendation: "Cancel Order"
+            });
             return res;
         }
 
@@ -119,16 +122,20 @@ export class MTTradeRatingService {
                 const logicalOrderBounds = Math.abs(order.SL - order.TP) * 1.3;
                 const priceDiff = Math.abs(order.Price - order.CurrentPrice);
                 if (logicalOrderBounds < priceDiff) {
-                    res.CancelNeeded = true;
-                    res.CancelReason = "Price too far from entry point";
+                    res.FailedChecks.push({
+                        Issue: "Price too far from entry point",
+                        Recommendation: "Cancel Order"
+                    });
                     return res;
                 }
             } else if (order.Price && order.SL && order.CurrentPrice) {
                 const logicalOrderBounds = Math.abs(order.SL - order.Price) * 2;
                 const priceDiff = Math.abs(order.Price - order.CurrentPrice);
                 if (logicalOrderBounds < priceDiff) {
-                    res.CancelNeeded = true;
-                    res.CancelReason = "Price too far from entry point";
+                    res.FailedChecks.push({
+                        Issue: "Price too far from entry point",
+                        Recommendation: "Cancel Order"
+                    });
                     return res;
                 }
             }
