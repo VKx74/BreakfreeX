@@ -50,14 +50,14 @@ export class SymbolMappingStorageService {
         return this.http.get<ISymbolMappingItem>(this._templatesURL, { params: params });
     }
 
-    public patchSymbolMapping(brokerName: string, login: number, patchRequest: PatchRequest): Observable<any> {        
+    public patchSymbolMapping(brokerName: string, login: number, patchRequest: PatchRequest): Observable<any> {
         let params = new HttpParams();
         params = params.append("brokerName", brokerName);
         params = params.append("login", login.toString());
         return this.http.patch(this._templatesURL, patchRequest, { params: params });
     }
 
-    public postSymbolMapping(symbolMappingItems: ISymbolMappingItem): Observable<any> {        
+    public postSymbolMapping(symbolMappingItems: ISymbolMappingItem): Observable<any> {
         return this.http.post(this._templatesURL, symbolMappingItems);
     }
 }

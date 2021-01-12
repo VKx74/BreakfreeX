@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Injector, OnInit, ViewChild } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { Observable } from "rxjs";
 import { Modal } from "Shared";
@@ -21,6 +21,10 @@ export class MapPair {
     public Item2: string;
 }
 
+export class SymbolMapConfig {
+    SelectedFeedInstrument: IInstrument;
+}
+
 @Component({
     selector: 'symbol-mapping',
     templateUrl: './symbol-mapping.component.html',
@@ -32,14 +36,14 @@ export class MapPair {
         }
     ]
 })
-export class SymbolMappingComponent extends Modal<any> implements OnInit {
+export class SymbolMappingComponent extends Modal<SymbolMapConfig> implements OnInit, AfterViewInit {
     constructor(injector: Injector,
         private _alertService: AlertService,
         private _brokerService: BrokerService,
         private _instrumentService: InstrumentService,
         private _symbolMappingService: InstrumentMappingService) {
         super(injector);
-    }
+    }   
 
     @ViewChild('feedInstrumentSearch', { static: false }) feedInstrumentSearch: InstrumentSearchComponent;
     @ViewChild('brokerInstrumentSearch', { static: false }) brokerInstrumentSearch: InstrumentSearchComponent;
@@ -65,6 +69,14 @@ export class SymbolMappingComponent extends Modal<any> implements OnInit {
             });
     }
 
+    ngAfterViewInit(): void {
+        let config = this.data as SymbolMapConfig;
+        if (config && config.SelectedFeedInstrument) {
+            this.feedInstrumentSearch.instrument = config.SelectedFeedInstrument;
+            this.feedSymbol = config.SelectedFeedInstrument.symbol;
+        }
+    }
+
     handleDFeedInstrumentChange(instrument: IInstrument) {
         this.feedSymbol = instrument.symbol;
     }
@@ -88,7 +100,7 @@ export class SymbolMappingComponent extends Modal<any> implements OnInit {
     Remove(item: MapPair): void {
         let index = this.MappedAray.indexOf(item, 0);
         if (index > -1) {
-            this.loading = true;
+            this.loading = true;            
             this._symbolMappingService.removeSymbolMapping(this.MappedAray[index].Item1)
                 .subscribe((res: any) => {
                     this.MappedAray.splice(index, 1);
@@ -106,8 +118,7 @@ export class SymbolMappingComponent extends Modal<any> implements OnInit {
         this.table.updateDataSource();
     }
 
-    Add(): void {
-        let activeBroker = this._brokerService.getActiveBroker();
+    Add(): void {        
         let errorMessage: string = '';
         if (!this.feedSymbol) {
             errorMessage = `Data feed symbol not set`;
