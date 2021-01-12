@@ -17,9 +17,7 @@ export class InstrumentMappingService {
 
     public getAllMapping() {
         return this._symbolMappingStorageService.getAllMapping()
-        .subscribe((result: ISymbolMappingItem[]) => {            
-            console.log('allItems result:');
-            console.log(result);
+        .subscribe((result: ISymbolMappingItem[]) => {
             if (result) {
                 result.forEach((value: ISymbolMappingItem) => {
                     let key = this.createKeyFrom(value.brokerName, value.login);                    
@@ -31,8 +29,6 @@ export class InstrumentMappingService {
                     this.allItems[key] = mapping;                    
                 });                             
             }
-            console.log('thisallItems:');
-            console.log(this.allItems);   
         });
     }
 
@@ -70,8 +66,9 @@ export class InstrumentMappingService {
 
     public removeSymbolMapping(feedSymbol: string): Observable<any> {        
         let key = this.createKey();
-        if (this.allItems[key]) {
-            let patchRequest = new PatchRequest(PatchAction.Remove);            
+        if (this.allItems[key]) {            
+            let patchRequest = new PatchRequest(PatchAction.Remove);
+            patchRequest.AddMapping(feedSymbol, '');
             let res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest);
             res.subscribe((ress: any) => {
                 delete this.allItems[key][feedSymbol];
@@ -115,7 +112,6 @@ export class InstrumentMappingService {
 
     private createKey(): string {
         if (!this._brokerState) {
-            console.log('state is nuull');
             return '';
         }
         let brokerName = this._brokerState.server;

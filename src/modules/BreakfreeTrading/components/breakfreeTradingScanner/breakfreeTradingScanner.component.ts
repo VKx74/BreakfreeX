@@ -490,7 +490,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                     if (i.exchange && i.exchange.toLowerCase() === scannerVM.exchange.toLowerCase() && i.id.toLowerCase() === scannerVM.symbol.toLowerCase()) {
                         instrument = i;
                     }
-                } catch(e) {
+                } catch (e) {
                 }
             }
 
