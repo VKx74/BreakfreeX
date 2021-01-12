@@ -486,8 +486,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             let instrument = data[0];
 
             for (const i of data) {
-                if (i.exchange.toLowerCase() === scannerVM.exchange.toLowerCase() && i.id.toLowerCase() === scannerVM.symbol.toLowerCase()) {
-                    instrument = i;
+                try {
+                    if (i.exchange && i.exchange.toLowerCase() === scannerVM.exchange.toLowerCase() && i.id.toLowerCase() === scannerVM.symbol.toLowerCase()) {
+                        instrument = i;
+                    }
+                } catch(e) {
                 }
             }
 
