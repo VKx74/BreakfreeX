@@ -170,6 +170,11 @@ export enum MTOrderRecommendationType {
     Pending
 }
 
+export interface MTOrderChecklistItem {
+    Issue: string;
+    Recommendation: string;
+}
+
 export interface MTOrderRecommendation {
     Type: MTOrderRecommendationType;
     GlobalRTD: boolean;
@@ -183,6 +188,5 @@ export interface MTOrderRecommendation {
 }
 
 export interface MTPEndingOrderRecommendation extends MTOrderRecommendation {
-    CancelNeeded: boolean;
-    CancelReason: string;
+    FailedChecks: MTOrderChecklistItem[];
 }

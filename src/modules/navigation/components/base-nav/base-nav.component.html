@@ -16,6 +16,14 @@
 
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
             <ng-content></ng-content>
+            <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer">
+                <div class="xp-nav-container" (click)="openMissionDialog()">
+                    <span *ngIf="isLoaded; else loading">Lvl {{level}} - {{levelName}}</span>
+                    <ng-template #loading>
+                        <span>Loading...</span>
+                    </ng-template>
+                </div>
+            </nav-section>
             <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="true">
                 <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()">
                     <ng-container *ngTemplateOutlet="avatar"></ng-container>

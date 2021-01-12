@@ -1,6 +1,12 @@
-import {Component, Inject, Injector, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angular/core';
 import {Modal} from "Shared";
 import { IdentityService } from '@app/services/auth/identity.service';
+
+enum CheckoutTab {
+    Monthly,
+    Month3,
+    Month12
+}
 
 @Component({
     selector: 'checkout-component',
@@ -8,6 +14,8 @@ import { IdentityService } from '@app/services/auth/identity.service';
     styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent extends Modal<CheckoutComponent> implements OnInit {
+    public SelectedTab: CheckoutTab = CheckoutTab.Monthly;
+    public CheckoutTab: any = CheckoutTab;
 
     constructor(private _injector: Injector, private _identityService: IdentityService) {
         super(_injector);
@@ -57,5 +65,17 @@ export class CheckoutComponent extends Modal<CheckoutComponent> implements OnIni
           .then(function (result) {
            
           });
+    }
+
+    monthlyClicked() {
+        this.SelectedTab = CheckoutTab.Monthly;
+    }
+
+    month3Clicked() {
+        this.SelectedTab = CheckoutTab.Month3;
+    }
+
+    month12Clicked() {
+        this.SelectedTab = CheckoutTab.Month12;
     }
 }

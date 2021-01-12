@@ -81,7 +81,6 @@ export class UserInfoMenuComponent implements OnInit {
         private _dialog: MatDialog,
         private _store: Store<AppState>,
         private _tradingProfileService: TradingProfileService,
-        private _usersProfileService: UsersProfileService,
         private _brokerService: BrokerService) {
     }
 

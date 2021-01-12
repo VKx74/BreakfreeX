@@ -46,11 +46,11 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
             return "No recommendations";
         }
 
-        if (rec.CancelNeeded) {
-            return "Cancel this order";
+        if (!rec.FailedChecks || !rec.FailedChecks.length) {
+            return "Keep this order";
         }
 
-        return "Keep this order";
+        return rec.FailedChecks[0].Recommendation;
     }
     
     getRecommendationsTooltip(rec: MTPEndingOrderRecommendation) {
@@ -66,12 +66,12 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
         if (rec.LocalRTDSpread) {
             localTrendPerformance = MTHelper.getLocalTrendPerformanceDescription(rec.LocalRTDSpread);
         }
-        let desc = "";
+        let desc = "Trend --------------------\n\r";
         desc += `${globalTrendPerformance} Global RTD trend - ${rec.GlobalRTDValue}\n\r`;
         desc += `${localTrendPerformance} Local RTD trend - ${rec.LocalRTDValue}\n\r`;
 
         if (rec.Timeframe || rec.OrderTradeType) {
-            desc += `-------------------------\n\r`;
+            desc += `Setup --------------------\n\r`;
 
             if (rec.Timeframe) {
                 const tfText = MTHelper.toGranularityToTimeframeText(rec.Timeframe);
@@ -83,9 +83,14 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
             }
         } 
         
-        if (rec.CancelNeeded) {
-            desc += `-------------------------\n\r`;
-            desc += `Cancel Reason - ${rec.CancelReason}\n\r`;
+        if (rec.FailedChecks && rec.FailedChecks.length) {
+            desc += `Issues -------------------\n\r`;
+            let count = 1;
+
+            for (const item of rec.FailedChecks) {
+                desc += `${count}. ${item.Issue}\n\r`;
+                count++;
+            }
         }
 
         return desc;
