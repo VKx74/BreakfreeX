@@ -54,9 +54,22 @@ export class IndicatorDataProviderService {
         const interval = indicator.chart.timeInterval / 1000;
         const dailyInterval = 86400;
 
-        if (params.barsCount && interval < dailyInterval) {
-            const diff = interval / dailyInterval;
-            params.barsCount = params.barsCount * diff;
+        if (interval < dailyInterval) {
+            try {
+                var l = indicator.chart.dataContext.dateDataRows.lastValue as Date;
+                var f = indicator.chart.dataContext.dateDataRows.firstValue as Date;
+                if (l && f) {
+                    const diff = (l.getTime() - f.getTime()) / 1000 / dailyInterval;
+                    if (diff > 0) {
+                        params.barsCount = diff;
+                    }
+                } else {
+                    const diff = interval / dailyInterval;
+                    if (diff > 0) {
+                        params.barsCount = params.barsCount * diff;
+                    }
+                }
+            } catch (error) {}
             params.barsCount = Math.round(params.barsCount);
         }
 
