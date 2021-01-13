@@ -56,8 +56,8 @@ export class IndicatorDataProviderService {
 
         if (interval < dailyInterval) {
             try {
-                var l = indicator.chart.dataContext.dateDataRows.lastValue as Date;
-                var f = indicator.chart.dataContext.dateDataRows.firstValue as Date;
+                let l = indicator.chart.dataContext.dateDataRows.lastValue as Date;
+                let f = indicator.chart.dataContext.dateDataRows.firstValue as Date;
                 if (l && f) {
                     const diff = (l.getTime() - f.getTime()) / 1000 / dailyInterval;
                     if (diff > 0) {
