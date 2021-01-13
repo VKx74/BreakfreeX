@@ -3,4 +3,9 @@
 @import "global-styles/mixins/themify";
 
 :host {
+    @include themify($themes, false) {
+        .modal-body {
+            color: themed('valueTextColor') !important;
+        }
+    }
 }
