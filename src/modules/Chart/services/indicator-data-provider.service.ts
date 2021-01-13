@@ -51,28 +51,6 @@ export class IndicatorDataProviderService {
     }
 
     getRTD(indicator: TradingChartDesigner.Indicator, params?: any): Promise<IRTDPayload> {
-        const interval = indicator.chart.timeInterval / 1000;
-        const dailyInterval = 86400;
-
-        if (interval < dailyInterval) {
-            try {
-                let l = indicator.chart.dataContext.dateDataRows.lastValue as Date;
-                let f = indicator.chart.dataContext.dateDataRows.firstValue as Date;
-                if (l && f) {
-                    const diff = (l.getTime() - f.getTime()) / 1000 / dailyInterval;
-                    if (diff > 0) {
-                        params.barsCount = diff;
-                    }
-                } else {
-                    const diff = interval / dailyInterval;
-                    if (diff > 0) {
-                        params.barsCount = params.barsCount * diff;
-                    }
-                }
-            } catch (error) {}
-            params.barsCount = Math.round(params.barsCount);
-        }
-
         return this._bftService.getRTDCalculation(params).then(data => {
             return data;
         });
