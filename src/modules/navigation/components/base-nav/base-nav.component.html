@@ -18,7 +18,7 @@
             <ng-content></ng-content>
             <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer">
                 <div class="xp-nav-container" (click)="openMissionDialog()">
-                    <span *ngIf="isLoaded; else loading">Lvl {{level}} - {{levelName}}</span>
+                    <span *ngIf="isLoaded; else loading"><span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} <span class="xp-title">LV</span> {{level}}</span>
                     <ng-template #loading>
                         <span>Loading...</span>
                     </ng-template>

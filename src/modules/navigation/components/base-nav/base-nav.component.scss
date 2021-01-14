@@ -8,11 +8,20 @@
   //    max-width: 350px !important;
   //  }
   //}
+
   
   .xp-nav-container {
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     color: #ffffffd1;
+    .xp-title {
+        background-color: #27282B;
+        padding: 4px;
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: 700;
+        font-family: monospace;
+    }
   }
 
   .mission-toolbar {

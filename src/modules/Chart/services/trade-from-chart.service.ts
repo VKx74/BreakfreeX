@@ -110,7 +110,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     if (dialogResult) {
                         this.showMappingModal();
                     } else {
-                        this.showOrderModal(orderConfig, callback, false);
+                        this._alertService.warning("Can`t map instruments to your broker format");
                     }
                 });                
             } else {
@@ -277,7 +277,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     if (dialogResult) {
                         this.showMappingModal();
                     } else {
-                        this.showOrderModal(orderConfig, null, true);
+                        this._alertService.warning("Can`t map instruments to your broker format");
                     }                   
                 });                
             } else {
