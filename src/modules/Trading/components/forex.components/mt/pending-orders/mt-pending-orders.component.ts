@@ -61,10 +61,10 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
         let globalTrendPerformance = "";
         let localTrendPerformance = "";
         if (rec.GlobalRTDSpread) {
-            globalTrendPerformance = MTHelper.getGlobalTrendPerformanceDescription(rec.GlobalRTDSpread);
+            globalTrendPerformance = rec.GlobalRTDTrendStrength;
         }
         if (rec.LocalRTDSpread) {
-            localTrendPerformance = MTHelper.getLocalTrendPerformanceDescription(rec.LocalRTDSpread);
+            localTrendPerformance = rec.LocalRTDTrendStrength;
         }
         let desc = "Trend --------------------\n\r";
         desc += `${globalTrendPerformance} Global RTD trend - ${rec.GlobalRTDValue}\n\r`;

@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
+import { MTHelper } from "@app/services/mt/mt.helper";
 
 @Injectable()
 export class IndicatorDataProviderService {
@@ -52,6 +53,8 @@ export class IndicatorDataProviderService {
 
     getRTD(indicator: TradingChartDesigner.Indicator, params?: any): Promise<IRTDPayload> {
         return this._bftService.getRTDCalculation(params).then(data => {
+            data.global_trend_strength = MTHelper.convertTrendSpread(data.global_trend_spread);
+            data.local_trend_strength = MTHelper.convertTrendSpread(data.local_trend_spread);
             return data;
         });
     }

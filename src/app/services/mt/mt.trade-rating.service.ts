@@ -1,5 +1,5 @@
 import { MTSymbolTradeInfoResponse } from "modules/Trading/models/forex/mt/mt.communication";
-import { MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPEndingOrderRecommendation } from "modules/Trading/models/forex/mt/mt.models";
+import { MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPEndingOrderRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
 import { OrderSide } from "modules/Trading/models/models";
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
@@ -79,6 +79,8 @@ export class MTTradeRatingService {
         const localRTDValue = marketInfo.local_trend;
         const localRTDSpread = marketInfo.local_trend_spread;
         const globalRTDSpread = marketInfo.global_trend_spread;
+        const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
+        const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
 
         let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
         let localRTD = marketInfo.local_trend === IBFTATrend.Up;
@@ -94,6 +96,8 @@ export class MTTradeRatingService {
             LocalRTDValue: localRTDValue,
             GlobalRTDSpread: globalRTDSpread,
             LocalRTDSpread: localRTDSpread,
+            GlobalRTDTrendStrength: globalRTDTrendStrength,
+            LocalRTDTrendStrength: localRTDTrendStrength,
             Timeframe: timeframe,
             OrderTradeType: tradeType,
             Type: MTOrderRecommendationType.Pending,
@@ -199,6 +203,9 @@ export class MTTradeRatingService {
             result.LocalRTDValue = marketInfo.local_trend;
             result.LocalRTDSpread = marketInfo.local_trend_spread;
             result.GlobalRTDSpread = marketInfo.global_trend_spread;
+
+            result.GlobalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
+            result.LocalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
         }
 
         if (symbolTradeInfo && symbolTradeInfo.Data) {

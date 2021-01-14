@@ -12,7 +12,7 @@ import { AlertService } from "@alert/services/alert.service";
 import { memoize } from "@decorators/memoize";
 import bind from "bind-decorator";
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTOrderValidationChecklist, MTPlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTOrderValidationChecklist, MTPlaceOrder, RTDTrendStrength } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { MatDialog } from '@angular/material/dialog';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
@@ -36,18 +36,16 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let minusScore = data.LocalRTD ? 0 : 2;
             let tooltip = data.LocalRTD ? "Local RTD Trend in correct direction." :  "Local RTD Trend in wrong direction.";
-            if (data.LocalRTDSpread !== null && data.LocalRTDSpread !== undefined) {
-                if (data.LocalRTDSpread > 0.2) {
+            if (data.LocalRTDTrendStrength) {
+                if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 3;
-                    // tooltip = "Strong " + tooltip;
-                } else if (data.LocalRTDSpread > 0.1) {
+                } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Medium) {
                     minusScore = 2;
                 } else {
                     minusScore = 1;
-                    // tooltip = "Weak " + tooltip;
                 }
 
-                tooltip = MTHelper.getLocalTrendPerformanceDescription(data.GlobalRTDSpread) + " " + tooltip;
+                tooltip = data.LocalRTDTrendStrength + " " + tooltip;
             }
             return {
                 name: "Local Trend",
@@ -61,20 +59,18 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let minusScore = data.GlobalRTD ? 0 : 4;
             let tooltip = data.LocalRTD ? "Global RTD Trend in correct direction." :  "Global RTD Trend in wrong direction.";
-            if (data.GlobalRTDSpread !== null && data.GlobalRTDSpread !== undefined) {
-                if (data.GlobalRTDSpread > 1.5) {
+            if (data.GlobalRTDTrendStrength) {
+                if (data.GlobalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 5;
-                    // tooltip = "Strong " + tooltip;
-                } else if (data.GlobalRTDSpread > 0.5) {
+                } else if (data.GlobalRTDTrendStrength === RTDTrendStrength.Medium) {
                     minusScore = 4;
-                    // tooltip = "Good " + tooltip;
-                } else if (data.GlobalRTDSpread > 0.2) {
+                } else if (data.GlobalRTDTrendStrength === RTDTrendStrength.Low) {
                     minusScore = 3;
                 } else {
                     minusScore = 2;
                 }
 
-                tooltip = MTHelper.getGlobalTrendPerformanceDescription(data.GlobalRTDSpread) + " " + tooltip;
+                tooltip = data.GlobalRTDTrendStrength + " " + tooltip;
             }
             return {
                 name: "Global Trend",

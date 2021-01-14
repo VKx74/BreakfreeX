@@ -1,3 +1,4 @@
+import { RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
 import { OrderTradeType } from "modules/Trading/models/models";
 
 export class MTHelper {
@@ -121,34 +122,6 @@ export class MTHelper {
         return null;
 
     }
-    
-    public static getGlobalTrendPerformanceDescription(value: number): string {
-        if (value) {
-            if (value > 1.5) {
-                return "Strong";
-            } else if (value > 0.7) {
-                return "Medium";
-            } else if (value > 0.4) {
-                return "Low";
-            } else {
-                return "Weak";
-            }
-        }
-    }
-
-    public static getLocalTrendPerformanceDescription(value: number): string {
-        if (value) {
-            if (value > 0.2) {
-                return "Strong";
-            } else if (value > 0.1) {
-                return "Medium";
-            } else if (value > 0.05) {
-                return "Low";
-            } else {
-                return "Weak";
-            }
-        }
-    }
 
     public static toGranularityToTimeframeText(tf: number): string {
         switch (tf) {
@@ -160,5 +133,19 @@ export class MTHelper {
             case 24 * 60 * 60: return "1 Day";
         }
         return "Undefined";
+    }
+
+    public static convertTrendSpread(value: number): RTDTrendStrength {
+        if (value) {
+            if (value > 1.2) {
+                return RTDTrendStrength.Strong;
+            } else if (value > 0.7) {
+                return RTDTrendStrength.Medium;
+            } else if (value > 0.4) {
+                return RTDTrendStrength.Low;
+            } else {
+                return RTDTrendStrength.Weak;
+            }
+        }
     }
 }

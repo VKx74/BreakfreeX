@@ -159,11 +159,19 @@ export interface MTOrderValidationChecklist {
     LocalRTDValue?: IBFTATrend;
     LocalRTDSpread?: number;
     GlobalRTDSpread?: number;
+    LocalRTDTrendStrength?: RTDTrendStrength;
+    GlobalRTDTrendStrength?: RTDTrendStrength;
     RiskValue?: number;
     SpreadRiskValue?: number;
     CorrelatedRiskValue?: number;
 }
 
+export enum RTDTrendStrength {
+    Strong = "Strong",
+    Medium = "Medium",
+    Low = "Low",
+    Weak = "Weak"
+}
 
 export enum MTOrderRecommendationType {
     Active,
@@ -183,6 +191,8 @@ export interface MTOrderRecommendation {
     LocalRTDValue: IBFTATrend;
     LocalRTDSpread: number;
     GlobalRTDSpread: number;
+    LocalRTDTrendStrength: RTDTrendStrength;
+    GlobalRTDTrendStrength: RTDTrendStrength;
     OrderTradeType: OrderTradeType;
     Timeframe: number;
 }
