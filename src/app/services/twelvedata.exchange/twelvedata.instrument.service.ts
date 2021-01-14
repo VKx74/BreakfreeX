@@ -105,7 +105,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         const instrument: IInstrument = {
             id: product.Symbol,
             symbol: product.Symbol.replace("/", ""),
-            exchange: exchange,
+            exchange: exchange || EExchange.Unknown,
             datafeed: EExchangeInstance.TwelvedataExchange,
             type: type,
             tickSize: tickSize,
