@@ -105,7 +105,6 @@ export class MTTradeRatingService {
                 Issue: "Global RTD trend - reversed direction",
                 Recommendation: "Cancel Order"
             });
-            return res;
         }
 
         // 1h
@@ -114,19 +113,17 @@ export class MTTradeRatingService {
                 Issue: "Local RTD trend - reversed direction",
                 Recommendation: "Cancel Order"
             });
-            return res;
         }
 
         if (order.ProfitRate) {
             if (order.Price && order.SL && order.TP && order.CurrentPrice) {
-                const logicalOrderBounds = Math.abs(order.SL - order.TP) * 1.3;
+                const logicalOrderBounds = Math.abs(order.SL - order.TP);
                 const priceDiff = Math.abs(order.Price - order.CurrentPrice);
                 if (logicalOrderBounds < priceDiff) {
                     res.FailedChecks.push({
                         Issue: "Price too far from entry point",
                         Recommendation: "Cancel Order"
                     });
-                    return res;
                 }
             } else if (order.Price && order.SL && order.CurrentPrice) {
                 const logicalOrderBounds = Math.abs(order.SL - order.Price) * 2;
@@ -136,9 +133,22 @@ export class MTTradeRatingService {
                         Issue: "Price too far from entry point",
                         Recommendation: "Cancel Order"
                     });
-                    return res;
                 }
             }
+        }
+
+        if (order.RiskPercentage && order.RiskPercentage >= 25) {
+            res.FailedChecks.push({
+                Issue: "High Risk",
+                Recommendation: "Decrease order size or cancel this order"
+            });
+        }
+
+        if (!order.SL) {
+            res.FailedChecks.push({
+                Issue: "SL not set",
+                Recommendation: "Setup SL for order"
+            });
         }
 
         return res;
