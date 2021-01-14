@@ -23,6 +23,7 @@ export class MapPair {
 
 export class SymbolMapConfig {
     SelectedFeedInstrument: IInstrument;
+    SelectedBrokerInstrument: IInstrument;
 }
 
 @Component({
@@ -74,6 +75,11 @@ export class SymbolMappingComponent extends Modal<SymbolMapConfig> implements On
         if (config && config.SelectedFeedInstrument) {
             this.feedInstrumentSearch.instrument = config.SelectedFeedInstrument;
             this.feedSymbol = config.SelectedFeedInstrument.symbol;
+        }  
+        
+        if (config && config.SelectedBrokerInstrument) {
+            this.brokerInstrumentSearch.instrument = config.SelectedBrokerInstrument;
+            this.brokerSymbol = config.SelectedBrokerInstrument.symbol;
         }
     }
 

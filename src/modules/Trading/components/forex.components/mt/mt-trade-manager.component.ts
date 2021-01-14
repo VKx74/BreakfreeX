@@ -17,7 +17,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { MTHelper } from "@app/services/mt/mt.helper";
 import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
 
@@ -206,7 +206,16 @@ export class MTTradeManagerComponent {
         }
         this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
             if (!instrument) {
-                this._alertService.warning("Failed to view chart by order symbol");
+                mt5Broker.getInstruments(null, symbol).subscribe((brokerInstruments) => {
+                    let brokerInstrument: IInstrument = null;
+                    for (const i of brokerInstruments) {
+                        if (i.symbol.toLowerCase() === symbol.toLowerCase()) {
+                            brokerInstrument = i;
+                            break;
+                        }
+                    }
+                    this.showMappingConfirmation(brokerInstrument);
+                });
                 return;
             }
             const linkAction: LinkingAction = {
@@ -226,6 +235,30 @@ export class MTTradeManagerComponent {
             this._alertService.warning("Failed to view chart by order symbol");
         });
     }
+
+    private showMappingConfirmation(brokerInstrument: IInstrument) {
+        return this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Symbol Mapping',
+                message: `Market unrecognized in your brokerage, please manually map instrument to your brokerage. Do you want to do it now?`
+            }
+        }).afterClosed().subscribe((dialogResult: any) => {
+            if (dialogResult) {
+                this.showMappingModal(brokerInstrument);
+            } else {
+                this._alertService.warning("Failed to view chart by order symbol");
+            }
+        });
+    }
+
+    private showMappingModal(brokerInstrument: IInstrument): void {
+        this._dialog.open(SymbolMappingComponent, {
+            data: {
+                SelectedBrokerInstrument: brokerInstrument
+            }
+        });
+    }
+
 
     private _reconnect() {
         this._alertService.info("Reconnecting");
