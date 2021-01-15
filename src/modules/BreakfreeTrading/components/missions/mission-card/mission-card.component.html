@@ -1,0 +1,26 @@
+<div class="content" [ngClass]="{'failed': failed}" [matTooltip]="failedDescription">
+    <div class="experiance-points-claimed">
+        <div *ngIf="!failed; else missionFailed">
+            <i class="fa fa-check-circle-o" aria-hidden="true" *ngIf="claimed; else notClaimed"></i>
+            <ng-template #notClaimed>
+                <i class="fa fa-circle-thin" aria-hidden="true"></i>
+            </ng-template>
+        </div>
+        <ng-template #missionFailed>
+            <img src="./assets/img/sad.png"/>
+        </ng-template>
+    </div>    
+    <div class="experiance-points">
+        <div class="experiance-points-text">
+            <div class="experiance-points-text-lable">
+                {{Name}}
+            </div>
+            <div class="experiance-points-points">
+                {{Points}}  XP
+            </div>
+        </div>
+        <div class="progress-bar-area">
+            <mat-progress-bar mode="determinate" value="{{value}}"></mat-progress-bar>
+        </div>
+    </div>
+</div>

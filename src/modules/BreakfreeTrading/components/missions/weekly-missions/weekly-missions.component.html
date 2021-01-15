@@ -1,6 +1,8 @@
-<div class="content">
+<div class="content tiles-wrapper">
     <ng-container *ngFor="let mission of missions?.weekly">
-        <mission-row-component Name='{{mission.name}}' Points='{{mission.points}}' Needed='{{mission.requiredValue}}' Current='{{mission.currentValue}}'
-        [Failed]="mission.conditionsFailed" FailedDescription='{{mission.faileDescription}}'></mission-row-component>
+        <div class="tile-wrapper">
+            <mission-card-component Name='{{mission.name}}' Points='{{mission.points}}' Needed='{{mission.requiredValue}}' Current='{{mission.currentValue}}'
+            [Failed]="mission.conditionsFailed" FailedDescription='{{mission.faileDescription}}'></mission-card-component>
+        </div>
     </ng-container>
 </div>

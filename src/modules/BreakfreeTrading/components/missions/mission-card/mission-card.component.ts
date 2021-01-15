@@ -1,11 +1,11 @@
 import {Component, Inject, Injector, Input, OnInit, ViewChild} from '@angular/core';
 
 @Component({
-    selector: 'mission-row-component',
-    templateUrl: './mission-row.component.html',
-    styleUrls: ['./mission-row.component.scss']
+    selector: 'mission-card-component',
+    templateUrl: './mission-card.component.html',
+    styleUrls: ['./mission-card.component.scss']
 })
-export class MissionRowComponent {
+export class MissionCardComponent {
     @Input() Name: string;
     @Input() Points: number;
     @Input() Needed: number;

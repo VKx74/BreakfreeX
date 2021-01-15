@@ -9,39 +9,44 @@
   .content {
     // height: 40px;
     display: flex;
-    border-top: 1px solid;
-    margin: 10px 0px;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
 
     /deep/ .mat-progress-bar {
       height: 5px;
     }
 
     .experiance-points-points {
-      font-size: 12px;
-      line-height: 40px;
-      margin-left: 15px;
+      font-size: 11px;
       font-weight: 700;
-      min-width: 50px;
+      white-space: nowrap;
+      padding: 1px 5px;
+      border-radius: 3px;
+      height: fit-content;
     }
 
     .experiance-points-claimed {
-      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 20px;
+      }
+      i {
+        font-size: 20px;
+      }
     }
-    .experiance-points-claimed img {
-      width: 20px;
-      margin: 0 auto;
-      margin-top: 14px;
-    }
+
     .experiance-points-text-value {
      font-weight:700;
      margin-left: 15px;
     }
     .experiance-points-text-lable {
       font-weight:700;
+      margin-right: 10px;
      }
- 
-
-    
 
     .experiance-points {
       display: flex;
@@ -53,21 +58,28 @@
       max-width: 300px;
 
       .progress-bar-area {
-        margin-top: -5px;
+        margin-top: 10px;
       }
 
       .experiance-points-text {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-bottom: 12px;
       }
+    }
+
+    .fa-check-circle-o {
+      color: #39c467;
     }
   }
 }
 
 @include themify($themes, true) {
   .content {
-    border-top-color: themed('missionMenu');
+    background-color: themed('missionCard');
+  }
+  .experiance-points-points  {
+    color: themed('missionCardXPColor');
+    background-color: themed('missionCardXPBackground');
   }
 }

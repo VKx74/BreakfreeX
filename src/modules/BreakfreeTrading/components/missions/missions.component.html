@@ -1,28 +1,42 @@
 <div class="crypto-modal">
     <div class="content">
         <div class="left-side">
-            <div class="period" [ngClass]="{'selected': selectedSection == Sections.Daily}" (click)="selectPeriod(Sections.Daily)">Daily</div>
-            <div class="period" [ngClass]="{'selected': selectedSection == Sections.Weekly}" (click)="selectPeriod(Sections.Weekly)">Weekly</div>
-            <div class="period" [ngClass]="{'selected': selectedSection == Sections.Info}" (click)="selectPeriod(Sections.Info)">Info</div>
+            <div class="welcome-title">
+                <div class="avatar">
+                    <name-avatar [name]="name"></name-avatar>
+                </div>
+                <div class="greeting">
+                    <div>
+                        Welcome,
+                    </div>
+                    <div>
+                        {{name}}
+                    </div>
+                </div>
+            </div>
+            <div class="experiance-points">
+                <div class="experiance-points-text">
+                    <div class="experiance-points-text-value">
+                        XP {{score}}/{{scoreForLevel}}
+                    </div>
+                    <div class="experiance-levels-text">LV {{level}}</div>
+                </div>
+                <div class="progress-bar-area">
+                    <mat-progress-bar mode="determinate" value="{{score/scoreForLevel * 100}}" ></mat-progress-bar>
+                </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="description-title">Quests</div>
+            <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Daily}" (click)="selectPeriod(Sections.Daily)">Daily Quests</div>
+            <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Weekly}" (click)="selectPeriod(Sections.Weekly)">Weekly Quests</div>
+            <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.TradeGuard}" (click)="selectPeriod(Sections.TradeGuard)">Trade Guard</div>
+            <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.Info}" (click)="selectPeriod(Sections.Info)">Info</div>
         </div>
         <div class="center">
             <div class="header">
-                <div class="experiance-points">
-                    <div class="experiance-points-text">
-                        <div class="experiance-points-text-lable">
-                            Experience
-                        </div>
-                        <div class="experiance-points-text-value">
-                            {{score}}/{{scoreForLevel}}
-                        </div>
-                    </div>
-                    <div class="progress-bar-area">
-                        <mat-progress-bar mode="determinate" value="{{score/scoreForLevel * 100}}" ></mat-progress-bar>
-                    </div>
-                </div>
-                <div class="experiance-levels">
-                    <div class="experiance-levels-text">Level {{level}}</div>
-                </div>
+                <div class="section-name">{{selectedSection}}</div>
             </div>
             <div class="mission-content">
                 <ng-container [ngSwitch]="selectedSection">
@@ -34,6 +48,9 @@
                     </ng-container>  
                     <ng-container *ngSwitchCase="Sections.Info">
                         <missions-info-component></missions-info-component>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Sections.TradeGuard">
+                        <trade-guard-component></trade-guard-component>
                     </ng-container>
                  </ng-container>
             </div>

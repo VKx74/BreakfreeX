@@ -35,11 +35,12 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { MissionsComponent } from './components/missions/missions.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DailyMissionsComponent } from './components/missions/daily-missions/daily-missions.component';
-import { MissionRowComponent } from './components/missions/mission-row/mission-row.component';
+import { MissionCardComponent } from './components/missions/mission-card/mission-card.component';
 import { WeeklyMissionsComponent } from './components/missions/weekly-missions/weekly-missions.component';
 import { ScannerCardComponent } from './components/breakfreeTradingScanner/scanner-card/scanner-card.component';
 import { MissionsInfoComponent } from './components/missions/missions-info/missions-info.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TradeGuardComponent } from './components/missions/trade-guard/trade-guard.component';
 
 @NgModule({
     // components here
@@ -54,9 +55,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MissionsComponent,
         DailyMissionsComponent,
         WeeklyMissionsComponent,
-        MissionRowComponent,
+        MissionCardComponent,
         MissionsInfoComponent,
-        ScannerCardComponent
+        ScannerCardComponent,
+        TradeGuardComponent
     ],
     imports: [
         CommonModule,
@@ -92,7 +94,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
         MissionsComponent,
-        MissionsInfoComponent
+        MissionsInfoComponent,
+        TradeGuardComponent
     ],
     // components here
     exports: [
@@ -104,7 +107,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
         MissionsInfoComponent,
-        MissionsComponent
+        MissionsComponent,
+        TradeGuardComponent
     ],
     providers: [
         HistoryService,

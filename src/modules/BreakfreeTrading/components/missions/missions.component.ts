@@ -13,11 +13,14 @@ import {ApplicationTypeService} from "@app/services/application-type.service";
 import {GoldenLayoutPopupComponent} from "angular-golden-layout";
 import { IdentityService } from '@app/services/auth/identity.service';
 import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { AccountInfoModel, PersonalInfoService } from '@app/services/personal-info/personal-info.service';
+import { IPersonalInfoData } from 'modules/Admin/components/app-member-info/app-member-info.component';
 
 enum Sections {
-    Daily,
-    Weekly,
-    Info
+    Daily = "Daily Quests",
+    Weekly = "Weekly Quests",
+    Info = "Info",
+    TradeGuard = "Trade Guard"
 }
 
 @Component({
@@ -43,6 +46,10 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
 
     public get level(): number {
         return this._tradingProfileService.level;
+    }
+
+    public get name(): string {
+        return `${this._identityService.firstName} ${this._identityService.lastName}`;
     }
 
     constructor(private _injector: Injector,
