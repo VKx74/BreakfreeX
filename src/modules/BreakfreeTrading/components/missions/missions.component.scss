@@ -46,11 +46,18 @@
         display: flex;
         padding: 25px 15px;
         .avatar {
+          min-width: 30px;
           width: 30px;
           height: 30px;
         }
         .greeting {
           margin-left: 10px;
+          .user-name {
+            overflow: hidden;
+            display: inline-block;
+            text-overflow: ellipsis;
+            max-width: 120px;
+          }
         }
       }
 
