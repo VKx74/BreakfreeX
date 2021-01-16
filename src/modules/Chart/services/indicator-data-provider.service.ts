@@ -56,15 +56,6 @@ export class IndicatorDataProviderService {
     }
 
     getRTD(indicator: TradingChartDesigner.Indicator, params?: any): Promise<IRTDPayload> {
-        const interval = indicator.chart.timeInterval / 1000;
-        const dailyInterval = 86400;
-
-        if (params.barsCount && interval < dailyInterval) {
-            const diff = interval / dailyInterval;
-            params.barsCount = params.barsCount * diff;
-            params.barsCount = Math.round(params.barsCount);
-        }
-
         return this._bftService.getRTDCalculation(params).then(data => {
             return data;
         });

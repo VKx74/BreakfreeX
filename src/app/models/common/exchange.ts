@@ -48,5 +48,6 @@ export enum EExchange {
     NZX_Demo = "NZX[Demo]",
 
     Oanda = 'Oanda',
+    Unknown = ''
 }
 
