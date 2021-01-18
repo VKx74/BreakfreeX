@@ -82,12 +82,22 @@ export class MTTradeRatingService {
             });
         }
 
-        // 1h
-        if (res.Timeframe <= 60 * 60 && !res.LocalRTDValue) {
-            res.FailedChecks.push({
-                Issue: "Local RTD trend - reversed direction",
-                Recommendation: "Cancel Order"
-            });
+        if (!res.LocalRTDValue) {
+            if (res.Timeframe <= 60 * 60) {
+                if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
+                    res.FailedChecks.push({
+                        Issue: "Local RTD trend - reversed direction",
+                        Recommendation: "Cancel Order"
+                    });
+                }
+            } else {
+                if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
+                    res.FailedChecks.push({
+                        Issue: "Local RTD trend - reversed direction",
+                        Recommendation: "Cancel Order"
+                    });
+                }
+            }
         }
 
         if (order.ProfitRate) {
@@ -145,12 +155,22 @@ export class MTTradeRatingService {
             });
         }
 
-        // 1h
-        if (res.Timeframe <= 60 * 60 && !res.LocalRTDValue) {
-            res.FailedChecks.push({
-                Issue: "Local RTD trend - reversed direction",
-                Recommendation: "Move to breakeven"
-            });
+        if (!res.LocalRTDValue) {
+            if (res.Timeframe <= 60 * 60) {
+                if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
+                    res.FailedChecks.push({
+                        Issue: "Local RTD trend - reversed direction",
+                        Recommendation: "Move to breakeven"
+                    });
+                }
+            } else {
+                if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
+                    res.FailedChecks.push({
+                        Issue: "Local RTD trend - reversed direction",
+                        Recommendation: "Move to breakeven"
+                    });
+                }
+            }
         }
 
         if (!order.SL) {
@@ -159,7 +179,7 @@ export class MTTradeRatingService {
                 Recommendation: "Setup SL for order"
             });
         }
-        
+
         return res;
     }
 
