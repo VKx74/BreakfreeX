@@ -6,6 +6,7 @@ import {Component, Inject, Injector, Input, OnInit, ViewChild} from '@angular/co
     styleUrls: ['./mission-card.component.scss']
 })
 export class MissionCardComponent {
+    @Input() Notice: string;
     @Input() Name: string;
     @Input() Points: number;
     @Input() Needed: number;

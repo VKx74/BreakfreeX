@@ -16,6 +16,7 @@ export interface IBFTTradingProfile {
 export interface IBFTMission {
     internalId: string;
     name: string;
+    notice: string;
     faileDescription: string;
     requiredValue: number;
     currentValue: number;

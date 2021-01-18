@@ -18,6 +18,9 @@
             <div class="experiance-points-points">
                 {{Points}}  XP
             </div>
+            <div class="mission-notice" [matTooltip]="Notice" *ngIf="Notice">
+                <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+            </div>
         </div>
         <div class="progress-bar-area">
             <mat-progress-bar mode="determinate" value="{{value}}"></mat-progress-bar>
