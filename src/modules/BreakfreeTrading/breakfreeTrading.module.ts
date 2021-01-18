@@ -41,6 +41,7 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
 import { MissionsInfoComponent } from './components/missions/missions-info/missions-info.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TradeGuardComponent } from './components/missions/trade-guard/trade-guard.component';
+import { SpeedometerComponent } from './components/speedometer/speedometer.component';
 
 @NgModule({
     // components here
@@ -58,7 +59,8 @@ import { TradeGuardComponent } from './components/missions/trade-guard/trade-gua
         MissionCardComponent,
         MissionsInfoComponent,
         ScannerCardComponent,
-        TradeGuardComponent
+        TradeGuardComponent,
+        SpeedometerComponent
     ],
     imports: [
         CommonModule,
@@ -108,7 +110,8 @@ import { TradeGuardComponent } from './components/missions/trade-guard/trade-gua
         CheckoutComponent,
         MissionsInfoComponent,
         MissionsComponent,
-        TradeGuardComponent
+        TradeGuardComponent,
+        SpeedometerComponent
     ],
     providers: [
         HistoryService,
