@@ -841,7 +841,9 @@ export abstract class MTBroker implements IMTBroker {
         this._buildCurrencyRisks();
         
         for (const o of this._orders) {
-            if (o.Type !== OrderTypes.Market) {
+            if (o.Type === OrderTypes.Market) {
+                o.Recommendations = this._tradeRatingService.calculateMarketOrderRecommendations(o);
+            } else {
                 o.Recommendations = this._tradeRatingService.calculatePendingOrderRecommendations(o);
             } 
         }

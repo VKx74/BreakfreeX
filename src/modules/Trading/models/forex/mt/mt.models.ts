@@ -197,6 +197,10 @@ export interface MTOrderRecommendation {
     Timeframe: number;
 }
 
-export interface MTPEndingOrderRecommendation extends MTOrderRecommendation {
+export interface MTPendingOrderRecommendation extends MTOrderRecommendation {
+    FailedChecks: MTOrderChecklistItem[];
+}
+
+export interface MTMarketOrderRecommendation extends MTOrderRecommendation {
     FailedChecks: MTOrderChecklistItem[];
 }

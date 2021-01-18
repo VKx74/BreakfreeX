@@ -1,6 +1,6 @@
 import { MTSymbolTradeInfoResponse } from "modules/Trading/models/forex/mt/mt.communication";
-import { MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPEndingOrderRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
-import { OrderSide } from "modules/Trading/models/models";
+import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPendingOrderRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
+import { OrderSide, OrderTypes } from "modules/Trading/models/models";
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
@@ -66,45 +66,16 @@ export class MTTradeRatingService {
         }));
     }
 
-    public calculatePendingOrderRecommendations(order: MTOrder): MTPEndingOrderRecommendation {
-        const symbol = order.Symbol;
-        const marketInfo = this._getOrLoadMarketInfo(symbol);
-        if (!marketInfo) {
-            return marketInfo === undefined ? undefined : null;
+    public calculatePendingOrderRecommendations(order: MTOrder): MTPendingOrderRecommendation {
+        let res = this._createRecommendationBase(order) as MTPendingOrderRecommendation;
+
+        if (!res) {
+            return res;
         }
 
-        const tradeType = MTHelper.getTradeTypeFromTechnicalComment(order.Comment);
-        const timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
-        const globalRTDValue = marketInfo.global_trend;
-        const localRTDValue = marketInfo.local_trend;
-        const localRTDSpread = marketInfo.local_trend_spread;
-        const globalRTDSpread = marketInfo.global_trend_spread;
-        const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
-        const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
+        res.FailedChecks = [];
 
-        let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
-        let localRTD = marketInfo.local_trend === IBFTATrend.Up;
-        if (order.Side === OrderSide.Sell) {
-            globalRTD = marketInfo.global_trend === IBFTATrend.Down;
-            localRTD = marketInfo.local_trend === IBFTATrend.Down;
-        }
-
-        let res: MTPEndingOrderRecommendation = {
-            GlobalRTD: globalRTD,
-            LocalRTD: localRTD,
-            GlobalRTDValue: globalRTDValue,
-            LocalRTDValue: localRTDValue,
-            GlobalRTDSpread: globalRTDSpread,
-            LocalRTDSpread: localRTDSpread,
-            GlobalRTDTrendStrength: globalRTDTrendStrength,
-            LocalRTDTrendStrength: localRTDTrendStrength,
-            Timeframe: timeframe,
-            OrderTradeType: tradeType,
-            Type: MTOrderRecommendationType.Pending,
-            FailedChecks: []
-        };
-
-        if (!globalRTD) {
+        if (!res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Global RTD trend - reversed direction",
                 Recommendation: "Cancel Order"
@@ -112,7 +83,7 @@ export class MTTradeRatingService {
         }
 
         // 1h
-        if (timeframe <= 60 * 60 && !localRTDValue) {
+        if (res.Timeframe <= 60 * 60 && !res.LocalRTDValue) {
             res.FailedChecks.push({
                 Issue: "Local RTD trend - reversed direction",
                 Recommendation: "Cancel Order"
@@ -154,6 +125,80 @@ export class MTTradeRatingService {
                 Recommendation: "Setup SL for order"
             });
         }
+
+        return res;
+    }
+
+    public calculateMarketOrderRecommendations(order: MTOrder): MTMarketOrderRecommendation {
+        let res = this._createRecommendationBase(order) as MTMarketOrderRecommendation;
+
+        if (!res) {
+            return res;
+        }
+
+        res.FailedChecks = [];
+
+        if (!res.GlobalRTD) {
+            res.FailedChecks.push({
+                Issue: "Global RTD trend - reversed direction",
+                Recommendation: "Move to breakeven"
+            });
+        }
+
+        // 1h
+        if (res.Timeframe <= 60 * 60 && !res.LocalRTDValue) {
+            res.FailedChecks.push({
+                Issue: "Local RTD trend - reversed direction",
+                Recommendation: "Move to breakeven"
+            });
+        }
+
+        if (!order.SL) {
+            res.FailedChecks.push({
+                Issue: "SL not set",
+                Recommendation: "Setup SL for order"
+            });
+        }
+        
+        return res;
+    }
+
+    private _createRecommendationBase(order: MTOrder): MTOrderRecommendation {
+        const symbol = order.Symbol;
+        const marketInfo = this._getOrLoadMarketInfo(symbol);
+        if (!marketInfo) {
+            return marketInfo === undefined ? undefined : null;
+        }
+
+        const tradeType = MTHelper.getTradeTypeFromTechnicalComment(order.Comment);
+        const timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
+        const globalRTDValue = marketInfo.global_trend;
+        const localRTDValue = marketInfo.local_trend;
+        const localRTDSpread = marketInfo.local_trend_spread;
+        const globalRTDSpread = marketInfo.global_trend_spread;
+        const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
+        const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
+
+        let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
+        let localRTD = marketInfo.local_trend === IBFTATrend.Up;
+        if (order.Side === OrderSide.Sell) {
+            globalRTD = marketInfo.global_trend === IBFTATrend.Down;
+            localRTD = marketInfo.local_trend === IBFTATrend.Down;
+        }
+
+        let res: MTOrderRecommendation = {
+            GlobalRTD: globalRTD,
+            LocalRTD: localRTD,
+            GlobalRTDValue: globalRTDValue,
+            LocalRTDValue: localRTDValue,
+            GlobalRTDSpread: globalRTDSpread,
+            LocalRTDSpread: localRTDSpread,
+            GlobalRTDTrendStrength: globalRTDTrendStrength,
+            LocalRTDTrendStrength: localRTDTrendStrength,
+            Timeframe: timeframe,
+            OrderTradeType: tradeType,
+            Type: order.Type === OrderTypes.Market ? MTOrderRecommendationType.Active : MTOrderRecommendationType.Pending
+        };
 
         return res;
     }
