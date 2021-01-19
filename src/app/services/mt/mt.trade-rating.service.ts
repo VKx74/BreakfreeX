@@ -1,6 +1,6 @@
 import { MTSymbolTradeInfoResponse } from "modules/Trading/models/forex/mt/mt.communication";
 import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPendingOrderRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
-import { OrderSide, OrderTypes } from "modules/Trading/models/models";
+import { OrderSide, OrderTypes, RiskClass, RiskType } from "modules/Trading/models/models";
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
@@ -78,7 +78,9 @@ export class MTTradeRatingService {
         if (!res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Global RTD trend - reversed direction",
-                Recommendation: "Cancel Order"
+                Recommendation: "Cancel Order",
+                RiskClass: RiskClass.Medium,
+                RiskType: RiskType.WrongTrend
             });
         }
 
@@ -87,14 +89,18 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
                         Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Cancel Order"
+                        Recommendation: "Cancel Order",
+                        RiskClass: RiskClass.Low,
+                        RiskType: RiskType.WrongTrend
                     });
                 }
             } else {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Cancel Order"
+                        Recommendation: "Cancel Order",
+                        RiskClass: RiskClass.Medium,
+                        RiskType: RiskType.WrongTrend
                     });
                 }
             }
@@ -107,7 +113,9 @@ export class MTTradeRatingService {
                 if (logicalOrderBounds < priceDiff) {
                     res.FailedChecks.push({
                         Issue: "Price too far from entry point",
-                        Recommendation: "Cancel Order"
+                        Recommendation: "Cancel Order",
+                        RiskClass: RiskClass.Low,
+                        RiskType: RiskType.PriceFarFromEntry
                     });
                 }
             } else if (order.Price && order.SL && order.CurrentPrice) {
@@ -116,23 +124,30 @@ export class MTTradeRatingService {
                 if (logicalOrderBounds < priceDiff) {
                     res.FailedChecks.push({
                         Issue: "Price too far from entry point",
-                        Recommendation: "Cancel Order"
+                        Recommendation: "Cancel Order",
+                        RiskClass: RiskClass.Low,
+                        RiskType: RiskType.PriceFarFromEntry
                     });
                 }
             }
         }
 
-        if (order.RiskPercentage && order.RiskPercentage >= 25) {
+        const riskClass = MTHelper.convertValueToAssetRiskClass(order.RiskPercentage);
+        if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
                 Issue: "High Risk",
-                Recommendation: "Decrease order size or cancel this order"
+                Recommendation: "Decrease order size or cancel this order",
+                RiskClass: riskClass,
+                RiskType: RiskType.HighRisk
             });
         }
 
         if (!order.SL) {
             res.FailedChecks.push({
                 Issue: "SL not set",
-                Recommendation: "Setup SL for order"
+                Recommendation: "Setup SL for order",
+                RiskClass: RiskClass.Medium,
+                RiskType: RiskType.SLNotSet
             });
         }
 
@@ -151,7 +166,9 @@ export class MTTradeRatingService {
         if (!res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Global RTD trend - reversed direction",
-                Recommendation: "Move to breakeven"
+                Recommendation: "Move to breakeven",
+                RiskClass: RiskClass.High,
+                RiskType: RiskType.WrongTrend
             });
         }
 
@@ -160,14 +177,18 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
                         Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Move to breakeven"
+                        Recommendation: "Move to breakeven",
+                        RiskClass: RiskClass.Medium,
+                        RiskType: RiskType.WrongTrend
                     });
                 }
             } else {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Move to breakeven"
+                        Recommendation: "Move to breakeven",
+                        RiskClass: RiskClass.High,
+                        RiskType: RiskType.WrongTrend
                     });
                 }
             }
@@ -176,7 +197,9 @@ export class MTTradeRatingService {
         if (!order.SL) {
             res.FailedChecks.push({
                 Issue: "SL not set",
-                Recommendation: "Setup SL for order"
+                Recommendation: "Setup SL for order",
+                RiskClass: RiskClass.Medium,
+                RiskType: RiskType.SLNotSet
             });
         }
 

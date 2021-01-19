@@ -38,6 +38,22 @@ export enum OrderTradeType {
     EXT = 'EXT'
 }
 
+export enum RiskClass {
+    Extreme = 4,
+    High = 3,
+    Medium = 2,
+    Low = 1,
+    NoRisk = 0
+}
+
+export enum RiskType {
+    WrongTrend = 'WrongTrend',
+    PriceFarFromEntry = 'PriceFarFromEntry',
+    HighRisk = 'HighRisk',
+    SLNotSet = 'SLNotSet',
+    NoRisk = ''
+}
+
 export enum OrderPlacedFrom {
     Sonar = 'Sonar',
     Manually = 'Manually'

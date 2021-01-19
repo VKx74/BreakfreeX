@@ -1,4 +1,4 @@
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from 'modules/Trading/models/models';
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType } from 'modules/Trading/models/models';
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 import { IBFTATrend } from '@app/services/algo.service';
 
@@ -46,6 +46,7 @@ export interface MTOrder {
     ExpirationType?: OrderExpirationType;
     ExpirationDate?: number;
     Recommendations?: MTOrderRecommendation;
+    RiskClass: RiskClass;
 }
 
 export interface MTHistoricalOrder extends MTOrder {
@@ -103,6 +104,7 @@ export interface MTPosition {
     RiskPercentage?: number;
     Side: OrderSide;
     VAR: number;
+    RiskClass: RiskClass;
 }
 
 export enum MTCurrencyRiskType {
@@ -117,6 +119,7 @@ export interface MTCurrencyRisk {
     Risk?: number;
     RiskPercentage?: number;
     Side: OrderSide;
+    RiskClass: RiskClass;
     // PendingOrdersCount: number;
     // PendingRisk?: number;
     // PendingRiskPercentage?: number;
@@ -181,6 +184,8 @@ export enum MTOrderRecommendationType {
 export interface MTOrderChecklistItem {
     Issue: string;
     Recommendation: string;
+    RiskClass: RiskClass;
+    RiskType: RiskType;
 }
 
 export interface MTOrderRecommendation {

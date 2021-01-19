@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
 import { IMTTick, ITick } from "@app/models/common/tick";
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from "../../../../models/models";
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass } from "../../../../models/models";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
 import { Observable, Subject, Subscription } from "rxjs";
@@ -93,21 +93,22 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = "";
-            let valid = null;
+            let valid = true;
             let minusScore = 0;
             let tooltip = "";
             if (data.RiskValue !== null && data.RiskValue !== undefined) {
                 value = data.RiskValue.toFixed(2) + "%";
-                valid = data.RiskValue < 15;
-                tooltip = valid ? "You have correct order Size and Risk in relation to your account balance." :  "You have to high order Size and Risk in relation to your account balance.";
 
-                if (data.RiskValue > 40) {
+                const risk = MTHelper.convertValueToOrderRiskClass(data.RiskValue);
+                if (risk === RiskClass.Extreme) {
                     minusScore = 5;
-                } else if (data.RiskValue > 25) {
-                    minusScore = 4;
-                } else if (data.RiskValue > 15) {
+                    valid = false;
+                } else if (risk === RiskClass.High) {
                     minusScore = 3;
+                    valid = false;
                 }
+
+                tooltip = valid ? "You have correct order Size and Risk in relation to your account balance." :  "You have to high order Size and Risk in relation to your account balance.";
             }
 
             return {
@@ -122,21 +123,23 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let value = "";
-            let valid = null;
+            let valid = true;
             let minusScore = 0;
             let tooltip = "";
             if (data.CorrelatedRiskValue !== null && data.CorrelatedRiskValue !== undefined) {
                 value = data.CorrelatedRiskValue.toFixed(2) + "%";
-                valid = data.CorrelatedRiskValue < 15;
+
+                const risk = MTHelper.convertValueToAssetRiskClass(data.CorrelatedRiskValue);
+                if (risk === RiskClass.Extreme) {
+                    minusScore = 5;
+                    valid = false;
+                } else if (risk === RiskClass.High) {
+                    minusScore = 3;
+                    valid = false;
+                }
+
                 tooltip = valid ? "You have correct order Side and Risk in relation to other orders in your portfolio." :  "You have high Risk by same currencies in your portfolio.";
 
-                if (data.CorrelatedRiskValue > 40) {
-                    minusScore = 4;
-                } else if (data.CorrelatedRiskValue > 25) {
-                    minusScore = 3;
-                } else if (data.CorrelatedRiskValue > 15) {
-                    minusScore = 2;
-                }
             }
             return {
                 name: "Correlated Risk",

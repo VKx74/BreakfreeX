@@ -1,10 +1,39 @@
 @import "themes/themes";
 @import "mixins/themify";
+@import "global-styles/variables";
 
 :host {
   .content {
    font-size: 12px;
    padding: 15px;
+   display: flex;
+   flex-direction: column;
+   max-height: 50vh;
+
+   .recommendations {
+    margin-top: 10px;
+    overflow-y: auto;
+   }
+
+   .header-content {
+    display: flex;
+    justify-content: space-evenly;
+   }
+  }
+  .low-risk {
+    color: $lightGreenColor;
+  }
+
+  .mid-risk {
+    color: $lightBlueColor;
+  }
+
+  .extreme-risk {
+    color: $lightRedColor;
+  }
+
+  .high-risk {
+    color: $yellowColor;
   }
 }
 

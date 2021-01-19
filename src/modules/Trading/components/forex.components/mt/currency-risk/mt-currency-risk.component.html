@@ -21,7 +21,7 @@
     </data-table-cell>
     <data-table-cell columnName="Risk (%)">
         <ng-template let-item>
-            <span class="{{item.RiskPercentage | currencyGuardRiskClassPipe}}">{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}} {{item.RiskPercentage | currencyGuardRiskPipe}}</span>
+            <span class="{{item.RiskClass | currencyGuardRiskClassPipe}}">{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}} {{item.RiskClass | currencyGuardRiskPipe}}</span>
         </ng-template>
     </data-table-cell>
 

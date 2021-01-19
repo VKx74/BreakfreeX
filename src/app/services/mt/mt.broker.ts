@@ -5,7 +5,7 @@ import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTCon
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
-import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy } from 'modules/Trading/models/models';
+import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass } from 'modules/Trading/models/models';
 import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
 import { IMTTick } from '@app/models/common/tick';
@@ -878,7 +878,8 @@ export abstract class MTBroker implements IMTBroker {
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
-            PipPL: null
+            PipPL: null,
+            RiskClass: null
         };
 
         this._calculatePipPL(ord);
@@ -907,7 +908,8 @@ export abstract class MTBroker implements IMTBroker {
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
             PipPL: null,
-            CloseTime: data.CloseTime
+            CloseTime: data.CloseTime,
+            RiskClass: null
         };
 
         this._calculatePipPL(ord);
@@ -968,6 +970,7 @@ export abstract class MTBroker implements IMTBroker {
 
             order.Risk = Math.roundToDecimals(this.accountInfo.Balance / 100 * risk, 2);
             order.RiskPercentage = Math.roundToDecimals(risk, 2);
+            order.RiskClass = MTHelper.convertValueToOrderRiskClass(order.RiskPercentage);
         }
     }
 
@@ -978,7 +981,8 @@ export abstract class MTBroker implements IMTBroker {
             Risk: 0,
             RiskPercentage: 0,
             Type: type,
-            Side: OrderSide.Buy
+            Side: OrderSide.Buy,
+            RiskClass: RiskClass.NoRisk
         };
     }
 
@@ -1066,6 +1070,7 @@ export abstract class MTBroker implements IMTBroker {
             risk.Risk = Math.abs(risk.Risk);
             risk.RiskPercentage = Math.roundToDecimals(risk.Risk / this.accountInfo.Balance * 100, 2);
             risk.Risk = Math.roundToDecimals(risk.Risk, 2);
+            risk.RiskClass = MTHelper.convertValueToAssetRiskClass(risk.RiskPercentage);
         }
     }
 
@@ -1132,6 +1137,10 @@ export abstract class MTBroker implements IMTBroker {
                 updateRequired = true;
                 this._positions.push(positions[i]);
             }
+        }
+
+        for (const position of this._positions) {
+            position.RiskClass = MTHelper.convertValueToOrderRiskClass(position.RiskPercentage);
         }
 
         if (updateRequired) {
@@ -1211,7 +1220,8 @@ export abstract class MTBroker implements IMTBroker {
             Risk: order.Risk,
             RiskPercentage: order.RiskPercentage,
             CurrentPrice: order.CurrentPrice,
-            VAR: order.VAR || 0
+            VAR: order.VAR || 0,
+            RiskClass: RiskClass.NoRisk
         };
     }
 

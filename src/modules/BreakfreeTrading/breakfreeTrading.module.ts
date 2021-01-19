@@ -42,6 +42,8 @@ import { MissionsInfoComponent } from './components/missions/missions-info/missi
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TradeGuardComponent } from './components/missions/trade-guard/trade-guard.component';
 import { SpeedometerComponent } from './components/speedometer/speedometer.component';
+import { TradeGuardService } from './services/tradeGuard.service';
+import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
 
 @NgModule({
     // components here
@@ -60,7 +62,8 @@ import { SpeedometerComponent } from './components/speedometer/speedometer.compo
         MissionsInfoComponent,
         ScannerCardComponent,
         TradeGuardComponent,
-        SpeedometerComponent
+        SpeedometerComponent,
+        TradeGuardRiskClassPipe
     ],
     imports: [
         CommonModule,
@@ -120,6 +123,7 @@ import { SpeedometerComponent } from './components/speedometer/speedometer.compo
         RealtimeService,
         BreakfreeTradingService,
         ChartTrackerService,
+        TradeGuardService,
         BreakfreeTradingBacktestService,
         {
             provide: BreakfreeTradingTranslateService,

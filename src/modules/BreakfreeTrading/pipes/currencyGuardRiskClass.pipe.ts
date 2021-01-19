@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { RiskClass } from 'modules/Trading/models/models';
 
-@Pipe({name: 'currencyGuardRiskClassPipe'})
-export class CurrencyGuardRiskClassPipe implements PipeTransform {
+@Pipe({name: 'tradeGuardRiskClassPipe'})
+export class TradeGuardRiskClassPipe implements PipeTransform {
   transform(value: RiskClass): string {
     if (!value) {
         return "";

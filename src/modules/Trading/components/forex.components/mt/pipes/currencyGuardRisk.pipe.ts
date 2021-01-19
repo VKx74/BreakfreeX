@@ -1,24 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { RiskClass } from 'modules/Trading/models/models';
 
 @Pipe({name: 'currencyGuardRiskPipe'})
 export class CurrencyGuardRiskPipe implements PipeTransform {
-  transform(value: number): string {
+  transform(value: RiskClass): string {
     if (!value) {
         return "Calculating...";
     }
+
+    switch (value) {
+      case RiskClass.Low: return "Low Risk";
+      case RiskClass.Medium: return "Mid Risk";
+      case RiskClass.High: return "High Risk";
+      case RiskClass.Extreme: return "Extreme Risk";
+    }
     
-    if (value < 4) {
-        return "Low Risk";
-    }
-
-    if (value < 7) {
-        return "Mid Risk";
-    }
-
-    if (value < 10) {
-        return "High Risk";
-    }
-
-    return "Extreme Risk";
+    return "No Risk";
   }
 }

@@ -1,5 +1,5 @@
 import { RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
-import { OrderTradeType } from "modules/Trading/models/models";
+import { OrderTradeType, RiskClass } from "modules/Trading/models/models";
 
 export class MTHelper {
     public static buildRiskByVAR(contractSize: number, profitRate: number, size: number, price: number, cvar: number, balance: number) {
@@ -147,5 +147,45 @@ export class MTHelper {
                 return RTDTrendStrength.Weak;
             }
         }
+    }
+
+    public static convertValueToAssetRiskClass(value: number): RiskClass {
+        if (!value) {
+            return RiskClass.NoRisk;
+        }
+        
+        if (value < 5) {
+            return RiskClass.Low;
+        }
+    
+        if (value < 15) {
+            return RiskClass.Medium;
+        }
+    
+        if (value < 25) {
+            return RiskClass.High;
+        }
+    
+        return RiskClass.Extreme;
+    }
+
+    public static convertValueToOrderRiskClass(value: number): RiskClass {
+        if (!value) {
+            return RiskClass.NoRisk;
+        }
+        
+        if (value < 5) {
+            return RiskClass.Low;
+        }
+    
+        if (value < 15) {
+            return RiskClass.Medium;
+        }
+    
+        if (value < 25) {
+            return RiskClass.High;
+        }
+    
+        return RiskClass.Extreme;
     }
 }
