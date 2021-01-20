@@ -42,6 +42,8 @@ import { MissionsInfoComponent } from './components/missions/missions-info/missi
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TradeGuardComponent } from './components/missions/trade-guard/trade-guard.component';
 import { SpeedometerComponent } from './components/speedometer/speedometer.component';
+import { PlainChartComponent } from './components/plainChart/plainChart.component';
+import { TradingPerformanceService } from './services/tradingPerformance.service';
 import { TradeGuardService } from './services/tradeGuard.service';
 import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
 
@@ -63,6 +65,7 @@ import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
         ScannerCardComponent,
         TradeGuardComponent,
         SpeedometerComponent,
+        PlainChartComponent,
         TradeGuardRiskClassPipe
     ],
     imports: [
@@ -125,6 +128,7 @@ import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
         ChartTrackerService,
         TradeGuardService,
         BreakfreeTradingBacktestService,
+        TradingPerformanceService,
         {
             provide: BreakfreeTradingTranslateService,
             useFactory: TranslateServiceFactory('breakfreeTrading'),
