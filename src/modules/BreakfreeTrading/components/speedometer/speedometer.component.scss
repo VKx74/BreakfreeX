@@ -4,6 +4,10 @@
 :host {
   .content {
     
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
     .wrapper-header {
       font-family: Arial, Helvetica, sans-serif;
       text-align: center;

@@ -7,34 +7,34 @@ import { TradingPerformanceService } from "modules/BreakfreeTrading/services/tra
     templateUrl: 'plainChart.component.html',
     styleUrls: ['plainChart.component.scss']
 })
-export class PlainChartComponent implements OnInit{    
-    @ViewChild ('theCanvas',{static:true}) theCanvas:ElementRef
-    Chart:any;
+export class PlainChartComponent implements OnInit {    
+    @ViewChild ('theCanvas', {static: true}) theCanvas: ElementRef;
+    Chart: any;
 
     constructor(private _tradingPerformanceService: TradingPerformanceService,
-        private _brokerService:BrokerService){}
+        private _brokerService: BrokerService) {}
     
-    public showSpinner:boolean;
+    public showSpinner: boolean;
 
     ngOnInit(): void {        
         this.initChart();
         let activeBroker = this._brokerService.getActiveBroker();
-        if(activeBroker) {
+        if (activeBroker) {
             this.showSpinner = true;
             this._tradingPerformanceService.getWeeklyPnLHistory(activeBroker.account, activeBroker.brokerType)
-            .subscribe((result:any)=>{
-                var res = result as {[key: number]: number};
-                if (res){                   
+            .subscribe((result: any) => {
+                let res = result as {[key: number]: number};
+                if (res) {                   
                     this.addChartData(res);
                 }
                 this.showSpinner = false;
-            }, (error:any)=>{
+            }, (error: any) => {
                 this.showSpinner = false;
             });
         }
     }
 
-    private addChartData(chartData: {[key: number]: number}){
+    private addChartData(chartData: {[key: number]: number}) {
         let lastVal = 0;
         let keys = Object.keys(chartData);        
         keys.forEach((key) => {
@@ -43,7 +43,7 @@ export class PlainChartComponent implements OnInit{
             this.Chart.specArray.push(key);
             lastVal = chartData[key];            
         });        
-        if (lastVal < 0){
+        if (lastVal < 0) {
             this.Chart.data.datasets[0].borderColor = 'red';
             this.Chart.data.datasets[0].pointBackgroundColor = 'red';
         } else {
@@ -53,7 +53,7 @@ export class PlainChartComponent implements OnInit{
         this.Chart.update();
     }
 
-    private initChart():void{
+    private initChart(): void {
         this.Chart = new Chart(this.theCanvas.nativeElement.getContext('2d'), {            
             type: 'line', 
             data: {
@@ -63,12 +63,12 @@ export class PlainChartComponent implements OnInit{
                     fill: false,                  
                     data: [],                    
                 }],
-                labels:[]
+                labels: []
             },
             options: {                
-                aspectRatio:3,
+                aspectRatio: 3,
                 tooltips: {
-                    position:'nearest',
+                    position: 'nearest',
                     backgroundColor: 'rgba(125,125,125,0.8)',
                     displayColors: false,
                     callbacks: {
@@ -83,9 +83,9 @@ export class PlainChartComponent implements OnInit{
                     display: false,                 
                 },
                 scales: {
-                    yAxes:[{
-                        gridLines:{
-                            display:false
+                    yAxes: [{
+                        gridLines: {
+                            display: false
                         },
                         ticks: {
                             padding: 2,
@@ -94,10 +94,10 @@ export class PlainChartComponent implements OnInit{
                             fontSize: 8
                         }
                     }],
-                    xAxes:[{
+                    xAxes: [{
                         display: false,
-                        gridLines:{
-                            display:false
+                        gridLines: {
+                            display: false
                         },
                         ticks: {
                             padding: 0,                            

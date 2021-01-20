@@ -1,4 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, ViewChild} from '@angular/core';
+import { BrokerService } from '@app/services/broker.service';
+import { MTBroker } from '@app/services/mt/mt.broker';
 import { ITradeGuardItem, TradeGuardService } from 'modules/BreakfreeTrading/services/tradeGuard.service';
 import { RiskClass } from 'modules/Trading/models/models';
 
@@ -12,8 +14,11 @@ import { RiskClass } from 'modules/Trading/models/models';
 export class TradeGuardComponent {
     public result: ITradeGuardItem[];
     public score: number = 0;
+    public get isBrokerConnected(): boolean {
+        return !!this._getBrokerInstance();
+    }
 
-    constructor(protected _tradeGuardService: TradeGuardService) {
+    constructor(protected _tradeGuardService: TradeGuardService, protected _brokerService: BrokerService) {
     }
 
     ngOnInit() {
@@ -53,5 +58,12 @@ export class TradeGuardComponent {
             case RiskClass.Low: return 0.3;
         }
         return 0;
+    }
+
+    private _getBrokerInstance(): MTBroker {
+        if (this._brokerService.activeBroker instanceof MTBroker) {
+            return this._brokerService.activeBroker as MTBroker;
+        }
+        return null;
     }
 }
