@@ -2,8 +2,6 @@ import {Injector, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TradeManagerComponent} from "./components/trade-manager/trade-manager.component";
 import {UIModule} from "UI";
-import {Level2Component} from "./components/level2/level2.component";
-import {Level2SimulateService} from "./services/level2-simulate.service";
 import {LoadingModule} from "ngx-loading";
 import {IntervalSelectorComponent} from "./components/interval-selector/interval-selector.component";
 import {PeriodicitySelectorComponent} from "./components/periodicity-selector/periodicity-selector.component";
@@ -78,10 +76,10 @@ import { CurrencyGuardRiskClassPipe } from './components/forex.components/mt/pip
 import { CurrencyGuardRiskPipe } from './components/forex.components/mt/pipes/currencyGuardRisk.pipe';
 import { MTOrderScoreComponent } from './components/forex.components/mt/order-score/mt-order-score.component';
 import { SymbolMappingComponent } from './components/forex.components/mt/symbol-mapping/symbol-mapping.component';
+import { DataHighlightService } from './services/dataHighlight.service';
 
 const components = [
     TradeManagerComponent,
-    Level2Component,
     IntervalSelectorComponent,
     PeriodicitySelectorComponent,
     CryptoTradeManagerComponent,
@@ -173,12 +171,12 @@ const components = [
         ...components
     ],
     providers: [
-        Level2SimulateService,
         {
             provide: TradingTranslateService,
             useFactory: TranslateServiceFactory('trading'),
             deps: [Injector, SharedTranslateService]
-        }
+        },
+        DataHighlightService
     ],
     entryComponents: [
         ...components

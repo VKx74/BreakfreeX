@@ -6,7 +6,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoadingModule} from "ngx-loading";
 import {ChartModule, TcdComponent} from "Chart";
 import {UIModule} from "UI";
-import {Level2Component, TradingModule} from "Trading";
+import {TradingModule} from "Trading";
 import {WatchlistComponent, WatchlistModule} from "Watchlist";
 import {StorageModule} from "Storage";
 import {OrderBookChartComponent, OrderBookChartModule} from "../OrderBookChart";
@@ -379,10 +379,6 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         {
                             componentName: ComponentIdentifier.marketTrades,
                             component: MarketTradesComponent
-                        },
-                        {
-                            componentName: ComponentIdentifier.level2View,
-                            component: Level2Component
                         },
                         {
                             componentName: ComponentIdentifier.news,

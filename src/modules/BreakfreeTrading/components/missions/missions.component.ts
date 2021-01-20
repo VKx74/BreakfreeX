@@ -71,4 +71,8 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
 
     ngOnDestroy() {
     }
+    
+    onClose() {
+        this.close();
+    }
 }

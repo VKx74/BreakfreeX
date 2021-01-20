@@ -57,7 +57,6 @@ import {TemplatesDataProviderService} from "@chart/services/templates-data-provi
 import {ComponentIdentifier} from "@app/models/app-config";
 import {OrderBookComponent} from "@order-book/components/order-book/order-book.component";
 import {MarketTradesComponent} from "@market-trades/components/market-trades/market-trades.component";
-import {Level2Component} from "Trading";
 import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-layout-widget/public-chat-layout-widget.component";
 import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-layout-widget/private-chat-layout-widget.component";
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
@@ -264,10 +263,6 @@ export function sharedEducationalTipsService() {
                         {
                             componentName: ComponentIdentifier.marketTrades,
                             component: MarketTradesComponent
-                        },
-                        {
-                            componentName: ComponentIdentifier.level2View,
-                            component: Level2Component
                         },
                         {
                             componentName: ComponentIdentifier.news,

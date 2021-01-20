@@ -293,6 +293,15 @@ $defaultModeRowHeight: 32px;
   }
 }
 
+    
+.blink {
+  animation: blinker 1.2s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.3; }
+}
+
 @include themify($themes, true) {
   mat-header-cell {
     color: themed('titleTextColor');
@@ -372,26 +381,6 @@ $defaultModeRowHeight: 32px;
 
       &.selected {
         background-color: themed('accentLightColor') !important;
-      }
-      
-      .quadrat {
-        width: 50px;
-        height: 50px;
-        -webkit-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Safari 4+ */
-        -moz-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Fx 5+ */
-        -o-animation: NAME-YOUR-ANIMATION 1s infinite;  /* Opera 12+ */
-        animation: NAME-YOUR-ANIMATION 1s infinite;  /* IE 10+, Fx 29+ */
-      }
-      
-      @-webkit-keyframes NAME-YOUR-ANIMATION {
-        0%, 49% {
-          background-color: rgb(117, 209, 63);
-          border: 3px solid #e50000;
-        }
-        50%, 100% {
-          background-color: #e50000;
-          border: 3px solid rgb(117, 209, 63);
-        }
       }
     }
 

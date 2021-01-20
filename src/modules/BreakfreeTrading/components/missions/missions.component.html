@@ -50,7 +50,7 @@
                         <missions-info-component></missions-info-component>
                     </ng-container>
                     <ng-container *ngSwitchCase="Sections.TradeGuard">
-                        <trade-guard-component></trade-guard-component>
+                        <trade-guard-component (CloseRequested)="onClose()"></trade-guard-component>
                     </ng-container>
                  </ng-container>
             </div>

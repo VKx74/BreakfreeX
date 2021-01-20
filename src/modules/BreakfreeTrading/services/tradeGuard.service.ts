@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTMarketOrderRecommendation, MTPendingOrderRecommendation } from 'modules/Trading/models/forex/mt/mt.models';
-import { RiskClass, RiskType } from 'modules/Trading/models/models';
+import { MTCurrencyRisk, MTMarketOrderRecommendation, MTOrder, MTPendingOrderRecommendation, MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
+import { RiskClass, RiskObject, RiskType } from 'modules/Trading/models/models';
 
 export interface ITradeGuardItem {
     Issue: string;
     Recommendation: string;
     RiskClass: RiskClass;
     RiskType: RiskType;
+    RiskObject: RiskObject;
+    RelatedData: any[];
 }
 
 @Injectable()
@@ -25,14 +27,13 @@ export class TradeGuardService {
         }
         
         const positions = broker.positions;
+        const relatedData: MTPosition[] = [];
         let risks = 0;
 
         for (const position of positions) {
-            if (position.RiskClass === RiskClass.Extreme) {
+            if (position.RiskClass === RiskClass.Extreme || position.RiskClass === RiskClass.High) {
                 risks++;
-            }
-            if (position.RiskClass === RiskClass.High) {
-                risks++;
+                relatedData.push(position);
             }
         }
 
@@ -41,14 +42,18 @@ export class TradeGuardService {
                 Issue: "Position overhit recommended risk",
                 Recommendation: "Take care about your positions",
                 RiskClass: RiskClass.Low,
-                RiskType: RiskType.HighRisk
+                RiskType: RiskType.HighRisk,
+                RelatedData: relatedData,
+                RiskObject: RiskObject.Positions
             });
         } else if (risks > 1) {
             res.push({
                 Issue: "Multiple positions overhit recommended risk",
                 Recommendation: "Take care about your positions",
                 RiskClass: RiskClass.Medium,
-                RiskType: RiskType.HighRisk
+                RiskType: RiskType.HighRisk,
+                RelatedData: relatedData,
+                RiskObject: RiskObject.Positions
             });
         }
 
@@ -63,14 +68,13 @@ export class TradeGuardService {
         }
         
         const currencyRisks = broker.currencyRisks;
+        const relatedData: MTCurrencyRisk[] = [];
         let risks = 0;
 
         for (const currencyRisk of currencyRisks) {
-            if (currencyRisk.RiskClass === RiskClass.Extreme) {
+            if (currencyRisk.RiskClass === RiskClass.Extreme || currencyRisk.RiskClass === RiskClass.High) {
                 risks++;
-            }
-            if (currencyRisk.RiskClass === RiskClass.High) {
-                risks++;
+                relatedData.push(currencyRisk);
             }
         }
 
@@ -79,14 +83,18 @@ export class TradeGuardService {
                 Issue: "Currency overhit recommended risk",
                 Recommendation: "Take care about your portfolio",
                 RiskClass: RiskClass.Low,
-                RiskType: RiskType.HighRisk
+                RiskType: RiskType.HighRisk,
+                RelatedData: relatedData,
+                RiskObject: RiskObject.CurrencyRisk
             });
         } else if (risks > 1) {
             res.push({
                 Issue: "Multiple currencies overhit recommended risk",
                 Recommendation: "Take care about your portfolio",
                 RiskClass: RiskClass.Medium,
-                RiskType: RiskType.HighRisk
+                RiskType: RiskType.HighRisk,
+                RelatedData: relatedData,
+                RiskObject: RiskObject.CurrencyRisk
             });
         }
 
@@ -112,6 +120,7 @@ export class TradeGuardService {
 
                     if (existing) {
                         existing.Issue = this._getRiskTypeDescriptionForMarketOrders(recommendation.RiskType, true);
+                        existing.RelatedData.push(marketOrder);
                         if (recommendation.RiskClass > existing.RiskClass) {
                             existing.RiskClass = recommendation.RiskClass;
                         }
@@ -121,7 +130,9 @@ export class TradeGuardService {
                             Issue: this._getRiskTypeDescriptionForMarketOrders(recommendation.RiskType),
                             Recommendation: currentRecommendation,
                             RiskClass: recommendation.RiskClass,
-                            RiskType: recommendation.RiskType
+                            RiskType: recommendation.RiskType,
+                            RelatedData: [marketOrder],
+                            RiskObject: RiskObject.MarketOrders
                         });
                     }
                 }
@@ -150,6 +161,7 @@ export class TradeGuardService {
                     
                     if (existing) {
                         existing.Issue = this._getRiskTypeDescriptionForPendingOrders(recommendation.RiskType, true);
+                        existing.RelatedData.push(pendingOrder);
                         if (recommendation.RiskClass > existing.RiskClass) {
                             existing.RiskClass = recommendation.RiskClass;
                         }
@@ -159,7 +171,9 @@ export class TradeGuardService {
                             Issue: this._getRiskTypeDescriptionForPendingOrders(recommendation.RiskType),
                             Recommendation: currentRecommendation,
                             RiskClass: recommendation.RiskClass,
-                            RiskType: recommendation.RiskType
+                            RiskType: recommendation.RiskType,
+                            RelatedData: [pendingOrder],
+                            RiskObject: RiskObject.ActiveOrders
                         });
                     }
                 }

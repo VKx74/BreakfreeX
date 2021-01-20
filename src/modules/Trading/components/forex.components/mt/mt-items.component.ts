@@ -7,15 +7,18 @@ import { OrderSide } from 'modules/Trading/models/models';
 import { BrokerService } from '@app/services/broker.service';
 import { MTMarketOrderRecommendation, MTPendingOrderRecommendation } from "modules/Trading/models/forex/mt/mt.models";
 import { MTHelper } from "@app/services/mt/mt.helper";
+import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 
 export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
+    protected _blinkingTimeout: any;
+    protected _onTradePanelDataHighlightSubscription: Subscription;
     protected get _mtBroker(): MTBroker {
         return this._broker.activeBroker as MTBroker;
     }
     
-    private _subscription: Subscription;
-    private _subscriptionOnOrderDataChanged: Subscription;
-    private _instrumentDecimals: { [symbol: string]: number; } = {};
+    protected _subscription: Subscription;
+    protected _subscriptionOnOrderDataChanged: Subscription;
+    protected _instrumentDecimals: { [symbol: string]: number; } = {};
 
     protected _selectedTabIndex: number;
     @Input() set selectedTabIndex(value: number) {
@@ -31,6 +34,7 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
     @Output() onOpenChart = new EventEmitter<T>();
 
     items: T[] = [];
+    blinking: T[] = [];
     selectedItem: T;
     OrderSide = OrderSide;
 
@@ -53,6 +57,7 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
     }   
 
     constructor(private _broker: BrokerService,
+                protected _dataHighlightService: DataHighlightService,
                 @Inject(AlertService) protected _alertService: AlertService,
                 protected _dialog: MatDialog, private cdr: ChangeDetectorRef) {
 
@@ -64,6 +69,7 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
         this._subscriptionOnOrderDataChanged = this._mtBroker.onOrdersParametersUpdated.subscribe(() => {
             this.ordersUpdated();
         });
+        this._onTradePanelDataHighlightSubscription = this._dataHighlightService.onTradePanelDataHighlight.subscribe(this._handleHighlight.bind(this));
     }
 
     getRecommendationsTooltip(rec: MTPendingOrderRecommendation | MTMarketOrderRecommendation) {
@@ -187,9 +193,35 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (this._subscription)
+        if (this._subscription) {
             this._subscription.unsubscribe();
-        if (this._subscriptionOnOrderDataChanged)
+        }
+
+        if (this._subscriptionOnOrderDataChanged) {
             this._subscriptionOnOrderDataChanged.unsubscribe();
+        }
+
+        if (this._onTradePanelDataHighlightSubscription) {
+            this._onTradePanelDataHighlightSubscription.unsubscribe();
+            this._onTradePanelDataHighlightSubscription = null;
+        }
+    }
+
+    private _handleHighlight(data: ITradePanelDataHighlight) {
+        if (!data) {
+            return;
+        }
+
+        this.blinking = data.Data;
+
+        if (this._blinkingTimeout) {
+            clearTimeout(this._blinkingTimeout);
+            this._blinkingTimeout = null;
+        }
+
+        this._blinkingTimeout = setTimeout(() => {
+            this.blinking = [];
+            this._blinkingTimeout = null;
+        }, 1000 * 15);
     }
 }

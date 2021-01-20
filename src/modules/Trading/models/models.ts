@@ -54,6 +54,22 @@ export enum RiskType {
     NoRisk = ''
 }
 
+export enum RiskObject {
+    Positions = 'Positions',
+    MarketOrders = 'OpenOrders',
+    ActiveOrders = 'ActiveOrders',
+    CurrencyRisk = 'CurrencyRisk'
+}
+
+export enum TradeManagerTab {
+    Positions = 'Positions',
+    MarketOrders = 'MarketOrders',
+    ActiveOrders = 'ActiveOrders',
+    OrderHistory = 'OrderHistory',
+    AccountInfo = 'AccountInfo',
+    CurrencyRisk = 'CurrencyRisk'
+}
+
 export enum OrderPlacedFrom {
     Sonar = 'Sonar',
     Manually = 'Manually'

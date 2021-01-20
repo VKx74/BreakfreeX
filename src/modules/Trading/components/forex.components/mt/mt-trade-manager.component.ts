@@ -5,7 +5,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from "@app/services/broker.service";
 import { MTOrderConfiguratorModalComponent } from './order-configurator-modal/mt-order-configurator-modal.component';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { OrderFillPolicy, OrderTypes } from 'modules/Trading/models/models';
+import { OrderFillPolicy, OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
 import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { MTOrder, MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
 import { MTOrderCloseModalComponent } from './order-close-modal/mt-order-close-modal.component';
@@ -17,9 +17,10 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { MTHelper } from "@app/services/mt/mt.helper";
 import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
+import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 
 @Component({
     selector: 'mt-trade-manager',
@@ -34,6 +35,8 @@ import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.componen
 })
 export class MTTradeManagerComponent {
     protected linker: Linker;
+    protected _onTradePanelDataHighlightSubscription: Subscription;
+    selectedIndex: number;
     selectedTabIndex: number;
     @ViewChild('tabGroup', {static: true}) tabGroup: MatTabGroup;
     
@@ -94,10 +97,22 @@ export class MTTradeManagerComponent {
         private brokerService: BrokerService,
         protected _alertService: AlertService,
         protected _instrumentService: InstrumentService,
+        protected _dataHighlightService: DataHighlightService,
         protected _injector: Injector) {
 
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();
+    }
+
+    ngOnInit() {
+        this._onTradePanelDataHighlightSubscription = this._dataHighlightService.onTradePanelDataHighlight.subscribe(this._handleHighlight.bind(this));
+    }
+
+    ngOnDestroy() {
+        if (this._onTradePanelDataHighlightSubscription) {
+            this._onTradePanelDataHighlightSubscription.unsubscribe();
+            this._onTradePanelDataHighlightSubscription = null;
+        }
     }
 
     ngAfterContentChecked() {
@@ -286,5 +301,20 @@ export class MTTradeManagerComponent {
           }, (error) => {
             // this._alertService.info("Error to cancel one of the orders");
         });
+    }
+
+    private _handleHighlight(data: ITradePanelDataHighlight) {
+        if (!data) {
+            return;
+        }
+
+        switch (data.ActivateTab) {
+            case TradeManagerTab.Positions: this.selectedIndex = 0; break;
+            case TradeManagerTab.MarketOrders: this.selectedIndex = 1; break;
+            case TradeManagerTab.ActiveOrders: this.selectedIndex = 2; break;
+            case TradeManagerTab.OrderHistory: this.selectedIndex = 3; break;
+            case TradeManagerTab.AccountInfo: this.selectedIndex = 4; break;
+            case TradeManagerTab.CurrencyRisk: this.selectedIndex = 5; break;
+        }
     }
 }

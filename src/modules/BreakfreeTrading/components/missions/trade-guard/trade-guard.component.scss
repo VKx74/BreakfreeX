@@ -3,6 +3,12 @@
 @import "global-styles/variables";
 
 :host {
+  /deep/ {
+    .mat-row {
+      cursor: pointer;
+    }
+  }
+  
   .broker-not-connected {
     display: flex;
     justify-content: center;

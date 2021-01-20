@@ -4,7 +4,8 @@
     <div>Account balance graph here</div>
   </div>
   <div class="recommendations">
-    <data-table [rows]="result ? result : []" [selectable]="false" [allowColumnsVisibilityChange]="false" [expandOnClick]="false" [trackByIndex]="false">
+    <data-table [rows]="result ? result : []" [selectable]="false" [allowColumnsVisibilityChange]="false" [expandOnClick]="false" [trackByIndex]="false"
+                (onDoubleClick)="doubleClicked($event)">
       <data-table-header-cell columnName="Risk" [columnWidth]="30" [columnMinWidth]="30" [sortable]="false"></data-table-header-cell>
       <data-table-header-cell columnName="Issue" [columnMinWidth]="50" [sortable]="false">Issue</data-table-header-cell>
       <data-table-header-cell columnName="Recommendation" [columnMinWidth]="50" [sortable]="false">Recommendation</data-table-header-cell>

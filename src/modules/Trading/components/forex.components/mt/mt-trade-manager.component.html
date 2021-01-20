@@ -3,7 +3,7 @@
         <color-selector [activeColor]="linkerColor" [path]="'flag'" (activeColorChange)='handleColorSelected($event)'>
         </color-selector>
     </div>
-    <mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup>
+    <mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedIndex">
         <mat-tab label="{{'tradeManager.positions' | translate}} {{positionsAmount ? '[' + positionsAmount + ']' : ''}}">
             <mt-positions [selectedTabIndex]="selectedTabIndex" [tabIndex]="0" (onPositionClose)="handlePositionClose($event)" (onOpenChart)="handleOpenChart($event)"></mt-positions>
         </mat-tab>

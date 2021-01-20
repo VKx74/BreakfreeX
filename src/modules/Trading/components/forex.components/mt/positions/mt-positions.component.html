@@ -1,5 +1,5 @@
 <div class="positions">
-    <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
+    <data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
         [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
         [hiddenColumns]="['Net Risk']"
         (onContextMenuSelected)="handleContextMenuSelected($event)">
