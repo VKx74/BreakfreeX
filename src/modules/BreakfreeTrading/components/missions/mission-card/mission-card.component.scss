@@ -6,7 +6,7 @@
     cursor: pointer;
     opacity: 0.5;
   }
-  .content {
+  .card-content {
     // height: 40px;
     display: flex;
     margin: 5px;
@@ -80,7 +80,7 @@
 }
 
 @include themify($themes, true) {
-  .content {
+  .card-content {
     background-color: themed('missionCard');
   }
   .experiance-points-points  {

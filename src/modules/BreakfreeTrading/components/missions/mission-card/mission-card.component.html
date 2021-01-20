@@ -1,4 +1,4 @@
-<div class="content" [ngClass]="{'failed': failed}" [matTooltip]="failedDescription">
+<div class="card-content" [ngClass]="{'failed': failed}" [matTooltip]="failedDescription">
     <div class="experiance-points-claimed">
         <div *ngIf="!failed; else missionFailed">
             <i class="fa fa-check-circle-o" aria-hidden="true" *ngIf="claimed; else notClaimed"></i>
