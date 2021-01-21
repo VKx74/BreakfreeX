@@ -4,6 +4,9 @@
 
 :host {
 
+
+
+
   .checklist-row {
     position: relative;
     /deep/ .mat-progress-bar {
@@ -20,11 +23,7 @@
       justify-content: space-between;
     }
 
-    .score-container {
-      font-size: 13px;
-      color: goldenrod;
-      display: flex;
-    }
+    
 
     .score-text {
       margin-right: 10px;
@@ -36,13 +35,17 @@
   .tiles-wrapper {
     padding: 2px;
     max-width: 290px;
+    transition: all .2s ease;
     .checklist-tile-wrapper {
       border-radius: 5px;
-      cursor: pointer;
-      margin: 3px;
-      font-size: 11px;
-      padding: 3px 5px;
-      float: left;
+      transition: all .2s ease;
+    cursor: pointer;
+    margin: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 7px;
+    float: left;
+    transition: all .2s ease;
       &:hover {
        // border-color: black;
       }
@@ -163,15 +166,29 @@
     flex-basis: 100%;
     flex: 1;
     width: 120px;
-    padding: 0px 5px;
+
   }
+  .padding-right {
+
+  padding-right:3px;
+  }
+  .padding-left {
+
+  padding-left:3px;
+  }
+
+  .crypto-form-unit.margin-bottom{
+
+    margin-bottom:4px !important;
+    }
+
 
   .total {
     margin-bottom: 15px;
   }
 
   .order-side-buttons {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
   }
 
   .bid-text {
@@ -199,11 +216,12 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
     font-family: $primaryFontFamily;
-    height: 32px;
-    font-weight:bold;
+    height: 25px;
+    font-weight: 700;
     text-align: center;
+    transition: all .2s ease;
     
 
     &.active.order-side-buy {
@@ -298,6 +316,55 @@ hr {
   /deep/ mat-expansion-panel, mat-expansion-panel, mat-expansion-panel-header {
    background-color: themed('appModalsPanelColor');
   }
+
+  .orderheader{
+    margin: 0px;
+    background: themed('inputInModalsBackgroundColor');
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding-top: 3px;
+    margin-bottom:-7px;
+    font-size: 9px;
+    font-weight: 700;
+    padding-bottom: 2px;
+    padding-left: 11px;
+    z-index: 9999999;
+    position: relative;
+    // pls define this color in the color scheme
+    color: #a9aaabab;
+    // use this one for light: #6a6a6a
+  }
+
+  .tradescoreholder {
+    min-height:110px;
+    border:1px solid themed('inputInModalsBackgroundColor');
+    border-radius: 15px;
+    padding-bottom: 5px;
+    //background: #00000012;
+  }
+  .tradescore{
+    
+    font-size: 10px !important;
+    font-weight: 700;
+    padding-bottom: 5px;
+    padding-left: 11px;
+    z-index: 9999999;
+    position: relative;
+    padding-top: 8px;
+    border-bottom: 1px solid #00000012;
+
+  
+  }
+
+  .score-container {
+    font-size: 11px;
+    color: #ffffffd1;
+    display: flex;
+    padding-right:5px
+  }
+
+
+
 }
 
 .modal-body {
