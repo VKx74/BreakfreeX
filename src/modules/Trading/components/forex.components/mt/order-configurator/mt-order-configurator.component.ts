@@ -270,6 +270,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     @Input() submitHandler: MTOrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
     @Output() onOrderPlaced = new EventEmitter<MTPlaceOrder>();
+    @Output() onInstrumentSelected = new EventEmitter<string>();
     @Input()
     set config(value: MTOrderConfig) {
         if (value) {
@@ -476,6 +477,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
                 this._setTick(tick);
             });
+
+            this.onInstrumentSelected.emit(symbol);
         }
     }
 
