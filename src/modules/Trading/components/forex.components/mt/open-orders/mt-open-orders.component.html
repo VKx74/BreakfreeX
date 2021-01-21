@@ -120,7 +120,7 @@
     <data-table-cell columnName="Recommendations">
         <ng-template let-item>
             <div [matTooltip]="getRecommendationsTooltip(item.Recommendations)" matTooltipClass="tooltip-with-line-break">
-                {{getRecommendationsText(item.Recommendations)}}
+                {{getOrderRecommendationsText(item.Recommendations)}}
             </div>
         </ng-template>
     </data-table-cell>

@@ -16,6 +16,7 @@
         <!-- <data-table-header-cell columnName="Trade Guard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Recommendations" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.recommendations' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
     
 
@@ -76,6 +77,13 @@
         <data-table-cell columnName="Risk (%)">
             <ng-template let-item>
                 <span class="{{item.RiskClass | currencyGuardRiskClassPipe}}">{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : ''}} {{item.RiskClass | currencyGuardRiskPipe}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Recommendations">
+            <ng-template let-item>
+                <div [matTooltip]="getRecommendationsTooltip(item.Recommendations)" matTooltipClass="tooltip-with-line-break">
+                    {{getPositionRecommendationsText(item.Recommendations)}}
+                </div>
             </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Close">

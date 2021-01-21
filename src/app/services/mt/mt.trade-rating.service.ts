@@ -1,5 +1,5 @@
 import { MTSymbolTradeInfoResponse } from "modules/Trading/models/forex/mt/mt.communication";
-import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPendingOrderRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
+import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPendingOrderRecommendation, MTPosition, MTPositionRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
 import { OrderSide, OrderTypes, RiskClass, RiskType } from "modules/Trading/models/models";
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
@@ -67,7 +67,7 @@ export class MTTradeRatingService {
     }
 
     public calculatePendingOrderRecommendations(order: MTOrder): MTPendingOrderRecommendation {
-        let res = this._createRecommendationBase(order) as MTPendingOrderRecommendation;
+        let res = this._createOrderRecommendationBase(order) as MTPendingOrderRecommendation;
 
         if (!res) {
             return res;
@@ -155,7 +155,7 @@ export class MTTradeRatingService {
     }
 
     public calculateMarketOrderRecommendations(order: MTOrder): MTMarketOrderRecommendation {
-        let res = this._createRecommendationBase(order) as MTMarketOrderRecommendation;
+        let res = this._createOrderRecommendationBase(order) as MTMarketOrderRecommendation;
 
         if (!res) {
             return res;
@@ -206,7 +206,60 @@ export class MTTradeRatingService {
         return res;
     }
 
-    private _createRecommendationBase(order: MTOrder): MTOrderRecommendation {
+    public calculatePositionRecommendations(position: MTPosition): MTPositionRecommendation {
+        let res = this._createPositionsRecommendationBase(position) as MTPositionRecommendation;
+
+        if (!res) {
+            return res;
+        }
+
+        res.FailedChecks = [];
+
+        if (!res.GlobalRTD) {
+            res.FailedChecks.push({
+                Issue: "Global RTD trend - reversed direction",
+                Recommendation: "Move to breakeven",
+                RiskClass: RiskClass.High,
+                RiskType: RiskType.WrongTrend
+            });
+        }
+
+        if (!res.LocalRTDValue) {
+            if (res.Timeframe <= 60 * 60) {
+                if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
+                    res.FailedChecks.push({
+                        Issue: "Local RTD trend - reversed direction",
+                        Recommendation: "Move to breakeven",
+                        RiskClass: RiskClass.Medium,
+                        RiskType: RiskType.WrongTrend
+                    });
+                }
+            } else {
+                if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
+                    res.FailedChecks.push({
+                        Issue: "Local RTD trend - reversed direction",
+                        Recommendation: "Move to breakeven",
+                        RiskClass: RiskClass.High,
+                        RiskType: RiskType.WrongTrend
+                    });
+                }
+            }
+        }
+
+        const riskClass = MTHelper.convertValueToAssetRiskClass(position.RiskPercentage);
+        if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
+            res.FailedChecks.push({
+                Issue: "High Risk",
+                Recommendation: "Decrease position size",
+                RiskClass: riskClass,
+                RiskType: RiskType.HighRisk
+            });
+        }
+
+        return res;
+    }
+
+    private _createOrderRecommendationBase(order: MTOrder): MTOrderRecommendation {
         const symbol = order.Symbol;
         const marketInfo = this._getOrLoadMarketInfo(symbol);
         if (!marketInfo) {
@@ -241,6 +294,44 @@ export class MTTradeRatingService {
             Timeframe: timeframe,
             OrderTradeType: tradeType,
             Type: order.Type === OrderTypes.Market ? MTOrderRecommendationType.Active : MTOrderRecommendationType.Pending
+        };
+
+        return res;
+    } 
+    
+    private _createPositionsRecommendationBase(order: MTPosition): MTOrderRecommendation {
+        const symbol = order.Symbol;
+        const marketInfo = this._getOrLoadMarketInfo(symbol);
+        if (!marketInfo) {
+            return marketInfo === undefined ? undefined : null;
+        }
+
+        const globalRTDValue = marketInfo.global_trend;
+        const localRTDValue = marketInfo.local_trend;
+        const localRTDSpread = marketInfo.local_trend_spread;
+        const globalRTDSpread = marketInfo.global_trend_spread;
+        const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
+        const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
+
+        let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
+        let localRTD = marketInfo.local_trend === IBFTATrend.Up;
+        if (order.Side === OrderSide.Sell) {
+            globalRTD = marketInfo.global_trend === IBFTATrend.Down;
+            localRTD = marketInfo.local_trend === IBFTATrend.Down;
+        }
+
+        let res: MTOrderRecommendation = {
+            GlobalRTD: globalRTD,
+            LocalRTD: localRTD,
+            GlobalRTDValue: globalRTDValue,
+            LocalRTDValue: localRTDValue,
+            GlobalRTDSpread: globalRTDSpread,
+            LocalRTDSpread: localRTDSpread,
+            GlobalRTDTrendStrength: globalRTDTrendStrength,
+            LocalRTDTrendStrength: localRTDTrendStrength,
+            Timeframe: null,
+            OrderTradeType: null,
+            Type: MTOrderRecommendationType.Active
         };
 
         return res;

@@ -1141,6 +1141,7 @@ export abstract class MTBroker implements IMTBroker {
 
         for (const position of this._positions) {
             position.RiskClass = MTHelper.convertValueToOrderRiskClass(position.RiskPercentage);
+            position.Recommendations = this._tradeRatingService.calculatePositionRecommendations(position);
         }
 
         if (updateRequired) {
