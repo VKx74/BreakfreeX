@@ -145,7 +145,6 @@ export class MissionTrackingService {
             this._failedMissionsTimeout = null;
             this._processFailedMissions();
         }, 1000);
-
     }
 
     private _processFailedMissions() {
