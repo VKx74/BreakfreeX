@@ -1,4 +1,4 @@
-<div class="form-wrapper">
+<div class="form-wrapper bftorderpanel">
 
     
 
@@ -17,16 +17,17 @@
         <div class="flex-row">
             <div class="flex-column padding-right" >
                 <div class="crypto-form-unit margin-bottom" [ngClass]="{'disabled': !canChangeInstrument}">
-                    <div class="form-unit__label orderheader">{{'symbol' | translate}} </div>
                     <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
                         [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
                 </div>
             </div>
             <div class="flex-column  padding-left">
                 <div class="crypto-form-unit margin-bottom">
-                    <div class="form-unit__label orderheader">{{'amount' | translate}}</div>
+               
                     <mat-form-field class="crypto-input bft-form-input full-width">
-                        <input matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
+
+                        <span class="orderpanelprefix" matPrefix>{{'amount' | translate}}</span>
+                        <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
                             [step]="priceStep" [(ngModel)]="config.amount" (ngModelChange)="valueChanged()">
                     </mat-form-field>
                 </div>
@@ -37,16 +38,19 @@
     <div class="flex-row">
         <div class="flex-column  padding-right">
             <div class="crypto-form-unit margin-bottom">
-                <div class="form-unit__label orderheader">{{'type' | translate}}</div>
+
+          
                 <selector class="bft-form-select" [selectedOption]="config.type" [options]="allowedOrderTypes"
                     [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
+          
             </div>
         </div>
         <div class="flex-column padding-left">
             <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
-                <div class="form-unit__label orderheader">{{'limitPrice' | translate}}</div>
+         
                 <mat-form-field class="crypto-input bft-form-input full-width">
-                    <input matInput type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                    <span class="orderpanelprefix" matPrefix>{{'limitPrice' | translate}}</span>
+                    <input matInput class="bftinput"  type="number" numericInput [floatOnly]="true" [step]="priceStep"
                         [range]="{min: minPriceValue}" [(ngModel)]="config.price" (ngModelChange)="valueChanged()">
                 </mat-form-field>
             </div>
@@ -58,9 +62,10 @@
         <div class="flex-column  padding-right">
             <div class="crypto-form-unit margin-bottom">
             
-                <div class="form-unit__label orderheader">{{'tradeManager.stoploss' | translate}}</div>
+             
                 <mat-form-field class="crypto-input bft-form-input full-width">
-                    <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.stoploss' | translate}}</span>
+                    <input matInput class="bftinput"  type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                         [step]="priceStep" [(ngModel)]="config.sl" (ngModelChange)="valueChanged()">
                 </mat-form-field>
             </div>
@@ -68,9 +73,10 @@
         <div class="flex-column padding-left">
             <div class="crypto-form-unit margin-bottom">
                 
-                <div class="form-unit__label orderheader">{{'tradeManager.takeprofit' | translate}}</div>
+ 
                 <mat-form-field class="crypto-input bft-form-input full-width" >
-                    <input matInput type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.takeprofit' | translate}}</span>
+                    <input matInput  class="bftinput"  type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                         [step]="priceStep" placeholder="0.0" [(ngModel)]="config.tp">
                 </mat-form-field>
             </div>
