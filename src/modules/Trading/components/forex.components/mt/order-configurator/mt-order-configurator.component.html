@@ -91,7 +91,9 @@
                     </div>
                 </div>
 
-                <bft-loader-block class="loader" *ngIf="calculatingChecklist"></bft-loader-block>
+                <div class="loader">
+                    <bft-loader-block *ngIf="calculatingChecklist"></bft-loader-block>
+                </div>
                 
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
                     <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems"
