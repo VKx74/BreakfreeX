@@ -22,6 +22,7 @@ export interface IBFTMission {
     currentValue: number;
     points: number;
     wasJustReached: boolean;
+    wasJustFailed: boolean;
     conditionsFailed: boolean;
 }
 
@@ -85,7 +86,7 @@ export class TradingProfileService {
         this.url = AppConfigService.config.apiUrls.bftTradingProfilesREST;
     }
 
-    setProcessedState() {
+    setProcessedStateForReachedMissions() {
         if (!this.missions) {
             return;
         }
@@ -94,7 +95,7 @@ export class TradingProfileService {
             for (const mission of this.missions.daily) {
                 if (mission.wasJustReached) {
                     mission.wasJustReached = false;
-                }
+                } 
             }
         }
 
@@ -103,6 +104,29 @@ export class TradingProfileService {
             for (const mission of this.missions.weekly) {
                 if (mission.wasJustReached) {
                     mission.wasJustReached = false;
+                } 
+            }
+        }
+    }
+    
+    setProcessedStateForFailedMissions() {
+        if (!this.missions) {
+            return;
+        }
+
+        if (this.missions.daily) {
+            for (const mission of this.missions.daily) {
+                if (mission.wasJustFailed) {
+                    mission.wasJustFailed = false;
+                }
+            }
+        }
+
+
+        if (this.missions.weekly) {
+            for (const mission of this.missions.weekly) {
+                if (mission.wasJustFailed) {
+                    mission.wasJustFailed = false;
                 }
             }
         }

@@ -7,7 +7,7 @@
             </ng-template>
         </div>
         <ng-template #missionFailed>
-            <img src="./assets/img/sad.png"/>
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
         </ng-template>
     </div>    
     <div class="experiance-points">
@@ -22,7 +22,7 @@
                 <i class="fa fa-question-circle-o" aria-hidden="true"></i>
             </div>
         </div>
-        <div class="progress-bar-area">
+        <div class="progress-bar-area" matTooltip="{{Current}}/{{Needed}}">
             <mat-progress-bar mode="determinate" value="{{value}}"></mat-progress-bar>
         </div>
     </div>

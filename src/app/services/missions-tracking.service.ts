@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IdentityService } from "@app/services/auth/identity.service";
-import { NotificationsService } from "@alert/services/notifications.service";
+import { NotificationsService, NotificationType } from "@alert/services/notifications.service";
 import { IBFTMission, TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { Subject, Subscription } from "rxjs";
 import { BrokerService } from "./broker.service";
@@ -16,6 +16,7 @@ export class MissionTrackingService {
     private _timeInterval: number = 1000 * 60 * 13; // 13 min
     private _timeout: number = 1000 * 60 * 1.5; // 1.5 min
     private _recalculateRequired: boolean = true;
+    private _failedMissionsTimeout: any;
 
     constructor(private _identity: IdentityService,
         private _notificationService: NotificationsService,
@@ -134,12 +135,56 @@ export class MissionTrackingService {
             }
         }
 
-        this._tradingProfileService.setProcessedState();
+        this._tradingProfileService.setProcessedStateForReachedMissions();
+
+        if (this._failedMissionsTimeout) {
+            clearTimeout(this._failedMissionsTimeout);
+        }
+
+        this._failedMissionsTimeout = setTimeout(() => {
+            this._failedMissionsTimeout = null;
+            this._processFailedMissions();
+        }, 1000);
+
+    }
+
+    private _processFailedMissions() {
+        let count = 1;
+        if (this._tradingProfileService.missions.daily) {
+            for (const mission of this._tradingProfileService.missions.daily) {
+                if (mission.wasJustFailed) {
+                    this._showMissionFailed(mission, "Daily Mission Failed");
+                }
+
+                if (++count > 3) {
+                    break;
+                }
+            }
+        }
+
+        count = 1;
+        if (this._tradingProfileService.missions.weekly) {
+            for (const mission of this._tradingProfileService.missions.weekly) {
+                if (mission.wasJustFailed) {
+                    this._showMissionFailed(mission, "Weekly Mission Failed");
+                }
+
+                if (++count > 3) {
+                    break;
+                }
+            }
+        }
+
+        this._tradingProfileService.setProcessedStateForFailedMissions();
     }
 
     private _showMissionEarned(mission: IBFTMission, header: string) {
-        this._notificationService.show(`<div class="complete-mission-notification-row"><i class="fa fa-check" aria-hidden="true"></i>${mission.name}</div>`, header);
+        this._notificationService.show(`<div class="complete-mission-notification-row">${mission.name}</div>`, header, NotificationType.Success);
         // this._notificationService.show(`<div class="complete-mission-notification-row"><i class="fa fa-check" aria-hidden="true"></i>${mission.name}</div>`, "Experience Earned");
+    }
+
+    private _showMissionFailed(mission: IBFTMission, header: string) {
+        this._notificationService.show(`<div class="failed-mission-notification-row">${mission.name}</div>`, header, NotificationType.Error);
     }
 
 }

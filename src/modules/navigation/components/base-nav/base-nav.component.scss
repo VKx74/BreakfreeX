@@ -24,6 +24,27 @@
     }
   }
 
+  .theme-nav-container {
+    font-size: 13px;
+    cursor: pointer;
+    color: #ffffffd1;
+    .theme-title {
+        background-color: #27282B;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+
+        .fa {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          align-content: center;
+          justify-content: center;
+          align-items: center;
+        }
+    }
+  }
+
   .mission-toolbar {
     display: flex;
 

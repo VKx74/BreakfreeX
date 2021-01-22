@@ -15,7 +15,7 @@
         <div class="flex"></div>
 
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
-            <ng-content></ng-content>
+            <ng-content></ng-content> 
             <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer">
                 <div class="xp-nav-container" (click)="openMissionDialog()">
                     <span *ngIf="isLoaded; else loading"><span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} <span class="xp-title">LV</span> {{level}}</span>
@@ -24,6 +24,16 @@
                     </ng-template>
                 </div>
             </nav-section>
+            <nav-section [leftBorder]="true" [paddingRight]="true">
+                <div class="theme-nav-container" (click)="changeTheme()">
+                    <div class="theme-title">
+                        <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>
+                        <ng-template #lightThemeIcon>
+                            <i class="fa fa-moon-o" aria-hidden="true"></i>
+                        </ng-template>
+                    </div>
+                </div>
+            </nav-section> 
             <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="true">
                 <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()">
                     <ng-container *ngTemplateOutlet="avatar"></ng-container>
