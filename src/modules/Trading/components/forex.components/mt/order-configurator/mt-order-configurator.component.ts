@@ -178,7 +178,7 @@ const checklist: ChecklistItemDescription[] = [
     },
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            const isValid = config.useSL && !!(config.sl);
+            const isValid = !!config.sl;
             return {
                 name: "Stoploss",
                 valid: isValid,
@@ -200,8 +200,8 @@ export class MTOrderConfig {
     price?: number; // Limit price
     sl?: number; // Stop price
     tp?: number; // Stop price
-    useSL: boolean; // Stop price
-    useTP: boolean; // Stop price
+    // useSL: boolean; // Stop price
+    // useTP: boolean; // Stop price
     comment?: string; // Stop price
     timeframe?: number;
     tradeType?: OrderTradeType;
@@ -233,8 +233,6 @@ export class MTOrderConfig {
             side: OrderSide.Buy,
             amount: 0.1,
             type: OrderTypes.Market,
-            useSL: false,
-            useTP: false,
             expirationType: OrderExpirationType.GTC,
             fillPolicy: OrderFillPolicy.IOC
         };
@@ -458,6 +456,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (instrument) {
             if (resetPrice) {
                 this._config.price = 0;
+                this._config.sl = null;
+                this._config.tp = null;
             }
 
             this.checklistItems = [];
@@ -525,7 +525,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
             Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
-            SL: this.config.useSL ? this.config.sl : null
+            SL: this.config.sl ? this.config.sl : null
         }).subscribe((res) => {
             this.calculatingChecklist = false;
             this._buildCalculateChecklistResults(res);
@@ -577,12 +577,12 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (tick && !this._config.price) {
             this._config.price = price;
         }
-        if (tick && !this._config.sl) {
-            this._config.sl = price;
-        }
-        if (tick && !this._config.tp) {
-            this._config.tp = price;
-        }
+        // if (tick && !this._config.sl) {
+        //     this._config.sl = price;
+        // }
+        // if (tick && !this._config.tp) {
+        //     this._config.tp = price;
+        // }
 
         if (needLoad) {
             this._raiseCalculateChecklist();
@@ -626,8 +626,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
             Symbol: this.config.instrument.id,
             Type: this.config.type,
             Price: this.config.type !== OrderTypes.Market ?  Number(this.config.price) : 0,
-            SL: this.config.useSL ?  Number(this.config.sl) : 0,
-            TP: this.config.useTP ?  Number(this.config.tp) : 0,
+            SL: this.config.sl ?  Number(this.config.sl) : 0,
+            TP: this.config.tp ?  Number(this.config.tp) : 0,
             FillPolicy: this.config.fillPolicy,
             ExpirationType: this.config.expirationType,
             ExpirationDate: this._getSetupDate(),

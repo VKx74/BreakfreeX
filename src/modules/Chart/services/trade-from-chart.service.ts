@@ -90,12 +90,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
             if (params.sl) {
                 orderConfig.sl =  Math.roundToDecimals(params.sl, pricePrecision);
-                orderConfig.useSL = true;
             }
 
             if (params.tp) {
                 orderConfig.tp =  Math.roundToDecimals(params.tp, pricePrecision);
-                orderConfig.useTP = true;
             }
             
             orderConfig.amount = params.size;
@@ -268,8 +266,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             const pricePrecision = mtBroker.instrumentDecimals(this._chart.instrument.symbol);
             orderConfig.instrument = mtBroker.instrumentToBrokerFormat(this._chart.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(price, pricePrecision);
-            orderConfig.sl = orderConfig.price;
-            orderConfig.tp = orderConfig.price;
+            // orderConfig.sl = orderConfig.price;
+            // orderConfig.tp = orderConfig.price;
             orderConfig.timeframe = this._chart.timeInterval / 1000;            
             if (!this.IsSymbolSupported()) {                
                 this.showMappingConfirmation()
