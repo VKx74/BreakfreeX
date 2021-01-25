@@ -172,7 +172,7 @@ export interface MTOrderValidationChecklist {
 
 export enum RTDTrendStrength {
     Strong = "Strong",
-    Medium = "Medium",
+    Average = "Average",
     Low = "Low",
     Weak = "Weak"
 }

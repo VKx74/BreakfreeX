@@ -17,12 +17,13 @@ import { AccountInfoModel, PersonalInfoService } from '@app/services/personal-in
 import { IPersonalInfoData } from 'modules/Admin/components/app-member-info/app-member-info.component';
 
 enum Ranks {
+    Newbie = "Newbie",
     Bronze = "Bronze",
     Silver = "Silver",
     Gold = "Gold",
     Platinum = "Platinum",
     Master = "Master",
-    Grandmaster = "Grandmaster"
+    Legend = "Legend"
 }
 
 enum Sections {

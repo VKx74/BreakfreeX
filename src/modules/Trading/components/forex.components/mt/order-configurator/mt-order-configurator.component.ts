@@ -39,7 +39,7 @@ const checklist: ChecklistItemDescription[] = [
             if (data.LocalRTDTrendStrength) {
                 if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 3;
-                } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Medium) {
+                } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Average) {
                     minusScore = 2;
                 } else {
                     minusScore = 1;
@@ -62,7 +62,7 @@ const checklist: ChecklistItemDescription[] = [
             if (data.GlobalRTDTrendStrength) {
                 if (data.GlobalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 5;
-                } else if (data.GlobalRTDTrendStrength === RTDTrendStrength.Medium) {
+                } else if (data.GlobalRTDTrendStrength === RTDTrendStrength.Average) {
                     minusScore = 4;
                 } else if (data.GlobalRTDTrendStrength === RTDTrendStrength.Low) {
                     minusScore = 3;
