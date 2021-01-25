@@ -1,9 +1,5 @@
 <div class="order-score">
-    <div class="icon-container">
-        <img src="./assets/img/emoji/happy.svg" *ngIf="calculateScore() == 5" />
-        <img src="./assets/img/emoji/ok.svg" *ngIf="calculateScore() == 4" />
-        <img src="./assets/img/emoji/sad.svg" *ngIf="calculateScore() == 3" />
-        <img src="./assets/img/emoji/surprised.svg" *ngIf="calculateScore() == 2" />
-        <img src="./assets/img/emoji/disappointed.svg" *ngIf="calculateScore() == 1" />
+    <div class="score-item" *ngFor="let item of ScoreItems">
+        <i class="fa" aria-hidden="true"  [ngClass]="{'fa-star': item.IsHit, 'fa-star-o': !item.IsHit}"></i>
     </div>
 </div>

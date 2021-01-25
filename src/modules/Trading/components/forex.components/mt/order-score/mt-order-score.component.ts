@@ -13,15 +13,18 @@ interface IScoreItem {
     styleUrls: ['./mt-order-score.component.scss']
 })
 export class MTOrderScoreComponent {
+    private _res: IScoreItem[] = [];
     private _maxScore: number;
     private _score: number;
 
     @Input() set MaxScore(value: number) {
         this._maxScore = value;
+        this._recalculateScore();
     }
 
     @Input() set Score(value: number) {
         this._score = value;
+        this._recalculateScore();
     }
 
     get maxScore(): number {
@@ -32,20 +35,19 @@ export class MTOrderScoreComponent {
         return this._score;
     }
 
+    public get ScoreItems(): IScoreItem[] {
+        return this._res;
+    }
+
     constructor() {
     }
 
-    calculateScore(): number {
-        const scPoint = this.maxScore / 5;
-        let res = Math.round(this.score / scPoint);
-
-        if (res < 1) {
-            res = 1;
+    private _recalculateScore() {
+        this._res = [];
+        for (let i = 0; i < this._maxScore; i++) {
+            this._res.push({
+                IsHit: i < this._score
+            });
         }
-        if (res > 5) {
-            res = 5;
-        }
-
-        return res;
     }
 }

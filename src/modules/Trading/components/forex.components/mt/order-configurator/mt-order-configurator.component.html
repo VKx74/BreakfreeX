@@ -92,7 +92,7 @@
                 <div class="section-header tradescore">
                     <div class="form-unit__label ">{{'tradeManager.validationChecklist' | translate}}: {{orderScore}}</div>
                     <div class="score-container" *ngIf="!calculatingChecklist && config.instrument">
-                        <mt-order-score [MaxScore]="10" [Score]="calculateOrderStarts()"></mt-order-score>
+                        <mt-order-score [MaxScore]="5" [Score]="calculateOrderStarts()"></mt-order-score>
                     </div>
                 </div>
 
