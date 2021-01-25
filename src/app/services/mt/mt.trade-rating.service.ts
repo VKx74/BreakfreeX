@@ -77,7 +77,7 @@ export class MTTradeRatingService {
 
         if (!res.GlobalRTD) {
             res.FailedChecks.push({
-                Issue: "Global RTD trend - reversed direction",
+                Issue: "Trading against global trend",
                 Recommendation: "Cancel Order",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.WrongTrend
@@ -88,7 +88,7 @@ export class MTTradeRatingService {
             if (res.Timeframe <= 60 * 60) {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
-                        Issue: "Local RTD trend - reversed direction",
+                        Issue: "Trading against local trend",
                         Recommendation: "Cancel Order",
                         RiskClass: RiskClass.Low,
                         RiskType: RiskType.WrongTrend
@@ -97,7 +97,7 @@ export class MTTradeRatingService {
             } else {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
-                        Issue: "Local RTD trend - reversed direction",
+                        Issue: "Trading against strong local trend",
                         Recommendation: "Cancel Order",
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
@@ -112,7 +112,7 @@ export class MTTradeRatingService {
                 const priceDiff = Math.abs(order.Price - order.CurrentPrice);
                 if (logicalOrderBounds < priceDiff) {
                     res.FailedChecks.push({
-                        Issue: "Price too far from entry point",
+                        Issue: "Market too far from entry",
                         Recommendation: "Cancel Order",
                         RiskClass: RiskClass.Low,
                         RiskType: RiskType.PriceFarFromEntry
@@ -123,7 +123,7 @@ export class MTTradeRatingService {
                 const priceDiff = Math.abs(order.Price - order.CurrentPrice);
                 if (logicalOrderBounds < priceDiff) {
                     res.FailedChecks.push({
-                        Issue: "Price too far from entry point",
+                        Issue: "Market too far from entry",
                         Recommendation: "Cancel Order",
                         RiskClass: RiskClass.Low,
                         RiskType: RiskType.PriceFarFromEntry
@@ -135,8 +135,8 @@ export class MTTradeRatingService {
         const riskClass = MTHelper.convertValueToAssetRiskClass(order.RiskPercentage);
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
-                Issue: "High Risk",
-                Recommendation: "Decrease order size or cancel this order",
+                Issue: "High leverage",
+                Recommendation: "Stop gambling. Reduce position size or cancel this order",
                 RiskClass: riskClass,
                 RiskType: RiskType.HighRisk
             });
@@ -144,8 +144,8 @@ export class MTTradeRatingService {
 
         if (!order.SL) {
             res.FailedChecks.push({
-                Issue: "SL not set",
-                Recommendation: "Setup SL for order",
+                Issue: "Gambling! No stoploss set",
+                Recommendation: "Stop gambling. Set stoploss for this order",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.SLNotSet
             });
@@ -165,8 +165,8 @@ export class MTTradeRatingService {
 
         if (!res.GlobalRTD) {
             res.FailedChecks.push({
-                Issue: "Global RTD trend - reversed direction",
-                Recommendation: "Move to breakeven",
+                Issue: "Trading against global trend",
+                Recommendation: "Move TPs to breakeven",
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
             });
@@ -176,8 +176,8 @@ export class MTTradeRatingService {
             if (res.Timeframe <= 60 * 60) {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
-                        Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Move to breakeven",
+                        Issue: "Trading against local trend",
+                        Recommendation: "Move TPs to breakeven",
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
                     });
@@ -185,8 +185,8 @@ export class MTTradeRatingService {
             } else {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
-                        Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Move to breakeven",
+                        Issue: "Trading against strong local trend",
+                        Recommendation: "Move TPs to breakeven",
                         RiskClass: RiskClass.High,
                         RiskType: RiskType.WrongTrend
                     });
@@ -196,8 +196,8 @@ export class MTTradeRatingService {
 
         if (!order.SL) {
             res.FailedChecks.push({
-                Issue: "SL not set",
-                Recommendation: "Setup SL for order",
+                Issue: "No stoploss set",
+                Recommendation: "Stop gambling. Set stoploss for this order",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.SLNotSet
             });
@@ -217,8 +217,8 @@ export class MTTradeRatingService {
 
         if (!res.GlobalRTD) {
             res.FailedChecks.push({
-                Issue: "Global RTD trend - reversed direction",
-                Recommendation: "Move to breakeven",
+                Issue: "Trading against global trend",
+                Recommendation: "Move TPs to breakeven",
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
             });
@@ -228,8 +228,8 @@ export class MTTradeRatingService {
             if (res.Timeframe <= 60 * 60) {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
-                        Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Move to breakeven",
+                        Issue: "Trading against local trend",
+                        Recommendation: "Move TPs to breakeven",
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
                     });
@@ -237,8 +237,8 @@ export class MTTradeRatingService {
             } else {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
-                        Issue: "Local RTD trend - reversed direction",
-                        Recommendation: "Move to breakeven",
+                        Issue: "Trading against strong local trend",
+                        Recommendation: "Move TPs to breakeven",
                         RiskClass: RiskClass.High,
                         RiskType: RiskType.WrongTrend
                     });
@@ -249,8 +249,8 @@ export class MTTradeRatingService {
         const riskClass = MTHelper.convertValueToAssetRiskClass(position.RiskPercentage);
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
-                Issue: "High Risk",
-                Recommendation: "Decrease position size",
+                Issue: "High leverage",
+                Recommendation: "Stop gambling. Reduce position size or cancel this order",
                 RiskClass: riskClass,
                 RiskType: RiskType.HighRisk
             });

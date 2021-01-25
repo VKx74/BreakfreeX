@@ -35,7 +35,7 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let minusScore = data.LocalRTD ? 0 : 2;
-            let tooltip = data.LocalRTD ? "Local RTD Trend in correct direction." :  "Local RTD Trend in wrong direction.";
+            let tooltip = data.LocalRTD ?   "You are trading with local trend in your favour." : "You are trading against local trend.";
             if (data.LocalRTDTrendStrength) {
                 if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 3;
@@ -58,7 +58,7 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let minusScore = data.GlobalRTD ? 0 : 4;
-            let tooltip = data.LocalRTD ? "Global RTD Trend in correct direction." :  "Global RTD Trend in wrong direction.";
+            let tooltip = data.LocalRTD ? "This is not smart. You are trading against global trend." : "You are trading with global trend in your favour.";
             if (data.GlobalRTDTrendStrength) {
                 if (data.GlobalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 5;
@@ -83,10 +83,10 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             return {
-                name: "1D S/R",
+                name: "Major levels",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                tooltip: data.Levels ? "1D Support and Resistance in correct distance to current market price." : "1D Support or Resistance is too close to current market price."
+                tooltip: data.Levels ? "There are no major levels to contradict trend within distance to your entry." : "CAREFUL! There are major levels close to contradicting your entry."
             };
         }
     },
@@ -108,7 +108,7 @@ const checklist: ChecklistItemDescription[] = [
                     valid = false;
                 }
 
-                tooltip = valid ? "You have correct order Size and Risk in relation to your account balance." :  "You have to high order Size and Risk in relation to your account balance.";
+                tooltip = valid ? "Reasonable leverage used for this position. " :  "WARNING! You are overleveraging on this position, please reduce size or avoid trade.";
             }
 
             return {
@@ -138,7 +138,7 @@ const checklist: ChecklistItemDescription[] = [
                     valid = false;
                 }
 
-                tooltip = valid ? "You have correct order Side and Risk in relation to other orders in your portfolio." :  "You have high Risk by same currencies in your portfolio.";
+                tooltip = valid ? "No major correlated risk found in your open positions. " :  "WARNING! We found high correlated risk for this trade with your current open positions. That means if you lose this trade, you will lose other trades at the same time, amplifying your risk and increasing your loss of capital. Cancel this trade.";
 
             }
             return {
@@ -172,7 +172,7 @@ const checklist: ChecklistItemDescription[] = [
                 valid: valid,
                 value: value,
                 minusScore: valid ? 0 : minusScore,
-                tooltip: valid ? "Low Instrument Bid/Ask spread" :  "High Instrument Bid/Ask spread - that can cause unexpected loses"
+                tooltip: valid ? "Acceptable spread." :  "Unreasonable spread found on this market with your broker. "
             };
         }
     },
@@ -183,7 +183,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Stoploss",
                 valid: isValid,
                 minusScore: isValid ? 0 : 2,
-                tooltip: isValid ? "Stoploss set for order" :  "Stoploss Not set for order - that can cause unmanaged loses"
+                tooltip: isValid ? "Acceptable stoploss set for order" :  "Warning! Unacceptable stoploss, you might as well just go to the Casino. Atleast this way you will have fun losing all your money."
             };
         }
     }

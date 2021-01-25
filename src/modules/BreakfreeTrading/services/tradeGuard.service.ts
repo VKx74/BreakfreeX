@@ -80,8 +80,8 @@ export class TradeGuardService {
 
         if (risks === 1) {
             res.push({
-                Issue: "Currency overhit recommended risk",
-                Recommendation: "Take care about your portfolio",
+                Issue: "You are overleveraged.",
+                Recommendation: "Stop gambling immediately.",
                 RiskClass: RiskClass.Low,
                 RiskType: RiskType.HighRisk,
                 RelatedData: relatedData,
@@ -89,8 +89,8 @@ export class TradeGuardService {
             });
         } else if (risks > 1) {
             res.push({
-                Issue: "Multiple currencies overhit recommended risk",
-                Recommendation: "Take care about your portfolio",
+                Issue: "You are overleveraging on multiple positions.",
+                Recommendation: "Stop gambling immediately. You will loss everything like this.",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.HighRisk,
                 RelatedData: relatedData,
@@ -192,51 +192,51 @@ export class TradeGuardService {
 
     private _getRiskTypeDescriptionForMarketOrders(riskType: RiskType, isMultiple: boolean = false): string {
         switch (riskType) {
-            case RiskType.HighRisk: return isMultiple ? "Multiple orders overhit recommended risk" : "Open order overhit recommended risk";
-            case RiskType.PriceFarFromEntry: return isMultiple ? "Multiple open orders to far from recommended entry point" : "Open order to far from recommended entry point";
-            case RiskType.SLNotSet: return isMultiple ? "SL not set for multiple open orders" : "SL not set for open order";
-            case RiskType.WrongTrend: return isMultiple ? "Multiple open orders with wrong RTD trend" : "Open order with wrong RTD trend";
+            case RiskType.HighRisk: return isMultiple ? "Several overleveraged trades found in filled orders." : "Overleveraged trade found in filled orders.";
+            case RiskType.PriceFarFromEntry: return isMultiple ? "Several orders have moved too far from the trade setup." : "filled order too far from recommended entry point.";
+            case RiskType.SLNotSet: return isMultiple ? "Stoploss missing on multiple filled orders." : "Stoploss missing in a filled orders.";
+            case RiskType.WrongTrend: return isMultiple ? "Multiple trades against the global trend found." : "A trade currently trading against the trade found in filled orders.";
         }
     }
 
     private _getRiskTypeDescriptionForPendingOrders(riskType: RiskType, isMultiple: boolean = false): string {
         switch (riskType) {
-            case RiskType.HighRisk: return isMultiple ? "Multiple active orders overhit recommended risk" : "Active order overhit recommended risk";
-            case RiskType.PriceFarFromEntry: return isMultiple ? "Multiple active orders to far from recommended entry point" : "Active order to far from recommended entry point";
-            case RiskType.SLNotSet: return isMultiple ? "SL not set for multiple active orders" : "SL not set for active order";
-            case RiskType.WrongTrend: return isMultiple ? "Multiple active orders with wrong RTD trend" : "Active order with wrong RTD trend";
+            case RiskType.HighRisk: return isMultiple ? "Several overleveraged trades found in pending orders." : "Overleveraged trade found in pending orders.";
+            case RiskType.PriceFarFromEntry: return isMultiple ? "Several pending orders have moved too far from the trade setup." : "Pending order to far from recommended entry point.";
+            case RiskType.SLNotSet: return isMultiple ? "Stoploss missing on multiple pending orders." : "Stoploss missing in a pending order.";
+            case RiskType.WrongTrend: return isMultiple ? "Multiple trades against the global trend found in pending orders." : "A trade currently trading against the trade found in pending orders.";
         }
     }
 
     private _getRiskTypeDescriptionForPositions(riskType: RiskType, isMultiple: boolean = false): string {
         switch (riskType) {
-            case RiskType.HighRisk: return isMultiple ? "Multiple positions overhit recommended risk" : "Position overhit recommended risk";
-            case RiskType.WrongTrend: return isMultiple ? "Multiple positions with wrong RTD trend" : "Position with wrong RTD trend";
+            case RiskType.HighRisk: return isMultiple ? "Overleverage detected on multiple positions." : "Overleverage detected on a position.";
+            case RiskType.WrongTrend: return isMultiple ? "Multiple positions against the global trend." : "Position found trading against the global trend. ";
         }
     }
 
     private _getRiskTypeRecommendationForMarketOrders(riskType: RiskType): string {
         switch (riskType) {
-            case RiskType.HighRisk: return "Decrease order(s) size or close";
-            case RiskType.PriceFarFromEntry: return "Cancel Order(s)";
-            case RiskType.SLNotSet: return "Setup SL for order(s)";
-            case RiskType.WrongTrend: return "Move to breakeven";
+            case RiskType.HighRisk: return "Reduce position size or orders.";
+            case RiskType.PriceFarFromEntry: return "Cancel orders.";
+            case RiskType.SLNotSet: return "Set stoploss for orders.";
+            case RiskType.WrongTrend: return "Move TPs to breakeven.";
         }
     }
 
     private _getRiskTypeRecommendationForPendingOrders(riskType: RiskType): string {
         switch (riskType) {
-            case RiskType.HighRisk: return "Decrease order(s) size or cancel";
-            case RiskType.PriceFarFromEntry: return "Cancel Order(s)";
-            case RiskType.SLNotSet: return "Setup SL for order(s)";
-            case RiskType.WrongTrend: return "Cancel Order(s)";
+            case RiskType.HighRisk: return "Decrease position size or cancel.";
+            case RiskType.PriceFarFromEntry: return "Cancel orders.";
+            case RiskType.SLNotSet: return "Set stoploss for orders.";
+            case RiskType.WrongTrend: return "Cancel orders.";
         }
     }
 
     private _getRiskTypeRecommendationForPositions(riskType: RiskType): string {
         switch (riskType) {
-            case RiskType.HighRisk: return "Decrease position(s) size or close";
-            case RiskType.WrongTrend: return "Move to breakeven";
+            case RiskType.HighRisk: return "Reduce position size.";
+            case RiskType.WrongTrend: return "Move TPs to breakeven.";
         }
     }
 }
