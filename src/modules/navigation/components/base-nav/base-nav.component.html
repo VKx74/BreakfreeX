@@ -16,9 +16,15 @@
 
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
             <ng-content></ng-content> 
-            <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer">
+            <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer">
                 <div class="xp-nav-container" (click)="openMissionDialog()">
-                    <span *ngIf="isLoaded; else loading"><span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} <span class="xp-title">LV</span> {{level}}</span>
+                    <span *ngIf="isLoaded; else loading">
+                        <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
+                        <!-- <span class="xp-title">LV</span> {{level}} -->
+                        <span [ngClass]="getOverviewClass()">
+                            Overview
+                        </span>
+                    </span>
                     <ng-template #loading>
                         <span>Loading...</span>
                     </ng-template>
@@ -34,7 +40,7 @@
                     </div>
                 </div>
             </nav-section> 
-            <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="true">
+            <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
                 <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()">
                     <ng-container *ngTemplateOutlet="avatar"></ng-container>
                     <mat-menu #menu="matMenu" xPosition="before">
@@ -59,7 +65,7 @@
             ></name-avatar>
             <div class="about-user flex flex-direction-column">
                 <span class="role">{{role}}</span>
-                <span class="email">{{firstName}}</span>
+                <span class="email">{{userNameWithLevel}}</span>
             </div>
         </div>
     </ng-template>

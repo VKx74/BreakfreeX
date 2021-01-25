@@ -102,7 +102,7 @@
                 
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
                     <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems"
-                        [matTooltip]="item.tooltip">
+                        tooltip [matTooltip]="item.tooltip">
                         <span class="icon">
                             <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
                                 aria-hidden="true"></i>

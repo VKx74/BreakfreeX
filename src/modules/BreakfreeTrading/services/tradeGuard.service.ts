@@ -13,6 +13,11 @@ export interface ITradeGuardItem {
     RelatedData: any[];
 }
 
+export interface ITradeGuardOverview {
+    Items: ITradeGuardItem[];
+    Score: number;
+}
+
 @Injectable()
 export class TradeGuardService {
 
@@ -183,6 +188,32 @@ export class TradeGuardService {
         return res;
     }
 
+    public GetRiskOverview(): ITradeGuardOverview {
+        const result: ITradeGuardItem[] = [];
+
+        const assetsRisk = this.GetAssetsRisks();
+        const positionsRisk = this.GetPositionsRisks();
+        const filledOrdersRisk = this.GetFilledOrdersRisks();
+        const activeOrdersRisk = this.GetActiveOrdersRisks();
+
+        result.push(...assetsRisk);
+        result.push(...positionsRisk);
+        result.push(...filledOrdersRisk);
+        result.push(...activeOrdersRisk);
+        result.sort((a, b) => b.RiskClass - a.RiskClass);
+        
+        let score = 5;
+
+        for (const i of result) {
+            score -= this._getScore(i.RiskClass);
+        }
+
+        return {
+            Items: result,
+            Score: score
+        };
+    }
+
     private _getBrokerInstance(): MTBroker {
         if (this._brokerService.activeBroker instanceof MTBroker) {
             return this._brokerService.activeBroker as MTBroker;
@@ -238,5 +269,15 @@ export class TradeGuardService {
             case RiskType.HighRisk: return "Decrease position(s) size or close";
             case RiskType.WrongTrend: return "Move to breakeven";
         }
+    }
+
+    private _getScore(riskClass: RiskClass): number {
+        switch (riskClass) {
+            case RiskClass.Extreme: return 1.5;
+            case RiskClass.High: return 1;
+            case RiskClass.Medium: return 0.5;
+            case RiskClass.Low: return 0.3;
+        }
+        return 0;
     }
 }

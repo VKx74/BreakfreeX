@@ -48,6 +48,29 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 
 }
 
+
+
+.bft_tooltip {
+  white-space: pre-line;
+  font-size: 11px;
+  border-radius: 5px;
+}
+
+.Dark-theme {
+  .bft_tooltip {
+    background: #191919;
+    color: #d5d5dc;
+    box-shadow: 0 0 5px -2px rgba(0, 0, 0, 0.77);
+  }
+}
+.Light-theme {
+  .bft_tooltip {
+    background: white;
+    color: #323232;
+    box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
+  }
+}
+
 bs-dropdown-container {
   z-index: 10000;
 }
@@ -515,9 +538,6 @@ color: #000;
   font-size:12px;
 
  }
-
-
-
 
 
  @media (max-width: 470px) {

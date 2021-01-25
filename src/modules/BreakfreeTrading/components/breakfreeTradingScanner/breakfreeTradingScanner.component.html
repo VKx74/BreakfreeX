@@ -55,7 +55,7 @@
                                     *ngFor="let result of group.data; trackBy: trackByResult">
                                     <scanner-card [result]="result" (click)="handleScannerResultsClick(result)">
                                     </scanner-card>
-                                    <div class="featured-settings" [matTooltip]="'If you click the flag and select a color, Sonar will keep this trade in the top list even if it clears.'">
+                                    <div class="featured-settings" tooltip [matTooltip]="'If you click the flag and select a color, Sonar will keep this trade in the top list even if it clears.'">
                                        <color-selector [activeColor]="getFeaturedDetails(result)"
                                           class="featured-selector result-data"
                                           (activeColorChange)='handleColorSelected($event, result)'

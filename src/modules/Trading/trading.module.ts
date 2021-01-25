@@ -70,7 +70,6 @@ import { MTTradeManagerComponent } from './components/forex.components/mt/mt-tra
 import { MTCurrencyRiskComponent } from './components/forex.components/mt/currency-risk/mt-currency-risk.component';
 import { ForexBrokerConnectorComponent } from './components/forex.components/forex-broker-connector/forex-broker-connector.component';
 import { MTBrokerTypeSelectorComponent } from './components/forex.components/mt/broker-type-selector/mt-broker-type-selector.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CurrencyGuardRiskClassPipe } from './components/forex.components/mt/pipes/currencyGuardRiskClass.pipe';
 import { CurrencyGuardRiskPipe } from './components/forex.components/mt/pipes/currencyGuardRisk.pipe';
@@ -163,7 +162,6 @@ const components = [
         NgxMaterialTimepickerModule,
         DragDropModule,
         MatExpansionModule,
-        MatTooltipModule,
         MatProgressBarModule
         // TimeZonesModule,
     ],

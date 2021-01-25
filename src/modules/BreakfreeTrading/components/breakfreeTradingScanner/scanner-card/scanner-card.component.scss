@@ -64,9 +64,6 @@
   }
 }
 
-::ng-deep .tooltip-with-line-break {
-  white-space: pre-line;
-}
 
 @include themify($themes, true) {
   .sonar-tile {

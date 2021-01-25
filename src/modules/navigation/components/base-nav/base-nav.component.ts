@@ -35,6 +35,14 @@ export class BaseNavComponent implements OnInit {
     email = this._identityService.email;
     opened: Subject<void> = new Subject<void>();
 
+    get userNameWithLevel(): string {
+        if (this.level) {
+            return `${this.firstName} ${this.level}`;
+        }
+
+        return this.firstName;
+    } 
+
     get isDarkTheme() {
         return this._themeService.activeTheme === Theme.Dark;
     } 
@@ -143,4 +151,8 @@ export class BaseNavComponent implements OnInit {
     changeTheme() {
         this._themeService.setActiveTheme(this.isDarkTheme ? Theme.Light : Theme.Dark);
     } 
+
+    getOverviewClass() {
+        
+    }
 }
