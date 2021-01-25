@@ -1,14 +1,21 @@
 import { forkJoin, Observable, of } from "rxjs";
-import { NotificationsService } from "./notifications.service";
+import { NotificationsService, NotificationType } from "./notifications.service";
 
 export class ToasterNotificationsService extends NotificationsService {
     private _inited: boolean;
 
     private _toasts: any;
 
-    defaultOptions: ToastrOptions = {
+    defaultSuccessOptions: ToastrOptions = {
         positionClass: 'toast-top-center',
-        toastClass: 'toast-notifications-custom',
+        toastClass: 'toast-notifications-custom-success',
+        timeOut: 1000 * 60
+
+    };
+
+    defaultErrorOptions: ToastrOptions = {
+        positionClass: 'toast-top-center',
+        toastClass: 'toast-notifications-custom-error',
         timeOut: 1000 * 60
 
     };
@@ -17,12 +24,12 @@ export class ToasterNotificationsService extends NotificationsService {
         super();
     }
 
-    async init() {
+    async init(notificationType?: NotificationType) {
         // if (this._inited) {
         //     return true;
         // }
 
-        toastr.options = this.defaultOptions;
+        toastr.options = notificationType === NotificationType.Error ? this.defaultErrorOptions : this.defaultSuccessOptions;
         this._toasts = toastr;
         this._inited = true;
     }
@@ -35,8 +42,8 @@ export class ToasterNotificationsService extends NotificationsService {
         return of(word);
     }
 
-    async show(message: Observable<string> | string, title?: string | Observable<string>) {
-        await this.init();
+    async show(message: Observable<string> | string, title?: string | Observable<string>, notificationType?: NotificationType) {
+        await this.init(notificationType);
 
         forkJoin(this._getAsObservable(message), this._getAsObservable(title))
             .subscribe((values: string[]) => {

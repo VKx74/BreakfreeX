@@ -7,9 +7,50 @@
     .mat-row {
       cursor: pointer;
     }
+
+    mat-header-cell {
+      color: #8798ad !important;
+    }
+
+    mat-cell {
+      color: #323232 !important;
+    }
+
+    mat-header-row {
+      border-bottom: 1px solid #edeff2 !important;
+      border-top: 1px solid #edeff2 !important;
+    }
+
+    mat-row {
+      border-color: #edeff2 !important;
+    }
+
+    mat-header-row,
+    mat-row {
+      background-color: #ffffff !important;
+    }
+
+    mat-row.expanded-row-details {
+      background-color: #ffffff !important;
+    }
+
+    mat-header-cell[aria-sort="descending"],
+    mat-header-cell[aria-sort="ascending"] {
+      background-color: #ffffff !important;
+      color: #397dc4 !important;
+
+      &:after {
+        background-color:  #397dc4 !important;
+      }
+    }
+
+    .resize-handle {
+      background-color: #edeff2 !important;
+    }
+
   }
   
-  .broker-not-connected {
+  .broker-not-connected, .no-recommendations {
     display: flex;
     justify-content: center;
     align-items: center;

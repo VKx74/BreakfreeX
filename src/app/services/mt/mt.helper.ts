@@ -140,7 +140,7 @@ export class MTHelper {
             if (value > 1.2) {
                 return RTDTrendStrength.Strong;
             } else if (value > 0.7) {
-                return RTDTrendStrength.Medium;
+                return RTDTrendStrength.Average;
             } else if (value > 0.4) {
                 return RTDTrendStrength.Low;
             } else {

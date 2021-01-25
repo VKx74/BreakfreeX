@@ -11,6 +11,8 @@ import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
+import { ThemeService } from '@app/services/theme.service';
+import { Theme } from '@app/enums/Theme';
 
 @Component({
     selector: 'base-nav',
@@ -33,6 +35,18 @@ export class BaseNavComponent implements OnInit {
     email = this._identityService.email;
     opened: Subject<void> = new Subject<void>();
 
+    get userNameWithLevel(): string {
+        if (this.level) {
+            return `${this.firstName} ${this.level}`;
+        }
+
+        return this.firstName;
+    } 
+
+    get isDarkTheme() {
+        return this._themeService.activeTheme === Theme.Dark;
+    } 
+    
     get currentUserFullName() {
         return this._identityService.fullName;
     }
@@ -67,6 +81,7 @@ export class BaseNavComponent implements OnInit {
                 private _dialog: MatDialog,
                 private _tradingProfileService: TradingProfileService,
                 private _sidebarService: SidebarService,
+                private _themeService: ThemeService,
                 private _route: ActivatedRoute) {
     }
 
@@ -132,4 +147,12 @@ export class BaseNavComponent implements OnInit {
     openMissionDialog() {
         this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background' });
     } 
+
+    changeTheme() {
+        this._themeService.setActiveTheme(this.isDarkTheme ? Theme.Light : Theme.Dark);
+    } 
+
+    getOverviewClass() {
+        
+    }
 }

@@ -39,7 +39,6 @@ import { MissionCardComponent } from './components/missions/mission-card/mission
 import { WeeklyMissionsComponent } from './components/missions/weekly-missions/weekly-missions.component';
 import { ScannerCardComponent } from './components/breakfreeTradingScanner/scanner-card/scanner-card.component';
 import { MissionsInfoComponent } from './components/missions/missions-info/missions-info.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { TradeGuardComponent } from './components/missions/trade-guard/trade-guard.component';
 import { SpeedometerComponent } from './components/speedometer/speedometer.component';
 import { PlainChartComponent } from './components/plainChart/plainChart.component';
@@ -94,7 +93,7 @@ import { ChartWrapperComponent } from './components/tradingPerformance/chartWrap
         ClipboardModule,
         MatFormFieldModule,
         MatSelectModule,
-        MatTooltipModule
+        UIModule
     ],
     // components here
     entryComponents: [

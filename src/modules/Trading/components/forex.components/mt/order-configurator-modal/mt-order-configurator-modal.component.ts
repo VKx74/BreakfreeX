@@ -23,6 +23,8 @@ export interface IMT5OrderFormConfig {
     ]
 })
 export class MTOrderConfiguratorModalComponent extends Modal<IMT5OrderFormConfig> implements OnInit {
+    public symbol: string;
+    
     get submitHandler(): MTOrderComponentSubmitHandler {
         return this.data ? this.data.submitHandler : null;
     }
@@ -57,5 +59,9 @@ export class MTOrderConfiguratorModalComponent extends Modal<IMT5OrderFormConfig
 
     hide() {
         this.close();
+    }
+
+    instrumentSelected(symbol: string) {
+        this.symbol = symbol;
     }
 }

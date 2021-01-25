@@ -105,6 +105,7 @@ export interface MTPosition {
     Side: OrderSide;
     VAR: number;
     RiskClass: RiskClass;
+    Recommendations?: MTOrderRecommendation;
 }
 
 export enum MTCurrencyRiskType {
@@ -171,7 +172,7 @@ export interface MTOrderValidationChecklist {
 
 export enum RTDTrendStrength {
     Strong = "Strong",
-    Medium = "Medium",
+    Average = "Average",
     Low = "Low",
     Weak = "Weak"
 }
@@ -200,6 +201,10 @@ export interface MTOrderRecommendation {
     GlobalRTDTrendStrength: RTDTrendStrength;
     OrderTradeType: OrderTradeType;
     Timeframe: number;
+}
+
+export interface MTPositionRecommendation extends MTOrderRecommendation {
+    FailedChecks: MTOrderChecklistItem[];
 }
 
 export interface MTPendingOrderRecommendation extends MTOrderRecommendation {

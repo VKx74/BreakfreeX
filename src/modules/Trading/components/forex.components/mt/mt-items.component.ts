@@ -5,7 +5,7 @@ import { MTBroker } from '@app/services/mt/mt.broker';
 import {MatDialog} from "@angular/material/dialog";
 import { OrderSide } from 'modules/Trading/models/models';
 import { BrokerService } from '@app/services/broker.service';
-import { MTMarketOrderRecommendation, MTPendingOrderRecommendation } from "modules/Trading/models/forex/mt/mt.models";
+import { MTMarketOrderRecommendation, MTPendingOrderRecommendation, MTPositionRecommendation } from "modules/Trading/models/forex/mt/mt.models";
 import { MTHelper } from "@app/services/mt/mt.helper";
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 
@@ -115,7 +115,7 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
         return desc;
     }
 
-    getRecommendationsText(rec: MTPendingOrderRecommendation | MTMarketOrderRecommendation) {
+    getOrderRecommendationsText(rec: MTPendingOrderRecommendation | MTMarketOrderRecommendation) {
         if (rec === undefined) {
             return "Calculating...";
         }
@@ -126,6 +126,22 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
 
         if (!rec.FailedChecks || !rec.FailedChecks.length) {
             return "Keep this order";
+        }
+
+        return rec.FailedChecks[0].Recommendation;
+    }
+
+    getPositionRecommendationsText(rec: MTPositionRecommendation) {
+        if (rec === undefined) {
+            return "Calculating...";
+        }
+        
+        if (!rec) {
+            return "No recommendations";
+        }
+
+        if (!rec.FailedChecks || !rec.FailedChecks.length) {
+            return "Keep this position";
         }
 
         return rec.FailedChecks[0].Recommendation;

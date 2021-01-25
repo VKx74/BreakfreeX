@@ -335,7 +335,7 @@ $defaultModeRowHeight: 32px;
     }
 
     mat-row {
-      border-color: themed('tableBorders') !important;
+      border-color: themed('tableBorders');
     }
 
     mat-header-row,

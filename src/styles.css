@@ -7,6 +7,10 @@ body, html {
   touch-action: none;
 }
 
+
+/* .bft_tooltip {
+  white-space: pre-line;
+} */
 /*body div.modal,*/
 /*body #toast-container,*/
 /*body .scxSpectrum,*/
