@@ -43,9 +43,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TradeGuardComponent } from './components/missions/trade-guard/trade-guard.component';
 import { SpeedometerComponent } from './components/speedometer/speedometer.component';
 import { PlainChartComponent } from './components/plainChart/plainChart.component';
-import { TradingPerformanceService } from './services/tradingPerformance.service';
+import { TradingPerformanceService, UserTradingPerformanceData } from './services/tradingPerformance.service';
 import { TradeGuardService } from './services/tradeGuard.service';
 import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
+import { TradingPerformanceComponent } from './components/tradingPerformance/tradingPerformance.component';
+import { ChartWrapperComponent } from './components/tradingPerformance/chartWrapper/chart-wrapper.component';
 
 @NgModule({
     // components here
@@ -66,7 +68,9 @@ import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
         TradeGuardComponent,
         SpeedometerComponent,
         PlainChartComponent,
-        TradeGuardRiskClassPipe
+        TradeGuardRiskClassPipe,
+        ChartWrapperComponent,
+        TradingPerformanceComponent
     ],
     imports: [
         CommonModule,
@@ -117,7 +121,9 @@ import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
         MissionsInfoComponent,
         MissionsComponent,
         TradeGuardComponent,
-        SpeedometerComponent
+        SpeedometerComponent,
+        // ChartWrapperComponent,
+        TradingPerformanceComponent
     ],
     providers: [
         HistoryService,

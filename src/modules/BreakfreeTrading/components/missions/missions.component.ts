@@ -20,7 +20,8 @@ enum Sections {
     Daily = "Daily Quests",
     Weekly = "Weekly Quests",
     Info = "Info",
-    TradeGuard = "Trade Guard"
+    TradeGuard = "Trade Guard",
+    Analysis = "Profit & Loss Analysis"
 }
 
 @Component({

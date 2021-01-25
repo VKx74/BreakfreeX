@@ -32,6 +32,7 @@
             <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Daily}" (click)="selectPeriod(Sections.Daily)">Daily Quests</div>
             <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Weekly}" (click)="selectPeriod(Sections.Weekly)">Weekly Quests</div>
             <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.TradeGuard}" (click)="selectPeriod(Sections.TradeGuard)">Trade Guard</div>
+            <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.Analysis}" (click)="selectPeriod(Sections.Analysis)">Analysis</div>
             <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.Info}" (click)="selectPeriod(Sections.Info)">Info</div>
         </div>
         <div class="center">
@@ -51,6 +52,9 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="Sections.TradeGuard">
                         <trade-guard-component (CloseRequested)="onClose()"></trade-guard-component>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Sections.Analysis">
+                        <user-trading-performance></user-trading-performance>
                     </ng-container>
                  </ng-container>
             </div>

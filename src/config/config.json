@@ -125,6 +125,7 @@
     "https://breakfreetrading.com",
     "https://platform-stage.breakfreetrading.com",
     "https://algo-stage.breakfreetrading.com",
-    "https://mtapi-stage.breakfreetrading.com"
+    "https://mtapi-stage.breakfreetrading.com",
+    "http://localhost:5000/"
   ]
 }

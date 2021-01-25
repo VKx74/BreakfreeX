@@ -1,7 +1,6 @@
 <div class="content" *ngIf="isBrokerConnected; else brokerNotConnected">
   <div class="header-content">
-    <speedometer-component [score]="score"></speedometer-component>
-    <div><plainchart></plainchart></div>
+    <speedometer-component [score]="score"></speedometer-component>    
   </div>
   <div class="recommendations">
     <data-table [rows]="result ? result : []" [selectable]="false" [allowColumnsVisibilityChange]="false" [expandOnClick]="false" [trackByIndex]="false"
