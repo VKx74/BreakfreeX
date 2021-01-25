@@ -44,6 +44,21 @@
     }
   }
 
+  .rank-title {
+    .rank-avatar {
+      img {
+        width: 32px;
+        height: 32px;
+      }
+    }
+    .rank-name {
+      line-height: 32px;
+      margin-left: 10px;
+    }
+    display: flex;
+    padding: 0px 15px 15px 15px;
+  }
+
   .content {
     /deep/ {
       .mat-progress-bar-fill::after {
@@ -71,7 +86,7 @@
       .welcome-title {
         font-weight: 700;
         display: flex;
-        padding: 25px 15px;
+        padding: 25px 15px 5px 15px;
         .avatar {
           min-width: 30px;
           width: 30px;

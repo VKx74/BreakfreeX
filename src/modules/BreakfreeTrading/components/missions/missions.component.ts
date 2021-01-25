@@ -16,6 +16,15 @@ import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/se
 import { AccountInfoModel, PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { IPersonalInfoData } from 'modules/Admin/components/app-member-info/app-member-info.component';
 
+enum Ranks {
+    Bronze = "Bronze",
+    Silver = "Silver",
+    Gold = "Gold",
+    Platinum = "Platinum",
+    Master = "Master",
+    Grandmaster = "Grandmaster"
+}
+
 enum Sections {
     Daily = "Daily Quests",
     Weekly = "Weekly Quests",
@@ -30,10 +39,15 @@ enum Sections {
 })
 export class MissionsComponent extends Modal<MissionsComponent> implements OnInit {
     public Sections = Sections;
+    public Ranks: any = Ranks;
     public selectedSection = Sections.Daily;
 
     public get missions(): IBFTMissions {
         return this._tradingProfileService.missions;
+    }
+
+    public get rank(): Ranks {
+        return this._tradingProfileService.levelName as Ranks;
     }
 
     public get score(): number {
