@@ -31,8 +31,8 @@ export class TradingPerformanceService {
     private url: string;
 
     constructor(private  _http: HttpClient) {
-        // this.url = AppConfigService.config.apiUrls.bftTradingProfilesREST;
-        this.url = "http://localhost:5000/";
+        this.url = AppConfigService.config.apiUrls.bftTradingProfilesREST;
+        // this.url = "http://localhost:5000/";
     }
 
     public getBalanceHistory(mtLogin: string, mtPlatform: string, period: Period = Period.Last30Days): Observable<any> {
