@@ -34,23 +34,24 @@ interface ChecklistItemDescription {
 const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let minusScore = data.LocalRTD ? 0 : 2;
-            let tooltip = data.LocalRTD ?   "You are trading with local trend in your favour." : "You are trading against local trend.";
+            let acceptableTrend = data.LocalRTD;
+            let minusScore = acceptableTrend ? 0 : 2;
+            let tooltip = acceptableTrend ?   "You are trading with local trend in your favour." : "You are trading against local trend.";
             if (data.LocalRTDTrendStrength) {
                 if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 3;
                 } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Average) {
                     minusScore = 2;
                 } else {
-                    minusScore = 1;
+                    minusScore = 0;
+                    acceptableTrend = true;
                 }
-
-                tooltip = data.LocalRTDTrendStrength + " " + tooltip;
             }
+
             return {
                 name: "Local Trend",
-                valid: data.LocalRTD,
-                minusScore: data.LocalRTD ? 0 : minusScore,
+                valid: acceptableTrend,
+                minusScore: acceptableTrend ? 0 : minusScore,
                 tooltip: tooltip
             };
         }
@@ -58,7 +59,7 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let minusScore = data.GlobalRTD ? 0 : 4;
-            let tooltip = data.LocalRTD ? "This is not smart. You are trading against global trend." : "You are trading with global trend in your favour.";
+            let tooltip = data.GlobalRTD ? "You are trading with global trend in your favour." : "This is not smart. You are trading against global trend.";
             if (data.GlobalRTDTrendStrength) {
                 if (data.GlobalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 5;
@@ -69,8 +70,6 @@ const checklist: ChecklistItemDescription[] = [
                 } else {
                     minusScore = 2;
                 }
-
-                tooltip = data.GlobalRTDTrendStrength + " " + tooltip;
             }
             return {
                 name: "Global Trend",
@@ -86,7 +85,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Major levels",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                tooltip: data.Levels ? "There are no major levels to contradict trend within distance to your entry." : "CAREFUL! There are major levels close to contradicting your entry."
+                tooltip: data.Levels ? "There are no major levels to contradict trend within close distance to your entry." : "CAREFUL! There are major levels close to contradicting your entry."
             };
         }
     },

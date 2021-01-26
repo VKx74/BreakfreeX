@@ -85,9 +85,31 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
         if (rec.LocalRTDSpread) {
             localTrendPerformance = rec.LocalRTDTrendStrength;
         }
-        let desc = "Trend --------------------\n\r";
-        desc += `${globalTrendPerformance} Global RTD trend - ${rec.GlobalRTDValue}\n\r`;
-        desc += `${localTrendPerformance} Local RTD trend - ${rec.LocalRTDValue}\n\r`;
+
+        let desc = "";
+        if (rec.FailedChecks && rec.FailedChecks.length) {
+            desc += `Issues -------------------\n\r`;
+            let count = 1;
+
+            for (const item of rec.FailedChecks) {
+                desc += `${count}. ${item.Issue}\n\r`;
+                count++;
+            }
+
+            desc += "Recommendation ------\n\r";
+            count = 1;
+
+            for (const item of rec.FailedChecks) {
+                desc += `${count}. ${item.Recommendation}\n\r`;
+                count++;
+            }
+        }
+
+        if (rec.GlobalRTDValue && rec.LocalRTDValue) {
+            desc += "Trend --------------------\n\r";
+            desc += `${globalTrendPerformance} Global RTD trend - ${rec.GlobalRTDValue}\n\r`;
+            desc += `${localTrendPerformance} Local RTD trend - ${rec.LocalRTDValue}\n\r`;
+        }
 
         if (rec.Timeframe || rec.OrderTradeType) {
             desc += `Setup --------------------\n\r`;
@@ -101,16 +123,6 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
                 desc += `Trade Setup - ${rec.OrderTradeType}\n\r`;
             }
         } 
-        
-        if (rec.FailedChecks && rec.FailedChecks.length) {
-            desc += `Issues -------------------\n\r`;
-            let count = 1;
-
-            for (const item of rec.FailedChecks) {
-                desc += `${count}. ${item.Issue}\n\r`;
-                count++;
-            }
-        }
 
         return desc;
     }

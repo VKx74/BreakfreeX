@@ -41,7 +41,7 @@
   }
 
   .tiles-wrapper {
-    padding: 2px;
+    padding-top: 5px;
     max-width: 290px;
     transition: all .2s ease;
     .checklist-tile-wrapper {
@@ -116,7 +116,8 @@
   }
 
   /deep/ .mat-expansion-panel-body {
-    padding: 0px !important;
+    padding: 10px;
+    
   }  
   
   /deep/ mat-expansion-panel, mat-expansion-panel {
@@ -124,15 +125,19 @@
     box-shadow: none;
   }
 
+  
+
   mat-expansion-panel-header {
     border-radius: 0px;
-    height: 30px !important;
-    font-size: 11px;
+    height: 15px !important;
+    font-size: 10px;
+    font-weight:700;
     box-shadow: none;
+    background-color: transparent;
     // border: none;
     padding: 0px 10px;
-    border-bottom: solid 1px #f1f3f4;
-    margin-bottom: 12px;
+     // border-bottom: solid 1px #f1f3f4;
+     // margin-bottom: 12px;
   }
 
   /deep/ .instrument-search {
@@ -263,6 +268,7 @@
     padding: 0;
     height: 32px;
     border-radius: 3px;
+    margin-top: 10px;
   }
 
   .input-currency {
@@ -282,21 +288,7 @@
     position: relative;
   }
 
-  .tradescoreholder {
-    min-height:110px;
-    border-radius: 15px;
-    padding-bottom: 5px;
-  }
 
-  .tradescore {
-    font-size: 10px !important;
-    font-weight: 700;
-    padding-bottom: 5px;
-    padding-left: 11px;
-    position: relative;
-    padding-top: 8px;
-    border-bottom: 1px solid #00000012;
-  }
 
   .score-container {
     font-size: 11px;
@@ -305,11 +297,7 @@
     padding-right:5px
   }
 
-span.orderpanelprefix {
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 2;
-}
+
 
  .bftinput  {
     text-align: right;
@@ -332,8 +320,8 @@ span.orderpanelprefix {
 @include themify($themes, true) {
 
   .checklist-tile-wrapper {
-    background-color: themed('appBackgroundColor');
-    color: themed('titleTextColor');
+    background-color: themed('tradescoreitembg');
+    color: themed('tradescoreitembTextColor');
   }
 
   .indicator-graph {
@@ -367,12 +355,31 @@ span.orderpanelprefix {
 
   mat-expansion-panel-header {
     color: themed('order-modal-color');
-    border-color: themed('appBackgroundColor');
+   // border-color: themed('appBackgroundColor');
+   border:none;
   }
 
-  /deep/ mat-expansion-panel, mat-expansion-panel, mat-expansion-panel-header {
-   background-color: themed('appModalsPanelColor');
+  /deep/ mat-expansion-panel {
+   background-color: themed('tradescoreholderbg');
+   border: 1px solid themed('tradescoreSecondColor');
+    border-radius: 5px;
+    padding:5px;
+ 
+
   }
+
+  span.orderpanelprefix {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 2;
+    opacity: 0.65;
+    color: themed('orderpanelprefixcolor'),
+}
+
+  .nborder {
+    border: 1px solid themed('niceborder');
+    border-radius:5px;
+}
 
   .orderheader {
     background: themed('inputInModalsBackgroundColor');
@@ -380,13 +387,54 @@ span.orderpanelprefix {
   }
 
   .tradescoreholder {
-    border:1px solid themed('inputInModalsBackgroundColor');
+
+    background: themed('tradescoreholderbg'); 
+    min-height:110px;
   }
 
-}
+  .bfttradescore{
+    margin-left:-15px;
+    margin-right: -15px;
+    margin-bottom:-15px;
+    padding:0px 15px 15px 15px;
+    background: themed('tradescoreholderbg'); 
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    margin-top: 15px;
+  }
+
+  .tradescore {
+    font-size: 10px !important;
+    font-weight: 700;
+    padding-bottom: 5px;
+    padding-left: 11px;
+    position: relative;
+    padding-top: 8px;
+    border-bottom: 1px solid themed('tradescoreSecondColor');
+  }
+
+  .bfttradescore .form-unit__label {
+    color: themed('tradescorelabels');
+    font-weight: 700;
+    font-size:10px;
+  } 
+
+
+   .tradescoretext {
+   font-weight: 700;
+    font-size: 11px;
+    color: themed('tradescoretext');
+     // color:  themed('tradescoreSecondColor');
+   
+  } 
+
+ 
+ }
 
 .modal-body {
   @include themify($themes, true) {
     color: themed('order-modal-color');
   }
 }
+
+//d5d5dc

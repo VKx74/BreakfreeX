@@ -1,4 +1,5 @@
-<div class="bftScanner" *ngIf="isAuthorizedCustomer; else outOfAccess">
+<!-- <div class="bftScanner" *ngIf="isAuthorizedCustomer; else outOfAccess"> -->
+<div class="bftScanner">
    <div class="content">
       <div class="top-line">
          <!-- <div class="segment-select">
@@ -35,7 +36,7 @@
             <div class="content-wrapper flex-grow-1 h-0">
                <div class="full-height padding-wrapper">
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
-                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container">
+                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container" [ngClass]="{'blur': !isAuthorizedCustomer}">
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
                         <div *ngIf="showRestrictions(groupedResult); else dataContainer">
                            <div class="access-restrictions" (click)="manageSubscriptions()" *ngIf="isOutOfAccess(groupedResult); else restrictionTemplate">
@@ -86,7 +87,7 @@
          </mat-tab>
          <mat-tab label="History">
             <div class="content-wrapper flex-grow-1 h-0">
-               <div class="full-height padding-wrapper">
+               <div class="full-height padding-wrapper" [ngClass]="{'blur': !isAuthorizedCustomer}">
                   <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true"
                      [expandOnClick]="false" [selectedRow]="selectedScannerResult"
                      [allowColumnsVisibilityChange]="false" (onRowSelect)="handleScannerResultsClick($event, true)">
@@ -166,17 +167,18 @@
          </mat-tab>
       </mat-tab-group>
    </div>
-</div>
 
-<ng-template #outOfAccess>
-   <div class="out-of-access" (click)="processCheckout()">
-      <div class="image">
-         <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
-      </div>
-      <div class="text">
-         Click to upgrade to Discovery or Pro to utilize the Sonar Algorithm.
+   <div class="out-of-access" (click)="processCheckout()"  *ngIf="!isAuthorizedCustomer">
+      <div class="out-of-access-box">
+         <div class="image">
+            <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
+         </div>
+         <div class="text">
+            Click to upgrade to Discovery or Pro to utilize the Sonar Algorithm.
+         </div>
       </div>
    </div>
-</ng-template>
+
+</div>
 
 <bft-loader *ngIf="loading && isAuthorizedCustomer"></bft-loader>

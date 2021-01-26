@@ -13,10 +13,10 @@
         </div>
     </div>
 
-    <div class="form-wrapper">
+    <div class="form-wrapper first">
         <div class="flex-row">
             <div class="flex-column padding-right" >
-                <div class="crypto-form-unit margin-bottom" [ngClass]="{'disabled': !canChangeInstrument}">
+                <div class="crypto-form-unit  nborder margin-bottom" [ngClass]="{'disabled': !canChangeInstrument}">
                     <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
                         [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
                 </div>
@@ -24,7 +24,7 @@
             <div class="flex-column  padding-left">
                 <div class="crypto-form-unit margin-bottom">
                
-                    <mat-form-field class="crypto-input bft-form-input full-width">
+                    <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
 
                         <span class="orderpanelprefix" matPrefix>{{'amount' | translate}}</span>
                         <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
@@ -37,10 +37,10 @@
 
     <div class="flex-row">
         <div class="flex-column  padding-right">
-            <div class="crypto-form-unit margin-bottom">
+            <div class="crypto-form-unit  nborder  margin-bottom">
 
           
-                <selector class="bft-form-select" [selectedOption]="config.type" [options]="allowedOrderTypes"
+                <selector class="bft-form-select " [selectedOption]="config.type" [options]="allowedOrderTypes"
                     [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
           
             </div>
@@ -48,7 +48,7 @@
         <div class="flex-column padding-left">
             <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
          
-                <mat-form-field class="crypto-input bft-form-input full-width">
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
                     <span class="orderpanelprefix" matPrefix>{{'limitPrice' | translate}}</span>
                     <input matInput class="bftinput"  type="number" numericInput [floatOnly]="true" [step]="priceStep"
                         [range]="{min: minPriceValue}" [(ngModel)]="config.price" (ngModelChange)="valueChanged()">
@@ -63,7 +63,7 @@
             <div class="crypto-form-unit margin-bottom">
             
              
-                <mat-form-field class="crypto-input bft-form-input full-width">
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
                     <span class="orderpanelprefix" matPrefix>{{'tradeManager.stoploss' | translate}}</span>
                     <input matInput class="bftinput"  type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                         [step]="priceStep"  placeholder="Enter SL" [(ngModel)]="config.sl" (ngModelChange)="valueChanged()">
@@ -74,7 +74,7 @@
             <div class="crypto-form-unit margin-bottom">
                 
  
-                <mat-form-field class="crypto-input bft-form-input full-width" >
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder " >
                     <span class="orderpanelprefix" matPrefix>{{'tradeManager.takeprofit' | translate}}</span>
                     <input matInput  class="bftinput"  type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
                         [step]="priceStep" placeholder="Enter TP" [(ngModel)]="config.tp">
@@ -84,13 +84,17 @@
 
     </div>
 </div>
-<div class="form-wrapper">
+<div class="form-wrapper bfttradescore">
 
     <div class="flex-row">
         <div class="crypto-form-unit margin-bottom tradescoreholder">
             <div class="checklist-row">
-                <div class="section-header tradescore">
-                    <div class="form-unit__label ">{{'tradeManager.validationChecklist' | translate}}: {{orderScore}}</div>
+                <div class="section-header tradescore"> 
+                    <div class="flex"> 
+                        <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg">
+                    <div class="tradescoretext ">: {{orderScore}}</div>
+                </div>
+                   
                     <div class="score-container" *ngIf="!calculatingChecklist && config.instrument">
                         <mt-order-score [MaxScore]="5" [Score]="calculateOrderStarts()"></mt-order-score>
                     </div>
@@ -139,7 +143,7 @@
                     <div class="form-unit__label">{{'tradeManager.comment' | translate}} ({{commentLengthUsed}}/{{maxCommentLength - technicalCommentLengthUsed}})</div>
                     <div class="comment-area">
                         <mat-form-field class="crypto-input bft-form-input full-width">
-                            <textarea matInput class="crypto-textarea comment-textarea" 
+                            <textarea matInput class="crypto-textarea nborder comment-textarea" 
                                 [(ngModel)]="config.comment" [maxlength]="maxCommentLength-technicalCommentLengthUsed">
                             </textarea>
                         </mat-form-field>
@@ -148,37 +152,37 @@
             </div>
 
             <div class="flex-row">
-                <div class="flex-column">
+                <div class="flex-column padding-right">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
-                        <selector class="bft-form-select" [selectedOption]="config.expirationType"
+                        <selector class="bft-form-select  nborder " [selectedOption]="config.expirationType"
                             [options]="expirationTypes" (onSelect)="handleExpirationTypeSelected($event)"></selector>
                     </div>
                 </div>
-                <div class="flex-column">
+                <div class="flex-column padding-left">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.fillPolicy' | translate}}</div>
-                        <selector class="bft-form-select" [selectedOption]="config.fillPolicy"
+                        <selector class="bft-form-select  nborder " [selectedOption]="config.fillPolicy"
                             [options]="orderFillPolicies" (onSelect)="handleFillPolicySelected($event)"></selector>
                     </div>
                 </div>
             </div>
 
             <div class="flex-row" [class.disabled]="!isExpirationVisible()">
-                <div class="flex-column">
+                <div class="flex-column padding-right">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
-                        <mat-form-field class="crypto-input bft-form-input full-width">
+                        <mat-form-field class="crypto-input  nborder  bft-form-input full-width">
                             <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime"
                                 [ngxTimepicker]="time" [format]='24'>
                             <ngx-material-timepicker #time></ngx-material-timepicker>
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="flex-column">
+                <div class="flex-column padding-left">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
-                        <mat-form-field class="crypto-input bft-form-input full-width">
+                        <mat-form-field class="crypto-input  nborder  bft-form-input full-width">
                             <input matInput readonly [matDatepicker]="end" [(ngModel)]="selectedDate"
                                 (click)="end.open()" placeholder="Date">
                             <mat-datepicker #end></mat-datepicker>
