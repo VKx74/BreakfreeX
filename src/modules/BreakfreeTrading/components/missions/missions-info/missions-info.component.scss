@@ -9,6 +9,44 @@
   .definition {
     font-weight: 700;
   }
+
+  .ranktop {
+    border-top: 1px solid #ddd;
+    padding-top: 5px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+.rank {
+  font-weight: 700;
+  padding-right: 50px;
+  width: 30%;
+}
+
+ .ranktop img {
+  height: 30px;
+}
+
+.descripton {
+  font-weight: 700;
+  font-size: 11px;
+  padding-right: 50px;
+  width: 30%;
+}
+
+.reward {
+  display: flex;
+  width: 30%;
+}
+span.plus {
+  font-size: 22px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: 700;
+}
+
 }
 
 @include themify($themes, true) {
