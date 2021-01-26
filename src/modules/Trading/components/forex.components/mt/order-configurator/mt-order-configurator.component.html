@@ -89,8 +89,12 @@
     <div class="flex-row">
         <div class="crypto-form-unit margin-bottom tradescoreholder">
             <div class="checklist-row">
-                <div class="section-header tradescore">
-                    <div class="tradescoretext ">{{'tradeManager.validationChecklist' | translate}}: {{orderScore}}</div>
+                <div class="section-header tradescore"> 
+                    <div class="flex"> 
+                        <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg">
+                    <div class="tradescoretext ">: {{orderScore}}</div>
+                </div>
+                   
                     <div class="score-container" *ngIf="!calculatingChecklist && config.instrument">
                         <mt-order-score [MaxScore]="5" [Score]="calculateOrderStarts()"></mt-order-score>
                     </div>

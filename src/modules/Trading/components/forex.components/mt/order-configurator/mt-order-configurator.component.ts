@@ -85,7 +85,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Major levels",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                tooltip: data.Levels ? "There are no major levels to contradict trend within distance to your entry." : "CAREFUL! There are major levels close to contradicting your entry."
+                tooltip: data.Levels ? "There are no major levels to contradict trend within close distance to your entry." : "CAREFUL! There are major levels close to contradicting your entry."
             };
         }
     },
