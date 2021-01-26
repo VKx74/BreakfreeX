@@ -49,7 +49,12 @@
     }
 
   }
-  
+  .nicebox {
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px -2px rgba(75,72,72,.44);
+    background: #fff;
+}
   .broker-not-connected, .no-recommendations {
     display: flex;
     justify-content: center;

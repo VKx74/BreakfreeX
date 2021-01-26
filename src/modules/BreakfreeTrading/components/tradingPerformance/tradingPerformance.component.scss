@@ -5,9 +5,11 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 10px;
-        margin: 10px;
-        background-color: white;
+        padding: 15px;
+        margin:15px;
+        box-shadow: rgba(11, 14, 17, 0.08) 0px 2px 4px;
+        border-radius: 4px;
+        background: rgb(255, 255, 255);
     }
 
     @media screen and (min-width: 700px) {
@@ -21,8 +23,9 @@
         flex-direction: column;        
     }
     .acc-info-param-header{
-        font-size: 10px;
-        color: gray;
+        font-size: 11px;
+        color: rgb(71, 77, 87);
+        font-weight: 700;
     }
 
     .column1{
@@ -38,12 +41,11 @@
     }
     .acc-info-param-body{
         .acc-info-param-value{
-            float: left;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 32px;
+            line-height: 37px;
         }
         .acc-info-param-value-add{
-            font-size: 12px;
+            font-size: 14px;
             margin-top: 12px;
             float: left;
         }
@@ -57,25 +59,25 @@
 
     .period-selectors{
         display: flex;
-        //padding: 5px;
-        margin: 5px;
-        // background-color: white;
+        margin-right: 15px;
+        justify-content: flex-end;
     }
+    
     .selector-wrapper{
         float: left;
         /*display: inline;*/
     }
     .selector-button{
         line-height: 1.5;
-        margin: 5px;
-        padding: 4px;
+        margin-left:10px;
+        padding: 3px 8px;
         border: 1px solid #DFDFDF;
-        background: #F5F5F5;
+        background: #fff;
         border-radius: 3px;
-        font-size: 13.5px;        
+        font-size: 11px;        
     }
     .btn-selected{
-        border: 1px solid gray;        
+        border: 1px solid rgb(30, 32, 38);;        
         font-weight: bold;
     }
     .doBlur{
