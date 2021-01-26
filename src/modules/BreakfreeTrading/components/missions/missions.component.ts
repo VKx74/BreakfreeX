@@ -29,7 +29,7 @@ enum Sections {
 export class MissionsComponent extends Modal<MissionsComponent> implements OnInit {
     public Sections = Sections;
     public Ranks: any = Ranks;
-    public selectedSection = Sections.Daily;
+    public selectedSection = Sections.TradeGuard;
 
     public get missions(): IBFTMissions {
         return this._tradingProfileService.missions;

@@ -48,7 +48,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 
 }
 
-
+.blur {
+  filter: blur(1.5px);
+}
 
 .bft_tooltip {
   white-space: pre-line;

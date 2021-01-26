@@ -75,7 +75,7 @@ export class MTTradeRatingService {
 
         res.FailedChecks = [];
 
-        if (!res.GlobalRTD) {
+        if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
                 Recommendation: "Cancel Order",
@@ -84,7 +84,7 @@ export class MTTradeRatingService {
             });
         }
 
-        if (!res.LocalRTDValue) {
+        if (res.LocalRTDValue !== null && !res.LocalRTDValue) {
             if (res.Timeframe <= 60 * 60) {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
@@ -144,7 +144,7 @@ export class MTTradeRatingService {
 
         if (!order.SL) {
             res.FailedChecks.push({
-                Issue: "Gambling! No stoploss set",
+                Issue: "No stoploss set",
                 Recommendation: "Stop gambling. Set stoploss for this order",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.SLNotSet
@@ -163,7 +163,7 @@ export class MTTradeRatingService {
 
         res.FailedChecks = [];
 
-        if (!res.GlobalRTD) {
+        if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
                 Recommendation: "Move TPs to breakeven",
@@ -172,7 +172,7 @@ export class MTTradeRatingService {
             });
         }
 
-        if (!res.LocalRTDValue) {
+        if (res.LocalRTDValue !== null && !res.LocalRTDValue) {
             if (res.Timeframe <= 60 * 60) {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
@@ -203,6 +203,16 @@ export class MTTradeRatingService {
             });
         }
 
+        const riskClass = MTHelper.convertValueToAssetRiskClass(order.RiskPercentage);
+        if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
+            res.FailedChecks.push({
+                Issue: "High leverage",
+                Recommendation: "Stop gambling. Reduce position size or cancel this order",
+                RiskClass: riskClass,
+                RiskType: RiskType.HighRisk
+            });
+        }
+
         return res;
     }
 
@@ -215,7 +225,7 @@ export class MTTradeRatingService {
 
         res.FailedChecks = [];
 
-        if (!res.GlobalRTD) {
+        if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
                 Recommendation: "Move TPs to breakeven",
@@ -224,7 +234,7 @@ export class MTTradeRatingService {
             });
         }
 
-        if (!res.LocalRTDValue) {
+        if (res.LocalRTDValue !== null && !res.LocalRTDValue) {
             if (res.Timeframe <= 60 * 60) {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
@@ -262,12 +272,29 @@ export class MTTradeRatingService {
     private _createOrderRecommendationBase(order: MTOrder): MTOrderRecommendation {
         const symbol = order.Symbol;
         const marketInfo = this._getOrLoadMarketInfo(symbol);
-        if (!marketInfo) {
-            return marketInfo === undefined ? undefined : null;
+        if (marketInfo === undefined) {
+            return undefined;
         }
 
         const tradeType = MTHelper.getTradeTypeFromTechnicalComment(order.Comment);
         const timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
+
+        if (marketInfo === null) {
+            return {
+                GlobalRTD: null,
+                LocalRTD: null,
+                GlobalRTDValue: null,
+                LocalRTDValue: null,
+                GlobalRTDSpread: null,
+                LocalRTDSpread: null,
+                GlobalRTDTrendStrength: null,
+                LocalRTDTrendStrength: null,
+                Timeframe: timeframe,
+                OrderTradeType: tradeType,
+                Type: order.Type === OrderTypes.Market ? MTOrderRecommendationType.Active : MTOrderRecommendationType.Pending
+            };
+        }
+
         const globalRTDValue = marketInfo.global_trend;
         const localRTDValue = marketInfo.local_trend;
         const localRTDSpread = marketInfo.local_trend_spread;
@@ -302,8 +329,23 @@ export class MTTradeRatingService {
     private _createPositionsRecommendationBase(order: MTPosition): MTOrderRecommendation {
         const symbol = order.Symbol;
         const marketInfo = this._getOrLoadMarketInfo(symbol);
-        if (!marketInfo) {
-            return marketInfo === undefined ? undefined : null;
+        if (marketInfo === undefined) {
+            return undefined;
+        }
+        if (marketInfo === null) {
+            return {
+                GlobalRTD: null,
+                LocalRTD: null,
+                GlobalRTDValue: null,
+                LocalRTDValue: null,
+                GlobalRTDSpread: null,
+                LocalRTDSpread: null,
+                GlobalRTDTrendStrength: null,
+                LocalRTDTrendStrength: null,
+                Timeframe: null,
+                OrderTradeType: null,
+                Type: MTOrderRecommendationType.Active
+            };
         }
 
         const globalRTDValue = marketInfo.global_trend;

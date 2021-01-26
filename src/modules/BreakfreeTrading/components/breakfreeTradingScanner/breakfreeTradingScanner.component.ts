@@ -178,6 +178,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             return false;
         }
 
+        if (!this.isAuthorizedCustomer) {
+            return true;
+        }
+
         let level = this._tradingProfileService.level;
         if (this.isPro && level < this._levelRestriction && is15MinSelected) {
             return true;
@@ -192,6 +196,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             return false;
         }
 
+        if (!this.isAuthorizedCustomer) {
+            return true;
+        }
+
         let level = this._tradingProfileService.level;
         if (!this.isPro && level < this._levelRestriction && is1HSelected) {
             return true;
@@ -201,12 +209,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
+        this.loading = true;
+        this.scanMarkets();
+
         if (!this._identityService.isAuthorizedCustomer) {
             return;
         }
-        this.loading = true;
 
-        this.scanMarkets();
         this._timer = setInterval(() => {
             this.scanMarkets();
         }, 1000 * 60 * 2);
@@ -222,6 +231,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     showRestrictions(group: IGroupedResults): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
         const tfValue15Min = this.toTimeframe(60 * 15);
         if (group.timeframe === tfValue15Min && this.show15MinLevelRestriction()) {
             return true;
@@ -476,7 +489,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     private _sendInstrumentChange(scannerVM: IScannerResults, isHistoricalRecord: boolean) {
-        // just oanda supported
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+        
         this._instrumentService.getInstruments(null, scannerVM.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
                 this._alertService.warning("Failed to view chart by symbol");
