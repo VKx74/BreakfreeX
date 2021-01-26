@@ -68,11 +68,18 @@ export class ChartWrapperComponent implements OnInit {
         this.Chart.specArray = [];
         this.Chart.unit = this._chartSettings.unit;
         this.Header = `${this._chartSettings.header}(${this._chartSettings.unit})`;
+        // let maxVal = Number.NEGATIVE_INFINITY;
+        // let minVal = Number.POSITIVE_INFINITY;
         keys.forEach((key) => {            
             this.Chart.data.datasets[0].data.push(chartData[key]);            
             this.Chart.data.labels.push(this.screateLabel(parseInt(key, 10)));
             this.Chart.specArray.push(key);
             lastVal = chartData[key];
+            /* if(lastVal > maxVal)
+                maxVal = lastVal;
+            if(lastVal < minVal)
+                minVal = lastVal;
+                */
             if (!firstVal)
                 firstVal = chartData[key];
             if (lastVal < 0) {
@@ -80,7 +87,11 @@ export class ChartWrapperComponent implements OnInit {
             } else {
                 this.Chart.data.datasets[0].backgroundColor.push('green');
             }
-        });        
+        });
+        // maxVal*=1.1;
+        // minVal*=1.1;
+        // this.Chart.options.scales.yAxes[0].ticks.stepSize = (maxVal - minVal) / 4;
+
         if (firstVal > lastVal ) {
             this.Chart.data.datasets[0].borderColor = 'red';
             this.Chart.data.datasets[0].pointBackgroundColor = 'red';            
@@ -129,25 +140,26 @@ export class ChartWrapperComponent implements OnInit {
                 },
                 scales: {
                     yAxes: [{
-                        /*gridLines: {
-                            display: false
-                        },*/
+                        gridLines: {
+                            color: "rgba(50,50,50,0.1)",
+                            drawBorder: false                            
+                        },
                         ticks: {
                             padding: 2,
                             fontColor: "rgba(0,0,0,0.5)",                            
                             fontStyle: "bold",
-                            fontSize: 10
+                            fontSize: 10,
+                            maxTicksLimit: 4                            
+                            // stepSize: 1000                            
                         }
                     }],
                     xAxes: [{
                         // display: true,
                         gridLines: {
-                            display: false
-                        },
-                       /* ticks: {
-                            padding: 0,
-                            fontSize: 10                            
-                        }*/
+                            display: false,
+                            /*zeroLineColor: "rgba(0,0,0,0)",
+                            drawBorder: false*/
+                        },                       
                     }]
                 }
             }
