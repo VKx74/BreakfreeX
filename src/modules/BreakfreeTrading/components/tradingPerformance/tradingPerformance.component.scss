@@ -1,5 +1,6 @@
 :host{
-    background-color: rebeccapurple;
+
+    
 
     .acc-info{
         display: flex;
@@ -16,7 +17,7 @@
         .acc-info {
             flex-direction: row;
         }
-      }
+    }  
 
     .acc-info-param{
         display: flex;
@@ -41,13 +42,17 @@
     }
     .acc-info-param-body{
         .acc-info-param-value{
-            font-size: 32px;
+            font-size: 20px;
             line-height: 37px;
         }
+        @media screen and (min-width: 420px) {
+            .acc-info-param-value{
+                font-size: 32px;                
+            }
+         }
+
         .acc-info-param-value-add{
-            font-size: 14px;
-            margin-top: 12px;
-            float: left;
+            font-size: 14px;            
         }
         .green{
             color: green;
@@ -60,6 +65,7 @@
     .period-selectors{
         display: flex;
         margin-right: 15px;
+        margin-left: 15px;
         justify-content: flex-end;
     }
     
@@ -69,13 +75,20 @@
     }
     .selector-button{
         line-height: 1.5;
-        margin-left:10px;
-        padding: 3px 8px;
+        margin-left:1px;
+        padding: 3px 3px;
         border: 1px solid #DFDFDF;
         background: #fff;
         border-radius: 3px;
-        font-size: 11px;        
+        font-size: 11px;            
     }
+    @media screen and (min-width: 420px) {
+        .selector-button{            
+            margin-left:10px;
+            padding: 3px 8px;            
+        }
+     }
+
     .btn-selected{
         border: 1px solid rgb(30, 32, 38);;        
         font-weight: bold;

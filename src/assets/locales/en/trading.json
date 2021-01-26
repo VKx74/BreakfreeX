@@ -6,7 +6,7 @@
     "time": "Time"
   },
   "tradeManager": {
-    "validationChecklist": "Trade Score",
+    "validationChecklist": "TradeGuard Pre-trade",
     "title": "Trade Widget",
     "resetAmount": "Reset size",
     "amountToClose": "Size to close",
@@ -149,8 +149,8 @@
     "swap": "Swap",
     "risk": "Net Risk",
     "riskP": "Risk (%)",
-    "recommendations": "Trade Guard",
-    "tradeGuard": "Trade Guard",
+    "recommendations": "TradeGuard",
+    "tradeGuard": "TradeGuard",
     "riskPending": "Pending Net Risk",
     "riskPPending": "Pending Risk (%)",
     "commission": "Commission",
