@@ -428,7 +428,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     calculateOrderStarts() {
-        return Math.floor(this.orderScore / 2);
+        return this.orderScore;
+        // return Math.floor(this.orderScore / 2);
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
