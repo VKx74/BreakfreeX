@@ -1,0 +1,27 @@
+<div class="badge-container">
+    <div class="rank-avatar">
+        <ng-container [ngSwitch]="rank">
+            <ng-container *ngSwitchCase="Ranks.Bronze">
+                <img src="/assets/img/ranks/badge_bronze.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="Ranks.Silver">
+                <img src="/assets/img/ranks/badge_silver.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="Ranks.Gold">
+                <img src="/assets/img/ranks/badge_gold.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="Ranks.Platinum">
+                <img src="/assets/img/ranks/badge_platinum.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="Ranks.Master">
+                <img src="/assets/img/ranks/badge_master.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="Ranks.Legend">
+                <img src="/assets/img/ranks/badge_grandmaster.png" />
+            </ng-container>
+         </ng-container>
+    </div>
+    <span class="rank-level">
+        {{level}}
+    </span>
+</div>

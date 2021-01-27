@@ -29,7 +29,7 @@
                         <span>Loading...</span>
                     </ng-template>
                 </div>
-            </nav-section>
+            </nav-section> 
             <nav-section [leftBorder]="true" [paddingRight]="true">
                 <div class="theme-nav-container" (click)="changeTheme()">
                     <div class="theme-title">
@@ -41,12 +41,18 @@
                 </div>
             </nav-section> 
             <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
-                <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()">
+                <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex">
                     <ng-container *ngTemplateOutlet="avatar"></ng-container>
+                    <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
+                        <badge></badge>
+                    </div>
                     <mat-menu #menu="matMenu" xPosition="before">
                         <user-info-menu [avatarTemplate]="avatarUserInfo" (logOut)="logout()" [opened]="opened"></user-info-menu>
                     </mat-menu>
                 </div>
+            </nav-section>
+            <nav-section [leftBorder]="false" [paddingRight]="true" [paddingLeft]="false" *ngIf="isAuthorizedCustomer">
+              
             </nav-section>
         </div>
     </div>
@@ -57,7 +63,7 @@
 
 
     <ng-template #avatar>
-        <div class="flex cursor-pointer">
+        <div class="flex cursor-pointer main-menu">
             <name-avatar [name]="currentUserFullName"
                          [src]="avatarId"
                          class="avatar"
@@ -65,7 +71,7 @@
             ></name-avatar>
             <div class="about-user flex flex-direction-column">
                 <span class="role">{{role}}</span>
-                <span class="email">{{userNameWithLevel}}</span>
+                <span class="email">{{firstName}}</span>
             </div>
         </div>
     </ng-template>
