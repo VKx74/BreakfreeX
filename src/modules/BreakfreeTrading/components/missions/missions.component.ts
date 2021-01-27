@@ -16,8 +16,8 @@ enum Ranks {
 enum Sections {
     Daily = "Daily Quests",
     Weekly = "Weekly Quests",
-    Info = "Info",
-    TradeGuard = "Trade Guard",
+    Info = "Ranks & Rewards",
+    TradeGuard = "TradeGuard",
     Analysis = "Profit & Loss Analysis"
 }
 
