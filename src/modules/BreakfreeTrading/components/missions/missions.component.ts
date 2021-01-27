@@ -59,7 +59,6 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
                 private _identityService: IdentityService,
                 private _tradingProfileService: TradingProfileService) {
         super(_injector);
-        // this._tradingProfileService.updateMissions();
     }
 
     selectPeriod(period: Sections) {

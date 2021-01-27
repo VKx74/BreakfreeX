@@ -61,12 +61,7 @@
     display: flex;
     justify-content: space-evenly;
    }
-
-   @media (max-width: 768px) {
-    .header-content {
-      flex-direction: column;
-    }
-   }
+   
   }
   .low-risk {
     color: $lightGreenColor;
