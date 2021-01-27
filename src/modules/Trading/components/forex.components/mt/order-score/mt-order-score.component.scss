@@ -289,6 +289,12 @@
                     animation: shake .8s linear forwards;
                 }
             }
+            &.active_no_animation {
+                --sb: var(--active);
+                --sh: var(--active-shadow);
+                --m: var(--active-mouth);
+                --e: var(--active-eye);
+            }
         }
     }
     
