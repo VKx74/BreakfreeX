@@ -54,13 +54,15 @@
             </div>
 
             <div class="separator"></div>
+            <div class="menuwrapper ">
 
             <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.TradeGuard}" (click)="selectPeriod(Sections.TradeGuard)">Trade Guard</div>
-            <div class="description-title">Quests</div>
+            <div class="description-title mobilehidden">Quests</div>
             <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Daily}" (click)="selectPeriod(Sections.Daily)">Daily Quests</div>
             <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Weekly}" (click)="selectPeriod(Sections.Weekly)">Weekly Quests</div>
             <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.Analysis}" (click)="selectPeriod(Sections.Analysis)">Analysis</div>
-            <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.Info}" (click)="selectPeriod(Sections.Info)">Ranks</div>
+            <div class="menu-item mobile-margin-right" [ngClass]="{'selected': selectedSection == Sections.Info}" (click)="selectPeriod(Sections.Info)">Ranks</div>
+        </div>
         </div>
         <div class="center">
             <div class="header">

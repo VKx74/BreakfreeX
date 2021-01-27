@@ -145,7 +145,10 @@ export class BaseNavComponent implements OnInit {
     }
 
     openMissionDialog() {
-        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background' });
+        let scrHeight = window.innerHeight;
+        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background', position: {
+            top: scrHeight > 667 ? "100px" : null
+        }});
     } 
 
     changeTheme() {
