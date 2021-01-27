@@ -96,6 +96,13 @@ background-color: rgba(0,0,0, 0.3);
   src: local('Fira Sans'), url(./assets/fonts/Fira_Sans/FiraSans-Regular.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Fira Sans'), url(./assets/fonts/Fira_Sans/FiraSans-Bold.ttf) format('truetype');
+}
+
 /* cyrillic-ext */
 @font-face {
   font-family: 'PT Sans';
