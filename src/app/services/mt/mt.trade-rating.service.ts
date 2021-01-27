@@ -108,7 +108,7 @@ export class MTTradeRatingService {
 
         if (order.ProfitRate) {
             if (order.Price && order.SL && order.TP && order.CurrentPrice) {
-                const logicalOrderBounds = Math.abs(order.SL - order.TP);
+                const logicalOrderBounds = Math.abs(order.SL - order.TP) * 1.5;
                 const priceDiff = Math.abs(order.Price - order.CurrentPrice);
                 if (logicalOrderBounds < priceDiff) {
                     res.FailedChecks.push({

@@ -128,18 +128,6 @@ export class UserInfoMenuComponent implements OnInit {
         }});
     } 
 
-    getLevelStyleClassName(): string {
-        switch (this.levelName.toLowerCase()) {
-            case "bronze": return "bronze-rank";
-            case "silver": return "silver-rank";
-            case "gold": return "gold-rank";
-            case "platinum": return "platinum-rank";
-            case "master": return "master-rank";
-            case "legend": return "legend-rank";
-            default: return "";
-        }
-    }
-
     private _resetLayout() {
         this._store.dispatch(new ResetLayoutAction());
     }

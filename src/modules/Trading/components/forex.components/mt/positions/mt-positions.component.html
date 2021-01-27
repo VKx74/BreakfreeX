@@ -16,7 +16,7 @@
         <!-- <data-table-header-cell columnName="Trade Guard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Recommendations" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.recommendations' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="TradeGuard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.recommendations' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
     
 
@@ -79,7 +79,7 @@
                 <span class="{{item.RiskClass | currencyGuardRiskClassPipe}}">{{item.RiskClass | currencyGuardRiskPipe}} {{item.RiskPercentage ? '(' + item.RiskPercentage.toFixed(2) + '%)' : ''}}</span>
             </ng-template>
         </data-table-cell>
-        <data-table-cell columnName="Recommendations">
+        <data-table-cell columnName="TradeGuard">
             <ng-template let-item>
                 <div tooltip [matTooltip]="getRecommendationsTooltip(item.Recommendations)" >
                     {{getPositionRecommendationsText(item.Recommendations)}}
