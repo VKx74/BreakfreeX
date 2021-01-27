@@ -127,12 +127,12 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._newsTranslateService.stream('newsComponentName'),
                 componentIdentifier: ComponentIdentifier.news,
             },*/
-            {
-                component: PublicChatComponent,
-                previewImgClass: 'crypto-icon-chat',
-                componentName: this._chatTranslateService.stream('publicChatTitle'),
-                componentIdentifier: ComponentIdentifier.publicChat,
-            },
+            // {
+            //     component: PublicChatComponent,
+            //     previewImgClass: 'crypto-icon-chat',
+            //     componentName: this._chatTranslateService.stream('publicChatTitle'),
+            //     componentIdentifier: ComponentIdentifier.publicChat,
+            // },
            /* {
                 component: PrivateChatComponent,
                 previewImgClass: 'crypto-icon-private-chat',
