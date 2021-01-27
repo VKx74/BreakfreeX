@@ -220,6 +220,33 @@
   cursor: pointer;
 }
 
+@media (max-width: 450px) {
+  .mobileshow {
+    display:block;
+    
+  }
+  .desktopshow {
+    display:none !important;
+  } 
+}
+
+@media (min-width: 450px) {
+  .mobileshow {
+    display:none !important;
+  }
+  .desktopshow {
+    display: block !important;
+  } 
+}
+
+
+img.mobileshow {
+  height: 12px;
+  width: auto !important;
+  vertical-align: middle;
+  margin-top: 4px;
+}
+
 .navigation {
   @include themify($themes, true) {
     background-color: themed('appPanelColor');
