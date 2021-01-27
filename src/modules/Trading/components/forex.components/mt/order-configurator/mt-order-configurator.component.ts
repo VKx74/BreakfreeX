@@ -36,7 +36,7 @@ const checklist: ChecklistItemDescription[] = [
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let acceptableTrend = data.LocalRTD;
             let minusScore = acceptableTrend ? 0 : 2;
-            let tooltip = acceptableTrend ?   "You are trading with local trend in your favour." : "You are trading against local trend.";
+            let tooltip = acceptableTrend ?   "You are trading with local trend in your favor." : "You are trading against local trend.";
             if (data.LocalRTDTrendStrength) {
                 if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 3;
@@ -59,7 +59,7 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let minusScore = data.GlobalRTD ? 0 : 4;
-            let tooltip = data.GlobalRTD ? "You are trading with global trend in your favour." : "This is not smart. You are trading against global trend.";
+            let tooltip = data.GlobalRTD ? "You are trading with the global trend in your favor. Keep doing this." : "WARNING! You are entering a trade that goes against the global trend. It's very possible this trade could be a winning trade, however you will discover over time that trading against the trend this is the sole reason you never become profitable.";
             if (data.GlobalRTDTrendStrength) {
                 if (data.GlobalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 5;
@@ -85,7 +85,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Major levels",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                tooltip: data.Levels ? "There are no major levels to contradict trend within close distance to your entry." : "CAREFUL! There are major levels close to contradicting your entry."
+                tooltip: data.Levels ? "You are not trading into any major support or resistance levels. " : "CAREFUL! You are counter trading into a major level. Only do this if you know what you are doing (most humans don't, and would be better off deploying capital another way)"
             };
         }
     },
@@ -107,7 +107,7 @@ const checklist: ChecklistItemDescription[] = [
                     valid = false;
                 }
 
-                tooltip = valid ? "Reasonable leverage used for this position. " :  "WARNING! You are overleveraging on this position, please reduce size or avoid trade.";
+                tooltip = valid ? "You are using adequate leverage sized for this position. " :  "WARNING! You are about to enter an overleveraged trade. This is the main reason simple humans continue to lose in trading because they love to gamble.";
             }
 
             return {
@@ -137,7 +137,7 @@ const checklist: ChecklistItemDescription[] = [
                     valid = false;
                 }
 
-                tooltip = valid ? "No major correlated risk found in your open positions. " :  "WARNING! We found high correlated risk for this trade with your current open positions. That means if you lose this trade, you will lose other trades at the same time, amplifying your risk and increasing your loss of capital. Cancel this trade.";
+                tooltip = valid ? "You have no major correlated risk in your open/pending orders." :  "WARNING! If you take this trade, you will be overexposing and taking a too much-correlated risk. This means you will lose or win a much higher amount than usual and likely lead to losing your account in the long run. Avoid this trade and look to other markets.";
 
             }
             return {
@@ -171,7 +171,7 @@ const checklist: ChecklistItemDescription[] = [
                 valid: valid,
                 value: value,
                 minusScore: valid ? 0 : minusScore,
-                tooltip: valid ? "Acceptable spread." :  "Unreasonable spread found on this market with your broker. "
+                tooltip: valid ? "Your broker has acceptable spread on this market." :  "Warning! Your broker is offering you a bad spread on this market. Be very careful as this can lead to a total loss of your trading account on the wrong markets."
             };
         }
     },
@@ -182,7 +182,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Stoploss",
                 valid: isValid,
                 minusScore: isValid ? 0 : 2,
-                tooltip: isValid ? "Acceptable stoploss set for order" :  "Warning! Unacceptable stoploss, you might as well just go to the Casino. Atleast this way you will have fun losing all your money."
+                tooltip: isValid ? "You have set a stoploss for the order. A basic but very important discipline for successful trading, when it comes to humans." :  "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. "
             };
         }
     }
@@ -552,7 +552,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 this._dialog.open(ConfirmModalComponent, {
                     data: {
                         title: 'Overleverage detected',
-                        message: `You are already overleveraged. Reduce your position size or remove active orders. If you place this trade, you will be very overleveraged. Most Likely you will loss your entire account. Place order?`,
+                        message: `Warning! You are about to enter a terrible trade. You might be lucky to win this trade, but you will never be successful in the long run like this. Place trade?`,
                         onConfirm: () => {
                             this._placeOrder();
                         }
