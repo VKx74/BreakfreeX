@@ -1,18 +1,11 @@
 import {Component, Input} from '@angular/core';
-import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
-import { BrokerService } from '@app/services/broker.service';
-
-interface IScoreItem {
-    IsHit: boolean;
-}
 
 @Component({
-    selector: 'mt-order-score',
-    templateUrl: './mt-order-score.component.html',
-    styleUrls: ['./mt-order-score.component.scss']
+    selector: 'emoji',
+    templateUrl: './emoji.component.html',
+    styleUrls: ['./emoji.component.scss']
 })
-export class MTOrderScoreComponent {
+export class EmojiComponent {
     private _calculating: boolean;
     private _maxScore: number;
     private _score: number;

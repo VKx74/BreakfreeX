@@ -42,6 +42,7 @@ import {IndicatorComponent} from "./components/indicator/indicator.component";
 import { HeaderComponent } from './components/header/header.component';
 import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.component';
 import { TooltipDirective } from './directives/tooltip.directive';
+import { EmojiComponent } from './components/emoji/emoji.component';
 
 @NgModule({
     declarations: [
@@ -69,6 +70,7 @@ import { TooltipDirective } from './directives/tooltip.directive';
         IndicatorComponent,
         HeaderComponent,
         PinInputModalComponent,
+        EmojiComponent
     ],
     imports: [
         CommonModule,
@@ -112,6 +114,7 @@ import { TooltipDirective } from './directives/tooltip.directive';
         PaginationButtonsComponent,
         IndicatorComponent,
         HeaderComponent,
+        EmojiComponent
     ],
     entryComponents: [
         ConfirmModalComponent,

@@ -73,7 +73,6 @@ import { MTBrokerTypeSelectorComponent } from './components/forex.components/mt/
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CurrencyGuardRiskClassPipe } from './components/forex.components/mt/pipes/currencyGuardRiskClass.pipe';
 import { CurrencyGuardRiskPipe } from './components/forex.components/mt/pipes/currencyGuardRisk.pipe';
-import { MTOrderScoreComponent } from './components/forex.components/mt/order-score/mt-order-score.component';
 import { SymbolMappingComponent } from './components/forex.components/mt/symbol-mapping/symbol-mapping.component';
 import { DataHighlightService } from './services/dataHighlight.service';
 
@@ -131,8 +130,7 @@ const components = [
         OrderSideComponent,
         TradingCloseButtonComponent,
         CurrencyGuardRiskClassPipe,
-        CurrencyGuardRiskPipe,
-        MTOrderScoreComponent
+        CurrencyGuardRiskPipe
     ],
     imports: [
         CommonModule,

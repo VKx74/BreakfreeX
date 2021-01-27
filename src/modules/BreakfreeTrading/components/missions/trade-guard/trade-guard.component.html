@@ -1,6 +1,8 @@
 <div class="content" *ngIf="isBrokerConnected; else brokerNotConnected">
   <div class="header-content">
-    <speedometer-component [score]="score"></speedometer-component>    
+    <div class="emoji-container" *ngIf="isBrokerConnected">
+      <emoji [MaxScore]="5" [Score]="score"></emoji>
+    </div>
   </div>
   <div class="recommendations" *ngIf="result && result.length; else noRecommendations">
     <div class="recommendation-row"  *ngFor="let item of result" (dblclick)="doubleClicked(item)">

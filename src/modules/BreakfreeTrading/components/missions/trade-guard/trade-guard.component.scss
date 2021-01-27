@@ -3,6 +3,10 @@
 @import "global-styles/variables";
 
 :host {
+  .emoji-container {
+    transform: scale(1.2);
+  }
+
   .recommendation-row {
     display: flex;
     margin: 5px;
