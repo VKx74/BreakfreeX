@@ -58,7 +58,7 @@ export class ThemeService {
     }
 
     reset() {
-        this.setActiveTheme(Theme.Light);
+        this.setActiveTheme(Theme.Dark);
     }
 
     setupElementCssClasses(element: HTMLElement) {
