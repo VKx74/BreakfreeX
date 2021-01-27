@@ -13,8 +13,13 @@ interface IScoreItem {
     styleUrls: ['./mt-order-score.component.scss']
 })
 export class MTOrderScoreComponent {
+    private _calculating: boolean;
     private _maxScore: number;
     private _score: number;
+
+    @Input() set Calculating(value: boolean) {
+        this._calculating = value;
+    }
 
     @Input() set MaxScore(value: number) {
         this._maxScore = value;
@@ -22,6 +27,10 @@ export class MTOrderScoreComponent {
 
     @Input() set Score(value: number) {
         this._score = value;
+    }
+
+    get Calculating(): boolean {
+        return this._calculating;
     }
 
     get maxScore(): number {

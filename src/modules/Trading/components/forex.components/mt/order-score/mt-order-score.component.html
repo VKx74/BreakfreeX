@@ -1,6 +1,6 @@
 <div class="order-score">
     <ul class="feedback">
-        <li class="angry active" *ngIf="calculateScore() == 1">
+        <li class="angry active" *ngIf="calculateScore() == 1 && !Calculating">
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye" />
@@ -13,7 +13,7 @@
                 </svg>
             </div>
         </li>
-        <li class="sad active" *ngIf="calculateScore() == 2">
+        <li class="sad active" *ngIf="calculateScore() == 2 && !Calculating">
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye" />
@@ -26,10 +26,10 @@
                 </svg>
             </div>
         </li>
-        <li class="ok active" *ngIf="calculateScore() == 3">
+        <li class="ok active" *ngIf="calculateScore() == 3 && !Calculating">
             <div></div>
         </li>
-        <li class="good active" *ngIf="calculateScore() == 4">
+        <li class="good active" *ngIf="calculateScore() == 4 && !Calculating">
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye" />
@@ -42,7 +42,7 @@
                 </svg>
             </div>
         </li>
-        <li class="happy active" *ngIf="calculateScore() == 5">
+        <li class="happy active" *ngIf="calculateScore() == 5 && !Calculating">
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye" />
@@ -51,6 +51,9 @@
                     <use xlink:href="#eye" />
                 </svg>
             </div>
+        </li>
+        <li class="ok" *ngIf="Calculating">
+            <div></div>
         </li>
     </ul>
 

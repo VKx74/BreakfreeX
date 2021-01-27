@@ -107,8 +107,8 @@
                     </div>
 
                         
-                    <div class="score-container" *ngIf="!calculatingChecklist && config.instrument">
-                        <mt-order-score [MaxScore]="10" [Score]="calculateOrderStarts()"></mt-order-score>
+                    <div class="score-container" *ngIf="config.instrument">
+                        <mt-order-score [Calculating]="calculatingChecklist" [MaxScore]="10" [Score]="calculateOrderStarts()"></mt-order-score>
                     </div>
                 </div>
                 
