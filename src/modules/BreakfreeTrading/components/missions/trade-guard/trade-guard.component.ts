@@ -32,6 +32,10 @@ export class TradeGuardComponent {
         const results = this._tradeGuardService.GetRiskOverview();
         this.result = results.Items;
         this.score = results.Score;
+
+        if (!this.score || this.score < 0) {
+            this.score = 0;
+        }
     }
 
     ngAfterViewInit() {

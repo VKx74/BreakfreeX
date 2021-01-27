@@ -1,7 +1,12 @@
 <div class="content" *ngIf="isBrokerConnected; else brokerNotConnected">
   <div class="header-content">
     <div class="emoji-container" *ngIf="isBrokerConnected">
-      <emoji [MaxScore]="5" [Score]="score"></emoji>
+      <div class="score">
+        {{score}} / 10
+      </div>
+      <div class="face">
+        <emoji [MaxScore]="10" [Score]="score"></emoji>
+      </div>
     </div>
   </div>
   <div class="recommendations" *ngIf="result && result.length; else noRecommendations">

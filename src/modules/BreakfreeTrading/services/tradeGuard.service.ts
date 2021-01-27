@@ -202,10 +202,14 @@ export class TradeGuardService {
         result.push(...activeOrdersRisk);
         result.sort((a, b) => b.RiskClass - a.RiskClass);
         
-        let score = 5;
+        let score = 10;
 
         for (const i of result) {
             score -= this._getScore(i.RiskClass);
+        }
+
+        if (score < 0) {
+            score = 0;
         }
 
         return {
@@ -273,10 +277,10 @@ export class TradeGuardService {
 
     private _getScore(riskClass: RiskClass): number {
         switch (riskClass) {
-            case RiskClass.Extreme: return 1.5;
-            case RiskClass.High: return 1;
-            case RiskClass.Medium: return 0.5;
-            case RiskClass.Low: return 0.3;
+            case RiskClass.Extreme: return 3;
+            case RiskClass.High: return 2;
+            case RiskClass.Medium: return 1;
+            case RiskClass.Low: return 0;
         }
         return 0;
     }

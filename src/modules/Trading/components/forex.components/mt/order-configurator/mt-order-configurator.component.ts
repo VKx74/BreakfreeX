@@ -502,6 +502,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.checklistItems.push(res);
         }
 
+        if (this.orderScore < 0) {
+            this.orderScore = 0;
+        }
+
         if (recalculateNeeded && this._recalculatePossible) {
             this.calculatingChecklist = true;
             this._recalculatePossible = false;

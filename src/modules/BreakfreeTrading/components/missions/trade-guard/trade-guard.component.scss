@@ -4,7 +4,18 @@
 
 :host {
   .emoji-container {
-    transform: scale(1.2);
+    display: flex;
+    .score {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      font-size: 20px;
+    }
+    .face {
+      display: flex;
+      transform: scale(1.2);
+    }
   }
 
   .recommendation-row {
@@ -35,8 +46,9 @@
       display: flex;
     }
   }
-  
-  .broker-not-connected, .no-recommendations {
+
+  .broker-not-connected,
+  .no-recommendations {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,22 +58,21 @@
     font-weight: 700;
   }
   .content {
-   font-size: 12px;
-   padding: 15px;
-   display: flex;
-   flex-direction: column;
-   min-width: 340px;
-
-   .recommendations {
-    margin-top: 10px;
-    overflow-y: auto;
-   }
-
-   .header-content {
+    font-size: 12px;
+    padding: 15px;
     display: flex;
-    justify-content: space-evenly;
-   }
-   
+    flex-direction: column;
+    min-width: 340px;
+
+    .recommendations {
+      margin-top: 10px;
+      overflow-y: auto;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-evenly;
+    }
   }
   .low-risk {
     color: $lightGreenColor;
@@ -81,5 +92,4 @@
 }
 
 @include themify($themes, true) {
-  
 }
