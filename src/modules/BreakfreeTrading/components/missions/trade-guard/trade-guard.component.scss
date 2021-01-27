@@ -3,58 +3,35 @@
 @import "global-styles/variables";
 
 :host {
-  /deep/ {
-    .mat-row {
-      cursor: pointer;
+  .recommendation-row {
+    display: flex;
+    margin: 5px;
+    padding: 3px;
+    background: white;
+    border-radius: 3px;
+    box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
+    cursor: pointer;
+
+    .recommendation-flag {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0px 15px;
+      font-size: 14px;
     }
-
-    mat-header-cell {
-      color: #8798ad !important;
+    .recommendation-text {
+      display: flex;
+      flex-direction: column;
     }
-
-    mat-cell {
-      color: #323232 !important;
+    .recommendation-issue {
+      display: flex;
+      font-weight: 700;
     }
-
-    mat-header-row {
-      border-bottom: 1px solid #edeff2 !important;
-      border-top: 1px solid #edeff2 !important;
+    .recommendation-description {
+      display: flex;
     }
-
-    mat-row {
-      border-color: #edeff2 !important;
-    }
-
-    mat-header-row,
-    mat-row {
-      background-color: #ffffff !important;
-    }
-
-    mat-row.expanded-row-details {
-      background-color: #ffffff !important;
-    }
-
-    mat-header-cell[aria-sort="descending"],
-    mat-header-cell[aria-sort="ascending"] {
-      background-color: #ffffff !important;
-      color: #397dc4 !important;
-
-      &:after {
-        background-color:  #397dc4 !important;
-      }
-    }
-
-    .resize-handle {
-      background-color: #edeff2 !important;
-    }
-
   }
-  .nicebox {
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px -2px rgba(75,72,72,.44);
-    background: #fff;
-}
+  
   .broker-not-connected, .no-recommendations {
     display: flex;
     justify-content: center;

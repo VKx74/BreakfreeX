@@ -86,7 +86,7 @@ export class TradeGuardService {
         if (risks === 1) {
             res.push({
                 Issue: "You are overleveraged.",
-                Recommendation: "Stop gambling immediately.",
+                Recommendation: "Stop gambling immediately. You should reduce position size or cancel orders.",
                 RiskClass: RiskClass.Low,
                 RiskType: RiskType.HighRisk,
                 RelatedData: relatedData,
@@ -95,7 +95,7 @@ export class TradeGuardService {
         } else if (risks > 1) {
             res.push({
                 Issue: "You are overleveraging on multiple positions.",
-                Recommendation: "Stop gambling immediately. You will loss everything like this.",
+                Recommendation: "You better pay attention now, trading like this will cost you everything. Cancel orders or reduce position size.",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.HighRisk,
                 RelatedData: relatedData,
@@ -223,19 +223,19 @@ export class TradeGuardService {
 
     private _getRiskTypeDescriptionForMarketOrders(riskType: RiskType, isMultiple: boolean = false): string {
         switch (riskType) {
-            case RiskType.HighRisk: return isMultiple ? "Several overleveraged trades found in filled orders." : "Overleveraged trade found in filled orders.";
-            case RiskType.PriceFarFromEntry: return isMultiple ? "Several orders have moved too far from the trade setup." : "filled order too far from recommended entry point.";
-            case RiskType.SLNotSet: return isMultiple ? "Stoploss missing on multiple filled orders." : "Stoploss missing in a filled orders.";
-            case RiskType.WrongTrend: return isMultiple ? "Multiple trades against the global trend found." : "A trade currently trading against the trade found in filled orders.";
+            case RiskType.HighRisk: return isMultiple ? "You are overleveraged on multiple filled trades." : "You are overleveraged on a filled trade.";
+            case RiskType.PriceFarFromEntry: return isMultiple ? "You have several orders that have moved too far from the trade setup." : "You have an order which has moved too far from the trade setup.";
+            case RiskType.SLNotSet: return isMultiple ? "You have multiple filled trades with missing stoplosses." : "You have a filled trade open without any stoploss.";
+            case RiskType.WrongTrend: return isMultiple ? "You have trades that are directly trading against the global trend." : "Your trade is trading directly against the global trend.";
         }
     }
 
     private _getRiskTypeDescriptionForPendingOrders(riskType: RiskType, isMultiple: boolean = false): string {
         switch (riskType) {
-            case RiskType.HighRisk: return isMultiple ? "Several overleveraged trades found in pending orders." : "Overleveraged trade found in pending orders.";
-            case RiskType.PriceFarFromEntry: return isMultiple ? "Several pending orders have moved too far from the trade setup." : "Pending order to far from recommended entry point.";
-            case RiskType.SLNotSet: return isMultiple ? "Stoploss missing on multiple pending orders." : "Stoploss missing in a pending order.";
-            case RiskType.WrongTrend: return isMultiple ? "Multiple trades against the global trend found in pending orders." : "A trade currently trading against the trade found in pending orders.";
+            case RiskType.HighRisk: return isMultiple ? "You are overleveraged on multiple open orders." : "You are overleveraged on a open order.";
+            case RiskType.PriceFarFromEntry: return isMultiple ? "You have several open orders that have moved too far from the trade setup." : "You have an open order which has moved too far from the trade setup.";
+            case RiskType.SLNotSet: return isMultiple ? "You have multiple open orders with missing stoplosses." : "You have a pending order set without any stoploss.";
+            case RiskType.WrongTrend: return isMultiple ? "You have multiple open orders that are directly trading against the global trend." : "You have a pending order that is trading directly against the global trend.";
         }
     }
 
@@ -248,19 +248,19 @@ export class TradeGuardService {
 
     private _getRiskTypeRecommendationForMarketOrders(riskType: RiskType): string {
         switch (riskType) {
-            case RiskType.HighRisk: return "Reduce position size or orders.";
-            case RiskType.PriceFarFromEntry: return "Cancel orders.";
-            case RiskType.SLNotSet: return "Set stoploss for orders.";
-            case RiskType.WrongTrend: return "Move TPs to breakeven.";
+            case RiskType.HighRisk: return "You should carefully avoid adding further trades or orders.";
+            case RiskType.PriceFarFromEntry: return "You will never catch all of them. You can go now cancel these orders.";
+            case RiskType.SLNotSet: return "You should never have open trades with no stoploss set. You should set stoploss for orders.";
+            case RiskType.WrongTrend: return "Market structure has changed. You can go ahead and move TPs to breakeven.";
         }
     }
 
     private _getRiskTypeRecommendationForPendingOrders(riskType: RiskType): string {
         switch (riskType) {
-            case RiskType.HighRisk: return "Decrease position size or cancel.";
-            case RiskType.PriceFarFromEntry: return "Cancel orders.";
-            case RiskType.SLNotSet: return "Set stoploss for orders.";
-            case RiskType.WrongTrend: return "Cancel orders.";
+            case RiskType.HighRisk: return "There is no need for you to overleverage, it will only lead to pain. Please decrease position size or cancel pending trades.";
+            case RiskType.PriceFarFromEntry: return "You can cancel these orders and move to next trade setup.";
+            case RiskType.SLNotSet: return "Guessing your stoploss is the worst idea you had yet. Set stoploss for pending orders now.";
+            case RiskType.WrongTrend: return "This trade is no longer favourable for you. Go ahead and Cancel orders.";
         }
     }
 

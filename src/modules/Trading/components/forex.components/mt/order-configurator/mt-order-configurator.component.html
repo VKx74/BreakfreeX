@@ -1,6 +1,6 @@
 <div class="form-wrapper bftorderpanel">
 
-    
+
 
     <div class="order-side-buttons flex">
         <div class="order-side-btn order-side-buy flex-grow-1" (click)="setBuyMode()"
@@ -15,7 +15,7 @@
 
     <div class="form-wrapper first">
         <div class="flex-row">
-            <div class="flex-column padding-right" >
+            <div class="flex-column padding-right">
                 <div class="crypto-form-unit  nborder margin-bottom" [ngClass]="{'disabled': !canChangeInstrument}">
                     <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
                         [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
@@ -23,12 +23,13 @@
             </div>
             <div class="flex-column  padding-left">
                 <div class="crypto-form-unit margin-bottom">
-               
+
                     <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
 
                         <span class="orderpanelprefix" matPrefix>{{'amount' | translate}}</span>
-                        <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}" type="number"
-                            [step]="priceStep" [(ngModel)]="config.amount" (ngModelChange)="valueChanged()">
+                        <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
+                            type="number" [step]="priceStep" [(ngModel)]="config.amount"
+                            (ngModelChange)="valueChanged()">
                     </mat-form-field>
                 </div>
             </div>
@@ -39,18 +40,18 @@
         <div class="flex-column  padding-right">
             <div class="crypto-form-unit  nborder  margin-bottom">
 
-          
+
                 <selector class="bft-form-select " [selectedOption]="config.type" [options]="allowedOrderTypes"
                     [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
-          
+
             </div>
         </div>
         <div class="flex-column padding-left">
             <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
-         
+
                 <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
                     <span class="orderpanelprefix" matPrefix>{{'limitPrice' | translate}}</span>
-                    <input matInput class="bftinput"  type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true" [step]="priceStep"
                         [range]="{min: minPriceValue}" [(ngModel)]="config.price" (ngModelChange)="valueChanged()">
                 </mat-form-field>
             </div>
@@ -61,23 +62,25 @@
     <div class="flex-row">
         <div class="flex-column  padding-right">
             <div class="crypto-form-unit margin-bottom">
-            
-             
+
+
                 <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
                     <span class="orderpanelprefix" matPrefix>{{'tradeManager.stoploss' | translate}}</span>
-                    <input matInput class="bftinput"  type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
-                        [step]="priceStep"  placeholder="Enter SL" [(ngModel)]="config.sl" (ngModelChange)="valueChanged()">
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
+                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter SL" [(ngModel)]="config.sl"
+                        (ngModelChange)="valueChanged()">
                 </mat-form-field>
             </div>
         </div>
         <div class="flex-column padding-left">
             <div class="crypto-form-unit margin-bottom">
-                
- 
-                <mat-form-field class="crypto-input bft-form-input full-width  nborder " >
+
+
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
                     <span class="orderpanelprefix" matPrefix>{{'tradeManager.takeprofit' | translate}}</span>
-                    <input matInput  class="bftinput"  type="number" numericInput [floatOnly]="true" [range]="{min: minPriceValue}"
-                        [step]="priceStep" placeholder="Enter TP" [(ngModel)]="config.tp">
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
+                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter TP"
+                        [(ngModel)]="config.tp">
                 </mat-form-field>
             </div>
         </div>
@@ -89,24 +92,35 @@
     <div class="flex-row">
         <div class="crypto-form-unit margin-bottom tradescoreholder">
             <div class="checklist-row">
-                <div class="section-header tradescore"> 
-                    <div class="flex"> 
-                        <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg">
-                    <div class="tradescoretext ">: {{orderScore}}</div>
-                </div>
-                   
-                    <div class="score-container" *ngIf="!calculatingChecklist && config.instrument">
-                        <mt-order-score [MaxScore]="5" [Score]="calculateOrderStarts()"></mt-order-score>
+                <div class="section-header tradescore">
+                    <div class="flex">
+                        <!-- <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg"> -->
+                        <div class="tradescoretext-label">
+                            <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg"> <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
+                        </div>
+                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">: {{orderScore}}/10</div>
+                        <ng-template #calculating>
+                            <div class="tradescoretext-calculating">
+                                - calculating...
+                            </div>
+                        </ng-template>
+                    </div>
+
+                        
+                    <div class="score-container" *ngIf="config.instrument">
+                        <mt-order-score [Calculating]="calculatingChecklist" [MaxScore]="10" [Score]="calculateOrderStarts()"></mt-order-score>
                     </div>
                 </div>
+                
+                <div class="tradescore-separator"></div>
 
                 <div class="loader">
                     <bft-loader-block *ngIf="calculatingChecklist"></bft-loader-block>
                 </div>
-                
+
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
-                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems"
-                        tooltip [matTooltip]="item.tooltip">
+                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" tooltip
+                        [matTooltip]="item.tooltip">
                         <span class="icon">
                             <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
                                 aria-hidden="true"></i>
@@ -128,7 +142,7 @@
         </div>
     </div>
 
-   
+
 
     <mat-expansion-panel [expanded]="false">
         <mat-expansion-panel-header [@.disabled]="true">
@@ -140,10 +154,11 @@
 
             <div class="flex-row">
                 <div class="crypto-form-unit margin-bottom">
-                    <div class="form-unit__label">{{'tradeManager.comment' | translate}} ({{commentLengthUsed}}/{{maxCommentLength - technicalCommentLengthUsed}})</div>
+                    <div class="form-unit__label">{{'tradeManager.comment' | translate}}
+                        ({{commentLengthUsed}}/{{maxCommentLength - technicalCommentLengthUsed}})</div>
                     <div class="comment-area">
                         <mat-form-field class="crypto-input bft-form-input full-width">
-                            <textarea matInput class="crypto-textarea nborder comment-textarea" 
+                            <textarea matInput class="crypto-textarea nborder comment-textarea"
                                 [(ngModel)]="config.comment" [maxlength]="maxCommentLength-technicalCommentLengthUsed">
                             </textarea>
                         </mat-form-field>

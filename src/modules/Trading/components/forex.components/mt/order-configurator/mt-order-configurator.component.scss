@@ -3,7 +3,6 @@
 @import "global-styles/variables";
 
 :host {
-
   /deep/ {
     .component-loading {
       width: 100%;
@@ -31,8 +30,6 @@
       justify-content: space-between;
     }
 
-    
-
     .score-text {
       margin-right: 10px;
       margin-top: 1px;
@@ -41,21 +38,20 @@
   }
 
   .tiles-wrapper {
-    padding-top: 5px;
     max-width: 290px;
-    transition: all .2s ease;
+    transition: all 0.2s ease;
     .checklist-tile-wrapper {
       border-radius: 5px;
-      transition: all .2s ease;
-    cursor: pointer;
-    margin: 3px;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 7px;
-    float: left;
-    transition: all .2s ease;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      margin: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 7px;
+      float: left;
+      transition: all 0.2s ease;
       &:hover {
-       // border-color: black;
+        // border-color: black;
       }
       .image {
         margin: 0px 3px;
@@ -117,27 +113,29 @@
 
   /deep/ .mat-expansion-panel-body {
     padding: 10px;
-    
-  }  
-  
-  /deep/ mat-expansion-panel, mat-expansion-panel {
-    border-radius: 0px;
-    box-shadow: none;
   }
 
-  
+  /deep/ mat-expansion-panel,
+  mat-expansion-panel {
+    border-radius: 0px;
+    box-shadow: none;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  /deep/ .mat-expansion-indicator {
+    padding-bottom: 3px;
+  }
 
   mat-expansion-panel-header {
     border-radius: 0px;
     height: 15px !important;
     font-size: 10px;
-    font-weight:700;
+    font-weight: 700;
     box-shadow: none;
     background-color: transparent;
-    // border: none;
     padding: 0px 10px;
-     // border-bottom: solid 1px #f1f3f4;
-     // margin-bottom: 12px;
+    border: none;
   }
 
   /deep/ .instrument-search {
@@ -165,36 +163,30 @@
   display: block;
   padding: 15px 15px 0;
 
-
   .flex-row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
   }
-  
+
   .flex-column {
     display: flex;
     flex-direction: column;
     flex-basis: 100%;
     flex: 1;
     width: 120px;
-
   }
   .padding-right {
-
-  padding-right:3px;
+    padding-right: 3px;
   }
   .padding-left {
-
-  padding-left:3px;
+    padding-left: 3px;
   }
 
-  .crypto-form-unit.margin-bottom{
-
-    margin-bottom:4px !important;
-    }
-
+  .crypto-form-unit.margin-bottom {
+    margin-bottom: 4px !important;
+  }
 
   .total {
     margin-bottom: 15px;
@@ -214,7 +206,7 @@
 
   .submit-btn.order-side-buy {
     background: $lightGreenColor;
-    color: #fff; 
+    color: #fff;
     font-weight: bold;
   }
 
@@ -234,8 +226,7 @@
     height: 30px;
     font-weight: 700;
     text-align: center;
-    transition: all .2s ease;
-    
+    transition: all 0.2s ease;
 
     &.active.order-side-buy {
       background: $lightGreenColor;
@@ -247,7 +238,6 @@
       color: #fff;
     }
 
-
     &:first-of-type {
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px;
@@ -258,7 +248,6 @@
       border-bottom-right-radius: 3px;
     }
   }
-
 
   .buttons-wrapper {
     position: relative;
@@ -288,116 +277,42 @@
     position: relative;
   }
 
-
-
   .score-container {
     font-size: 11px;
     color: #ffffffd1;
     display: flex;
-    padding-right:5px
+    transform: scale(0.6);
+    height: 25px;
+    width: 25px;
   }
 
-
-
- .bftinput  {
+  .bftinput {
     text-align: right;
-    font-weight:700;
+    font-weight: 700;
     font-size: 10px !important;
-}
+  }
 
   hr {
     margin-bottom: 5px;
     margin-top: 5px;
   }
-}
-
-
-:host-context(.#{$classPrefix}-modal) {
-  padding: 0;
-}
-
-
-@include themify($themes, true) {
-
-  .checklist-tile-wrapper {
-    background-color: themed('tradescoreitembg');
-    color: themed('tradescoreitembTextColor');
-  }
-
-  .indicator-graph {
-    border-color: themed('appBackgroundColor');
-  }
-
-  .svg-arrow {
-    fill: themed('titleTextColor');
-  }
-
-  .no-data {
-    color: themed('valueTextColor');
-  }
-
-  .order-side-btn {
-    background-color: themed('activeBackgroundColor');
-    color: themed('valueTextColor');
-  }
-
-  .risk-overview {
-    color: themed('valueTextColor');
-  }
-
-  .risk-overview.critical{
-    color: $lightRedColor;
-  }
-
-  hr {
-    border-color: themed('appBackgroundColor');
-  }
-
-  mat-expansion-panel-header {
-    color: themed('order-modal-color');
-   // border-color: themed('appBackgroundColor');
-   border:none;
-  }
-
-  /deep/ mat-expansion-panel {
-   background-color: themed('tradescoreholderbg');
-   border: 1px solid themed('tradescoreSecondColor');
-    border-radius: 5px;
-    padding:5px;
- 
-
-  }
-
-  span.orderpanelprefix {
+  .orderpanelprefix {
     font-size: 10px;
     font-weight: 700;
     line-height: 2;
     opacity: 0.65;
-    color: themed('orderpanelprefixcolor'),
-}
-
+  }
   .nborder {
-    border: 1px solid themed('niceborder');
-    border-radius:5px;
-}
-
-  .orderheader {
-    background: themed('inputInModalsBackgroundColor');
-    color: themed('card-title');
+    border-radius: 5px;
   }
-
   .tradescoreholder {
-
-    background: themed('tradescoreholderbg'); 
-    min-height:110px;
+    min-height: 110px;
   }
-
-  .bfttradescore{
-    margin-left:-15px;
+  .bfttradescore {
+    margin-left: -15px;
     margin-right: -15px;
-    margin-bottom:-15px;
-    padding:0px 15px 15px 15px;
-    background: themed('tradescoreholderbg'); 
+    margin-bottom: -15px;
+    padding: 0px 15px 15px 15px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     margin-top: 15px;
@@ -406,34 +321,127 @@
   .tradescore {
     font-size: 10px !important;
     font-weight: 700;
-    padding-bottom: 5px;
-    padding-left: 11px;
+    padding-left: 5px;
+    padding-right:5px;
     position: relative;
-    padding-top: 8px;
-    border-bottom: 1px solid themed('tradescoreSecondColor');
+    height: 30px;
   }
 
   .bfttradescore .form-unit__label {
-    color: themed('tradescorelabels');
     font-weight: 700;
-    font-size:10px;
-  } 
+    font-size: 10px;
+  }
 
-
-   .tradescoretext {
-   font-weight: 700;
+  .tradescoretext, .tradescoretext-calculating, .tradescoretext-label {
+    font-weight: 500;
     font-size: 11px;
-    color: themed('tradescoretext');
-     // color:  themed('tradescoreSecondColor');
-   
-  } 
+    margin-top: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .tradescoretext-label {
+    .bold {
+      font-weight: 700;
+      font-size: 12px;
+      margin-right: 3px;
+    }
+  }
+  .tradescoretext-calculating {
+    margin-left: 5px;
+  }
+  .tradescore-separator {
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
 
- 
- }
+:host-context(.#{$classPrefix}-modal) {
+  padding: 0;
+}
+
+@include themify($themes, true) {
+  .checklist-tile-wrapper {
+    background-color: themed("tradescoreitembg");
+    color: themed("tradescoreitembTextColor");
+  }
+
+  .indicator-graph {
+    border-color: themed("appBackgroundColor");
+  }
+
+  .svg-arrow {
+    fill: themed("titleTextColor");
+  }
+
+  .no-data {
+    color: themed("valueTextColor");
+  }
+
+  .order-side-btn {
+    background-color: themed("activeBackgroundColor");
+    color: themed("valueTextColor");
+  }
+
+  .risk-overview {
+    color: themed("valueTextColor");
+  }
+
+  .risk-overview.critical {
+    color: $lightRedColor;
+  }
+
+  hr {
+    border-color: themed("appBackgroundColor");
+  }
+
+  mat-expansion-panel-header {
+    color: themed("order-modal-color");
+  }
+
+  /deep/ mat-expansion-panel {
+    background-color: themed("tradescoreholderbg");
+    border: 1px solid themed("tradescoreSecondColor");
+  }
+
+  .orderpanelprefix {
+    color: themed("orderpanelprefixcolor");
+  }
+
+  .nborder {
+    border: 1px solid themed("niceborder");
+  }
+
+  .orderheader {
+    background: themed("inputInModalsBackgroundColor");
+    color: themed("card-title");
+  }
+
+  .tradescoreholder {
+    background: themed("tradescoreholderbg");
+  }
+
+  .bfttradescore {
+    background: themed("tradescoreholderbg");
+  }
+
+  .tradescore-separator {
+    border-bottom: 1px solid themed("tradescoreSecondColor");
+  }
+
+  .bfttradescore .form-unit__label {
+    color: themed("tradescorelabels");
+  }
+
+  .tradescoretext {
+    color: themed("tradescoretext");
+  }
+}
 
 .modal-body {
   @include themify($themes, true) {
-    color: themed('order-modal-color');
+    color: themed("order-modal-color");
   }
 }
 
