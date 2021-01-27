@@ -9,20 +9,23 @@
   .definition {
     font-weight: 700;
   }
+  .ladder-wrapper  {
+ 
+  }
 
   .ranktop {
-    border-top: 1px solid #ddd;
-    padding-top: 5px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
+    border-top: 1px solid #eaecef;
+    border-bottom: 1px solid #eaecef;
     display: flex;
     justify-content: left;
     align-items: center;
+    padding: 0px 10px;
+    min-height: 40px;
 }
 .rank {
   font-weight: 700;
-  padding-right: 50px;
-  width: 30%;
+  min-width: 70px;
+  width: 20%;
 }
 
  .ranktop img {
@@ -32,20 +35,45 @@
 .descripton {
   font-weight: 700;
   font-size: 11px;
-  padding-right: 50px;
-  width: 30%;
+  min-width: 60px;
+  width: 20%;
 }
 
 .reward {
   display: flex;
-  width: 30%;
+  min-width:100px;
+  
+
+}
+
+.bonus {
+  font-weight: 700;
+  font-size: 12px;
 }
 span.plus {
   font-size: 22px;
   margin-left: 10px;
   margin-right: 10px;
   font-weight: 700;
+  vertical-align: middle;
 }
+
+
+
+.ranktop.header {
+  background: #f9f9fa;
+  color: #848e9c;
+  border: none !important;
+  font-weight: 700;
+  
+    
+}
+
+.content {
+  background: #fff;
+}
+
+
 
 }
 
