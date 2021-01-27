@@ -96,7 +96,7 @@
                     <div class="flex">
                         <!-- <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg"> -->
                         <div class="tradescoretext-label">
-                            <span class="bold">TradeGuard</span>Pre-trade Score
+                            <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg"> <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
                         </div>
                         <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">: {{orderScore}}/10</div>
                         <ng-template #calculating>
@@ -106,6 +106,7 @@
                         </ng-template>
                     </div>
 
+                        
                     <div class="score-container" *ngIf="!calculatingChecklist && config.instrument">
                         <mt-order-score [MaxScore]="10" [Score]="calculateOrderStarts()"></mt-order-score>
                     </div>
