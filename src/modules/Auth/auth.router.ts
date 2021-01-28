@@ -36,7 +36,10 @@ import { LoginWithPageComponent } from './components/login-with-page/login-with-
                     },
                     {
                         path: AuthRoutes.Registration,
-                        component: CredentialsPageComponent
+                        component: CredentialsPageComponent,
+                        data: {
+                            test: "1"                            
+                        }
                     },
                     {
                         path: AuthRoutes.Confirming,

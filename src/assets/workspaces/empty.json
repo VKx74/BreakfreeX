@@ -26,8 +26,19 @@
           },
           {
             "type": "column",
-            "width":"35",
+            "width":"40",
             "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "2",
+                    "type": "component",
+                    "componentName": "breakfreeTradingAcademy",
+                    "isClosable": true
+                  }
+                ]
+              },
               {
                 "type": "stack",
                 "content": [
@@ -36,15 +47,9 @@
                     "type": "component",
                     "componentName": "watchlist",
                     "isClosable": true
-                  }, {
-                    "id": "2",
-                    "type": "component",
-                    "componentName": "breakfreeTradingAcademy",
-                    "isClosable": true
                   }
                 ]
               }
-             
             ]
           }
         ]

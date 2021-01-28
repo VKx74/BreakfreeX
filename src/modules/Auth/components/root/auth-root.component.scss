@@ -8,8 +8,46 @@
   width: 100%;
   display: block;
   overflow: auto;
-  background:#191919;
   font-family:  $primaryFontFamily;
+  background:#fff;
+
+  .login_container {
+    display: flex;
+    height: 100%;
+  }
+
+  .left_part {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    border-left: 15px solid #191919;
+  }
+
+  .right_part {
+    display: flex;
+    background:#191919;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .video_container {
+    width: 100%;
+    margin: 20px;
+    height: calc(((100vw / 2) - 40px) / 1.77);
+    
+    embed {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+      .right_part {
+          display: none;
+      }
+  }
 
   .logo:before {
     vertical-align: unset;
@@ -137,6 +175,9 @@
         width: 100px;
         height: 100px;
         background: #191919;
+        position: absolute;
+        left: 0px;
+        top: 0px;
       }
 
       .navimgholder img {
@@ -228,8 +269,6 @@ span#actualquote {
 }
 
 .page {
-  background: #fff;
-  height: 1010px;
 }
 
 .left {
