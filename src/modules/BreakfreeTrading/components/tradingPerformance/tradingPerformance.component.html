@@ -1,7 +1,7 @@
 <div [ngClass]="{'doBlur':showSpinner}"  *ngIf="isBrokerConnected; else brokerNotConnected" class="performance-container"> 
     <bft-loader *ngIf="showSpinner"></bft-loader>
     <div>
-        <div class="acc-info">
+        <div class="acc-info mobilefix">
             <div class="acc-info-param column1">
                 <div class="acc-info-param-header">Estimated Balance</div>
                 <div class="acc-info-param-body">

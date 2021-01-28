@@ -22,6 +22,12 @@
     padding: 0px 10px;
     min-height: 40px;
 }
+
+span.insidereward {
+  display: flex;
+  align-items: center;
+}
+
 .rank {
   font-weight: 700;
   min-width: 70px;
@@ -49,6 +55,8 @@
 .bonus {
   font-weight: 700;
   font-size: 12px;
+  align-items: center;
+  display:flex;
 }
 span.plus {
   font-size: 22px;
