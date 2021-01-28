@@ -4,6 +4,7 @@ import { OrderSide, OrderTypes, RiskClass, RiskType } from "modules/Trading/mode
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
+import { InstrumentMappingService } from "../instrument-mapping.service";
 import { MTBroker } from "./mt.broker";
 import { MTHelper } from "./mt.helper";
 
@@ -18,7 +19,7 @@ export class MTTradeRatingService {
     protected _marketInfoLoading: { [symbol: string]: boolean; } = {};
     protected _timeInterval: any;
 
-    constructor(protected mtBroker: MTBroker, protected algoService: AlgoService) {
+    constructor(protected mtBroker: MTBroker, protected algoService: AlgoService, protected mappingService: InstrumentMappingService) {
         this._timeInterval = setInterval(() => {
             const dtNow = new Date().getTime();
 
@@ -40,6 +41,10 @@ export class MTTradeRatingService {
                 }
             }
         }, 1000 * 60 * 1);
+
+        this.mappingService.mappingChanged.subscribe(() => {
+            this._marketInfoCache = {};
+        });
 
     }
 
