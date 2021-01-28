@@ -106,6 +106,17 @@ export class MTTradeRatingService {
             }
         }
 
+        if (res.IsRTDOverhit === true) {
+            if (res.Timeframe < 60 * 60 * 24) {
+                res.FailedChecks.push({
+                    Issue: "Trading against strong local trend",
+                    Recommendation: "Cancel Order",
+                    RiskClass: RiskClass.Medium,
+                    RiskType: RiskType.WrongTrend
+                });
+            }
+        }
+
         if (order.ProfitRate) {
             if (order.Price && order.SL && order.TP && order.CurrentPrice) {
                 const logicalOrderBounds = Math.abs(order.SL - order.TP) * 1.5;
@@ -191,6 +202,17 @@ export class MTTradeRatingService {
                         RiskType: RiskType.WrongTrend
                     });
                 }
+            }
+        } 
+        
+        if (res.IsRTDOverhit === true) {
+            if (res.Timeframe < 60 * 60 * 24) {
+                res.FailedChecks.push({
+                    Issue: "Trading against strong local trend",
+                    Recommendation: "Cancel Order",
+                    RiskClass: RiskClass.Medium,
+                    RiskType: RiskType.WrongTrend
+                });
             }
         }
 
@@ -289,6 +311,7 @@ export class MTTradeRatingService {
                 LocalRTDSpread: null,
                 GlobalRTDTrendStrength: null,
                 LocalRTDTrendStrength: null,
+                IsRTDOverhit: null,
                 Timeframe: timeframe,
                 OrderTradeType: tradeType,
                 Type: order.Type === OrderTypes.Market ? MTOrderRecommendationType.Active : MTOrderRecommendationType.Pending
@@ -299,6 +322,7 @@ export class MTTradeRatingService {
         const localRTDValue = marketInfo.local_trend;
         const localRTDSpread = marketInfo.local_trend_spread;
         const globalRTDSpread = marketInfo.global_trend_spread;
+        const isOverhit = marketInfo.is_overhit;
         const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
         const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
 
@@ -312,6 +336,7 @@ export class MTTradeRatingService {
         let res: MTOrderRecommendation = {
             GlobalRTD: globalRTD,
             LocalRTD: localRTD,
+            IsRTDOverhit: isOverhit,
             GlobalRTDValue: globalRTDValue,
             LocalRTDValue: localRTDValue,
             GlobalRTDSpread: globalRTDSpread,
@@ -344,6 +369,7 @@ export class MTTradeRatingService {
                 LocalRTDTrendStrength: null,
                 Timeframe: null,
                 OrderTradeType: null,
+                IsRTDOverhit: null,
                 Type: MTOrderRecommendationType.Active
             };
         }
@@ -352,6 +378,7 @@ export class MTTradeRatingService {
         const localRTDValue = marketInfo.local_trend;
         const localRTDSpread = marketInfo.local_trend_spread;
         const globalRTDSpread = marketInfo.global_trend_spread;
+        const isOverhit = marketInfo.is_overhit;
         const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
         const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
 
@@ -365,6 +392,7 @@ export class MTTradeRatingService {
         let res: MTOrderRecommendation = {
             GlobalRTD: globalRTD,
             LocalRTD: localRTD,
+            IsRTDOverhit: isOverhit,
             GlobalRTDValue: globalRTDValue,
             LocalRTDValue: localRTDValue,
             GlobalRTDSpread: globalRTDSpread,

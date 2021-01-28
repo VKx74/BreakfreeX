@@ -201,6 +201,7 @@ export interface IBFTAMarketInfo {
     last_price: number;
     local_trend: IBFTATrend;
     global_trend: IBFTATrend;
+    is_overhit: boolean;
     global_trend_spread: number;
     local_trend_spread: number;
 }

@@ -195,6 +195,7 @@ export interface MTOrderRecommendation {
     LocalRTD: boolean;
     GlobalRTDValue: IBFTATrend;
     LocalRTDValue: IBFTATrend;
+    IsRTDOverhit: boolean;
     LocalRTDSpread: number;
     GlobalRTDSpread: number;
     LocalRTDTrendStrength: RTDTrendStrength;
