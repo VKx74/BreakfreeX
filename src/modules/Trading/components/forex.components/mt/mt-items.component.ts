@@ -8,6 +8,7 @@ import { BrokerService } from '@app/services/broker.service';
 import { MTMarketOrderRecommendation, MTPendingOrderRecommendation, MTPositionRecommendation } from "modules/Trading/models/forex/mt/mt.models";
 import { MTHelper } from "@app/services/mt/mt.helper";
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
+import { IBFTATrend } from "@app/services/algo.service";
 
 export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
     protected _blinkingTimeout: any;
@@ -107,8 +108,8 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
 
         if (rec.GlobalRTDValue && rec.LocalRTDValue) {
             desc += "Trend --------------------\n\r";
-            desc += `${globalTrendPerformance} Global ${rec.GlobalRTDValue}\n\r`;
-            desc += `${localTrendPerformance} Local ${rec.LocalRTDValue}\n\r`;
+            desc += `${globalTrendPerformance} Global ${this._getTrendName(rec.GlobalRTDValue)}\n\r`;
+            desc += `${localTrendPerformance} Local ${this._getTrendName(rec.LocalRTDValue)}\n\r`;
         }
 
         if (rec.Timeframe || rec.OrderTradeType) {
@@ -251,5 +252,14 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
             this.blinking = [];
             this._blinkingTimeout = null;
         }, 1000 * 15);
+    }
+    
+    protected _getTrendName(trend: IBFTATrend) {
+        if (trend === IBFTATrend.Up) {
+            return "Uptrend";
+        } else if (trend === IBFTATrend.Down) {
+            return "Downtrend";
+        }
+        return "Unknown";
     }
 }
