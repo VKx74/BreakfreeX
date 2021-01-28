@@ -2,6 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { Modal } from "Shared";
 import { IdentityService } from '@app/services/auth/identity.service';
 import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { UsersProfileService } from '@app/services/users-profile.service';
 
 enum Ranks {
     Newbie = "Newbie",
@@ -27,6 +28,8 @@ enum Sections {
     styleUrls: ['./missions.component.scss']
 })
 export class MissionsComponent extends Modal<MissionsComponent> implements OnInit {
+    private _name: string;
+
     public Sections = Sections;
     public Ranks: any = Ranks;
     public selectedSection = Sections.TradeGuard;
@@ -52,11 +55,12 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
     }
 
     public get name(): string {
-        return `${this._identityService.firstName} ${this._identityService.lastName}`;
+        return this._name;
     }
 
     constructor(private _injector: Injector,
                 private _identityService: IdentityService,
+                private _profileService: UsersProfileService,
                 private _tradingProfileService: TradingProfileService) {
         super(_injector);
     }
@@ -66,6 +70,15 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
     }
 
     ngOnInit() {
+        this._profileService.getUserProfileById(this._identityService.id, true)
+        .subscribe(
+            data => {
+                if (data && data.userName) {
+                    this._name = data.userName;
+                } else {
+                    this._name = `${this._identityService.firstName} ${this._identityService.lastName}`;
+                }
+            });
     }
 
     ngAfterViewInit() {

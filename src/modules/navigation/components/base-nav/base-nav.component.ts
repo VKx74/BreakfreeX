@@ -30,6 +30,7 @@ export class BaseNavComponent implements OnInit {
         );
     logoRedirectRoute = `/${AppRoutes.Platform}`;
     avatarId: string;
+    login: string;
     firstName = this._identityService.firstName;
     role = this._identityService.role;
     email = this._identityService.email;
@@ -109,7 +110,10 @@ export class BaseNavComponent implements OnInit {
         this._usersProfileService.getUserProfileById(this._identityService.id)
             .subscribe(userProfileModel => {
                 this.avatarId = userProfileModel ? userProfileModel.avatarId : '';
-                // TODO: Review
+                this.login = userProfileModel.userName;
+                if (!this.login) {
+                    this.login = this._identityService.firstName;
+                }
                 this._cdRef.markForCheck();
             }, e => {
                 this.avatarId = '';

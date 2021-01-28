@@ -109,7 +109,7 @@ export class MTTradeRatingService {
         if (res.IsRTDOverhit === true) {
             if (res.Timeframe < 60 * 60 * 24) {
                 res.FailedChecks.push({
-                    Issue: "Trading against strong local trend",
+                    Issue: "Trading against reversing of trends",
                     Recommendation: "Cancel Order",
                     RiskClass: RiskClass.Medium,
                     RiskType: RiskType.WrongTrend
@@ -208,7 +208,7 @@ export class MTTradeRatingService {
         if (res.IsRTDOverhit === true) {
             if (res.Timeframe < 60 * 60 * 24) {
                 res.FailedChecks.push({
-                    Issue: "Trading against strong local trend",
+                    Issue: "Trading against reversing of trends",
                     Recommendation: "Cancel Order",
                     RiskClass: RiskClass.Medium,
                     RiskType: RiskType.WrongTrend
