@@ -15,12 +15,14 @@
             <div class="experiance-points-text-lable">
                 {{Name}}
             </div>
+            <div class="secondpart">
             <div class="experiance-points-points">
                 {{Points}}  XP
             </div>
             <div class="mission-notice" tooltip [matTooltip]="Notice" *ngIf="Notice">
                 <i class="fa fa-question-circle-o" aria-hidden="true"></i>
             </div>
+        </div> 
         </div>
         <div class="progress-bar-area" tooltip matTooltip="{{Current}}/{{Needed}}">
             <mat-progress-bar mode="determinate" value="{{value}}"></mat-progress-bar>
