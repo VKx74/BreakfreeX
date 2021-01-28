@@ -107,8 +107,8 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
 
         if (rec.GlobalRTDValue && rec.LocalRTDValue) {
             desc += "Trend --------------------\n\r";
-            desc += `${globalTrendPerformance} Global RTD trend - ${rec.GlobalRTDValue}\n\r`;
-            desc += `${localTrendPerformance} Local RTD trend - ${rec.LocalRTDValue}\n\r`;
+            desc += `${globalTrendPerformance} Global ${rec.GlobalRTDValue}\n\r`;
+            desc += `${localTrendPerformance} Local ${rec.LocalRTDValue}\n\r`;
         }
 
         if (rec.Timeframe || rec.OrderTradeType) {

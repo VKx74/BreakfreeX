@@ -75,7 +75,7 @@
     "route": "Route",
     "positions": "Positions",
     "openOrders": "Filled Orders",
-    "pendingOrders": "Active Orders",
+    "pendingOrders": "Pending Orders",
     "orderHistory": "History",
     "accountInfo": "Account",
     "currencyRisk": "Risk",

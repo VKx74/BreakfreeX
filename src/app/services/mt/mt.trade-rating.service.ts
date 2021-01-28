@@ -136,7 +136,7 @@ export class MTTradeRatingService {
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
                 Issue: "High leverage",
-                Recommendation: "Stop gambling. Reduce position size or cancel this order",
+                Recommendation: "Stop gambling, reduce position size or cancel this order",
                 RiskClass: riskClass,
                 RiskType: RiskType.HighRisk
             });
@@ -145,7 +145,7 @@ export class MTTradeRatingService {
         if (!order.SL) {
             res.FailedChecks.push({
                 Issue: "No stoploss set",
-                Recommendation: "Stop gambling. Set stoploss for this order",
+                Recommendation: "Set stoploss for this order",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.SLNotSet
             });
@@ -197,7 +197,7 @@ export class MTTradeRatingService {
         if (!order.SL) {
             res.FailedChecks.push({
                 Issue: "No stoploss set",
-                Recommendation: "Stop gambling. Set stoploss for this order",
+                Recommendation: "Set stoploss for this order",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.SLNotSet
             });
@@ -207,7 +207,7 @@ export class MTTradeRatingService {
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
                 Issue: "High leverage",
-                Recommendation: "Stop gambling. Reduce position size or cancel this order",
+                Recommendation: "Stop gambling, reduce position size or cancel this order",
                 RiskClass: riskClass,
                 RiskType: RiskType.HighRisk
             });
@@ -260,7 +260,7 @@ export class MTTradeRatingService {
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
                 Issue: "High leverage",
-                Recommendation: "Stop gambling. Reduce position size or cancel this order",
+                Recommendation: "Stop gambling, reduce position size or cancel this order",
                 RiskClass: riskClass,
                 RiskType: RiskType.HighRisk
             });
