@@ -24,6 +24,7 @@ export class UserTradingPerformAdditionalData {
     public dailyPnLValPercent: number;
     public monthlyPnLVal: number;
     public monthlyPnLValPercent: number;
+    public accCurencySign: string;
 }
 
 @Injectable()

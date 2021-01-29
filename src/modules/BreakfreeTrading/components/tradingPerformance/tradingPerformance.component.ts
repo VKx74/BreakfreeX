@@ -19,8 +19,7 @@ export class PeriodDescriptor {
     templateUrl: 'tradingPerformance.component.html',
     styleUrls: ['tradingPerformance.component.scss']
 })
-export class TradingPerformanceComponent implements OnInit {
-    // TTesst:ChartWrapperSettings = new ChartWrapperSettings(0, 'Cumulative PnL(%)','line');    
+export class TradingPerformanceComponent implements OnInit {    
     ChartsSettingsSet: Array<ChartWrapperSettings>;
     ChartDataSet: Array<{[key: number]: number}> = new Array<{[key: number]: number}>();
     periodSelectors: Array<PeriodDescriptor> = new Array<PeriodDescriptor>();
@@ -29,6 +28,7 @@ export class TradingPerformanceComponent implements OnInit {
     public showSpinner: boolean = false;
     EstBalance: number;    
     AccCurency: string;
+    AccCurrencySign: string;
     EstBalanceUSD: string;
     DailyPnLVal: string;
     DailyPnLsign: number;
@@ -78,31 +78,30 @@ export class TradingPerformanceComponent implements OnInit {
                 this.ChartDataSet[0] = result.cumulativePnL;
                 this.ChartDataSet[1] = result.dailyPnL;
                 this.ChartDataSet[2] = result.balanceHistory;
-                this.AccCurency = result.accCurency;
-                this.ChartsSettingsSet[1].unit = this.AccCurency;
-                this.ChartsSettingsSet[2].unit = this.AccCurency;
+                this.AccCurency = result.accCurency;                
+                this.ChartsSettingsSet[1].unit = this.AccCurency;                
+                this.ChartsSettingsSet[2].unit = this.AccCurency;                
                 
                 this.showSpinner = false;                
-                console.log("RResult:");
-                console.log(result);
             }, (error: any) => {         
-                this.showSpinner = false;       
-                console.log("Error:");
+                this.showSpinner = false;
                 console.log(error);
             });
             if (!this.DailyPnLVal) {
                 this._tradingPerformanceService.getTradingPerformanceAdditionalParams(activeBroker.account, activeBroker.brokerType)
                 .subscribe((result: UserTradingPerformAdditionalData) => {
                     this.updateParameters(result);
-                    }, (error: any) => {});
+                    }, (error: any) => {
+                        console.log(error);
+                    });
             }
         }
     }
 
     private updateParameters(tradingPerformanceData: UserTradingPerformAdditionalData): void {
         this.EstBalance = tradingPerformanceData.estBalance;
-        this.AccCurency = tradingPerformanceData.accCurency;
-        // this.EstBalanceUSD = `${this.AccCurency} = $${tradingPerformanceData.estBalanceUSD}`; !!!
+        this.AccCurency = tradingPerformanceData.accCurency; 
+        this.AccCurrencySign = tradingPerformanceData.accCurencySign;       
         this.EstBalanceUSD = `${this.AccCurency}`;
         
         let dailyPnLsign = '';
@@ -113,7 +112,7 @@ export class TradingPerformanceComponent implements OnInit {
             dailyPnLsign = '-';   
             this.DailyPnLsign = -1;     
         }
-        this.DailyPnLVal = `${dailyPnLsign}$${Math.abs(tradingPerformanceData.dailyPnLVal)}`;
+        this.DailyPnLVal = `${dailyPnLsign}${this.AccCurrencySign}${Math.abs(tradingPerformanceData.dailyPnLVal)}`;
         this.DailyPnLValPercent = `${dailyPnLsign}${Math.abs(tradingPerformanceData.dailyPnLValPercent)}%`;
 
         let monthlyPnLsign = '';
@@ -124,7 +123,7 @@ export class TradingPerformanceComponent implements OnInit {
             monthlyPnLsign = '-';        
             this.MonthlyPnLsign = -1;
         }
-        this.MonthlyPnLVal = `${monthlyPnLsign}$${Math.abs(tradingPerformanceData.monthlyPnLVal)}`;
+        this.MonthlyPnLVal = `${monthlyPnLsign}${this.AccCurrencySign}${Math.abs(tradingPerformanceData.monthlyPnLVal)}`;
         this.MonthlyPnLValPercent = `${monthlyPnLsign}${Math.abs(tradingPerformanceData.monthlyPnLValPercent)}%`;
     }
 }
