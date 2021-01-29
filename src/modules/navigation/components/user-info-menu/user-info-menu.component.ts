@@ -21,6 +21,9 @@ import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confi
 import { Store } from "@ngrx/store";
 import { AppState } from "@app/store/reducer";
 import { ResetLayoutAction } from '@app/store/actions/platform.actions';
+import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
+import { UsersProfileService } from "@app/services/users-profile.service";
+
 
 @Component({
     selector: 'user-info-menu',
@@ -37,6 +40,7 @@ import { ResetLayoutAction } from '@app/store/actions/platform.actions';
 })
 export class UserInfoMenuComponent implements OnInit {
     private _workspacesSubscription: Subscription;
+    private _subscriptionToMenuOpen: Subscription;
 
     @Input() avatarTemplate: TemplateRef<any>;
     @Input() opened: Subject<void>;
@@ -48,15 +52,41 @@ export class UserInfoMenuComponent implements OnInit {
     userId = this._identity.id;
     @Output() logOut = new EventEmitter();
 
+    public get score(): number {
+        return this._tradingProfileService.score;
+    } 
+    
+    public get isAuthorizedCustomer(): boolean {
+        return this._identity.isAuthorizedCustomer;
+    }
+
+    public get levelName(): string {
+        return this._tradingProfileService.levelName || "";
+    }
+
+    public get isLoaded(): boolean {
+        return !!this._tradingProfileService.missions;
+    }
+
+    public get scoreForLevel(): number {
+        return this._tradingProfileService.scoreForLevel;
+    }
+
+    public get level(): number {
+        return this._tradingProfileService.level;
+    }
+
     constructor(private _identity: IdentityService,
         private _appTypeService: ApplicationTypeService,
         private _dialog: MatDialog,
         private _store: Store<AppState>,
+        private _tradingProfileService: TradingProfileService,
         private _brokerService: BrokerService) {
     }
 
     ngAfterViewInit() {
-       
+       this._subscriptionToMenuOpen = this.opened.subscribe(() => {
+       });
     }
 
     ngOnInit() {
@@ -84,7 +114,19 @@ export class UserInfoMenuComponent implements OnInit {
             this._workspacesSubscription.unsubscribe();
             this._workspacesSubscription = null;
         }
+
+        if (this._subscriptionToMenuOpen) {
+            this._subscriptionToMenuOpen.unsubscribe();
+            this._subscriptionToMenuOpen = null;
+        }
     }
+
+    openMissionDialog() {
+        let scrHeight = window.innerHeight;
+        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background', position: {
+            top: scrHeight > 667 ? "100px" : null
+        }});
+    } 
 
     private _resetLayout() {
         this._store.dispatch(new ResetLayoutAction());

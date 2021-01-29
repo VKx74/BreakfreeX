@@ -293,6 +293,15 @@ $defaultModeRowHeight: 32px;
   }
 }
 
+    
+.blink {
+  animation: blinker 1.2s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.3; }
+}
+
 @include themify($themes, true) {
   mat-header-cell {
     color: themed('titleTextColor');
@@ -326,7 +335,7 @@ $defaultModeRowHeight: 32px;
     }
 
     mat-row {
-      border-color: themed('tableBorders') !important;
+      border-color: themed('tableBorders');
     }
 
     mat-header-row,
@@ -372,10 +381,6 @@ $defaultModeRowHeight: 32px;
 
       &.selected {
         background-color: themed('accentLightColor') !important;
-
-          // .mat-cell {
-          //   color: #fff;
-          // }
       }
     }
 

@@ -6,6 +6,7 @@
     "time": "Час"
   },
   "tradeManager": {
+    "validationChecklist": "Список перевірок",
     "title": "Торговий Віджет",
     "resetAmount": "Скинути суму",
     "amountToClose": "Кількість закриття",
@@ -146,10 +147,13 @@
     "swap": "Зміна",
     "risk": "Ризик",
     "riskP": "Ризик (%)",
+    "recommendations": "Рекомендації",
+    "tradeGuard": "TradeGuard",
     "riskPending": "Відкладений Ризик",
     "riskPPending": "Відкладений Ризик (%)",
     "pendingOrdersCount": "Відкладена кількість ордерів",
     "ordersCount": "Кількість ордерів",
+    "riskStatus": "Ризик",
     "currency": "Валюта",
     "commission": "Комісія",
     "expirationDate": "Термін дії (дата)",

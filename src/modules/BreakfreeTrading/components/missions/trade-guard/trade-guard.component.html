@@ -1,0 +1,35 @@
+<div class="content" *ngIf="isBrokerConnected; else brokerNotConnected">
+  <div class="header-content">
+    <div class="emoji-container" *ngIf="isBrokerConnected">
+      <div class="score">
+        {{score}} / 10
+      </div>
+      <div class="face">
+        <emoji [MaxScore]="10" [Score]="score"></emoji>
+      </div>
+    </div>
+  </div>
+  <div class="recommendations" *ngIf="result && result.length; else noRecommendations">
+    <div class="recommendation-row"  *ngFor="let item of result" (dblclick)="doubleClicked(item)">
+      <div class="recommendation-flag">
+        <span class="{{item.RiskClass | tradeGuardRiskClassPipe}}">
+          <i class="fa fa-flag" aria-hidden="true"></i>
+        </span>
+      </div>  
+      <div class="recommendation-text">
+        <div class="recommendation-issue">
+          {{item.Issue}}
+        </div> 
+        <div class="recommendation-description">
+          {{item.Recommendation}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noRecommendations>
+    <div class="no-recommendations">All is looking good!</div>
+  </ng-template>
+</div>
+<ng-template #brokerNotConnected>
+  <div class="broker-not-connected">Waiting for MT4/MT5 account connection...</div>
+</ng-template>

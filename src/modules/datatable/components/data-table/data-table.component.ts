@@ -57,6 +57,7 @@ const ResizeHandleClass = 'resize-handle';
 })
 export class DataTableComponent {
     @Input() rows: any[];
+    @Input() blinking: any[];
     @Input() groupingField: string;
     @Input() groups: string[];
     @Input() selectedRow: any;
@@ -522,13 +523,13 @@ export class DataTableComponent {
 
     handleRowDoubleClick(row: any, event: any) {
         const target = event.target;
-        this._prevRowClicked = null;
+        // this._prevRowClicked = null;
 
         if (target.classList.contains(ResizeHandleClass)) { // resize handle clicked
             return;
         }
 
-        this.onDoubleClick.emit(row);
+        // this.onDoubleClick.emit(row);
     }
 
     isRowExpanded(row): boolean {
@@ -573,6 +574,14 @@ export class DataTableComponent {
         if (this.isRowExpanded(row)) {
             this._collapseRow(row);
         }
+    }
+
+    isBlinking(row: any) {
+        if (!this.blinking) {
+            return false;
+        }
+        const index = this.blinking.indexOf(row);
+        return index !== -1;
     }
 
     onContextMenu(row: any, event: MouseEvent) {

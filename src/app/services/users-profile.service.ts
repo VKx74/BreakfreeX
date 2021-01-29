@@ -11,6 +11,7 @@ import {IBaseUserModel, UserProfileModel} from "@app/models/auth/auth.models";
     providedIn: 'root'
 })
 export class UsersProfileService {
+    private _cachedProfile: UserProfileModel;
 
     constructor(private _http: HttpClient) {
     }
@@ -38,8 +39,15 @@ export class UsersProfileService {
             { params: QueryParamsConstructor.fromObject(params.toOffsetLimit()) });
     }
 
-    public getUserProfileById(userId: string): Observable<UserProfileModel> {
-        return this._http.get<UserProfileModel>(`${AppConfigService.config.apiUrls.userDataStoreREST}Profile/${userId}`);
+    public getUserProfileById(userId: string, useCache: boolean = false): Observable<UserProfileModel> {
+        if (useCache && this._cachedProfile) {
+            return of(this._cachedProfile);
+        }
+
+        return this._http.get<UserProfileModel>(`${AppConfigService.config.apiUrls.userDataStoreREST}Profile/${userId}`).pipe(map((data) => {
+            this._cachedProfile = data;
+            return data;
+        }));
     }
 
     public patchUserAvatar(userId: string, avatarId: string): Observable<any> {

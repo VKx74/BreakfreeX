@@ -19,7 +19,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "AUD",
         "company": "AUD vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_CHF",
@@ -32,7 +33,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CHF",
         "dependInstrument": "EUR",
         "company": "EUR vs CHF",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_JPY",
@@ -40,12 +42,13 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "exchange": EExchange.Oanda,
         "datafeed": EExchangeInstance.OandaExchange,
         "type": EMarketType.Forex,
-        "tickSize": 0.00001,
-        "pricePrecision": 5,
+        "tickSize": 0.001,
+        "pricePrecision": 3,
         "baseInstrument": "JPY",
         "dependInstrument": "EUR",
         "company": "EUR vs JPY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "EUR_USD",
@@ -58,7 +61,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "EUR",
         "company": "EUR vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "GBP_JPY",
@@ -66,12 +70,13 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "exchange": EExchange.Oanda,
         "datafeed": EExchangeInstance.OandaExchange,
         "type": EMarketType.Forex,
-        "tickSize": 0.00001,
-        "pricePrecision": 5,
+        "tickSize": 0.001,
+        "pricePrecision": 3,
         "baseInstrument": "JPY",
         "dependInstrument": "GBP",
         "company": "GBP vs JPY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "GBP_USD",
@@ -84,7 +89,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "GBP",
         "company": "GBP vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "NZD_USD",
@@ -97,7 +103,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "NZD",
         "company": "NZD vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_CAD",
@@ -110,7 +117,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CAD",
         "dependInstrument": "USD",
         "company": "USD vs CAD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_CHF",
@@ -123,7 +131,8 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "baseInstrument": "CHF",
         "dependInstrument": "USD",
         "company": "USD vs CHF",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USD_JPY",
@@ -131,11 +140,12 @@ export const MajorForexWatchlist: IWatchlistItem = {
         "exchange": EExchange.Oanda,
         "datafeed": EExchangeInstance.OandaExchange,
         "type": EMarketType.Forex,
-        "tickSize": 0.00001,
-        "pricePrecision": 5,
+        "tickSize": 0.001,
+        "pricePrecision": 3,
         "baseInstrument": "JPY",
         "dependInstrument": "USD",
         "company": "USD vs JPY",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };

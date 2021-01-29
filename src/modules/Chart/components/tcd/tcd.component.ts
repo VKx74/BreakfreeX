@@ -281,8 +281,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
         if (!this.chart || this.chart.isDestroyed) {
             return;
         }
-
-        this._indicatorDataProviderService.indicatorRemoved(indicator);
     } 
     
     protected setDefaultSettings(eventObject: TradingChartDesigner.IValueChangedEvent) {

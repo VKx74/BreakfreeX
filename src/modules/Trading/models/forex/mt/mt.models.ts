@@ -1,5 +1,6 @@
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from 'modules/Trading/models/models';
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType } from 'modules/Trading/models/models';
 import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
+import { IBFTATrend } from '@app/services/algo.service';
 
 export enum MTStatus {
     Connected,
@@ -40,9 +41,12 @@ export interface MTOrder {
     Type: OrderTypes;
     Status: string;
     Time: number;
+    VAR: number;
     Comment: string;
     ExpirationType?: OrderExpirationType;
     ExpirationDate?: number;
+    Recommendations?: MTOrderRecommendation;
+    RiskClass: RiskClass;
 }
 
 export interface MTHistoricalOrder extends MTOrder {
@@ -99,6 +103,9 @@ export interface MTPosition {
     Risk?: number;
     RiskPercentage?: number;
     Side: OrderSide;
+    VAR: number;
+    RiskClass: RiskClass;
+    Recommendations?: MTOrderRecommendation;
 }
 
 export enum MTCurrencyRiskType {
@@ -113,6 +120,7 @@ export interface MTCurrencyRisk {
     Risk?: number;
     RiskPercentage?: number;
     Side: OrderSide;
+    RiskClass: RiskClass;
     // PendingOrdersCount: number;
     // PendingRisk?: number;
     // PendingRiskPercentage?: number;
@@ -129,4 +137,81 @@ export interface MTConnectionData {
     Login: number;
     Password: string;
     Linker?: string;
+}
+
+export interface MTCurrencyVarRisk {
+    Currency: string;
+    Risk: number;
+    Type: MTCurrencyRiskType;
+    OrdersCount: number;
+}
+
+export interface MTOrderValidationChecklistInput {
+    Symbol: string;
+    Side: OrderSide;
+    Size: number;
+    Price?: number;
+    SL?: number;
+}
+
+export interface MTOrderValidationChecklist {
+    GlobalRTD?: boolean;
+    LocalRTD?: boolean;
+    Levels?: boolean;
+
+    GlobalRTDValue?: IBFTATrend;
+    LocalRTDValue?: IBFTATrend;
+    LocalRTDSpread?: number;
+    GlobalRTDSpread?: number;
+    LocalRTDTrendStrength?: RTDTrendStrength;
+    GlobalRTDTrendStrength?: RTDTrendStrength;
+    RiskValue?: number;
+    SpreadRiskValue?: number;
+    CorrelatedRiskValue?: number;
+}
+
+export enum RTDTrendStrength {
+    Strong = "Strong",
+    Average = "Average",
+    Low = "Low",
+    Weak = "Weak"
+}
+
+export enum MTOrderRecommendationType {
+    Active,
+    Pending
+}
+
+export interface MTOrderChecklistItem {
+    Issue: string;
+    Recommendation: string;
+    RiskClass: RiskClass;
+    RiskType: RiskType;
+}
+
+export interface MTOrderRecommendation {
+    Type: MTOrderRecommendationType;
+    GlobalRTD: boolean;
+    LocalRTD: boolean;
+    GlobalRTDValue: IBFTATrend;
+    LocalRTDValue: IBFTATrend;
+    IsRTDOverhit: boolean;
+    LocalRTDSpread: number;
+    GlobalRTDSpread: number;
+    LocalRTDTrendStrength: RTDTrendStrength;
+    GlobalRTDTrendStrength: RTDTrendStrength;
+    OrderTradeType: OrderTradeType;
+    Timeframe: number;
+}
+
+export interface MTPositionRecommendation extends MTOrderRecommendation {
+    FailedChecks: MTOrderChecklistItem[];
+}
+
+export interface MTPendingOrderRecommendation extends MTOrderRecommendation {
+    FailedChecks: MTOrderChecklistItem[];
+}
+
+export interface MTMarketOrderRecommendation extends MTOrderRecommendation {
+    FailedChecks: MTOrderChecklistItem[];
 }

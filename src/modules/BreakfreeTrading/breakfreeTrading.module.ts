@@ -17,8 +17,7 @@ import {SharedModule} from "Shared";
 import { UIModule } from 'UI';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreakfreeTradingService } from './services/breakfreeTrading.service';
-import { BreakfreeTradingNavigatorService } from './services/breakfreeTradingNavigator.service';
-import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent, BreakfreeTradingScannerComponent } from './components';
+import { BreakfreeTradingBacktestComponent, BreakfreeTradingAcademyComponent, BreakfreeTradingScannerComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBacktest.service';
@@ -36,9 +35,18 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { MissionsComponent } from './components/missions/missions.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DailyMissionsComponent } from './components/missions/daily-missions/daily-missions.component';
-import { MissionRowComponent } from './components/missions/mission-row/mission-row.component';
+import { MissionCardComponent } from './components/missions/mission-card/mission-card.component';
 import { WeeklyMissionsComponent } from './components/missions/weekly-missions/weekly-missions.component';
 import { ScannerCardComponent } from './components/breakfreeTradingScanner/scanner-card/scanner-card.component';
+import { MissionsInfoComponent } from './components/missions/missions-info/missions-info.component';
+import { TradeGuardComponent } from './components/missions/trade-guard/trade-guard.component';
+import { SpeedometerComponent } from './components/speedometer/speedometer.component';
+import { PlainChartComponent } from './components/plainChart/plainChart.component';
+import { TradingPerformanceService, UserTradingPerformanceData } from './services/tradingPerformance.service';
+import { TradeGuardService } from './services/tradeGuard.service';
+import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
+import { TradingPerformanceComponent } from './components/tradingPerformance/tradingPerformance.component';
+import { ChartWrapperComponent } from './components/tradingPerformance/chartWrapper/chart-wrapper.component';
 
 @NgModule({
     // components here
@@ -47,14 +55,21 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
-        BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
         MissionsComponent,
         DailyMissionsComponent,
         WeeklyMissionsComponent,
-        MissionRowComponent,
-        ScannerCardComponent
+        MissionCardComponent,
+        MissionsInfoComponent,
+        ScannerCardComponent,
+        TradeGuardComponent,
+        SpeedometerComponent,
+        PlainChartComponent,
+        TradeGuardRiskClassPipe,
+        ChartWrapperComponent,
+        TradingPerformanceComponent
     ],
     imports: [
         CommonModule,
@@ -77,7 +92,8 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         LoaderModule,
         ClipboardModule,
         MatFormFieldModule,
-        MatSelectModule
+        MatSelectModule,
+        UIModule
     ],
     // components here
     entryComponents: [
@@ -85,10 +101,12 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
-        BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
-        MissionsComponent
+        MissionsComponent,
+        MissionsInfoComponent,
+        TradeGuardComponent
     ],
     // components here
     exports: [
@@ -96,10 +114,15 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         StrategyV2ModeBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
-        BreakfreeTradingNavigatorComponent,
+        BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
-        MissionsComponent
+        MissionsInfoComponent,
+        MissionsComponent,
+        TradeGuardComponent,
+        SpeedometerComponent,
+        // ChartWrapperComponent,
+        TradingPerformanceComponent
     ],
     providers: [
         HistoryService,
@@ -107,9 +130,10 @@ import { ScannerCardComponent } from './components/breakfreeTradingScanner/scann
         InstrumentService,
         RealtimeService,
         BreakfreeTradingService,
-        BreakfreeTradingNavigatorService,
         ChartTrackerService,
+        TradeGuardService,
         BreakfreeTradingBacktestService,
+        TradingPerformanceService,
         {
             provide: BreakfreeTradingTranslateService,
             useFactory: TranslateServiceFactory('breakfreeTrading'),

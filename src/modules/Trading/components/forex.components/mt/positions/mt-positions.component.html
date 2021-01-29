@@ -1,5 +1,5 @@
 <div class="positions">
-    <data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
+    <data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
         [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
         [hiddenColumns]="['Net Risk']"
         (onContextMenuSelected)="handleContextMenuSelected($event)">
@@ -13,8 +13,10 @@
         <data-table-header-cell columnName="Net PL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Commission" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Swap" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
+        <!-- <data-table-header-cell columnName="Trade Guard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="TradeGuard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.recommendations' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
     
 
@@ -62,11 +64,27 @@
         <data-table-cell columnName="Swap">
             <ng-template let-item>{{item.Swap?.toFixed(2)}}</ng-template>
         </data-table-cell>
+        <!-- <data-table-cell columnName="Trade Guard">
+            <ng-template let-item>
+                <div matTooltip='Trade risk - {{item.VAR.toFixed(2)}}%' class="{{item.VAR | tradeGuardRiskClassPipe}}">
+                    {{item.VAR | tradeGuardRiskPipe}}
+                </div>
+            </ng-template>
+        </data-table-cell> -->
         <data-table-cell columnName="Net Risk">
             <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
         </data-table-cell>
         <data-table-cell columnName="Risk (%)">
-            <ng-template let-item>{{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : '-'}}</ng-template>
+            <ng-template let-item>
+                <span class="{{item.RiskClass | currencyGuardRiskClassPipe}}">{{item.RiskClass | currencyGuardRiskPipe}} {{item.RiskPercentage ? '(' + item.RiskPercentage.toFixed(2) + '%)' : ''}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="TradeGuard">
+            <ng-template let-item>
+                <div tooltip [matTooltip]="getRecommendationsTooltip(item.Recommendations)" >
+                    {{getPositionRecommendationsText(item.Recommendations)}}
+                </div>
+            </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Close">
             <ng-template let-item>

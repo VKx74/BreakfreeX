@@ -1,16 +1,22 @@
-import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin } from "rxjs";
+import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
 import { Injectable } from '@angular/core';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
-import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy } from 'modules/Trading/models/models';
-import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData } from 'modules/Trading/models/forex/mt/mt.communication';
+import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass } from 'modules/Trading/models/models';
+import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
 import { IMTTick } from '@app/models/common/tick';
 import { ReadyStateConstants } from '@app/interfaces/socket/WebSocketConfig';
 import { MTSocketService } from '../socket/mt.socket.service';
+import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
+import { InstrumentService } from "../instrument.service";
+import { map } from "rxjs/operators";
+import { InstrumentMappingService } from "../instrument-mapping.service";
+import { MTHelper } from "./mt.helper";
+import { MTTradeRatingService } from "./mt.trade-rating.service";
 
 export abstract class MTBroker implements IMTBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<IMTTick>; } = {};
@@ -48,7 +54,9 @@ export abstract class MTBroker implements IMTBroker {
         Margin: 0,
         Pl: 0
     };
+    protected _serverName: string;
 
+    protected _tradeRatingService: MTTradeRatingService;
     protected _lastUpdate: number;
 
     protected _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
@@ -127,8 +135,8 @@ export abstract class MTBroker implements IMTBroker {
         return this._accountInfo;
     }
 
-    constructor(protected ws: MTSocketService) {
-
+    constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        this._tradeRatingService = new MTTradeRatingService(this, algoService, _instrumentMappingService);
     }
 
     placeOrder(order: MTPlaceOrder): Observable<ActionResult> {
@@ -468,12 +476,12 @@ export abstract class MTBroker implements IMTBroker {
 
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number {
         let res = 0;
-        const s1 = this.instrumentToChartFormat(symbol);
+        const s1 = MTHelper.normalizeInstrument(symbol);
         const s1Part1 = s1.substring(0, 3);
         const s1Part2 = s1.substring(3, 6);
 
         for (const order of this.orders) {
-            const s2 = this.instrumentToChartFormat(order.Symbol);
+            const s2 = MTHelper.normalizeInstrument(order.Symbol);
             if (s2 === s1) {
                 if (side === order.Side) {
                     res += order.Risk || 0;
@@ -510,31 +518,37 @@ export abstract class MTBroker implements IMTBroker {
 
     }
 
-    instrumentToChartFormat(symbol: string): string {
-        let s = symbol;
-        if (s.length > 6 && s[s.length - 2] === '-') {
-            s = s.slice(0, s.length - 2);
-        }
-        s = s.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
-        return s;
-    }
-
     instrumentToBrokerFormat(symbol: string): IInstrument {
-        const s1 = symbol.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
-
-        for (const i of this._instruments) {
-            const s2 = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
-            if (s2 === s1) {
-                return i;
-            }
+        let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol/*, this._serverName, this._accountInfo.Account*/);
+        let isMapped = !!(searchingString);
+        if (!searchingString) {
+            searchingString = MTHelper.normalizeInstrument(symbol);
         }
 
         for (const i of this._instruments) {
-            const s2 = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
-            if (s2.startsWith(s1)) {
-                return i;
+            if (!isMapped) {
+                let instrumentID = MTHelper.normalizeInstrument(i.id);
+                let instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
+                if (searchingString === instrumentID || searchingString === instrumentSymbol) {
+                    return i;
+                }
+            } else {
+                if (searchingString === i.id || searchingString === i.symbol) {
+                    return i;
+                }
             }
         }
+
+        // if (isMapped) {
+        //     return null;
+        // }
+
+        // for (const i of this._instruments) {
+        //     const instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
+        //     if (instrumentSymbol.startsWith(searchingString)) {
+        //         return i;
+        //     }
+        // }
 
         return null;
     }
@@ -567,6 +581,10 @@ export abstract class MTBroker implements IMTBroker {
                 observer.complete();
             });
         });
+    }
+    
+    public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
+        return this._tradeRatingService.calculateOrderChecklist(parameters);
     }
 
     protected _initialize(instruments: IMTSymbolData[]) {
@@ -610,6 +628,8 @@ export abstract class MTBroker implements IMTBroker {
         this._positions = [];
         this._currencyRisks = [];
         this._accountInfo.Account = this._initData.Login.toString();
+        this._serverName = this._initData.ServerName;
+
         this._loadHistory();
     }
 
@@ -640,6 +660,38 @@ export abstract class MTBroker implements IMTBroker {
 
     public instrumentAmountStep(symbol: string): number {
         return 0.01;
+    }
+
+    public canCalculateTotalVAR(orderType?: OrderTypes): boolean {
+        for (const order of this.orders) {
+            if (orderType && orderType !== order.Type) {
+                continue;
+            }
+
+            if (!order.Risk) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public calculateTotalVAR(orderType?: OrderTypes): number {
+        let res = 0;
+        for (const order of this.orders) {
+            if (orderType && orderType !== order.Type) {
+                continue;
+            }
+            
+            if (order.RiskPercentage) {
+                res += order.RiskPercentage;
+            }
+        }
+
+        return res;
+    }
+
+    public getSymbolTradeInfo(symbol: string): Observable<MTSymbolTradeInfoResponse> {
+        return this.ws.getSymbolTradeInfo(symbol);
     }
 
     protected _reconnect() {
@@ -734,10 +786,11 @@ export abstract class MTBroker implements IMTBroker {
                     const size = newOrder.Lots;
                     const netPl = newOrder.Profit;
                     const contractSize = newOrder.ContractSize;
+                    const VAR = newOrder.VarRisk;
 
                     if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Price !== price ||
                         existingOrder.Size !== size || existingOrder.NetPL !== netPl || existingOrder.Type !== type ||
-                        existingOrder.Status !== status || existingOrder.ContractSize !== contractSize) {
+                        existingOrder.Status !== status || existingOrder.ContractSize !== contractSize || existingOrder.VAR !== VAR) {
                         changedOrders.push(existingOrder);
                     }
 
@@ -753,6 +806,7 @@ export abstract class MTBroker implements IMTBroker {
                     existingOrder.Price = price;
                     existingOrder.Size = size;
                     existingOrder.NetPL = netPl;
+                    existingOrder.VAR = VAR;
 
                     this._calculatePipPL(existingOrder);
                     exists = true;
@@ -787,6 +841,14 @@ export abstract class MTBroker implements IMTBroker {
         this._buildPositions();
         this._buildRates();
         this._buildCurrencyRisks();
+        
+        for (const o of this._orders) {
+            if (o.Type === OrderTypes.Market) {
+                o.Recommendations = this._tradeRatingService.calculateMarketOrderRecommendations(o);
+            } else {
+                o.Recommendations = this._tradeRatingService.calculatePendingOrderRecommendations(o);
+            } 
+        }
 
         if (changedOrders.length && !updateRequired) {
             this.onOrdersParametersUpdated.next(changedOrders);
@@ -813,11 +875,13 @@ export abstract class MTBroker implements IMTBroker {
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
+            VAR: data.VarRisk,
             ExpirationType: this._getOrderExpiration(data.ExpirationType, data.ExpirationDate),
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
-            PipPL: null
+            PipPL: null,
+            RiskClass: null
         };
 
         this._calculatePipPL(ord);
@@ -840,12 +904,14 @@ export abstract class MTBroker implements IMTBroker {
             Time: data.OpenTime,
             NetPL: data.Profit,
             Status: data.State,
+            VAR: data.VarRisk,
             ExpirationType: this._getOrderExpiration(data.ExpirationType, data.ExpirationDate),
             ExpirationDate: data.ExpirationDate ? data.ExpirationDate : null,
             Side: this._getOrderSide(data.Side),
             Symbol: data.Symbol,
             PipPL: null,
-            CloseTime: data.CloseTime
+            CloseTime: data.CloseTime,
+            RiskClass: null
         };
 
         this._calculatePipPL(ord);
@@ -883,7 +949,7 @@ export abstract class MTBroker implements IMTBroker {
 
     protected _buildRates() {
         for (const order of this._orders) {
-            let riskNet = 0;
+            let risk = 0;
             let contractSize = order.ContractSize;
 
             if (!contractSize) {
@@ -893,27 +959,20 @@ export abstract class MTBroker implements IMTBroker {
             }
 
             if (order.SL) {
-                const diff = Math.abs(order.Price - order.SL);
-                riskNet = diff * order.Size * contractSize;
-                if (order.ProfitRate === 0) {
-                    riskNet = riskNet / order.Price;
-                } else {
-                    if (order.ProfitRate) {
-                        riskNet = riskNet * order.ProfitRate;
-                    }
-                }
-            } else if (order.NetPL < 0) {
-                riskNet = Math.abs(order.NetPL);
+                risk = MTHelper.buildRiskByPrice(contractSize, order.ProfitRate, order.Size, order.Price, order.SL, this.accountInfo.Balance);
+            } else if (order.VAR) {
+                risk = order.VAR;
             }
 
-            if (!riskNet) {
+            if (!risk) {
                 order.Risk = 0;
                 order.RiskPercentage = 0;
                 continue;
             }
 
-            order.Risk = Math.roundToDecimals(riskNet, 2);
-            order.RiskPercentage = Math.roundToDecimals(riskNet / this.accountInfo.Balance * 100, 2);
+            order.Risk = Math.roundToDecimals(this.accountInfo.Balance / 100 * risk, 2);
+            order.RiskPercentage = Math.roundToDecimals(risk, 2);
+            order.RiskClass = MTHelper.convertValueToOrderRiskClass(order.RiskPercentage);
         }
     }
 
@@ -924,7 +983,8 @@ export abstract class MTBroker implements IMTBroker {
             Risk: 0,
             RiskPercentage: 0,
             Type: type,
-            Side: OrderSide.Buy
+            Side: OrderSide.Buy,
+            RiskClass: RiskClass.NoRisk
         };
     }
 
@@ -936,7 +996,7 @@ export abstract class MTBroker implements IMTBroker {
                 continue;
             }
 
-            const s1 = this.instrumentToChartFormat(order.Symbol).toUpperCase();
+            const s1 = MTHelper.normalizeInstrument(order.Symbol).toUpperCase();
             const s1Part1 = s1.substring(0, 3).toUpperCase();
             const s1Part2 = s1.substring(3, 6).toUpperCase();
 
@@ -1012,6 +1072,7 @@ export abstract class MTBroker implements IMTBroker {
             risk.Risk = Math.abs(risk.Risk);
             risk.RiskPercentage = Math.roundToDecimals(risk.Risk / this.accountInfo.Balance * 100, 2);
             risk.Risk = Math.roundToDecimals(risk.Risk, 2);
+            risk.RiskClass = MTHelper.convertValueToAssetRiskClass(risk.RiskPercentage);
         }
     }
 
@@ -1064,6 +1125,7 @@ export abstract class MTBroker implements IMTBroker {
                 existingPosition.Size = pos.Size;
                 existingPosition.RiskPercentage = pos.RiskPercentage;
                 existingPosition.Risk = pos.Risk;
+                existingPosition.VAR = pos.VAR;
 
             } else {
                 updateRequired = true;
@@ -1079,6 +1141,11 @@ export abstract class MTBroker implements IMTBroker {
             }
         }
 
+        for (const position of this._positions) {
+            position.RiskClass = MTHelper.convertValueToOrderRiskClass(position.RiskPercentage);
+            position.Recommendations = this._tradeRatingService.calculatePositionRecommendations(position);
+        }
+
         if (updateRequired) {
             this._onPositionsUpdated.next(this._positions);
         }
@@ -1089,12 +1156,19 @@ export abstract class MTBroker implements IMTBroker {
 
         const totalPrice = (position.Size * position.Price) + (order.Size * order.Price);
         const avgPrice = totalPrice / (position.Size + order.Size);
-
+        
         if (order.Risk) {
             if (!position.Risk) {
                 position.Risk = 0;
             }
             position.Risk += order.Risk;
+        }
+        
+        if (order.VAR) {
+            if (!position.VAR) {
+                position.VAR = 0;
+            }
+            position.VAR += order.VAR;
         }
 
         if (order.RiskPercentage) {
@@ -1148,7 +1222,9 @@ export abstract class MTBroker implements IMTBroker {
             PipPL: order.PipPL,
             Risk: order.Risk,
             RiskPercentage: order.RiskPercentage,
-            CurrentPrice: order.CurrentPrice
+            CurrentPrice: order.CurrentPrice,
+            VAR: order.VAR || 0,
+            RiskClass: RiskClass.NoRisk
         };
     }
 

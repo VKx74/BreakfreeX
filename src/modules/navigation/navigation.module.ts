@@ -19,6 +19,8 @@ import { SidebarToggleComponent } from './components/sidebar-toggle/sidebar-togg
 import { BaseNavComponent } from './components/base-nav/base-nav.component';
 import { NavDelimiterComponent } from './components/nav-delimiter/nav-delimiter.component';
 import { NavSectionComponent } from './components/nav-section/nav-section.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { BadgeComponent } from './components/badge/badge.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +32,7 @@ import { NavSectionComponent } from './components/nav-section/nav-section.compon
         BaseNavComponent,
         NavDelimiterComponent,
         NavSectionComponent,
+        BadgeComponent
     ],
     imports: [
         CommonModule,
@@ -43,7 +46,8 @@ import { NavSectionComponent } from './components/nav-section/nav-section.compon
         MatDividerModule,
         MatRadioModule,
         ReactiveFormsModule,
-        TradingDialogModule
+        TradingDialogModule,
+        MatProgressBarModule
     ],
     entryComponents: [
         ExchangeStatusConfiguratorComponent

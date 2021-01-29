@@ -612,6 +612,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this.instrumentsVM = [...this.instrumentsVM];
             const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
             this.instrumentsPriceHistory[key] = data.map(value => value.close);
+
+            if (!instrumentVM.instrument.tickSizeCorrect && response.pricePrecision) {
+                instrumentVM.pricePrecision = response.pricePrecision;
+            }
         }
 
         this._changesDetected = true;

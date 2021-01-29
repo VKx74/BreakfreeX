@@ -5,12 +5,14 @@ import { MTOrderConfiguratorModalComponent } from 'modules/Trading/components/fo
 import { MTOrderConfig } from 'modules/Trading/components/forex.components/mt/order-configurator/mt-order-configurator.component';
 import { OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MTEditOrderPrice, MTOrder, MTPlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { AlertService } from "@alert/services/alert.service";
 import { MTOrderCloseModalComponent } from 'modules/Trading/components/forex.components/mt/order-close-modal/mt-order-close-modal.component';
 import { MTOrderEditModalComponent } from 'modules/Trading/components/forex.components/mt/order-edit-modal/mt-order-edit-modal.component';
+import { SymbolMappingComponent } from 'modules/Trading/components/forex.components/mt/symbol-mapping/symbol-mapping.component';
+import { IInstrument } from "../../../app/models/common/instrument";
 
 @Injectable()
 export class TradeFromChartService implements TradingChartDesigner.ITradingFromChartHandler {
@@ -76,7 +78,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 this._alertService.info(`${this._chart.instrument.symbol} not exist in connected broker`);
                 // return;
             }
-            
+
             const mtBroker = this._brokerService.activeBroker as MTBroker;
             const orderConfig = MTOrderConfig.createLimit(mtBroker.instanceType);
             const pricePrecision = mtBroker.instrumentDecimals(this._chart.instrument.symbol);
@@ -88,12 +90,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
             if (params.sl) {
                 orderConfig.sl =  Math.roundToDecimals(params.sl, pricePrecision);
-                orderConfig.useSL = true;
             }
 
             if (params.tp) {
                 orderConfig.tp =  Math.roundToDecimals(params.tp, pricePrecision);
-                orderConfig.useTP = true;
             }
             
             orderConfig.amount = params.size;
@@ -101,16 +101,19 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             orderConfig.placedFrom = params.placedFrom;
             orderConfig.tradeType = params.tradeType;
             orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
-            this._dialog.open(MTOrderConfiguratorModalComponent, {
-                data: {
-                    tradeConfig: orderConfig,
-                    orderPlacedHandler: (order: MTPlaceOrder) => {
-                        if (callback) {
-                            callback();
-                        }
+
+            if (!this.IsSymbolSupported()) {                
+                this.showMappingConfirmation()
+                .subscribe((dialogResult: any) => {
+                    if (dialogResult) {
+                        this.showMappingModal();
+                    } else {
+                        this._alertService.warning("Can`t map instruments to your broker format");
                     }
-                }
-            });
+                });                
+            } else {
+                this.showOrderModal(orderConfig, callback, false);
+            }
         }
     }
 
@@ -219,9 +222,17 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (!this._brokerService.activeBroker || !this._chart) {
             return false;
         }
+        let isMTBroker: boolean = this._brokerService.activeBroker instanceof MTBroker;
+        return isMTBroker;
+    }
+
+    public IsSymbolSupported(): boolean {
+        if (!this._brokerService.activeBroker || !this._chart) {
+            return false;
+        }
 
         if (this._brokerService.activeBroker instanceof MTBroker) {
-            const mtBroker = this._brokerService.activeBroker as MTBroker;
+            const mtBroker = this._brokerService.activeBroker as MTBroker;            
             return mtBroker.instrumentToBrokerFormat(this._chart.instrument.symbol) !== null;
         } else {
             return false;
@@ -232,6 +243,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (this._brokerService.activeBroker instanceof MTBroker) {
             const mtBroker = this._brokerService.activeBroker as MTBroker;
             this._orderConfig.Price = Math.roundToDecimals(price, this._decimals);
+            this._orderConfig.Timeframe = this._chart.timeInterval / 1000;
             this._alertService.info("Processing order");
     
             mtBroker.placeOrder(this._orderConfig)
@@ -254,16 +266,21 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             const pricePrecision = mtBroker.instrumentDecimals(this._chart.instrument.symbol);
             orderConfig.instrument = mtBroker.instrumentToBrokerFormat(this._chart.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(price, pricePrecision);
-            orderConfig.sl = orderConfig.price;
-            orderConfig.tp = orderConfig.price;
-            this._dialog.open(MTOrderConfiguratorModalComponent, {
-                data: {
-                    tradeConfig: orderConfig,
-                    orderPlacedHandler: (order: MTPlaceOrder) => {
-                        this._orderConfig = order;
-                    }
-                }
-            });
+            // orderConfig.sl = orderConfig.price;
+            // orderConfig.tp = orderConfig.price;
+            orderConfig.timeframe = this._chart.timeInterval / 1000;            
+            if (!this.IsSymbolSupported()) {                
+                this.showMappingConfirmation()
+                .subscribe((dialogResult: any) => {
+                    if (dialogResult) {
+                        this.showMappingModal();
+                    } else {
+                        this._alertService.warning("Can`t map instruments to your broker format");
+                    }                   
+                });                
+            } else {
+                this.showOrderModal(orderConfig, null, true);
+            }
         }
     }
 
@@ -635,5 +652,38 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 this.refresh();
             }
         );
+    }
+
+    private showMappingConfirmation(): Observable<any> {
+        return this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Symbol Mapping',
+                message: `We are unable to find this market on your broker account, please map the market manually.`
+            }
+        }).afterClosed();
+    }
+
+    private showMappingModal(): void {
+        this._dialog.open(SymbolMappingComponent, {
+            data: {
+                SelectedFeedInstrument: this._chart.instrument
+            }
+        });
+    }
+
+    private showOrderModal(orderConfig: any, callback: () => void, doGetOrder: boolean): void {
+        this._dialog.open(MTOrderConfiguratorModalComponent, {
+            data: {
+                tradeConfig: orderConfig,
+                orderPlacedHandler: (order: MTPlaceOrder) => {
+                    if (doGetOrder) {
+                        this._orderConfig = order;
+                    }
+                    if (callback) {
+                        callback();
+                    }
+                }
+            }
+        });
     }
 }

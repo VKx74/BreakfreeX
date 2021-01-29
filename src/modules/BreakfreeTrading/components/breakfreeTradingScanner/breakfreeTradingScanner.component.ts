@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import bind from "bind-decorator";
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import {AlertService} from "@alert/services/alert.service";
 import { AlgoService, IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem } from '@app/services/algo.service';
@@ -24,6 +24,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
+import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { NotificationsService } from '@alert/services/notifications.service';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -89,7 +91,7 @@ enum TradeTypes {
 })
 export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     static componentName = 'BreakfreeTradingScanner';
-    static previewImgClass = 'crypto-icon-watchlist';
+    static previewImgClass = 'crypto-icon-news';
 
     private _featured: IFeaturedResult[] = [];
     private _loaded: IBFTScanInstrumentsResponseItem[] = [];
@@ -98,6 +100,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _otherGroupName: string = "Other";
     private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
+    private _loadingProfile: boolean = true;
+    private _levelRestriction: number = 4;
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
@@ -116,6 +120,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public output: string;
     public loading: boolean;
     public trends: any = IBFTATrend;
+    private _missionsChangedSubscription: Subscription;
     
     public get origType() {
         return IBFTATradeType;
@@ -144,31 +149,103 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         private _alogService: AlgoService,
         private _cdr: ChangeDetectorRef,
         private _personalInfoService: PersonalInfoService,
+        private _tradingProfileService: TradingProfileService,
         protected _injector: Injector) {
         super(_injector);
         super.setTitle(
             this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
         );
         this._loadState(_state);
-        
-
         this.groups.push(this._featuredGroupName);
         this._types.forEach(_ => {
             this.groups.push(_.name);
         });
         this.groups.push(this._otherGroupName);
+        this._missionsChangedSubscription = this._tradingProfileService.MissionChanged.subscribe(() => {
+            this._loadingProfile = false;
+            this._filterResults(false);
+            this._filterResults(true);
+        });
+        
+        if (this._tradingProfileService.missions) {
+            this._loadingProfile = false;
+        }
+    }
+
+    show15MinLevelRestriction() {
+        const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        if (!this.isAuthorizedCustomer) {
+            return true;
+        }
+
+        let level = this._tradingProfileService.level;
+        if (this.isPro && level < this._levelRestriction && is15MinSelected) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show1HLevelRestriction() {
+        const is1HSelected = this.activeTimeframes.indexOf(TimeFrames.Hour1) !== -1;
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        if (!this.isAuthorizedCustomer) {
+            return true;
+        }
+
+        let level = this._tradingProfileService.level;
+        if (!this.isPro && level < this._levelRestriction && is1HSelected) {
+            return true;
+        }
+        
+        return false;
     }
 
     ngOnInit() {
+        this.loading = true;
+        this.scanMarkets();
+
         if (!this._identityService.isAuthorizedCustomer) {
             return;
         }
-        this.loading = true;
 
-        this.scanMarkets();
         this._timer = setInterval(() => {
             this.scanMarkets();
         }, 1000 * 60 * 2);
+    }
+
+    isOutOfAccess(group: IGroupedResults): boolean {
+        const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
+        const tfValue15Min = this.toTimeframe(60 * 15);
+        if (group.timeframe === tfValue15Min && is15MinSelected && !this.isPro) {
+            return true;
+        }
+        return false;
+    }
+
+    showRestrictions(group: IGroupedResults): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
+        const tfValue15Min = this.toTimeframe(60 * 15);
+        if (group.timeframe === tfValue15Min && this.show15MinLevelRestriction()) {
+            return true;
+        }
+        
+        const tfValue1H = this.toTimeframe(60 * 60);
+        if (group.timeframe === tfValue1H && this.show1HLevelRestriction()) {
+            return true;
+        }
+
+        return this.isOutOfAccess(group);
     }
 
     dataExistsInGroup(group: IGroupedResults): boolean {
@@ -177,7 +254,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 return true;
             }
         }
-        return false;
+
+       
+        return this.showRestrictions(group);
     }
 
     groupedResults(): IGroupedResults[] {
@@ -226,19 +305,19 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     segmentSelected(item: any) {
-        this.activeSegments = item;
+        // this.activeSegments = item;
         this._filterResults(false);
         this._filterResults(true);
     }
 
     timeframeSelected(item: any) {
-        this.activeTimeframes = item;
+        // this.activeTimeframes = item;
         this._filterResults(false);
         this._filterResults(true);
     }
 
     typeSelected(item: any) {
-        this.activeTypes = item;
+        // this.activeTypes = item;
         this._filterResults(false);
         this._filterResults(true);
     }
@@ -285,6 +364,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (this._timer) {
             clearInterval(this._timer);
             this._timer = null;
+        }
+
+        if (this._missionsChangedSubscription) {
+            this._missionsChangedSubscription.unsubscribe();
         }
     }
 
@@ -406,7 +489,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     private _sendInstrumentChange(scannerVM: IScannerResults, isHistoricalRecord: boolean) {
-        // just oanda supported
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+        
         this._instrumentService.getInstruments(null, scannerVM.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
                 this._alertService.warning("Failed to view chart by symbol");
@@ -428,7 +514,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             if (isHistoricalRecord && (scannerVM as any).date) {
                 date = (scannerVM as any).date;
             }
-
+            
             const linkAction: LinkingAction = {
                 type: Actions.ChangeInstrumentAndTimeframe,
                 data: {
@@ -585,9 +671,15 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     private _isTFAllowed(tf: number): boolean {
-       // less than 1h
-       if (!this.isPro && tf < 60 * 60) {
-            return false;
+       let level = this._tradingProfileService.level;
+       if (this.isPro) {
+            if (tf < 60 * 60 && level < this._levelRestriction) {
+                return false;
+            }
+       } else {
+            if (tf < 60 * 60 * 4 && level < this._levelRestriction) {
+                return false;
+            }
        }
 
        return true;

@@ -1,0 +1,95 @@
+@import "themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  .emoji-container {
+    display: flex;
+    .score {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      font-size: 20px;
+    }
+    .face {
+      display: flex;
+      transform: scale(1.2);
+    }
+  }
+
+  .recommendation-row {
+    display: flex;
+    margin: 5px;
+    padding: 10px 5px;
+    background: white;
+    border-radius: 3px;
+    box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
+    cursor: pointer;
+
+    .recommendation-flag {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0px 15px;
+      font-size: 14px;
+    }
+    .recommendation-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .recommendation-issue {
+      display: flex;
+      font-weight: 700;
+    }
+    .recommendation-description {
+      display: flex;
+    }
+  }
+
+  .broker-not-connected,
+  .no-recommendations {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    height: 100%;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .content {
+    font-size: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    min-width: 340px;
+
+    .recommendations {
+      margin-top: 10px;
+      overflow-y: auto;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-evenly;
+    }
+  }
+  .low-risk {
+    color: $lightGreenColor;
+  }
+
+  .mid-risk {
+    color: $lightBlueColor;
+  }
+
+  .extreme-risk {
+    color: $lightRedColor;
+  }
+
+  .high-risk {
+    color: $yellowColor;
+  }
+}
+
+@include themify($themes, true) {
+}

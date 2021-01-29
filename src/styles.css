@@ -7,6 +7,10 @@ body, html {
   touch-action: none;
 }
 
+
+/* .bft_tooltip {
+  white-space: pre-line;
+} */
 /*body div.modal,*/
 /*body #toast-container,*/
 /*body .scxSpectrum,*/
@@ -83,6 +87,21 @@ background-color: rgba(0,0,0, 0.3);
 }
 
 /*instead   <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">*/
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Fira Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  src: local('Fira Sans'), url(./assets/fonts/Fira_Sans/FiraSans-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Fira Sans', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  src: local('Fira Sans'), url(./assets/fonts/Fira_Sans/FiraSans-Bold.ttf) format('truetype');
+}
 
 /* cyrillic-ext */
 @font-face {

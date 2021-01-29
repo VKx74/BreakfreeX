@@ -19,9 +19,9 @@ export class ToasterAlertService extends AlertService {
     }
 
     async init() {
-        if (this._inited) {
-            return true;
-        }
+        // if (this._inited) {
+        //     return true;
+        // }
 
         toastr.options = this.defaultOptions;
         this._toasts = toastr;

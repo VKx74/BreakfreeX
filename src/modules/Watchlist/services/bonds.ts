@@ -19,7 +19,8 @@ export const BondsWatchlist: IWatchlistItem = {
         "baseInstrument": "EUR",
         "dependInstrument": "DE10YB",
         "company": "DE10YB vs EUR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "UK10YB_GBP",
@@ -32,7 +33,8 @@ export const BondsWatchlist: IWatchlistItem = {
         "baseInstrument": "GBP",
         "dependInstrument": "UK10YB",
         "company": "UK10YB vs GBP",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "UK100_GBP",
@@ -45,7 +47,8 @@ export const BondsWatchlist: IWatchlistItem = {
         "baseInstrument": "GBP",
         "dependInstrument": "UK100",
         "company": "UK100 vs GBP",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USB02Y_USD",
@@ -58,7 +61,8 @@ export const BondsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "USB02Y",
         "company": "USB02Y vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USB05Y_USD",
@@ -71,7 +75,8 @@ export const BondsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "USB05Y",
         "company": "USB05Y vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "USB30Y_USD",
@@ -84,6 +89,7 @@ export const BondsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "USB30Y",
         "company": "USB30Y vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };

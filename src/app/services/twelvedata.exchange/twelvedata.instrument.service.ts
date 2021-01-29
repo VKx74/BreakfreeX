@@ -92,7 +92,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             console.log(ex);
         }
 
-        if (search !== undefined && this._cachedSymbols.length) {
+        if (search !== undefined) {
             this._cacheBySearch[search] = this._cachedSymbols.slice();
         }
         return this._filterResponse(exchange, search);
@@ -113,7 +113,8 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             baseInstrument: product.CurrencyBase,
             dependInstrument: product.CurrencyQuote,
             company: description,
-            tradable: false
+            tradable: false,
+            tickSizeCorrect: type === EMarketType.Stocks || type === EMarketType.Indices
         };
 
         this._cachedSymbols.push(instrument);

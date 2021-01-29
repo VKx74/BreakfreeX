@@ -1,0 +1,10 @@
+@import "../../themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+
+:host {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}

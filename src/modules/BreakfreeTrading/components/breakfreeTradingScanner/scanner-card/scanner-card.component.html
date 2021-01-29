@@ -1,21 +1,23 @@
-<div class="sonar-tile w-100 h-100 crypto-text">
-    <div class="symbol">
+<div class="sonar-tile w-100 h-100 crypto-text" >
+    <div class="symbol" tooltip tooltip [matTooltip]="'This is a fresh Sonar trade setup found by Breakfree Trading Algorithm. \n\rIf you click on it, it will take you directly to the opportunity in the market.'"
+    >
         {{result?.symbol.toUpperCase()}}
     </div>
 
-    <div class="type">
+    <div class="type" tooltip [matTooltip]="'This is the market category of the specific trade.'" >
         {{result.marketType}}
     </div>
 
     <div>
-        <div class="tradetf">
+        <div class="tradetf" tooltip [matTooltip]="'This shows the timeframe of the trade setup. \n\rAnything below 4h timeframe should be actively monitored every few minutes after trade opens.'" >
             <i class="fa fa-clock-o"></i>
             {{toTimeframe(result.timeframe)}} Setup
         </div>
     </div>
 
     <div>
-        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}">
+        <div class="setup" [ngClass]="{'setup-long': (result.trend == trends.Up), 'setup-short': (result.trend == trends.Down)}"  
+        tooltip [matTooltip]="'This is the type of trade setup.\n\rTheres 3 different setups: BRC, EXT & Swing.\n\r-----------------------------------------------------\n\rBRC is short for Break, retest & continuation setup.\n\r\n\rEXT = Extension trade setup.\n\r\n\rSwing = Swing trade setup. \n\r-----------------------------------------------------'">
             <ng-container [ngSwitch]="result.origType">
                 <ng-container *ngSwitchCase="origType.EXT">
                     <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
@@ -31,12 +33,12 @@
                         {{result.trend == trends.Up ? "Long" : "Short"}} BRC
                     </span>
                 </ng-container>
-                <ng-container *ngSwitchCase="origType.SwingExt">
+                <ng-container *ngSwitchCase="origType.SwingExt" >
                     <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->
                     <span>
                         <i class="fa" [ngClass]="{'fas fa-arrow-up': (result.trend == trends.Up), 'fas fa-arrow-down': (result.trend == trends.Down)}"></i> 
                         {{result.trend == trends.Up ? "Long" : "Short"}} SWING 
-                    </span>
+                    </span> 
                 </ng-container>
                 <ng-container *ngSwitchCase="origType.SwingN">
                     <!-- <img class="svgfiller"  src="assets/img/SWING2.svg"/> -->

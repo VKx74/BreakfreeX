@@ -6,7 +6,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoadingModule} from "ngx-loading";
 import {ChartModule, TcdComponent} from "Chart";
 import {UIModule} from "UI";
-import {Level2Component, TradingModule} from "Trading";
+import {TradingModule} from "Trading";
 import {WatchlistComponent, WatchlistModule} from "Watchlist";
 import {StorageModule} from "Storage";
 import {OrderBookChartComponent, OrderBookChartModule} from "../OrderBookChart";
@@ -114,9 +114,10 @@ import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-la
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { SingleSessionService } from '@app/services/single-session.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
-import { BreakfreeTradingNavigatorComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
+import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
 import { TestOandaComponent } from '../Trading/components/forex.components/test-oanda/test-oanda.component';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
+import { MissionTrackingService } from '@app/services/missions-tracking.service';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -258,6 +259,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         AlertCloudRepositoryService,
         SignalService,
         SingleSessionService,
+        MissionTrackingService,
 
         NotificationService,
         NotificationWebSocketService,
@@ -379,10 +381,6 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                             component: MarketTradesComponent
                         },
                         {
-                            componentName: ComponentIdentifier.level2View,
-                            component: Level2Component
-                        },
-                        {
                             componentName: ComponentIdentifier.news,
                             component: NewsWidgetComponent
                         },
@@ -395,8 +393,8 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                             component: PrivateChatLayoutWidgetComponent
                         },
                         {
-                            componentName: ComponentIdentifier.breakfreeTradingNavigator,
-                            component: BreakfreeTradingNavigatorComponent
+                            componentName: ComponentIdentifier.breakfreeTradingAcademy,
+                            component: BreakfreeTradingAcademyComponent
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingScanner,

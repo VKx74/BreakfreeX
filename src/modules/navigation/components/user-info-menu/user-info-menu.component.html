@@ -1,6 +1,59 @@
 <div class="user-info-menu">
-    <div class="menu-top flex flex-direction-column justify-content-center">
-        <div class="flex justify-space-between w-100">
+    <div class="menu-top flex flex-direction-column">
+        <div class="top-line flex justify-space-between" *ngIf="isAuthorizedCustomer">
+            <div class="level-container">
+                <div class="level">
+                    {{level}}
+                </div>
+                <div class="badge-container">
+                    <badge></badge>
+                </div>
+            </div>
+            <div class="experiance-container" (click)="openMissionDialog()">
+                See Quests
+            </div>
+        </div>
+        <div class="avatar-line flex" [ngClass]="{'margin-top-negative': isAuthorizedCustomer}">
+            <div class="avatar">
+                <ng-container *ngTemplateOutlet="avatarTemplate || avatar"></ng-container>
+            </div>
+        </div>
+        <div class="username-line flex justify-space-around">
+            <div class="user-name">
+                {{userName}}
+            </div>
+        </div>
+        <div class="user-rank-line flex justify-space-around" *ngIf="isAuthorizedCustomer">
+            <div class="user-rank">
+                {{levelName}}
+            </div>
+        </div>
+        <div class="user-level-slider-line flex" *ngIf="isAuthorizedCustomer">
+            <div class="progress-bar-area flex">
+                <mat-progress-bar mode="determinate" value="{{score/scoreForLevel * 100}}"></mat-progress-bar>
+            </div>
+            <div class="progress-bar-text flex justify-space-between">
+                <div class="flex">Experience</div>
+                <div class="flex">
+                    <span *ngIf="isLoaded; else loading">{{score}}/{{scoreForLevel}}</span>
+                    <ng-template #loading>
+                        <span>Loading...</span>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="functiona-menu flex justify-content-center crypto-text is-large">
+            <div class="user-settings" routerLink="/platform/settings">
+                <span title="{{'app.settings' | translate}}">{{'app.settings' | translate}}</span>
+            </div>
+            <div class="reset-layout" (click)="resetLayout()">
+                <span title="{{'app.resetLayout' | translate}}">{{'app.resetLayout' | translate}}</span>
+            </div>
+            <div class="log-out" (click)="onLogoutClick()">
+                <span title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
+            </div>
+        </div>
+        <!-- <div class="menu-top-inner w-100">
            <div class="avatar">
                <ng-container *ngTemplateOutlet="avatarTemplate || avatar"></ng-container>
            </div>
@@ -8,16 +61,6 @@
                 <div class="user-name">
                     {{userName}}
                 </div>
-                <!-- <div class="experiance">
-                    <div class="experiance-points">
-                        <span class="ico">XP</span>
-                        <span class="ico-text">{{score}}/{{scoreForLevel}}</span>
-                    </div>  
-                    <div class="experiance-level">
-                        <span class="ico">LV</span>
-                        <span class="ico-text">{{level}}</span>
-                    </div>
-                </div> -->
             </div>
         </div>
         <div class="functiona-menu flex justify-content-center crypto-text is-large">
@@ -30,7 +73,7 @@
             <div class="log-out" (click)="onLogoutClick()">
                 <span title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <ng-template #avatar>

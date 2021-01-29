@@ -11,6 +11,8 @@ export enum TrendDirection {
 }
 
 export class WatchlistInstrumentVM {
+    private _pricePrecision: number;
+
     instrument: IInstrument;
     highestPrice = 0;
     lowestPrice = 0;
@@ -32,11 +34,19 @@ export class WatchlistInstrumentVM {
     }
     
     get pricePrecision(): number {
+        if (this._pricePrecision) {
+            return this._pricePrecision;
+        }
+
         if (this.instrument && this.instrument.pricePrecision) {
             return this.instrument.pricePrecision;
         }
         
         return 6;
+    }
+    
+    set pricePrecision(value: number) { 
+        this._pricePrecision = value;
     }
 
     get price(): number {

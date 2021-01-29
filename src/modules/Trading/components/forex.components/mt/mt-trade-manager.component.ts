@@ -5,7 +5,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from "@app/services/broker.service";
 import { MTOrderConfiguratorModalComponent } from './order-configurator-modal/mt-order-configurator-modal.component';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { OrderFillPolicy, OrderTypes } from 'modules/Trading/models/models';
+import { OrderFillPolicy, OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
 import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { MTOrder, MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
 import { MTOrderCloseModalComponent } from './order-close-modal/mt-order-close-modal.component';
@@ -17,7 +17,10 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { MTHelper } from "@app/services/mt/mt.helper";
+import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
+import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 
 @Component({
     selector: 'mt-trade-manager',
@@ -32,6 +35,8 @@ import { combineLatest } from 'rxjs';
 })
 export class MTTradeManagerComponent {
     protected linker: Linker;
+    protected _onTradePanelDataHighlightSubscription: Subscription;
+    selectedIndex: number;
     selectedTabIndex: number;
     @ViewChild('tabGroup', {static: true}) tabGroup: MatTabGroup;
     
@@ -41,7 +46,7 @@ export class MTTradeManagerComponent {
 
     get brokerConnected(): boolean {
         return this._broker != null;
-    }   
+    }
     
     get showCancelAll(): boolean {
         return this.selectedTabIndex === 2 && this._broker.pendingOrders && this._broker.pendingOrders.length > 0;
@@ -92,10 +97,22 @@ export class MTTradeManagerComponent {
         private brokerService: BrokerService,
         protected _alertService: AlertService,
         protected _instrumentService: InstrumentService,
+        protected _dataHighlightService: DataHighlightService,
         protected _injector: Injector) {
 
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();
+    }
+
+    ngOnInit() {
+        this._onTradePanelDataHighlightSubscription = this._dataHighlightService.onTradePanelDataHighlight.subscribe(this._handleHighlight.bind(this));
+    }
+
+    ngOnDestroy() {
+        if (this._onTradePanelDataHighlightSubscription) {
+            this._onTradePanelDataHighlightSubscription.unsubscribe();
+            this._onTradePanelDataHighlightSubscription = null;
+        }
     }
 
     ngAfterContentChecked() {
@@ -135,6 +152,10 @@ export class MTTradeManagerComponent {
     disconnect() {        
         this.brokerService.disposeActiveBroker()
         .subscribe(() => {});      
+    }
+
+    showSymbolMapping() {    
+        this._dialog.open(SymbolMappingComponent);    
     }
 
     tabChanged(data: MatTabChangeEvent) {
@@ -192,22 +213,67 @@ export class MTTradeManagerComponent {
             return;
         }
 
-        const symbol = mt5Broker.instrumentToChartFormat(order.Symbol);
-        this._instrumentService.getInstruments(null, symbol).subscribe((data: IInstrument[]) => {
-            if (!data || !data.length) {
-                this._alertService.warning("Failed to view chart by order symbol");
+        const symbol = order.Symbol;
+        let tf: number = null;
+        if ((order as any).Comment) {
+            const comment = (order as any).Comment;
+            tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+        }
+        this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
+            if (!instrument) {
+                mt5Broker.getInstruments(null, symbol).subscribe((brokerInstruments) => {
+                    let brokerInstrument: IInstrument = null;
+                    for (const i of brokerInstruments) {
+                        if (i.symbol.toLowerCase() === symbol.toLowerCase()) {
+                            brokerInstrument = i;
+                            break;
+                        }
+                    }
+                    this.showMappingConfirmation(brokerInstrument);
+                });
                 return;
             }
-            const instrument = data[0];
             const linkAction: LinkingAction = {
                 type: Actions.ChangeInstrument,
                 data: instrument
             };
+
+            if (tf) {
+                linkAction.type = Actions.ChangeInstrumentAndTimeframe;
+                linkAction.data = {
+                    instrument: instrument,
+                    timeframe: tf
+                };
+            }
             this.linker.sendAction(linkAction);
         }, (error) => {
             this._alertService.warning("Failed to view chart by order symbol");
         });
     }
+
+    private showMappingConfirmation(brokerInstrument: IInstrument) {
+        return this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Symbol Mapping',
+                message: `We are unable to find this market on your broker account, please map the market manually.`
+            }
+        }).afterClosed().subscribe((dialogResult: any) => {
+            if (dialogResult) {
+                this.showMappingModal(brokerInstrument);
+            } else {
+                this._alertService.warning("Failed to view chart by order symbol");
+            }
+        });
+    }
+
+    private showMappingModal(brokerInstrument: IInstrument): void {
+        this._dialog.open(SymbolMappingComponent, {
+            data: {
+                SelectedBrokerInstrument: brokerInstrument
+            }
+        });
+    }
+
 
     private _reconnect() {
         this._alertService.info("Reconnecting");
@@ -235,5 +301,20 @@ export class MTTradeManagerComponent {
           }, (error) => {
             // this._alertService.info("Error to cancel one of the orders");
         });
+    }
+
+    private _handleHighlight(data: ITradePanelDataHighlight) {
+        if (!data) {
+            return;
+        }
+
+        switch (data.ActivateTab) {
+            case TradeManagerTab.Positions: this.selectedIndex = 0; break;
+            case TradeManagerTab.MarketOrders: this.selectedIndex = 1; break;
+            case TradeManagerTab.ActiveOrders: this.selectedIndex = 2; break;
+            case TradeManagerTab.OrderHistory: this.selectedIndex = 3; break;
+            case TradeManagerTab.AccountInfo: this.selectedIndex = 4; break;
+            case TradeManagerTab.CurrencyRisk: this.selectedIndex = 5; break;
+        }
     }
 }

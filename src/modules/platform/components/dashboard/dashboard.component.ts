@@ -3,7 +3,6 @@ import { of, Subject } from "rxjs";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LayoutTranslateService } from "@layout/localization/token";
-import { LocalizationService } from "Localization";
 import { catchError, first, map, takeUntil } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { NavigationStart, Router } from "@angular/router";
@@ -36,6 +35,8 @@ import { SingleSessionService } from '@app/services/single-session.service';
 import { Intercom } from 'ng-intercom';
 import { CookieService } from '@app/services/сookie.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
+import { MissionTrackingService } from "@app/services/missions-tracking.service";
+import { InstrumentMappingService } from "../../../../app/services/instrument-mapping.service";
 
 
 @Component({
@@ -91,8 +92,10 @@ export class DashboardComponent {
         private _workspaceRepository: WorkspaceRepository,
         private _alertService: AlertService,
         private _singleSessionService: SingleSessionService,
+        private _missionTrackingService: MissionTrackingService,
         public bottomPanelSizeService: ToggleBottomPanelSizeService,
         private _overlay: Overlay,
+        private _instrumentMappingService: InstrumentMappingService
     ) {
 
     }
@@ -162,6 +165,11 @@ export class DashboardComponent {
 
         if (!this._identityService.isAdmin) {
             this._singleSessionService.watchSessions();
+        } 
+        
+        if (this._identityService.isAuthorizedCustomer) {
+            this._missionTrackingService.initMissions();
+            this._missionTrackingService.watchMissions();
         }
 
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
@@ -170,6 +178,7 @@ export class DashboardComponent {
 
     ngAfterViewInit() {
         this._loadLayoutState();
+        this._instrumentMappingService.getAllMapping();
 
         this._layoutManager.layout.$onAddComponent
             .pipe(takeUntil(componentDestroyed(this)))
@@ -249,32 +258,8 @@ export class DashboardComponent {
     }
 
     private _initializeLayout(state: IGoldenLayoutComponentState) {
-        // try {
-        //     if (!this._identityService.isBeta) {
-        //         this._replaceBFTPanelWithSonar(state.content);
-        //     }
-        // } catch (e) {
-
-        // }
         this.layout.loadState(state);
         this._processLayoutReady();
-    }
-
-    private _replaceBFTPanelWithSonar(content: any) {
-        if (content instanceof Array) {
-            content.forEach((item) => {
-                this._replaceBFTPanelWithSonar(item);
-            });
-        } else {
-            if (content.type !== "component" && content.content instanceof Array) {
-                content.content.forEach((item) => {
-                    this._replaceBFTPanelWithSonar(item);
-                });
-            } else if (content.type === "component" && content.componentName === "breakfreeTradingScanner") {
-                content.componentName = "breakfreeTradingNavigator";
-                content.componentState = null;
-            }
-        }
     }
 
     private _saveLayoutState(async: boolean = true) {

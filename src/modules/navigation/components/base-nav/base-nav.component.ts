@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {UserAvatarShape} from "../../../UI/components/name-avatar/name-avatar.component";
 import {AppRoutes} from "AppRoutes";
-import {SystemNotificationsService} from "../../../Notifications/services/system-notifications.service";
 import {IdentityService} from "@app/services/auth/identity.service";
 import {UsersProfileService} from "@app/services/users-profile.service";
 import {SidebarService} from "@app/services/sidebar.service";
@@ -10,7 +9,10 @@ import {debounceTime, takeUntil} from "rxjs/operators";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
+import { ThemeService } from '@app/services/theme.service';
+import { Theme } from '@app/enums/Theme';
 
 @Component({
     selector: 'base-nav',
@@ -28,21 +30,59 @@ export class BaseNavComponent implements OnInit {
         );
     logoRedirectRoute = `/${AppRoutes.Platform}`;
     avatarId: string;
+    login: string;
     firstName = this._identityService.firstName;
     role = this._identityService.role;
     email = this._identityService.email;
     opened: Subject<void> = new Subject<void>();
 
+    get userNameWithLevel(): string {
+        if (this.level) {
+            return `${this.firstName} ${this.level}`;
+        }
+
+        return this.firstName;
+    } 
+
+    get isDarkTheme() {
+        return this._themeService.activeTheme === Theme.Dark;
+    } 
+    
     get currentUserFullName() {
         return this._identityService.fullName;
     }
 
+    public get score(): number {
+        return this._tradingProfileService.score;
+    } 
+    
+    public get isAuthorizedCustomer(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }
+
+    public get levelName(): string {
+        return this._tradingProfileService.levelName || "";
+    }
+
+    public get isLoaded(): boolean {
+        return !!this._tradingProfileService.missions;
+    }
+
+    public get scoreForLevel(): number {
+        return this._tradingProfileService.scoreForLevel;
+    }
+
+    public get level(): number {
+        return this._tradingProfileService.level;
+    }
+
     constructor(private _identityService: IdentityService,
-                private _systemNotificationsService: SystemNotificationsService,
                 private _usersProfileService: UsersProfileService,
                 private _cdRef: ChangeDetectorRef,
                 private _dialog: MatDialog,
+                private _tradingProfileService: TradingProfileService,
                 private _sidebarService: SidebarService,
+                private _themeService: ThemeService,
                 private _route: ActivatedRoute) {
     }
 
@@ -70,17 +110,16 @@ export class BaseNavComponent implements OnInit {
         this._usersProfileService.getUserProfileById(this._identityService.id)
             .subscribe(userProfileModel => {
                 this.avatarId = userProfileModel ? userProfileModel.avatarId : '';
-                // TODO: Review
+                this.login = userProfileModel.userName;
+                if (!this.login) {
+                    this.login = this._identityService.firstName;
+                }
                 this._cdRef.markForCheck();
             }, e => {
                 this.avatarId = '';
                 console.log(e);
             });
     }
-
-    openMissionDialog() {
-        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background' });
-    } 
     
     onMenuOpen() {
         this.opened.next();
@@ -107,5 +146,20 @@ export class BaseNavComponent implements OnInit {
     }
 
     ngOnDestroy() {
+    }
+
+    openMissionDialog() {
+        let scrHeight = window.innerHeight;
+        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background', position: {
+            top: scrHeight > 667 ? "100px" : null
+        }});
+    } 
+
+    changeTheme() {
+        this._themeService.setActiveTheme(this.isDarkTheme ? Theme.Light : Theme.Dark);
+    } 
+
+    getOverviewClass() {
+        
     }
 }

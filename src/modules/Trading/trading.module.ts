@@ -2,8 +2,6 @@ import {Injector, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TradeManagerComponent} from "./components/trade-manager/trade-manager.component";
 import {UIModule} from "UI";
-import {Level2Component} from "./components/level2/level2.component";
-import {Level2SimulateService} from "./services/level2-simulate.service";
 import {LoadingModule} from "ngx-loading";
 import {IntervalSelectorComponent} from "./components/interval-selector/interval-selector.component";
 import {PeriodicitySelectorComponent} from "./components/periodicity-selector/periodicity-selector.component";
@@ -72,10 +70,14 @@ import { MTTradeManagerComponent } from './components/forex.components/mt/mt-tra
 import { MTCurrencyRiskComponent } from './components/forex.components/mt/currency-risk/mt-currency-risk.component';
 import { ForexBrokerConnectorComponent } from './components/forex.components/forex-broker-connector/forex-broker-connector.component';
 import { MTBrokerTypeSelectorComponent } from './components/forex.components/mt/broker-type-selector/mt-broker-type-selector.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CurrencyGuardRiskClassPipe } from './components/forex.components/mt/pipes/currencyGuardRiskClass.pipe';
+import { CurrencyGuardRiskPipe } from './components/forex.components/mt/pipes/currencyGuardRisk.pipe';
+import { SymbolMappingComponent } from './components/forex.components/mt/symbol-mapping/symbol-mapping.component';
+import { DataHighlightService } from './services/dataHighlight.service';
 
 const components = [
     TradeManagerComponent,
-    Level2Component,
     IntervalSelectorComponent,
     PeriodicitySelectorComponent,
     CryptoTradeManagerComponent,
@@ -88,6 +90,7 @@ const components = [
     CryptoOrderConfiguratorComponent,
     CryptoWalletTableComponent,
     TrendsWidgetComponent,
+    SymbolMappingComponent,
 
     ForexTradeManagerComponent,
     OandaTradeManagerComponent,
@@ -115,7 +118,7 @@ const components = [
     MTCurrencyRiskComponent,
     MTPendingOrdersComponent,
     MTHistoryOrdersComponent,
-    MTPositionsComponent    
+    MTPositionsComponent
 ];
 
 @NgModule({
@@ -126,6 +129,8 @@ const components = [
         OrderComponent,
         OrderSideComponent,
         TradingCloseButtonComponent,
+        CurrencyGuardRiskClassPipe,
+        CurrencyGuardRiskPipe
     ],
     imports: [
         CommonModule,
@@ -154,19 +159,20 @@ const components = [
         MatSlideToggleModule,
         NgxMaterialTimepickerModule,
         DragDropModule,
-        MatExpansionModule        
+        MatExpansionModule,
+        MatProgressBarModule
         // TimeZonesModule,
     ],
     exports: [
         ...components
     ],
     providers: [
-        Level2SimulateService,
         {
             provide: TradingTranslateService,
             useFactory: TranslateServiceFactory('trading'),
             deps: [Injector, SharedTranslateService]
-        }
+        },
+        DataHighlightService
     ],
     entryComponents: [
         ...components

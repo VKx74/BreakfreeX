@@ -1,7 +1,7 @@
 import {Observable, Subject, Subscription} from "rxjs";
 import {IBroker} from "./broker";
-import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice, MTStatus, MTCurrencyRisk } from 'modules/Trading/models/forex/mt/mt.models';
-import { ActionResult, OrderFillPolicy, OrderSide } from 'modules/Trading/models/models';
+import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
+import { ActionResult, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { ITick, IMTTick } from '@app/models/common/tick';
 import { IInstrument } from '@app/models/common/instrument';
 
@@ -32,8 +32,9 @@ export interface IMT5Broker extends IBroker {
     instrumentMinAmount(symbol: string): number;
     instrumentAmountStep(symbol: string): number;
     instrumentToBrokerFormat(symbol: string): IInstrument;
-    instrumentToChartFormat(symbol: string): string;
     getOrderById(orderId: number): MTOrder;
     getPrice(symbol: string): Observable<IMTTick>;
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number;
+    canCalculateTotalVAR(orderType?: OrderTypes): boolean;
+    calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist>;
 }

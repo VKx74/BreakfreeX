@@ -3,80 +3,305 @@
 
 :host {
   /deep/ {
-    .mat-progress-bar-fill::after {
-      background-color: #c43939;
+    .tiles-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-auto-rows: auto;
+      margin:3px;
+
+      .tile-wrapper {
+        border-radius: 5px;
+        position: relative;
+        cursor: pointer;
+        margin: 3px;
+        -webkit-animation: slidein-bft 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        animation: slidein-bft 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .tiles-wrapper {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+
+      .experiance-points {
+        padding-left: 10px !important;
+      }
+
+      .experiance-points-points {
+        max-width: 50px;
+      }
+
+      .experiance-points-text {
+        flex-direction: column !important;
+      }
+
+      .card-content {
+        margin: 0px !important;
+        padding: 5px !important;
+        border-radius: 3px !important;
+      }
     }
   }
-  .content {
+
+  
+
+  .rank-title {
+    .rank-avatar {
+      img {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+      }
+    }
+    .rank-name {
+      line-height: 32px;
+    }
     display: flex;
-    min-height: 300px;
-    min-width: 300px;
+    padding: 0px 15px 10px 15px;
+  }
+
+  @media (min-width: 500px) {
+    .content {
+      display: flex;
+      width: 80vw;
+    }
 
     .left-side {
-      width: 130px;
+      width: 200px;
+    }
+
+    .menu-subitem {
+      width: 100px;
+      height: 18px;
+      font-size: 12px;
+      margin-left: 20px;
+      margin-top: 8px;
+      cursor: pointer;
+      padding-left: 5px;
+      border-left:2px solid transparent;
+
+      &.selected {
+        border-left: 2px solid;
+        padding-left: 5px;
+      }
+    }
+
+    .description-title,
+    .menu-item {
+      width: 100px;
+      height: 18px;
+      font-size: 13px;
+      margin-left: 15px;
+      margin-top: 10px;
+      font-weight: 700;
+      padding-left: 5px;
+      border-left:2px solid transparent;
+    }
+
+    .menu-item {
+      cursor: pointer;
+
+      &.selected {
+        border-left: 2px solid;
+        padding-left: 5px;
+      }
+    }
+  }
+
+  //Mobile styling
+  @media (max-width: 500px) {
+    .content {
+      display: block;
+      overflow: hidden;
+    }
+    .left-side {
+      margin: 0 auto;
+    }
+
+    .menuwrapper {
+      display: flex;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+    .mobilehidden {
+      display: none !important;
+    }
+    .mobile-margin-right {
+      margin-right: 10px;
+    }
+
+    .menu-subitem {
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 10px;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 5px;
+      text-align: center;
+
+      &.selected {
+        border-bottom: 2px solid;
+        padding-bottom: 5px;
+
+        text-align: center;
+      }
+    }
+
+    .description-title,
+    .menu-item {
+      margin-left: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      padding-bottom: 5px;
+      text-align: center;
+
+      border-bottom: 2px solid transparent;
+    }
+
+    .menu-item {
+      cursor: pointer;
+
+      &.selected {
+        border-bottom: 2px solid;
+
+        padding-bottom: 5px;
+        text-align: center;
+      }
+    }
+  }
+
+  .content {
+    /deep/ {
+      .mat-progress-bar-fill::after {
+        background-color: #39c467;
+      }
+    }
+
+    max-height: 95vh;
+    max-width: 800px;
+    font-family: 'Fira Sans', sans-serif;
+
+    border-radius: 10px;
+
+    .left-side {
+      /deep/ {
+        .mat-progress-bar-fill::after {
+          background-color: #7b4594;
+        }
+      }
+
       display: flex;
       flex-direction: column;
+      font-size: 12px;
 
-      .period {
-        width: 100px;
-        height: 24px;
-        font-size: 15px;
-        margin-left: 15px;
-        margin-top: 22px;
+      .welcome-title {
         font-weight: 700;
-        cursor: pointer;
-
-        &.selected {
-          text-decoration: underline;
+        display: flex;
+        padding: 25px 15px 5px 15px;
+        .avatar {
+          min-width: 30px;
+          width: 30px;
+          height: 30px;
         }
+        .greeting {
+          margin-left: 10px;
+          .user-name {
+            overflow: hidden;
+            display: inline-block;
+            text-overflow: ellipsis;
+            max-width: 120px;
+            text-transform: capitalize;
+          }
+        }
+      }
+
+      .experiance-levels {
+        min-width: 120px;
+        .experiance-levels-text {
+          font-size: 15px;
+          font-weight: 700;
+          // line-height: 50px;
+          text-align: center;
+          padding-top: 15px;
+        }
+      }
+
+      .experiance-points {
+        display: flex;
+        flex-direction: column;
+        font-size: 11px;
+        width: 100%;
+        padding: 0px 15px;
+        font-weight: 700;
+
+        .experiance-points-text {
+          display: flex;
+          flex-direction: row !important;
+          justify-content: space-between;
+        }
+      }
+
+      .separator {
+        margin: 10px 15px;
+        border-top: 1px solid #3f4245;
       }
     }
 
     .progress-bar-area {
       width: 100%;
+      margin-top: 5px;
     }
 
     .center {
-      width: 100%;
       display: flex;
       flex-direction: column;
+      margin: 15px;
+      height: 100%;
+      overflow: auto;
 
       .header {
-        height: 50px;
+        height: 42px;
         display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 700;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom: 1px solid #eeedee;
 
-        /deep/ .mat-progress-bar {
-          height: 7px;
-        }
-
-        .experiance-levels {
-          min-width: 120px;
-          .experiance-levels-text {
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 50px;
-            text-align: center;
-          }
-        }
-
-        .experiance-points {
-          display: flex;
-          flex-direction: column;
-          font-size: 12px;
-          width: 100%;
-          padding: 15px;
-
-          .experiance-points-text {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-          }
+        .section-name {
+          margin-left: 15px;
         }
       }
 
       .mission-content {
-        margin: 10px 0px 10px 10px;
         height: 100%;
+        width: 100%;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        min-height: 280px;
+        max-height: 500px;
+        overflow: auto;
+      }
+
+      @media (max-height: 667px) {
+        .mission-content {
+          max-height: calc(95vh - 70px);
+        }
+      }
+    }
+
+
+    @media (max-width: 500px) {
+      .center {
+        margin: 5px !important;
+      }
+    }
+
+    @media (min-width: 500px) {
+      .center {
+        margin: 5px !important;
+        width: 100%;
       }
     }
   }
@@ -84,15 +309,16 @@
 
 @include themify($themes, true) {
   .content {
-    background-color: themed('appBackgroundColor');
-  } 
-  .left-side {
-    background-color: themed('missionMenu');
-  } 
-  .content {
-    color: themed('valueTextColor');
+    color: themed("missionTextColor");
+    background-color: themed("missionDialogBackground");
   }
-  .experiance-levels {
-    background-color: themed('missionMenu');
+  .mission-content {
+    background-color: themed("missionContent");
+  }
+  .header {
+    background-color: themed("missionContentHeader");
+  }
+  .left-side {
+    color: themed("missionTextMenuColor");
   }
 }

@@ -19,7 +19,8 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "EUR",
         "dependInstrument": "XAG",
         "company": "XAG vs EUR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "XAG_USD",
@@ -32,7 +33,8 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "XAG",
         "company": "XAG vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "XAU_EUR",
@@ -45,7 +47,8 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "EUR",
         "dependInstrument": "XAU",
         "company": "XAU vs EUR",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "XAU_USD",
@@ -58,7 +61,8 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "XAU",
         "company": "XAU vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "XAU_XAG",
@@ -71,7 +75,8 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "XAG",
         "dependInstrument": "XAU",
         "company": "XAU vs XAG",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "XPD_USD",
@@ -84,7 +89,8 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "XPD",
         "company": "XPD vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "XPT_USD",
@@ -97,6 +103,7 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "XPT",
         "company": "XPT vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };

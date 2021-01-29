@@ -19,7 +19,8 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "BCO",
         "company": "BCO vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "CORN_USD",
@@ -32,7 +33,8 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "CORN",
         "company": "CORN vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "NATGAS_USD",
@@ -45,7 +47,8 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "NATGAS",
         "company": "NATGAS vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "SOYBN_USD",
@@ -58,7 +61,8 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "SOYBN",
         "company": "SOYBN vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "SUGAR_USD",
@@ -71,7 +75,8 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "SUGAR",
         "company": "SUGAR vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "WHEAT_USD",
@@ -84,7 +89,8 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "WHEAT",
         "company": "WHEAT vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "WTICO_USD",
@@ -97,7 +103,8 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "WTICO",
         "company": "WTICO vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         },
         {
         "id": "XCU_USD",
@@ -110,6 +117,7 @@ export const CommoditiesWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "XCU",
         "company": "XCU vs USD",
-        "tradable": true
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };

@@ -13,6 +13,8 @@
     padding-right: 10px;
   }
 
+
+
   .type {
     font-size: 10px;
     text-align: left;
@@ -61,6 +63,7 @@
     overflow:hidden;
   }
 }
+
 
 @include themify($themes, true) {
   .sonar-tile {

@@ -41,6 +41,8 @@ import {PaginationButtonsComponent} from './components/pagination-buttons/pagina
 import {IndicatorComponent} from "./components/indicator/indicator.component";
 import { HeaderComponent } from './components/header/header.component';
 import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.component';
+import { TooltipDirective } from './directives/tooltip.directive';
+import { EmojiComponent } from './components/emoji/emoji.component';
 
 @NgModule({
     declarations: [
@@ -54,6 +56,7 @@ import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.comp
         ManualSearchComponent,
         ManualSearchInputDirective,
         ManualSearchTriggerDirective,
+        TooltipDirective,
         MenuToggleComponent,
         EmojiPickerComponent,
         NameAvatarComponent,
@@ -67,6 +70,7 @@ import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.comp
         IndicatorComponent,
         HeaderComponent,
         PinInputModalComponent,
+        EmojiComponent
     ],
     imports: [
         CommonModule,
@@ -97,6 +101,7 @@ import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.comp
         ManualSearchComponent,
         ManualSearchInputDirective,
         ManualSearchTriggerDirective,
+        TooltipDirective,
         MenuToggleComponent,
         EmojiPickerComponent,
         NameAvatarComponent,
@@ -109,6 +114,7 @@ import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.comp
         PaginationButtonsComponent,
         IndicatorComponent,
         HeaderComponent,
+        EmojiComponent
     ],
     entryComponents: [
         ConfirmModalComponent,

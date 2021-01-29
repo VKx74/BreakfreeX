@@ -1,16 +1,15 @@
 import { Injectable } from "@angular/core";
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
-import { BreakfreeTradingNavigatorService } from 'modules/BreakfreeTrading/services/breakfreeTradingNavigator.service';
 import { of } from 'rxjs';
 import { IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
+import { MTHelper } from "@app/services/mt/mt.helper";
 
 @Injectable()
 export class IndicatorDataProviderService {
 
-    constructor(protected _bftService: BreakfreeTradingService, protected _bftPanel: BreakfreeTradingNavigatorService, protected _broker: BrokerService) {
-       
+    constructor(protected _bftService: BreakfreeTradingService, protected _broker: BrokerService) {
     }
 
     getData(indicator: TradingChartDesigner.Indicator, params?: object): Promise<any> {
@@ -49,19 +48,14 @@ export class IndicatorDataProviderService {
             console.log(">>> Contract size: " + bftParams.contract_size);
         }
 
-        return this._bftService.getBftIndicatorCalculationV2(bftParams).then(data => {
-            this._bftPanel.indicatorDataLoaded(bftParams, indicator.id, data);
-            return data;
-        });
+        return this._bftService.getBftIndicatorCalculationV2(bftParams);
     }
 
     getRTD(indicator: TradingChartDesigner.Indicator, params?: any): Promise<IRTDPayload> {
         return this._bftService.getRTDCalculation(params).then(data => {
+            data.global_trend_strength = MTHelper.convertTrendSpread(data.global_trend_spread);
+            data.local_trend_strength = MTHelper.convertTrendSpread(data.local_trend_spread);
             return data;
         });
-    }
-    
-    indicatorRemoved(indicator: TradingChartDesigner.Indicator) {
-        this._bftPanel.indicatorRemoved(indicator.id);
     }
 }

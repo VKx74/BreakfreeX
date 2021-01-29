@@ -14,7 +14,7 @@ import {OrderBookTranslateService} from "@order-book/localization/token";
 import {ComponentAccessService} from "@app/services/component-access.service";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {NewsTranslateService} from "../../../News/localization/news.token";
-import { BreakfreeTradingBacktestComponent, BreakfreeTradingNavigatorComponent } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingBacktestComponent, BreakfreeTradingAcademyComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 
@@ -97,12 +97,12 @@ export class ComponentSelectorComponent implements OnDestroy {
             //     componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
             //     componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
             // }, 
-            // {
-            //     component: BreakfreeTradingNavigatorComponent,
-            //     previewImgClass: BreakfreeTradingNavigatorComponent.previewImgClass,
-            //     componentName: this._bftTranslateService.stream('breakfreeTradingNavigatorComponentName'),
-            //     componentIdentifier: ComponentIdentifier.breakfreeTradingNavigator,
-            // },
+            {
+                component: BreakfreeTradingAcademyComponent,
+                previewImgClass: BreakfreeTradingAcademyComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('breakfreeTradingAcademyComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingAcademy,
+            },
             {
                 component: BreakfreeTradingScannerComponent,
                 previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,
@@ -127,12 +127,12 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._newsTranslateService.stream('newsComponentName'),
                 componentIdentifier: ComponentIdentifier.news,
             },*/
-            {
-                component: PublicChatComponent,
-                previewImgClass: 'crypto-icon-chat',
-                componentName: this._chatTranslateService.stream('publicChatTitle'),
-                componentIdentifier: ComponentIdentifier.publicChat,
-            },
+            // {
+            //     component: PublicChatComponent,
+            //     previewImgClass: 'crypto-icon-chat',
+            //     componentName: this._chatTranslateService.stream('publicChatTitle'),
+            //     componentIdentifier: ComponentIdentifier.publicChat,
+            // },
            /* {
                 component: PrivateChatComponent,
                 previewImgClass: 'crypto-icon-private-chat',

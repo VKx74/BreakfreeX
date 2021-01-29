@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
-import {OandaOrder} from 'modules/Trading/models/forex/oanda/oanda.models';
 import { MTItemsComponent } from '../mt-items.component';
-import { MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTOrder, MTOrderRecommendation, MTPendingOrderRecommendation } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTHelper } from '@app/services/mt/mt.helper';
 
 
 @Component({
@@ -33,8 +33,8 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
         super.ngOnDestroy();
     }
 
-    trackById(index, item: OandaOrder) {
-        return item.id;
+    trackById(index, item: MTOrder) {
+        return item.Id;
     }
 
     protected ordersUpdated() {

@@ -1,0 +1,29 @@
+@import "variables";
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  .badge-container {
+    display: flex;
+  }
+  .rank-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 25px;
+      height: 25px;
+      margin-right: 2px;
+    }
+  }
+  .rank-level {
+    display: flex;
+    color: #ffffffd1;
+    font-size: 12px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@include themify($themes, true) {
+}

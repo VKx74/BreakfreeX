@@ -28,6 +28,20 @@
     }
   }
 
+  .timeframe-restrictions, .access-restrictions {
+    font-size: 12px;
+    text-align: center;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-animation: slidein-bft 0.2s cubic-bezier(.17,.67,.83,.67);
+    animation: slidein-bft 0.2s cubic-bezier(.17,.67,.83,.67);
+  }
+
+  .access-restrictions {
+    cursor: pointer;
+  }
+
   .featured-settings {
     position: absolute;
     top: 12px;
@@ -65,34 +79,46 @@
     margin-left: 10px;
   }
 
-  .out-of-access {
-    height: 100%;
-  }
-
   .out-of-subscription {
-    margin-top: 30px;
+    cursor: pointer;
   }
   
-  .out-of-access, .out-of-subscription { 
+  .out-of-access { 
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-flow: column;
     width: 100%;
     cursor: pointer;
+    position: absolute;
+    top: 0px;
+    z-index: 2;
 
-    .text {
-      margin: 20px 10px;
+    .out-of-access-box {
       display: flex;
-      text-align: center;
-    }
-  
-    .image {
-      display: flex;
-      justify-content: center;
-    }
-    img {
-      width: 200px;
+      flex-flow: column;
+      padding: 30px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
+      .text {
+        margin: 10px 7px;
+        display: flex;
+        text-align: center;
+        font-weight: 700;
+        font-size: 12px;
+        max-width: 180px;
+
+        padding-top: 5px;
+      }
+    
+      .image {
+        display: flex;
+        justify-content: center;
+      }
+      img {
+        width: 200px;
+      }
     }
   }
 
@@ -206,6 +232,10 @@
 }
 
 @include themify($themes, true) {
+  .out-of-access-box {
+    background-color: themed('appPanelColor');
+  }
+
   .top-line {
     background-color: themed('appPanelColor');
     border-bottom: 1px solid themed('rejectButtonBackgroundColor');
@@ -225,6 +255,11 @@
     &:hover {
       background-color: themed('activeBackgroundColor') !important;
     }
+  }
+
+  .timeframe-restrictions, .access-restrictions {
+    background-color: themed('tableBorders');
+    color: themed('valueTextColor');
   }
 
   .scanner-result-row {

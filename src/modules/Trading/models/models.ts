@@ -38,6 +38,38 @@ export enum OrderTradeType {
     EXT = 'EXT'
 }
 
+export enum RiskClass {
+    Extreme = 4,
+    High = 3,
+    Medium = 2,
+    Low = 1,
+    NoRisk = 0
+}
+
+export enum RiskType {
+    WrongTrend = 'WrongTrend',
+    PriceFarFromEntry = 'PriceFarFromEntry',
+    HighRisk = 'HighRisk',
+    SLNotSet = 'SLNotSet',
+    NoRisk = ''
+}
+
+export enum RiskObject {
+    Positions = 'Positions',
+    MarketOrders = 'OpenOrders',
+    ActiveOrders = 'ActiveOrders',
+    CurrencyRisk = 'CurrencyRisk'
+}
+
+export enum TradeManagerTab {
+    Positions = 'Positions',
+    MarketOrders = 'MarketOrders',
+    ActiveOrders = 'ActiveOrders',
+    OrderHistory = 'OrderHistory',
+    AccountInfo = 'AccountInfo',
+    CurrencyRisk = 'CurrencyRisk'
+}
+
 export enum OrderPlacedFrom {
     Sonar = 'Sonar',
     Manually = 'Manually'

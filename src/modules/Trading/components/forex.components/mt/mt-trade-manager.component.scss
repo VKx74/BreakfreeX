@@ -16,6 +16,30 @@
     left: 10px;
   }
 
+  /deep/ {
+    .low-risk {
+      color: $lightGreenColor;
+    }
+
+    .mid-risk {
+      color: $lightBlueColor;
+    }
+
+    .extreme-risk {
+      color: $lightRedColor;
+    }
+
+    .high-risk {
+      color: $yellowColor;
+    }
+  }
+
+  .high-risk-label {
+    color: $lightRedColor;
+    font-weight: 700;
+    margin-left: 5px;
+  }
+
   /deep/ .side-buy {
     color: $lightGreenColor;
   }
@@ -47,17 +71,17 @@
     color: $lightGreenColor;
   }
 
-  /deep/ .low-risk {
-    color: $lightGreenColor;
-  }
+  // /deep/ .low-risk {
+  //   color: $lightGreenColor;
+  // }
 
-  /deep/ .mid-risk {
-    color: $lightBlueColor;
-  }
+  // /deep/ .mid-risk {
+  //   color: $lightBlueColor;
+  // }
 
-  /deep/ .high-risk {
-    color: $lightRedColor;
-  }
+  // /deep/ .high-risk {
+  //   color: $lightRedColor;
+  // }
 
   /deep/ .negative-value {
     color: $lightRedColor;
@@ -146,10 +170,6 @@
     width: 15px;
   } 
 }
-
-// .tabs-wrapper {
-//   padding: 10px 5px;
-// }
 
 @include themify($themes, true) {
   .control .caption {

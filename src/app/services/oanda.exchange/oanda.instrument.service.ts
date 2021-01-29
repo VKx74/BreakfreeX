@@ -50,7 +50,8 @@ export class OandaInstrumentService extends InstrumentServiceBase {
                     dependInstrument: this._getDependSymbol(product.Symbol),
                     baseInstrument: this._getBaseSymbol(product.Symbol),
                     company: desciption,
-                    tradable: true
+                    tradable: true,
+                    tickSizeCorrect: true
                 };
 
                 this._cachedSymbols.push(instrument);

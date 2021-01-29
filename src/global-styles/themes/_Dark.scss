@@ -4,11 +4,28 @@ $DarkTheme: (
         appPanelColor: #191919,
         appModalsPanelColor: #27282B,
 
+        tradescoreitembg: #282828,
+        tradescoreitembTextColor: #ffffffd1,
+        tradescoreholderbg: #191919,
+        tradescoreSecondColor: #2e2e38,
+        tradescoretext: #ffffffd1,
+        tradescorelabels: #ffffffd1,
+        niceborder: transparent,
+        orderpanelprefixcolor: #fff,
+
+
         buyColor: #27cf6d,
         sellColor: #f02645,
         accentColor: #397dc4,
         accentLightColor: #324254,
-        missionMenu: #131313,
+        missionDialogBackground: rgba(28, 32, 36, 1),
+        missionTextMenuColor: #f0f1f6,
+        missionContent: rgb(250, 250, 250),
+        missionCard: #FFF,
+        missionTextColor: #323232,
+        missionCardXPColor: #368857b3,
+        missionCardXPBackground: #38ab7126,
+        missionContentHeader: #FFF,
 
         titleTextColor: #ffffffd1,
         valueTextColor: #d5d5dc,
@@ -37,5 +54,7 @@ $DarkTheme: (
         scanner-card-setup-long-background: #94fac726,
 
         scanner-card-setup-short-color: #fa9494b3,
-        scanner-card-setup-short-background: #fa949426
+        scanner-card-setup-short-background: #fa949426,
+
+        card-title: #a9aaab
 )

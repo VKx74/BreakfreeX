@@ -2,6 +2,10 @@
 @import "../themes/themes";
 @import "global-styles/variables";
 
+#toast-container {
+  height: 0px;
+}
+
 #toast-container > .toast-custom {
   background-image: none !important;
     opacity: 1;
@@ -23,6 +27,43 @@
   }
 }
 
+#toast-container > .toast-notifications-custom-success, #toast-container > .toast-notifications-custom-error {
+    background-image: none !important;
+    opacity: 1;
+    border-radius: 5px;
+    box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.25);
+    padding: 10px;
+    max-width:400px;
+    width:auto !important;
+    min-width:300px;
+    margin-top: 5px !important;
+
+  .complete-mission-notification-row {
+    i {
+      margin-right: 5px;
+      font-size: 16px;
+    }
+  }
+
+  .failed-mission-notification-row {
+    i {
+      margin-right: 5px;
+      font-size: 16px;
+    }
+  }
+
+  .toast-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .toast-message {
+    font-size: 12px;
+    font-weight: normal;
+    margin-top: 5px;
+  }
+}
+
 #toast-container > .toast-custom:before {
   font-family: FontAwesome;
   font-size: 17px;
@@ -31,40 +72,72 @@
   padding-top: 8px;
   padding-left: 5px;
   height: 40px;
- 
 }
 
-#toast-container > .toast-warning:before {
-  content: "\f06a";
-  color: $lightYellowColor;
+#toast-container > .toast-notifications-custom-success:before, #toast-container > .toast-notifications-custom-error:before {
+  font-family: FontAwesome;
+  font-size: 17px;
+  float: left;
+  padding-right: 15px;
+  padding-top: 8px;
+  padding-left: 5px;
 }
 
-#toast-container > .toast-error:before {
-  content: "\f057";
-  color: $lightRedColor;
+#toast-container {
+  .toast-custom.toast-warning:before {
+    content: "\f06a";
+    color: $lightYellowColor;
+  }
+  .toast-custom.toast-error:before {
+    content: "\f057";
+    color: $lightRedColor;
+  }
+  .toast-custom.toast-info:before {
+    content: "\f05a";
+    color: $lightBlueColor;
+  }
+  .toast-custom.toast-success:before {
+    content: "\f058";
+    color: $lightGreenColor;
+  }
+  
+  .toast-notifications-custom-success.toast-info:before {
+    content: url('/assets/img/target.png');
+  }
+  .toast-notifications-custom-error.toast-info:before {
+    content: url('/assets/img/error.png');
+  }
 }
 
-#toast-container > .toast-info:before {
-  content: "\f05a";
-  color: $lightBlueColor;
-}
-
-#toast-container > .toast-success:before {
-  content: "\f058";
-  color: $lightGreenColor;
-}
 
 .toast-custom {
+  @include themify($themes) {
+      background-color: themed('appModalsPanelColor');
 
-@include themify($themes) {
-    background-color: themed('appModalsPanelColor');
+      .toast-title {
+        color: themed('valueTextColor');
+      }
 
-    .toast-title {
-      color: themed('valueTextColor');
+      .toast-message {
+        color: themed('titleTextColor');
+      }
     }
+}
 
-    .toast-message {
-      color: themed('titleTextColor');
+.toast-notifications-custom-success, .toast-notifications-custom-error {
+  @include themify($themes) {
+      background-color: themed('appModalsPanelColor');
+
+      .toast-title {
+        color: themed('valueTextColor');
+      }
+
+      .toast-message {
+        color: themed('valueTextColor');
+      }
+
+      i {
+        color: themed('titleTextColor');
+      }
     }
-  }
 }

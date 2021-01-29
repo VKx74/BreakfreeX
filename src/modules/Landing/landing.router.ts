@@ -5,6 +5,7 @@ import {NgModule} from "@angular/core";
 import {IForumRouteData, TagGuard} from "@app/services/role/tag.guard";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {UserSettingsResolver} from "@app/services/user-settings.resolver";
+import { AuthGuard } from "@app/services/auth/auth.guard";
 
 const routes: Routes = [
     {

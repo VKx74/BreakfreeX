@@ -14,6 +14,7 @@ import {IInstrument} from "@app/models/common/instrument";
 import {ITick} from "@app/models/common/tick";
 import {TimeFrameHelper} from "@app/helpers/timeFrame.helper";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { IBarData } from "@app/models/common/barData";
 
 @Injectable()
 export class HistoryService implements IHealthable {
@@ -69,12 +70,14 @@ export class HistoryService implements IHealthable {
         return service.getHistory(request)
             .pipe(
                 map((resp) => {
+                    const pricePrecision = !request.instrument.tickSizeCorrect ? this._calculatePricePrecision(resp.data) : request.instrument.tickSize;
                     return {
                         ...resp,
                         data: resp.data.map((b) => ({
                             ...b,
                             date: TzUtils.convertDateTz(b.date, UTCTimeZone, this._timeZoneManager.timeZone)
-                        }))
+                        })),
+                        pricePrecision: pricePrecision
                     };
                 })
             );
@@ -115,5 +118,23 @@ export class HistoryService implements IHealthable {
                 return this.services[i];
             }
         }
+    }
+
+    private _calculatePricePrecision(bars: IBarData[]) {
+        let pricePrecision = 0;
+
+        if (bars != null && bars.length > 0) {
+            bars.forEach(bar => {
+                let price = `${bar.close}`.split('.');
+                if (price.length === 2 && pricePrecision < price[1].length) {
+                    let decimals = price[1].length;
+                    if (decimals > pricePrecision) {
+                        pricePrecision = decimals;
+                    }
+                }
+            });
+        }
+
+        return pricePrecision;
     }
 }

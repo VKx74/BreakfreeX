@@ -1,22 +1,25 @@
-import {Component, Inject, Injector, OnInit, ViewChild} from '@angular/core';
-import {Modal} from "Shared";
-import {ThemeService} from "@app/services/theme.service";
-import {LocalizationService} from "Localization";
-import {LayoutTranslateService} from "@layout/localization/token";
-import {TranslateService} from "@ngx-translate/core";
-import {InstrumentService} from "@app/services/instrument.service";
-import {RealtimeService} from "@app/services/realtime.service";
-import {HistoryService} from "@app/services/history.service";
-import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
-import {ActivatedRoute} from "@angular/router";
-import {ApplicationTypeService} from "@app/services/application-type.service";
-import {GoldenLayoutPopupComponent} from "angular-golden-layout";
+import { Component, Injector, OnInit } from '@angular/core';
+import { Modal } from "Shared";
 import { IdentityService } from '@app/services/auth/identity.service';
 import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { UsersProfileService } from '@app/services/users-profile.service';
 
-enum MissionPeriod {
-    Daily,
-    Weekly
+enum Ranks {
+    Newbie = "Newbie",
+    Bronze = "Bronze",
+    Silver = "Silver",
+    Gold = "Gold",
+    Platinum = "Platinum",
+    Master = "Master",
+    Legend = "Legend"
+}
+
+enum Sections {
+    Daily = "Daily Quests",
+    Weekly = "Weekly Quests",
+    Info = "Ranks & Rewards",
+    TradeGuard = "TradeGuard",
+    Analysis = "Profit & Loss Analysis"
 }
 
 @Component({
@@ -25,11 +28,18 @@ enum MissionPeriod {
     styleUrls: ['./missions.component.scss']
 })
 export class MissionsComponent extends Modal<MissionsComponent> implements OnInit {
-    public MissionPeriod = MissionPeriod;
-    public selectedMissionPeriod = MissionPeriod.Daily;
+    private _name: string;
+
+    public Sections = Sections;
+    public Ranks: any = Ranks;
+    public selectedSection = Sections.TradeGuard;
 
     public get missions(): IBFTMissions {
         return this._tradingProfileService.missions;
+    }
+
+    public get rank(): Ranks {
+        return this._tradingProfileService.levelName as Ranks;
     }
 
     public get score(): number {
@@ -44,23 +54,40 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
         return this._tradingProfileService.level;
     }
 
-    constructor(private _injector: Injector,
-                private _identityService: IdentityService,
-                private _tradingProfileService: TradingProfileService) {
-        super(_injector);
-        this._tradingProfileService.updateMissions();
+    public get name(): string {
+        return this._name;
     }
 
-    selectPeriod(period: MissionPeriod) {
-        this.selectedMissionPeriod = period;
+    constructor(private _injector: Injector,
+                private _identityService: IdentityService,
+                private _profileService: UsersProfileService,
+                private _tradingProfileService: TradingProfileService) {
+        super(_injector);
+    }
+
+    selectPeriod(period: Sections) {
+        this.selectedSection = period;
     }
 
     ngOnInit() {
+        this._profileService.getUserProfileById(this._identityService.id, true)
+        .subscribe(
+            data => {
+                if (data && data.userName) {
+                    this._name = data.userName;
+                } else {
+                    this._name = `${this._identityService.firstName} ${this._identityService.lastName}`;
+                }
+            });
     }
 
     ngAfterViewInit() {
     }
 
     ngOnDestroy() {
+    }
+    
+    onClose() {
+        this.close();
     }
 }

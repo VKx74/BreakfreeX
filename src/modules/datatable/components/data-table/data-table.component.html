@@ -58,6 +58,7 @@
         </ng-container>
 
         <mat-row *matRowDef="let row; columns: (visibleColumns$ | async); when: isNotGroup" [class.selected]="row === selectedRow"
+            [class.blink]="isBlinking(row)"
             [class.expand-row-header]="expandable" [class.is-expanded]="isRowExpanded(row)"
             (contextmenu)="onContextMenu(row, $event)" (dblclick)="handleRowDoubleClick(row, $event)"
             (click)="handleRowSelected(row, $event)"></mat-row>
