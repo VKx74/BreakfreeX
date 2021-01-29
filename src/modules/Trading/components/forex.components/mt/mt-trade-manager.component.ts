@@ -255,7 +255,7 @@ export class MTTradeManagerComponent {
         return this._dialog.open(ConfirmModalComponent, {
             data: {
                 title: 'Symbol Mapping',
-                message: `Market unrecognized in your brokerage, please manually map instrument to your brokerage. Do you want to do it now?`
+                message: `We are unable to find this market on your broker account, please map the market manually.`
             }
         }).afterClosed().subscribe((dialogResult: any) => {
             if (dialogResult) {

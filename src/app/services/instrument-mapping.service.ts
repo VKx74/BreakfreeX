@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, of, throwError } from "rxjs";
+import { Observable, of, Subject, throwError } from "rxjs";
 import { IBrokerState } from "../interfaces/broker/broker";
 import { ISymbolMappingItem, PatchAction, PatchRequest, SymbolMappingStorageService } from "./instrument-mapping-storage.service";
 
@@ -7,6 +7,8 @@ import { ISymbolMappingItem, PatchAction, PatchRequest, SymbolMappingStorageServ
 export class InstrumentMappingService {
     private allItems: { [key: string]: {[key: string]: string}} = {};    
     private _brokerState: IBrokerState;
+
+    public mappingChanged: Subject<void> = new Subject();
 
     constructor(private _symbolMappingStorageService: SymbolMappingStorageService) {        
     }
@@ -58,6 +60,7 @@ export class InstrumentMappingService {
         }
         res.subscribe((ress: any) => {
             this.allItems[key][feedSymbol] = brokerSymbol;
+            this.mappingChanged.next();
         }, (error: any) => {
 
         });
@@ -72,6 +75,7 @@ export class InstrumentMappingService {
             let res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest);
             res.subscribe((ress: any) => {
                 delete this.allItems[key][feedSymbol];
+                this.mappingChanged.next();
             });
             return res;
         } else {

@@ -12,6 +12,7 @@ import { InstrumentServiceBase } from "@app/interfaces/exchange/instrument.servi
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { InstrumentMappingService } from "./instrument-mapping.service";
 import { BrokerService } from "./broker.service";
+import { MTHelper } from "./mt/mt.helper";
 
 @Injectable()
 export class InstrumentService implements IHealthable {
@@ -58,7 +59,7 @@ export class InstrumentService implements IHealthable {
         let searchingString = this._instrumentMappingService.tryMapInstrumentToDatafeedFormat(instrument);
         let isMapped = !!(searchingString);
         if (!searchingString) {
-            searchingString = this._normalizeInstrument(instrument);
+            searchingString = MTHelper.normalizeInstrument(instrument);
         }
 
         const observables: Observable<IInstrument[]>[] = this.services.map(s => s.getInstruments(undefined, searchingString));
@@ -73,8 +74,8 @@ export class InstrumentService implements IHealthable {
                 let instruments = JsUtil.flattenArray<IInstrument>(responses);
                 for (const i of instruments) {
                     if (!isMapped) {
-                        let instrumentID = this._normalizeInstrument(i.id);
-                        let instrumentSymbol = this._normalizeInstrument(i.symbol);
+                        let instrumentID = MTHelper.normalizeInstrument(i.id);
+                        let instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
                         if (searchingString === instrumentID || searchingString === instrumentSymbol) {
                             return i;
                         }
@@ -85,17 +86,17 @@ export class InstrumentService implements IHealthable {
                     }
                 }
                 
-                if (isMapped) {
-                    return null;
-                }
+                // if (isMapped) {
+                //     return null;
+                // }
 
-                for (const i of instruments) {
-                    let instrumentID = this._normalizeInstrument(i.id);
-                    let instrumentSymbol = this._normalizeInstrument(i.symbol);
-                    if (searchingString.startsWith(instrumentID) || searchingString.startsWith(instrumentSymbol)) {
-                        return i;
-                    }
-                }
+                // for (const i of instruments) {
+                //     let instrumentID = this.MTHelper.normalizeInstrument(i.id);
+                //     let instrumentSymbol = this.MTHelper.normalizeInstrument(i.symbol);
+                //     if (searchingString.startsWith(instrumentID) || searchingString.startsWith(instrumentSymbol)) {
+                //         return i;
+                //     }
+                // }
                 
                 return null;
             })
@@ -134,16 +135,6 @@ export class InstrumentService implements IHealthable {
                     return JsUtil.flattenArray<IInstrument>(responses).filter(i => i.symbol === symbol);
                 })
             );
-    }
-
-
-    protected _normalizeInstrument(symbol: string): string {
-        let s = symbol;
-        if (s.length > 6 && s[s.length - 2] === '-') {
-            s = s.slice(0, s.length - 2);
-        }
-        s = s.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
-        return s;
     }
 
     private _getServiceByDatafeed(datafeed: EExchangeInstance): InstrumentServiceBase {

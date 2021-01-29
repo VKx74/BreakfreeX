@@ -109,7 +109,7 @@ export interface MTPosition {
 }
 
 export enum MTCurrencyRiskType {
-    Actual = "Filled",
+    Actual = "Actual",
     Pending = "Pending"
 }
 

@@ -136,7 +136,7 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-        this._tradeRatingService = new MTTradeRatingService(this, algoService);
+        this._tradeRatingService = new MTTradeRatingService(this, algoService, _instrumentMappingService);
     }
 
     placeOrder(order: MTPlaceOrder): Observable<ActionResult> {
@@ -539,16 +539,16 @@ export abstract class MTBroker implements IMTBroker {
             }
         }
 
-        if (isMapped) {
-            return null;
-        }
+        // if (isMapped) {
+        //     return null;
+        // }
 
-        for (const i of this._instruments) {
-            const instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
-            if (instrumentSymbol.startsWith(searchingString)) {
-                return i;
-            }
-        }
+        // for (const i of this._instruments) {
+        //     const instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
+        //     if (instrumentSymbol.startsWith(searchingString)) {
+        //         return i;
+        //     }
+        // }
 
         return null;
     }
