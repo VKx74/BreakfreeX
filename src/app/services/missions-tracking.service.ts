@@ -54,7 +54,7 @@ export class MissionTrackingService {
             return;
         }
         let activeBroker = this._brokerService.activeBroker as MTBroker;
-        if (activeBroker && activeBroker.canCalculateTotalVAR(OrderTypes.Market)) {
+        if (activeBroker && activeBroker.canCalculateHighestVAR(OrderTypes.Market)) {
             this._recalculateRequired = false;
             this._updateMissions();
         }
@@ -85,10 +85,10 @@ export class MissionTrackingService {
         }   
         
         let varRisk = null;
-        let currencyVarRisk = null;
+        let currencyVarRisk = 0;
         let activeBroker = this._brokerService.activeBroker as MTBroker;
         if (this._brokerService.isConnected && activeBroker) {
-            varRisk = activeBroker.calculateTotalVAR(OrderTypes.Market);
+            varRisk = activeBroker.calculateHighestVAR(OrderTypes.Market);
             const risks = activeBroker.currencyRisks;
             for (const risk of risks) {
                 if (risk.Type !== MTCurrencyRiskType.Actual) {
@@ -114,10 +114,9 @@ export class MissionTrackingService {
             for (const mission of this._tradingProfileService.missions.daily) {
                 if (mission.wasJustReached) {
                     this._showMissionEarned(mission, "Daily Experience Earned");
-                }
-
-                if (++count > 3) {
-                    break;
+                    if (++count > 3) {
+                        break;
+                    }
                 }
             }
         }
@@ -127,10 +126,9 @@ export class MissionTrackingService {
             for (const mission of this._tradingProfileService.missions.weekly) {
                 if (mission.wasJustReached) {
                     this._showMissionEarned(mission, "Weekly Experience Earned");
-                }
-
-                if (++count > 3) {
-                    break;
+                    if (++count > 3) {
+                        break;
+                    }
                 }
             }
         }
@@ -154,10 +152,9 @@ export class MissionTrackingService {
             for (const mission of this._tradingProfileService.missions.daily) {
                 if (mission.wasJustFailed) {
                     this._showMissionFailed(mission, "Daily Mission Failed");
-                }
-
-                if (++count > 3) {
-                    break;
+                    if (++count > 3) {
+                        break;
+                    }
                 }
             }
         }
@@ -167,10 +164,9 @@ export class MissionTrackingService {
             for (const mission of this._tradingProfileService.missions.weekly) {
                 if (mission.wasJustFailed) {
                     this._showMissionFailed(mission, "Weekly Mission Failed");
-                }
-
-                if (++count > 3) {
-                    break;
+                    if (++count > 3) {
+                        break;
+                    }
                 }
             }
         }

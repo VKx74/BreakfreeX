@@ -35,6 +35,6 @@ export interface IMT5Broker extends IBroker {
     getOrderById(orderId: number): MTOrder;
     getPrice(symbol: string): Observable<IMTTick>;
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number;
-    canCalculateTotalVAR(orderType?: OrderTypes): boolean;
+    canCalculateHighestVAR(orderType?: OrderTypes): boolean;
     calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist>;
 }

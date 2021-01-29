@@ -662,7 +662,7 @@ export abstract class MTBroker implements IMTBroker {
         return 0.01;
     }
 
-    public canCalculateTotalVAR(orderType?: OrderTypes): boolean {
+    public canCalculateHighestVAR(orderType?: OrderTypes): boolean {
         for (const order of this.orders) {
             if (orderType && orderType !== order.Type) {
                 continue;
@@ -675,15 +675,15 @@ export abstract class MTBroker implements IMTBroker {
         return true;
     }
 
-    public calculateTotalVAR(orderType?: OrderTypes): number {
+    public calculateHighestVAR(orderType?: OrderTypes): number {
         let res = 0;
         for (const order of this.orders) {
             if (orderType && orderType !== order.Type) {
                 continue;
             }
             
-            if (order.RiskPercentage) {
-                res += order.RiskPercentage;
+            if (order.RiskPercentage > res) {
+                res = order.RiskPercentage;
             }
         }
 
