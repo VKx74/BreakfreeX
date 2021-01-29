@@ -16,17 +16,11 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
     protected get _mtBroker(): MTBroker {
         return this._broker.activeBroker as MTBroker;
     }
-    
-<<<<<<< HEAD
-    private _subscription: Subscription;
-    private _subscriptionOnOrderDataChanged: Subscription;
-    private _brokerStateChangedSubscription: Subscription;
-    private _instrumentDecimals: { [symbol: string]: number; } = {};
-=======
+
     protected _subscription: Subscription;
     protected _subscriptionOnOrderDataChanged: Subscription;
     protected _instrumentDecimals: { [symbol: string]: number; } = {};
->>>>>>> feature/user-info-popup
+    protected _brokerStateChangedSubscription: Subscription;
 
     protected _selectedTabIndex: number;
     @Input() set selectedTabIndex(value: number) {
@@ -77,13 +71,11 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
         this._subscriptionOnOrderDataChanged = this._mtBroker.onOrdersParametersUpdated.subscribe(() => {
             this.ordersUpdated();
         });
-<<<<<<< HEAD
         this._brokerStateChangedSubscription = this._broker.activeBroker$.subscribe((data) => {
             if (this._mtBroker) {
                 this.updateItems();
             }
         });
-=======
         this._onTradePanelDataHighlightSubscription = this._dataHighlightService.onTradePanelDataHighlight.subscribe(this._handleHighlight.bind(this));
     }
 
@@ -172,7 +164,6 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
         }
 
         return rec.FailedChecks[0].Recommendation;
->>>>>>> feature/user-info-popup
     }
 
     public raiseEdit(item: T) {
@@ -243,10 +234,9 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
 
         if (this._subscriptionOnOrderDataChanged) {
             this._subscriptionOnOrderDataChanged.unsubscribe();
-<<<<<<< HEAD
+
         if (this._brokerStateChangedSubscription)
             this._brokerStateChangedSubscription.unsubscribe();
-=======
         }
 
         if (this._onTradePanelDataHighlightSubscription) {
@@ -280,6 +270,5 @@ export abstract class MTItemsComponent<T> implements OnInit, OnDestroy {
             return "Downtrend";
         }
         return "Unknown";
->>>>>>> feature/user-info-popup
     }
 }
