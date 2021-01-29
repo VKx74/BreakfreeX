@@ -59,7 +59,7 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let minusScore = data.GlobalRTD ? 0 : 4;
-            let tooltip = data.GlobalRTD ? "You are trading with the global trend in your favor. Keep doing this." : "WARNING! You are entering a trade that goes against the global trend. It's very possible this trade could be a winning trade, however you will discover over time that trading against the trend this is the sole reason you never become profitable.";
+            let tooltip = data.GlobalRTD ? "You are trading with the global trend in your favor. Keep doing this." : "WARNING! You are entering a trade that goes against the global trend. It's very possible this trade could be a winning trade, however you will discover over time that trading against the trend is the sole reason you never become profitable.";
             if (data.GlobalRTDTrendStrength) {
                 if (data.GlobalRTDTrendStrength === RTDTrendStrength.Strong) {
                     minusScore = 5;
@@ -85,7 +85,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Major levels",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                tooltip: data.Levels ? "You are not trading into any major support or resistance levels. " : "CAREFUL! You are counter trading into a major level. Only do this if you know what you are doing (most humans don't, and would be better off deploying capital another way)"
+                tooltip: data.Levels ? "You are not trading into any major support or resistance levels. " : "CAREFUL! You are counter trading into a major level. Only do this if you know what you are doing (most humans don't, and would be better off deploying capital in a different market)"
             };
         }
     },

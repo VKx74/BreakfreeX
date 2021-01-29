@@ -86,7 +86,7 @@ export class TradeGuardService {
         if (risks === 1) {
             res.push({
                 Issue: "You are overleveraged.",
-                Recommendation: "Stop gambling immediately. You should reduce position size or cancel orders.",
+                Recommendation: "Are you going to take this serious or not, you should reduce position size or cancel orders.",
                 RiskClass: RiskClass.Low,
                 RiskType: RiskType.HighRisk,
                 RelatedData: relatedData,
@@ -94,7 +94,7 @@ export class TradeGuardService {
             });
         } else if (risks > 1) {
             res.push({
-                Issue: "You are overleveraging on multiple positions.",
+                Issue: "You are overleveraging on multiple assets.",
                 Recommendation: "You better pay attention now, trading like this will cost you everything. Cancel orders or reduce position size.",
                 RiskClass: RiskClass.Medium,
                 RiskType: RiskType.HighRisk,
@@ -245,15 +245,15 @@ export class TradeGuardService {
 
     private _getRiskTypeDescriptionForPositions(riskType: RiskType, isMultiple: boolean = false): string {
         switch (riskType) {
-            case RiskType.HighRisk: return isMultiple ? "Overleverage detected on multiple positions." : "Overleverage detected on a position.";
+            case RiskType.HighRisk: return isMultiple ? "You are overleveraged on multiple trades." : "You are overleveraged on a trade.";
             case RiskType.WrongTrend: return isMultiple ? "Multiple positions against the global trend." : "Position found trading against the global trend. ";
         }
     }
 
     private _getRiskTypeRecommendationForMarketOrders(riskType: RiskType): string {
         switch (riskType) {
-            case RiskType.HighRisk: return "You should carefully avoid adding further trades or orders.";
-            case RiskType.PriceFarFromEntry: return "You will never catch all of them. You can go now cancel these orders.";
+            case RiskType.HighRisk: return "Get out of this trade at breakeven and stop doing greedy emotional trading, that only simple human minds would do.";
+            case RiskType.PriceFarFromEntry: return "No trigger, no trade. On to the next. You can now cancel these orders.";
             case RiskType.SLNotSet: return "You should never have open trades with no stoploss set. You should set stoploss for orders.";
             case RiskType.WrongTrend: return "Market structure has changed. You can go ahead and move TPs to breakeven.";
         }
