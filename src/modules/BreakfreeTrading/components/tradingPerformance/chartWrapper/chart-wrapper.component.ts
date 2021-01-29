@@ -1,6 +1,4 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { first } from "rxjs/operators";
-import { AST_This } from "terser";
 import { ChartWrapperSettings } from "../model/ChartWrapperSettings";
 
 @Component({
@@ -16,17 +14,11 @@ export class ChartWrapperComponent implements OnInit {
 
     public Header: string;
 
-    @Input() set ChartSettings(chartSettings: ChartWrapperSettings) {
-        /* console.log('chartSettings:');
-        console.log(chartSettings);
-        this._chartSettings = chartSettings;
-        this.updateChartSettings(); */        
+    @Input() set ChartSettings(chartSettings: ChartWrapperSettings) {        
         if (!this.Chart) {
             this._chartSettings = chartSettings;
             this.initChart();
-            this.Header = `${this._chartSettings.header}(${this._chartSettings.unit})`;
-            // console.log('header:');
-            // console.log(this.Header);
+            this.Header = `${this._chartSettings.header}(${this._chartSettings.unit})`;            
         }
     }
 
@@ -35,21 +27,9 @@ export class ChartWrapperComponent implements OnInit {
         this.updateChartData();
     }
     
-    ngOnInit(): void {
-        // this.initChart();
-        // this.updateChartSettings();
+    ngOnInit(): void {        
         this.updateChartData();
     }
-
-    /*private updateChartSettings(): void {        
-        if (this.Chart && this._chartSettings){
-            console.log('uppdate chart settings:');
-            this.Chart.type = this._chartSettings.chartType;
-            console.log(this.Chart.type);
-            console.log('^ chart type');
-            this.Chart.update();
-        }
-    }*/
 
     private updateChartData(): void {
         if (this.Chart && this._chartSettings) {
@@ -57,8 +37,7 @@ export class ChartWrapperComponent implements OnInit {
         }
     }
 
-    private addChartData(chartData: {[key: number]: number}) {
-        console.log('Add chart Data');
+    private addChartData(chartData: {[key: number]: number}) {        
         let firstVal = 0;
         let lastVal = 0;
         let keys = Object.keys(chartData);        
@@ -67,19 +46,12 @@ export class ChartWrapperComponent implements OnInit {
         this.Chart.data.datasets[0].backgroundColor = [];
         this.Chart.specArray = [];
         this.Chart.unit = this._chartSettings.unit;
-        this.Header = `${this._chartSettings.header}(${this._chartSettings.unit})`;
-        // let maxVal = Number.NEGATIVE_INFINITY;
-        // let minVal = Number.POSITIVE_INFINITY;
+        this.Header = `${this._chartSettings.header}(${this._chartSettings.unit})`;        
         keys.forEach((key) => {            
             this.Chart.data.datasets[0].data.push(chartData[key]);            
             this.Chart.data.labels.push(this.screateLabel(parseInt(key, 10)));
             this.Chart.specArray.push(key);
-            lastVal = chartData[key];
-            /* if(lastVal > maxVal)
-                maxVal = lastVal;
-            if(lastVal < minVal)
-                minVal = lastVal;
-                */
+            lastVal = chartData[key];            
             if (!firstVal)
                 firstVal = chartData[key];
             if (lastVal < 0) {
@@ -88,9 +60,6 @@ export class ChartWrapperComponent implements OnInit {
                 this.Chart.data.datasets[0].backgroundColor.push('green');
             }
         });
-        // maxVal*=1.1;
-        // minVal*=1.1;
-        // this.Chart.options.scales.yAxes[0].ticks.stepSize = (maxVal - minVal) / 4;
 
         if (firstVal > lastVal ) {
             this.Chart.data.datasets[0].borderColor = 'red';
@@ -127,10 +96,7 @@ export class ChartWrapperComponent implements OnInit {
                     backgroundColor: 'rgba(125,125,125,0.8)',                    
                     displayColors: false,
                     callbacks: {
-                        label: function(tooltipItem, data) {
-                            // let dateUnix = this._chart.specArray[tooltipItem.index];
-                            // let date = new Date(dateUnix * 1000);                            
-                            // return `${date.toLocaleDateString()}: ${tooltipItem.yLabel} ${this._chart.unit}`;
+                        label: function(tooltipItem, data) {                            
                             return `${tooltipItem.yLabel} ${this._chart.unit}`;
                         }
                     }
@@ -150,15 +116,12 @@ export class ChartWrapperComponent implements OnInit {
                             fontStyle: "bold",
                             fontSize: 10,
                             maxTicksLimit: 4                            
-                            // stepSize: 1000                            
                         }
                     }],
                     xAxes: [{
                         // display: true,
                         gridLines: {
-                            display: false,
-                            /*zeroLineColor: "rgba(0,0,0,0)",
-                            drawBorder: false*/
+                            display: false,                            
                         },                       
                     }]
                 }
