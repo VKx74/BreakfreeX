@@ -13,6 +13,8 @@ import { TradingProfileService } from 'modules/BreakfreeTrading/services/trading
 import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
 import { ThemeService } from '@app/services/theme.service';
 import { Theme } from '@app/enums/Theme';
+import { UserSettings, UserSettingsService } from '@app/services/user-settings/user-settings.service';
+import { LocalizationService } from 'Localization';
 
 @Component({
     selector: 'base-nav',
@@ -82,7 +84,9 @@ export class BaseNavComponent implements OnInit {
                 private _dialog: MatDialog,
                 private _tradingProfileService: TradingProfileService,
                 private _sidebarService: SidebarService,
+                private _localizationService: LocalizationService,
                 private _themeService: ThemeService,
+                private _userSettingsService: UserSettingsService,
                 private _route: ActivatedRoute) {
     }
 
@@ -157,9 +161,19 @@ export class BaseNavComponent implements OnInit {
 
     changeTheme() {
         this._themeService.setActiveTheme(this.isDarkTheme ? Theme.Light : Theme.Dark);
+        this._save();
     } 
 
     getOverviewClass() {
         
+    }
+
+    private _save() {
+        const settings: UserSettings = {
+            theme: this._themeService.activeTheme,
+            locale: this._localizationService.locale,
+        } as UserSettings;
+
+        this._userSettingsService.saveSettings(settings, true).subscribe();
     }
 }
