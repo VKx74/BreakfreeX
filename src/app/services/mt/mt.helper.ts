@@ -3,6 +3,10 @@ import { OrderTradeType, RiskClass } from "modules/Trading/models/models";
 
 export class MTHelper {
     public static buildRiskByVAR(contractSize: number, profitRate: number, size: number, price: number, cvar: number, balance: number) {
+        if (!profitRate) {
+            return 0;
+        }
+        
         let diff = price / 100 * cvar;
         let riskNet = diff * size * contractSize;
         // if (profitRate === 0) {
@@ -15,6 +19,10 @@ export class MTHelper {
     } 
     
     public static buildRiskByPrice(contractSize: number, profitRate: number, size: number, price1: number, price2: number, balance: number) {
+        if (!profitRate) {
+            return 0;
+        }
+
         let diff = Math.abs(price1 - price2);
         let riskNet = diff * size * contractSize;
         // if (profitRate === 0) {
