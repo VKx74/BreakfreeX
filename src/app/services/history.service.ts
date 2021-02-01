@@ -135,6 +135,9 @@ export class HistoryService implements IHealthable {
             });
         }
 
+        if (pricePrecision > 8) {
+            pricePrecision = 8;
+        }
         return pricePrecision;
     }
 }

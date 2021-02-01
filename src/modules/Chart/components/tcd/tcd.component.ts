@@ -402,8 +402,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     const instrument = action.data as IChartInstrument;
                     const chartInstrument = chart.instrument;
 
-                    if (chartInstrument.symbol !== instrument.symbol
-                        || chartInstrument.exchange !== instrument.exchange) {
+                    if (!instrument) {
+                        return;
+                    }
+
+                    if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange) {
 
                         chart.instrument = Object.assign({}, instrument);
                         chart.sendBarsRequest();
@@ -416,6 +419,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     const instrument = action.data.instrument as IChartInstrument;
                     const timeInterval = (action.data.timeframe as number) * 1000;
                     const chartInstrument = chart.instrument;
+
+                    if (!instrument) {
+                        return;
+                    }
                     
                     if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
 
