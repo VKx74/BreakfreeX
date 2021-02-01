@@ -9,7 +9,7 @@ import {PersonalInfoHelper} from "@app/services/personal-info/personal-info-help
 import {TzUtils} from "TimeZones";
 import {DocumentsUrls, IPersonalInfoData} from "../app-member-info/app-member-info.component";
 import {Observable} from "rxjs";
-import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 
 export type ApproveHandler = () => Observable<any>;
 export type RejectHandler = (message: string) => Observable<any>;
@@ -22,12 +22,15 @@ export type RejectHandler = (message: string) => Observable<any>;
 export class AppMemberXpInfoComponent implements OnInit {
     @Input() userId: string;
 
+    missions: IBFTMissions;
+
     constructor(private _tradingProfileService: TradingProfileService) {
-        this._tradingProfileService.getTradingMissionsByUSerId(this.userId).subscribe((data) => {
-            console.log(data);
-        });
     }
 
     ngOnInit() {
+        this._tradingProfileService.getTradingMissionsByUSerId(this.userId).subscribe((data) => {
+            this.missions = data;
+            console.log(this.missions);
+        });
     }
 }

@@ -1,4 +1,77 @@
 <div class="root">
-    <div class="xp-wrapper">
+    <div class="xp-wrapper" *ngIf="missions">
+        <div class="xp-header">General</div>
+        <div class="xp-row">
+            <div class="name">Level</div>
+            <div class="value">{{missions.level}}</div>
+        </div>
+        <div class="xp-row">
+            <div class="name">Level Name</div>
+            <div class="value">{{missions.levelName}}</div>
+        </div>
+        <div class="xp-row">
+            <div class="name">Level Points</div>
+            <div class="value">{{missions.levelPoints}}</div>
+        </div>
+        <div class="xp-row">
+            <div class="name">Total Points</div>
+            <div class="value">{{missions.totalPoints}}</div>
+        </div>
+
+        <div class="xp-header">Daily missions</div>
+        <div class="xp-mission-row" *ngFor="let mission of missions?.daily">
+            <div class="xp-row">
+                <div class="name">Mission name</div>
+                <div class="value">{{mission.name}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission current value</div>
+                <div class="value">{{mission.currentValue}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission required value</div>
+                <div class="value">{{mission.requiredValue}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Is Mission failed</div>
+                <div class="value">{{mission.faileDescription ? "Yes" : "No"}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission fail desc.</div>
+                <div class="value">{{mission.faileDescription}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission notice</div>
+                <div class="value">{{mission.notice}}</div>
+            </div>
+        </div>
+
+        <div class="xp-header">Weekly missions</div>
+        <div class="xp-mission-row" *ngFor="let mission of missions?.weekly">
+            <div class="xp-row">
+                <div class="name">Mission name</div>
+                <div class="value">{{mission.name}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission current value</div>
+                <div class="value">{{mission.currentValue}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission required value</div>
+                <div class="value">{{mission.requiredValue}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Is Mission failed</div>
+                <div class="value">{{mission.faileDescription ? "Yes" : "No"}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission fail desc.</div>
+                <div class="value">{{mission.faileDescription}}</div>
+            </div>
+            <div class="xp-row">
+                <div class="name">Mission notice</div>
+                <div class="value">{{mission.notice}}</div>
+            </div>
+        </div>
     </div>
 </div>

@@ -2,7 +2,38 @@
 @import "global-styles/mixins/themify";
 
 :host {
+  .xp-header {
+    margin: 10px;
+    font-weight: 700;
+  }
+
+  .xp-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .xp-row {
+    display: flex;
+    font-size: 12px;
+    margin: 5px;
+    .name {
+      width: 200px;
+      font-weight: 700;
+    }
+    .value {
+      max-width: 400px;
+    }
+  }
+
+  .xp-mission-row {
+    margin: 5px;
+    padding: 5px;
+    border-bottom: 1px solid;
+  }
 }
 
 @include themify($themes, true) {
+  .root {
+    color: themed('valueTextColor');
+  }
 }
