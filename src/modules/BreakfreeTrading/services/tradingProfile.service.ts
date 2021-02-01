@@ -148,6 +148,10 @@ export class TradingProfileService {
         });
     } 
 
+    getTradingMissionsByUSerId(id: string): Observable<IBFTMissions> {
+        return this._http.get<IBFTMissions>(`${this.url}generalstats/missions?userId=${id}`);
+    }
+
     private _raiseCallbacks() {
         this.MissionChanged.next();
     }

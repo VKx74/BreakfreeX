@@ -1,0 +1,8 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+}
+
+@include themify($themes, true) {
+}

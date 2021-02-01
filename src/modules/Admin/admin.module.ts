@@ -119,6 +119,7 @@ import {UploadFileInputConfig} from "@file-uploader/components/upload-file-input
 import {IUploadFileInputConfig} from "@file-uploader/components/upload-file-input/upload-file-input.component";
 import {UploadFile} from "@file-uploader/data/UploadFIle";
 import { LayoutStorageService } from '@app/services/layout-storage.service';
+import { AppMemberXpInfoComponent } from './components/app-member-xp-info/app-member-xp-info.component';
 
 @NgModule({
     imports: [
@@ -203,6 +204,7 @@ import { LayoutStorageService } from '@app/services/layout-storage.service';
         RunningScriptsComponent,
         FooterComponent,
         AppMemberKycInfoComponent,
+        AppMemberXpInfoComponent,
         PaginationTableContainerComponent,
         AdminSidebarComponent,
         AdminNavComponent,

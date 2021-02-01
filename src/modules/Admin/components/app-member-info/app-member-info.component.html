@@ -49,6 +49,9 @@
                     <mat-tab label="Subscriptions">
                         <user-subscriptions [user]="user"></user-subscriptions>
                     </mat-tab>
+                    <mat-tab label="XP">
+                        <app-member-xp-info [userId]="user.id"></app-member-xp-info>
+                    </mat-tab>
                     
                 </mat-tab-group>
             </div>
