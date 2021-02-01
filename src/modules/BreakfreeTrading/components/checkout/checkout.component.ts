@@ -58,7 +58,7 @@ export class CheckoutComponent extends Modal<CheckoutComponent> implements OnIni
         (window as any).stripe.redirectToCheckout({
             lineItems: [{price: subscription_id, quantity: 1}],
             mode: 'subscription',
-            successUrl: window.location.origin + "/#/pages/success-checkout",
+            successUrl: "https://breakfreetrading.com/success-checkout.html",
             cancelUrl: window.location.origin,
             customerEmail: this._identityService.email || ""
           })
