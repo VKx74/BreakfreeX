@@ -120,6 +120,8 @@ import {IUploadFileInputConfig} from "@file-uploader/components/upload-file-inpu
 import {UploadFile} from "@file-uploader/data/UploadFIle";
 import { LayoutStorageService } from '@app/services/layout-storage.service';
 import { AppMemberXpInfoComponent } from './components/app-member-xp-info/app-member-xp-info.component';
+import { XPDashboardComponent } from './components/xp-dashboard/xp-dashboard.component';
+import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
 
 @NgModule({
     imports: [
@@ -195,6 +197,7 @@ import { AppMemberXpInfoComponent } from './components/app-member-xp-info/app-me
         ThreadMessagesComponent,
         ThreadMembersComponent,
         ForumComponent,
+        XPDashboardComponent,
         QAComponent,
         UiComponentsPermissionManagerComponent,
         AdminPanelMainComponent,
@@ -236,6 +239,7 @@ import { AppMemberXpInfoComponent } from './components/app-member-xp-info/app-me
         EventConsolidatorResolver,
         SystemNotificationsResolver,
         ThreadsResolver,
+        XPDashboardResolver,
         ThreadMembersResolver,
         ThreadDetailsResolver,
         ThreadMessagesResolver,

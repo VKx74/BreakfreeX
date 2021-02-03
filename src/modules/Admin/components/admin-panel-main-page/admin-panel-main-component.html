@@ -95,6 +95,19 @@
             </div>
         </ng-container>
 
+        <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
+            <div class="section" *showByTag="ComponentIdentifier.xpDashboard">
+                <div class="top flex">
+                    <div class="icon">
+                        <i class="crypto-icon crypto-icon-admin-dashboard"></i>
+                    </div>
+                    <h3 class="is-bold crypto-text">XP Dashboard</h3>
+                </div>
+                <p>View trading XP Dashboard.</p>
+                <button class="crypto-button" [routerLink]="AdminRoutes.XPDashboard">XP Dashboard</button>
+            </div>
+        </ng-container>
+
         <ng-container *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]">
             <div class="section" *showByTag="ComponentIdentifier.adminChat">
                 <div class="top flex">

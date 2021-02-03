@@ -123,7 +123,14 @@
             <div class="section-item" [routerLink]="AdminRoutes.AppMembers"  *showByTag="ComponentIdentifier.appMembers">
                 <div class="item-icon">
                     <i class="crypto-icon crypto-icon-app-members"></i></div>
-                <div class="item-text">Members of platform</div>
+                <div class="item-text">Members</div>
+            </div>
+        </ng-container>
+        <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
+            <div class="section-item" [routerLink]="AdminRoutes.XPDashboard"  *showByTag="ComponentIdentifier.xpDashboard">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-admin-dashboard"></i></div>
+                <div class="item-text">XP Dashboard</div>
             </div>
         </ng-container>
     </sidebar-section>

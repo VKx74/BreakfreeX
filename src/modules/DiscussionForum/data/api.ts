@@ -8,7 +8,6 @@ export interface IBaseResponse<T = any> {
     error: any | null;
 }
 
-
 export interface DiscussionDTO {
     id: string;
     title: string;

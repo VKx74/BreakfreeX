@@ -41,6 +41,7 @@
   "runningScript": true,
   "accounts": false,
 
+  "xpDashboard":  true,
   "forum":  true,
   "scripting": true,
   "backtesting": true,

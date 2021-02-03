@@ -1,0 +1,58 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!items?.length"
+                            [componentIdentifier]="ComponentIdentifier.xpDashboard"
+                            [title]="'XP Dashboard'"
+                            [loading]="false">
+
+    <data-table [rows]="items">
+        <data-table-header-cell columnName="id">
+            Id
+        </data-table-header-cell>
+        <data-table-header-cell columnName="email">
+            Email
+        </data-table-header-cell>
+        <data-table-header-cell columnName="levelName">
+            Level Name
+        </data-table-header-cell>
+        <data-table-header-cell columnName="level">
+            Level
+        </data-table-header-cell>
+        <data-table-header-cell columnName="levelPoints">
+            Level Points
+        </data-table-header-cell>
+        <data-table-header-cell columnName="points">
+            Points
+        </data-table-header-cell>
+
+        <data-table-cell columnName="id">
+            <ng-template let-item>
+                <span>{{item.profile.userId}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="email">
+            <ng-template let-item>
+                <span>{{item.email ? item.email : "Loading..."}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="levelName">
+            <ng-template let-item>
+                <span>{{item.profile.levelName}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="level">
+            <ng-template let-item>
+                <span>{{item.profile.level}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="levelPoints">
+            <ng-template let-item>
+                <span>{{item.profile.levelPoints}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="points">
+            <ng-template let-item>
+                <span>{{item.profile.points}}</span>
+            </ng-template>
+        </data-table-cell>
+    </data-table>
+</pagination-table-container>

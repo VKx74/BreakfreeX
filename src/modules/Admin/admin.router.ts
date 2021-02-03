@@ -46,6 +46,8 @@ import {AdminComponent} from "./components/admin/admin.component";
 import {UserSettingsResolver} from "@app/services/user-settings.resolver";
 import {ForumCategoriesComponent} from "./components/forum-categories/forum-categories.component";
 import {ForumCategoriesResolver} from "./resolvers/forum-categories.resolver";
+import { XPDashboardComponent } from './components/xp-dashboard/xp-dashboard.component';
+import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
 export const redirectUrl = `/${AppRoutes.Admin}`;
 
 const SYSTEM_MONITORING_URLS = AppConfigService.config.systemMonitoringUrls;
@@ -310,6 +312,25 @@ export const routes: Routes = [
                     discussions: ForumResolver
                 },
                 component: ForumComponent,
+            },
+            {
+                path: `${AdminRoutes.XPDashboard}`,
+                canActivate: [RoleGuard, TagGuard],
+                data: {
+                    redirectUrl: redirectUrl,
+                    identifier: ComponentIdentifier.xpDashboard,
+                    roleGuardConfig: {
+                        allowedRoles: [
+                            Roles.Admin,
+                            Roles.SupportOfficer,
+                        ],
+                        redirectUrl: redirectUrl
+                    },
+                },
+                resolve: {
+                    discussions: XPDashboardResolver
+                },
+                component: XPDashboardComponent,
             },
             {
                 path: `${AdminRoutes.QA}`,

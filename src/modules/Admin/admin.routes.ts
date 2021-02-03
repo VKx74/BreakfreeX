@@ -22,5 +22,6 @@ export const AdminRoutes = {
     RestrictionsManager: 'restrictions-manager',
     Wallets: 'wallets',
     Withdraws: 'withdraws',
-    RunningScripts: 'running-scripts'
+    RunningScripts: 'running-scripts',
+    XPDashboard: 'xp-dashboard'
 };
