@@ -23,6 +23,7 @@
         <data-table-header-cell columnName="points">
             Points
         </data-table-header-cell>
+        <data-table-header-cell columnName="actions" [columnWidth]="50"></data-table-header-cell>
 
         <data-table-cell columnName="id">
             <ng-template let-item>
@@ -52,6 +53,19 @@
         <data-table-cell columnName="points">
             <ng-template let-item>
                 <span>{{item.profile.points}}</span>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="actions">
+            <ng-template let-item>
+                <div class="text-right">
+                    <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                                *ngIf="showToggleMenu(item)"
+                                (click)="showUserInfo(item)">Details
+                        </button>
+                    </mat-menu>
+                </div>
             </ng-template>
         </data-table-cell>
     </data-table>

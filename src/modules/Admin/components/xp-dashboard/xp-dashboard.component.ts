@@ -17,7 +17,10 @@ import { XPDashboardItem, XPDashboardItemDTO } from 'modules/Admin/data/xp-dashb
 import { XPDashboardService } from 'modules/Admin/services/xp-dashboard.service';
 import { HttpParams } from '@angular/common/http';
 import { UsersService } from '@app/services/users.service';
-import { UserModel } from '@app/models/auth/auth.models';
+import { Roles, UserModel } from '@app/models/auth/auth.models';
+import { IdentityService } from '@app/services/auth/identity.service';
+import { PersonalInfoStatus } from '@app/services/personal-info/personal-info.service';
+import { AppMemberInfoComponent, AppMemberInfoComponentConfig } from '../app-member-info/app-member-info.component';
 
 export interface IXPDashboardRequestParams {
     from?: string;
@@ -82,6 +85,8 @@ export class XPDashboardComponent extends PaginationComponent<XPDashboardItemDTO
 
     constructor(private _xpService: XPDashboardService,
                 private _userService: UsersService,
+                private _identityService: IdentityService,
+                private _dialog: MatDialog,
                 private _activatedRoute: ActivatedRoute) {
         super();
         this.pageSize = 50;
@@ -106,6 +111,39 @@ export class XPDashboardComponent extends PaginationComponent<XPDashboardItemDTO
             });
         }
         this._loadUsers();
+    }  
+    
+    showToggleMenu(item: XPDashboardItem): boolean {
+        const member = this._getUserFromCache(item);
+        if (!member) {
+            return false;
+        }
+
+        const role = this._identityService.role;
+        if (role === Roles.Admin || role === Roles.SupportOfficer) {
+            return true;
+        }
+        return member.kycStatus !== PersonalInfoStatus.None;
+    }
+
+    showUserInfo(item: XPDashboardItem) {
+        const user = this._getUserFromCache(item);
+        if (!user) {
+            return false;
+        }
+
+        this._dialog.open<any, AppMemberInfoComponentConfig>(AppMemberInfoComponent, {
+            data: {
+                user: user,
+                statusChangeHandler: (status: PersonalInfoStatus) => {
+                    user.kycStatus = status;
+                }
+            }
+        });
+    }
+
+    private _getUserFromCache(search: XPDashboardItem): UserModel {
+       return this.userDataCache[search.profile.userId];
     }
 
     private _loadUsers() {
