@@ -108,6 +108,19 @@
             </div>
         </ng-container>
 
+        <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
+            <div class="section" *showByTag="ComponentIdentifier.registrationsDashboard">
+                <div class="top flex">
+                    <div class="icon">
+                        <i class="crypto-icon crypto-icon-admin-dashboard"></i>
+                    </div>
+                    <h3 class="is-bold crypto-text">Registrations Dashboard</h3>
+                </div>
+                <p>View user Registrations Dashboard.</p>
+                <button class="crypto-button" [routerLink]="AdminRoutes.registrationsDashboard">Registrations Dashboard</button>
+            </div>
+        </ng-container>
+
         <ng-container *showIfRole="[Roles.Admin, Roles.SocialMediaOfficer]">
             <div class="section" *showByTag="ComponentIdentifier.adminChat">
                 <div class="top flex">

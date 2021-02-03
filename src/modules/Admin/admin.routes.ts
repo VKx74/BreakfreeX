@@ -23,5 +23,6 @@ export const AdminRoutes = {
     Wallets: 'wallets',
     Withdraws: 'withdraws',
     RunningScripts: 'running-scripts',
-    XPDashboard: 'xp-dashboard'
+    XPDashboard: 'xp-dashboard',
+    registrationsDashboard: 'registrations-dashboard',
 };

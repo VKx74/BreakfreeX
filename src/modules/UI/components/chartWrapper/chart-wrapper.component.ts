@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { ChartWrapperSettings } from "../model/ChartWrapperSettings";
+import { ChartWrapperSettings } from "../../../BreakfreeTrading/components/tradingPerformance/model/ChartWrapperSettings";
 
 @Component({
     selector: 'chart-wrapper',

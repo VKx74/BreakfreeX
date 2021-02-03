@@ -10,6 +10,7 @@ import {AppConfigService} from "./app.config.service";
 import { IPaginationResponse, PaginationParams, PaginationResponse } from '@app/models/pagination.model';
 import { QueryParamsConstructor } from 'modules/Admin/data/models';
 import { map } from 'rxjs/operators';
+import { IRegistrationStats } from '@app/models/common/registrationStats';
 
 @Injectable({
     providedIn: 'root'
@@ -34,6 +35,14 @@ export class UsersService {
 
     public deleteUser(id: string): Observable<any> {
         return this._http.delete(`${AppConfigService.config.apiUrls.identityUrl}User/${id}`, this._httpOptions);
+    }
+
+    public getRegistrationsStats(): Observable<IRegistrationStats[]> {
+        return this._http.get<IRegistrationStats[]>(`${AppConfigService.config.apiUrls.identityUrl}Statistics/total_user_registrations_filtered_by_days`, this._httpOptions);
+    }
+
+    public getRegistrationsStatsByDate(from: number, to: number): Observable<IRegistrationStats[]> {
+        return this._http.get<IRegistrationStats[]>(`${AppConfigService.config.apiUrls.identityUrl}Statistics/total_user_registrations_filtered_by_days?from=${from}&to=${to}`, this._httpOptions);
     }
 
 

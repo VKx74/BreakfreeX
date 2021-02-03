@@ -46,7 +46,6 @@ import { TradingPerformanceService, UserTradingPerformanceData } from './service
 import { TradeGuardService } from './services/tradeGuard.service';
 import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
 import { TradingPerformanceComponent } from './components/tradingPerformance/tradingPerformance.component';
-import { ChartWrapperComponent } from './components/tradingPerformance/chartWrapper/chart-wrapper.component';
 
 @NgModule({
     // components here
@@ -68,7 +67,6 @@ import { ChartWrapperComponent } from './components/tradingPerformance/chartWrap
         SpeedometerComponent,
         PlainChartComponent,
         TradeGuardRiskClassPipe,
-        ChartWrapperComponent,
         TradingPerformanceComponent
     ],
     imports: [

@@ -122,6 +122,7 @@ import { LayoutStorageService } from '@app/services/layout-storage.service';
 import { AppMemberXpInfoComponent } from './components/app-member-xp-info/app-member-xp-info.component';
 import { XPDashboardComponent } from './components/xp-dashboard/xp-dashboard.component';
 import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
+import { RegistrationsDashboardComponent } from './components/registrations-dashboard/registrations-dashboard.component';
 
 @NgModule({
     imports: [
@@ -198,6 +199,7 @@ import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
         ThreadMembersComponent,
         ForumComponent,
         XPDashboardComponent,
+        RegistrationsDashboardComponent,
         QAComponent,
         UiComponentsPermissionManagerComponent,
         AdminPanelMainComponent,

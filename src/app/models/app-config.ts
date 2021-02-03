@@ -92,6 +92,7 @@ export enum ComponentIdentifier {
     marketView = "marketView",
 
     // admin
+    registrationsDashboard = "registrationsDashboard",
     xpDashboard = "xpDashboard",
     summary = "summary",
     blockchains = "blockchains",

@@ -40,7 +40,7 @@
     </div>
 
     <div *ngFor="let chartSett of ChartsSettingsSet">
-        <chart-wrapper [ChartSettings] = 'chartSett' [ChartData]='ChartDataSet[chartSett.index]'>
+        <chart-wrapper [ChartSettings]='chartSett' [ChartData]='ChartDataSet[chartSett.index]'>
         </chart-wrapper>
     </div> 
 </div>

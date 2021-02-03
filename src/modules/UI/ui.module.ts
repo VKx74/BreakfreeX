@@ -43,6 +43,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.component';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { EmojiComponent } from './components/emoji/emoji.component';
+import { ChartWrapperComponent } from './components/chartWrapper/chart-wrapper.component';
 
 @NgModule({
     declarations: [
@@ -70,7 +71,8 @@ import { EmojiComponent } from './components/emoji/emoji.component';
         IndicatorComponent,
         HeaderComponent,
         PinInputModalComponent,
-        EmojiComponent
+        EmojiComponent,
+        ChartWrapperComponent
     ],
     imports: [
         CommonModule,
@@ -114,7 +116,8 @@ import { EmojiComponent } from './components/emoji/emoji.component';
         PaginationButtonsComponent,
         IndicatorComponent,
         HeaderComponent,
-        EmojiComponent
+        EmojiComponent,
+        ChartWrapperComponent
     ],
     entryComponents: [
         ConfirmModalComponent,
