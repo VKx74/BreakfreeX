@@ -84,6 +84,7 @@ export class XPDashboardComponent extends PaginationComponent<XPDashboardItemDTO
                 private _userService: UsersService,
                 private _activatedRoute: ActivatedRoute) {
         super();
+        this.pageSize = 50;
     }
 
     ngOnInit() {
