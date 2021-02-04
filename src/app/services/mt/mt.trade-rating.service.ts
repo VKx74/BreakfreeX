@@ -101,7 +101,7 @@ export class MTTradeRatingService {
                         RiskType: RiskType.WrongTrend
                     });
                 }
-            } else {
+            } else if (!res.Timeframe || res.Timeframe <= 60 * 60 * 4) {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Trading against strong local trend",
@@ -200,7 +200,7 @@ export class MTTradeRatingService {
                         RiskType: RiskType.WrongTrend
                     });
                 }
-            } else {
+            } else if (!res.Timeframe || res.Timeframe <= 60 * 60 * 4) {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Trading against strong local trend",

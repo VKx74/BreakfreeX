@@ -7,7 +7,7 @@ import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
 import { Observable, Subject, Subscription } from "rxjs";
 import { BrokerService } from "@app/services/broker.service";
-import { debounceTime, finalize, takeUntil} from "rxjs/operators";
+import { debounceTime, finalize, takeUntil } from "rxjs/operators";
 import { AlertService } from "@alert/services/alert.service";
 import { memoize } from "@decorators/memoize";
 import bind from "bind-decorator";
@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { MTHelper } from '@app/services/mt/mt.helper';
+import { TimeSpan } from '@app/helpers/timeFrame.helper';
 
 interface ChecklistItem {
     name: string;
@@ -35,16 +36,36 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             let acceptableTrend = data.LocalRTD;
-            let minusScore = acceptableTrend ? 0 : 2;
-            let tooltip = acceptableTrend ?   "You are trading with local trend in your favor." : "You are trading against local trend.";
-            if (data.LocalRTDTrendStrength) {
-                if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
-                    minusScore = 3;
-                } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Average) {
+            let minusScore = 0;
+            let tooltip = acceptableTrend ? "You are trading with local trend in your favor." : "You are trading against local trend.";
+            let timeframe = config.timeframe;
+            let hour = TimeSpan.MILLISECONDS_IN_HOUR / 1000;
+
+            if (!acceptableTrend) {
+                if (timeframe) {
+                    if (timeframe <= hour) {
+                        if (data.LocalRTDTrendStrength === RTDTrendStrength.Weak) {
+                            acceptableTrend = true;
+                            tooltip = `You are trading against acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                        } else {
+                            tooltip = `You are trading against non acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                            minusScore = data.LocalRTDTrendStrength === RTDTrendStrength.Strong ? 3 : 2;
+                        }
+                    } else if (timeframe <= hour * 4) {
+                        if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
+                            tooltip = `You are trading against non acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                            minusScore = 2;
+                        } else {
+                            tooltip = `You are trading against acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                            acceptableTrend = true;
+                        }
+                    } else {
+                        tooltip = `You are trading against acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                        acceptableTrend = true;
+                    }
+                } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
+                    tooltip = `You are trading against non acceptable '${data.LocalRTDTrendStrength}' local trend.`;
                     minusScore = 2;
-                } else {
-                    minusScore = 0;
-                    acceptableTrend = true;
                 }
             }
 
@@ -107,7 +128,7 @@ const checklist: ChecklistItemDescription[] = [
                     valid = false;
                 }
 
-                tooltip = valid ? "You are using adequate leverage sized for this position. " :  "WARNING! You are about to enter an overleveraged trade. This is the main reason simple humans continue to lose in trading because they love to gamble.";
+                tooltip = valid ? "You are using adequate leverage sized for this position. " : "WARNING! You are about to enter an overleveraged trade. This is the main reason simple humans continue to lose in trading because they love to gamble.";
             }
 
             return {
@@ -137,7 +158,7 @@ const checklist: ChecklistItemDescription[] = [
                     valid = false;
                 }
 
-                tooltip = valid ? "You have no major correlated risk in your open/pending orders." :  "WARNING! If you take this trade, you will be overexposing and taking a too much-correlated risk. This means you will lose or win a much higher amount than usual and likely lead to losing your account in the long run. Avoid this trade and look to other markets.";
+                tooltip = valid ? "You have no major correlated risk in your open/pending orders." : "WARNING! If you take this trade, you will be overexposing and taking a too much-correlated risk. This means you will lose or win a much higher amount than usual and likely lead to losing your account in the long run. Avoid this trade and look to other markets.";
 
             }
             return {
@@ -171,7 +192,7 @@ const checklist: ChecklistItemDescription[] = [
                 valid: valid,
                 value: value,
                 minusScore: valid ? 0 : minusScore,
-                tooltip: valid ? "Your broker has acceptable spread on this market." :  "Warning! Your broker is offering you a bad spread on this market. Be very careful as this can lead to a total loss of your trading account on the wrong markets."
+                tooltip: valid ? "Your broker has acceptable spread on this market." : "Warning! Your broker is offering you a bad spread on this market. Be very careful as this can lead to a total loss of your trading account on the wrong markets."
             };
         }
     },
@@ -182,7 +203,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Stoploss",
                 valid: isValid,
                 minusScore: isValid ? 0 : 2,
-                tooltip: isValid ? "You have set a stoploss for the order. A basic but very important discipline for successful trading, when it comes to humans." :  "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. "
+                tooltip: isValid ? "You have set a stoploss for the order. A basic but very important discipline for successful trading, when it comes to humans." : "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. "
             };
         }
     }
@@ -279,7 +300,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             }
         }
     }
-    
+
     get config(): MTOrderConfig {
         return this._config;
     }
@@ -291,8 +312,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
     get selectedTime(): string {
         return this._selectedTime;
-    } 
-    
+    }
+
     set selectedDate(value: Date) {
         if (value) {
             this._selectedDate = value;
@@ -350,7 +371,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
         this._config = MTOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
-        
+
         this._checklistSubject.pipe(
             debounceTime(500),
             takeUntil(componentDestroyed(this))
@@ -529,7 +550,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             Symbol: this.config.instrument.id,
             Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
             SL: this.config.sl ? this.config.sl : null,
-            Timeframe:  this.config.timeframe
+            Timeframe: this.config.timeframe
         }).subscribe((res) => {
             this.calculatingChecklist = false;
             this._buildCalculateChecklistResults(res);
@@ -543,7 +564,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (!this.config.instrument) {
             return;
         }
-        
+
         this.calculatingChecklist = true;
         this._checklistSubject.next();
     }
@@ -620,18 +641,18 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this._alertService.info("Select instrument");
             return;
         }
-        
+
         const broker = this._brokerService.activeBroker as MTBroker;
-        let comment = (this.technicalComment || "") +  (this.config.comment || "");
+        let comment = (this.technicalComment || "") + (this.config.comment || "");
         const placeOrderData: MTPlaceOrder = {
             Comment: comment,
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
             Type: this.config.type,
-            Price: this.config.type !== OrderTypes.Market ?  Number(this.config.price) : 0,
-            SL: this.config.sl ?  Number(this.config.sl) : 0,
-            TP: this.config.tp ?  Number(this.config.tp) : 0,
+            Price: this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0,
+            SL: this.config.sl ? Number(this.config.sl) : 0,
+            TP: this.config.tp ? Number(this.config.tp) : 0,
             FillPolicy: this.config.fillPolicy,
             ExpirationType: this.config.expirationType,
             ExpirationDate: this._getSetupDate(),
