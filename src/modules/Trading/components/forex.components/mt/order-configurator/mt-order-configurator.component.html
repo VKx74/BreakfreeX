@@ -115,7 +115,11 @@
                 <div class="tradescore-separator"></div>
 
                 <div class="loader">
-                    <bft-loader-block *ngIf="calculatingChecklist"></bft-loader-block>
+                    <bft-loader-block *ngIf="calculatingChecklist">
+                    </bft-loader-block>
+                    <div class="loade-text" *ngIf="calculatingChecklist">
+                        Waiting for market data
+                    </div>
                 </div>
 
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">

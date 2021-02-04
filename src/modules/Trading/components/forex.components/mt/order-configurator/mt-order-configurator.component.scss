@@ -12,6 +12,19 @@
 
   .loader {
     height: 0px;
+    position: relative;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // flex-direction: column;
+    .loade-text {
+      position: absolute;
+      top: 23px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.7;
+    }
   }
 
   .checklist-row {
@@ -369,6 +382,10 @@
 
   .indicator-graph {
     border-color: themed("appBackgroundColor");
+  }
+
+  .loade-text {
+    color: themed("titleTextColor");
   }
 
   .svg-arrow {
