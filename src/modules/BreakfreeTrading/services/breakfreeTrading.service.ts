@@ -26,8 +26,4 @@ export class BreakfreeTradingService {
     getRTDCalculation(params: any): Promise<IRTDPayload> {
         return this.alogService.calculateRTD(params).toPromise();
     } 
-    
-    getMarketInfo(instrument: IInstrument): Promise<IBFTAMarketInfo> {
-        return this.alogService.getMarketInfo(instrument).toPromise();
-    } 
 }

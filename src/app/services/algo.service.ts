@@ -198,6 +198,9 @@ export interface IBFTAMarketInfo {
     support: number;
     resistance: number;
     natural: number;
+    daily_support: number;
+    daily_resistance: number;
+    daily_natural: number;
     last_price: number;
     local_trend: IBFTATrend;
     global_trend: IBFTATrend;
@@ -421,7 +424,7 @@ export class AlgoService {
         return str.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
     }
 
-    getMarketInfo(instrument: IInstrument | string): Observable<IBFTAMarketInfo> {
+    getMarketInfo(instrument: IInstrument | string, granularity: number): Observable<IBFTAMarketInfo> {
         if (typeof (instrument) === 'string') {
             return new Observable<IBFTAMarketInfo>((observer: Observer<IBFTAMarketInfo>) => {
                 this._instrumentService.instrumentToDatafeedFormat(instrument).subscribe((mappedInstrument: IInstrument) => {
@@ -429,7 +432,10 @@ export class AlgoService {
                         observer.next(null);
                         return;
                     }
-                    this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info`, mappedInstrument).pipe(map(this._decrypt)).subscribe((res) => {
+                    this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_market_info_v2`, {
+                        instrument: mappedInstrument,
+                        granularity: granularity
+                    }).pipe(map(this._decrypt)).subscribe((res) => {
                         observer.next(res);
                     });
                 }, (error) => {

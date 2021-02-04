@@ -1,3 +1,4 @@
+import { TimeSpan } from "@app/helpers/timeFrame.helper";
 import { MTSymbolTradeInfoResponse } from "modules/Trading/models/forex/mt/mt.communication";
 import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPendingOrderRecommendation, MTPosition, MTPositionRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
 import { OrderSide, OrderTypes, RiskClass, RiskType } from "modules/Trading/models/models";
@@ -50,9 +51,10 @@ export class MTTradeRatingService {
 
     public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
         const symbol = parameters.Symbol;
-        let marketInfo = this._tryGetMarketInfoFromCache(symbol);
+        const timeframe = parameters.Timeframe;
+        let marketInfo = this._tryGetMarketInfoFromCache(symbol, timeframe);
         if (!marketInfo) {
-            marketInfo = this.algoService.getMarketInfo(symbol);
+            marketInfo = this.algoService.getMarketInfo(symbol, timeframe);
         }
 
         let symbolTradeInfo = this._tryGetSymbolTradeInfoFromCache(parameters.Symbol);
@@ -61,7 +63,7 @@ export class MTTradeRatingService {
         }
 
         return combineLatest([marketInfo, symbolTradeInfo]).pipe(map(([res1, res2]) => {
-            this._tryAddMarketInfoToCache(symbol, res1 || null);
+            this._tryAddMarketInfoToCache(symbol, timeframe, res1 || null);
 
             if (res2 && res2.Data && res2.Data.CVaR && res2.Data.ContractSize && res2.Data.Rate) {
                 this._tryAddSymbolTradeInfoToCache(parameters.Symbol, res2);
@@ -298,13 +300,13 @@ export class MTTradeRatingService {
 
     private _createOrderRecommendationBase(order: MTOrder): MTOrderRecommendation {
         const symbol = order.Symbol;
-        const marketInfo = this._getOrLoadMarketInfo(symbol);
+        const tradeType = MTHelper.getTradeTypeFromTechnicalComment(order.Comment);
+        const timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
+
+        const marketInfo = this._getOrLoadMarketInfo(symbol, timeframe);
         if (marketInfo === undefined) {
             return undefined;
         }
-
-        const tradeType = MTHelper.getTradeTypeFromTechnicalComment(order.Comment);
-        const timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
 
         if (marketInfo === null) {
             return {
@@ -356,9 +358,21 @@ export class MTTradeRatingService {
         return res;
     } 
     
-    private _createPositionsRecommendationBase(order: MTPosition): MTOrderRecommendation {
-        const symbol = order.Symbol;
-        const marketInfo = this._getOrLoadMarketInfo(symbol);
+    private _createPositionsRecommendationBase(position: MTPosition): MTOrderRecommendation {
+        const symbol = position.Symbol;
+        let timeframe = null;
+        for (const marketOrder of this.mtBroker.marketOrders) {
+            if (marketOrder.Symbol !== position.Symbol) {
+                continue;
+            }
+            
+            timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(marketOrder.Comment);
+            if (timeframe) {
+                break;
+            }
+        }
+
+        const marketInfo = this._getOrLoadMarketInfo(symbol, timeframe);
         if (marketInfo === undefined) {
             return undefined;
         }
@@ -389,7 +403,7 @@ export class MTTradeRatingService {
 
         let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
         let localRTD = marketInfo.local_trend === IBFTATrend.Up;
-        if (order.Side === OrderSide.Sell) {
+        if (position.Side === OrderSide.Sell) {
             globalRTD = marketInfo.global_trend === IBFTATrend.Down;
             localRTD = marketInfo.local_trend === IBFTATrend.Down;
         }
@@ -412,31 +426,35 @@ export class MTTradeRatingService {
         return res;
     }
 
-    private _getOrLoadMarketInfo(symbol: string): IBFTAMarketInfo {
-        if (!this._marketInfoCache[symbol]) {
-            if (!this._marketInfoLoading[symbol]) {
-                this._marketInfoLoading[symbol] = true;
-                this.algoService.getMarketInfo(symbol).subscribe((data) => {
-                    this._tryAddMarketInfoToCache(symbol, data || null);
-                    this._marketInfoLoading[symbol] = false;
+    protected _getOrLoadMarketInfo(symbol: string, timeframe: number): IBFTAMarketInfo {
+        const key = this._getMarketInfoKey(symbol, timeframe);
+        if (!this._marketInfoCache[key]) {
+            if (!this._marketInfoLoading[key]) {
+                this._marketInfoLoading[key] = true;
+                this.algoService.getMarketInfo(symbol, timeframe).subscribe((data) => {
+                    this._tryAddMarketInfoToCache(symbol, timeframe, data || null);
+                    this._marketInfoLoading[key] = false;
                 });
             }
             return undefined;
         }
-        return this._marketInfoCache[symbol].Data;
+        return this._marketInfoCache[key].Data;
     }
 
-    private _calculateOrderChecklist(marketInfo: IBFTAMarketInfo, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
+    protected _calculateOrderChecklist(marketInfo: IBFTAMarketInfo, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
         let result: MTOrderValidationChecklist = {};
 
         if (marketInfo) {
-            let allowedDiff = Math.abs(marketInfo.natural - marketInfo.support) / 5;
+            let allowedDiff = Math.abs(marketInfo.natural - marketInfo.support) / 3;
+            let minGranularity = TimeSpan.MILLISECONDS_IN_MINUTE / 1000 * 15;
+            let price = parameters.Price ? parameters.Price : marketInfo.last_price;
+
             if (parameters.Side === OrderSide.Buy) {
                 result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Up;
                 result.LocalRTD = marketInfo.local_trend === IBFTATrend.Up;
 
-                let priceToTargetDiff = Math.abs(marketInfo.resistance - marketInfo.last_price);
-                if (marketInfo.last_price >= marketInfo.resistance || allowedDiff > priceToTargetDiff) {
+                let priceToTargetDiff = Math.abs(marketInfo.resistance - price);
+                if (parameters.Timeframe >= minGranularity && (price >= marketInfo.resistance || allowedDiff > priceToTargetDiff)) {
                     result.Levels = false;
                 } else {
                     result.Levels = true;
@@ -445,8 +463,8 @@ export class MTTradeRatingService {
                 result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Down;
                 result.LocalRTD = marketInfo.local_trend === IBFTATrend.Down;
 
-                let priceToTargetDiff = Math.abs(marketInfo.support - marketInfo.last_price);
-                if (marketInfo.last_price <= marketInfo.support || allowedDiff > priceToTargetDiff) {
+                let priceToTargetDiff = Math.abs(marketInfo.support - price);
+                if (parameters.Timeframe >= minGranularity && (price <= marketInfo.support || allowedDiff > priceToTargetDiff)) {
                     result.Levels = false;
                 } else {
                     result.Levels = true;
@@ -505,18 +523,24 @@ export class MTTradeRatingService {
         };
     }
 
-    protected _tryGetMarketInfoFromCache(instrument: string): Observable<IBFTAMarketInfo> {
-        if (this._marketInfoCache[instrument]) {
-            return of(this._marketInfoCache[instrument].Data);
+    protected _tryGetMarketInfoFromCache(instrument: string, timeframe: number): Observable<IBFTAMarketInfo> {
+        const key = this._getMarketInfoKey(instrument, timeframe);
+        if (this._marketInfoCache[key]) {
+            return of(this._marketInfoCache[key].Data);
         }
 
         return null;
     }
 
-    protected _tryAddMarketInfoToCache(instrument: string, data: IBFTAMarketInfo) {
-        this._marketInfoCache[instrument] = {
+    protected _tryAddMarketInfoToCache(instrument: string, timeframe: number, data: IBFTAMarketInfo) {
+        const key = this._getMarketInfoKey(instrument, timeframe);
+        this._marketInfoCache[key] = {
             Data: data,
             Time: new Date().getTime()
         };
+    }
+
+    protected _getMarketInfoKey(symbol: string, timeframe: number): string {
+        return `${symbol}${timeframe}`;
     }
 }

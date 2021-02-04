@@ -528,7 +528,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
             Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
-            SL: this.config.sl ? this.config.sl : null
+            SL: this.config.sl ? this.config.sl : null,
+            Timeframe:  this.config.timeframe
         }).subscribe((res) => {
             this.calculatingChecklist = false;
             this._buildCalculateChecklistResults(res);
