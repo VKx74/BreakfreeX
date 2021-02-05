@@ -116,10 +116,10 @@ const checklist: ChecklistItemDescription[] = [
             let valid = true;
             let minusScore = 0;
             let tooltip = "";
-            if (data.RiskValue !== null && data.RiskValue !== undefined) {
-                value = data.RiskValue.toFixed(2) + "%";
+            if (data.PositionRiskValue !== null && data.PositionRiskValue !== undefined) {
+                value = data.PositionRiskValue.toFixed(2) + "%";
 
-                const risk = MTHelper.convertValueToOrderRiskClass(data.RiskValue);
+                const risk = MTHelper.convertValueToOrderRiskClass(data.PositionRiskValue);
                 if (risk === RiskClass.Extreme) {
                     minusScore = 5;
                     valid = false;

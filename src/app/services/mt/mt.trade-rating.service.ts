@@ -489,9 +489,9 @@ export class MTTradeRatingService {
             let ask = symbolTradeInfo.Data.Ask;
             if (price) {
                 if (parameters.SL) {
-                    result.RiskValue = MTHelper.buildRiskByPrice(contractSize, rate, parameters.Size, price, parameters.SL, this.mtBroker.accountInfo.Balance);
+                    result.OrderRiskValue = MTHelper.buildRiskByPrice(contractSize, rate, parameters.Size, price, parameters.SL, this.mtBroker.accountInfo.Balance);
                 } else if (cvar) {
-                    result.RiskValue = MTHelper.buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar, this.mtBroker.accountInfo.Balance);
+                    result.OrderRiskValue = MTHelper.buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar, this.mtBroker.accountInfo.Balance);
                 }
             }
 
@@ -500,8 +500,10 @@ export class MTTradeRatingService {
             }
         }
 
+        let positionRisk = this.mtBroker.getSamePositionsRisk(parameters.Symbol, parameters.Side);
         let correlatedRisk = this.mtBroker.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
-        result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.mtBroker.accountInfo.Balance * 100) + result.RiskValue);
+        result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.mtBroker.accountInfo.Balance * 100) + result.OrderRiskValue);
+        result.PositionRiskValue = Math.abs((positionRisk / this.mtBroker.accountInfo.Balance * 100) + result.OrderRiskValue);
         if (Number.isNaN(result.CorrelatedRiskValue)) {
             result.CorrelatedRiskValue = 0;
         }

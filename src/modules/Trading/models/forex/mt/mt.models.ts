@@ -166,7 +166,8 @@ export interface MTOrderValidationChecklist {
     GlobalRTDSpread?: number;
     LocalRTDTrendStrength?: RTDTrendStrength;
     GlobalRTDTrendStrength?: RTDTrendStrength;
-    RiskValue?: number;
+    OrderRiskValue?: number;
+    PositionRiskValue?: number;
     SpreadRiskValue?: number;
     CorrelatedRiskValue?: number;
 }

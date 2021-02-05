@@ -474,6 +474,20 @@ export abstract class MTBroker implements IMTBroker {
         return this._tickSubscribers[symbol].subscribe(subscription);
     }
 
+    getSamePositionsRisk(symbol: string, side: OrderSide): number {
+        let res = 0;
+        for (const order of this.orders) {
+            if (symbol === order.Symbol) {
+                if (side === order.Side) {
+                    res += order.Risk || 0;
+                } else {
+                    res -= order.Risk || 0;
+                }
+            }
+        }
+        return res;
+    }
+
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number {
         let res = 0;
         const s1 = MTHelper.normalizeInstrument(symbol);
