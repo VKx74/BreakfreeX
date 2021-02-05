@@ -311,6 +311,7 @@ export interface IRTDPayload {
     local_trend_spread: number;
     global_trend_strength: string;
     local_trend_strength: string;
+    general_trend: string[];
 }
 
 class AlgoServiceEncryptionHelper {
