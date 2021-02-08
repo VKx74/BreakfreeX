@@ -199,10 +199,38 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             const isValid = !!config.sl;
+
+            if (data.isSLReversed) {
+                return {
+                    name: "Stoploss",
+                    valid: false,
+                    minusScore: 10,
+                    tooltip: "Incorrect Stoploss direction."
+                };
+            }
+
+            if (data.isSLToClose) {
+                return {
+                    name: "Stoploss",
+                    valid: false,
+                    minusScore: 2,
+                    tooltip: "Stoploss too close to entry price."
+                };
+            }
+
+            if (data.isSLToFare) {
+                return {
+                    name: "Stoploss",
+                    valid: false,
+                    minusScore: 2,
+                    tooltip: "Stoploss too fare from entry price."
+                };
+            }
+
             return {
                 name: "Stoploss",
                 valid: isValid,
-                minusScore: isValid ? 0 : 2,
+                minusScore: isValid ? 0 : 3,
                 tooltip: isValid ? "You have set a stoploss for the order. A basic but very important discipline for successful trading, when it comes to humans." : "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. "
             };
         }

@@ -170,6 +170,10 @@ export interface MTOrderValidationChecklist {
     PositionRiskValue?: number;
     SpreadRiskValue?: number;
     CorrelatedRiskValue?: number;
+    cVar?: number;
+    isSLReversed?: boolean;
+    isSLToClose?: boolean;
+    isSLToFare?: boolean;
 }
 
 export enum RTDTrendStrength {
