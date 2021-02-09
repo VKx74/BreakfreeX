@@ -59,6 +59,14 @@ export interface IBFTAlgoParameters {
     timeframe: ITimeFrame;
 }
 
+export interface IBFTAPositionSizeParameters {
+    contract_size?: number;
+    input_accountsize: number;
+    input_risk: number;
+    price_diff: number;
+    instrument: IInstrument;
+}
+
 export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
     hma_period: number;
     breakeven_candles: number;
@@ -212,6 +220,10 @@ export interface IBFTAMarketInfo {
 export interface IBFTAAlgoResponseV2 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
+    size: number;
+}
+
+export interface IBFTAPositionSize {
     size: number;
 }
 
@@ -403,6 +415,10 @@ export class AlgoService {
 
     calculateV2(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v2`, data).pipe(map(this._decrypt));
+    }
+
+    calculatePositionSize(data: IBFTAPositionSizeParameters): Observable<IBFTAPositionSize> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_pos_size`, data).pipe(map(this._decrypt));
     }
 
     backtest(data: IBFTBacktestAlgoParameters): Observable<IBFTABacktestResponse> {
