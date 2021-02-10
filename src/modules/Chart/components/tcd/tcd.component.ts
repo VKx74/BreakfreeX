@@ -164,19 +164,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
         // const instrumentsNeeded = !state || !state.instrument;
         
         if (state && state.chartState) {
-            if (!state.chartState.version) {
+            if (state.chartState.version !== 7) {
                 console.log("Set default theme");
                 theme = this._getTheme();
                 if (state.chartState.chart) {
                     state.chartState.chart.theme = theme;
-                }
-            } else {
-                if (state.chartState.version !== 6) {
-                    console.log("Set default theme");
-                    theme = this._getTheme();
-                    if (state.chartState.chart) {
-                        state.chartState.chart.theme = theme;
-                    }
                 }
             }
         }

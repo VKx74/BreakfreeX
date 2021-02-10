@@ -13,11 +13,22 @@ import { MTOrderCloseModalComponent } from 'modules/Trading/components/forex.com
 import { MTOrderEditModalComponent } from 'modules/Trading/components/forex.components/mt/order-edit-modal/mt-order-edit-modal.component';
 import { SymbolMappingComponent } from 'modules/Trading/components/forex.components/mt/symbol-mapping/symbol-mapping.component';
 import { IInstrument } from "../../../app/models/common/instrument";
-import { AlgoService, IBFTAPositionSizeParameters } from "@app/services/algo.service";
+import { AlgoService } from "@app/services/algo.service";
 import { debounceTime } from "rxjs/operators";
+import { MTHelper } from "@app/services/mt/mt.helper";
+
+
+interface IPositionSizeParameters {
+    contract_size?: number;
+    input_accountsize: number;
+    input_risk: number;
+    price_diff: number;
+    instrument: IInstrument;
+    account_currency: string;
+}
 
 interface IPositionSizeCalculationRequest {
-    params: IBFTAPositionSizeParameters;
+    params: IPositionSizeParameters;
     callback: (size: any) => void;
 }
 
@@ -30,6 +41,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _orderConfig: MTPlaceOrder;
     private _decimals: number = 5;
     private _pendingEdit: { [id: string]: MTEditOrderPrice; } = {};
+    private _ratioCache: { [id: string]: number; } = {};
     private _posSizeSubject: Subject<IPositionSizeCalculationRequest> = new Subject();
 
     constructor(private _brokerService: BrokerService, private _dialog: MatDialog,
@@ -322,11 +334,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         const mtBroker = this._brokerService.activeBroker as MTBroker;
-        const params: IBFTAPositionSizeParameters = {
+        const params: IPositionSizeParameters = {
             input_risk: risk,
             price_diff: priceDiff,
             instrument: this._chart.instrument as any,
-            input_accountsize: mtBroker.accountInfo.Balance
+            input_accountsize: mtBroker.accountInfo.Balance,
+            account_currency: mtBroker.accountInfo.Currency
         };
 
         if (!params.input_accountsize) {
@@ -361,10 +374,19 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             params.contract_size = contract_size;
         }
 
-        this._posSizeSubject.next({
+        const request = {
             params: params,
             callback: callback
-        });
+        };
+
+        const ratioKey = this._getRatioKey(request);
+        const ratio = this._ratioCache[ratioKey];
+
+        if (ratio) {
+            this._calculatePositionSizeBasedOnRatio(request, ratio);
+        } else {
+            this._posSizeSubject.next(request);
+        }
     }
 
     public dispose() {
@@ -380,11 +402,26 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private _calculatePositionSize(request: IPositionSizeCalculationRequest) {
-        this._alogService.calculatePositionSize(request.params).subscribe((data) => {
-            request.callback(data.size);
+        this._alogService.calculatePriceRatio({
+            account_currency: request.params.account_currency,
+            instrument: request.params.instrument
+        }).subscribe((data) => {
+            const ratioKey = this._getRatioKey(request);
+            this._ratioCache[ratioKey] = data.ratio || 1;
+            this._calculatePositionSizeBasedOnRatio(request, data.ratio);
         }, () => {
             request.callback("Calculate manually");
         });
+    }  
+    
+    private _calculatePositionSizeBasedOnRatio(request: IPositionSizeCalculationRequest, ratio: number) {
+        const acctSize = request.params.input_accountsize * (ratio || 1);
+        const size = MTHelper.calculatePositionSize(acctSize, request.params.input_risk, request.params.price_diff, request.params.contract_size);
+        request.callback(size);
+    }
+
+    private _getRatioKey(request: IPositionSizeCalculationRequest): string {
+        return request.params.instrument.id + request.params.account_currency;
     }
 
     private getOrderPriceDiff(order: MTOrder): number {

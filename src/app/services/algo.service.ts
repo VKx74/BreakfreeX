@@ -67,6 +67,11 @@ export interface IBFTAPositionSizeParameters {
     instrument: IInstrument;
 }
 
+export interface IBFTACalculatePriceRatioParameters {
+    account_currency: string;
+    instrument: IInstrument;
+}
+
 export interface IBFTBacktestAlgoParameters extends IBFTAlgoParameters {
     hma_period: number;
     breakeven_candles: number;
@@ -225,6 +230,10 @@ export interface IBFTAAlgoResponseV2 {
 
 export interface IBFTAPositionSize {
     size: number;
+}
+
+export interface IBFTAPriceRatio {
+    ratio: number;
 }
 
 export interface IBFTAEncryptedResponse {
@@ -419,6 +428,10 @@ export class AlgoService {
 
     calculatePositionSize(data: IBFTAPositionSizeParameters): Observable<IBFTAPositionSize> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_pos_size`, data).pipe(map(this._decrypt));
+    }
+
+    calculatePriceRatio(data: IBFTACalculatePriceRatioParameters): Observable<IBFTAPriceRatio> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_price_ratio`, data).pipe(map(this._decrypt));
     }
 
     backtest(data: IBFTBacktestAlgoParameters): Observable<IBFTABacktestResponse> {
