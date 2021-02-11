@@ -64,9 +64,9 @@ export class IndicatorDataProviderService {
             let globalTrendDesc = [];
 
             if (isGlobalUptrend) {
-                globalTrendDesc.push("Bullish uptrend");
+                globalTrendDesc.push("Uptrend");
             } else {
-                globalTrendDesc.push("Bearish downtrend");
+                globalTrendDesc.push("Downtrend");
             }
 
             let generalSpread = data.global_trend_spread;
