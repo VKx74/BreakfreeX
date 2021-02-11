@@ -57,7 +57,7 @@
             <div class="menuwrapper ">
 
             <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.TradeGuard}" (click)="selectPeriod(Sections.TradeGuard)">TradeGuard</div>
-            <div class="description-title mobilehidden">Quests</div>
+            <div class="description-title mobilehidden quests-title">Quests <div class="timer-ticker">{{timeToUpdate}}</div></div>
             <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Daily}" (click)="selectPeriod(Sections.Daily)">Daily Quests</div>
             <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Weekly}" (click)="selectPeriod(Sections.Weekly)">Weekly Quests</div>
             <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.Analysis}" (click)="selectPeriod(Sections.Analysis)">Analysis</div>

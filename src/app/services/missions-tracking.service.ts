@@ -13,10 +13,15 @@ export class MissionTrackingService {
     private _brokerStateChangedSubscription: Subscription;
     private _ordersUpdatedSubscription: Subscription;
     private _onOrdersParametersUpdated: Subscription;
+    private _nextUpdateTime: number; // 13 min
     private _timeInterval: number = 1000 * 60 * 13; // 13 min
     private _timeout: number = 1000 * 60 * 1.5; // 1.5 min
     private _recalculateRequired: boolean = true;
     private _failedMissionsTimeout: any;
+
+    public get nextUpdateTime(): number {
+        return this._nextUpdateTime;
+    }
 
     constructor(private _identity: IdentityService,
         private _notificationService: NotificationsService,
@@ -76,7 +81,12 @@ export class MissionTrackingService {
             try {
                 this._updateMissions();
             } catch (error) {}
+
+            this._nextUpdateTime = new Date().getTime() + this._timeInterval;
+
         }, this._timeInterval);
+
+        this._nextUpdateTime = new Date().getTime() + this._timeInterval;
     }
 
     private _updateMissions() {
