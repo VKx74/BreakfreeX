@@ -91,7 +91,6 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
 
         this._timeInterval = setInterval(() => {
             this._updateTimer();
-            console.log("sdfsdf");
         }, 1000);
     }
 
