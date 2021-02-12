@@ -102,12 +102,16 @@ const checklist: ChecklistItemDescription[] = [
     },
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
+            let tooltip = data.Levels ? "Good entry, you are buying into support." : "Warning! You are buying into resistance. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run.";
+            if (config.side === OrderSide.Sell) {
+                tooltip = data.Levels ? "Good entry, you are selling into resistance." : "Warning! You are selling into support. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run.";
+            }
+
             return {
                 name: "Trade Entry",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                // tooltip: data.Levels ? "Good entry, you are selling into resistance." : "Warning! You are selling into support. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run."
-                tooltip: data.Levels ? "Good entry, you are buying into support." : "Warning! You are buying into resistance. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run."
+                tooltip: tooltip
             };
         }
     },
