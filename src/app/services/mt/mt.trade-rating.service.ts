@@ -181,14 +181,14 @@ export class MTTradeRatingService {
 
         res.FailedChecks = [];
 
+        const breakevenRecommendation = order.NetPL > 0 ? "Move SL to breakeven" : "Move TP to breakeven";
+
         if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
-                Recommendation: "Move SL to breakeven",
+                Recommendation: breakevenRecommendation,
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
-                //  If P&L >0 tradeguard = move SL to breakeven 
-                //If P&L <0 tradeguard = move TP's to breakeven
             });
         }
 
@@ -197,7 +197,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
                         Issue: "Trading against local trend",
-                        Recommendation: "Move TP to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
                     });
@@ -206,7 +206,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Trading against strong local trend",
-                        Recommendation: "Move TP to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.High,
                         RiskType: RiskType.WrongTrend
                     });
@@ -218,7 +218,7 @@ export class MTTradeRatingService {
             if (res.Timeframe < 60 * 60 * 24) {
                 res.FailedChecks.push({
                     Issue: "Trading against reversing of trends",
-                    Recommendation: "Cancel Order",
+                    Recommendation: breakevenRecommendation,
                     RiskClass: RiskClass.Medium,
                     RiskType: RiskType.WrongTrend
                 });
@@ -256,14 +256,14 @@ export class MTTradeRatingService {
 
         res.FailedChecks = [];
 
+        const breakevenRecommendation = position.NetPL > 0 ? "Move SLs to breakeven" : "Move TPs to breakeven";
+
         if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
-                Recommendation: "Move SL to breakeven",
+                Recommendation: breakevenRecommendation,
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
-                  //  If P&L >0 tradeguard = move SL to breakeven 
-                //If P&L <0 tradeguard = move TP's to breakeven
             });
         }
 
@@ -272,7 +272,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
                         Issue: "Trading against local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
                     });
@@ -281,7 +281,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Trading against strong local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.High,
                         RiskType: RiskType.WrongTrend
                     });
