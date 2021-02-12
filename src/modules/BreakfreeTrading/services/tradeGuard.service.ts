@@ -254,8 +254,8 @@ export class TradeGuardService {
         switch (riskType) {
             case RiskType.HighRisk: return "Get out of this trade at breakeven and stop doing greedy emotional trading, that only simple human minds would do.";
             case RiskType.PriceFarFromEntry: return "No trigger, no trade. On to the next. You can now cancel these orders.";
-            case RiskType.SLNotSet: return "You should never have open trades with no stoploss set. You should set stoploss for orders.";
-            case RiskType.WrongTrend: return "Market structure has changed. You can go ahead and move TPs to breakeven.";
+            case RiskType.SLNotSet: return "You should never have open trades with no stoploss set. It is simply impossible to tell when a small dip turns into a 50% drawdown candle. don't be afraid of using stops, embrace them or stop trading completely. Set a stoploss now.";
+            case RiskType.WrongTrend: return "The market range of this particular market has changed. You should carefully monitor this trade, and most likely get out of this trade by moving SL or TP to breakeven.";
         }
     }
 

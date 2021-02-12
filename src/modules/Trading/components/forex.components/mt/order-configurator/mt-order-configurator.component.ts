@@ -46,25 +46,25 @@ const checklist: ChecklistItemDescription[] = [
                     if (timeframe <= hour) {
                         if (data.LocalRTDTrendStrength === RTDTrendStrength.Weak) {
                             acceptableTrend = true;
-                            tooltip = `You are trading against acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                            tooltip = `You are trading against an acceptable ${data.LocalRTDTrendStrength} local trend.`;
                         } else {
-                            tooltip = `You are trading against non acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                            tooltip = `You are trading against an unacceptable ${data.LocalRTDTrendStrength} local trend.`;
                             minusScore = data.LocalRTDTrendStrength === RTDTrendStrength.Strong ? 3 : 2;
                         }
                     } else if (timeframe <= hour * 4) {
                         if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
-                            tooltip = `You are trading against non acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                            tooltip = `You are trading against an unacceptable ${data.LocalRTDTrendStrength} local trend.`;
                             minusScore = 2;
                         } else {
-                            tooltip = `You are trading against acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                            tooltip = `You are trading against an acceptable ${data.LocalRTDTrendStrength} local trend.`;
                             acceptableTrend = true;
                         }
                     } else {
-                        tooltip = `You are trading against acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                        tooltip = `You are trading against an acceptable ${data.LocalRTDTrendStrength} local trend.`;
                         acceptableTrend = true;
                     }
                 } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
-                    tooltip = `You are trading against non acceptable '${data.LocalRTDTrendStrength}' local trend.`;
+                    tooltip = `You are trading against an unacceptable ${data.LocalRTDTrendStrength} local trend.`;
                     minusScore = 2;
                 }
             }
@@ -103,10 +103,11 @@ const checklist: ChecklistItemDescription[] = [
     {
         calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
             return {
-                name: "Major levels",
+                name: "Trade Entry",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                tooltip: data.Levels ? "You are not trading into any major support or resistance levels. " : "CAREFUL! You are counter trading into a major level. Only do this if you know what you are doing (most humans don't, and would be better off deploying capital in a different market)"
+                //tooltip: data.Levels ? "Good entry, you are selling into resistance." : "Warning! You are selling into support. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run."
+                tooltip: data.Levels ? "Good entry, you are buying into support." : "Warning! You are buying into resistance. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run."
             };
         }
     },
@@ -205,7 +206,7 @@ const checklist: ChecklistItemDescription[] = [
                     name: "Stoploss",
                     valid: false,
                     minusScore: 10,
-                    tooltip: "Incorrect Stoploss direction."
+                    tooltip: "Your stoploss is on the wrong side of this trade, please pay attention."
                 };
             }
 
@@ -214,7 +215,7 @@ const checklist: ChecklistItemDescription[] = [
                     name: "Stoploss",
                     valid: false,
                     minusScore: 2,
-                    tooltip: "Stoploss too close to entry price."
+                    tooltip: "This stoploss has a high risk of being stopped out with the current volatility of this market. Please rethink this stoploss."
                 };
             }
 
@@ -223,7 +224,7 @@ const checklist: ChecklistItemDescription[] = [
                     name: "Stoploss",
                     valid: false,
                     minusScore: 2,
-                    tooltip: "Stoploss too fare from entry price."
+                    tooltip: "Stoploss unreasonable far from the entry price."
                 };
             }
 
@@ -231,7 +232,7 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Stoploss",
                 valid: isValid,
                 minusScore: isValid ? 0 : 3,
-                tooltip: isValid ? "You have set a stoploss for the order. A basic but very important discipline for successful trading, when it comes to humans." : "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. "
+                tooltip: isValid ? "You have set a reasonable stoploss for the trade. A basic but very important discipline for successful trading, when it comes to humans." : "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. "
             };
         }
     }
