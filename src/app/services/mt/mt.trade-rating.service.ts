@@ -184,9 +184,11 @@ export class MTTradeRatingService {
         if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
-                Recommendation: "Move TPs to breakeven",
+                Recommendation: "Move SL to breakeven",
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
+                //  If P&L >0 tradeguard = move SL to breakeven 
+                //If P&L <0 tradeguard = move TP's to breakeven
             });
         }
 
@@ -195,7 +197,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
                         Issue: "Trading against local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: "Move TP to breakeven",
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
                     });
@@ -204,7 +206,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Trading against strong local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: "Move TP to breakeven",
                         RiskClass: RiskClass.High,
                         RiskType: RiskType.WrongTrend
                     });
@@ -257,9 +259,11 @@ export class MTTradeRatingService {
         if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
-                Recommendation: "Move TPs to breakeven",
+                Recommendation: "Move SL to breakeven",
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
+                  //  If P&L >0 tradeguard = move SL to breakeven 
+                //If P&L <0 tradeguard = move TP's to breakeven
             });
         }
 
