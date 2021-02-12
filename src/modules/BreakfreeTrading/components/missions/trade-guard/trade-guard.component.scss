@@ -23,9 +23,10 @@
     margin: 5px;
     padding: 10px 5px;
     background: white;
-    border-radius: 3px;
+    border-radius: 5px;
     box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
     cursor: pointer;
+    border: 1px solid transparent;
 
     .recommendation-flag {
       display: flex;
@@ -47,6 +48,10 @@
     }
   }
 
+  .recommendation-row:hover {
+    border: 1px solid #ddd;
+  }
+  
   .broker-not-connected,
   .no-recommendations {
     display: flex;
