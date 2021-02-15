@@ -218,7 +218,22 @@ export class MTTradeManagerComponent {
         if ((order as any).Comment) {
             const comment = (order as any).Comment;
             tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+        } else {
+            const symbol = order.Symbol;
+            const marketOrders = mt5Broker.marketOrders;
+
+            for (const marketOrder of marketOrders) {
+                if (marketOrder.Symbol === symbol && (marketOrder as any).Comment) {
+                    const comment = (marketOrder as any).Comment;
+                    tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+
+                    if (tf) {
+                        break;
+                    }
+                }
+            }
         }
+
         this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
             if (!instrument) {
                 mt5Broker.getInstruments(null, symbol).subscribe((brokerInstruments) => {
