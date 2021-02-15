@@ -124,6 +124,7 @@ export interface IMTOrderData {
     FillPolicy: string;
     ExpirationType: string;
     ExpirationDate: number;
+    ClosePrice?: number;
 }
 
 export interface IMTPlaceOrderData {

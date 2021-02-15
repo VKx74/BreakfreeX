@@ -925,7 +925,8 @@ export abstract class MTBroker implements IMTBroker {
             Symbol: data.Symbol,
             PipPL: null,
             CloseTime: data.CloseTime,
-            RiskClass: null
+            RiskClass: null,
+            ClosePrice: data.ClosePrice
         };
 
         this._calculatePipPL(ord);

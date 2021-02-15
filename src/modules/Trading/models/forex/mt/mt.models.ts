@@ -51,6 +51,7 @@ export interface MTOrder {
 
 export interface MTHistoricalOrder extends MTOrder {
     CloseTime: number;
+    ClosePrice: number;
 }
 
 export interface MTPlaceOrder {
