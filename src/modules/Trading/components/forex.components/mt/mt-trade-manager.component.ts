@@ -219,7 +219,6 @@ export class MTTradeManagerComponent {
             const comment = (order as any).Comment;
             tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
         } else {
-            const symbol = order.Symbol;
             const marketOrders = mt5Broker.marketOrders;
 
             for (const marketOrder of marketOrders) {
