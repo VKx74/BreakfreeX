@@ -3,6 +3,8 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {first} from 'rxjs/operators';
 import {IdentityService} from "@app/services/auth/identity.service";
 import {AppRoutes} from "AppRoutes";
+import { Angulartics2Facebook } from "angulartics2/facebook";
+import { FBPixelTrackingService } from "@app/services/traking/fb.pixel.tracking.service";
 
 @Component({
     selector: 'login-with-page',
@@ -16,7 +18,9 @@ export class LoginWithPageComponent {
     constructor(private _identity: IdentityService,
                 private _router: Router,
                 private _route: ActivatedRoute,
-                private _activatedRoute: ActivatedRoute) {
+                private _activatedRoute: ActivatedRoute,
+                private _angulartics2Facebook: Angulartics2Facebook,
+                private _fbPixelTrackingService: FBPixelTrackingService) {
     }
 
     ngOnInit() {
@@ -46,9 +50,17 @@ export class LoginWithPageComponent {
         }).subscribe({
                 next: (value) => {
                     if (value) {
-                        this._router.navigate([AppRoutes.Platform], {
-                            relativeTo: this._route.root
-                        });
+                        if (value.isUserCreated) {
+                            this._fbPixelTrackingService.load();
+                            this._angulartics2Facebook.eventTrack("CompleteRegistration");
+                        }
+                        
+                        setTimeout(() => {
+                            this._router.navigate([AppRoutes.Platform], {
+                                relativeTo: this._route.root
+                            });
+                        }, value.isUserCreated ? 3 * 1000 : 1);
+
                     } else {
                         this._router.navigate([AppRoutes.Auth], {
                             relativeTo: this._route.root

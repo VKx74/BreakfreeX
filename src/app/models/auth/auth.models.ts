@@ -22,6 +22,7 @@ export class GrantTokenResponse {
     accessToken: string;
     refreshToken: string;
     expireIn: string;
+    isUserCreated?: boolean;
 }
 
 export class RefreshTokenRequestModel {

@@ -51,16 +51,21 @@ export class AuthenticationService {
     }
 
     public signIn(model: SignInRequestModel): Observable<GrantTokenResponse> {
-        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/signin`, model, this._httpOptions)
-            .pipe(
-                switchMap(() => this._getTokens())
+        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/signin`, model, this._httpOptions) .pipe(
+                switchMap((data: any) => { 
+                    const isUserCreated = data ? data.isUserCreated : false;
+                    return this._getTokens(isUserCreated);
+                })
             );
     }
 
     public signInWithThirdPartyProvider(model: SignInWithThirdPartyRequestModel): Observable<GrantTokenResponse> {
         return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/signin`, model, this._httpOptions)
             .pipe(
-                switchMap(() => this._getTokens())
+                switchMap((data: any) => {
+                    const isUserCreated = data ? data.isUserCreated : false;
+                    return this._getTokens(isUserCreated);
+                })
             );
     }
 
@@ -222,7 +227,7 @@ export class AuthenticationService {
             );
     }
 
-    private _getTokens(): Observable<GrantTokenResponse> {
+    private _getTokens(isUserCreated?: boolean): Observable<GrantTokenResponse> {
         return this._getGrant()
             .pipe(
                 switchMap((value: any) => {
@@ -235,6 +240,7 @@ export class AuthenticationService {
                                     throw new Error('Failed to get token');
                                 }
 
+                                resp.isUserCreated = isUserCreated;
                                 return resp;
                             }));
                     }

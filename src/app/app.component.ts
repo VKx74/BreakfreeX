@@ -16,12 +16,8 @@ import {BrokerService} from "@app/services/broker.service";
 import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
 import {SidebarService} from "@app/services/sidebar.service";
 import {LoaderService} from "@app/services/loader.service";
-import {ThemeService} from "@app/services/theme.service";
-import {LocalizationService} from "Localization";
-import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
 import {filter, tap} from "rxjs/operators";
 import {AppRoutes} from './app.routes';
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import { Angulartics2Segment } from 'angulartics2/segment';
 import { Angulartics2GoSquared } from 'angulartics2/gosquared';
 

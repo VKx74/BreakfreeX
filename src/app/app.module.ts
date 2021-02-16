@@ -105,6 +105,7 @@ import { ToasterNotificationsService } from '@alert/services/toaster-notificatio
 import { MissionTrackingService } from './services/missions-tracking.service';
 import { InstrumentMappingService } from './services/instrument-mapping.service';
 import { SymbolMappingStorageService } from './services/instrument-mapping-storage.service';
+import { FBPixelTrackingService } from './services/traking/fb.pixel.tracking.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -364,6 +365,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
                 FileUploaderTranslateService
             ]
         },
+        FBPixelTrackingService
     ],
     entryComponents: [],
     bootstrap: [AppComponent]

@@ -35,6 +35,8 @@ import {SharedTranslateService} from "@app/localization/shared.token";
 import { LoginWithPageComponent } from './components/login-with-page/login-with-page.component';
 import { LoadingModule } from 'ngx-loading';
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
+import { Angulartics2Facebook } from 'angulartics2/facebook';
+import { FBPixelTrackingService } from "@app/services/traking/fb.pixel.tracking.service";
 
 @NgModule({
     declarations: [
@@ -81,6 +83,8 @@ import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/pr
             useFactory: FormErrorProviderFactory,
             deps: [SharedTranslateService]
         },
+        Angulartics2Facebook,
+        FBPixelTrackingService
     ],
     entryComponents: [
         PrivacyPolicyTradingModalComponent
