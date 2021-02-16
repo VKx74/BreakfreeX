@@ -15,6 +15,6 @@ import { Injectable } from '@angular/core';
                 t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
             })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
             (window as any).fbq.disablePushState = true; // not recommended, but can be done
-            (window as any).fbq('init', '2945718008809081');
+            (window as any).fbq('init', '2505743942817479');
         }
     }
