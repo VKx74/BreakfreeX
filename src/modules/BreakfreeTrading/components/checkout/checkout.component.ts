@@ -1,6 +1,7 @@
 import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angular/core';
 import {Modal} from "Shared";
 import { IdentityService } from '@app/services/auth/identity.service';
+import { AppConfigService } from '@app/services/app.config.service';
 
 enum CheckoutTab {
     Monthly,
@@ -55,10 +56,12 @@ export class CheckoutComponent extends Modal<CheckoutComponent> implements OnIni
     }
 
     checkout(subscription_id: string) {
+        const redirectUrl = AppConfigService.config.apiUrls.successCheckoutRedirect;
+        console.log(redirectUrl);
         (window as any).stripe.redirectToCheckout({
             lineItems: [{price: subscription_id, quantity: 1}],
             mode: 'subscription',
-            successUrl: window.location.origin + "/success-checkout.html?sub=" + subscription_id + "&session_id={CHECKOUT_SESSION_ID}",
+            successUrl: redirectUrl + "?sub=" + subscription_id + "&session_id={CHECKOUT_SESSION_ID}",
             cancelUrl: window.location.origin,
             customerEmail: this._identityService.email || ""
           })
