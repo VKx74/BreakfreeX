@@ -76,6 +76,8 @@ export class UserModel {
 
     public email: string;
 
+    public stripeId: string;
+
     public emailConfirmed: boolean;
 
     public id: string;
@@ -127,6 +129,8 @@ export class ReconfirmEmailModel {
 export class UpdateUserModel {
 
     public email: string;
+    
+    public stripeId: string;
 
     public userName: string;
 

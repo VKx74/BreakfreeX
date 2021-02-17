@@ -47,6 +47,7 @@ export class RefreshPasswordComponent extends Modal<ResetPasswordConfig, MemberC
             role: user.role,
             userName: user.userName,
             id: user.id,
+            stripeId: user.stripeId,
             email: newEmail
         };
         this._usersService.updateUser(updateUserModel)
