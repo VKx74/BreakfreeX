@@ -99,7 +99,7 @@ export class LoginPageComponent {
                     this.formGroup.controls['email'].setValue(params['email']);
 
                     this._fbPixelTrackingService.load();
-                    this._angulartics2Facebook.eventTrack("CompleteRegistration");
+                    this._angulartics2Facebook.eventTrack("CompleteRegistration", {currency: "USD", value: 0});
                 }
             });
     }

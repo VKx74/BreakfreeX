@@ -52,7 +52,7 @@ export class LoginWithPageComponent {
                     if (value) {
                         if (value.isUserCreated) {
                             this._fbPixelTrackingService.load();
-                            this._angulartics2Facebook.eventTrack("CompleteRegistration");
+                            this._angulartics2Facebook.eventTrack("CompleteRegistration", {currency: "USD", value: 0});
                         }
                         
                         setTimeout(() => {
