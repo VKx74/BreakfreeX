@@ -78,9 +78,7 @@ export abstract class WebsocketBase {
                         complete: () => subscriber.complete()
                     });
 
-                if (!this._socket) {
-                    this._connect();
-                }
+                this._connect();
             }
         });
     }
@@ -120,7 +118,7 @@ export abstract class WebsocketBase {
                 this._log(ev);
 
                 console.log("Socket closed");
-
+                
                 if (!this._isClosed) {
                     this._reconnect();
                 }

@@ -10,6 +10,7 @@ import { IdentityService } from '../auth/identity.service';
 export abstract class MTSocketService extends WebsocketBase {
   private _subscribers: { [id: string]: Subscriber<MTResponseMessageBase>; } = {};
   private _authSucceeded: boolean;
+  private _brokerConnected: boolean;
   private _token: string;
   private _onMessageSubscription: Subscription;
   private _tickSubject: Subject<IMTTick> = new Subject<IMTTick>();
@@ -79,6 +80,7 @@ export abstract class MTSocketService extends WebsocketBase {
     // if (this._onMessageSubscription) {
     //   this._onMessageSubscription.unsubscribe();
     // }
+    this._brokerConnected = false;
     this.send(new MTLogoutRequest());
     this.close();
   }
@@ -95,6 +97,10 @@ export abstract class MTSocketService extends WebsocketBase {
         this._open(subscriber);
       }
     });
+  }
+
+  setConnectivity(connected: boolean) {
+    this._brokerConnected = connected;
   }
 
   open(): Observable<void> {
@@ -153,6 +159,10 @@ export abstract class MTSocketService extends WebsocketBase {
 
   protected _reconnect() {
     if (!this._authSucceeded) {
+      return;
+    }
+
+    if (!this._brokerConnected) {
       return;
     }
     super._reconnect();
