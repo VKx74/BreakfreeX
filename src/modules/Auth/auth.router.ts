@@ -13,6 +13,7 @@ import {InstitutionalAccountRegisterPageComponent} from "./components/institutio
 import {ResetTwoStepAuthComponent} from "./components/reset-two-step-auth/reset-two-step-auth.component";
 import {LoginPageComponent} from "./components/login-page/login-page.component";
 import { LoginWithPageComponent } from './components/login-with-page/login-with-page.component';
+import { OAuthRegistrationFinishedComponent } from "./components/oauth-registration-finished/oauth-registration-finished.component";
 
 @NgModule({
     imports: [
@@ -29,6 +30,14 @@ import { LoginWithPageComponent } from './components/login-with-page/login-with-
                     {
                         path: AuthRoutes.Login,
                         component: LoginPageComponent
+                    },
+                    {
+                        path: AuthRoutes.RegistrationFinished,
+                        component: LoginPageComponent
+                    },
+                    {
+                        path: AuthRoutes.OAuthRegistrationFinished,
+                        component: OAuthRegistrationFinishedComponent
                     },
                     {
                         path: AuthRoutes.LoginWith,
