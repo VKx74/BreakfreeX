@@ -3,9 +3,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {first} from 'rxjs/operators';
 import {IdentityService} from "@app/services/auth/identity.service";
 import {AppRoutes} from "AppRoutes";
-import { Angulartics2Facebook } from "angulartics2/facebook";
-import { FBPixelTrackingService } from "@app/services/traking/fb.pixel.tracking.service";
-import { AuthRoutes } from "modules/Auth/auth.routes";
+import { PagesRoutes } from "modules/Pages/pages.routes";
 
 @Component({
     selector: 'login-with-page',
@@ -22,7 +20,7 @@ export class LoginWithPageComponent {
                 private _activatedRoute: ActivatedRoute) {
     }
 
-    ngOnInit() {
+    ngAfterViewInit() {
         this._activatedRoute.queryParams
             .pipe(first())
             .subscribe(params => {
@@ -49,7 +47,7 @@ export class LoginWithPageComponent {
         }).subscribe({
                 next: (value) => {
                     if (value) {
-                        this._router.navigate([value.isUserCreated ? AuthRoutes.OAuthRegistrationFinished : AppRoutes.Platform], {
+                        this._router.navigate([value.isUserCreated ? `${AppRoutes.Pages}/${PagesRoutes.OAuthRegistrationFinished}` : AppRoutes.Platform], {
                             relativeTo: this._route.root
                         });
                     } else {

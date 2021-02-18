@@ -134,7 +134,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         PlatformNavComponent,
         PlatformSidebarComponent,
         WalletsListComponent,
-        WorkspacesComponent,
+        WorkspacesComponent
     ],
     imports: [
         CommonModule,

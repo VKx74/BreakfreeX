@@ -2,10 +2,16 @@
 @import "mixins/themify";
 @import "global-styles/variables";
 
-
 :host {
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: auto;
+  font-family: $primaryFontFamily;
+  background: #fff;
+
   .back-to-navigator {
-    margin-top:   100px;
+    margin-top: 100px;
     font-size: 1.2em;
     text-decoration: underline;
     cursor: pointer;
@@ -16,4 +22,91 @@
   .root {
     width: 300px;
   }
+
+  .success_checkout_container {
+    display: flex;
+    height: 100%;
+  }
+
+  .left {
+    padding-top: 50px;
+    margin: 0 auto;
+  }
+
+  .left_part {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    border-left: 15px solid #191919;
+  }
+
+  .right_part {
+    display: flex;
+    background: #191919;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo:before {
+    vertical-align: unset;
+  }
+}
+
+span#actualquote {
+  padding: 15px;
+  color: #fff;
+}
+
+.quoteholder {
+  display: block;
+  position: relative;
+  margin-top: 60vh;
+  margin-left: 10vh;
+}
+
+.form-header-bft {
+  background: #191919;
+  color: #fff;
+  font-size: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.form-header-bft img {
+  width: 200px;
+  filter: invert(1);
+}
+
+.lds-ellipsis div {
+  background: #000 !important;
+  transition-duration: 0.22s;
+}
+
+.full-height.background {
+  background-image: url(https://images.unsplash.com/photo-1604724434236-a7cebeaa13e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80);
+}
+
+span.splitter {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: block;
+  height: 0.01rem;
+  background: #19191963;
+}
+
+.navimgholder {
+  width: 100px;
+  height: 100px;
+  background: #191919;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.navimgholder img {
+  padding: 20px;
 }
