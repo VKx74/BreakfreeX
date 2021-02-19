@@ -6,6 +6,7 @@ import {AppRoutes} from "AppRoutes";
 import { Angulartics2Facebook } from "angulartics2/facebook";
 import { FBPixelTrackingService } from "@app/services/traking/fb.pixel.tracking.service";
 import { AuthRoutes } from "modules/Auth/auth.routes";
+import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 
 @Component({
     selector: 'oauth-registration-finished-page',
@@ -17,11 +18,13 @@ export class OAuthRegistrationFinishedComponent {
     constructor(private _router: Router,
                 private _route: ActivatedRoute,
                 private _angulartics2Facebook: Angulartics2Facebook,
-                private _fbPixelTrackingService: FBPixelTrackingService) {
+                private _fbPixelTrackingService: FBPixelTrackingService,
+                private _gtmTrackingService: GTMTrackingService) {
     }
 
     ngOnInit() {
         this._fbPixelTrackingService.load();
+        this._gtmTrackingService.load();
         this._angulartics2Facebook.eventTrack("CompleteRegistration", {currency: "USD", value: 0});
 
         setTimeout(() => {
