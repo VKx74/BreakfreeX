@@ -9,8 +9,6 @@ import {LocalStorageService} from "Storage";
 import {ThemeService} from "../theme.service";
 import {delay, map, tap} from "rxjs/operators";
 import {NewsConfigService} from "../../../modules/News/services/news.config.service";
-import {ApplicationType} from "../../enums/ApplicationType";
-import {ApplicationTypeService} from "../application-type.service";
 import {EducationalTipsService} from "@app/services/educational-tips.service";
 import set = Reflect.set;
 
@@ -19,7 +17,6 @@ export interface UserSettingsDTO {
     timeZoneId: string;
     theme: Theme;
     rssFeedId: String;
-    applicationType: ApplicationType;
     showTips: boolean;
 }
 
@@ -28,7 +25,6 @@ export interface UserSettings {
     timeZone?: TimeZone;
     theme?: Theme;
     rssFeed?: IRSSFeed;
-    applicationType?: ApplicationType;
     showTips?: boolean;
 }
 
@@ -42,7 +38,6 @@ export class UserSettingsService {
                 private _themeService: ThemeService,
                 private _tipsService: EducationalTipsService,
                 private _newsConfigService: NewsConfigService,
-                private _applicationTypeService: ApplicationTypeService,
                 private _localStorageService: LocalStorageService) {
     }
 
@@ -65,8 +60,7 @@ export class UserSettingsService {
                         timeZone: LocalTimeZone,
                         theme: Theme.Dark,
                         rssFeed: feeds[0],
-                        showTips: false,
-                        applicationType: ApplicationType.Crypto
+                        showTips: false
                     };
                 })
             );
@@ -108,7 +102,6 @@ export class UserSettingsService {
         this._tipsService.changeShowTips(settings.showTips);
         this._localizationService.setLocale(settings.locale);
         this._newsConfigService.setDefaultFeed(settings.rssFeed);
-        this._applicationTypeService.setApplicationType(settings.applicationType);
     }
 
     private _convertDTO(dto: UserSettingsDTO): Observable<UserSettings> {
@@ -120,8 +113,7 @@ export class UserSettingsService {
                         timeZone: TimeZones.find(t => t.id === dto.timeZoneId) || LocalTimeZone,
                         theme: dto.theme,
                         showTips: dto.showTips,
-                        rssFeed: feeds.find(f => f.id === dto.rssFeedId) || feeds[0],
-                        applicationType: dto.applicationType
+                        rssFeed: feeds.find(f => f.id === dto.rssFeedId) || feeds[0]
                     };
                 })
             );
@@ -133,8 +125,7 @@ export class UserSettingsService {
             timeZoneId: settings.timeZone ? settings.timeZone.id : "",
             theme: settings.theme,
             rssFeedId: settings.rssFeed ? settings.rssFeed.id : "",
-            showTips: settings.showTips,
-            applicationType: settings.applicationType
+            showTips: settings.showTips
         } as UserSettingsDTO);
     }
 

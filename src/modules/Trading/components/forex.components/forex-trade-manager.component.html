@@ -1,5 +1,4 @@
 <div [ngSwitch]="instanceType" class="h-100">    
-    <oanda-trade-manager *ngSwitchCase="EBrokerInstance.OandaBroker" class="h-100"></oanda-trade-manager>
     <mt-trade-manager *ngSwitchCase="EBrokerInstance.MT4" class="h-100"></mt-trade-manager>
     <mt-trade-manager *ngSwitchCase="EBrokerInstance.MT5" class="h-100"></mt-trade-manager>
     <div *ngSwitchDefault class="flex align-items-center justify-content-center w-100 h-100">

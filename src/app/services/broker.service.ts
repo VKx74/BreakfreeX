@@ -3,12 +3,10 @@ import {IInstrument} from "../models/common/instrument";
 import {EExchange} from "../models/common/exchange";
 import {IHealthable} from "../interfaces/healthcheck/healthable";
 import {BehaviorSubject, Observable, of, Subject, Subscription} from "rxjs";
-import {ApplicationType} from "../enums/ApplicationType";
-import {EBrokerInstance, IBroker, IBrokerState} from "../interfaces/broker/broker";
-import {ActionResult, IBrokerUserInfo, OrderTypes} from "../../modules/Trading/models/models";
+import {IBroker, IBrokerState} from "../interfaces/broker/broker";
+import {ActionResult, OrderTypes} from "../../modules/Trading/models/models";
 import {map} from "rxjs/operators";
 import {BrokerFactory, CreateBrokerActionResult} from "../factories/broker.factory";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import { IdentityService } from './auth/identity.service';
 import { InstrumentMappingService } from "./instrument-mapping.service";
 
@@ -56,12 +54,6 @@ export class BrokerService implements IHealthable {
         return this._identityService.isAuthorizedCustomer;
     }  
 
-    private _applicationType: ApplicationType;
-
-    get supportedApplicationType(): ApplicationType {
-        return this._applicationType;
-    }
-
     private _activeBroker$ = new BehaviorSubject<IBroker>(null);
     activeBroker$ = this._activeBroker$.asObservable();
 
@@ -70,10 +62,7 @@ export class BrokerService implements IHealthable {
 
     constructor(private _brokerFactory: BrokerFactory,
                 private _identityService: IdentityService,
-                private _instrumentMappingService: InstrumentMappingService,
-                private _applicationTypeService: ApplicationTypeService) {
-        // Todo review
-        this._applicationType = this._applicationTypeService.applicationType;
+                private _instrumentMappingService: InstrumentMappingService) {
         this._isConnected = false;
     }
 
@@ -275,25 +264,6 @@ export class BrokerService implements IHealthable {
                 subscriber.complete();
             });
         });
-    }
-
-    setDefaultBroker(): Observable<ActionResult> {
-        switch (this._applicationTypeService.applicationType) {
-            // case ApplicationType.Crypto:
-            //     return this._restoreBrokerFromState({
-            //         brokerType: EBrokerInstance.BitmexBroker,
-            //         state: {}
-            //     });
-            // case ApplicationType.Forex:
-            //     return this._restoreBrokerFromState({
-            //         brokerType: EBrokerInstance.OandaBroker,
-            //         state: {}
-            //     });
-            default:
-                return of({
-                    result: true
-                });
-        }
     }
 
     public setBrokerInitializationState(state = true) {

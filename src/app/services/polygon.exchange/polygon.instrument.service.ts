@@ -7,8 +7,6 @@ import {AppConfigService} from "../app.config.service";
 import {IInstrument} from "@app/models/common/instrument";
 import { Observable, Subject, of } from 'rxjs';
 import {map} from "rxjs/operators";
-import {ApplicationTypeService} from "@app/services/application-type.service";
-import { ApplicationType } from '@app/enums/ApplicationType';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
@@ -19,7 +17,7 @@ export class PolygonInstrumentService extends InstrumentServiceBase {
         return EExchangeInstance.PolygonExchange;
     }
 
-    constructor(protected _http: HttpClient, private _applicationTypeService: ApplicationTypeService) {
+    constructor(protected _http: HttpClient) {
         super(_http);
         this._supportedMarkets = [EMarketType.Crypto, EMarketType.Forex, EMarketType.Stocks];
         this._endpoint = `${AppConfigService.config.apiUrls.polygonREST}instruments/extended`;
@@ -97,12 +95,12 @@ export class PolygonInstrumentService extends InstrumentServiceBase {
 
     protected _requestInstrumentsWithSearch(search: string = ""): Observable<any[]> {
         let market = "";
-        const appType = this._applicationTypeService.applicationType;
-        switch (appType) {
-            case ApplicationType.Crypto: market = "&Market=CRYPTO"; break;
-            case ApplicationType.Forex: market = "&Market=FX"; break;
-            case ApplicationType.Stock: market = "&Market=STOCKS"; break;
-        }
+        // const appType = this._applicationTypeService.applicationType;
+        // switch (appType) {
+        //     case ApplicationType.Crypto: market = "&Market=CRYPTO"; break;
+        //     case ApplicationType.Forex: market = "&Market=FX"; break;
+        //     case ApplicationType.Stock: market = "&Market=STOCKS"; break;
+        // }
 
         return this._http.get<any[]>(`${this._endpoint}?Search=${search}${market}`);
     }

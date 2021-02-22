@@ -1,9 +1,0 @@
-@import "../../../styles/themes/themes";
-@import "mixins/themify";
-
-:host {
-  .crypto-modal {
-    min-width: 320px;
-    max-width: 600px;
-  }
-}

@@ -1,11 +1,9 @@
 <!--Depend to broker type show specific component-->
 <ng-container *ngIf="activeBroker$ | async; else noBrokerConnected">
-    <div [ngSwitch]="applicationType$ | async" class="trade-manager h-100 flex" style="position: relative">
-
+    <div class="trade-manager h-100 flex" style="position: relative">
         <ng-template #accountInfo>
             <div class="account-info-panel flex-grow-1 flex justify-flex-end align-items-center">
                 <div [ngSwitch]="instanceType" class="h-100">    
-                    <oanda-account-info-bar *ngSwitchCase="EBrokerInstance.OandaBroker" class="date-container"></oanda-account-info-bar>
                     <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT4" class="date-container"></mt-account-info-bar>
                     <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT5" class="date-container"></mt-account-info-bar>
                 </div>
@@ -18,13 +16,8 @@
             <i *ngIf="isMinimized" class="crypto-icon crypto-icon-layout-maximise over-head" (click)="open()"></i>
         </div>
         <div class="flex trade-managers-wrapper" *ngIf="isOpen; else accountInfo">
-            <crypto-trade-manager *ngSwitchCase="ApplicationType.Crypto" class="h-100"></crypto-trade-manager>
-            <forex-trade-manager *ngSwitchCase="ApplicationType.Forex" class="h-100"></forex-trade-manager>
-            <forex-trade-manager *ngSwitchCase="ApplicationType.All" class="h-100"></forex-trade-manager>
+            <forex-trade-manager class="h-100"></forex-trade-manager>
         </div>
-        <!-- <div class="sell-buy" *ngIf="isOpen">
-            <order></order>
-        </div> -->
     </div>
 </ng-container>
 <ng-template #noBrokerConnected>
@@ -41,7 +34,6 @@
         </div>
         <div class="broker-not-connected flex align-items-center justify-content-center h-100 w-100 relative-wrapper">
             <div *ngIf="((brokerInitialized$ | async) !== null); else loader" class="shiftup">
-                <!-- <div class="section-label">{{'tradeManager.brokerType' | translate}}</div> -->
                 <forex-broker-connector></forex-broker-connector>
             </div>           
             <ng-template #loader>
@@ -50,12 +42,3 @@
         </div>
     </div>
 </ng-template>
-
-<!--<ng-template #closedBottomPanelTemplate>-->
-<!--    <div class="trade-manager h-100 flex" style="position: relative">-->
-<!--        <div class="top-panel w-100 flex-grow-1 flex justify-flex-end align-items-center">-->
-<!--            <div class="date-container">{{date}}</div>-->
-<!--            <i class="crypto-icon crypto-icon-layout-maximise" (click)="open()"></i>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</ng-template>-->

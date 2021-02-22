@@ -1,8 +1,4 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
-import { OandaTradingAccount } from 'modules/Trading/models/forex/oanda/oanda.models';
-import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
 import { BrokerService } from '@app/services/broker.service';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 

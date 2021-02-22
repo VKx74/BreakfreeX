@@ -15,11 +15,6 @@ import {AutoTradingAlertService} from "../../services/auto-trading-alert.service
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AudioService} from "@app/services/audio.service";
 import {CancelOrderComponent} from "../cancel-order/cancel-order.component";
-import {
-    CryptoOrderConfiguratorModalComponent,
-    ICryptoOrderFormConfig
-} from "../../../Trading/components/crypto.components/crypto-order-configurator-modal/crypto-order-configurator-modal.component";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import {RealtimeSourceSettings, IndicatorSourceSettings} from "../../models/AlertSourceSettingsBase";
 import {
     AlertSettings,
@@ -28,12 +23,10 @@ import {
     PriceAlertSettings,
     IndicatorAlertSettings
 } from "../../models/AlertSettingsBase";
-import {TradeActionType, OrderSide, OrderTypes} from "../../../Trading/models/models";
-import {BrokerService} from "@app/services/broker.service";
+import {TradeActionType} from "../../../Trading/models/models";
 import {JsUtil} from "../../../../utils/jsUtil";
-import {CancelTradeSettings, PlaceTradeSettings, TradeSettings} from "../../models/TradeSettingsBase";
+import {CancelTradeSettings, TradeSettings} from "../../models/TradeSettingsBase";
 import {AlertService} from "@alert/services/alert.service";
-import {OrderConfig} from "../../../Trading/components/crypto.components/crypto-order-configurator/crypto-order-configurator.component";
 import {AlertViewModel, TradingOrdersStatus} from './alert.view.model';
 import {IndicatorSeriesDescription} from 'modules/AutoTradingAlerts/models/dataSources/IndicatorSeriesDescription';
 import {Observable, of} from 'rxjs';
@@ -154,9 +147,7 @@ export class AlertDialogComponent extends Modal<IAlertDialogConfig> implements O
         private _fb: FormBuilder,
         private _translateService: TranslateService,
         private _instrumentService: InstrumentService,
-        private _applicationTypeService: ApplicationTypeService,
         private _autoTradingAlertService: AutoTradingAlertService,
-        private _brokerService: BrokerService,
         private _alertService: AlertService,
         private _audioService: AudioService,
         @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -246,51 +237,7 @@ export class AlertDialogComponent extends Modal<IAlertDialogConfig> implements O
     }
 
     placeOrder() {
-        let trade = this.configuredTrade as PlaceTradeSettings;
-        let orderConfig: OrderConfig = null;
-        let instrument: IInstrument = null;
-
-        if (trade && trade.TradeActionType === TradeActionType.Place) {
-            this._instrumentService.getInstrumentsBySymbol(trade.Symbol)
-                .subscribe((instruments: IInstrument[]) => {
-                    if (instruments && instruments.length > 0)
-                        instrument = instruments[0];
-                });
-            orderConfig = {
-                instrument: instrument,
-                side: trade.Side as OrderSide,
-                amount: trade.Size,
-                type: trade.Type as OrderTypes,
-                price: trade.Price,
-                stopPrice: trade.StopPrice
-            };
-        }
-
-        this._dialog.open(this._getOrderConfigComponent(), {
-            data: {
-                tradeConfig: orderConfig,
-                skipOrderPlacing: true
-            } as ICryptoOrderFormConfig
-        })
-            .afterClosed()
-            .subscribe((data: OrderConfig) => {
-                if (data == null) { // canceled
-                    this._resetTradingAction();
-                    return;
-                }
-
-                let settings: PlaceTradeSettings = {
-                    Side: data.side,
-                    Size: data.amount,
-                    Symbol: data.instrument.symbol,
-                    Type: data.type,
-                    StopPrice: data.stopPrice,
-                    Price: data.price,
-                    TradeActionType: TradeActionType.Place
-                };
-
-                this.configuredTrade = settings;
-            });
+       // not used
     }
 
     setTradingAlertStatus() {
@@ -319,7 +266,7 @@ export class AlertDialogComponent extends Modal<IAlertDialogConfig> implements O
     }
 
     private _getOrderConfigComponent(): any {
-        return CryptoOrderConfiguratorModalComponent;
+        // not used
     }
 
     private _initAlertForm_new(alertVM: AlertViewModel): void {

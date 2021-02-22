@@ -1,30 +1,22 @@
-import {ActivatedRouteSnapshot, Resolve} from "@angular/router";
-import {forkJoin, Observable, of} from "rxjs";
-import {Injectable} from "@angular/core";
-import {BrokerService, IBrokerServiceState} from "@app/services/broker.service";
-import {ApplicationTypeService} from "@app/services/application-type.service";
-import {ApplicationType} from "@app/enums/ApplicationType";
-import {map, switchMap} from "rxjs/operators";
-import {IdentityService} from "@app/services/auth/identity.service";
-import {BrokerStorage} from "@app/services/broker.storage";
-import {TranslateService} from "@ngx-translate/core";
-import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
+import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { Observable, of } from "rxjs";
+import { Injectable } from "@angular/core";
+import { BrokerService, IBrokerServiceState } from "@app/services/broker.service";
+import { BrokerStorage } from "@app/services/broker.storage";
 
 @Injectable()
 export class DashboardResolver implements Resolve<any> {
     constructor(private _brokerService: BrokerService,
-                private _appTypeService: ApplicationTypeService,
-                private _brokerStorage: BrokerStorage,
-                private _identityService: IdentityService) {
+        private _brokerStorage: BrokerStorage) {
     }
 
     resolve(route: ActivatedRouteSnapshot): Observable<any> {
         this._initializeBroker().subscribe(state => {
-                if (state && state.result) {
-                    this._brokerService.setBrokerInitializationState(true);
-                } else {
-                    this._brokerService.setBrokerInitializationState(false);
-                }
+            if (state && state.result) {
+                this._brokerService.setBrokerInitializationState(true);
+            } else {
+                this._brokerService.setBrokerInitializationState(false);
+            }
         }, error => {
             this._brokerService.setBrokerInitializationState(false);
         });

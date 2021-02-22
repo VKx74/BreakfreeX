@@ -28,7 +28,6 @@ import {SharedTranslateService} from "@app/localization/shared.token";
 import {LocalizationModule, TranslateServiceFactory} from "Localization";
 import {BrokerService} from "@app/services/broker.service";
 import {BrokerFactory} from "@app/factories/broker.factory";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import {AppTranslateService} from "@app/localization/token";
 import {UserSettingsResolver} from "@app/services/user-settings.resolver";
 import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
@@ -41,7 +40,6 @@ import {LocalStorageService} from "Storage";
 import {SessionStorageService} from "Storage";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {MatNativeDateModule} from "@angular/material/core";
-import {BitmexBrokerService} from "@app/services/bitmex.exchange/bitmex.broker.service";
 import {BitmexInstrumentService} from "@app/services/bitmex.exchange/bitmex.instrument.service";
 import {ExchangeFactory} from "@app/factories/exchange.factory";
 import {BitmexRealtimeService} from "@app/services/bitmex.exchange/bitmex.realtime.service";
@@ -60,8 +58,7 @@ import {UploadFile} from "@file-uploader/data/UploadFIle";
 import {IUploadFileInputConfig} from "@file-uploader/components/upload-file-input/upload-file-input.component";
 import {FileUploaderTranslateService} from "@file-uploader/localization/token";
 import {ToasterAlertService} from "@alert/services/toaster-alert.service";
-import {FileUploaderLocalizationModule, FileUploaderModule} from "@file-uploader/file-uploader.module";
-import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
+import {FileUploaderLocalizationModule} from "@file-uploader/file-uploader.module";
 import {OandaInstrumentService} from "@app/services/oanda.exchange/oanda.instrument.service";
 import {OandaHistoryService} from "@app/services/oanda.exchange/oanda.history.service";
 import {OandaRealtimeService} from "@app/services/oanda.exchange/oanda.realtime.service";
@@ -90,11 +87,8 @@ import { KaikoHistoryService } from './services/kaiko.exchange/kaiko.history.ser
 import { KaikoRealtimeService } from './services/kaiko.exchange/kaiko.realtime.service';
 import { KaikoSocketService } from './services/socket/kaiko.socket.service';
 import { MT5SocketService } from './services/socket/mt5.socket.service';
-import { MTBroker } from './services/mt/mt.broker';
 import { MT5BrokerServersProvider } from './services/mt/mt5.servers.service';
 import { MT4SocketService } from './services/socket/mt4.socket.service';
-import { MTSocketService } from './services/socket/mt.socket.service';
-import { MTBrokerServersProvider } from './services/mt/mt.servers.service';
 import { MT4BrokerServersProvider } from './services/mt/mt4.servers.service';
 import { MT4Broker } from './services/mt/mt4.broker';
 import { MT5Broker } from './services/mt/mt5.broker';
@@ -262,7 +256,6 @@ const FILE_INPUT_CONFIG_PROVIDER = {
             }
         },
 
-        ApplicationTypeService,
         SettingsStorageService,
         AuthGuard,
         BlockIfPopupWindowGuard,
@@ -287,7 +280,6 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         ExchangeFactory,
         BitmexRealtimeService,
         BitmexHistoryService,
-        BitmexBrokerService,
         BitmexInstrumentService,
         BitmexSocketService,
         BFTSocketService,
@@ -299,7 +291,6 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         OandaInstrumentService,
         OandaHistoryService,
         OandaRealtimeService,
-        OandaBrokerService,
         OandaSocketService,
         PolygonSocketService,
         TwelvedataSocketService,

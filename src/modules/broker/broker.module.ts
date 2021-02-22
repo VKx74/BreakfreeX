@@ -3,19 +3,15 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {IDEModule} from "../ide/ide.module";
 import {TradingModule} from "Trading";
-import {BrokerComponent} from './components/broker/broker.component';
 import {LocalizationModule, TranslateServiceFactory} from "Localization";
 import {SettingsTranslateService} from "./localization/token";
 import {UIModule} from "UI";
 import {LoadingModule} from "ngx-loading";
 import {SharedModule} from "Shared";
-import {CryptoBrokerComponent} from "./components/broker/crypto/crypto.broker.component";
-import {BitmexBrokerLoginComponent} from "./components/broker/crypto/bitmex/bitmex.broker.login.component";
 import {MatInputModule} from "@angular/material/input";
 import {MatTabsModule} from "@angular/material/tabs";
 import {FormErrorDirectiveModule} from "@form-error-directive/form-error-directive.module";
 import {ForexBrokerComponent} from "./components/broker/forex/forex.broker.component";
-import {OandaBrokerLoginComponent} from "./components/broker/forex/oanda/oanda.broker.login.component";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {PersonalInfoService} from "@app/services/personal-info/personal-info.service";
 import {EducationalTipsModule} from "../educational-tips/educational-tips.module";
@@ -62,11 +58,7 @@ import { MTBrokerLoginComponent } from './components/broker/forex/mt/mt.broker.l
     declarations: [
         // AlertWidgetComponent,
         // ProfileActivitiesComponent,
-        BrokerComponent,
-        CryptoBrokerComponent,
-        BitmexBrokerLoginComponent,
         ForexBrokerComponent,
-        OandaBrokerLoginComponent,
         MTBrokerLoginComponent,
         BrokerDialogComponent,
         ConnectedAccountInfoComponent
@@ -76,7 +68,6 @@ import { MTBrokerLoginComponent } from './components/broker/forex/mt/mt.broker.l
         PrivacyPolicyTradingModalComponent
     ],
     exports: [
-        BrokerComponent,
         BrokerDialogComponent,
     ],
     providers: [

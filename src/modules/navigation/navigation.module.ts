@@ -11,10 +11,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from "@angular/material/button";
 import {UserInfoMenuComponent} from './components/user-info-menu/user-info-menu.component';
 import {MatDividerModule} from "@angular/material/divider";
-import {WalletsListComponent} from './components/wallets-list/wallets-list.component';
 import {MatRadioModule} from "@angular/material/radio";
 import {ReactiveFormsModule} from "@angular/forms";
-import {TradingDialogModule} from "../trading-dialog/trading-dialog.module";
 import { SidebarToggleComponent } from './components/sidebar-toggle/sidebar-toggle.component';
 import { BaseNavComponent } from './components/base-nav/base-nav.component';
 import { NavDelimiterComponent } from './components/nav-delimiter/nav-delimiter.component';
@@ -27,7 +25,6 @@ import { BadgeComponent } from './components/badge/badge.component';
         ExchangeStatusConfiguratorComponent,
         NavigationComponent,
         UserInfoMenuComponent,
-        WalletsListComponent,
         SidebarToggleComponent,
         BaseNavComponent,
         NavDelimiterComponent,
@@ -46,7 +43,6 @@ import { BadgeComponent } from './components/badge/badge.component';
         MatDividerModule,
         MatRadioModule,
         ReactiveFormsModule,
-        TradingDialogModule,
         MatProgressBarModule
     ],
     entryComponents: [

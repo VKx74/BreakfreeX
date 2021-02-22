@@ -5,13 +5,11 @@ import { IInstrument } from "../models/common/instrument";
 import { EExchange } from "../models/common/exchange";
 import { JsUtil } from "../../utils/jsUtil";
 import { IHealthable } from "../interfaces/healthcheck/healthable";
-import { ApplicationTypeService } from "./application-type.service";
 import { ExchangeFactory } from "../factories/exchange.factory";
 import { APP_TYPE_EXCHANGES } from "../enums/ApplicationType";
 import { InstrumentServiceBase } from "@app/interfaces/exchange/instrument.service";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { InstrumentMappingService } from "./instrument-mapping.service";
-import { BrokerService } from "./broker.service";
 import { MTHelper } from "./mt/mt.helper";
 
 @Injectable()
@@ -32,26 +30,21 @@ export class InstrumentService implements IHealthable {
     }
 
     constructor(private exchangeFactory: ExchangeFactory,
-        private applicationTypeService: ApplicationTypeService,
-        private _instrumentMappingService: InstrumentMappingService) {        
+        private _instrumentMappingService: InstrumentMappingService) {
         this._init();
     }
 
     private _init() {
         setTimeout(() => {
-            let exchanges = APP_TYPE_EXCHANGES[this.applicationTypeService.applicationType];
-
-            if (exchanges) {
-                exchanges.forEach(value => {
-                    this.exchangeFactory.tryCreateInstrumentServiceInstance(value).subscribe(result => {
-                        if (result.serviceInstance && result.result) {
-                            this.services.push(result.serviceInstance);
-                        }
-                    }, error => {
-                        console.table(error);
-                    });
+            APP_TYPE_EXCHANGES.forEach(value => {
+                this.exchangeFactory.tryCreateInstrumentServiceInstance(value).subscribe(result => {
+                    if (result.serviceInstance && result.result) {
+                        this.services.push(result.serviceInstance);
+                    }
+                }, error => {
+                    console.table(error);
                 });
-            }
+            });
         });
     }
 
@@ -85,7 +78,7 @@ export class InstrumentService implements IHealthable {
                         }
                     }
                 }
-                
+
                 // if (isMapped) {
                 //     return null;
                 // }
@@ -97,12 +90,12 @@ export class InstrumentService implements IHealthable {
                 //         return i;
                 //     }
                 // }
-                
+
                 return null;
             })
         );
-    } 
-    
+    }
+
     getInstruments(datafeed?: EExchangeInstance, search?: string): Observable<IInstrument[]> {
         const observables: Observable<IInstrument[]>[] = [] = datafeed
             ? [this._getServiceByDatafeed(datafeed).getInstruments(undefined, search)]

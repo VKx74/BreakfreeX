@@ -3,7 +3,6 @@ import {TranslateService} from "@ngx-translate/core";
 import {TimeZone, TimeZoneManager, TzUtils, UTCTimeZone} from "TimeZones";
 import {interval, Observable} from "rxjs";
 import {map, switchMap, takeUntil} from "rxjs/operators";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import {BrokerService} from "@app/services/broker.service";
 import {JsUtil} from "../../../../utils/jsUtil";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
@@ -35,10 +34,6 @@ export class FooterComponent implements OnInit {
         this.notSaved = value;
     }
     @Output() saveLayoutE: EventEmitter<void> = new EventEmitter();
-
-    get appTypeCaption(): Observable<string> {
-        return this._translateService.get(`footer.${this._applicationTypeService.applicationType}`);
-    }
     
     get exchange(): string {
         return this._brokerService.activeBroker ?
@@ -54,7 +49,6 @@ export class FooterComponent implements OnInit {
     constructor(private _store: Store<AppState>,
         private _timeZoneManager: TimeZoneManager,
         private _translateService: TranslateService,
-        private _applicationTypeService: ApplicationTypeService,
         private _brokerService: BrokerService,
         private _tzUtils: TzUtils) {
     }

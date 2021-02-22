@@ -1,5 +1,4 @@
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType } from 'modules/Trading/models/models';
-import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
 import { IBFTATrend } from '@app/services/algo.service';
 
 export enum MTStatus {

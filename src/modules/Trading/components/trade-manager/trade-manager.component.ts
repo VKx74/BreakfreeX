@@ -1,18 +1,15 @@
-import {Component, Inject, OnDestroy, Optional, Input} from "@angular/core";
+import {Component, OnDestroy} from "@angular/core";
 import {TradingTranslateService} from "../../localization/token";
 import {TranslateService} from "@ngx-translate/core";
 import {LocalizationService} from "Localization";
-import {ApplicationType} from "@app/enums/ApplicationType";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import {TimeZone, TimeZoneManager, TzUtils, UTCTimeZone} from "TimeZones";
-import {combineLatest, interval, Observable} from "rxjs";
+import {interval, Observable} from "rxjs";
 import {map, switchMap, takeUntil, tap} from "rxjs/operators";
 import {JsUtil} from "../../../../utils/jsUtil";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {BrokerService} from "@app/services/broker.service";
 // @ts-ignore
 import moment = require('moment');
-import {IOutputAreaSizes} from "angular-split";
 import {ToggleBottomPanelSizeService} from "@platform/components/dashboard/toggle-bottom-panel-size.service";
 import {EventsHelper} from "@app/helpers/events.helper";
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
@@ -31,8 +28,6 @@ export class TradeManagerComponent implements OnDestroy {
     date: string;
     activeBroker$ = this._brokerService.activeBroker$;
     brokerInitialized$ = this._brokerService.brokerInitializationState$;
-    applicationType$ = this._applicationTypeService.applicationTypeChanged;
-    ApplicationType = ApplicationType;
     EBrokerInstance = EBrokerInstance;
     readonly openBottomPanel = 150;
     readonly openBottomPanelHeight = 250;
@@ -51,20 +46,11 @@ export class TradeManagerComponent implements OnDestroy {
         return this._bottomPanelSizeService.sizeBottomPanel() < this.openBottomPanel;
     }
 
-    constructor(private _localizationService: LocalizationService,
-                private _applicationTypeService: ApplicationTypeService,
-                private _timeZoneManager: TimeZoneManager,
+    constructor(private _timeZoneManager: TimeZoneManager,
                 private _brokerService: BrokerService,
                 private _tzUtils: TzUtils,
-                private _translateService: TranslateService,
                 private _bottomPanelSizeService: ToggleBottomPanelSizeService,
                 ) {
-
-        // if (this._goldenLayoutItemComponent) {
-        //     this._goldenLayoutItemComponent.setTitle(
-        //         this._translateService.get('tradeManagerComponentName')
-        //     );
-        // }
     }
 
     ngOnInit() {

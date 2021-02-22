@@ -1,7 +1,6 @@
 <div class="forex-broker-settings flex">
     <div *ngIf="brokerConnected">
         <div [ngSwitch]="broker" class="broker-container">
-            <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
             <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" *ngSwitchCase="EBrokerInstance.MT5"></mt-broker-login>
             <mt-broker-login [brokerInstance]="EBrokerInstance.MT4" *ngSwitchCase="EBrokerInstance.MT4"></mt-broker-login>
         </div>      
@@ -15,7 +14,6 @@
         </div>
 
         <div [ngSwitch]="broker" class="broker-container">
-            <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
             <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" *ngSwitchCase="EBrokerInstance.MT5"></mt-broker-login>
             <mt-broker-login [brokerInstance]="EBrokerInstance.MT4" *ngSwitchCase="EBrokerInstance.MT4"></mt-broker-login>
         </div>

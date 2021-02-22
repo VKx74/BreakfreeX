@@ -1,23 +1,19 @@
-import {Component, Inject} from "@angular/core";
-import {IdentityService} from "./services/auth/identity.service";
-import {TranslateService} from "@ngx-translate/core";
-import {AppTranslateService} from "./localization/token";
+import { Component, Inject } from "@angular/core";
+import { IdentityService } from "./services/auth/identity.service";
+import { TranslateService } from "@ngx-translate/core";
+import { AppTranslateService } from "./localization/token";
 import {
     ActivatedRoute,
     NavigationCancel,
     NavigationEnd,
-    NavigationError,
     NavigationStart,
     Router,
     RouterEvent
 } from "@angular/router";
-import {ComponentAccessService} from "@app/services/component-access.service";
-import {BrokerService} from "@app/services/broker.service";
-import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
-import {SidebarService} from "@app/services/sidebar.service";
-import {LoaderService} from "@app/services/loader.service";
-import {filter, tap} from "rxjs/operators";
-import {AppRoutes} from './app.routes';
+import { SidebarService } from "@app/services/sidebar.service";
+import { LoaderService } from "@app/services/loader.service";
+import { filter } from "rxjs/operators";
+import { AppRoutes } from './app.routes';
 import { Angulartics2Segment } from 'angulartics2/segment';
 import { Angulartics2GoSquared } from 'angulartics2/gosquared';
 
@@ -46,13 +42,13 @@ export class AppComponent {
     }
 
     constructor(private _authService: IdentityService,
-                private _router: Router,
-                private _route: ActivatedRoute,
-                private _ss: SidebarService,
-                private _loaderService: LoaderService,
-                private _angulartics2Segment: Angulartics2Segment,
-                private _angulartics2GoSquared: Angulartics2GoSquared,
-                @Inject(AppTranslateService) private _translateService: TranslateService
+        private _router: Router,
+        private _route: ActivatedRoute,
+        private _ss: SidebarService,
+        private _loaderService: LoaderService,
+        private _angulartics2Segment: Angulartics2Segment,
+        private _angulartics2GoSquared: Angulartics2GoSquared,
+        @Inject(AppTranslateService) private _translateService: TranslateService
     ) {
         this._authService.isAuthorizedChange$.subscribe(value => {
             if (!value) {
@@ -97,20 +93,20 @@ export class AppComponent {
             .pipe(
                 filter(e => e instanceof NavigationStart || e instanceof NavigationEnd || e instanceof NavigationCancel)
             ).subscribe((e: RouterEvent) => {
-            const url = e.url;
+                const url = e.url;
 
-            if (e instanceof NavigationStart) {
-                for (let module of this.SHOW_LOADER_MODULES) {
-                    if (url.includes(module) && module !== prevModule) {
-                        this._loaderService.show();
-                        prevModule = currModule;
-                        return currModule = module;
+                if (e instanceof NavigationStart) {
+                    for (let module of this.SHOW_LOADER_MODULES) {
+                        if (url.includes(module) && module !== prevModule) {
+                            this._loaderService.show();
+                            prevModule = currModule;
+                            return currModule = module;
+                        }
                     }
+                } else {
+                    this._loaderService.hide();
                 }
-            } else {
-                this._loaderService.hide();
-            }
-        });
+            });
     }
 }
 

@@ -1,13 +1,9 @@
 import {ActionResult, IBrokerUserInfo, OrderTypes} from "../../../modules/Trading/models/models";
 import {EExchange} from "../../models/common/exchange";
-import {EMarketType} from "../../models/common/marketType";
 import {Observable, Subject} from "rxjs";
 import {IInstrument} from "../../models/common/instrument";
-import { EExchangeInstance } from '../exchange/exchange';
 
 export enum EBrokerInstance {
-    BitmexBroker = 'Bitmex',
-    OandaBroker = "Oanda",
     MT5 = "MT5",
     MT4 = "MT4"
 }

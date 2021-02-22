@@ -1,13 +1,9 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {APP_TYPE_BROKERS, ApplicationType} from "@app/enums/ApplicationType";
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {BrokerService} from "@app/services/broker.service";
 import {EBrokerInstance} from "@app/interfaces/broker/broker";
 import { MatDialog } from '@angular/material/dialog';
 import { BrokerDialogComponent, BrokerDialogData } from '../../../../../broker/components/broker/broker-dialog/broker-dialog.component';
 import { tap } from 'rxjs/operators';
-import {AlertService} from "@alert/services/alert.service";
-import { IdentityService } from '@app/services/auth/identity.service';
-import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 @Component({
     selector: 'mt-broker-type-selector',
@@ -15,7 +11,6 @@ import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/
     styleUrls: ['mt-broker-type-selector.component.scss']    
 })
 export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
-    @Input() applicationType: ApplicationType;
     public availableBrokers: EBrokerInstance[] = [];
     public selectedBroker: EBrokerInstance;
 
@@ -33,13 +28,12 @@ export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
         return this._brokerService.activeBroker ? this._brokerService.activeBroker.instanceType : "None";
     }
 
-    constructor(private _brokerService: BrokerService,    
-                private _identityService: IdentityService,            
+    constructor(private _brokerService: BrokerService,   
                 private _dialog: MatDialog) {
     }
 
     ngOnInit() {
-        this.availableBrokers = APP_TYPE_BROKERS[this.applicationType];
+        this.availableBrokers = [EBrokerInstance.MT4, EBrokerInstance.MT5];
         this.selectedBroker = this.availableBrokers[0];        
     }
 

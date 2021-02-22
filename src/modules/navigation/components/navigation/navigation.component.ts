@@ -1,6 +1,4 @@
 import {
-    AfterContentInit,
-    AfterViewInit,
     Component,
     EventEmitter,
     Injector,
@@ -28,11 +26,6 @@ import {UserAvatarShape} from "../../../UI/components/name-avatar/name-avatar.co
 import {Workspace} from "@platform/data/workspaces";
 import {WorkspaceIds, WorkspaceRepository} from "@platform/services/workspace-repository.service";
 import {ProcessState} from "@app/helpers/ProcessState";
-import {BrokerService} from "@app/services/broker.service";
-import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
-import {WithdrawModalComponent} from "../../../trading-dialog/components/withdraw-modal/withdraw-modal.component";
-import {ModalDepositComponent} from "../../../trading-dialog/components/modal-deposit/modal-deposit.component";
-import {ApplicationType} from "@app/enums/ApplicationType";
 import {
     ShuftiproAccountManagerComponent,
     ShuftiproAccountManagerConfig, ShuftiproAccountManagerResult
@@ -41,7 +34,6 @@ import {PersonalInfoService} from "@app/services/personal-info/personal-info.ser
 import {catchError, delay} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 import {SidebarService} from "@app/services/sidebar.service";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 
 export enum NavigationMode {
     User,
@@ -69,7 +61,6 @@ export class NavigationComponent implements OnInit {
     Roles = Roles;
     UserAvatarShape = UserAvatarShape;
     WorkspaceIds = WorkspaceIds;
-    ApplicationType = ApplicationType;
     workspaces: Workspace[];
     opened: Subject<void> = new Subject<void>();
 
@@ -91,27 +82,6 @@ export class NavigationComponent implements OnInit {
         [ExchangeStatus.Maintenance]: 'Maintenance',
         [ExchangeStatus.Closed]: 'Closed',
     };
-
-    get activeWallet() {
-        const broker = this._brokerService.activeBroker as CryptoBroker;
-
-        if (broker && broker.activeWallet) {
-            return broker.activeWallet;
-        }
-    }
-
-    get applicationType(): ApplicationType {
-        // Todo review
-        return this._applicationTypeService.applicationType;
-    }
-
-    get walletsExists() {
-        const broker = this._brokerService.activeBroker as CryptoBroker;
-
-        if (broker && broker.getWallets()) {
-            return broker.activeWallet;
-        }
-    }
 
     get exchangeStatus() {
         return this._systemNotificationsService.exchangeStatus;
@@ -167,11 +137,9 @@ export class NavigationComponent implements OnInit {
                 private _dialog: MatDialog,
                 private _router: Router,
                 public _themeService: ThemeService,
-                private _brokerService: BrokerService,
                 private _personalInfoService: PersonalInfoService,
                 private _workspaceRepository: WorkspaceRepository,
                 private _sidebarService: SidebarService,
-                private _applicationTypeService: ApplicationTypeService,
                 private _rolesHelper: RolesHelper) {
     }
 
@@ -235,18 +203,6 @@ export class NavigationComponent implements OnInit {
             this._logout();
     }
 
-    // showComponentSelector() {
-    //     this._dialog.open(ComponentSelectorComponent, {
-    //         panelClass: 'no-shadow'
-    //     } as any)
-    //         .afterClosed()
-    //         .subscribe((item: Type<any>) => {
-    //             if (item && this._layoutService) {
-    //                 this._layoutService.addComponent({layoutItem: item} as AddComponentData);
-    //             }
-    //         });
-    // }
-
     changeShuftiproAccount() {
         const shuftiproAccountManagerConfig: ShuftiproAccountManagerConfig = {
             currentEmail: this.shuftiproAccountEmail
@@ -287,15 +243,11 @@ export class NavigationComponent implements OnInit {
     }
 
     openModalWithdraw() {
-        this._dialog.open(WithdrawModalComponent, {
-        })
-            .afterClosed().subscribe();
+        // not used
     }
 
     openModalDeposit() {
-        this._dialog.open(ModalDepositComponent, {
-        })
-            .afterClosed().subscribe();
+        // not used
     }
 
     private _logout() {

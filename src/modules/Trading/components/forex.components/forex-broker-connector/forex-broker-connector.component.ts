@@ -1,7 +1,6 @@
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../localization/token";
 import {BrokerService} from "@app/services/broker.service";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import { Component } from "@angular/core";
 
 @Component({
@@ -16,8 +15,6 @@ import { Component } from "@angular/core";
     ]
 })
 export class ForexBrokerConnectorComponent {
-    applicationType$ = this._applicationTypeService.applicationTypeChanged;
-    // EBrokerInstance = EBrokerInstance;
 
     get instanceType() {
         const brokerService = this.brokerService;
@@ -25,7 +22,6 @@ export class ForexBrokerConnectorComponent {
         return brokerService && brokerService.activeBroker && brokerService.activeBroker.instanceType;
     }
 
-    constructor(private brokerService: BrokerService,
-                private _applicationTypeService: ApplicationTypeService) {
+    constructor(private brokerService: BrokerService) {
     }
 }

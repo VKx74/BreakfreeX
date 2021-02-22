@@ -1,18 +1,17 @@
-import {Observable, of} from "rxjs";
-import {Injectable} from "@angular/core";
-import {EExchange} from "../models/common/exchange";
-import {HistoryServiceBase} from "../interfaces/exchange/history.service";
-import {IHistoryByBackBarsCountRequest, IHistoryRequest} from "../models/common/historyRequest";
-import {IHistoryResponse} from "../models/common/historyResponse";
-import {IHealthable} from "../interfaces/healthcheck/healthable";
-import {TimeZoneManager, TzUtils, UTCTimeZone} from "TimeZones";
-import {map} from "rxjs/operators";
-import {ApplicationTypeService} from "./application-type.service";
-import {APP_TYPE_EXCHANGES} from "../enums/ApplicationType";
-import {ExchangeFactory} from "../factories/exchange.factory";
-import {IInstrument} from "@app/models/common/instrument";
-import {ITick} from "@app/models/common/tick";
-import {TimeFrameHelper} from "@app/helpers/timeFrame.helper";
+import { Observable, of } from "rxjs";
+import { Injectable } from "@angular/core";
+import { EExchange } from "../models/common/exchange";
+import { HistoryServiceBase } from "../interfaces/exchange/history.service";
+import { IHistoryByBackBarsCountRequest, IHistoryRequest } from "../models/common/historyRequest";
+import { IHistoryResponse } from "../models/common/historyResponse";
+import { IHealthable } from "../interfaces/healthcheck/healthable";
+import { TimeZoneManager, TzUtils, UTCTimeZone } from "TimeZones";
+import { map } from "rxjs/operators";
+import { APP_TYPE_EXCHANGES } from "../enums/ApplicationType";
+import { ExchangeFactory } from "../factories/exchange.factory";
+import { IInstrument } from "@app/models/common/instrument";
+import { ITick } from "@app/models/common/tick";
+import { TimeFrameHelper } from "@app/helpers/timeFrame.helper";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { IBarData } from "@app/models/common/barData";
 
@@ -34,27 +33,23 @@ export class HistoryService implements IHealthable {
     }
 
     constructor(private _timeZoneManager: TimeZoneManager,
-                private exchangeFactory: ExchangeFactory,
-                private applicationTypeService: ApplicationTypeService) {
+        private exchangeFactory: ExchangeFactory) {
         this._init();
     }
 
     private _init() {
         setTimeout(() => {
-            let exchanges = APP_TYPE_EXCHANGES[this.applicationTypeService.applicationType];
-            if (exchanges) {
-                exchanges.forEach(value => {
-                    this.exchangeFactory.tryCreateHistoryServiceInstance(value).subscribe(result => {
-                        if (result.serviceInstance && result.result) {
-                            this.services.push(result.serviceInstance);
-                        } else {
-                            console.table(result);
-                        }
-                    }, error => {
-                        console.table(error);
-                    });
+            APP_TYPE_EXCHANGES.forEach(value => {
+                this.exchangeFactory.tryCreateHistoryServiceInstance(value).subscribe(result => {
+                    if (result.serviceInstance && result.result) {
+                        this.services.push(result.serviceInstance);
+                    } else {
+                        console.table(result);
+                    }
+                }, error => {
+                    console.table(error);
                 });
-            }
+            });
         });
     }
 

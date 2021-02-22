@@ -14,17 +14,14 @@ import {CalendarEventsDatafeed} from "../../calendarEvents/CalendarEventsDatafee
 import {IndicatorAlertHandler} from 'modules/Chart/indicatorAlertHandler/indicatorAlertHandler';
 import {AutoTradingAlertConfigurationService} from 'modules/AutoTradingAlerts/services/auto-trading-alert-configuration.service';
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {ComponentIdentifier} from "@app/models/app-config";
 import {EducationalTipsService} from "@app/services/educational-tips.service";
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import {IInstrument} from "@app/models/common/instrument";
 import IChartInstrument = TradingChartDesigner.IInstrument;
 import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
-import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
 import {BrokerService} from "@app/services/broker.service";
-import {ICryptoPlaceOrderAction} from "../../../Trading/models/crypto/crypto.models";
 import TradeAction = TradingChartDesigner.TradeAction;
-import {OrderSide, OrderTypes} from "../../../Trading/models/models";
+import {OrderTypes} from "../../../Trading/models/models";
 import {AlertService} from "@alert/services/alert.service";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { InstrumentService } from '@app/services/instrument.service';
@@ -325,34 +322,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         const instrument = this.chart.instrument as IInstrument;
         const orderType = OrderTypes[params.orderName];
 
-        if (this._brokerService.isInstrumentAvailable(instrument, orderType)) {
-            const broker = this._brokerService.activeBroker as CryptoBroker;
-            if (!params.amount) {
-                this._alertService.error(this._translateService.get('amountMustHaveValue'));
-                return;
-            }
-            const placeOrderData: ICryptoPlaceOrderAction = {
-                symbol: instrument.symbol,
-                side: OrderSide[TradeAction[params.action]],
-                size: params.amount,
-                type: orderType,
-                price: orderType === OrderTypes.Limit || orderType === OrderTypes.StopLimit ? params.limitPrice : null,
-                stopPrice: (orderType === OrderTypes.Stop || orderType === OrderTypes.StopLimit) ? params.stopPrice : null
-            };
-
-            broker.placeOrder(placeOrderData)
-                .subscribe(value => {
-                    if (value.result) {
-                        this._alertService.success(this._translateService.get('orderPlaced'));
-                    } else {
-                        this._alertService.error(value.msg);
-                    }
-                }, error => {
-                    this._alertService.error(error.message);
-                });
-        } else {
-            this._alertService.error(this._translateService.get('brokerNotSupportThisSymbol'));
-        }
+        // not using
     }
 
     private _subscribeOnChartEvents(chart: TradingChartDesigner.Chart) {

@@ -79,15 +79,6 @@
 <!--            </ng-container>-->
 <!--        </ng-container>-->
 
-        <ng-container *ngIf="mode === NavigationMode.Forum">
-            <div class="flex navigation-padding">
-                <button class="crypto-button crypto-button_primary m-right-10" [disabled]="!activeWallet"
-                        (click)="openModalDeposit()">
-                    {{'app.deposits' | translate}}
-                </button>
-            </div>
-        </ng-container>
-
         <div class="delimiter-vertical delimiter-left"></div>
         <div class="navigation-padding avatar">
             <name-avatar [name]="currentUserFullName"
