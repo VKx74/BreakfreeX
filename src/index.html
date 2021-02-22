@@ -2,193 +2,205 @@
 
 
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <base href=".">
-    <title>Navigator - Breakfree Trading</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1">
-    <link rel="icon" type="image/x-icon" href="assets/img/logo.png">
+  <meta charset="utf-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <base href=".">
+  <title>Navigator - Breakfree Trading</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1">
+  <link rel="icon" type="image/x-icon" href="assets/img/logo.png">
 
- <!--updateCSSx -->   
-         <link rel="stylesheet" href="styles.css?1.6">  
-         <link href="../node_modules/trading-chart-designer/css/TradingChartDesigner.min.css?5.2.94" rel="stylesheet">  
-
-
-    <!--<link rel="stylesheet" href="assets/global-styles/select.css">-->
-    <link rel="stylesheet" href="libs/fontawersome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="libs/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../node_modules/trading-chart-designer/css/external/spectrum.min.css">
-    <link rel="stylesheet" href="../node_modules/trading-chart-designer/css/external/toastr.min.css">
-    <link rel="stylesheet" href="libs/croopie/croppie.css">
-<!--    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,900" rel="stylesheet">-->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
-
-    <!--Material Icons-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--End Material Icons-->
-
-    <!-- TCD -->
+  <!--updateCSSx -->
+  <link rel="stylesheet" href="styles.css?1.6">
+  <link href="../node_modules/trading-chart-designer/css/TradingChartDesigner.min.css?5.2.94" rel="stylesheet">
 
 
+  <!--<link rel="stylesheet" href="assets/global-styles/select.css">-->
+  <link rel="stylesheet" href="libs/fontawersome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="libs/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="../node_modules/trading-chart-designer/css/external/spectrum.min.css">
+  <link rel="stylesheet" href="../node_modules/trading-chart-designer/css/external/toastr.min.css">
+  <link rel="stylesheet" href="libs/croopie/croppie.css">
+  <!--    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,900" rel="stylesheet">-->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
 
-    <link href="../node_modules/trading-chart-designer/css/external/spectrum.min.css" rel="stylesheet">
-    <link href="../node_modules/trading-chart-designer/css/external/toastr.min.css" rel="stylesheet">
-    <link href="../node_modules/trading-chart-designer/css/external/jqNumericField.min.css" rel="stylesheet">
-    <!-- End TCD -->
+  <!--Material Icons-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--End Material Icons-->
 
-    <!--Wistia-->
-    <!-- <link rel="stylesheet" href="https://fast.wistia.com/embed/channel/project/kc3lu27hox/font.css" /> -->
-    <!-- <script src="https://fast.wistia.com/assets/external/channel.js" async></script> -->
+  <!-- TCD -->
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118418177-3"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'UA-118418177-3');
-    </script> -->
+
+  <link href="../node_modules/trading-chart-designer/css/external/spectrum.min.css" rel="stylesheet">
+  <link href="../node_modules/trading-chart-designer/css/external/toastr.min.css" rel="stylesheet">
+  <link href="../node_modules/trading-chart-designer/css/external/jqNumericField.min.css" rel="stylesheet">
+  <!-- End TCD -->
+
+  <!--Wistia-->
+  <!-- <link rel="stylesheet" href="https://fast.wistia.com/embed/channel/project/kc3lu27hox/font.css" /> -->
+  <!-- <script src="https://fast.wistia.com/assets/external/channel.js" async></script> -->
+
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-TNPBKC9');</script>
+  <!-- End Google Tag Manager -->
 </head>
+
 <body>
 
 
-    
-<app></app>
 
-<app-root> 
+  <app></app>
+
+  <app-root>
     <div class="app-loading" id="initial-loader">
       <div class="logo">
 
         <img src="assets/img/bft_bird_w.svg" alt="">
       </div>
       <svg class="spinner" viewBox="25 25 50 50">
-        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="0.05" stroke-miterlimit="10"/>
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="0.05" stroke-miterlimit="10" />
       </svg>
     </div>
-    
-</app-root>
+
+  </app-root>
 
 
 
 
 
-<!--<root></root>-->
-<!--<script src="libs/detectizer/detectizr.min.js"></script>-->
-<script src="libs/moment/moment@2.23.min.js"></script>
-<script src="libs/moment/moment-timezone@0.5.23.min.js"></script>
-<script src="libs/moment/moment-zones.js"></script>
-<script src="libs/jquery/jquery.min.js"></script>
-<!--<script src="libs/jquery/jquery-ui.min.js"></script>-->
-<!--<script src="libs/jquery/jquery.ui.touch-punch.min.js"></script>-->
-<!--<script src="libs/bootstrap/bootstrap.min.js"></script>-->
-<!--<script src="libs/bootstrap/bootstrap.v3.datetimepicker.min.js"></script>-->
-<!--<script src="libs/jquery-i18next.min.js"></script>-->
-<!--<script src="libs/i18nextXHRBackend.min.js"></script>-->
-<!--<script src="libs/html2canvas/html2canvas.min.js"></script>-->
-<script src="libs/html2canvas/html2canvas.svg.min.js"></script>
+  <!--<root></root>-->
+  <!--<script src="libs/detectizer/detectizr.min.js"></script>-->
+  <script src="libs/moment/moment@2.23.min.js"></script>
+  <script src="libs/moment/moment-timezone@0.5.23.min.js"></script>
+  <script src="libs/moment/moment-zones.js"></script>
+  <script src="libs/jquery/jquery.min.js"></script>
+  <!--<script src="libs/jquery/jquery-ui.min.js"></script>-->
+  <!--<script src="libs/jquery/jquery.ui.touch-punch.min.js"></script>-->
+  <!--<script src="libs/bootstrap/bootstrap.min.js"></script>-->
+  <!--<script src="libs/bootstrap/bootstrap.v3.datetimepicker.min.js"></script>-->
+  <!--<script src="libs/jquery-i18next.min.js"></script>-->
+  <!--<script src="libs/i18nextXHRBackend.min.js"></script>-->
+  <!--<script src="libs/html2canvas/html2canvas.min.js"></script>-->
+  <script src="libs/html2canvas/html2canvas.svg.min.js"></script>
 
-<!--<script src="libs/resizeSensor.js"></script>-->
-<!--<script src="libs/element-queries/resize-sensor.js"></script>-->
-<!--<script src="libs/element-queries/element-queries.custom.js"></script>-->
-<!--<script src="libs/element-queries-initialization.js"></script>-->
+  <!--<script src="libs/resizeSensor.js"></script>-->
+  <!--<script src="libs/element-queries/resize-sensor.js"></script>-->
+  <!--<script src="libs/element-queries/element-queries.custom.js"></script>-->
+  <!--<script src="libs/element-queries-initialization.js"></script>-->
 
-<!-- TCD -->
-<!--<script src="../node_modules/jquery/dist/jquery.min.js"></script>-->
-<script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
-<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- TCD -->
+  <!--<script src="../node_modules/jquery/dist/jquery.min.js"></script>-->
+  <script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery-ui.min.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/Intl.min.js"></script>
-<!--<script src="../node_modules/trading-chart-designer/scripts/frameworks/moment.min.js"></script>-->
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/detectizr.min.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/html2canvas.min.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/i18nextXHRBackend.min.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery-i18next.min.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/bootstrap.v3.datetimepicker.min.js"></script>
-<!--<script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery-ui.min.js"></script>-->
-<script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery.ui.touch-punch.min.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/jquery.autocolumnlist.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/jquery.resizable.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/bootstrap-select.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery-ui.min.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/Intl.min.js"></script>
+  <!--<script src="../node_modules/trading-chart-designer/scripts/frameworks/moment.min.js"></script>-->
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/detectizr.min.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/html2canvas.min.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/i18nextXHRBackend.min.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery-i18next.min.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/bootstrap.v3.datetimepicker.min.js"></script>
+  <!--<script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery-ui.min.js"></script>-->
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks/jquery.ui.touch-punch.min.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/jquery.autocolumnlist.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/jquery.resizable.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/bootstrap-select.js"></script>
 
-   <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/spectrum.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/switchery.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/toastr.js"></script>
-<script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/i18next.js"></script>
-<!--  For theme-->
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/spectrum.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/switchery.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/toastr.js"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/frameworks-modified/i18next.js"></script>
+  <!--  For theme-->
 
-<!--updateJSx -->      
-                     <script src="../node_modules/trading-chart-designer/scripts/TradingChartDesigner.min.js?5.2.94" charset="iso-8859-1"></script>
-                     <script src="../node_modules/trading-chart-designer/scripts/themes/defaultTheme.js?5.2.94"></script>
-                     <script src="../node_modules/trading-chart-designer/scripts/themes/fintatechDarkTheme.js?5.2.94"></script>
-                    
-
- <script src="../node_modules/trading-chart-designer/scripts/themes/darkTheme.js"></script>
-<!--<script src="../node_modules/trading-chart-designer/scripts/themes/tealTheme.js"></script>-->
-<!--<script src="../node_modules/trading-chart-designer/scripts/themes/beetTheme.js"></script>-->
-<!--<script src="../node_modules/trading-chart-designer/scripts/themes/oliveTheme.js"></script>-->
-<!--<script src="../node_modules/trading-chart-designer/scripts/themes/orangeTheme.js"></script>-->
-<!--<script src="../node_modules/trading-chart-designer/scripts/themes/purpleTheme.js"></script>-->
-<!--<script src="../node_modules/trading-chart-designer/scripts/themes/skyTheme.js"></script>-->
-<!--<script src="../node_modules/trading-chart-designer/scripts/themes/grayTheme.js"></script>-->
+  <!--updateJSx -->
+  <script src="../node_modules/trading-chart-designer/scripts/TradingChartDesigner.min.js?5.2.94"
+    charset="iso-8859-1"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/themes/defaultTheme.js?5.2.94"></script>
+  <script src="../node_modules/trading-chart-designer/scripts/themes/fintatechDarkTheme.js?5.2.94"></script>
 
 
-<script src="libs/moment/locales/uk.js"></script>
-<script src="libs/croopie/croppie.min.js"></script>
-<!-- End TCD -->
+  <script src="../node_modules/trading-chart-designer/scripts/themes/darkTheme.js"></script>
+  <!--<script src="../node_modules/trading-chart-designer/scripts/themes/tealTheme.js"></script>-->
+  <!--<script src="../node_modules/trading-chart-designer/scripts/themes/beetTheme.js"></script>-->
+  <!--<script src="../node_modules/trading-chart-designer/scripts/themes/oliveTheme.js"></script>-->
+  <!--<script src="../node_modules/trading-chart-designer/scripts/themes/orangeTheme.js"></script>-->
+  <!--<script src="../node_modules/trading-chart-designer/scripts/themes/purpleTheme.js"></script>-->
+  <!--<script src="../node_modules/trading-chart-designer/scripts/themes/skyTheme.js"></script>-->
+  <!--<script src="../node_modules/trading-chart-designer/scripts/themes/grayTheme.js"></script>-->
 
-<script src="libs/jquery.actual.min.js"></script>
-<!-- <script>
+
+  <script src="libs/moment/locales/uk.js"></script>
+  <script src="libs/croopie/croppie.min.js"></script>
+  <!-- End TCD -->
+
+  <script src="libs/jquery.actual.min.js"></script>
+  <!-- <script>
     !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var t=analytics.methods[e];analytics[t]=analytics.factory(t)}analytics.load=function(e,t){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+e+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=t};analytics.SNIPPET_VERSION="4.1.0";
     analytics.load("9ZJFKISmYAKrzYtBupvXwt5UTrfZ5XV7");
     analytics.page();
     }}();
 </script> -->
-<script src="https://js.stripe.com/v3/"></script>
+  <script src="https://js.stripe.com/v3/"></script>
   <script type="text/javascript">
     var stripe = Stripe('pk_live_BNJ3Mq52FeMZpAjqzQkbNztn00X2pf2iLv');
   </script>
 
-<script>
-    !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var t=analytics.methods[e];analytics[t]=analytics.factory(t)}analytics.load=function(e,t){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="libs/analytics/GS.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=t};analytics.SNIPPET_VERSION="4.1.0";
-    analytics.load("9ZJFKISmYAKrzYtBupvXwt5UTrfZ5XV7");
-    analytics.page();
-    }}();
-</script>
+  <script>
+    !function () {
+      var analytics = window.analytics = window.analytics || []; if (!analytics.initialize) if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else {
+        analytics.invoked = !0; analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware"]; analytics.factory = function (e) { return function () { var t = Array.prototype.slice.call(arguments); t.unshift(e); analytics.push(t); return analytics } }; for (var e = 0; e < analytics.methods.length; e++) { var t = analytics.methods[e]; analytics[t] = analytics.factory(t) } analytics.load = function (e, t) { var n = document.createElement("script"); n.type = "text/javascript"; n.async = !0; n.src = "libs/analytics/GS.min.js"; var a = document.getElementsByTagName("script")[0]; a.parentNode.insertBefore(n, a); analytics._loadOptions = t }; analytics.SNIPPET_VERSION = "4.1.0";
+        analytics.load("9ZJFKISmYAKrzYtBupvXwt5UTrfZ5XV7");
+        analytics.page();
+      }
+    }();
+  </script>
 
-<script>
-    !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
-    arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
-    d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
-    insertBefore(d,q)}(window,document,'script','_gs');
+  <script>
+    !function (g, s, q, r, d) {
+      r = g[r] = g[r] || function () {
+        (r.q = r.q || []).push(
+          arguments)
+      }; d = s.createElement(q); q = s.getElementsByTagName(q)[0];
+      d.src = '//d1l6p2sc9645hc.cloudfront.net/tracker.js'; q.parentNode.
+        insertBefore(d, q)
+    }(window, document, 'script', '_gs');
     _gs('GSN-101912-A');
-</script>
+  </script>
 
-<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-<script>
-  var isLocalhost = window.location.href.indexOf("localhost") != -1 || window.location.href.indexOf("127.0.0.1") != -1;
-  var isStage = window.location.href.indexOf("stage") != -1;
-  var appId = "11e83020-c0cf-4c44-b6ed-4b17665f8b17"; // localhost app id for test
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    var isLocalhost = window.location.href.indexOf("localhost") != -1 || window.location.href.indexOf("127.0.0.1") != -1;
+    var isStage = window.location.href.indexOf("stage") != -1;
+    var appId = "11e83020-c0cf-4c44-b6ed-4b17665f8b17"; // localhost app id for test
 
-  if (isStage) {
-    appId = "dafe29a8-c2b4-4eb6-ab92-376dd85c9822"; // staging app id
-  } else if (!isLocalhost) {
-    appId = "5486281b-8c07-4a1b-8918-323c7890e8e2"; // prod app id
-  }
+    if (isStage) {
+      appId = "dafe29a8-c2b4-4eb6-ab92-376dd85c9822"; // staging app id
+    } else if (!isLocalhost) {
+      appId = "5486281b-8c07-4a1b-8918-323c7890e8e2"; // prod app id
+    }
 
-  console.log(appId);
+    console.log(appId);
 
-  window.OneSignal = window.OneSignal || [];
-  OneSignal.push(function() {
-    OneSignal.init({
-      appId: appId,
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function () {
+      OneSignal.init({
+        appId: appId,
+      });
     });
-  });
-</script>
+  </script>
 
 </body>
+
 </html>
