@@ -59,7 +59,7 @@ export class AlertCloudExecutorService implements IAlertCloudExecutorService {
             }
 
             tradingParameters = {
-                accessToken: this._brokerService.activeBroker.accessToken,
+                accessToken: "",
                 broker: this._brokerService.activeBroker.instanceType,
                 symbol: instrument
             };

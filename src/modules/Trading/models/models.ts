@@ -1,11 +1,13 @@
 import {EBrokerInstance} from "../../../app/interfaces/broker/broker";
 
-export interface IBrokerAccount {
-    id: string;
+export enum BrokerConnectivityStatus {
+    Connected,
+    Pending,
+    NoConnection
 }
 
-export interface IBrokerUserInfo {
-    username: string;
+export interface IConnectionData {
+    Linker?: string;
 }
 
 export enum OrderTypes {

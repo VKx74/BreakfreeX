@@ -1,8 +1,8 @@
 import {Observable, Subject, Subscription} from "rxjs";
 import {IBroker} from "./broker";
-import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
-import { ActionResult, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
-import { ITick, IMTTick } from '@app/models/common/tick';
+import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice, MTCurrencyRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
+import { ActionResult, BrokerConnectivityStatus, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
+import { IMTTick } from '@app/models/common/tick';
 import { IInstrument } from '@app/models/common/instrument';
 
 export interface IMT5Broker extends IBroker {
@@ -12,7 +12,7 @@ export interface IMT5Broker extends IBroker {
     onHistoricalOrdersUpdated: Subject<MTOrder[]>;
     onPositionsUpdated: Subject<MTPosition[]>;
 
-    status: MTStatus;
+    status: BrokerConnectivityStatus;
     orders: MTOrder[];
     ordersHistory: MTOrder[];
     positions: MTPosition[];

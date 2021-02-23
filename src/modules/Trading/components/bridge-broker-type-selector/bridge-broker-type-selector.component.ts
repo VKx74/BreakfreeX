@@ -2,15 +2,16 @@ import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {BrokerService} from "@app/services/broker.service";
 import {EBrokerInstance} from "@app/interfaces/broker/broker";
 import { MatDialog } from '@angular/material/dialog';
-import { BrokerDialogComponent, BrokerDialogData } from '../../../../../broker/components/broker/broker-dialog/broker-dialog.component';
+import { BrokerDialogComponent, BrokerDialogData } from '../../../broker/components/broker/broker-dialog/broker-dialog.component';
 import { tap } from 'rxjs/operators';
+import { APP_TYPE_BROKERS } from '@app/enums/ApplicationType';
 
 @Component({
-    selector: 'mt-broker-type-selector',
-    templateUrl: 'mt-broker-type-selector.component.html',
-    styleUrls: ['mt-broker-type-selector.component.scss']    
+    selector: 'bridge-broker-type-selector',
+    templateUrl: 'bridge-broker-type-selector.component.html',
+    styleUrls: ['bridge-broker-type-selector.component.scss']    
 })
-export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
+export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     public availableBrokers: EBrokerInstance[] = [];
     public selectedBroker: EBrokerInstance;
 
@@ -33,7 +34,7 @@ export class MTBrokerTypeSelectorComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.availableBrokers = [EBrokerInstance.MT4, EBrokerInstance.MT5];
+        this.availableBrokers = APP_TYPE_BROKERS;
         this.selectedBroker = this.availableBrokers[0];        
     }
 

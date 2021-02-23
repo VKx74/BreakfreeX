@@ -3,7 +3,7 @@ import {IInstrument} from "../models/common/instrument";
 import {EExchange} from "../models/common/exchange";
 import {IHealthable} from "../interfaces/healthcheck/healthable";
 import {BehaviorSubject, Observable, of, Subject, Subscription} from "rxjs";
-import {IBroker, IBrokerState} from "../interfaces/broker/broker";
+import {EBrokerInstance, IBroker, IBrokerState} from "../interfaces/broker/broker";
 import {ActionResult, OrderTypes} from "../../modules/Trading/models/models";
 import {map} from "rxjs/operators";
 import {BrokerFactory, CreateBrokerActionResult} from "../factories/broker.factory";
@@ -90,14 +90,6 @@ export class BrokerService implements IHealthable {
         }
     }
 
-    isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes): boolean {
-        if (!this._activeBroker) {
-            return false;
-        } else {
-            return this._activeBroker.isInstrumentAvailable(instrument, orderType);
-        }
-    }
-
     setActiveBroker(broker: IBroker): Observable<ActionResult> {
         if (!this.isTradingAllowed) {
             return of({
@@ -140,12 +132,17 @@ export class BrokerService implements IHealthable {
         }
     }
     
-    getSavedBroker(): IBrokerState[] {
+    getSavedBroker(brokerType?: EBrokerInstance): IBrokerState[] {
+        const res = [];
         if (this._activeState.previousConnected) {
-            return this._activeState.previousConnected;
+            for (const account of this._activeState.previousConnected) {
+                if (!brokerType || account.brokerType === brokerType) {
+                    res.push(account);  
+                }
+            }
         }
 
-        return [];
+        return res;
     }  
     
     getActiveBroker(): IBrokerState {

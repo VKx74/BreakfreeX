@@ -1,11 +1,5 @@
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType } from 'modules/Trading/models/models';
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType, IConnectionData } from 'modules/Trading/models/models';
 import { IBFTATrend } from '@app/services/algo.service';
-
-export enum MTStatus {
-    Connected,
-    Pending,
-    NoConnection
-}
 
 export interface MTTradingAccount {
     Account: string;
@@ -132,11 +126,10 @@ export interface MTServer {
     IsDemo: boolean;
 }
 
-export interface MTConnectionData {
+export interface MTConnectionData extends IConnectionData {
     ServerName: string;
     Login: number;
     Password: string;
-    Linker?: string;
 }
 
 export interface MTCurrencyVarRisk {

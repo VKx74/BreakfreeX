@@ -74,7 +74,7 @@ export class ScriptCloudExecutorService implements IScriptCloudExecutorService {
 
             if (this._brokerService.isConnected && this._brokerService.activeBroker) {
                 tradingParameters = {
-                    accessToken: this._brokerService.activeBroker.accessToken,
+                    accessToken: "",
                     broker: this._brokerService.activeBroker.instanceType,
                     symbol: undefined
                 };

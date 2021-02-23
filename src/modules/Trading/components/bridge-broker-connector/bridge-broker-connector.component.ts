@@ -1,12 +1,12 @@
 import { TranslateService } from "@ngx-translate/core";
-import { TradingTranslateService } from "../../../localization/token";
+import { TradingTranslateService } from "../../localization/token";
 import {BrokerService} from "@app/services/broker.service";
 import { Component } from "@angular/core";
 
 @Component({
-    selector: 'forex-broker-connector',
-    templateUrl: 'forex-broker-connector.component.html',
-    styleUrls: ['forex-broker-connector.component.scss'],
+    selector: 'bridge-broker-connector',
+    templateUrl: 'bridge-broker-connector.component.html',
+    styleUrls: ['bridge-broker-connector.component.scss'],
     providers: [
         {
             provide: TranslateService,
@@ -14,7 +14,7 @@ import { Component } from "@angular/core";
         }
     ]
 })
-export class ForexBrokerConnectorComponent {
+export class BridgeBrokerConnectorComponent {
 
     get instanceType() {
         const brokerService = this.brokerService;

@@ -90,8 +90,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _templateDataProviderService: TemplatesDataProviderService,
                 private _instrumentService: InstrumentService,
                 private _calendarEventsDatafeed: CalendarEventsDatafeed,
-                private _brokerService: BrokerService,
-                private _alertService: AlertService,
                 private _alertChartService: AutoTradingAlertConfigurationService,
                 private _indicatorRestrictionService: IndicatorRestrictionService,
                 private _indicatorDataProviderService: IndicatorDataProviderService,
@@ -142,15 +140,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     ngAfterViewInit() {
-        // this._educationalTipsService.getLinkForComponent(ComponentIdentifier.chart)
-        //     .subscribe(links => {
-        //         // this.linksList = links;
-        //         this.init(this._state);
-        //     }, e => {
-        //         console.log(e);
-        //         this.init(this._state);
-        //     });
-
         setTimeout(() => {
             this.init(this._state);
         }, 1);

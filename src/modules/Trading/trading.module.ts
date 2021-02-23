@@ -19,7 +19,6 @@ import {MatInputModule} from "@angular/material/input";
 import {OrderTypePipe} from './pipes/order-type.pipe';
 import {NumericInputModule} from "@numeric-input/numeric-input.module";
 import {InstrumentSearchModule} from "@instrument-search/instrument-search.module";
-import {ForexTradeManagerComponent} from "./components/forex.components/forex-trade-manager.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {DatatableModule} from "../datatable/datatable.module";
 import {MatTableModule} from "@angular/material/table";
@@ -52,8 +51,9 @@ import { CurrencyGuardRiskPipe } from './components/forex.components/mt/pipes/cu
 import { SymbolMappingComponent } from './components/forex.components/mt/symbol-mapping/symbol-mapping.component';
 import { DataHighlightService } from './services/dataHighlight.service';
 import { PeriodicitySelectorComponent } from './components/periodicity-selector/periodicity-selector.component';
-import { MTBrokerTypeSelectorComponent } from './components/forex.components/mt/broker-type-selector/mt-broker-type-selector.component';
-import { ForexBrokerConnectorComponent } from './components/forex.components/forex-broker-connector/forex-broker-connector.component';
+import { BridgeBrokerTypeSelectorComponent } from './components/bridge-broker-type-selector/bridge-broker-type-selector.component';
+import { BridgeBrokerConnectorComponent } from './components/bridge-broker-connector/bridge-broker-connector.component';
+import { TradeManagerComponentContainer } from './components/trade-manager/container/trade-manager-container.component';
 
 const components = [
     TradeManagerComponent,
@@ -61,7 +61,7 @@ const components = [
     TrendsWidgetComponent,
     SymbolMappingComponent,
 
-    ForexTradeManagerComponent,
+    TradeManagerComponentContainer,
     MTTradeManagerComponent,
     MTOrderConfiguratorModalComponent,
     MTOrderConfiguratorComponent,
@@ -85,8 +85,8 @@ const components = [
         OrderTypePipe,
         OrderSideComponent,
         TradingCloseButtonComponent,
-        MTBrokerTypeSelectorComponent,
-        ForexBrokerConnectorComponent,
+        BridgeBrokerTypeSelectorComponent,
+        BridgeBrokerConnectorComponent,
         CurrencyGuardRiskClassPipe,
         CurrencyGuardRiskPipe
     ],

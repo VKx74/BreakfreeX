@@ -1,0 +1,21 @@
+@import "themes/themes";
+@import "mixins/themify";
+@import "variables";
+
+:host {
+    /deep/ .mat-row {
+        line-height: 26px !important;
+    }
+
+    /deep/ .color-column { 
+        width: 6px;
+        height: 24px;
+        position: relative;
+        left: -10px;
+        background-color: $primaryBtnBgColor;
+    }
+      
+    /deep/ .color-column.active {
+        background-color: $lightGreenColor !important;
+    }
+}

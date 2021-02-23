@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, Injector, ViewChild } from "@angular/core";
+import { Component, Injector, ViewChild } from "@angular/core";
 import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
@@ -17,7 +17,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { MTHelper } from "@app/services/mt/mt.helper";
 import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";

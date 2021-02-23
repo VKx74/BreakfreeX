@@ -1,19 +1,17 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
 import { Injectable } from '@angular/core';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTStatus, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
-import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass } from 'modules/Trading/models/models';
+import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass, BrokerConnectivityStatus } from 'modules/Trading/models/models';
 import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
 import { IMTTick } from '@app/models/common/tick';
 import { ReadyStateConstants } from '@app/interfaces/socket/WebSocketConfig';
 import { MTSocketService } from '../socket/mt.socket.service';
 import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
-import { InstrumentService } from "../instrument.service";
-import { map } from "rxjs/operators";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { MTHelper } from "./mt.helper";
 import { MTTradeRatingService } from "./mt.trade-rating.service";
@@ -62,19 +60,19 @@ export abstract class MTBroker implements IMTBroker {
     protected _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
     protected _startHistory: number = this._endHistory - (60 * 60 * 24 * 14);
 
-    public get status(): MTStatus {
+    public get status(): BrokerConnectivityStatus {
         if (!this._lastUpdate || this.ws.readyState !== ReadyStateConstants.OPEN) {
-            return MTStatus.NoConnection;
+            return BrokerConnectivityStatus.NoConnection;
         }
 
         const diff = (new Date().getTime() - this._lastUpdate) / 1000;
         if (diff < 10) {
-            return MTStatus.Connected;
+            return BrokerConnectivityStatus.Connected;
         }
         if (diff > 10 && diff < 60) {
-            return MTStatus.Pending;
+            return BrokerConnectivityStatus.Pending;
         }
-        return MTStatus.NoConnection;
+        return BrokerConnectivityStatus.NoConnection;
     }
 
     public get onSaveStateRequired(): Subject<void> {
@@ -373,14 +371,6 @@ export abstract class MTBroker implements IMTBroker {
         });
 
         return of(filtered.slice());
-    }
-    isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes = null): boolean {
-        for (const i of this._instruments) {
-            if (i.symbol === instrument.symbol) {
-                return true;
-            }
-        }
-        return false;
     }
 
     init(initData: MTConnectionData): Observable<ActionResult> {

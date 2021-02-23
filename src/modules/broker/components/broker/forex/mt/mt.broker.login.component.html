@@ -1,8 +1,8 @@
 <div class="connected-broker-area" *ngIf="!brokerConnected" [class.disabled]="showSpinner">
     <div class="flex-row" *ngIf="savedAccountExists()">
         <div class="connected-accounts">
-            <connected-account-info [brokerInstance]="brokerInstance" (onBrokerSelected)="brokerSelected($event)">
-            </connected-account-info>
+            <mt-connected-account-info [brokerInstance]="brokerInstance" (onBrokerSelected)="brokerSelected($event)">
+            </mt-connected-account-info>
         </div>
     </div>
 

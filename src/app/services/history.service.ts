@@ -38,17 +38,15 @@ export class HistoryService implements IHealthable {
     }
 
     private _init() {
-        setTimeout(() => {
-            APP_TYPE_EXCHANGES.forEach(value => {
-                this.exchangeFactory.tryCreateHistoryServiceInstance(value).subscribe(result => {
-                    if (result.serviceInstance && result.result) {
-                        this.services.push(result.serviceInstance);
-                    } else {
-                        console.table(result);
-                    }
-                }, error => {
-                    console.table(error);
-                });
+        APP_TYPE_EXCHANGES.forEach(value => {
+            this.exchangeFactory.tryCreateHistoryServiceInstance(value).subscribe(result => {
+                if (result.serviceInstance && result.result) {
+                    this.services.push(result.serviceInstance);
+                } else {
+                    console.table(result);
+                }
+            }, error => {
+                console.table(error);
             });
         });
     }

@@ -1,14 +1,9 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { EventEmitter, Input, Output} from '@angular/core';
 import { BrokerService } from '@app/services/broker.service';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 
-@Component({
-    selector: 'connected-account-info',
-    templateUrl: './connected-account-info.component.html',
-    styleUrls: ['./connected-account-info.component.scss']
-})
 export class ConnectedAccountInfoComponent {
-    private _accounts: IBrokerState[];
+    protected _accounts: IBrokerState[];
     @Output() onBrokerSelected = new EventEmitter<IBrokerState>();
     @Input() brokerInstance: EBrokerInstance;
 
@@ -18,7 +13,7 @@ export class ConnectedAccountInfoComponent {
         return this._accounts;
     }
 
-    constructor(private _brokerService: BrokerService) {
+    constructor(protected _brokerService: BrokerService) {
     }
 
     removeSavedAccount(account: IBrokerState) {

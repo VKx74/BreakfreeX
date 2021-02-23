@@ -16,7 +16,7 @@
             <i *ngIf="isMinimized" class="crypto-icon crypto-icon-layout-maximise over-head" (click)="open()"></i>
         </div>
         <div class="flex trade-managers-wrapper" *ngIf="isOpen; else accountInfo">
-            <forex-trade-manager class="h-100"></forex-trade-manager>
+            <trade-manager-container class="h-100"></trade-manager-container>
         </div>
     </div>
 </ng-container>
@@ -34,7 +34,7 @@
         </div>
         <div class="broker-not-connected flex align-items-center justify-content-center h-100 w-100 relative-wrapper">
             <div *ngIf="((brokerInitialized$ | async) !== null); else loader" class="shiftup">
-                <forex-broker-connector></forex-broker-connector>
+                <bridge-broker-connector></bridge-broker-connector>
             </div>           
             <ng-template #loader>
                 <bft-loader *ngIf="!isMinimized"></bft-loader>

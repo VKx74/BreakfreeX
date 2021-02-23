@@ -6,7 +6,7 @@
             <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
             <h4 class="modal-title">
                
-                <span >MetaTrader Bridge</span>
+                <span>BreakfreeTrading Bridge</span>
             </h4>
         </div>
      
@@ -17,7 +17,9 @@
                     <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT5">
                     </mt-broker-login>
                     <mt-broker-login [brokerInstance]="EBrokerInstance.MT4" [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT4">
-                    </mt-broker-login>
+                    </mt-broker-login>  
+                    <binance-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.Binance">
+                    </binance-broker-login>
                 </ng-container>
                 <div class="policy-agreement-wrapper">
                     <span>
