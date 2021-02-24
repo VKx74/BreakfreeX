@@ -24,5 +24,7 @@ export interface IBroker {
     dispose(): Observable<ActionResult>;
     saveState(): Observable<IBrokerState>;
     loadSate(state: IBrokerState): Observable<ActionResult>;
+    instrumentToBrokerFormat(symbol: string): IInstrument;
+    instrumentDecimals(symbol: string): number;
 }
 

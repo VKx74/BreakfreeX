@@ -1,5 +1,3 @@
-import {EBrokerInstance} from "../../../app/interfaces/broker/broker";
-
 export enum BrokerConnectivityStatus {
     Connected,
     Pending,

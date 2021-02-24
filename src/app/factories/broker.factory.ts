@@ -5,6 +5,7 @@ import {ActionResult} from "../../modules/Trading/models/models";
 import {map} from "rxjs/operators";
 import { MT5Broker } from '@app/services/mt/mt5.broker';
 import { MT4Broker } from '@app/services/mt/mt4.broker';
+import { BinanceBroker } from "@app/services/binance/binance.broker";
 
 export interface CreateBrokerActionResult extends ActionResult {
     brokerInstance?: IBroker;
@@ -60,7 +61,9 @@ export class BrokerFactory {
             case EBrokerInstance.MT5:
                 return this._injector.get(MT5Broker);
             case EBrokerInstance.MT4:
-                return this._injector.get(MT4Broker);
+                return this._injector.get(MT4Broker); 
+            case EBrokerInstance.Binance:
+                return this._injector.get(BinanceBroker);
             default:
                 return null;
         }

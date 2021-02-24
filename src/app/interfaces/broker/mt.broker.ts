@@ -26,12 +26,10 @@ export interface IMT5Broker extends IBroker {
     closePosition(symbol: string, fillPolicy: OrderFillPolicy): Observable<ActionResult>;
     cancelOrder(order: string, fillPolicy: OrderFillPolicy): Observable<ActionResult>;
     subscribeToTicks(instrument: string, subscription: (value: IMTTick) => void): Subscription;
-    instrumentDecimals(symbol: string): number;
     instrumentTickSize(symbol: string): number;
     instrumentContractSize(symbol: string): number;
     instrumentMinAmount(symbol: string): number;
     instrumentAmountStep(symbol: string): number;
-    instrumentToBrokerFormat(symbol: string): IInstrument;
     getOrderById(orderId: number): MTOrder;
     getPrice(symbol: string): Observable<IMTTick>;
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number;

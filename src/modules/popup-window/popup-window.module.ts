@@ -37,7 +37,6 @@ import {MarketTradesModule} from "@market-trades/market-trades.module";
 import {ChatModule} from "../Chat/chat.module";
 import {NotificationService} from "@app/services/notification.service";
 import {NotificationWebSocketService} from "@app/services/socket/notification.socket.service";
-import {StoreModule} from "@ngrx/store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {EffectsModule} from "@ngrx/effects";
 import {
@@ -63,7 +62,6 @@ import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.co
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
-import { TradeManagerComponentContainer } from 'modules/Trading/components/trade-manager/container/trade-manager-container.component';
 
 
 export function sharedThemeService() {
@@ -287,11 +285,7 @@ export function sharedEducationalTipsService() {
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,
                             component: BreakfreeTradingBacktestComponent
-                        },
-                        {
-                            componentName: ComponentIdentifier.forexTradeManager,
-                            component: TradeManagerComponentContainer
-                        },
+                        }
                     ]
                 } as IGoldenLayoutComponentConfiguration;
             },

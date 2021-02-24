@@ -10,98 +10,7 @@
   overflow: auto;
   flex-direction: column;
 
-  .color-selector {
-    position: absolute;
-    top: 6px;
-    left: 10px;
-  }
-
-  /deep/ {
-    .low-risk {
-      color: $lightGreenColor;
-    }
-
-    .mid-risk {
-      color: $lightBlueColor;
-    }
-
-    .extreme-risk {
-      color: $lightRedColor;
-    }
-
-    .high-risk {
-      color: $yellowColor;
-    }
-  }
-
-  .high-risk-label {
-    color: $lightRedColor;
-    font-weight: 700;
-    margin-left: 5px;
-  }
-
-  /deep/ .side-buy {
-    color: $lightGreenColor;
-  }
-
-  /deep/ .side-sell {
-    color: $lightRedColor;
-  }
-  
-  /deep/ .color-column { 
-    width: 6px;
-    height: 24px;
-    position: relative;
-    left: -10px;
-  }
-  
-  /deep/ .symbol-column { 
-    font-weight: bolder;
-  }
-
-  /deep/ .color-column.side-buy {
-    background-color: $lightGreenColor;
-  }
-
-  /deep/ .color-column.side-sell {
-    background-color: $lightRedColor;
-  }
-
-  /deep/ .positive-value {
-    color: $lightGreenColor;
-  }
-
-  // /deep/ .low-risk {
-  //   color: $lightGreenColor;
-  // }
-
-  // /deep/ .mid-risk {
-  //   color: $lightBlueColor;
-  // }
-
-  // /deep/ .high-risk {
-  //   color: $lightRedColor;
-  // }
-
-  /deep/ .negative-value {
-    color: $lightRedColor;
-  }
-
-  /deep/ .mat-tab-header {
-    margin-left: 32px;
-    margin-right: 32px;
-  }
-
-  // .crypto-button { 
-  //   padding: 0px 10px !important;
-  //   height: 26px;
-  //   margin: 0px 0px 0px 12px !important;
-  // }
-
-  /deep/ .mat-tab-body-wrapper { 
-    height: 100% !important;
-  } 
-  // /deep/ .mat-tab-label { 
+  // /deep/ .mat-tab-label {
   //   height: 26px !important;
   // }
   // /deep/ mat-header-cell {
@@ -113,81 +22,14 @@
   /deep/ mat-table {
     min-width: 650px;
   }
-
-  .selectAccount {
-    selector {
-      display: inline-block;
-      width: 200px;
-      margin-left: 20px;
-
-      /deep/ ul {
-        max-height: 250px !important;
-        overflow: auto;
-      }
-    }
-
-    .caption {
-      font-size: 0.9em;
-    }
-  }
-
-  .trade-manager {
-    //padding: 10px;
-    width: 100%;
-    //height: calc(100% - 50px);
-    overflow: auto;
-
-    sortable-table {
-      flex-grow: 1;
-    }
-  }
-
-  .controls {
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .controls button {
-    background: none;
-    border-radius: 5px;
-    font-size: 10px;
-    font-weight:700;
-    padding: 0px 5px !important;
-    height: 25px;
-    margin: 0px 0px 0px 0px !important;
-    opacity: 0.8;
-    transition-duration: 0.22s;
-    border: 1px solid transparent;
-    &:hover {
-      border: 1px solid #ddd;
-      opacity: 1;
-      transition-duration: 0.22s;
-    }
-  }
-  
-  .color-selector {
-    width: 15px;
-  } 
 }
 
 @include themify($themes, true) {
-  .control .caption {
-    color: themed('valueTextColor');
-  }
-
   /deep/ mat-row:nth-child(even) {
-    background-color: themed('nthChild') !important;
+    background-color: themed("nthChild") !important;
   }
 
   /deep/ .mat-tab-header-pagination-chevron {
-    border-color: themed('valueTextColor');
-  }
-  .controls button {
-    color: themed('titleTextColor');
-    &:hover {
-      color: themed('titleTextColor');
-      border: 1px solid themed('titleTextColor');
-    }
+    border-color: themed("valueTextColor");
   }
 }

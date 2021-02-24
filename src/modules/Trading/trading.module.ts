@@ -53,7 +53,7 @@ import { DataHighlightService } from './services/dataHighlight.service';
 import { PeriodicitySelectorComponent } from './components/periodicity-selector/periodicity-selector.component';
 import { BridgeBrokerTypeSelectorComponent } from './components/bridge-broker-type-selector/bridge-broker-type-selector.component';
 import { BridgeBrokerConnectorComponent } from './components/bridge-broker-connector/bridge-broker-connector.component';
-import { TradeManagerComponentContainer } from './components/trade-manager/container/trade-manager-container.component';
+import { TradeManagerContainerComponent } from './components/trade-manager/container/trade-manager-container.component';
 
 const components = [
     TradeManagerComponent,
@@ -61,7 +61,7 @@ const components = [
     TrendsWidgetComponent,
     SymbolMappingComponent,
 
-    TradeManagerComponentContainer,
+    TradeManagerContainerComponent,
     MTTradeManagerComponent,
     MTOrderConfiguratorModalComponent,
     MTOrderConfiguratorComponent,

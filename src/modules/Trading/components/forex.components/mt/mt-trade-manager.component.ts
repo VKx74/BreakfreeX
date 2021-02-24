@@ -6,7 +6,6 @@ import { BrokerService } from "@app/services/broker.service";
 import { MTOrderConfiguratorModalComponent } from './order-configurator-modal/mt-order-configurator-modal.component';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { OrderFillPolicy, OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
-import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { MTOrder, MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
 import { MTOrderCloseModalComponent } from './order-close-modal/mt-order-close-modal.component';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
@@ -34,19 +33,10 @@ import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/
     ]
 })
 export class MTTradeManagerComponent {
-    protected linker: Linker;
     protected _onTradePanelDataHighlightSubscription: Subscription;
     selectedIndex: number;
     selectedTabIndex: number;
     @ViewChild('tabGroup', {static: true}) tabGroup: MatTabGroup;
-    
-    get linkerColor(): string {
-        return this.linker.getLinkingId();
-    }
-
-    get brokerConnected(): boolean {
-        return this._broker != null;
-    }
     
     get showCancelAll(): boolean {
         return this.selectedTabIndex === 2 && this._broker.pendingOrders && this._broker.pendingOrders.length > 0;
@@ -97,11 +87,8 @@ export class MTTradeManagerComponent {
         private brokerService: BrokerService,
         protected _alertService: AlertService,
         protected _instrumentService: InstrumentService,
-        protected _dataHighlightService: DataHighlightService,
-        protected _injector: Injector) {
+        protected _dataHighlightService: DataHighlightService) {
 
-        this.linker = this._injector.get(LinkerFactory).getLinker();
-        this.linker.setDefaultLinking();
     }
 
     ngOnInit() {
@@ -121,49 +108,8 @@ export class MTTradeManagerComponent {
         }
     }
 
-    cancelAllPending() {
-        this._dialog.open(ConfirmModalComponent, {
-            data: {
-                title: 'Cancel orders',
-                message: `Do you want to cancel all pending orders?`,
-                onConfirm: () => {
-                   this._cancelAllPending();
-                }
-            }
-        });
-    }
-
-    placeOrder() {
-        this._dialog.open(MTOrderConfiguratorModalComponent);
-    }
-
-    reconnect() {
-        this._dialog.open(ConfirmModalComponent, {
-            data: {
-                title: 'Reconnect',
-                message: `Reconnect to current broker account?`,
-                onConfirm: () => {
-                   this._reconnect();
-                }
-            }
-        });
-    }
-
-    disconnect() {        
-        this.brokerService.disposeActiveBroker()
-        .subscribe(() => {});      
-    }
-
-    showSymbolMapping() {    
-        this._dialog.open(SymbolMappingComponent);    
-    }
-
     tabChanged(data: MatTabChangeEvent) {
         this.selectedTabIndex = data.index;
-    }
-
-    public handleColorSelected(color: string) {
-        this.linker.setLinking(color);
     }
 
     public handlePositionClose(position: MTPosition) { 
@@ -259,7 +205,7 @@ export class MTTradeManagerComponent {
                     timeframe: tf
                 };
             }
-            this.linker.sendAction(linkAction);
+            // this.linker.sendAction(linkAction);
         }, (error) => {
             this._alertService.warning("Failed to view chart by order symbol");
         });
@@ -285,20 +231,6 @@ export class MTTradeManagerComponent {
             data: {
                 SelectedBrokerInstrument: brokerInstrument
             }
-        });
-    }
-
-
-    private _reconnect() {
-        this._alertService.info("Reconnecting");
-        this.brokerService.reconnect().subscribe((res) => {
-            if (res.result) {
-                this._alertService.success("Broker reconnected");
-            } else {
-                this._alertService.warning("Failed to reconnect to broker");
-            }
-        }, (error) => {
-            this._alertService.warning("Failed to reconnect to broker");
         });
     }
 
