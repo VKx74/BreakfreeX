@@ -102,7 +102,7 @@ export class LoginPageComponent {
 
                     this._fbPixelTrackingService.load();
                     this._gtmTrackingService.load();
-                    this._gtmTrackingService.setPath("/registration-finished");
+                    this._gtmTrackingService.processRegistration("/registration-finished");
                     this._angulartics2Facebook.eventTrack("CompleteRegistration", {currency: "USD", value: 0});
                 }
             });
