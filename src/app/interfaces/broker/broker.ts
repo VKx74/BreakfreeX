@@ -1,7 +1,8 @@
-import { ActionResult } from "../../../modules/Trading/models/models";
+import { ActionResult, BrokerConnectivityStatus } from "../../../modules/Trading/models/models";
 import { EExchange } from "../../models/common/exchange";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 import { IInstrument } from "../../models/common/instrument";
+import { ITradeTick } from "@app/models/common/tick";
 
 export enum EBrokerInstance {
     MT5 = "MT5",
@@ -19,6 +20,19 @@ export interface IBrokerState<T = any> {
 export interface IBroker {
     instanceType: EBrokerInstance;
     onSaveStateRequired: Subject<void>;
+    onAccountInfoUpdated: Subject<any>;
+    onOrdersUpdated: Subject<any[]>;
+    onOrdersParametersUpdated: Subject<any[]>;
+    onHistoricalOrdersUpdated: Subject<any[]>;
+    onPositionsUpdated: Subject<any[]>;
+
+    status: BrokerConnectivityStatus;
+    orders: any[];
+    ordersHistory: any[];
+    positions: any[];
+    currencyRisks: any[];
+    accountInfo: any;
+
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]>;
     init(initData: any): Observable<ActionResult>;
     dispose(): Observable<ActionResult>;
@@ -26,5 +40,20 @@ export interface IBroker {
     loadSate(state: IBrokerState): Observable<ActionResult>;
     instrumentToBrokerFormat(symbol: string): IInstrument;
     instrumentDecimals(symbol: string): number;
+
+    cancelAll(): Observable<any>;
+    placeOrder(order: any): Observable<ActionResult>;
+    editOrder(order: any): Observable<ActionResult>;
+    editOrderPrice(order: any): Observable<ActionResult>;
+    closeOrder(order: string, ...args): Observable<ActionResult>;
+    closePosition(symbol: string, ...args): Observable<ActionResult>;
+    cancelOrder(order: string, ...args): Observable<ActionResult>;
+    subscribeToTicks(instrument: string, subscription: (value: ITradeTick) => void): Subscription;
+    instrumentTickSize(symbol: string): number;
+    instrumentContractSize(symbol: string): number;
+    instrumentMinAmount(symbol: string): number;
+    instrumentAmountStep(symbol: string): number;
+    getOrderById(orderId: number): any;
+    getPrice(symbol: string): Observable<ITradeTick>;
 }
 

@@ -10,6 +10,7 @@ import { IBroker } from "@app/interfaces/broker/broker";
 
 export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
     protected _blinkingTimeout: any;
+    protected _subscriptionOnOrderDataChanged: Subscription;
     protected _onTradePanelDataHighlightSubscription: Subscription;
     protected _instrumentDecimals: { [symbol: string]: number; } = {};
     protected _brokerStateChangedSubscription: Subscription;
@@ -65,9 +66,12 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
         this.updateItems();
         this._subscription = this._subscribeOnUpdates();
         this._brokerStateChangedSubscription = this._broker.activeBroker$.subscribe((data) => {
-            // if (this._mtBroker) {
-            this.updateItems();
-            // }
+            if (this._broker.activeBroker) {
+                this.updateItems();
+            }
+        });
+        this._subscriptionOnOrderDataChanged = this._activeBroker.onOrdersParametersUpdated.subscribe(() => {
+            this.ordersUpdated();
         });
         this._onTradePanelDataHighlightSubscription = this._dataHighlightService.onTradePanelDataHighlight.subscribe(this._handleHighlight.bind(this));
     }
@@ -84,6 +88,10 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
         if (this._onTradePanelDataHighlightSubscription) {
             this._onTradePanelDataHighlightSubscription.unsubscribe();
             this._onTradePanelDataHighlightSubscription = null;
+        }
+
+        if (this._subscriptionOnOrderDataChanged) {
+            this._subscriptionOnOrderDataChanged.unsubscribe();
         }
     }
 

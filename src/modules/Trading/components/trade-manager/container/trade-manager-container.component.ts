@@ -1,12 +1,12 @@
 import {Component, Injector} from "@angular/core";
-import { EBrokerInstance } from "@app/interfaces/broker/broker";
+import { EBrokerInstance, IBroker } from "@app/interfaces/broker/broker";
 import { BrokerService } from "@app/services/broker.service";
 import {TranslateService} from "@ngx-translate/core";
 import { TradingTranslateService } from "modules/Trading/localization/token";
 import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { MatDialog } from "@angular/material";
 import { ConfirmModalComponent } from "UI";
-import { MTOrderConfiguratorModalComponent } from "../../forex.components/mt/order-configurator-modal/mt-order-configurator-modal.component";
+import { OrderConfiguratorModalComponent } from "../order-configurator-modal/order-configurator-modal.component";
 import { SymbolMappingComponent } from "../../forex.components/mt/symbol-mapping/symbol-mapping.component";
 import { AlertService } from "@alert/services/alert.service";
 
@@ -24,6 +24,10 @@ import { AlertService } from "@alert/services/alert.service";
 export class TradeManagerContainerComponent {
     protected linker: Linker;
     EBrokerInstance = EBrokerInstance;
+    
+    get brokerInstance(): EBrokerInstance {
+        return this.brokerService.activeBroker ? this.brokerService.activeBroker.instanceType : null;
+    }
 
     get linkerColor(): string {
         return this.linker.getLinkingId();
@@ -33,10 +37,8 @@ export class TradeManagerContainerComponent {
         return !!(this.brokerService.activeBroker);
     }
 
-    get instanceType() {
-        const brokerService = this.brokerService;
-
-        return brokerService && brokerService.activeBroker && brokerService.activeBroker.instanceType;
+    get broker(): IBroker {
+        return this.brokerService ? this.brokerService.activeBroker : null;
     } 
     
     get showCancelAll(): boolean {
@@ -57,14 +59,14 @@ export class TradeManagerContainerComponent {
                 title: 'Cancel orders',
                 message: `Do you want to cancel all pending orders?`,
                 onConfirm: () => {
-                //    this._cancelAllPending();
+                   this._cancelAllPending();
                 }
             }
         });
     }
 
     placeOrder() {
-        this._dialog.open(MTOrderConfiguratorModalComponent);
+        this._dialog.open(OrderConfiguratorModalComponent);
     }
 
     reconnect() {
@@ -92,6 +94,16 @@ export class TradeManagerContainerComponent {
         this.linker.setLinking(color);
     }
 
+    private _cancelAllPending() {
+        this._alertService.info("Canceling");
+        let result = this.broker.cancelAll();
+        result.subscribe(() => {
+            this._alertService.success("Canceled");
+          }, (error) => {
+            this._alertService.info("Error to cancel one of the orders");
+        });
+    }
+
     private _reconnect() {
         this._alertService.info("Reconnecting");
         this.brokerService.reconnect().subscribe((res) => {
@@ -104,5 +116,4 @@ export class TradeManagerContainerComponent {
             this._alertService.warning("Failed to reconnect to broker");
         });
     }
-
 }

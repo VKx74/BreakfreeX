@@ -34,7 +34,7 @@ import { MTAccountInfoBarComponent } from './components/forex.components/mt/acco
 import { MTOpenOrdersComponent } from './components/forex.components/mt/open-orders/mt-open-orders.component';
 import { MTHistoryOrdersComponent } from './components/forex.components/mt/history-orders/mt-history-orders.component';
 import { MTPositionsComponent } from './components/forex.components/mt/positions/mt-positions.component';
-import { MTOrderConfiguratorModalComponent } from './components/forex.components/mt/order-configurator-modal/mt-order-configurator-modal.component';
+import { OrderConfiguratorModalComponent } from './components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { MTOrderConfiguratorComponent } from './components/forex.components/mt/order-configurator/mt-order-configurator.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
@@ -54,6 +54,9 @@ import { PeriodicitySelectorComponent } from './components/periodicity-selector/
 import { BridgeBrokerTypeSelectorComponent } from './components/bridge-broker-type-selector/bridge-broker-type-selector.component';
 import { BridgeBrokerConnectorComponent } from './components/bridge-broker-connector/bridge-broker-connector.component';
 import { TradeManagerContainerComponent } from './components/trade-manager/container/trade-manager-container.component';
+import { BinanceOrderConfiguratorComponent } from './components/crypto.components/binance/order-configurator/binance-order-configurator.component';
+import { BinanceAccountInfoBarComponent } from './components/crypto.components/binance/account-info-bar/binance-account-info-bar.component';
+import { BinanceTradeManagerComponent } from './components/crypto.components/binance/binance-trade-manager.component';
 
 const components = [
     TradeManagerComponent,
@@ -63,7 +66,7 @@ const components = [
 
     TradeManagerContainerComponent,
     MTTradeManagerComponent,
-    MTOrderConfiguratorModalComponent,
+    OrderConfiguratorModalComponent,
     MTOrderConfiguratorComponent,
     MTOrderCloseModalComponent,
     MTPositionCloseModalComponent,
@@ -76,7 +79,11 @@ const components = [
     MTPendingOrdersComponent,
     MTHistoryOrdersComponent,
     MTPositionsComponent,
-    PeriodicitySelectorComponent
+    PeriodicitySelectorComponent,
+
+    BinanceOrderConfiguratorComponent,
+    BinanceAccountInfoBarComponent,
+    BinanceTradeManagerComponent
 ];
 
 @NgModule({

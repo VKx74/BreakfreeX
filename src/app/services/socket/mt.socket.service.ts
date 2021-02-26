@@ -4,7 +4,7 @@ import { AppConfigService } from '../app.config.service';
 import { Injectable } from "@angular/core";
 import { Observable, Subscriber, Subscription, Subject } from 'rxjs';
 import { MTResponseMessageBase, MTLoginRequest, EMTMessageType, SubscribeQuote, MTQuoteResponse, MTPlaceOrderRequest, MTPlaceOrderResponse, MTLoginResponse, MTEditOrderRequest, MTEditOrderResponse, MTCloseOrderRequest, MTCloseOrderResponse, MTLogoutRequest, MTRequestMessageBase, MTGetOrderHistoryRequest, MTAccountUpdateResponse, IMTAccountUpdatedData, IMTOrderData, MTOrdersUpdateResponse, MTGetOrderHistoryResponse, MTAuthRequest, GetQuote, GetSymbolTradeInfo, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
-import { IMTTick } from '@app/models/common/tick';
+import { ITradeTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 
 export abstract class MTSocketService extends WebsocketBase {
@@ -13,7 +13,7 @@ export abstract class MTSocketService extends WebsocketBase {
   private _brokerConnected: boolean;
   private _token: string;
   private _onMessageSubscription: Subscription;
-  private _tickSubject: Subject<IMTTick> = new Subject<IMTTick>();
+  private _tickSubject: Subject<ITradeTick> = new Subject<ITradeTick>();
   private _accountUpdatedSubject: Subject<IMTAccountUpdatedData> = new Subject<IMTAccountUpdatedData>();
   private _ordersUpdatedSubject: Subject<IMTOrderData[]> = new Subject<IMTOrderData[]>();
 
@@ -21,7 +21,7 @@ export abstract class MTSocketService extends WebsocketBase {
     return false;
   }
 
-  get tickSubject(): Subject<IMTTick> {
+  get tickSubject(): Subject<ITradeTick> {
     return this._tickSubject;
   }
 

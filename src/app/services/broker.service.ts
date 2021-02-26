@@ -16,8 +16,7 @@ export interface IBrokerServiceState {
 }
 
 @Injectable()
-export class BrokerService implements IHealthable {
-    // if initialization failed - false, succeed - true, otherwise - null
+export class BrokerService {
     private _activeState: IBrokerServiceState = {};
     private _brokerInitializationState$ = new BehaviorSubject<boolean>(null);
     public brokerInitializationState$ = this._brokerInitializationState$.asObservable();
@@ -36,19 +35,7 @@ export class BrokerService implements IHealthable {
         return this._isConnected;
     }
 
-    public get isHealthy(): boolean {
-        return true;
-    } 
-    
-    public get showTradingPanel(): boolean {
-        return true;
-    }
-
     public get isTradingAllowed(): boolean {
-        if (!this.showTradingPanel) {
-            return false;
-        } 
-
         // show MT Bridge for all users even without subscriptions
         return true;
         return this._identityService.isAuthorizedCustomer;
@@ -152,32 +139,6 @@ export class BrokerService implements IHealthable {
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
         if (this._activeBroker) {
             return this._activeBroker.getInstruments(exchange, search);
-        }
-
-        return of([]);
-    }
-
-    tryMapInstrument(instrument: string, exchange: EExchange): Observable<IInstrument[]> {
-        let symbolsSimilar = (s1: string, s2: string): boolean => {
-            let _s1 = s1.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            let _s2 = s2.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            return _s1 === _s2;
-        };
-
-        if (this._activeBroker) {
-            return this._activeBroker.getInstruments(exchange, instrument[0]).pipe(map((instruments: IInstrument[]) => {
-                let res: IInstrument[] = [];
-
-                for (let i in instruments) {
-                    if (instruments[i].symbol === instrument) {
-                        res.unshift(instruments[i]);
-                    } else if (symbolsSimilar(instruments[i].symbol, instrument)) {
-                        res.push(instruments[i]);
-                    }
-                }
-
-                return res;
-            }));
         }
 
         return of([]);

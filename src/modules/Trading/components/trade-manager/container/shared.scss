@@ -1,0 +1,17 @@
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+/deep/ mat-table {
+    min-width: 650px;
+}
+
+@include themify($themes, true) {
+    /deep/ mat-row:nth-child(even) {
+        background-color: themed("nthChild") !important;
+    }
+
+    /deep/ .mat-tab-header-pagination-chevron {
+        border-color: themed("valueTextColor");
+    }
+}

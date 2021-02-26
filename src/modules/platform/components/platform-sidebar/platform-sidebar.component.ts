@@ -33,11 +33,6 @@ export class PlatformSidebarComponent implements OnInit {
     LandingRoutes = LandingRoutes;
     role: string;
 
-    public get showTradingPanel(): boolean {
-        // return this._brokerService.showTradingPanel;
-        return false;
-    }
-
     constructor(private _translateService: TranslateService,
         private _themeService: ThemeService,
         private _localizationService: LocalizationService,

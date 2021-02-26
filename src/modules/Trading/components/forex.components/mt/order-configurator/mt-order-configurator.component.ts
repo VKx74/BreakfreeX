@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
-import { IMTTick, ITick } from "@app/models/common/tick";
+import { ITradeTick, ITick } from "@app/models/common/tick";
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass } from "../../../../models/models";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
@@ -19,6 +19,7 @@ import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { MTHelper } from '@app/services/mt/mt.helper';
 import { TimeSpan } from '@app/helpers/timeFrame.helper';
+import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 
 interface ChecklistItem {
     name: string;
@@ -253,8 +254,6 @@ export class MTOrderConfig {
     price?: number; // Limit price
     sl?: number; // Stop price
     tp?: number; // Stop price
-    // useSL: boolean; // Stop price
-    // useTP: boolean; // Stop price
     comment?: string; // Stop price
     timeframe?: number;
     tradeType?: OrderTradeType;
@@ -292,9 +291,6 @@ export class MTOrderConfig {
     }
 }
 
-export type MTOrderComponentSubmitHandler = (config: MTOrderConfig) => void;
-export type MTOrderSubmitHandler = (config: MTPlaceOrder) => void;
-
 @Component({
     selector: 'mt-order-configurator',
     templateUrl: './mt-order-configurator.component.html',
@@ -318,7 +314,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _technicalComment: string;
     private _canChangeInstrument: boolean = true;
 
-    @Input() submitHandler: MTOrderComponentSubmitHandler;
+    @Input() submitHandler: OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
     @Output() onOrderPlaced = new EventEmitter<MTPlaceOrder>();
     @Output() onInstrumentSelected = new EventEmitter<string>();
@@ -387,7 +383,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     checklistItems: ChecklistItem[] = [];
     orderScore: number = 10;
 
-    lastTick: IMTTick = null;
+    lastTick: ITradeTick = null;
     allowedOrderTypes: OrderTypes[] = [];
     orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
     expirationTypes: OrderExpirationType[] = [OrderExpirationType.GTC, OrderExpirationType.Specified, OrderExpirationType.Today];
@@ -418,11 +414,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (this.config.instrument) {
             this._selectInstrument(this.config.instrument, false);
             this._technicalComment = MTHelper.buildTechnicalComment(this.config.tradeType, this.config.timeframe);
-
-            // tech comment exists if it is strategy setup
-            // if (this._technicalComment) {
-            //     this._canChangeInstrument = false;
-            // }
         }
     }
 
@@ -483,7 +474,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
     calculateOrderStarts() {
         return this.orderScore;
-        // return Math.floor(this.orderScore / 2);
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
@@ -491,10 +481,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
         }
-
-        // if (this._technicalComment) {
-        //     this._technicalComment = "";
-        // }
 
         this.config.instrument = instrument;
         const broker = this._brokerService.activeBroker as MTBroker;
@@ -517,14 +503,14 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.calculatingChecklist = true;
             this._recalculatePossible = true;
 
-            broker.getPrice(symbol).subscribe((tick: IMTTick) => {
+            broker.getPrice(symbol).subscribe((tick: ITradeTick) => {
                 if (!tick || tick.symbol !== this.config.instrument.symbol) {
                     return;
                 }
                 this._setTick(tick);
             });
 
-            this.marketSubscription = broker.subscribeToTicks(symbol, (tick: IMTTick) => {
+            this.marketSubscription = broker.subscribeToTicks(symbol, (tick: ITradeTick) => {
                 if (tick.symbol !== this.config.instrument.symbol) {
                     return;
                 }
@@ -623,7 +609,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         }
     }
 
-    private _setTick(tick: IMTTick) {
+    private _setTick(tick: ITradeTick) {
         let needLoad = false;
         if (!this.lastTick) {
             needLoad = true;
@@ -635,12 +621,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (tick && !this._config.price) {
             this._config.price = price;
         }
-        // if (tick && !this._config.sl) {
-        //     this._config.sl = price;
-        // }
-        // if (tick && !this._config.tp) {
-        //     this._config.tp = price;
-        // }
 
         if (needLoad) {
             this._raiseCalculateChecklist();
@@ -693,10 +673,6 @@ export class MTOrderConfiguratorComponent implements OnInit {
             Timeframe: this.config.timeframe,
             TradeType: this.config.tradeType
         };
-
-        // if (this.config.type === OrderTypes.Market) {
-        //     placeOrderData.Price = placeOrderData.Side === OrderSide.Buy ? this.lastTick.ask : this.lastTick.bid;
-        // }
 
         this.processingSubmit = true;
         broker.placeOrder(placeOrderData)

@@ -1,0 +1,90 @@
+<div class="form-wrapper bftorderpanel">
+    <div class="order-side-buttons flex">
+        <div class="order-side-btn order-side-buy flex-grow-1" (click)="setBuyMode()"
+            [ngClass]="{'active': isBuyMode()}">
+            {{'buy' | translate}} {{lastTick ? lastTick.ask.toFixed(decimals) : '-'}}
+        </div>
+        <div class="order-side-btn order-side-sell flex-grow-1" (click)="setSellMode()"
+            [ngClass]="{'active': !isBuyMode()}">
+            {{'sell' | translate}} {{lastTick ? lastTick?.bid.toFixed(decimals) : '-'}}
+        </div>
+    </div>
+
+    <div class="form-wrapper first">
+        <div class="flex-row">
+            <div class="flex-column padding-right">
+                <div class="crypto-form-unit  nborder margin-bottom">
+                    <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
+                        [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
+                </div>
+            </div>
+            <div class="flex-column  padding-left">
+                <div class="crypto-form-unit margin-bottom">
+
+                    <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+
+                        <span class="orderpanelprefix" matPrefix>{{'amount' | translate}}</span>
+                        <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
+                            type="number" [step]="priceStep" [(ngModel)]="config.amount">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="flex-column  padding-right">
+            <div class="crypto-form-unit  nborder  margin-bottom">
+
+
+                <selector class="bft-form-select " [selectedOption]="config.type" [options]="allowedOrderTypes"
+                    [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
+
+            </div>
+        </div>
+        <div class="flex-column padding-left">
+            <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
+
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+                    <span class="orderpanelprefix" matPrefix>{{'limitPrice' | translate}}</span>
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                        [range]="{min: minPriceValue}" [(ngModel)]="config.price">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex-row">
+        <div class="flex-column  padding-right">
+            <div class="crypto-form-unit margin-bottom">
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.stoploss' | translate}}</span>
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
+                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter SL" [(ngModel)]="config.sl">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex-column padding-left">
+            <div class="crypto-form-unit margin-bottom">
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.takeprofit' | translate}}</span>
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
+                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter TP"
+                        [(ngModel)]="config.tp">
+                </mat-form-field>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="form-wrapper additional-trade-data">
+    <div class="buttons-wrapper flex justify-flex-end">
+        <button class="full-width crypto-button submit-btn" [ngClass]="{'order-side-buy': isBuyMode(),
+                        'order-side-sell': !isBuyMode(),
+                        'is-loading': processingSubmit}" (click)="submit()">
+            {{submitHandler ? ('tradeManager.applyOrder' | translate) : ('tradeManager.placeOrder' | translate)}}
+        </button>
+    </div>
+</div>

@@ -7,7 +7,7 @@ import { MTBroker } from '@app/services/mt/mt.broker';
 import { AlertService } from '@alert/services/alert.service';
 import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType } from 'modules/Trading/models/models';
 import { Subscription } from 'rxjs';
-import { IMTTick } from '@app/models/common/tick';
+import { ITradeTick } from '@app/models/common/tick';
 import { BrokerService } from '@app/services/broker.service';
 
 export interface IEDitDialogInputParameters {
@@ -78,7 +78,7 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
         return this._selectedDate;
     }
 
-    public lastTick: IMTTick;
+    public lastTick: ITradeTick;
     public minAmountValue: number = 0.01;
     public minPriceValue: number = 0.000001;
     public priceStep: number = 0.000001;
@@ -113,11 +113,11 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
 
         if (this._config.symbol) {
 
-            this._mtBroker.getPrice(this._config.symbol).subscribe((tick: IMTTick) => {
+            this._mtBroker.getPrice(this._config.symbol).subscribe((tick: ITradeTick) => {
                 this._setTick(tick);
             });
 
-            this._marketSubscription = this._mtBroker.subscribeToTicks(this._config.symbol, (tick: IMTTick) => {
+            this._marketSubscription = this._mtBroker.subscribeToTicks(this._config.symbol, (tick: ITradeTick) => {
                 this._setTick(tick);
             });
         }
@@ -152,7 +152,7 @@ export class MTOrderEditModalComponent extends Modal<IEDitDialogInputParameters>
             this._config.tp = this.order.Price;
         }
     }
-    private _setTick(tick: IMTTick) {
+    private _setTick(tick: ITradeTick) {
         if (!tick || tick.symbol !== this._config.symbol) {
             return;
         }

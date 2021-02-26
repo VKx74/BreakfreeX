@@ -6,6 +6,7 @@
                 <div [ngSwitch]="instanceType" class="h-100">    
                     <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT4" class="date-container"></mt-account-info-bar>
                     <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT5" class="date-container"></mt-account-info-bar>
+                    <binance-account-info-bar *ngSwitchCase="EBrokerInstance.Binance" class="date-container"></binance-account-info-bar>
                 </div>
             </div>
         </ng-template>

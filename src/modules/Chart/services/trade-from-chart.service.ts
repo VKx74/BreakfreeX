@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from '@app/services/broker.service';
-import { MTOrderConfiguratorModalComponent } from 'modules/Trading/components/forex.components/mt/order-configurator-modal/mt-order-configurator-modal.component';
+import { OrderConfiguratorModalComponent } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { MTOrderConfig } from 'modules/Trading/components/forex.components/mt/order-configurator/mt-order-configurator.component';
 import { OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { MTBroker } from '@app/services/mt/mt.broker';
@@ -789,9 +789,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private showOrderModal(orderConfig: any, callback: () => void, doGetOrder: boolean): void {
-        this._dialog.open(MTOrderConfiguratorModalComponent, {
+        this._dialog.open(OrderConfiguratorModalComponent, {
             data: {
-                tradeConfig: orderConfig,
+                orderConfig: orderConfig,
                 orderPlacedHandler: (order: MTPlaceOrder) => {
                     if (doGetOrder) {
                         this._orderConfig = order;

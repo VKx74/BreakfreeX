@@ -83,17 +83,17 @@ export class ScriptCloudExecutorService implements IScriptCloudExecutorService {
                     tradingParameters.broker = "peatio";
                 }
 
-                this._brokerService.tryMapInstrument(params.symbol, params.exchange as EExchange).subscribe((instruments: IInstrument[]) => {
-                    if (instruments.length) {
-                        tradingParameters.symbol = instruments[0].symbol;
-                    } else {
-                        this.onScriptShowPopup.next(`Failed to map ${params.symbol} to broker format`);
-                    }
+                // this._brokerService.tryMapInstrument(params.symbol, params.exchange as EExchange).subscribe((instruments: IInstrument[]) => {
+                //     if (instruments.length) {
+                //         tradingParameters.symbol = instruments[0].symbol;
+                //     } else {
+                //         this.onScriptShowPopup.next(`Failed to map ${params.symbol} to broker format`);
+                //     }
 
-                    sendStartRequest();
-                }, error => {
-                    sendStartRequest();
-                });
+                //     sendStartRequest();
+                // }, error => {
+                //     sendStartRequest();
+                // });
             } else {
                 sendStartRequest();
             }

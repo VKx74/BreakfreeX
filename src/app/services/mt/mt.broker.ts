@@ -1,6 +1,5 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
-import { Injectable } from '@angular/core';
 import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
@@ -8,16 +7,16 @@ import { IInstrument } from '@app/models/common/instrument';
 import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass, BrokerConnectivityStatus } from 'modules/Trading/models/models';
 import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
-import { IMTTick } from '@app/models/common/tick';
+import { ITradeTick } from '@app/models/common/tick';
 import { ReadyStateConstants } from '@app/interfaces/socket/WebSocketConfig';
 import { MTSocketService } from '../socket/mt.socket.service';
-import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
+import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { MTHelper } from "./mt.helper";
 import { MTTradeRatingService } from "./mt.trade-rating.service";
 
 export abstract class MTBroker implements IMTBroker {
-    protected _tickSubscribers: { [symbol: string]: Subject<IMTTick>; } = {};
+    protected _tickSubscribers: { [symbol: string]: Subject<ITradeTick>; } = {};
     protected _instrumentDecimals: { [symbol: string]: number; } = {};
     protected _instrumentTickSize: { [symbol: string]: number; } = {};
     protected _instrumentType: { [symbol: string]: string; } = {};
@@ -360,6 +359,18 @@ export abstract class MTBroker implements IMTBroker {
             });
         });
     }
+
+    cancelAll(): Observable<any> {
+        const pending =  this.pendingOrders;
+        const subjects = [];
+        for (const order of pending) {
+            const subj = this.cancelOrder(order.Id, OrderFillPolicy.FOK);
+            subjects.push(subj);
+        }
+        
+        return combineLatest(subjects)
+    }
+
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
         if (!search) {
             return of(this._instruments.slice());
@@ -457,9 +468,9 @@ export abstract class MTBroker implements IMTBroker {
 
     abstract loadSate(state: IBrokerState<any>): Observable<ActionResult>;
 
-    subscribeToTicks(symbol: string, subscription: (value: IMTTick) => void): Subscription {
+    subscribeToTicks(symbol: string, subscription: (value: ITradeTick) => void): Subscription {
         if (!this._tickSubscribers[symbol]) {
-            this._tickSubscribers[symbol] = new Subject<IMTTick>();
+            this._tickSubscribers[symbol] = new Subject<ITradeTick>();
             this.ws.subscribeOnQuotes(symbol).subscribe();
         }
 
@@ -567,8 +578,8 @@ export abstract class MTBroker implements IMTBroker {
         }
     }
 
-    getPrice(symbol: string): Observable<IMTTick> {
-        return new Observable<IMTTick>((observer: Observer<IMTTick>) => {
+    getPrice(symbol: string): Observable<ITradeTick> {
+        return new Observable<ITradeTick>((observer: Observer<ITradeTick>) => {
             this.ws.getPrice(symbol).subscribe((response) => {
                 if (response.IsSuccess) {
                     observer.next({
@@ -730,7 +741,7 @@ export abstract class MTBroker implements IMTBroker {
 
     }
 
-    protected _handleQuotes(quote: IMTTick) {
+    protected _handleQuotes(quote: ITradeTick) {
         const subject = this._tickSubscribers[quote.symbol];
         if (subject && subject.observers.length > 0) {
             this._tickSubscribers[quote.symbol].next(quote);

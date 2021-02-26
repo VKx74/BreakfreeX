@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Inject } from "@angular/core";
-import { Subscription } from "rxjs";
 import { AlertService } from "@alert/services/alert.service";
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { MatDialog } from "@angular/material/dialog";
@@ -11,7 +10,6 @@ import { IBFTATrend } from "@app/services/algo.service";
 import { ItemsComponent } from "../../trade-manager/items.component";
 
 export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
-    protected _subscriptionOnOrderDataChanged: Subscription;
     protected get _mtBroker(): MTBroker {
         return this._broker.activeBroker as MTBroker;
     }
@@ -24,12 +22,6 @@ export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
             super(_broker, _dataHighlightService, _alertService, _dialog, _cdr);
     }
 
-    ngOnInit(): void {
-        super.ngOnInit();
-        this._subscriptionOnOrderDataChanged = this._mtBroker.onOrdersParametersUpdated.subscribe(() => {
-            this.ordersUpdated();
-        });
-    }
 
     getRecommendationsTooltip(rec: MTPendingOrderRecommendation | MTMarketOrderRecommendation) {
         if (!rec) {
@@ -116,13 +108,6 @@ export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
         }
 
         return rec.FailedChecks[0].Recommendation;
-    }
-
-    ngOnDestroy(): void {
-        super.ngOnDestroy();
-        if (this._subscriptionOnOrderDataChanged) {
-            this._subscriptionOnOrderDataChanged.unsubscribe();
-        }
     }
 
     protected _getTrendName(trend: IBFTATrend) {

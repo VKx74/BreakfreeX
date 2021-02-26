@@ -3,7 +3,7 @@ import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from "@app/services/broker.service";
-import { MTOrderConfiguratorModalComponent } from './order-configurator-modal/mt-order-configurator-modal.component';
+import { OrderConfiguratorModalComponent } from '../../trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { OrderFillPolicy, OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
 import { MTOrder, MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
@@ -231,21 +231,6 @@ export class MTTradeManagerComponent {
             data: {
                 SelectedBrokerInstrument: brokerInstrument
             }
-        });
-    }
-
-    private _cancelAllPending() {
-        this._alertService.info("Canceling");
-        const pending =  this._broker.pendingOrders;
-        const subjects = [];
-        for (const order of pending) {
-            const subj = this._broker.cancelOrder(order.Id, OrderFillPolicy.FOK);
-            subjects.push(subj);
-        }
-        combineLatest(subjects).subscribe((response) => {
-            this._alertService.success("Canceled");
-          }, (error) => {
-            // this._alertService.info("Error to cancel one of the orders");
         });
     }
 
