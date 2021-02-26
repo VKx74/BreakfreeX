@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
 import { BrokerService } from '@app/services/broker.service';
+import { BinanceBroker } from '@app/services/binance/binance.broker';
 
 @Component({
     selector: 'binance-funds',
@@ -12,12 +13,12 @@ export class MTAccountInfoComponent {
     decimals = 8;
     
     get activeAccount(): MTTradingAccount {
-        const mtBroker = this._broker.activeBroker as MTBroker;
-        if (!mtBroker) {
+        const broker = this._broker.activeBroker as BinanceBroker;
+        if (!broker) {
             return null;
         }
 
-        return mtBroker.accountInfo;
+        return broker.accountInfo;
     }
 
     constructor(private _broker: BrokerService) {

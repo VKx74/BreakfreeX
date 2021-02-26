@@ -7,3 +7,7 @@ export interface BinanceConnectionData extends IConnectionData {
 export interface BinanceTradingAccount {
     Account: string;
 }
+
+export interface BinanceFund {
+    Account: string;
+}
