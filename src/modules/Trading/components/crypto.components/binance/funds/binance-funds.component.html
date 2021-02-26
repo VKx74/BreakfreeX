@@ -1,0 +1,13 @@
+<div class="accountInfo">
+    <data-table [rows]="[]" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false">
+        <data-table-header-cell columnName="Coin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.coin' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Total Balance" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.totalBalance' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Available Balance" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.availableBalance' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Freezed Balance" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.freezedBalance' | translate}}</data-table-header-cell>
+
+        <data-table-cell columnName="Coin"><ng-template let-item>{{item.Coin}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Total Balance"><ng-template let-item>{{item.TotalBalance.toFixed(decimals)}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Available Balance"><ng-template let-item>{{item.AvailableBalance.toFixed(decimals)}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Freezed Balance"><ng-template let-item>{{item.FreezedBalance.toFixed(decimals)}}</ng-template></data-table-cell>
+    </data-table>
+</div>
