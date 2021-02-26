@@ -18,10 +18,10 @@ export abstract class DataFeedBase implements IDatafeedBase {
     static DefaultInstrument: IInstrument = {
         baseInstrument: "EUR",
         company: "EUR vs USD",
-        datafeed: EExchangeInstance.TwelvedataExchange,
+        datafeed: EExchangeInstance.OandaExchange,
         dependInstrument: "USD",
-        exchange: EExchange.Forex,
-        id: "EUR/USD",
+        exchange: EExchange.Oanda,
+        id: "EUR_USD",
         pricePrecision: 5,
         symbol: "EURUSD",
         tickSize: 0.00001,
