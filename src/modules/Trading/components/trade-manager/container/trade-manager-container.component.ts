@@ -4,11 +4,11 @@ import { BrokerService } from "@app/services/broker.service";
 import {TranslateService} from "@ngx-translate/core";
 import { TradingTranslateService } from "modules/Trading/localization/token";
 import { Linker, LinkerFactory } from "@linking/linking-manager";
-import { MatDialog } from "@angular/material";
 import { ConfirmModalComponent } from "UI";
 import { OrderConfiguratorModalComponent } from "../order-configurator-modal/order-configurator-modal.component";
 import { SymbolMappingComponent } from "../../forex.components/mt/symbol-mapping/symbol-mapping.component";
 import { AlertService } from "@alert/services/alert.service";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: 'trade-manager-container',

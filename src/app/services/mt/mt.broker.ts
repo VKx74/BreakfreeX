@@ -368,7 +368,7 @@ export abstract class MTBroker implements IMTBroker {
             subjects.push(subj);
         }
         
-        return combineLatest(subjects)
+        return combineLatest(subjects);
     }
 
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
