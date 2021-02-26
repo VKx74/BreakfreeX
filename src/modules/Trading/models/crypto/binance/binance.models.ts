@@ -6,8 +6,11 @@ export interface BinanceConnectionData extends IConnectionData {
 
 export interface BinanceTradingAccount {
     Account: string;
+    Funds: BinanceFund[];
 }
 
 export interface BinanceFund {
-    Account: string;
+    Coin: string;
+    AvailableBalance: number;
+    FreezedBalance: number;
 }

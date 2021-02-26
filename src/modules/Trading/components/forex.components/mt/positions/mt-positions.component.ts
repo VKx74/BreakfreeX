@@ -31,7 +31,7 @@ export class MTPositionsComponent extends MTItemsComponent<MTPosition> {
         super.ngOnDestroy();
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         this.refresh();
     }
 }

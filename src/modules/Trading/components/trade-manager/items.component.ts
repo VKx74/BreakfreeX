@@ -71,7 +71,7 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
             }
         });
         this._subscriptionOnOrderDataChanged = this._activeBroker.onOrdersParametersUpdated.subscribe(() => {
-            this.ordersUpdated();
+            this.collectionUpdated();
         });
         this._onTradePanelDataHighlightSubscription = this._dataHighlightService.onTradePanelDataHighlight.subscribe(this._handleHighlight.bind(this));
     }
@@ -146,7 +146,7 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
 
     protected abstract loadItems(): Observable<T[]>;
 
-    protected abstract ordersUpdated();
+    protected abstract collectionUpdated();
 
     protected _subscribeOnUpdates(): Subscription {
         return null;

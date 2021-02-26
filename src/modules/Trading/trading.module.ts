@@ -57,6 +57,7 @@ import { TradeManagerContainerComponent } from './components/trade-manager/conta
 import { BinanceOrderConfiguratorComponent } from './components/crypto.components/binance/order-configurator/binance-order-configurator.component';
 import { BinanceAccountInfoBarComponent } from './components/crypto.components/binance/account-info-bar/binance-account-info-bar.component';
 import { BinanceTradeManagerComponent } from './components/crypto.components/binance/binance-trade-manager.component';
+import { BinanceFundsComponent } from './components/crypto.components/binance/funds/binance-funds.component';
 
 const components = [
     TradeManagerComponent,
@@ -83,7 +84,8 @@ const components = [
 
     BinanceOrderConfiguratorComponent,
     BinanceAccountInfoBarComponent,
-    BinanceTradeManagerComponent
+    BinanceTradeManagerComponent,
+    BinanceFundsComponent
 ];
 
 @NgModule({

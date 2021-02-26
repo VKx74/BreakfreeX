@@ -1,9 +1,8 @@
 <mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedIndex">
-    <!-- <mat-tab label="{{'tradeManager.positions' | translate}} {{positionsAmount ? '[' + positionsAmount + ']' : ''}}">
-        <mt-positions [selectedTabIndex]="selectedTabIndex" [tabIndex]="0"
-            (onPositionClose)="handlePositionClose($event)" (onOpenChart)="handleOpenChart($event)"></mt-positions>
+    <mat-tab label="{{'tradeManager.positions' | translate}} {{positionsAmount ? '[' + positionsAmount + ']' : ''}}">
+        <binance-funds [selectedTabIndex]="selectedTabIndex" [tabIndex]="0"></binance-funds>
     </mat-tab>
-    <mat-tab label="{{'tradeManager.openOrders' | translate}} {{ordersAmount ? '[' + ordersAmount + ']' : ''}}">
+    <!-- <mat-tab label="{{'tradeManager.openOrders' | translate}} {{ordersAmount ? '[' + ordersAmount + ']' : ''}}">
         <mt-open-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="1" (onOrderClose)="handleOrderClose($event)"
             (onOrderEdit)="handleOrderEdit($event)" (onOpenChart)="handleOpenChart($event)"></mt-open-orders>
     </mat-tab>

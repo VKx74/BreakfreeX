@@ -41,7 +41,7 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
         return "high-risk";
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         this.updateItems();
     }
 }

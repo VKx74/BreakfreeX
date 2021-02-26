@@ -14,7 +14,7 @@ import { MTHelper } from '@app/services/mt/mt.helper';
 export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
 
     protected loadItems(): Observable<MTOrder[]> {
-       return of(this._mtBroker.pendingOrders);
+       return of(this._mtBroker.marketOrders);
     }
 
     protected _subscribeOnUpdates(): Subscription {
@@ -37,7 +37,7 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
         return item.Id;
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         this.refresh();
     }
 }

@@ -24,7 +24,7 @@ export class MTHistoryOrdersComponent extends MTItemsComponent<MTHistoricalOrder
         });
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         // this.cdr.detectChanges();
     }
     
