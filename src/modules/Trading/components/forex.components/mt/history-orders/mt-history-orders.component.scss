@@ -1,8 +1,5 @@
-@import "themes/themes";
-@import "mixins/themify";
-@import "variables";
+@import "../../../trade-manager/items-component/shared.scss";
 
 :host {
   height: 100%;
-
 }

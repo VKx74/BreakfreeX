@@ -7,7 +7,7 @@ import { MTMarketOrderRecommendation, MTPendingOrderRecommendation, MTPositionRe
 import { MTHelper } from "@app/services/mt/mt.helper";
 import { DataHighlightService } from "modules/Trading/services/dataHighlight.service";
 import { IBFTATrend } from "@app/services/algo.service";
-import { ItemsComponent } from "../../trade-manager/items.component";
+import { ItemsComponent } from "../../trade-manager/items-component/items.component";
 
 export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
     protected get _mtBroker(): MTBroker {

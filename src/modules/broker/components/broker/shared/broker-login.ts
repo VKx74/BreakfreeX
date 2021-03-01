@@ -5,7 +5,6 @@ import {Observable} from "rxjs";
 import { BrokerFactory, CreateBrokerActionResult } from '@app/factories/broker.factory';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { BrokerService } from '@app/services/broker.service';
-import { BinanceConnectionData } from 'modules/Trading/models/crypto/binance/binance.models';
 
 
 export class BrokerLogin {

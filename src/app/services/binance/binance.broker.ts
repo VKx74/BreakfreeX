@@ -7,19 +7,19 @@ import { ActionResult, BrokerConnectivityStatus } from "modules/Trading/models/m
 import { Subject, Observable, of, Subscription } from "rxjs";
 
 export class BinanceBroker implements IBroker {
-    onAccountInfoUpdated: Subject<any>;
-    onOrdersUpdated: Subject<any[]>;
-    onOrdersParametersUpdated: Subject<any[]>;
-    onHistoricalOrdersUpdated: Subject<any[]>;
-    onPositionsUpdated: Subject<any[]>;
+    onAccountInfoUpdated: Subject<any> = new Subject<any>();
+    onOrdersUpdated: Subject<any[]> = new Subject<any[]>();
+    onOrdersParametersUpdated: Subject<any[]> = new Subject<any[]>();
+    onHistoricalOrdersUpdated: Subject<any[]> = new Subject<any[]>();
+    // onPositionsUpdated: Subject<any[]> = new Subject<any[]>();
     onSaveStateRequired: Subject<void> = new Subject;
 
     instanceType: EBrokerInstance = EBrokerInstance.Binance;
-    status: BrokerConnectivityStatus;
-    orders: any[];
-    ordersHistory: any[];
-    positions: any[];
-    currencyRisks: any[];
+    status: BrokerConnectivityStatus = BrokerConnectivityStatus.NoConnection;
+    orders: any[] = [];
+    ordersHistory: any[] = [];
+    tradesHistory: any[] = [];
+    // currencyRisks: any[] = [];
     accountInfo: BinanceTradingAccount;
 
     cancelAll(): Observable<any> {
@@ -34,12 +34,12 @@ export class BinanceBroker implements IBroker {
     editOrderPrice(order: any): Observable<ActionResult> {
         throw new Error("Method not implemented.");
     }
-    closeOrder(order: string, ...args: any[]): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
-    }
-    closePosition(symbol: string, ...args: any[]): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
-    }
+    // closeOrder(order: string, ...args: any[]): Observable<ActionResult> {
+    //     throw new Error("Method not implemented.");
+    // }
+    // closePosition(symbol: string, ...args: any[]): Observable<ActionResult> {
+    //     throw new Error("Method not implemented.");
+    // }
     cancelOrder(order: string, ...args: any[]): Observable<ActionResult> {
         throw new Error("Method not implemented.");
     }
@@ -71,6 +71,10 @@ export class BinanceBroker implements IBroker {
         return 3;
     }
     init(initData: any): Observable<ActionResult> {
+        this.accountInfo = {
+            Account: "asdasd-asdfasdf-asdf",
+            Funds: []
+        };
         return of({
             result: true
         });
@@ -91,9 +95,10 @@ export class BinanceBroker implements IBroker {
         });
     }
     loadSate(state: IBrokerState<any>): Observable<ActionResult> {
-        return of({
-            result: true
-        });
+        return this.init(state);
+        // return of({
+        //     result: true
+        // });
     }
     instrumentToBrokerFormat(symbol: string): IInstrument {
         return null;

@@ -8,6 +8,18 @@
   "tradeManager": {
     "validationChecklist": "Список перевірок",
     "title": "Торговий Віджет",
+    "total": "Total",
+    "balance": "Баланс",
+    "totalBalance": "Загальний Баланс",
+    "availableBalance": "Доступний Баланс",
+    "lockedBalance": "Заблокований Баланс",
+    "symbol": "Символ",
+    "coin": "Інструмент",
+    "type": "Тим",
+    "size": "Кількість",
+    "executedSize": "Виконана Кількість",
+    "funds": "Фонд",
+    "tradeHistory": "Історія трейдів",
     "resetAmount": "Скинути суму",
     "amountToClose": "Кількість закриття",
     "compleatedAt": "Завершено",
@@ -163,7 +175,12 @@
     "viewChart": "Перглянути Чарт",
     "account": "Акаунт",
     "server": "Сервер",
-    "advancedSettings": "Розширені налаштування"
+    "advancedSettings": "Розширені налаштування",
+    "liqPrice": "Liq. Price",
+    "marginRatio": "Margin Ratio",
+    "pnl": "PNL",
+    "date": "Date",
+    "realizedProfit": "Realized Profit"
   },
   "periodicity": {
     "minute": "Хвилина",

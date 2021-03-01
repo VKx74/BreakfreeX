@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { BinanceBroker } from '@app/services/binance/binance.broker';
 import { BrokerService } from '@app/services/broker.service';
-import { MTBroker } from '@app/services/mt/mt.broker';
 import { BinanceTradingAccount } from 'modules/Trading/models/crypto/binance/binance.models';
-import { MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
 import { BrokerConnectivityStatus } from 'modules/Trading/models/models';
 
 @Component({

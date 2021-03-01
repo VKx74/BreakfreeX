@@ -8,6 +8,18 @@
   "tradeManager": {
     "validationChecklist": "TradeGuard Pre-trade",
     "title": "Trade Widget",
+    "total": "Total",
+    "balance": "Balance",
+    "totalBalance": "Total Balance",
+    "availableBalance": "Available Balance",
+    "lockedBalance": "Locked Balance",
+    "symbol": "Symbol",
+    "coin": "Coin",
+    "type": "Type",
+    "size": "Size",
+    "executedSize": "Executed Size",
+    "funds": "Funds",
+    "tradeHistory": "Trade History",
     "resetAmount": "Reset size",
     "amountToClose": "Size to close",
     "compleatedAt": "Compl. At",
@@ -170,7 +182,12 @@
     "brokerType": "Broker Type",
     "connect": "Connect",
     "disconnect": "Disconnect",
-    "addAccount": "Add broker account"
+    "addAccount": "Add broker account",
+    "liqPrice": "Liq. Price",
+    "marginRatio": "Margin Ratio",
+    "pnl": "PNL",
+    "date": "Date",
+    "realizedProfit": "Realized Profit"
   },
   "periodicity": {
     "minute": "Minute",

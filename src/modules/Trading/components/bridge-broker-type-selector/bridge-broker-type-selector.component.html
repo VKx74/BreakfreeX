@@ -4,6 +4,7 @@
               [options]="availableBrokers"
               [selectedOption]="selectedBroker"
               [placeholder]="'addAccount' | translate"
+              [optionCaption]="captionText"
               (optionClick)="onBrokerSelect($event)"></selector>
 
     <div class="disconnect-broker" *ngIf="!isBrokerConnected" [class.disabled]="!selectedBroker">

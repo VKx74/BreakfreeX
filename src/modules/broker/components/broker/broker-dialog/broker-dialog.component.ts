@@ -61,4 +61,14 @@ export class BrokerDialogComponent extends Modal implements OnInit {
             this._initialized = true;
     }
 
+    captionText() {
+        switch (this.brokerType) {
+            case EBrokerInstance.MT4: return "MT4";
+            case EBrokerInstance.MT5: return "MT5";
+            case EBrokerInstance.Binance: return "Binance (Spot)";
+            case EBrokerInstance.BinanceFuturesUSD: return "Binance (Futures USD)";
+            case EBrokerInstance.BinanceFuturesCOIN: return "Binance (Futures COIN)";
+        }
+    } 
+
 }

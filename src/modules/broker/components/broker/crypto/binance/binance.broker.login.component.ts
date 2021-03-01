@@ -31,11 +31,11 @@ export class BinanceBrokerLoginComponent extends BrokerLogin {
             APIKey: this.apiKey
         };
 
-        this._connect(EBrokerInstance.Binance, initData);
+        this._connect(this.brokerInstance, initData);
     }
 
     savedAccountExists(): boolean {
-        return this._savedAccountExists(EBrokerInstance.Binance);
+        return this._savedAccountExists(this.brokerInstance);
     }
 
     disconnect(): void {

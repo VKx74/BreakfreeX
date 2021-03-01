@@ -7,6 +7,8 @@
         <mt-trade-manager *ngSwitchCase="EBrokerInstance.MT4" class="h-100"></mt-trade-manager>
         <mt-trade-manager *ngSwitchCase="EBrokerInstance.MT5" class="h-100"></mt-trade-manager>
         <binance-trade-manager *ngSwitchCase="EBrokerInstance.Binance" class="h-100"></binance-trade-manager>
+        <binance-futures-trade-manager *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" class="h-100"></binance-futures-trade-manager>
+        <binance-futures-trade-manager *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" class="h-100"></binance-futures-trade-manager>
         <div *ngSwitchDefault class="flex align-items-center justify-content-center w-100 h-100">
             <span class="notConnected caption">{{"tradeManager.connectToBroker" | translate}}</span>
         </div>
@@ -18,6 +20,8 @@
         <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT4" class="info-bar"></mt-account-info-bar>
         <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT5" class="info-bar"></mt-account-info-bar>
         <binance-account-info-bar *ngSwitchCase="EBrokerInstance.Binance" class="info-bar"></binance-account-info-bar>
+        <binance-futures-account-info-bar *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" class="date-container"></binance-futures-account-info-bar>
+        <binance-futures-account-info-bar *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" class="date-container"></binance-futures-account-info-bar>
     </div>
     <div>
         <button (click)="cancelAllPending()"

@@ -12,6 +12,10 @@
                     (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></mt-order-configurator>
                 <binance-order-configurator *ngSwitchCase="EBrokerInstance.Binance" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
                     (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></binance-order-configurator>
+                <binance-futures-order-configurator *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
+                    (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></binance-futures-order-configurator>
+                <binance-futures-order-configurator *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
+                    (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></binance-futures-order-configurator>
             </div>
         </div>
     </div>

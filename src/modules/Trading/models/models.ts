@@ -68,7 +68,9 @@ export enum TradeManagerTab {
     ActiveOrders = 'ActiveOrders',
     OrderHistory = 'OrderHistory',
     AccountInfo = 'AccountInfo',
-    CurrencyRisk = 'CurrencyRisk'
+    CurrencyRisk = 'CurrencyRisk',
+    TradeHistory = 'TradeHistory',
+    Funds = 'Funds'
 }
 
 export enum OrderPlacedFrom {

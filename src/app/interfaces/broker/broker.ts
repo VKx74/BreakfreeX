@@ -8,6 +8,8 @@ export enum EBrokerInstance {
     MT5 = "MT5",
     MT4 = "MT4",
     Binance = "Binance",
+    BinanceFuturesUSD = "BinanceFuturesUSD",
+    BinanceFuturesCOIN = "BinanceFuturesCOIN"
 }
 
 export interface IBrokerState<T = any> {
@@ -24,13 +26,12 @@ export interface IBroker {
     onOrdersUpdated: Subject<any[]>;
     onOrdersParametersUpdated: Subject<any[]>;
     onHistoricalOrdersUpdated: Subject<any[]>;
-    onPositionsUpdated: Subject<any[]>;
+    // onPositionsUpdated: Subject<any[]>;
 
     status: BrokerConnectivityStatus;
     orders: any[];
     ordersHistory: any[];
-    positions: any[];
-    currencyRisks: any[];
+    // currencyRisks: any[];
     accountInfo: any;
 
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]>;
@@ -45,8 +46,8 @@ export interface IBroker {
     placeOrder(order: any): Observable<ActionResult>;
     editOrder(order: any): Observable<ActionResult>;
     editOrderPrice(order: any): Observable<ActionResult>;
-    closeOrder(order: string, ...args): Observable<ActionResult>;
-    closePosition(symbol: string, ...args): Observable<ActionResult>;
+    // closeOrder(order: string, ...args): Observable<ActionResult>;
+    // closePosition(symbol: string, ...args): Observable<ActionResult>;
     cancelOrder(order: string, ...args): Observable<ActionResult>;
     subscribeToTicks(instrument: string, subscription: (value: ITradeTick) => void): Subscription;
     instrumentTickSize(symbol: string): number;

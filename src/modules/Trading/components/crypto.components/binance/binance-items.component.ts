@@ -3,12 +3,16 @@ import { AlertService } from "@alert/services/alert.service";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from '@app/services/broker.service';
 import { DataHighlightService } from "modules/Trading/services/dataHighlight.service";
-import { ItemsComponent } from "../../trade-manager/items.component";
+import { ItemsComponent } from "../../trade-manager/items-component/items.component";
 import { BinanceBroker } from "@app/services/binance/binance.broker";
 
 export abstract class BinanceItemsComponent<T> extends ItemsComponent<T> {
     protected get _binanceBroker(): BinanceBroker {
         return this._broker.activeBroker as BinanceBroker;
+    }
+
+    public get decimals(): number {
+        return 8;
     }
 
     constructor(protected _broker: BrokerService,

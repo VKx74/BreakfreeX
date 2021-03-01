@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { BrokerDialogComponent, BrokerDialogData } from '../../../broker/components/broker/broker-dialog/broker-dialog.component';
 import { tap } from 'rxjs/operators';
 import { APP_TYPE_BROKERS } from '@app/enums/ApplicationType';
+import bind from "bind-decorator";
+import { of } from 'rxjs';
 
 @Component({
     selector: 'bridge-broker-type-selector',
@@ -49,6 +51,19 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     onBrokerSelect(broker: EBrokerInstance) {
        this.selectedBroker = broker;
     }
+
+    @bind
+    captionText(value: EBrokerInstance) {
+        switch (value) {
+            case EBrokerInstance.MT4: return of("MT4");
+            case EBrokerInstance.MT5: return of("MT5");
+            case EBrokerInstance.Binance: return of("Binance (Spot)");
+            case EBrokerInstance.BinanceFuturesUSD: return of("Binance (Futures USD)");
+            case EBrokerInstance.BinanceFuturesCOIN: return of("Binance (Futures COIN)");
+        }
+
+        return of("Undefined");
+    } 
     
     connectCurrentBroker() {
         // show MT Bridge for all users even without subscriptions

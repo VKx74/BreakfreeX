@@ -102,6 +102,8 @@ import { SymbolMappingStorageService } from './services/instrument-mapping-stora
 import { FBPixelTrackingService } from './services/traking/fb.pixel.tracking.service';
 import { GTMTrackingService } from './services/traking/gtm.tracking.service';
 import { BinanceBroker } from './services/binance/binance.broker';
+import { BinanceFuturesUsdBroker } from './services/binance-futures/binance-futures-usd.broker';
+import { BinanceFuturesCoinBroker } from './services/binance-futures/binance-futures-coin.broker';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -302,6 +304,8 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         MT5Broker,
 
         BinanceBroker,
+        BinanceFuturesUsdBroker,
+        BinanceFuturesCoinBroker,
 
         PolygonInstrumentService,
         PolygonHistoryService,

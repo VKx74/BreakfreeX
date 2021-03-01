@@ -58,6 +58,16 @@ import { BinanceOrderConfiguratorComponent } from './components/crypto.component
 import { BinanceAccountInfoBarComponent } from './components/crypto.components/binance/account-info-bar/binance-account-info-bar.component';
 import { BinanceTradeManagerComponent } from './components/crypto.components/binance/binance-trade-manager.component';
 import { BinanceFundsComponent } from './components/crypto.components/binance/funds/binance-funds.component';
+import { BinanceHistoryOrdersComponent } from './components/crypto.components/binance/history-orders/binance-history-orders.component';
+import { BinanceHistoryTradeComponent } from './components/crypto.components/binance/history-trades/binance-history-trades.component';
+import { BinancePendingOrdersComponent } from './components/crypto.components/binance/pending-orders/binance-pending-orders.component';
+import { BinanceFuturesOrderConfiguratorComponent } from './components/crypto.components/binance-futures/order-configurator/binance-futures-order-configurator.component';
+import { BinanceFuturesAccountInfoBarComponent } from './components/crypto.components/binance-futures/account-info-bar/binance-futures-account-info-bar.component';
+import { BinanceFuturesTradeManagerComponent } from './components/crypto.components/binance-futures/binance-futures-trade-manager.component';
+import { BinanceFuturesPositionsComponent } from './components/crypto.components/binance-futures/positions/binance-futures-positions.component';
+import { BinanceFuturesHistoryOrdersComponent } from './components/crypto.components/binance-futures/history-orders/binance-futures-history-orders.component';
+import { BinanceFuturesHistoryTradeComponent } from './components/crypto.components/binance-futures/history-trades/binance-futures-history-trades.component';
+import { BinanceFuturesPendingOrdersComponent } from './components/crypto.components/binance-futures/pending-orders/binance-futures-pending-orders.component';
 
 const components = [
     TradeManagerComponent,
@@ -85,7 +95,18 @@ const components = [
     BinanceOrderConfiguratorComponent,
     BinanceAccountInfoBarComponent,
     BinanceTradeManagerComponent,
-    BinanceFundsComponent
+    BinanceFundsComponent,
+    BinanceHistoryOrdersComponent,
+    BinanceHistoryTradeComponent,
+    BinancePendingOrdersComponent,
+
+    BinanceFuturesOrderConfiguratorComponent,
+    BinanceFuturesAccountInfoBarComponent,
+    BinanceFuturesTradeManagerComponent,
+    BinanceFuturesPositionsComponent,
+    BinanceFuturesHistoryOrdersComponent,
+    BinanceFuturesHistoryTradeComponent,
+    BinanceFuturesPendingOrdersComponent
 ];
 
 @NgModule({

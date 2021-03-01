@@ -13,6 +13,7 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Subscription } from 'rxjs';
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 import { SymbolMappingComponent } from "../../forex.components/mt/symbol-mapping/symbol-mapping.component";
+import { BinanceBroker } from "@app/services/binance/binance.broker";
 
 @Component({
     selector: 'binance-trade-manager',
@@ -27,44 +28,30 @@ import { SymbolMappingComponent } from "../../forex.components/mt/symbol-mapping
 })
 export class BinanceTradeManagerComponent {
     protected _onTradePanelDataHighlightSubscription: Subscription;
+    protected get _binanceBroker(): BinanceBroker {
+        return this.brokerService.activeBroker as BinanceBroker;
+    }
+
     selectedIndex: number;
     selectedTabIndex: number;
     @ViewChild('tabGroup', {static: true}) tabGroup: MatTabGroup;
 
-    get positionsAmount(): number {
-        const broker = this.brokerService.activeBroker;
-        if (!broker || !broker.positions) {
+    get fundsAmount(): number {
+        const broker = this._binanceBroker;
+        if (!broker || !broker.accountInfo || !broker.accountInfo.Funds) {
             return 0;
         }
 
-        return broker.positions.length;
-    }
-
-    public get ordersAmount(): number {
-        const broker = this.brokerService.activeBroker;
-        if (!broker || !broker.orders) {
-            return 0;
-        }
-
-        return broker.orders.filter(_ => _.Type === OrderTypes.Market).length;
+        return broker.accountInfo.Funds.length;
     }
 
     public get pendingAmount(): number {
-        const broker = this.brokerService.activeBroker as MTBroker;
+        const broker = this.brokerService.activeBroker;
         if (!broker || !broker.orders) {
             return 0;
         }
 
         return broker.orders.filter(_ => _.Type !== OrderTypes.Market).length;
-    }
-
-    public get historyAmount(): number {
-        const broker = this.brokerService.activeBroker as MTBroker;
-        if (!broker || !broker.ordersHistory) {
-            return 0;
-        }
-
-        return broker.ordersHistory.length;
     }
 
     constructor(private _dialog: MatDialog,
@@ -217,13 +204,11 @@ export class BinanceTradeManagerComponent {
             return;
         }
 
-        // switch (data.ActivateTab) {
-        //     case TradeManagerTab.Positions: this.selectedIndex = 0; break;
-        //     case TradeManagerTab.MarketOrders: this.selectedIndex = 1; break;
-        //     case TradeManagerTab.ActiveOrders: this.selectedIndex = 2; break;
-        //     case TradeManagerTab.OrderHistory: this.selectedIndex = 3; break;
-        //     case TradeManagerTab.AccountInfo: this.selectedIndex = 4; break;
-        //     case TradeManagerTab.CurrencyRisk: this.selectedIndex = 5; break;
-        // }
+        switch (data.ActivateTab) {
+            case TradeManagerTab.Funds: this.selectedIndex = 0; break;
+            case TradeManagerTab.ActiveOrders: this.selectedIndex = 1; break;
+            case TradeManagerTab.OrderHistory: this.selectedIndex = 2; break;
+            case TradeManagerTab.TradeHistory: this.selectedIndex = 3; break;
+        }
     }
 }
