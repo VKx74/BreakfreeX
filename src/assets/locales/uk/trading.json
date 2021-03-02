@@ -24,7 +24,6 @@
     "amountToClose": "Кількість закриття",
     "compleatedAt": "Завершено",
     "address": "Адреса",
-    "market": "Ринок",
     "max": "Максимум",
     "fee": "Збір",
     "status": "Статус",
@@ -63,9 +62,26 @@
     "totalQty": "Кількість",
     "qtyFilled": "Заповнених",
     "qtyLeft": "Залишилось",
-    "stop": "Стоп",
-    "limit": "Ліміт",
-    "stopLimit": "Стоп Ліміт",
+    "orderType": {
+      "market": "Market",
+      "stop": "Stop",
+      "limit": "Limit",
+      "stopLimit": "Stop Limit",
+      "limitMaker": "Limit Maker",
+      "liquidation": "Liquidation",
+      "stopLoss": "Stop Loss",
+      "stopLossLimit": "Stop Loss Limit",
+      "stopMarket": "Stop Market",
+      "takeProfit": "Take Profit",
+      "takeProfitLimit": "Take Profit Limit"
+    },
+    "timeInForceType": {
+      "fillOrKill": "Fill Or Kill",
+      "goodTillCancel": "Good Till Cancel",
+      "goodTillCrossing": "Good Till Crossing",
+      "goodTillExpiredOrCanceled": "Good Till Expired Or Canceled",
+      "immediateOrCancel": "Immediate Or Cancel"
+    },
     "filledPrice": "Ціна заповнених",
     "placeOrder": "Зробити замовлення",
     "applyOrder": "Застосувати",
@@ -180,7 +196,13 @@
     "marginRatio": "Margin Ratio",
     "pnl": "PNL",
     "date": "Date",
-    "realizedProfit": "Realized Profit"
+    "realizedProfit": "Realized Profit",
+    "icebergQty": "Iceberg Qty.",
+    "limitPrice": "Ліміт ціна",
+    "stopPrice": "Стоп ціна",
+    "stop": "Стоп",
+    "limit": "Ліміт",
+    "timeInForce": "Час виконання"
   },
   "periodicity": {
     "minute": "Хвилина",

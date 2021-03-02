@@ -38,10 +38,17 @@
   "closeOrder": "Закриті позизції",
   "loading": "Завантаження...",
   "orderType": {
-    "market": "Маркет",
-    "stop": "Стоп",
-    "limit": "Ліміт",
-    "stopLimit": "Стоп Ліміт"
+    "market": "Market",
+    "stop": "Stop",
+    "limit": "Limit",
+    "stopLimit": "Stop Limit",
+    "limitMaker": "Limit Maker",
+    "liquidation": "Liquidation",
+    "stopLoss": "Stop Loss",
+    "stopLossLimit": "Stop Loss Limit",
+    "stopMarket": "Stop Market",
+    "takeProfit": "Take Profit",
+    "takeProfitLimit": "Take Profit Limit"
   },
   "barsCount": "Кількість бар",
   "validationErrors": {

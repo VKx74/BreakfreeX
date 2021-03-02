@@ -12,7 +12,16 @@ export enum OrderTypes {
     Market = 'Market',
     Limit = 'Limit',
     Stop = 'Stop',
-    StopLimit = 'StopLimit'
+    StopLimit = 'StopLimit',
+    StopLoss = 'StopLoss',
+    StopLossLimit = 'StopLossLimit',
+    StopMarket = 'StopMarket',
+    TakeProfit = 'TakeProfit',
+    TakeProfitMarket = 'TakeProfitMarket',
+    TakeProfitLimit = 'TakeProfitLimit',
+    LimitMaker = 'LimitMaker',
+    TrailingStopMarket = 'TrailingStopMarket',
+    Liquidation = 'Liquidation'
 }
 
 export enum OrderSide {
@@ -71,6 +80,14 @@ export enum TradeManagerTab {
     CurrencyRisk = 'CurrencyRisk',
     TradeHistory = 'TradeHistory',
     Funds = 'Funds'
+}
+
+export enum TimeInForce {
+    GoodTillCancel = 'GoodTillCancel', 
+    ImmediateOrCancel = 'ImmediateOrCancel', 
+    FillOrKill = 'FillOrKill', 
+    GoodTillCrossing = 'GoodTillCrossing', 
+    GoodTillExpiredOrCanceled = 'GoodTillExpiredOrCanceled'
 }
 
 export enum OrderPlacedFrom {

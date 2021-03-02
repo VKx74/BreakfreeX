@@ -424,10 +424,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
     @memoize({ primitive: true })
     orderTypeStr(type: OrderTypes): Observable<string> {
         const _map = {
-            [OrderTypes.Market]: 'tradeManager.market',
-            [OrderTypes.Limit]: 'tradeManager.limit',
-            [OrderTypes.Stop]: 'tradeManager.stop',
-            [OrderTypes.StopLimit]: 'tradeManager.stopLimit'
+            [OrderTypes.Market]: 'tradeManager.orderType.market',
+            [OrderTypes.Limit]: 'tradeManager.orderType.limit',
+            [OrderTypes.Stop]: 'tradeManager.orderType.stop',
+            [OrderTypes.StopLimit]: 'tradeManager.orderType.stopLimit'
         };
 
         return this._translateService.stream(_map[type]);

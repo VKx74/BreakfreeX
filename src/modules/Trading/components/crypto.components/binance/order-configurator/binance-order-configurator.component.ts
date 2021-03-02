@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
-import { ITradeTick, ITick } from "@app/models/common/tick";
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass } from "../../../../models/models";
+import { ITradeTick } from "@app/models/common/tick";
+import { OrderSide, OrderTypes, TimeInForce } from "../../../../models/models";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
-import { Observable, Subject, Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { BrokerService } from "@app/services/broker.service";
 import { finalize } from "rxjs/operators";
 import { AlertService } from "@alert/services/alert.service";
@@ -15,21 +15,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 
 
+// stopPrice - Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders.
+// icebergQty - Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order.
 export class BinanceOrderConfig {
     instrument: IInstrument;
     side: OrderSide;
     amount: number;
     type: OrderTypes;
-    // fillPolicy?: OrderFillPolicy;
-    // expirationType?: OrderExpirationType;
-    // expirationDate?: number;
-    price?: number; // Limit price
-    sl?: number; // Stop price
-    tp?: number; // Stop price
-    // comment?: string; // Stop price
-    // timeframe?: number;
-    // tradeType?: OrderTradeType;
-    // placedFrom?: OrderPlacedFrom;
+    price?: number;
+    stopPrice?: number;
+    icebergQty?: number;
+    tif?: TimeInForce;
+    useIcebergQty?: boolean;
 
     static createLimit(): BinanceOrderConfig {
         const order = this.create();
@@ -49,8 +46,7 @@ export class BinanceOrderConfig {
             side: OrderSide.Buy,
             amount: 0.1,
             type: OrderTypes.Market,
-            // expirationType: OrderExpirationType.GTC,
-            // fillPolicy: OrderFillPolicy.IOC
+            tif: TimeInForce.GoodTillCancel
         };
     }
 }
@@ -70,13 +66,14 @@ export class BinanceOrderConfig {
 export class BinanceOrderConfiguratorComponent implements OnInit {
     private _config: BinanceOrderConfig = BinanceOrderConfig.createMarket();
     private marketSubscription: Subscription;
-    private technicalComment: string;
+    OrderTypes = OrderTypes;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
     @Output() onOrderPlaced = new EventEmitter<any>();
     @Output() onInstrumentSelected = new EventEmitter<string>();
     @Input()
+
     set config(value: BinanceOrderConfig) {
         if (value) {
             this._config = value;
@@ -93,9 +90,8 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
     amountStep: number = 0.01;
     decimals: number = 5;
     lastTick: ITradeTick = null;
-    allowedOrderTypes: OrderTypes[] = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
-    orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
-    expirationTypes: OrderExpirationType[] = [OrderExpirationType.GTC, OrderExpirationType.Specified, OrderExpirationType.Today];
+    allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.StopLoss, OrderTypes.StopLossLimit, OrderTypes.TakeProfit, OrderTypes.TakeProfitLimit, OrderTypes.LimitMaker];
+    allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing, TimeInForce.GoodTillExpiredOrCanceled];
     processingSubmit: boolean;
 
     get instrumentSearchCallback(): (e?: EExchange, s?: string) => Observable<IInstrument[]> {
@@ -121,10 +117,31 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
     @memoize({ primitive: true })
     orderTypeStr(type: OrderTypes): Observable<string> {
         const _map = {
-            [OrderTypes.Market]: 'tradeManager.market',
-            [OrderTypes.Limit]: 'tradeManager.limit',
-            [OrderTypes.Stop]: 'tradeManager.stop',
-            [OrderTypes.StopLimit]: 'tradeManager.stopLimit'
+            [OrderTypes.Market]: 'tradeManager.orderType.market',
+            [OrderTypes.Limit]: 'tradeManager.orderType.limit',
+            [OrderTypes.Stop]: 'tradeManager.orderType.stop',
+            [OrderTypes.StopLimit]: 'tradeManager.orderType.stopLimit',
+            [OrderTypes.LimitMaker]: 'tradeManager.orderType.limitMaker',
+            [OrderTypes.Liquidation]: 'tradeManager.orderType.liquidation',
+            [OrderTypes.StopLoss]: 'tradeManager.orderType.stopLoss',
+            [OrderTypes.StopLossLimit]: 'tradeManager.orderType.stopLossLimit',
+            [OrderTypes.StopMarket]: 'tradeManager.orderType.stopMarket',
+            [OrderTypes.TakeProfit]: 'tradeManager.orderType.takeProfit',
+            [OrderTypes.TakeProfitLimit]: 'tradeManager.orderType.takeProfitLimit'
+        };
+
+        return this._translateService.stream(_map[type]);
+    }
+
+    @bind
+    @memoize({ primitive: true })
+    orderTIFStr(type: TimeInForce): Observable<string> {
+        const _map = {
+            [TimeInForce.FillOrKill]: 'tradeManager.timeInForceType.fillOrKill',
+            [TimeInForce.GoodTillCancel]: 'tradeManager.timeInForceType.goodTillCancel',
+            [TimeInForce.GoodTillCrossing]: 'tradeManager.timeInForceType.goodTillCrossing',
+            [TimeInForce.GoodTillExpiredOrCanceled]: 'tradeManager.timeInForceType.goodTillExpiredOrCanceled',
+            [TimeInForce.ImmediateOrCancel]: 'tradeManager.timeInForceType.immediateOrCancel'
         };
 
         return this._translateService.stream(_map[type]);
@@ -134,8 +151,20 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
         return this.config.side === OrderSide.Buy;
     }
 
-    isPriceVisible() {
-        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.Stop;
+    isPriceRequired() {
+        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit || this.config.type === OrderTypes.LimitMaker;
+    }
+
+    isStopPriceRequired() {
+        return this.config.type === OrderTypes.StopLoss || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit || this.config.type === OrderTypes.TakeProfit;
+    }
+
+    isIcebergQtyAllowed() {
+        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit;
+    }
+
+    isTimeInForceRequired() {
+        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit;
     }
 
     handleInstrumentChange(instrument: IInstrument) {
@@ -144,6 +173,10 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
 
     handleTypeSelected(type: OrderTypes) {
         this.config.type = type;
+    }
+
+    handleTIFSelected(type: TimeInForce) {
+        this.config.tif = type;
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
@@ -165,8 +198,6 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
         if (instrument) {
             if (resetPrice) {
                 this._config.price = 0;
-                this._config.sl = null;
-                this._config.tp = null;
             }
 
             broker.getPrice(symbol).subscribe((tick: ITradeTick) => {
@@ -213,16 +244,12 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
         }
 
         const broker = this._brokerService.activeBroker;
-        // let comment = (this.technicalComment || "") + (this.config.comment || "");
         const placeOrderData = {
-            // Comment: comment,
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
             Type: this.config.type,
-            Price: this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0,
-            SL: this.config.sl ? Number(this.config.sl) : 0,
-            TP: this.config.tp ? Number(this.config.tp) : 0,
+            // Price: this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0,
             // FillPolicy: this.config.fillPolicy,
             // ExpirationType: this.config.expirationType,
             // ExpirationDate: this._getSetupDate(),
@@ -230,6 +257,22 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
             // Timeframe: this.config.timeframe,
             // TradeType: this.config.tradeType
         };
+
+        if (this.isPriceRequired()) {
+            placeOrderData["Price"] = Number(this.config.price);
+        }
+
+        if (this.isStopPriceRequired()) {
+            placeOrderData["StopPrice"] = Number(this.config.stopPrice);
+        }
+
+        if (this.isTimeInForceRequired()) {
+            placeOrderData["TimeInForce"] = this.config.tif;
+        }
+
+        if (this.isIcebergQtyAllowed() && this.config.useIcebergQty && this.config.icebergQty) {
+            placeOrderData["IcebergQty"] = Number(this.config.icebergQty);
+        }
 
         this.processingSubmit = true;
         broker.placeOrder(placeOrderData)

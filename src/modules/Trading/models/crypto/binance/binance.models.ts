@@ -1,4 +1,4 @@
-import { IConnectionData } from "../../models";
+import { IConnectionData, OrderTypes } from "../../models";
 
 export interface BinanceConnectionData extends IConnectionData {
     APIKey: string;

@@ -25,7 +25,7 @@
 
                         <span class="orderpanelprefix" matPrefix>{{'amount' | translate}}</span>
                         <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
-                            type="number" [step]="priceStep" [(ngModel)]="config.amount">
+                            type="number" [step]="amountStep" [(ngModel)]="config.amount">
                     </mat-form-field>
                 </div>
             </div>
@@ -34,48 +34,64 @@
 
     <div class="flex-row">
         <div class="flex-column  padding-right">
-            <div class="crypto-form-unit  nborder  margin-bottom">
-
-
-                <selector class="bft-form-select " [selectedOption]="config.type" [options]="allowedOrderTypes"
-                    [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
-
+            <div class="crypto-form-unit margin-bottom">
+                <span class="form-unit__label">{{'tradeManager.type' | translate}}</span>
+                <div class="nborder">
+                    <selector class="bft-form-select" [selectedOption]="config.type" [options]="allowedOrderTypes"
+                        [optionCaption]="orderTypeStr" (onSelect)="handleTypeSelected($event)"></selector>
+                </div>
             </div>
         </div>
         <div class="flex-column padding-left">
-            <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceVisible()">
+            <div class="crypto-form-unit margin-bottom" [class.disabled]="!isTimeInForceRequired()">
+                <span class="form-unit__label">{{'tradeManager.timeInForce' | translate}}</span>
+                <div class="nborder">
+                    <selector class="bft-form-select" [selectedOption]="config.tif" [options]="allowedTIFTypes"
+                        [optionCaption]="orderTIFStr" (onSelect)="handleTIFSelected($event)"></selector>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="flex-row">
+        <div class="flex-column  padding-right">
+            <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceRequired()">
                 <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
-                    <span class="orderpanelprefix" matPrefix>{{'limitPrice' | translate}}</span>
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.limit' | translate}}</span>
                     <input matInput class="bftinput" type="number" numericInput [floatOnly]="true" [step]="priceStep"
-                        [range]="{min: minPriceValue}" [(ngModel)]="config.price">
+                        [range]="{min: minPriceValue}" [(ngModel)]="config.price" placeholder="Entre price">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex-column padding-left">
+            <div class="crypto-form-unit margin-bottom" [class.disabled]="!isStopPriceRequired()">
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.stop' | translate}}</span>
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                        [range]="{min: minPriceValue}" [(ngModel)]="config.stopPrice" placeholder="Entre price">
                 </mat-form-field>
             </div>
         </div>
     </div>
 
-
-    <div class="flex-row">
+    <div class="flex-row" *ngIf="isIcebergQtyAllowed()">
         <div class="flex-column  padding-right">
             <div class="crypto-form-unit margin-bottom">
-                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
-                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.stoploss' | translate}}</span>
-                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
-                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter SL" [(ngModel)]="config.sl">
-                </mat-form-field>
+                <mat-slide-toggle class="form-unit__label" [(ngModel)]="config.useIcebergQty">
+                    {{'tradeManager.icebergQty' | translate}}</mat-slide-toggle>
             </div>
         </div>
         <div class="flex-column padding-left">
             <div class="crypto-form-unit margin-bottom">
-                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
-                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.takeprofit' | translate}}</span>
-                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
-                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter TP"
-                        [(ngModel)]="config.tp">
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder"
+                    [class.disabled]="!config.useIcebergQty">
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.icebergQty' | translate}}</span>
+                    <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
+                        type="number" [step]="amountStep" [(ngModel)]="config.amount"
+                        placeholder="{{'tradeManager.icebergQty' | translate}}">
                 </mat-form-field>
             </div>
         </div>
-
     </div>
 </div>
 
