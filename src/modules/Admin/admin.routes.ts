@@ -25,4 +25,5 @@ export const AdminRoutes = {
     RunningScripts: 'running-scripts',
     XPDashboard: 'xp-dashboard',
     registrationsDashboard: 'registrations-dashboard',
+    TradingPerformanceMonitoring: 'trading-performance-monitoring'
 };

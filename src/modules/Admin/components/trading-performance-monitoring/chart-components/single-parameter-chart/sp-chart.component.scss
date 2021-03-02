@@ -1,0 +1,93 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+.bblur{
+  filter: blur(2px);
+}
+
+.instrument, .price-column {
+  margin: 0 30px;
+}
+
+.price-value {
+  font-size: 11px;
+}
+
+.name-chart {
+  font-size: 15px;
+}
+
+.price-change, .name-exchange {
+  font-size: 10px;
+}
+
+.select{
+    width: 150px;
+}
+
+.header-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+.selector-button{    
+    align-self: center;    
+}
+
+@include themify($themes, true) {
+  .watchlist-tile {
+    background-color: themed('appPanelColor');
+    border-radius: 10px;
+    color: themed('valueTextColor');
+    border: 1px solid transparent;
+    overflow:hidden;
+
+
+    .instrument, .price-value, .price-change {
+      color: themed('valueTextColor');
+    }
+    .name-exchange {
+      color: themed('titleTextColor');
+    }
+  }
+  .selected {
+    border: 1px solid themed('accentColor') !important;
+  }
+}
+
+
+
+.watchlist-tile-wrapper
+
+{
+ border: 2px solid transparent;
+}
+
+
+.watchlist-tile-wrapper:hover{
+ border: 2px solid #fff;
+}
+
+.tile-header {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  overflow: hidden;
+
+  .name-chart {
+    line-height: 40px;
+    float: left;
+    font-weight: 600;
+    overflow: hidden;
+  }
+  .type-data{
+    float: left;    
+    line-height: 25px;
+    font-weight: 600;
+    padding: 5px;
+  }
+}

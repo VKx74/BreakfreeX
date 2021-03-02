@@ -98,7 +98,6 @@ export class AppMembersComponent {
             onSearchError: (error: any, query: string) => {
             }
         };
-
     }
 
     handleStatusFilterChange(change: MatSelectChange) {

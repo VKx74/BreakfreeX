@@ -49,6 +49,8 @@ import {ForumCategoriesResolver} from "./resolvers/forum-categories.resolver";
 import { XPDashboardComponent } from './components/xp-dashboard/xp-dashboard.component';
 import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
 import { RegistrationsDashboardComponent } from './components/registrations-dashboard/registrations-dashboard.component';
+import { TPMonitoringComponent } from './components/trading-performance-monitoring/tp-monitoring.component';
+import { TPMonitoringResolver } from './resolvers/tp-monitoring.resolver';
 export const redirectUrl = `/${AppRoutes.Admin}`;
 
 const SYSTEM_MONITORING_URLS = AppConfigService.config.systemMonitoringUrls;
@@ -348,6 +350,25 @@ export const routes: Routes = [
                     },
                 },
                 component: RegistrationsDashboardComponent,
+            },
+            {
+                path: `${AdminRoutes.TradingPerformanceMonitoring}`,
+                canActivate: [RoleGuard, TagGuard],
+                data: {
+                    redirectUrl: redirectUrl,
+                    identifier: ComponentIdentifier.tradingPerformanceMonitoring,
+                    roleGuardConfig: {
+                        allowedRoles: [
+                            Roles.Admin,
+                            Roles.SupportOfficer,
+                        ],
+                        redirectUrl: redirectUrl
+                    },
+                },
+                resolve: {
+                    users: TPMonitoringResolver
+                },
+                component: TPMonitoringComponent
             },
             {
                 path: `${AdminRoutes.QA}`,

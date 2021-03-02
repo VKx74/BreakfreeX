@@ -140,6 +140,13 @@
                 <div class="item-text">Registrations</div>
             </div>
         </ng-container>
+        <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
+            <div class="section-item" [routerLink]="AdminRoutes.TradingPerformanceMonitoring"  *showByTag="ComponentIdentifier.tradingPerformanceMonitoring">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-trade-manager"></i></div>
+                <div class="item-text">TP monitoring</div>
+            </div>
+        </ng-container>
     </sidebar-section>
 
     <sidebar-section>
