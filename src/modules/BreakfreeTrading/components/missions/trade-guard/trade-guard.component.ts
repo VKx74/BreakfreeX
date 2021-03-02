@@ -44,7 +44,7 @@ export class TradeGuardComponent {
     ngOnDestroy() {
     }
 
-    doubleClicked(item: ITradeGuardItem) {
+    itemClicked(item: ITradeGuardItem) {
         if (!item) {
             return;
         }

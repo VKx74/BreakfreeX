@@ -419,6 +419,7 @@ export abstract class MTBroker implements IMTBroker {
                             result: true
                         });
                         this._initialize(data.Data);
+                        this.ws.setConnectivity(true);
                     } else {
                         observer.error(data.ErrorMessage);
                     }
@@ -453,7 +454,8 @@ export abstract class MTBroker implements IMTBroker {
         if (this._onReconnectSubscription) {
             this._onReconnectSubscription.unsubscribe();
         }
-
+        
+        this.ws.setConnectivity(false);
         this.ws.dispose();
 
         return of({
@@ -725,6 +727,7 @@ export abstract class MTBroker implements IMTBroker {
             this.ws.login(request).subscribe((data: MTLoginResponse) => {
                 if (data.IsSuccess) {
                     console.log("Reconnected");
+                    this.ws.setConnectivity(true);
                 } else {
                     console.error("Failed to Reconnected");
                 }
@@ -925,7 +928,8 @@ export abstract class MTBroker implements IMTBroker {
             Symbol: data.Symbol,
             PipPL: null,
             CloseTime: data.CloseTime,
-            RiskClass: null
+            RiskClass: null,
+            ClosePrice: data.ClosePrice
         };
 
         this._calculatePipPL(ord);

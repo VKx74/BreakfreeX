@@ -14,6 +14,9 @@ import {concat} from "@decorators/concat";
 import {Subscription} from "rxjs";
 import {AppRoutes} from "AppRoutes";
 import { SessionStorageService } from 'Storage';
+import { Angulartics2Facebook } from "angulartics2/facebook";
+import { FBPixelTrackingService } from "@app/services/traking/fb.pixel.tracking.service";
+import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 
 export interface IRecaptchaConfig {
     siteKey: string;
@@ -70,7 +73,10 @@ export class LoginPageComponent {
                 private _router: Router,
                 private _route: ActivatedRoute,
                 private _sessionStorage: SessionStorageService,
-                private _activatedRoute: ActivatedRoute) {
+                private _activatedRoute: ActivatedRoute,
+                private _angulartics2Facebook: Angulartics2Facebook,
+                private _fbPixelTrackingService: FBPixelTrackingService,
+                private _gtmTrackingService: GTMTrackingService) {
     }
 
     ngOnInit() {
@@ -93,6 +99,11 @@ export class LoginPageComponent {
 
                 if (params['email'] && params['confirmed'] && params['confirmed'] === 'True') {
                     this.formGroup.controls['email'].setValue(params['email']);
+
+                    this._fbPixelTrackingService.load();
+                    this._gtmTrackingService.load();
+                    this._gtmTrackingService.processRegistration("/registration-finished");
+                    this._angulartics2Facebook.eventTrack("CompleteRegistration", {currency: "USD", value: 0});
                 }
             });
     }

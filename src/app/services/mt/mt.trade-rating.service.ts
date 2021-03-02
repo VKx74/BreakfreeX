@@ -181,10 +181,12 @@ export class MTTradeRatingService {
 
         res.FailedChecks = [];
 
+        const breakevenRecommendation = order.NetPL > 0 ? "Move SL to breakeven" : "Move TP to breakeven";
+
         if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
-                Recommendation: "Move TPs to breakeven",
+                Recommendation: breakevenRecommendation,
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
             });
@@ -195,7 +197,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
                         Issue: "Trading against local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
                     });
@@ -204,7 +206,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Trading against strong local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.High,
                         RiskType: RiskType.WrongTrend
                     });
@@ -216,7 +218,7 @@ export class MTTradeRatingService {
             if (res.Timeframe < 60 * 60 * 24) {
                 res.FailedChecks.push({
                     Issue: "Trading against reversing of trends",
-                    Recommendation: "Cancel Order",
+                    Recommendation: breakevenRecommendation,
                     RiskClass: RiskClass.Medium,
                     RiskType: RiskType.WrongTrend
                 });
@@ -254,10 +256,12 @@ export class MTTradeRatingService {
 
         res.FailedChecks = [];
 
+        const breakevenRecommendation = position.NetPL > 0 ? "Move SLs to breakeven" : "Move TPs to breakeven";
+
         if (res.GlobalRTD !== null && !res.GlobalRTD) {
             res.FailedChecks.push({
                 Issue: "Trading against global trend",
-                Recommendation: "Move TPs to breakeven",
+                Recommendation: breakevenRecommendation,
                 RiskClass: RiskClass.High,
                 RiskType: RiskType.WrongTrend
             });
@@ -268,7 +272,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength !== RTDTrendStrength.Weak) {
                     res.FailedChecks.push({
                         Issue: "Trading against local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.Medium,
                         RiskType: RiskType.WrongTrend
                     });
@@ -277,7 +281,7 @@ export class MTTradeRatingService {
                 if (res.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
                     res.FailedChecks.push({
                         Issue: "Trading against strong local trend",
-                        Recommendation: "Move TPs to breakeven",
+                        Recommendation: breakevenRecommendation,
                         RiskClass: RiskClass.High,
                         RiskType: RiskType.WrongTrend
                     });
@@ -444,6 +448,15 @@ export class MTTradeRatingService {
     protected _calculateOrderChecklist(marketInfo: IBFTAMarketInfo, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
         let result: MTOrderValidationChecklist = {};
 
+        if (parameters.SL && parameters.Price) {
+            if (parameters.Side === OrderSide.Buy && parameters.SL >= parameters.Price) {
+                result.isSLReversed = true;
+            }
+            if (parameters.Side === OrderSide.Sell && parameters.SL <= parameters.Price) {
+                result.isSLReversed = true;
+            }
+        }
+
         if (marketInfo) {
             let allowedDiff = Math.abs(marketInfo.natural - marketInfo.support) / 3;
             let minGranularity = TimeSpan.MILLISECONDS_IN_MINUTE / 1000 * 15;
@@ -498,6 +511,38 @@ export class MTTradeRatingService {
             if (bid && ask) {
                 result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
             }
+
+            result.cVar = symbolTradeInfo.Data.CVaR;
+
+            if (!result.isSLReversed && parameters.SL && parameters.Price && result.cVar) {
+                let allowedMinDiff = parameters.Price / 100 * result.cVar;
+                let allowedMaxDiff = parameters.Price / 100 * result.cVar;
+                let hour = TimeSpan.MILLISECONDS_IN_HOUR / 1000;
+
+                if (parameters.Timeframe && parameters.Timeframe <= hour) {
+                    allowedMinDiff = allowedMinDiff / 12;
+                    allowedMaxDiff = allowedMaxDiff * 2;
+                } else if (parameters.Timeframe && parameters.Timeframe <= hour * 4) {
+                    allowedMinDiff = allowedMinDiff / 8;
+                    allowedMaxDiff = allowedMaxDiff * 3;
+                } else if (parameters.Timeframe && parameters.Timeframe <= hour * 24) {
+                    allowedMinDiff = allowedMinDiff / 4;
+                    allowedMaxDiff = allowedMaxDiff * 6;
+                } else {
+                    allowedMinDiff = allowedMinDiff / 2;
+                    allowedMaxDiff = allowedMaxDiff * 12;
+                }
+
+                let slToPriceDiff = Math.abs(parameters.SL - parameters.Price);
+                
+                if (slToPriceDiff <= allowedMinDiff) {
+                    result.isSLToClose = true;
+                }
+
+                if (slToPriceDiff >= allowedMaxDiff) {
+                    result.isSLToFare = true;
+                }
+            }
         }
 
         let positionRisk = this.mtBroker.getSamePositionsRisk(parameters.Symbol, parameters.Side);
@@ -507,6 +552,7 @@ export class MTTradeRatingService {
         if (Number.isNaN(result.CorrelatedRiskValue)) {
             result.CorrelatedRiskValue = 0;
         }
+
         return result;
     }
 

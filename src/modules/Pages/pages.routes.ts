@@ -1,3 +1,4 @@
 export const PagesRoutes = {
-    SuccessCheckout: 'success-checkout'
+    SuccessCheckout: 'success-checkout',
+    OAuthRegistrationFinished: 'oauth-registration-finished',
 };

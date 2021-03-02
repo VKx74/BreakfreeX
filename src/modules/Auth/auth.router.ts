@@ -31,6 +31,10 @@ import { LoginWithPageComponent } from './components/login-with-page/login-with-
                         component: LoginPageComponent
                     },
                     {
+                        path: AuthRoutes.RegistrationFinished,
+                        component: LoginPageComponent
+                    },
+                    {
                         path: AuthRoutes.LoginWith,
                         component: LoginWithPageComponent
                     },

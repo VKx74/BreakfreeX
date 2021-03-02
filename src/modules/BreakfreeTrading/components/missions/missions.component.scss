@@ -44,7 +44,22 @@
     }
   }
 
+  .quests-title {
+    display: flex;
+  }
   
+  .timer-ticker {
+    display: flex;
+    margin-left: 10px;
+    background-color: #7b4594;
+    color: white;
+    font-weight: 700;
+    padding: 0px 5px;
+    border-radius: 3px;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+  }
 
   .rank-title {
     .rank-avatar {

@@ -4,7 +4,7 @@ import {JsUtil} from "../../utils/jsUtil";
 
 export class UrlsManager {
     static registrationRedirectUrl(email: string): string {
-        return `${JsUtil.getRootUrl()}/#/${AppRoutes.Auth}/${AuthRoutes.Login}?email=${encodeURIComponent(email)}`;
+        return `${JsUtil.getRootUrl()}/#/${AppRoutes.Auth}/${AuthRoutes.RegistrationFinished}?email=${encodeURIComponent(email)}`;
     }
 
     static restorePasswordRedirectUrl(): string {

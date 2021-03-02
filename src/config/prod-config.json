@@ -2,6 +2,7 @@
   "apiKey": "8e738606c9ba4315aae2ef0ac15d6740",
   "fileStorageApiKey": "123",
   "apiUrls": {
+    "successCheckoutRedirect": "https://breakfreetrading.com/success-checkout.html",
     "identityUrl": "https://auth-platform.breakfreetrading.com/",
     "webSocketUrl": "wss://ws-platform.breakfreetrading.com/wsnotification",
     "bitmexREST": "https://feed.breakfreetrading.com/bitmex/",

@@ -10,6 +10,7 @@ export type ServicesHealthCheckUrls = {
 };
 
 export interface ApiUrls {
+    successCheckoutRedirect: string;
     identityUrl: string;
     webSocketUrl: string;
     bitmexREST: string;

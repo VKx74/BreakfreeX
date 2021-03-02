@@ -3,6 +3,7 @@ import { Modal } from "Shared";
 import { IdentityService } from '@app/services/auth/identity.service';
 import { IBFTMissions, TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { UsersProfileService } from '@app/services/users-profile.service';
+import { MissionTrackingService } from '@app/services/missions-tracking.service';
 
 enum Ranks {
     Newbie = "Newbie",
@@ -29,6 +30,8 @@ enum Sections {
 })
 export class MissionsComponent extends Modal<MissionsComponent> implements OnInit {
     private _name: string;
+    private _timeInterval: any;
+    private _timeToUpdate: string;
 
     public Sections = Sections;
     public Ranks: any = Ranks;
@@ -58,11 +61,17 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
         return this._name;
     }
 
+    public get timeToUpdate(): string {
+        return this._timeToUpdate;
+    }
+
     constructor(private _injector: Injector,
                 private _identityService: IdentityService,
                 private _profileService: UsersProfileService,
-                private _tradingProfileService: TradingProfileService) {
+                private _tradingProfileService: TradingProfileService,
+                private _missionTrackingService: MissionTrackingService) {
         super(_injector);
+        this._updateTimer();
     }
 
     selectPeriod(period: Sections) {
@@ -79,15 +88,32 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
                     this._name = `${this._identityService.firstName} ${this._identityService.lastName}`;
                 }
             });
+
+        this._timeInterval = setInterval(() => {
+            this._updateTimer();
+        }, 1000);
     }
 
     ngAfterViewInit() {
     }
 
     ngOnDestroy() {
+        if (this._timeInterval) {
+            clearInterval(this._timeInterval);
+        }
     }
     
     onClose() {
         this.close();
+    }
+
+    private _updateTimer() {
+        let diff = (this._missionTrackingService.nextUpdateTime - new Date().getTime()) / 1000;
+        let minutes = Math.trunc(diff / 60);
+        let seconds = Math.trunc(diff - (minutes * 60)).toString();
+        if (seconds.length < 2) {
+            seconds = `0${seconds}`;
+        }
+        this._timeToUpdate = `${minutes}:${seconds}`;
     }
 }

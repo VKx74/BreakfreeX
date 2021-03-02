@@ -196,4 +196,8 @@ export class MTHelper {
     
         return RiskClass.Extreme;
     }
+
+    public static calculatePositionSize(accountSize: number, suggestedRisk: number, priceDiff: number, contract?: number) {
+        return (((accountSize * (suggestedRisk / 100)) / Math.abs(priceDiff))) / contract;
+    }
 }

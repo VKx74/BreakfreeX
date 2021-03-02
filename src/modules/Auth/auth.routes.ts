@@ -1,5 +1,6 @@
 export const AuthRoutes = {
     Login: 'login',
+    RegistrationFinished: 'registration-finished',
     LoginWith: 'login-with',
     Registration: 'registration',
     Confirming: 'confirming',

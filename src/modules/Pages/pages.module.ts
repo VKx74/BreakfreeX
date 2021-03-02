@@ -5,11 +5,16 @@ import {SharedModule} from "Shared";
 import { PagesRootComponent } from './components/root/pages-root.component';
 import { SuccessCheckoutPageComponent } from './components/success-checkout-page/success-checkout-page.component';
 import { PagesRoutingModule } from './pages.router';
+import { OAuthRegistrationFinishedComponent } from "./components/oauth-registration-finished/oauth-registration-finished.component";
+import { Angulartics2Facebook } from "angulartics2/facebook";
+import { FBPixelTrackingService } from "@app/services/traking/fb.pixel.tracking.service";
+import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 
 @NgModule({
     declarations: [
         PagesRootComponent,
-        SuccessCheckoutPageComponent
+        SuccessCheckoutPageComponent,
+        OAuthRegistrationFinishedComponent
     ],
     imports: [
         CommonModule,
@@ -18,6 +23,9 @@ import { PagesRoutingModule } from './pages.router';
         PagesRoutingModule
     ],
     providers: [
+        Angulartics2Facebook,
+        FBPixelTrackingService,
+        GTMTrackingService
     ],
     entryComponents: []
 })

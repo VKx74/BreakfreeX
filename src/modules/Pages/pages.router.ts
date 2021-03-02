@@ -3,6 +3,7 @@ import {NgModule} from "@angular/core";
 import { PagesRootComponent } from './components/root/pages-root.component';
 import { PagesRoutes } from './pages.routes';
 import { SuccessCheckoutPageComponent } from './components/success-checkout-page/success-checkout-page.component';
+import { OAuthRegistrationFinishedComponent } from "./components/oauth-registration-finished/oauth-registration-finished.component";
 
 
 @NgModule({
@@ -15,6 +16,10 @@ import { SuccessCheckoutPageComponent } from './components/success-checkout-page
                     {
                         path: PagesRoutes.SuccessCheckout,
                         component: SuccessCheckoutPageComponent
+                    },
+                    {
+                        path: PagesRoutes.OAuthRegistrationFinished,
+                        component: OAuthRegistrationFinishedComponent
                     }
                 ]
             }

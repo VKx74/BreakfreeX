@@ -9,8 +9,14 @@
   display: block;
   overflow: auto;
   background: #191919;
+
+  .title {
+    color: #8c8c8c;
+    font-size: 18px;
+    margin-top: 5px;
+  }
  
-  .login-page {
+  .oauth-registration-finished {
     display: flex;
     position: fixed;
     width: 100%;

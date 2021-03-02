@@ -152,7 +152,8 @@ export class AppMemberConfiguratorComponent extends Modal<ConfiguratorConfig, Me
             id: this.data.user.id,
             email: controls['email'].value,
             userName: controls['userName'].value,
-            role: controls['role'].value as string
+            role: controls['role'].value as string,
+            stripeId: controls['stripeId'].value as string
         })
             .pipe(
                 flatMap((user: UserModel) => {
@@ -216,14 +217,16 @@ export class AppMemberConfiguratorComponent extends Modal<ConfiguratorConfig, Me
         if (this.isUserUpdating) {
             return new FormGroup({
                 role: new FormControl(this.user.role),
-                userName: new FormControl(this.user.userName, [Validators.required, Validators.minLength(3)]),
-                email: new FormControl(this.user.email, [Validators.required, Validators.email])
+                userName: new FormControl(this.user.userName, [Validators.required, Validators.minLength(1)]),
+                email: new FormControl(this.user.email, [Validators.required, Validators.email]),
+                stripeId: new FormControl(this.user.stripeId)
             });
         } else {
             return new FormGroup({
                 role: new FormControl(this.user.role || Roles.User),
                 email: new FormControl('', [Validators.required, Validators.email]),
-                password: new FormControl('', [Validators.required, passwordValidator()])
+                password: new FormControl('', [Validators.required, passwordValidator()]),
+                stripeId: new FormControl('')
             });
         }
     }

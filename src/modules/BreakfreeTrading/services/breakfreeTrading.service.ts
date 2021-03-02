@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { WebsocketBase } from '@app/interfaces/socket/socketBase';
 import { BFTSocketService } from '@app/services/socket/bft.socket.service';
-import { AlgoService, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAlgoParameters, IBFTAMarketInfo, IRTDPayload } from '@app/services/algo.service';
+import { AlgoService, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAlgoParameters, IBFTAMarketInfo, IBFTAPositionSize, IBFTAPositionSizeParameters, IRTDPayload } from '@app/services/algo.service';
 import { IInstrument } from '@app/models/common/instrument';
 
 export interface IPoolItem {

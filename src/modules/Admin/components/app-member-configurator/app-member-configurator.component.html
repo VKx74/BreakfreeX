@@ -39,6 +39,15 @@
                 </div>
 
 
+                <div class="crypto-form-unit">
+                    <div class="form-unit__label">Stripe ID:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="stripeId" placeholder="Stripe ID">
+                        <i class="crypto-icon crypto-icon-document-id" matSuffix></i>
+                    </mat-form-field>
+                </div>
+
+
                 <div class="crypto-form-unit" *ngIf="isUserCreating">
                     <p class="form-unit__label">Password:</p>
                     <mat-form-field class="crypto-input with-hint full-width">

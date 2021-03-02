@@ -51,6 +51,7 @@ export interface MTOrder {
 
 export interface MTHistoricalOrder extends MTOrder {
     CloseTime: number;
+    ClosePrice: number;
 }
 
 export interface MTPlaceOrder {
@@ -170,6 +171,10 @@ export interface MTOrderValidationChecklist {
     PositionRiskValue?: number;
     SpreadRiskValue?: number;
     CorrelatedRiskValue?: number;
+    cVar?: number;
+    isSLReversed?: boolean;
+    isSLToClose?: boolean;
+    isSLToFare?: boolean;
 }
 
 export enum RTDTrendStrength {

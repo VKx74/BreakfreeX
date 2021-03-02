@@ -35,7 +35,8 @@ export enum OrderExpirationType {
 export enum OrderTradeType {
     BRC = 'BRC',
     SWING = 'SWING',
-    EXT = 'EXT'
+    EXT = 'EXT',
+    None = ""
 }
 
 export enum RiskClass {
