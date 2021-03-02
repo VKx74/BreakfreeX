@@ -11,8 +11,8 @@
                                         [noItems]="!Users?.length"
                                         [componentIdentifier]="ComponentIdentifier.eventsLog"
                                         [title]="'User accounts'"
-                                        [loading]="loading">
-                    <div>
+                                        [loading]="showSpinner">
+                    <div class="search-container">
                         <manual-search [searchHandler]="searchHandler" placeholder="Search items...">
                             <span manual-search-trigger></span>
                         </manual-search>

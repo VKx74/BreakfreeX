@@ -37,6 +37,7 @@
 
 .selector-button{    
     align-self: center;    
+    padding: 3px 8px;
 }
 
 @include themify($themes, true) {

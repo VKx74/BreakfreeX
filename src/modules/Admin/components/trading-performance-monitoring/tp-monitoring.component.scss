@@ -3,78 +3,102 @@
 @import "global-styles/themes/themes";
 
 :host {
-  height: 100%;  
+  height: 100%;
   width: 100%;
-  
+
+  /deep/ {
+    .mat-form-field-flex {
+      height: 24px !important;  
+    }
+    
+    mat-select {
+      height: 24px;  
+      font-size: 11px !important;
+      .mat-select-value {
+        font-size: 11px !important;
+      }
+    }
+  }
+
+  .search-container {
+    padding: 5px;
+  }
+
   .mat-tab-group ::ng-deep {
-  .mat-tab-labels{
-    justify-content: center;
-    background-color: transparent !important;
-  }
-  
-  .mat-tab-label{
-    font-size: 15px !important;
-    background-color: transparent !important;
-    padding: 0 20px 5px !important;
-  }
-  
-  .mat-tab-label-active{
-    border-radius: 0;
-    border-bottom: 2px solid #397dc4;
-    border-top: 0 !important; 
-  }
-  
-  .overflowhidden{
-    overflow: hidden !important;
-  }
-  
-  .mat-cell{
-    padding-right: 10px !important;
-  }
+    .mat-tab-labels {
+      justify-content: center;
+      background-color: transparent !important;
+    }
 
-  mat-row.expanded-row-details{
-    height: 0;
-    overflow: hidden;    
+    .mat-tab-label {
+      font-size: 15px !important;
+      background-color: transparent !important;
+      padding: 0 20px 5px !important;
+    }
+
+    .mat-tab-label-active {
+      border-radius: 0;
+      border-bottom: 2px solid #397dc4;
+      border-top: 0 !important;
+    }
+
+    .overflowhidden {
+      overflow: hidden !important;
+    }
+
+    .mat-cell {
+      padding-right: 10px !important;
+    }
+
+    mat-row.expanded-row-details {
+      height: 0;
+      overflow: hidden;
+    }
+    mat-row.expanded-row-details.is-expanded {
+      height: auto;
+      overflow: hidden;
+    }
+    mat-row {
+      cursor: pointer;
+      &:hover {
+        background-color: #6785de55 !important;
+      }
+    }
   }
-  mat-row.expanded-row-details.is-expanded{
-    height: auto;
-    overflow: hidden;    
-  }
-}
   //--------------------------
-  .flex-center{
+  .flex-center {
     justify-content: center;
   }
 
-  .content{
+  .content {
     width: 1300px;
     max-width: 100%;
-    height: 100%;    
+    height: 100%;
   }
 
-  .theidentiButton{    
+  .theidentiButton {
     line-height: 1.5;
     margin: 5px;
     padding: 4px;
     border: 1px solid gray;
-    border-radius: 3px;    
+    border-radius: 3px;
   }
 
-  .isselected{
-    background-color: red;
+  .isselected {
+    background-color: lightcoral;
   }
-  
-  .otherclass{
+
+  .otherclass {
     background-color: green;
     display: flow-root;
   }
 
-  .testclass{
+  .testclass {
     background-color: black;
-    float:left; 
+    float: left;
     display: inline;
   }
-	
+
   .charts-wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -82,12 +106,11 @@
     padding: 5px;
 
     .watchlist-tile-wrapper {
-      
       border-radius: 5px;
       border: 1px solid grey;
       position: relative;
       cursor: pointer;
-      margin:2px;
+      margin: 2px;
 
       &:hover {
         .remove-instrument-button {
@@ -128,8 +151,8 @@
   @include themify($themes, true) {
     .functional-icons {
       .crypto-icon {
-        color: themed('valueTextColor');
+        color: themed("valueTextColor");
       }
-    }    
+    }
   }
 }

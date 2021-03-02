@@ -32,7 +32,7 @@
     <div class="period-selectors">
         <div *ngFor="let pselector of periodSelectors">
         <div class="selector-wrapper">
-            <button class="selector-button" [ngClass]="{'btn-selected': pselector.isSelected}" (click)="selectPeriod(pselector)">
+            <button class="selector-button crypto-button crypto-button_primary" [ngClass]="{'btn-selected': pselector.isSelected}" (click)="selectPeriod(pselector)">
                 {{pselector.name}}
             </button>            
         </div>

@@ -5,7 +5,7 @@
         <div *ngFor="let acc of UserAccounts">            
             <div>
                 <div class="mt-acc-wrapper">
-                    <button class="mtButton" [ngClass]="{'isselected' : acc.isSelected}" (click)="onSelectMTAccount(acc)">
+                    <button class="mtButton crypto-button crypto-button_primary" [ngClass]="{'isselected' : acc.isSelected}" (click)="onSelectMTAccount(acc)">
                         {{acc.name}}
                     </button>                    
                 </div>
