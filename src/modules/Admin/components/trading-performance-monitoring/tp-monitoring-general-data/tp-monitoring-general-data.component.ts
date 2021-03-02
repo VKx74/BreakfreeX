@@ -385,10 +385,9 @@ export class TPMonitoringGeneralDataComponent implements OnInit {
     private loadTradedVolume(): void {
         this._tpMonitoringService.getTradedVolume()
             .subscribe((data: { [key: number]: number }) => {
-                if (data) {
-                    //toLocaleString('default', { month: 'long', year:'numeric'});
+                if (data) {                    
                     let strData: { [key: string]: number } = {};
-                    var keys = Object.keys(data);
+                    let keys = Object.keys(data);
                     keys.forEach((key) => {
                         let dateUnix = parseInt(key, 10);
                         let date = new Date(dateUnix * 1000);
