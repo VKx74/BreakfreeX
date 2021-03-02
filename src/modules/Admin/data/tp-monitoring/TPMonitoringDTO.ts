@@ -32,7 +32,7 @@ export class MTAccountPerformanceData {
 
     balance: number;
     profit: number;
-    totalVolume: number;
+    totalTrades: number;
     totalInstruments: number;
 
     profitability: string;
