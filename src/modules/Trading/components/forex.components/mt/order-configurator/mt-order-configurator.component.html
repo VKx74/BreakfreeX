@@ -174,15 +174,19 @@
                 <div class="flex-column padding-right">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
-                        <selector class="bft-form-select  nborder " [selectedOption]="config.expirationType"
-                            [options]="expirationTypes" (onSelect)="handleExpirationTypeSelected($event)"></selector>
+                        <div class="nborder">
+                            <selector class="bft-form-select " [selectedOption]="config.expirationType"
+                                [options]="expirationTypes" (onSelect)="handleExpirationTypeSelected($event)"></selector>
+                        </div>
                     </div>
                 </div>
                 <div class="flex-column padding-left">
                     <div class="crypto-form-unit margin-bottom">
                         <div class="form-unit__label">{{'tradeManager.fillPolicy' | translate}}</div>
-                        <selector class="bft-form-select  nborder " [selectedOption]="config.fillPolicy"
-                            [options]="orderFillPolicies" (onSelect)="handleFillPolicySelected($event)"></selector>
+                        <div class="nborder">
+                            <selector class="bft-form-select" [selectedOption]="config.fillPolicy"
+                                [options]="orderFillPolicies" (onSelect)="handleFillPolicySelected($event)"></selector>
+                        </div>
                     </div>
                 </div>
             </div>
