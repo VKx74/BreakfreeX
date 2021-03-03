@@ -20,7 +20,6 @@ import { BaseNavComponent } from './components/base-nav/base-nav.component';
 import { NavDelimiterComponent } from './components/nav-delimiter/nav-delimiter.component';
 import { NavSectionComponent } from './components/nav-section/nav-section.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { BadgeComponent } from './components/badge/badge.component';
 
 @NgModule({
     declarations: [
@@ -31,8 +30,7 @@ import { BadgeComponent } from './components/badge/badge.component';
         SidebarToggleComponent,
         BaseNavComponent,
         NavDelimiterComponent,
-        NavSectionComponent,
-        BadgeComponent
+        NavSectionComponent
     ],
     imports: [
         CommonModule,

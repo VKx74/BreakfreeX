@@ -1,0 +1,92 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .content {
+    display: flex;
+    padding: 10px 40px;
+    flex-direction: column;
+  }
+
+  .container-header {
+    font-size: 11px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+
+    .show-username {
+      display: flex;
+      .lable-text {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .ranks-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: 12px;
+
+    .ranks-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      margin: 5px;
+      padding: 5px 15px;
+    }
+
+    .ranks-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 3px;
+      padding: 5px 15px;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
+      border: 1px solid transparent;
+    }
+
+    .badge-name {
+      margin-left: 10px;
+    }
+
+    .ranking-cell,
+    .badge-cell,
+    .name-cell,
+    .level-cell {
+      display: flex;
+      // justify-content: center;
+      align-items: center;
+    }
+
+    .own-row {
+      background-color: #7b459470 !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .content {
+      display: flex;
+      padding: 10px;
+    }
+
+    .container-header {
+      flex-direction: column-reverse;
+    }
+
+    .description {
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .content {
+      display: flex;
+      padding: 10px 20px;
+    }
+  }
+}
+
+@include themify($themes, true) {
+}

@@ -16,26 +16,7 @@
             </div>  
             <div class="rank-title">
                 <div class="rank-avatar">
-                    <ng-container [ngSwitch]="rank">
-                        <ng-container *ngSwitchCase="Ranks.Bronze">
-                            <img src="/assets/img/ranks/badge_bronze.png" />
-                        </ng-container>
-                        <ng-container *ngSwitchCase="Ranks.Silver">
-                            <img src="/assets/img/ranks/badge_silver.png" />
-                        </ng-container>
-                        <ng-container *ngSwitchCase="Ranks.Gold">
-                            <img src="/assets/img/ranks/badge_gold.png" />
-                        </ng-container>
-                        <ng-container *ngSwitchCase="Ranks.Platinum">
-                            <img src="/assets/img/ranks/badge_platinum.png" />
-                        </ng-container>
-                        <ng-container *ngSwitchCase="Ranks.Master">
-                            <img src="/assets/img/ranks/badge_master.png" />
-                        </ng-container>
-                        <ng-container *ngSwitchCase="Ranks.Legend">
-                            <img src="/assets/img/ranks/badge_grandmaster.png" />
-                        </ng-container>
-                     </ng-container>
+                     <badge></badge>
                 </div>
                 <div class="rank-name">
                     {{rank}}
@@ -62,11 +43,12 @@
             <div class="menu-subitem" [ngClass]="{'selected': selectedSection == Sections.Weekly}" (click)="selectPeriod(Sections.Weekly)">Weekly Quests</div>
             <div class="menu-item" [ngClass]="{'selected': selectedSection == Sections.Analysis}" (click)="selectPeriod(Sections.Analysis)">Analysis</div>
             <div class="menu-item mobile-margin-right" [ngClass]="{'selected': selectedSection == Sections.Info}" (click)="selectPeriod(Sections.Info)">Ranks</div>
+            <div class="menu-item mobile-margin-right" [ngClass]="{'selected': selectedSection == Sections.LeaderDashboard}" (click)="selectPeriod(Sections.LeaderDashboard)">Leader Dashboard</div>
         </div>
         </div>
         <div class="center">
             <div class="header">
-                <div class="section-name">{{selectedSection}}</div>
+                <div class="section-name">{{selectedSectionTitle()}}</div>
             </div>
             <div class="mission-content">
                 <ng-container [ngSwitch]="selectedSection">
@@ -84,6 +66,9 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="Sections.Analysis">
                         <user-trading-performance></user-trading-performance>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Sections.LeaderDashboard">
+                        <leader-dashboard-component></leader-dashboard-component>
                     </ng-container>
                  </ng-container>
             </div>

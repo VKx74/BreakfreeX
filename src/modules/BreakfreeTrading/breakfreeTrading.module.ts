@@ -46,6 +46,7 @@ import { TradingPerformanceService, UserTradingPerformanceData } from './service
 import { TradeGuardService } from './services/tradeGuard.service';
 import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
 import { TradingPerformanceComponent } from './components/tradingPerformance/tradingPerformance.component';
+import { LeaderDashboardComponent } from './components/missions/leader-dashboard/leader-dashboard.component';
 
 @NgModule({
     // components here
@@ -67,7 +68,8 @@ import { TradingPerformanceComponent } from './components/tradingPerformance/tra
         SpeedometerComponent,
         PlainChartComponent,
         TradeGuardRiskClassPipe,
-        TradingPerformanceComponent
+        TradingPerformanceComponent,
+        LeaderDashboardComponent
     ],
     imports: [
         CommonModule,
