@@ -1,4 +1,4 @@
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType, IConnectionData } from 'modules/Trading/models/models';
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType, IConnectionData, IOrder, IOrderRisk } from 'modules/Trading/models/models';
 import { IBFTATrend } from '@app/services/algo.service';
 
 export interface MTTradingAccount {
@@ -14,24 +14,12 @@ export interface MTTradingAccount {
     RiskPercentage?: number;
 }
 
-export interface MTOrder {
-    Id: number;
-    Symbol: string;
-    Size: number;
-    Price: number;
-    CurrentPrice?: number;
+export interface MTOrder extends IOrder, IOrderRisk {
     Commission?: number;
     Swap?: number;
-    SL?: number;
-    TP?: number;
-    NetPL?: number;
     ProfitRate?: number;
     ContractSize?: number;
-    Risk?: number;
-    RiskPercentage?: number;
     PipPL?: number;
-    Side: OrderSide;
-    Type: OrderTypes;
     Status: string;
     Time: number;
     VAR: number;
@@ -39,7 +27,6 @@ export interface MTOrder {
     ExpirationType?: OrderExpirationType;
     ExpirationDate?: number;
     Recommendations?: MTOrderRecommendation;
-    RiskClass: RiskClass;
 }
 
 export interface MTHistoricalOrder extends MTOrder {

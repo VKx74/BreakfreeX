@@ -1,4 +1,4 @@
-import { ActionResult, BrokerConnectivityStatus } from "../../../modules/Trading/models/models";
+import { ActionResult, BrokerConnectivityStatus, IOrder } from "../../../modules/Trading/models/models";
 import { EExchange } from "../../models/common/exchange";
 import { Observable, Subject, Subscription } from "rxjs";
 import { IInstrument } from "../../models/common/instrument";
@@ -29,8 +29,8 @@ export interface IBroker {
     // onPositionsUpdated: Subject<any[]>;
 
     status: BrokerConnectivityStatus;
-    orders: any[];
-    ordersHistory: any[];
+    orders: IOrder[];
+    ordersHistory: IOrder[];
     // currencyRisks: any[];
     accountInfo: any;
 

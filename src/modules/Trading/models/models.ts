@@ -120,3 +120,22 @@ export interface ICancelOrderAction {
 export interface ICloseTradeAction {
     Id: string;
 }
+
+export interface IOrder {
+    Id: number;
+    Symbol: string;
+    Size: number;
+    Price: number;
+    CurrentPrice?: number;
+    SL?: number;
+    TP?: number;
+    Side: OrderSide;
+    Type: OrderTypes;
+    NetPL?: number;
+}
+
+export interface IOrderRisk {
+    Risk?: number;
+    RiskPercentage?: number;
+    RiskClass?: RiskClass;
+}
