@@ -23,6 +23,14 @@ export class MissionTrackingService {
         return this._nextUpdateTime;
     }
 
+    public get broker(): MTBroker {
+        if (this._brokerService.activeBroker instanceof MTBroker) {
+            return this._brokerService.activeBroker as MTBroker;
+        }
+
+        return null;
+    }
+
     constructor(private _identity: IdentityService,
         private _notificationService: NotificationsService,
         private _brokerService: BrokerService,
@@ -32,7 +40,7 @@ export class MissionTrackingService {
             this._processMissions();
         });
         this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
-            if (this._brokerService.activeBroker instanceof MTBroker) {
+            if (this.broker) {
                 this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
                     this._recalculate();
                 }); 
@@ -55,10 +63,10 @@ export class MissionTrackingService {
     }
 
     public _recalculate() {
-        if (!this._recalculateRequired) {
+        if (!this.broker) {
             return;
         }
-        let activeBroker = this._brokerService.activeBroker as MTBroker;
+        let activeBroker = this.broker;
         if (activeBroker && activeBroker.canCalculateHighestVAR(OrderTypes.Market)) {
             this._recalculateRequired = false;
             this._updateMissions();
@@ -90,16 +98,15 @@ export class MissionTrackingService {
     }
 
     private _updateMissions() {
-        if (!this._identity.isAuthorizedCustomer) {
+        if (!this._identity.isAuthorizedCustomer || !this.broker) {
             return;
         }   
         
         let varRisk = null;
         let currencyVarRisk = 0;
-        let activeBroker = this._brokerService.activeBroker as MTBroker;
-        if (this._brokerService.isConnected && activeBroker) {
-            varRisk = activeBroker.calculateHighestVAR(OrderTypes.Market);
-            const risks = activeBroker.currencyRisks;
+        if (this._brokerService.isConnected && this.broker) {
+            varRisk = this.broker.calculateHighestVAR(OrderTypes.Market);
+            const risks = this.broker.currencyRisks;
             for (const risk of risks) {
                 if (risk.Type !== MTCurrencyRiskType.Actual) {
                     continue;

@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
-import { ITradeTick, ITick } from "@app/models/common/tick";
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass } from "../../../../models/models";
+import { ITradeTick } from "@app/models/common/tick";
+import { OrderSide, OrderTypes, TimeInForce } from "../../../../models/models";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
-import { Observable, Subject, Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { BrokerService } from "@app/services/broker.service";
 import { finalize } from "rxjs/operators";
 import { AlertService } from "@alert/services/alert.service";
@@ -20,16 +20,9 @@ export class BinanceFuturesOrderConfig {
     side: OrderSide;
     amount: number;
     type: OrderTypes;
-    // fillPolicy?: OrderFillPolicy;
-    // expirationType?: OrderExpirationType;
-    // expirationDate?: number;
-    price?: number; // Limit price
-    sl?: number; // Stop price
-    tp?: number; // Stop price
-    // comment?: string; // Stop price
-    // timeframe?: number;
-    // tradeType?: OrderTradeType;
-    // placedFrom?: OrderPlacedFrom;
+    price?: number;
+    stopPrice?: number;
+    tif?: TimeInForce;
 
     static createLimit(): BinanceFuturesOrderConfig {
         const order = this.create();
@@ -49,8 +42,7 @@ export class BinanceFuturesOrderConfig {
             side: OrderSide.Buy,
             amount: 0.1,
             type: OrderTypes.Market,
-            // expirationType: OrderExpirationType.GTC,
-            // fillPolicy: OrderFillPolicy.IOC
+            tif: TimeInForce.GoodTillCancel
         };
     }
 }
@@ -70,12 +62,13 @@ export class BinanceFuturesOrderConfig {
 export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
     private _config: BinanceFuturesOrderConfig = BinanceFuturesOrderConfig.createMarket();
     private marketSubscription: Subscription;
-    private technicalComment: string;
+    OrderTypes = OrderTypes;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
     @Output() onOrderPlaced = new EventEmitter<any>();
     @Output() onInstrumentSelected = new EventEmitter<string>();
+
     @Input()
     set config(value: BinanceFuturesOrderConfig) {
         if (value) {
@@ -93,9 +86,8 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
     amountStep: number = 0.01;
     decimals: number = 5;
     lastTick: ITradeTick = null;
-    allowedOrderTypes: OrderTypes[] = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
-    orderFillPolicies: OrderFillPolicy[] = [OrderFillPolicy.FF, OrderFillPolicy.FOK, OrderFillPolicy.IOC];
-    expirationTypes: OrderExpirationType[] = [OrderExpirationType.GTC, OrderExpirationType.Specified, OrderExpirationType.Today];
+    allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.Stop, OrderTypes.TakeProfit, OrderTypes.StopMarket, OrderTypes.TakeProfitMarket];
+    allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing, TimeInForce.GoodTillExpiredOrCanceled];
     processingSubmit: boolean;
 
     get instrumentSearchCallback(): (e?: EExchange, s?: string) => Observable<IInstrument[]> {
@@ -124,7 +116,30 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
             [OrderTypes.Market]: 'tradeManager.orderType.market',
             [OrderTypes.Limit]: 'tradeManager.orderType.limit',
             [OrderTypes.Stop]: 'tradeManager.orderType.stop',
-            [OrderTypes.StopLimit]: 'tradeManager.orderType.stopLimit'
+            [OrderTypes.StopLimit]: 'tradeManager.orderType.stopLimit',
+            [OrderTypes.LimitMaker]: 'tradeManager.orderType.limitMaker',
+            [OrderTypes.Liquidation]: 'tradeManager.orderType.liquidation',
+            [OrderTypes.StopLoss]: 'tradeManager.orderType.stopLoss',
+            [OrderTypes.StopLossLimit]: 'tradeManager.orderType.stopLossLimit',
+            [OrderTypes.StopMarket]: 'tradeManager.orderType.stopMarket',
+            [OrderTypes.TakeProfit]: 'tradeManager.orderType.takeProfit',
+            [OrderTypes.TakeProfitLimit]: 'tradeManager.orderType.takeProfitLimit',
+            [OrderTypes.TakeProfitMarket]: 'tradeManager.orderType.takeProfitMarket',
+            [OrderTypes.TrailingStopMarket]: 'tradeManager.orderType.trailingStopMarket',
+        };
+
+        return this._translateService.stream(_map[type]);
+    }
+
+    @bind
+    @memoize({ primitive: true })
+    orderTIFStr(type: TimeInForce): Observable<string> {
+        const _map = {
+            [TimeInForce.FillOrKill]: 'tradeManager.timeInForceType.fillOrKill',
+            [TimeInForce.GoodTillCancel]: 'tradeManager.timeInForceType.goodTillCancel',
+            [TimeInForce.GoodTillCrossing]: 'tradeManager.timeInForceType.goodTillCrossing',
+            [TimeInForce.GoodTillExpiredOrCanceled]: 'tradeManager.timeInForceType.goodTillExpiredOrCanceled',
+            [TimeInForce.ImmediateOrCancel]: 'tradeManager.timeInForceType.immediateOrCancel'
         };
 
         return this._translateService.stream(_map[type]);
@@ -134,8 +149,16 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
         return this.config.side === OrderSide.Buy;
     }
 
-    isPriceVisible() {
-        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.Stop;
+    isPriceRequired() {
+        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.Stop || this.config.type === OrderTypes.TakeProfit;
+    }
+
+    isStopPriceRequired() {
+        return this.config.type === OrderTypes.Stop || this.config.type === OrderTypes.TakeProfit || this.config.type === OrderTypes.StopMarket || this.config.type === OrderTypes.TakeProfitMarket;
+    }
+
+    isTimeInForceRequired() {
+        return this.config.type === OrderTypes.Limit;
     }
 
     handleInstrumentChange(instrument: IInstrument) {
@@ -144,6 +167,10 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
 
     handleTypeSelected(type: OrderTypes) {
         this.config.type = type;
+    }
+
+    handleTIFSelected(type: TimeInForce) {
+        this.config.tif = type;
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
@@ -165,8 +192,6 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
         if (instrument) {
             if (resetPrice) {
                 this._config.price = 0;
-                this._config.sl = null;
-                this._config.tp = null;
             }
 
             broker.getPrice(symbol).subscribe((tick: ITradeTick) => {
@@ -213,23 +238,24 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
         }
 
         const broker = this._brokerService.activeBroker;
-        // let comment = (this.technicalComment || "") + (this.config.comment || "");
         const placeOrderData = {
-            // Comment: comment,
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
-            Type: this.config.type,
-            Price: this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0,
-            SL: this.config.sl ? Number(this.config.sl) : 0,
-            TP: this.config.tp ? Number(this.config.tp) : 0,
-            // FillPolicy: this.config.fillPolicy,
-            // ExpirationType: this.config.expirationType,
-            // ExpirationDate: this._getSetupDate(),
-            // PlacedFrom: this.config.placedFrom,
-            // Timeframe: this.config.timeframe,
-            // TradeType: this.config.tradeType
+            Type: this.config.type
         };
+
+        if (this.isPriceRequired()) {
+            placeOrderData["Price"] = Number(this.config.price);
+        }
+
+        if (this.isStopPriceRequired()) {
+            placeOrderData["StopPrice"] = Number(this.config.stopPrice);
+        }
+
+        if (this.isTimeInForceRequired()) {
+            placeOrderData["TimeInForce"] = this.config.tif;
+        }
 
         this.processingSubmit = true;
         broker.placeOrder(placeOrderData)

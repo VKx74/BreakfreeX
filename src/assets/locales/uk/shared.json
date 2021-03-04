@@ -48,7 +48,9 @@
     "stopLossLimit": "Stop Loss Limit",
     "stopMarket": "Stop Market",
     "takeProfit": "Take Profit",
-    "takeProfitLimit": "Take Profit Limit"
+    "takeProfitLimit": "Take Profit Limit",
+    "takeProfitMarket": "Take Profit Market",
+    "trailingStopMarket": "Trailing Stop Market"
   },
   "barsCount": "Кількість бар",
   "validationErrors": {

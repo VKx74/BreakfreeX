@@ -65,11 +65,23 @@ export class TradingPerformanceComponent implements OnInit {
         this.selectPeriod(this.periodSelectors[0]);        
     }    
 
+    public get broker(): MTBroker {
+        if (this._brokerService.activeBroker instanceof MTBroker) {
+            return this._brokerService.activeBroker as MTBroker;
+        }
+
+        return null;
+    }
+    
     public get isBrokerConnected(): boolean {
-        return this._brokerService.activeBroker instanceof MTBroker;
+        return !!(this.broker);
     }
 
     private loadData(period: Period) {
+        if (!this.broker) {
+            return;
+        }
+        
         let activeBroker = this._brokerService.getActiveBroker();
         if (activeBroker) {
             this.showSpinner = true;
