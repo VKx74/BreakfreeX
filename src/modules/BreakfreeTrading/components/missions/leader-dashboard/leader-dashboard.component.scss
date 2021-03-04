@@ -2,10 +2,15 @@
 @import "mixins/themify";
 
 :host {
+  /deep/.spinner {
+    height: 100px !important;
+  }
+
   .content {
     display: flex;
     padding: 10px 40px;
     flex-direction: column;
+    position: relative;
   }
 
   .container-header {
@@ -56,8 +61,16 @@
     .name-cell,
     .level-cell {
       display: flex;
-      // justify-content: center;
       align-items: center;
+      width: 100%;
+    }
+
+    .level-cell {
+      width: 60px;
+    }
+
+    .ranking-cell {
+      width: 70%;
     }
 
     .own-row {

@@ -23,6 +23,7 @@
                 Level
             </div>
         </div>
+        <bft-loader-block *ngIf="loading"></bft-loader-block>
         <div *ngFor="let item of items" class="ranks-row" [ngClass]="{'own-row': isMyRow(item)}">
             <div class="ranking-cell">
                 NO.{{item.position}}

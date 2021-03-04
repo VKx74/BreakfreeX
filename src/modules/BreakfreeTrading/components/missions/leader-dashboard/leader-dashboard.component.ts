@@ -1,6 +1,9 @@
 import { I } from '@angular/cdk/keycodes';
-import {Component, Inject, Injector, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Inject, Injector, Input, OnInit, ViewChild } from '@angular/core';
+import { UserProfileModel } from '@app/models/auth/auth.models';
 import { IdentityService } from '@app/services/auth/identity.service';
+import { UsersProfileService } from '@app/services/users-profile.service';
+import { TradingPerformanceService } from 'modules/BreakfreeTrading/services/tradingPerformance.service';
 
 interface Item {
     userId: string;
@@ -16,10 +19,12 @@ interface Item {
     styleUrls: ['./leader-dashboard.component.scss']
 })
 export class LeaderDashboardComponent {
+    private _userProfileModel: UserProfileModel;
     private _showPublicUsername = false;
-    
+
     items: Item[] = [];
     userId: string;
+    loading: boolean = false;
 
     public get showPublicUsername(): boolean {
         return this._showPublicUsername;
@@ -29,26 +34,50 @@ export class LeaderDashboardComponent {
         this._showPublicUsername = value;
     }
 
-    constructor(private identity: IdentityService) {
-        for (let i = 1; i <= 50; i++) {
-            this.items.push({
-                position: i,
-                level: i % 10,
-                name: "some username",
-                rank: "Bronze",
-                userId: "asdasd"
-            });
-        }
-        this.userId = identity.id;
+    constructor(private _identityService: IdentityService,
+        private _profileService: UsersProfileService,
+        private _tradingPerformanceService: TradingPerformanceService) {
+        this.userId = this._identityService.id;
+        this.loading = true;
+        this._tradingPerformanceService.getPublicQuestsLeaderBoard(true).subscribe((items) => {
+            this.loading = false;
+            if (!items) {
+                return;
+            }
+
+            let index = 1;
+            for (const item of items) {
+                this.items.push({
+                    level: item.level,
+                    name: item.userName,
+                    position: index++,
+                    rank: item.levelName,
+                    userId: item.userId
+                });
+            }
+        });
     }
 
     ngOnInit() {
+        this._profileService.getUserProfileById(this._identityService.id, true)
+            .subscribe(
+                data => {
+                    this._userProfileModel = data;
+                    if (data) {
+                        this._showPublicUsername = !!(data.useUserName);
+                    } else {
+                        this._showPublicUsername = false;
+                    }
+                });
     }
 
     ngAfterViewInit() {
     }
 
     ngOnDestroy() {
+        if (this._userProfileModel && this._userProfileModel.useUserName !== this._showPublicUsername) {
+            this._profileService.patchUsingOfRandomNames(this._identityService.id, this._showPublicUsername).subscribe(data => {});
+        }
     }
 
     isMyRow(item: Item): boolean {

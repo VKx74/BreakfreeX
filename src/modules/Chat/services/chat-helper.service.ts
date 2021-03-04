@@ -37,6 +37,7 @@ export class ChatHelperService {
             firstName: this._identityService.firstName,
             lastName: this._identityService.lastName,
             role: this._identityService.role,
+            useUserName: false,
             avatarId: '',
         };
     }
