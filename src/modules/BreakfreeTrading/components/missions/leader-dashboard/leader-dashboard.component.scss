@@ -8,10 +8,13 @@
 
   .content {
     display: flex;
-    padding: 10px 40px;
+    padding: 10px 10px;
     flex-direction: column;
     position: relative;
   }
+  .badge-image {
+    min-width: 28px;
+}
 
   .container-header {
     font-size: 11px;
@@ -31,13 +34,13 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
 
     .ranks-header {
       display: flex;
       justify-content: space-between;
-      margin: 5px;
+      margin: 3px;
       padding: 5px 15px;
     }
 
@@ -50,10 +53,11 @@
       border-radius: 5px;
       box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
       border: 1px solid transparent;
+      min-height: 37px; 
     }
 
     .badge-name {
-      margin-left: 10px;
+      //margin-left: 10px;
     }
 
     .ranking-cell,
@@ -68,6 +72,10 @@
     .level-cell {
       width: 60px;
     }
+
+    .name-cell {
+      text-transform: capitalize;
+  }
 
     .ranking-cell {
       width: 70%;
