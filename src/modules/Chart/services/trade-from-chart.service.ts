@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from '@app/services/broker.service';
-import { OrderConfiguratorModalComponent } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
+import { BaseOrderConfig, OrderConfiguratorModalComponent } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { MTOrderConfig } from 'modules/Trading/components/forex.components/mt/order-configurator/mt-order-configurator.component';
-import { IOrder, IOrderRisk, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
+import { IOrder, IOrderRisk, IPlaceOrder, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
@@ -15,13 +15,9 @@ import { IInstrument } from "../../../app/models/common/instrument";
 import { AlgoService } from "@app/services/algo.service";
 import { debounceTime } from "rxjs/operators";
 import { MTHelper } from "@app/services/mt/mt.helper";
-import { IBroker } from "@app/interfaces/broker/broker";
-
-interface PlaceOrderConfigBase {
-    Symbol: string;
-    Price: number;
-    Timeframe?: number;
-}
+import { EBrokerInstance, IBroker } from "@app/interfaces/broker/broker";
+import { BinanceOrderConfig } from "modules/Trading/components/crypto.components/binance/order-configurator/binance-order-configurator.component";
+import { BinanceFuturesOrderConfig } from "modules/Trading/components/crypto.components/binance-futures/order-configurator/binance-futures-order-configurator.component";
 
 export interface EditOrderPriceConfigBase {
     Ticket: any;
@@ -50,7 +46,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _brokerStateChangedSubscription: Subscription;
     private _ordersUpdatedSubscription: Subscription;
     private _onOrdersParametersUpdated: Subscription;
-    private _orderConfig: PlaceOrderConfigBase;
+    private _orderConfig: IPlaceOrder;
     private _decimals: number = 5;
     private _pendingEdit: { [id: string]: EditOrderPriceConfigBase; } = {};
     private _ratioCache: { [id: string]: number; } = {};
@@ -64,13 +60,13 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         @Inject(AlertService) protected _alertService: AlertService, protected _alogService: AlgoService) {
         this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
             this.refresh();
-            if (this._brokerService.activeBroker) {
-                this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
+            if (this._broker) {
+                this._ordersUpdatedSubscription = this._broker.onOrdersUpdated.subscribe(() => {
                     this._pendingEdit = {};
                     this.refresh();
                 });
 
-                this._onOrdersParametersUpdated = this._brokerService.activeBroker.onOrdersParametersUpdated.subscribe((orders: any[]) => {
+                this._onOrdersParametersUpdated = this._broker.onOrdersParametersUpdated.subscribe((orders: any[]) => {
                     this.handleOrdersParametersChanged(orders);
                 });
             } else {
@@ -93,21 +89,16 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public IsTradePlaced(): boolean {
-        if (!this._orderConfig) {
+        if (!this._orderConfig || !this._broker) {
             return false;
         }
 
-        if (this._brokerService.activeBroker) {
-            const broker = this._brokerService.activeBroker;
-            const instrument = broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
-            if (!instrument) {
-                return false;
-            }
-
-            return this._orderConfig.Symbol === instrument.id;
+        const instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+        if (!instrument) {
+            return false;
         }
 
-        return false;
+        return this._orderConfig.Symbol === instrument.id;
     }
 
     public setChart(chart: TradingChartDesigner.Chart) {
@@ -116,47 +107,26 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public PlaceOrder(params: TradingChartDesigner.OrderParameters, callback: () => void): void {
-        if (this._brokerService.activeBroker) {
-            if (!this.IsTradingEnabledHandler()) {
-                this._alertService.info(`${this._chart.instrument.symbol} not exist in connected broker`);
-                // return;
-            }
+        if (!this.IsTradingEnabledHandler()) {
+            return;
+        }
+        const orderConfig = this._getOrderSettings(params);
+        if (orderConfig) {
+            this._alertService.error("Broker not support trading from chart.");
+            return;
+        }
 
-            const broker = this._brokerService.activeBroker;
-            const orderConfig = MTOrderConfig.createLimit(broker.instanceType);
-            const pricePrecision = broker.instrumentDecimals(this._chart.instrument.symbol);
-            orderConfig.instrument = broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
-
-            if (params.price) {
-                orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
-            }
-
-            if (params.sl) {
-                orderConfig.sl = Math.roundToDecimals(params.sl, pricePrecision);
-            }
-
-            if (params.tp) {
-                orderConfig.tp = Math.roundToDecimals(params.tp, pricePrecision);
-            }
-
-            orderConfig.amount = params.size;
-            orderConfig.timeframe = params.timeframe;
-            orderConfig.placedFrom = params.placedFrom;
-            orderConfig.tradeType = params.tradeType;
-            orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
-
-            if (!this.IsSymbolSupported()) {
-                this.showMappingConfirmation()
-                    .subscribe((dialogResult: any) => {
-                        if (dialogResult) {
-                            this.showMappingModal();
-                        } else {
-                            this._alertService.warning("Can`t map instruments to your broker format");
-                        }
-                    });
-            } else {
-                this.showOrderModal(orderConfig, callback, false);
-            }
+        if (!this.IsSymbolSupported()) {
+            this.showMappingConfirmation()
+                .subscribe((dialogResult: any) => {
+                    if (dialogResult) {
+                        this.showMappingModal();
+                    } else {
+                        this._alertService.warning("Can`t map instruments to your broker format");
+                    }
+                });
+        } else {
+            this.showOrderModal(orderConfig, callback, false);
         }
     }
 
@@ -295,17 +265,20 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public PlaceLimitOrder(price: number): void {
-        if (!this._broker) {
+        if (!this.IsTradingEnabledHandler()) {
             return;
         }
 
-        const orderConfig = MTOrderConfig.createLimit(this._broker.instanceType);
+        const orderConfig = this._getOrderSettings();
+        if (orderConfig) {
+            this._alertService.error("Broker not support trading from chart.");
+            return;
+        }
+        
         const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
-        orderConfig.instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
         orderConfig.price = Math.roundToDecimals(price, pricePrecision);
-        // orderConfig.sl = orderConfig.price;
-        // orderConfig.tp = orderConfig.price;
         orderConfig.timeframe = this._chart.timeInterval / 1000;
+        
         if (!this.IsSymbolSupported()) {
             this.showMappingConfirmation()
                 .subscribe((dialogResult: any) => {
@@ -788,7 +761,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             });
     }
 
-    private showOrderModal(orderConfig: any, callback: () => void, doGetOrder: boolean): void {
+    private showOrderModal(orderConfig: BaseOrderConfig, callback: () => void, doGetOrder: boolean): void {
         this._dialog.open(OrderConfiguratorModalComponent, {
             data: {
                 orderConfig: orderConfig,
@@ -802,5 +775,75 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 }
             }
         });
+    }
+
+    private _getOrderSettings(params?: TradingChartDesigner.OrderParameters): BaseOrderConfig {
+        switch (this._broker.instanceType) {
+            case EBrokerInstance.MT4:
+            case EBrokerInstance.MT5:
+                return this._getMTOrderSettings(params);
+            case EBrokerInstance.BinanceFuturesCOIN:
+            case EBrokerInstance.BinanceFuturesUSD:
+                return this._getBinanceFuturesOrderSettings(params);
+            case EBrokerInstance.Binance:
+                return this._getBinanceOrderSettings(params);
+        }
+    }
+
+    private _getMTOrderSettings(params?: TradingChartDesigner.OrderParameters): BaseOrderConfig {
+        const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
+        const orderConfig = MTOrderConfig.createLimit(this._broker.instanceType);
+        orderConfig.instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+
+        if (!params) {
+            return orderConfig;
+        }
+
+        if (params.price) {
+            orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
+        }
+
+        if (params.sl) {
+            orderConfig.sl = Math.roundToDecimals(params.sl, pricePrecision);
+        }
+
+        if (params.tp) {
+            orderConfig.tp = Math.roundToDecimals(params.tp, pricePrecision);
+        }
+
+        orderConfig.amount = params.size;
+        orderConfig.timeframe = params.timeframe;
+        orderConfig.placedFrom = params.placedFrom;
+        orderConfig.tradeType = params.tradeType;
+        orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
+        return orderConfig;
+    }
+
+    private _getBinanceOrderSettings(params: TradingChartDesigner.OrderParameters): BaseOrderConfig {
+        const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
+        const orderConfig = BinanceOrderConfig.createLimit();
+        orderConfig.instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+
+        if (params.price) {
+            orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
+        }
+
+        orderConfig.amount = params.size;
+        orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
+        return orderConfig;
+    }
+
+    private _getBinanceFuturesOrderSettings(params: TradingChartDesigner.OrderParameters): BaseOrderConfig {
+        const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
+        const orderConfig = BinanceFuturesOrderConfig.createLimit();
+        orderConfig.instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+
+        if (params.price) {
+            orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
+        }
+
+        orderConfig.amount = params.size;
+        orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
+        return orderConfig;
     }
 }

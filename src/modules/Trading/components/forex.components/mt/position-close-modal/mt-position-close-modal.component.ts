@@ -19,7 +19,7 @@ import { BrokerService } from '@app/services/broker.service';
         }
     ]
 })
-export class MTPositionCloseModalComponent extends Modal<MTOrder> implements OnInit {
+export class MTPositionCloseModalComponent extends Modal<MTPosition> implements OnInit {
     protected get _mtBroker(): MTBroker {
         return this._broker.activeBroker as MTBroker;
     }

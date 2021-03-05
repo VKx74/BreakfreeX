@@ -139,3 +139,14 @@ export interface IOrderRisk {
     RiskPercentage?: number;
     RiskClass?: RiskClass;
 }
+
+export interface IPlaceOrder {
+    Symbol: string;
+    Size: number;
+    Price?: number;
+    Side: OrderSide;
+    Type: OrderTypes;
+    Timeframe?: number;
+    TradeType?: OrderTradeType;
+    PlacedFrom?: OrderPlacedFrom;
+}

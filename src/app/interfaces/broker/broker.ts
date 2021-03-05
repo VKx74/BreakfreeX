@@ -1,4 +1,4 @@
-import { ActionResult, BrokerConnectivityStatus, IOrder } from "../../../modules/Trading/models/models";
+import { ActionResult, BrokerConnectivityStatus, IOrder, IPlaceOrder } from "../../../modules/Trading/models/models";
 import { EExchange } from "../../models/common/exchange";
 import { Observable, Subject, Subscription } from "rxjs";
 import { IInstrument } from "../../models/common/instrument";
@@ -23,9 +23,9 @@ export interface IBroker {
     instanceType: EBrokerInstance;
     onSaveStateRequired: Subject<void>;
     onAccountInfoUpdated: Subject<any>;
-    onOrdersUpdated: Subject<any[]>;
-    onOrdersParametersUpdated: Subject<any[]>;
-    onHistoricalOrdersUpdated: Subject<any[]>;
+    onOrdersUpdated: Subject<IOrder[]>;
+    onOrdersParametersUpdated: Subject<IOrder[]>;
+    onHistoricalOrdersUpdated: Subject<IOrder[]>;
     // onPositionsUpdated: Subject<any[]>;
 
     status: BrokerConnectivityStatus;
@@ -43,7 +43,7 @@ export interface IBroker {
     instrumentDecimals(symbol: string): number;
 
     cancelAll(): Observable<any>;
-    placeOrder(order: any): Observable<ActionResult>;
+    placeOrder(order: IPlaceOrder): Observable<ActionResult>;
     editOrder(order: any): Observable<ActionResult>;
     editOrderPrice(order: any): Observable<ActionResult>;
     // closeOrder(order: string, ...args): Observable<ActionResult>;

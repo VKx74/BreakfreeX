@@ -4,14 +4,25 @@ import { TradingTranslateService } from "../../../localization/token";
 import { Modal } from "Shared";
 import { BrokerService } from '@app/services/broker.service';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
+import { IInstrument } from '@app/models/common/instrument';
+import { OrderSide, OrderTypes } from 'modules/Trading/models/models';
 
 export type OrderComponentSubmitHandler = (config: any) => void;
 export type OrderSubmitHandler = (config: any) => void;
 
+export interface BaseOrderConfig {
+    instrument: IInstrument;
+    side: OrderSide;
+    amount: number;
+    type: OrderTypes;
+    price?: number;
+    timeframe?: number;
+}
+
 export interface OrderFormConfig {
     submitHandler: OrderComponentSubmitHandler;
     orderPlacedHandler: OrderSubmitHandler;
-    orderConfig: any;
+    orderConfig: BaseOrderConfig;
 }
 
 @Component({
