@@ -1,3 +1,4 @@
+import { AlertService } from '@alert/services/alert.service';
 import { I } from '@angular/cdk/keycodes';
 import { Component, Inject, Injector, Input, OnInit, ViewChild } from '@angular/core';
 import { UserProfileModel } from '@app/models/auth/auth.models';
@@ -32,11 +33,18 @@ export class LeaderDashboardComponent {
 
     public set showPublicUsername(value: boolean) {
         this._showPublicUsername = value;
+
+        if (this._showPublicUsername) {
+            this._alertService.info("Real username on leaderboard enabled. Please wait up to 1 hour before this change is effective.");
+        } else {
+            this._alertService.info("Real username on leaderboard disabled. Please wait up to 1 hour before this change is effective");
+        }
     }
 
     constructor(private _identityService: IdentityService,
         private _profileService: UsersProfileService,
-        private _tradingPerformanceService: TradingPerformanceService) {
+        private _tradingPerformanceService: TradingPerformanceService,
+        private _alertService: AlertService) {
         this.userId = this._identityService.id;
         this.loading = true;
         this._tradingPerformanceService.getPublicQuestsLeaderBoard(true).subscribe((items) => {
