@@ -20,6 +20,9 @@ export interface IBrokerState<T = any> {
 }
 
 export interface IBroker {
+    isOrderEditAvailable: boolean;
+    isPositionBased: boolean;
+
     instanceType: EBrokerInstance;
     onSaveStateRequired: Subject<void>;
     onAccountInfoUpdated: Subject<any>;

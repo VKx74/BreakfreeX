@@ -9,6 +9,7 @@ import { OrderConfiguratorModalComponent } from "../order-configurator-modal/ord
 import { SymbolMappingComponent } from "../../forex.components/mt/symbol-mapping/symbol-mapping.component";
 import { AlertService } from "@alert/services/alert.service";
 import { MatDialog } from "@angular/material/dialog";
+import { LinkingAction } from "@linking/models";
 
 @Component({
     selector: 'trade-manager-container',
@@ -92,6 +93,10 @@ export class TradeManagerContainerComponent {
     
     handleColorSelected(color: string) {
         this.linker.setLinking(color);
+    }
+
+    public handleOpenChart(action: LinkingAction) { 
+        this.linker.sendAction(action);
     }
 
     private _cancelAllPending() {

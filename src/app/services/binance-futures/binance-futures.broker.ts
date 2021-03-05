@@ -26,6 +26,14 @@ export abstract class BinanceFuturesBroker implements IBroker {
     // currencyRisks: any[] = [];
     accountInfo: BinanceFuturesTradingAccount;
 
+    public get isOrderEditAvailable(): boolean {
+        return false;
+    }
+
+    public get isPositionBased(): boolean {
+        return true;
+    }
+
     cancelAll(): Observable<any> {
         throw new Error("Method not implemented.");
     }

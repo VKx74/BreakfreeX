@@ -1,4 +1,4 @@
-import { Component, Injector, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Injector, Output, ViewChild } from "@angular/core";
 import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
@@ -37,6 +37,8 @@ export class MTTradeManagerComponent {
     selectedIndex: number;
     selectedTabIndex: number;
     @ViewChild('tabGroup', {static: true}) tabGroup: MatTabGroup;
+
+    @Output() onOpenChart = new EventEmitter<LinkingAction>();
     
     get showCancelAll(): boolean {
         return this.selectedTabIndex === 2 && this._broker.pendingOrders && this._broker.pendingOrders.length > 0;
@@ -130,7 +132,7 @@ export class MTTradeManagerComponent {
                     title: 'Cancel order',
                     message: `Are you sure you want cancel #'${order.Id}' order?`,
                     onConfirm: () => {
-                        mt5Broker.cancelOrder(order.Id, OrderFillPolicy.FOK).subscribe((result) => {
+                        mt5Broker.cancelOrder(order.Id).subscribe((result) => {
                             if (result.result) {
                                 this._alertService.success("Order canceled");
                             } else {
@@ -205,7 +207,7 @@ export class MTTradeManagerComponent {
                     timeframe: tf
                 };
             }
-            // this.linker.sendAction(linkAction);
+            this.onOpenChart.emit(linkAction);
         }, (error) => {
             this._alertService.warning("Failed to view chart by order symbol");
         });

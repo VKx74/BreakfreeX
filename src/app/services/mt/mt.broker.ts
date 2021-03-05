@@ -132,6 +132,14 @@ export abstract class MTBroker implements IMTBroker {
         return this._accountInfo;
     }
 
+    public get isOrderEditAvailable(): boolean {
+        return true;
+    }
+
+    public get isPositionBased(): boolean {
+        return false;
+    }
+
     constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
         this._tradeRatingService = new MTTradeRatingService(this, algoService, _instrumentMappingService);
     }
@@ -319,7 +327,7 @@ export abstract class MTBroker implements IMTBroker {
 
     }
 
-    cancelOrder(order_id: any, fillPolicy: OrderFillPolicy): Observable<ActionResult> {
+    cancelOrder(order_id: any, fillPolicy: OrderFillPolicy = OrderFillPolicy.FOK): Observable<ActionResult> {
         let order = null;
 
         for (const o of this._orders) {

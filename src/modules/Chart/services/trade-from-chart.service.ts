@@ -245,7 +245,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
     public RepeatLimitOrder(price: number): void {
         if (!this._broker) {
-            return
+            return;
         }
 
         this._orderConfig.Price = Math.roundToDecimals(price, this._decimals);
@@ -447,13 +447,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         });
 
         for (const order of orders) {
-
             const shape = this.createBaseShape(order);
             const shapeOrderBox = this.createBaseOrderShape(order);
             if (shapeOrderBox) {
                 shapes.push(shapeOrderBox);
             }
-            shape.showSLTP = true;
+            shape.showSLTP = this._canEditOrder();
             shape.lineId = order.Id.toString();
             shape.lineText = `#${order.Id}`;
             shape.lineType = this.getType(order);
@@ -547,7 +546,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private createBaseShape(order: IOrder): TradingChartDesigner.ShapeOrderLine {
         const shape = new TradingChartDesigner.ShapeOrderLine();
         shape.showClose = true;
-        shape.isEditable = true;
+        shape.isEditable = this._canEditOrder();
         shape.boxSize = order.Size.toString();
         return shape;
     }
@@ -620,7 +619,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     title: 'Cancel order',
                     message: `Are you sure you want cancel #'${order.Id}' order?`,
                     onConfirm: () => {
-                        this._broker.cancelOrder(order.Id, OrderFillPolicy.FOK)
+                        this._broker.cancelOrder(order.Id)
                             .subscribe((result) => {
                                 if (result.result) {
                                     this._alertService.success("Order canceled");
@@ -845,5 +844,21 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         orderConfig.amount = params.size;
         orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
         return orderConfig;
+    }
+
+    private _canEditOrder(): boolean {
+        if (!this._broker) {
+            return false;
+        }
+
+        return this._broker.isOrderEditAvailable;
+    }
+
+    private _isPositionBased(): boolean {
+        if (!this._broker) {
+            return false;
+        }
+
+        return this._broker.isPositionBased;
     }
 }
