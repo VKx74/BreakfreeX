@@ -23,13 +23,14 @@
 }
 
 .select{
-    width: 150px;
+    width: 110px;
 }
 
 .header-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    height: 30px;
     padding-left: 10px;
     padding-top: 10px;
     padding-right: 10px;
@@ -61,14 +62,9 @@
   }
 }
 
-
-
-.watchlist-tile-wrapper
-
-{
+.watchlist-tile-wrapper{
  border: 2px solid transparent;
 }
-
 
 .watchlist-tile-wrapper:hover{
  border: 2px solid #fff;
@@ -80,15 +76,17 @@
   overflow: hidden;
 
   .name-chart {
-    line-height: 40px;
+    line-height: 20px;
     float: left;
     font-weight: 600;
     overflow: hidden;
   }
   .type-data{
     float: left;    
-    line-height: 25px;
+    line-height: 15px;
     font-weight: 600;
     padding: 5px;
+    padding-left: 10px;
+    padding-right: 0px;
   }
 }

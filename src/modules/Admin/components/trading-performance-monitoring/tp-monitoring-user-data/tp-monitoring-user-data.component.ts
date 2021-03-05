@@ -12,7 +12,7 @@ import { NumberDataSet } from "../tp-monitoring-general-data/tp-monitoring-gener
 })
 export class TPMonitoringUserDataComponent implements OnInit {
     constructor(private _tpMonitoringService: TPMonitoringService) {
-    }   
+    }
 
     UserAccounts: Array<MTAccData>;
     public showSpinner: boolean;
@@ -20,9 +20,11 @@ export class TPMonitoringUserDataComponent implements OnInit {
     public showUsersCharts: boolean;
 
     BalanceChartSettings: TPChartSettings = new TPChartSettings();
+    CumPnLChartSettings: TPChartSettings = new TPChartSettings();
     TradesChartSettings: TPChartSettings = new TPChartSettings();
 
     BalanceChartData: ChartData = new ChartData();
+    CumPnLChartData: ChartData = new ChartData();
     TradesChartData: ChartData = new ChartData();
 
     AccountData: MTAccountPerformanceData = new MTAccountPerformanceData();
@@ -37,13 +39,19 @@ export class TPMonitoringUserDataComponent implements OnInit {
         this.BalanceChartSettings.chartType = 'line';
         this.BalanceChartSettings.showPeriodOption = true;
         this.BalanceChartSettings.updateOnPeriodChange = true;
-        this.BalanceChartSettings.ratio = 2;
+        this.BalanceChartSettings.ratio = 1.5;
+
+        this.CumPnLChartSettings.chartHeader = 'Cumulative PnL';
+        this.CumPnLChartSettings.chartType = 'line';
+        this.CumPnLChartSettings.showPeriodOption = true;
+        this.CumPnLChartSettings.updateOnPeriodChange = true;
+        this.CumPnLChartSettings.ratio = 1.5;
 
         this.TradesChartSettings.chartHeader = 'Trades History';
         this.TradesChartSettings.chartType = 'bar';
         this.TradesChartSettings.showGroupOption = true;
         this.TradesChartSettings.showPeriodOption = true;
-        this.BalanceChartSettings.ratio = 2;
+        this.TradesChartSettings.ratio = 1.5;
 
         this.BalanceChartData.Grouping = Grouping.Separate;
         this.BalanceChartData.Period = Periods.AllTime;
@@ -61,12 +69,17 @@ export class TPMonitoringUserDataComponent implements OnInit {
 
     private reset(): void {
         this.BalanceChartData = new ChartData();
+        this.CumPnLChartData = new ChartData();
         this.TradesChartData = new ChartData();
         this.AccountData = new MTAccountPerformanceData();
     }
 
     updateBalanceChart(args: ChartDataArgs) {
         this.loadBalanceHistory(args.Period);
+    }
+
+    updateCumPnLChart(args: ChartDataArgs) {
+        this.loadCumulativePnl(args.Period);
     }
 
     updateTradesChart(args: ChartDataArgs) {
@@ -81,6 +94,17 @@ export class TPMonitoringUserDataComponent implements OnInit {
                     balanceChartData.DataSet = new NumberDataSet(result.balanceHistory, true);
                     balanceChartData.Period = result.period;
                     this.BalanceChartData = balanceChartData;
+                });
+    }
+
+    private loadCumulativePnl(period: Periods) {        
+        this._tpMonitoringService.getUserCumulativePnl(this.selectedMTAccount.identityId, this.selectedMTAccount.number,
+            this.selectedMTAccount.mtPlatform, period).subscribe(
+                (result: UserBalanceResponse) => {
+                    let cumPnLChartData = new ChartData();
+                    cumPnLChartData.DataSet = new NumberDataSet(result.balanceHistory, true);
+                    cumPnLChartData.Period = result.period;
+                    this.CumPnLChartData = cumPnLChartData;
                 });
     }
 
@@ -99,6 +123,7 @@ export class TPMonitoringUserDataComponent implements OnInit {
 
     private LoadTradingHistory(): void {
         this.loadUserAccPerformanceData();
+        this.loadCumulativePnl(Periods.Last7Days);
         this.loadBalanceHistory(Periods.Last7Days);
         this.loadTradesHistory(Periods.Last7Days, Grouping.Daily);
     }

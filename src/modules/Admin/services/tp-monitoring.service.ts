@@ -27,6 +27,10 @@ export class TPMonitoringService {
         return `${this.URL}UserBalanceHistory`;
     }
 
+    get getUserPnlUrl(): string {
+        return `${this.URL}UserCumulativePnLHistory`;
+    }
+
     get getUserAccPerformanceUrl(): string {
         return `${this.URL}MTAccountPerformanceData`;
     }
@@ -113,5 +117,15 @@ export class TPMonitoringService {
         params = params.append('period', EnumHelper.getKeyString(period));
 
         return this._http.get<UserBalanceResponse>(this.getUserBalanceUrl, { params: params });
+    }
+
+    public getUserCumulativePnl(userId: string, mtLogin: number, mtPlatform: string, period: Periods): Observable<UserBalanceResponse> {
+        let params = new HttpParams();
+        params = params.append('userId', userId.toString());
+        params = params.append('mtLogin', mtLogin.toString());
+        params = params.append('mtPlatform', mtPlatform);
+        params = params.append('period', EnumHelper.getKeyString(period));
+
+        return this._http.get<UserBalanceResponse>(this.getUserPnlUrl, { params: params });
     }
 }

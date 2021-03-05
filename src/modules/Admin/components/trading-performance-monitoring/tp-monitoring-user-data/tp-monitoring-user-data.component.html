@@ -71,9 +71,11 @@
     <div>
         <div *ngIf="showUsersCharts">
             <sp-chart [ChartSettings]='BalanceChartSettings' [Data]='BalanceChartData' (needUpdate)="updateBalanceChart($event)"
-             style="width: 50%; float:left; padding:5px"></sp-chart>
+             style="width: 33%; float:left; padding:5px"></sp-chart>
+             <sp-chart [ChartSettings]='CumPnLChartSettings' [Data]='CumPnLChartData' (needUpdate)="updateCumPnLChart($event)"
+             style="width: 33%; float:left; padding:5px"></sp-chart>
             <sp-chart [ChartSettings]='TradesChartSettings' [Data]='TradesChartData' (needUpdate)="updateTradesChart($event)"
-             style="width: 50%; float:left; padding:5px"></sp-chart>            
+             style="width: 33%; float:left; padding:5px"></sp-chart>            
         </div>
     </div>
 </div>
