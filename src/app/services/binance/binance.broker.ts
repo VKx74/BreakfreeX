@@ -98,7 +98,8 @@ export class BinanceBroker implements IBroker {
             brokerType: EBrokerInstance.Binance,
             server: "Binance",
             state: {
-                APIKey: "api_key"
+                APIKey: "",
+                APISecret: ""
             }
         });
     }

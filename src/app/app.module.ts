@@ -104,6 +104,8 @@ import { GTMTrackingService } from './services/traking/gtm.tracking.service';
 import { BinanceBroker } from './services/binance/binance.broker';
 import { BinanceFuturesUsdBroker } from './services/binance-futures/binance-futures-usd.broker';
 import { BinanceFuturesCoinBroker } from './services/binance-futures/binance-futures-coin.broker';
+import { BinanceFuturesUsdSocketService } from './services/socket/binance-futures-usd.socket.service';
+import { BinanceFuturesCoinSocketService } from './services/socket/binance-futures-coin.socket.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -303,6 +305,8 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         MT4Broker,
         MT5Broker,
 
+        BinanceFuturesUsdSocketService,
+        BinanceFuturesCoinSocketService,
         BinanceBroker,
         BinanceFuturesUsdBroker,
         BinanceFuturesCoinBroker,

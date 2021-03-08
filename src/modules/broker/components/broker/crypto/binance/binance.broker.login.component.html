@@ -10,7 +10,17 @@
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">API Key:</span>
-                <input id="mt5login" type="text" class="full-width crypto-input mtInput" [(ngModel)]="apiKey" placeholder="Binance API Key"
+                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="apiKey" placeholder="Binance API Key"
+                readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" autocorrect="off"  spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit">
+                <span class="form-unit__label">API Secret:</span>
+                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="apiSecret" placeholder="Binance API Secret"
                 readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" autocorrect="off"  spellcheck="false">
             </div>
         </div>

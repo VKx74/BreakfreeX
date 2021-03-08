@@ -14,6 +14,7 @@ import { BrokerLogin } from '../../shared/broker-login';
 })
 export class BinanceBrokerLoginComponent extends BrokerLogin {
     public apiKey = "";
+    public apiSecret = "";
     
     constructor(protected _brokerFactory: BrokerFactory,
         protected _translateService: TranslateService,
@@ -28,7 +29,8 @@ export class BinanceBrokerLoginComponent extends BrokerLogin {
         }
 
         const initData: BinanceConnectionData = {
-            APIKey: this.apiKey
+            APIKey: this.apiKey,
+            APISecret: this.apiSecret
         };
 
         this._connect(this.brokerInstance, initData);

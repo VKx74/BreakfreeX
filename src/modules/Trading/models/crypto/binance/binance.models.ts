@@ -2,6 +2,7 @@ import { IConnectionData, OrderTypes } from "../../models";
 
 export interface BinanceConnectionData extends IConnectionData {
     APIKey: string;
+    APISecret: string;
 }
 
 export interface BinanceTradingAccount {

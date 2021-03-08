@@ -9,6 +9,7 @@ export enum EMarketType {
     Stocks = 'Stocks',
     Indices = 'Indices',
     Metals = 'Metals',
-    CFD = 'CFD'
+    CFD = 'CFD',
+    FuturesUsdt = 'futuresUsdt'
 }
 

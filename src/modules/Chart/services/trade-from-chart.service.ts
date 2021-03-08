@@ -150,6 +150,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
+        if (!this._canEditOrder()) {
+            this._alertService.info("Broker not support order editing");
+            callback();
+            return;
+        }
+
         let order: any;
 
         for (const o of this._broker.orders) {
@@ -164,11 +170,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        this._dialog.open(MTOrderEditModalComponent, {
-            data: {
-                order: order
-            }
-        });
+        if (this._broker instanceof MTBroker) {
+            this._editMTOrder(order);
+        }
     }
 
     public OrderSLTPChange(id: any, price: number, callback: () => void): void {
@@ -844,6 +848,14 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         orderConfig.amount = params.size;
         orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
         return orderConfig;
+    }
+
+    private _editMTOrder(order: any) {
+        this._dialog.open(MTOrderEditModalComponent, {
+            data: {
+                order: order
+            }
+        });
     }
 
     private _canEditOrder(): boolean {

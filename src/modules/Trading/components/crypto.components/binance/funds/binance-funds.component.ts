@@ -1,9 +1,5 @@
 import {Component} from '@angular/core';
-import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
-import { BrokerService } from '@app/services/broker.service';
-import { BinanceBroker } from '@app/services/binance/binance.broker';
-import { BinanceFund, BinanceTradingAccount } from 'modules/Trading/models/crypto/binance/binance.models';
+import { BinanceFund } from 'modules/Trading/models/crypto/binance/binance.models';
 import { BinanceItemsComponent } from '../binance-items.component';
 import { Observable, of, Subscription } from 'rxjs';
 

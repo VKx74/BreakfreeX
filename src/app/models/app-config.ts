@@ -55,6 +55,7 @@ export interface ApiUrls {
     exchangeUserApi: string;
     MT5WS: string;
     MT4WS: string;
+    BinanceBrokerWS: string;
 }
 
 export interface AppConfig {
