@@ -13,22 +13,31 @@ export class BinanceFuturesAccountInfoBarComponent {
     BrokerConnectivityStatus = BrokerConnectivityStatus;
 
     get activeAccount(): BinanceFuturesTradingAccount {
-        const mtBroker = this._broker.activeBroker as BinanceFuturesBroker;
-        if (!mtBroker) {
+        const broker = this._broker.activeBroker as BinanceFuturesBroker;
+        if (!broker) {
             return null;
         }
 
-        return mtBroker.accountInfo;
+        return broker.accountInfo;
+    }
+    
+    get accountName(): string {
+        const broker = this._broker.activeBroker as BinanceFuturesBroker;
+        if (!broker) {
+            return null;
+        }
+
+        return broker.accountName;
     }
 
     get status(): BrokerConnectivityStatus {
-        const mtBroker = this._broker.activeBroker;
-        if (!mtBroker) {
+        const broker = this._broker.activeBroker;
+        if (!broker) {
             return null;
         }
 
 
-        return mtBroker.status;
+        return broker.status;
     }
 
     constructor(private _broker: BrokerService) {

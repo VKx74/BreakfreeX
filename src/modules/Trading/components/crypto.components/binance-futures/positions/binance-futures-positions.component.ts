@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input} from '@angular/core';
+import { BinanceFuturesPosition } from 'modules/Trading/models/crypto/binance-futures/binance-futures.models';
 import {Observable, Subscription, of} from "rxjs";
 import { BinanceFuturesItemsComponent } from '../binance-futures-items.component';
 
@@ -8,9 +9,9 @@ import { BinanceFuturesItemsComponent } from '../binance-futures-items.component
     styleUrls: ['./binance-futures-positions.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BinanceFuturesPositionsComponent extends BinanceFuturesItemsComponent<any> {
+export class BinanceFuturesPositionsComponent extends BinanceFuturesItemsComponent<BinanceFuturesPosition> {
 
-    protected loadItems(): Observable<any[]> {
+    protected loadItems(): Observable<BinanceFuturesPosition[]> {
         return of(this._binanceBroker.positions);
     }
 

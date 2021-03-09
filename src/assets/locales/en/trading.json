@@ -18,6 +18,7 @@
     "type": "Type",
     "size": "Size",
     "executedSize": "Executed Size",
+    "executedPrice": "Executed Price",
     "funds": "Funds",
     "tradeHistory": "Trade History",
     "resetAmount": "Reset size",
@@ -211,7 +212,17 @@
     "stopPrice": "Stop price",
     "stop": "Stop",
     "limit": "Limit",
-    "timeInForce": "Time In Force"
+    "timeInForce": "Time In Force",
+    "mntMargin": "Mnt. Margin",
+    "initMargin": "Init. Margin",
+    "crossPnl": "Cross PNL",
+    "crossBalance": "Cross Balance",
+    "avblBalance": "Avbl. Balance",
+    "leverage": "Leverage",
+    "assets": "Assets",
+    "asset": "Asset",
+    "APIKey": "APIKey",
+    "FeeTier": "Fee Tier"
   },
   "periodicity": {
     "minute": "Minute",

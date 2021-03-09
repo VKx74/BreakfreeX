@@ -47,7 +47,7 @@ export class BinanceFuturesTradeManagerComponent {
             return 0;
         }
 
-        return broker.orders.filter(_ => _.Type !== OrderTypes.Market).length;
+        return broker.orders.length;
     }
 
     selectedIndex: number;

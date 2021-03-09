@@ -1,0 +1,44 @@
+<div class="orders-parameters-selection">
+  <div class="instrument-filter-container">
+    <div class="filter-title">Symbol:</div>
+    <div class="instrument-filter-input">
+      <instrument-search [instrument]="instrument" (onSelect)="handleInstrumentChange($event)" [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
+    </div>
+  </div>
+
+  <div class="from-filter-container">
+    <div class="filter-title">From:</div>
+    <div class="from-filter-input">
+      <div class="from-date-filter-input">
+        <input matInput readonly [matDatepicker]="fromDate" [(ngModel)]="selectedFromDate" (click)="fromDate.open()"
+          placeholder="From Date">
+        <mat-datepicker #fromDate></mat-datepicker>
+      </div>
+      <div class="from-time-filter-input">
+        <input matInput placeholder="From Time" (click)="fromTime.open()" readonly [(ngModel)]="selectedFromTime"
+          [ngxTimepicker]="fromTime" [format]='24'>
+        <ngx-material-timepicker #fromTime></ngx-material-timepicker>
+      </div>
+    </div>
+  </div>
+
+  <div class="to-filter-container">
+    <div class="filter-title">To:</div>
+    <div class="to-filter-input">
+      <div class="to-date-filter-input">
+        <input matInput readonly [matDatepicker]="toDate" [(ngModel)]="selectedToDate" (click)="toDate.open()"
+          placeholder="To Date">
+        <mat-datepicker #toDate></mat-datepicker>
+      </div>
+      <div class="to-time-filter-input">
+        <input matInput placeholder="To Time" (click)="toTime.open()" readonly [(ngModel)]="selectedToTime"
+          [ngxTimepicker]="toTime" [format]='24'>
+        <ngx-material-timepicker #toTime></ngx-material-timepicker>
+      </div>
+    </div>
+  </div>
+
+  <div class="refre-button">
+    <i class="refresh-icon crypto-icon crypto-icon-refresh refresh" (click)="refresh()"></i>
+  </div>
+</div>

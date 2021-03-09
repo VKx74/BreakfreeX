@@ -339,6 +339,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this._selectedTime = value;
         }
     }
+    
     get selectedTime(): string {
         return this._selectedTime;
     }

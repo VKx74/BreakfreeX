@@ -1,14 +1,16 @@
 import { EBrokerInstance, IBroker, IBrokerState } from "@app/interfaces/broker/broker";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
+import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { EExchange } from "@app/models/common/exchange";
 import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
-import { BinanceFutureLoginRequest, BinanceFutureLoginResponse, IBinanceFutureAccountUpdatedData, IBinanceFutureAsset, IBinanceFuturePosition, IBinanceFutureSymbolData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
-import { BinanceFuturesAsset, BinanceFuturesPosition, BinanceFuturesTradingAccount } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, IBinanceFutureAccountUpdatedData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureSymbolData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData } from "modules/Trading/models/crypto/binance/binance.models";
-import { ActionResult, BrokerConnectivityStatus } from "modules/Trading/models/models";
-import { Subject, Observable, of, Subscription, Observer } from "rxjs";
+import { ActionResult, BrokerConnectivityStatus, IOrder, OrderSide, OrderTypes } from "modules/Trading/models/models";
+import { Subject, Observable, of, Subscription, Observer, throwError } from "rxjs";
+import { map } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { BinanceFuturesSocketService } from "../socket/binance-futures.socket.service";
@@ -39,12 +41,26 @@ export abstract class BinanceFuturesBroker implements IBroker {
     onAssetsUpdated: Subject<BinanceFuturesAsset[]> = new Subject<BinanceFuturesAsset[]>();
     onSaveStateRequired: Subject<void> = new Subject;
 
-    status: BrokerConnectivityStatus = BrokerConnectivityStatus.NoConnection;
-    orders: any[] = [];
-    marketOrders: any[] = [];
-    pendingOrders: any[] = [];
-    ordersHistory: any[] = [];
+    orders: BinanceFuturesOrder[] = [];
+    ordersHistory: BinanceFuturesHistoricalOrder[] = [];
+
     tradesHistory: any[] = [];
+
+    public get pendingOrders(): BinanceFuturesOrder[] {
+        return this.orders.filter(order => order.Type.toLowerCase() !== OrderTypes.Market.toLowerCase());
+    }
+
+    public get marketOrders(): BinanceFuturesOrder[] {
+        return this.orders.filter(order => order.Type.toLowerCase() === OrderTypes.Market.toLowerCase());
+    }
+    
+    public get status(): BrokerConnectivityStatus {
+        if (this.ws.readyState === ReadyStateConstants.OPEN) {
+            return BrokerConnectivityStatus.Connected;
+        }
+
+        return BrokerConnectivityStatus.NoConnection;
+    }
 
     public get accountInfo(): BinanceFuturesTradingAccount {
         return this._accountInfo;
@@ -64,6 +80,10 @@ export abstract class BinanceFuturesBroker implements IBroker {
 
     public get isPositionBased(): boolean {
         return true;
+    }
+
+    public get accountName(): string {
+        return this._accountName;
     }
 
     constructor(protected ws: BinanceFuturesSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
@@ -121,7 +141,16 @@ export abstract class BinanceFuturesBroker implements IBroker {
         throw new Error("Method not implemented.");
     }
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
-        return of([]);
+        if (!search) {
+            return of(this._instruments.slice());
+        }
+
+        const filtered = this._instruments.filter(i => {
+            const s = i.symbol.replace("/", "").replace("_", "").replace("-", "").replace("^", "").toLowerCase();
+            return s.indexOf(search.toLowerCase()) !== -1;
+        });
+
+        return of(filtered.slice());
     }
     instrumentDecimals(symbol: string): number {
         if (this._instrumentDecimals[symbol] !== undefined) {
@@ -206,8 +235,76 @@ export abstract class BinanceFuturesBroker implements IBroker {
     loadSate(state: IBrokerState<any>): Observable<ActionResult> {
         return this.init(state.state);
     }
+
     instrumentToBrokerFormat(symbol: string): IInstrument {
         return null;
+    }
+
+    protected _parseOrdersHistory(orders: IBinanceFutureHistoricalOrder[]): BinanceFuturesHistoricalOrder[] {
+        const response: BinanceFuturesHistoricalOrder[] = [];
+
+        for (const order of orders) {
+            response.push({
+                Id: order.orderId,
+                ExecutedSize: order.executedQty,
+                Price: order.price,
+                ExecutedPrice: order.avgPrice,
+                Side: order.side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
+                Size: order.origQty,
+                Status: order.status,
+                Symbol: order.symbol,
+                TIF: order.timeInForce,
+                Time: order.time,
+                Type: order.type as OrderTypes
+            });
+        }
+
+        return response;
+    } 
+    
+    protected _parseOrders(orders: IBinanceFutureOrder[]): BinanceFuturesOrder[] {
+        const response: BinanceFuturesOrder[] = [];
+
+        for (const order of orders) {
+            response.push({
+                Id: order.orderId,
+                ExecutedSize: order.executedQty,
+                Price: order.price,
+                ExecutedPrice: order.avgPrice,
+                Side: order.side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
+                Size: order.origQty,
+                Status: order.status,
+                Symbol: order.symbol,
+                TIF: order.timeInForce,
+                Time: order.time,
+                Type: order.type as OrderTypes
+            });
+        }
+
+        return response;
+    }
+    
+    loadOrdersHistory(symbol: string, from: number, to: number): Observable<BinanceFuturesHistoricalOrder[]> {
+        return this.ws.getOrdersHistory(symbol, from, to).pipe(map((response: BinanceFutureOrderHistoryResponse) => {
+            if (!response || !response.Data || !response.IsSuccess) {
+                throwError(response.ErrorMessage || "Failed to load historical orders from Binance");
+            }
+
+            this.ordersHistory = this._parseOrdersHistory(response.Data.Orders);
+            this.onHistoricalOrdersUpdated.next(this.ordersHistory);
+            return this.ordersHistory;
+        }));
+    }
+    
+    protected _loadPendingOrders() {
+        return this.ws.getOpenOrders().subscribe((response: BinanceFutureOpenOrderResponse) => {
+            if (!response || !response.Data || !response.IsSuccess) {
+                throwError(response.ErrorMessage || "Failed to load historical orders from Binance");
+            }
+
+            this.orders = this._parseOrders(response.Data.Orders);
+            this.onOrdersUpdated.next(this.orders);
+        });
     }
 
     protected _handleQuotes(quote: ITradeTick) {
@@ -257,7 +354,10 @@ export abstract class BinanceFuturesBroker implements IBroker {
         this._instruments = [];
 
         for (const instrument of instruments) {
-            let tickSize = 1 / Math.pow(10, instrument.QuoteAssetPrecision);
+            // let precision = instrument.QuoteAssetPrecision;
+            let precision = 2;
+
+            let tickSize = 1 / Math.pow(10, precision);
           
             this._instruments.push({
                 id: instrument.Pair,
@@ -269,11 +369,11 @@ export abstract class BinanceFuturesBroker implements IBroker {
                 tickSize: tickSize,
                 baseInstrument: instrument.BaseAsset,
                 dependInstrument: instrument.QuoteAsset,
-                pricePrecision: instrument.QuoteAssetPrecision,
+                pricePrecision: precision,
                 tradable: true
             });
 
-            this._instrumentDecimals[instrument.Name] = instrument.QuoteAssetPrecision;
+            this._instrumentDecimals[instrument.Name] = precision;
             this._instrumentTickSize[instrument.Name] = tickSize;
         }
 
@@ -283,7 +383,7 @@ export abstract class BinanceFuturesBroker implements IBroker {
         // this._accountInfo.Account = this._initData.Login.toString();
         // this._serverName = this._initData.ServerName;
 
-        // this._loadHistory();
+        this._loadPendingOrders();
     }
 
     protected _handleAccountUpdate(data: IBinanceFutureAccountUpdatedData) {
@@ -291,6 +391,8 @@ export abstract class BinanceFuturesBroker implements IBroker {
             this._accountInfo = {} as any;
         }
 
+        const apiKeyLength = this._initData.APIKey.length;
+        this._accountInfo.APIKey = this._initData.APIKey.slice(0, 1) + "******" + this._initData.APIKey.slice(apiKeyLength - 4, apiKeyLength);
         this._accountInfo.AvailableBalance = data.AvailableBalance;
         this._accountInfo.FeeTier = data.FeeTier;
         this._accountInfo.TotalInitialMargin = data.TotalInitialMargin;
@@ -324,26 +426,28 @@ export abstract class BinanceFuturesBroker implements IBroker {
             for (const existingPos of this._positions) {
                 if (existingPos.Symbol === posFromBroker.Symbol) {
                     positionExist = true;
-                    existingPos.EntryPrice = posFromBroker.EntryPrice;
+                    existingPos.Price = posFromBroker.EntryPrice;
                     existingPos.Leverage = posFromBroker.Leverage;
-                    existingPos.LiquidationPrice = posFromBroker.LiquidationPrice;
-                    existingPos.MarkPrice = posFromBroker.MarkPrice;
-                    existingPos.PositionAmt = posFromBroker.positionAmt;
-                    existingPos.UnrealizedProfit = posFromBroker.UnrealizedProfit;
+                    existingPos.Size = posFromBroker.positionAmt;
+                    existingPos.PNL = posFromBroker.UnrealizedProfit;
+                    existingPos.MaintMargin = posFromBroker.MaintMargin;
+                    existingPos.Margin = posFromBroker.PositionInitialMargin;
+                    existingPos.Side = posFromBroker.positionAmt > 0 ? OrderSide.Buy : OrderSide.Sell;
+                    break;
                 }
-                break;
             }
 
             if (!positionExist) {
                 positionsChanged = true;
                 this._positions.push({
-                    EntryPrice: posFromBroker.EntryPrice,
+                    Price: posFromBroker.EntryPrice,
                     Leverage: posFromBroker.Leverage,
-                    LiquidationPrice: posFromBroker.LiquidationPrice,
-                    MarkPrice: posFromBroker.MarkPrice,
-                    PositionAmt: posFromBroker.positionAmt,
-                    UnrealizedProfit: posFromBroker.UnrealizedProfit,
-                    Symbol: posFromBroker.Symbol
+                    Size: posFromBroker.positionAmt,
+                    PNL: posFromBroker.UnrealizedProfit,
+                    Symbol: posFromBroker.Symbol,
+                    MaintMargin: posFromBroker.MaintMargin,
+                    Margin: posFromBroker.PositionInitialMargin,
+                    Side: posFromBroker.positionAmt > 0 ? OrderSide.Buy : OrderSide.Sell
                 });
             }
         }
@@ -391,8 +495,8 @@ export abstract class BinanceFuturesBroker implements IBroker {
                     existingAsset.PositionInitialMargin = assetBroker.PositionInitialMargin;
                     existingAsset.UnrealizedProfit = assetBroker.UnrealizedProfit;
                     existingAsset.WalletBalance = assetBroker.WalletBalance;
+                    break;
                 }
-                break;
             }
 
             if (!assetExist) {

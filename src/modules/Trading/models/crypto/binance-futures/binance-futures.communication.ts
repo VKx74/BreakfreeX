@@ -3,11 +3,19 @@ import { BrokerRequestMessageBase, BrokerResponseMessageBase } from "../../commu
 export enum BinanceFutureMessageType {
     LoginFuturesUsdt = "LoginFuturesUsdt",
     AccountUpdate = "AccountUpdate",
+    FuturesUsdtOrdersHistory = "FuturesUsdtOrdersHistory",
+    FuturesUsdtOpenOrders = "FuturesUsdtOpenOrders"
 }
 
 export interface IBinanceFutureLoginData {
     ApiKey: string;
     ApiSecret: string;
+}
+
+export interface IBinanceFutureGetOrdersData {
+    Symbol: string;
+    From: number;
+    To: number;
 }
 
 export interface IBinanceFutureSymbolData {
@@ -43,13 +51,13 @@ export interface IBinanceFutureAsset {
 }
 
 export interface IBinanceFuturePosition {
-    MaxNotionalValue: number;
-    MarginType: string;
-    IsAutoAddMargin: boolean;
-    IsolatedMargin: number;
-    LiquidationPrice: number;
-    MarkPrice: number;
+    MaxNotional: number;
     positionAmt: number;
+    InitialMargin: number;
+    MaintMargin: number;
+    PositionInitialMargin: number;
+    OpenOrderInitialMargin: number;
+    Isolated: boolean;
     Symbol: string;
     EntryPrice: number;
     Leverage: number;
@@ -78,6 +86,68 @@ export interface IBinanceFutureAccountUpdatedData {
     Positions: IBinanceFuturePosition[];
 }
 
+export interface IBinanceFutureHistoricalOrder {
+    symbol: string;
+    orderId: any;
+    clientOrderId: string;
+    price: number;
+    avgPrice: number;
+    cumQty: number;
+    cumQuote: number;
+    executedQty: number;
+    origQty: number;
+    reduceOnly: boolean;
+    closePosition: boolean;
+    side: string;
+    status: string;
+    stopPrice: number;
+    timeInForce: string;
+    origType: string;
+    type: string;
+    activatePrice?: any;
+    priceRate?: any;
+    updateTime: number;
+    time: number;
+    workingType: string;
+    positionSide: string;
+}
+
+export interface IBinanceFutureOrder {
+    symbol: string;
+    orderId: number;
+    clientOrderId: string;
+    price: number;
+    avgPrice: number;
+    cumQty: number;
+    cumQuote: number;
+    executedQty: number;
+    origQty: number;
+    reduceOnly: boolean;
+    closePosition: boolean;
+    side: string;
+    status: string;
+    stopPrice: number;
+    timeInForce: string;
+    origType: string;
+    type: string;
+    activatePrice?: any;
+    priceRate?: any;
+    updateTime: number;
+    time: number;
+    workingType: string;
+    positionSide: string;
+}
+
+export interface IBinanceFutureOrderHistoryResponseData {
+    Type: string;
+    Orders: IBinanceFutureHistoricalOrder[];
+}
+
+export interface IBinanceFutureOpenOrderResponseData {
+    Type: string;
+    Orders: IBinanceFutureOrder[];
+}
+
 // Requests
 export class BinanceFutureLoginRequest extends BrokerRequestMessageBase {
     public Data: IBinanceFutureLoginData;
@@ -87,9 +157,31 @@ export class BinanceFutureLoginRequest extends BrokerRequestMessageBase {
     }
 }
 
+export class BinanceOrderHistoryRequest extends BrokerRequestMessageBase {
+    public Data: IBinanceFutureGetOrdersData;
+
+    constructor() {
+        super(BinanceFutureMessageType.FuturesUsdtOrdersHistory);
+    }
+}
+
+export class BinanceFutureOpenOrderRequest extends BrokerRequestMessageBase {
+    constructor() {
+        super(BinanceFutureMessageType.FuturesUsdtOpenOrders);
+    }
+}
+
 // Responses
 export class BinanceFutureLoginResponse extends BrokerResponseMessageBase {
     public Data: IBinanceFutureSymbolData[];
+}
+
+export class BinanceFutureOrderHistoryResponse extends BrokerResponseMessageBase {
+    public Data: IBinanceFutureOrderHistoryResponseData;
+}
+
+export class BinanceFutureOpenOrderResponse extends BrokerResponseMessageBase {
+    public Data: IBinanceFutureOpenOrderResponseData;
 }
 
 export class BinanceFutureAccountUpdateResponse extends BrokerResponseMessageBase {

@@ -5,7 +5,7 @@ import { ITradeTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
-import { BinanceFutureAccountUpdateResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMessageType, IBinanceFutureAccountUpdatedData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFutureAccountUpdateResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMessageType, BinanceFutureOpenOrderRequest, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceOrderHistoryRequest as BinanceFutureOrderHistoryRequest, IBinanceFutureAccountUpdatedData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 
 export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   private _onMessageSubscription: Subscription;
@@ -13,7 +13,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   private _accountUpdatedSubject: Subject<IBinanceFutureAccountUpdatedData> = new Subject<IBinanceFutureAccountUpdatedData>();
 
   get usePingPongs(): boolean {
-    return false;
+    return true;
   }
 
   get tickSubject(): Subject<ITradeTick> {
@@ -29,7 +29,6 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     this._token = "Bearer " + this._identityService.token;
     this._onMessageSubscription = this.onMessage.subscribe(value => {
       try {
-
         const msgData = value as BrokerResponseMessageBase;
         const msgTypeString = msgData && msgData.Type ? msgData.Type.toLowerCase() : "";
 
@@ -71,6 +70,25 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   public login(data: BinanceFutureLoginRequest): Observable<BinanceFutureLoginResponse> {
     return new Observable<BinanceFutureLoginResponse>(subscriber => {
       this._send(data, subscriber);
+    });
+  }
+
+  public getOrdersHistory(symbol: string, from: number, to: number): Observable<BinanceFutureOrderHistoryResponse> {
+    return new Observable<BinanceFutureOrderHistoryResponse>(subscriber => {
+      const message = new BinanceFutureOrderHistoryRequest();
+      message.Data = {
+        Symbol: symbol,
+        From: from,
+        To: to
+      };
+      this._send(message, subscriber);
+    });
+  }
+
+  public getOpenOrders(): Observable<BinanceFutureOpenOrderResponse> {
+    return new Observable<BinanceFutureOpenOrderResponse>(subscriber => {
+      const message = new BinanceFutureOpenOrderRequest();
+      this._send(message, subscriber);
     });
   }
 
@@ -116,7 +134,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   //   const quoteMessage = msgData as MTOrdersUpdateResponse;
   //   this._ordersUpdatedSubject.next(quoteMessage.Data);
   // }
-  
+
   // private _processOrdersUpdate(msgData: BrokerResponseMessageBase) {
   //   const quoteMessage = msgData as MTOrdersUpdateResponse;
   //   this._ordersUpdatedSubject.next(quoteMessage.Data);

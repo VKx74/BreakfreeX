@@ -36,6 +36,7 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
     blinking: T[] = [];
     selectedItem: T;
     OrderSide = OrderSide;
+    refreshing: boolean = false;
 
     selectItem(item: T) {
         this.selectedItem = item;
@@ -134,13 +135,20 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
     }
 
     protected updateItems(): void {
+        this.refreshing = true;
         this.loadItems()
             .subscribe(
                 items => {
+                    this.refreshing = false;
                     this.items = items.slice();
                     this.refresh();
                 },
-                e => this._handleLoadingError(e)
+                e => {
+                    this.refreshing = false;
+                    this.items = [];
+                    this._handleLoadingError(e);
+                    this.refresh();
+                }
             );
     }
 
@@ -152,7 +160,7 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
         return null;
     }
 
-    private _handleLoadingError(e) {
+    protected _handleLoadingError(e) {
         this._alertService.error(this._getLoadingError());
     }
 
