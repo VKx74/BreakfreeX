@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTHelper } from "@app/services/mt/mt.helper";
+import { TradingHelper } from "@app/services/mt/mt.helper";
 
 @Injectable()
 export class IndicatorDataProviderService {
@@ -53,8 +53,8 @@ export class IndicatorDataProviderService {
 
     getRTD(indicator: TradingChartDesigner.Indicator, params?: any): Promise<IRTDPayload> {
         return this._bftService.getRTDCalculation(params).then(data => {
-            data.global_trend_strength = MTHelper.convertTrendSpread(data.global_trend_spread);
-            data.local_trend_strength = MTHelper.convertTrendSpread(data.local_trend_spread);
+            data.global_trend_strength = TradingHelper.convertTrendSpread(data.global_trend_spread);
+            data.local_trend_strength = TradingHelper.convertTrendSpread(data.local_trend_spread);
             let lastFast = data.fast[data.fast.length - 1];
             let lastFast2 = data.fast_2[data.fast_2.length - 1];
             let lastSlow = data.slow[data.slow.length - 1];
@@ -82,7 +82,7 @@ export class IndicatorDataProviderService {
                 globalTrendDesc = [];
                 globalTrendDesc.push("Sideways");
             } else {
-                let generalStrength = MTHelper.convertTrendSpread(generalSpread);
+                let generalStrength = TradingHelper.convertTrendSpread(generalSpread);
                 generalSpread *= 100;
                 globalTrendDesc.push(`${generalStrength} (${generalSpread.toFixed(2)}%)`);
             }

@@ -4,7 +4,7 @@ import { MTBroker } from '@app/services/mt/mt.broker';
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from '@app/services/broker.service';
 import { MTMarketOrderRecommendation, MTPendingOrderRecommendation, MTPositionRecommendation } from "modules/Trading/models/forex/mt/mt.models";
-import { MTHelper } from "@app/services/mt/mt.helper";
+import { TradingHelper } from "@app/services/mt/mt.helper";
 import { DataHighlightService } from "modules/Trading/services/dataHighlight.service";
 import { IBFTATrend } from "@app/services/algo.service";
 import { ItemsComponent } from "../../trade-manager/items-component/items.component";
@@ -66,7 +66,7 @@ export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
             desc += `Setup --------------------\n\r`;
 
             if (rec.Timeframe) {
-                const tfText = MTHelper.toGranularityToTimeframeText(rec.Timeframe);
+                const tfText = TradingHelper.toGranularityToTimeframeText(rec.Timeframe);
                 desc += `Trade Timeframe - ${tfText}\n\r`;
             }
 

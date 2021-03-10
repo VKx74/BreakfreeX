@@ -4,7 +4,12 @@ export enum BinanceFutureMessageType {
     LoginFuturesUsdt = "LoginFuturesUsdt",
     AccountUpdate = "AccountUpdate",
     FuturesUsdtOrdersHistory = "FuturesUsdtOrdersHistory",
-    FuturesUsdtOpenOrders = "FuturesUsdtOpenOrders"
+    FuturesUsdtSymbolTradeHistory = "FuturesUsdtSymbolTradeHistory",
+    FuturesUsdtOpenOrders = "FuturesUsdtOpenOrders",
+    FuturesUsdtSymbolMyTrades = "FuturesUsdtSymbolMyTrades",
+    CloseFuturesUsdtOrder = "CloseFuturesUsdtOrder",
+    FuturesUsdtSymbolOrderInfo = "FuturesUsdtSymbolOrderInfo",
+    PlaceFuturesUsdtOrder = "PlaceFuturesUsdtOrder"
 }
 
 export interface IBinanceFutureLoginData {
@@ -16,6 +21,26 @@ export interface IBinanceFutureGetOrdersData {
     Symbol: string;
     From: number;
     To: number;
+}
+
+export interface IBinanceFutureGetTradesData {
+    Symbol: string;
+    From: number;
+    To: number;
+}
+
+export interface IBinanceFutureGetMarketTradesData {
+    Symbol: string;
+}
+
+export interface IBinanceFutureCloseOrderData {
+    Symbol: string;
+    OrderId: any;
+}
+
+export interface IBinanceFutureOrderInfoData {
+    Symbol: string;
+    OrderId: any;
 }
 
 export interface IBinanceFutureSymbolData {
@@ -138,9 +163,46 @@ export interface IBinanceFutureOrder {
     positionSide: string;
 }
 
+export interface IBinanceFutureTrade {
+    quoteQty: number;
+    Symbol: string;
+    Buyer: boolean;
+    Commission: number;
+    CommissionAsset: string;
+    Id: number;
+    Maker: boolean;
+    OrderId: any;
+    Price: number;
+    qty: number;
+    RealizedPnl: number;
+    Side: string;
+    PositionSide: string;
+    time: number;
+}
+
+export interface IBinanceFutureMarketTradeHistory {
+    quoteQty: number;
+    qty: number;
+    id: number;
+    Price: number;
+    Time: any;
+    isBuyerMaker: boolean;
+    IsBestMatch: boolean;
+}
+
 export interface IBinanceFutureOrderHistoryResponseData {
     Type: string;
     Orders: IBinanceFutureHistoricalOrder[];
+}
+
+export interface IBinanceFutureTradeHistoryResponseData {
+    Type: string;
+    Trades: IBinanceFutureTrade[];
+}
+
+export interface IBinanceFutureMarketTradeResponseData {
+    Type: string;
+    History: IBinanceFutureMarketTradeHistory[];
 }
 
 export interface IBinanceFutureOpenOrderResponseData {
@@ -165,9 +227,49 @@ export class BinanceOrderHistoryRequest extends BrokerRequestMessageBase {
     }
 }
 
+export class BinanceFutureTradeHistoryRequest extends BrokerRequestMessageBase {
+    public Data: IBinanceFutureGetTradesData;
+
+    constructor() {
+        super(BinanceFutureMessageType.FuturesUsdtSymbolMyTrades);
+    }
+}
+
+export class BinanceFutureMarketTradesRequest extends BrokerRequestMessageBase {
+    public Data: IBinanceFutureGetMarketTradesData;
+
+    constructor() {
+        super(BinanceFutureMessageType.FuturesUsdtSymbolTradeHistory);
+    }
+}
+
 export class BinanceFutureOpenOrderRequest extends BrokerRequestMessageBase {
     constructor() {
         super(BinanceFutureMessageType.FuturesUsdtOpenOrders);
+    }
+}
+
+export class BinanceFutureCloseOrderRequest extends BrokerRequestMessageBase {
+    public Data: IBinanceFutureCloseOrderData;
+
+    constructor() {
+        super(BinanceFutureMessageType.CloseFuturesUsdtOrder);
+    }
+}
+
+export class BinanceFutureOrderInfoRequest extends BrokerRequestMessageBase {
+    public Data: IBinanceFutureOrderInfoData;
+
+    constructor() {
+        super(BinanceFutureMessageType.FuturesUsdtSymbolOrderInfo);
+    }
+}
+
+export class BinanceFuturePlaceOrderRequest extends BrokerRequestMessageBase {
+    public Data: any;
+
+    constructor() {
+        super(BinanceFutureMessageType.PlaceFuturesUsdtOrder);
     }
 }
 
@@ -180,10 +282,30 @@ export class BinanceFutureOrderHistoryResponse extends BrokerResponseMessageBase
     public Data: IBinanceFutureOrderHistoryResponseData;
 }
 
+export class BinanceFutureTradeHistoryResponse extends BrokerResponseMessageBase {
+    public Data: IBinanceFutureTradeHistoryResponseData;
+}
+
+export class BinanceFutureMarketTradeResponse extends BrokerResponseMessageBase {
+    public Data: IBinanceFutureMarketTradeResponseData;
+}
+
 export class BinanceFutureOpenOrderResponse extends BrokerResponseMessageBase {
     public Data: IBinanceFutureOpenOrderResponseData;
 }
 
 export class BinanceFutureAccountUpdateResponse extends BrokerResponseMessageBase {
     public Data: IBinanceFutureAccountUpdatedData;
+}
+
+export class BinanceFutureCloseOrderResponse extends BrokerResponseMessageBase {
+    public Data: any;
+}
+
+export class BinanceFutureOrderInfoResponse extends BrokerResponseMessageBase {
+    public Data: any;
+}
+
+export class BinanceFuturePlaceOrderResponse extends BrokerResponseMessageBase {
+    public Data: any;
 }

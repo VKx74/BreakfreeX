@@ -13,6 +13,7 @@ import { memoize } from "@decorators/memoize";
 import bind from "bind-decorator";
 import { MatDialog } from '@angular/material/dialog';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
+import { IBinanceFuturesPlaceOrderData } from 'modules/Trading/models/crypto/binance-futures/binance-futures.models';
 
 
 export class BinanceFuturesOrderConfig {
@@ -104,6 +105,9 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
     }
 
     ngOnInit() {
+        if (this.config.instrument) {
+            this._selectInstrument(this.config.instrument, false);
+        }
     }
 
     ngAfterViewInit() {
@@ -238,7 +242,7 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
         }
 
         const broker = this._brokerService.activeBroker;
-        const placeOrderData = {
+        const placeOrderData: IBinanceFuturesPlaceOrderData = {
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,

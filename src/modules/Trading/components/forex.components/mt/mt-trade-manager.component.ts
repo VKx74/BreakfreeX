@@ -3,9 +3,8 @@ import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from "@app/services/broker.service";
-import { OrderConfiguratorModalComponent } from '../../trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { OrderFillPolicy, OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
+import { OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
 import { MTOrder, MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
 import { MTOrderCloseModalComponent } from './order-close-modal/mt-order-close-modal.component';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
@@ -16,8 +15,8 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { combineLatest, Subscription } from 'rxjs';
-import { MTHelper } from "@app/services/mt/mt.helper";
+import { Subscription } from 'rxjs';
+import { TradingHelper } from "@app/services/mt/mt.helper";
 import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 
@@ -165,14 +164,14 @@ export class MTTradeManagerComponent {
         let tf: number = null;
         if ((order as any).Comment) {
             const comment = (order as any).Comment;
-            tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+            tf = TradingHelper.getTradeTimeframeFromTechnicalComment(comment);
         } else {
             const marketOrders = mt5Broker.marketOrders;
 
             for (const marketOrder of marketOrders) {
                 if (marketOrder.Symbol === symbol && (marketOrder as any).Comment) {
                     const comment = (marketOrder as any).Comment;
-                    tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+                    tf = TradingHelper.getTradeTimeframeFromTechnicalComment(comment);
 
                     if (tf) {
                         break;

@@ -7,8 +7,8 @@
         <mt-trade-manager *ngSwitchCase="EBrokerInstance.MT4" class="h-100" (onOpenChart)="handleOpenChart($event)"></mt-trade-manager>
         <mt-trade-manager *ngSwitchCase="EBrokerInstance.MT5" class="h-100" (onOpenChart)="handleOpenChart($event)"></mt-trade-manager>
         <binance-trade-manager *ngSwitchCase="EBrokerInstance.Binance" class="h-100"></binance-trade-manager>
-        <binance-futures-trade-manager *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" class="h-100"></binance-futures-trade-manager>
-        <binance-futures-trade-manager *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" class="h-100"></binance-futures-trade-manager>
+        <binance-futures-trade-manager *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" class="h-100" (onOpenChart)="handleOpenChart($event)"></binance-futures-trade-manager>
+        <binance-futures-trade-manager *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" class="h-100" (onOpenChart)="handleOpenChart($event)"></binance-futures-trade-manager>
         <div *ngSwitchDefault class="flex align-items-center justify-content-center w-100 h-100">
             <span class="notConnected caption">{{"tradeManager.connectToBroker" | translate}}</span>
         </div>

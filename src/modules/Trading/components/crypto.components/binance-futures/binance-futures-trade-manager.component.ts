@@ -1,10 +1,9 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from "@app/services/broker.service";
-import { MTBroker } from '@app/services/mt/mt.broker';
-import { OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
+import { IOrder, IPosition, TradeManagerTab } from 'modules/Trading/models/models';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { AlertService } from '@alert/services/alert.service';
 import { InstrumentService } from '@app/services/instrument.service';
@@ -14,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 import { SymbolMappingComponent } from "../../forex.components/mt/symbol-mapping/symbol-mapping.component";
 import { BinanceFuturesBroker } from "@app/services/binance-futures/binance-futures.broker";
+import { Actions, LinkingAction } from '@linking/models/models';
 
 @Component({
     selector: 'binance-futures-trade-manager',
@@ -31,6 +31,8 @@ export class BinanceFuturesTradeManagerComponent {
     protected get _binanceBroker(): BinanceFuturesBroker {
         return this.brokerService.activeBroker as BinanceFuturesBroker;
     }
+    
+    @Output() onOpenChart = new EventEmitter<LinkingAction>();
 
     get positionsAmount(): number {
         const broker = this._binanceBroker;
@@ -83,97 +85,82 @@ export class BinanceFuturesTradeManagerComponent {
         this.selectedTabIndex = data.index;
     }
 
-    public handleOrderClose(order: any) {
-        // if (order.Type === OrderTypes.Market) {
-        //     this._dialog.open(MTOrderCloseModalComponent, {
-        //         data: order
-        //     });
-        // } else {
-        //     const broker = this.brokerService.activeBroker as MTBroker;
-        //     this._dialog.open(ConfirmModalComponent, {
-        //         data: {
-        //             title: 'Cancel order',
-        //             message: `Are you sure you want cancel #'${order.Id}' order?`,
-        //             onConfirm: () => {
-        //                 broker.cancelOrder(order.Id, OrderFillPolicy.FOK).subscribe((result) => {
-        //                     if (result.result) {
-        //                         this._alertService.success("Order canceled");
-        //                     } else {
-        //                         this._alertService.error("Failed to cancel order: " + result.msg);
-        //                     }
-        //                 }, (error) => {
-        //                     this._alertService.error("Failed to cancel order: " + error);
-        //                 });
-        //             }
-        //         }
-        //     });
-        // }
+    public handlePositionClose(position: IPosition) {
+        const broker = this._binanceBroker;
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Close position',
+                message: `Are you sure you want close '${position.Symbol}' position?`,
+                onConfirm: () => {
+                    broker.closePosition(position.Symbol).subscribe((result) => {
+                        if (result.result) {
+                            this._alertService.success("Position closed");
+                        } else {
+                            this._alertService.error("Failed to close position: " + result.msg);
+                        }
+                    }, (error) => {
+                        this._alertService.error("Failed to close position: " + error);
+                    });
+                }
+            }
+        });
     }
 
-    public handleOrderEdit(order: any) { 
-        // this._dialog.open(MTOrderEditModalComponent, {
-        //     data: {
-        //         order: order
-        //     }
-        // });
+    public handleOrderClose(order: IOrder) {
+        const broker = this._binanceBroker;
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Cancel order',
+                message: `Are you sure you want cancel #'${order.Id}' order?`,
+                onConfirm: () => {
+                    broker.cancelOrder(order.Id).subscribe((result) => {
+                        if (result.result) {
+                            this._alertService.success("Order canceled");
+                        } else {
+                            this._alertService.error("Failed to cancel order: " + result.msg);
+                        }
+                    }, (error) => {
+                        this._alertService.error("Failed to cancel order: " + error);
+                    });
+                }
+            }
+        });
     }
 
-    public handleOpenChart(order: any) { 
-        // const broker = this.brokerService.activeBroker;
-        // if (!broker) {
-        //     return;
-        // }
+    public handleOrderEdit(order: any) {
+        this._alertService.info("Broker not order editing");
+    }
 
-        // const symbol = order.Symbol;
-        // let tf: number = null;
-        // if ((order as any).Comment) {
-        //     const comment = (order as any).Comment;
-        //     tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
-        // } else {
-        //     const marketOrders = broker.;
+    public handleOpenChart(order: IOrder) { 
+        const broker = this.brokerService.activeBroker as BinanceFuturesBroker;
+        if (!broker) {
+            return;
+        }
 
-        //     for (const marketOrder of marketOrders) {
-        //         if (marketOrder.Symbol === symbol && (marketOrder as any).Comment) {
-        //             const comment = (marketOrder as any).Comment;
-        //             tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+        const symbol = order.Symbol;
 
-        //             if (tf) {
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
-        //     if (!instrument) {
-        //         broker.getInstruments(null, symbol).subscribe((brokerInstruments) => {
-        //             let brokerInstrument: IInstrument = null;
-        //             for (const i of brokerInstruments) {
-        //                 if (i.symbol.toLowerCase() === symbol.toLowerCase()) {
-        //                     brokerInstrument = i;
-        //                     break;
-        //                 }
-        //             }
-        //             this.showMappingConfirmation(brokerInstrument);
-        //         });
-        //         return;
-        //     }
-        //     const linkAction: LinkingAction = {
-        //         type: Actions.ChangeInstrument,
-        //         data: instrument
-        //     };
-
-        //     if (tf) {
-        //         linkAction.type = Actions.ChangeInstrumentAndTimeframe;
-        //         linkAction.data = {
-        //             instrument: instrument,
-        //             timeframe: tf
-        //         };
-        //     }
-        //     // this.linker.sendAction(linkAction);
-        // }, (error) => {
-        //     this._alertService.warning("Failed to view chart by order symbol");
-        // });
+        this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
+            if (!instrument) {
+                broker.getInstruments(null, symbol).subscribe((brokerInstruments) => {
+                    let brokerInstrument: IInstrument = null;
+                    for (const i of brokerInstruments) {
+                        if (i.symbol.toLowerCase() === symbol.toLowerCase()) {
+                            brokerInstrument = i;
+                            break;
+                        }
+                    }
+                    this.showMappingConfirmation(brokerInstrument);
+                });
+                return;
+            }
+            const linkAction: LinkingAction = {
+                type: Actions.ChangeInstrument,
+                data: instrument
+            };
+            this.onOpenChart.emit(linkAction);
+        }, (error) => {
+            this._alertService.warning("Failed to view chart by order symbol");
+        });
     }
 
     private showMappingConfirmation(brokerInstrument: IInstrument) {
@@ -209,6 +196,8 @@ export class BinanceFuturesTradeManagerComponent {
             case TradeManagerTab.ActiveOrders: this.selectedIndex = 1; break;
             case TradeManagerTab.OrderHistory: this.selectedIndex = 2; break;
             case TradeManagerTab.TradeHistory: this.selectedIndex = 3; break;
+            case TradeManagerTab.Assets: this.selectedIndex = 4; break;
+            case TradeManagerTab.AccountInfo: this.selectedIndex = 5; break;
         }
     }
 }

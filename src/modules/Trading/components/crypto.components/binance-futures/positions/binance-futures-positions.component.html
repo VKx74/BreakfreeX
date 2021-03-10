@@ -47,8 +47,8 @@
         </data-table-cell>
         <data-table-cell columnName="PNL">
             <ng-template let-item>
-                <span [ngClass]="{'positive-value': item.PNL > 0, 'negative-value': item.PNL < 0}">
-                    {{item.PNL?.toFixed(2)}}
+                <span [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}">
+                    {{item.NetPL?.toFixed(2)}}
                 </span>
             </ng-template>
         </data-table-cell>

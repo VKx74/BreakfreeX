@@ -1,7 +1,7 @@
 import { RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
 import { OrderTradeType, RiskClass } from "modules/Trading/models/models";
 
-export class MTHelper {
+export class TradingHelper {
     public static buildRiskByVAR(contractSize: number, profitRate: number, size: number, price: number, cvar: number, balance: number) {
         if (!profitRate) {
             return 0;

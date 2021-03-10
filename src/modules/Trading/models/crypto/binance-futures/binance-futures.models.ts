@@ -1,4 +1,4 @@
-import { IOrder, OrderSide, TimeInForce } from "../../models";
+import { IOrder, IPosition, OrderSide, OrderTypes, TimeInForce } from "../../models";
 
 export interface BinanceFuturesAsset {
     Asset: string;
@@ -15,16 +15,11 @@ export interface BinanceFuturesAsset {
     AvailableBalance: number;
 }
 
-export interface BinanceFuturesPosition {
+export interface BinanceFuturesPosition extends IPosition {
     CurrentPrice?: number;
-    Size: number;
-    Symbol: string;
-    Price: number;
     Leverage: number;
     Margin: number;
     MaintMargin: number;
-    PNL: number;
-    Side: OrderSide;
 }
 
 export interface BinanceFuturesTradingAccount {
@@ -42,6 +37,20 @@ export interface BinanceFuturesTradingAccount {
     AvailableBalance: number;
 }
 
+
+export interface BinanceFuturesHistoricalTrade {
+    Id: any;
+    Symbol: string;
+    Time: number;
+    Commission: number;
+    CommissionAsset: string;
+    Price: number;
+    Size: number;
+    QuoteSize: number;
+    PNL: number;
+    Side: OrderSide;
+}
+
 export interface BinanceFuturesHistoricalOrder extends IOrder {
     Status: string;
     Time: number;
@@ -56,4 +65,15 @@ export interface BinanceFuturesOrder extends IOrder {
     ExecutedSize: number;
     ExecutedPrice: number;
     TIF: string;
+}
+
+export interface IBinanceFuturesPlaceOrderData {
+    Side: OrderSide;
+    Size: number;
+    Symbol: string;
+    Type: OrderTypes;
+
+    Price?: number;
+    StopPrice?: number;
+    TimeInForce?: TimeInForce;
 }

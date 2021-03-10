@@ -1,21 +1,22 @@
-import { EBrokerInstance, IBroker, IBrokerState } from "@app/interfaces/broker/broker";
+import { EBrokerInstance, IBroker, IBrokerState, IPositionBasedBroker } from "@app/interfaces/broker/broker";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { EExchange } from "@app/models/common/exchange";
 import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
-import { BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, IBinanceFutureAccountUpdatedData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureSymbolData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
-import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureTradeHistoryResponse, IBinanceFutureAccountUpdatedData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureSymbolData, IBinanceFutureTrade } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesHistoricalTrade, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount, IBinanceFuturesPlaceOrderData } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData } from "modules/Trading/models/crypto/binance/binance.models";
-import { ActionResult, BrokerConnectivityStatus, IOrder, OrderSide, OrderTypes } from "modules/Trading/models/models";
-import { Subject, Observable, of, Subscription, Observer, throwError } from "rxjs";
+import { ActionResult, BrokerConnectivityStatus, IOrder, IPosition, OrderSide, OrderTypes, TimeInForce } from "modules/Trading/models/models";
+import { Subject, Observable, of, Subscription, Observer, throwError, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
+import { TradingHelper } from "../mt/mt.helper";
 import { BinanceFuturesSocketService } from "../socket/binance-futures.socket.service";
 
-export abstract class BinanceFuturesBroker implements IBroker {
+export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBroker {
     protected _accountInfo: BinanceFuturesTradingAccount;
     protected _initData: BinanceConnectionData;
     protected _positions: BinanceFuturesPosition[] = [];
@@ -27,24 +28,25 @@ export abstract class BinanceFuturesBroker implements IBroker {
     protected _onAccountUpdateSubscription: Subscription;
     protected _onReconnectSubscription: Subscription;
     protected _onTickSubscription: Subscription;
-    
+
     protected abstract get _accountName(): string;
     protected abstract get _server(): string;
 
     abstract instanceType: EBrokerInstance;
 
     onAccountInfoUpdated: Subject<BinanceFuturesTradingAccount> = new Subject<BinanceFuturesTradingAccount>();
-    onOrdersUpdated: Subject<any[]> = new Subject<any[]>();
-    onOrdersParametersUpdated: Subject<any[]> = new Subject<any[]>();
-    onHistoricalOrdersUpdated: Subject<any[]> = new Subject<any[]>();
+    onOrdersUpdated: Subject<BinanceFuturesOrder[]> = new Subject<BinanceFuturesOrder[]>();
+    onOrdersParametersUpdated: Subject<BinanceFuturesOrder[]> = new Subject<BinanceFuturesOrder[]>();
+    onHistoricalOrdersUpdated: Subject<BinanceFuturesHistoricalOrder[]> = new Subject<BinanceFuturesHistoricalOrder[]>();
+    onHistoricalTradesUpdated: Subject<BinanceFuturesHistoricalTrade[]> = new Subject<BinanceFuturesHistoricalTrade[]>();
     onPositionsUpdated: Subject<BinanceFuturesPosition[]> = new Subject<BinanceFuturesPosition[]>();
+    onPositionsParametersUpdated: Subject<BinanceFuturesPosition[]> = new Subject<BinanceFuturesPosition[]>();
     onAssetsUpdated: Subject<BinanceFuturesAsset[]> = new Subject<BinanceFuturesAsset[]>();
     onSaveStateRequired: Subject<void> = new Subject;
 
     orders: BinanceFuturesOrder[] = [];
     ordersHistory: BinanceFuturesHistoricalOrder[] = [];
-
-    tradesHistory: any[] = [];
+    tradesHistory: BinanceFuturesHistoricalTrade[] = [];
 
     public get pendingOrders(): BinanceFuturesOrder[] {
         return this.orders.filter(order => order.Type.toLowerCase() !== OrderTypes.Market.toLowerCase());
@@ -53,7 +55,7 @@ export abstract class BinanceFuturesBroker implements IBroker {
     public get marketOrders(): BinanceFuturesOrder[] {
         return this.orders.filter(order => order.Type.toLowerCase() === OrderTypes.Market.toLowerCase());
     }
-    
+
     public get status(): BrokerConnectivityStatus {
         if (this.ws.readyState === ReadyStateConstants.OPEN) {
             return BrokerConnectivityStatus.Connected;
@@ -89,26 +91,97 @@ export abstract class BinanceFuturesBroker implements IBroker {
     constructor(protected ws: BinanceFuturesSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
     }
 
-    cancelAll(): Observable<any> {
-        throw new Error("Method not implemented.");
-    }
-    placeOrder(order: any): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
+    placeOrder(order: IBinanceFuturesPlaceOrderData): Observable<ActionResult> {
+        return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+            this.ws.placeOrder(order).subscribe((response) => {
+                if (response.IsSuccess) {
+                    observer.next({ result: true });
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
     }
     editOrder(order: any): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
+        return of({
+            result: false,
+            msg: "Edit not supported by broker"
+        });
     }
     editOrderPrice(order: any): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
+        return of({
+            result: false,
+            msg: "Edit not supported by broker"
+        });
     }
-    closeOrder(order: string, ...args: any[]): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
+    closePosition(symbol: string): Observable<ActionResult> {
+        let position: IPosition;
+
+        for (const p of this.positions) {
+            if (p.Symbol === symbol) {
+                position = p;
+            }
+        }
+
+        if (!position) {
+            return throwError("Position not found");
+        }
+
+        let placeOrderRequest: IBinanceFuturesPlaceOrderData = {
+            Side: position.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
+            Size: position.Size,
+            Symbol: position.Symbol,
+            Type: OrderTypes.Market
+        };
+
+        return this.placeOrder(placeOrderRequest).pipe(map((data: ActionResult) => {
+            if (data.result) {
+                this._removeFromPositions(symbol);
+            }
+            return data;
+        }));
     }
-    closePosition(symbol: string, ...args: any[]): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
+    cancelOrder(order: any): Observable<ActionResult> {
+        let specificOrder: IOrder;
+
+        for (const o of this.orders) {
+            if (o.Id === order) {
+                specificOrder = o;
+            }
+        }
+
+        if (!specificOrder) {
+            return throwError("Order not found");
+        }
+
+        return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+            this.ws.closeOrder(specificOrder.Symbol, specificOrder.Id).subscribe((response) => {
+                if (response.IsSuccess) {
+                    observer.next({ result: true });
+                    this._removeFromOrders(specificOrder.Id);
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
     }
-    cancelOrder(order: string, ...args: any[]): Observable<ActionResult> {
-        throw new Error("Method not implemented.");
+    cancelAll(): Observable<any> {
+        const pending =  this.orders;
+        const subjects = [];
+        for (const order of pending) {
+            const subj = this.cancelOrder(order.Id);
+            subjects.push(subj);
+        }
+        
+        return combineLatest(subjects);
     }
     subscribeToTicks(symbol: string, subscription: (value: ITradeTick) => void): Subscription {
         if (!this._tickSubscribers[symbol]) {
@@ -126,19 +199,42 @@ export abstract class BinanceFuturesBroker implements IBroker {
         return 0.00001;
     }
     instrumentContractSize(symbol: string): number {
-        throw new Error("Method not implemented.");
+        return 1;
     }
     instrumentMinAmount(symbol: string): number {
-        throw new Error("Method not implemented.");
+        return 0.001;
     }
     instrumentAmountStep(symbol: string): number {
-        throw new Error("Method not implemented.");
+        return 0.001;
     }
-    getOrderById(orderId: number) {
-        throw new Error("Method not implemented.");
+    getOrderById(orderId: any): IOrder {
+        for (const o of this.orders) {
+            if (o.Id === orderId) {
+                return o;
+            }
+        }
     }
     getPrice(symbol: string): Observable<ITradeTick> {
-        throw new Error("Method not implemented.");
+        return new Observable<ITradeTick>((observer: Observer<ITradeTick>) => {
+            this.ws.getMarketTrades(symbol).subscribe((response: BinanceFutureMarketTradeResponse) => {
+                if (response.IsSuccess) {
+                    const last = response.Data.History[response.Data.History.length - 1];
+                    observer.next({
+                        ask: last.Price,
+                        bid: last.Price,
+                        last: last.Price,
+                        symbol: symbol,
+                        volume: last.qty
+                    });
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
     }
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
         if (!search) {
@@ -237,6 +333,26 @@ export abstract class BinanceFuturesBroker implements IBroker {
     }
 
     instrumentToBrokerFormat(symbol: string): IInstrument {
+        let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol/*, this._serverName, this._accountInfo.Account*/);
+        let isMapped = !!(searchingString);
+        if (!searchingString) {
+            searchingString = TradingHelper.normalizeInstrument(symbol);
+        }
+
+        for (const i of this._instruments) {
+            if (!isMapped) {
+                let instrumentID = TradingHelper.normalizeInstrument(i.id);
+                let instrumentSymbol = TradingHelper.normalizeInstrument(i.symbol);
+                if (searchingString === instrumentID || searchingString === instrumentSymbol) {
+                    return i;
+                }
+            } else {
+                if (searchingString === i.id || searchingString === i.symbol) {
+                    return i;
+                }
+            }
+        }
+
         return null;
     }
 
@@ -260,8 +376,8 @@ export abstract class BinanceFuturesBroker implements IBroker {
         }
 
         return response;
-    } 
-    
+    }
+
     protected _parseOrders(orders: IBinanceFutureOrder[]): BinanceFuturesOrder[] {
         const response: BinanceFuturesOrder[] = [];
 
@@ -283,7 +399,28 @@ export abstract class BinanceFuturesBroker implements IBroker {
 
         return response;
     }
-    
+
+    protected _parseTradesHistory(trades: IBinanceFutureTrade[]): BinanceFuturesHistoricalTrade[] {
+        const response: BinanceFuturesHistoricalTrade[] = [];
+
+        for (const trade of trades) {
+            response.push({
+                Id: trade.Id,
+                Commission: trade.Commission,
+                CommissionAsset: trade.CommissionAsset,
+                Price: trade.Price,
+                QuoteSize: trade.quoteQty,
+                Size: trade.qty,
+                PNL: trade.RealizedPnl,
+                Symbol: trade.Symbol,
+                Time: trade.time,
+                Side: trade.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
+            });
+        }
+
+        return response;
+    }
+
     loadOrdersHistory(symbol: string, from: number, to: number): Observable<BinanceFuturesHistoricalOrder[]> {
         return this.ws.getOrdersHistory(symbol, from, to).pipe(map((response: BinanceFutureOrderHistoryResponse) => {
             if (!response || !response.Data || !response.IsSuccess) {
@@ -295,7 +432,19 @@ export abstract class BinanceFuturesBroker implements IBroker {
             return this.ordersHistory;
         }));
     }
-    
+
+    loadTradesHistory(symbol: string, from: number, to: number): Observable<BinanceFuturesHistoricalTrade[]> {
+        return this.ws.getTradesHistory(symbol, from, to).pipe(map((response: BinanceFutureTradeHistoryResponse) => {
+            if (!response || !response.Data || !response.IsSuccess) {
+                throwError(response.ErrorMessage || "Failed to load historical orders from Binance");
+            }
+
+            this.tradesHistory = this._parseTradesHistory(response.Data.Trades);
+            this.onHistoricalTradesUpdated.next(this.tradesHistory);
+            return this.tradesHistory;
+        }));
+    }
+
     protected _loadPendingOrders() {
         return this.ws.getOpenOrders().subscribe((response: BinanceFutureOpenOrderResponse) => {
             if (!response || !response.Data || !response.IsSuccess) {
@@ -358,7 +507,7 @@ export abstract class BinanceFuturesBroker implements IBroker {
             let precision = 2;
 
             let tickSize = 1 / Math.pow(10, precision);
-          
+
             this._instruments.push({
                 id: instrument.Pair,
                 symbol: instrument.Name,
@@ -377,11 +526,11 @@ export abstract class BinanceFuturesBroker implements IBroker {
             this._instrumentTickSize[instrument.Name] = tickSize;
         }
 
-        // this._orders = [];
-        // this._positions = [];
-        // this._currencyRisks = [];
-        // this._accountInfo.Account = this._initData.Login.toString();
-        // this._serverName = this._initData.ServerName;
+        this.orders = [];
+        this.ordersHistory = [];
+        this.tradesHistory = [];
+        this._positions = [];
+        this._assets = [];
 
         this._loadPendingOrders();
     }
@@ -411,7 +560,7 @@ export abstract class BinanceFuturesBroker implements IBroker {
         this._updatePositions(data.Positions);
 
         this._updateAssets(data.Assets);
-        
+
     }
 
     protected _updatePositions(positions: IBinanceFuturePosition[]) {
@@ -429,7 +578,7 @@ export abstract class BinanceFuturesBroker implements IBroker {
                     existingPos.Price = posFromBroker.EntryPrice;
                     existingPos.Leverage = posFromBroker.Leverage;
                     existingPos.Size = posFromBroker.positionAmt;
-                    existingPos.PNL = posFromBroker.UnrealizedProfit;
+                    existingPos.NetPL = posFromBroker.UnrealizedProfit;
                     existingPos.MaintMargin = posFromBroker.MaintMargin;
                     existingPos.Margin = posFromBroker.PositionInitialMargin;
                     existingPos.Side = posFromBroker.positionAmt > 0 ? OrderSide.Buy : OrderSide.Sell;
@@ -443,7 +592,7 @@ export abstract class BinanceFuturesBroker implements IBroker {
                     Price: posFromBroker.EntryPrice,
                     Leverage: posFromBroker.Leverage,
                     Size: posFromBroker.positionAmt,
-                    PNL: posFromBroker.UnrealizedProfit,
+                    NetPL: posFromBroker.UnrealizedProfit,
                     Symbol: posFromBroker.Symbol,
                     MaintMargin: posFromBroker.MaintMargin,
                     Margin: posFromBroker.PositionInitialMargin,
@@ -537,6 +686,38 @@ export abstract class BinanceFuturesBroker implements IBroker {
 
         if (assetsChanged) {
             this.onAssetsUpdated.next(this._assets);
+        }
+    }
+
+    protected _removeFromOrders(orderId: any) {
+        let removed = false;
+        for (let i = 0; i < this.orders.length; i++) {
+            let order = this.orders[i];
+            if (order.Id === orderId) {
+                this.orders.splice(i, 1);
+                i--;
+                removed = true;
+            }
+        }
+
+        if (removed) {
+            this.onOrdersUpdated.next(this.orders);
+        }
+    }
+
+    protected _removeFromPositions(symbol: string) {
+        let removed = false;
+        for (let i = 0; i < this.positions.length; i++) {
+            let position = this.positions[i];
+            if (position.Symbol === symbol) {
+                this.positions.splice(i, 1);
+                i--;
+                removed = true;
+            }
+        }
+
+        if (removed) {
+            this.onPositionsUpdated.next(this.positions);
         }
     }
 }

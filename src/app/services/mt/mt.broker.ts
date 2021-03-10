@@ -12,7 +12,7 @@ import { ReadyStateConstants } from '@app/interfaces/socket/WebSocketConfig';
 import { MTSocketService } from '../socket/mt.socket.service';
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
-import { MTHelper } from "./mt.helper";
+import { TradingHelper } from "./mt.helper";
 import { MTTradeRatingService } from "./mt.trade-rating.service";
 
 export abstract class MTBroker implements IMTBroker {
@@ -501,12 +501,12 @@ export abstract class MTBroker implements IMTBroker {
 
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number {
         let res = 0;
-        const s1 = MTHelper.normalizeInstrument(symbol);
+        const s1 = TradingHelper.normalizeInstrument(symbol);
         const s1Part1 = s1.substring(0, 3);
         const s1Part2 = s1.substring(3, 6);
 
         for (const order of this.orders) {
-            const s2 = MTHelper.normalizeInstrument(order.Symbol);
+            const s2 = TradingHelper.normalizeInstrument(order.Symbol);
             if (s2 === s1) {
                 if (side === order.Side) {
                     res += order.Risk || 0;
@@ -547,13 +547,13 @@ export abstract class MTBroker implements IMTBroker {
         let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol/*, this._serverName, this._accountInfo.Account*/);
         let isMapped = !!(searchingString);
         if (!searchingString) {
-            searchingString = MTHelper.normalizeInstrument(symbol);
+            searchingString = TradingHelper.normalizeInstrument(symbol);
         }
 
         for (const i of this._instruments) {
             if (!isMapped) {
-                let instrumentID = MTHelper.normalizeInstrument(i.id);
-                let instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
+                let instrumentID = TradingHelper.normalizeInstrument(i.id);
+                let instrumentSymbol = TradingHelper.normalizeInstrument(i.symbol);
                 if (searchingString === instrumentID || searchingString === instrumentSymbol) {
                     return i;
                 }
@@ -563,17 +563,6 @@ export abstract class MTBroker implements IMTBroker {
                 }
             }
         }
-
-        // if (isMapped) {
-        //     return null;
-        // }
-
-        // for (const i of this._instruments) {
-        //     const instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
-        //     if (instrumentSymbol.startsWith(searchingString)) {
-        //         return i;
-        //     }
-        // }
 
         return null;
     }
@@ -986,7 +975,7 @@ export abstract class MTBroker implements IMTBroker {
             }
 
             if (order.SL) {
-                risk = MTHelper.buildRiskByPrice(contractSize, order.ProfitRate, order.Size, order.Price, order.SL, this.accountInfo.Balance);
+                risk = TradingHelper.buildRiskByPrice(contractSize, order.ProfitRate, order.Size, order.Price, order.SL, this.accountInfo.Balance);
             } else if (order.VAR) {
                 risk = order.VAR;
             }
@@ -999,7 +988,7 @@ export abstract class MTBroker implements IMTBroker {
 
             order.Risk = Math.roundToDecimals(this.accountInfo.Balance / 100 * risk, 2);
             order.RiskPercentage = Math.roundToDecimals(risk, 2);
-            order.RiskClass = MTHelper.convertValueToOrderRiskClass(order.RiskPercentage);
+            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(order.RiskPercentage);
         }
     }
 
@@ -1023,7 +1012,7 @@ export abstract class MTBroker implements IMTBroker {
                 continue;
             }
 
-            const s1 = MTHelper.normalizeInstrument(order.Symbol).toUpperCase();
+            const s1 = TradingHelper.normalizeInstrument(order.Symbol).toUpperCase();
             const s1Part1 = s1.substring(0, 3).toUpperCase();
             const s1Part2 = s1.substring(3, 6).toUpperCase();
 
@@ -1099,7 +1088,7 @@ export abstract class MTBroker implements IMTBroker {
             risk.Risk = Math.abs(risk.Risk);
             risk.RiskPercentage = Math.roundToDecimals(risk.Risk / this.accountInfo.Balance * 100, 2);
             risk.Risk = Math.roundToDecimals(risk.Risk, 2);
-            risk.RiskClass = MTHelper.convertValueToAssetRiskClass(risk.RiskPercentage);
+            risk.RiskClass = TradingHelper.convertValueToAssetRiskClass(risk.RiskPercentage);
         }
     }
 
@@ -1169,7 +1158,7 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         for (const position of this._positions) {
-            position.RiskClass = MTHelper.convertValueToOrderRiskClass(position.RiskPercentage);
+            position.RiskClass = TradingHelper.convertValueToOrderRiskClass(position.RiskPercentage);
             position.Recommendations = this._tradeRatingService.calculatePositionRecommendations(position);
         }
 

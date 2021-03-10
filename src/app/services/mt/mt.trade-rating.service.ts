@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
 import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { MTBroker } from "./mt.broker";
-import { MTHelper } from "./mt.helper";
+import { TradingHelper } from "./mt.helper";
 
 interface CacheItem<T> {
     Data: T;
@@ -150,7 +150,7 @@ export class MTTradeRatingService {
             }
         }
 
-        const riskClass = MTHelper.convertValueToAssetRiskClass(order.RiskPercentage);
+        const riskClass = TradingHelper.convertValueToAssetRiskClass(order.RiskPercentage);
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
                 Issue: "High leverage",
@@ -234,7 +234,7 @@ export class MTTradeRatingService {
             });
         }
 
-        const riskClass = MTHelper.convertValueToAssetRiskClass(order.RiskPercentage);
+        const riskClass = TradingHelper.convertValueToAssetRiskClass(order.RiskPercentage);
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
                 Issue: "High leverage",
@@ -289,7 +289,7 @@ export class MTTradeRatingService {
             }
         }
 
-        const riskClass = MTHelper.convertValueToAssetRiskClass(position.RiskPercentage);
+        const riskClass = TradingHelper.convertValueToAssetRiskClass(position.RiskPercentage);
         if (riskClass === RiskClass.High || riskClass === RiskClass.Extreme) {
             res.FailedChecks.push({
                 Issue: "High leverage",
@@ -304,8 +304,8 @@ export class MTTradeRatingService {
 
     private _createOrderRecommendationBase(order: MTOrder): MTOrderRecommendation {
         const symbol = order.Symbol;
-        const tradeType = MTHelper.getTradeTypeFromTechnicalComment(order.Comment);
-        const timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
+        const tradeType = TradingHelper.getTradeTypeFromTechnicalComment(order.Comment);
+        const timeframe = TradingHelper.getTradeTimeframeFromTechnicalComment(order.Comment);
 
         const marketInfo = this._getOrLoadMarketInfo(symbol, timeframe);
         if (marketInfo === undefined) {
@@ -334,8 +334,8 @@ export class MTTradeRatingService {
         const localRTDSpread = marketInfo.local_trend_spread;
         const globalRTDSpread = marketInfo.global_trend_spread;
         const isOverhit = marketInfo.is_overhit;
-        const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
-        const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
+        const globalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.global_trend_spread);
+        const localRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.local_trend_spread);
 
         let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
         let localRTD = marketInfo.local_trend === IBFTATrend.Up;
@@ -370,7 +370,7 @@ export class MTTradeRatingService {
                 continue;
             }
             
-            timeframe = MTHelper.getTradeTimeframeFromTechnicalComment(marketOrder.Comment);
+            timeframe = TradingHelper.getTradeTimeframeFromTechnicalComment(marketOrder.Comment);
             if (timeframe) {
                 break;
             }
@@ -402,8 +402,8 @@ export class MTTradeRatingService {
         const localRTDSpread = marketInfo.local_trend_spread;
         const globalRTDSpread = marketInfo.global_trend_spread;
         const isOverhit = marketInfo.is_overhit;
-        const globalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
-        const localRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
+        const globalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.global_trend_spread);
+        const localRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.local_trend_spread);
 
         let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
         let localRTD = marketInfo.local_trend === IBFTATrend.Up;
@@ -489,8 +489,8 @@ export class MTTradeRatingService {
             result.LocalRTDSpread = marketInfo.local_trend_spread;
             result.GlobalRTDSpread = marketInfo.global_trend_spread;
 
-            result.GlobalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.global_trend_spread);
-            result.LocalRTDTrendStrength = MTHelper.convertTrendSpread(marketInfo.local_trend_spread);
+            result.GlobalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.global_trend_spread);
+            result.LocalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.local_trend_spread);
         }
 
         if (symbolTradeInfo && symbolTradeInfo.Data) {
@@ -502,9 +502,9 @@ export class MTTradeRatingService {
             let ask = symbolTradeInfo.Data.Ask;
             if (price) {
                 if (parameters.SL) {
-                    result.OrderRiskValue = MTHelper.buildRiskByPrice(contractSize, rate, parameters.Size, price, parameters.SL, this.mtBroker.accountInfo.Balance);
+                    result.OrderRiskValue = TradingHelper.buildRiskByPrice(contractSize, rate, parameters.Size, price, parameters.SL, this.mtBroker.accountInfo.Balance);
                 } else if (cvar) {
-                    result.OrderRiskValue = MTHelper.buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar, this.mtBroker.accountInfo.Balance);
+                    result.OrderRiskValue = TradingHelper.buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar, this.mtBroker.accountInfo.Balance);
                 }
             }
 

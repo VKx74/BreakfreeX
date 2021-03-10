@@ -17,7 +17,7 @@ import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { MatDialog } from '@angular/material/dialog';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
-import { MTHelper } from '@app/services/mt/mt.helper';
+import { TradingHelper } from '@app/services/mt/mt.helper';
 import { TimeSpan } from '@app/helpers/timeFrame.helper';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 
@@ -125,7 +125,7 @@ const checklist: ChecklistItemDescription[] = [
             if (data.PositionRiskValue !== null && data.PositionRiskValue !== undefined) {
                 value = data.PositionRiskValue.toFixed(2) + "%";
 
-                const risk = MTHelper.convertValueToOrderRiskClass(data.PositionRiskValue);
+                const risk = TradingHelper.convertValueToOrderRiskClass(data.PositionRiskValue);
                 if (risk === RiskClass.Extreme) {
                     minusScore = 5;
                     valid = false;
@@ -155,7 +155,7 @@ const checklist: ChecklistItemDescription[] = [
             if (data.CorrelatedRiskValue !== null && data.CorrelatedRiskValue !== undefined) {
                 value = data.CorrelatedRiskValue.toFixed(2) + "%";
 
-                const risk = MTHelper.convertValueToAssetRiskClass(data.CorrelatedRiskValue);
+                const risk = TradingHelper.convertValueToAssetRiskClass(data.CorrelatedRiskValue);
                 if (risk === RiskClass.Extreme) {
                     minusScore = 5;
                     valid = false;
@@ -414,7 +414,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         this.allowedOrderTypes = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
         if (this.config.instrument) {
             this._selectInstrument(this.config.instrument, false);
-            this._technicalComment = MTHelper.buildTechnicalComment(this.config.tradeType, this.config.timeframe);
+            this._technicalComment = TradingHelper.buildTechnicalComment(this.config.tradeType, this.config.timeframe);
         }
     }
 

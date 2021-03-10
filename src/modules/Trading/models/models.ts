@@ -79,7 +79,8 @@ export enum TradeManagerTab {
     AccountInfo = 'AccountInfo',
     CurrencyRisk = 'CurrencyRisk',
     TradeHistory = 'TradeHistory',
-    Funds = 'Funds'
+    Funds = 'Funds',
+    Assets = 'Assets',
 }
 
 export enum TimeInForce {
@@ -132,6 +133,14 @@ export interface IOrder {
     Side: OrderSide;
     Type: OrderTypes;
     NetPL?: number;
+}
+
+export interface IPosition {
+    Size: number;
+    Symbol: string;
+    Price: number;
+    NetPL?: number;
+    Side: OrderSide;
 }
 
 export interface IOrderRisk {

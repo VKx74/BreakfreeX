@@ -5,7 +5,7 @@ import { ITradeTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
-import { BinanceFutureAccountUpdateResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMessageType, BinanceFutureOpenOrderRequest, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceOrderHistoryRequest as BinanceFutureOrderHistoryRequest, IBinanceFutureAccountUpdatedData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFutureAccountUpdateResponse, BinanceFutureCloseOrderRequest, BinanceFutureCloseOrderResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureMarketTradesRequest, BinanceFutureMessageType, BinanceFutureOpenOrderRequest, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureOrderInfoRequest, BinanceFutureOrderInfoResponse, BinanceFuturePlaceOrderRequest, BinanceFuturePlaceOrderResponse, BinanceFutureTradeHistoryRequest, BinanceFutureTradeHistoryResponse, BinanceOrderHistoryRequest as BinanceFutureOrderHistoryRequest, IBinanceFutureAccountUpdatedData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 
 export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   private _onMessageSubscription: Subscription;
@@ -85,6 +85,28 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
+  public getTradesHistory(symbol: string, from: number, to: number): Observable<BinanceFutureTradeHistoryResponse> {
+    return new Observable<BinanceFutureTradeHistoryResponse>(subscriber => {
+      const message = new BinanceFutureTradeHistoryRequest();
+      message.Data = {
+        Symbol: symbol,
+        From: from,
+        To: to
+      };
+      this._send(message, subscriber);
+    });
+  }
+
+  public getMarketTrades(symbol: string): Observable<BinanceFutureMarketTradeResponse> {
+    return new Observable<BinanceFutureMarketTradeResponse>(subscriber => {
+      const message = new BinanceFutureMarketTradesRequest();
+      message.Data = {
+        Symbol: symbol
+      };
+      this._send(message, subscriber);
+    });
+  }
+
   public getOpenOrders(): Observable<BinanceFutureOpenOrderResponse> {
     return new Observable<BinanceFutureOpenOrderResponse>(subscriber => {
       const message = new BinanceFutureOpenOrderRequest();
@@ -92,53 +114,40 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  // public subscribeOnQuotes(symbol: string): Observable<BrokerResponseMessageBase> {
-  //   return new Observable<BrokerResponseMessageBase>(subscriber => {
-  //     const message = new SubscribeQuote();
-  //     message.Data = {
-  //       Subscribe: true,
-  //       Symbol: symbol
-  //     };
-  //     this._send(message, subscriber);
-  //   });
-  // }
+  public closeOrder(symbol: string, orderId: any): Observable<BinanceFutureCloseOrderResponse> {
+    return new Observable<BinanceFutureCloseOrderResponse>(subscriber => {
+      const message = new BinanceFutureCloseOrderRequest();
+      message.Data = {
+        Symbol: symbol,
+        OrderId: orderId
+      };
+      this._send(message, subscriber);
+    });
+  }
 
-  // public unsubscribeFromQuotes(symbol: string): Observable<BrokerResponseMessageBase> {
-  //   return new Observable<BrokerResponseMessageBase>(subscriber => {
-  //     const message = new SubscribeQuote();
-  //     message.Data = {
-  //       Subscribe: false,
-  //       Symbol: symbol
-  //     };
-  //     this._send(message, subscriber);
-  //   });
-  // }
+  public orderInfo(symbol: string, orderId: string): Observable<BinanceFutureOrderInfoResponse> {
+    return new Observable<BinanceFutureOrderInfoResponse>(subscriber => {
+      const message = new BinanceFutureOrderInfoRequest();
+      message.Data = {
+        Symbol: symbol,
+        OrderId: orderId
+      };
+      this._send(message, subscriber);
+    });
+  }
 
-  // private _processNewQuote(msgData: BrokerResponseMessageBase) {
-  //   const quoteMessage = msgData as MTQuoteResponse;
-  //   this._tickSubject.next({
-  //     ask: quoteMessage.Data.Ask,
-  //     bid: quoteMessage.Data.Bid,
-  //     last: quoteMessage.Data.Last,
-  //     volume: quoteMessage.Data.Volume,
-  //     symbol: quoteMessage.Data.Symbol
-  //   });
-  // }
+  public placeOrder(orderData: any): Observable<BinanceFuturePlaceOrderResponse> {
+    return new Observable<BinanceFuturePlaceOrderResponse>(subscriber => {
+      const message = new BinanceFuturePlaceOrderRequest();
+      message.Data = orderData;
+      this._send(message, subscriber);
+    });
+  }
 
   private _processAccountUpdate(msgData: BrokerResponseMessageBase) {
     const quoteMessage = msgData as BinanceFutureAccountUpdateResponse;
     this._accountUpdatedSubject.next(quoteMessage.Data);
   }
-
-  // private _processOrdersUpdate(msgData: BrokerResponseMessageBase) {
-  //   const quoteMessage = msgData as MTOrdersUpdateResponse;
-  //   this._ordersUpdatedSubject.next(quoteMessage.Data);
-  // }
-
-  // private _processOrdersUpdate(msgData: BrokerResponseMessageBase) {
-  //   const quoteMessage = msgData as MTOrdersUpdateResponse;
-  //   this._ordersUpdatedSubject.next(quoteMessage.Data);
-  // }
 }
 
 

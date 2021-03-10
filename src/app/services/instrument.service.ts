@@ -10,7 +10,7 @@ import { APP_TYPE_EXCHANGES } from "../enums/ApplicationType";
 import { InstrumentServiceBase } from "@app/interfaces/exchange/instrument.service";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { InstrumentMappingService } from "./instrument-mapping.service";
-import { MTHelper } from "./mt/mt.helper";
+import { TradingHelper } from "./mt/mt.helper";
 
 @Injectable()
 export class InstrumentService implements IHealthable {
@@ -52,7 +52,7 @@ export class InstrumentService implements IHealthable {
         let searchingString = this._instrumentMappingService.tryMapInstrumentToDatafeedFormat(instrument);
         let isMapped = !!(searchingString);
         if (!searchingString) {
-            searchingString = MTHelper.normalizeInstrument(instrument);
+            searchingString = TradingHelper.normalizeInstrument(instrument);
         }
 
         const observables: Observable<IInstrument[]>[] = this.services.map(s => s.getInstruments(undefined, searchingString));
@@ -67,8 +67,8 @@ export class InstrumentService implements IHealthable {
                 let instruments = JsUtil.flattenArray<IInstrument>(responses);
                 for (const i of instruments) {
                     if (!isMapped) {
-                        let instrumentID = MTHelper.normalizeInstrument(i.id);
-                        let instrumentSymbol = MTHelper.normalizeInstrument(i.symbol);
+                        let instrumentID = TradingHelper.normalizeInstrument(i.id);
+                        let instrumentSymbol = TradingHelper.normalizeInstrument(i.symbol);
                         if (searchingString === instrumentID || searchingString === instrumentSymbol) {
                             return i;
                         }

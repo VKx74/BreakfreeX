@@ -1,4 +1,4 @@
-import { ActionResult, BrokerConnectivityStatus, IOrder, IPlaceOrder } from "../../../modules/Trading/models/models";
+import { ActionResult, BrokerConnectivityStatus, IOrder, IPlaceOrder, IPosition } from "../../../modules/Trading/models/models";
 import { EExchange } from "../../models/common/exchange";
 import { Observable, Subject, Subscription } from "rxjs";
 import { IInstrument } from "../../models/common/instrument";
@@ -17,6 +17,14 @@ export interface IBrokerState<T = any> {
     account: string;
     server: string;
     state: T;
+}
+
+export interface IPositionBasedBroker {
+    onPositionsUpdated: Subject<IPosition[]>;
+    onPositionsParametersUpdated: Subject<IPosition[]>;
+    positions: IPosition[];
+
+    closePosition(symbol: any, ...args): Observable<ActionResult>;
 }
 
 export interface IBroker {
@@ -49,9 +57,7 @@ export interface IBroker {
     placeOrder(order: IPlaceOrder): Observable<ActionResult>;
     editOrder(order: any): Observable<ActionResult>;
     editOrderPrice(order: any): Observable<ActionResult>;
-    // closeOrder(order: string, ...args): Observable<ActionResult>;
-    // closePosition(symbol: string, ...args): Observable<ActionResult>;
-    cancelOrder(order: string, ...args): Observable<ActionResult>;
+    cancelOrder(order: any, ...args): Observable<ActionResult>;
     subscribeToTicks(instrument: string, subscription: (value: ITradeTick) => void): Subscription;
     instrumentTickSize(symbol: string): number;
     instrumentContractSize(symbol: string): number;
