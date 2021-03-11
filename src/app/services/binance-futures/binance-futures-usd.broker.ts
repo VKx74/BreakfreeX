@@ -8,11 +8,11 @@ import { BinanceFuturesBroker } from "./binance-futures.broker";
 
 export class BinanceFuturesUsdBroker extends BinanceFuturesBroker {
     protected get _accountName(): string {
-        return "Binance Futures USDT";
+        return "10000000000";
     }
     
     protected get _server(): string {
-        return "Binance Futures";
+        return "Binance Futures USDT";
     }
 
     instanceType: EBrokerInstance = EBrokerInstance.BinanceFuturesUSD;

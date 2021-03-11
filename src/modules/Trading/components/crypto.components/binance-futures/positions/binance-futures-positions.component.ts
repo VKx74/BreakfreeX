@@ -10,6 +10,7 @@ import { BinanceFuturesItemsComponent } from '../binance-futures-items.component
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BinanceFuturesPositionsComponent extends BinanceFuturesItemsComponent<BinanceFuturesPosition> {
+    protected _subscriptionOnPositionDataChanged: Subscription;
 
     protected loadItems(): Observable<BinanceFuturesPosition[]> {
         return of(this._binanceBroker.positions);
@@ -29,6 +30,18 @@ export class BinanceFuturesPositionsComponent extends BinanceFuturesItemsCompone
 
     ngOnDestroy(): void {
         super.ngOnDestroy();
+
+        if (this._subscriptionOnPositionDataChanged) {
+            this._subscriptionOnPositionDataChanged.unsubscribe();
+            this._subscriptionOnPositionDataChanged = null;
+        }
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
+        this._subscriptionOnPositionDataChanged = this._binanceBroker.onPositionsParametersUpdated.subscribe(() => {
+            this.collectionUpdated();
+        });
     }
 
     protected collectionUpdated() {

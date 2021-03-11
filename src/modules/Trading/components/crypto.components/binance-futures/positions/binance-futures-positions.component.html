@@ -10,9 +10,9 @@
         <data-table-header-cell columnName="Current Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
         <!-- <data-table-header-cell columnName="Liq. Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.liqPrice' | translate}}</data-table-header-cell> -->
         <!-- <data-table-header-cell columnName="Margin Ratio" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.marginRatio' | translate}}</data-table-header-cell> -->
-        <data-table-header-cell columnName="Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Mnt. Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.mntMargin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Leverage" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.leverage' | translate}}</data-table-header-cell>
+        <!-- <data-table-header-cell columnName="Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell> -->
+        <!-- <data-table-header-cell columnName="Mnt. Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.mntMargin' | translate}}</data-table-header-cell> -->
+        <!-- <data-table-header-cell columnName="Leverage" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.leverage' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="PNL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.pnl' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
     
@@ -36,15 +36,15 @@
         <data-table-cell columnName="Current Price">
             <ng-template let-item>{{item.CurrentPrice?.toFixed(getDecimals(item.Symbol))}}</ng-template>
         </data-table-cell>
-        <data-table-cell columnName="Margin">
+        <!-- <data-table-cell columnName="Margin">
             <ng-template let-item>{{item.Margin?.toFixed(2)}}</ng-template>
-        </data-table-cell>
-        <data-table-cell columnName="Mnt. Margin">
+        </data-table-cell> -->
+        <!-- <data-table-cell columnName="Mnt. Margin">
             <ng-template let-item>{{item.MaintMargin?.toFixed(2)}}</ng-template>
-        </data-table-cell>
-        <data-table-cell columnName="Leverage">
+        </data-table-cell> -->
+        <!-- <data-table-cell columnName="Leverage">
             <ng-template let-item>{{item.Leverage?.toFixed(2)}}</ng-template>
-        </data-table-cell>
+        </data-table-cell> -->
         <data-table-cell columnName="PNL">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}">

@@ -1,7 +1,7 @@
 <div class="connected-broker-area" *ngIf="!brokerConnected" [class.disabled]="showSpinner">
     <div class="flex-row" *ngIf="savedAccountExists()">
         <div class="connected-accounts">
-            <binance-connected-account-info>
+            <binance-connected-account-info [brokerInstance]="brokerInstance" (onBrokerSelected)="brokerSelected($event)">
             </binance-connected-account-info>
         </div>
     </div>

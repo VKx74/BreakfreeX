@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IWebSocketConfig } from "@app/interfaces/socket/WebSocketConfig";
+import { BinanceFutureBrokerType } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 import { AppConfigService } from "../app.config.service";
 import { IdentityService } from "../auth/identity.service";
 import { BinanceFuturesSocketService } from "./binance-futures.socket.service";
@@ -10,6 +11,10 @@ export class BinanceFuturesCoinSocketService extends BinanceFuturesSocketService
     return {
       url: AppConfigService.config.apiUrls.BinanceBrokerWS
     };
+  }
+
+  get type(): BinanceFutureBrokerType {
+    return BinanceFutureBrokerType.COIN;
   }
 
   constructor(protected _identityService: IdentityService) {

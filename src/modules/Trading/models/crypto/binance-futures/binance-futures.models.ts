@@ -17,24 +17,24 @@ export interface BinanceFuturesAsset {
 
 export interface BinanceFuturesPosition extends IPosition {
     CurrentPrice?: number;
-    Leverage: number;
-    Margin: number;
-    MaintMargin: number;
+    Leverage?: number;
+    Margin?: number;
+    MaintMargin?: number;
 }
 
 export interface BinanceFuturesTradingAccount {
     APIKey: string;
     FeeTier: number;
-    TotalInitialMargin: number;
-    TotalMaintMargin: number;
-    TotalMarginBalance: number;
-    TotalOpenOrderInitialMargin: number;
-    TotalPositionInitialMargin: number;
-    TotalUnrealizedProfit: number;
-    TotalWalletBalance: number;
-    TotalCrossWalletBalance: number;
-    TotalCrossUnPnl: number;
-    AvailableBalance: number;
+    // TotalInitialMargin: number;
+    // TotalMaintMargin: number;
+    // TotalMarginBalance: number;
+    // TotalOpenOrderInitialMargin: number;
+    // TotalPositionInitialMargin: number;
+    // TotalUnrealizedProfit: number;
+    // TotalWalletBalance: number;
+    // TotalCrossWalletBalance: number;
+    // TotalCrossUnPnl: number;
+    // AvailableBalance: number;
 }
 
 
@@ -56,6 +56,7 @@ export interface BinanceFuturesHistoricalOrder extends IOrder {
     Time: number;
     ExecutedSize: number;
     ExecutedPrice: number;
+    StopPrice: number;
     TIF: string;
 }
 
@@ -64,6 +65,7 @@ export interface BinanceFuturesOrder extends IOrder {
     Time: number;
     ExecutedSize: number;
     ExecutedPrice: number;
+    StopPrice: number;
     TIF: string;
 }
 

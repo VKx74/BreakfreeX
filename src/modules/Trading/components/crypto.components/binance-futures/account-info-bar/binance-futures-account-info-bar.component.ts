@@ -21,13 +21,13 @@ export class BinanceFuturesAccountInfoBarComponent {
         return broker.accountInfo;
     }
     
-    get accountName(): string {
+    get server(): string {
         const broker = this._broker.activeBroker as BinanceFuturesBroker;
         if (!broker) {
             return null;
         }
 
-        return broker.accountName;
+        return broker.server;
     }
 
     get status(): BrokerConnectivityStatus {

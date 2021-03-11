@@ -1,3 +1,4 @@
+import { W } from "@angular/cdk/keycodes";
 import { EBrokerInstance, IBroker, IBrokerState, IPositionBasedBroker } from "@app/interfaces/broker/broker";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
@@ -5,7 +6,7 @@ import { EExchange } from "@app/models/common/exchange";
 import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
-import { BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureTradeHistoryResponse, IBinanceFutureAccountUpdatedData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureSymbolData, IBinanceFutureTrade } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFutureBookPriceResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureTradeHistoryResponse, FuturesOrderStatus, IBinanceFutureAccountInfoData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureSymbolData, IBinanceFutureTrade, IBinanceFuturesOrderUpdateData, IBinanceFuturesAccountUpdateData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesHistoricalTrade, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount, IBinanceFuturesPlaceOrderData } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData } from "modules/Trading/models/crypto/binance/binance.models";
 import { ActionResult, BrokerConnectivityStatus, IOrder, IPosition, OrderSide, OrderTypes, TimeInForce } from "modules/Trading/models/models";
@@ -21,6 +22,8 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
     protected _initData: BinanceConnectionData;
     protected _positions: BinanceFuturesPosition[] = [];
     protected _assets: BinanceFuturesAsset[] = [];
+    protected _lastPriceSubscribers: string[] = [];
+    protected _symbolToAsset: { [key: string]: string; } = {};
     protected _tickSubscribers: { [symbol: string]: Subject<ITradeTick>; } = {};
     protected _instrumentDecimals: { [symbol: string]: number; } = {};
     protected _instrumentTickSize: { [symbol: string]: number; } = {};
@@ -28,6 +31,9 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
     protected _onAccountUpdateSubscription: Subscription;
     protected _onReconnectSubscription: Subscription;
     protected _onTickSubscription: Subscription;
+    protected _onLastPriceSubject: Subscription;
+    protected _onOrderUpdateSubject: Subscription;
+    protected _onAccountUpdateSubject: Subscription;
 
     protected abstract get _accountName(): string;
     protected abstract get _server(): string;
@@ -84,8 +90,8 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         return true;
     }
 
-    public get accountName(): string {
-        return this._accountName;
+    public get server(): string {
+        return this._server;
     }
 
     constructor(protected ws: BinanceFuturesSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
@@ -140,7 +146,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
         return this.placeOrder(placeOrderRequest).pipe(map((data: ActionResult) => {
             if (data.result) {
-                this._removeFromPositions(symbol);
+                // this._removeFromPositions(symbol);
             }
             return data;
         }));
@@ -162,7 +168,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
             this.ws.closeOrder(specificOrder.Symbol, specificOrder.Id).subscribe((response) => {
                 if (response.IsSuccess) {
                     observer.next({ result: true });
-                    this._removeFromOrders(specificOrder.Id);
+                    // this._removeFromOrders(specificOrder.Id);
                 } else {
                     observer.error(response.ErrorMessage);
                 }
@@ -174,19 +180,19 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         });
     }
     cancelAll(): Observable<any> {
-        const pending =  this.orders;
+        const pending = this.orders;
         const subjects = [];
         for (const order of pending) {
             const subj = this.cancelOrder(order.Id);
             subjects.push(subj);
         }
-        
+
         return combineLatest(subjects);
     }
     subscribeToTicks(symbol: string, subscription: (value: ITradeTick) => void): Subscription {
         if (!this._tickSubscribers[symbol]) {
             this._tickSubscribers[symbol] = new Subject<ITradeTick>();
-            // this.ws.subscribeOnQuotes(symbol).subscribe();
+            this.ws.subscribeOnOrderBook(symbol).subscribe();
         }
 
         return this._tickSubscribers[symbol].subscribe(subscription);
@@ -216,15 +222,17 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
     }
     getPrice(symbol: string): Observable<ITradeTick> {
         return new Observable<ITradeTick>((observer: Observer<ITradeTick>) => {
-            this.ws.getMarketTrades(symbol).subscribe((response: BinanceFutureMarketTradeResponse) => {
+            this.ws.getBookPrice(symbol).subscribe((response: BinanceFutureBookPriceResponse) => {
                 if (response.IsSuccess) {
-                    const last = response.Data.History[response.Data.History.length - 1];
+                    const bid = response.Data.BookPrice.bidPrice;
+                    const ask = response.Data.BookPrice.askPrice;
+                    const qty = response.Data.BookPrice.askQty + response.Data.BookPrice.bidQty;
                     observer.next({
-                        ask: last.Price,
-                        bid: last.Price,
-                        last: last.Price,
+                        ask: ask,
+                        bid: bid,
+                        last: (bid + ask) / 2,
                         symbol: symbol,
-                        volume: last.qty
+                        volume: qty
                     });
                 } else {
                     observer.error(response.ErrorMessage);
@@ -259,14 +267,28 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         if (this._onTickSubscription) {
             this._onTickSubscription.unsubscribe();
         }
+        if (this._onLastPriceSubject) {
+            this._onLastPriceSubject.unsubscribe();
+        }
         if (this._onAccountUpdateSubscription) {
             this._onAccountUpdateSubscription.unsubscribe();
+        }
+        if (this._onOrderUpdateSubject) {
+            this._onOrderUpdateSubject.unsubscribe();
+        }
+        if (this._onAccountUpdateSubject) {
+            this._onAccountUpdateSubject.unsubscribe();
         }
         if (this._onReconnectSubscription) {
             this._onReconnectSubscription.unsubscribe();
         }
 
+        this._symbolToAsset = {};
+
         this._onTickSubscription = this.ws.tickSubject.subscribe(this._handleQuotes.bind(this));
+        this._onLastPriceSubject = this.ws.lastPriceSubject.subscribe(this._handleLastPrice.bind(this));
+        this._onOrderUpdateSubject = this.ws.orderUpdateSubject.subscribe(this._handleOrderUpdate.bind(this));
+        this._onAccountUpdateSubject = this.ws.accountUpdateSubject.subscribe(this._handleRealtimeAccountUpdate.bind(this));
         this._onAccountUpdateSubscription = this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate.bind(this));
         this._onReconnectSubscription = this.ws.onReconnect.subscribe(() => {
             this._reconnect();
@@ -274,7 +296,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
             this.ws.open().subscribe(value => {
-                const request = new BinanceFutureLoginRequest();
+                const request = new BinanceFutureLoginRequest(this.ws.type);
                 request.Data = {
                     ApiSecret: initData.APISecret,
                     ApiKey: initData.APIKey
@@ -309,6 +331,30 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         });
     }
     dispose(): Observable<ActionResult> {
+        if (this._onTickSubscription) {
+            this._onTickSubscription.unsubscribe();
+        }
+        if (this._onLastPriceSubject) {
+            this._onLastPriceSubject.unsubscribe();
+        }
+        if (this._onAccountUpdateSubscription) {
+            this._onAccountUpdateSubscription.unsubscribe();
+        }
+        if (this._onOrderUpdateSubject) {
+            this._onOrderUpdateSubject.unsubscribe();
+        }
+        if (this._onAccountUpdateSubject) {
+            this._onAccountUpdateSubject.unsubscribe();
+        }
+        if (this._onReconnectSubscription) {
+            this._onReconnectSubscription.unsubscribe();
+        }
+
+        this._symbolToAsset = {};        
+
+        this.ws.setConnectivity(false);
+        this.ws.dispose();
+
         return of({
             result: true
         });
@@ -371,10 +417,11 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
                 Symbol: order.symbol,
                 TIF: order.timeInForce,
                 Time: order.time,
+                StopPrice: order.stopPrice,
                 Type: order.type as OrderTypes
             });
         }
-
+        response.sort((a, b) => b.Time - a.Time);
         return response;
     }
 
@@ -387,6 +434,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
                 ExecutedSize: order.executedQty,
                 Price: order.price,
                 ExecutedPrice: order.avgPrice,
+                StopPrice: order.stopPrice,
                 Side: order.side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
                 Size: order.origQty,
                 Status: order.status,
@@ -396,7 +444,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
                 Type: order.type as OrderTypes
             });
         }
-
+        response.sort((a, b) => b.Time - a.Time);
         return response;
     }
 
@@ -417,7 +465,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
                 Side: trade.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
             });
         }
-
+        response.sort((a, b) => b.Time - a.Time);
         return response;
     }
 
@@ -453,7 +501,16 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
             this.orders = this._parseOrders(response.Data.Orders);
             this.onOrdersUpdated.next(this.orders);
+            this._trySubscribeToAll();
         });
+    }
+
+    protected _handleLastPrice(quote: ITradeTick) {
+        if (this._updateInnerData(quote)) {
+            return;
+        }
+
+        this._unsubscribeFromLastPrice(quote.symbol);
     }
 
     protected _handleQuotes(quote: ITradeTick) {
@@ -463,9 +520,9 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         } else {
             if (subject) {
                 subject.unsubscribe();
+                delete this._tickSubscribers[quote.symbol];
+                this.ws.unsubscribeOrderBook(quote.symbol).subscribe();
             }
-            delete this._tickSubscribers[quote.symbol];
-            // this.ws.unsubscribeFromQuotes(quote.symbol).subscribe();
         }
     }
 
@@ -474,7 +531,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
             return;
         }
 
-        const request = new BinanceFutureLoginRequest();
+        const request = new BinanceFutureLoginRequest(this.ws.type);
         request.Data = {
             ApiKey: this._initData.APIKey,
             ApiSecret: this._initData.APISecret
@@ -535,39 +592,37 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         this._loadPendingOrders();
     }
 
-    protected _handleAccountUpdate(data: IBinanceFutureAccountUpdatedData) {
+    protected _handleAccountUpdate(data: IBinanceFutureAccountInfoData) {
         if (!this._accountInfo) {
             this._accountInfo = {} as any;
         }
 
         const apiKeyLength = this._initData.APIKey.length;
         this._accountInfo.APIKey = this._initData.APIKey.slice(0, 1) + "******" + this._initData.APIKey.slice(apiKeyLength - 4, apiKeyLength);
-        this._accountInfo.AvailableBalance = data.AvailableBalance;
+        // this._accountInfo.AvailableBalance = data.AvailableBalance;
         this._accountInfo.FeeTier = data.FeeTier;
-        this._accountInfo.TotalInitialMargin = data.TotalInitialMargin;
-        this._accountInfo.TotalMaintMargin = data.TotalMaintMargin;
-        this._accountInfo.TotalMarginBalance = data.TotalMarginBalance;
-        this._accountInfo.TotalOpenOrderInitialMargin = data.TotalOpenOrderInitialMargin;
-        this._accountInfo.TotalPositionInitialMargin = data.TotalPositionInitialMargin;
-        this._accountInfo.TotalUnrealizedProfit = data.TotalUnrealizedProfit;
-        this._accountInfo.TotalWalletBalance = data.TotalWalletBalance;
-        this._accountInfo.TotalCrossWalletBalance = data.TotalCrossWalletBalance;
-        this._accountInfo.TotalCrossUnPnl = data.TotalCrossUnPnl;
-        this._accountInfo.AvailableBalance = data.AvailableBalance;
+        // this._accountInfo.TotalInitialMargin = data.TotalInitialMargin;
+        // this._accountInfo.TotalMaintMargin = data.TotalMaintMargin;
+        // this._accountInfo.TotalMarginBalance = data.TotalMarginBalance;
+        // this._accountInfo.TotalOpenOrderInitialMargin = data.TotalOpenOrderInitialMargin;
+        // this._accountInfo.TotalPositionInitialMargin = data.TotalPositionInitialMargin;
+        // this._accountInfo.TotalUnrealizedProfit = data.TotalUnrealizedProfit;
+        // this._accountInfo.TotalWalletBalance = data.TotalWalletBalance;
+        // this._accountInfo.TotalCrossWalletBalance = data.TotalCrossWalletBalance;
+        // this._accountInfo.TotalCrossUnPnl = data.TotalCrossUnPnl;
+        // this._accountInfo.AvailableBalance = data.AvailableBalance;
 
         this.onAccountInfoUpdated.next(this._accountInfo);
 
         this._updatePositions(data.Positions);
 
         this._updateAssets(data.Assets);
-
     }
 
     protected _updatePositions(positions: IBinanceFuturePosition[]) {
         let positionsChanged = false;
-
         for (const posFromBroker of positions) {
-            if (posFromBroker.positionAmt === 0) {
+            if (!posFromBroker.positionAmt || posFromBroker.positionAmt === 0) {
                 continue;
             }
 
@@ -622,8 +677,11 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         }
 
         if (positionsChanged) {
+            this._updateAccountPNL();
             this.onPositionsUpdated.next(this._positions);
         }
+
+        this._trySubscribeToAll();
     }
 
     protected _updateAssets(assets: IBinanceFutureAsset[]) {
@@ -717,7 +775,236 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         }
 
         if (removed) {
+            this._updateAccountPNL();
             this.onPositionsUpdated.next(this.positions);
         }
     }
+
+    protected _handleOrderUpdate(update: IBinanceFuturesOrderUpdateData) {
+        if (update.Status === FuturesOrderStatus.FILLED) {
+            this._removeFromOrders(update.OrderId);
+        }
+
+        if (update.Status === FuturesOrderStatus.CANCELED ||
+            update.Status === FuturesOrderStatus.EXPIRED ||
+            update.Status === FuturesOrderStatus.REJECTED) {
+            this._removeFromOrders(update.OrderId);
+        }
+
+        if (update.Status === FuturesOrderStatus.NEW) {
+            for (let i = 0; i < this.orders.length; i++) {
+                let order = this.orders[i];
+                if (order.Id === update.OrderId) {
+                    return;
+                }
+            }
+            this.orders.unshift({
+                Id: update.OrderId,
+                ExecutedSize: 0,
+                Price: update.Price,
+                ExecutedPrice: update.AveragePrice,
+                StopPrice: update.StopPrice,
+                Side: update.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
+                Size: update.Quantity,
+                Status: update.Status,
+                Symbol: update.Symbol,
+                TIF: update.TimeInForce,
+                Time: update.CreateTime,
+                Type: update.Type as OrderTypes
+            });
+
+            this._trySubscribeToAll();
+        }
+
+        if (update.Status === FuturesOrderStatus.PARTIALLY_FILLED) {
+            for (let i = 0; i < this.orders.length; i++) {
+                let order = this.orders[i];
+                if (order.Id === update.OrderId) {
+                    order.ExecutedSize = update.AccumulatedQuantityOfFilledTrades;
+                    order.Price = update.Price;
+                    order.ExecutedPrice = update.AveragePrice;
+                    order.StopPrice = update.StopPrice;
+                    order.Size = update.Quantity;
+                    order.Status = update.Status;
+                    order.Type = update.Type as OrderTypes;
+                    break;
+                }
+            }
+        }
+
+        this.onOrdersUpdated.next(this.orders);
+    }
+
+    protected _getPosition(symbol: string): BinanceFuturesPosition {
+        for (const pos of this.positions) {
+            if (pos.Symbol === symbol) {
+                return pos;
+            }
+        }
+    }
+
+    protected _handleRealtimeAccountUpdate(update: IBinanceFuturesAccountUpdateData) {
+        let positionsUpdated = false;
+        let positionsParametersUpdated = false;
+        for (const updatedPosition of update.Positions) {
+            const position = this._getPosition(updatedPosition.Symbol);
+            if (position) {
+                position.Size = updatedPosition.PositionAmount;
+                position.Side = updatedPosition.PositionAmount > 0 ? OrderSide.Buy : OrderSide.Sell;
+                position.Price = updatedPosition.EntryPrice;
+                position.NetPL = updatedPosition.UnrealizedPnl;
+
+                if (position.Size === 0) {
+                    this._removeFromPositions(position.Symbol);
+                    positionsUpdated = true;
+                } else {
+                    positionsParametersUpdated = true;
+                }
+            } else {
+                this.positions.push({
+                    Symbol: updatedPosition.Symbol,
+                    Size: updatedPosition.PositionAmount,
+                    Side: updatedPosition.PositionAmount > 0 ? OrderSide.Buy : OrderSide.Sell,
+                    Price: updatedPosition.EntryPrice,
+                    NetPL: updatedPosition.UnrealizedPnl,
+                    CurrentPrice: updatedPosition.EntryPrice
+                });
+                positionsUpdated = true;
+            }
+        }
+
+        if (positionsUpdated) {
+            this._updateAccountPNL();
+            this.onPositionsUpdated.next(this.positions);
+        } else if (positionsParametersUpdated) {
+            this.onPositionsParametersUpdated.next(this.positions);
+        }
+
+        for (const balance of update.Balances) {
+            for (const asset of this.assets) {
+                if (asset.Asset === balance.Asset) {
+                    asset.WalletBalance = balance.WalletBalance;
+                    asset.CrossWalletBalance = balance.CrossBalance;
+                }
+            }
+        }
+
+        this.onAssetsUpdated.next(this._assets);
+
+        this._trySubscribeToAll();
+    }
+
+    protected _trySubscribeToAll() {
+        for (const pos of this.positions) {
+            this._subscribeOnLastPrice(pos.Symbol);
+        }
+        for (const order of this.orders) {
+            this._subscribeOnLastPrice(order.Symbol);
+        }
+    }
+
+    protected _subscribeOnLastPrice(symbol: string) {
+        if (this._lastPriceSubscribers.indexOf(symbol) >= 0) {
+            return;
+        }
+
+        this._lastPriceSubscribers.push(symbol);
+        this.ws.subscribeOnQuotes(symbol).subscribe();
+    }
+
+    protected _unsubscribeFromLastPrice(symbol: string) {
+        const index = this._lastPriceSubscribers.indexOf(symbol);
+        if (index < 0) {
+            return;
+        }
+
+        this._lastPriceSubscribers.splice(index, 1);
+        this.ws.unsubscribeFromQuotes(symbol).subscribe();
+    }
+
+    protected _updateInnerData(quote: ITradeTick): boolean {
+        let positionUpdated = false;
+
+        for (const pos of this.positions) {
+            if (pos.Symbol === quote.symbol) {
+                this._updatePositionByQuote(pos, quote);
+                positionUpdated = true;
+            }
+        }
+
+        if (positionUpdated) {
+            this.onPositionsParametersUpdated.next(this.positions);
+            this._updateAccountPNL();
+            this.onAccountInfoUpdated.next(this.accountInfo);
+        }
+
+        let orderUpdated = false;
+        for (const order of this.orders) {
+            if (order.Symbol === quote.symbol) {
+                this._updateOrderByQuote(order, quote);
+                orderUpdated = true;
+            }
+        }
+
+        if (orderUpdated) {
+            this.onOrdersParametersUpdated.next(this.orders);
+        }
+
+        return positionUpdated || orderUpdated;
+    }
+
+    protected _getQuoteCurrency(symbol: string): string {
+        if (this._symbolToAsset[symbol]) {
+            return this._symbolToAsset[symbol];
+        }
+        for (const i of this._instruments) {
+            if (i.symbol === symbol) {
+                this._symbolToAsset[symbol] = i.dependInstrument;
+                return i.dependInstrument;
+            }
+        }
+    }
+
+    protected _updateAccountPNL() {
+        const assets: { [key: string]: BinanceFuturesAsset; } = {};
+
+        // this.accountInfo.TotalUnrealizedProfit = 0;
+        for (const a of this._assets) {
+            a.UnrealizedProfit = 0;
+            assets[a.Asset] = a;
+        }
+
+        for (const pos of this.positions) {
+            if (pos.NetPL) {
+                // this.accountInfo.TotalUnrealizedProfit += pos.NetPL;
+                const asset = this._getQuoteCurrency(pos.Symbol);
+                const assetForUpdate = assets[asset];
+
+                if (assetForUpdate) {
+                    assetForUpdate.UnrealizedProfit += pos.NetPL;
+                }
+            }
+        }
+    }
+
+    protected _updatePositionByQuote(position: BinanceFuturesPosition, quote: ITradeTick) {
+        position.CurrentPrice = quote.last;
+        console.log(quote);
+
+        if (position.CurrentPrice && position.Price) {
+            if (position.Side === OrderSide.Buy) {
+                position.NetPL = (position.CurrentPrice - position.Price) * position.Size;
+            } else {
+                position.NetPL = (position.Price - position.CurrentPrice) * position.Size;
+            }
+
+            // for COIN
+            // position.NetPL = (1 / position.Price - 1 / position.CurrentPrice) * position.Size;            
+        }
+    }
+
+    private _updateOrderByQuote(order: BinanceFuturesOrder, quote: ITradeTick) {
+        order.CurrentPrice = quote.last;
+    }
+
 }

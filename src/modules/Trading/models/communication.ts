@@ -1,4 +1,4 @@
-import { BinanceFutureMessageType } from "./crypto/binance-futures/binance-futures.communication";
+import { BinanceFutureCoinMessageType, BinanceFutureUsdtMessageType } from "./crypto/binance-futures/binance-futures.communication";
 import { MTMessageType } from "./forex/mt/mt.communication";
 
 export enum BrokerMessageType {
@@ -13,9 +13,9 @@ export abstract class BrokerRequestMessageBase {
     private static counter = 1;
 
     public MessageId: string;
-    public Type: BrokerMessageType | MTMessageType | BinanceFutureMessageType;
+    public Type: BrokerMessageType | MTMessageType | BinanceFutureUsdtMessageType | BinanceFutureCoinMessageType;
 
-    constructor(type: BrokerMessageType | MTMessageType | BinanceFutureMessageType) {
+    constructor(type: BrokerMessageType | MTMessageType | BinanceFutureUsdtMessageType | BinanceFutureCoinMessageType) {
         this.Type = type;
         this.MessageId = `${new Date().getTime()}_${BrokerRequestMessageBase.counter++}`;
     }

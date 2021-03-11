@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AlertService } from "@alert/services/alert.service";
 import { TranslateService } from "@ngx-translate/core";
 import { BrokerFactory } from '@app/factories/broker.factory';
-import { EBrokerInstance } from '@app/interfaces/broker/broker';
+import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { BrokerService } from '@app/services/broker.service';
 import { BinanceConnectionData } from 'modules/Trading/models/crypto/binance/binance.models';
 import { BrokerLogin } from '../../shared/broker-login';
@@ -24,7 +24,7 @@ export class BinanceBrokerLoginComponent extends BrokerLogin {
     }
 
     connect() {
-        if (!this.policyAccepted || !this.apiKey) {
+        if (!this.policyAccepted || !this.apiKey || !this.apiSecret) {
             return;
         }
 
@@ -42,5 +42,10 @@ export class BinanceBrokerLoginComponent extends BrokerLogin {
 
     disconnect(): void {
         this._disconnect();
+    }
+
+    brokerSelected(input: IBrokerState<BinanceConnectionData>) {
+        this.apiKey = input.state.APIKey;
+        this.apiSecret = input.state.APISecret;
     }
 }

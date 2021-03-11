@@ -46,6 +46,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _brokerStateChangedSubscription: Subscription;
     private _ordersUpdatedSubscription: Subscription;
     private _positionsUpdatedSubscription: Subscription;
+    private _positionsParametersUpdatedSubscription: Subscription;
     private _onOrdersParametersUpdated: Subscription;
     private _orderConfig: IPlaceOrder;
     private _decimals: number = 5;
@@ -67,17 +68,20 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     this.refresh();
                 });
 
+                this._onOrdersParametersUpdated = this._broker.onOrdersParametersUpdated.subscribe((orders: any[]) => {
+                    this.handleOrdersParametersChanged(orders);
+                });
+
                 if (this._broker.isPositionBased) {
                     const positionBasedBroker: IPositionBasedBroker = this._broker as any;
                     this._positionsUpdatedSubscription = positionBasedBroker.onPositionsUpdated.subscribe(() => {
                         this.refresh();
+                    }); 
+                    
+                    this._positionsParametersUpdatedSubscription = positionBasedBroker.onPositionsParametersUpdated.subscribe(() => {
+                        this.handlePositionsParametersChanged();
                     });
                 }
-
-                this._onOrdersParametersUpdated = this._broker.onOrdersParametersUpdated.subscribe((orders: any[]) => {
-                    this.handleOrdersParametersChanged(orders);
-                    this.handlePositionsParametersChanged();
-                });
             } else {
                 if (this._ordersUpdatedSubscription) {
                     this._ordersUpdatedSubscription.unsubscribe();
@@ -86,6 +90,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 if (this._positionsUpdatedSubscription) {
                     this._positionsUpdatedSubscription.unsubscribe();
                     this._positionsUpdatedSubscription = null;
+                }
+                if (this._positionsParametersUpdatedSubscription) {
+                    this._positionsParametersUpdatedSubscription.unsubscribe();
+                    this._positionsParametersUpdatedSubscription = null;
                 }
                 if (this._onOrdersParametersUpdated) {
                     this._onOrdersParametersUpdated.unsubscribe();
@@ -403,6 +411,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             this._positionsUpdatedSubscription.unsubscribe();
             this._positionsUpdatedSubscription = null;
         }
+        if (this._positionsParametersUpdatedSubscription) {
+            this._positionsParametersUpdatedSubscription.unsubscribe();
+            this._positionsParametersUpdatedSubscription = null;
+        }
         if (this._onOrdersParametersUpdated) {
             this._onOrdersParametersUpdated.unsubscribe();
             this._onOrdersParametersUpdated = null;
@@ -486,11 +498,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         for (const position of positions) {
             const shape = this.createBaseShape(position);
             shape.showSLTP = false;
-            shape.lineId = position.Symbol.toString();
             shape.lineText = `#${position.Symbol}`;
             shape.lineType = this.getPositionLineType(position);
             shape.linePrice = position.Price;
-            shape.lineId = `position_${position.Symbol}`;
+            shape.lineId = this.getPositionOrderLineId(position);
             this.setLinePL(shape, position);
             shapes.push(shape);
         }
@@ -498,6 +509,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (shapes.length) {
             this._chart.primaryPane.addShapes(shapes);
         }
+    }
+
+    private getPositionOrderLineId(position: IPosition) {
+        return `position_${position.Symbol}`;
     }
 
     private fillOrderLines() {
@@ -783,7 +798,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
                 const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
                 for (const position of positions) {
-                    if (position.Symbol !== orderLine.lineId) {
+                    const id = this.getPositionOrderLineId(position);
+                    if (id !== orderLine.lineId) {
                         continue;
                     }
                     shape.lineType = this.getPositionLineType(position);

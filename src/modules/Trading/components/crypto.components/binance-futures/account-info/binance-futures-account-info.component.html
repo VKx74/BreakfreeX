@@ -1,15 +1,16 @@
 <div class="accountInfo">
-    <data-table [rows]="activeAccount ? [activeAccount] : []" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false">
-        <data-table-header-cell columnName="API Key">{{'tradeManager.APIKey' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Fee Tier">{{'tradeManager.feeTier' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Init. Margin">{{'tradeManager.initMargin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Mnt. Margin">{{'tradeManager.mntMargin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Margin">{{'tradeManager.margin' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="PNL">{{'tradeManager.pnl' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Balance">{{'tradeManager.balance' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Cross PNL">{{'tradeManager.crossPnl' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Cross Balance">{{'tradeManager.crossBalance' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Avbl. Balance">{{'tradeManager.avblBalance' | translate}}</data-table-header-cell>
+    <data-table [rows]="activeAccount ? [activeAccount] : []" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false"
+        [hiddenColumns]="[]">
+        <data-table-header-cell [columnWidth]="140" [columnMinWidth]="10" columnName="API Key">{{'tradeManager.APIKey' | translate}}</data-table-header-cell>
+        <data-table-header-cell [columnWidth]="140" [columnMinWidth]="10" columnName="Fee Tier">{{'tradeManager.feeTier' | translate}}</data-table-header-cell>
+        <!-- <data-table-header-cell columnName="Init. Margin">{{'tradeManager.initMargin' | translate}}</data-table-header-cell> -->
+        <!-- <data-table-header-cell columnName="Mnt. Margin">{{'tradeManager.mntMargin' | translate}}</data-table-header-cell> -->
+        <!-- <data-table-header-cell columnName="Margin">{{'tradeManager.margin' | translate}}</data-table-header-cell> -->
+        <data-table-header-cell [columnWidth]="140" [columnMinWidth]="10" columnName="PNL">{{'tradeManager.pnl' | translate}}</data-table-header-cell>
+        <data-table-header-cell [columnWidth]="140" [columnMinWidth]="10" columnName="Balance">{{'tradeManager.balance' | translate}}</data-table-header-cell>
+        <!-- <data-table-header-cell columnName="Cross PNL">{{'tradeManager.crossPnl' | translate}}</data-table-header-cell> -->
+        <!-- <data-table-header-cell columnName="Cross Balance">{{'tradeManager.crossBalance' | translate}}</data-table-header-cell> -->
+        <!-- <data-table-header-cell columnName="Avbl. Balance">{{'tradeManager.avblBalance' | translate}}</data-table-header-cell> -->
 
         <!-- <data-table-header-cell columnName="Trade Guard">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell> -->
         <!-- <data-table-header-cell columnName="Net Risk">{{'tradeManager.risk' | translate}}</data-table-header-cell>
@@ -17,15 +18,15 @@
 
         <data-table-cell columnName="API Key"><ng-template let-item>{{item.APIKey}}</ng-template></data-table-cell>
         <data-table-cell columnName="Fee Tier"><ng-template let-item>{{item.FeeTier}}</ng-template></data-table-cell>
-        <data-table-cell columnName="Init. Margin">
+        <!-- <data-table-cell columnName="Init. Margin">
             <ng-template let-item>{{item.TotalInitialMargin.toFixed(2)}}</ng-template>
-        </data-table-cell>
-        <data-table-cell columnName="Mnt. Margin">
+        </data-table-cell> -->
+        <!-- <data-table-cell columnName="Mnt. Margin">
             <ng-template let-item>{{item.TotalMaintMargin.toFixed(2)}}</ng-template>
-        </data-table-cell>
-        <data-table-cell columnName="Margin">
+        </data-table-cell> -->
+        <!-- <data-table-cell columnName="Margin">
             <ng-template let-item>{{item.TotalMarginBalance.toFixed(2)}}</ng-template>
-        </data-table-cell>
+        </data-table-cell> -->
         <data-table-cell columnName="PNL">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.TotalUnrealizedProfit > 0, 'negative-value': item.TotalUnrealizedProfit < 0}">
@@ -36,18 +37,18 @@
         <data-table-cell columnName="Balance">
             <ng-template let-item>{{item.TotalWalletBalance.toFixed(2)}}</ng-template>
         </data-table-cell>
-        <data-table-cell columnName="Cross PNL">
+        <!-- <data-table-cell columnName="Cross PNL">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.TotalCrossUnPnl > 0, 'negative-value': item.TotalCrossUnPnl < 0}">
                     {{item.TotalCrossUnPnl.toFixed(2)}}
                 </span>
             </ng-template>
-        </data-table-cell>
-        <data-table-cell columnName="Cross Balance">
+        </data-table-cell> -->
+        <!-- <data-table-cell columnName="Cross Balance">
             <ng-template let-item>{{item.TotalCrossWalletBalance.toFixed(2)}}</ng-template>
-        </data-table-cell>
-        <data-table-cell columnName="Avbl. Balance">
+        </data-table-cell> -->
+        <!-- <data-table-cell columnName="Avbl. Balance">
             <ng-template let-item>{{item.AvailableBalance.toFixed(2)}}</ng-template>
-        </data-table-cell>
+        </data-table-cell> -->
     </data-table>
 </div>
