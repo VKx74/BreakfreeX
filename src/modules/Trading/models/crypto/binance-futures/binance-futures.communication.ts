@@ -11,7 +11,8 @@ export enum BinanceFutureUsdtMessageType {
     FuturesUsdtSymbolMyTrades = "FuturesUsdtSymbolMyTrades",
     CloseFuturesUsdtOrder = "CloseFuturesUsdtOrder",
     FuturesUsdtSymbolOrderInfo = "FuturesUsdtSymbolOrderInfo",
-    PlaceFuturesUsdtOrder = "PlaceFuturesUsdtOrder"
+    PlaceFuturesUsdtOrder = "PlaceFuturesUsdtOrder",
+    SubscribeFuturesUsdtMarkPrice = "SubscribeFuturesUsdtMarkPrice"
 }
 
 export enum BinanceFutureCoinMessageType {
@@ -25,7 +26,8 @@ export enum BinanceFutureCoinMessageType {
     FuturesCoinSymbolMyTrades = "FuturesCoinSymbolMyTrades",
     CloseFuturesCoinOrder = "CloseFuturesCoinOrder",
     FuturesCoinSymbolOrderInfo = "FuturesCoinSymbolOrderInfo",
-    PlaceFuturesCoinOrder = "PlaceFuturesCoinOrder"
+    PlaceFuturesCoinOrder = "PlaceFuturesCoinOrder",
+    SubscribeFuturesCoinMarkPrice = "SubscribeFuturesCoinMarkPrice"
 }
 
 export enum BinanceFutureBrokerType {
@@ -40,6 +42,11 @@ export interface IBinanceFutureSymbolBasedData {
 export interface IBinanceFutureLoginData {
     ApiKey: string;
     ApiSecret: string;
+}
+
+export interface IBinanceLastPrice {
+    Price: number;
+    Symbol: string;
 }
 
 export interface IBinanceFutureGetOrdersData extends IBinanceFutureSymbolBasedData {
@@ -64,6 +71,10 @@ export interface IBinanceFutureQuoteSubscriptionData extends IBinanceFutureSymbo
     Subscribe: boolean;
 }
 
+export interface IBinanceFutureMarketPriceSubscriptionData extends IBinanceFutureSymbolBasedData {
+    Subscribe: boolean;
+}
+
 export interface IBinanceFutureOrderBookSubscriptionData extends IBinanceFutureSymbolBasedData {
     Subscribe: boolean;
 }
@@ -76,6 +87,8 @@ export interface IBinanceFutureSymbolData {
     QuoteAssetPrecision: number;
     BaseCommissionPrecision: number;
     QuoteCommissionPrecision: number;
+    ContractSize?: number;
+    PricePrecision?: number;
     IceBergAllowed: boolean;
     IsSpotTradingAllowed: boolean;
     IsMarginTradingAllowed: boolean;
@@ -83,6 +96,11 @@ export interface IBinanceFutureSymbolData {
     Pair: string;
     DeliveryDate: string;
     ListingDate: string;
+}
+
+export interface IBinanceFutureMarketPrice {
+    MarkPrice: number;
+    Symbol: string;
 }
 
 export interface IBinanceFutureTick {
@@ -139,13 +157,11 @@ export interface IBinanceFutureAsset {
 }
 
 export interface IBinanceFuturePosition {
-    MaxNotional: number;
     positionAmt: number;
     InitialMargin: number;
     MaintMargin: number;
     PositionInitialMargin: number;
     OpenOrderInitialMargin: number;
-    Isolated: boolean;
     Symbol: string;
     EntryPrice: number;
     Leverage: number;
@@ -336,6 +352,14 @@ export class BinanceFutureSubscribeQuoteRequest extends BrokerRequestMessageBase
     }
 }
 
+export class BinanceFutureSubscribeMarketPriceRequest extends BrokerRequestMessageBase {
+    public Data: IBinanceFutureMarketPriceSubscriptionData;
+
+    constructor(type: BinanceFutureBrokerType) {
+        super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.SubscribeFuturesUsdtMarkPrice : BinanceFutureCoinMessageType.SubscribeFuturesCoinMarkPrice);
+    }
+}
+
 export class BinanceFutureSubscribeOrderBookRequest extends BrokerRequestMessageBase {
     public Data: IBinanceFutureOrderBookSubscriptionData;
 
@@ -403,6 +427,10 @@ export class BinanceFutureAccountInfoResponse extends BrokerResponseMessageBase 
     public Data: IBinanceFutureAccountInfoData;
 }
 
+export class BinanceFuturePositionDetailsResponse extends BrokerResponseMessageBase {
+    public Data: IBinanceFuturePosition[];
+}
+
 export class BinanceFutureCloseOrderResponse extends BrokerResponseMessageBase {
     public Data: any;
 }
@@ -419,8 +447,16 @@ export class BinanceFutureSubscribeQuoteResponse extends BrokerResponseMessageBa
     public Data: any;
 }
 
+export class BinanceFutureSubscribeMarketPriceResponse extends BrokerResponseMessageBase {
+    public Data: any;
+}
+
 export class BinanceFutureTickResponse extends BrokerResponseMessageBase {
     public Data: IBinanceFutureTick;
+}
+
+export class BinanceFutureMarketPriceResponse extends BrokerResponseMessageBase {
+    public Data: IBinanceFutureMarketPrice;
 }
 
 export class BinanceFutureOrderBookItemResponse extends BrokerResponseMessageBase {

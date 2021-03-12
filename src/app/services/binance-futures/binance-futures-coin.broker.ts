@@ -1,5 +1,9 @@
 import { Inject } from "@angular/core";
 import { EBrokerInstance } from "@app/interfaces/broker/broker";
+import { ITradeTick } from "@app/models/common/tick";
+import { IBinanceLastPrice } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFuturesPosition } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { OrderSide } from "modules/Trading/models/models";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { BinanceFuturesCoinSocketService } from "../socket/binance-futures-coin.socket.service";
@@ -29,6 +33,22 @@ export class BinanceFuturesCoinBroker extends BinanceFuturesBroker {
             if (i.symbol === symbol) {
                 this._symbolToAsset[symbol] = i.baseInstrument;
                 return i.baseInstrument;
+            }
+        }
+    }
+    
+    protected _updatePositionByQuote(position: BinanceFuturesPosition, quote: IBinanceLastPrice) {
+        position.CurrentPrice = quote.Price;
+        const contractSize = this._instrumentContractSize[position.Symbol];
+        if (!contractSize) {
+            return;
+        }
+
+        if (position.CurrentPrice && position.Price) {
+            if (position.Side === OrderSide.Buy) {
+                position.NetPL = (1 / position.Price - 1 / position.CurrentPrice) * Math.abs(position.Size) * contractSize;
+            } else {
+                position.NetPL = (1 / position.CurrentPrice - 1 / position.Price) * Math.abs(position.Size) * contractSize;
             }
         }
     }

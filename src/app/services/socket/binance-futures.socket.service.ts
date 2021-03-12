@@ -3,13 +3,14 @@ import { ITradeTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
-import { BinanceFutureAccountInfoResponse, BinanceFutureAccountUpdateResponse, BinanceFutureBookPriceRequest, BinanceFutureBookPriceResponse, BinanceFutureCloseOrderRequest, BinanceFutureCloseOrderResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureMarketTradesRequest, BinanceFutureUsdtMessageType, BinanceFutureOpenOrderRequest, BinanceFutureOpenOrderResponse, BinanceFutureOrderBookItemResponse, BinanceFutureOrderHistoryResponse, BinanceFutureOrderInfoRequest, BinanceFutureOrderInfoResponse, BinanceFutureOrderUpdateResponse, BinanceFuturePlaceOrderRequest, BinanceFuturePlaceOrderResponse, BinanceFutureSubscribeOrderBookRequest, BinanceFutureSubscribeOrderBookResponse, BinanceFutureSubscribeQuoteRequest, BinanceFutureSubscribeQuoteResponse, BinanceFutureTickResponse, BinanceFutureTradeHistoryRequest, BinanceFutureTradeHistoryResponse, BinanceOrderHistoryRequest as BinanceFutureOrderHistoryRequest, IBinanceFutureAccountInfoData, IBinanceFuturesAccountUpdateData, IBinanceFuturesOrderUpdateData, BinanceFutureBrokerType } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFutureAccountInfoResponse, BinanceFutureAccountUpdateResponse, BinanceFutureBookPriceRequest, BinanceFutureBookPriceResponse, BinanceFutureCloseOrderRequest, BinanceFutureCloseOrderResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureMarketTradesRequest, BinanceFutureUsdtMessageType, BinanceFutureOpenOrderRequest, BinanceFutureOpenOrderResponse, BinanceFutureOrderBookItemResponse, BinanceFutureOrderHistoryResponse, BinanceFutureOrderInfoRequest, BinanceFutureOrderInfoResponse, BinanceFutureOrderUpdateResponse, BinanceFuturePlaceOrderRequest, BinanceFuturePlaceOrderResponse, BinanceFutureSubscribeOrderBookRequest, BinanceFutureSubscribeOrderBookResponse, BinanceFutureSubscribeQuoteRequest, BinanceFutureSubscribeQuoteResponse, BinanceFutureTickResponse, BinanceFutureTradeHistoryRequest, BinanceFutureTradeHistoryResponse, BinanceOrderHistoryRequest as BinanceFutureOrderHistoryRequest, IBinanceFutureAccountInfoData, IBinanceFuturesAccountUpdateData, IBinanceFuturesOrderUpdateData, BinanceFutureBrokerType, BinanceFuturePositionDetailsResponse, IBinanceFuturePosition, BinanceFutureSubscribeMarketPriceRequest, BinanceFutureSubscribeMarketPriceResponse, BinanceFutureMarketPriceResponse, IBinanceLastPrice } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 
 export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   private _onMessageSubscription: Subscription;
   private _tickSubject: Subject<ITradeTick> = new Subject<ITradeTick>();
-  private _lastPriceSubject: Subject<ITradeTick> = new Subject<ITradeTick>();
+  private _lastPriceSubject: Subject<IBinanceLastPrice> = new Subject<IBinanceLastPrice>();
   private _orderUpdateSubject: Subject<IBinanceFuturesOrderUpdateData> = new Subject<IBinanceFuturesOrderUpdateData>();
+  private _positionsUpdateSubject: Subject<IBinanceFuturePosition[]> = new Subject<IBinanceFuturePosition[]>();
   private _accountUpdateSubject: Subject<IBinanceFuturesAccountUpdateData> = new Subject<IBinanceFuturesAccountUpdateData>();
   private _accountUpdatedSubject: Subject<IBinanceFutureAccountInfoData> = new Subject<IBinanceFutureAccountInfoData>();
 
@@ -23,6 +24,10 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     return this._orderUpdateSubject;
   }
 
+  get positionsUpdateSubject(): Subject<IBinanceFuturePosition[]> {
+    return this._positionsUpdateSubject;
+  }
+
   get accountUpdateSubject(): Subject<IBinanceFuturesAccountUpdateData> {
     return this._accountUpdateSubject;
   }
@@ -31,7 +36,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     return this._tickSubject;
   }
 
-  get lastPriceSubject(): Subject<ITradeTick> {
+  get lastPriceSubject(): Subject<IBinanceLastPrice> {
     return this._lastPriceSubject;
   }
 
@@ -52,11 +57,21 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
           return;
         }    
         
-        if (msgTypeString === "quote") {
-          this._processLastPrice(msgData);
+        // if (msgTypeString === "quote") {
+        //   this._processLastPrice(msgData);
+        //   return;
+        // }  
+        
+        if (msgTypeString === "markprice") {
+          this._processMarketPrice(msgData);
           return;
         }  
         
+        if (msgTypeString === "positiondetails") {
+          this._processPositionsDetailsUpdated(msgData);
+          return;
+        }
+
         if (msgTypeString === "futuresorderupdate") {
           this._processOrderUpdated(msgData);
           return;
@@ -71,11 +86,6 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
           this._processAccountUpdate(msgData);
           return;
         }
-
-        // if (msgTypeString === MTMessageType.OrdersUpdate.toLowerCase()) {
-        //   this._processOrdersUpdate(msgData);
-        //   return;
-        // }
 
         if (msgData && msgData.MessageId && this._subscribers[msgData.MessageId]) {
           const subscription = this._subscribers[msgData.MessageId];
@@ -147,9 +157,31 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public subscribeOnQuotes(symbol: string): Observable<BinanceFutureSubscribeQuoteResponse> {
-    return new Observable<BinanceFutureSubscribeQuoteResponse>(subscriber => {
-      const message = new BinanceFutureSubscribeQuoteRequest(this.type);
+  // public subscribeOnQuotes(symbol: string): Observable<BinanceFutureSubscribeQuoteResponse> {
+  //   return new Observable<BinanceFutureSubscribeQuoteResponse>(subscriber => {
+  //     const message = new BinanceFutureSubscribeQuoteRequest(this.type);
+  //     message.Data = {
+  //       Symbol: symbol,
+  //       Subscribe: true
+  //     };
+  //     this._send(message, subscriber);
+  //   });
+  // }
+
+  // public unsubscribeFromQuotes(symbol: string): Observable<BinanceFutureSubscribeQuoteResponse> {
+  //   return new Observable<BinanceFutureSubscribeQuoteResponse>(subscriber => {
+  //     const message = new BinanceFutureSubscribeQuoteRequest(this.type);
+  //     message.Data = {
+  //       Symbol: symbol,
+  //       Subscribe: false
+  //     };
+  //     this._send(message, subscriber);
+  //   });
+  // }
+
+  public subscribeOnMarketPrice(symbol: string): Observable<BinanceFutureSubscribeMarketPriceResponse> {
+    return new Observable<BinanceFutureSubscribeMarketPriceResponse>(subscriber => {
+      const message = new BinanceFutureSubscribeMarketPriceRequest(this.type);
       message.Data = {
         Symbol: symbol,
         Subscribe: true
@@ -158,9 +190,9 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public unsubscribeFromQuotes(symbol: string): Observable<BinanceFutureSubscribeQuoteResponse> {
-    return new Observable<BinanceFutureSubscribeQuoteResponse>(subscriber => {
-      const message = new BinanceFutureSubscribeQuoteRequest(this.type);
+  public unsubscribeFromMarketPrice(symbol: string): Observable<BinanceFutureSubscribeMarketPriceResponse> {
+    return new Observable<BinanceFutureSubscribeMarketPriceResponse>(subscriber => {
+      const message = new BinanceFutureSubscribeMarketPriceRequest(this.type);
       message.Data = {
         Symbol: symbol,
         Subscribe: false
@@ -244,20 +276,34 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  private _processLastPrice(msgData: BrokerResponseMessageBase) {
-    const quoteMessage = msgData as BinanceFutureTickResponse;
+  // private _processLastPrice(msgData: BrokerResponseMessageBase) {
+  //   const quoteMessage = msgData as BinanceFutureTickResponse;
+  //   this._lastPriceSubject.next({
+  //     ask: quoteMessage.Data.AskPrice,
+  //     bid: quoteMessage.Data.BidPrice,
+  //     last: quoteMessage.Data.LastPrice,
+  //     volume: quoteMessage.Data.LastQuantity,
+  //     symbol: quoteMessage.Data.Symbol
+  //   });
+  // }
+
+  private _processMarketPrice(msgData: BrokerResponseMessageBase) {
+    const quoteMessage = msgData as BinanceFutureMarketPriceResponse;
+    const lastPrice = quoteMessage.Data;
     this._lastPriceSubject.next({
-      ask: quoteMessage.Data.AskPrice,
-      bid: quoteMessage.Data.BidPrice,
-      last: quoteMessage.Data.LastPrice,
-      volume: quoteMessage.Data.LastQuantity,
-      symbol: quoteMessage.Data.Symbol
+      Price: lastPrice.MarkPrice,
+      Symbol: lastPrice.Symbol
     });
   }
 
   private _processOrderUpdated(msgData: BrokerResponseMessageBase) {
     const updateMessage = msgData as BinanceFutureOrderUpdateResponse;
     this._orderUpdateSubject.next(updateMessage.Data.UpdateData);
+  }
+
+  private _processPositionsDetailsUpdated(msgData: BrokerResponseMessageBase) {
+    const updateMessage = msgData as BinanceFuturePositionDetailsResponse;
+    this._positionsUpdateSubject.next(updateMessage.Data);
   }
 
   private _processAccountUpdated(msgData: BrokerResponseMessageBase) {

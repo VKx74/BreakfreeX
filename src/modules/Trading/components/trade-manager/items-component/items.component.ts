@@ -161,10 +161,20 @@ export abstract class ItemsComponent<T> implements OnInit, OnDestroy {
     }
 
     protected _handleLoadingError(e) {
-        this._alertService.error(this._getLoadingError());
+        this._alertService.error(this._getLoadingError(e));
     }
 
-    protected _getLoadingError() {
+    protected _getLoadingError(e: any) {
+        if (e instanceof Error) {
+            if (e.message) {
+                return e.message;
+            }
+        }
+
+        if (e instanceof String) {
+            return e as string;
+        }
+        
         return 'Can\'t loading items';
     }
 
