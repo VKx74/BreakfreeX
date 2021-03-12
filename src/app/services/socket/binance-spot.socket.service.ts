@@ -3,33 +3,36 @@ import { ITradeTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
-import { BinanceFutureAccountInfoResponse, BinanceFutureAccountUpdateResponse, BinanceFutureBookPriceRequest, BinanceFutureBookPriceResponse, BinanceFutureCloseOrderRequest, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureMarketTradesRequest, BinanceFutureOpenOrdersRequest, BinanceFutureOpenOrderResponse, BinanceFutureOrderBookItemResponse, BinanceFutureOrderHistoryResponse, BinanceFutureOrderInfoRequest, BinanceFutureOrderUpdateResponse, BinanceFuturePlaceOrderRequest, BinanceFutureSubscribeOrderBookRequest, BinanceFutureSubscribeOrderBookResponse, BinanceFutureTradeHistoryRequest, BinanceFutureTradeHistoryResponse, IBinanceFutureAccountInfoData, IBinanceFuturesAccountUpdateData, IBinanceFuturesOrderUpdateData, BinanceFutureBrokerType, BinanceFuturePositionDetailsResponse, IBinanceFuturePosition, BinanceFutureSubscribeMarketPriceRequest, BinanceFutureMarketPriceResponse, BinanceFutureOrderHistoryRequest } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 import { IBinancePrice } from 'modules/Trading/models/crypto/shared/models.communication';
+import { BinanceSpotAccountInfoResponse, BinanceSpotAccountUpdateResponse, BinanceSpotBookPriceRequest, BinanceSpotBookPriceResponse, BinanceSpotCloseOrderRequest, BinanceSpotLoginRequest, BinanceSpotLoginResponse, BinanceSpotMarketPriceResponse, BinanceSpotMarketTradeResponse, BinanceSpotMarketTradesRequest, BinanceSpotOpenOrderResponse, BinanceSpotOpenOrdersRequest, BinanceSpotOrderBookItemResponse, BinanceSpotOrderHistoryRequest, BinanceSpotOrderHistoryResponse, BinanceSpotOrderInfoRequest, BinanceSpotOrderUpdateResponse, BinanceSpotPlaceOrderRequest, BinanceSpotSubscribeMarketPriceRequest, BinanceSpotSubscribeOrderBookRequest, BinanceSpotSubscribeOrderBookResponse, BinanceSpotTradeHistoryRequest, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountInfoData, IBinanceSpotAccountUpdateData, IBinanceSpotOrderUpdateData } from 'modules/Trading/models/crypto/binance/binance.models.communication';
+import { IWebSocketConfig } from '@app/interfaces/socket/WebSocketConfig';
+import { Injectable } from '@angular/core';
+import { AppConfigService } from '../app.config.service';
 
-export abstract class BinanceFuturesSocketService extends BrokerSocketService {
+@Injectable()
+export class BinanceSpotSocketService extends BrokerSocketService {
+  get config(): IWebSocketConfig {
+    return {
+      url: AppConfigService.config.apiUrls.BinanceBrokerWS
+    };
+  }
+
   private _onMessageSubscription: Subscription;
   private _tickSubject: Subject<ITradeTick> = new Subject<ITradeTick>();
   private _lastPriceSubject: Subject<IBinancePrice> = new Subject<IBinancePrice>();
-  private _orderUpdateSubject: Subject<IBinanceFuturesOrderUpdateData> = new Subject<IBinanceFuturesOrderUpdateData>();
-  private _positionsUpdateSubject: Subject<IBinanceFuturePosition[]> = new Subject<IBinanceFuturePosition[]>();
-  private _accountUpdateSubject: Subject<IBinanceFuturesAccountUpdateData> = new Subject<IBinanceFuturesAccountUpdateData>();
-  private _accountInfoReceivedSubject: Subject<IBinanceFutureAccountInfoData> = new Subject<IBinanceFutureAccountInfoData>();
-
-  abstract get type(): BinanceFutureBrokerType;
+  private _orderUpdateSubject: Subject<IBinanceSpotOrderUpdateData> = new Subject<IBinanceSpotOrderUpdateData>();
+  private _accountUpdateSubject: Subject<IBinanceSpotAccountUpdateData> = new Subject<IBinanceSpotAccountUpdateData>();
+  private _accountInfoReceivedSubject: Subject<IBinanceSpotAccountInfoData> = new Subject<IBinanceSpotAccountInfoData>();
 
   get usePingPongs(): boolean {
     return true;
   }
 
-  get orderUpdateSubject(): Subject<IBinanceFuturesOrderUpdateData> {
+  get orderUpdateSubject(): Subject<IBinanceSpotOrderUpdateData> {
     return this._orderUpdateSubject;
   }
 
-  get positionsUpdateSubject(): Subject<IBinanceFuturePosition[]> {
-    return this._positionsUpdateSubject;
-  }
-
-  get accountUpdateSubject(): Subject<IBinanceFuturesAccountUpdateData> {
+  get accountUpdateSubject(): Subject<IBinanceSpotAccountUpdateData> {
     return this._accountUpdateSubject;
   }
 
@@ -41,7 +44,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     return this._lastPriceSubject;
   }
 
-  get accountInfoReceivedSubject(): Subject<IBinanceFutureAccountInfoData> {
+  get accountInfoReceivedSubject(): Subject<IBinanceSpotAccountInfoData> {
     return this._accountInfoReceivedSubject;
   }
 
@@ -62,13 +65,8 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
           this._processMarketPrice(msgData);
           return;
         }  
-        
-        if (msgTypeString === "positiondetails") {
-          this._processPositionsDetailsUpdated(msgData);
-          return;
-        }
 
-        if (msgTypeString === "futuresorderupdate") {
+        if (msgTypeString === "spotsorderupdate") {
           this._processOrderUpdated(msgData);
           return;
         }
@@ -103,15 +101,15 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     this.close();
   }
 
-  public login(data: BinanceFutureLoginRequest): Observable<BinanceFutureLoginResponse> {
-    return new Observable<BinanceFutureLoginResponse>(subscriber => {
+  public login(data: BinanceSpotLoginRequest): Observable<BinanceSpotLoginResponse> {
+    return new Observable<BinanceSpotLoginResponse>(subscriber => {
       this._send(data, subscriber);
     });
   }
 
-  public getOrdersHistory(symbol: string, from: number, to: number): Observable<BinanceFutureOrderHistoryResponse> {
-    return new Observable<BinanceFutureOrderHistoryResponse>(subscriber => {
-      const message = new BinanceFutureOrderHistoryRequest(this.type);
+  public getOrdersHistory(symbol: string, from: number, to: number): Observable<BinanceSpotOrderHistoryResponse> {
+    return new Observable<BinanceSpotOrderHistoryResponse>(subscriber => {
+      const message = new BinanceSpotOrderHistoryRequest();
       message.Data = {
         Symbol: symbol,
         From: from,
@@ -121,9 +119,9 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public getTradesHistory(symbol: string, from: number, to: number): Observable<BinanceFutureTradeHistoryResponse> {
-    return new Observable<BinanceFutureTradeHistoryResponse>(subscriber => {
-      const message = new BinanceFutureTradeHistoryRequest(this.type);
+  public getTradesHistory(symbol: string, from: number, to: number): Observable<BinanceSpotTradeHistoryResponse> {
+    return new Observable<BinanceSpotTradeHistoryResponse>(subscriber => {
+      const message = new BinanceSpotTradeHistoryRequest();
       message.Data = {
         Symbol: symbol,
         From: from,
@@ -133,9 +131,9 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public getMarketTrades(symbol: string): Observable<BinanceFutureMarketTradeResponse> {
-    return new Observable<BinanceFutureMarketTradeResponse>(subscriber => {
-      const message = new BinanceFutureMarketTradesRequest(this.type);
+  public getMarketTrades(symbol: string): Observable<BinanceSpotMarketTradeResponse> {
+    return new Observable<BinanceSpotMarketTradeResponse>(subscriber => {
+      const message = new BinanceSpotMarketTradesRequest();
       message.Data = {
         Symbol: symbol
       };
@@ -143,9 +141,9 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public getBookPrice(symbol: string): Observable<BinanceFutureBookPriceResponse> {
-    return new Observable<BinanceFutureBookPriceResponse>(subscriber => {
-      const message = new BinanceFutureBookPriceRequest(this.type);
+  public getBookPrice(symbol: string): Observable<BinanceSpotBookPriceResponse> {
+    return new Observable<BinanceSpotBookPriceResponse>(subscriber => {
+      const message = new BinanceSpotBookPriceRequest();
       message.Data = {
         Symbol: symbol
       };
@@ -155,7 +153,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
 
   public subscribeOnMarketPrice(symbol: string): Observable<BrokerResponseMessageBase> {
     return new Observable<BrokerResponseMessageBase>(subscriber => {
-      const message = new BinanceFutureSubscribeMarketPriceRequest(this.type);
+      const message = new BinanceSpotSubscribeMarketPriceRequest();
       message.Data = {
         Symbol: symbol,
         Subscribe: true
@@ -166,7 +164,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
 
   public unsubscribeFromMarketPrice(symbol: string): Observable<BrokerResponseMessageBase> {
     return new Observable<BrokerResponseMessageBase>(subscriber => {
-      const message = new BinanceFutureSubscribeMarketPriceRequest(this.type);
+      const message = new BinanceSpotSubscribeMarketPriceRequest();
       message.Data = {
         Symbol: symbol,
         Subscribe: false
@@ -175,9 +173,9 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public subscribeOnOrderBook(symbol: string): Observable<BinanceFutureSubscribeOrderBookResponse> {
-    return new Observable<BinanceFutureSubscribeOrderBookResponse>(subscriber => {
-      const message = new BinanceFutureSubscribeOrderBookRequest(this.type);
+  public subscribeOnOrderBook(symbol: string): Observable<BinanceSpotSubscribeOrderBookResponse> {
+    return new Observable<BinanceSpotSubscribeOrderBookResponse>(subscriber => {
+      const message = new BinanceSpotSubscribeOrderBookRequest();
       message.Data = {
         Symbol: symbol,
         Subscribe: true
@@ -186,9 +184,9 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public unsubscribeOrderBook(symbol: string): Observable<BinanceFutureSubscribeOrderBookResponse> {
-    return new Observable<BinanceFutureSubscribeOrderBookResponse>(subscriber => {
-      const message = new BinanceFutureSubscribeOrderBookRequest(this.type);
+  public unsubscribeOrderBook(symbol: string): Observable<BinanceSpotSubscribeOrderBookResponse> {
+    return new Observable<BinanceSpotSubscribeOrderBookResponse>(subscriber => {
+      const message = new BinanceSpotSubscribeOrderBookRequest();
       message.Data = {
         Symbol: symbol,
         Subscribe: false
@@ -197,16 +195,16 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     });
   }
 
-  public getOpenOrders(): Observable<BinanceFutureOpenOrderResponse> {
-    return new Observable<BinanceFutureOpenOrderResponse>(subscriber => {
-      const message = new BinanceFutureOpenOrdersRequest(this.type);
+  public getOpenOrders(): Observable<BinanceSpotOpenOrderResponse> {
+    return new Observable<BinanceSpotOpenOrderResponse>(subscriber => {
+      const message = new BinanceSpotOpenOrdersRequest();
       this._send(message, subscriber);
     });
   }
 
   public closeOrder(symbol: string, orderId: any): Observable<BrokerResponseMessageBase> {
     return new Observable<BrokerResponseMessageBase>(subscriber => {
-      const message = new BinanceFutureCloseOrderRequest(this.type);
+      const message = new BinanceSpotCloseOrderRequest();
       message.Data = {
         Symbol: symbol,
         OrderId: orderId
@@ -217,7 +215,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
 
   public orderInfo(symbol: string, orderId: string): Observable<BrokerResponseMessageBase> {
     return new Observable<BrokerResponseMessageBase>(subscriber => {
-      const message = new BinanceFutureOrderInfoRequest(this.type);
+      const message = new BinanceSpotOrderInfoRequest();
       message.Data = {
         Symbol: symbol,
         OrderId: orderId
@@ -228,19 +226,19 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
 
   public placeOrder(orderData: any): Observable<BrokerResponseMessageBase> {
     return new Observable<BrokerResponseMessageBase>(subscriber => {
-      const message = new BinanceFuturePlaceOrderRequest(this.type);
+      const message = new BinanceSpotPlaceOrderRequest();
       message.Data = orderData;
       this._send(message, subscriber);
     });
   }
 
   private _processAccountUpdate(msgData: BrokerResponseMessageBase) {
-    const quoteMessage = msgData as BinanceFutureAccountInfoResponse;
+    const quoteMessage = msgData as BinanceSpotAccountInfoResponse;
     this._accountInfoReceivedSubject.next(quoteMessage.Data);
   }
 
   private _processNewQuote(msgData: BrokerResponseMessageBase) {
-    const quoteMessage = msgData as BinanceFutureOrderBookItemResponse;
+    const quoteMessage = msgData as BinanceSpotOrderBookItemResponse;
     this._tickSubject.next({
       ask: quoteMessage.Data.BestAskPrice,
       bid: quoteMessage.Data.BestBidPrice,
@@ -251,7 +249,7 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   }
 
   private _processMarketPrice(msgData: BrokerResponseMessageBase) {
-    const quoteMessage = msgData as BinanceFutureMarketPriceResponse;
+    const quoteMessage = msgData as BinanceSpotMarketPriceResponse;
     const lastPrice = quoteMessage.Data;
     this._lastPriceSubject.next({
       Price: lastPrice.MarkPrice,
@@ -260,17 +258,12 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   }
 
   private _processOrderUpdated(msgData: BrokerResponseMessageBase) {
-    const updateMessage = msgData as BinanceFutureOrderUpdateResponse;
+    const updateMessage = msgData as BinanceSpotOrderUpdateResponse;
     this._orderUpdateSubject.next(updateMessage.Data.UpdateData);
   }
 
-  private _processPositionsDetailsUpdated(msgData: BrokerResponseMessageBase) {
-    const updateMessage = msgData as BinanceFuturePositionDetailsResponse;
-    this._positionsUpdateSubject.next(updateMessage.Data);
-  }
-
   private _processAccountUpdated(msgData: BrokerResponseMessageBase) {
-    const updateMessage = msgData as BinanceFutureAccountUpdateResponse;
+    const updateMessage = msgData as BinanceSpotAccountUpdateResponse;
     this._accountUpdateSubject.next(updateMessage.Data.UpdateData);
   }
 }

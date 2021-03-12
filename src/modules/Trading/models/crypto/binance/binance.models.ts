@@ -5,13 +5,13 @@ export interface BinanceConnectionData extends IConnectionData {
     APISecret: string;
 }
 
-export interface BinanceTradingAccount {
-    Account: string;
-    Funds: BinanceFund[];
+export interface BinanceSpotTradingAccount {
+    APIKey: string;
+    FeeTier: number;
 }
 
 export interface BinanceFund {
     Coin: string;
     AvailableBalance: number;
-    FreezedBalance: number;
+    LockedBalance: number;
 }

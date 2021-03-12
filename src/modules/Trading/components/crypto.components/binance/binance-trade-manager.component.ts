@@ -38,11 +38,12 @@ export class BinanceTradeManagerComponent {
 
     get fundsAmount(): number {
         const broker = this._binanceBroker;
-        if (!broker || !broker.accountInfo || !broker.accountInfo.Funds) {
-            return 0;
-        }
+        return 0;
+        // if (!broker || !broker.accountInfo || !broker.accountInfo.Funds) {
+        //     return 0;
+        // }
 
-        return broker.accountInfo.Funds.length;
+        // return broker.accountInfo.Funds.length;
     }
 
     public get pendingAmount(): number {

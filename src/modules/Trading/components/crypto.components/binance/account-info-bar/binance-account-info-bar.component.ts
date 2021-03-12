@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BinanceBroker } from '@app/services/binance/binance.broker';
 import { BrokerService } from '@app/services/broker.service';
-import { BinanceTradingAccount } from 'modules/Trading/models/crypto/binance/binance.models';
+import { BinanceSpotTradingAccount } from 'modules/Trading/models/crypto/binance/binance.models';
 import { BrokerConnectivityStatus } from 'modules/Trading/models/models';
 
 @Component({
@@ -12,13 +12,13 @@ import { BrokerConnectivityStatus } from 'modules/Trading/models/models';
 export class BinanceAccountInfoBarComponent {
     BrokerConnectivityStatus = BrokerConnectivityStatus;
 
-    get activeAccount(): BinanceTradingAccount {
-        const mtBroker = this._broker.activeBroker as BinanceBroker;
-        if (!mtBroker) {
+    get activeAccount(): any {
+        const broker = this._broker.activeBroker as BinanceBroker;
+        if (!broker) {
             return null;
         }
 
-        return mtBroker.accountInfo;
+        return broker.accountInfo;
     }
 
     get status(): BrokerConnectivityStatus {

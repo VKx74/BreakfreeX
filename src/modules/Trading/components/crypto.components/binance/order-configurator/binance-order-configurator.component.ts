@@ -104,10 +104,13 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
         private _alertService: AlertService,
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
-        // this._config = MTOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
+        this._config = BinanceOrderConfig.createMarket();
     }
 
     ngOnInit() {
+        if (this.config.instrument) {
+            this._selectInstrument(this.config.instrument, false);
+        }
     }
 
     ngAfterViewInit() {
@@ -248,14 +251,7 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
-            Type: this.config.type,
-            // Price: this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0,
-            // FillPolicy: this.config.fillPolicy,
-            // ExpirationType: this.config.expirationType,
-            // ExpirationDate: this._getSetupDate(),
-            // PlacedFrom: this.config.placedFrom,
-            // Timeframe: this.config.timeframe,
-            // TradeType: this.config.tradeType
+            Type: this.config.type
         };
 
         if (this.isPriceRequired()) {

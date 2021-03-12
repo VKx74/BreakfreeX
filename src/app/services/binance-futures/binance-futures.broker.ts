@@ -1,4 +1,3 @@
-import { W } from "@angular/cdk/keycodes";
 import { EBrokerInstance, IBroker, IBrokerState, IPositionBasedBroker } from "@app/interfaces/broker/broker";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
@@ -6,10 +5,11 @@ import { EExchange } from "@app/models/common/exchange";
 import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
-import { BinanceFutureBookPriceResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureTradeHistoryResponse, FuturesOrderStatus, IBinanceFutureAccountInfoData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureSymbolData, IBinanceFutureTrade, IBinanceFuturesOrderUpdateData, IBinanceFuturesAccountUpdateData, IBinanceLastPrice } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
+import { BinanceFutureBookPriceResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureTradeHistoryResponse, FuturesOrderStatus, IBinanceFutureAccountInfoData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureTrade, IBinanceFuturesOrderUpdateData, IBinanceFuturesAccountUpdateData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesHistoricalTrade, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount, IBinanceFuturesPlaceOrderData } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData } from "modules/Trading/models/crypto/binance/binance.models";
-import { ActionResult, BrokerConnectivityStatus, IOrder, IPosition, OrderSide, OrderTypes, TimeInForce } from "modules/Trading/models/models";
+import { IBinancePrice, IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
+import { ActionResult, BrokerConnectivityStatus, IOrder, IPosition, OrderSide, OrderTypes } from "modules/Trading/models/models";
 import { Subject, Observable, of, Subscription, Observer, throwError, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
@@ -295,7 +295,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         this._onOrderUpdateSubject = this.ws.orderUpdateSubject.subscribe(this._handleOrderUpdate.bind(this));
         this._onAccountUpdateSubject = this.ws.accountUpdateSubject.subscribe(this._handleRealtimeAccountUpdate.bind(this));
         this._onPositionsUpdateSubject = this.ws.positionsUpdateSubject.subscribe(this._handlePositionsUpdate.bind(this));
-        this._onAccountUpdateSubscription = this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate.bind(this));
+        this._onAccountUpdateSubscription = this.ws.accountInfoReceivedSubject.subscribe(this._handleAccountUpdate.bind(this));
         this._onReconnectSubscription = this.ws.onReconnect.subscribe(() => {
             this._reconnect();
         });
@@ -526,7 +526,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         });
     }
 
-    protected _handleLastPrice(quote: IBinanceLastPrice) {
+    protected _handleLastPrice(quote: IBinancePrice) {
         if (this._updateInnerData(quote)) {
             return;
         }
@@ -576,7 +576,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
     }
 
-    protected _initialize(instruments: IBinanceFutureSymbolData[]) {
+    protected _initialize(instruments: IBinanceSymbolData[]) {
         this._instrumentDecimals = {};
         this._instrumentContractSize = {};
         this._instrumentTickSize = {};
@@ -585,7 +585,6 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
         for (const instrument of instruments) {
             let precision = instrument.PricePrecision || 2;
-            // let precision = 2;
 
             let tickSize = 1 / Math.pow(10, precision);
 
@@ -624,18 +623,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
         const apiKeyLength = this._initData.APIKey.length;
         this._accountInfo.APIKey = this._initData.APIKey.slice(0, 1) + "******" + this._initData.APIKey.slice(apiKeyLength - 4, apiKeyLength);
-        // this._accountInfo.AvailableBalance = data.AvailableBalance;
         this._accountInfo.FeeTier = data.FeeTier;
-        // this._accountInfo.TotalInitialMargin = data.TotalInitialMargin;
-        // this._accountInfo.TotalMaintMargin = data.TotalMaintMargin;
-        // this._accountInfo.TotalMarginBalance = data.TotalMarginBalance;
-        // this._accountInfo.TotalOpenOrderInitialMargin = data.TotalOpenOrderInitialMargin;
-        // this._accountInfo.TotalPositionInitialMargin = data.TotalPositionInitialMargin;
-        // this._accountInfo.TotalUnrealizedProfit = data.TotalUnrealizedProfit;
-        // this._accountInfo.TotalWalletBalance = data.TotalWalletBalance;
-        // this._accountInfo.TotalCrossWalletBalance = data.TotalCrossWalletBalance;
-        // this._accountInfo.TotalCrossUnPnl = data.TotalCrossUnPnl;
-        // this._accountInfo.AvailableBalance = data.AvailableBalance;
 
         this.onAccountInfoUpdated.next(this._accountInfo);
 
@@ -997,7 +985,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         // this.ws.unsubscribeFromQuotes(symbol).subscribe();
     }
 
-    protected _updateInnerData(quote: IBinanceLastPrice): boolean {
+    protected _updateInnerData(quote: IBinancePrice): boolean {
         let positionUpdated = false;
 
         for (const pos of this.positions) {
@@ -1042,8 +1030,6 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
     protected _updateAccountPNL() {
         const assets: { [key: string]: BinanceFuturesAsset; } = {};
-
-        // this.accountInfo.TotalUnrealizedProfit = 0;
         for (const a of this._assets) {
             a.UnrealizedProfit = 0;
             assets[a.Asset] = a;
@@ -1051,7 +1037,6 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
         for (const pos of this.positions) {
             if (pos.NetPL) {
-                // this.accountInfo.TotalUnrealizedProfit += pos.NetPL;
                 const asset = this._getQuoteCurrency(pos.Symbol);
                 const assetForUpdate = assets[asset];
 
@@ -1062,7 +1047,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         }
     }
 
-    protected _updatePositionByQuote(position: BinanceFuturesPosition, quote: IBinanceLastPrice) {
+    protected _updatePositionByQuote(position: BinanceFuturesPosition, quote: IBinancePrice) {
         position.CurrentPrice = quote.Price;
 
         if (position.CurrentPrice && position.Price) {
@@ -1074,7 +1059,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         }
     }
 
-    private _updateOrderByQuote(order: BinanceFuturesOrder, quote: IBinanceLastPrice) {
+    private _updateOrderByQuote(order: BinanceFuturesOrder, quote: IBinancePrice) {
         order.CurrentPrice = quote.Price;
     }
 

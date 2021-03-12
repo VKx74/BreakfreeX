@@ -106,6 +106,7 @@ import { BinanceFuturesUsdBroker } from './services/binance-futures/binance-futu
 import { BinanceFuturesCoinBroker } from './services/binance-futures/binance-futures-coin.broker';
 import { BinanceFuturesUsdSocketService } from './services/socket/binance-futures-usd.socket.service';
 import { BinanceFuturesCoinSocketService } from './services/socket/binance-futures-coin.socket.service';
+import { BinanceSpotSocketService } from './services/socket/binance-spot.socket.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -307,6 +308,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
 
         BinanceFuturesUsdSocketService,
         BinanceFuturesCoinSocketService,
+        BinanceSpotSocketService,
         BinanceBroker,
         BinanceFuturesUsdBroker,
         BinanceFuturesCoinBroker,

@@ -25,18 +25,7 @@ export interface BinanceFuturesPosition extends IPosition {
 export interface BinanceFuturesTradingAccount {
     APIKey: string;
     FeeTier: number;
-    // TotalInitialMargin: number;
-    // TotalMaintMargin: number;
-    // TotalMarginBalance: number;
-    // TotalOpenOrderInitialMargin: number;
-    // TotalPositionInitialMargin: number;
-    // TotalUnrealizedProfit: number;
-    // TotalWalletBalance: number;
-    // TotalCrossWalletBalance: number;
-    // TotalCrossUnPnl: number;
-    // AvailableBalance: number;
 }
-
 
 export interface BinanceFuturesHistoricalTrade {
     Id: any;
@@ -74,7 +63,6 @@ export interface IBinanceFuturesPlaceOrderData {
     Size: number;
     Symbol: string;
     Type: OrderTypes;
-
     Price?: number;
     StopPrice?: number;
     TimeInForce?: TimeInForce;

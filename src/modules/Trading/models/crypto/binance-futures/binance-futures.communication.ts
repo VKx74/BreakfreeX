@@ -1,4 +1,5 @@
 import { BrokerRequestMessageBase, BrokerResponseMessageBase } from "../../communication";
+import { IBinanceBookPrice, IBinanceCloseOrderData, IBinanceGetOrdersData, IBinanceGetTradesData, IBinanceLoginData, IBinanceMarketPrice, IBinanceMarketTradeHistory, IBinanceOrderInfoData, IBinanceSubscriptionRequestData, IBinanceSymbolBasedData, IBinanceSymbolData } from "../shared/models.communication";
 
 export enum BinanceFutureUsdtMessageType {
     LoginFuturesUsdt = "LoginFuturesUsdt",
@@ -35,101 +36,7 @@ export enum BinanceFutureBrokerType {
     COIN = "COIN"
 }
 
-export interface IBinanceFutureSymbolBasedData {
-    Symbol: string;
-}
-
-export interface IBinanceFutureLoginData {
-    ApiKey: string;
-    ApiSecret: string;
-}
-
-export interface IBinanceLastPrice {
-    Price: number;
-    Symbol: string;
-}
-
-export interface IBinanceFutureGetOrdersData extends IBinanceFutureSymbolBasedData {
-    From: number;
-    To: number;
-}
-
-export interface IBinanceFutureGetTradesData extends IBinanceFutureSymbolBasedData {
-    From: number;
-    To: number;
-}
-
-export interface IBinanceFutureCloseOrderData extends IBinanceFutureSymbolBasedData {
-    OrderId: any;
-}
-
-export interface IBinanceFutureOrderInfoData extends IBinanceFutureSymbolBasedData {
-    OrderId: any;
-}
-
-export interface IBinanceFutureQuoteSubscriptionData extends IBinanceFutureSymbolBasedData {
-    Subscribe: boolean;
-}
-
-export interface IBinanceFutureMarketPriceSubscriptionData extends IBinanceFutureSymbolBasedData {
-    Subscribe: boolean;
-}
-
-export interface IBinanceFutureOrderBookSubscriptionData extends IBinanceFutureSymbolBasedData {
-    Subscribe: boolean;
-}
-
-export interface IBinanceFutureSymbolData {
-    Type: string;
-    Name: string;
-    BaseAsset: string;
-    QuoteAsset: string;
-    QuoteAssetPrecision: number;
-    BaseCommissionPrecision: number;
-    QuoteCommissionPrecision: number;
-    ContractSize?: number;
-    PricePrecision?: number;
-    IceBergAllowed: boolean;
-    IsSpotTradingAllowed: boolean;
-    IsMarginTradingAllowed: boolean;
-    OCOAllowed: boolean;
-    Pair: string;
-    DeliveryDate: string;
-    ListingDate: string;
-}
-
-export interface IBinanceFutureMarketPrice {
-    MarkPrice: number;
-    Symbol: string;
-}
-
-export interface IBinanceFutureTick {
-    BaseVolume: number;
-    QuoteVolume: number;
-    Symbol: string;
-    PriceChange: number;
-    PriceChangePercent: number;
-    WeightedAveragePrice: number;
-    PrevDayClosePrice: number;
-    LastPrice: number;
-    LastQuantity: number;
-    BidPrice: number;
-    BidQuantity: number;
-    AskPrice: number;
-    AskQuantity: number;
-    OpenPrice: number;
-    HighPrice: number;
-    LowPrice: number;
-    FirstTradeId: number;
-    LastTradeId: number;
-    TotalTrades: number;
-    OpenTime: number;
-    CloseTime: number;
-    Event: string;
-    EventTime: number;
-}
-
-export interface IBinanceFutureOrderBookItem {
+export interface IBinanceOrderBookItem {
     TransactionTime: number;
     EventTime: number;
     Event: string;
@@ -259,25 +166,6 @@ export interface IBinanceFutureTrade {
     time: number;
 }
 
-export interface IBinanceFutureMarketTradeHistory {
-    quoteQty: number;
-    qty: number;
-    id: number;
-    Price: number;
-    Time: any;
-    isBuyerMaker: boolean;
-    IsBestMatch: boolean;
-}
-
-export interface IBinanceFutureBookPrice {
-    Symbol: string;
-    bidPrice: number;
-    bidQty: number;
-    askPrice: number;
-    askQty: number;
-    time: number;
-}
-
 export interface IBinanceFutureOrderHistoryResponseData {
     Type: string;
     Orders: IBinanceFutureHistoricalOrder[];
@@ -290,12 +178,12 @@ export interface IBinanceFutureTradeHistoryResponseData {
 
 export interface IBinanceFutureMarketTradeResponseData {
     Type: string;
-    History: IBinanceFutureMarketTradeHistory[];
+    History: IBinanceMarketTradeHistory[];
 }
 
 export interface IBinanceFutureBookPriceResponseData {
     Type: string;
-    BookPrice: IBinanceFutureBookPrice;
+    BookPrice: IBinanceBookPrice;
 }
 
 export interface IBinanceFutureOpenOrderResponseData {
@@ -303,17 +191,18 @@ export interface IBinanceFutureOpenOrderResponseData {
     Orders: IBinanceFutureOrder[];
 }
 
-// Requests
+// --- Requests
+// ------------
 export class BinanceFutureLoginRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureLoginData;
+    public Data: IBinanceLoginData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.LoginFuturesUsdt : BinanceFutureCoinMessageType.LoginFuturesCoin);
     }
 }
 
-export class BinanceOrderHistoryRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureGetOrdersData;
+export class BinanceFutureOrderHistoryRequest extends BrokerRequestMessageBase {
+    public Data: IBinanceGetOrdersData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.FuturesUsdtOrdersHistory : BinanceFutureCoinMessageType.FuturesCoinOrdersHistory);
@@ -321,7 +210,7 @@ export class BinanceOrderHistoryRequest extends BrokerRequestMessageBase {
 }
 
 export class BinanceFutureTradeHistoryRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureGetTradesData;
+    public Data: IBinanceGetTradesData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.FuturesUsdtSymbolMyTrades : BinanceFutureCoinMessageType.FuturesCoinSymbolMyTrades);
@@ -329,7 +218,7 @@ export class BinanceFutureTradeHistoryRequest extends BrokerRequestMessageBase {
 }
 
 export class BinanceFutureMarketTradesRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureSymbolBasedData;
+    public Data: IBinanceSymbolBasedData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.FuturesUsdtSymbolTradeHistory : BinanceFutureCoinMessageType.FuturesCoinSymbolTradeHistory);
@@ -337,7 +226,7 @@ export class BinanceFutureMarketTradesRequest extends BrokerRequestMessageBase {
 }
 
 export class BinanceFutureBookPriceRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureSymbolBasedData;
+    public Data: IBinanceSymbolBasedData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.GetFuturesUsdtBookPrice : BinanceFutureCoinMessageType.GetFuturesCoinBookPrice);
@@ -345,7 +234,7 @@ export class BinanceFutureBookPriceRequest extends BrokerRequestMessageBase {
 }
 
 export class BinanceFutureSubscribeQuoteRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureQuoteSubscriptionData;
+    public Data: IBinanceSubscriptionRequestData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.SubscribeFuturesUsdtQuote : BinanceFutureCoinMessageType.SubscribeFuturesCoinQuote);
@@ -353,7 +242,7 @@ export class BinanceFutureSubscribeQuoteRequest extends BrokerRequestMessageBase
 }
 
 export class BinanceFutureSubscribeMarketPriceRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureMarketPriceSubscriptionData;
+    public Data: IBinanceSubscriptionRequestData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.SubscribeFuturesUsdtMarkPrice : BinanceFutureCoinMessageType.SubscribeFuturesCoinMarkPrice);
@@ -361,21 +250,21 @@ export class BinanceFutureSubscribeMarketPriceRequest extends BrokerRequestMessa
 }
 
 export class BinanceFutureSubscribeOrderBookRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureOrderBookSubscriptionData;
+    public Data: IBinanceSubscriptionRequestData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.SubscribeFuturesUsdtBookTicker : BinanceFutureCoinMessageType.SubscribeFuturesCoinBookTicker);
     }
 }
 
-export class BinanceFutureOpenOrderRequest extends BrokerRequestMessageBase {
+export class BinanceFutureOpenOrdersRequest extends BrokerRequestMessageBase {
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.FuturesUsdtOpenOrders : BinanceFutureCoinMessageType.FuturesCoinOpenOrders);
     }
 }
 
 export class BinanceFutureCloseOrderRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureCloseOrderData;
+    public Data: IBinanceCloseOrderData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.CloseFuturesUsdtOrder : BinanceFutureCoinMessageType.CloseFuturesCoinOrder);
@@ -383,7 +272,7 @@ export class BinanceFutureCloseOrderRequest extends BrokerRequestMessageBase {
 }
 
 export class BinanceFutureOrderInfoRequest extends BrokerRequestMessageBase {
-    public Data: IBinanceFutureOrderInfoData;
+    public Data: IBinanceOrderInfoData;
 
     constructor(type: BinanceFutureBrokerType) {
         super(type === BinanceFutureBrokerType.USDT ? BinanceFutureUsdtMessageType.FuturesUsdtSymbolOrderInfo : BinanceFutureCoinMessageType.FuturesCoinSymbolOrderInfo);
@@ -398,9 +287,10 @@ export class BinanceFuturePlaceOrderRequest extends BrokerRequestMessageBase {
     }
 }
 
-// Responses
+// --- Responses
+// -------------
 export class BinanceFutureLoginResponse extends BrokerResponseMessageBase {
-    public Data: IBinanceFutureSymbolData[];
+    public Data: IBinanceSymbolData[];
 }
 
 export class BinanceFutureOrderHistoryResponse extends BrokerResponseMessageBase {
@@ -431,36 +321,12 @@ export class BinanceFuturePositionDetailsResponse extends BrokerResponseMessageB
     public Data: IBinanceFuturePosition[];
 }
 
-export class BinanceFutureCloseOrderResponse extends BrokerResponseMessageBase {
-    public Data: any;
-}
-
-export class BinanceFutureOrderInfoResponse extends BrokerResponseMessageBase {
-    public Data: any;
-}
-
-export class BinanceFuturePlaceOrderResponse extends BrokerResponseMessageBase {
-    public Data: any;
-}
-
-export class BinanceFutureSubscribeQuoteResponse extends BrokerResponseMessageBase {
-    public Data: any;
-}
-
-export class BinanceFutureSubscribeMarketPriceResponse extends BrokerResponseMessageBase {
-    public Data: any;
-}
-
-export class BinanceFutureTickResponse extends BrokerResponseMessageBase {
-    public Data: IBinanceFutureTick;
-}
-
 export class BinanceFutureMarketPriceResponse extends BrokerResponseMessageBase {
-    public Data: IBinanceFutureMarketPrice;
+    public Data: IBinanceMarketPrice;
 }
 
 export class BinanceFutureOrderBookItemResponse extends BrokerResponseMessageBase {
-    public Data: IBinanceFutureOrderBookItem;
+    public Data: IBinanceOrderBookItem;
 }
 
 export class BinanceFutureSubscribeOrderBookResponse extends BrokerResponseMessageBase {
@@ -475,8 +341,8 @@ export class BinanceFutureAccountUpdateResponse extends BrokerResponseMessageBas
     public Data: IBinanceFuturesAccountUpdate;
 }
 
-// events
-
+// --- Events
+// ------------
 export enum FuturesOrderStatus {
     NEW = "NEW",
     PARTIALLY_FILLED = "PARTIALLY_FILLED",
@@ -549,7 +415,4 @@ export interface IBinanceFuturesAccountUpdateData {
 
 export interface IBinanceFuturesAccountUpdate {
     UpdateData: IBinanceFuturesAccountUpdateData;
-    TransactionTime: number;
-    Event: string;
-    EventTime: number;
 }

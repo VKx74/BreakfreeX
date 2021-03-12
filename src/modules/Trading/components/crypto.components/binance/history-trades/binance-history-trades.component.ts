@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
-import { BinanceItemsComponent } from '../binance-items.component';
+import { BinanceItemsComponent, BinanceItemsComponentWithHeader } from '../binance-items.component';
 
 
 @Component({
@@ -9,10 +9,17 @@ import { BinanceItemsComponent } from '../binance-items.component';
     styleUrls: ['./binance-history-trades.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BinanceHistoryTradeComponent extends BinanceItemsComponent<any> {
+export class BinanceHistoryTradeComponent extends BinanceItemsComponentWithHeader<any> {
 
     protected loadItems(): Observable<any[]> {
-       return of(this._binanceBroker.tradesHistory);
+        if (!this._instrument) {
+            return of([]);
+        }
+
+        const from = this._getDate(this._fromTime, this._fromDate);
+        const to = this._getDate(this._toTime, this._toDate);
+
+        return this._binanceBroker.loadTradesHistory(this._instrument.symbol, from, to);
     }
 
     protected _subscribeOnUpdates(): Subscription {

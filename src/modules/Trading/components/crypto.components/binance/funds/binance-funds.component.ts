@@ -15,7 +15,7 @@ export class BinanceFundsComponent extends BinanceItemsComponent<BinanceFund> {
         if (!broker) {
             return null;
         }
-        return of(broker.accountInfo.Funds);
+        return of(broker.funds);
     }
 
     trackById(index, item: BinanceFund) {
@@ -23,11 +23,11 @@ export class BinanceFundsComponent extends BinanceItemsComponent<BinanceFund> {
     }
     
     totalBalance(item: BinanceFund): number {
-        return item.AvailableBalance + item.FreezedBalance;
+        return item.AvailableBalance + item.LockedBalance;
     }
 
     protected _subscribeOnUpdates(): Subscription {
-        return this._binanceBroker.onAccountInfoUpdated.subscribe(orderResp => {
+        return this._binanceBroker.onFundsUpdated.subscribe(orderResp => {
             this.updateItems();
         });
     }

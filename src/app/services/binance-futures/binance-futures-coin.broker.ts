@@ -1,8 +1,7 @@
 import { Inject } from "@angular/core";
 import { EBrokerInstance } from "@app/interfaces/broker/broker";
-import { ITradeTick } from "@app/models/common/tick";
-import { IBinanceLastPrice } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 import { BinanceFuturesPosition } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { IBinancePrice } from "modules/Trading/models/crypto/shared/models.communication";
 import { OrderSide } from "modules/Trading/models/models";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
@@ -37,7 +36,7 @@ export class BinanceFuturesCoinBroker extends BinanceFuturesBroker {
         }
     }
     
-    protected _updatePositionByQuote(position: BinanceFuturesPosition, quote: IBinanceLastPrice) {
+    protected _updatePositionByQuote(position: BinanceFuturesPosition, quote: IBinancePrice) {
         position.CurrentPrice = quote.Price;
         const contractSize = this._instrumentContractSize[position.Symbol];
         if (!contractSize) {
