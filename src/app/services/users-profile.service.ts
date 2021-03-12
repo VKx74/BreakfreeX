@@ -58,6 +58,19 @@ export class UsersProfileService {
         return this._http.patch(`${AppConfigService.config.apiUrls.userDataStoreREST}Profile/avatarId`, data);
     }
 
+    public patchUsingOfRandomNames(userId: string, useUserName: boolean): Observable<any> {
+        let data = {
+            userId: userId,
+            useUserName: useUserName
+        };
+        return this._http.patch(`${AppConfigService.config.apiUrls.userDataStoreREST}Profile/userNamePublicity`, data).pipe(map((response) => {
+            if (this._cachedProfile) {
+                this._cachedProfile.useUserName = useUserName;
+            }
+            return response;
+        }));
+    }
+
     public searchUsersProfileByUserName(userName: string, params = new PaginationParams(0, 15)): Observable<IPaginationResponse<UserProfileModel>> {
         if (!userName || !userName.length || !userName.trim().length) {
             return of({items: [], total: 0});

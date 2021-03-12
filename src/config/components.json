@@ -43,6 +43,7 @@
 
   "xpDashboard":  true,
   "registrationsDashboard":  true,
+  "tradingPerformanceMonitoring": true,
   "forum":  true,
   "scripting": true,
   "backtesting": true,

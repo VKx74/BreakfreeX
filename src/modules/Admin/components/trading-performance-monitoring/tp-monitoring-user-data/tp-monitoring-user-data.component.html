@@ -1,0 +1,82 @@
+<div>
+    <bft-loader *ngIf="showSpinner"></bft-loader>
+    <div [ngClass]="{'bblur' : showSpinner}">    
+    <div class="mt-accs-container">        
+        <div *ngFor="let acc of UserAccounts">            
+            <div>
+                <div class="mt-acc-wrapper">
+                    <button class="mtButton crypto-button crypto-button_primary" [ngClass]="{'isselected' : acc.isSelected}" (click)="onSelectMTAccount(acc)">
+                        {{acc.name}}
+                    </button>                    
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="container">        
+        <div class="sub-container column1">
+            <div class="prop-container">
+                Account number: 
+                <span class="mt-prop-value">{{AccountData.number}}</span>
+            </div>
+            <div class="prop-container">                
+                Account type:
+                <span class="mt-prop-value">{{AccountData.type}}</span>
+            </div>
+            <div class="prop-container">
+                Account currency:
+                <span class="mt-prop-value">{{AccountData.currency}}</span>
+            </div>
+            <div class="prop-container">
+                Account age:
+                <span class="mt-prop-value">{{AccountData.age}}</span>
+            </div>
+        </div>
+        <div class="sub-container column2">
+            <div class="prop-container">
+                Balance: 
+                <span class="mt-prop-value">{{AccountData.balance}}</span>
+            </div>
+            <div class="prop-container">                
+                Profit:
+                <span class="mt-prop-value">{{AccountData.profit}}</span>
+            </div>
+            <div class="prop-container">
+                Total instruments:
+                <span class="mt-prop-value">{{AccountData.totalInstruments}}</span>
+            </div>
+            <div class="prop-container">
+                Account Trades:
+                <span class="mt-prop-value">{{AccountData.totalTrades}}</span>
+            </div>
+        </div>
+        <div class="sub-container column3">
+            <div class="prop-container">
+                Profitability: 
+                <span class="mt-prop-value">{{AccountData.profitability}}</span>
+            </div>
+            <div class="prop-container">                
+                Average loss:
+                <span class="mt-prop-value">{{AccountData.avgLoss}}</span>
+            </div>
+            <div class="prop-container">
+                Average win:
+                <span class="mt-prop-value">{{AccountData.avgWin}}</span>
+            </div>
+            <div class="prop-container">
+                Average trade length:
+                <span class="mt-prop-value">{{AccountData.avgTradeLength}}</span>
+            </div>
+        </div>
+    </div>   
+    <div>
+        <div *ngIf="showUsersCharts">
+            <sp-chart [ChartSettings]='BalanceChartSettings' [Data]='BalanceChartData' (needUpdate)="updateBalanceChart($event)"
+             style="width: 33%; float:left; padding:5px"></sp-chart>
+             <sp-chart [ChartSettings]='CumPnLChartSettings' [Data]='CumPnLChartData' (needUpdate)="updateCumPnLChart($event)"
+             style="width: 33%; float:left; padding:5px"></sp-chart>
+            <sp-chart [ChartSettings]='TradesChartSettings' [Data]='TradesChartData' (needUpdate)="updateTradesChart($event)"
+             style="width: 33%; float:left; padding:5px"></sp-chart>            
+        </div>
+    </div>
+</div>
+<div>

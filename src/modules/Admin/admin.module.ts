@@ -123,6 +123,13 @@ import { AppMemberXpInfoComponent } from './components/app-member-xp-info/app-me
 import { XPDashboardComponent } from './components/xp-dashboard/xp-dashboard.component';
 import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
 import { RegistrationsDashboardComponent } from './components/registrations-dashboard/registrations-dashboard.component';
+import { TPMonitoringComponent } from './components/trading-performance-monitoring/tp-monitoring.component';
+import { TPMonitoringService } from './services/tp-monitoring.service';
+import { TPMonitoringUserDataComponent } from './components/trading-performance-monitoring/tp-monitoring-user-data/tp-monitoring-user-data.component';
+import { SPChartComponent } from './components/trading-performance-monitoring/chart-components/single-parameter-chart/sp-chart.component.';
+import { TPMonitoringResolver } from './resolvers/tp-monitoring.resolver';
+import { TPMonitoringGeneralDataComponent } from './components/trading-performance-monitoring/tp-monitoring-general-data/tp-monitoring-general-data.component';
+import { LoaderModule } from 'modules/loader/loader.module';
 
 @NgModule({
     imports: [
@@ -172,6 +179,7 @@ import { RegistrationsDashboardComponent } from './components/registrations-dash
         SidebarModule,
         MatTableModule,
         ChatModuleForAdmin,
+        LoaderModule
     ],
     declarations: [
         AdminDashboardSidebarComponent,
@@ -199,7 +207,11 @@ import { RegistrationsDashboardComponent } from './components/registrations-dash
         ThreadMembersComponent,
         ForumComponent,
         XPDashboardComponent,
-        RegistrationsDashboardComponent,
+        RegistrationsDashboardComponent,        
+        TPMonitoringComponent,
+        TPMonitoringUserDataComponent,
+        TPMonitoringGeneralDataComponent,
+        SPChartComponent,
         QAComponent,
         UiComponentsPermissionManagerComponent,
         AdminPanelMainComponent,
@@ -219,7 +231,7 @@ import { RegistrationsDashboardComponent } from './components/registrations-dash
     exports: [
         RouterModule,
         PaginationTableContainerComponent,
-        NewsListComponent,
+        NewsListComponent,        
         // FileUploaderModalComponent
     ],
     entryComponents: [
@@ -242,6 +254,7 @@ import { RegistrationsDashboardComponent } from './components/registrations-dash
         SystemNotificationsResolver,
         ThreadsResolver,
         XPDashboardResolver,
+        TPMonitoringResolver,
         ThreadMembersResolver,
         ThreadDetailsResolver,
         ThreadMessagesResolver,
@@ -252,6 +265,7 @@ import { RegistrationsDashboardComponent } from './components/registrations-dash
         AdminHelperService,
         EventConsolidatorService,
         UserTagsService,
+        TPMonitoringService,
         LayoutStorageService,
         // UserSettingsResolver,
         {

@@ -25,6 +25,7 @@ export class OAuthRegistrationFinishedComponent {
     ngOnInit() {
         this._fbPixelTrackingService.load();
         this._gtmTrackingService.load();
+        this._gtmTrackingService.processRegistration("/oauth-registration-finished");
         this._angulartics2Facebook.eventTrack("CompleteRegistration", {currency: "USD", value: 0});
 
         setTimeout(() => {

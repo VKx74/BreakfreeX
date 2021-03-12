@@ -1,0 +1,50 @@
+<div class="modal-body flex flex-center">
+    <div class="containe">
+        <mat-tab-group class="tabs-wrapper full-width">
+            <mat-tab label="User Data">
+                <bft-loader *ngIf="showSpinner"></bft-loader>
+                <div>
+                    <ng-template #details let-user>                        
+                        <tp-monitoring-user-data [Accounts]="user.mtAccounts" style="overflow: hidden;"></tp-monitoring-user-data>
+                    </ng-template>
+                    <pagination-table-container [paginationHandler]="paginationHandler"
+                                        [noItems]="!Users?.length"
+                                        [componentIdentifier]="ComponentIdentifier.eventsLog"
+                                        [title]="'User accounts'"
+                                        [loading]="showSpinner">
+                    <div class="search-container">
+                        <manual-search [searchHandler]="searchHandler" placeholder="Search items...">
+                            <span manual-search-trigger></span>
+                        </manual-search>
+                    </div>
+                    <data-table class="" [rows]="Users"
+                            [expandOnClick]="true"
+                            [expandDetailsTemplate]="details">
+                    <data-table-header-cell columnName="id" [sortable]="true">
+                        ID
+                    </data-table-header-cell>
+                    <data-table-header-cell columnName="name" [sortable]="true">
+                        Name
+                    </data-table-header-cell>
+                    <data-table-header-cell columnName="email">
+                        Email
+                    </data-table-header-cell>                    
+                    <data-table-cell columnName="id">
+                        <ng-template let-user>{{user.id}}</ng-template>
+                    </data-table-cell>            
+                    <data-table-cell columnName="name">
+                        <ng-template let-user>{{user.userName}}</ng-template>
+                    </data-table-cell>
+                    <data-table-cell columnName="email">
+                        <ng-template let-user>{{user.email}}</ng-template>
+                    </data-table-cell>
+                    </data-table>
+                    </pagination-table-container>
+                </div>
+            </mat-tab>
+            <mat-tab label="General Data">
+                <tp-monitoring-general-data></tp-monitoring-general-data>                
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

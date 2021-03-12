@@ -1,0 +1,11 @@
+<div class="underlay container">
+    <div class="charts-wrapper w-100">
+        <div *ngFor="let chartItem of AllCharts">
+            <div style="margin: 8px;">                 
+                <sp-chart [ChartSettings]='chartItem.Settings'
+                [Data]='chartItem.Data'
+                ></sp-chart>
+            </div>
+        </div>
+    </div>
+</div>

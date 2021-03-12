@@ -20,7 +20,8 @@ enum Sections {
     Weekly = "Weekly Quests",
     Info = "Ranks & Rewards",
     TradeGuard = "TradeGuard",
-    Analysis = "Profit & Loss Analysis"
+    Analysis = "Profit & Loss Analysis",
+    LeaderDashboard = "Leaderboard"
 }
 
 @Component({
@@ -105,6 +106,13 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
     
     onClose() {
         this.close();
+    }
+
+    selectedSectionTitle(): string {
+        switch (this.selectedSection) {
+            case Sections.LeaderDashboard: return "TOP 50 Leaderboard (Hourly refresh)";
+            default: return this.selectedSection;
+        }
     }
 
     private _updateTimer() {

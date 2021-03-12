@@ -106,6 +106,7 @@ export class UserProfileModel {
     public role: string;
     public userName: string;
     public avatarId: string;
+    public useUserName: boolean;
 }
 
 export class RegisterUserModel {

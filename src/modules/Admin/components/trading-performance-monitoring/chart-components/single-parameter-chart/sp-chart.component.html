@@ -1,0 +1,44 @@
+<div class="watchlist-tile w-100 crypto-text">
+    <bft-loader *ngIf="showSpinner"></bft-loader>
+    <div [ngClass]="{'bblur' : showSpinner}">
+    <div class="tile-header">
+            <div class="header-container">
+                <div class="name-chart">
+                    {{ChartHeader}}
+                </div>
+                <button class="selector-button crypto-button crypto-button_primary" style="float: right;" (click)="update()" *ngIf="showUpdateButton">
+                    <i class="crypto-icon crypto-icon-trade-manager"></i>
+                </button>
+            </div>
+            <div style="width: 100%;">
+                <div class="type-data" *ngIf='showPeriodOption'>
+                    <div>Period:</div>
+                    <mat-form-field class="select m-right-10">
+                        <mat-select [value]="SelectedPeriod"
+                                (selectionChange)="handlePeriodSelectionChange($event)">
+                            <mat-option *ngFor="let period of PeriodOptions" [value]="period">
+                                {{ period }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="type-data" *ngIf='showGroupOption'>
+                    <div>Group:</div>
+                        <mat-form-field class="select m-right-10">
+                        <mat-select [value]="SelectedGrouping"
+                                (selectionChange)="handleGroupingSelectionChange($event)">
+                            <mat-option *ngFor="let grouping of GroupingOptions" [value]="grouping">
+                                {{ grouping }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>            
+    </div>
+    <div class="tile-footer">        
+        <div class="w-100">
+            <canvas #theCanvas>{{Chart}}</canvas>
+        </div>
+    </div>
+</div>
+</div>

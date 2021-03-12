@@ -1,7 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AppConfigService } from "@app/services/app.config.service";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
 
 export enum Period {    
     Last7Days = "Last7Days",
@@ -27,8 +28,16 @@ export class UserTradingPerformAdditionalData {
     public accCurencySign: string;
 }
 
+export class LeaderDashboardItem {
+    level: number;
+    levelName: string;
+    userId: string;
+    userName: string;
+}
+
 @Injectable()
 export class TradingPerformanceService {
+    private _cachedLeaderBoard: LeaderDashboardItem[];
     private url: string;
 
     constructor(private  _http: HttpClient) {
@@ -64,5 +73,15 @@ export class TradingPerformanceService {
             mtLogin: mtLogin,
             platform: mtPlatform            
         }});
+    }
+
+    public getPublicQuestsLeaderBoard(useCache: boolean = false): Observable<LeaderDashboardItem[]> {
+        if (useCache && this._cachedLeaderBoard) {
+            return of(this._cachedLeaderBoard);
+        }
+        return this._http.get<LeaderDashboardItem[]>(`${this.url}UserStats/PublicQuestsLeaderBoard`).pipe(map((data) => {
+            this._cachedLeaderBoard = data;
+            return data;
+        }));
     }
 }

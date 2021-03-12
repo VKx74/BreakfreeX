@@ -1,6 +1,6 @@
-@import "variables";
 @import "../../styles/themes/themes";
 @import "mixins/themify";
+@import "variables";
 
 :host {
   .badge-container {
@@ -15,13 +15,6 @@
       height: 25px;
       margin-right: 2px;
     }
-  }
-  .rank-level {
-    display: flex;
-    color: #ffffffd1;
-    font-size: 12px;
-    justify-content: center;
-    align-items: center;
   }
 }
 

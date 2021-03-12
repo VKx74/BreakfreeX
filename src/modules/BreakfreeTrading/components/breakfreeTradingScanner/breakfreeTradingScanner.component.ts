@@ -25,7 +25,6 @@ import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
-import { NotificationsService } from '@alert/services/notifications.service';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -652,7 +651,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _getMarketType(symbol: string): string {
         for (const type of this._types) {
             for (const inst of type.data) {
-                if (inst.id === symbol || inst.symbol === symbol) {
+                let normalized_id = inst.id.replace("_", "").replace("/", "");
+                let normalized_symbol = inst.symbol.replace("_", "").replace("/", "");
+                let normalized_search = symbol.replace("_", "").replace("/", "");
+                if (normalized_id === normalized_search || normalized_symbol === normalized_search) {
                     return type.name;
                 }
             }

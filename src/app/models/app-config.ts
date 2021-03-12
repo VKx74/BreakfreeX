@@ -94,6 +94,7 @@ export enum ComponentIdentifier {
     marketView = "marketView",
 
     // admin
+    tradingPerformanceMonitoring = "tradingPerformanceMonitoring",
     registrationsDashboard = "registrationsDashboard",
     xpDashboard = "xpDashboard",
     summary = "summary",

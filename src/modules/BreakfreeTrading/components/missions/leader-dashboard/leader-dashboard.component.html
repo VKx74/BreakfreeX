@@ -1,0 +1,47 @@
+<div class="content">
+    <div class="container-header">
+        <div class="show-username">
+            <input type="checkbox" id="show-public-username" [(ngModel)]="showPublicUsername">
+            <label for="show-public-username"><div class="lable-text">Show my real username publicly on leaderboard</div></label>
+        </div>
+        <div class="description hidden">
+            *Leaderboard data refreshing hourly
+        </div>
+    </div>
+    <div class="ranks-container">
+        <div class="ranks-header">
+            <div class="ranking-cell">
+                Rank
+            </div>
+            <div class="badge-cell">
+                Badge
+            </div>
+            <div class="level-cell">
+                Level
+            </div>
+            <div class="name-cell">
+                Name
+            </div>
+        </div>
+        <bft-loader-block *ngIf="loading"></bft-loader-block>
+        <div *ngFor="let item of items" class="ranks-row" [ngClass]="{'own-row': isMyRow(item)}">
+            <div class="ranking-cell">
+                NO.{{item.position}}
+            </div>
+            <div class="badge-cell">
+                <div class="badge-image">
+                    <static-badge [ranksName]="item.rank"></static-badge>
+                </div>
+                <div class="badge-name">
+                    {{item.rank}}
+                </div>
+            </div>
+            <div class="level-cell">
+                {{item.level}}
+            </div>
+            <div class="name-cell">
+                {{item.name}}
+            </div>
+        </div>
+    </div>
+</div>

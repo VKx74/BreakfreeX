@@ -44,6 +44,8 @@ import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.comp
 import { TooltipDirective } from './directives/tooltip.directive';
 import { EmojiComponent } from './components/emoji/emoji.component';
 import { ChartWrapperComponent } from './components/chartWrapper/chart-wrapper.component';
+import { BadgeComponent } from './components/badge/badge.component';
+import { StaticBadgeComponent } from './components/static-badge/static-badge.component';
 
 @NgModule({
     declarations: [
@@ -72,7 +74,9 @@ import { ChartWrapperComponent } from './components/chartWrapper/chart-wrapper.c
         HeaderComponent,
         PinInputModalComponent,
         EmojiComponent,
-        ChartWrapperComponent
+        ChartWrapperComponent,
+        BadgeComponent,
+        StaticBadgeComponent
     ],
     imports: [
         CommonModule,
@@ -117,7 +121,9 @@ import { ChartWrapperComponent } from './components/chartWrapper/chart-wrapper.c
         IndicatorComponent,
         HeaderComponent,
         EmojiComponent,
-        ChartWrapperComponent
+        ChartWrapperComponent,
+        BadgeComponent,
+        StaticBadgeComponent
     ],
     entryComponents: [
         ConfirmModalComponent,
