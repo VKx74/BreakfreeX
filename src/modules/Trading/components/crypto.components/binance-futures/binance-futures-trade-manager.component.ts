@@ -3,12 +3,13 @@ import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from "@app/services/broker.service";
-import { TradeManagerTab } from 'modules/Trading/models/models';
+import { IPosition, TradeManagerTab } from 'modules/Trading/models/models';
 import { AlertService } from '@alert/services/alert.service';
 import { InstrumentService } from '@app/services/instrument.service';
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 import { BinanceFuturesBroker } from "@app/services/binance-futures/binance-futures.broker";
 import { BinanceTradeManagerComponentBase } from "../common/binance-trade-manager.component";
+import { ConfirmModalComponent } from "modules/UI/components/confirm-modal/confirm-modal.component";
 
 @Component({
     selector: 'binance-futures-trade-manager',
@@ -50,6 +51,28 @@ export class BinanceFuturesTradeManagerComponent extends BinanceTradeManagerComp
         protected _instrumentService: InstrumentService,
         protected _dataHighlightService: DataHighlightService) {
             super(_dialog, _brokerService, _alertService, _instrumentService, _dataHighlightService);
+    }
+
+
+    public handlePositionClose(position: IPosition) {
+        const broker = this._binanceBroker;
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Close position',
+                message: `Are you sure you want close '${position.Symbol}' position?`,
+                onConfirm: () => {
+                    broker.closePosition(position.Symbol).subscribe((result) => {
+                        if (result.result) {
+                            this._alertService.success("Position closed");
+                        } else {
+                            this._alertService.error("Failed to close position: " + result.msg);
+                        }
+                    }, (error) => {
+                        this._alertService.error("Failed to close position: " + error);
+                    });
+                }
+            }
+        });
     }
 
     protected _handleHighlight(data: ITradePanelDataHighlight) {
