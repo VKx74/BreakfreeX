@@ -8,7 +8,7 @@
         <bft-loader *ngIf="refreshing"></bft-loader>
         <data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true"
             [expandOnClick]="false" [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)"
-            (onDoubleClick)="doubleClicked($event)" [hiddenColumns]="['Id']"
+            (onDoubleClick)="doubleClicked($event)" [hiddenColumns]="['Id', 'Open Time']"
             (onContextMenuSelected)="handleContextMenuSelected($event)">
             <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false">
             </data-table-header-cell>
@@ -18,14 +18,20 @@
                 {{'tradeManager.symbol' | translate}}</data-table-header-cell>
             <data-table-header-cell columnName="Type" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
                 {{'tradeManager.type' | translate}}</data-table-header-cell>
-            <data-table-header-cell columnName="Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
-                {{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
             <data-table-header-cell columnName="Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
                 {{'tradeManager.size' | translate}}</data-table-header-cell>
             <data-table-header-cell columnName="Executed Size" [columnWidth]="140" [columnMinWidth]="10"
                 [sortable]="true">{{'tradeManager.executedSize' | translate}}</data-table-header-cell>
-            <data-table-header-cell columnName="Total" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
-                {{'tradeManager.total' | translate}}</data-table-header-cell>
+            <data-table-header-cell columnName="Iceberg Qty" [columnWidth]="140" [columnMinWidth]="10"
+                [sortable]="true">{{'tradeManager.icebergQty' | translate}}</data-table-header-cell>
+            <data-table-header-cell columnName="Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+                {{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
+            <data-table-header-cell columnName="Stop Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+                {{'tradeManager.stopPrice' | translate}}</data-table-header-cell>
+            <data-table-header-cell columnName="Status" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+                {{'tradeManager.status' | translate}}</data-table-header-cell>
+            <data-table-header-cell columnName="TIF" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+                {{'tradeManager.tif' | translate}}</data-table-header-cell>
             <data-table-header-cell columnName="Date" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
                 {{'tradeManager.date' | translate}}</data-table-header-cell>
 
@@ -45,31 +51,39 @@
             <data-table-cell columnName="Type">
                 <ng-template let-item>{{item.Type}}</ng-template>
             </data-table-cell>
-            <data-table-cell columnName="Price">
-                <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>
-            </data-table-cell>
             <data-table-cell columnName="Size">
                 <ng-template let-item>
                     <div
                         [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">
-                        {{item.Size.toFixed(decimals)}}</div>
+                        {{item.Size.toFixed(2)}}</div>
                 </ng-template>
             </data-table-cell>
             <data-table-cell columnName="Executed Size">
-                <ng-template let-item>
-                    <div
-                        [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">
-                        {{item.ExecutedSize.toFixed(decimals)}}</div>
+                <ng-template let-item>{{item.ExecutedSize ? item.ExecutedSize : "-"}}
                 </ng-template>
             </data-table-cell>
-            <data-table-cell columnName="Total">
-                <ng-template let-item>
-                    <div>{{item.Total.toFixed(decimals)}}</div>
+            <data-table-cell columnName="Iceberg Qty">
+                <ng-template let-item>{{item.IcebergSize ? item.IcebergSize : "-"}}
                 </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="Price">
+                <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="Stop Price">
+                <ng-template let-item>{{item.StopPrice ? item.StopPrice.toFixed(getDecimals(item.Symbol)) : "-"}}
+                </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="Status">
+                <ng-template let-item>{{item.Status}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="TIF">
+                <ng-template let-item>{{item.TIF}}</ng-template>
             </data-table-cell>
             <data-table-cell columnName="Date">
-                <ng-template let-item>{{item.Date | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
+                <ng-template let-item>{{item.Time | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
             </data-table-cell>
+
         </data-table>
+
     </div>
 </div>

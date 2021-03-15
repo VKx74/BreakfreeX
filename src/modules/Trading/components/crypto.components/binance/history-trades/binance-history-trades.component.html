@@ -22,8 +22,6 @@
                 {{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
             <data-table-header-cell columnName="Fee" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
                 {{'tradeManager.fee' | translate}}</data-table-header-cell>
-            <data-table-header-cell columnName="Total" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
-                {{'tradeManager.total' | translate}}</data-table-header-cell>
             <data-table-header-cell columnName="Date" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
                 {{'tradeManager.date' | translate}}</data-table-header-cell>
 
@@ -44,20 +42,17 @@
                 <ng-template let-item>
                     <div
                         [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">
-                        {{item.Size.toFixed(2)}}</div>
+                        {{item.Size}}</div>
                 </ng-template>
             </data-table-cell>
             <data-table-cell columnName="Price">
                 <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>
             </data-table-cell>
             <data-table-cell columnName="Fee">
-                <ng-template let-item><span class="symbol-column">{{item.Fee}}</span></ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="Total">
-                <ng-template let-item><span class="symbol-column">{{item.Total}}</span></ng-template>
+                <ng-template let-item><span>{{item.Commission}} {{item.CommissionAsset}}</span></ng-template>
             </data-table-cell>
             <data-table-cell columnName="Date">
-                <ng-template let-item>{{item.Date | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
+                <ng-template let-item>{{item.Time | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
             </data-table-cell>
         </data-table>
     </div>

@@ -12,7 +12,7 @@ import { BrokerConnectivityStatus } from 'modules/Trading/models/models';
 export class BinanceAccountInfoBarComponent {
     BrokerConnectivityStatus = BrokerConnectivityStatus;
 
-    get activeAccount(): any {
+    get activeAccount(): BinanceSpotTradingAccount {
         const broker = this._broker.activeBroker as BinanceBroker;
         if (!broker) {
             return null;
@@ -20,15 +20,24 @@ export class BinanceAccountInfoBarComponent {
 
         return broker.accountInfo;
     }
+    
+    get server(): string {
+        const broker = this._broker.activeBroker as BinanceBroker;
+        if (!broker) {
+            return null;
+        }
+
+        return broker.server;
+    }
 
     get status(): BrokerConnectivityStatus {
-        const mtBroker = this._broker.activeBroker;
-        if (!mtBroker) {
+        const broker = this._broker.activeBroker;
+        if (!broker) {
             return null;
         }
 
 
-        return mtBroker.status;
+        return broker.status;
     }
 
     constructor(private _broker: BrokerService) {

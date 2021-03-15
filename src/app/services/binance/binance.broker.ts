@@ -7,11 +7,11 @@ import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
 import { BinanceFutureLoginResponse } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
-import { BinanceConnectionData, BinanceFund, BinanceSpotTradingAccount } from "modules/Trading/models/crypto/binance/binance.models";
-import { BinanceSpotBookPriceResponse, BinanceSpotLoginRequest, BinanceSpotOpenOrderResponse, BinanceSpotOrderHistoryResponse, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountInfoData, IBinanceSpotHistoricalOrder, IBinanceSpotOrder, IBinanceSpotOrderUpdateData, IBinanceSpotTrade, IBinanceSpotWalletBalance } from "modules/Trading/models/crypto/binance/binance.models.communication";
+import { BinanceConnectionData, BinanceFund, BinanceHistoricalOrder, BinanceHistoricalTrade, BinanceOrder, BinanceSpotTradingAccount } from "modules/Trading/models/crypto/binance/binance.models";
+import { BinanceSpotBookPriceResponse, BinanceSpotLoginRequest, BinanceSpotOpenOrderResponse, BinanceSpotOrderHistoryResponse, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountBalance, IBinanceSpotAccountInfoData, IBinanceSpotHistoricalOrder, IBinanceSpotOrder, IBinanceSpotOrderUpdateData, IBinanceSpotTrade, IBinanceSpotWalletBalance, SpotOrderStatus } from "modules/Trading/models/crypto/binance/binance.models.communication";
 import { IBinancePrice, IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
 import { ActionResult, BrokerConnectivityStatus, IOrder, OrderSide, OrderTypes } from "modules/Trading/models/models";
-import { Subject, Observable, of, Subscription, Observer, combineLatest } from "rxjs";
+import { Subject, Observable, of, Subscription, Observer, combineLatest, throwError } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
@@ -32,7 +32,6 @@ export class BinanceBroker implements IBroker {
     protected _onAccountUpdateSubscription: Subscription;
     protected _onReconnectSubscription: Subscription;
     protected _onTickSubscription: Subscription;
-    protected _onLastPriceSubject: Subscription;
     protected _onOrderUpdateSubject: Subscription;
     protected _onAccountUpdateSubject: Subscription;
     protected _onPositionsUpdateSubject: Subscription;
@@ -42,23 +41,23 @@ export class BinanceBroker implements IBroker {
     }
 
     protected get _server(): string {
-        return "Binance Futures Spot";
+        return "Binance Spot";
     }
 
     instanceType: EBrokerInstance = EBrokerInstance.Binance;
 
     onAccountInfoUpdated: Subject<BinanceSpotTradingAccount> = new Subject<BinanceSpotTradingAccount>();
-    onOrdersUpdated: Subject<any[]> = new Subject<any[]>();
-    onOrdersParametersUpdated: Subject<any[]> = new Subject<any[]>();
-    onHistoricalOrdersUpdated: Subject<any[]> = new Subject<any[]>();
-    onHistoricalTradesUpdated: Subject<any[]> = new Subject<any[]>();
+    onOrdersUpdated: Subject<BinanceOrder[]> = new Subject<BinanceOrder[]>();
+    onOrdersParametersUpdated: Subject<BinanceOrder[]> = new Subject<BinanceOrder[]>();
+    onHistoricalOrdersUpdated: Subject<BinanceHistoricalOrder[]> = new Subject<BinanceHistoricalOrder[]>();
+    onHistoricalTradesUpdated: Subject<BinanceHistoricalTrade[]> = new Subject<BinanceHistoricalTrade[]>();
     onFundsUpdated: Subject<BinanceFund[]> = new Subject<BinanceFund[]>();
     onSaveStateRequired: Subject<void> = new Subject;
 
     funds: BinanceFund[] = [];
-    orders: any[] = [];
-    ordersHistory: any[] = [];
-    tradesHistory: any[] = [];
+    orders: BinanceOrder[] = [];
+    ordersHistory: BinanceHistoricalOrder[] = [];
+    tradesHistory: BinanceHistoricalTrade[] = [];
 
     public get status(): BrokerConnectivityStatus {
         if (this.ws.readyState === ReadyStateConstants.OPEN) {
@@ -115,33 +114,31 @@ export class BinanceBroker implements IBroker {
         });
     }
     cancelOrder(order: any): Observable<ActionResult> {
-        return of();
-        // let specificOrder: IOrder;
+        let specificOrder: IOrder;
 
-        // for (const o of this.orders) {
-        //     if (o.Id === order) {
-        //         specificOrder = o;
-        //     }
-        // }
+        for (const o of this.orders) {
+            if (o.Id === order) {
+                specificOrder = o;
+            }
+        }
 
-        // if (!specificOrder) {
-        //     return throwError("Order not found");
-        // }
+        if (!specificOrder) {
+            return throwError("Order not found");
+        }
 
-        // return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
-        //     this.ws.closeOrder(specificOrder.Symbol, specificOrder.Id).subscribe((response) => {
-        //         if (response.IsSuccess) {
-        //             observer.next({ result: true });
-        //             // this._removeFromOrders(specificOrder.Id);
-        //         } else {
-        //             observer.error(response.ErrorMessage);
-        //         }
-        //         observer.complete();
-        //     }, (error) => {
-        //         observer.error(error);
-        //         observer.complete();
-        //     });
-        // });
+        return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+            this.ws.closeOrder(specificOrder.Symbol, specificOrder.Id).subscribe((response) => {
+                if (response.IsSuccess) {
+                    observer.next({ result: true });
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
     }
     cancelAll(): Observable<any> {
         const pending = this.orders;
@@ -154,9 +151,10 @@ export class BinanceBroker implements IBroker {
         return combineLatest(subjects);
     }
     subscribeToTicks(symbol: string, subscription: (value: ITradeTick) => void): Subscription {
+        this._subscribeOnLastPrice(symbol);
+
         if (!this._tickSubscribers[symbol]) {
             this._tickSubscribers[symbol] = new Subject<ITradeTick>();
-            this.ws.subscribeOnOrderBook(symbol).subscribe();
         }
 
         return this._tickSubscribers[symbol].subscribe(subscription);
@@ -231,9 +229,6 @@ export class BinanceBroker implements IBroker {
         if (this._onTickSubscription) {
             this._onTickSubscription.unsubscribe();
         }
-        if (this._onLastPriceSubject) {
-            this._onLastPriceSubject.unsubscribe();
-        }
         if (this._onAccountUpdateSubscription) {
             this._onAccountUpdateSubscription.unsubscribe();
         }
@@ -253,7 +248,6 @@ export class BinanceBroker implements IBroker {
         this._symbolToAsset = {};
 
         this._onTickSubscription = this.ws.tickSubject.subscribe(this._handleQuotes.bind(this));
-        this._onLastPriceSubject = this.ws.lastPriceSubject.subscribe(this._handleLastPrice.bind(this));
         this._onOrderUpdateSubject = this.ws.orderUpdateSubject.subscribe(this._handleOrderUpdate.bind(this));
         this._onAccountUpdateSubject = this.ws.accountUpdateSubject.subscribe(this._handleRealtimeAccountUpdate.bind(this));
         this._onAccountUpdateSubscription = this.ws.accountInfoReceivedSubject.subscribe(this._handleAccountUpdate.bind(this));
@@ -300,9 +294,6 @@ export class BinanceBroker implements IBroker {
     dispose(): Observable<ActionResult> {
         if (this._onTickSubscription) {
             this._onTickSubscription.unsubscribe();
-        }
-        if (this._onLastPriceSubject) {
-            this._onLastPriceSubject.unsubscribe();
         }
         if (this._onAccountUpdateSubscription) {
             this._onAccountUpdateSubscription.unsubscribe();
@@ -372,70 +363,71 @@ export class BinanceBroker implements IBroker {
         return null;
     }
 
-    protected _parseOrdersHistory(orders: IBinanceSpotHistoricalOrder[]): any[] {
-        const response: any[] = [];
+    protected _parseOrdersHistory(orders: IBinanceSpotHistoricalOrder[]): BinanceHistoricalOrder[] {
+        const response: BinanceHistoricalOrder[] = [];
 
-        // for (const order of orders) {
-        //     response.push({
-        //         Id: order.orderId,
-        //         ExecutedSize: order.executedQty,
-        //         Price: order.price,
-        //         ExecutedPrice: order.avgPrice,
-        //         Side: order.side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
-        //         Size: order.origQty,
-        //         Status: order.status,
-        //         Symbol: order.symbol,
-        //         TIF: order.timeInForce,
-        //         Time: order.time,
-        //         StopPrice: order.stopPrice,
-        //         Type: order.type as OrderTypes
-        //     });
-        // }
-        // response.sort((a, b) => b.Time - a.Time);
+        for (const order of orders) {
+            response.push({
+                Id: order.OrderId,
+                ExecutedSize: order.executedQty,
+                Price: order.Price,
+                ExecutedPrice: order.AverageFillPrice || 0,
+                StopPrice: order.StopPrice,
+                Side: order.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
+                Size: order.origQty,
+                Status: order.Status,
+                Symbol: order.Symbol,
+                TIF: order.TimeInForce,
+                Time: order.time,
+                Type: order.Type as OrderTypes,
+                IcebergSize: order.icebergQty
+            });
+        }
+        response.sort((a, b) => b.Time - a.Time);
         return response;
     }
 
-    protected _parseOrders(orders: IBinanceSpotOrder[]): any[] {
-        const response: any[] = [];
+    protected _parseOrders(orders: IBinanceSpotOrder[]): BinanceOrder[] {
+        const response: BinanceOrder[] = [];
 
-        // for (const order of orders) {
-        //     response.push({
-        //         Id: order.orderId,
-        //         ExecutedSize: order.executedQty,
-        //         Price: order.price,
-        //         ExecutedPrice: order.avgPrice,
-        //         StopPrice: order.stopPrice,
-        //         Side: order.side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
-        //         Size: order.origQty,
-        //         Status: order.status,
-        //         Symbol: order.symbol,
-        //         TIF: order.timeInForce,
-        //         Time: order.time,
-        //         Type: order.type as OrderTypes
-        //     });
-        // }
-        // response.sort((a, b) => b.Time - a.Time);
+        for (const order of orders) {
+            response.push({
+                Id: order.OrderId,
+                ExecutedSize: order.executedQty,
+                Price: order.Price,
+                ExecutedPrice: order.AverageFillPrice || 0,
+                StopPrice: order.StopPrice,
+                Side: order.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
+                Size: order.origQty,
+                Status: order.Status,
+                Symbol: order.Symbol,
+                TIF: order.TimeInForce,
+                Time: order.time,
+                Type: order.Type as OrderTypes,
+                IcebergSize: order.icebergQty
+            });
+        }
+        response.sort((a, b) => b.Time - a.Time);
         return response;
     }
 
-    protected _parseTradesHistory(trades: IBinanceSpotTrade[]): any[] {
-        const response: any[] = [];
+    protected _parseTradesHistory(trades: IBinanceSpotTrade[]): BinanceHistoricalTrade[] {
+        const response: BinanceHistoricalTrade[] = [];
 
-        // for (const trade of trades) {
-        //     response.push({
-        //         Id: trade.Id,
-        //         Commission: trade.Commission,
-        //         CommissionAsset: trade.CommissionAsset,
-        //         Price: trade.Price,
-        //         QuoteSize: trade.quoteQty,
-        //         Size: trade.qty,
-        //         PNL: trade.RealizedPnl,
-        //         Symbol: trade.Symbol,
-        //         Time: trade.time,
-        //         Side: trade.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
-        //     });
-        // }
-        // response.sort((a, b) => b.Time - a.Time);
+        for (const trade of trades) {
+            response.push({
+                Id: trade.Id,
+                Commission: trade.Commission,
+                CommissionAsset: trade.CommissionAsset,
+                Price: trade.Price,
+                QuoteSize: trade.quoteQty,
+                Size: trade.qty,
+                Symbol: trade.Symbol,
+                Time: trade.time,
+                Side: trade.qty < 0 ? OrderSide.Sell : OrderSide.Buy,
+            });
+        }
+        response.sort((a, b) => b.Time - a.Time);
         return response;
     }
 
@@ -455,7 +447,7 @@ export class BinanceBroker implements IBroker {
         }));
     }
 
-    loadTradesHistory(symbol: string, from: number, to: number): Observable<any[]> {
+    loadTradesHistory(symbol: string, from: number, to: number): Observable<BinanceHistoricalTrade[]> {
         return this.ws.getTradesHistory(symbol, from, to).pipe(map((response: BinanceSpotTradeHistoryResponse) => {
             if (!response || !response.Data || !response.IsSuccess) {
                 throw new Error(response.ErrorMessage || "Failed to load historical trades from Binance");
@@ -487,24 +479,23 @@ export class BinanceBroker implements IBroker {
         });
     }
 
-    protected _handleLastPrice(quote: IBinancePrice) {
-        if (this._updateInnerData(quote)) {
-            return;
-        }
-
-        this._unsubscribeFromLastPrice(quote.Symbol);
-    }
-
     protected _handleQuotes(quote: ITradeTick) {
+        let externalSubscribers = false;
         const subject = this._tickSubscribers[quote.symbol];
         if (subject && subject.observers.length > 0) {
             this._tickSubscribers[quote.symbol].next(quote);
+            externalSubscribers = true;
         } else {
             if (subject) {
                 subject.unsubscribe();
                 delete this._tickSubscribers[quote.symbol];
-                this.ws.unsubscribeOrderBook(quote.symbol).subscribe();
             }
+        }
+
+        let internalSubscribers = this._updateInnerData(quote);
+
+        if (!externalSubscribers && !internalSubscribers) {
+            this._unsubscribeFromLastPrice(quote.symbol);
         }
     }
 
@@ -586,8 +577,6 @@ export class BinanceBroker implements IBroker {
         this.onAccountInfoUpdated.next(this._accountInfo);
 
         this._updateFunds(data.Balances);
-
-        // this._updateAssets(data.Assets);
     }
 
     protected _updateFunds(balances: IBinanceSpotWalletBalance[]) {
@@ -613,22 +602,22 @@ export class BinanceBroker implements IBroker {
             }
         }
 
-        for (let i = 0; i < this.funds.length; i++) {
-            let existingFund = this.funds[i];
-            let assetExist = false;
-            for (const brokerBalance of balances) {
-                if (existingFund.Coin === brokerBalance.Asset) {
-                    assetExist = true;
-                    break;
-                }
-            }
+        // for (let i = 0; i < this.funds.length; i++) {
+        //     let existingFund = this.funds[i];
+        //     let assetExist = false;
+        //     for (const brokerBalance of balances) {
+        //         if (existingFund.Coin === brokerBalance.Asset) {
+        //             assetExist = true;
+        //             break;
+        //         }
+        //     }
 
-            if (!assetExist) {
-                changed = true;
-                this.funds.splice(i, 1);
-                i--;
-            }
-        }
+        //     if (!assetExist) {
+        //         changed = true;
+        //         this.funds.splice(i, 1);
+        //         i--;
+        //     }
+        // }
 
         if (changed) {
             this.onFundsUpdated.next(this.funds);
@@ -652,62 +641,64 @@ export class BinanceBroker implements IBroker {
     }
 
     protected _handleOrderUpdate(update: IBinanceSpotOrderUpdateData) {
-        // if (update.Status === FuturesOrderStatus.FILLED) {
-        //     this._removeFromOrders(update.OrderId);
-        // }
+        if (update.Status === SpotOrderStatus.FILLED) {
+            this._removeFromOrders(update.OrderId);
+        }
 
-        // if (update.Status === FuturesOrderStatus.CANCELED ||
-        //     update.Status === FuturesOrderStatus.EXPIRED ||
-        //     update.Status === FuturesOrderStatus.REJECTED) {
-        //     this._removeFromOrders(update.OrderId);
-        // }
+        if (update.Status === SpotOrderStatus.CANCELED ||
+            update.Status === SpotOrderStatus.EXPIRED ||
+            update.Status === SpotOrderStatus.REJECTED) {
+            this._removeFromOrders(update.OrderId);
+        }
 
-        // if (update.Status === FuturesOrderStatus.NEW) {
-        //     for (let i = 0; i < this.orders.length; i++) {
-        //         let order = this.orders[i];
-        //         if (order.Id === update.OrderId) {
-        //             return;
-        //         }
-        //     }
-        //     this.orders.unshift({
-        //         Id: update.OrderId,
-        //         ExecutedSize: 0,
-        //         Price: update.Price,
-        //         ExecutedPrice: update.AveragePrice,
-        //         StopPrice: update.StopPrice,
-        //         Side: update.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
-        //         Size: update.Quantity,
-        //         Status: update.Status,
-        //         Symbol: update.Symbol,
-        //         TIF: update.TimeInForce,
-        //         Time: update.CreateTime,
-        //         Type: update.Type as OrderTypes
-        //     });
+        if (update.Status === SpotOrderStatus.NEW) {
+            for (let i = 0; i < this.orders.length; i++) {
+                let order = this.orders[i];
+                if (order.Id === update.OrderId) {
+                    return;
+                }
+            }
+            this.orders.unshift({
+                Id: update.OrderId,
+                ExecutedSize: update.QuantityFilled,
+                Price: update.Price,
+                ExecutedPrice: update.LastPriceFilled,
+                StopPrice: update.StopPrice,
+                Side: update.Side === "SELL" ? OrderSide.Sell : OrderSide.Buy,
+                Size: update.Quantity,
+                Status: update.Status,
+                Symbol: update.Symbol,
+                TIF: update.TimeInForce,
+                Time: update.CreateTime,
+                Type: update.Type as OrderTypes,
+                IcebergSize: update.IcebergQuantity
+            });
 
-        //     this._trySubscribeToAll();
-        // }
+            this._trySubscribeToAll();
+        }
 
-        // if (update.Status === FuturesOrderStatus.PARTIALLY_FILLED) {
-        //     for (let i = 0; i < this.orders.length; i++) {
-        //         let order = this.orders[i];
-        //         if (order.Id === update.OrderId) {
-        //             order.ExecutedSize = update.AccumulatedQuantityOfFilledTrades;
-        //             order.Price = update.Price;
-        //             order.ExecutedPrice = update.AveragePrice;
-        //             order.StopPrice = update.StopPrice;
-        //             order.Size = update.Quantity;
-        //             order.Status = update.Status;
-        //             order.Type = update.Type as OrderTypes;
-        //             break;
-        //         }
-        //     }
-        // }
+        if (update.Status === SpotOrderStatus.PARTIALLY_FILLED) {
+            for (let i = 0; i < this.orders.length; i++) {
+                let order = this.orders[i];
+                if (order.Id === update.OrderId) {
+                    order.ExecutedSize = update.QuantityFilled;
+                    order.Price = update.Price;
+                    order.ExecutedPrice = update.LastPriceFilled;
+                    order.StopPrice = update.StopPrice;
+                    order.Size = update.Quantity;
+                    order.Status = update.Status;
+                    order.IcebergSize = update.IcebergQuantity;
+                    order.Type = update.Type as OrderTypes;
+                    break;
+                }
+            }
+        }
 
-        // this.onOrdersUpdated.next(this.orders);
+        this.onOrdersUpdated.next(this.orders);
     }
 
-    protected _handleRealtimeAccountUpdate(update: any) {
-        this._trySubscribeToAll();
+    protected _handleRealtimeAccountUpdate(balances: IBinanceSpotAccountBalance[]) {
+        this._updateFunds(balances);
     }
 
     protected _trySubscribeToAll() {
@@ -719,11 +710,10 @@ export class BinanceBroker implements IBroker {
     protected _subscribeOnLastPrice(symbol: string) {
         if (this._lastPriceSubscribers.indexOf(symbol) >= 0) {
             return;
-        }
+        } 
 
         this._lastPriceSubscribers.push(symbol);
-        this.ws.subscribeOnMarketPrice(symbol).subscribe();
-        // this.ws.subscribeOnQuotes(symbol).subscribe();
+        this.ws.subscribeOnOrderBook(symbol).subscribe();
     }
 
     protected _unsubscribeFromLastPrice(symbol: string) {
@@ -733,14 +723,13 @@ export class BinanceBroker implements IBroker {
         }
 
         this._lastPriceSubscribers.splice(index, 1);
-        this.ws.unsubscribeFromMarketPrice(symbol).subscribe();
-        // this.ws.unsubscribeFromQuotes(symbol).subscribe();
+        this.ws.unsubscribeOrderBook(symbol).subscribe();
     }
 
-    protected _updateInnerData(quote: IBinancePrice): boolean {
+    protected _updateInnerData(quote: ITradeTick): boolean {
         let orderUpdated = false;
         for (const order of this.orders) {
-            if (order.Symbol === quote.Symbol) {
+            if (order.Symbol === quote.symbol) {
                 this._updateOrderByQuote(order, quote);
                 orderUpdated = true;
             }
@@ -753,7 +742,7 @@ export class BinanceBroker implements IBroker {
         return orderUpdated;
     }
 
-    private _updateOrderByQuote(order: any, quote: IBinancePrice) {
-        order.CurrentPrice = quote.Price;
+    private _updateOrderByQuote(order: BinanceOrder, quote: ITradeTick) {
+        order.CurrentPrice = order.Side === OrderSide.Buy ? quote.bid : quote.ask;
     }
 }

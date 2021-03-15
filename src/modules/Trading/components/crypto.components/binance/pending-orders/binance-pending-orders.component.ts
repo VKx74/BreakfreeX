@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import { BinanceOrder } from 'modules/Trading/models/crypto/binance/binance.models';
 import {Observable, Subscription, of} from "rxjs";
 import { BinanceItemsComponent } from '../binance-items.component';
 
@@ -9,9 +10,10 @@ import { BinanceItemsComponent } from '../binance-items.component';
     styleUrls: ['./binance-pending-orders.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BinancePendingOrdersComponent extends BinanceItemsComponent<any> {
+export class BinancePendingOrdersComponent extends BinanceItemsComponent<BinanceOrder> {
+    protected _subscriptionOnOrdersDataChanged: Subscription;
 
-    protected loadItems(): Observable<any[]> {
+    protected loadItems(): Observable<BinanceOrder[]> {
        return of(this._binanceBroker.orders);
     }
 
@@ -21,7 +23,7 @@ export class BinancePendingOrdersComponent extends BinanceItemsComponent<any> {
         });
     }
 
-    closeOrder(selectedItem: any) {
+    closeOrder(selectedItem: BinanceOrder) {
         if (selectedItem) {
             this.raiseOrderClose(selectedItem);
         }
@@ -29,6 +31,18 @@ export class BinancePendingOrdersComponent extends BinanceItemsComponent<any> {
 
     ngOnDestroy(): void {
         super.ngOnDestroy();
+
+        if (this._subscriptionOnOrdersDataChanged) {
+            this._subscriptionOnOrdersDataChanged.unsubscribe();
+            this._subscriptionOnOrdersDataChanged = null;
+        }
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
+        this._subscriptionOnOrdersDataChanged = this._binanceBroker.onOrdersParametersUpdated.subscribe(() => {
+            this.collectionUpdated();
+        });
     }
 
     protected collectionUpdated() {

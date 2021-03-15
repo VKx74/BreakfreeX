@@ -48,7 +48,7 @@ build-app-stage:
             - dist/
   only:
     - develop
-    # - feature/binance
+    - feature/binance
     - ci-improvements
 #   tags:
 #     - web
@@ -100,7 +100,7 @@ build-latest:
     #     - docker
     only:
         - develop
-        # - feature/binance
+        - feature/binance
         - ci-improvements
 
 build-stable:

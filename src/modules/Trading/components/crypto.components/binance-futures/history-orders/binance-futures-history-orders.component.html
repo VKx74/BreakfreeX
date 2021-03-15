@@ -60,7 +60,7 @@
                 </ng-template>
             </data-table-cell>
             <data-table-cell columnName="Executed Size">
-                <ng-template let-item>{{item.ExecutedSize ? item.ExecutedSize.toFixed(getDecimals(item.Symbol)) : "-"}}
+                <ng-template let-item>{{item.ExecutedSize ? item.ExecutedSize : "-"}}
                 </ng-template>
             </data-table-cell>
             <data-table-cell columnName="Price">

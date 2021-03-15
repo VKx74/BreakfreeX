@@ -4,7 +4,7 @@ import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
 import { IBinancePrice } from 'modules/Trading/models/crypto/shared/models.communication';
-import { BinanceSpotAccountInfoResponse, BinanceSpotAccountUpdateResponse, BinanceSpotBookPriceRequest, BinanceSpotBookPriceResponse, BinanceSpotCloseOrderRequest, BinanceSpotLoginRequest, BinanceSpotLoginResponse, BinanceSpotMarketPriceResponse, BinanceSpotMarketTradeResponse, BinanceSpotMarketTradesRequest, BinanceSpotOpenOrderResponse, BinanceSpotOpenOrdersRequest, BinanceSpotOrderBookItemResponse, BinanceSpotOrderHistoryRequest, BinanceSpotOrderHistoryResponse, BinanceSpotOrderInfoRequest, BinanceSpotOrderUpdateResponse, BinanceSpotPlaceOrderRequest, BinanceSpotSubscribeMarketPriceRequest, BinanceSpotSubscribeOrderBookRequest, BinanceSpotSubscribeOrderBookResponse, BinanceSpotTradeHistoryRequest, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountInfoData, IBinanceSpotAccountUpdateData, IBinanceSpotOrderUpdateData } from 'modules/Trading/models/crypto/binance/binance.models.communication';
+import { BinanceSpotAccountInfoResponse, BinanceSpotAccountUpdateResponse, BinanceSpotBookPriceRequest, BinanceSpotBookPriceResponse, BinanceSpotCloseOrderRequest, BinanceSpotLoginRequest, BinanceSpotLoginResponse, BinanceSpotMarketPriceResponse, BinanceSpotMarketTradeResponse, BinanceSpotMarketTradesRequest, BinanceSpotOpenOrderResponse, BinanceSpotOpenOrdersRequest, BinanceSpotOrderBookItemResponse, BinanceSpotOrderHistoryRequest, BinanceSpotOrderHistoryResponse, BinanceSpotOrderInfoRequest, BinanceSpotOrderUpdateResponse, BinanceSpotPlaceOrderRequest, BinanceSpotSubscribeMarketPriceRequest, BinanceSpotSubscribeOrderBookRequest, BinanceSpotSubscribeOrderBookResponse, BinanceSpotTradeHistoryRequest, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountInfoData, IBinanceSpotAccountBalance, IBinanceSpotOrderUpdateData } from 'modules/Trading/models/crypto/binance/binance.models.communication';
 import { IWebSocketConfig } from '@app/interfaces/socket/WebSocketConfig';
 import { Injectable } from '@angular/core';
 import { AppConfigService } from '../app.config.service';
@@ -21,7 +21,7 @@ export class BinanceSpotSocketService extends BrokerSocketService {
   private _tickSubject: Subject<ITradeTick> = new Subject<ITradeTick>();
   private _lastPriceSubject: Subject<IBinancePrice> = new Subject<IBinancePrice>();
   private _orderUpdateSubject: Subject<IBinanceSpotOrderUpdateData> = new Subject<IBinanceSpotOrderUpdateData>();
-  private _accountUpdateSubject: Subject<IBinanceSpotAccountUpdateData> = new Subject<IBinanceSpotAccountUpdateData>();
+  private _accountUpdateSubject: Subject<IBinanceSpotAccountBalance[]> = new Subject<IBinanceSpotAccountBalance[]>();
   private _accountInfoReceivedSubject: Subject<IBinanceSpotAccountInfoData> = new Subject<IBinanceSpotAccountInfoData>();
 
   get usePingPongs(): boolean {
@@ -32,7 +32,7 @@ export class BinanceSpotSocketService extends BrokerSocketService {
     return this._orderUpdateSubject;
   }
 
-  get accountUpdateSubject(): Subject<IBinanceSpotAccountUpdateData> {
+  get accountUpdateSubject(): Subject<IBinanceSpotAccountBalance[]> {
     return this._accountUpdateSubject;
   }
 
@@ -66,18 +66,18 @@ export class BinanceSpotSocketService extends BrokerSocketService {
           return;
         }  
 
-        if (msgTypeString === "spotsorderupdate") {
+        if (msgTypeString === "spotorderupdate") {
           this._processOrderUpdated(msgData);
           return;
         }
 
-        if (msgTypeString === "accountupdate") {
+        if (msgTypeString === "spotaccountposition") {
           this._processAccountUpdated(msgData);
           return;
         }
 
         if (msgTypeString === "accountinfo") {
-          this._processAccountUpdate(msgData);
+          this._processAccountInfoReceived(msgData);
           return;
         }
 
@@ -150,29 +150,6 @@ export class BinanceSpotSocketService extends BrokerSocketService {
       this._send(message, subscriber);
     });
   }
-
-  public subscribeOnMarketPrice(symbol: string): Observable<BrokerResponseMessageBase> {
-    return new Observable<BrokerResponseMessageBase>(subscriber => {
-      const message = new BinanceSpotSubscribeMarketPriceRequest();
-      message.Data = {
-        Symbol: symbol,
-        Subscribe: true
-      };
-      this._send(message, subscriber);
-    });
-  }
-
-  public unsubscribeFromMarketPrice(symbol: string): Observable<BrokerResponseMessageBase> {
-    return new Observable<BrokerResponseMessageBase>(subscriber => {
-      const message = new BinanceSpotSubscribeMarketPriceRequest();
-      message.Data = {
-        Symbol: symbol,
-        Subscribe: false
-      };
-      this._send(message, subscriber);
-    });
-  }
-
   public subscribeOnOrderBook(symbol: string): Observable<BinanceSpotSubscribeOrderBookResponse> {
     return new Observable<BinanceSpotSubscribeOrderBookResponse>(subscriber => {
       const message = new BinanceSpotSubscribeOrderBookRequest();
@@ -232,7 +209,7 @@ export class BinanceSpotSocketService extends BrokerSocketService {
     });
   }
 
-  private _processAccountUpdate(msgData: BrokerResponseMessageBase) {
+  private _processAccountInfoReceived(msgData: BrokerResponseMessageBase) {
     const quoteMessage = msgData as BinanceSpotAccountInfoResponse;
     this._accountInfoReceivedSubject.next(quoteMessage.Data);
   }
@@ -259,12 +236,12 @@ export class BinanceSpotSocketService extends BrokerSocketService {
 
   private _processOrderUpdated(msgData: BrokerResponseMessageBase) {
     const updateMessage = msgData as BinanceSpotOrderUpdateResponse;
-    this._orderUpdateSubject.next(updateMessage.Data.UpdateData);
+    this._orderUpdateSubject.next(updateMessage.Data);
   }
 
   private _processAccountUpdated(msgData: BrokerResponseMessageBase) {
     const updateMessage = msgData as BinanceSpotAccountUpdateResponse;
-    this._accountUpdateSubject.next(updateMessage.Data.UpdateData);
+    this._accountUpdateSubject.next(updateMessage.Data.Balances);
   }
 }
 

@@ -38,7 +38,7 @@ export interface IBinanceSpotHistoricalOrder {
     UpdateTime: number;
     IsWorking: boolean;
     QuantityRemaining: number;
-    AverageFillPrice?: any;
+    AverageFillPrice: number;
 }
 
 export interface IBinanceSpotOrderHistoryResponseData {
@@ -47,6 +47,19 @@ export interface IBinanceSpotOrderHistoryResponseData {
 }
 
 export interface IBinanceSpotTrade {
+    Symbol: string;
+    Id: number;
+    OrderId: number;
+    OrderListId: number;
+    Price: number;
+    qty: number;
+    quoteQty: number;
+    Commission: number;
+    CommissionAsset: string;
+    time: number;
+    IsBuyer: boolean;
+    IsMaker: boolean;
+    IsBestMatch: boolean;
 }
 
 export interface IBinanceSpotTradeHistoryResponseData {
@@ -85,7 +98,7 @@ export interface IBinanceSpotOrder {
     UpdateTime: number;
     IsWorking: boolean;
     QuantityRemaining: number;
-    AverageFillPrice?: any;
+    AverageFillPrice?: number;
 }
 
 export interface IBinanceSpotWalletBalance {
@@ -115,21 +128,48 @@ export interface IBinanceSpotOpenOrderResponseData {
 }
 
 export interface IBinanceSpotOrderUpdateData {
-
-}
-
-export interface IBinanceSpotOrderUpdate {
-    UpdateData: IBinanceSpotOrderUpdateData;
-    TransactionTime: number;
+    Symbol: string;
+    ClientOrderId: string;
+    Side: string;
+    Type: string;
+    TimeInForce: string;
+    Quantity: number;
+    Price: number;
+    StopPrice: number;
+    IcebergQuantity: number;
+    OriginalClientOrderId: string;
+    ExecutionType: string;
+    Status: SpotOrderStatus;
+    RejectReason: string;
+    OrderId: number;
+    LastQuantityFilled: number;
+    QuantityFilled: number;
+    LastPriceFilled: number;
+    Commission: number;
+    CommissionAsset: string;
+    UpdateTime: number;
+    TradeId: number;
+    IsWorking: boolean;
+    BuyerIsMaker: boolean;
+    CreateTime: number;
+    QuoteQuantityFilled: number;
+    QuoteQuantity: number;
+    LastQuoteQuantity: number;
+    OrderListId: number;
+    I: number;
     Event: string;
     EventTime: number;
 }
 
-export interface IBinanceSpotAccountUpdateData {
+export interface IBinanceSpotAccountBalance {
+    Asset: string;
+    Free: number;
+    Locked: number;
+    Total: number;
 }
 
 export interface IBinanceSpotAccountUpdate {
-    UpdateData: IBinanceSpotAccountUpdateData;
+    Balances: IBinanceSpotAccountBalance[];
 }
 
 
@@ -272,9 +312,20 @@ export class BinanceSpotSubscribeOrderBookResponse extends BrokerResponseMessage
 }
 
 export class BinanceSpotOrderUpdateResponse extends BrokerResponseMessageBase {
-    public Data: IBinanceSpotOrderUpdate;
+    public Data: IBinanceSpotOrderUpdateData;
 }
 
 export class BinanceSpotAccountUpdateResponse extends BrokerResponseMessageBase {
     public Data: IBinanceSpotAccountUpdate;
+}
+
+// --- Events
+// ------------
+export enum SpotOrderStatus {
+    NEW = "NEW",
+    PARTIALLY_FILLED = "PARTIALLY_FILLED",
+    FILLED = "FILLED",
+    CANCELED = "CANCELED",
+    REJECTED = "REJECTED",
+    EXPIRED = "EXPIRED"
 }
