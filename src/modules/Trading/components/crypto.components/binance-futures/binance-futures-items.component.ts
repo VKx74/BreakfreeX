@@ -6,6 +6,7 @@ import { DataHighlightService } from "modules/Trading/services/dataHighlight.ser
 import { ItemsComponent } from "../../trade-manager/items-component/items.component";
 import { BinanceFuturesBroker } from "@app/services/binance-futures/binance-futures.broker";
 import { IInstrument } from "@app/models/common/instrument";
+import { BinanceItemsComponentWithHeader } from "../common/binance-items-with-header.component";
 
 export abstract class BinanceFuturesItemsComponent<T> extends ItemsComponent<T> {
     protected get _binanceBroker(): BinanceFuturesBroker {
@@ -25,80 +26,23 @@ export abstract class BinanceFuturesItemsComponent<T> extends ItemsComponent<T> 
     }
 }
 
-export abstract class BinanceFuturesItemsComponentWithHeader<T> extends BinanceFuturesItemsComponent<T> {
-    protected _instrument: IInstrument;
-    protected _fromTime: string;
-    protected _toTime: string;
-    protected _fromDate: Date;
-    protected _toDate: Date;
-
-    get instrument(): IInstrument {
-        return this._instrument;
+export abstract class BinanceFuturesItemsComponentWithHeader<T> extends BinanceItemsComponentWithHeader<T> {
+    protected get _binanceBroker(): BinanceFuturesBroker {
+        return this._broker.activeBroker as BinanceFuturesBroker;
     }
 
-    set instrument(data: IInstrument) {
-        this._instrument = data;
-        this.updateItems();
-    }
-     
-    get fromTime(): string {
-        return this._fromTime;
+    public get decimals(): number {
+        return 8;
     }
 
-    set fromTime(data: string) {
-        this._fromTime = data;
-        this.updateItems();
-    }
-     
-    get toTime(): string {
-        return this._toTime;
-    }
-
-    set toTime(data: string) {
-        this._toTime = data;
-        this.updateItems();
+    constructor(protected _broker: BrokerService,
+        protected _dataHighlightService: DataHighlightService,
+        @Inject(AlertService) protected _alertService: AlertService,
+        protected _dialog: MatDialog, 
+        protected _cdr: ChangeDetectorRef) {
+            super(_broker, _dataHighlightService, _alertService, _dialog, _cdr);
     }
 
-    get fromDate(): Date {
-        return this._fromDate;
-    }
-
-    set fromDate(data: Date) {
-        this._fromDate = data;
-        this.updateItems();
-    }
-
-    get toDate(): Date {
-        return this._toDate;
-    }
-
-    set toDate(data: Date) {
-        this._toDate = data;
-        this.updateItems();
-    }
-
-    protected _getDate(time: string, date: Date): number {
-        const hourMin = time.split(":");
-        let h = hourMin[0];
-        let m = hourMin[1];
-
-        if (h.length === 1) {
-            h = `0${h}`;
-        }
-        if (m.length === 1) {
-            m = `0${m}`;
-        }
-
-        const dateString = date.toISOString().split("T")[0];
-        const timeString = `${h}:${m}:00.500Z`;
-        const exp = new Date(`${dateString}T${timeString}`).getTime() / 1000;
-        return Math.roundToDecimals(exp, 0);
-    }
-
-    refreshRequired() {
-        this.updateItems();
-    }
-    
     ngOnInit() {
         super.ngOnInit();
 

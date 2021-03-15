@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import { BinanceHistoricalTrade } from 'modules/Trading/models/crypto/binance/binance.models';
 import {Observable, Subscription, of} from "rxjs";
-import { BinanceItemsComponent, BinanceItemsComponentWithHeader } from '../binance-items.component';
+import { BinanceSpotItemsComponentWithHeader } from '../binance-items.component';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { BinanceItemsComponent, BinanceItemsComponentWithHeader } from '../binan
     styleUrls: ['./binance-history-trades.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BinanceHistoryTradeComponent extends BinanceItemsComponentWithHeader<BinanceHistoricalTrade> {
+export class BinanceHistoryTradeComponent extends BinanceSpotItemsComponentWithHeader<BinanceHistoricalTrade> {
 
     protected loadItems(): Observable<BinanceHistoricalTrade[]> {
         if (!this._instrument) {
@@ -24,9 +24,10 @@ export class BinanceHistoryTradeComponent extends BinanceItemsComponentWithHeade
     }
 
     protected _subscribeOnUpdates(): Subscription {
-        return this._binanceBroker.onOrdersUpdated.subscribe(() => {
-            this.updateItems();
-        });
+        return null;
+        // return this._binanceBroker.onOrdersUpdated.subscribe(() => {
+        //     this.updateItems();
+        // });
     }
 
     ngOnDestroy(): void {
