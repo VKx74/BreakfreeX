@@ -863,6 +863,11 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         let positionsUpdated = false;
         let positionsParametersUpdated = false;
         for (const updatedPosition of positions) {
+            if (updatedPosition.PositionSide !== "BOTH") 
+            {
+                continue;
+            }
+
             const position = this._getPosition(updatedPosition.Symbol);
             if (position) {
                 position.Size = updatedPosition.positionAmt;
@@ -907,6 +912,11 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         let positionsUpdated = false;
         let positionsParametersUpdated = false;
         for (const updatedPosition of update.Positions) {
+            if (updatedPosition.PositionSide !== "BOTH") 
+            {
+                continue;
+            }
+
             const position = this._getPosition(updatedPosition.Symbol);
             if (position) {
                 position.Size = updatedPosition.PositionAmount;

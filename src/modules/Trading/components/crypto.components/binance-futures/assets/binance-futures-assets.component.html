@@ -25,12 +25,12 @@
         <data-table-cell columnName="PNL">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.UnrealizedProfit > 0, 'negative-value': item.UnrealizedProfit < 0}">
-                    {{item.UnrealizedProfit.toFixed(2)}}
+                    {{item.UnrealizedProfit.toFixed(decimals)}}
                 </span>
             </ng-template>
         </data-table-cell>
         <data-table-cell columnName="Balance">
-            <ng-template let-item>{{item.WalletBalance.toFixed(2)}}</ng-template>
+            <ng-template let-item>{{item.WalletBalance.toFixed(decimals)}}</ng-template>
         </data-table-cell>
         <!-- <data-table-cell columnName="Cross PNL">
             <ng-template let-item>

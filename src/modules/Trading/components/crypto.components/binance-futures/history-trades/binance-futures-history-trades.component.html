@@ -56,7 +56,7 @@
             <data-table-cell columnName="Realized Profit">
                 <ng-template let-item>
                     <span [ngClass]="{'positive-value': item.PNL > 0, 'negative-value': item.PNL < 0}">
-                        {{item.PNL?.toFixed(2)}} {{item.CommissionAsset}}
+                        {{item.PNL?.toFixed(decimals)}} {{item.CommissionAsset}}
                     </span>
                 </ng-template>
             </data-table-cell>
