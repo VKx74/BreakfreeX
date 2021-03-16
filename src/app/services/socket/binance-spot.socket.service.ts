@@ -3,7 +3,7 @@ import { ITradeTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
-import { IBinancePrice } from 'modules/Trading/models/crypto/shared/models.communication';
+import { BinanceEnvironment, IBinancePrice } from 'modules/Trading/models/crypto/shared/models.communication';
 import { BinanceSpotAccountInfoResponse, BinanceSpotAccountUpdateResponse, BinanceSpotBookPriceRequest, BinanceSpotBookPriceResponse, BinanceSpotCloseOrderRequest, BinanceSpotLoginRequest, BinanceSpotLoginResponse, BinanceSpotMarketPriceResponse, BinanceSpotMarketTradeResponse, BinanceSpotMarketTradesRequest, BinanceSpotOpenOrderResponse, BinanceSpotOpenOrdersRequest, BinanceSpotOrderBookItemResponse, BinanceSpotOrderHistoryRequest, BinanceSpotOrderHistoryResponse, BinanceSpotOrderInfoRequest, BinanceSpotOrderUpdateResponse, BinanceSpotPlaceOrderRequest, BinanceSpotSubscribeMarketPriceRequest, BinanceSpotSubscribeOrderBookRequest, BinanceSpotSubscribeOrderBookResponse, BinanceSpotTradeHistoryRequest, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountInfoData, IBinanceSpotAccountBalance, IBinanceSpotOrderUpdateData } from 'modules/Trading/models/crypto/binance/binance.models.communication';
 import { IWebSocketConfig } from '@app/interfaces/socket/WebSocketConfig';
 import { Injectable } from '@angular/core';
@@ -11,9 +11,11 @@ import { AppConfigService } from '../app.config.service';
 
 @Injectable()
 export class BinanceSpotSocketService extends BrokerSocketService {
+  protected _environment: BinanceEnvironment = BinanceEnvironment.Testnet;
+   
   get config(): IWebSocketConfig {
     return {
-      url: AppConfigService.config.apiUrls.BinanceBrokerWS
+      url: this._environment === BinanceEnvironment.Real ? AppConfigService.config.apiUrls.BinanceBrokerWS : AppConfigService.config.apiUrls.BinanceTestnetBrokerWS
     };
   }
 
@@ -101,7 +103,12 @@ export class BinanceSpotSocketService extends BrokerSocketService {
     this.close();
   }
 
+  public setEnvironment(environment: BinanceEnvironment) {
+    this._environment = environment;
+  }
+
   public login(data: BinanceSpotLoginRequest): Observable<BinanceSpotLoginResponse> {
+    console.log(this._environment);
     return new Observable<BinanceSpotLoginResponse>(subscriber => {
       this._send(data, subscriber);
     });

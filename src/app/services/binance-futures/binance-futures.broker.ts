@@ -301,6 +301,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         });
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+            this.ws.setEnvironment(initData.BinanceEnvironment);
             this.ws.open().subscribe(value => {
                 const request = new BinanceFutureLoginRequest(this.ws.type);
                 request.Data = {
@@ -379,7 +380,8 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
             server: this._server,
             state: {
                 APIKey: this._initData.APIKey,
-                APISecret: this._initData.APISecret
+                APISecret: this._initData.APISecret,
+                BinanceEnvironment: this._initData.BinanceEnvironment
             }
         });
     }
@@ -624,6 +626,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
         const apiKeyLength = this._initData.APIKey.length;
         this._accountInfo.APIKey = this._initData.APIKey.slice(0, 1) + "******" + this._initData.APIKey.slice(apiKeyLength - 4, apiKeyLength);
         this._accountInfo.FeeTier = data.FeeTier;
+        this._accountInfo.BinanceEnvironment = this._initData.BinanceEnvironment;
 
         this.onAccountInfoUpdated.next(this._accountInfo);
 

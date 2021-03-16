@@ -24,4 +24,12 @@ export class BinanceConnectedAccountInfoComponent extends ConnectedAccountInfoCo
         return apiKey.slice(0, 1) + "******" + apiKey.slice(apiKeyLength - 4, apiKeyLength);
         
     }
+
+    getEnvironment(item: IBrokerState<BinanceConnectionData>) {
+        if (!item.state || !item.state.BinanceEnvironment) {
+            return 'Not specified';
+        }
+
+        return item.state.BinanceEnvironment;
+    }
 }

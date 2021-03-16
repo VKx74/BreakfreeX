@@ -103,6 +103,7 @@
     "accountType": "Тип рахунку",
     "accountNickname": "Назва рахунку",
     "apiKey": "Ключ API",
+    "environment": "Середовище",
     "broker": "Брокер",
     "brokerDisconnected": "Брокер відключено",
     "connect": "Додати",

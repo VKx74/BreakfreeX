@@ -6,6 +6,7 @@ import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { BrokerService } from '@app/services/broker.service';
 import { BinanceConnectionData } from 'modules/Trading/models/crypto/binance/binance.models';
 import { BrokerLogin } from '../../shared/broker-login';
+import { BinanceEnvironment } from 'modules/Trading/models/crypto/shared/models.communication';
 
 @Component({
     selector: 'binance-broker-login',
@@ -15,6 +16,8 @@ import { BrokerLogin } from '../../shared/broker-login';
 export class BinanceBrokerLoginComponent extends BrokerLogin {
     public apiKey = "";
     public apiSecret = "";
+    public binanceEnvironment = BinanceEnvironment.Testnet;
+    public possibleEnvironments = [BinanceEnvironment.Testnet, BinanceEnvironment.Real];
     
     constructor(protected _brokerFactory: BrokerFactory,
         protected _translateService: TranslateService,
@@ -24,13 +27,14 @@ export class BinanceBrokerLoginComponent extends BrokerLogin {
     }
 
     connect() {
-        if (!this.policyAccepted || !this.apiKey || !this.apiSecret) {
+        if (!this.policyAccepted || !this.apiKey || !this.apiSecret || !this.binanceEnvironment) {
             return;
         }
 
         const initData: BinanceConnectionData = {
             APIKey: this.apiKey,
-            APISecret: this.apiSecret
+            APISecret: this.apiSecret,
+            BinanceEnvironment: this.binanceEnvironment
         };
 
         this._connect(this.brokerInstance, initData);
@@ -47,5 +51,6 @@ export class BinanceBrokerLoginComponent extends BrokerLogin {
     brokerSelected(input: IBrokerState<BinanceConnectionData>) {
         this.apiKey = input.state.APIKey;
         this.apiSecret = input.state.APISecret;
+        this.binanceEnvironment = input.state.BinanceEnvironment;
     }
 }

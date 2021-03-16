@@ -64,3 +64,8 @@ export interface IBinanceBookPrice {
     askQty: number;
     time: number;
 }
+
+export enum BinanceEnvironment {
+    Real = "Real",
+    Testnet = "Testnet"
+}

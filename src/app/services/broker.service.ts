@@ -1,12 +1,12 @@
-import {Injectable} from "@angular/core";
-import {IInstrument} from "../models/common/instrument";
-import {EExchange} from "../models/common/exchange";
-import {IHealthable} from "../interfaces/healthcheck/healthable";
-import {BehaviorSubject, Observable, of, Subject, Subscription} from "rxjs";
-import {EBrokerInstance, IBroker, IBrokerState} from "../interfaces/broker/broker";
-import {ActionResult, OrderTypes} from "../../modules/Trading/models/models";
-import {map} from "rxjs/operators";
-import {BrokerFactory, CreateBrokerActionResult} from "../factories/broker.factory";
+import { Injectable } from "@angular/core";
+import { IInstrument } from "../models/common/instrument";
+import { EExchange } from "../models/common/exchange";
+import { IHealthable } from "../interfaces/healthcheck/healthable";
+import { BehaviorSubject, Observable, of, Subject, Subscription } from "rxjs";
+import { EBrokerInstance, IBroker, IBrokerState } from "../interfaces/broker/broker";
+import { ActionResult, OrderTypes } from "../../modules/Trading/models/models";
+import { map } from "rxjs/operators";
+import { BrokerFactory, CreateBrokerActionResult } from "../factories/broker.factory";
 import { IdentityService } from './auth/identity.service';
 import { InstrumentMappingService } from "./instrument-mapping.service";
 
@@ -39,7 +39,7 @@ export class BrokerService {
         // show MT Bridge for all users even without subscriptions
         return true;
         return this._identityService.isAuthorizedCustomer;
-    }  
+    }
 
     private _activeBroker$ = new BehaviorSubject<IBroker>(null);
     activeBroker$ = this._activeBroker$.asObservable();
@@ -48,8 +48,8 @@ export class BrokerService {
     onSaveStateRequired: Subject<void> = new Subject<void>();
 
     constructor(private _brokerFactory: BrokerFactory,
-                private _identityService: IdentityService,
-                private _instrumentMappingService: InstrumentMappingService) {
+        private _identityService: IdentityService,
+        private _instrumentMappingService: InstrumentMappingService) {
         this._isConnected = false;
     }
 
@@ -118,20 +118,20 @@ export class BrokerService {
             }
         }
     }
-    
+
     getSavedBroker(brokerType?: EBrokerInstance): IBrokerState[] {
         const res = [];
         if (this._activeState.previousConnected) {
             for (const account of this._activeState.previousConnected) {
                 if (!brokerType || account.brokerType === brokerType) {
-                    res.push(account);  
+                    res.push(account);
                 }
             }
         }
 
         return res;
-    }  
-    
+    }
+
     getActiveBroker(): IBrokerState {
         return this._activeState.activeBrokerState;
     }
@@ -232,7 +232,7 @@ export class BrokerService {
         if (!this._activeState.previousConnected) {
             this._activeState.previousConnected = [];
         }
-        
+
         const currentState = this._activeState.activeBrokerState;
 
         if (!currentState) {
@@ -241,7 +241,14 @@ export class BrokerService {
 
         let acctExist = false;
         for (const acct of this._activeState.previousConnected) {
-            if (acct.account === currentState.account && acct.server === currentState.server) {
+            try {
+                let acc1 = JSON.stringify(acct);
+                let acc2 = JSON.stringify(currentState);
+                if (acc1 === acc2) {
+                    acctExist = true;
+                    break;
+                }
+            } catch (ex) {
                 acctExist = true;
                 break;
             }

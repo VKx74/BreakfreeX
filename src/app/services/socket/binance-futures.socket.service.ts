@@ -4,7 +4,7 @@ import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
 import { BinanceFutureAccountInfoResponse, BinanceFutureAccountUpdateResponse, BinanceFutureBookPriceRequest, BinanceFutureBookPriceResponse, BinanceFutureCloseOrderRequest, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureMarketTradeResponse, BinanceFutureMarketTradesRequest, BinanceFutureOpenOrdersRequest, BinanceFutureOpenOrderResponse, BinanceFutureOrderBookItemResponse, BinanceFutureOrderHistoryResponse, BinanceFutureOrderInfoRequest, BinanceFutureOrderUpdateResponse, BinanceFuturePlaceOrderRequest, BinanceFutureSubscribeOrderBookRequest, BinanceFutureSubscribeOrderBookResponse, BinanceFutureTradeHistoryRequest, BinanceFutureTradeHistoryResponse, IBinanceFutureAccountInfoData, IBinanceFuturesAccountUpdateData, IBinanceFuturesOrderUpdateData, BinanceFutureBrokerType, BinanceFuturePositionDetailsResponse, IBinanceFuturePosition, BinanceFutureSubscribeMarketPriceRequest, BinanceFutureMarketPriceResponse, BinanceFutureOrderHistoryRequest } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
-import { IBinancePrice } from 'modules/Trading/models/crypto/shared/models.communication';
+import { BinanceEnvironment, IBinancePrice } from 'modules/Trading/models/crypto/shared/models.communication';
 
 export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   private _onMessageSubscription: Subscription;
@@ -14,6 +14,8 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
   private _positionsUpdateSubject: Subject<IBinanceFuturePosition[]> = new Subject<IBinanceFuturePosition[]>();
   private _accountUpdateSubject: Subject<IBinanceFuturesAccountUpdateData> = new Subject<IBinanceFuturesAccountUpdateData>();
   private _accountInfoReceivedSubject: Subject<IBinanceFutureAccountInfoData> = new Subject<IBinanceFutureAccountInfoData>();
+
+  protected _environment: BinanceEnvironment = BinanceEnvironment.Testnet;
 
   abstract get type(): BinanceFutureBrokerType;
 
@@ -103,7 +105,13 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     this.close();
   }
 
+  public setEnvironment(environment: BinanceEnvironment) {
+    this._environment = environment;
+  }
+
   public login(data: BinanceFutureLoginRequest): Observable<BinanceFutureLoginResponse> {
+
+    console.log(this._environment);
     return new Observable<BinanceFutureLoginResponse>(subscriber => {
       this._send(data, subscriber);
     });

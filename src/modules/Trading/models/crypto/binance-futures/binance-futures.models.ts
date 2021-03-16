@@ -1,4 +1,5 @@
 import { IOrder, IPosition, OrderSide, OrderTypes, TimeInForce } from "../../models";
+import { BinanceEnvironment } from "../shared/models.communication";
 
 export interface BinanceFuturesAsset {
     Asset: string;
@@ -25,6 +26,7 @@ export interface BinanceFuturesPosition extends IPosition {
 export interface BinanceFuturesTradingAccount {
     APIKey: string;
     FeeTier: number;
+    BinanceEnvironment: BinanceEnvironment;
 }
 
 export interface BinanceFuturesHistoricalTrade {

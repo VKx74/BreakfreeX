@@ -1,13 +1,16 @@
 import { IConnectionData, IOrder, OrderSide, OrderTypes } from "../../models";
+import { BinanceEnvironment } from "../shared/models.communication";
 
 export interface BinanceConnectionData extends IConnectionData {
     APIKey: string;
     APISecret: string;
+    BinanceEnvironment: BinanceEnvironment;
 }
 
 export interface BinanceSpotTradingAccount {
     APIKey: string;
     FeeTier: number;
+    BinanceEnvironment: BinanceEnvironment;
 }
 
 export interface BinanceFund {
