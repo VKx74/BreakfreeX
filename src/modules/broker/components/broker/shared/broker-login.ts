@@ -56,8 +56,22 @@ export class BrokerLogin {
                 }
             }, error => {
                 this.showSpinner = false;
-                this._alertService.error(this._translateService.get('broker.createFailed'), this._translateService.get('broker.broker'));
+                this._alertService.error(this._getError(error), this._translateService.get('broker.broker'));
             });
+    }
+
+    protected _getError(e: any) {
+        if (e instanceof Error) {
+            if (e.message) {
+                return e.message;
+            }
+        }
+
+        if (e instanceof String) {
+            return e as string;
+        }
+        
+        return this._translateService.get('broker.createFailed');
     }
 
     protected _savedAccountExists(brokerType?: EBrokerInstance): boolean {

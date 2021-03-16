@@ -273,11 +273,13 @@ export class BinanceBroker implements IBroker {
                         this.ws.setConnectivity(true);
                     } else {
                         observer.error(data.ErrorMessage);
+                        this.ws.close();
                     }
                     observer.complete();
                 }, (error) => {
                     observer.error(error);
                     observer.complete();
+                    this.ws.close();
                 });
 
             }, error => {
