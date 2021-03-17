@@ -14,6 +14,7 @@ import bind from "bind-decorator";
 import { MatDialog } from '@angular/material/dialog';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { IBinanceFuturesPlaceOrderData } from 'modules/Trading/models/crypto/binance-futures/binance-futures.models';
+import { EBrokerInstance } from '@app/interfaces/broker/broker';
 
 
 export class BinanceFuturesOrderConfig {
@@ -25,23 +26,23 @@ export class BinanceFuturesOrderConfig {
     stopPrice?: number;
     tif?: TimeInForce;
 
-    static createLimit(): BinanceFuturesOrderConfig {
-        const order = this.create();
+    static createLimit(brokerType: EBrokerInstance): BinanceFuturesOrderConfig {
+        const order = this.create(brokerType);
         order.type = OrderTypes.Limit;
         return order;
     }
 
-    static createMarket(): BinanceFuturesOrderConfig {
-        const order = this.create();
+    static createMarket(brokerType: EBrokerInstance): BinanceFuturesOrderConfig {
+        const order = this.create(brokerType);
         order.type = OrderTypes.Market;
         return order;
     }
 
-    private static create(): BinanceFuturesOrderConfig {
+    private static create(brokerType: EBrokerInstance): BinanceFuturesOrderConfig {
         return {
             instrument: null,
             side: OrderSide.Buy,
-            amount: 0.1,
+            amount: brokerType === EBrokerInstance.BinanceFuturesCOIN ? 1 : 0.1,
             type: OrderTypes.Market,
             tif: TimeInForce.GoodTillCancel
         };
@@ -61,7 +62,7 @@ export class BinanceFuturesOrderConfig {
     ]
 })
 export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
-    private _config: BinanceFuturesOrderConfig = BinanceFuturesOrderConfig.createMarket();
+    private _config: BinanceFuturesOrderConfig;
     private marketSubscription: Subscription;
     OrderTypes = OrderTypes;
 
@@ -101,7 +102,8 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
         private _alertService: AlertService,
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
-        // this._config = MTOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
+            this.amountStep = this._brokerService.activeBroker.instanceType === EBrokerInstance.BinanceFuturesCOIN ? 1 : 0.1;
+            this._config = BinanceFuturesOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
     }
 
     ngOnInit() {

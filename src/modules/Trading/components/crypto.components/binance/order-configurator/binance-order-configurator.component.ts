@@ -87,7 +87,7 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
     minAmountValue: number = 0.01;
     minPriceValue: number = 0.000001;
     priceStep: number = 0.00001;
-    amountStep: number = 0.01;
+    amountStep: number = 0.0001;
     decimals: number = 5;
     lastTick: ITradeTick = null;
     allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.StopLoss, OrderTypes.StopLossLimit, OrderTypes.TakeProfit, OrderTypes.TakeProfitLimit, OrderTypes.LimitMaker];

@@ -50,6 +50,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _onOrdersParametersUpdated: Subscription;
     private _orderConfig: IPlaceOrder;
     private _decimals: number = 5;
+    private _prevSymbol: string;
     private _pendingEdit: { [id: string]: EditOrderPriceConfigBase; } = {};
     private _ratioCache: { [id: string]: number; } = {};
     private _posSizeSubject: Subject<IPositionSizeCalculationRequest> = new Subject();
@@ -76,8 +77,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     const positionBasedBroker: IPositionBasedBroker = this._broker as any;
                     this._positionsUpdatedSubscription = positionBasedBroker.onPositionsUpdated.subscribe(() => {
                         this.refresh();
-                    }); 
-                    
+                    });
+
                     this._positionsParametersUpdatedSubscription = positionBasedBroker.onPositionsParametersUpdated.subscribe(() => {
                         this.handlePositionsParametersChanged();
                     });
@@ -160,8 +161,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (id.toString().startsWith("tp_")) {
             this.OrderPriceChange(id, null, callback);
             return;
-        } 
-        
+        }
+
         if (id.toString().startsWith("position_")) {
             this.cancelPosition(id, callback);
             return;
@@ -305,10 +306,6 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
-        orderConfig.price = Math.roundToDecimals(price, pricePrecision);
-        orderConfig.timeframe = this._chart.timeInterval / 1000;
-
         if (!this.IsSymbolSupported()) {
             this.showMappingConfirmation()
                 .subscribe((dialogResult: any) => {
@@ -319,6 +316,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     }
                 });
         } else {
+            const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
+            orderConfig.price = Math.roundToDecimals(price, pricePrecision);
+            orderConfig.timeframe = this._chart.timeInterval / 1000;
             this.showOrderModal(orderConfig, null, true);
         }
     }
@@ -334,7 +334,16 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        this._decimals = this._broker.instrumentDecimals(this._chart.instrument.symbol);
+        if (this._prevSymbol !== this._chart.instrument.symbol) {
+            let brokerInstrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+            if (brokerInstrument) {
+                this._decimals = this._broker.instrumentDecimals(brokerInstrument.symbol);
+            } else {
+                this._decimals = this._broker.instrumentDecimals(this._chart.instrument.symbol);
+            }
+        }
+
+        this._prevSymbol = this._chart.instrument.symbol;
         this.fillOrderLines();
         this.fillPositionsLines();
     }
@@ -935,7 +944,6 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private _getMTOrderSettings(params?: TradingChartDesigner.OrderParameters): BaseOrderConfig {
-        const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
         const orderConfig = MTOrderConfig.createLimit(this._broker.instanceType);
         orderConfig.instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
 
@@ -943,6 +951,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return orderConfig;
         }
 
+        const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
         if (params.price) {
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
         }
@@ -964,7 +973,6 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private _getBinanceOrderSettings(params: TradingChartDesigner.OrderParameters): BaseOrderConfig {
-        const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
         const orderConfig = BinanceOrderConfig.createLimit();
         orderConfig.instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
 
@@ -973,6 +981,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         if (params.price) {
+            const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
         }
 
@@ -982,8 +991,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private _getBinanceFuturesOrderSettings(params: TradingChartDesigner.OrderParameters): BaseOrderConfig {
-        const pricePrecision = this._broker.instrumentDecimals(this._chart.instrument.symbol);
-        const orderConfig = BinanceFuturesOrderConfig.createLimit();
+        const orderConfig = BinanceFuturesOrderConfig.createLimit(this._broker.instanceType);
         orderConfig.instrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
 
         if (!params) {
@@ -991,6 +999,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         if (params.price) {
+            const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
         }
 
