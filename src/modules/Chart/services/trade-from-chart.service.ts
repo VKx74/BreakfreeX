@@ -62,6 +62,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     constructor(private _brokerService: BrokerService, private _dialog: MatDialog,
         @Inject(AlertService) protected _alertService: AlertService, protected _alogService: AlgoService) {
         this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
+            this._prevSymbol = null;
             this.refresh();
             if (this._broker) {
                 this._ordersUpdatedSubscription = this._broker.onOrdersUpdated.subscribe(() => {
@@ -338,12 +339,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             let brokerInstrument = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
             if (brokerInstrument) {
                 this._decimals = this._broker.instrumentDecimals(brokerInstrument.symbol);
+                this._prevSymbol = this._chart.instrument.symbol;
             } else {
                 this._decimals = this._broker.instrumentDecimals(this._chart.instrument.symbol);
             }
         }
-
-        this._prevSymbol = this._chart.instrument.symbol;
         this.fillOrderLines();
         this.fillPositionsLines();
     }
@@ -494,7 +494,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return [];
         }
 
-        return positionBasedBroker.positions;
+        return positionBasedBroker.positions.filter(_ => _.Symbol === symbol.symbol);
     }
 
     private fillPositionsLines() {
