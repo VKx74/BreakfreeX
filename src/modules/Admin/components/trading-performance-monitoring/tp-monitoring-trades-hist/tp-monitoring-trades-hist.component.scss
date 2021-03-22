@@ -1,0 +1,20 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+:host {
+    padding-bottom: 10px;
+
+    .paginator-container {
+        position: sticky;
+        bottom: 0px;
+    }
+    .dt-table-container {
+        margin-bottom: 1px;
+    }
+}
+@include themify($themes, true) {
+    .paginator-container {
+        background-color: themed("appPanelColor");
+    }
+}

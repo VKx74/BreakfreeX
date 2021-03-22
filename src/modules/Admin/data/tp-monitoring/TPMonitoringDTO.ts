@@ -24,6 +24,25 @@ export class UserBalanceResponse {
     public balanceHistory: { [key: number]: number };
 }
 
+export class Trade {
+    public userName: string;
+    public ticket: string;
+    public openTime: number;
+    public type: string;
+    public size: string;
+    public symbol: string;
+    public openPrice: number;
+    public sl: string;
+    public tp: string;
+    public closeTime: number;
+    public closePrice: number;
+    public commision: string;
+    public swap: string;
+    public profit: string;
+    public setupType: string;
+    public timeFrame: number;    
+}
+
 export class MTAccountPerformanceData {
     number: number;
     type: string;

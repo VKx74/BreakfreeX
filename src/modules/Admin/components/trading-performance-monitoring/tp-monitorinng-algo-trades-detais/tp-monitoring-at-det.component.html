@@ -1,0 +1,105 @@
+<div class="watchlist-tile w-100 crypto-text">
+    <bft-loader *ngIf="showSpinner"></bft-loader>
+    <div [ngClass]="{'bblur' : showSpinner}">
+        <div style="width: 100%;" class="tile-header">
+            <div class="type-data">
+                <div class="option-name">Time Frame:</div>
+                <mat-form-field class="select m-right-10">
+                    <mat-select [value]="SelectedTF" (selectionChange)="handleTFSelectionChange($event)">
+                        <mat-option *ngFor="let tfSelected of AlgoTimeFramesItems" [value]="tfSelected">
+                            {{ tfSelected }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="type-data">
+                <div class="option-name">Market Type:</div>
+                <mat-form-field class="select m-right-10">
+                    <mat-select [value]="SelectedMktType"
+                        (selectionChange)="handleInstrumentTypeSelectionChange($event)">
+                        <mat-option *ngFor="let mktTypeSelected of InstrumentTypeItems" [value]="mktTypeSelected">
+                            {{ mktTypeSelected }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="type-data">
+                <div class="option-name">Setup Type:</div>
+                <mat-form-field class="select m-right-10">
+                    <mat-select [value]="SelectedSetupType" (selectionChange)="handleSetupTypeSelectionChange($event)">
+                        <mat-option *ngFor="let setupTypeSelected of BFTTradeTypeItems" [value]="setupTypeSelected">
+                            {{ setupTypeSelected }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-accordion>
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Charts Comparison
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div style="padding-left: 10px;">
+                    <span class="option-name">Compare By:</span>
+                    <mat-form-field class="select m-right-10">
+                        <mat-select [value]="SelectedComparing"
+                            (selectionChange)="handleComparingSelectionChange($event)">
+                            <mat-option *ngFor="let comSelected of ComparisonParamers" [value]="comSelected">
+                                {{ comSelected }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="buttn crypto-button crypto-button_primary" (click)='handleBtnClick()'>Update</button>
+                </div>
+                <!--<div style="padding-left: 10px;">
+                <button class="buttn crypto-button crypto-button_primary" (click)='handleBtnClick()'>Update</button>
+            </div>-->
+                <div>
+                    <div class="charts-wrapper w-100">
+                        <div *ngFor="let chartItem of AllCharts">
+                            <div style="margin: 8px;">
+                                <sp-chart [ChartSettings]='chartItem.Settings' [Data]='chartItem.Data'></sp-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+            <mat-expansion-panel hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Trades History
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div style="padding-left: 10px;">
+                    <span class="option-name">MT Platform:</span>
+                    <mat-form-field class="select m-right-10">
+                        <mat-select [value]="SelectedPlatform"
+                            (selectionChange)="handleMTPlatformSelectionChange($event)">
+                            <mat-option value="MT4">
+                                MT4
+                            </mat-option>
+                            <mat-option value="MT5">
+                                MT5
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="buttn crypto-button crypto-button_primary"
+                        (click)='loadOrdersBtnClick()'>Update</button>
+                    <mat-form-field class="crypto-input bft-form-input nborder">
+                        <span class="orderpanelprefix" matPrefix>Thousand #</span>
+                        <input matInput class="bftinput" type="number" numericInput
+                            [step]="1" [(ngModel)]="thousandNumber">
+                    </mat-form-field>
+                    <button class="buttn crypto-button crypto-button_primary"
+                        (click)='loadOrdersCSVBtnClick()'>Download</button>
+                    <tp-monitoring-trades-hist [TradesSet]='Trades' [Total]='Total' [PageIndex]='pageIndexTrades'
+                        [ShowUname]='true' (onNewPage)='handleNewPage($event)'></tp-monitoring-trades-hist>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>

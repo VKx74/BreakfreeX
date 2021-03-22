@@ -1,0 +1,109 @@
+<div>
+    <div class="dt-table-container">
+        <data-table class="dt-table" [rows]="Trades" [expandOnClick]="false" (onDoubleClick)='handleClick($event)'>            
+            <data-table-header-cell *ngIf='showUserName' columnName="userName" [sortable]="true">
+                User Name
+            </data-table-header-cell>
+            <data-table-header-cell columnName="ticket" [sortable]="true">
+                Ticket
+            </data-table-header-cell>
+            <data-table-header-cell columnName="opentime" [columnWidth]="110">
+                Open Time
+            </data-table-header-cell>
+            <data-table-header-cell columnName="type">
+                Type
+            </data-table-header-cell>
+            <data-table-header-cell columnName="size">
+                Size
+            </data-table-header-cell>
+            <data-table-header-cell columnName="symbol">
+                Symbol
+            </data-table-header-cell>
+            <data-table-header-cell columnName="openprice">
+                Open Price
+            </data-table-header-cell>
+            <data-table-header-cell columnName="sl">
+                S/L
+            </data-table-header-cell>
+            <data-table-header-cell columnName="tp">
+                T/P
+            </data-table-header-cell>
+            <data-table-header-cell columnName="closetime" [columnWidth]="110">
+                Close Time
+            </data-table-header-cell>
+            <data-table-header-cell columnName="closeprice">
+                Close Price
+            </data-table-header-cell>
+            <data-table-header-cell columnName="commision">
+                Commision
+            </data-table-header-cell>
+            <data-table-header-cell columnName="swap">
+                Swap
+            </data-table-header-cell>
+            <data-table-header-cell columnName="profit">
+                Profit
+            </data-table-header-cell>
+            <data-table-header-cell columnName="setupType">
+                Setup
+            </data-table-header-cell>
+            <data-table-header-cell columnName="timeFrame">
+                Time Frame
+            </data-table-header-cell>
+            <data-table-cell columnName="userName">
+                <ng-template let-order>{{order.user}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="createdAt">
+                <ng-template let-order>{{order.createdAt}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="ticket">
+                <ng-template let-order>{{order.ticket}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="opentime">
+                <ng-template let-order>{{order.openTime | utcSecondsToStr }}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="type">
+                <ng-template let-order>{{order.type}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="size">
+                <ng-template let-order>{{order.size}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="symbol">
+                <ng-template let-order>{{order.symbol}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="openprice">
+                <ng-template let-order>{{order.openPrice}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="sl">
+                <ng-template let-order>{{order.sl}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="tp">
+                <ng-template let-order>{{order.tp}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="closetime">
+                <ng-template let-order>{{order.closeTime | utcSecondsToStr}}
+                </ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="closeprice">
+                <ng-template let-order>{{order.closePrice}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="commision">
+                <ng-template let-order>{{order.commision}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="swap">
+                <ng-template let-order>{{order.swap}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="profit">
+                <ng-template let-order>{{order.profit}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="setupType">
+                <ng-template let-order>{{order.setupType}}</ng-template>
+            </data-table-cell>
+            <data-table-cell columnName="timeFrame">
+                <ng-template let-order>{{order.timeFrame | secondsToTF}}</ng-template>
+            </data-table-cell>
+        </data-table>
+    </div>
+    <div class="paginator-container">
+        <mat-paginator hidePageSize #paginator></mat-paginator>
+    </div>
+</div>

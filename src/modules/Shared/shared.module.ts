@@ -36,6 +36,8 @@ import {BreadcrumbsComponent} from "./components/breadcrumbs/breadcrumbs.compone
 import {LoadingModule} from "ngx-loading";
 import {LoaderModule} from "../loader/loader.module";
 import { PrivacyPolicyTradingModalComponent } from './components/privacy-policy-trading/privacy-policy-trading.component';
+import { UTCSecondsToDTPipe } from './pipes/utc-seconds-to-dt.pipe';
+import { SecondsToTFPipe } from './pipes/seconds-to-tf.pipe';
 
 const PIPES = [
     DateFormatPipe,
@@ -50,6 +52,8 @@ const PIPES = [
     UrlPathPipe,
     MemoizePipe,
     UTCSecondsToLocalPipe,
+    UTCSecondsToDTPipe,
+    SecondsToTFPipe
 ];
 
 const DIRECTIVES = [

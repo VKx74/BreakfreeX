@@ -55,6 +55,11 @@ export class EnumHelper {
         let index = Object.values(Periods).indexOf(period);
         return Object.keys(Periods)[index];
     }
+
+    /*public static getKeyStringG<T>(period: T) {
+        let index = Object.values(T).indexOf(period);
+        return Object.keys(T)[index];
+    }*/
 }
 
 export class ChartData {
@@ -66,4 +71,38 @@ export class ChartData {
 export class ChartDataArgs {
     Period: Periods;
     Grouping: Grouping;
+}
+
+export enum ParamNames {
+    None = "None",
+    TimeFrame = 'Time Frame',
+    MarketType = 'Market Type',
+    SetupType = 'Setup Type'
+}
+
+export enum AlgoTimeFrames {
+    All = "All",
+    _15Min = "15 Min",
+    _1Hour = "1 Hour",
+    _4Hour = "4 Hour",
+    _1Day = "1 Day",
+}
+
+export enum BFTTradeType {
+    All = "All",
+    BRC = "BRC",
+    Swing = "Swing",
+    EXT = "EXT"
+}
+
+export enum InstrumentType {
+    All = "All",
+    MajorForex = "MajorForex",
+    MinorForex = "MinorForex",
+    ExoticsForex = "ExoticsForex",
+    Indices = "Indices",
+    Commodities = "Commodities",
+    Metals = "Metals",
+    Bonds = "Bonds",
+    Equities = "Equities"
 }

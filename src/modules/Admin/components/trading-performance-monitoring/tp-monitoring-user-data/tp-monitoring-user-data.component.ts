@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { PageEvent } from "@angular/material/paginator";
+import { IPaginationResponse } from "@app/models/pagination.model";
 import { ChartData, ChartDataArgs, Grouping, MTAccData, Periods } from "modules/Admin/data/tp-monitoring/TPMonitoringData";
-import { MTAccountPerformanceData, UserBalanceResponse, UserOrdersResponse } from "modules/Admin/data/tp-monitoring/TPMonitoringDTO";
+import { MTAccountPerformanceData, Trade, UserBalanceResponse, UserOrdersResponse } from "modules/Admin/data/tp-monitoring/TPMonitoringDTO";
 import { TPMonitoringService } from "modules/Admin/services/tp-monitoring.service";
 import { TPChartSettings } from "../chart-components/single-parameter-chart/sp-chart.component.";
 import { NumberDataSet } from "../tp-monitoring-general-data/tp-monitoring-general-data.component";
@@ -11,7 +14,8 @@ import { NumberDataSet } from "../tp-monitoring-general-data/tp-monitoring-gener
     styleUrls: ['tp-monitoring-user-data.component.scss']
 })
 export class TPMonitoringUserDataComponent implements OnInit {
-    constructor(private _tpMonitoringService: TPMonitoringService) {
+    constructor(private _tpMonitoringService: TPMonitoringService,
+        private _dialog: MatDialog) {
     }
 
     UserAccounts: Array<MTAccData>;
@@ -26,6 +30,10 @@ export class TPMonitoringUserDataComponent implements OnInit {
     BalanceChartData: ChartData = new ChartData();
     CumPnLChartData: ChartData = new ChartData();
     TradesChartData: ChartData = new ChartData();
+    Trades: Array<Trade> = new Array<Trade>();
+    Total: number = 0;
+    pageSizeTrades: number = 50;
+    pageIndexTrades: number = 0;
 
     AccountData: MTAccountPerformanceData = new MTAccountPerformanceData();
 
@@ -33,7 +41,7 @@ export class TPMonitoringUserDataComponent implements OnInit {
         this.reset();
         this.UserAccounts = accounts;
     }
-    
+
     ngOnInit(): void {
         this.BalanceChartSettings.chartHeader = 'Balance History';
         this.BalanceChartSettings.chartType = 'line';
@@ -58,6 +66,7 @@ export class TPMonitoringUserDataComponent implements OnInit {
     }
 
     public onSelectMTAccount(mtAccount: MTAccData): void {
+        this.pageIndexTrades = 0;
         this.showUsersCharts = false;
         if (this.selectedMTAccount != null) {
             this.selectedMTAccount.isSelected = false;
@@ -65,6 +74,11 @@ export class TPMonitoringUserDataComponent implements OnInit {
         this.selectedMTAccount = mtAccount;
         this.selectedMTAccount.isSelected = true;
         this.LoadTradingHistory();
+    }    
+
+    handleNewPage(page: PageEvent): void {
+        this.pageIndexTrades = page.pageIndex;        
+        this.loadTradesHistoryDetailed();
     }
 
     private reset(): void {
@@ -97,7 +111,7 @@ export class TPMonitoringUserDataComponent implements OnInit {
                 });
     }
 
-    private loadCumulativePnl(period: Periods) {        
+    private loadCumulativePnl(period: Periods) {
         this._tpMonitoringService.getUserCumulativePnl(this.selectedMTAccount.identityId, this.selectedMTAccount.number,
             this.selectedMTAccount.mtPlatform, period).subscribe(
                 (result: UserBalanceResponse) => {
@@ -121,11 +135,28 @@ export class TPMonitoringUserDataComponent implements OnInit {
                 });
     }
 
+    private loadTradesHistoryDetailed() {
+        this.showUsersCharts = true;
+        this.showSpinner = true;
+        this._tpMonitoringService.getUserOrdersHistoryDetailed(
+            this.pageSizeTrades, this.pageIndexTrades,
+            this.selectedMTAccount.identityId, this.selectedMTAccount.number,
+            this.selectedMTAccount.mtPlatform).subscribe(
+                (trades: IPaginationResponse<Trade>) => {
+                    if (trades) {
+                        this.Trades = trades.items;
+                        this.Total = trades.total;
+                        this.showSpinner = false;                        
+                    }
+                });
+    }
+
     private LoadTradingHistory(): void {
         this.loadUserAccPerformanceData();
         this.loadCumulativePnl(Periods.Last7Days);
         this.loadBalanceHistory(Periods.Last7Days);
         this.loadTradesHistory(Periods.Last7Days, Grouping.Daily);
+        this.loadTradesHistoryDetailed();
     }
 
     private loadUserAccPerformanceData(): void {

@@ -5,7 +5,7 @@ import { TPMonitoringService } from "modules/Admin/services/tp-monitoring.servic
 import { AST_This } from "terser";
 import { IChartDataSet, TPChartSettings } from "../chart-components/single-parameter-chart/sp-chart.component.";
 
-class ChartDescriptor {
+export class ChartDescriptor {
     constructor(settings: TPChartSettings, data: ChartData) {
         this.Settings = settings;
         this.Data = data;
