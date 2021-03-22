@@ -1,17 +1,17 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IPaginationResponse, PaginationParams, PaginationResponse } from "@app/models/pagination.model";
 import { AppConfigService } from "@app/services/app.config.service";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { QueryParamsConstructor } from "../data/models";
-import { EnumHelper, Grouping, Periods } from "../data/tp-monitoring/TPMonitoringData";
-import { AlgoTradingData, DistributionData, GeneralData, MTAccountDTO, MTAccountPerformanceData, TradingData, UserBalanceResponse, UserMTAccounts, UserOrdersResponse } from "../data/tp-monitoring/TPMonitoringDTO";
+import { BFTTradeType, EnumHelper, Grouping, InstrumentType, Periods } from "../data/tp-monitoring/TPMonitoringData";
+import { AlgoTradingData, DistributionData, GeneralData, MTAccountDTO, MTAccountPerformanceData, Trade, TradingData, UserBalanceResponse, UserMTAccounts, UserOrdersResponse } from "../data/tp-monitoring/TPMonitoringDTO";
 
 @Injectable()
 export class TPMonitoringService {
     readonly URL = `${AppConfigService.config.apiUrls.bftTradingProfilesREST}generalstats/`;
-    // readonly URL = `http://localhost:5000/generalstats/`;
+    // readonly URL = `http://localhost:4000/generalstats/`;
     constructor(private _http: HttpClient) {
     }
 
@@ -22,6 +22,14 @@ export class TPMonitoringService {
     get getUserOrdersUrl(): string {
         return `${this.URL}UserOrdersHistory`;
     }
+
+    get getUserOrdersDetailedUrl(): string {
+        return `${this.URL}UserOrdersHistoryDetailed`;
+    }
+
+    /*get getOrdersDetPaginatedUrl(): string {
+        return `${this.URL}OrdersHistoryPaginated`;
+    }*/
 
     get getUserBalanceUrl(): string {
         return `${this.URL}UserBalanceHistory`;
@@ -55,6 +63,18 @@ export class TPMonitoringService {
         return `${this.URL}TradedVolume`;
     }
 
+    get getAlgoTradeDetailedUrl(): string {
+        return `${this.URL}AlgoTradesDetails`;
+    }
+
+    get getAlgoOrdersHistoryDetailedUrl(): string {
+        return `${this.URL}AlgoOrdersHistoryDetailed`;
+    }
+
+    get getAlgoOrdersHistoryDetailedcsvUrl(): string {
+        return `${this.URL}AlgoOrdersHistorycsv`;
+    }
+
     public getGeneralData(): Observable<GeneralData> {
         return this._http.get<GeneralData>(this.getGeneralDataUrl);
     }
@@ -86,7 +106,8 @@ export class TPMonitoringService {
         return this._http.get<MTAccountPerformanceData>(this.getUserAccPerformanceUrl, { params: params });
     }
 
-    public getUsers(paginationParams = new PaginationParams(0, 50), filtrationParams = {}): Observable<IPaginationResponse<UserMTAccounts>> {
+    public getUsers(paginationParams = new PaginationParams(0, 50), filtrationParams = {})
+        : Observable<IPaginationResponse<UserMTAccounts>> {
         return this._http.get(this.getUsersUrl, {
             params: QueryParamsConstructor.fromObjects(paginationParams.toSkipTake(), filtrationParams), withCredentials: true
         }).pipe(
@@ -109,6 +130,23 @@ export class TPMonitoringService {
         return this._http.get<UserOrdersResponse>(this.getUserOrdersUrl, { params: params });
     }
 
+    public getUserOrdersHistoryDetailed(pageSize: number, pageIndex: number, userId: string, mtLogin: number, mtPlatform: string)
+        : Observable<IPaginationResponse<Trade>> {        
+        let params = new HttpParams();
+        params = params.append('pageSize', pageSize.toString());
+        params = params.append('pageIndex', pageIndex.toString());
+        params = params.append('userId', userId.toString());
+        params = params.append('mtLogin', mtLogin.toString());
+        params = params.append('mtPlatform', mtPlatform);
+
+        return this._http.get<IPaginationResponse<Trade>>(this.getUserOrdersDetailedUrl, { params: params })
+            .pipe(
+                map((r: any) => {
+                    return new PaginationResponse(r.data, r.total);
+                })
+            );
+    }
+
     public getUserBalanceHistory(userId: string, mtLogin: number, mtPlatform: string, period: Periods): Observable<UserBalanceResponse> {
         let params = new HttpParams();
         params = params.append('userId', userId.toString());
@@ -127,5 +165,58 @@ export class TPMonitoringService {
         params = params.append('period', EnumHelper.getKeyString(period));
 
         return this._http.get<UserBalanceResponse>(this.getUserPnlUrl, { params: params });
+    }
+
+    public getAlgoTradesCharts(compareParam: string, tfFilter: number,
+        tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType): Observable<any> {
+        let params = new HttpParams();
+        params = params.append('algoTradesCompareBy', compareParam);
+        params = params.append('tfFilter', tfFilter.toString());
+        if (tradeFilter !== BFTTradeType.All)
+            params = params.append('ordTradeTypeFilter', tradeFilter.toString());
+        if (mktTypeFilter !== InstrumentType.All)
+            params = params.append('instrTypeFilter', mktTypeFilter.toString());
+
+        return this._http.get<any>(this.getAlgoTradeDetailedUrl, { params: params });
+    }
+
+    public getAlgoOrdersHistoryDetailed(pageSize: number, pageIndex: number,
+        mtPlatform: string, tfFilter: number,
+        tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType)
+        : Observable<IPaginationResponse<Trade>> {
+        let params = new HttpParams();
+        params = params.append('pageSize', pageSize.toString());
+        params = params.append('pageIndex', pageIndex.toString());
+        params = params.append('mtPlatform', mtPlatform);
+        params = params.append('tfFilter', tfFilter.toString());
+        if (tradeFilter !== BFTTradeType.All)
+            params = params.append('ordTradeTypeFilter', tradeFilter.toString());
+        if (mktTypeFilter !== InstrumentType.All)
+            params = params.append('instrTypeFilter', mktTypeFilter.toString());
+
+        return this._http.get<IPaginationResponse<Trade>>(this.getAlgoOrdersHistoryDetailedUrl, { params: params })
+            .pipe(
+                map((r: any) => {
+                    return new PaginationResponse(r.data, r.total);
+                })
+            );
+    }
+
+    public getAlgoOrdersHistoryDetailedCSV(pageNumber: number,
+        mtPlatform: string, tfFilter: number,
+        tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType)
+        : Observable<any> {
+            
+        let params = new HttpParams();
+        params = params.append('pageNumber', pageNumber.toString());        
+        params = params.append('mtPlatform', mtPlatform);
+        params = params.append('tfFilter', tfFilter.toString());
+        if (tradeFilter !== BFTTradeType.All)
+            params = params.append('ordTradeTypeFilter', tradeFilter.toString());
+        if (mktTypeFilter !== InstrumentType.All)
+            params = params.append('instrTypeFilter', mktTypeFilter.toString());
+                        
+        return this._http.get(this.getAlgoOrdersHistoryDetailedcsvUrl, 
+            { params: params, observe: 'response', responseType: 'blob'});
     }
 }

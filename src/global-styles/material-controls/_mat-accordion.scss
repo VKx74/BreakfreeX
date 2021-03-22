@@ -9,14 +9,20 @@ mat-accordion {
 
 @include themify($themes) {
   mat-expansion-panel {
-    background-color: themed('appPanelColor');
+    background-color: themed("activeBackgroundColor");
+    color: themed("titleTextColor");
   }
 
   mat-expansion-panel-header {
-    background-color: themed('appPanelColor');
+    background-color: themed("activeBackgroundColor");
+    //themed("tableBorders");
+    color: themed("titleTextColor");    
+  }
+  .mat-expansion-panel-header-title{
+    color: themed("titleTextColor");    
   }
 
   .mat-expansion-indicator::after {
-    color: themed('valueTextColor');
+    color: themed("valueTextColor");
   }
 }

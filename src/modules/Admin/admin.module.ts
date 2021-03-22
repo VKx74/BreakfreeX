@@ -130,6 +130,11 @@ import { SPChartComponent } from './components/trading-performance-monitoring/ch
 import { TPMonitoringResolver } from './resolvers/tp-monitoring.resolver';
 import { TPMonitoringGeneralDataComponent } from './components/trading-performance-monitoring/tp-monitoring-general-data/tp-monitoring-general-data.component';
 import { LoaderModule } from 'modules/loader/loader.module';
+import { TPMonitoringTradeDetailsComponent } from './components/trading-performance-monitoring/tp-monitoring-trade-details/tp-monitoring-trade-details.component';
+import { TPMonitoringAlgoTradesDetsComponent } from './components/trading-performance-monitoring/tp-monitorinng-algo-trades-detais/tp-monitoring-at-det.component';
+import { TPMonitoringTradesHistComponent } from './components/trading-performance-monitoring/tp-monitoring-trades-hist/tp-monitoring-trades-hist.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     imports: [
@@ -179,7 +184,9 @@ import { LoaderModule } from 'modules/loader/loader.module';
         SidebarModule,
         MatTableModule,
         ChatModuleForAdmin,
-        LoaderModule
+        LoaderModule,
+        MatPaginatorModule,
+        MatExpansionModule
     ],
     declarations: [
         AdminDashboardSidebarComponent,
@@ -210,7 +217,10 @@ import { LoaderModule } from 'modules/loader/loader.module';
         RegistrationsDashboardComponent,        
         TPMonitoringComponent,
         TPMonitoringUserDataComponent,
+        TPMonitoringTradeDetailsComponent,
         TPMonitoringGeneralDataComponent,
+        TPMonitoringAlgoTradesDetsComponent,
+        TPMonitoringTradesHistComponent,
         SPChartComponent,
         QAComponent,
         UiComponentsPermissionManagerComponent,
@@ -245,7 +255,8 @@ import { LoaderModule } from 'modules/loader/loader.module';
         ThreadDetailsDialogComponent,
         JSONViewDialogComponent,
         CreateThreadComponent,
-        ForumCategoryConfiguratorComponent
+        ForumCategoryConfiguratorComponent,
+        TPMonitoringTradeDetailsComponent
         // CreateNewsComponent,
     ],
     providers: [

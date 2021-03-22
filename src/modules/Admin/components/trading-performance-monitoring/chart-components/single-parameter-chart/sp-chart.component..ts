@@ -64,6 +64,10 @@ export class SPChartComponent implements OnInit {
         }
     }
 
+    @Input() set DetailParams(detailParams: any) {
+
+    }
+
     @Output() needUpdate = new EventEmitter<ChartDataArgs>();
 
     Chart: any;
@@ -202,9 +206,9 @@ export class SPChartComponent implements OnInit {
                             padding: 0,
                         }
                     }]
-                }
+                }                
             }
         });
-        this.Chart.specArray = [];
+        this.Chart.specArray = [];        
     }
 }

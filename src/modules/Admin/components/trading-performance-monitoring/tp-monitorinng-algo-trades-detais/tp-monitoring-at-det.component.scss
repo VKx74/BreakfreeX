@@ -1,0 +1,169 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+:host {
+  display: block;
+  margin-top: 20px;
+  padding-bottom: 10px;
+
+  .nborder{
+    margin-left: 100px;
+  }
+  
+  .mat-expansion-panel{
+    margin-top: 8px;
+  }
+
+  .option-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin: 5px;
+  }
+
+  .buttn {
+    margin: 5px;
+    padding: 3px 5px;
+    font-size: 11px;
+  }
+
+  .bblur {
+    filter: blur(2px);
+  }
+
+  .instrument,
+  .price-column {
+    margin: 0 30px;
+  }
+
+  .price-value {
+    font-size: 11px;
+  }
+
+  .name-chart {
+    font-size: 15px;
+  }
+
+  .price-change,
+  .name-exchange {
+    font-size: 10px;
+  }
+
+  .select {
+    width: 110px;
+  }
+
+  .header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+  }
+
+  .selector-button {
+    align-self: center;
+    padding: 3px 8px;
+  }
+
+  .charts-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: auto;
+    padding: 5px;
+
+    .watchlist-tile-wrapper {
+      border-radius: 5px;
+      border: 1px solid grey;
+      position: relative;
+      cursor: pointer;
+      margin: 2px;
+
+      &:hover {
+        .remove-instrument-button {
+          display: flex;
+        }
+
+        .tiles-trading-controls {
+          display: flex;
+        }
+      }
+
+      .tiles-trading-controls {
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        display: none;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+
+      .remove-instrument-button {
+        display: none;
+        position: absolute;
+        top: 1px;
+        right: calc((100% - 194px) / 2);
+        opacity: 0.6;
+      }
+    }
+  }
+
+  @include themify($themes, true) {
+    .watchlist-tile {
+      background-color: themed("appPanelColor");
+      border-radius: 10px;
+      color: themed("valueTextColor");
+      border: 1px solid transparent;
+      overflow: hidden;
+
+      .instrument,
+      .price-value,
+      .price-change {
+        color: themed("valueTextColor");
+      }
+      .name-exchange {
+        color: themed("titleTextColor");
+      }
+    }
+    .selected {
+      border: 1px solid themed("accentColor") !important;
+    }
+  }  
+
+  .watchlist-tile-wrapper {
+    border: 2px solid transparent;
+  }
+
+  .watchlist-tile-wrapper:hover {
+    border: 2px solid #fff;
+  }
+
+  .tile-header {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    overflow: hidden;
+
+    .name-chart {
+      line-height: 20px;
+      float: left;
+      font-weight: 600;
+      overflow: hidden;
+    }
+    .type-data {
+      float: left;
+      line-height: 15px;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 5px;
+      padding-left: 10px;
+      padding-right: 0px;
+    }
+  }
+  mat-form-field{
+    vertical-align: middle;
+  }
+}
