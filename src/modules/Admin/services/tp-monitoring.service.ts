@@ -11,7 +11,7 @@ import { AlgoTradingData, DistributionData, GeneralData, MTAccountDTO, MTAccount
 @Injectable()
 export class TPMonitoringService {
     readonly URL = `${AppConfigService.config.apiUrls.bftTradingProfilesREST}generalstats/`;
-    //readonly URL = `http://localhost:4000/generalstats/`;
+    // readonly URL = `http://localhost:4000/generalstats/`;
     constructor(private _http: HttpClient) {
     }
 
