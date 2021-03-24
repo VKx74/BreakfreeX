@@ -47,6 +47,14 @@
                     </mat-form-field>
                 </div>
 
+                <div class="crypto-form-unit" *ngIf="isUserUpdating">
+                    <div class="form-unit__label">Phone Number:</div>
+                    <mat-form-field class="crypto-input with-hint full-width">
+                        <input matInput type="text" formControlName="phone" placeholder="Phone Number">
+                        <i class="crypto-icon crypto-icon-document-id" matSuffix></i>
+                    </mat-form-field>
+                </div>
+
 
                 <div class="crypto-form-unit" *ngIf="isUserCreating">
                     <p class="form-unit__label">Password:</p>

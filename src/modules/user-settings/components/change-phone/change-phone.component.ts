@@ -172,7 +172,9 @@ export class ChangePhoneComponent implements OnInit {
     private _addPhone() {
         this.loading = true;
         const attachPhoneNumberModel: AttachPhoneNumberModel = {
-            code: this.formGroup.controls['code'].value
+            code: this.formGroup.controls['code'].value,
+            email: this.email,
+            phone: this.formGroup.controls['addPhone'].value
         };
         this._personalInfoService.attachPhoneNumber(attachPhoneNumberModel)
             .subscribe(() => {

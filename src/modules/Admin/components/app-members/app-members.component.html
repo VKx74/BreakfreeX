@@ -35,6 +35,9 @@
         <data-table-header-cell columnName="email">
             Email
         </data-table-header-cell>
+        <data-table-header-cell columnName="phone">
+            Phone
+        </data-table-header-cell>
         <data-table-header-cell columnName="username">
             Username
         </data-table-header-cell>
@@ -60,6 +63,10 @@
 
         <data-table-cell columnName="email">
             <ng-template let-item>{{item.user.email}}</ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="phone">
+            <ng-template let-item>{{item.user.phone}}</ng-template>
         </data-table-cell>
 
         <data-table-cell columnName="username">

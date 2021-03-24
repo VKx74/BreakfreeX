@@ -48,7 +48,8 @@ export class RefreshPasswordComponent extends Modal<ResetPasswordConfig, MemberC
             userName: user.userName,
             id: user.id,
             stripeId: user.stripeId,
-            email: newEmail
+            email: newEmail,
+            phoneNumber: user.phone
         };
         this._usersService.updateUser(updateUserModel)
             .subscribe({

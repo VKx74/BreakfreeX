@@ -254,6 +254,8 @@ export interface SendCodeViaSMSToRemovePhoneNumberModel {
 
 export interface AttachPhoneNumberModel {
     code: string;
+    email: string;
+    phone: string;
 }
 
 export interface ChangePhoneNumberModel {
