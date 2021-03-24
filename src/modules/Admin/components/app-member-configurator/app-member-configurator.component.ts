@@ -153,7 +153,8 @@ export class AppMemberConfiguratorComponent extends Modal<ConfiguratorConfig, Me
             email: controls['email'].value,
             userName: controls['userName'].value,
             role: controls['role'].value as string,
-            stripeId: controls['stripeId'].value as string
+            stripeId: controls['stripeId'].value as string,
+            phoneNumber: controls['phone'].value as string,
         })
             .pipe(
                 flatMap((user: UserModel) => {
@@ -219,14 +220,16 @@ export class AppMemberConfiguratorComponent extends Modal<ConfiguratorConfig, Me
                 role: new FormControl(this.user.role),
                 userName: new FormControl(this.user.userName, [Validators.required, Validators.minLength(1)]),
                 email: new FormControl(this.user.email, [Validators.required, Validators.email]),
-                stripeId: new FormControl(this.user.stripeId)
+                stripeId: new FormControl(this.user.stripeId),
+                phone: new FormControl(this.user.phone)
             });
         } else {
             return new FormGroup({
                 role: new FormControl(this.user.role || Roles.User),
                 email: new FormControl('', [Validators.required, Validators.email]),
                 password: new FormControl('', [Validators.required, passwordValidator()]),
-                stripeId: new FormControl('')
+                stripeId: new FormControl(''),
+                phone: new FormControl('')
             });
         }
     }

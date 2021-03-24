@@ -78,6 +78,10 @@ export class UserModel {
 
     public stripeId: string;
 
+    public phone: string;
+
+    public phoneConfirmed: string;
+
     public emailConfirmed: boolean;
 
     public id: string;
@@ -132,6 +136,8 @@ export class UpdateUserModel {
     public email: string;
     
     public stripeId: string;
+
+    public phoneNumber: string;
 
     public userName: string;
 
