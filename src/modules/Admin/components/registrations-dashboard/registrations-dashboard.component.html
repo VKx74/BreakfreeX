@@ -1,4 +1,36 @@
 <div class="container">
+    <div class="filters-wrapper flex align-items-center">
+        <div class="title">From:</div>
+        <mat-form-field class="crypto-date-input m-right-10">
+            <input matInput readonly
+                   [matDatepicker]="start"
+                   [max]="selectedEventsToDateFilter"
+                   [(ngModel)]="selectedEventsFromDateFilter"
+                   (dateChange)="reload()"
+                   (click)="start.open()"
+                   placeholder="Start date">
+            <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+            <mat-datepicker #start></mat-datepicker>
+        </mat-form-field>
+
+        <div class="title">To:</div>
+        <mat-form-field class="crypto-date-input m-right-10">
+            <input matInput readonly
+                   [matDatepicker]="end"
+                   [min]="selectedEventsFromDateFilter"
+                   [(ngModel)]="selectedEventsToDateFilter"
+                   (dateChange)="reload()"
+                   (click)="end.open()"
+                   placeholder="End date">
+            <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+            <mat-datepicker #end></mat-datepicker>
+        </mat-form-field>
+    </div>
+
+    <div class="loader">
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    </div>
+    
     <chart-wrapper [ChartSettings]='chartSett' [ChartData]='chartDataSet'>
     </chart-wrapper>
 </div>
