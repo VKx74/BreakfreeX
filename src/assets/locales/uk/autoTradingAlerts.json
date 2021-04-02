@@ -24,6 +24,7 @@
   },
   "tradingAlert": {
     "condition": "Стан",
+    "instrument": "Інструмент",
     "options": "Опції",
     "expirationTime": "Час закінчення",
     "onlyOnce": "Тільки один раз",
@@ -35,8 +36,8 @@
     "sendSMS": "Відправити SMS",
     "sendEmail": "Відправити email",
     "message": "Коментар",
-    "createAlert": "Створити сповіщення для",
-    "editAlert": "Редагувати сповіщення для",
+    "createAlert": "Створити сповіщення",
+    "editAlert": "Редагувати сповіщення",
     "value": "Значення",
     "parameterInput": "Вхідні параметри",
     "upperBound": "Верхня межа",
@@ -85,5 +86,6 @@
   "alertsRestarted": "Сповіщення перезапущені",
   "failedToRestartAlerts": "Не вдалося перезапустити сповіщення",
   "alertsStopped": "Сповіщення деактивовано",
-  "failedToStopAlerts": "Не вдалося деактувати сповіщення"
+  "failedToStopAlerts": "Не вдалося деактувати сповіщення",
+  "alertsComponentName": "Сповіщення"
 }

@@ -9,7 +9,6 @@ import {LoadingModule} from "ngx-loading";
 import {TranslateServiceFactory} from "Localization";
 import {ChartTranslateService} from "./localization/token";
 import {LinkingModule} from "../Linking";
-import { AutoTradingAlertConfigurationService } from 'modules/AutoTradingAlerts/services/auto-trading-alert-configuration.service';
 import {sharedProviderResolver} from "../popup-window/functions";
 import {LoaderModule} from "../loader/loader.module";
 import { IndicatorRestrictionService } from './services/indicator-restriction.service';
@@ -18,6 +17,7 @@ import { BreakfreeTradingModule } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
 import { TradeFromChartService } from './services/trade-from-chart.service';
+import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 
 export function sharedTemplatesDataProviderService() {
     return sharedProviderResolver('chartTemplatesDataProviderService');
@@ -50,7 +50,7 @@ export function sharedTemplatesDataProviderService() {
             useFactory: TranslateServiceFactory('chart'),
             deps: [Injector]
         },
-        AutoTradingAlertConfigurationService,
+        AlertsService,
         IndicatorRestrictionService,
         IndicatorDataProviderService,
         BreakfreeTradingService,

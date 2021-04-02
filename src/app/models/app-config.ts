@@ -88,6 +88,7 @@ export enum ComponentIdentifier {
     breakfreeTradingAcademy = "breakfreeTradingAcademy",
     breakfreeTradingScanner = "breakfreeTradingScanner",
     forexTradeManager = "forexTradeManager",
+    alertsManager = "alertsManager",
     level2View = "level2View",
     news = "news",
     marketView = "marketView",

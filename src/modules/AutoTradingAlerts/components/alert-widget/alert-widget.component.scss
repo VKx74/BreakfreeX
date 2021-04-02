@@ -1,0 +1,17 @@
+:host {
+    .alerts-settings-header {
+        font-size: 12px !important;
+        
+        /deep/ {
+            .mat-tab-link {
+                font-size: 12px !important;
+                // font-weight: 700 !important;
+                height: 34px !important;
+                min-width: 100px !important;
+            }
+            .mat-tab-nav-bar, .mat-tab-header {
+                border: none !important;
+            }
+        }
+    }
+}

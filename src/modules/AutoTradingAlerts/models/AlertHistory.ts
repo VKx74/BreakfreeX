@@ -1,5 +1,2 @@
-export interface AlertHistory {
-    Description: string;
-    Comment: string;
-    Time: number;
+export class AlertHistory {
 }

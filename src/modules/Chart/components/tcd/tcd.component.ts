@@ -12,9 +12,7 @@ import {ChartTranslateService} from "../../localization/token";
 import {Actions, LinkingAction} from "../../../Linking/models";
 import {CalendarEventsDatafeed} from "../../calendarEvents/CalendarEventsDatafeed";
 import {IndicatorAlertHandler} from 'modules/Chart/indicatorAlertHandler/indicatorAlertHandler';
-import {AutoTradingAlertConfigurationService} from 'modules/AutoTradingAlerts/services/auto-trading-alert-configuration.service';
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {ComponentIdentifier} from "@app/models/app-config";
 import {EducationalTipsService} from "@app/services/educational-tips.service";
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import {IInstrument} from "@app/models/common/instrument";
@@ -25,7 +23,6 @@ import {BrokerService} from "@app/services/broker.service";
 import {ICryptoPlaceOrderAction} from "../../../Trading/models/crypto/crypto.models";
 import TradeAction = TradingChartDesigner.TradeAction;
 import {OrderSide, OrderTypes} from "../../../Trading/models/models";
-import {AlertService} from "@alert/services/alert.service";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { InstrumentService } from '@app/services/instrument.service';
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
@@ -35,6 +32,7 @@ import { TradeFromChartService } from '@chart/services/trade-from-chart.service'
 import {Store} from "@ngrx/store";
 import {AppState} from "@app/store/reducer";
 import { SaveStateAction } from '@app/store/actions/platform.actions';
+import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -94,8 +92,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _instrumentService: InstrumentService,
                 private _calendarEventsDatafeed: CalendarEventsDatafeed,
                 private _brokerService: BrokerService,
-                private _alertService: AlertService,
-                private _alertChartService: AutoTradingAlertConfigurationService,
+                private _alertsService: AlertsService,
                 private _indicatorRestrictionService: IndicatorRestrictionService,
                 private _indicatorDataProviderService: IndicatorDataProviderService,
                 private _tradingFromChartHandler: TradeFromChartService,
@@ -190,7 +187,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 templateDataProvider: this._templateDataProviderService,
                 indicatorsDataProvider: this._indicatorDataProviderService,
                 marketEventsDatafeed: this._calendarEventsDatafeed,
-                indicatorAlertsHandler: new IndicatorAlertHandler(this._alertChartService),
+                indicatorAlertsHandler: new IndicatorAlertHandler(this._alertsService),
                 indicatorsRestrictionsProvider: this._indicatorRestrictionService,
                 // helpLinks: this.linksList,
                 showHelp: this._educationalTipsService.isTipsShown(),
@@ -322,37 +319,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     private tradeHandler(params: ITradeHandlerParams) {
-        const instrument = this.chart.instrument as IInstrument;
-        const orderType = OrderTypes[params.orderName];
-
-        if (this._brokerService.isInstrumentAvailable(instrument, orderType)) {
-            const broker = this._brokerService.activeBroker as CryptoBroker;
-            if (!params.amount) {
-                this._alertService.error(this._translateService.get('amountMustHaveValue'));
-                return;
-            }
-            const placeOrderData: ICryptoPlaceOrderAction = {
-                symbol: instrument.symbol,
-                side: OrderSide[TradeAction[params.action]],
-                size: params.amount,
-                type: orderType,
-                price: orderType === OrderTypes.Limit || orderType === OrderTypes.StopLimit ? params.limitPrice : null,
-                stopPrice: (orderType === OrderTypes.Stop || orderType === OrderTypes.StopLimit) ? params.stopPrice : null
-            };
-
-            broker.placeOrder(placeOrderData)
-                .subscribe(value => {
-                    if (value.result) {
-                        this._alertService.success(this._translateService.get('orderPlaced'));
-                    } else {
-                        this._alertService.error(value.msg);
-                    }
-                }, error => {
-                    this._alertService.error(error.message);
-                });
-        } else {
-            this._alertService.error(this._translateService.get('brokerNotSupportThisSymbol'));
-        }
+       
     }
 
     private _subscribeOnChartEvents(chart: TradingChartDesigner.Chart) {
@@ -381,8 +348,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             TradingChartDesigner.ChartEvent.CHART_TYPE_CHANGED,
             TradingChartDesigner.ChartEvent.CROSS_HAIR_CHANGED,
             TradingChartDesigner.ChartEvent.THEME_CHANGED,
-            TradingChartDesigner.ChartEvent.GLOBAL_THEME_CHANGED,
-            // TradingChartDesigner.ShapeEvent.POINTS_CHANGED
+            TradingChartDesigner.ChartEvent.GLOBAL_THEME_CHANGED
         ].join(' ');
     }
 

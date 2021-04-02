@@ -1,7 +1,4 @@
 <div *ngIf="alertsHistory$ | async  as alertHistories; else loader" class="flex flex-direction-column flex-grow-1 full-height">
-    <div class="header flex-shrink-0">
-      <span class="header_title"></span>
-    </div>
   <div class="content-wrapper flex-grow-1 full-height overflow-y-auto">
   <data-table [rows]="alertHistories" class="stripped-mode">
     <data-table-header-cell columnName="symbol">

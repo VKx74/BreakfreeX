@@ -1,0 +1,48 @@
+<div class="alerts-settings-header flex justify-space-between">
+  <nav mat-tab-nav-bar class="flex justify-space-between">
+    <a mat-tab-link (click)="tabChanged(AlertTabs.Alerts)">
+      {{'alertWidget.manageAlerts' | translate}}
+    </a>
+    <a mat-tab-link (click)="tabChanged(AlertTabs.AlertsLog)">
+      {{'alertWidget.alertsLog' | translate}}
+    </a>
+  </nav>
+
+  <div class="flex align-items-center">
+    <div class="crypto-button-icon control create-alert-control" (click)="showAlertDialog()"
+      title="{{'alertWidget.setAlert' | translate}}">
+      <span class="crypto-icon crypto-icon-midle-add"></span>
+    </div>
+    <div class="crypto-button-icon control" title="{{'app.settings' | translate}}" [matMenuTriggerFor]="alertsDropdown">
+      <span class="crypto-icon crypto-icon-more"></span>
+    </div>
+
+    <mat-menu #alertsDropdown="matMenu">
+      <div class="mat-menu-wrapper">
+        <!-- <div class="mat-menu-item hideLabel">
+          <input type="checkbox" id="hideInactive" [checked]="isInactiveAlertsHidden"
+            (change)="handleHideInactiveAlerts($event)">
+          <label for="hideInactive">{{'alertWidget.hideInactive' | translate}}</label>
+        </div> -->
+        <div class="mat-menu-item" (click)="restartAllInactive()">
+          <span>{{'alertWidget.restartAllInactive' | translate}}</span>
+        </div>
+        <div class="mat-menu-item" (click)="stopAll()">
+          <span>{{'alertWidget.stopAll' | translate}}</span>
+        </div>
+        <div class="mat-menu-item" (click)="deleteAllInactive()">
+          <span>{{'alertWidget.deleteAllInactive' | translate}}</span>
+        </div>
+      </div>
+    </mat-menu>
+  </div>
+</div>
+
+<div class="full-height" [ngSwitch]="selectedTabIndex">
+  <div class="full-height section-alert" *ngSwitchCase="AlertTabs.Alerts">
+    <app-alert></app-alert>
+  </div>
+  <div class="full-height section-alert" *ngSwitchCase="AlertTabs.AlertsLog">
+    <alert-log></alert-log>
+  </div>
+</div>

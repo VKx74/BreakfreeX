@@ -24,6 +24,7 @@
   },
   "tradingAlert": {
     "condition": "Condition",
+    "instrument": "Instrument",
     "options": "Options",
     "expirationTime": "Expiration Time",
     "onlyOnce": "Only Once",
@@ -35,8 +36,8 @@
     "sendSMS": "Send SMS",
     "sendEmail": "Send email",
     "message": "Message",
-    "createAlert": "Create Alert to",
-    "editAlert": "Edit Alert to",
+    "createAlert": "Create Alert",
+    "editAlert": "Edit Alert",
     "value": "Value",
     "parameterInput": "Parameter Input",
     "upperBound": "Upper Bound",
@@ -85,5 +86,6 @@
   "alertsRestarted": "Alerts restarted",
   "failedToRestartAlerts": "Failed to restart alerts",
   "alertsStopped": "Alerts stopped",
-  "failedToStopAlerts": "Failed to stop alerts"
+  "failedToStopAlerts": "Failed to stop alerts",
+  "alertsComponentName": "Alerts"
 }

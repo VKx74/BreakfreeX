@@ -40,21 +40,13 @@ export class PlatformComponent implements OnInit, AfterViewInit {
 
 
     constructor(private _actions: Actions,
-                private _dataStorage: DataStorage,
                 private _identityService: IdentityService,
-                private _layoutStorage: LayoutStorage,
                 private _brokerStorage: BrokerStorage,
                 private _signalService: SignalService,
                 private _audioService: AudioService,
-                private _instrumentService: InstrumentService,
-                private _realtimeService: RealtimeService,
-                private _historyService: HistoryService,
                 private _userSettingsService: UserSettingsService,
                 private _brokerService: BrokerService,
                 private _route: ActivatedRoute,
-                private _router: Router,
-                private _translateService: TranslateService,
-                private _sidebarService: SidebarService,
                 private _alertService: AlertService) {
     }
 

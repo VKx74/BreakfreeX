@@ -64,6 +64,7 @@ import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTradin
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
 import { ForexTradeManagerComponent } from '../Trading/components/forex.components/forex-trade-manager.component';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
+import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
 
 
 export function sharedThemeService() {
@@ -291,6 +292,10 @@ export function sharedEducationalTipsService() {
                         {
                             componentName: ComponentIdentifier.forexTradeManager,
                             component: ForexTradeManagerComponent
+                        },
+                        {
+                            componentName: ComponentIdentifier.alertsManager,
+                            component: AlertWidgetComponent
                         },
                     ]
                 } as IGoldenLayoutComponentConfiguration;
