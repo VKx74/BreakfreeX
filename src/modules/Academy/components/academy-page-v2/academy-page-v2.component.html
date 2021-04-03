@@ -31,12 +31,12 @@
                 <div class="title-1">{{selectedContentSector.Name}}</div>
                 <ng-container *ngFor="let group of groupedMedia">
                     <div class="title-2">{{group.GroupName}}</div>
-                    <div class="title-3 groped" [ngClass]="{'is-active': selectedMedia?.basic.hashedId == media.basic.hashedId}" (click)="selectMedia(media)" *ngFor="let media of group.MediaData">{{media.basic.name}}</div>
+                    <div class="title-3 groped" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of group.MediaData">{{media.name}}</div>
                 </ng-container>
 
                 <div class="separator" *ngIf="groupedMedia && groupedMedia.length > 0"></div>
 
-                <div class="title-3" [ngClass]="{'is-active': selectedMedia?.basic.hashedId == media.basic.hashedId}" (click)="selectMedia(media)" *ngFor="let media of mediaDetails">{{media.basic.name}}</div>
+                <div class="title-3" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of mediaDetails">{{media.name}}</div>
 
                 <div *ngIf="loading" class="loader-container">
                     <bft-loader-block class="loader-component"></bft-loader-block>
@@ -68,8 +68,8 @@
             <div class="separator"></div>
 
             <div class="video-details">
-                <div class="video-title">{{selectedMedia?.basic.name}}</div>
-                <div class="video-description" [innerHTML]="selectedMedia?.basic.description"></div>
+                <div class="video-title">{{selectedMedia?.name}}</div>
+                <div class="video-description" [innerHTML]="selectedMedia?.description"></div>
             </div>
         </div>
     </div>

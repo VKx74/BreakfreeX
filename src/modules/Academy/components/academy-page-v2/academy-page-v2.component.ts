@@ -19,11 +19,10 @@ export class AcademyPageV2Component {
     private _name: string;
     private _avatarId: string;
     private _selectedContentSector: ContentSectors;
-    private _content: Content[];
-    private _allMedia: MediaDetails[];
-    private _mediaDetails: MediaDetails[];
-    private _groupedMedia: GroupedMedia[];
-    private _selectedMedia: MediaDetails;
+    private _content: Content[] = [];
+    private _mediaDetails: Content[] = [];
+    private _groupedMedia: GroupedMedia[] = [];
+    private _selectedMedia: Content;
 
     public get canPrev(): boolean {
         return !!(this.getPrevVideo());
@@ -49,7 +48,7 @@ export class AcademyPageV2Component {
         return this._content;
     }
 
-    public get mediaDetails(): MediaDetails[] {
+    public get mediaDetails(): Content[] {
         return this._mediaDetails;
     }
 
@@ -57,7 +56,7 @@ export class AcademyPageV2Component {
         return this._groupedMedia;
     }
 
-    public get selectedMedia(): MediaDetails {
+    public get selectedMedia(): Content {
         return this._selectedMedia;
     }
 
@@ -125,12 +124,12 @@ export class AcademyPageV2Component {
         this.selectedContentSector = selected;
     }
 
-    selectMedia(media: MediaDetails) {
+    selectMedia(media: Content) {
         this._selectedMedia = media;
         const iframe = this._hostElement.nativeElement.querySelector('iframe');
 
         if (this._selectedMedia) {
-            iframe.src = `${this._srcBase}\\${this._selectedMedia.basic.hashedId}?videoFoam=true`;
+            iframe.src = `${this._srcBase}\\${this._selectedMedia.hashed_id}?videoFoam=true`;
         } 
     }
 
@@ -153,11 +152,10 @@ export class AcademyPageV2Component {
             return "--:--:--";
         }
 
-        return new Date(Math.round(this._selectedMedia.basic.duration) * 1000).toISOString().substr(11, 8);
+        return new Date(Math.round(this._selectedMedia.duration) * 1000).toISOString().substr(11, 8);
     }
 
     private updateContent() {
-        this._allMedia = [];
         this._mediaDetails = [];
         this._groupedMedia = [];
 
@@ -176,27 +174,27 @@ export class AcademyPageV2Component {
     }
 
     private updateMediaDetails() {
-        let allTasks: Observable<MediaDetails>[] = [];
-        for (const c of this._content) {
-            let obs = this._wistiaService.getVideoDetails(c.hashed_id);
-            allTasks.push(obs);
-        }
+        // let allTasks: Observable<MediaDetails>[] = [];
+        // for (const c of this._content) {
+        //     let obs = this._wistiaService.getVideoDetails(c.hashed_id);
+        //     allTasks.push(obs);
+        // }
 
-        forkJoin(allTasks).subscribe(results => {
-            this.buildGroup(results);
-        });
+        // forkJoin(allTasks).subscribe(results => {
+        //     this.buildGroup(results);
+        // });
+        this.buildGroup();
     }
 
-    private buildGroup(details: MediaDetails[]) {
+    private buildGroup() {
         this._loading = false;
-        this._allMedia = details;
 
-        if (details) {
-            this.selectMedia(details[0]);
+        if (this._content) {
+            this.selectMedia(this._content[0]);
         }
 
-        for (const detail of details) {
-            let description = detail.basic.description.replace(/<\/?[^>]+(>|$)/g, "");
+        for (const detail of this._content) {
+            let description = detail.description.replace(/<\/?[^>]+(>|$)/g, "");
             let startIndex = description.indexOf('[');
             let endIndex = description.indexOf(']');
 
@@ -210,35 +208,35 @@ export class AcademyPageV2Component {
         }
     }
 
-    private addInGroup(media: MediaDetails, groupName: string) {
+    private addInGroup(content: Content, groupName: string) {
         for (const groupedMedia of this._groupedMedia) {
             if (groupedMedia.GroupName === groupName) {
-                groupedMedia.MediaData.push(media);
+                groupedMedia.MediaData.push(content);
                 return;
             }
         }
 
         this._groupedMedia.push({
             GroupName: groupName,
-            MediaData: [media]
+            MediaData: [content]
         });
     }
 
-    private getNextVideo(): MediaDetails {
-        let currentIndex = this._allMedia.indexOf(this._selectedMedia);
+    private getNextVideo(): Content {
+        let currentIndex = this._content.indexOf(this._selectedMedia);
         if (currentIndex === -1) {
             return null;
         }
 
-        return this._allMedia[currentIndex + 1];
+        return this._content[currentIndex + 1];
     }
 
-    private getPrevVideo(): MediaDetails {
-        let currentIndex = this._allMedia.indexOf(this._selectedMedia);
+    private getPrevVideo(): Content {
+        let currentIndex = this._content.indexOf(this._selectedMedia);
         if (currentIndex < 1) {
             return null;
         }
 
-        return this._allMedia[currentIndex - 1];
+        return this._content[currentIndex - 1];
     }
 }

@@ -1,4 +1,4 @@
-import { MediaDetails } from "./dto";
+import { Content } from "./dto";
 
 export interface ContentSectors
 {
@@ -10,5 +10,5 @@ export interface ContentSectors
 export interface GroupedMedia
 {
     GroupName: string;
-    MediaData: MediaDetails[];
+    MediaData: Content[];
 }
