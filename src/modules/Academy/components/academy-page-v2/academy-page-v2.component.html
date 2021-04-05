@@ -1,52 +1,21 @@
 <div class="root flex">
     <div class="content flex">
-        <div class="menu flex">
-            <div class="drop-down flex">
-                <div [matMenuTriggerFor]="menu" class="flex">
-                    <div class="menuheader flex">
-                        <div class="menuheader-text flex">{{selectedContentSector.Title}}</div>
-                        <div class="dropdown-toggle flex">&#5121;</div>
-                    </div>
-                    <mat-menu #menu="matMenu" xPosition="before">
-                        <div class="weeks-menu-content flex">
-                            <div class="weeks-menu-item flex" (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors">{{contentSector.Name}}</div>
-                        </div>
-                    </mat-menu>
+        <div class="side-menu" [class.side-menu-closed]="!sidebarOpen">
+            <div class="menu-container">
+                <div class="menu-mobile-header">
+                    <i class="fa fa-times-circle close-button" (click)="setSidebarState(false)"></i>
+                    <i class="fa fa-angle-double-right open-button" (click)="setSidebarState(true)"></i>
                 </div>
-            </div>
-            <div class="welcome-title">
-                <div class="avatar">
-                    <name-avatar [name]="name" [src]="avatarId"></name-avatar>
-                </div>
-                <div class="greeting">
-                    <div>
-                        Welcome,
-                    </div>
-                    <div class="user-name">
-                        {{name}}
-                    </div>
-                </div>
-            </div>  
-            <div class="video-content">
-                <div class="title-1">{{selectedContentSector.Name}}</div>
-                <ng-container *ngFor="let group of groupedMedia">
-                    <div class="title-2">{{group.GroupName}}</div>
-                    <div class="title-3 groped" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of group.MediaData">{{media.name}}</div>
-                </ng-container>
-
-                <div class="separator" *ngIf="groupedMedia && groupedMedia.length > 0"></div>
-
-                <div class="title-3" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of mediaDetails">{{media.name}}</div>
-
-                <div *ngIf="loading" class="loader-container">
-                    <bft-loader-block class="loader-component"></bft-loader-block>
-                </div>
+                <academy-menu [(selectedMedia)]="selectedMedia" (nextMediaChange)="nextMediaChanged($event)"
+                (prevMediaChange)="prevMediaChanged($event)"></academy-menu>
             </div>
         </div>
         <div class="page flex">
             <div class="video-player">
                 <div class="frame-container">
-                    <iframe title="1.4 Video" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen msallowfullscreen width="100%" height="100%"></iframe>
+                    <iframe title="1.4 Video" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0"
+                        scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen msallowfullscreen
+                        width="100%" height="100%"></iframe>
                 </div>
                 <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
             </div>
@@ -54,7 +23,7 @@
                 <div class="move-prev flex" [ngClass]="{'disabled': !canPrev}" (click)="prevVideo()">
                     <div class="arro flex">&#10094;</div>
                     <div class="lable flex">Prev</div>
-                </div>  
+                </div>
                 <div class="timing flex">
                     <i class="fa fa-clock-o"></i>
                     <div class="lable flex">{{getTiming()}}</div>
@@ -73,4 +42,12 @@
             </div>
         </div>
     </div>
+
+    <!-- <mat-sidenav-container class="sidebar-container" [class.sidebar-close]="!sidebarOpen"
+        (backdropClick)="setSidebarState(false)">
+        <mat-sidenav mode="push" [opened]="sidebarOpen" [autoFocus]="false">
+            <academy-menu [(selectedMedia)]="selectedMedia" (nextMediaChange)="nextMediaChanged($event)"
+                (prevMediaChange)="prevMediaChanged($event)"></academy-menu>
+        </mat-sidenav>
+    </mat-sidenav-container> -->
 </div>

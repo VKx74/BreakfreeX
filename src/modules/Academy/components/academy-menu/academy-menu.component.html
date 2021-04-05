@@ -1,0 +1,43 @@
+<div class="menu flex">
+    <div class="drop-down flex">
+        <div [matMenuTriggerFor]="menu" class="flex">
+            <div class="menuheader flex">
+                <div class="menuheader-text flex">{{selectedContentSector.Title}}</div>
+                <div class="dropdown-toggle flex">&#5121;</div>
+            </div>
+            <mat-menu #menu="matMenu" xPosition="before">
+                <div class="weeks-menu-content flex">
+                    <div class="weeks-menu-item flex" (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors">{{contentSector.Name}}</div>
+                </div>
+            </mat-menu>
+        </div>
+    </div>
+    <div class="welcome-title">
+        <div class="avatar">
+            <name-avatar [name]="name" [src]="avatarId"></name-avatar>
+        </div>
+        <div class="greeting">
+            <div>
+                Welcome,
+            </div>
+            <div class="user-name">
+                {{name}}
+            </div>
+        </div>
+    </div>  
+    <div class="video-content">
+        <div class="title-1">{{selectedContentSector.Name}}</div>
+        <ng-container *ngFor="let group of groupedMedia">
+            <div class="title-2">{{group.GroupName}}</div>
+            <div class="title-3 groped" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of group.MediaData">{{media.name}}</div>
+        </ng-container>
+
+        <div class="separator" *ngIf="groupedMedia && groupedMedia.length > 0 && mediaDetails && mediaDetails.length > 0"></div>
+
+        <div class="title-3" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of mediaDetails">{{media.name}}</div>
+
+        <div *ngIf="loading" class="loader-container">
+            <bft-loader-block class="loader-component"></bft-loader-block>
+        </div>
+    </div>
+</div>

@@ -9,12 +9,15 @@ import { AcademyPageV2Component } from "./components/academy-page-v2/academy-pag
 import { MatMenuModule } from "@angular/material/menu";
 import { WistiaService } from "./services/wistia.service";
 import { LoaderModule } from "modules/loader/loader.module";
+import { AcademyMenuComponent } from "./components/academy-menu/academy-menu.component";
+import { MatSidenavModule } from "@angular/material/sidenav";
 
 @NgModule({
     declarations: [
         AcademyPageComponent,
         AcademyRootComponent,
-        AcademyPageV2Component
+        AcademyPageV2Component,
+        AcademyMenuComponent
     ],
     imports: [
         CommonModule,
@@ -22,7 +25,8 @@ import { LoaderModule } from "modules/loader/loader.module";
         SharedModule,
         MatMenuModule,
         AcademyRoutingModule,
-        LoaderModule
+        LoaderModule,
+        MatSidenavModule
     ],
     providers: [
         WistiaService

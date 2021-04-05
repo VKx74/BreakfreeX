@@ -23,6 +23,7 @@ import { LocalizationService } from 'Localization';
 })
 export class BaseNavComponent implements OnInit {
     readonly avatarShape = UserAvatarShape.Rounded;
+    @Input() showUserDashboard = false;
     @Input() showUserAvatar = false;
     @Input() logoutConfirm: Function;
     sidebarState$ = this._sidebarService.state$;

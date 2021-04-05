@@ -5,6 +5,7 @@ import {UserSettingsResolver} from "@app/services/user-settings.resolver";
 import {MarkdownInputResolver} from "@app/resolvers/markdown-input.resolver";
 import {DashboardComponent} from "@platform/components/dashboard/dashboard.component";
 import {DashboardResolver} from "@app/resolvers/dashboard.resolver";
+import { AppRoutes } from '@app/app.routes';
 
 const routes: Routes = [
     {
@@ -35,7 +36,7 @@ const routes: Routes = [
                 loadChildren: () => import('../scripting-page/scripting-page.module').then(m => m.ScriptingPageModule),
             },
             {
-                path: "academy",
+                path: AppRoutes.Academy,
                 loadChildren: () => import('../Academy/academy.module').then(m => m.AcademyModule)
             },
         ]
