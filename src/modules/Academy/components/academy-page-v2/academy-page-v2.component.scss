@@ -3,7 +3,7 @@
 @import "global-styles/variables";
 
 :host {
-  font-family: 'Fira Sans', sans-serif;
+  font-family: "Fira Sans", sans-serif;
   height: 100%;
 
   .disabled {
@@ -19,8 +19,6 @@
     width: 100%;
     height: 100%;
     background-image: url(/assets/img/academy/academy-bg.jpg);
-    background-repeat: no-repeat;
-    background-position-x: center;
     background-position-y: top;
     background-color: #0e0e0e;
     justify-content: center;
@@ -34,7 +32,7 @@
 
   .page {
     background-color: #fff;
-    width: 700px;
+    width: 950px;
     height: 100%;
     flex-direction: column;
 
@@ -44,8 +42,7 @@
       margin: 10px 0px;
     }
 
-    .video-footer
-    {
+    .video-footer {
       justify-content: space-between;
       padding: 10px 20px 0px 20px;
       color: rgba(50, 50, 50, 1);
@@ -61,7 +58,8 @@
         padding: 0px 5px;
       }
 
-      .move-prev, .move-next {
+      .move-prev,
+      .move-next {
         cursor: pointer;
         &:hover {
           text-decoration: underline;
@@ -97,9 +95,9 @@
       background-color: #191919;
       justify-content: flex-end;
       align-items: center;
-      
     }
-    .close-button, .open-button {
+    .close-button,
+    .open-button {
       font-size: 22px;
       margin-right: 10px;
       cursor: pointer;
@@ -107,7 +105,7 @@
     }
     .close-button {
       display: flex;
-    } 
+    }
     .open-button {
       display: none;
     }
@@ -140,14 +138,19 @@
       }
       .close-button {
         display: none;
-      } 
+      }
       .open-button {
         display: flex;
       }
     }
 
-    .page, .content {
+    .page,
+    .content {
       width: 100%;
+    }
+
+    .video-title {
+      font-size: 24px !important;
     }
   }
 
@@ -157,15 +160,24 @@
     width: 100%;
     .frame-container {
       width: 100%;
-      min-height: 400px;
+      // min-height: 392px;
     }
+
+    //  @media (min-width: 1280px) {
+    //   .frame-container {
+    //     width: 100%;
+    //     min-height: 536px !important;
+    //   }
+    //  }
   }
 
   .video-details {
-    padding: 15px 30px; 
+    padding: 15px 30px;
     .video-title {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 42px;
+      font-weight: 700;
+      max-width: 780px;
+      margin: 0 auto;
     }
     .video-description {
       margin-top: 15px;

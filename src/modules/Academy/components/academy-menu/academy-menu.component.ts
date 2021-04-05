@@ -86,23 +86,23 @@ export class AcademyMenuComponent {
 
     contentSectors: ContentSectors[] = [{
         Id: "nrdbxd633l",
-        Name: "Week 1 [2019]",
-        Title: "Week 1 of Breakfree Trading"
+        Name: "BFT Academy - Week 1 [2020]",
+        Title: "BFT Academy - Week 1 [2020]"
     },
     {
         Id: "zctobnmsk9",
-        Name: "Week 2 [2019]",
-        Title: "Week 2 of Breakfree Trading"
+        Name: "BFT Academy - Week 2 [2020]",
+        Title: "BFT Academy - Week 2 [2020]"
     },
     {
         Id: "ufonh214hz",
-        Name: "Week 3 [2021]",
-        Title: "Week 3 of Breakfree Trading"
+        Name: "BFT Academy - Week 1 [2021]",
+        Title: "BFT Academy - Week 1 [2021]"
     },
     {
-        Id: "sj7ygoyhmy",
-        Name: "Week 4 [2021]",
-        Title: "Week 4 of Breakfree Trading"
+        Id: "zctobnmsk9",
+        Name: "BFT Academy - Week 2 [2021]",
+        Title: "BFT Academy - Week 2 [2021]"
     }];
 
     constructor(private _identityService: IdentityService, private _profileService: UsersProfileService, 

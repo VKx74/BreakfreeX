@@ -26,7 +26,7 @@
         </div>
     </div>  
     <div class="video-content">
-        <div class="title-1">{{selectedContentSector.Name}}</div>
+        <!-- <div class="title-1">{{selectedContentSector.Name}}</div> -->
         <ng-container *ngFor="let group of groupedMedia">
             <div class="title-2">{{group.GroupName}}</div>
             <div class="title-3 groped" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of group.MediaData">{{media.name}}</div>
