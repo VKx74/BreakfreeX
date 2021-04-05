@@ -17,7 +17,7 @@ export class WistiaService {
     }
 
     getContentByProject(project: string): Observable<Content[]> {
-        return this._http.get<Content[]>(`${this.apiUrl}medias.json?access_token=${this.key}&project_id=${project}`);
+        return this._http.get<Content[]>(`${this.apiUrl}medias.json?access_token=${this.key}&project_id=${project}&sort_by=name`);
     }
 
     getVideoDetails(id: string): Observable<MediaDetails> {

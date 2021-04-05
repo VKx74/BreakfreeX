@@ -11,6 +11,7 @@ import { WistiaService } from "./services/wistia.service";
 import { LoaderModule } from "modules/loader/loader.module";
 import { AcademyMenuComponent } from "./components/academy-menu/academy-menu.component";
 import { MatSidenavModule } from "@angular/material/sidenav";
+import { IntercomModule } from 'ng-intercom';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,11 @@ import { MatSidenavModule } from "@angular/material/sidenav";
         MatMenuModule,
         AcademyRoutingModule,
         LoaderModule,
-        MatSidenavModule
+        MatSidenavModule,
+        IntercomModule.forRoot({
+            appId: 'sv09ttz9', // from your Intercom config
+            updateOnRouterChange: true // will automatically run `update` on router event changes. Default: `false`
+        }),
     ],
     providers: [
         WistiaService

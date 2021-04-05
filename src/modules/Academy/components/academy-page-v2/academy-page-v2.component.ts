@@ -1,5 +1,8 @@
 import { Component, ElementRef } from "@angular/core";
+import { ChatbroService } from "@app/services/traking/ChatbroService";
+import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { Content } from "modules/Academy/models/dto";
+import { Intercom } from "ng-intercom";
 @Component({
     selector: 'academy-page-v2',
     templateUrl: 'academy-page-v2.component.html',
@@ -34,10 +37,25 @@ export class AcademyPageV2Component {
         this.selectMedia(value);
     }
 
-    constructor(private _hostElement: ElementRef) {
+    constructor(private _hostElement: ElementRef, private _intercom: Intercom, 
+        private _gtmService: GTMTrackingService, private _chatbroService: ChatbroService) {
     }
 
     ngOnInit() {
+    }
+
+    ngAfterViewInit() {
+        try {
+            if ((window as any).Intercom) {
+                (window as any).Intercom('update', {"hide_default_launcher": false});
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        
+
+        this._gtmService.load();
+        this._chatbroService.load();
     }
 
     ngOnDestroy() {

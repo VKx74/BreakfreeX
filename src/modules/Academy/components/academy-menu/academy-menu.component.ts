@@ -1,3 +1,4 @@
+import { stringify } from "@angular/compiler/src/util";
 import { Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { UsersProfileService } from "@app/services/users-profile.service";
@@ -100,7 +101,7 @@ export class AcademyMenuComponent {
         Title: "BFT Academy - Week 1 [2021]"
     },
     {
-        Id: "zctobnmsk9",
+        Id: "sj7ygoyhmy",
         Name: "BFT Academy - Week 2 [2021]",
         Title: "BFT Academy - Week 2 [2021]"
     }];
@@ -158,7 +159,31 @@ export class AcademyMenuComponent {
 
         this._loading = true;
         this._wistiaService.getContentByProject(this._selectedContentSector.Id).subscribe((data: Content[]) => {
-            this._content = data;
+            this._content = data.sort((item1, item2) => {
+                let i1 = item1.name.indexOf(" ");
+                let i2 = item2.name.indexOf(" ");
+                let name1 = item1.name;
+                let name2 = item2.name;
+                let numericalName1 = 0;
+                let numericalName2 = 0;
+
+                if (i1 !== -1) {
+                    name1 = name1.substr(0, i1);
+                    numericalName1 = Number(name1);
+                }
+                if (i2 !== -1) {
+                    name2 = name2.substr(0, i2);
+                    numericalName2 = Number(name2);
+                }
+
+                if (numericalName1 && numericalName2 && !Number.isNaN(numericalName1) && !Number.isNaN(numericalName2)) {
+                    return numericalName1 - numericalName2;
+                }
+
+                return name1.localeCompare(name2);
+
+            });
+            
             this.updateMediaDetails();
         }, (error) => {
             console.error(error);
