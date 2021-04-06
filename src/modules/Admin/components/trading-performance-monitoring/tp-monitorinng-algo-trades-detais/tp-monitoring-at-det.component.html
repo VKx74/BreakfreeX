@@ -34,6 +34,32 @@
                 </mat-form-field>
             </div>
         </div>
+        <div class="date-container">
+            <!--<form [formGroup]="formGroup">-->
+            <mat-slide-toggle class="v-align-middle option-name" [checked]="useDateRangeFilter"
+                (change)="handleUseDateRangeCheckedChanged($event)">Date Range</mat-slide-toggle>
+            <div class="filters-wrapper" *ngIf="useDateRangeFilter">
+                <div class="crypto-form-unit control-date">
+                    <span class="form-unit__label">From:</span>
+                    <mat-form-field class="crypto-date-input m-right-10">
+                        <input matInput readonly [matDatepicker]="dateFrom" [(ngModel)]="dtFrom" class="cursor-default"
+                            placeholder="From">
+                        <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #dateFrom></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="crypto-form-unit control-date">
+                    <span class="form-unit__label">To:</span>
+                    <mat-form-field class="crypto-date-input m-right-10">
+                        <input matInput readonly [matDatepicker]="dateTo" [(ngModel)]="dtTo" class="cursor-default"
+                            placeholder="To">
+                        <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
+                        <mat-datepicker #dateTo></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!--</form>-->
+        </div>
 
         <mat-accordion>
             <mat-expansion-panel hideToggle>
@@ -91,8 +117,8 @@
                         (click)='loadOrdersBtnClick()'>Update</button>
                     <mat-form-field class="crypto-input bft-form-input nborder">
                         <span class="orderpanelprefix" matPrefix>Thousand #</span>
-                        <input matInput class="bftinput" type="number" numericInput
-                            [step]="1" [(ngModel)]="thousandNumber">
+                        <input matInput class="bftinput" type="number" numericInput [step]="1"
+                            [(ngModel)]="thousandNumber">
                     </mat-form-field>
                     <button class="buttn crypto-button crypto-button_primary"
                         (click)='loadOrdersCSVBtnClick()'>Download</button>
