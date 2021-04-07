@@ -6,7 +6,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { AlertBase } from 'modules/AutoTradingAlerts/models/AlertBase';
 import { ConfirmModalComponent } from "UI";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
-import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
+import { PriceAlertDialogComponent } from '../price-alert-dialog/price-alert-dialog.component';
+import { SonarAlertDialogComponent } from '../sonar-alert-dialog/sonar-alert-dialog.component';
 
 export enum AlertTabs {
   Alerts = 1,
@@ -40,7 +41,7 @@ export class AlertWidgetComponent extends BaseLayoutItemComponent {
   }
 
   showAlertDialog() {
-    this._dialog.open(AlertDialogComponent, {});
+    this._dialog.open(SonarAlertDialogComponent, {});
   }
 
   restartAllInactive() {

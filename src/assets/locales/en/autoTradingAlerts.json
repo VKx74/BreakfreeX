@@ -48,7 +48,12 @@
     "startAlert": "Start alert",
     "whereStartAlert": "Where do you want to start alert?",
     "local": "Local",
-    "onCloud": "On cloud"
+    "onCloud": "On cloud",
+    "timeframe": "Time Frame",
+    "setup": "Setup",
+    "newSetup": "New Setup",
+    "setupDisappeared": "Setup Disappeared",
+    "triggerType": "Trigger Type"
   },
   "tradingOrderStatus": {
     "PlaceOrder": "Place Order",

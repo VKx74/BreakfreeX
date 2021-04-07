@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {UIModule} from "UI";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LocalizationModule, TranslateServiceFactory} from "Localization";
-import {AlertDialogComponent} from './components/alert-dialog/alert-dialog.component';
+import {PriceAlertDialogComponent} from './components/price-alert-dialog/price-alert-dialog.component';
 import {AutoTradingAlertsTranslateService} from "./localization/token";
 import {SharedModule} from "Shared";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
@@ -22,25 +22,31 @@ import { AlertLogComponent } from './components/alert-log/alert-log.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import {LoaderModule} from "../loader/loader.module";
 import {DatatableModule} from "../datatable/datatable.module";
-import { AlertWidgetComponent } from './components/alert-widget/alert-widget.component';
-import { AppAlertComponent } from './components/app-alert/app-alert.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NumericInputModule } from '@numeric-input/numeric-input.module';
 import { AlertsService } from './services/alerts.service';
+import { AppAlertComponent } from './components/app-alert/app-alert.component';
+import { AlertWidgetComponent } from './components/alert-widget/alert-widget.component';
+import { AlertSetupBaseComponent } from './components/alert-setup-base/alert-setup-base.component';
+import { SonarAlertDialogComponent } from './components/sonar-alert-dialog/sonar-alert-dialog.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     declarations: [
-        AlertDialogComponent,
+        PriceAlertDialogComponent,
+        SonarAlertDialogComponent,
         AppAlertComponent,
         AlertLogComponent,
-        AlertWidgetComponent
+        AlertWidgetComponent,
+        AlertSetupBaseComponent
     ],
     imports: [
         CommonModule,
         UIModule,
         ReactiveFormsModule,
         FormsModule,
+        MatRadioModule,
         LocalizationModule,
         InstrumentSearchModule,
         SharedModule,
@@ -63,7 +69,8 @@ import { AlertsService } from './services/alerts.service';
         NumericInputModule
     ],
     entryComponents: [
-        AlertDialogComponent,
+        PriceAlertDialogComponent,
+        SonarAlertDialogComponent,
         AlertWidgetComponent,
         AppAlertComponent
     ],

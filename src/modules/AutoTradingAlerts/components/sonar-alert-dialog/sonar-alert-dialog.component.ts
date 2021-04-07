@@ -15,10 +15,30 @@ export interface IAlertDialogConfig {
     alert?: AlertBase;
 }
 
+export enum TriggerType {
+    NewSetup = "NewSetup",
+    SetupDisappeared = "SetupDisappeared"
+}
+
+export enum TriggerTimeframe {
+    AllTimeframes = "allTimeframes",
+    Min15 = "15m",
+    Hour1 = "1h",
+    Hour4 = "4h",
+    Day1 = "1d"
+}
+
+export enum TriggerSetup {
+    AllSetups = "allSetups",
+    Swing = "swing",
+    BRC = "brc",
+    EXT = "ext"
+}
+
 @Component({
-    selector: 'app-alert-dialog',
-    templateUrl: './alert-dialog.component.html',
-    styleUrls: ['./alert-dialog.component.scss'],
+    selector: 'sonar-alert-dialog',
+    templateUrl: './sonar-alert-dialog.component.html',
+    styleUrls: ['./sonar-alert-dialog.component.scss'],
     providers: [
         {
             provide: TranslateService,
@@ -26,10 +46,40 @@ export interface IAlertDialogConfig {
         }
     ]
 })
-export class AlertDialogComponent extends Modal<IAlertDialogConfig> implements OnInit {
+export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> implements OnInit {
     private _instrument: IInstrument;
-    private _selectedCondition: EPriceAlertCondition = EPriceAlertCondition.GreaterThan;
-    private _alertPrice: number = 1;
+    private _selectedTriggerType: TriggerType = TriggerType.NewSetup;
+    private _selectedTriggerTimeframe: TriggerTimeframe = TriggerTimeframe.AllTimeframes;
+    private _selectedTriggerSetup: TriggerSetup = TriggerSetup.AllSetups;
+    TriggerType = TriggerType;
+    TriggerTimeframe = TriggerTimeframe;
+
+    public get allowedTriggerTimeframe(): TriggerTimeframe[] {
+        return [
+            TriggerTimeframe.AllTimeframes,
+            TriggerTimeframe.Min15, 
+            TriggerTimeframe.Hour1, 
+            TriggerTimeframe.Hour4, 
+            TriggerTimeframe.Day1
+        ];
+    } 
+
+    public get allowedTriggerSetup(): TriggerSetup[] {
+        return [
+            TriggerSetup.AllSetups,
+            TriggerSetup.Swing, 
+            TriggerSetup.BRC, 
+            TriggerSetup.EXT
+        ];
+    } 
+    
+    public get selectedTriggerType(): TriggerType {
+        return this._selectedTriggerType;
+    }
+    public set selectedTriggerType(value: TriggerType) {
+        this._selectedTriggerType = value;
+        this._setNotificationText();
+    }
 
     public get instrument(): IInstrument {
         return this._instrument;
@@ -39,23 +89,22 @@ export class AlertDialogComponent extends Modal<IAlertDialogConfig> implements O
         this._setNotificationText();
     }
 
-    public get selectedCondition(): EPriceAlertCondition {
-        return this._selectedCondition;
+    public get selectedTriggerTimeframe(): TriggerTimeframe {
+        return this._selectedTriggerTimeframe;
     }
-    public set selectedCondition(value: EPriceAlertCondition) {
-        this._selectedCondition = value;
+    public set selectedTriggerTimeframe(value: TriggerTimeframe) {
+        this._selectedTriggerTimeframe = value;
         this._setNotificationText();
     }
 
-    public get alertPrice(): number {
-        return this._alertPrice;
+    public get selectedTriggerSetup(): TriggerSetup {
+        return this._selectedTriggerSetup;
     }
-    public set alertPrice(value: number) {
-        this._alertPrice = value;
+    public set selectedTriggerSetup(value: TriggerSetup) {
+        this._selectedTriggerSetup = value;
         this._setNotificationText();
     }
 
-    minDate = new Date;
     processingSubmit: boolean = false;
     useExpiration: boolean = false;
     showPopup: boolean = true;
@@ -63,11 +112,8 @@ export class AlertDialogComponent extends Modal<IAlertDialogConfig> implements O
     sendEmail: boolean = false;
     message: string = "";
 
-    get conditions(): EPriceAlertCondition[] {
-        return [EPriceAlertCondition.GreaterThan, EPriceAlertCondition.LessThan];
-    }
-
-    conditionTitlesTranslate = (conditions: any) => this._translateService.get(`conditionTitles.${conditions}`);
+    timeframeTitlesTranslate = (tf: any) => this._translateService.get(`timeFrameToStr.${tf}`);
+    triggerSetupTranslate = (tf: any) => this._translateService.get(`triggerSetupStr.${tf}`);
 
     constructor(
         _injector: Injector,
@@ -153,16 +199,16 @@ export class AlertDialogComponent extends Modal<IAlertDialogConfig> implements O
             return;
         }
 
-        if (!this.selectedCondition) {
+        if (!this.selectedTriggerSetup) {
             return;
         }
 
-        if (!this.alertPrice) {
+        if (!this._selectedTriggerTimeframe) {
             return;
         }
 
-        this.conditionTitlesTranslate(this.selectedCondition).subscribe((conditionTitle) => {
-            this.message = `${this.instrument.symbol} ${conditionTitle} ${this.alertPrice}`;
-        });
+        // this.conditionTitlesTranslate(this.selectedCondition).subscribe((conditionTitle) => {
+        //     this.message = `${this.instrument.symbol} ${conditionTitle} ${this.alertPrice}`;
+        // });
     }
 }

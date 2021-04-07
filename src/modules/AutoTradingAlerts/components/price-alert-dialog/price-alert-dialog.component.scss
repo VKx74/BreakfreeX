@@ -1,0 +1,57 @@
+@import "mixins/themify";
+@import "global-styles/themes/themes";
+@import "global-styles/_variables";
+@import "global-styles/mixins/columns";
+@import "global-styles/controls/textarea-variables";
+
+
+:host {
+  /deep/ {
+    .instrument-search
+    {
+      padding: 0px !important;
+    }
+  }
+
+  .crypto-modal {
+    min-width: auto;
+    max-width: 400px;
+  }
+
+  .delimiter {
+    margin: 10px 0;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    width: 120px;
+    padding: 0px 5px;
+  }
+    
+  .disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .submit-btn {
+    padding: 0;
+    height: 32px;
+    border-radius: 3px;
+  }
+}
+
+@include themify($themes, true) {
+  .delimiter {
+    border-color: themed('appBackgroundColor');
+  }
+}

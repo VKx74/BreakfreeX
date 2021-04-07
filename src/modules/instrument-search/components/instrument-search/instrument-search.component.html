@@ -4,7 +4,7 @@
             <input class="watchlistinput"
                    matInput
                    #instrument_input
-                   [placeholder]="'Add market' | translate"
+                   [placeholder]="getPlaceholderText() || ('Add market' | translate)"
                    [matAutocomplete]="auto"
                    [formControl]="inputControl"
                    (blur)="handleBlur()"

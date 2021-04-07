@@ -31,7 +31,7 @@ import {
 } from "../../../Trading/components/crypto.components/crypto-order-configurator-modal/crypto-order-configurator-modal.component";
 import {OrderConfig} from "../../../Trading/components/crypto.components/crypto-order-configurator/crypto-order-configurator.component";
 import {ITcdComponentState} from "Chart";
-import {AlertDialogComponent} from "../../../AutoTradingAlerts/components/alert-dialog/alert-dialog.component";
+import {PriceAlertDialogComponent} from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
 import {HistoryService} from "@app/services/history.service";
 import {IBarData} from "@app/models/common/barData";
 import { WatchlistService, IWatchlistItem } from 'modules/Watchlist/services/watchlist.service';
@@ -719,7 +719,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     setAlert(watchlistInstrument: WatchlistInstrumentVM) {
-        this._dialog.open(AlertDialogComponent, {
+        this._dialog.open(PriceAlertDialogComponent, {
             data: {
                 instrument: watchlistInstrument.instrument
             }

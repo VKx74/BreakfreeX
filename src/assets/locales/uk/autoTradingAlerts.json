@@ -48,7 +48,12 @@
     "startAlert": "Запустити сповіщення",
     "whereStartAlert": "Де ви бажаєте запустити сповіщення?",
     "local": "Локально",
-    "onCloud": "На хмарі"
+    "onCloud": "На хмарі",
+    "timeframe": "Таймфрейм",
+    "setup": "Збірка",
+    "newSetup": "Нова Збірка",
+    "setupDisappeared": "Збірка Зникла",
+    "triggerType": "Тип спрацювання"
   },
   "tradingOrderStatus": {
     "PlaceOrder": "Зробити замовлення",

@@ -1,0 +1,69 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="modal-content">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{data?.alert ? ('tradingAlert.editAlert' | translate) : ('tradingAlert.createAlert'
+                | translate)}}</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="flex-row form-wrapper">
+                <div class="flex-column padding-right">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span>{{'tradingAlert.instrument' | translate}}</span></p>
+                        <instrument-search [instrument]="instrument" (onSelect)="handleInstrumentChange($event)"
+                            placeholder="All Instruments">
+                        </instrument-search>
+                    </div>
+                </div>
+                <div class="flex-column padding-right">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span>{{'tradingAlert.timeframe' | translate}}</span></p>
+                        <selector class="condition-selector bft-form-select" [options]="allowedTriggerTimeframe"
+                            [optionCaption]="timeframeTitlesTranslate" [(ngModel)]="selectedTriggerTimeframe">
+                        </selector>
+                    </div>
+                </div>
+                <div class="flex-column padding-right">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span> {{'tradingAlert.setup' | translate}}</span></p>
+                        <selector class="condition-selector bft-form-select" [options]="allowedTriggerSetup"
+                            [optionCaption]="triggerSetupTranslate" [(ngModel)]="selectedTriggerSetup">
+                        </selector>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-row form-wrapper">
+                <div class="flex-column padding-right">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span> {{'tradingAlert.triggerType' | translate}}</span></p>
+                        <div class="radio-group">
+                            <mat-radio-group [(ngModel)]="selectedTriggerType">
+                                <mat-radio-button value="{{TriggerType.NewSetup}}">{{'tradingAlert.newSetup' |
+                                    translate}}
+                                </mat-radio-button>
+                                <mat-radio-button value="{{TriggerType.SetupDisappeared}}">
+                                    {{'tradingAlert.setupDisappeared'
+                                    | translate}}</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="delimiter" />
+
+            <alert-setup-base [(useExpiration)]="useExpiration" [(showPopup)]="showPopup" [(sendSMS)]="sendSMS"
+                [(sendEmail)]="sendEmail" [(message)]="message"></alert-setup-base>
+
+        </div>
+        <div class="modal-footer">
+            <div class="buttons-wrap flex justify-flex-end">
+                <button class="crypto-button crypto-button_primary submit-btn crypto-button-w-100"
+                    [class.is-loading]="processingSubmit" (click)="onSubmitDialog()">
+                    {{ data?.alert ? ('edit' | translate) : ('create' | translate) }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,6 +13,18 @@
     }
   }
 
+  .radio-group {
+    margin-top: 10px;
+    font-weight: 700 !important;
+    font-size: 12px;
+
+    /deep/ {
+      .mat-radio-label-content {
+        margin-right: 20px;
+      }
+    }
+  }
+
   .crypto-modal {
     min-width: auto;
     max-width: 400px;
@@ -71,5 +83,8 @@
 @include themify($themes, true) {
   .delimiter {
     border-color: themed('appBackgroundColor');
+  } 
+  .radio-group {
+    color: themed('valueTextColor');
   }
 }

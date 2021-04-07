@@ -31,6 +31,7 @@ export const INPUT_DEBOUNCE_TIME = 500;
 })
 export class InstrumentSearchComponent {
     @Input() instrumentSearchCallback?: (e?: EExchangeInstance, s?: string) => Observable<IInstrument[]>;
+    @Input() placeholder: string;
     @Input() formControlName: string;
     @Input() resetAfterSelection: boolean = false;
     @Input() openPanelOnClick = false;
@@ -153,6 +154,12 @@ export class InstrumentSearchComponent {
             this.inputControl.disable();
         } else {
             this.inputControl.enable();
+        }
+    }
+
+    getPlaceholderText() {
+        if (this.placeholder) {
+            return this.placeholder;
         }
     }
 
