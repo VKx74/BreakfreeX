@@ -4,5 +4,6 @@ export const AppRoutes = {
     ClearSession: 'platform/clear-session',
     Admin: 'admin',
     Pages: 'pages',
-    Landing: 'landing'
+    Landing: 'landing',
+    Academy: 'academy'
 };
