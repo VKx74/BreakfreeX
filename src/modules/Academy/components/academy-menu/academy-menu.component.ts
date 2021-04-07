@@ -86,16 +86,6 @@ export class AcademyMenuComponent {
 
 
     contentSectors: ContentSectors[] = [{
-        Id: "nrdbxd633l",
-        Name: "BFT Academy - Week 1 [2020]",
-        Title: "BFT Academy - Week 1 [2020]"
-    },
-    {
-        Id: "zctobnmsk9",
-        Name: "BFT Academy - Week 2 [2020]",
-        Title: "BFT Academy - Week 2 [2020]"
-    },
-    {
         Id: "ufonh214hz",
         Name: "BFT Academy - Week 1 [2021]",
         Title: "BFT Academy - Week 1 [2021]"
@@ -104,6 +94,11 @@ export class AcademyMenuComponent {
         Id: "sj7ygoyhmy",
         Name: "BFT Academy - Week 2 [2021]",
         Title: "BFT Academy - Week 2 [2021]"
+    },
+    {
+        Id: "zctobnmsk9",
+        Name: "BFT Academy - Extended content",
+        Title: "BFT Academy - Extended content"
     }];
 
     constructor(private _identityService: IdentityService, private _profileService: UsersProfileService, 

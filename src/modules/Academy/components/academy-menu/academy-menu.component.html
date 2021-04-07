@@ -29,7 +29,7 @@
         <!-- <div class="title-1">{{selectedContentSector.Name}}</div> -->
         <ng-container *ngFor="let group of groupedMedia">
             <div class="title-2">{{group.GroupName}}</div>
-            <div class="title-3 groped" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of group.MediaData">{{media.name}}</div>
+            <div class="title-3 groped" [ngClass]="{'is-active': selectedMedia?.hashed_id == media.hashed_id}" (click)="selectMedia(media)" *ngFor="let media of group.MediaData"> <svg class="iconformedia"> </svg> {{media.name}}</div>
         </ng-container>
 
         <div class="separator" *ngIf="groupedMedia && groupedMedia.length > 0 && mediaDetails && mediaDetails.length > 0"></div>

@@ -38,8 +38,8 @@
 
   .menuheader {
     .menuheader-text {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 700;
     }
     .dropdown-toggle {
       margin-left: 10px;
@@ -72,6 +72,18 @@
     }
   }
 
+    .iconformedia {
+      background-image: url(/assets/img/academy/circle_half.svg);
+      background-repeat: no-repeat;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      padding-left:30px;
+      transition: all 0.22s;
+      margin-top: 4px;
+    }
+
+
   .video-content {
     display: flex;
     flex-direction: column;
@@ -89,15 +101,29 @@
       color: hsla(0, 0%, 100%, 0.7);
       font-size: 13px;
       margin-top: 10px;
-      background-image: url(/assets/img/academy/academy-item.png);
+     // background-image: url(/assets/img/academy/circle_half.svg);
       background-repeat: no-repeat;
       line-height: 24px;
-      padding-left: 30px;
+     // padding-left: 30px;
       cursor: pointer;
       transition: all 0.22s;
+      max-width:220px;
+      display:flex;
+      align-items: initial;
+    justify-content: left;
       &:hover {
         font-weight:bold;
         color: rgba(255, 255, 255, 0.95)
+      }
+      &:hover > .iconformedia {
+        background-image: url(/assets/img/academy/circle.svg) !important;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        padding-left:30px;
+        transition: all 0.22s;
+        margin-top: 4px;
       }
 
       &.groped {
