@@ -31,6 +31,7 @@ import { AlertWidgetComponent } from './components/alert-widget/alert-widget.com
 import { AlertSetupBaseComponent } from './components/alert-setup-base/alert-setup-base.component';
 import { SonarAlertDialogComponent } from './components/sonar-alert-dialog/sonar-alert-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { AlertRestClient } from './services/alert.rest.client';
 
 @NgModule({
     declarations: [
@@ -84,7 +85,8 @@ import { MatRadioModule } from '@angular/material/radio';
             useFactory: TranslateServiceFactory('autoTradingAlerts'),
             deps: [Injector, SharedTranslateService]
         },
-        AlertsService
+        AlertsService,
+        AlertRestClient
     ]
 })
 export class AutoTradingAlertsModule {

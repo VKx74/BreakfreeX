@@ -4,35 +4,15 @@ import {TranslateService} from "@ngx-translate/core";
 import {AutoTradingAlertsTranslateService} from "../../localization/token";
 import {IInstrument} from "@app/models/common/instrument";
 import {
-    EPriceAlertCondition
+    AlertCondition, TriggerSetup, TriggerTimeframe, TriggerType
 } from "../../models/Enums";
-import {Observable} from 'rxjs';
+import {forkJoin, Observable} from 'rxjs';
 import {Modal} from "Shared";
 import {AlertBase} from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 
 export interface IAlertDialogConfig {
     alert?: AlertBase;
-}
-
-export enum TriggerType {
-    NewSetup = "NewSetup",
-    SetupDisappeared = "SetupDisappeared"
-}
-
-export enum TriggerTimeframe {
-    AllTimeframes = "allTimeframes",
-    Min15 = "15m",
-    Hour1 = "1h",
-    Hour4 = "4h",
-    Day1 = "1d"
-}
-
-export enum TriggerSetup {
-    AllSetups = "allSetups",
-    Swing = "swing",
-    BRC = "brc",
-    EXT = "ext"
 }
 
 @Component({
@@ -113,7 +93,7 @@ export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
     message: string = "";
 
     timeframeTitlesTranslate = (tf: any) => this._translateService.get(`timeFrameToStr.${tf}`);
-    triggerSetupTranslate = (tf: any) => this._translateService.get(`triggerSetupStr.${tf}`);
+    triggerSetupTranslate = (setup: any) => this._translateService.get(`triggerSetupStr.${setup}`);
 
     constructor(
         _injector: Injector,
@@ -143,8 +123,8 @@ export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         this.instrument = instrument;
     }
 
-    onSubmitDialog() {
-        // const isEditMode = this.data.alert;
+    public submit() {
+       // const isEditMode = this.data.alert;
         // const obs = isEditMode ? this.editAlert(this.data.alert.externalId) : this.createAlert();
 
         // this.processingSubmit = true;
@@ -160,55 +140,24 @@ export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         return null;
     }
 
-    public editAlert(id: string): Observable<any> {
-        // return this._autoTradingAlertService.updateAlert(id, this._getAlertSettingsNew(), this._getSourceSettingsNew())
-        //     .pipe(
-        //         tap({
-        //             next: () => {
-        //                 this._alertService.success(this._translateService.get('alertUpdated'));
-        //             },
-        //             error: (error) => {
-        //                 this._alertService.error(this._translateService.get('failedToEditAlert'));
-        //                 console.error(error);
-        //             }
-        //         })
-        //     );
-        return null;
-    }
-
-    public createAlert(): Observable<any> {
-        // return this._autoTradingAlertService.createAlert(this._getAlertSettingsNew(), this._getSourceSettingsNew())
-        //     .pipe(
-        //         tap({
-        //             next: () => {
-        //                 this._alertService.success(this._translateService.get('alertCreated'));
-        //             },
-        //             error: (error) => {
-        //                 this._alertService.error(this._translateService.get('failedToCreateAlert'));
-        //                 console.error(error);
-        //             }
-        //         })
-        //     );
-        return null;
-    }
-
     private _setNotificationText() {
         this.message = "";
-
-        if (!this.instrument) {
-            return;
-        }
 
         if (!this.selectedTriggerSetup) {
             return;
         }
 
-        if (!this._selectedTriggerTimeframe) {
+        if (!this.selectedTriggerTimeframe) {
             return;
         }
 
-        // this.conditionTitlesTranslate(this.selectedCondition).subscribe((conditionTitle) => {
-        //     this.message = `${this.instrument.symbol} ${conditionTitle} ${this.alertPrice}`;
-        // });
+        let task1 = this.timeframeTitlesTranslate(this.selectedTriggerTimeframe);
+        let task2 = this.triggerSetupTranslate(this.selectedTriggerSetup);
+
+        forkJoin([task1, task2]).subscribe((data) => {
+            let symbol = this.instrument ? this.instrument.symbol : "All instruments";
+            let triggerType = this.selectedTriggerType === TriggerType.NewSetup ? "New Sonar trade(s)" : "Sonar trade(s) Disappeared";
+            this.message = `${triggerType} for ${symbol} ${data[0]} ${data[1]}`;
+        });
     }
 }

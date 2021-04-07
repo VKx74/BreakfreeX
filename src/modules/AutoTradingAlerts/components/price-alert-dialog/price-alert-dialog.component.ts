@@ -4,7 +4,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {AutoTradingAlertsTranslateService} from "../../localization/token";
 import {IInstrument} from "@app/models/common/instrument";
 import {
-    EPriceAlertCondition
+    AlertCondition
 } from "../../models/Enums";
 import {Observable} from 'rxjs';
 import {Modal} from "Shared";
@@ -28,7 +28,7 @@ export interface IAlertDialogConfig {
 })
 export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> implements OnInit {
     private _instrument: IInstrument;
-    private _selectedCondition: EPriceAlertCondition = EPriceAlertCondition.GreaterThan;
+    private _selectedCondition: AlertCondition = AlertCondition.GreaterThan;
     private _alertPrice: number = 1;
 
     public get instrument(): IInstrument {
@@ -39,10 +39,10 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         this._setNotificationText();
     }
 
-    public get selectedCondition(): EPriceAlertCondition {
+    public get selectedCondition(): AlertCondition {
         return this._selectedCondition;
     }
-    public set selectedCondition(value: EPriceAlertCondition) {
+    public set selectedCondition(value: AlertCondition) {
         this._selectedCondition = value;
         this._setNotificationText();
     }
@@ -62,8 +62,8 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
     sendEmail: boolean = false;
     message: string = "";
 
-    get conditions(): EPriceAlertCondition[] {
-        return [EPriceAlertCondition.GreaterThan, EPriceAlertCondition.LessThan];
+    get conditions(): AlertCondition[] {
+        return [AlertCondition.GreaterThan, AlertCondition.LessThan];
     }
 
     conditionTitlesTranslate = (conditions: any) => this._translateService.get(`conditionTitles.${conditions}`);
@@ -96,7 +96,7 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         this.instrument = instrument;
     }
 
-    onSubmitDialog() {
+    submit() {
         // const isEditMode = this.data.alert;
         // const obs = isEditMode ? this.editAlert(this.data.alert.externalId) : this.createAlert();
 
@@ -110,38 +110,6 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         //         this.processingSubmit = false;
         //     }
         // });
-        return null;
-    }
-
-    public editAlert(id: string): Observable<any> {
-        // return this._autoTradingAlertService.updateAlert(id, this._getAlertSettingsNew(), this._getSourceSettingsNew())
-        //     .pipe(
-        //         tap({
-        //             next: () => {
-        //                 this._alertService.success(this._translateService.get('alertUpdated'));
-        //             },
-        //             error: (error) => {
-        //                 this._alertService.error(this._translateService.get('failedToEditAlert'));
-        //                 console.error(error);
-        //             }
-        //         })
-        //     );
-        return null;
-    }
-
-    public createAlert(): Observable<any> {
-        // return this._autoTradingAlertService.createAlert(this._getAlertSettingsNew(), this._getSourceSettingsNew())
-        //     .pipe(
-        //         tap({
-        //             next: () => {
-        //                 this._alertService.success(this._translateService.get('alertCreated'));
-        //             },
-        //             error: (error) => {
-        //                 this._alertService.error(this._translateService.get('failedToCreateAlert'));
-        //                 console.error(error);
-        //             }
-        //         })
-        //     );
         return null;
     }
 
