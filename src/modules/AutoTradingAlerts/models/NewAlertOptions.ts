@@ -21,3 +21,4 @@ export interface NewSonarAlertOptions extends NewAlertOptions {
     Setup: TriggerSetup;
     TriggerType: TriggerType;
 }
+
