@@ -7,11 +7,11 @@
   margin-top: 20px;
   padding-bottom: 10px;
 
-  .nborder{
+  .nborder {
     margin-left: 100px;
   }
-  
-  .mat-expansion-panel{
+
+  .mat-expansion-panel {
     margin-top: 8px;
   }
 
@@ -132,7 +132,7 @@
     .selected {
       border: 1px solid themed("accentColor") !important;
     }
-  }  
+  }
 
   .watchlist-tile-wrapper {
     border: 2px solid transparent;
@@ -163,7 +163,23 @@
       padding-right: 0px;
     }
   }
-  mat-form-field{
-    vertical-align: middle;
+
+  .date-container{
+    margin-bottom: 10px;
+    .filters-wrapper{
+      overflow: auto;
+      .control-date {
+        max-width: 250px;
+        padding-left: 10px;
+        float: left;
+        mat-form-field {
+          ::ng-deep .mat-form-field-wrapper {
+            ::ng-deep .mat-form-field-flex {
+              height: 32px !important;
+            }
+          }
+        }
+      }      
+    }
   }
 }
