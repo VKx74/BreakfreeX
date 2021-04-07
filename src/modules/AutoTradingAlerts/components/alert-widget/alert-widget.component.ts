@@ -6,6 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AlertBase } from 'modules/AutoTradingAlerts/models/AlertBase';
 import { ConfirmModalComponent } from "UI";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 export enum AlertTabs {
   Alerts = 1,
@@ -18,7 +19,7 @@ export enum AlertTabs {
   styleUrls: ['alert-widget.component.scss']
 })
 export class AlertWidgetComponent extends BaseLayoutItemComponent {
-  static componentName = 'BreakfreeTradingScanner';
+  static componentName = 'BreakfreeAlerts';
   AlertTabs = AlertTabs;
   selectedTabIndex: number = AlertTabs.Alerts;
 
@@ -38,12 +39,8 @@ export class AlertWidgetComponent extends BaseLayoutItemComponent {
     this.selectedTabIndex = data;
   }
 
-  showAlertDialog(alert?: AlertBase) {
-    // if (alert) {
-    //   this._autoTradingAlertConfigurationService.editAlert(alert);
-    // } else {
-    //   this._autoTradingAlertConfigurationService.createDefaultPriceAlert();
-    // }
+  showAlertDialog() {
+    this._dialog.open(AlertDialogComponent, {});
   }
 
   restartAllInactive() {

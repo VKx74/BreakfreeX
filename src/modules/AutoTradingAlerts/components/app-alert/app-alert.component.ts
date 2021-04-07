@@ -26,7 +26,7 @@ export class AppAlertComponent implements OnInit {
     alertsLaunchProcessing: string[] = [];
     $initObs: Observable<any>;
     alerts$: BehaviorSubject<AlertBase[]> = new BehaviorSubject(null);
-    filteredAlerts$: BehaviorSubject<AlertBase[]> = new BehaviorSubject(null);
+    filteredAlerts$: BehaviorSubject<AlertBase[]> = new BehaviorSubject([]);
     alertsHistory$: Observable<AlertHistory[]>;
     isInactiveAlertsHidden$ = new BehaviorSubject(false);
 

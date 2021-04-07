@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header" cdkDragHandle>
             <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
-            <h4 class="modal-title">{{data.alert ? ('tradingAlert.editAlert' | translate) : ('tradingAlert.createAlert' | translate)}}</h4>
+            <h4 class="modal-title">{{data?.alert ? ('tradingAlert.editAlert' | translate) : ('tradingAlert.createAlert' | translate)}}</h4>
         </div>
 
         <div class="modal-body">
@@ -115,7 +115,7 @@
                 <button class="crypto-button crypto-button_primary submit-btn crypto-button-w-100"
                         [class.is-loading]="processingSubmit"
                         (click)="onSubmitDialog()">
-                    {{ data.alert ? ('edit' | translate) : ('create' | translate) }}
+                    {{ data?.alert ? ('edit' | translate) : ('create' | translate) }}
                 </button>
             </div>
         </div>
