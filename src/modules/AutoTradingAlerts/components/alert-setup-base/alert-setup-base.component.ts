@@ -17,11 +17,11 @@ export class AlertSetupBaseComponent {
   @Input() sendEmail: boolean = false;
   @Input() message: string = "";
 
-  @Output() useExpirationChanged = new EventEmitter<boolean>();
-  @Output() showPopupChanged = new EventEmitter<boolean>();
-  @Output() sendSMSChanged = new EventEmitter<boolean>();
-  @Output() sendEmailChanged = new EventEmitter<boolean>();
-  @Output() messageChanged = new EventEmitter<string>();
+  @Output() useExpirationChange = new EventEmitter<boolean>();
+  @Output() showPopupChange = new EventEmitter<boolean>();
+  @Output() sendSMSChange = new EventEmitter<boolean>();
+  @Output() sendEmailChange = new EventEmitter<boolean>();
+  @Output() messageChange = new EventEmitter<string>();
 
   public get useExpirationProp(): boolean {
     return this.useExpiration;
@@ -45,27 +45,27 @@ export class AlertSetupBaseComponent {
 
   public set useExpirationProp(value: boolean) {
     this.useExpiration = value;
-    this.useExpirationChanged.next(this.useExpiration);
+    this.useExpirationChange.next(this.useExpiration);
   }
   
   public set showPopupProp(value: boolean) {
     this.showPopup = value;
-    this.showPopupChanged.next(this.showPopup);
+    this.showPopupChange.next(this.showPopup);
   }
   
   public set sendSMSProp(value: boolean) {
     this.sendSMS = value;
-    this.sendSMSChanged.next(this.sendSMS);
+    this.sendSMSChange.next(this.sendSMS);
   }
 
   public set sendEmailProp(value: boolean) {
     this.sendEmail = value;
-    this.sendEmailChanged.next(this.sendEmail);
+    this.sendEmailChange.next(this.sendEmail);
   }
 
   public set messageProp(value: string ) {
     this.message = value;
-    this.messageChanged.next(this.message);
+    this.messageChange.next(this.message);
   }
 
   constructor(@Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService) {

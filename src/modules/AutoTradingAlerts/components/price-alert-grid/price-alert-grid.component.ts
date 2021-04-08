@@ -9,6 +9,7 @@ import { AutoTradingAlertsTranslateService } from "../../localization/token";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
+import { PriceAlertDialogComponent } from '../price-alert-dialog/price-alert-dialog.component';
 
 @Component({
     selector: 'price-alert-grid',
@@ -48,7 +49,9 @@ export class PriceAlertGridComponent implements OnInit {
     }
 
     handleEdit(alert: AlertBase) {
-
+        this._dialog.open(PriceAlertDialogComponent, {
+            data: { alert: alert }
+        });
     }
 
     handleLaunch(alert: AlertBase) {

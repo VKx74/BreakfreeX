@@ -5,7 +5,7 @@
             <h4 class="modal-title">{{data?.alert ? ('tradingAlert.editAlert' | translate) : ('tradingAlert.createAlert' | translate)}}</h4>
         </div>
 
-        <div class="modal-body">
+        <div class="modal-body" [class.disabled]="processingSubmit">
             <div class="flex-row form-wrapper">
                 <div class="flex-column padding-right">
                     <div class="crypto-form-unit margin-bottom">
@@ -42,12 +42,12 @@
         <div class="modal-footer">
             <div class="buttons-wrap flex justify-flex-end">
                 <button class="crypto-button crypto-button_primary submit-btn crypto-button-w-100"
-                        [class.is-loading]="processingSubmit"
                         (click)="submit()">
                     {{ data?.alert ? ('edit' | translate) : ('create' | translate) }}
                 </button>
             </div>
         </div>
+        <bft-loader *ngIf="processingSubmit"></bft-loader>
     </div>
 </div>
  

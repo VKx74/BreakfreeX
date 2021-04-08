@@ -6,15 +6,17 @@ import {IInstrument} from "@app/models/common/instrument";
 import {
     AlertCondition
 } from "../../models/Enums";
-import {Observable} from 'rxjs';
 import {Modal} from "Shared";
-import {AlertBase} from "../../models/AlertBase";
+import { PriceAlert} from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { Console } from 'console';
+import { InstrumentService } from '@app/services/instrument.service';
+import { EExchange } from '@app/models/common/exchange';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
-export interface IAlertDialogConfig {
-    alert?: AlertBase;
+export interface IPriceAlertDialogConfig {
+    alert?: PriceAlert;
 }
 
 @Component({
@@ -28,7 +30,7 @@ export interface IAlertDialogConfig {
         }
     ]
 })
-export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> implements OnInit {
+export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> implements OnInit {
     private _instrument: IInstrument;
     private _selectedCondition: AlertCondition = AlertCondition.GreaterThan;
     private _alertPrice: number = 1;
@@ -57,7 +59,7 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         this._setNotificationText();
     }
 
-    processingSubmit: boolean = false;
+    processingSubmit: boolean = true;
     useExpiration: boolean = false;
     showPopup: boolean = true;
     sendSMS: boolean = false;
@@ -74,9 +76,26 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         _injector: Injector,
         private _translateService: TranslateService,
         private _alertsService: AlertsService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-
+        private _instrumentService: InstrumentService,
+        @Inject(MAT_DIALOG_DATA) public data: IPriceAlertDialogConfig) {
         super(_injector);
+
+        if (data && data.alert) {
+            this.selectedCondition = data.alert.condition;
+            this.alertPrice = data.alert.value;
+            this.sendEmail = data.alert.useEmail;
+            this.sendSMS = data.alert.useSMS;
+            this.showPopup = data.alert.usePush;
+            this._instrumentService.getInstruments(null, data.alert.instrument).subscribe((instruments) => {
+                for (const i of instruments) {
+                    if (i.id.toLowerCase() === data.alert.instrument.toLowerCase() &&
+                        i.exchange.toLowerCase() === data.alert.exchange.toLowerCase()) {
+                            this.instrument = i;
+                            this.message = data.alert.notificationMessage;
+                        }
+                }
+            });
+        }
     }
 
     ngOnInit() {
@@ -110,10 +129,14 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
             value: this.alertPrice,
             // Expiring:
         };
+
+        this.processingSubmit = true;
         
         this._alertsService.createPriceAlert(option).subscribe((alert) => {
+            this.processingSubmit = false;
             this.close(true);
         }, (error) => {
+            this.processingSubmit = false;
             console.error(error);
         });
     }
