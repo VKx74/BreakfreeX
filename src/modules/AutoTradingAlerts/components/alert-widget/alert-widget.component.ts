@@ -12,7 +12,8 @@ import { SonarAlertDialogComponent } from '../sonar-alert-dialog/sonar-alert-dia
 export enum AlertTabs {
   PriceAlerts = 1,
   SonarAlerts = 2,
-  AlertsLog = 3
+  AlertsLog = 3,
+  NotificationLog = 4
 }
 
 @Component({

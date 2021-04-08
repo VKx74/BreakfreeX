@@ -3,11 +3,10 @@ import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { PriceAlert } from "../../models/AlertBase";
 import { Observable } from "rxjs";
-import { ComponentIdentifier } from "@app/models/app-config";
 import { AutoTradingAlertsTranslateService } from "../../localization/token";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
-import { AlertService } from '@alert/services/alert.service'
+import { AlertService } from '@alert/services/alert.service';
 import { AlertGridBase } from '../alert-grid-base/alert-grid-base';
 
 @Component({
@@ -24,10 +23,6 @@ import { AlertGridBase } from '../alert-grid-base/alert-grid-base';
 export class PriceAlertGridComponent extends AlertGridBase {
     get alerts(): PriceAlert[] {
         return this._alertsService.Alerts.filter(_ => _.type === AlertType.PriceAlert) as PriceAlert[];
-    }
-
-    get ComponentIdentifier() {
-        return ComponentIdentifier;
     }
 
     constructor (protected _dialog: MatDialog,

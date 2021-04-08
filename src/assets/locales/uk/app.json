@@ -39,6 +39,7 @@
     "priceAlerts": "Сповіщення цін",
     "sonarAlerts": "Сповіщення сонар",
     "alertsLog": "Журнал сповіщень",
+    "notificationsLog": "Нотифікації",
     "description": "Опис",
     "dateTime": "Дата/Час",
     "showCode": "Показати код",

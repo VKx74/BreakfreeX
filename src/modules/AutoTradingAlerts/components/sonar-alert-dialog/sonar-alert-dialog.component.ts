@@ -109,6 +109,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.selectedTriggerType = data.alert.triggerType;
             this.selectedTriggerTimeframe = data.alert.timeframe;
             this.selectedTriggerType = data.alert.triggerType;
+            this.selectedTriggerSetup = data.alert.setup;
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
             this.showPopup = data.alert.usePush;
@@ -178,7 +179,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
 
     private _getData(): NewSonarAlertOptions {
         return {
-            instrument: this._instrument.id,
+            instrument: this._instrument ? this._instrument.id : null,
             notificationMessage: this.message,
             useEmail: this.sendEmail,
             usePush: this.showPopup,

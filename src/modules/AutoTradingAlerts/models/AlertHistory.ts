@@ -13,3 +13,5 @@ export interface AlertHistory {
     created: number;
     triggerTime: number;
 }
+
+

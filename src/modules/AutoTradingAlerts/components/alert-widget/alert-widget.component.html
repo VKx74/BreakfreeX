@@ -9,9 +9,12 @@
     <a mat-tab-link (click)="tabChanged(AlertTabs.AlertsLog)">
       {{'alertWidget.alertsLog' | translate}}
     </a>
+    <a mat-tab-link (click)="tabChanged(AlertTabs.NotificationLog)">
+      {{'alertWidget.notificationsLog' | translate}}
+    </a>
   </nav>
 
-  <div class="flex align-items-center" [class.disabled]="selectedTabIndex === AlertTabs.AlertsLog">
+  <div class="flex align-items-center" [class.disabled]="selectedTabIndex === AlertTabs.AlertsLog || selectedTabIndex === AlertTabs.NotificationLog">
     <div class="crypto-button-icon control create-alert-control" (click)="showAlertDialog()"
       title="{{'alertWidget.setAlert' | translate}}">
       <span class="crypto-icon crypto-icon-midle-add"></span>
@@ -49,6 +52,9 @@
     <sonar-alert-grid></sonar-alert-grid>
   </div>
   <div class="full-height section-alert" *ngSwitchCase="AlertTabs.AlertsLog">
-    <alert-log></alert-log>
+    <alert-log-grid></alert-log-grid>
+  </div>
+  <div class="full-height section-alert" *ngSwitchCase="AlertTabs.NotificationLog">
+    <notifications-log-grid></notifications-log-grid>
   </div>
 </div>

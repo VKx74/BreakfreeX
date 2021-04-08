@@ -1,0 +1,8 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/variables";
+
+:host {
+  display: block;
+  height: 100%;
+}

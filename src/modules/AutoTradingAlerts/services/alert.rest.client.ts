@@ -7,6 +7,7 @@ import { NewPriceAlertDTO, NewSonarAlertDTO } from "../models/NewAlertDTO";
 import { UpdatePriceAlertDTO } from "../models/UpdatePriceAlertDTO";
 import { UpdateSonarAlertDTO } from "../models/UpdateSonarAlertDTO";
 import { AppConfigService } from "@app/services/app.config.service";
+import { NotificationLogDTO } from "../models/NotificationLogDTO";
 
 
 @Injectable()
@@ -37,14 +38,18 @@ export class AlertRestClient {
 
     loadAlertsHistory(): Observable<AlertHistoryDTO[]> {
         return this._http.get<AlertHistoryDTO[]>(`${this._url}AlertsHistory`);
+    } 
+    
+    loadNotificationLog(): Observable<NotificationLogDTO[]> {
+        return this._http.get<NotificationLogDTO[]>(`${this._url}NotificationsHistory`);
     }
 
     updatePriceAlert(dto: UpdatePriceAlertDTO, alertId: number): Observable<PriceAlertDTO> {
-        return this._http.post<PriceAlertDTO>(`${this._url}AddPriceAlert/${alertId}`, dto);
+        return this._http.patch<PriceAlertDTO>(`${this._url}EditPriceAlert/${alertId}`, dto);
     }
 
     updateSonarAlert(dto: UpdateSonarAlertDTO, alertId: number): Observable<SonarAlertDTO> {
-        return this._http.post<SonarAlertDTO>(`${this._url}EditSonarAlert/${alertId}`, dto);
+        return this._http.patch<SonarAlertDTO>(`${this._url}EditSonarAlert/${alertId}`, dto);
     }
 
     startAlert(alertId: number): Observable<any> {

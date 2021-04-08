@@ -7,6 +7,8 @@ import { AlertBaseDTO, PriceAlertDTO, SonarAlertDTO } from "../models/AlertBaseD
 import { AlertBase, PriceAlert, SonarAlert } from "../models/AlertBase";
 import { AlertHistory } from "../models/AlertHistory";
 import { AlertHistoryDTO } from "../models/AlertHistoryDTO";
+import { NotificationLog } from "../models/NotificationLog";
+import { NotificationLogDTO } from "../models/NotificationLogDTO";
 
 
 export class AlertConverters {
@@ -32,6 +34,10 @@ export class AlertConverters {
             name: dto.name,
             triggerTime: dto.triggerTime
         };
+    }  
+    
+    public static NotificationLogDTOToNotificationLog(dto: NotificationLogDTO): NotificationLog {
+        return dto; // same data
     }
 
     public static PriceAlertDTOToAlertBase(dto: PriceAlertDTO): PriceAlert {

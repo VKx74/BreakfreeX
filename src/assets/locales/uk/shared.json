@@ -166,6 +166,7 @@
   "ipRegion": "IP Регіон",
   "value": "Значення",
   "condition": "Умова",
+  "message": "Повідомлення",
   "app": {
     "type&broker": "тип & брокер",
     "server": "Сервер",

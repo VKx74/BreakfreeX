@@ -165,6 +165,7 @@
   "ipRegion": "IP Region",
   "value": "Value",
   "condition": "Condition",
+  "message": "Message",
   "roles": {
     "Unset": "Unset",
     "User": "User",

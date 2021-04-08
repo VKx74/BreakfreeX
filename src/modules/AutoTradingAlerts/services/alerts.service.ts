@@ -8,6 +8,8 @@ import { AlertHistory } from "../models/AlertHistory";
 import { AlertHistoryDTO } from "../models/AlertHistoryDTO";
 import { AlertStatus } from "../models/EnumsDTO";
 import { NewPriceAlertOptions, NewSonarAlertOptions } from "../models/NewAlertOptions";
+import { NotificationLog } from "../models/NotificationLog";
+import { NotificationLogDTO } from "../models/NotificationLogDTO";
 import { UpdatePriceAlertOptions, UpdateSonarAlertOptions } from "../models/UpdateAlertOptions";
 import { AlertConverters } from "./alert.converters";
 import { AlertRestClient } from "./alert.rest.client";
@@ -16,12 +18,14 @@ import { AlertRestClient } from "./alert.rest.client";
 export class AlertsService {
     private _alerts: AlertBase[] = [];
     private _alertHistory: AlertHistory[] = [];
+    private _notificationLogs: NotificationLog[] = [];
 
     public onAlertTriggered: Subject<string> = new Subject<string>();
     public onAlertShowPopup: Subject<string> = new Subject<string>();
     public onAlertPlaySound: Subject<string> = new Subject<string>();
     public onAlertsChanged: Subject<void> = new Subject<void>();
     public onAlertsHistoryChanged: Subject<void> = new Subject<void>();
+    public onNotificationLogsChanged: Subject<void> = new Subject<void>();
 
     public get Alerts(): AlertBase[] {
         return this._alerts;
@@ -31,6 +35,10 @@ export class AlertsService {
         return this._alertHistory;
     }
 
+    public get NotificationLogs(): NotificationLog[] {
+        return this._notificationLogs;
+    }
+
     constructor(private _alertRestClient: AlertRestClient) {
     }
 
@@ -38,6 +46,20 @@ export class AlertsService {
         this.loadAlerts().subscribe((alerts) => {
             this._alerts = alerts;
             this.onAlertsChanged.next();
+        }, (error) => {
+            console.error(error);
+        });
+        
+        this.loadAlertsHistory().subscribe((alerts) => {
+            this._alertHistory = alerts;
+            this.onAlertsHistoryChanged.next();
+        }, (error) => {
+            console.error(error);
+        }); 
+        
+        this.loadNotificationLog().subscribe((logs) => {
+            this._notificationLogs = logs;
+            this.onNotificationLogsChanged.next();
         }, (error) => {
             console.error(error);
         });
@@ -87,6 +109,20 @@ export class AlertsService {
             let res: AlertHistory[] = [];
             for (let item of result) {
                 let converted = AlertConverters.AlertHistoryDTOToAlertHistory(item);
+
+                if (converted) {
+                    res.push(converted);
+                }
+            }
+            return res;
+        }));
+    }
+
+    loadNotificationLog(): Observable<NotificationLog[]> {
+        return this._alertRestClient.loadNotificationLog().pipe(map((result: NotificationLogDTO[]) => {
+            let res: NotificationLog[] = [];
+            for (let item of result) {
+                let converted = AlertConverters.NotificationLogDTOToNotificationLog(item);
 
                 if (converted) {
                     res.push(converted);

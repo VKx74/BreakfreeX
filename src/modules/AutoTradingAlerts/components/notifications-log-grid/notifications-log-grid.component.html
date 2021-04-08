@@ -1,0 +1,43 @@
+<div class="root flex flex-direction-column full-height">
+  <div class="flex flex-direction-column flex-grow-1 h-0">
+      <div class="content-wrapper full-height flex-grow-1 overflow-y-auto">
+          <data-table [rows]="alerts"
+              class="manage-alerts-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis crypto-table_selectable">
+              <data-table-header-cell columnName="type">
+                  {{'type' | translate}}
+              </data-table-header-cell>
+              <data-table-header-cell columnName="time">
+                  {{'time' | translate}}
+              </data-table-header-cell>
+              <data-table-header-cell columnName="message">
+                  {{'message' | translate}}
+              </data-table-header-cell>
+
+              <data-table-cell class="stripped-mode" columnName="type">
+                  <ng-template let-item>
+                      <span class="flex">
+                          {{getTypeTitle(item)}}
+                      </span>
+                  </ng-template>
+              </data-table-cell>
+
+              <data-table-cell class="stripped-mode" columnName="time">
+                  <ng-template let-item>
+                      <span class="flex">
+                        {{item.Time | formatDate:'YYYY/MM/DD HH:mm'}}
+                      </span>
+                  </ng-template>
+              </data-table-cell>
+
+              <data-table-cell class="stripped-mode" columnName="message">
+                  <ng-template let-item>
+                      <span class="flex">
+                          {{item.notificationMessage}}
+                      </span>
+                  </ng-template>
+              </data-table-cell>
+
+          </data-table>
+      </div>
+  </div>
+</div>

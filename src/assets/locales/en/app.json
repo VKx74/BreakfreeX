@@ -38,6 +38,7 @@
     "priceAlerts": "Price Alerts",
     "sonarAlerts": "Sonar Alerts",
     "alertsLog": "Alerts Log",
+    "notificationsLog": "Notifications Log",
     "description": "Description",
     "dateTime": "Date/Time",
     "showCode": "Show Code",
