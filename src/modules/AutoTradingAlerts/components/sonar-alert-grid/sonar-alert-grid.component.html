@@ -1,0 +1,56 @@
+<div class="root flex flex-direction-column full-height">
+    <div class="flex flex-direction-column flex-grow-1 h-0">
+        <div class="content-wrapper full-height flex-grow-1 overflow-y-auto">
+            <data-table [rows]="alerts"
+                class="manage-alerts-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis crypto-table_selectable">
+                <data-table-header-cell columnName="symbol">
+                    {{'symbol' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="condition">
+                    {{'condition' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="value">
+                    {{'value' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="status">
+                    <span class="right">{{'status' | translate}}</span>
+                </data-table-header-cell>
+
+                <data-table-cell class="stripped-mode" columnName="symbol">
+                    <ng-template let-item>
+                        <span class="flex">
+                            {{item.instrument}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell class="stripped-mode" columnName="condition">
+                    <ng-template let-item>
+                        <span class="flex">
+                            {{getConditionTitle(item) | async}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell class="stripped-mode" columnName="value">
+                    <ng-template let-item>
+                        <span class="flex">
+                            {{item.value}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell columnName="status">
+                    <ng-template let-item>
+                        <alert-grid-actions [item]="item" (onEdit)="handleEdit($event)" (onRemove)="handleRemove($event)"  (onLaunch)="handleLaunch($event)"></alert-grid-actions>
+                    </ng-template>
+                </data-table-cell>
+            </data-table>
+        </div>
+    </div>
+</div>
+
+<ng-template #loader>
+    <bft-loader></bft-loader>
+</ng-template>

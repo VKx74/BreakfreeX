@@ -59,7 +59,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
         this._setNotificationText();
     }
 
-    processingSubmit: boolean = true;
+    processingSubmit: boolean = false;
     useExpiration: boolean = false;
     showPopup: boolean = true;
     sendSMS: boolean = false;
@@ -118,18 +118,15 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     }
 
     submit() {
-        let option: NewPriceAlertOptions = {
-            condition: this._selectedCondition,
-            exchange: this._instrument.exchange,
-            instrument: this._instrument.id,
-            notificationMessage: this.message,
-            useEmail: this.sendEmail,
-            usePush: this.showPopup,
-            useSMS: this.sendSMS,
-            value: this.alertPrice,
-            // Expiring:
-        };
+       if (this.data && this.data.alert) {
+           this._edit();
+       } else {
+            this._create();
+       }
+    }
 
+    private _create() {
+        let option = this._getData();
         this.processingSubmit = true;
         
         this._alertsService.createPriceAlert(option).subscribe((alert) => {
@@ -139,6 +136,32 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             this.processingSubmit = false;
             console.error(error);
         });
+    }
+    
+    private _edit() {
+        let option = this._getData();
+        this.processingSubmit = true;
+        
+        this._alertsService.updatePriceAlert(option, this.data.alert.id).subscribe((alert) => {
+            this.processingSubmit = false;
+            this.close(true);
+        }, (error) => {
+            this.processingSubmit = false;
+            console.error(error);
+        });
+    }
+
+    private _getData(): NewPriceAlertOptions {
+        return {
+            condition: this._selectedCondition,
+            exchange: this._instrument.exchange,
+            instrument: this._instrument.id,
+            notificationMessage: this.message,
+            useEmail: this.sendEmail,
+            usePush: this.showPopup,
+            useSMS: this.sendSMS,
+            value: this.alertPrice
+        };
     }
 
     private _setNotificationText() {

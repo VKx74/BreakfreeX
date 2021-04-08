@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
-import { PriceAlert } from "../../models/AlertBase";
+import { SonarAlert } from "../../models/AlertBase";
 import { Observable } from "rxjs";
 import { ComponentIdentifier } from "@app/models/app-config";
 import { AutoTradingAlertsTranslateService } from "../../localization/token";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
-import { AlertService } from '@alert/services/alert.service'
+import { AlertService } from '@alert/services/alert.service';
 import { AlertGridBase } from '../alert-grid-base/alert-grid-base';
 
 @Component({
-    selector: 'price-alert-grid',
-    templateUrl: './price-alert-grid.component.html',
-    styleUrls: ['./price-alert-grid.component.scss'],
+    selector: 'sonar-alert-grid',
+    templateUrl: './sonar-alert-grid.component.html',
+    styleUrls: ['./sonar-alert-grid.component.scss'],
     providers: [
         {
             provide: TranslateService,
@@ -21,13 +21,9 @@ import { AlertGridBase } from '../alert-grid-base/alert-grid-base';
         }
     ]
 })
-export class PriceAlertGridComponent extends AlertGridBase {
-    get alerts(): PriceAlert[] {
-        return this._alertsService.Alerts.filter(_ => _.type === AlertType.PriceAlert) as PriceAlert[];
-    }
-
-    get ComponentIdentifier() {
-        return ComponentIdentifier;
+export class SonarAlertGridComponent extends AlertGridBase {
+    get alerts(): SonarAlert[] {
+        return this._alertsService.Alerts.filter(_ => _.type === AlertType.SonarAlert) as SonarAlert[];
     }
 
     constructor (protected _dialog: MatDialog,
@@ -37,7 +33,11 @@ export class PriceAlertGridComponent extends AlertGridBase {
             super(_dialog, _alertsService, _alertService, _translateService);
     }
 
-    getConditionTitle(priceAlert: PriceAlert): Observable<string> {
-        return this._translateService.get(`conditionTitles.${priceAlert.condition}`);
+    getTimeframeTitle(sonarAlert: SonarAlert): Observable<string> {
+        return this._translateService.get(`timeFrameToStr.${sonarAlert.timeframe}`);
+    }
+
+    getTriggerTitle(sonarAlert: SonarAlert): Observable<string> {
+        return this._translateService.get(`triggerSetupStr.${sonarAlert.triggerType}`);
     }
 }
