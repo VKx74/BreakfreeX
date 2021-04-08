@@ -33,10 +33,15 @@ export class AlertsService {
     constructor(private _alertRestClient: AlertRestClient) {
     }
 
+    init() {
+        
+    }
+
     createPriceAlert(alert: NewPriceAlertOptions): Observable<PriceAlert> {
         let dto = AlertConverters.NewPriceAlertOptionsToDTO(alert);
-        return this._alertRestClient.createPriceAlert(dto).pipe(map((alert) => {
-            let newAlert = AlertConverters.PriceAlertDTOToAlertBase(alert);
+
+        return this._alertRestClient.createPriceAlert(dto).pipe(map((response) => {
+            let newAlert = AlertConverters.PriceAlertDTOToAlertBase(response);
             this.addAlert(newAlert);
             return newAlert;
         }));
@@ -44,8 +49,8 @@ export class AlertsService {
 
     createSonarAlert(alert: NewSonarAlertOptions): Observable<SonarAlert> {
         let dto = AlertConverters.NewSonarAlertOptionsToDTO(alert);
-        return this._alertRestClient.createSonarAlert(dto).pipe(map((alert) => {
-            let newAlert = AlertConverters.SonarAlertDTOToAlertBase(alert);
+        return this._alertRestClient.createSonarAlert(dto).pipe(map((response) => {
+            let newAlert = AlertConverters.SonarAlertDTOToAlertBase(response);
             this.addAlert(newAlert);
             return newAlert;
         }));
@@ -87,8 +92,8 @@ export class AlertsService {
 
     updatePriceAlert(alert: UpdatePriceAlertOptions, alertId: number): Observable<PriceAlert> {
         let dto = AlertConverters.NewPriceAlertOptionsToDTO(alert);
-        return this._alertRestClient.updatePriceAlert(dto, alertId).pipe(map((alert) => {
-            let newAlert = AlertConverters.PriceAlertDTOToAlertBase(alert);
+        return this._alertRestClient.updatePriceAlert(dto, alertId).pipe(map((response) => {
+            let newAlert = AlertConverters.PriceAlertDTOToAlertBase(response);
             this.addAlert(newAlert);
             return newAlert;
         }));
@@ -96,8 +101,8 @@ export class AlertsService {
 
     updateSonarAlert(alert: UpdateSonarAlertOptions, alertId: number): Observable<SonarAlert> {
         let dto = AlertConverters.NewSonarAlertOptionsToDTO(alert);
-        return this._alertRestClient.updateSonarAlert(dto, alertId).pipe(map((alert) => {
-            let newAlert = AlertConverters.SonarAlertDTOToAlertBase(alert);
+        return this._alertRestClient.updateSonarAlert(dto, alertId).pipe(map((response) => {
+            let newAlert = AlertConverters.SonarAlertDTOToAlertBase(response);
             this.addAlert(newAlert);
             return newAlert;
         }));
