@@ -142,7 +142,7 @@ export class AlertsService {
     }
 
     private addAlert(alert: AlertBase) {
-        let index = this._alerts.findIndex(alert => alert.Id === alert.Id);
+        let index = this._alerts.findIndex(a => a.Id === alert.Id);
         if (index === -1) {
             this._alerts.push(alert);
             this.onAlertsChanged.next();
@@ -150,7 +150,7 @@ export class AlertsService {
     }
 
     private update(alertId: number, alert: AlertBase) {
-        let index = this._alerts.findIndex(alert => alert.Id === alertId);
+        let index = this._alerts.findIndex(a => a.Id === alertId);
 
         if (index !== -1) {
             this._alerts[index] = alert;
@@ -159,7 +159,7 @@ export class AlertsService {
     }
 
     private changeStatus(alertId: number, status: AlertStatus) {
-        let alert = this._alerts.find(alert => alert.Id === alert.Id);
+        let alert = this._alerts.find(a => a.Id === alertId);
         if (alert) {
             alert.Status = status;
             this.onAlertsChanged.next();
