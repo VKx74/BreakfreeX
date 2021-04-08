@@ -37,7 +37,7 @@ export class AcademyPageV2Component {
         this.selectMedia(value);
     }
 
-    constructor(private _hostElement: ElementRef, private _intercom: Intercom, 
+    constructor(private _hostElement: ElementRef, private _intercom: Intercom,
         private _gtmService: GTMTrackingService, private _chatbroService: ChatbroService) {
     }
 
@@ -52,7 +52,6 @@ export class AcademyPageV2Component {
         } catch (error) {
             console.error(error);
         }
-        
 
         this._gtmService.load();
         this._chatbroService.load();
