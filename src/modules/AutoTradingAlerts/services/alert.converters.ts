@@ -75,7 +75,6 @@ export class AlertConverters {
     }
 
     public static NewPriceAlertOptionsToDTO(options: NewPriceAlertOptions): NewPriceAlertDTO {
-        debugger
         let notifications: AlertNotificationType[] = [];
         if (options.useEmail) {
             notifications.push(AlertNotificationType.Email);

@@ -1,18 +1,20 @@
-import {Component, Inject, Injector, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
-import {TranslateService} from "@ngx-translate/core";
-import {AutoTradingAlertsTranslateService} from "../../localization/token";
-import {IInstrument} from "@app/models/common/instrument";
+import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { TranslateService } from "@ngx-translate/core";
+import { AutoTradingAlertsTranslateService } from "../../localization/token";
+import { IInstrument } from "@app/models/common/instrument";
 import {
-    AlertCondition, TriggerSetup, TriggerTimeframe, TriggerType
+    TriggerSetup, TriggerTimeframe, TriggerType
 } from "../../models/Enums";
-import {forkJoin, Observable} from 'rxjs';
-import {Modal} from "Shared";
-import {AlertBase} from "../../models/AlertBase";
+import { forkJoin } from 'rxjs';
+import { Modal } from "Shared";
+import { SonarAlert } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
+import { InstrumentService } from '@app/services/instrument.service';
+import { NewSonarAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 
-export interface IAlertDialogConfig {
-    alert?: AlertBase;
+export interface ISonarDialogConfig {
+    alert?: SonarAlert;
 }
 
 @Component({
@@ -26,7 +28,7 @@ export interface IAlertDialogConfig {
         }
     ]
 })
-export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> implements OnInit {
+export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> implements OnInit {
     private _instrument: IInstrument;
     private _selectedTriggerType: TriggerType = TriggerType.NewSetup;
     private _selectedTriggerTimeframe: TriggerTimeframe = TriggerTimeframe.AllTimeframes;
@@ -37,22 +39,22 @@ export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
     public get allowedTriggerTimeframe(): TriggerTimeframe[] {
         return [
             TriggerTimeframe.AllTimeframes,
-            TriggerTimeframe.Min15, 
-            TriggerTimeframe.Hour1, 
-            TriggerTimeframe.Hour4, 
+            TriggerTimeframe.Min15,
+            TriggerTimeframe.Hour1,
+            TriggerTimeframe.Hour4,
             TriggerTimeframe.Day1
         ];
-    } 
+    }
 
     public get allowedTriggerSetup(): TriggerSetup[] {
         return [
             TriggerSetup.AllSetups,
-            TriggerSetup.Swing, 
-            TriggerSetup.BRC, 
+            TriggerSetup.Swing,
+            TriggerSetup.BRC,
             TriggerSetup.EXT
         ];
-    } 
-    
+    }
+
     public get selectedTriggerType(): TriggerType {
         return this._selectedTriggerType;
     }
@@ -99,9 +101,26 @@ export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
         _injector: Injector,
         private _translateService: TranslateService,
         private _alertsService: AlertsService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-
+        private _instrumentService: InstrumentService,
+        @Inject(MAT_DIALOG_DATA) public data: ISonarDialogConfig) {
         super(_injector);
+
+        if (data && data.alert) {
+            this.selectedTriggerType = data.alert.triggerType;
+            this.selectedTriggerTimeframe = data.alert.timeframe;
+            this.selectedTriggerType = data.alert.triggerType;
+            this.sendEmail = data.alert.useEmail;
+            this.sendSMS = data.alert.useSMS;
+            this.showPopup = data.alert.usePush;
+            this._instrumentService.getInstruments(null, data.alert.instrument).subscribe((instruments) => {
+                for (const i of instruments) {
+                    if (i.id.toLowerCase() === data.alert.instrument.toLowerCase()) {
+                            this.instrument = i;
+                            this.message = data.alert.notificationMessage;
+                        }
+                }
+            });
+        }
     }
 
     ngOnInit() {
@@ -124,20 +143,50 @@ export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
     }
 
     public submit() {
-       // const isEditMode = this.data.alert;
-        // const obs = isEditMode ? this.editAlert(this.data.alert.externalId) : this.createAlert();
+        if (this.data && this.data.alert) {
+            this._edit();
+        } else {
+             this._create();
+        }
+    }
 
-        // this.processingSubmit = true;
-        // obs.subscribe({
-        //     next: () => {
-        //         this.processingSubmit = false;
-        //         this.close();
-        //     },
-        //     error: () => {
-        //         this.processingSubmit = false;
-        //     }
-        // });
-        return null;
+    private _create() {
+        let option = this._getData();
+        this.processingSubmit = true;
+        
+        this._alertsService.createSonarAlert(option).subscribe((alert) => {
+            this.processingSubmit = false;
+            this.close(true);
+        }, (error) => {
+            this.processingSubmit = false;
+            console.error(error);
+        });
+    }
+    
+    private _edit() {
+        let option = this._getData();
+        this.processingSubmit = true;
+        
+        this._alertsService.updateSonarAlert(option, this.data.alert.id).subscribe((alert) => {
+            this.processingSubmit = false;
+            this.close(true);
+        }, (error) => {
+            this.processingSubmit = false;
+            console.error(error);
+        });
+    }
+
+    private _getData(): NewSonarAlertOptions {
+        return {
+            instrument: this._instrument.id,
+            notificationMessage: this.message,
+            useEmail: this.sendEmail,
+            usePush: this.showPopup,
+            useSMS: this.sendSMS,
+            setup: this.selectedTriggerSetup,
+            timeframe: this.selectedTriggerTimeframe,
+            triggerType: this.selectedTriggerType
+        };
     }
 
     private _setNotificationText() {

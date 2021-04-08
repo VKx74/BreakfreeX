@@ -23,7 +23,7 @@ export enum AlertTabs {
 export class AlertWidgetComponent extends BaseLayoutItemComponent {
   static componentName = 'BreakfreeAlerts';
   AlertTabs = AlertTabs;
-  selectedTabIndex: number = AlertTabs.PriceAlerts;
+  selectedTabIndex: AlertTabs = AlertTabs.PriceAlerts;
 
   constructor(@Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService,
     private _alertsService: AlertsService,
@@ -42,8 +42,11 @@ export class AlertWidgetComponent extends BaseLayoutItemComponent {
   }
 
   showAlertDialog() {
-    // this._dialog.open(SonarAlertDialogComponent, {});
-    this._dialog.open(PriceAlertDialogComponent, {});
+    if (this.selectedTabIndex === AlertTabs.SonarAlerts) {
+      this._dialog.open(SonarAlertDialogComponent, {});
+    } else {
+      this._dialog.open(PriceAlertDialogComponent, {});
+    }
   }
 
   restartAllInactive() {

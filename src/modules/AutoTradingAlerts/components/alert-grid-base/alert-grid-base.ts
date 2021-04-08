@@ -3,9 +3,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { ConfirmModalComponent } from "UI";
 import { AlertBase } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
-import { AlertStatus } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
 import { SonarAlertDialogComponent } from '../sonar-alert-dialog/sonar-alert-dialog.component';
+import { PriceAlertDialogComponent } from "../price-alert-dialog/price-alert-dialog.component";
 
 export abstract class AlertGridBase {
     constructor (protected _dialog: MatDialog,
@@ -16,9 +17,15 @@ export abstract class AlertGridBase {
     }
 
     handleEdit(alert: AlertBase) {
-        this._dialog.open(SonarAlertDialogComponent, {
-            data: { alert: alert }
-        });
+        if (alert.type === AlertType.SonarAlert) {
+            this._dialog.open(SonarAlertDialogComponent, {
+                data: { alert: alert }
+            });
+        } else {
+            this._dialog.open(PriceAlertDialogComponent, {
+                data: { alert: alert }
+            });
+        }
     }
 
     handleLaunch(alert: AlertBase) {

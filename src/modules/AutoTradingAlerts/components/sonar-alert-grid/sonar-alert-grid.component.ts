@@ -3,12 +3,12 @@ import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { SonarAlert } from "../../models/AlertBase";
 import { Observable } from "rxjs";
-import { ComponentIdentifier } from "@app/models/app-config";
 import { AutoTradingAlertsTranslateService } from "../../localization/token";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
 import { AlertGridBase } from '../alert-grid-base/alert-grid-base';
+import { TriggerType } from 'modules/AutoTradingAlerts/models/Enums';
 
 @Component({
     selector: 'sonar-alert-grid',
@@ -37,7 +37,16 @@ export class SonarAlertGridComponent extends AlertGridBase {
         return this._translateService.get(`timeFrameToStr.${sonarAlert.timeframe}`);
     }
 
+    getSetupTitle(sonarAlert: SonarAlert): Observable<string> {
+        return this._translateService.get(`triggerSetupStr.${sonarAlert.setup}`);
+    }
+
     getTriggerTitle(sonarAlert: SonarAlert): Observable<string> {
-        return this._translateService.get(`triggerSetupStr.${sonarAlert.triggerType}`);
+
+        if (sonarAlert.triggerType === TriggerType.NewSetup) {
+            return this._translateService.get(`tradingAlert.newSetup`);
+        }
+
+        return this._translateService.get(`tradingAlert.setupDisappeared`);
     }
 }

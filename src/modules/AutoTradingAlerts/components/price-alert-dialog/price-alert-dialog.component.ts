@@ -10,10 +10,7 @@ import {Modal} from "Shared";
 import { PriceAlert} from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
-import { Console } from 'console';
 import { InstrumentService } from '@app/services/instrument.service';
-import { EExchange } from '@app/models/common/exchange';
-import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 export interface IPriceAlertDialogConfig {
     alert?: PriceAlert;

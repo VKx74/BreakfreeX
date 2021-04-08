@@ -33,16 +33,18 @@ import { SonarAlertDialogComponent } from './components/sonar-alert-dialog/sonar
 import { MatRadioModule } from '@angular/material/radio';
 import { AlertRestClient } from './services/alert.rest.client';
 import { AlertGridActionsComponent } from './components/alert-grid-actions/alert-grid-actions.component';
+import { SonarAlertGridComponent } from './components/sonar-alert-grid/sonar-alert-grid.component';
 
 @NgModule({
     declarations: [
         PriceAlertDialogComponent,
         SonarAlertDialogComponent,
         PriceAlertGridComponent,
+        SonarAlertGridComponent,
         AlertLogComponent,
         AlertWidgetComponent,
         AlertSetupBaseComponent,
-        AlertGridActionsComponent
+        AlertGridActionsComponent,
     ],
     imports: [
         CommonModule,
