@@ -98,19 +98,28 @@
       align-items: center;
       z-index: 1000;
     }
-    .close-button,
-    .open-button {
-      font-size: 22px;
-      margin-right: 10px;
+    .close-button {
       cursor: pointer;
       color: whitesmoke;
-    }
-    .close-button {
       display: flex;
+      font-size: 22px;
+      margin-right: 10px;
     }
-    .open-button {
-      display: none;
-    }
+  }
+
+  .open-button {
+    display: none;
+    position: fixed;
+    top: 30px;
+    left: 0px;
+    width: 36px;
+    height: 36px;
+    background: #191919;
+    font-size: 26px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: whitesmoke;
   }
 
   .menu-mobile-header {
@@ -138,16 +147,13 @@
     .side-menu-closed {
       width: 0px;
       transition: width 0.2s;
-      .menu-mobile-header {
-        min-width: 36px;
-        position: fixed;
-      }
       .close-button {
         display: none;
       }
-      .open-button {
-        display: flex;
-      }
+    }
+
+    .open-button {
+      display: flex;
     }
 
     .page,
