@@ -1,0 +1,59 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/variables";
+
+:host {
+  /deep/ {
+    .not-running {
+      background-color: $redColor;
+    }
+
+    .is-running {
+      background-color: $greenColor;
+    }
+  }
+  .alert-description-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .alert-description-wrapper {
+      flex-grow: 1;
+      margin-right: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .running-status-wrapper {
+      flex-shrink: 0;
+    }
+
+    .alert-controls-wrapper {
+      display: none;
+      flex-shrink: 0;
+      align-items: center;
+      position: relative;
+      // right: 5px;
+
+      .control {
+        line-height: 20px;
+        font-size: 25px;
+        cursor: pointer;
+
+        &.disabled {
+          opacity: 0.5;
+        }
+
+        &.control-pause {
+          font-size: 12px;
+          line-height: 12px;
+          margin-bottom: -2px;
+        }
+
+        &:not(:last-of-type) {
+          margin-right: 7px;
+        }
+      }
+    }
+  }
+}

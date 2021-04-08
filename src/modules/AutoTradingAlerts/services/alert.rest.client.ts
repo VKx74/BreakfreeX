@@ -3,9 +3,10 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AlertBaseDTO, PriceAlertDTO, SonarAlertDTO } from "../models/AlertBaseDTO";
 import { AlertHistoryDTO } from "../models/AlertHistoryDTO";
-import { NewAlertDTO, NewPriceAlertDTO, NewSonarAlertDTO } from "../models/NewAlertDTO";
+import { NewPriceAlertDTO, NewSonarAlertDTO } from "../models/NewAlertDTO";
 import { UpdatePriceAlertDTO } from "../models/UpdatePriceAlertDTO";
 import { UpdateSonarAlertDTO } from "../models/UpdateSonarAlertDTO";
+import { AppConfigService } from "@app/services/app.config.service";
 
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AlertRestClient {
     private _url: string;
 
     constructor(private _http: HttpClient) {
+        this._url = AppConfigService.config.apiUrls.bftAlertsREST;
     }
 
     createPriceAlert(dto: NewPriceAlertDTO): Observable<PriceAlertDTO> {

@@ -1,7 +1,10 @@
 <div class="alerts-settings-header flex justify-space-between">
   <nav mat-tab-nav-bar class="flex justify-space-between">
-    <a mat-tab-link (click)="tabChanged(AlertTabs.Alerts)">
-      {{'alertWidget.manageAlerts' | translate}}
+    <a mat-tab-link (click)="tabChanged(AlertTabs.PriceAlerts)">
+      {{'alertWidget.priceAlerts' | translate}}
+    </a>
+    <a mat-tab-link (click)="tabChanged(AlertTabs.SonarAlerts)">
+      {{'alertWidget.sonarAlerts' | translate}}
     </a>
     <a mat-tab-link (click)="tabChanged(AlertTabs.AlertsLog)">
       {{'alertWidget.alertsLog' | translate}}
@@ -39,8 +42,8 @@
 </div>
 
 <div class="full-height" [ngSwitch]="selectedTabIndex">
-  <div class="full-height section-alert" *ngSwitchCase="AlertTabs.Alerts">
-    <app-alert></app-alert>
+  <div class="full-height section-alert" *ngSwitchCase="AlertTabs.PriceAlerts">
+    <price-alert-grid></price-alert-grid>
   </div>
   <div class="full-height section-alert" *ngSwitchCase="AlertTabs.AlertsLog">
     <alert-log></alert-log>

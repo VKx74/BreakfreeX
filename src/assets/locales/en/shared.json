@@ -164,6 +164,7 @@
   "action": "Action",
   "ipRegion": "IP Region",
   "value": "Value",
+  "condition": "Condition",
   "roles": {
     "Unset": "Unset",
     "User": "User",

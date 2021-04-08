@@ -35,7 +35,8 @@
   },
   "alertWidget": {
     "title": "Alerts Widget",
-    "manageAlerts": "Alerts",
+    "priceAlerts": "Price Alerts",
+    "sonarAlerts": "Sonar Alerts",
     "alertsLog": "Alerts Log",
     "description": "Description",
     "dateTime": "Date/Time",

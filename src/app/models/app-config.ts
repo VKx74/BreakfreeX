@@ -55,6 +55,8 @@ export interface ApiUrls {
     exchangeUserApi: string;
     MT5WS: string;
     MT4WS: string;
+    bftAlertsWS: string;
+    bftAlertsREST: string;
 }
 
 export interface AppConfig {

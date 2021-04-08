@@ -1,7 +1,8 @@
 {
   "alertWidget": {
     "title": "Alerts Widget",
-    "manageAlerts": "Manage Alerts",
+    "priceAlerts": "Price Alerts",
+    "sonarAlerts": "Sonar Alerts",
     "alertsLog": "Alerts Log",
     "description": "Description",
     "dateTime": "Date/Time",
@@ -92,5 +93,6 @@
   "failedToRestartAlerts": "Failed to restart alerts",
   "alertsStopped": "Alerts stopped",
   "failedToStopAlerts": "Failed to stop alerts",
-  "alertsComponentName": "Alerts"
+  "alertsComponentName": "Alerts",
+  "condition": "Condition"
 }

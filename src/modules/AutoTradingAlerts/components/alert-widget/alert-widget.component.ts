@@ -10,8 +10,9 @@ import { PriceAlertDialogComponent } from '../price-alert-dialog/price-alert-dia
 import { SonarAlertDialogComponent } from '../sonar-alert-dialog/sonar-alert-dialog.component';
 
 export enum AlertTabs {
-  Alerts = 1,
-  AlertsLog = 2
+  PriceAlerts = 1,
+  SonarAlerts = 2,
+  AlertsLog = 3
 }
 
 @Component({
@@ -22,7 +23,7 @@ export enum AlertTabs {
 export class AlertWidgetComponent extends BaseLayoutItemComponent {
   static componentName = 'BreakfreeAlerts';
   AlertTabs = AlertTabs;
-  selectedTabIndex: number = AlertTabs.Alerts;
+  selectedTabIndex: number = AlertTabs.PriceAlerts;
 
   constructor(@Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService,
     private _alertsService: AlertsService,
@@ -41,7 +42,8 @@ export class AlertWidgetComponent extends BaseLayoutItemComponent {
   }
 
   showAlertDialog() {
-    this._dialog.open(SonarAlertDialogComponent, {});
+    // this._dialog.open(SonarAlertDialogComponent, {});
+    this._dialog.open(PriceAlertDialogComponent, {});
   }
 
   restartAllInactive() {

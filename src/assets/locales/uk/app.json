@@ -36,7 +36,8 @@
   },
   "alertWidget": {
     "title": "Віджет Сповіщень",
-    "manageAlerts": "Сповіщення",
+    "priceAlerts": "Сповіщення цін",
+    "sonarAlerts": "Сповіщення сонар",
     "alertsLog": "Журнал сповіщень",
     "description": "Опис",
     "dateTime": "Дата/Час",

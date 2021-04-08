@@ -6,7 +6,7 @@ import { AlertHistory } from 'modules/AutoTradingAlerts/models/AlertHistory';
 @Component({
   selector: 'alert-log',
   templateUrl: './alert-log.component.html',
-  styleUrls: ['../app-alert/app-alert.component.scss']
+  styleUrls: ['../price-alert-grid/price-alert-grid.component.scss']
 })
 export class AlertLogComponent implements OnInit {
   alertsHistory$: Observable<AlertHistory[]>;

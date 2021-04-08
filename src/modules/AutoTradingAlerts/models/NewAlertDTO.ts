@@ -3,21 +3,21 @@ import { PriceAlertConditionObject } from "./PriceAlertConditionObject";
 import { SonarAlertConditionObject } from "./SonarAlertConditionObject";
 
 export interface NewAlertDTO {
-    Action: AlertActionObject;
-    Name: string;
-    Description: string;
-    NotificationMessage: string;
-    Expiring?: number;
+    action: AlertActionObject;
+    name: string;
+    description: string;
+    notificationMessage: string;
+    expiring?: number;
 }
 
 export interface NewPriceAlertDTO extends NewAlertDTO {
-    Condition: PriceAlertConditionObject;
-    Instrument: string;
-    Exchange: string;
+    condition: PriceAlertConditionObject;
+    instrument: string;
+    exchange: string;
 }
 
 export interface NewSonarAlertDTO extends NewAlertDTO {
-    Condition: SonarAlertConditionObject;
+    condition: SonarAlertConditionObject;
 }
 
 

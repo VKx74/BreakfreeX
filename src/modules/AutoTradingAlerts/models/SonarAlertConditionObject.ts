@@ -1,7 +1,7 @@
 
 export interface SonarAlertConditionObject {
-    Symbol: string;
-    Granularity: number;
-    Setup: string;
-    IsDisappeared: boolean;
+    symbol: string;
+    granularity: number;
+    setup: string;
+    isDisappeared: boolean;
 }

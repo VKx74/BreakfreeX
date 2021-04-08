@@ -1,7 +1,8 @@
 {
   "alertWidget": {
     "title": "Віджет Сповіщень",
-    "manageAlerts": "Керування сповіщеннями",
+    "priceAlerts": "Сповіщення цін",
+    "sonarAlerts": "Сповіщення сонар",
     "alertsLog": "Журнал сповіщень",
     "description": "Опис",
     "dateTime": "Дата/Час",
@@ -92,5 +93,6 @@
   "failedToRestartAlerts": "Не вдалося перезапустити сповіщення",
   "alertsStopped": "Сповіщення деактивовано",
   "failedToStopAlerts": "Не вдалося деактувати сповіщення",
-  "alertsComponentName": "Сповіщення"
+  "alertsComponentName": "Сповіщення",
+  "value": "Значення"
 }

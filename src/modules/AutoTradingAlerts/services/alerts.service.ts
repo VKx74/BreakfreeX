@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Console } from "console";
 import { Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlertBase, PriceAlert, SonarAlert } from "../models/AlertBase";
@@ -34,7 +35,12 @@ export class AlertsService {
     }
 
     init() {
-        
+        this.loadAlerts().subscribe((alerts) => {
+            this._alerts = alerts;
+            this.onAlertsChanged.next();
+        }, (error) => {
+            console.error(error);
+        });
     }
 
     createPriceAlert(alert: NewPriceAlertOptions): Observable<PriceAlert> {
@@ -94,7 +100,7 @@ export class AlertsService {
         let dto = AlertConverters.NewPriceAlertOptionsToDTO(alert);
         return this._alertRestClient.updatePriceAlert(dto, alertId).pipe(map((response) => {
             let newAlert = AlertConverters.PriceAlertDTOToAlertBase(response);
-            this.addAlert(newAlert);
+            this.update(alertId, newAlert);
             return newAlert;
         }));
     }
@@ -103,7 +109,7 @@ export class AlertsService {
         let dto = AlertConverters.NewSonarAlertOptionsToDTO(alert);
         return this._alertRestClient.updateSonarAlert(dto, alertId).pipe(map((response) => {
             let newAlert = AlertConverters.SonarAlertDTOToAlertBase(response);
-            this.addAlert(newAlert);
+            this.update(alertId, newAlert);
             return newAlert;
         }));
     }
@@ -133,7 +139,7 @@ export class AlertsService {
     }
 
     private removeAlert(alertId: number) {
-        let index = this._alerts.findIndex(alert => alert.Id === alertId);
+        let index = this._alerts.findIndex(alert => alert.id === alertId);
 
         if (index !== -1) {
             this._alerts.splice(index, 1);
@@ -142,7 +148,7 @@ export class AlertsService {
     }
 
     private addAlert(alert: AlertBase) {
-        let index = this._alerts.findIndex(a => a.Id === alert.Id);
+        let index = this._alerts.findIndex(a => a.id === alert.id);
         if (index === -1) {
             this._alerts.push(alert);
             this.onAlertsChanged.next();
@@ -150,7 +156,7 @@ export class AlertsService {
     }
 
     private update(alertId: number, alert: AlertBase) {
-        let index = this._alerts.findIndex(a => a.Id === alertId);
+        let index = this._alerts.findIndex(a => a.id === alertId);
 
         if (index !== -1) {
             this._alerts[index] = alert;
@@ -159,16 +165,16 @@ export class AlertsService {
     }
 
     private changeStatus(alertId: number, status: AlertStatus) {
-        let alert = this._alerts.find(a => a.Id === alertId);
+        let alert = this._alerts.find(a => a.id === alertId);
         if (alert) {
-            alert.Status = status;
+            alert.status = status;
             this.onAlertsChanged.next();
         }
     }
 
     private changeStatusAll(status: AlertStatus) {
         for (let alert of this._alerts) {
-            alert.Status = status;
+            alert.status = status;
             this.onAlertsChanged.next();
         }
     }

@@ -11,94 +11,94 @@ import { AlertHistoryDTO } from "../models/AlertHistoryDTO";
 
 export class AlertConverters {
     public static AlertDTOToAlertBase(dto: AlertBaseDTO): AlertBase {
-        if (dto.Type === AlertType.PriceAlert) {
+        if (dto.type === AlertType.PriceAlert) {
             return this.PriceAlertDTOToAlertBase(dto as PriceAlertDTO);
-        } else if (dto.Type === AlertType.SonarAlert) {
+        } else if (dto.type === AlertType.SonarAlert) {
             return this.SonarAlertDTOToAlertBase(dto as SonarAlertDTO);
         }
     } 
     
     public static AlertHistoryDTOToAlertHistory(dto: AlertHistoryDTO): AlertHistory {
         return {
-            Id: dto.Id,
-            Created: dto.Created,
-            ExecutionStrategy: dto.ExecutionStrategy,
-            NotificationMessage: dto.NotificationMessage,
-            Type: dto.Type,
-            Action: dto.Action,
-            AlertId: dto.AlertId,
-            Condition: dto.Condition,
-            Description: dto.Description,
-            Name: dto.Name,
-            TriggerTime: dto.TriggerTime
+            id: dto.id,
+            created: dto.created,
+            executionStrategy: dto.executionStrategy,
+            notificationMessage: dto.notificationMessage,
+            type: dto.type,
+            action: dto.action,
+            alertId: dto.alertId,
+            condition: dto.condition,
+            description: dto.description,
+            name: dto.name,
+            triggerTime: dto.triggerTime
         };
     }
 
     public static PriceAlertDTOToAlertBase(dto: PriceAlertDTO): PriceAlert {
         return {
-            Id: dto.Id,
-            Created: dto.Created,
-            Exchange: dto.Exchange,
-            ExecutionStrategy: dto.ExecutionStrategy,
-            Expiring: dto.Expiring,
-            Instrument: dto.Instrument,
-            NotificationMessage: dto.NotificationMessage,
-            Started: dto.Started,
-            Type: dto.Type,
-            Status: dto.Status,
-            Value: dto.Condition.Price,
-            Condition: this.MapDTOToPriceAlertCondition(dto.Condition.Condition),
-            UseEmail: dto.Action && dto.Action.Notifications ? dto.Action.Notifications.indexOf(AlertNotificationType.Email) !== -1 : false,
-            UsePush: dto.Action && dto.Action.Notifications ? dto.Action.Notifications.indexOf(AlertNotificationType.Push) !== -1 : false,
-            UseSMS: dto.Action && dto.Action.Notifications ? dto.Action.Notifications.indexOf(AlertNotificationType.SMS) !== -1 : false
+            id: dto.id,
+            created: dto.created,
+            exchange: dto.exchange,
+            executionStrategy: dto.executionStrategy,
+            expiring: dto.expiring,
+            instrument: dto.instrument,
+            notificationMessage: dto.notificationMessage,
+            started: dto.started,
+            type: dto.type,
+            status: dto.status,
+            value: dto.condition.price,
+            condition: this.MapDTOToPriceAlertCondition(dto.condition.condition),
+            useEmail: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Email) !== -1 : false,
+            usePush: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Push) !== -1 : false,
+            useSMS: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.SMS) !== -1 : false
         };
     }
 
     public static SonarAlertDTOToAlertBase(dto: SonarAlertDTO): SonarAlert {
         return {
-            Id: dto.Id,
-            Created: dto.Created,
-            ExecutionStrategy: dto.ExecutionStrategy,
-            Expiring: dto.Expiring,
-            NotificationMessage: dto.NotificationMessage,
-            Started: dto.Started,
-            Type: dto.Type,
-            Status: dto.Status,
-            Instrument: dto.Condition.Symbol,
-            Setup: this.MapDTOToTriggerSetup(dto.Condition.Setup),
-            Timeframe: this.MapGranularityToTriggerTimeframe(dto.Condition.Granularity),
-            TriggerType: dto.Condition.IsDisappeared ? TriggerType.SetupDisappeared : TriggerType.NewSetup,
-            UseEmail: dto.Action && dto.Action.Notifications ? dto.Action.Notifications.indexOf(AlertNotificationType.Email) !== -1 : false,
-            UsePush: dto.Action && dto.Action.Notifications ? dto.Action.Notifications.indexOf(AlertNotificationType.Push) !== -1 : false,
-            UseSMS: dto.Action && dto.Action.Notifications ? dto.Action.Notifications.indexOf(AlertNotificationType.SMS) !== -1 : false
+            id: dto.id,
+            created: dto.created,
+            executionStrategy: dto.executionStrategy,
+            expiring: dto.expiring,
+            notificationMessage: dto.notificationMessage,
+            started: dto.started,
+            type: dto.type,
+            status: dto.status,
+            instrument: dto.condition.symbol,
+            setup: this.MapDTOToTriggerSetup(dto.condition.setup),
+            timeframe: this.MapGranularityToTriggerTimeframe(dto.condition.granularity),
+            triggerType: dto.condition.isDisappeared ? TriggerType.SetupDisappeared : TriggerType.NewSetup,
+            useEmail: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Email) !== -1 : false,
+            usePush: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Push) !== -1 : false,
+            useSMS: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.SMS) !== -1 : false
         };
     }
 
     public static NewPriceAlertOptionsToDTO(options: NewPriceAlertOptions): NewPriceAlertDTO {
         let notifications: AlertNotificationType[] = [];
-        if (options.UseEmail) {
+        if (options.useEmail) {
             notifications.push(AlertNotificationType.Email);
         }
-        if (options.UseSMS) {
+        if (options.useSMS) {
             notifications.push(AlertNotificationType.SMS);
         }
-        if (options.UsePush) {
+        if (options.usePush) {
             notifications.push(AlertNotificationType.Push);
         }
 
         let result: NewPriceAlertDTO = {
-            Expiring: options.Expiring,
-            NotificationMessage: options.NotificationMessage,
-            Exchange: options.Exchange,
-            Instrument: options.Instrument,
-            Description: "",
-            Name: "",
-            Action: {
-                Notifications: notifications
+            expiring: options.expiring,
+            notificationMessage: options.notificationMessage,
+            exchange: options.exchange,
+            instrument: options.instrument,
+            description: "",
+            name: "",
+            action: {
+                notifications: notifications
             },
-            Condition: {
-                Price: options.Value,
-                Condition: this.MapPriceAlertConditionToDTO(options.Condition)
+            condition: {
+                price: options.value,
+                condition: this.MapPriceAlertConditionToDTO(options.condition)
             }
         };
 
@@ -107,29 +107,29 @@ export class AlertConverters {
 
     public static NewSonarAlertOptionsToDTO(options: NewSonarAlertOptions): NewSonarAlertDTO {
         let notifications: AlertNotificationType[] = [];
-        if (options.UseEmail) {
+        if (options.useEmail) {
             notifications.push(AlertNotificationType.Email);
         }
-        if (options.UseSMS) {
+        if (options.useSMS) {
             notifications.push(AlertNotificationType.SMS);
         }
-        if (options.UsePush) {
+        if (options.usePush) {
             notifications.push(AlertNotificationType.Push);
         }
 
         let result: NewSonarAlertDTO = {
-            Expiring: options.Expiring,
-            NotificationMessage: options.NotificationMessage,
-            Description: "",
-            Name: "",
-            Action: {
-                Notifications: notifications
+            expiring: options.expiring,
+            notificationMessage: options.notificationMessage,
+            description: "",
+            name: "",
+            action: {
+                notifications: notifications
             },
-            Condition: {
-                Symbol: options.Instrument,
-                Granularity: this.MapTriggerTimeframeToGranularity(options.Timeframe),
-                IsDisappeared: options.TriggerType === TriggerType.SetupDisappeared,
-                Setup: this.MapTriggerSetupToDTO(options.Setup)
+            condition: {
+                symbol: options.instrument,
+                granularity: this.MapTriggerTimeframeToGranularity(options.timeframe),
+                isDisappeared: options.triggerType === TriggerType.SetupDisappeared,
+                setup: this.MapTriggerSetupToDTO(options.setup)
             }
         };
         return result;

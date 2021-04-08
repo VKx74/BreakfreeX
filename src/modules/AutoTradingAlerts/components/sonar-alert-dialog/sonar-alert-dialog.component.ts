@@ -156,7 +156,7 @@ export class SonarAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
 
         forkJoin([task1, task2]).subscribe((data) => {
             let symbol = this.instrument ? this.instrument.symbol : "All instruments";
-            let triggerType = this.selectedTriggerType === TriggerType.NewSetup ? "New Sonar trade(s)" : "Sonar trade(s) Disappeared";
+            let triggerType = this.selectedTriggerType === TriggerType.NewSetup ? "New trade(s)" : "Trade(s) Disappeared";
             this.message = `${triggerType} for ${symbol} ${data[0]} ${data[1]}`;
         });
     }

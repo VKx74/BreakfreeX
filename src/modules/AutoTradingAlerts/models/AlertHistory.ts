@@ -1,15 +1,15 @@
 import { AlertExecutionStrategy, AlertType } from "./EnumsDTO";
 
 export interface AlertHistory {
-    Id: number;
-    AlertId: number;
-    Type: AlertType;
-    ExecutionStrategy: AlertExecutionStrategy;
-    Condition: any;
-    Action: any;
-    Name: string;
-    Description: string;
-    NotificationMessage: string;
-    Created: number;
-    TriggerTime: number;
+    id: number;
+    alertId: number;
+    type: AlertType;
+    executionStrategy: AlertExecutionStrategy;
+    condition: any;
+    action: any;
+    name: string;
+    description: string;
+    notificationMessage: string;
+    created: number;
+    triggerTime: number;
 }

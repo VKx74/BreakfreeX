@@ -165,6 +165,7 @@
   "action": "Дія",
   "ipRegion": "IP Регіон",
   "value": "Значення",
+  "condition": "Умова",
   "app": {
     "type&broker": "тип & брокер",
     "server": "Сервер",

@@ -10,6 +10,8 @@ import {Observable} from 'rxjs';
 import {Modal} from "Shared";
 import {AlertBase} from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
+import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
+import { Console } from 'console';
 
 export interface IAlertDialogConfig {
     alert?: AlertBase;
@@ -97,20 +99,23 @@ export class PriceAlertDialogComponent extends Modal<IAlertDialogConfig> impleme
     }
 
     submit() {
-        // const isEditMode = this.data.alert;
-        // const obs = isEditMode ? this.editAlert(this.data.alert.externalId) : this.createAlert();
-
-        // this.processingSubmit = true;
-        // obs.subscribe({
-        //     next: () => {
-        //         this.processingSubmit = false;
-        //         this.close();
-        //     },
-        //     error: () => {
-        //         this.processingSubmit = false;
-        //     }
-        // });
-        return null;
+        let option: NewPriceAlertOptions = {
+            condition: this._selectedCondition,
+            exchange: this._instrument.exchange,
+            instrument: this._instrument.id,
+            notificationMessage: this.message,
+            useEmail: this.sendEmail,
+            usePush: this.showPopup,
+            useSMS: this.sendSMS,
+            value: this.alertPrice,
+            // Expiring:
+        };
+        
+        this._alertsService.createPriceAlert(option).subscribe((alert) => {
+            this.close(true);
+        }, (error) => {
+            console.error(error);
+        });
     }
 
     private _setNotificationText() {

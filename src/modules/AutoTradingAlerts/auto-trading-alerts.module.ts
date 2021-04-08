@@ -26,21 +26,23 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NumericInputModule } from '@numeric-input/numeric-input.module';
 import { AlertsService } from './services/alerts.service';
-import { AppAlertComponent } from './components/app-alert/app-alert.component';
+import { PriceAlertGridComponent } from './components/price-alert-grid/price-alert-grid.component';
 import { AlertWidgetComponent } from './components/alert-widget/alert-widget.component';
 import { AlertSetupBaseComponent } from './components/alert-setup-base/alert-setup-base.component';
 import { SonarAlertDialogComponent } from './components/sonar-alert-dialog/sonar-alert-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { AlertRestClient } from './services/alert.rest.client';
+import { AlertGridActionsComponent } from './components/alert-grid-actions/alert-grid-actions.component';
 
 @NgModule({
     declarations: [
         PriceAlertDialogComponent,
         SonarAlertDialogComponent,
-        AppAlertComponent,
+        PriceAlertGridComponent,
         AlertLogComponent,
         AlertWidgetComponent,
-        AlertSetupBaseComponent
+        AlertSetupBaseComponent,
+        AlertGridActionsComponent
     ],
     imports: [
         CommonModule,
@@ -73,10 +75,10 @@ import { AlertRestClient } from './services/alert.rest.client';
         PriceAlertDialogComponent,
         SonarAlertDialogComponent,
         AlertWidgetComponent,
-        AppAlertComponent
+        PriceAlertGridComponent
     ],
     exports: [
-        AppAlertComponent,
+        PriceAlertGridComponent,
         AlertWidgetComponent
     ],
     providers: [
