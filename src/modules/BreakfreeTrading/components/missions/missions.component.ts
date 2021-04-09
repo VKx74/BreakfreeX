@@ -102,7 +102,7 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
         if (this._timeInterval) {
             clearInterval(this._timeInterval);
         }
-    }
+    }   
     
     onClose() {
         this.close();

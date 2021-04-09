@@ -107,6 +107,7 @@ import { BinanceFuturesCoinBroker } from './services/binance-futures/binance-fut
 import { BinanceFuturesUsdSocketService } from './services/socket/binance-futures-usd.socket.service';
 import { BinanceFuturesCoinSocketService } from './services/socket/binance-futures-coin.socket.service';
 import { BinanceSpotSocketService } from './services/socket/binance-spot.socket.service';
+import { ChatbroService } from './services/traking/ChatbroService';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -371,7 +372,8 @@ const FILE_INPUT_CONFIG_PROVIDER = {
             ]
         },
         FBPixelTrackingService,
-        GTMTrackingService
+        GTMTrackingService,
+        ChatbroService
     ],
     entryComponents: [],
     bootstrap: [AppComponent]

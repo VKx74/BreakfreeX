@@ -22,6 +22,15 @@ export class PlatformNavComponent implements OnInit, AfterViewInit, OnDestroy {
                 return e.urlAfterRedirects === `/${AppRoutes.Platform}`;
             }),
         );
+        
+    isAcademy$ = this._router.events
+        .pipe(
+            startWith(new NavigationEnd(0, this._router.url, this._router.url)),
+            filter((e: RouterEvent) => e instanceof NavigationEnd),
+            map((e: NavigationEnd) => {
+                return e.urlAfterRedirects === `/${AppRoutes.Platform}/${AppRoutes.Academy}`;
+            }),
+        );
 
     get activeBroker() {
         return this._brokerService.activeBroker;
