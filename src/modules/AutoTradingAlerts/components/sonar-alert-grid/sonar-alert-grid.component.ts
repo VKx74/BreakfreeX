@@ -52,7 +52,7 @@ export class SonarAlertGridComponent extends AlertGridBase<SonarAlert> {
      }
  
      protected _subscribeOnUpdates(): Subscription {
-         return this._alertsService.onAlertsChanged.subscribe(() => {
+         return this._alertsService.onAlertsChanged.subscribe(() => {             
              this.updateItems();
          });
      }

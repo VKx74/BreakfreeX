@@ -8,7 +8,7 @@ import { UpdatePriceAlertDTO } from "../models/UpdatePriceAlertDTO";
 import { UpdateSonarAlertDTO } from "../models/UpdateSonarAlertDTO";
 import { AppConfigService } from "@app/services/app.config.service";
 import { NotificationLogDTO } from "../models/NotificationLogDTO";
-
+import { AlertType } from "../models/EnumsDTO";
 
 @Injectable()
 export class AlertRestClient {
@@ -52,16 +52,16 @@ export class AlertRestClient {
         return this._http.patch<SonarAlertDTO>(`${this._url}EditSonarAlert/${alertId}`, dto);
     }
 
-    startAlert(alertId: number): Observable<any> {
-        return this._http.post(`${this._url}StartAlert/${alertId}`, null);
+    startAlert(alertId: number, alertType: AlertType): Observable<any> {
+        return this._http.post(`${this._url}StartAlert/${alertType}/${alertId}`, null);
     }
 
     startAllAlerts(): Observable<any> {
         return this._http.post(`${this._url}StartAllAlerts`, null);
     }
 
-    stopAlert(alertId: number): Observable<any> {
-        return this._http.post(`${this._url}StopAlert/${alertId}`, null);
+    stopAlert(alertId: number, alertType: AlertType): Observable<any> {
+        return this._http.post(`${this._url}StopAlert/${alertType}/${alertId}`, null);
     }
 
     stopAllAlerts(): Observable<any> {

@@ -100,7 +100,7 @@ export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
     }
 
     protected _stopAlert(alert: AlertBase) {
-        this._alertsService.stopAlert(alert.id).subscribe(() => {
+        this._alertsService.stopAlert(alert.id, alert.type).subscribe(() => {
             this._alertService.success(this._translateService.get('alertStopped'));
         }, (error) => {
             this._alertService.error(this._translateService.get('failedToStopAlert'));
@@ -109,7 +109,7 @@ export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
     }
 
     protected _startAlert(alert: AlertBase) {
-        this._alertsService.startAlert(alert.id).subscribe(() => {
+        this._alertsService.startAlert(alert.id, alert.type).subscribe(() => {
             this._alertService.success(this._translateService.get('alertStarted'));
         }, (error) => {
             this._alertService.error(this._translateService.get('failedToStartAlert'));

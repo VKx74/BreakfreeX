@@ -6,7 +6,7 @@ import { AlertBase, PriceAlert, SonarAlert } from "../models/AlertBase";
 import { AlertBaseDTO } from "../models/AlertBaseDTO";
 import { AlertHistory } from "../models/AlertHistory";
 import { AlertHistoryDTO } from "../models/AlertHistoryDTO";
-import { AlertStatus } from "../models/EnumsDTO";
+import { AlertStatus, AlertType } from "../models/EnumsDTO";
 import { NewPriceAlertOptions, NewSonarAlertOptions } from "../models/NewAlertOptions";
 import { NotificationLog } from "../models/NotificationLog";
 import { NotificationLogDTO } from "../models/NotificationLogDTO";
@@ -150,9 +150,10 @@ export class AlertsService {
         }));
     }
 
-    startAlert(alertId: number): Observable<any> {
-        return this._alertRestClient.startAlert(alertId).pipe(map(() => {
-            this.changeStatus(alertId, AlertStatus.Running);
+    startAlert(alertId: number, alertType: AlertType): Observable<any> {
+        console.log(`start alert:${alertId}`);
+        return this._alertRestClient.startAlert(alertId, alertType).pipe(map(() => {
+            this.changeStatus(alertId, alertType, AlertStatus.Running);
         }));
     }
 
@@ -162,9 +163,9 @@ export class AlertsService {
         }));
     }
 
-    stopAlert(alertId: number): Observable<any> {
-        return this._alertRestClient.stopAlert(alertId).pipe(map(() => {
-            this.changeStatus(alertId, AlertStatus.Stopped);
+    stopAlert(alertId: number, alertType: AlertType): Observable<any> {
+        return this._alertRestClient.stopAlert(alertId, alertType).pipe(map(() => {
+            this.changeStatus(alertId, alertType, AlertStatus.Stopped);
         }));
     }
 
@@ -245,8 +246,8 @@ export class AlertsService {
         }
     }
 
-    private changeStatus(alertId: number, status: AlertStatus) {
-        let alert = this._alerts.find(a => a.id === alertId);
+    private changeStatus(alertId: number, alertType: AlertType, status: AlertStatus) {       
+        let alert = this._alerts.find(a => a.id === alertId && a.type === alertType);
         if (alert) {
             alert.status = status;
             this.onAlertsChanged.next();
