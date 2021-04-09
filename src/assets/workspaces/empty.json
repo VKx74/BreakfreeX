@@ -31,10 +31,10 @@
               {
                 "type": "stack",
                 "content": [
-                  {
+                   {
                     "id": "2",
                     "type": "component",
-                    "componentName": "breakfreeTradingAcademy",
+                    "componentName": "breakfreeTradingScanner",
                     "isClosable": true
                   }
                 ]
@@ -44,12 +44,6 @@
                 "content": [
                   {
                     "id": "3",
-                    "type": "component",
-                    "componentName": "breakfreeTradingScanner",
-                    "isClosable": true
-                  },
-                  {
-                    "id": "4",
                     "type": "component",
                     "componentName": "watchlist",
                     "isClosable": true

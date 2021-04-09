@@ -5,6 +5,8 @@ import { IPaginationResponse } from "@app/models/pagination.model";
 import { AlgoTimeFrames, BFTTradeType, ChartData, InstrumentType, ParamNames } from "modules/Admin/data/tp-monitoring/TPMonitoringData";
 import { Trade } from "modules/Admin/data/tp-monitoring/TPMonitoringDTO";
 import { TPMonitoringService } from "modules/Admin/services/tp-monitoring.service";
+import { DataTableViewMode } from "modules/datatable/viewmode";
+import { TimeZone, TzUtils, UTCTimeZone } from "TimeZones";
 import { IChartDataSet, TPChartSettings } from "../chart-components/single-parameter-chart/sp-chart.component.";
 import { ChartDescriptor, StringDataSet } from "../tp-monitoring-general-data/tp-monitoring-general-data.component";
 
@@ -36,6 +38,10 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
     pageIndexTrades: number = 0;
     showSpinner: boolean;
     thousandNumber: number = 1;
+
+    useDateRangeFilter: boolean;
+    dtFrom: string = '';
+    dtTo: string = '';
 
     ngOnInit(): void {
         this.ComparisonParamers = Object.values(ParamNames);
@@ -78,6 +84,34 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
         this.loadTradesData();
     }
 
+    handleUseDateRangeCheckedChanged(args: any) {
+        this.useDateRangeFilter = args.checked;
+        if (!this.useDateRangeFilter) {
+            this.dtFrom = "";
+            this.dtTo = "";
+        }
+    }
+
+    dateFrom(): number {
+        if (this.dtFrom) {
+            return TzUtils.dateTimestamp(new Date(this.dtFrom), UTCTimeZone) / 1000;
+        } else {
+            return 0;
+        }
+    }
+
+    dateTo(): number {
+        if (this.dtTo) {
+            let res = TzUtils.dateTimestamp(new Date(this.dtTo), UTCTimeZone) / 1000;
+            if (res > 0) {
+                res += 86400; // include dateTo day trades
+            }
+            return res;
+        } else {
+            return 0;
+        }
+    }
+
     loadOrdersBtnClick(): void {
         this.pageIndexTrades = 0;
         this.loadTradesData();
@@ -90,7 +124,8 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
     loadTradesData(): void {
         this.showSpinner = true;
         this._tpMonitoringService.getAlgoOrdersHistoryDetailed(this.pageSizeTrades, this.pageIndexTrades, this.SelectedPlatform,
-            this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType).subscribe(
+            this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType,
+            this.dateFrom(), this.dateTo()).subscribe(
                 (trades: IPaginationResponse<Trade>) => {
                     if (trades) {
                         this.Trades = trades.items;
@@ -103,7 +138,8 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
     loadTradesDataCSV(): void {
         this.showSpinner = true;
         this._tpMonitoringService.getAlgoOrdersHistoryDetailedCSV(this.thousandNumber, this.SelectedPlatform,
-            this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType)
+            this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType,
+            this.dateFrom(), this.dateTo())
             .subscribe((res: HttpResponse<Blob>) => {
                 let fileName = res.headers.get("filename");
                 let a = document.createElement("a");
@@ -119,7 +155,8 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
         let index = Object.values(ParamNames).indexOf(this.SelectedComparing);
         let selectedComparing = Object.keys(ParamNames)[index];
         this._tpMonitoringService.getAlgoTradesCharts(selectedComparing,
-            this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType)
+            this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType,
+            this.dateFrom(), this.dateTo())
             .subscribe((data: { [key: string]: { [key: string]: number } }) => {
                 this.showSpinner = false;
                 if (data) {
@@ -157,8 +194,4 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
             }
         return 0;
     }
-}
-
-function saveAs(data: any, arg1: string): void {
-    throw new Error("Function not implemented.");
 }

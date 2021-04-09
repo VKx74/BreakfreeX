@@ -1,0 +1,55 @@
+<div class="root flex">
+    <div class="content flex">
+
+        <i class="fa fa-angle-double-right open-button" (click)="setSidebarState(true)"></i>
+        
+        <div class="side-menu" [class.side-menu-closed]="!sidebarOpen">
+            <div class="menu-container">
+                <div class="menu-mobile-header">
+                    <i class="fa fa-times-circle close-button" (click)="setSidebarState(false)"></i>
+                </div>
+                <academy-menu [(selectedMedia)]="selectedMedia" (nextMediaChange)="nextMediaChanged($event)"
+                (prevMediaChange)="prevMediaChanged($event)"></academy-menu>
+            </div>
+        </div>
+        <div class="page flex">
+            <div class="video-player">
+                <div class="frame-container">
+                    <iframe title="1.4 Video" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0"
+                        scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen msallowfullscreen
+                        width="100%" height="100%"></iframe>
+                </div>
+                <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
+            </div>
+            <div class="video-footer flex">
+                <div class="move-prev flex" [ngClass]="{'disabled': !canPrev}" (click)="prevVideo()">
+                    <div class="arro flex">&#10094;</div>
+                    <div class="lable flex">Prev</div>
+                </div>
+                <div class="timing flex">
+                    <i class="fa fa-clock-o"></i>
+                    <div class="lable flex">{{getTiming()}}</div>
+                </div>
+                <div class="move-next flex" [ngClass]="{'disabled': !canNext}" (click)="nextVideo()">
+                    <div class="lable flex">Next</div>
+                    <div class="arro flex">&#10095;</div>
+                </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="video-details">
+                <div class="video-title">{{selectedMedia?.name}}</div>
+                <div class="video-description" [innerHTML]="selectedMedia?.description"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <mat-sidenav-container class="sidebar-container" [class.sidebar-close]="!sidebarOpen"
+        (backdropClick)="setSidebarState(false)">
+        <mat-sidenav mode="push" [opened]="sidebarOpen" [autoFocus]="false">
+            <academy-menu [(selectedMedia)]="selectedMedia" (nextMediaChange)="nextMediaChanged($event)"
+                (prevMediaChange)="prevMediaChanged($event)"></academy-menu>
+        </mat-sidenav>
+    </mat-sidenav-container> -->
+</div>

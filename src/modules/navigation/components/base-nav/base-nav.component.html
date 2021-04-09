@@ -16,7 +16,7 @@
 
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
             <ng-content></ng-content> 
-            <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer">
+            <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">
                 <div class="xp-nav-container" (click)="openMissionDialog()">
                     <span *ngIf="isLoaded; else loading">
                         <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->

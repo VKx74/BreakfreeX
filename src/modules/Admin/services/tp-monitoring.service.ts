@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IPaginationResponse, PaginationParams, PaginationResponse } from "@app/models/pagination.model";
 import { AppConfigService } from "@app/services/app.config.service";
+import { param } from "jquery";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { QueryParamsConstructor } from "../data/models";
@@ -131,7 +132,7 @@ export class TPMonitoringService {
     }
 
     public getUserOrdersHistoryDetailed(pageSize: number, pageIndex: number, userId: string, mtLogin: number, mtPlatform: string)
-        : Observable<IPaginationResponse<Trade>> {        
+        : Observable<IPaginationResponse<Trade>> {
         let params = new HttpParams();
         params = params.append('pageSize', pageSize.toString());
         params = params.append('pageIndex', pageIndex.toString());
@@ -168,7 +169,8 @@ export class TPMonitoringService {
     }
 
     public getAlgoTradesCharts(compareParam: string, tfFilter: number,
-        tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType): Observable<any> {
+        tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType,
+        dtFrom: number, dtTo: number): Observable<any> {
         let params = new HttpParams();
         params = params.append('algoTradesCompareBy', compareParam);
         params = params.append('tfFilter', tfFilter.toString());
@@ -176,13 +178,15 @@ export class TPMonitoringService {
             params = params.append('ordTradeTypeFilter', tradeFilter.toString());
         if (mktTypeFilter !== InstrumentType.All)
             params = params.append('instrTypeFilter', mktTypeFilter.toString());
+        params = params.append("dateFrom", dtFrom.toString());
+        params = params.append("dateTo", dtTo.toString());
 
         return this._http.get<any>(this.getAlgoTradeDetailedUrl, { params: params });
     }
 
     public getAlgoOrdersHistoryDetailed(pageSize: number, pageIndex: number,
-        mtPlatform: string, tfFilter: number,
-        tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType)
+        mtPlatform: string, tfFilter: number, tradeFilter: BFTTradeType,
+        mktTypeFilter: InstrumentType, dtFrom: number, dtTo: number)
         : Observable<IPaginationResponse<Trade>> {
         let params = new HttpParams();
         params = params.append('pageSize', pageSize.toString());
@@ -193,6 +197,8 @@ export class TPMonitoringService {
             params = params.append('ordTradeTypeFilter', tradeFilter.toString());
         if (mktTypeFilter !== InstrumentType.All)
             params = params.append('instrTypeFilter', mktTypeFilter.toString());
+        params = params.append("dateFrom", dtFrom.toString());
+        params = params.append("dateTo", dtTo.toString());
 
         return this._http.get<IPaginationResponse<Trade>>(this.getAlgoOrdersHistoryDetailedUrl, { params: params })
             .pipe(
@@ -203,20 +209,22 @@ export class TPMonitoringService {
     }
 
     public getAlgoOrdersHistoryDetailedCSV(pageNumber: number,
-        mtPlatform: string, tfFilter: number,
-        tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType)
+        mtPlatform: string, tfFilter: number, tradeFilter: BFTTradeType,
+        mktTypeFilter: InstrumentType, dtFrom: number, dtTo: number)
         : Observable<any> {
-            
+
         let params = new HttpParams();
-        params = params.append('pageNumber', pageNumber.toString());        
+        params = params.append('pageNumber', pageNumber.toString());
         params = params.append('mtPlatform', mtPlatform);
         params = params.append('tfFilter', tfFilter.toString());
         if (tradeFilter !== BFTTradeType.All)
             params = params.append('ordTradeTypeFilter', tradeFilter.toString());
         if (mktTypeFilter !== InstrumentType.All)
             params = params.append('instrTypeFilter', mktTypeFilter.toString());
-                        
-        return this._http.get(this.getAlgoOrdersHistoryDetailedcsvUrl, 
-            { params: params, observe: 'response', responseType: 'blob'});
+        params = params.append("dateFrom", dtFrom.toString());
+        params = params.append("dateTo", dtTo.toString());
+
+        return this._http.get(this.getAlgoOrdersHistoryDetailedcsvUrl,
+            { params: params, observe: 'response', responseType: 'blob' });
     }
 }
