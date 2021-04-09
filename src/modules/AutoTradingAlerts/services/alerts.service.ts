@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Console } from "console";
-import { Observable, Subject } from "rxjs";
+import { Observable, of, Subject, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlertBase, PriceAlert, SonarAlert } from "../models/AlertBase";
 import { AlertBaseDTO } from "../models/AlertBaseDTO";
@@ -13,12 +13,19 @@ import { NotificationLogDTO } from "../models/NotificationLogDTO";
 import { UpdatePriceAlertOptions, UpdateSonarAlertOptions } from "../models/UpdateAlertOptions";
 import { AlertConverters } from "./alert.converters";
 import { AlertRestClient } from "./alert.rest.client";
+import { AlertSocketService } from "./alert.socket.service";
+import { IAlertChangedData, IAlertTriggeredData } from "./ws.models/models";
 
 @Injectable()
 export class AlertsService {
+    private _isInitialized: boolean = false;
+    private _timeoutForNotificationsLog: any;
+    private _defaultAlertSound: string = "Alert1";
     private _alerts: AlertBase[] = [];
     private _alertHistory: AlertHistory[] = [];
     private _notificationLogs: NotificationLog[] = [];
+    private _triggerSubscription: Subscription;
+    private _changedSubscription: Subscription;
 
     public onAlertTriggered: Subject<string> = new Subject<string>();
     public onAlertShowPopup: Subject<string> = new Subject<string>();
@@ -39,30 +46,23 @@ export class AlertsService {
         return this._notificationLogs;
     }
 
-    constructor(private _alertRestClient: AlertRestClient) {
+    constructor(private _alertRestClient: AlertRestClient, private _ws: AlertSocketService) {
     }
 
     init() {
-        this.loadAlerts().subscribe((alerts) => {
-            this._alerts = alerts;
-            this.onAlertsChanged.next();
-        }, (error) => {
-            console.error(error);
-        });
-        
-        this.loadAlertsHistory().subscribe((alerts) => {
-            this._alertHistory = alerts;
-            this.onAlertsHistoryChanged.next();
-        }, (error) => {
-            console.error(error);
-        }); 
-        
-        this.loadNotificationLog().subscribe((logs) => {
-            this._notificationLogs = logs;
-            this.onNotificationLogsChanged.next();
-        }, (error) => {
-            console.error(error);
-        });
+        if (this._isInitialized) {
+            return;
+        }
+
+        this._isInitialized = true;
+
+        this.reloadAlerts();
+        this.reloadHistory();
+        this.reloadNotifications();
+        this._ws.open().subscribe(() => { });
+
+        this._triggerSubscription = this._ws.alertTriggeredSubject.subscribe(this._handleAlertTriggered.bind(this));
+        this._changedSubscription = this._ws.alertChangedSubject.subscribe(this._handleAlertChanged.bind(this));
     }
 
     createPriceAlert(alert: NewPriceAlertOptions): Observable<PriceAlert> {
@@ -174,6 +174,51 @@ export class AlertsService {
         }));
     }
 
+    dispose(): Observable<void> {
+        if (this._triggerSubscription) {
+            this._triggerSubscription.unsubscribe();
+        }
+
+        if (this._changedSubscription) {
+            this._changedSubscription.unsubscribe();
+        }
+
+        if (this._timeoutForNotificationsLog) {
+            clearTimeout(this._timeoutForNotificationsLog);
+            this._timeoutForNotificationsLog = null;
+        }
+
+        this._ws.dispose();
+        return of();
+    }
+
+    private reloadAlerts() {
+        this.loadAlerts().subscribe((alerts) => {
+            this._alerts = alerts;
+            this.onAlertsChanged.next();
+        }, (error) => {
+            console.error(error);
+        });
+    }
+
+    private reloadHistory() {
+        this.loadAlertsHistory().subscribe((alerts) => {
+            this._alertHistory = alerts;
+            this.onAlertsHistoryChanged.next();
+        }, (error) => {
+            console.error(error);
+        });
+    }
+
+    private reloadNotifications() {
+        this.loadNotificationLog().subscribe((logs) => {
+            this._notificationLogs = logs;
+            this.onNotificationLogsChanged.next();
+        }, (error) => {
+            console.error(error);
+        });
+    }
+
     private removeAlert(alertId: number) {
         let index = this._alerts.findIndex(alert => alert.id === alertId);
 
@@ -213,5 +258,24 @@ export class AlertsService {
             alert.status = status;
             this.onAlertsChanged.next();
         }
+    }
+
+    protected _handleAlertTriggered(data: IAlertTriggeredData) {
+        this.onAlertShowPopup.next(data.NotificationMessage);
+        this.onAlertPlaySound.next(this._defaultAlertSound);
+
+        this.reloadAlerts();
+        this.reloadHistory();
+
+        if (!this._timeoutForNotificationsLog) {
+            this._timeoutForNotificationsLog = setTimeout(() => {
+                this._timeoutForNotificationsLog = null;
+                this.reloadNotifications();
+            }, 5000);
+        }
+    }
+
+    protected _handleAlertChanged(data: IAlertChangedData) {
+        this.reloadAlerts();
     }
 }

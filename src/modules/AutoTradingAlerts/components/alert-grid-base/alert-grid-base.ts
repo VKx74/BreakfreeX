@@ -7,13 +7,31 @@ import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDT
 import { AlertService } from '@alert/services/alert.service';
 import { SonarAlertDialogComponent } from '../sonar-alert-dialog/sonar-alert-dialog.component';
 import { PriceAlertDialogComponent } from "../price-alert-dialog/price-alert-dialog.component";
+import { ChangeDetectorRef, OnDestroy } from "@angular/core";
+import { Observable, Subscription } from "rxjs";
+import { OnInit } from "@angular/core";
 
-export abstract class AlertGridBase {
-    constructor (protected _dialog: MatDialog,
+export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
+    protected _subscription: Subscription;
+    alerts: T[] = [];
+
+    constructor(protected _dialog: MatDialog,
         protected _alertsService: AlertsService,
         protected _alertService: AlertService,
-        protected _translateService: TranslateService) {
+        protected _translateService: TranslateService,
+        protected _cdr: ChangeDetectorRef) {
         this._alertsService.init();
+    }
+
+    ngOnInit(): void {
+        this.updateItems();
+        this._subscription = this._subscribeOnUpdates();
+    }
+
+    ngOnDestroy(): void {
+        if (this._subscription) {
+            this._subscription.unsubscribe();
+        }
     }
 
     handleEdit(alert: AlertBase) {
@@ -50,6 +68,35 @@ export abstract class AlertGridBase {
                 }
             }
         });
+    }
+
+    protected _subscribeOnUpdates(): Subscription {
+        return null;
+    }
+
+    protected updateItems(): void {
+        this.loadItems()
+            .subscribe(
+                items => {
+                    this.alerts = items.slice();
+                    this.refresh();
+                },
+                e => this._handleLoadingError(e)
+            );
+    }
+
+    private _handleLoadingError(e) {
+        this._alertService.error(this._getLoadingError());
+    }
+
+    protected _getLoadingError() {
+        return 'Can\'t loading alerts';
+    }
+
+    protected abstract loadItems(): Observable<T[]>;
+
+    protected refresh(): void {
+        this._cdr.detectChanges();
     }
 
     protected _stopAlert(alert: AlertBase) {

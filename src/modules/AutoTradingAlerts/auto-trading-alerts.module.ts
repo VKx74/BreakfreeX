@@ -35,6 +35,7 @@ import { AlertGridActionsComponent } from './components/alert-grid-actions/alert
 import { SonarAlertGridComponent } from './components/sonar-alert-grid/sonar-alert-grid.component';
 import { AlertLogGridComponent } from './components/alert-log-grid/alert-log-grid.component';
 import { NotificationsLogGridComponent } from './components/notifications-log-grid/notifications-log-grid.component';
+import { AlertSocketService } from './services/alert.socket.service';
 
 @NgModule({
     declarations: [
@@ -92,7 +93,8 @@ import { NotificationsLogGridComponent } from './components/notifications-log-gr
             deps: [Injector, SharedTranslateService]
         },
         AlertsService,
-        AlertRestClient
+        AlertRestClient,
+        AlertSocketService
     ]
 })
 export class AutoTradingAlertsModule {

@@ -197,6 +197,14 @@ export class DashboardComponent {
         if (loader) {
             loader.remove();
         }
+
+        const os = (window as any).OneSignal;
+        if (os && os.push && os.setExternalUserId) {
+            const userId = this._identityService.id;
+            os.push(function() {
+                os.setExternalUserId(userId);
+            });
+        }
     }
 
     clearSession() {

@@ -67,10 +67,10 @@
 
   <div class="crypto-form-unit margin-bottom">
     <p class="form-unit__label">
-      <span>{{'tradingAlert.message' | translate}}</span>
+      <span>{{'tradingAlert.message' | translate}} (Max 70)</span>
     </p>
     <textarea matInput [(ngModel)]="messageProp" class="crypto-textarea"
-      placeholder="{{'tradingAlert.message' | translate}}">
+      placeholder="{{'tradingAlert.message' | translate}}" maxlength="70">
     </textarea>
   </div>
 </div>

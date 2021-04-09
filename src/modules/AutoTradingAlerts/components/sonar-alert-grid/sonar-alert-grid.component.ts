@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { SonarAlert } from "../../models/AlertBase";
-import { Observable } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { AutoTradingAlertsTranslateService } from "../../localization/token";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
@@ -21,16 +21,13 @@ import { TriggerType } from 'modules/AutoTradingAlerts/models/Enums';
         }
     ]
 })
-export class SonarAlertGridComponent extends AlertGridBase {
-    get alerts(): SonarAlert[] {
-        return this._alertsService.Alerts.filter(_ => _.type === AlertType.SonarAlert) as SonarAlert[];
-    }
-
+export class SonarAlertGridComponent extends AlertGridBase<SonarAlert> {
     constructor (protected _dialog: MatDialog,
         protected _alertsService: AlertsService,
         protected _alertService: AlertService,
-        protected _translateService: TranslateService) {
-            super(_dialog, _alertsService, _alertService, _translateService);
+        protected _translateService: TranslateService,
+        protected _cdr: ChangeDetectorRef) {
+            super(_dialog, _alertsService, _alertService, _translateService, _cdr);
     }
 
     getTimeframeTitle(sonarAlert: SonarAlert): Observable<string> {
@@ -49,4 +46,14 @@ export class SonarAlertGridComponent extends AlertGridBase {
 
         return this._translateService.get(`tradingAlert.setupDisappeared`);
     }
+
+    protected loadItems(): Observable<SonarAlert[]> {
+        return of(this._alertsService.Alerts.filter(_ => _.type === AlertType.SonarAlert) as SonarAlert[]);
+     }
+ 
+     protected _subscribeOnUpdates(): Subscription {
+         return this._alertsService.onAlertsChanged.subscribe(() => {
+             this.updateItems();
+         });
+     }
 }

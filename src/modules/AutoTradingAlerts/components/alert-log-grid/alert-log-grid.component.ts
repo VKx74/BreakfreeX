@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertHistory } from 'modules/AutoTradingAlerts/models/AlertHistory';
 import { AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertGridBase } from '../alert-grid-base/alert-grid-base';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertService } from '@alert/services/alert.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'alert-log-grid',
   templateUrl: 'alert-log-grid.component.html',
   styleUrls: ['alert-log-grid.component.scss']
 })
-export class AlertLogGridComponent implements OnInit {
-  get alerts(): AlertHistory[] {
-    return this._alertsService.AlertHistory;
-  }
+export class AlertLogGridComponent extends AlertGridBase<AlertHistory> {
 
-  constructor(private _alertsService: AlertsService) { 
-    this._alertsService.init();
-  }
-
-  ngOnInit() {
+  constructor(protected _dialog: MatDialog,
+    protected _alertsService: AlertsService,
+    protected _alertService: AlertService,
+    protected _translateService: TranslateService,
+    protected _cdr: ChangeDetectorRef) {
+    super(_dialog, _alertsService, _alertService, _translateService, _cdr);
   }
 
   getConditionTitle(alert: AlertHistory): string {
@@ -25,5 +28,15 @@ export class AlertLogGridComponent implements OnInit {
       case AlertType.PriceAlert: return "Price Alert";
       case AlertType.SonarAlert: return "Sonar Alert";
     }
+  }
+
+  protected loadItems(): Observable<AlertHistory[]> {
+    return of(this._alertsService.AlertHistory);
+  }
+
+  protected _subscribeOnUpdates(): Subscription {
+    return this._alertsService.onAlertsHistoryChanged.subscribe(() => {
+      this.updateItems();
+    });
   }
 }

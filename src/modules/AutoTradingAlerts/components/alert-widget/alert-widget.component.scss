@@ -1,7 +1,7 @@
 :host {
     .alerts-settings-header {
         font-size: 12px !important;
-        
+
         /deep/ {
             .mat-tab-link {
                 font-size: 12px !important;
@@ -9,7 +9,8 @@
                 height: 34px !important;
                 min-width: 100px !important;
             }
-            .mat-tab-nav-bar, .mat-tab-header {
+            .mat-tab-nav-bar,
+            .mat-tab-header {
                 border: none !important;
             }
         }
@@ -18,5 +19,16 @@
     .disabled {
         opacity: 0.35;
         pointer-events: none;
+    }
+
+    .alert-container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .active {
+        text-decoration: underline;
     }
 }

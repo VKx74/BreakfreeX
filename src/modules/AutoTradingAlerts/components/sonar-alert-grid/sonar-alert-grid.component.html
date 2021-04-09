@@ -23,7 +23,7 @@
                 <data-table-cell class="stripped-mode" columnName="symbol">
                     <ng-template let-item>
                         <span class="flex">
-                            {{item.instrument}}
+                            {{item.instrument || "All Instruments"}}
                         </span>
                     </ng-template>
                 </data-table-cell>

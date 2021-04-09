@@ -32,11 +32,12 @@ export class AlertConverters {
             condition: dto.condition,
             description: dto.description,
             name: dto.name,
-            triggerTime: dto.triggerTime
+            triggerTime: dto.triggerTime * 1000
         };
     }  
     
     public static NotificationLogDTOToNotificationLog(dto: NotificationLogDTO): NotificationLog {
+        dto.time *= 1000;
         return dto; // same data
     }
 
