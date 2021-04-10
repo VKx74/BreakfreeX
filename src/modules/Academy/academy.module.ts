@@ -12,13 +12,15 @@ import { LoaderModule } from "modules/loader/loader.module";
 import { AcademyMenuComponent } from "./components/academy-menu/academy-menu.component";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { IntercomModule } from 'ng-intercom';
+import { AcademyComponent } from "./components/academy-component/academy.component";
 
 @NgModule({
     declarations: [
         AcademyPageComponent,
         AcademyRootComponent,
         AcademyPageV2Component,
-        AcademyMenuComponent
+        AcademyMenuComponent,
+        AcademyComponent
     ],
     imports: [
         CommonModule,
@@ -36,7 +38,10 @@ import { IntercomModule } from 'ng-intercom';
     providers: [
         WistiaService
     ],
-    entryComponents: []
+    entryComponents: [],
+    exports: [
+        AcademyComponent
+    ]
 })
 export class AcademyModule {
 }

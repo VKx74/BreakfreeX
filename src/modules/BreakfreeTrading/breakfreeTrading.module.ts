@@ -47,6 +47,7 @@ import { TradeGuardService } from './services/tradeGuard.service';
 import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
 import { TradingPerformanceComponent } from './components/tradingPerformance/tradingPerformance.component';
 import { LeaderDashboardComponent } from './components/missions/leader-dashboard/leader-dashboard.component';
+import { AcademyModule } from 'modules/Academy/academy.module';
 
 @NgModule({
     // components here
@@ -93,7 +94,8 @@ import { LeaderDashboardComponent } from './components/missions/leader-dashboard
         ClipboardModule,
         MatFormFieldModule,
         MatSelectModule,
-        UIModule
+        UIModule,
+        AcademyModule
     ],
     // components here
     entryComponents: [

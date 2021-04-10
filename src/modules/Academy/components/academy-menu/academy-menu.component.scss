@@ -6,6 +6,31 @@
   font-family: "Fira Sans", sans-serif;
   height: 100%;
 
+  .close-button-container {
+    display: flex;
+  }
+
+  .open-button {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    background: #191919;
+    font-size: 26px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: whitesmoke;
+  }
+
+  .close-button {
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 16px;
+    cursor: pointer;
+  }
+
   .menu {
     max-width: 330px;
     min-width: 250px;
@@ -157,6 +182,9 @@
     // .video-content {
     //   margin-bottom: 100px;
     // }
+    .close-button-container {
+      display: none;
+    }
   }
 }
 

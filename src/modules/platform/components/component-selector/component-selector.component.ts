@@ -97,12 +97,12 @@ export class ComponentSelectorComponent implements OnDestroy {
             //     componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
             //     componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
             // }, 
-            // {
-            //     component: BreakfreeTradingAcademyComponent,
-            //     previewImgClass: BreakfreeTradingAcademyComponent.previewImgClass,
-            //     componentName: this._bftTranslateService.stream('breakfreeTradingAcademyComponentName'),
-            //     componentIdentifier: ComponentIdentifier.breakfreeTradingAcademy,
-            // },
+            {
+                component: BreakfreeTradingAcademyComponent,
+                previewImgClass: BreakfreeTradingAcademyComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('breakfreeTradingAcademyComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingAcademy,
+            },
             {
                 component: BreakfreeTradingScannerComponent,
                 previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,

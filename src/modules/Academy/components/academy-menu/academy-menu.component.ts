@@ -21,6 +21,8 @@ export class AcademyMenuComponent {
     private _groupedMedia: GroupedMedia[] = [];
     private _selectedMedia: Content;
 
+    @Input() showUserAvatar: boolean;
+    @Input() hidable: boolean;
     @Input() public set selectedMedia(value: Content) {
         this._selectedMedia = value;
         this.selectedMediaChange.next(this._selectedMedia);
@@ -30,6 +32,8 @@ export class AcademyMenuComponent {
     @Output() selectedMediaChange = new EventEmitter<Content>();
     @Output() nextMediaChange = new EventEmitter<Content>();
     @Output() prevMediaChange = new EventEmitter<Content>();
+
+    public sidebarOpen: boolean = true;
 
     public get selectedMedia(): Content {
         return this._selectedMedia;
@@ -107,6 +111,10 @@ export class AcademyMenuComponent {
     }
 
     ngOnInit() {
+        if (!this.showUserAvatar) {
+            return;
+        }
+
         this._profileService.getUserProfileById(this._identityService.id, true)
             .subscribe(
                 data => {
@@ -251,5 +259,10 @@ export class AcademyMenuComponent {
         }
 
         return this._content[currentIndex - 1];
+    }
+
+
+    setSidebarState(state: boolean) {
+        this.sidebarOpen = state;
     }
 }
