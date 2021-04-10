@@ -31,4 +31,26 @@
     .active {
         text-decoration: underline;
     }
+
+    .add-button {
+        position: absolute;
+        right: 0px;
+        z-index: 2;
+        top: 0px;
+    }
+
+    /deep/ {
+        .mat-tab-body-wrapper {
+            height: 100% !important;
+        }
+
+        .mat-tab-header {
+            margin-top: 10px;
+            margin-right: 33px;
+        }
+
+        .mat-tab-labels {
+            background-color: transparent !important;
+        }
+    }
 }

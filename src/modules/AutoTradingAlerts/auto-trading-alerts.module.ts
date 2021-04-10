@@ -36,6 +36,7 @@ import { SonarAlertGridComponent } from './components/sonar-alert-grid/sonar-ale
 import { AlertLogGridComponent } from './components/alert-log-grid/alert-log-grid.component';
 import { NotificationsLogGridComponent } from './components/notifications-log-grid/notifications-log-grid.component';
 import { AlertSocketService } from './services/alert.socket.service';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
     declarations: [
@@ -74,7 +75,8 @@ import { AlertSocketService } from './services/alert.socket.service';
         DatatableModule,
         MatFormFieldModule,
         MatSelectModule,
-        NumericInputModule
+        NumericInputModule,
+        DragDropModule
     ],
     entryComponents: [
         PriceAlertDialogComponent,

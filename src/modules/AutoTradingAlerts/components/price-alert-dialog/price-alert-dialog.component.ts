@@ -36,24 +36,30 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
         return this._instrument;
     }
     public set instrument(value: IInstrument) {
-        this._instrument = value;
-        this._setNotificationText();
+        if (this._instrument !== value) {
+            this._instrument = value;
+            this._setNotificationText();
+        }
     }
 
     public get selectedCondition(): AlertCondition {
         return this._selectedCondition;
     }
     public set selectedCondition(value: AlertCondition) {
-        this._selectedCondition = value;
-        this._setNotificationText();
+        if (this._selectedCondition !== value) {
+            this._selectedCondition = value;
+            this._setNotificationText();
+        }
     }
 
     public get alertPrice(): number {
         return this._alertPrice;
     }
     public set alertPrice(value: number) {
-        this._alertPrice = value;
-        this._setNotificationText();
+        if (this._alertPrice !== value) {
+            this._alertPrice = value;
+            this._setNotificationText();
+        }
     }
 
     processingSubmit: boolean = false;
@@ -120,6 +126,18 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
        } else {
             this._create();
        }
+    }
+
+    canCreateAlert() {
+        if (!this.instrument) {
+            return false;
+        }
+
+        if (this.alertPrice === null || this.alertPrice === undefined) {
+            return false;
+        }
+
+        return true;
     }
 
     private _create() {

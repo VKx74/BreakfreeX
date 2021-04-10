@@ -59,32 +59,40 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         return this._selectedTriggerType;
     }
     public set selectedTriggerType(value: TriggerType) {
-        this._selectedTriggerType = value;
-        this._setNotificationText();
+        if (this._selectedTriggerType !== value) {
+            this._selectedTriggerType = value;
+            this._setNotificationText();
+        }
     }
 
     public get instrument(): IInstrument {
         return this._instrument;
     }
     public set instrument(value: IInstrument) {
-        this._instrument = value;
-        this._setNotificationText();
+        if (this._instrument !== value) {
+            this._instrument = value;
+            this._setNotificationText();
+        }
     }
 
     public get selectedTriggerTimeframe(): TriggerTimeframe {
         return this._selectedTriggerTimeframe;
     }
     public set selectedTriggerTimeframe(value: TriggerTimeframe) {
-        this._selectedTriggerTimeframe = value;
-        this._setNotificationText();
+        if (this._selectedTriggerTimeframe = value) {
+            this._selectedTriggerTimeframe = value;
+            this._setNotificationText();
+        }
     }
 
     public get selectedTriggerSetup(): TriggerSetup {
         return this._selectedTriggerSetup;
     }
     public set selectedTriggerSetup(value: TriggerSetup) {
-        this._selectedTriggerSetup = value;
-        this._setNotificationText();
+        if (this._selectedTriggerSetup = value) {
+            this._selectedTriggerSetup = value;
+            this._setNotificationText();
+        }
     }
 
     processingSubmit: boolean = false;

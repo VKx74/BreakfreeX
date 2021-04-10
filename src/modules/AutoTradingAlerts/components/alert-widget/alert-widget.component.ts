@@ -8,12 +8,13 @@ import { ConfirmModalComponent } from "UI";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { PriceAlertDialogComponent } from '../price-alert-dialog/price-alert-dialog.component';
 import { SonarAlertDialogComponent } from '../sonar-alert-dialog/sonar-alert-dialog.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 export enum AlertTabs {
-  PriceAlerts = 1,
-  SonarAlerts = 2,
-  AlertsLog = 3,
-  NotificationLog = 4
+  PriceAlerts = 0,
+  SonarAlerts = 1,
+  AlertsLog = 2,
+  NotificationLog = 3
 }
 
 @Component({
@@ -38,9 +39,10 @@ export class AlertWidgetComponent extends BaseLayoutItemComponent {
   ngOnInit() {
   }
 
-  tabChanged(data: number) {
-    this.selectedTabIndex = data;
-  }
+
+  tabChanged(data: MatTabChangeEvent) {
+    this.selectedTabIndex = data.index;
+}
 
   showAlertDialog() {
     if (this.selectedTabIndex === AlertTabs.SonarAlerts) {
