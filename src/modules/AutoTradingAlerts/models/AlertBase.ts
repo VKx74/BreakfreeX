@@ -7,7 +7,7 @@ export interface AlertBase {
     status: AlertStatus;
     executionStrategy: AlertExecutionStrategy;
     notificationMessage: string;
-    expiring: number;
+    expiring?: number;
     started: number;
     created: number;
     useEmail: boolean;

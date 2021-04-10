@@ -37,6 +37,7 @@ import { CookieService } from '@app/services/сookie.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { MissionTrackingService } from "@app/services/missions-tracking.service";
 import { InstrumentMappingService } from "../../../../app/services/instrument-mapping.service";
+import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 
 
 @Component({
@@ -87,6 +88,7 @@ export class DashboardComponent {
         private _coockieService: CookieService,
         private _layoutStorageService: LayoutStorageService,
         private _brokerService: BrokerService,
+        private _alertsService: AlertsService,
         @Inject(LayoutTranslateService) private _layoutTranslateService: TranslateService,
         private _layoutManager: LayoutManagerService,
         private _workspaceRepository: WorkspaceRepository,
@@ -204,6 +206,12 @@ export class DashboardComponent {
             os.push(function() {
                 os.setExternalUserId(userId);
             });
+        }
+
+        try {
+            this._alertsService.init();
+        } catch (error) {
+            console.error(error);
         }
     }
 

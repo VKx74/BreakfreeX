@@ -33,6 +33,7 @@ import {Store} from "@ngrx/store";
 import {AppState} from "@app/store/reducer";
 import { SaveStateAction } from '@app/store/actions/platform.actions';
 import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
+import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -65,7 +66,8 @@ interface ReplayWaiter {
             useExisting: ChartTranslateService
         },
         CalendarEventsDatafeed,
-        TradeFromChartService
+        TradeFromChartService,
+        AlertingFromChartService
     ]
 })
 export class TcdComponent extends BaseLayoutItemComponent {
@@ -96,6 +98,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _indicatorRestrictionService: IndicatorRestrictionService,
                 private _indicatorDataProviderService: IndicatorDataProviderService,
                 private _tradingFromChartHandler: TradeFromChartService,
+                private _alertingFromChartService: AlertingFromChartService,
                 private _chartTrackerService: ChartTrackerService,
                 private _store: Store<AppState>,
                 protected _injector: Injector) {
@@ -161,7 +164,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         // const instrumentsNeeded = !state || !state.instrument;
         
         if (state && state.chartState) {
-            if (state.chartState.version !== 7) {
+            if (state.chartState.version !== 8) {
                 console.log("Set default theme");
                 theme = this._getTheme();
                 if (state.chartState.chart) {
@@ -195,13 +198,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 tradeHandler: this.tradeHandler.bind(this),
                 searchInstrumentHandler: this.searchInstrumentHandler.bind(this),
                 tradingFromChartHandler: this._tradingFromChartHandler,
+                alertingFromChartHandler: this._alertingFromChartService,
                 showScrollbar: false
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
             this.chart.showInstrumentWatermark = false;
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
-            this._tradingFromChartHandler.setChart(this.chart);
 
             if (state && state.chartState) {
                 // locale from app
@@ -288,6 +291,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     protected instrumentChanged(eventObject: TradingChartDesigner.IValueChangedEvent) {
         this._tradingFromChartHandler.refresh();
+        this._alertingFromChartService.refresh();
     }
 
     protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
@@ -302,6 +306,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }
 
         this.replayWaiter = null;
+        
+        this._tradingFromChartHandler.setChart(this.chart);
+        this._alertingFromChartService.setChart(this.chart);
     }
 
     protected useDefaultLinker(): boolean {
@@ -519,6 +526,12 @@ export class TcdComponent extends BaseLayoutItemComponent {
         
         try {
             this._tradingFromChartHandler.dispose();
+        } catch (e) {
+            console.log(e);
+        }
+
+        try {
+            this._alertingFromChartService.dispose();
         } catch (e) {
             console.log(e);
         }

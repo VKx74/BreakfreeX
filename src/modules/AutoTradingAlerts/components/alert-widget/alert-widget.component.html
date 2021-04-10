@@ -1,10 +1,10 @@
 <div class="alert-container">
-    <mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedIndex">
+    <mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedTabIndex">
       <mat-tab label="{{'alertWidget.priceAlerts' | translate}}">
-        <price-alert-grid></price-alert-grid>
+        <price-alert-grid (onOpenChart)="handleOpenChart($event)"></price-alert-grid>
       </mat-tab>
       <mat-tab label="{{'alertWidget.sonarAlerts' | translate}}">
-        <sonar-alert-grid></sonar-alert-grid>
+        <sonar-alert-grid (onOpenChart)="handleOpenChart($event)"></sonar-alert-grid>
       </mat-tab>
       <mat-tab label="{{'alertWidget.alertsLog' | translate}}">
         <alert-log-grid></alert-log-grid>

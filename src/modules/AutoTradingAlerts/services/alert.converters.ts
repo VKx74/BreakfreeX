@@ -142,21 +142,21 @@ export class AlertConverters {
         return result;
     }
 
-    private static MapPriceAlertConditionToDTO(alertCondition: AlertCondition): PriceAlertCondition {
+    public static MapPriceAlertConditionToDTO(alertCondition: AlertCondition): PriceAlertCondition {
         switch (alertCondition) {
             case AlertCondition.GreaterThan: return PriceAlertCondition.Greater;
             case AlertCondition.LessThan: return PriceAlertCondition.Less;
         }
     }   
     
-    private static MapDTOToPriceAlertCondition(alertCondition: PriceAlertCondition): AlertCondition {
+    public static MapDTOToPriceAlertCondition(alertCondition: PriceAlertCondition): AlertCondition {
         switch (alertCondition) {
             case PriceAlertCondition.Greater: return AlertCondition.GreaterThan;
             case PriceAlertCondition.Less: return AlertCondition.LessThan;
         }
     }
 
-    private static MapTriggerSetupToDTO(setup: TriggerSetup): string {
+    public static MapTriggerSetupToDTO(setup: TriggerSetup): string {
         switch (setup) {
             case TriggerSetup.AllSetups: return null;
             case TriggerSetup.BRC: return "BRC";
@@ -165,7 +165,7 @@ export class AlertConverters {
         }
     }
 
-    private static MapDTOToTriggerSetup(setup: string): TriggerSetup {
+    public static MapDTOToTriggerSetup(setup: string): TriggerSetup {
         if (!setup) {
             return TriggerSetup.AllSetups;
         }
@@ -182,7 +182,7 @@ export class AlertConverters {
         }
     }
 
-    private static MapTriggerTimeframeToGranularity(tf: TriggerTimeframe): number {
+    public static MapTriggerTimeframeToGranularity(tf: TriggerTimeframe): number {
         switch (tf) {
             case TriggerTimeframe.AllTimeframes: return null;
             case TriggerTimeframe.Min15: return TimeSpan.MILLISECONDS_IN_MINUTE / 1000 * 15;
@@ -192,7 +192,7 @@ export class AlertConverters {
         }
     }
 
-    private static MapGranularityToTriggerTimeframe(tf: number): TriggerTimeframe {
+    public static MapGranularityToTriggerTimeframe(tf: number): TriggerTimeframe {
         if (!tf) {
             return TriggerTimeframe.AllTimeframes;
         }

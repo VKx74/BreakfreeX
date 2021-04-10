@@ -7,13 +7,15 @@ import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDT
 import { AlertService } from '@alert/services/alert.service';
 import { SonarAlertDialogComponent } from '../sonar-alert-dialog/sonar-alert-dialog.component';
 import { PriceAlertDialogComponent } from "../price-alert-dialog/price-alert-dialog.component";
-import { ChangeDetectorRef, OnDestroy } from "@angular/core";
+import { ChangeDetectorRef, EventEmitter, OnDestroy, Output } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { OnInit } from "@angular/core";
 
 export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
     protected _subscription: Subscription;
     alerts: T[] = [];
+
+    @Output() onOpenChart = new EventEmitter<T>();
 
     constructor(protected _dialog: MatDialog,
         protected _alertsService: AlertsService,
@@ -68,6 +70,10 @@ export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    doubleClicked(item: T) {
+        this.onOpenChart.next(item);
     }
 
     protected _subscribeOnUpdates(): Subscription {

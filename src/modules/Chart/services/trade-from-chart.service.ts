@@ -16,6 +16,7 @@ import { IInstrument } from "../../../app/models/common/instrument";
 import { AlgoService } from "@app/services/algo.service";
 import { debounceTime } from "rxjs/operators";
 import { MTHelper } from "@app/services/mt/mt.helper";
+import { SonarAlertDialogComponent } from "modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component";
 
 
 interface IPositionSizeParameters {
@@ -95,8 +96,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public setChart(chart: TradingChartDesigner.Chart) {
-        this._chart = chart;
-        this.refresh();
+        if (this._chart !== chart) {
+            this._chart = chart;
+            this.refresh();
+        }
     }
 
     public PlaceOrder(params: TradingChartDesigner.OrderParameters, callback: () => void): void {
@@ -354,7 +357,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 callback("Calculate manually");
                 return;
             }
-            
+
             this.showMappingConfirmation()
                 .subscribe((dialogResult: any) => {
                     if (dialogResult) {
@@ -412,8 +415,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }, () => {
             request.callback("Calculate manually");
         });
-    }  
-    
+    }
+
     private _calculatePositionSizeBasedOnRatio(request: IPositionSizeCalculationRequest, ratio: number) {
         const acctSize = request.params.input_accountsize * (ratio || 1);
         const size = MTHelper.calculatePositionSize(acctSize, request.params.input_risk, request.params.price_diff, request.params.contract_size);
@@ -781,11 +784,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 SelectedFeedInstrument: this._chart.instrument
             }
         }).afterClosed()
-        .subscribe(() => {
-           if (callback) {
-                callback();
-           }
-        });
+            .subscribe(() => {
+                if (callback) {
+                    callback();
+                }
+            });
     }
 
     private showOrderModal(orderConfig: any, callback: () => void, doGetOrder: boolean): void {

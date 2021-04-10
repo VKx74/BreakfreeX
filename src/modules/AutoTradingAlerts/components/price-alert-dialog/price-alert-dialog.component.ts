@@ -12,8 +12,15 @@ import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service
 import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { InstrumentService } from '@app/services/instrument.service';
 
+export interface IPriceAlertDialogPreSettings {
+    instrument: IInstrument;
+    price: number;
+    condition: AlertCondition;
+}
+
 export interface IPriceAlertDialogConfig {
     alert?: PriceAlert;
+    settings?: IPriceAlertDialogPreSettings;
 }
 
 @Component({
@@ -98,6 +105,11 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
                         }
                 }
             });
+        } else if (data && data.settings) {
+            this.selectedCondition = data.settings.condition;
+            this.alertPrice = data.settings.price;
+            this.instrument = data.settings.instrument;
+            this._setNotificationText();
         }
     }
 
