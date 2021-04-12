@@ -9,7 +9,7 @@
                     <i class="fa fa-times-circle close-button" (click)="setSidebarState(false)"></i>
                 </div>
                 <academy-menu [(selectedMedia)]="selectedMedia" (nextMediaChange)="nextMediaChanged($event)"
-                (prevMediaChange)="prevMediaChanged($event)" [showUserAvatar]="true"></academy-menu>
+                (prevMediaChange)="prevMediaChanged($event)" [showUserAvatar]="false" [hidable]="true"></academy-menu>
             </div>
         </div>
         <div class="page flex">
@@ -21,6 +21,7 @@
                 </div>
                 <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
             </div>
+            <div>
             <div class="video-footer flex">
                 <div class="move-prev flex" [ngClass]="{'disabled': !canPrev}" (click)="prevVideo()">
                     <div class="arro flex">&#10094;</div>
@@ -44,12 +45,4 @@
             </div>
         </div>
     </div>
-
-    <!-- <mat-sidenav-container class="sidebar-container" [class.sidebar-close]="!sidebarOpen"
-        (backdropClick)="setSidebarState(false)">
-        <mat-sidenav mode="push" [opened]="sidebarOpen" [autoFocus]="false">
-            <academy-menu [(selectedMedia)]="selectedMedia" (nextMediaChange)="nextMediaChanged($event)"
-                (prevMediaChange)="prevMediaChanged($event)"></academy-menu>
-        </mat-sidenav>
-    </mat-sidenav-container> -->
 </div>
