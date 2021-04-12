@@ -1,6 +1,5 @@
 <div class="sonar-tile w-100 h-100 crypto-text" >
-    <div class="symbol" tooltip tooltip [matTooltip]="'This is a fresh Sonar trade setup found by Breakfree Trading Algorithm. \n\rIf you click on it, it will take you directly to the opportunity in the market.'"
-    >
+    <div class="symbol" tooltip tooltip [matTooltip]="'This is a fresh Sonar trade setup found by Breakfree Trading Algorithm. \n\rIf you click on it, it will take you directly to the opportunity in the market.'">
         {{result?.symbol.toUpperCase()}}
     </div>
 
@@ -8,11 +7,9 @@
         {{result.marketType}}
     </div>
 
-    <div>
-        <div class="tradetf" tooltip [matTooltip]="'This shows the timeframe of the trade setup. \n\rAnything below 4h timeframe should be actively monitored every few minutes after trade opens.'" >
-            <i class="fa fa-clock-o"></i>
-            {{toTimeframe(result.timeframe)}} Setup
-        </div>
+    <div class="tradetf" tooltip [matTooltip]="'This shows the timeframe of the trade setup. \n\rAnything below 4h timeframe should be actively monitored every few minutes after trade opens.'" >
+        <i class="fa fa-clock-o"></i>
+        {{toTimeframe(result.timeframe)}} Setup
     </div>
 
     <div>

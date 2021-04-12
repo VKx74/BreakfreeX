@@ -19,6 +19,12 @@ export enum AlertNotificationType {
     SMS
 }
 
+export enum NotificationStatus {
+    Sent,
+    Failed,
+    OutOfLImit
+}
+
 export enum AlertExecutionStrategy 
 {
     Once

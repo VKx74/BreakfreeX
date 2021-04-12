@@ -9,6 +9,7 @@ import { UpdateSonarAlertDTO } from "../models/UpdateSonarAlertDTO";
 import { AppConfigService } from "@app/services/app.config.service";
 import { NotificationLogDTO } from "../models/NotificationLogDTO";
 import { AlertType } from "../models/EnumsDTO";
+import { NotificationLimitsDTO } from "../models/NotificationLimitsDTO";
 
 @Injectable()
 export class AlertRestClient {
@@ -42,6 +43,10 @@ export class AlertRestClient {
     
     loadNotificationLog(): Observable<NotificationLogDTO[]> {
         return this._http.get<NotificationLogDTO[]>(`${this._url}NotificationsHistory`);
+    }
+
+    getNotificationLimits(): Observable<NotificationLimitsDTO> {
+        return this._http.get<NotificationLimitsDTO>(`${this._url}NotificationLimits`);
     }
 
     updatePriceAlert(dto: UpdatePriceAlertDTO, alertId: number): Observable<PriceAlertDTO> {

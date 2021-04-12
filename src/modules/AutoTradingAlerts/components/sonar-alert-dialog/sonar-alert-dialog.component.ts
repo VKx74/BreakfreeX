@@ -12,6 +12,7 @@ import { SonarAlert } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { InstrumentService } from '@app/services/instrument.service';
 import { NewSonarAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
+import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 
 export interface ISonarDialogConfig {
     alert?: SonarAlert;
@@ -96,11 +97,13 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     }
 
     processingSubmit: boolean = false;
-    useExpiration: boolean = false;
+    useExpiration: boolean = true;
     showPopup: boolean = true;
     sendSMS: boolean = false;
     sendEmail: boolean = false;
+    saveAndStart: boolean = true;
     message: string = "";
+    expiration: number = new Date(new Date().getTime() + (1000 * 24 * 60 * 60 * 5)).getTime();
 
     timeframeTitlesTranslate = (tf: any) => this._translateService.get(`timeFrameToStr.${tf}`);
     triggerSetupTranslate = (setup: any) => this._translateService.get(`triggerSetupStr.${setup}`);
@@ -121,14 +124,22 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
             this.showPopup = data.alert.usePush;
-            this._instrumentService.getInstruments(null, data.alert.instrument).subscribe((instruments) => {
-                for (const i of instruments) {
-                    if (i.id.toLowerCase() === data.alert.instrument.toLowerCase()) {
-                            this.instrument = i;
-                            this.message = data.alert.notificationMessage;
-                        }
-                }
-            });
+            if (data.alert.expiring) {
+                this.expiration = data.alert.expiring;
+            }
+
+            if (data.alert.instrument) {
+                this._instrumentService.getInstruments(null, data.alert.instrument).subscribe((instruments) => {
+                    for (const i of instruments) {
+                        if (i.id.toLowerCase() === data.alert.instrument.toLowerCase()) {
+                                this.instrument = i;
+                                this.message = data.alert.notificationMessage;
+                            }
+                    }
+                });
+            } else {
+                this.message = data.alert.notificationMessage;
+            }
         }
     }
 
@@ -194,7 +205,9 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             useSMS: this.sendSMS,
             setup: this.selectedTriggerSetup,
             timeframe: this.selectedTriggerTimeframe,
-            triggerType: this.selectedTriggerType
+            triggerType: this.selectedTriggerType,
+            expiring: this.expiration,
+            status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
         };
     }
 

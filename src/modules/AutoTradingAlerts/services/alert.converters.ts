@@ -98,6 +98,7 @@ export class AlertConverters {
             notificationMessage: options.notificationMessage,
             exchange: options.exchange,
             instrument: options.instrument,
+            status: options.status,
             description: "",
             name: "",
             action: {
@@ -127,6 +128,7 @@ export class AlertConverters {
         let result: NewSonarAlertDTO = {
             expiring: options.expiring,
             notificationMessage: options.notificationMessage,
+            status: options.status,
             description: "",
             name: "",
             action: {

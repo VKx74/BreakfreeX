@@ -25,6 +25,7 @@ import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -412,6 +413,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     trackByResult(index, res: IScannerResults) {
         return res.symbol + res.exchange + res.timeframe + res.origType;
+    }
+
+    addAlert() {
+        this._dialog.open(SonarAlertDialogComponent, {});
     }
 
     public getFeaturedDetails(scannerVM: IScannerResults): string {

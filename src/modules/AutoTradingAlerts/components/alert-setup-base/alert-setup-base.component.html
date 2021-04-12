@@ -2,23 +2,23 @@
   <div class="crypto-form-unit margin-bottom">
     <p class="form-unit__label flex justify-space-between align-items-center">
       <span>
-        {{'tradingAlert.useExpiration' | translate}}
+        {{'tradingAlert.expiration' | translate}}
       </span>
-      <mat-slide-toggle [(ngModel)]="useExpirationProp"></mat-slide-toggle>
+      <!-- <mat-slide-toggle [(ngModel)]="useExpirationProp"></mat-slide-toggle> -->
     </p>
 
     <div class="two-columns" [ngClass]="{'disabled': !useExpirationProp}">
       <mat-form-field class="crypto-date-input bft-form-input">
-        <input matInput readonly [matDatepicker]="dateFrom" [min]="minDate" placeholder="Datepicker"
-          (click)="dateFrom.open()" class="crypto-input datepicker cursor-pointer">
+        <input matInput readonly [matDatepicker]="dateFrom" [min]="minDate" [max]="maxDate" placeholder="Datepicker"
+          (click)="dateFrom.open()" class="crypto-input datepicker cursor-pointer" [(ngModel)]="selectedDateProp">
         <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
         <mat-datepicker #dateFrom></mat-datepicker>
       </mat-form-field>
 
 
       <mat-form-field class="crypto-time-input bft-form-input">
-        <input matInput [ngxTimepicker]="toggleTimepicker" (click)="toggleTimepicker.open()"
-          class="crypto-input datepicker cursor-pointer" placeholder="Time" [disableClick]="true" readonly>
+        <input matInput [ngxTimepicker]="toggleTimepicker" (click)="toggleTimepicker.open()" [(ngModel)]="selectedTimeProp"
+          class="crypto-input datepicker cursor-pointer" placeholder="Time" [disableClick]="true" readonly [format]='24'>
         <ngx-material-timepicker-toggle [for]="toggleTimepicker" matSuffix>
         </ngx-material-timepicker-toggle>
         <ngx-material-timepicker #toggleTimepicker></ngx-material-timepicker>
@@ -73,4 +73,12 @@
       placeholder="{{'tradingAlert.message' | translate}}" maxlength="70">
     </textarea>
   </div>
+
+  <div class="crypto-form-unit margin-bottom">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{'tradingAlert.saveAndStart' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="saveAndStartProp"></mat-slide-toggle>
+    </p>
+  </div>
+
 </div>

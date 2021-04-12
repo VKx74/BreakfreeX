@@ -1,4 +1,4 @@
-import { AlertNotificationType } from "./EnumsDTO";
+import { AlertNotificationType, NotificationStatus } from "./EnumsDTO";
 
 
 export interface NotificationLogDTO {
@@ -7,6 +7,7 @@ export interface NotificationLogDTO {
     time: number;
     notificationMessage: string;
     notificationType: AlertNotificationType;
+    notificationStatus: NotificationStatus;
 }
 
 

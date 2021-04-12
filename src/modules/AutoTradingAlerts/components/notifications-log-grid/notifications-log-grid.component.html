@@ -1,10 +1,16 @@
 <div class="root flex flex-direction-column full-height">
   <div class="flex flex-direction-column flex-grow-1 h-0">
+      <div class="limits-header">
+          Your 24H notification limits {{NotificationLimits.used}}/{{NotificationLimits.limit}}
+      </div>
       <div class="content-wrapper full-height flex-grow-1 overflow-y-auto">
           <data-table [rows]="alerts"
               class="manage-alerts-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis crypto-table_selectable">
               <data-table-header-cell columnName="type">
                   {{'type' | translate}}
+              </data-table-header-cell> 
+              <data-table-header-cell columnName="status">
+                  {{'status' | translate}}
               </data-table-header-cell>
               <data-table-header-cell columnName="time">
                   {{'time' | translate}}
@@ -17,6 +23,14 @@
                   <ng-template let-item>
                       <span class="flex">
                           {{getTypeTitle(item)}}
+                      </span>
+                  </ng-template>
+              </data-table-cell>
+
+              <data-table-cell class="stripped-mode" columnName="status">
+                  <ng-template let-item>
+                      <span class="flex">
+                          {{getStatusTitle(item)}}
                       </span>
                   </ng-template>
               </data-table-cell>

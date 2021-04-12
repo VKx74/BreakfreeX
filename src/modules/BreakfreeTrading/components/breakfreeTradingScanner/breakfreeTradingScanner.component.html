@@ -11,23 +11,29 @@
                </mat-select>
             </mat-form-field>
          </div> -->
-         <div class="tf-select">
-            <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
-               <mat-select (selectionChange)="timeframeSelected($event.value)" [(ngModel)]="activeTimeframes" multiple>
-                  <mat-option *ngFor="let option of timeframes" [value]="option">
-                     {{option}}
-                  </mat-option>
-               </mat-select>
-            </mat-form-field>
+         <div class="filters">
+            <div class="tf-select">
+               <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                  <mat-select (selectionChange)="timeframeSelected($event.value)" [(ngModel)]="activeTimeframes"
+                     multiple>
+                     <mat-option *ngFor="let option of timeframes" [value]="option">
+                        {{option}}
+                     </mat-option>
+                  </mat-select>
+               </mat-form-field>
+            </div>
+            <div class="type-select">
+               <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                  <mat-select (selectionChange)="typeSelected($event.value)" [(ngModel)]="activeTypes" multiple>
+                     <mat-option *ngFor="let option of types" [value]="option">
+                        {{option}}
+                     </mat-option>
+                  </mat-select>
+               </mat-form-field>
+            </div>
          </div>
-         <div class="type-select">
-            <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
-               <mat-select (selectionChange)="typeSelected($event.value)" [(ngModel)]="activeTypes" multiple>
-                  <mat-option *ngFor="let option of types" [value]="option">
-                     {{option}}
-                  </mat-option>
-               </mat-select>
-            </mat-form-field>
+         <div class="alerts">
+            <i class="fa fa-clock-o" (click)="addAlert()"></i>
          </div>
       </div>
 
@@ -36,18 +42,21 @@
             <div class="content-wrapper flex-grow-1 h-0">
                <div class="full-height padding-wrapper">
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
-                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container" [ngClass]="{'blur': !isAuthorizedCustomer}">
+                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container"
+                        [ngClass]="{'blur': !isAuthorizedCustomer}">
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
                         <div *ngIf="showRestrictions(groupedResult); else dataContainer">
-                           <div class="access-restrictions" (click)="manageSubscriptions()" *ngIf="isOutOfAccess(groupedResult); else restrictionTemplate">
+                           <div class="access-restrictions" (click)="manageSubscriptions()"
+                              *ngIf="isOutOfAccess(groupedResult); else restrictionTemplate">
                               Upgrade to Pro for access to 15m Sonar setups.
-                           </div>  
+                           </div>
                            <ng-template #restrictionTemplate>
                               <div class="timeframe-restrictions">
-                                 Before Sonar enables this timeframe, you need to achieve level 4. <br> Don't worry, trades are still available if you dig through this timeframe manually. 
-                                 
+                                 Before Sonar enables this timeframe, you need to achieve level 4. <br> Don't worry,
+                                 trades are still available if you dig through this timeframe manually.
+
                                  <br><br>
-                                <b>Enjoy your Breakfree journey.</b> 
+                                 <b>Enjoy your Breakfree journey.</b>
                               </div>
                            </ng-template>
                         </div>
@@ -58,7 +67,8 @@
                                     *ngFor="let result of group.data; trackBy: trackByResult">
                                     <scanner-card [result]="result" (click)="handleScannerResultsClick(result)">
                                     </scanner-card>
-                                    <div class="featured-settings" tooltip [matTooltip]="'If you click the flag and select a color, Sonar will keep this trade in the top list even if it clears.'">
+                                    <div class="featured-settings" tooltip
+                                       [matTooltip]="'If you click the flag and select a color, Sonar will keep this trade in the top list even if it clears.'">
                                        <color-selector [activeColor]="getFeaturedDetails(result)"
                                           class="featured-selector result-data"
                                           (activeColorChange)='handleColorSelected($event, result)'
@@ -170,13 +180,13 @@
       </mat-tab-group>
    </div>
 
-   <div class="out-of-access" (click)="processCheckout()"  *ngIf="!isAuthorizedCustomer">
+   <div class="out-of-access" (click)="processCheckout()" *ngIf="!isAuthorizedCustomer">
       <div class="out-of-access-box">
          <div class="image">
             <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
          </div>
          <div class="text">
-           Upgrade to Discovery or Pro to utilize Sonar in realtime.
+            Upgrade to Discovery or Pro to utilize Sonar in realtime.
          </div>
       </div>
    </div>

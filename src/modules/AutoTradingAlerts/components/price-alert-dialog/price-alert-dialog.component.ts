@@ -11,6 +11,7 @@ import { PriceAlert} from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { InstrumentService } from '@app/services/instrument.service';
+import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 
 export interface IPriceAlertDialogPreSettings {
     instrument: IInstrument;
@@ -70,11 +71,13 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     }
 
     processingSubmit: boolean = false;
-    useExpiration: boolean = false;
+    useExpiration: boolean = true;
     showPopup: boolean = true;
     sendSMS: boolean = false;
     sendEmail: boolean = false;
+    saveAndStart: boolean = true;
     message: string = "";
+    expiration: number = new Date(new Date().getTime() + (1000 * 24 * 60 * 60 * 5)).getTime();
 
     get conditions(): AlertCondition[] {
         return [AlertCondition.GreaterThan, AlertCondition.LessThan];
@@ -96,6 +99,9 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
             this.showPopup = data.alert.usePush;
+            if (data.alert.expiring) {
+                this.expiration = data.alert.expiring;
+            }
             this._instrumentService.getInstruments(null, data.alert.instrument).subscribe((instruments) => {
                 for (const i of instruments) {
                     if (i.id.toLowerCase() === data.alert.instrument.toLowerCase() &&
@@ -187,7 +193,9 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             useEmail: this.sendEmail,
             usePush: this.showPopup,
             useSMS: this.sendSMS,
-            value: this.alertPrice
+            value: this.alertPrice,
+            expiring: this.expiration,
+            status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
         };
     }
 

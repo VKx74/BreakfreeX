@@ -8,6 +8,7 @@ import { AlertHistory } from "../models/AlertHistory";
 import { AlertHistoryDTO } from "../models/AlertHistoryDTO";
 import { AlertStatus, AlertType } from "../models/EnumsDTO";
 import { NewPriceAlertOptions, NewSonarAlertOptions } from "../models/NewAlertOptions";
+import { NotificationLimits } from "../models/NotificationLimits";
 import { NotificationLog } from "../models/NotificationLog";
 import { NotificationLogDTO } from "../models/NotificationLogDTO";
 import { UpdatePriceAlertOptions, UpdateSonarAlertOptions } from "../models/UpdateAlertOptions";
@@ -24,6 +25,7 @@ export class AlertsService {
     private _alerts: AlertBase[] = [];
     private _alertHistory: AlertHistory[] = [];
     private _notificationLogs: NotificationLog[] = [];
+    private _notificationLimits: NotificationLimits;
     private _triggerSubscription: Subscription;
     private _changedSubscription: Subscription;
 
@@ -44,6 +46,10 @@ export class AlertsService {
 
     public get NotificationLogs(): NotificationLog[] {
         return this._notificationLogs;
+    }
+
+    public get NotificationLimits(): NotificationLimits {
+        return this._notificationLimits;
     }
 
     constructor(private _alertRestClient: AlertRestClient, private _ws: AlertSocketService) {
@@ -132,6 +138,10 @@ export class AlertsService {
         }));
     }
 
+    getNotificationLimits(): Observable<NotificationLimits> {
+        return this._alertRestClient.getNotificationLimits();
+    }
+
     updatePriceAlert(alert: UpdatePriceAlertOptions, alertId: number): Observable<PriceAlert> {
         let dto = AlertConverters.NewPriceAlertOptionsToDTO(alert);
         return this._alertRestClient.updatePriceAlert(dto, alertId).pipe(map((response) => {
@@ -215,6 +225,12 @@ export class AlertsService {
         this.loadNotificationLog().subscribe((logs) => {
             this._notificationLogs = logs;
             this.onNotificationLogsChanged.next();
+        }, (error) => {
+            console.error(error);
+        });  
+        
+        this.getNotificationLimits().subscribe((limits) => {
+            this._notificationLimits = limits;
         }, (error) => {
             console.error(error);
         });
