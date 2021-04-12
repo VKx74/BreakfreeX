@@ -10,6 +10,7 @@ import { AppConfigService } from "@app/services/app.config.service";
 import { NotificationLogDTO } from "../models/NotificationLogDTO";
 import { AlertType } from "../models/EnumsDTO";
 import { NotificationLimitsDTO } from "../models/NotificationLimitsDTO";
+import { AlertLimitsDTO } from "../models/AlertLimitsDTO";
 
 @Injectable()
 export class AlertRestClient {
@@ -47,6 +48,10 @@ export class AlertRestClient {
 
     getNotificationLimits(): Observable<NotificationLimitsDTO> {
         return this._http.get<NotificationLimitsDTO>(`${this._url}NotificationLimits`);
+    }
+
+    getLimits(): Observable<AlertLimitsDTO> {
+        return this._http.get<AlertLimitsDTO>(`${this._url}Limits`);
     }
 
     updatePriceAlert(dto: UpdatePriceAlertDTO, alertId: number): Observable<PriceAlertDTO> {

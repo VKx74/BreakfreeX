@@ -12,6 +12,7 @@ export class AlertSetupBaseComponent {
   private _selectedDate: Date;
   private _expiration: number;
 
+  @Input() canRunAlert: boolean = true;
   @Input() useExpiration: boolean = true;
   @Input() showPopup: boolean = true;
   @Input() sendSMS: boolean = false;
@@ -55,7 +56,7 @@ export class AlertSetupBaseComponent {
   }
 
   public get saveAndStartProp(): boolean {
-    return this.saveAndStart;
+    return this.saveAndStart && this.canRunAlert;
   }
 
   public get messageProp(): string {

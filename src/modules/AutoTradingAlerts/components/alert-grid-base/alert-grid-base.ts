@@ -115,6 +115,11 @@ export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
     }
 
     protected _startAlert(alert: AlertBase) {
+        if (!this._alertsService.canRunMoreAlerts(alert.type)) {
+            this._alertService.info("Can`t run alerts. Out of limits for subscription level.");
+            return;
+        }
+
         this._alertsService.startAlert(alert.id, alert.type).subscribe(() => {
             this._alertService.success(this._translateService.get('alertStarted'));
         }, (error) => {

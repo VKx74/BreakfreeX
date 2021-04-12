@@ -1,17 +1,18 @@
-import {Component, Inject, Injector, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
-import {TranslateService} from "@ngx-translate/core";
-import {AutoTradingAlertsTranslateService} from "../../localization/token";
-import {IInstrument} from "@app/models/common/instrument";
+import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
+import { TranslateService } from "@ngx-translate/core";
+import { AutoTradingAlertsTranslateService } from "../../localization/token";
+import { IInstrument } from "@app/models/common/instrument";
 import {
     AlertCondition
 } from "../../models/Enums";
-import {Modal} from "Shared";
-import { PriceAlert} from "../../models/AlertBase";
+import { Modal } from "Shared";
+import { PriceAlert } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { InstrumentService } from '@app/services/instrument.service';
 import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertService } from '@alert/services/alert.service';
 
 export interface IPriceAlertDialogPreSettings {
     instrument: IInstrument;
@@ -76,6 +77,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     sendSMS: boolean = false;
     sendEmail: boolean = false;
     saveAndStart: boolean = true;
+    canRunAlert: boolean = true;
     message: string = "";
     expiration: number = new Date(new Date().getTime() + (1000 * 24 * 60 * 60 * 5)).getTime();
 
@@ -89,9 +91,13 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
         _injector: Injector,
         private _translateService: TranslateService,
         private _alertsService: AlertsService,
+        private _alertService: AlertService,
         private _instrumentService: InstrumentService,
         @Inject(MAT_DIALOG_DATA) public data: IPriceAlertDialogConfig) {
         super(_injector);
+
+        this.canRunAlert = this._alertsService.canRunMoreAlerts(AlertType.PriceAlert);
+        this.saveAndStart = this.canRunAlert;
 
         if (data && data.alert) {
             this.selectedCondition = data.alert.condition;
@@ -106,16 +112,24 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
                 for (const i of instruments) {
                     if (i.id.toLowerCase() === data.alert.instrument.toLowerCase() &&
                         i.exchange.toLowerCase() === data.alert.exchange.toLowerCase()) {
-                            this.instrument = i;
-                            this.message = data.alert.notificationMessage;
-                        }
+                        this.instrument = i;
+                        this.message = data.alert.notificationMessage;
+                    }
                 }
             });
-        } else if (data && data.settings) {
-            this.selectedCondition = data.settings.condition;
-            this.alertPrice = data.settings.price;
-            this.instrument = data.settings.instrument;
-            this._setNotificationText();
+        } else {
+            if (!this._alertsService.canAddMoreAlerts()) {
+                this._alertService.info("Can`t add more alerts. Out of limits for subscription level.");
+                this.close();
+                return;
+            }
+
+            if (data && data.settings) {
+                this.selectedCondition = data.settings.condition;
+                this.alertPrice = data.settings.price;
+                this.instrument = data.settings.instrument;
+                this._setNotificationText();
+            }
         }
     }
 
@@ -139,11 +153,11 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     }
 
     submit() {
-       if (this.data && this.data.alert) {
-           this._edit();
-       } else {
+        if (this.data && this.data.alert) {
+            this._edit();
+        } else {
             this._create();
-       }
+        }
     }
 
     canCreateAlert() {
@@ -161,27 +175,44 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     private _create() {
         let option = this._getData();
         this.processingSubmit = true;
-        
+
         this._alertsService.createPriceAlert(option).subscribe((alert) => {
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
+            this._shoeError(error);
             this.processingSubmit = false;
             console.error(error);
         });
     }
-    
+
     private _edit() {
         let option = this._getData();
         this.processingSubmit = true;
-        
+
         this._alertsService.updatePriceAlert(option, this.data.alert.id).subscribe((alert) => {
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
+            this._shoeError(error);
             this.processingSubmit = false;
             console.error(error);
         });
+    }
+
+    private _shoeError(error: any) {
+        if (error) {
+            if (typeof error === "string") {
+                this._alertService.error(error);
+                return;
+            }
+            if (typeof error.error === "string") {
+                this._alertService.error(error.error);
+                return;
+            }
+        }
+
+        this._alertService.error("Failed to create alert.");
     }
 
     private _getData(): NewPriceAlertOptions {

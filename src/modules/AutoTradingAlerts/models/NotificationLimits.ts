@@ -1,5 +1,11 @@
 
 export interface NotificationLimits {
-    limit: number;
-    used: number;
+    smsLimit: number;
+    smsUsed: number;
+    emailLimit: number;
+    emailUsed: number;
+    pushLimit: number;
+    pushUsed: number;
 }
+
+

@@ -31,7 +31,7 @@
 
               <data-table-cell class="stripped-mode" columnName="message">
                   <ng-template let-item>
-                      <span class="flex">
+                      <span class="flex" tooltip [matTooltip]='item.notificationMessage'>
                           {{item.notificationMessage}}
                       </span>
                   </ng-template>

@@ -6,6 +6,7 @@ import { AlertBase, PriceAlert, SonarAlert } from "../models/AlertBase";
 import { AlertBaseDTO } from "../models/AlertBaseDTO";
 import { AlertHistory } from "../models/AlertHistory";
 import { AlertHistoryDTO } from "../models/AlertHistoryDTO";
+import { AlertLimits } from "../models/AlertLimits";
 import { AlertStatus, AlertType } from "../models/EnumsDTO";
 import { NewPriceAlertOptions, NewSonarAlertOptions } from "../models/NewAlertOptions";
 import { NotificationLimits } from "../models/NotificationLimits";
@@ -26,6 +27,7 @@ export class AlertsService {
     private _alertHistory: AlertHistory[] = [];
     private _notificationLogs: NotificationLog[] = [];
     private _notificationLimits: NotificationLimits;
+    private _alertLimits: AlertLimits;
     private _triggerSubscription: Subscription;
     private _changedSubscription: Subscription;
 
@@ -52,6 +54,10 @@ export class AlertsService {
         return this._notificationLimits;
     }
 
+    public get AlertLimits(): AlertLimits {
+        return this._alertLimits;
+    }
+
     constructor(private _alertRestClient: AlertRestClient, private _ws: AlertSocketService) {
     }
 
@@ -65,6 +71,7 @@ export class AlertsService {
         this.reloadAlerts();
         this.reloadHistory();
         this.reloadNotifications();
+        this.reloadLimits();
         this._ws.open().subscribe(() => { });
 
         this._triggerSubscription = this._ws.alertTriggeredSubject.subscribe(this._handleAlertTriggered.bind(this));
@@ -141,6 +148,10 @@ export class AlertsService {
     getNotificationLimits(): Observable<NotificationLimits> {
         return this._alertRestClient.getNotificationLimits();
     }
+    
+    getLimits(): Observable<AlertLimits> {
+        return this._alertRestClient.getLimits();
+    }
 
     updatePriceAlert(alert: UpdatePriceAlertOptions, alertId: number): Observable<PriceAlert> {
         let dto = AlertConverters.NewPriceAlertOptionsToDTO(alert);
@@ -185,6 +196,29 @@ export class AlertsService {
         }));
     }
 
+    canUseSonarAlerts(): boolean {
+        return this._alertLimits.canUseSonarAlerts;
+    }
+
+    canAddMoreAlerts(): boolean {
+        return this.Alerts.length < this._alertLimits.alertsCount;
+    }
+
+    canRunMoreAlerts(alertType: AlertType): boolean {
+        let priceAlertsCount = this.Alerts.filter(_ => _.type === AlertType.PriceAlert && _.status === AlertStatus.Running).length;
+        let sonarAlertsCount = this.Alerts.filter(_ => _.type === AlertType.SonarAlert && _.status === AlertStatus.Running).length;
+
+        if (this._alertLimits.runningAlertsCount <= priceAlertsCount + sonarAlertsCount) {
+            return false;
+        }
+
+        if (alertType === AlertType.PriceAlert && this._alertLimits.runningPriceAlertsCount <= priceAlertsCount) {
+            return false;
+        }
+
+        return true;
+    }
+
     dispose(): Observable<void> {
         if (this._triggerSubscription) {
             this._triggerSubscription.unsubscribe();
@@ -214,7 +248,7 @@ export class AlertsService {
 
     private reloadHistory() {
         this.loadAlertsHistory().subscribe((alerts) => {
-            this._alertHistory = alerts;
+            this._alertHistory = alerts.sort((a, b) => b.triggerTime  - a.triggerTime);
             this.onAlertsHistoryChanged.next();
         }, (error) => {
             console.error(error);
@@ -223,7 +257,7 @@ export class AlertsService {
 
     private reloadNotifications() {
         this.loadNotificationLog().subscribe((logs) => {
-            this._notificationLogs = logs;
+            this._notificationLogs = logs.sort((a, b) => b.time  - a.time);
             this.onNotificationLogsChanged.next();
         }, (error) => {
             console.error(error);
@@ -233,6 +267,12 @@ export class AlertsService {
             this._notificationLimits = limits;
         }, (error) => {
             console.error(error);
+        });
+    }
+
+    private reloadLimits() {
+        this.getLimits().subscribe((limits) => {
+            this._alertLimits = limits;
         });
     }
 

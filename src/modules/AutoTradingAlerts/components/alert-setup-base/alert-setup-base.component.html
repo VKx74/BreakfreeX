@@ -74,7 +74,7 @@
     </textarea>
   </div>
 
-  <div class="crypto-form-unit margin-bottom">
+  <div class="crypto-form-unit margin-bottom" *ngIf="canRunAlert">
     <p class="form-unit__label flex align-items-center justify-space-between">
       <span>{{'tradingAlert.saveAndStart' | translate}}</span>
       <mat-slide-toggle [(ngModel)]="saveAndStartProp"></mat-slide-toggle>

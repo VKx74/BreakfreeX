@@ -13,6 +13,7 @@ import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service
 import { InstrumentService } from '@app/services/instrument.service';
 import { NewSonarAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertService } from '@alert/services/alert.service';
 
 export interface ISonarDialogConfig {
     alert?: SonarAlert;
@@ -102,6 +103,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     sendSMS: boolean = false;
     sendEmail: boolean = false;
     saveAndStart: boolean = true;
+    canRunAlert: boolean = true;
     message: string = "";
     expiration: number = new Date(new Date().getTime() + (1000 * 24 * 60 * 60 * 5)).getTime();
 
@@ -112,9 +114,13 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         _injector: Injector,
         private _translateService: TranslateService,
         private _alertsService: AlertsService,
+        private _alertService: AlertService,
         private _instrumentService: InstrumentService,
         @Inject(MAT_DIALOG_DATA) public data: ISonarDialogConfig) {
         super(_injector);
+
+        this.canRunAlert = this._alertsService.canRunMoreAlerts(AlertType.SonarAlert);
+        this.saveAndStart = this.canRunAlert;
 
         if (data && data.alert) {
             this.selectedTriggerType = data.alert.triggerType;
@@ -139,6 +145,14 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
                 });
             } else {
                 this.message = data.alert.notificationMessage;
+            }
+        } else {
+            if (!this._alertsService.canUseSonarAlerts()) {
+                this._alertService.info("Can`t create sonar alerts. Out of access for subscription level.");
+                this.close();
+            } else if (!this._alertsService.canAddMoreAlerts()) {
+                this._alertService.info("Can`t add more alerts. Out of limits for subscription level.");
+                this.close();
             }
         }
     }
@@ -178,6 +192,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
+            this._shoeError(error);
             this.processingSubmit = false;
             console.error(error);
         });
@@ -191,9 +206,25 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
+            this._shoeError(error);
             this.processingSubmit = false;
             console.error(error);
         });
+    }
+
+    private _shoeError(error: any) {
+        if (error) {
+            if (typeof error === "string") {
+                this._alertService.error(error);
+                return;
+            }
+            if (typeof error.error === "string") {
+                this._alertService.error(error.error);
+                return;
+            }
+        }
+
+        this._alertService.error("Failed to create alert.");
     }
 
     private _getData(): NewSonarAlertOptions {
