@@ -112,7 +112,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
 
     constructor(
         _injector: Injector,
-        private _translateService: TranslateService,
+        @Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService,
         private _alertsService: AlertsService,
         private _alertService: AlertService,
         private _instrumentService: InstrumentService,
@@ -130,7 +130,8 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
             this.showPopup = data.alert.usePush;
-            if (data.alert.expiring) {
+
+            if (data.alert.expiring && data.alert.expiring > new Date().getTime()) {
                 this.expiration = data.alert.expiring;
             }
 
@@ -148,10 +149,10 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             }
         } else {
             if (!this._alertsService.canUseSonarAlerts()) {
-                this._alertService.info("Can`t create sonar alerts. Out of access for subscription level.");
+                this._alertService.info(this._translateService.get("createSonarRestriction"));
                 this.close();
             } else if (!this._alertsService.canAddMoreAlerts()) {
-                this._alertService.info("Can`t add more alerts. Out of limits for subscription level.");
+                this._alertService.info(this._translateService.get("createLimit"));
                 this.close();
             }
         }
@@ -162,14 +163,6 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
 
     playSound() {
         // this._audioService.playSound(this.controls.sound.controls.selectedSound.value);
-    }
-
-    combineTimeNew(date: any, time: any): number {
-        let mdate = moment(date);
-        let hours = moment(time, 'HH:mm A');
-        let combine = mdate.set('hour', Number(hours.hour())).set('minute', Number(hours.minutes()));
-
-        return moment(combine).valueOf();
     }
 
     handleInstrumentChange(instrument: IInstrument) {

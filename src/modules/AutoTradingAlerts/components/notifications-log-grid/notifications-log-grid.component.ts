@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertHistory } from 'modules/AutoTradingAlerts/models/AlertHistory';
 import { AlertNotificationType, AlertType, NotificationStatus } from 'modules/AutoTradingAlerts/models/EnumsDTO';
@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable, of, Subscription } from 'rxjs';
 import { NotificationLog } from 'modules/AutoTradingAlerts/models/NotificationLog';
 import { NotificationLimits } from 'modules/AutoTradingAlerts/models/NotificationLimits';
+import { AutoTradingAlertsTranslateService } from 'modules/AutoTradingAlerts/localization/token';
 
 @Component({
   selector: 'notifications-log-grid',
@@ -23,24 +24,24 @@ export class NotificationsLogGridComponent extends AlertGridBase<NotificationLog
   constructor(protected _dialog: MatDialog,
     protected _alertsService: AlertsService,
     protected _alertService: AlertService,
-    protected _translateService: TranslateService,
+    @Inject(AutoTradingAlertsTranslateService) protected _translateService: TranslateService,
     protected _cdr: ChangeDetectorRef) {
     super(_dialog, _alertsService, _alertService, _translateService, _cdr);
   }
   
-  getTypeTitle(alert: NotificationLog): string {
+  getTypeTitle(alert: NotificationLog): Observable<string> {
     switch (alert.notificationType) {
-      case AlertNotificationType.Email: return "Email";
-      case AlertNotificationType.SMS: return "SMS";
-      case AlertNotificationType.Push: return "Push";
+      case AlertNotificationType.Email: return this._translateService.get("notificationTitles.email");
+      case AlertNotificationType.SMS: return this._translateService.get("notificationTitles.sms");
+      case AlertNotificationType.Push: return this._translateService.get("notificationTitles.push");
     }
   }
 
-  getStatusTitle(alert: NotificationLog): string {
+  getStatusTitle(alert: NotificationLog): Observable<string> {
     switch (alert.notificationStatus) {
-      case NotificationStatus.Sent: return "Sent";
-      case NotificationStatus.Failed: return "Failed";
-      case NotificationStatus.OutOfLImit: return "Out Of LImit";
+      case NotificationStatus.Sent: return this._translateService.get("notificationStatusTitles.sent");
+      case NotificationStatus.Failed: return this._translateService.get("notificationStatusTitles.failed");
+      case NotificationStatus.OutOfLImit: return this._translateService.get("notificationStatusTitles.outOfLimit");
     }
   }
 

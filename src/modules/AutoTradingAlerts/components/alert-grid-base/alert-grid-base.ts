@@ -95,8 +95,8 @@ export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
         this._alertService.error(this._getLoadingError());
     }
 
-    protected _getLoadingError() {
-        return 'Can\'t loading alerts';
+    protected _getLoadingError(): Observable<string> {
+        return this._translateService.get('loadError');
     }
 
     protected abstract loadItems(): Observable<T[]>;
@@ -116,7 +116,7 @@ export abstract class AlertGridBase<T> implements OnInit, OnDestroy {
 
     protected _startAlert(alert: AlertBase) {
         if (!this._alertsService.canRunMoreAlerts(alert.type)) {
-            this._alertService.info("Can`t run alerts. Out of limits for subscription level.");
+            this._alertService.info(this._translateService.get('startLimit'));
             return;
         }
 

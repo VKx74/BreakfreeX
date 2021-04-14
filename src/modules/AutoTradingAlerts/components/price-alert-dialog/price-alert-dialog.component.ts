@@ -89,7 +89,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
 
     constructor(
         _injector: Injector,
-        private _translateService: TranslateService,
+        @Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService,
         private _alertsService: AlertsService,
         private _alertService: AlertService,
         private _instrumentService: InstrumentService,
@@ -105,7 +105,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
             this.showPopup = data.alert.usePush;
-            if (data.alert.expiring) {
+            if (data.alert.expiring && data.alert.expiring > new Date().getTime()) {
                 this.expiration = data.alert.expiring;
             }
             this._instrumentService.getInstruments(null, data.alert.instrument).subscribe((instruments) => {
@@ -119,7 +119,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             });
         } else {
             if (!this._alertsService.canAddMoreAlerts()) {
-                this._alertService.info("Can`t add more alerts. Out of limits for subscription level.");
+                this._alertService.info(this._translateService.get("createLimit"));
                 this.close();
                 return;
             }
@@ -138,14 +138,6 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
 
     playSound() {
         // this._audioService.playSound(this.controls.sound.controls.selectedSound.value);
-    }
-
-    combineTimeNew(date: any, time: any): number {
-        let mdate = moment(date);
-        let hours = moment(time, 'HH:mm A');
-        let combine = mdate.set('hour', Number(hours.hour())).set('minute', Number(hours.minutes()));
-
-        return moment(combine).valueOf();
     }
 
     handleInstrumentChange(instrument: IInstrument) {
@@ -180,7 +172,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
-            this._shoeError(error);
+            this._showError(error);
             this.processingSubmit = false;
             console.error(error);
         });
@@ -194,13 +186,13 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
-            this._shoeError(error);
+            this._showError(error);
             this.processingSubmit = false;
             console.error(error);
         });
     }
 
-    private _shoeError(error: any) {
+    private _showError(error: any) {
         if (error) {
             if (typeof error === "string") {
                 this._alertService.error(error);
@@ -212,7 +204,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             }
         }
 
-        this._alertService.error("Failed to create alert.");
+        this._alertService.error(this._translateService.get("failedToCreateAlert"));
     }
 
     private _getData(): NewPriceAlertOptions {

@@ -182,7 +182,7 @@ export class AlertWidgetComponent extends BaseLayoutItemComponent {
 
     this._instrumentService.getInstruments(null, searchSymbol).subscribe((data: IInstrument[]) => {
       if (!data || !data.length) {
-        this._alertService.warning("Failed to view chart by symbol");
+        this._alertService.warning(this._translateService.get("failedToViewChart"));
         return;
       }
 
@@ -212,7 +212,7 @@ export class AlertWidgetComponent extends BaseLayoutItemComponent {
       }
       this.linker.sendAction(linkAction);
     }, (error) => {
-      this._alertService.warning("Failed to view chart by symbol");
+      this._alertService.warning(this._translateService.get("failedToViewChart"));
     });
   }
 

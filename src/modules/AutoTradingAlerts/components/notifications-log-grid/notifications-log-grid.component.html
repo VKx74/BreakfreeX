@@ -22,7 +22,7 @@
               <data-table-cell class="stripped-mode" columnName="type">
                   <ng-template let-item>
                       <span class="flex">
-                          {{getTypeTitle(item)}}
+                          {{getTypeTitle(item) | async}}
                       </span>
                   </ng-template>
               </data-table-cell>
@@ -30,7 +30,7 @@
               <data-table-cell class="stripped-mode" columnName="status">
                   <ng-template let-item>
                       <span class="flex">
-                          {{getStatusTitle(item)}}
+                          {{getStatusTitle(item) | async}}
                       </span>
                   </ng-template>
               </data-table-cell>

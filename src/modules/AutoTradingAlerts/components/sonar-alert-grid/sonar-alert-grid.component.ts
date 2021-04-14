@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { SonarAlert } from "../../models/AlertBase";
@@ -25,7 +25,7 @@ export class SonarAlertGridComponent extends AlertGridBase<SonarAlert> {
     constructor (protected _dialog: MatDialog,
         protected _alertsService: AlertsService,
         protected _alertService: AlertService,
-        protected _translateService: TranslateService,
+        @Inject(AutoTradingAlertsTranslateService) protected _translateService: TranslateService,
         protected _cdr: ChangeDetectorRef) {
             super(_dialog, _alertsService, _alertService, _translateService, _cdr);
     }

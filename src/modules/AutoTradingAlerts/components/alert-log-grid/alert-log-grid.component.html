@@ -16,7 +16,7 @@
               <data-table-cell class="stripped-mode" columnName="type">
                   <ng-template let-item>
                       <span class="flex">
-                          {{getConditionTitle(item)}}
+                          {{getConditionTitle(item) | async}}
                       </span>
                   </ng-template>
               </data-table-cell>

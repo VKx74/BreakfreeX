@@ -59,12 +59,6 @@
     "setupDisappeared": "Setup Disappeared",
     "triggerType": "Trigger Type"
   },
-  "tradingOrderStatus": {
-    "PlaceOrder": "Place Order",
-    "CancelOrder": "Cancel Order(s)",
-    "None": "None",
-    "sendId": "Sent ID"
-  },
   "conditionTitles": {
     "Crossing": "Crossing",
     "CrossingUp": "Crossing Up",
@@ -79,6 +73,16 @@
     "MovingDown": "Moving Down",
     "MovingUpPercentage": "Moving Up Percentage",
     "MovingDownPercentage": "Moving Down Percentage"
+  }, 
+  "notificationTitles": {
+    "email": "Email",
+    "sms": "SMS",
+    "push": "Push"
+  },
+  "notificationStatusTitles": {
+    "sent": "Sent",
+    "failed": "Failed",
+    "outOfLimit": "Out Of LImit"
   },
   "alertUpdated": "Alert updated",
   "failedToEditAlert": "Failed to edit alert",
@@ -97,5 +101,12 @@
   "alertsStopped": "Alerts stopped",
   "failedToStopAlerts": "Failed to stop alerts",
   "alertsComponentName": "Alerts",
-  "condition": "Condition"
+  "condition": "Condition",
+  "loadError": "Can`t loading alerts",
+  "startLimit": "Can`t start alerts. Out of limits for subscription level.",
+  "createLimit": "Can`t add more alerts. Out of limits for subscription level.",
+  "createSonarRestriction": "Can`t create sonar alerts. Out of access for subscription level.",
+  "priceAlert": "Price Alert",
+  "sonarAlert": "Sonar Alert",
+  "failedToViewChart": "Failed to view chart by symbol"
 }

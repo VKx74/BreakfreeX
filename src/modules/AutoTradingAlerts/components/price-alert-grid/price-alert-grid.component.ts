@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { PriceAlert } from "../../models/AlertBase";
@@ -26,7 +26,7 @@ export class PriceAlertGridComponent extends AlertGridBase<PriceAlert> {
     constructor (protected _dialog: MatDialog,
         protected _alertsService: AlertsService,
         protected _alertService: AlertService,
-        protected _translateService: TranslateService,
+        @Inject(AutoTradingAlertsTranslateService) protected _translateService: TranslateService,
         protected _cdr: ChangeDetectorRef) {
             super(_dialog, _alertsService, _alertService, _translateService, _cdr);
     }
