@@ -23,7 +23,7 @@ export class AlertSetupBaseComponent {
     if (this._expiration !== value) {
       this._expiration = value;
       this._selectedDate = new Date(this._expiration);
-      this._selectedTime = `${this._selectedDate.getUTCHours()}:${this._selectedDate.getUTCMinutes()}`;
+      this._selectedTime = `${this._selectedDate.getHours()}:${this._selectedDate.getMinutes()}`;
       this.expirationChange.next(this._expiration);
     }
   }
@@ -150,6 +150,7 @@ export class AlertSetupBaseComponent {
     let dateString = `${year}-${month}-${day}`;
     let timeString = `${h}:${m}:${tz}`;
     let exp = new Date(`${dateString}T${timeString}`).getTime();
-    this.expiration = exp;
+    let tzShift = new Date().getTimezoneOffset() * 60 * 1000;
+    this.expiration = exp + tzShift;
   }
 }

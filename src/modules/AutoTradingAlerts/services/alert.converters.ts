@@ -47,7 +47,7 @@ export class AlertConverters {
             created: dto.created,
             exchange: dto.exchange,
             executionStrategy: dto.executionStrategy,
-            expiring: dto.expiring,
+            expiring: dto.expiring ? dto.expiring * 1000 : dto.expiring,
             instrument: dto.instrument,
             notificationMessage: dto.notificationMessage,
             started: dto.started,
@@ -66,7 +66,7 @@ export class AlertConverters {
             id: dto.id,
             created: dto.created,
             executionStrategy: dto.executionStrategy,
-            expiring: dto.expiring,
+            expiring: dto.expiring ? dto.expiring * 1000 : dto.expiring,
             notificationMessage: dto.notificationMessage,
             started: dto.started,
             type: dto.type,
@@ -94,7 +94,7 @@ export class AlertConverters {
         }
 
         let result: NewPriceAlertDTO = {
-            expiring: options.expiring,
+            expiring: options.expiring ? Math.trunc(options.expiring / 1000) : options.expiring,
             notificationMessage: options.notificationMessage,
             exchange: options.exchange,
             instrument: options.instrument,
@@ -126,7 +126,7 @@ export class AlertConverters {
         }
 
         let result: NewSonarAlertDTO = {
-            expiring: options.expiring,
+            expiring: options.expiring ? Math.trunc(options.expiring / 1000) : options.expiring,
             notificationMessage: options.notificationMessage,
             status: options.status,
             description: "",
