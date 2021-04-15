@@ -106,3 +106,8 @@ export enum InstrumentType {
     Bonds = "Bonds",
     Equities = "Equities"
 }
+
+export enum OrderViewBy {
+    Count = "Count",
+    USDAmount = "$"
+}

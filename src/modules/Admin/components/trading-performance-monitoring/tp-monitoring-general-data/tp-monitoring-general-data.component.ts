@@ -123,13 +123,14 @@ export class StringDataSet implements IChartDataSet {
         });
         return res;
     }
+
     getToolTips(): string[][] {
         let res = new Array<Array<string>>();
         Object.keys(this._dataSet).forEach((key) => {
             let arr = new Array<string>();
             if (this._showPercents) {
                 let prercent = Math.roundToDecimals(this._dataSet[key] / this._total * 100, 2);
-                arr.push(`${key}: ${this._dataSet[key]} (${prercent}%)`);
+                arr.push(`${key}: ${this._numberWithCommas(this._dataSet[key])} (${prercent}%)`);
             } else {
                 arr.push(`${key}: ${this._dataSet[key]}`);
             }
@@ -155,6 +156,10 @@ export class StringDataSet implements IChartDataSet {
         return res;
     }
 
+    private _numberWithCommas(nmb: number): string {
+        return nmb.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     private _generateRandomColor(): string {
         let min = 0;
         let max = 255;
@@ -162,6 +167,16 @@ export class StringDataSet implements IChartDataSet {
         let green = Math.floor(Math.random() * (max - min + 1));
         let blue = Math.floor(Math.random() * (max - min + 1));
         return 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+    }
+}
+
+export class StringDSFixedColors extends StringDataSet {
+    constructor(dataSet: { [key: string]: number }, color: string = null, showPercents: boolean = true) {
+        super(dataSet, color, showPercents);
+    }
+
+    getColors(): string[] {
+        return ["#5ebd63", "#ff5959", "#b5b800"];
     }
 }
 
@@ -385,7 +400,7 @@ export class TPMonitoringGeneralDataComponent implements OnInit {
     private loadTradedVolume(): void {
         this._tpMonitoringService.getTradedVolume()
             .subscribe((data: { [key: number]: number }) => {
-                if (data) {                    
+                if (data) {
                     let strData: { [key: string]: number } = {};
                     let keys = Object.keys(data);
                     keys.forEach((key) => {

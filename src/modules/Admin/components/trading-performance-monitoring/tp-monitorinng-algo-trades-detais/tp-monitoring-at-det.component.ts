@@ -2,13 +2,13 @@ import { HttpResponse } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { IPaginationResponse } from "@app/models/pagination.model";
-import { AlgoTimeFrames, BFTTradeType, ChartData, InstrumentType, ParamNames } from "modules/Admin/data/tp-monitoring/TPMonitoringData";
+import { AlgoTimeFrames, BFTTradeType, ChartData, InstrumentType, OrderViewBy, ParamNames } from "modules/Admin/data/tp-monitoring/TPMonitoringData";
 import { Trade } from "modules/Admin/data/tp-monitoring/TPMonitoringDTO";
 import { TPMonitoringService } from "modules/Admin/services/tp-monitoring.service";
 import { DataTableViewMode } from "modules/datatable/viewmode";
 import { TimeZone, TzUtils, UTCTimeZone } from "TimeZones";
 import { IChartDataSet, TPChartSettings } from "../chart-components/single-parameter-chart/sp-chart.component.";
-import { ChartDescriptor, StringDataSet } from "../tp-monitoring-general-data/tp-monitoring-general-data.component";
+import { ChartDescriptor, StringDataSet, StringDSFixedColors } from "../tp-monitoring-general-data/tp-monitoring-general-data.component";
 
 @Component({
     selector: 'tp-algo-trades-details',
@@ -20,16 +20,18 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
     constructor(private _tpMonitoringService: TPMonitoringService) { }
 
     ParamNames = ParamNames;
-    ComparisonParamers: Array<ParamNames> = new Array<ParamNames>();
+    ComparisonParamers: Array<ParamNames> = new Array<ParamNames>();    
     AlgoTimeFramesItems: Array<AlgoTimeFrames> = new Array<AlgoTimeFrames>();
     BFTTradeTypeItems: Array<BFTTradeType> = new Array<BFTTradeType>();
     InstrumentTypeItems: Array<InstrumentType> = new Array<InstrumentType>();
+    OrderViewByItems: Array<OrderViewBy> = new Array<OrderViewBy>();
 
     SelectedComparing: ParamNames;
     SelectedTF: AlgoTimeFrames;
     SelectedMktType: InstrumentType;
     SelectedSetupType: BFTTradeType;
-    SelectedPlatform: string;
+    SelectedViewBy: OrderViewBy;
+    SelectedPlatform: string;    
 
     AllCharts: Array<ChartDescriptor> = new Array<ChartDescriptor>();
     Trades: Array<Trade> = new Array<Trade>();
@@ -40,6 +42,8 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
     thousandNumber: number = 1;
 
     useDateRangeFilter: boolean;
+    skipCanceledOrders: boolean = false;
+    realAccountsOnly:  boolean = false;
     dtFrom: string = '';
     dtTo: string = '';
 
@@ -48,10 +52,12 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
         this.AlgoTimeFramesItems = Object.values(AlgoTimeFrames);
         this.BFTTradeTypeItems = Object.values(BFTTradeType);
         this.InstrumentTypeItems = Object.values(InstrumentType);
+        this.OrderViewByItems = Object.values(OrderViewBy);
         this.SelectedComparing = ParamNames.None;
         this.SelectedTF = AlgoTimeFrames.All;
         this.SelectedMktType = InstrumentType.All;
         this.SelectedSetupType = BFTTradeType.All;
+        this.SelectedViewBy = OrderViewBy.Count;
         this.SelectedPlatform = "MT4";
     }
 
@@ -75,6 +81,10 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
         this.SelectedSetupType = change.value;
     }
 
+    handleViewBySelectionChange(change: any) {
+        this.SelectedViewBy = change.value;
+    }
+
     handleBtnClick(): void {
         this.loadChartData();
     }
@@ -90,6 +100,14 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
             this.dtFrom = "";
             this.dtTo = "";
         }
+    }
+
+    handleSkipCanceledOrdersCheckedChanged(args: any) {
+        this.skipCanceledOrders = args.checked;
+    }
+
+    handleRealAccountsOnlyCheckedChanged(args: any) {
+        this.realAccountsOnly = args.checked;
     }
 
     dateFrom(): number {
@@ -125,7 +143,7 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
         this.showSpinner = true;
         this._tpMonitoringService.getAlgoOrdersHistoryDetailed(this.pageSizeTrades, this.pageIndexTrades, this.SelectedPlatform,
             this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType,
-            this.dateFrom(), this.dateTo()).subscribe(
+            this.dateFrom(), this.dateTo(), this.skipCanceledOrders).subscribe(
                 (trades: IPaginationResponse<Trade>) => {
                     if (trades) {
                         this.Trades = trades.items;
@@ -139,7 +157,7 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
         this.showSpinner = true;
         this._tpMonitoringService.getAlgoOrdersHistoryDetailedCSV(this.thousandNumber, this.SelectedPlatform,
             this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType,
-            this.dateFrom(), this.dateTo())
+            this.dateFrom(), this.dateTo(), this.skipCanceledOrders)
             .subscribe((res: HttpResponse<Blob>) => {
                 let fileName = res.headers.get("filename");
                 let a = document.createElement("a");
@@ -152,11 +170,17 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
 
     loadChartData(): void {
         this.showSpinner = true;
+        
         let index = Object.values(ParamNames).indexOf(this.SelectedComparing);
         let selectedComparing = Object.keys(ParamNames)[index];
+
+        index = Object.values(OrderViewBy).indexOf(this.SelectedViewBy);
+        let selectedViewBy = Object.keys(OrderViewBy)[index];
+
         this._tpMonitoringService.getAlgoTradesCharts(selectedComparing,
             this.tfToSeconds(this.SelectedTF), this.SelectedSetupType, this.SelectedMktType,
-            this.dateFrom(), this.dateTo())
+            this.dateFrom(), this.dateTo(), this.skipCanceledOrders, selectedViewBy,
+            this.realAccountsOnly)
             .subscribe((data: { [key: string]: { [key: string]: number } }) => {
                 this.showSpinner = false;
                 if (data) {
@@ -165,8 +189,8 @@ export class TPMonitoringAlgoTradesDetsComponent implements OnInit {
 
                     chartNames.forEach((item) => {
                         arr.push(new ChartDescriptor(
-                            <TPChartSettings>{ chartHeader: item, chartType: "doughnut", ratio: 1.2 },
-                            <ChartData>{ DataSet: new StringDataSet(data[item]) as IChartDataSet }
+                            <TPChartSettings>{ chartHeader: item, chartType: "doughnutLabels", ratio: 1.2 },
+                            <ChartData>{ DataSet: new StringDSFixedColors(data[item]) as IChartDataSet }
                         ));
                     });
 
