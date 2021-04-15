@@ -23,6 +23,7 @@ declare class Chart {
         context: string | CanvasRenderingContext2D | HTMLCanvasElement | ArrayLike<CanvasRenderingContext2D | HTMLCanvasElement>,
         options: Chart.ChartConfiguration
     );
+    pluginTooltips: Array<any>;
     config: Chart.ChartConfiguration;
     data: Chart.ChartData;
     destroy: () => {};
@@ -58,6 +59,8 @@ declare class Chart {
 
     // Tooltip Static Options
     static Tooltip: Chart.ChartTooltipsStaticConfiguration;
+
+    static Tooltrip: any;
 }
 declare class PluginServiceStatic {
     register(plugin: PluginServiceGlobalRegistration & PluginServiceRegistrationOptions): void;
@@ -263,6 +266,7 @@ declare namespace Chart {
     interface ChartOptions {
         responsive?: boolean;
         responsiveAnimationDuration?: number;
+        showAllTooltips?: boolean;
         aspectRatio?: number;
         maintainAspectRatio?: boolean;
         events?: string[];
@@ -285,6 +289,8 @@ declare namespace Chart {
         rotation?: number;
         devicePixelRatio?: number;
         plugins?: ChartPluginsOptions;
+        onAnimationComplete?:any;
+        events?:any;
     }
 
     interface ChartFontOptions {
@@ -408,6 +414,16 @@ declare namespace Chart {
         line?: ChartLineOptions;
         arc?: ChartArcOptions;
         rectangle?: ChartRectangleOptions;
+    }
+
+    interface ChartTooltip {
+        _active:Array<any>;
+        _chart:any;
+        _data:any;
+        _model:any;
+        _options:any;
+        _start:any;
+        _view:any;
     }
 
     interface ChartArcOptions {

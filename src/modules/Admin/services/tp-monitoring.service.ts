@@ -6,7 +6,7 @@ import { param } from "jquery";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { QueryParamsConstructor } from "../data/models";
-import { BFTTradeType, EnumHelper, Grouping, InstrumentType, Periods } from "../data/tp-monitoring/TPMonitoringData";
+import { BFTTradeType, EnumHelper, Grouping, InstrumentType, OrderViewBy, Periods } from "../data/tp-monitoring/TPMonitoringData";
 import { AlgoTradingData, DistributionData, GeneralData, MTAccountDTO, MTAccountPerformanceData, Trade, TradingData, UserBalanceResponse, UserMTAccounts, UserOrdersResponse } from "../data/tp-monitoring/TPMonitoringDTO";
 
 @Injectable()
@@ -170,7 +170,8 @@ export class TPMonitoringService {
 
     public getAlgoTradesCharts(compareParam: string, tfFilter: number,
         tradeFilter: BFTTradeType, mktTypeFilter: InstrumentType,
-        dtFrom: number, dtTo: number): Observable<any> {
+        dtFrom: number, dtTo: number, skipCanceledOrders: boolean,
+        selectedViewBy: string, realAccounts: boolean): Observable<any> {
         let params = new HttpParams();
         params = params.append('algoTradesCompareBy', compareParam);
         params = params.append('tfFilter', tfFilter.toString());
@@ -180,13 +181,17 @@ export class TPMonitoringService {
             params = params.append('instrTypeFilter', mktTypeFilter.toString());
         params = params.append("dateFrom", dtFrom.toString());
         params = params.append("dateTo", dtTo.toString());
+        params = params.append("skipCanceledOrders", skipCanceledOrders.toString());
+        params = params.append('orderViewBy', selectedViewBy);
+        params = params.append('realAccounts', realAccounts.toString());
 
         return this._http.get<any>(this.getAlgoTradeDetailedUrl, { params: params });
     }
 
     public getAlgoOrdersHistoryDetailed(pageSize: number, pageIndex: number,
         mtPlatform: string, tfFilter: number, tradeFilter: BFTTradeType,
-        mktTypeFilter: InstrumentType, dtFrom: number, dtTo: number)
+        mktTypeFilter: InstrumentType, dtFrom: number, dtTo: number,
+        skipCanceledOrders: boolean)
         : Observable<IPaginationResponse<Trade>> {
         let params = new HttpParams();
         params = params.append('pageSize', pageSize.toString());
@@ -199,6 +204,7 @@ export class TPMonitoringService {
             params = params.append('instrTypeFilter', mktTypeFilter.toString());
         params = params.append("dateFrom", dtFrom.toString());
         params = params.append("dateTo", dtTo.toString());
+        params = params.append("skipCanceledOrders", skipCanceledOrders.toString());
 
         return this._http.get<IPaginationResponse<Trade>>(this.getAlgoOrdersHistoryDetailedUrl, { params: params })
             .pipe(
@@ -210,7 +216,8 @@ export class TPMonitoringService {
 
     public getAlgoOrdersHistoryDetailedCSV(pageNumber: number,
         mtPlatform: string, tfFilter: number, tradeFilter: BFTTradeType,
-        mktTypeFilter: InstrumentType, dtFrom: number, dtTo: number)
+        mktTypeFilter: InstrumentType, dtFrom: number, dtTo: number,
+        skipCanceledOrders: boolean)
         : Observable<any> {
 
         let params = new HttpParams();
@@ -223,6 +230,7 @@ export class TPMonitoringService {
             params = params.append('instrTypeFilter', mktTypeFilter.toString());
         params = params.append("dateFrom", dtFrom.toString());
         params = params.append("dateTo", dtTo.toString());
+        params = params.append("skipCanceledOrders", skipCanceledOrders.toString());
 
         return this._http.get(this.getAlgoOrdersHistoryDetailedcsvUrl,
             { params: params, observe: 'response', responseType: 'blob' });

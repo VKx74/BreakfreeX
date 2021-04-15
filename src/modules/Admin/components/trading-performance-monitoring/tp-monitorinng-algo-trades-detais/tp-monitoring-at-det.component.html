@@ -60,6 +60,8 @@
             </div>
             <!--</form>-->
         </div>
+        <mat-slide-toggle class="v-align-middle option-name" [checked]="skipCanceledOrders"
+                (change)="handleSkipCanceledOrdersCheckedChanged($event)">Skip 'Canceled' trades</mat-slide-toggle>
 
         <mat-accordion>
             <mat-expansion-panel hideToggle>
@@ -78,6 +80,17 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <span class="option-name">Show result as:</span>
+                    <mat-form-field class="select m-right-10">
+                        <mat-select [value]="SelectedViewBy"
+                            (selectionChange)="handleViewBySelectionChange($event)">
+                            <mat-option *ngFor="let comSelected of OrderViewByItems" [value]="comSelected">
+                                {{ comSelected }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-slide-toggle class="v-align-middle option-name" [checked]="realAccountsOnly"
+                (change)="handleRealAccountsOnlyCheckedChanged($event)">'Real' accounts only</mat-slide-toggle>
                     <button class="buttn crypto-button crypto-button_primary" (click)='handleBtnClick()'>Update</button>
                 </div>
                 <!--<div style="padding-left: 10px;">
