@@ -40,22 +40,20 @@ export class HistoryService implements IHealthable {
     }
 
     private _init() {
-        setTimeout(() => {
-            let exchanges = APP_TYPE_EXCHANGES[this.applicationTypeService.applicationType];
-            if (exchanges) {
-                exchanges.forEach(value => {
-                    this.exchangeFactory.tryCreateHistoryServiceInstance(value).subscribe(result => {
-                        if (result.serviceInstance && result.result) {
-                            this.services.push(result.serviceInstance);
-                        } else {
-                            console.table(result);
-                        }
-                    }, error => {
-                        console.table(error);
-                    });
+        let exchanges = APP_TYPE_EXCHANGES[this.applicationTypeService.applicationType];
+        if (exchanges) {
+            exchanges.forEach(value => {
+                this.exchangeFactory.tryCreateHistoryServiceInstance(value).subscribe(result => {
+                    if (result.serviceInstance && result.result) {
+                        this.services.push(result.serviceInstance);
+                    } else {
+                        console.table(result);
+                    }
+                }, error => {
+                    console.table(error);
                 });
-            }
-        });
+            });
+        }
     }
 
     getHistory(request: IHistoryRequest): Observable<IHistoryResponse> {
