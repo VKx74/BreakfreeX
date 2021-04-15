@@ -30,6 +30,7 @@ export class AlertsService {
     private _alertLimits: AlertLimits;
     private _triggerSubscription: Subscription;
     private _changedSubscription: Subscription;
+    protected _onReconnectSubscription: Subscription;
 
     public onAlertTriggered: Subject<string> = new Subject<string>();
     public onAlertShowPopup: Subject<string> = new Subject<string>();
@@ -37,7 +38,7 @@ export class AlertsService {
     public onAlertsChanged: Subject<void> = new Subject<void>();
     public onAlertsHistoryChanged: Subject<void> = new Subject<void>();
     public onNotificationLogsChanged: Subject<void> = new Subject<void>();
-
+    
     public get Alerts(): AlertBase[] {
         return this._alerts;
     }
@@ -76,6 +77,11 @@ export class AlertsService {
 
         this._triggerSubscription = this._ws.alertTriggeredSubject.subscribe(this._handleAlertTriggered.bind(this));
         this._changedSubscription = this._ws.alertChangedSubject.subscribe(this._handleAlertChanged.bind(this));
+        this._onReconnectSubscription = this._ws.onReconnect.subscribe(() => {
+            this._ws.sendAuth().subscribe(() => {
+                console.log(">>> Alert socket reconnected.");
+            });
+        });
     }
 
     createPriceAlert(alert: NewPriceAlertOptions): Observable<PriceAlert> {
@@ -226,6 +232,10 @@ export class AlertsService {
 
         if (this._changedSubscription) {
             this._changedSubscription.unsubscribe();
+        }
+
+        if (this._onReconnectSubscription) {
+            this._onReconnectSubscription.unsubscribe();
         }
 
         if (this._timeoutForNotificationsLog) {
