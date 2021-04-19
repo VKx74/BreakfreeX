@@ -157,7 +157,7 @@ export class StringDataSet implements IChartDataSet {
     }
 
     private _numberWithCommas(nmb: number): string {
-        return nmb.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        return nmb.toLocaleString();
     }
 
     private _generateRandomColor(): string {
