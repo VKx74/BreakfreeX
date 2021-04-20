@@ -7,7 +7,7 @@
 
         <div class="modal-body" [class.disabled]="processingSubmit">
             <div class="flex-row form-wrapper">
-                <div class="flex-column padding-right">
+                <div class="flex-column-full padding-right">
                     <div class="crypto-form-unit margin-bottom">
                         <p class="form-unit__label"><span>{{'tradingAlert.instrument' | translate}}</span></p>
                         <instrument-search [instrument]="instrument" (onSelect)="handleInstrumentChange($event)">
@@ -22,7 +22,7 @@
                         </selector>
                     </div>
                 </div>
-                <div class="flex-column padding-right">
+                <div class="flex-column padding-left">
                     <div class="crypto-form-unit margin-bottom">
                         <p class="form-unit__label"><span> {{'tradingAlert.value' | translate}}</span></p>
                         <mat-form-field class="crypto-input bft-form-input full-width">
@@ -32,13 +32,15 @@
                 </div>
             </div>
             
-            <hr class="delimiter"/>
+            <div class="delimiter"></div>
 
             <alert-setup-base
                 [(useExpiration)]="useExpiration" [(showPopup)]="showPopup" [(sendSMS)]="sendSMS" [canRunAlert]="canRunAlert"
                 [(sendEmail)]="sendEmail" [(message)]="message" [(saveAndStart)]="saveAndStart" [(expiration)]="expiration"></alert-setup-base>
 
         </div>
+
+        <div class="delimiter"></div>
         <div class="modal-footer">
             <div class="buttons-wrap flex justify-flex-end">
                 <button class="crypto-button crypto-button_primary submit-btn crypto-button-w-100"

@@ -966,3 +966,17 @@ transition-duration: 0.22s;
       font-weight: 700 !important;
     }
 }
+
+//Fix issue with timepicker dial, css overwritten from code above.
+
+input.timepicker-dial__control.timepicker-dial__item {
+  font-size: 50px !important;
+  height: auto !important;
+}
+
+
+//Global override for padding-left in modal window, looks better aligned.
+.crypto-modal .modal-content .modal-title {
+  padding-left: 15px  !important;
+ 
+}

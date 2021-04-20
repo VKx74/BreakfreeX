@@ -1,15 +1,19 @@
+
+
 <div class="content">
+  
+
   <div class="crypto-form-unit margin-bottom">
-    <p class="form-unit__label flex justify-space-between align-items-center">
-      <span>
-        {{'tradingAlert.expiration' | translate}}
-      </span>
-      <!-- <mat-slide-toggle [(ngModel)]="useExpirationProp"></mat-slide-toggle> -->
-    </p>
+    <div clasS="alertoptions form-unit__label"> Alert Options</div>
 
     <div class="two-columns" [ngClass]="{'disabled': !useExpirationProp}">
 
-   
+      <p class="form-unit__label no-padding ">
+        <span class="margin-left">
+          {{'tradingAlert.expiration' | translate}}
+        </span>
+        <!-- <mat-slide-toggle [(ngModel)]="useExpirationProp"></mat-slide-toggle> -->
+      </p>
 
 
       <mat-form-field class="crypto-time-input bft-form-input">
@@ -80,7 +84,7 @@
 
   <div class="crypto-form-unit margin-bottom">
     <p class="form-unit__label">
-      <span>{{'tradingAlert.message' | translate}} (Max 70)</span>
+      <span class="margin-left">{{'tradingAlert.message' | translate}} (Max 70 chars):</span>
     </p>
     <textarea matInput [(ngModel)]="messageProp" class="crypto-textarea"
       placeholder="{{'tradingAlert.message' | translate}}" maxlength="70">

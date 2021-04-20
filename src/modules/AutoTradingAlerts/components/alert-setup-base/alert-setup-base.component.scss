@@ -10,10 +10,44 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+       // background: #151617;
+        padding:15px 10px 10px 0px;
+        
+    }
+
+    .content .crypto-form-unit.margin-bottom {
+        margin: 0px;
+    }
+
+    p.form-unit__label.flex.justify-space-between.align-items-center span {
+        margin-bottom: 5px;
+        margin-left:10px;
+    }
+    
+    .alertoptions {
+        font-size: 11px;
+        font-weight: 700;
+       // color: #fff;
+        display: flex;
+        padding-left: 15px;
+        margin-bottom: 15px;
     }
 
     .two-columns {
-        @include columns(2, 10px);
+        @include columns(2, 100px);
+        padding: 0px 15px;
+        margin-bottom:5px;
+        align-items: center;
+    }
+
+    .no-padding  {
+       padding:0px !important;
+    }
+    .no-margin {
+        margin-left:0px !important;
+    }
+    .margin-left{
+        margin-left:10px !important;
     }
 
     .play-sound-btn {
@@ -33,18 +67,21 @@
     }
 
     textarea {
-        margin: 0;
-        padding: $textarea-padding;
         resize: vertical;
-        max-height: 150px;
-        border-radius:5px !important;
-        font-size:11px !important; 
-        font-weight:700;
+    max-height: 150px;
+    border-radius: 5px !important;
+    font-size: 11px !important;
+    font-weight: 700;
+    margin: 10px 25px 0px 25px;
+    max-width: 270px;
     }
 
     p.form-unit__label {
         font-weight: 700;
         font-size: 10px !important;
+        margin-bottom:0px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 
     .flex-row {
