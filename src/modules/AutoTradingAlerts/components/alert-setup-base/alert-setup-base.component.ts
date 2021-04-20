@@ -15,9 +15,10 @@ export class AlertSetupBaseComponent {
   @Input() canRunAlert: boolean = true;
   @Input() useExpiration: boolean = true;
   @Input() showPopup: boolean = true;
-  @Input() sendSMS: boolean = false;
-  @Input() sendEmail: boolean = false;
-  @Input() saveAndStart: boolean = false;
+  @Input() sendSMS: boolean = true;
+  @Input() sendEmail: boolean = true;
+  @Input() saveAndStart: boolean = true;
+  @Input() playSound: boolean = true;
   @Input() message: string = "";
   @Input() set expiration(value: number) {
     if (this._expiration !== value) {
@@ -35,6 +36,7 @@ export class AlertSetupBaseComponent {
   @Output() saveAndStartChange = new EventEmitter<boolean>();
   @Output() messageChange = new EventEmitter<string>();
   @Output() expirationChange = new EventEmitter<number>();
+  @Output() playSoundChange = new EventEmitter<boolean>();
 
   public minDate: Date = new Date();
   public maxDate: Date = new Date(new Date().getTime() + (1000 * 24 * 60 * 60 * 7));
@@ -57,6 +59,10 @@ export class AlertSetupBaseComponent {
 
   public get saveAndStartProp(): boolean {
     return this.saveAndStart && this.canRunAlert;
+  }
+
+  public get playSoundProp(): boolean {
+    return this.playSound;
   }
 
   public get messageProp(): string {
@@ -86,6 +92,11 @@ export class AlertSetupBaseComponent {
   public set saveAndStartProp(value: boolean) {
     this.saveAndStart = value;
     this.saveAndStartChange.next(this.saveAndStart);
+  }
+
+  public set playSoundProp(value: boolean) {
+    this.playSound = value;
+    this.playSoundChange.next(this.playSound);
   }
 
   public set messageProp(value: string) {

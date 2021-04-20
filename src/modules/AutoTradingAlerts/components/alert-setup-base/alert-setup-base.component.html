@@ -73,14 +73,21 @@
     </p>
   </div>
 
+  <div class="crypto-form-unit margin-bottom">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{'tradingAlert.playSound' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="playSoundProp"></mat-slide-toggle>
+    </p>
+  </div>
+
  
 
-  <div class="crypto-form-unit margin-bottom" *ngIf="canRunAlert">
+  <!-- <div class="crypto-form-unit margin-bottom" *ngIf="canRunAlert">
     <p class="form-unit__label flex align-items-center justify-space-between">
       <span>{{'tradingAlert.saveAndStart' | translate}}</span>
       <mat-slide-toggle [(ngModel)]="saveAndStartProp"></mat-slide-toggle>
     </p>
-  </div>
+  </div> -->
 
   <div class="crypto-form-unit margin-bottom">
     <p class="form-unit__label">

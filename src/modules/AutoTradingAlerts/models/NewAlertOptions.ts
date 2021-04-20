@@ -5,6 +5,7 @@ export interface NewAlertOptions {
     useEmail: boolean;
     useSMS: boolean;
     usePush: boolean;
+    playSound: boolean;
     notificationMessage: string;
     expiring?: number;
     status?: AlertStatus;

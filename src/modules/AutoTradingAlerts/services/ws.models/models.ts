@@ -11,6 +11,8 @@ export interface IAlertAuth {
 export interface IAlertTriggeredData {
     AlertId: number;
     NotificationMessage: string;
+    PlaySound: boolean;
+    Sound: string;
     Type: "string";
 }
 

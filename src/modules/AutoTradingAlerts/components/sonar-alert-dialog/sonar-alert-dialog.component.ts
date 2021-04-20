@@ -100,10 +100,11 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     processingSubmit: boolean = false;
     useExpiration: boolean = true;
     showPopup: boolean = true;
-    sendSMS: boolean = false;
-    sendEmail: boolean = false;
+    sendSMS: boolean = true;
+    sendEmail: boolean = true;
     saveAndStart: boolean = true;
     canRunAlert: boolean = true;
+    playSound: boolean = true;
     message: string = "";
     expiration: number = new Date(new Date().getTime() + (1000 * 24 * 60 * 60 * 5)).getTime();
 
@@ -130,6 +131,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
             this.showPopup = data.alert.usePush;
+            this.playSound = data.alert.playSound;
 
             if (data.alert.expiring && data.alert.expiring > new Date().getTime()) {
                 this.expiration = data.alert.expiring;
@@ -161,10 +163,6 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     ngOnInit() {
     }
 
-    playSound() {
-        // this._audioService.playSound(this.controls.sound.controls.selectedSound.value);
-    }
-
     handleInstrumentChange(instrument: IInstrument) {
         this.instrument = instrument;
     }
@@ -185,7 +183,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
-            this._shoeError(error);
+            this._showError(error);
             this.processingSubmit = false;
             console.error(error);
         });
@@ -199,13 +197,13 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this.processingSubmit = false;
             this.close(true);
         }, (error) => {
-            this._shoeError(error);
+            this._showError(error);
             this.processingSubmit = false;
             console.error(error);
         });
     }
 
-    private _shoeError(error: any) {
+    private _showError(error: any) {
         if (error) {
             if (typeof error === "string") {
                 this._alertService.error(error);
@@ -231,6 +229,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             timeframe: this.selectedTriggerTimeframe,
             triggerType: this.selectedTriggerType,
             expiring: this.expiration,
+            playSound: this.playSound,
             status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
         };
     }

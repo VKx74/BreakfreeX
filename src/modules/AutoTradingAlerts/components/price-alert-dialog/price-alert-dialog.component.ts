@@ -74,10 +74,11 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     processingSubmit: boolean = false;
     useExpiration: boolean = true;
     showPopup: boolean = true;
-    sendSMS: boolean = false;
-    sendEmail: boolean = false;
+    sendSMS: boolean = true;
+    sendEmail: boolean = true;
     saveAndStart: boolean = true;
     canRunAlert: boolean = true;
+    playSound: boolean = true;
     message: string = "";
     expiration: number = new Date(new Date().getTime() + (1000 * 24 * 60 * 60 * 5)).getTime();
 
@@ -105,6 +106,8 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
             this.showPopup = data.alert.usePush;
+            this.playSound = data.alert.playSound;
+
             if (data.alert.expiring && data.alert.expiring > new Date().getTime()) {
                 this.expiration = data.alert.expiring;
             }
@@ -134,10 +137,6 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     }
 
     ngOnInit() {
-    }
-
-    playSound() {
-        // this._audioService.playSound(this.controls.sound.controls.selectedSound.value);
     }
 
     handleInstrumentChange(instrument: IInstrument) {
@@ -218,6 +217,7 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             useSMS: this.sendSMS,
             value: this.alertPrice,
             expiring: this.expiration,
+            playSound: this.playSound,
             status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
         };
     }

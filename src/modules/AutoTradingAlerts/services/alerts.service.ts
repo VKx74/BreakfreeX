@@ -178,7 +178,6 @@ export class AlertsService {
     }
 
     startAlert(alertId: number, alertType: AlertType): Observable<any> {
-        console.log(`start alert:${alertId}`);
         return this._alertRestClient.startAlert(alertId, alertType).pipe(map(() => {
             this.changeStatus(alertId, alertType, AlertStatus.Running);
         }));
@@ -329,7 +328,10 @@ export class AlertsService {
 
     protected _handleAlertTriggered(data: IAlertTriggeredData) {
         this.onAlertShowPopup.next(data.NotificationMessage);
-        this.onAlertPlaySound.next(this._defaultAlertSound);
+
+        if (data.PlaySound !== false) {
+            this.onAlertPlaySound.next(this._defaultAlertSound);
+        }
 
         this.reloadAlerts();
         this.reloadHistory();

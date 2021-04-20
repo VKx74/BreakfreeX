@@ -55,6 +55,7 @@ export class AlertConverters {
             status: dto.status,
             value: dto.condition.price,
             condition: this.MapDTOToPriceAlertCondition(dto.condition.condition),
+            playSound: dto.action ? dto.action.playSound : true,
             useEmail: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Email) !== -1 : false,
             usePush: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Push) !== -1 : false,
             useSMS: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.SMS) !== -1 : false
@@ -74,6 +75,7 @@ export class AlertConverters {
             instrument: dto.condition.symbol,
             setup: this.MapDTOToTriggerSetup(dto.condition.setup),
             timeframe: this.MapGranularityToTriggerTimeframe(dto.condition.granularity),
+            playSound: dto.action ? dto.action.playSound : true,
             triggerType: dto.condition.isDisappeared ? TriggerType.SetupDisappeared : TriggerType.NewSetup,
             useEmail: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Email) !== -1 : false,
             usePush: dto.action && dto.action.notifications ? dto.action.notifications.indexOf(AlertNotificationType.Push) !== -1 : false,
@@ -102,7 +104,9 @@ export class AlertConverters {
             description: "",
             name: "",
             action: {
-                notifications: notifications
+                notifications: notifications,
+                playSound: options.playSound,
+                sound: ""
             },
             condition: {
                 price: options.value,
@@ -132,7 +136,9 @@ export class AlertConverters {
             description: "",
             name: "",
             action: {
-                notifications: notifications
+                notifications: notifications,
+                playSound: options.playSound,
+                sound: ""
             },
             condition: {
                 symbol: options.instrument,

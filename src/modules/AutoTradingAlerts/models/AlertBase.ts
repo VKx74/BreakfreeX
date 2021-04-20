@@ -13,6 +13,7 @@ export interface AlertBase {
     useEmail: boolean;
     useSMS: boolean;
     usePush: boolean;
+    playSound: boolean;
 }
 
 export interface PriceAlert extends AlertBase {
