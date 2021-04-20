@@ -8,12 +8,8 @@
     </p>
 
     <div class="two-columns" [ngClass]="{'disabled': !useExpirationProp}">
-      <mat-form-field class="crypto-date-input bft-form-input">
-        <input matInput readonly [matDatepicker]="dateFrom" [min]="minDate" [max]="maxDate" placeholder="Datepicker"
-          (click)="dateFrom.open()" class="crypto-input datepicker cursor-pointer" [(ngModel)]="selectedDateProp">
-        <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
-        <mat-datepicker #dateFrom></mat-datepicker>
-      </mat-form-field>
+
+   
 
 
       <mat-form-field class="crypto-time-input bft-form-input">
@@ -24,11 +20,19 @@
         <ngx-material-timepicker #toggleTimepicker></ngx-material-timepicker>
       </mat-form-field>
 
+      <mat-form-field class="crypto-date-input bft-form-input">
+        <input matInput readonly [matDatepicker]="dateFrom" [min]="minDate" [max]="maxDate" placeholder="Datepicker"
+          (click)="dateFrom.open()" class="crypto-input datepicker cursor-pointer" [(ngModel)]="selectedDateProp">
+        <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+        <mat-datepicker #dateFrom></mat-datepicker>
+      </mat-form-field>
+
 
     </div>
   </div>
 
-  <div class="crypto-form-unit margin-bottom">
+  
+  <div class="crypto-form-unit margin-bottom hidden">
     <p class="form-unit__label flex align-items-center justify-space-between">
       <span>{{ 'tradingAlert.showPopup' | translate}}</span>
       <mat-slide-toggle [(ngModel)]="showPopupProp"></mat-slide-toggle>
@@ -65,6 +69,15 @@
     </p>
   </div>
 
+ 
+
+  <div class="crypto-form-unit margin-bottom" *ngIf="canRunAlert">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{'tradingAlert.saveAndStart' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="saveAndStartProp"></mat-slide-toggle>
+    </p>
+  </div>
+
   <div class="crypto-form-unit margin-bottom">
     <p class="form-unit__label">
       <span>{{'tradingAlert.message' | translate}} (Max 70)</span>
@@ -72,13 +85,6 @@
     <textarea matInput [(ngModel)]="messageProp" class="crypto-textarea"
       placeholder="{{'tradingAlert.message' | translate}}" maxlength="70">
     </textarea>
-  </div>
-
-  <div class="crypto-form-unit margin-bottom" *ngIf="canRunAlert">
-    <p class="form-unit__label flex align-items-center justify-space-between">
-      <span>{{'tradingAlert.saveAndStart' | translate}}</span>
-      <mat-slide-toggle [(ngModel)]="saveAndStartProp"></mat-slide-toggle>
-    </p>
   </div>
 
 </div>
