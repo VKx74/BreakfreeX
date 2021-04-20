@@ -21,6 +21,7 @@
     /deep/ {
       .mat-radio-label-content {
         margin-right: 20px;
+        font-weight:700;
       }
     }
   }
@@ -30,9 +31,29 @@
     max-width: 320px;
   }
 
-  .delimiter {
-    margin: 10px 0;
+  .crypto-modal .modal-content .modal-body{
+    padding: 0px !important;
+    overflow:hidden;
+    margin-top:15px;
   }
+
+  .flex-row .form-unit__label {
+    font-weight:700;
+    font-size:11px;
+  }
+
+  .flex-row .crypto-form-unit.margin-bottom {
+    margin-bottom:5px !important;
+
+  }
+
+  .delimiter {
+    border-top: 1px solid #dddddd1f;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
 
   .two-columns {
     @include columns(2, 10px);
@@ -57,6 +78,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
+    padding: 0px 15px 10px 15px;
   }
   
   .flex-column {
@@ -72,11 +94,17 @@
     opacity: 0.35;
     pointer-events: none;
   }
+  .buttons-wrap {
+    margin-top:10px;
+   }
+ 
 
   .submit-btn {
     padding: 0;
-    height: 32px;
+    height: 25px;
     border-radius: 3px;
+    font-weight:700;
+    margin:0 auto;
   }
 }
 
