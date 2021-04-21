@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { SonarAlert } from "../../models/AlertBase";
@@ -19,7 +19,8 @@ import { TriggerType } from 'modules/AutoTradingAlerts/models/Enums';
             provide: TranslateService,
             useExisting: AutoTradingAlertsTranslateService
         }
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarAlertGridComponent extends AlertGridBase<SonarAlert> {
     constructor (protected _dialog: MatDialog,

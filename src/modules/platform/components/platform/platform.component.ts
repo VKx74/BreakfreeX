@@ -96,7 +96,7 @@ export class PlatformComponent implements OnInit, AfterViewInit {
             }
 
             this._audioService.playSound(soundId);
-            
+                
             this._playSoundLoop = setInterval(() => {
                 this._audioService.playSound(soundId);
             }, 1000 * 5);

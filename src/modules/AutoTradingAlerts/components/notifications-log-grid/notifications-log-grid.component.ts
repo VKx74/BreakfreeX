@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertHistory } from 'modules/AutoTradingAlerts/models/AlertHistory';
 import { AlertNotificationType, AlertType, NotificationStatus } from 'modules/AutoTradingAlerts/models/EnumsDTO';
@@ -14,7 +14,8 @@ import { AutoTradingAlertsTranslateService } from 'modules/AutoTradingAlerts/loc
 @Component({
   selector: 'notifications-log-grid',
   templateUrl: 'notifications-log-grid.component.html',
-  styleUrls: ['notifications-log-grid.component.scss']
+  styleUrls: ['notifications-log-grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationsLogGridComponent extends AlertGridBase<NotificationLog> {
   public get NotificationLimits(): NotificationLimits {

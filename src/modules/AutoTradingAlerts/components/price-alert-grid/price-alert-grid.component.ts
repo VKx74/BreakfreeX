@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { PriceAlert } from "../../models/AlertBase";
@@ -19,7 +19,8 @@ import { ChangeDetectorRef } from '@angular/core';
             provide: TranslateService,
             useExisting: AutoTradingAlertsTranslateService
         }
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PriceAlertGridComponent extends AlertGridBase<PriceAlert> {
 

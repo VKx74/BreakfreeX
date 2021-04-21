@@ -31,6 +31,8 @@ export enum AlertTabs {
 })
 export class AlertWidgetComponent extends BaseLayoutItemComponent {
   static componentName = 'BreakfreeAlerts';
+  static previewImgClass = 'crypto-icon-alert';
+
   AlertTabs = AlertTabs;
   selectedTabIndex: AlertTabs = AlertTabs.PriceAlerts;
 

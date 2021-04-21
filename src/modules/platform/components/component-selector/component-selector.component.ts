@@ -114,7 +114,7 @@ export class ComponentSelectorComponent implements OnDestroy {
             },
             {
                 component: AlertWidgetComponent,
-                previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,
+                previewImgClass: AlertWidgetComponent.previewImgClass,
                 componentName: this._alertsTranslateService.stream('alertsComponentName'),
                 componentIdentifier: ComponentIdentifier.alertsManager,
             },

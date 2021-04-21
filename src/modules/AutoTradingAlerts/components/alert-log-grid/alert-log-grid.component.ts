@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertHistory } from 'modules/AutoTradingAlerts/models/AlertHistory';
 import { AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
@@ -12,7 +12,8 @@ import { AutoTradingAlertsTranslateService } from 'modules/AutoTradingAlerts/loc
 @Component({
   selector: 'alert-log-grid',
   templateUrl: 'alert-log-grid.component.html',
-  styleUrls: ['alert-log-grid.component.scss']
+  styleUrls: ['alert-log-grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlertLogGridComponent extends AlertGridBase<AlertHistory> {
 
