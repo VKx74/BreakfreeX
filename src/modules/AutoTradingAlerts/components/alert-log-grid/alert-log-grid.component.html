@@ -15,25 +15,25 @@
 
               <data-table-cell class="stripped-mode" columnName="type">
                   <ng-template let-item>
-                      <span class="flex">
+                      <div class="ellipsis">
                           {{getConditionTitle(item) | async}}
-                      </span>
+                      </div>
                   </ng-template>
               </data-table-cell>
 
               <data-table-cell class="stripped-mode" columnName="time">
                   <ng-template let-item>
-                      <span class="flex">
+                      <div class="ellipsis">
                         {{item.triggerTime | formatDate:'YYYY/MM/DD HH:mm'}}
-                      </span>
+                      </div>
                   </ng-template>
               </data-table-cell>
 
               <data-table-cell class="stripped-mode" columnName="message">
                   <ng-template let-item>
-                      <span class="flex" tooltip [matTooltip]='item.notificationMessage'>
+                      <div class="ellipsis" tooltip [matTooltip]='item.notificationMessage'>
                           {{item.notificationMessage}}
-                      </span>
+                      </div>
                   </ng-template>
               </data-table-cell>
 

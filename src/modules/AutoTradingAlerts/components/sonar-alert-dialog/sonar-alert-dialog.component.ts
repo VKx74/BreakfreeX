@@ -14,6 +14,8 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { NewSonarAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
+import { IdentityService } from '@app/services/auth/identity.service';
+import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 
 export interface ISonarDialogConfig {
     alert?: SonarAlert;
@@ -32,20 +34,15 @@ export interface ISonarDialogConfig {
 })
 export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> implements OnInit {
     private _instrument: IInstrument;
+    private _allowedTriggerTimeframe: TriggerTimeframe[] = [];
     private _selectedTriggerType: TriggerType = TriggerType.NewSetup;
-    private _selectedTriggerTimeframe: TriggerTimeframe = TriggerTimeframe.AllTimeframes;
+    private _selectedTriggerTimeframe: TriggerTimeframe;
     private _selectedTriggerSetup: TriggerSetup = TriggerSetup.AllSetups;
     TriggerType = TriggerType;
     TriggerTimeframe = TriggerTimeframe;
 
     public get allowedTriggerTimeframe(): TriggerTimeframe[] {
-        return [
-            TriggerTimeframe.AllTimeframes,
-            TriggerTimeframe.Min15,
-            TriggerTimeframe.Hour1,
-            TriggerTimeframe.Hour4,
-            TriggerTimeframe.Day1
-        ];
+       return this._allowedTriggerTimeframe;
     }
 
     public get allowedTriggerSetup(): TriggerSetup[] {
@@ -117,9 +114,12 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         private _alertsService: AlertsService,
         private _alertService: AlertService,
         private _instrumentService: InstrumentService,
+        private _identityService: IdentityService,
+        private _tradingProfileService: TradingProfileService,
         @Inject(MAT_DIALOG_DATA) public data: ISonarDialogConfig) {
         super(_injector);
 
+        this._formAllowedTimeframes();
         this.canRunAlert = this._alertsService.canRunMoreAlerts(AlertType.SonarAlert);
         this.saveAndStart = this.canRunAlert;
 
@@ -253,5 +253,30 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             let triggerType = this.selectedTriggerType === TriggerType.NewSetup ? "New trade(s)" : "Trade(s) Disappeared";
             this.message = `${triggerType} for ${symbol} ${data[0]} ${data[1]}`;
         });
+    }
+
+    private _formAllowedTimeframes() {
+        if (!this._identityService.isAuthorizedCustomer) {
+            return;
+        }
+
+        let basicLevel = this._identityService.basicLevel;
+        let level = this._tradingProfileService.level;
+
+        if (this._identityService.isPro) {
+            if (level >= basicLevel) {
+                this._allowedTriggerTimeframe.push(TriggerTimeframe.AllTimeframes);
+                this._allowedTriggerTimeframe.push(TriggerTimeframe.Min15);
+            }
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour1);
+        } else {
+            if (level >= basicLevel) {
+                this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour1);
+            }
+        }
+
+        this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
+        this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
+        this._selectedTriggerTimeframe = this._allowedTriggerTimeframe[0];
     }
 }

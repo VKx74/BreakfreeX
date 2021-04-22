@@ -101,7 +101,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
-    private _levelRestriction: number = 4;
+    private get _levelRestriction(): number {
+        return this._identityService.basicLevel;
+    }
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];

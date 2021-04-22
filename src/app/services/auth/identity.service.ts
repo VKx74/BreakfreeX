@@ -111,6 +111,10 @@ export class IdentityService {
         }
         
         return false;
+    } 
+    
+    get basicLevel(): number {
+        return 4;
     }
 
     constructor(private _authService: AuthenticationService,
