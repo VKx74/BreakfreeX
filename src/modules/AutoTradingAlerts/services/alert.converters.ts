@@ -213,7 +213,7 @@ export class AlertConverters {
         {
             return TriggerTimeframe.Hour1;
         }
-        if (TimeSpan.MILLISECONDS_IN_HOUR / 1000 === tf)
+        if (TimeSpan.MILLISECONDS_IN_HOUR / 1000 * 4 === tf)
         {
             return TriggerTimeframe.Hour4;
         }
