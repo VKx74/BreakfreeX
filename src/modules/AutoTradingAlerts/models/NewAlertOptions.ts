@@ -1,5 +1,5 @@
 import { AlertCondition, TriggerSetup, TriggerTimeframe, TriggerType } from "./Enums";
-import { AlertStatus } from "./EnumsDTO";
+import { AlertExecutionStrategy, AlertStatus } from "./EnumsDTO";
 
 export interface NewAlertOptions {
     useEmail: boolean;
@@ -9,6 +9,7 @@ export interface NewAlertOptions {
     notificationMessage: string;
     expiring?: number;
     status?: AlertStatus;
+    triggerOptions: AlertExecutionStrategy;
 }
 
 export interface NewPriceAlertOptions extends NewAlertOptions {

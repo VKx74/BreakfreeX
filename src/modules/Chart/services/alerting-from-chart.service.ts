@@ -84,7 +84,8 @@ export class AlertingFromChartService implements TradingChartDesigner.IAlertingF
             usePush: alert.usePush,
             useSMS: alert.useSMS,
             expiring: alert.expiring,
-            playSound: alert.playSound
+            playSound: alert.playSound,
+            triggerOptions: alert.executionStrategy
         }, id).subscribe(
             (result) => {
                 callback();

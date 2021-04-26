@@ -27,5 +27,6 @@ export enum NotificationStatus {
 
 export enum AlertExecutionStrategy 
 {
-    Once
+    Once,
+    EveryTime
 }

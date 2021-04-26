@@ -47,6 +47,22 @@
                         </div>
                     </div>
                 </div>
+            </div>  
+            
+            <div class="flex-row form-wrapper">
+                <div class="flex-column padding-right">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span> {{'tradingAlert.triggerOptions' | translate}}</span></p>
+                        <div class="radio-group">
+                            <mat-radio-group [(ngModel)]="selectedTriggerOptions">
+                                <mat-radio-button [value]='AlertExecutionStrategy.Once'>{{'tradingAlert.triggerOptionOne' | translate}}
+                                </mat-radio-button>
+                                <mat-radio-button [value]='AlertExecutionStrategy.EveryTime'>
+                                    {{'tradingAlert.triggerOptionsEveryTime' | translate}}</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="delimiter"></div>

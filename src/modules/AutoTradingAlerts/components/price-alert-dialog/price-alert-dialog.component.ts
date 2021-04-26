@@ -11,7 +11,7 @@ import { PriceAlert } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { InstrumentService } from '@app/services/instrument.service';
-import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertExecutionStrategy, AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
 
 export interface IPriceAlertDialogPreSettings {
@@ -218,7 +218,8 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             value: this.alertPrice,
             expiring: this.expiration,
             playSound: this.playSound,
-            status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
+            status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped,
+            triggerOptions: AlertExecutionStrategy.Once
         };
     }
 

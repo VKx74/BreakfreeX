@@ -12,7 +12,7 @@ import { SonarAlert } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { InstrumentService } from '@app/services/instrument.service';
 import { NewSonarAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
-import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertExecutionStrategy, AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
@@ -36,9 +36,11 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     private _instrument: IInstrument;
     private _allowedTriggerTimeframe: TriggerTimeframe[] = [];
     private _selectedTriggerType: TriggerType = TriggerType.NewSetup;
+    private _selectedTriggerOptions: AlertExecutionStrategy = AlertExecutionStrategy.Once;
     private _selectedTriggerTimeframe: TriggerTimeframe;
     private _selectedTriggerSetup: TriggerSetup = TriggerSetup.AllSetups;
     TriggerType = TriggerType;
+    AlertExecutionStrategy = AlertExecutionStrategy;
     TriggerTimeframe = TriggerTimeframe;
 
     public get allowedTriggerTimeframe(): TriggerTimeframe[] {
@@ -78,9 +80,18 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         return this._selectedTriggerTimeframe;
     }
     public set selectedTriggerTimeframe(value: TriggerTimeframe) {
-        if (this._selectedTriggerTimeframe = value) {
+        if (this._selectedTriggerTimeframe != value) {
             this._selectedTriggerTimeframe = value;
             this._setNotificationText();
+        }
+    }
+
+    public get selectedTriggerOptions(): AlertExecutionStrategy {
+        return this._selectedTriggerOptions;
+    }
+    public set selectedTriggerOptions(value: AlertExecutionStrategy) {
+        if (this._selectedTriggerOptions != value) {
+            this._selectedTriggerOptions = value;
         }
     }
 
@@ -126,7 +137,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         if (data && data.alert) {
             this.selectedTriggerType = data.alert.triggerType;
             this.selectedTriggerTimeframe = data.alert.timeframe;
-            this.selectedTriggerType = data.alert.triggerType;
+            this.selectedTriggerOptions = data.alert.executionStrategy;
             this.selectedTriggerSetup = data.alert.setup;
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
@@ -228,6 +239,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             setup: this.selectedTriggerSetup,
             timeframe: this.selectedTriggerTimeframe,
             triggerType: this.selectedTriggerType,
+            triggerOptions: this.selectedTriggerOptions,
             expiring: this.expiration,
             playSound: this.playSound,
             status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
