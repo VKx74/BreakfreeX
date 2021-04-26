@@ -80,7 +80,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         return this._selectedTriggerTimeframe;
     }
     public set selectedTriggerTimeframe(value: TriggerTimeframe) {
-        if (this._selectedTriggerTimeframe != value) {
+        if (this._selectedTriggerTimeframe !== value) {
             this._selectedTriggerTimeframe = value;
             this._setNotificationText();
         }
@@ -90,7 +90,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         return this._selectedTriggerOptions;
     }
     public set selectedTriggerOptions(value: AlertExecutionStrategy) {
-        if (this._selectedTriggerOptions != value) {
+        if (this._selectedTriggerOptions !== value) {
             this._selectedTriggerOptions = value;
         }
     }
