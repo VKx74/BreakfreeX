@@ -20,7 +20,7 @@ export class SignInWithThirdPartyRequestModel {
 
 export class GrantTokenResponse {
     accessToken: string;
-    refreshToken: string;
+    refreshToken?: string;
     expireIn: string;
     isUserCreated?: boolean;
 }

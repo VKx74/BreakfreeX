@@ -50,9 +50,12 @@ export class PlatformSidebarComponent implements OnInit {
         return false;
     }
 
+    public get isGuest(): boolean {
+        return this._identityService.isGuestMode;
+    }
+
     constructor(private _translateService: TranslateService,
         private _themeService: ThemeService,
-        private _brokerService: BrokerService,
         private _localizationService: LocalizationService,
         private _applicationTypeService: ApplicationTypeService,
         private _userSettingsService: UserSettingsService,

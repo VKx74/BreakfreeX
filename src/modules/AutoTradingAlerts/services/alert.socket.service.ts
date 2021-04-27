@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, Subject, Subscriber, Subscription } from "rxjs";
+import { Observable, of, Subject, Subscriber, Subscription } from "rxjs";
 import { AppConfigService } from "@app/services/app.config.service";
 import { IWebSocketConfig, ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { IdentityService } from "@app/services/auth/identity.service";

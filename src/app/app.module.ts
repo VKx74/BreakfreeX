@@ -108,6 +108,8 @@ import { SymbolMappingStorageService } from './services/instrument-mapping-stora
 import { FBPixelTrackingService } from './services/traking/fb.pixel.tracking.service';
 import { GTMTrackingService } from './services/traking/gtm.tracking.service';
 import { ChatbroService } from './services/traking/ChatbroService';
+import { GuestGuard } from './services/auth/guest.guard';
+import { GuestResolver } from './reslovers/guest.resolver';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -169,6 +171,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         Angulartics2Segment,
         Angulartics2GoSquared,
         CookieService,
+        GuestResolver,
         AppConfigService,
         {
             provide: IdentityService,
@@ -192,6 +195,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
             provide: APP_INITIALIZER,
             useFactory: (appConfigService: AppConfigService,
                          identityService: IdentityService) => () => {
+                console.log(">>> APP module INIT" + identityService.isGuestMode);
                 return appConfigService.loadConfig()
                     .pipe(
                         switchMap(() => {
@@ -266,6 +270,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         ApplicationTypeService,
         SettingsStorageService,
         AuthGuard,
+        GuestGuard,
         BlockIfPopupWindowGuard,
         BrokerService,
         BrokerFactory,

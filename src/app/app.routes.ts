@@ -1,6 +1,7 @@
 export const AppRoutes = {
     Auth: 'auth',
     Platform: 'platform',
+    Guest: 'guest',
     ClearSession: 'platform/clear-session',
     Admin: 'admin',
     Pages: 'pages',

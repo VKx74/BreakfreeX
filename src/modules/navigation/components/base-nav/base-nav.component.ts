@@ -114,8 +114,13 @@ export class BaseNavComponent implements OnInit {
 
         this._usersProfileService.getUserProfileById(this._identityService.id)
             .subscribe(userProfileModel => {
-                this.avatarId = userProfileModel ? userProfileModel.avatarId : '';
-                this.login = userProfileModel.userName;
+                if (userProfileModel) {
+                    this.avatarId = userProfileModel.avatarId;
+                    this.login = userProfileModel.userName;
+                } else {
+                    this.avatarId = '';
+                }
+
                 if (!this.login) {
                     this.login = this._identityService.firstName;
                 }

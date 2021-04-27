@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject, throwError } from 'rxjs';
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { WatchlistStorageService } from './watchlist-storage.service';
 import { IInstrument } from '@app/models/common/instrument';
 
@@ -27,8 +27,7 @@ export interface IWatchlistItem {
 @Injectable()
 export class WatchlistService {
 
-    private _watchlists: IWatchlistItem[];
-    private _subject: Subject<IWatchlistItem[]>;
+    private _watchlists: IWatchlistItem[] = [];
     private _request: Observable<IWatchlistItem[]>;
 
     public onWatchlistAdded: Subject<IWatchlistItem> = new Subject<IWatchlistItem>();
@@ -49,28 +48,18 @@ export class WatchlistService {
     }
 
     public getWatchlists(): Observable<IWatchlistItem[]> { 
-        if (this._watchlists) {
+        if (this._watchlists && this._watchlists.length) {
             return of(this._watchlists);
         }
 
-        if (!this._request) {
-            this._subject = new Subject<IWatchlistItem[]>();
-            this._request = this._watchlistStorageService.allWatchlists();
-            this._request.subscribe(value => {
-                this._watchlists = value;
-                this._subject.next(value);
-                this._subject.complete();
-                this._request = null;
-            }, error => {
-                console.log('Failed to load watchlists');
-                console.log(error);
-                this._subject.next([]);
-                this._subject.complete();
-                this._request = null;
-            });
+        if (this._request) {
+            return this._request;
         }
-
-        return this._subject;
+        let r = this._watchlistStorageService.allWatchlists().pipe(tap(() => {
+            this._request = null;
+        }));
+        this._request = r;
+        return r;
     } 
 
     public getFeaturedInstruments(): Observable<IFeaturedInstruments[]>  {

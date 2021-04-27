@@ -463,6 +463,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
     
     createWatchlist() {
+        if (this._identityService.isGuestMode) {
+            this.processCheckout();
+            return;
+        }
+
         if (this.activeWatchlist && !this.activeWatchlist.id && this.existingWatchlists.length === 1) {
             this._watchlistService.addWatchlist(this.activeWatchlist.name, this.activeWatchlist.data, this.activeWatchlist.trackingId).subscribe(response => {
                 // console.log(response);
@@ -526,6 +531,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     deleteWatchlist() {
+        if (this._identityService.isGuestMode) {
+            this.processCheckout();
+            return;
+        }
+        
         const watchlistToDelete = this.activeWatchlist;
         const index = this.existingWatchlists.indexOf(watchlistToDelete);
 

@@ -203,9 +203,11 @@ export class DashboardComponent {
         const os = (window as any).OneSignal;
         if (os && os.push && os.setExternalUserId) {
             const userId = this._identityService.id;
-            os.push(function() {
-                os.setExternalUserId(userId);
-            });
+            if (userId) {
+                os.push(function() {
+                    os.setExternalUserId(userId);
+                });
+            }
         }
 
         try {

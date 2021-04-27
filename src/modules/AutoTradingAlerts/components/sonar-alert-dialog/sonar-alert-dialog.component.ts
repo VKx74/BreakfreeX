@@ -1,5 +1,5 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { TranslateService } from "@ngx-translate/core";
 import { AutoTradingAlertsTranslateService } from "../../localization/token";
 import { IInstrument } from "@app/models/common/instrument";
@@ -16,6 +16,7 @@ import { AlertExecutionStrategy, AlertStatus, AlertType } from 'modules/AutoTrad
 import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 export interface ISonarDialogConfig {
     alert?: SonarAlert;
@@ -127,6 +128,8 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         private _instrumentService: InstrumentService,
         private _identityService: IdentityService,
         private _tradingProfileService: TradingProfileService,
+        private _identity: IdentityService,
+        private _dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public data: ISonarDialogConfig) {
         super(_injector);
 
@@ -179,6 +182,11 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     }
 
     public submit() {
+        if (this._identity.isGuestMode) {
+            this._processCheckout();
+            return;
+        }
+
         if (this.data && this.data.alert) {
             this._edit();
         } else {
@@ -290,5 +298,9 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
         this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
         this._selectedTriggerTimeframe = this._allowedTriggerTimeframe[0];
+    }
+
+    private _processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 }

@@ -108,6 +108,31 @@ export class AuthenticationService {
             );
     }
 
+    public getGuestToken(): Observable<GrantTokenResponse> {
+        const httpOptions = {
+            withCredentials: true,
+            headers: new HttpHeaders({
+                'Content-Type': 'application/x-www-form-urlencoded',
+                [AuthInterceptorSkipHeader]: 'true'
+            })
+        };
+
+        let body = new URLSearchParams();
+        body.set('grant_type', 'client_credentials');
+        body.set('client_id', 'atp.client.free.user');
+        body.set('client_secret', 'atp.client.free.user.key');
+
+        return this._http.post<any>(`${AppConfigService.config.apiUrls.identityUrl}connect/token`, body.toString(), httpOptions)
+            .pipe(
+                map((resp: any) => {
+                    return {
+                        accessToken: resp.access_token,
+                        expireIn: resp.expires_in
+                    } as GrantTokenResponse;
+                })
+            );
+    }
+
     public reconfirmEmail(user: ReconfirmEmailModel): Observable<any> {
         return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/reconfirm`, user, this._httpOptions);
     }

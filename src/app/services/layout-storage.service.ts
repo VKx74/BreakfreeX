@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, tap} from "rxjs/operators";
 import {IdentityService} from './auth/identity.service';
 import {AppConfigService} from './app.config.service';
@@ -18,6 +18,10 @@ export class LayoutStorageService {
         return `${AppConfigService.config.apiUrls.userDataStoreREST}Dashboard`;
     }
 
+    private get _isGuest(): boolean {
+        return this._identity.isGuestMode;
+    }
+
     private _saveLayoutStateSync(state: IGoldenLayoutComponentState) {
         let payload = JSON.stringify(state);
         let method = this._layoutExistsRemotely ? "PUT" : "POST";
@@ -25,6 +29,10 @@ export class LayoutStorageService {
     }
 
     private _sendHttpRequestSync(method: string, body: string) {
+        if (this._isGuest) {
+            return;
+        }
+
         let httpRequest = new XMLHttpRequest();
         httpRequest.onerror = (e) => {
             console.log(e);
@@ -39,6 +47,10 @@ export class LayoutStorageService {
     }
 
     private _saveLayoutStateAsync(state: IGoldenLayoutComponentState): Observable<any> {
+        if (this._isGuest) {
+            return;
+        }
+
         if (this._layoutExistsRemotely) {
             return this.http.put(this._dashboardURL, state);
         } else {
@@ -58,6 +70,10 @@ export class LayoutStorageService {
     }
 
     getLayoutState(): Observable<IGoldenLayoutComponentState> {
+        if (this._isGuest) {
+            return throwError("");
+        }
+
         return this.http.get<IGoldenLayoutComponentState>(this._dashboardURL).pipe(
             tap((data) => {
                     if (data) {
@@ -75,6 +91,10 @@ export class LayoutStorageService {
     }
 
     saveLayoutState(state: IGoldenLayoutComponentState, async: boolean = true): Observable<any> {
+        if (this._isGuest) {
+            return;
+        }
+        
         if (async) {
             return this._saveLayoutStateAsync(state);
         } else {
@@ -83,10 +103,18 @@ export class LayoutStorageService {
     }
 
     removeLayoutState(): Observable<any> {
+        if (this._isGuest) {
+            return;
+        }
+
         return this.http.delete(this._dashboardURL, {});
     }
 
     removeUserLayoutState(userId: string): Observable<any> {
+        if (this._isGuest) {
+            return;
+        }
+
         return this.http.delete(`${AppConfigService.config.apiUrls.userDataStoreREST}Dashboard/${userId}`);
     }
 
