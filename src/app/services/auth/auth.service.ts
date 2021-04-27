@@ -160,14 +160,21 @@ export class AuthenticationService {
         scopes += "%20UserDataStore";
         scopes += "%20FileStore";
         scopes += "%20Notification";
-        scopes += "%20EmailSmsNotification";
-        scopes += "%20EventConsolidatorUser";
-        scopes += "%20EventConsolidatorAdmin";
-        scopes += "%20DataConsolidatorUser";
-        scopes += "%20DataConsolidatorAdmin";
-        scopes += "%20SocialChat";
-        scopes += "%20SocialForum";
-        scopes += "%20UserApi";
+        // scopes += "%20EmailSmsNotification";
+        // scopes += "%20EventConsolidatorUser";
+        // scopes += "%20EventConsolidatorAdmin";
+        // scopes += "%20DataConsolidatorUser";
+        // scopes += "%20DataConsolidatorAdmin";
+        // scopes += "%20SocialChat";
+        // scopes += "%20SocialForum";
+        // scopes += "%20UserApi";
+        scopes += "%20Alerts";
+        scopes += "%20Datafeed";
+        scopes += "%20Algo";
+        scopes += "%20MT_Bridge";
+        scopes += "%20Binance_Bridge";
+        scopes += "%20Portfolio";
+        scopes += "%20Identity";
 
         return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}connect/authorize?response_type=code%20id_token&state&client_id=atp.client&scope=${scopes}&redirect_uri=${url}&nonce=test&response_mode=form_post`, httpOptions)
             .pipe(
