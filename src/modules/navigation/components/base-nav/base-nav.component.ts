@@ -174,6 +174,10 @@ export class BaseNavComponent implements OnInit {
         
     }
 
+    iconClick() {
+        window.location.href = this.logoRedirectRoute;
+    }
+
     private _save() {
         const settings: UserSettings = {
             theme: this._themeService.activeTheme,

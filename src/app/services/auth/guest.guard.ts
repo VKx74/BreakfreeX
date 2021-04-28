@@ -5,9 +5,6 @@ import {AppRoutes} from "../../app.routes";
 import {AuthenticationService} from "./auth.service";
 import {AuthRoutes} from "../../../modules/Auth/auth.routes";
 import {Observable, of} from "rxjs";
-import {catchError, flatMap} from "rxjs/operators";
-
-const DefaultRedirect = `${AppRoutes.Auth}/${AuthRoutes.Login}`;
 
 interface GuestGuardSettings {
     redirectUrl?: string;
@@ -25,44 +22,9 @@ export class GuestGuard implements CanActivate, CanLoad {
             redirectUrl: null
         };
         return of(true);
-        // settings.redirectUrl = route.data['redirectUrl'] || DefaultRedirect;
-        // if (this._identityService.isAuthorized) {
-        //     if ( this._identityService.isExpired) {
-        //         return this._identityService.refreshTokens()
-        //             .pipe(
-        //                 flatMap(() => of(true)),
-        //                 catchError(() => {
-        //                     this._router.navigate([settings.redirectUrl]);
-        //                     return of(false);
-        //                 })
-        //             );
-        //     } else {
-        //         return of(true);
-        //     }
-        // } else {
-        //     this._router.navigate([settings.redirectUrl]);
-        //     return of(false);
-        // }
     }
 
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-        // if (this._identityService.isAuthorized) {
-        //     if (this._identityService.isExpired) {
-        //         return this._identityService.refreshTokens()
-        //             .pipe(
-        //                 flatMap(() => of(true)),
-        //                 catchError(() => {
-        //                     this._router.navigate([DefaultRedirect]);
-        //                     return of(false);
-        //                 })
-        //             );
-        //     } else {
-        //         return of(true);
-        //     }
-        // } else {
-        //     this._router.navigate([DefaultRedirect]);
-        //     return of(false);
-        // }
         return of(true);
     }
 }

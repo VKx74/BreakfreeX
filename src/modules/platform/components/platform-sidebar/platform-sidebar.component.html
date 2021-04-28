@@ -2,7 +2,7 @@
     <div class="section-label hidden">{{'app.menu' | translate}}</div>
     <sidebar-section>
         
-        <div class="section-item flex-child" routerLink="" [class.disabled]="isGuest">
+        <div class="section-item flex-child" routerLink="" (click)="chartClick()">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-platform"></i></div>
 

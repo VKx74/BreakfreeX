@@ -114,6 +114,12 @@ export class PlatformSidebarComponent implements OnInit {
         this._store.dispatch(new ClearSessionAction());
     }
 
+    chartClick() {
+        if (this.isGuest) {
+            window.location.href = "/";
+        }
+    }
+
     save() {
         const settings: UserSettings = {
             theme: this._themeService.activeTheme,

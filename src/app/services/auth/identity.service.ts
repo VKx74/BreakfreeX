@@ -172,24 +172,11 @@ export class IdentityService {
     }
 
     refreshTokens(): Observable<any> {
-        if (this._refreshToken$) {
-            return this._refreshToken$.asObservable();
+        if (this.isGuestMode) {
+            return this._refreshGuestTokens();
+        } else {
+            return this._refreshTokens();
         }
-
-        this._refreshToken$ = new ReplaySubject<any>(1);
-        return this._authService.refreshTokens(this.refreshToken)
-            .pipe(
-                tap((resp: GrantTokenResponse) => {
-                    this.insert(resp.accessToken, resp.refreshToken);
-                    this._setCookies(resp.accessToken, resp.refreshToken);
-
-                    this._refreshToken$.next();
-                    this._refreshToken$ = null;
-                }, (error) => {
-                    this._refreshToken$.error(error);
-                    this._refreshToken$ = null;
-                })
-            );
     }
 
     public insert(token: string, refreshToken: string): boolean {
@@ -217,7 +204,7 @@ export class IdentityService {
 
     public refreshTokenFromStorage(): Observable<any> {
        if (this.isGuestMode) {
-           return this._refreshGuestTokenFromStorage();
+           return this._refreshGuestTokens();
        } else {
            return this._refreshTokenFromStorage();
        }
@@ -269,7 +256,7 @@ export class IdentityService {
             );
     }
 
-    private _refreshGuestTokenFromStorage(): Observable<string> {
+    private _refreshGuestTokens(): Observable<string> {
         const token = this._coockieService.getCookie(this._guestTokenKey);
 
         if (token) {
@@ -290,6 +277,27 @@ export class IdentityService {
                 catchError((e) => {
                     console.log(e);
                     return of(null);
+                })
+            );
+    }
+    
+    private _refreshTokens(): Observable<any> {
+        if (this._refreshToken$) {
+            return this._refreshToken$.asObservable();
+        }
+
+        this._refreshToken$ = new ReplaySubject<any>(1);
+        return this._authService.refreshTokens(this.refreshToken)
+            .pipe(
+                tap((resp: GrantTokenResponse) => {
+                    this.insert(resp.accessToken, resp.refreshToken);
+                    this._setCookies(resp.accessToken, resp.refreshToken);
+
+                    this._refreshToken$.next();
+                    this._refreshToken$ = null;
+                }, (error) => {
+                    this._refreshToken$.error(error);
+                    this._refreshToken$ = null;
                 })
             );
     }

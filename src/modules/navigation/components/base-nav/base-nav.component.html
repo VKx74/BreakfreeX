@@ -3,7 +3,7 @@
         <div class="flex sidebar-toggle-wrapper">
             <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()"></sidebar-toggle>
 
-            <a [routerLink]="logoRedirectRoute" class="logo flex align-items-center">
+            <a class="logo flex align-items-center" (click)="iconClick()">
                 <div class="flex BFTN">
 
                     <img class="desktopshow" src="assets/img/bftnavigatorlogo.svg">

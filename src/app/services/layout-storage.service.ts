@@ -48,7 +48,7 @@ export class LayoutStorageService {
 
     private _saveLayoutStateAsync(state: IGoldenLayoutComponentState): Observable<any> {
         if (this._isGuest) {
-            return;
+            return of(null);
         }
 
         if (this._layoutExistsRemotely) {
@@ -92,7 +92,7 @@ export class LayoutStorageService {
 
     saveLayoutState(state: IGoldenLayoutComponentState, async: boolean = true): Observable<any> {
         if (this._isGuest) {
-            return;
+            return of(null);
         }
         
         if (async) {
@@ -104,7 +104,7 @@ export class LayoutStorageService {
 
     removeLayoutState(): Observable<any> {
         if (this._isGuest) {
-            return;
+            return of(null);
         }
 
         return this.http.delete(this._dashboardURL, {});
@@ -112,7 +112,7 @@ export class LayoutStorageService {
 
     removeUserLayoutState(userId: string): Observable<any> {
         if (this._isGuest) {
-            return;
+            return of(null);
         }
 
         return this.http.delete(`${AppConfigService.config.apiUrls.userDataStoreREST}Dashboard/${userId}`);

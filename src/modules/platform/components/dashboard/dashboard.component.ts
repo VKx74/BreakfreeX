@@ -281,7 +281,7 @@ export class DashboardComponent {
     }
 
     private _saveLayoutState(async: boolean = true) {
-        if (this._identityService.isAuthorized && this._saveLayout) {
+        if (this._identityService.isAuthorized && this._saveLayout && !this._identityService.isGuestMode) {
             const layoutState = this.layout.saveState();
             this._layoutStorageService.saveLayoutState(layoutState, async)
                 .subscribe(
