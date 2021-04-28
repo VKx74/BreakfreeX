@@ -35,7 +35,8 @@
                     [options]="getServerBySelectedBroker()" (onSelect)="onServerSelected($event)"
                     [selectedOption]="selectedServer"></selector> -->
                 <mat-form-field>
-                    <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onServerSelected($event)" [displayWith]="serverTitle">
+                    <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onServerSelected($event)"
+                        [displayWith]="serverTitle">
                         <mat-option *ngFor="let option of filteredServers" [value]="option">
                             {{option.Name}}
                         </mat-option>
@@ -52,16 +53,22 @@
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">Login:</span>
-                <input id="mt5login" type="text" class="full-width crypto-input mtInput" [(ngModel)]="login" placeholder="MT4/MT5 login (not your email) "
-                readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" autocorrect="off"  spellcheck="false">
+                <input id="mt5login" type="text" class="full-width crypto-input mtInput" [(ngModel)]="login"
+                    placeholder="MT4/MT5 login (not your email) " readonly
+                    onmousedown="this.setAttribute('readonly','');" ontouchstart="this.setAttribute('readonly','');"
+                    onmouseup="this.removeAttribute('readonly');" ontouchend="this.removeAttribute('readonly');"
+                    autocomplete="off" autocorrect="off" spellcheck="false">
             </div>
         </div>
 
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">Password:</span>
-                <input type="password" class="full-width crypto-input mtInput" [(ngModel)]="password"
-                    placeholder="Password" autocomplete="mt5password" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <input type="password" class="full-width crypto-input mtInput" [(ngModel)]="password" readonly
+                    onmousedown="this.setAttribute('readonly','');" ontouchstart="this.setAttribute('readonly','');"
+                    onmouseup="this.removeAttribute('readonly');" ontouchend="this.removeAttribute('readonly');"
+                    placeholder="Password" autocomplete="mt5password" autocorrect="off" autocapitalize="off"
+                    spellcheck="false">
             </div>
         </div>
     </div>
