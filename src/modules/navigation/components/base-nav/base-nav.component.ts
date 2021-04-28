@@ -175,7 +175,7 @@ export class BaseNavComponent implements OnInit {
     }
 
     iconClick() {
-        window.location.href = this.logoRedirectRoute;
+        window.location.href = "/";
     }
 
     private _save() {
