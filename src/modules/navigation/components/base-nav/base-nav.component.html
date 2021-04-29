@@ -17,7 +17,7 @@
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
             <ng-content></ng-content> 
             <nav-section [leftBorder]="true" [paddingRight]="true">
-                <div class="theme-nav-container">
+                <div class="theme-nav-container" (click)="runTestTopic()">
                     <div class="theme-title">
                         <i class="fa fa-book-o" aria-hidden="true"></i>
                     </div>
