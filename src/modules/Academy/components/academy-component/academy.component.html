@@ -8,8 +8,12 @@
                 <div class="menu-mobile-header">
                     <i class="fa fa-times-circle close-button" (click)="setSidebarState(false)"></i>
                 </div>
-                <academy-menu [(selectedMedia)]="selectedMedia" (nextMediaChange)="nextMediaChanged($event)"
-                (prevMediaChange)="prevMediaChanged($event)" [showUserAvatar]="false" [hidable]="true"></academy-menu>
+                <academy-menu [(selectedMedia)]="selectedMedia"
+                (canDoNext)="canDoNext($event)"
+                (canDoPrev)="canDoPrev($event)"
+                [doNext]="doNext"
+                [doPrev]="doPrev"
+                [showUserAvatar]="false" [hidable]="true"></academy-menu>
             </div>
         </div>
         <div class="page flex">
