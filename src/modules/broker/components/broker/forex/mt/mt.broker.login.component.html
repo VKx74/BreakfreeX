@@ -64,10 +64,11 @@
         <div class="flex-column">
             <div class="mat-form-field-wrapper crypto-form-unit">
                 <span class="form-unit__label">Password:</span>
-                <input type="password" class="full-width crypto-input mtInput" [(ngModel)]="password" readonly
+                <input type="text" id="mtPassword" class="full-width crypto-input mtInput" [(ngModel)]="password" readonly
                     onmousedown="this.setAttribute('readonly','');" ontouchstart="this.setAttribute('readonly','');"
                     onmouseup="this.removeAttribute('readonly');" ontouchend="this.removeAttribute('readonly');"
-                    placeholder="Password" autocomplete="mt5password" autocorrect="off" autocapitalize="off"
+                    oninput="if(!this.value) this.type='text'; else this.type='password';"
+                    placeholder="Password" autocomplete="mt5password" autocorrect="off" autocapitalize="off"                    
                     spellcheck="false">
             </div>
         </div>

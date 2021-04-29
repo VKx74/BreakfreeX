@@ -15,6 +15,7 @@ import { ThemeService } from '@app/services/theme.service';
 import { Theme } from '@app/enums/Theme';
 import { UserSettings, UserSettingsService } from '@app/services/user-settings/user-settings.service';
 import { LocalizationService } from 'Localization';
+import { InlineService } from '@app/services/inline-manual.service';
 
 @Component({
     selector: 'base-nav',
@@ -88,7 +89,8 @@ export class BaseNavComponent implements OnInit {
                 private _localizationService: LocalizationService,
                 private _themeService: ThemeService,
                 private _userSettingsService: UserSettingsService,
-                private _route: ActivatedRoute) {
+                private _route: ActivatedRoute,
+                private _inlineService: InlineService) {
     }
 
     toggleSidebar() {
@@ -129,6 +131,8 @@ export class BaseNavComponent implements OnInit {
                 this.avatarId = '';
                 console.log(e);
             });
+
+            this._inlineService.createPlayer();            
     }
     
     onMenuOpen() {
