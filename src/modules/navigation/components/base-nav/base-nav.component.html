@@ -12,10 +12,17 @@
             </a>
         </div>
 
-        <div class="flex"></div>
-
+        <div class="flex"></div>        
+        
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
             <ng-content></ng-content> 
+            <nav-section [leftBorder]="true" [paddingRight]="true">
+                <div class="theme-nav-container" (click)="runTestTopic()">
+                    <div class="theme-title">
+                        <i class="fa fa-book-o" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </nav-section>
             <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">
                 <div class="xp-nav-container" (click)="openMissionDialog()">
                     <span *ngIf="isLoaded; else loading">

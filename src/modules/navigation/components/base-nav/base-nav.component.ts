@@ -1,12 +1,12 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {UserAvatarShape} from "../../../UI/components/name-avatar/name-avatar.component";
-import {AppRoutes} from "AppRoutes";
-import {IdentityService} from "@app/services/auth/identity.service";
-import {UsersProfileService} from "@app/services/users-profile.service";
-import {SidebarService} from "@app/services/sidebar.service";
-import {ActivatedRoute} from "@angular/router";
-import {debounceTime, takeUntil} from "rxjs/operators";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { UserAvatarShape } from "../../../UI/components/name-avatar/name-avatar.component";
+import { AppRoutes } from "AppRoutes";
+import { IdentityService } from "@app/services/auth/identity.service";
+import { UsersProfileService } from "@app/services/users-profile.service";
+import { SidebarService } from "@app/services/sidebar.service";
+import { ActivatedRoute } from "@angular/router";
+import { debounceTime, takeUntil } from "rxjs/operators";
+import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
@@ -15,6 +15,7 @@ import { ThemeService } from '@app/services/theme.service';
 import { Theme } from '@app/enums/Theme';
 import { UserSettings, UserSettingsService } from '@app/services/user-settings/user-settings.service';
 import { LocalizationService } from 'Localization';
+import { InlineService } from '@app/services/inline-manual.service';
 
 @Component({
     selector: 'base-nav',
@@ -45,20 +46,20 @@ export class BaseNavComponent implements OnInit {
         }
 
         return this.firstName;
-    } 
+    }
 
     get isDarkTheme() {
         return this._themeService.activeTheme === Theme.Dark;
-    } 
-    
+    }
+
     get currentUserFullName() {
         return this._identityService.fullName;
     }
 
     public get score(): number {
         return this._tradingProfileService.score;
-    } 
-    
+    }
+
     public get isAuthorizedCustomer(): boolean {
         return this._identityService.isAuthorizedCustomer;
     }
@@ -80,15 +81,16 @@ export class BaseNavComponent implements OnInit {
     }
 
     constructor(private _identityService: IdentityService,
-                private _usersProfileService: UsersProfileService,
-                private _cdRef: ChangeDetectorRef,
-                private _dialog: MatDialog,
-                private _tradingProfileService: TradingProfileService,
-                private _sidebarService: SidebarService,
-                private _localizationService: LocalizationService,
-                private _themeService: ThemeService,
-                private _userSettingsService: UserSettingsService,
-                private _route: ActivatedRoute) {
+        private _usersProfileService: UsersProfileService,
+        private _cdRef: ChangeDetectorRef,
+        private _dialog: MatDialog,
+        private _tradingProfileService: TradingProfileService,
+        private _sidebarService: SidebarService,
+        private _localizationService: LocalizationService,
+        private _themeService: ThemeService,
+        private _userSettingsService: UserSettingsService,
+        private _route: ActivatedRoute,
+        private _inlineService: InlineService) {
     }
 
     toggleSidebar() {
@@ -129,8 +131,10 @@ export class BaseNavComponent implements OnInit {
                 this.avatarId = '';
                 console.log(e);
             });
+
+        // this._inlineService.createPlayer();
     }
-    
+
     onMenuOpen() {
         this.opened.next();
     }
@@ -160,18 +164,23 @@ export class BaseNavComponent implements OnInit {
 
     openMissionDialog() {
         let scrHeight = window.innerHeight;
-        this._dialog.open(MissionsComponent, { backdropClass: 'backdrop-background', position: {
-            top: scrHeight > 667 ? "100px" : null
-        }});
-    } 
+        this._dialog.open(MissionsComponent, {
+            backdropClass: 'backdrop-background', position: {
+                top: scrHeight > 667 ? "100px" : null
+            }
+        });
+    }
+    runTestTopic() {
+        this._inlineService.activateTopic('89410');        
+    }
 
     changeTheme() {
         this._themeService.setActiveTheme(this.isDarkTheme ? Theme.Light : Theme.Dark);
         this._save();
-    } 
+    }
 
     getOverviewClass() {
-        
+
     }
 
     iconClick() {
