@@ -132,7 +132,7 @@ export class BaseNavComponent implements OnInit {
                 console.log(e);
             });
 
-        this._inlineService.createPlayer();
+        // this._inlineService.createPlayer();
     }
 
     onMenuOpen() {
@@ -171,8 +171,7 @@ export class BaseNavComponent implements OnInit {
         });
     }
     runTestTopic() {
-        console.log('run topic');
-        this._inlineService.activateTopic('89410');
+        this._inlineService.activateTopic('89410');        
     }
 
     changeTheme() {

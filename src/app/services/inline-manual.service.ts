@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class InlineService {
   _window: any;
@@ -30,7 +30,10 @@ export class InlineService {
 
   activateTopic(id: string) {
     try {
-      this._window.inline_manual_player.activateTopic(id);
+      if (this._window.inline_manual_player)
+        this._window.inline_manual_player.activateTopic('89410');
+      else
+        console.log('im player instance not found');
     } catch (error) {
       console.error(error);
     }
