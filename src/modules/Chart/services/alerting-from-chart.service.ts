@@ -142,7 +142,7 @@ export class AlertingFromChartService implements TradingChartDesigner.IAlertingF
     }
 
     private fillOrderLines() {
-        if (!this._chart) {
+        if (!this._chart || !this._chart.dataContext || !this._chart.dataContext.dateDataRows || !this._chart.dataContext.dateDataRows.length) {
             return;
         }
 

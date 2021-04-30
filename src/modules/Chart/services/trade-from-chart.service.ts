@@ -449,7 +449,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private fillOrderLines() {
-        if (!this._chart) {
+        if (!this._chart || !this._chart.dataContext || !this._chart.dataContext.dateDataRows || !this._chart.dataContext.dateDataRows.length) {
             return;
         }
 
