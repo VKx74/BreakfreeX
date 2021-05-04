@@ -66,6 +66,11 @@ export class MissionTrackingService {
         if (!this.broker) {
             return;
         }
+
+        if (!this._recalculateRequired) {
+            return;
+        }
+        
         let activeBroker = this.broker;
         if (activeBroker && activeBroker.canCalculateHighestVAR(OrderTypes.Market)) {
             this._recalculateRequired = false;
