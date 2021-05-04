@@ -176,17 +176,12 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     ScrollDirection = ScrollDirection;
 
     constructor(private _identityService: IdentityService,
-                private _threadService: ChatApiService,
-                private _notificationService: NotificationService,
-                private _usersService: UsersService,
                 private _alertService: AlertService,
                 private _translateService: TranslateService,
                 private _dialog: MatDialog,
-                private _store: Store<State>,
                 private _facadeService: FacadeService,
                 private _fileStorage: FileStorageService,
-                @Inject(ChatModeToken) public chatMode: ChatMode,
-                private _actions: Actions) {
+                @Inject(ChatModeToken) public chatMode: ChatMode) {
     }
 
     public ngOnInit() {

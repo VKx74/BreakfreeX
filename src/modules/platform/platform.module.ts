@@ -28,12 +28,7 @@ import {ComponentSelectorComponent} from "./components/component-selector/compon
 import {NavigationModule} from "../navigation/navigation.module";
 import {LinkingModule} from "@linking/linking.module";
 import {AppTranslateService} from "@app/localization/token";
-import {AutoTradingEngine} from "@app/services/auto-trading-engine";
 import {AudioService} from "@app/services/audio.service";
-import {AutoTradingAlertService} from "../AutoTradingAlerts/services/auto-trading-alert.service";
-import {AlertCloudExecutorService} from "../AutoTradingAlerts/services/alert-cloud-executor.service";
-import {AlertFEExecutorService} from "../AutoTradingAlerts/services/alert-fe-executor.service";
-import {AlertCloudRepositoryService} from "../AutoTradingAlerts/services/alert-cloud-repository.service";
 import {SignalService} from "@app/services/signal.service";
 import {NotificationService} from "@app/services/notification.service";
 import {NotificationWebSocketService} from "@app/services/socket/notification.socket.service";
@@ -116,6 +111,8 @@ import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTradin
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 import { MissionTrackingService } from '@app/services/missions-tracking.service';
+import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
+import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -248,12 +245,8 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         CookieService,
         HealthCheckService,
 
-        AutoTradingEngine,
         AudioService,
-        AutoTradingAlertService,
-        AlertCloudExecutorService,
-        AlertFEExecutorService,
-        AlertCloudRepositoryService,
+        AlertsService,
         SignalService,
         SingleSessionService,
         MissionTrackingService,
@@ -400,6 +393,10 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,
                             component: BreakfreeTradingBacktestComponent
+                        },
+                        {
+                            componentName: ComponentIdentifier.alertsManager,
+                            component: AlertWidgetComponent
                         }
                     ]
                 } as IGoldenLayoutComponentConfiguration;

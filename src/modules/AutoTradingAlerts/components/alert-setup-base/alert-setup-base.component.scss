@@ -1,0 +1,107 @@
+@import "mixins/themify";
+@import "global-styles/themes/themes";
+@import "global-styles/_variables";
+@import "global-styles/mixins/columns";
+@import "global-styles/controls/textarea-variables";
+
+:host {
+    .content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+       // background: #151617;
+        padding:15px 10px 10px 0px;
+        
+    }
+
+    .content .crypto-form-unit.margin-bottom {
+        margin: 0px;
+    }
+
+    p.form-unit__label.flex.justify-space-between.align-items-center span {
+        margin-bottom: 5px;
+        margin-left:10px;
+    }
+    
+    .alertoptions {
+        font-size: 11px;
+        font-weight: 700;
+       // color: #fff;
+        display: flex;
+        padding-left: 15px;
+        margin-bottom: 15px;
+    }
+
+    .two-columns {
+        @include columns(2, 100px);
+        padding: 0px 15px;
+        margin-bottom:5px;
+        align-items: center;
+    }
+
+    .no-padding  {
+       padding:0px !important;
+    }
+    .no-margin {
+        margin-left:0px !important;
+    }
+    .margin-left{
+        margin-left:10px !important;
+    }
+
+    .play-sound-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 15px;
+        margin-left: 5px;
+    }
+
+    /deep/ ngx-material-timepicker-toggle svg {
+        height:15px !important;
+    }
+
+    /deep/ mat-form-field.crypto-date-input mat-datepicker-toggle svg {
+        width: 15px !important;
+        height: 15px !important;
+    }
+
+    textarea {
+        resize: vertical;
+    max-height: 150px;
+    border-radius: 5px !important;
+    font-size: 11px !important;
+    font-weight: 700;
+    margin: 10px 25px 0px 25px;
+    max-width: 270px;
+    }
+
+    p.form-unit__label {
+        font-weight: 700;
+        font-size: 10px !important;
+        margin-bottom:0px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .flex-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        flex: 1;
+        width: 120px;
+        padding: 0px 5px;
+    }
+
+    .disabled {
+        opacity: 0.35;
+        pointer-events: none;
+    }
+}

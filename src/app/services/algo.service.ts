@@ -450,10 +450,6 @@ export class AlgoService {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
     }
 
-    private _replaceSpecCharset(str: string): string {
-        return str.replace("_", "").replace("/", "").replace("^", "").replace("-", "").toLowerCase();
-    }
-
     getMarketInfo(instrument: IInstrument | string, granularity: number): Observable<IBFTAMarketInfo> {
         if (typeof (instrument) === 'string') {
             return new Observable<IBFTAMarketInfo>((observer: Observer<IBFTAMarketInfo>) => {

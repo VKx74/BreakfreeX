@@ -119,6 +119,7 @@
   "maximise": "Maximise",
   "minimise": "Minimise",
   "timeFrameToStr": {
+    "allTimeframes": "All Timeframes",
     "1m": "1 Minute",
     "5m": "5 Minutes",
     "15m": "15 Minutes",
@@ -128,6 +129,12 @@
     "1w": "1 Week",
     "1M": "1 Month",
     "1y": "1 Year"
+  },
+  "triggerSetupStr": {
+    "allSetups": "All Setups",
+    "swing": "Swing",
+    "brc": "BRC",
+    "ext": "EXT"
   },
   "timeFrameToShortStr": {
     "1m": "1min",
@@ -166,6 +173,8 @@
   "action": "Action",
   "ipRegion": "IP Region",
   "value": "Value",
+  "condition": "Condition",
+  "message": "Message",
   "roles": {
     "Unset": "Unset",
     "User": "User",
@@ -173,6 +182,7 @@
     "Admin": "Admin",
     "SocialMediaOfficer": "Social Media Officer",
     "SystemMonitoringOfficer": "System Monitoring Officer",
+    "FreeUser": "Free User",
     "TreasureOfficer": "Treasure Officer",
     "BusinessAccount": "Business Account",
     "InstitutionalAccount": "Institutional Account",

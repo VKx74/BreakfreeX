@@ -43,15 +43,20 @@
             </div>
         </div>
         <div class="functiona-menu flex justify-content-center crypto-text is-large">
-            <div class="user-settings" routerLink="/platform/settings">
+            <div class="user-settings" routerLink="/platform/settings" [class.disabled]="isGuest">
                 <span title="{{'app.settings' | translate}}">{{'app.settings' | translate}}</span>
             </div>
             <div class="reset-layout" (click)="resetLayout()">
                 <span title="{{'app.resetLayout' | translate}}">{{'app.resetLayout' | translate}}</span>
             </div>
-            <div class="log-out" (click)="onLogoutClick()">
-                <span title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
+            <div class="log-out" (click)="onLoginClick()" *ngIf="isGuest; else logout">
+                <span title="{{'app.login' | translate}}">{{'app.login' | translate}}</span>
             </div>
+            <ng-template #logout>
+                <div class="log-out" (click)="onLogoutClick()">
+                    <span title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
+                </div>
+            </ng-template>
         </div>
         <!-- <div class="menu-top-inner w-100">
            <div class="avatar">

@@ -57,6 +57,8 @@ export interface ApiUrls {
     MT4WS: string;
     BinanceTestnetBrokerWS: string;
     BinanceBrokerWS: string;
+    bftAlertsWS: string;
+    bftAlertsREST: string;
 }
 
 export interface AppConfig {
@@ -90,6 +92,7 @@ export enum ComponentIdentifier {
     breakfreeTradingAcademy = "breakfreeTradingAcademy",
     breakfreeTradingScanner = "breakfreeTradingScanner",
     forexTradeManager = "forexTradeManager",
+    alertsManager = "alertsManager",
     level2View = "level2View",
     news = "news",
     marketView = "marketView",

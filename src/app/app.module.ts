@@ -108,6 +108,8 @@ import { BinanceFuturesUsdSocketService } from './services/socket/binance-future
 import { BinanceFuturesCoinSocketService } from './services/socket/binance-futures-coin.socket.service';
 import { BinanceSpotSocketService } from './services/socket/binance-spot.socket.service';
 import { ChatbroService } from './services/traking/ChatbroService';
+import { GuestGuard } from './services/auth/guest.guard';
+import { GuestResolver } from './reslovers/guest.resolver';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -169,6 +171,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         Angulartics2Segment,
         Angulartics2GoSquared,
         CookieService,
+        GuestResolver,
         AppConfigService,
         {
             provide: IdentityService,
@@ -192,6 +195,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
             provide: APP_INITIALIZER,
             useFactory: (appConfigService: AppConfigService,
                          identityService: IdentityService) => () => {
+                console.log(">>> APP module INIT" + identityService.isGuestMode);
                 return appConfigService.loadConfig()
                     .pipe(
                         switchMap(() => {
@@ -265,6 +269,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
 
         SettingsStorageService,
         AuthGuard,
+        GuestGuard,
         BlockIfPopupWindowGuard,
         BrokerService,
         BrokerFactory,

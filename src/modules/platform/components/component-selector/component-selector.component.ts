@@ -14,9 +14,11 @@ import {OrderBookTranslateService} from "@order-book/localization/token";
 import {ComponentAccessService} from "@app/services/component-access.service";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {NewsTranslateService} from "../../../News/localization/news.token";
-import { BreakfreeTradingBacktestComponent, BreakfreeTradingAcademyComponent } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingAcademyComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
+import { AlertWidgetComponent } from "modules/AutoTradingAlerts/components/alert-widget/alert-widget.component";
+import { AutoTradingAlertsTranslateService } from "modules/AutoTradingAlerts/localization/token";
 
 interface IComponent {
     component: Type<any>;
@@ -41,6 +43,7 @@ export class ComponentSelectorComponent implements OnDestroy {
         @Inject(OrderBookChartTranslateService) private _orderBookChartTranslateService: TranslateService,
         @Inject(WatchListTranslateService) private _watchlistTranslateService: TranslateService,
         @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
+        @Inject(AutoTradingAlertsTranslateService) private _alertsTranslateService: TranslateService,
         @Inject(ChatTranslateService) private _chatTranslateService: TranslateService,
         @Inject(MarketTradesTranslateService) private _marketTradesTranslateService: TranslateService,
         @Inject(OrderBookTranslateService) private _orderBookTranslateService: TranslateService
@@ -97,17 +100,23 @@ export class ComponentSelectorComponent implements OnDestroy {
             //     componentName: this._bftTranslateService.stream('breakfreeTradingDiscoveryComponentName'),
             //     componentIdentifier: ComponentIdentifier.breakfreeTradingDiscovery,
             // }, 
-            // {
-            //     component: BreakfreeTradingAcademyComponent,
-            //     previewImgClass: BreakfreeTradingAcademyComponent.previewImgClass,
-            //     componentName: this._bftTranslateService.stream('breakfreeTradingAcademyComponentName'),
-            //     componentIdentifier: ComponentIdentifier.breakfreeTradingAcademy,
-            // },
+            {
+                component: BreakfreeTradingAcademyComponent,
+                previewImgClass: BreakfreeTradingAcademyComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('breakfreeTradingAcademyComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingAcademy,
+            },
             {
                 component: BreakfreeTradingScannerComponent,
                 previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,
                 componentName: this._bftTranslateService.stream('breakfreeTradingScannerComponentName'),
                 componentIdentifier: ComponentIdentifier.breakfreeTradingScanner,
+            },
+            {
+                component: AlertWidgetComponent,
+                previewImgClass: AlertWidgetComponent.previewImgClass,
+                componentName: this._alertsTranslateService.stream('alertsComponentName'),
+                componentIdentifier: ComponentIdentifier.alertsManager,
             },
             /*{
                 component: Level2Component,

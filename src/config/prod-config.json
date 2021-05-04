@@ -45,7 +45,9 @@
     "BinanceTestnetBrokerWS": "wss://binance-stage.breakfreetrading.com/binance-testnet/websocket",
     "BinanceBrokerWS": "wss://binance-stage.breakfreetrading.com/binance/websocket",
     "bftAlgoREST": "https://algo.breakfreetrading.com/algoserver/",
-    "bftTradingProfilesREST": "https://mtapi.breakfreetrading.com/portfolio/"
+    "bftTradingProfilesREST": "https://mtapi.breakfreetrading.com/portfolio/",
+    "bftAlertsWS": "wss://notifications-alerts.breakfreetrading.com/websocket",
+    "bftAlertsREST": "https://user-api-alerts.breakfreetrading.com/"
   },
   "systemMonitoringUrls": {
     "platform": {
@@ -128,6 +130,7 @@
     "https://breakfreetrading.com",
     "https://platform.breakfreetrading.com",
     "https://algo.breakfreetrading.com",
-    "https://mtapi.breakfreetrading.com"
+    "https://mtapi.breakfreetrading.com",
+    "https://user-api-alerts.breakfreetrading.com"
   ]
 }

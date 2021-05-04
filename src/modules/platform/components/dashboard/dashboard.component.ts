@@ -37,6 +37,7 @@ import { CookieService } from '@app/services/сookie.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { MissionTrackingService } from "@app/services/missions-tracking.service";
 import { InstrumentMappingService } from "../../../../app/services/instrument-mapping.service";
+import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 
 
 @Component({
@@ -83,6 +84,7 @@ export class DashboardComponent {
         private _coockieService: CookieService,
         private _layoutStorageService: LayoutStorageService,
         private _brokerService: BrokerService,
+        private _alertsService: AlertsService,
         @Inject(LayoutTranslateService) private _layoutTranslateService: TranslateService,
         private _layoutManager: LayoutManagerService,
         private _workspaceRepository: WorkspaceRepository,
@@ -193,6 +195,22 @@ export class DashboardComponent {
         if (loader) {
             loader.remove();
         }
+
+        const os = (window as any).OneSignal;
+        if (os && os.push && os.setExternalUserId) {
+            const userId = this._identityService.id;
+            if (userId) {
+                os.push(function() {
+                    os.setExternalUserId(userId);
+                });
+            }
+        }
+
+        try {
+            this._alertsService.init();
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     clearSession() {
@@ -259,7 +277,7 @@ export class DashboardComponent {
     }
 
     private _saveLayoutState(async: boolean = true) {
-        if (this._identityService.isAuthorized && this._saveLayout) {
+        if (this._identityService.isAuthorized && this._saveLayout && !this._identityService.isGuestMode) {
             const layoutState = this.layout.saveState();
             this._layoutStorageService.saveLayoutState(layoutState, async)
                 .subscribe(

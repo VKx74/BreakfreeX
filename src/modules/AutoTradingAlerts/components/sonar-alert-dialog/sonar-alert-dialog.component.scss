@@ -1,0 +1,118 @@
+@import "mixins/themify";
+@import "global-styles/themes/themes";
+@import "global-styles/_variables";
+@import "global-styles/mixins/columns";
+@import "global-styles/controls/textarea-variables";
+
+
+:host {
+  /deep/ {
+    .instrument-search
+    {
+      padding: 0px !important;
+    }
+  }
+
+  .radio-group {
+    margin-top: 10px;
+    font-weight: 700 !important;
+    font-size: 12px;
+
+    /deep/ {
+      .mat-radio-label-content {
+        margin-right: 20px;
+        font-weight:700;
+      }
+    }
+  }
+
+  .crypto-modal {
+    min-width: auto;
+    max-width: 320px;
+  }
+
+  .crypto-modal .modal-content .modal-body{
+    padding: 0px !important;
+    overflow:hidden;
+    margin-top:15px;
+  }
+
+  .flex-row .form-unit__label {
+    font-weight:700;
+    font-size:11px;
+  }
+
+  .flex-row .crypto-form-unit.margin-bottom {
+    margin-bottom:5px !important;
+
+  }
+
+  .delimiter {
+    border-top: 1px solid #dddddd1f;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+  .two-columns {
+    @include columns(2, 10px);
+  }
+
+  .play-sound-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+    margin-left: 5px;
+  }
+
+  textarea {
+    margin: 0;
+    padding: $textarea-padding;
+    resize: vertical;
+    max-height: 150px;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 0px 15px 10px 15px;
+  }
+  
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    width: 120px;
+    padding: 0px 5px;
+  }
+    
+  .disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .buttons-wrap {
+    margin-top:10px;
+   }
+ 
+
+  .submit-btn {
+    padding: 0;
+    height: 25px;
+    border-radius: 3px;
+    font-weight:700;
+    margin:0 auto;
+  }
+}
+
+@include themify($themes, true) {
+  .delimiter {
+    border-color: themed('appBackgroundColor');
+  } 
+  .radio-group {
+    color: themed('valueTextColor');
+  }
+}

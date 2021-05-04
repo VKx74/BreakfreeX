@@ -1,8 +1,10 @@
 {
   "alertWidget": {
     "title": "Віджет Сповіщень",
-    "manageAlerts": "Керування сповіщеннями",
+    "priceAlerts": "Сповіщення цін",
+    "sonarAlerts": "Сповіщення сонар",
     "alertsLog": "Журнал сповіщень",
+    "notificationsLog": "Нотифікації",
     "description": "Опис",
     "dateTime": "Дата/Час",
     "showCode": "Показати код",
@@ -24,6 +26,7 @@
   },
   "tradingAlert": {
     "condition": "Стан",
+    "instrument": "Інструмент",
     "options": "Опції",
     "expirationTime": "Час закінчення",
     "onlyOnce": "Тільки один раз",
@@ -34,26 +37,30 @@
     "playSound": "Відтворити звук",
     "sendSMS": "Відправити SMS",
     "sendEmail": "Відправити email",
+    "saveAndStart": "Зберегти та Запустити",
     "message": "Коментар",
-    "createAlert": "Створити сповіщення для",
-    "editAlert": "Редагувати сповіщення для",
+    "createAlert": "Створити сповіщення",
+    "editAlert": "Редагувати сповіщення",
     "value": "Значення",
     "parameterInput": "Вхідні параметри",
     "upperBound": "Верхня межа",
     "lowerBound": "Нижня межа",
     "useExpiration": "Використати час завершення",
+    "expiration": "Завершення",
     "trading": "Трейдинг",
     "withinMinutes": "Протягом хвилин",
     "startAlert": "Запустити сповіщення",
     "whereStartAlert": "Де ви бажаєте запустити сповіщення?",
     "local": "Локально",
-    "onCloud": "На хмарі"
-  },
-  "tradingOrderStatus": {
-    "PlaceOrder": "Зробити замовлення",
-    "CancelOrder": "Скасувати замовлення",
-    "None": "Не обрано",
-    "sendId": "Відправити ID"
+    "onCloud": "На хмарі",
+    "timeframe": "Таймфрейм",
+    "setup": "Збірка",
+    "newSetup": "Нова Збірка",
+    "setupDisappeared": "Збірка Зникла",
+    "triggerType": "Тип спрацювання",
+    "triggerOptions": "Параметер сповіщення",
+    "triggerOptionOne": "Разово",
+    "triggerOptionsEveryTime": "Кожного разу"
   },
   "conditionTitles": {
     "Crossing": "Перехід",
@@ -69,6 +76,16 @@
     "MovingDown": "Рух вниз",
     "MovingUpPercentage": "Переміщення вверх у процентах",
     "MovingDownPercentage": "Переміщення вниз у процентах"
+  }, 
+  "notificationTitles": {
+    "email": "Емейл",
+    "sms": "СМС",
+    "push": "Пуш"
+  },
+  "notificationStatusTitles": {
+    "sent": "Відправлено",
+    "failed": "Помилка",
+    "outOfLimit": "Поза лімітом"
   },
   "alertUpdated": "Сповіщення редаговано",
   "failedToEditAlert": "Не вдалося редагувати сповіщення",
@@ -85,5 +102,14 @@
   "alertsRestarted": "Сповіщення перезапущені",
   "failedToRestartAlerts": "Не вдалося перезапустити сповіщення",
   "alertsStopped": "Сповіщення деактивовано",
-  "failedToStopAlerts": "Не вдалося деактувати сповіщення"
+  "failedToStopAlerts": "Не вдалося деактувати сповіщення",
+  "alertsComponentName": "Сповіщення",
+  "condition": "Умова",
+  "loadError": "Помилка завантаження сповіщень",
+  "startLimit": "Неможливо запустити сповіщеня. Поза межами рівня підписки.",
+  "createLimit": "Неможливо додати сповіщеня. Поза межами рівня підписки.",
+  "createSonarRestriction": "Неможливо додати сонар сповіщеня. Поза межами рівня підписки.",
+  "priceAlert": "Сповіщення ціни",
+  "sonarAlert": "Сонар сповіщення",
+  "failedToViewChart": "Не вдалося переглянути чарт за символом"
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from "rxjs/operators";
 import { IdentityService } from '@app/services/auth/identity.service';
 import { IChartTemplate } from './templates-data-provider.service';
@@ -17,6 +17,10 @@ export class TemplatesStorageService {
         private _identity: IdentityService) { }
 
     public allTemplates(): Observable<IChartTemplate[]> {
+        if (this._identity.isGuestMode) {
+            return of([]);
+        }
+
         return this.http.get<IChartTemplate[]>(`${this._templatesURL}/all`)
             .pipe(map((data: any) => {
                 return data.map((value: any) => {
@@ -30,6 +34,10 @@ export class TemplatesStorageService {
     }
 
     public saveTemplate(template: IChartTemplate): Observable<any> {
+        if (this._identity.isGuestMode) {
+            return of({});
+        }
+
         let postData = {
             TemplateId: template.id,
             Name: template.name,
@@ -40,6 +48,10 @@ export class TemplatesStorageService {
     }
 
     public editTemplate(id: string | number, name: string): Observable<any> {
+        if (this._identity.isGuestMode) {
+            return of({});
+        }
+
         let patchData = {
             Id: id,
             PropertyName: "Name",
@@ -50,6 +62,10 @@ export class TemplatesStorageService {
     }
 
     public removeTemplate(id: string): Observable<any> {
+        if (this._identity.isGuestMode) {
+            return of({});
+        }
+
         let params = new HttpParams();
         params = params.append("id", id);
         return this.http.delete(this._templatesURL, { params: params });

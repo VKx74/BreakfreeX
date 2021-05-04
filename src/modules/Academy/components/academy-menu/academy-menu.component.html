@@ -1,18 +1,23 @@
-<div class="menu flex">
-    <div class="drop-down flex">
-        <div [matMenuTriggerFor]="menu" class="flex">
-            <div class="menuheader flex">
-                <div class="menuheader-text flex">{{selectedContentSector.Title}}</div>
-                <div class="dropdown-toggle flex">&#5121;</div>
-            </div>
-            <mat-menu #menu="matMenu" xPosition="before">
-                <div class="weeks-menu-content flex">
-                    <div class="weeks-menu-item flex" (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors">{{contentSector.Name}}</div>
+<div class="menu flex" *ngIf="sidebarOpen; else hidden_menu">
+    <div class="flex dd-container">
+        <div *ngIf="hidable" class="close-button-container">
+            <i class="fa fa-angle-double-left close-button" (click)="setSidebarState(false)"></i>
+        </div>
+        <div class="drop-down flex">
+            <div [matMenuTriggerFor]="menu" class="flex">
+                <div class="menuheader flex">
+                    <div class="menuheader-text flex">{{selectedContentSector?.Title}}</div>
+                    <div class="dropdown-toggle flex">&#5121;</div>
                 </div>
-            </mat-menu>
+                <mat-menu #menu="matMenu" xPosition="before">
+                    <div class="weeks-menu-content flex">
+                        <div class="weeks-menu-item flex" (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors">{{contentSector.Name}}</div>
+                    </div>
+                </mat-menu>
+            </div>
         </div>
     </div>
-    <div class="welcome-title">
+    <div class="welcome-title" *ngIf="showUserAvatar">
         <div class="avatar">
             <name-avatar [name]="name" [src]="avatarId"></name-avatar>
         </div>
@@ -41,3 +46,9 @@
         </div>
     </div>
 </div>
+
+<ng-template #hidden_menu>
+    <div class="hidden_menu flex">
+        <i class="fa fa-angle-double-right open-button flex" (click)="setSidebarState(true)"></i>
+    </div>
+</ng-template>

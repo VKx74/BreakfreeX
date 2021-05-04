@@ -1,8 +1,10 @@
 {
   "alertWidget": {
     "title": "Alerts Widget",
-    "manageAlerts": "Manage Alerts",
+    "priceAlerts": "Price Alerts",
+    "sonarAlerts": "Sonar Alerts",
     "alertsLog": "Alerts Log",
+    "notificationsLog": "Notifications Log",
     "description": "Description",
     "dateTime": "Date/Time",
     "showCode": "Show Code",
@@ -24,6 +26,7 @@
   },
   "tradingAlert": {
     "condition": "Condition",
+    "instrument": "Instrument",
     "options": "Options",
     "expirationTime": "Expiration Time",
     "onlyOnce": "Only Once",
@@ -34,26 +37,30 @@
     "playSound": "Play Sound",
     "sendSMS": "Send SMS",
     "sendEmail": "Send email",
+    "saveAndStart": "Save and Start",
     "message": "Message",
-    "createAlert": "Create Alert to",
-    "editAlert": "Edit Alert to",
+    "createAlert": "Create Alert",
+    "editAlert": "Edit Alert",
     "value": "Value",
     "parameterInput": "Parameter Input",
     "upperBound": "Upper Bound",
     "lowerBound": "Lower Bound",
     "useExpiration": "Use expiration",
+    "expiration": "Expiration",
     "trading": "Trading",
     "withinMinutes": "Within minutes",
     "startAlert": "Start alert",
     "whereStartAlert": "Where do you want to start alert?",
     "local": "Local",
-    "onCloud": "On cloud"
-  },
-  "tradingOrderStatus": {
-    "PlaceOrder": "Place Order",
-    "CancelOrder": "Cancel Order(s)",
-    "None": "None",
-    "sendId": "Sent ID"
+    "onCloud": "On cloud",
+    "timeframe": "Time Frame",
+    "setup": "Setup",
+    "newSetup": "New Setup",
+    "setupDisappeared": "Setup Disappeared",
+    "triggerType": "Trigger Type",
+    "triggerOptions": "Trigger Options",
+    "triggerOptionOne": "Only Once",
+    "triggerOptionsEveryTime": "Every Time"
   },
   "conditionTitles": {
     "Crossing": "Crossing",
@@ -69,6 +76,16 @@
     "MovingDown": "Moving Down",
     "MovingUpPercentage": "Moving Up Percentage",
     "MovingDownPercentage": "Moving Down Percentage"
+  }, 
+  "notificationTitles": {
+    "email": "Email",
+    "sms": "SMS",
+    "push": "Push"
+  },
+  "notificationStatusTitles": {
+    "sent": "Sent",
+    "failed": "Failed",
+    "outOfLimit": "Out Of LImit"
   },
   "alertUpdated": "Alert updated",
   "failedToEditAlert": "Failed to edit alert",
@@ -85,5 +102,14 @@
   "alertsRestarted": "Alerts restarted",
   "failedToRestartAlerts": "Failed to restart alerts",
   "alertsStopped": "Alerts stopped",
-  "failedToStopAlerts": "Failed to stop alerts"
+  "failedToStopAlerts": "Failed to stop alerts",
+  "alertsComponentName": "Alerts",
+  "condition": "Condition",
+  "loadError": "Can`t loading alerts",
+  "startLimit": "Can`t start alerts. Out of limits for subscription level.",
+  "createLimit": "Can`t add more alerts. Out of limits for subscription level.",
+  "createSonarRestriction": "Can`t create sonar alerts. Out of access for subscription level.",
+  "priceAlert": "Price Alert",
+  "sonarAlert": "Sonar Alert",
+  "failedToViewChart": "Failed to view chart by symbol"
 }

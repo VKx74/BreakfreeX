@@ -33,6 +33,10 @@ export class PlatformSidebarComponent implements OnInit {
     LandingRoutes = LandingRoutes;
     role: string;
 
+    public get isGuest(): boolean {
+        return this._identityService.isGuestMode;
+    }
+
     constructor(private _translateService: TranslateService,
         private _themeService: ThemeService,
         private _localizationService: LocalizationService,
@@ -70,6 +74,12 @@ export class PlatformSidebarComponent implements OnInit {
 
     clearSession() {
         this._store.dispatch(new ClearSessionAction());
+    }
+
+    chartClick() {
+        if (this.isGuest) {
+            window.location.href = "/";
+        }
     }
 
     save() {

@@ -125,8 +125,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public setChart(chart: TradingChartDesigner.Chart) {
-        this._chart = chart;
-        this.refresh();
+        if (this._chart !== chart) {
+            this._chart = chart;
+            this.refresh();
+        }
     }
 
     public PlaceOrder(params: TradingChartDesigner.OrderParameters, callback: () => void): void {
@@ -500,7 +502,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private fillPositionsLines() {
         const shapes = [];
         const positions = this.getActualPositions();
+
         if (!positions) {
+            return;
+        }
+
+        if (!this._chart || !this._chart.dataContext || !this._chart.dataContext.dateDataRows || !this._chart.dataContext.dateDataRows.length) {
             return;
         }
 
@@ -525,7 +532,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private fillOrderLines() {
-        if (!this._chart || !this._broker) {
+        if (!this._chart || !this._chart.dataContext || !this._chart.dataContext.dateDataRows || !this._chart.dataContext.dateDataRows.length) {
             return;
         }
 

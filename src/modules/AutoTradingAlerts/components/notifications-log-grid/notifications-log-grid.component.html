@@ -1,0 +1,57 @@
+<div class="root flex flex-direction-column full-height">
+  <div class="flex flex-direction-column flex-grow-1 h-0">
+      <div class="limits-header" *ngIf="NotificationLimits">
+          24H Limits: Push({{NotificationLimits.pushUsed}}/{{NotificationLimits.pushLimit}}) Email({{NotificationLimits.emailUsed}}/{{NotificationLimits.emailLimit}}) SMS({{NotificationLimits.smsUsed}}/{{NotificationLimits.smsLimit}})
+      </div>
+      <div class="content-wrapper full-height flex-grow-1 overflow-y-auto">
+          <data-table [rows]="alerts"
+              class="manage-alerts-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis crypto-table_selectable">
+              <data-table-header-cell columnName="type">
+                  {{'type' | translate}}
+              </data-table-header-cell> 
+              <data-table-header-cell columnName="status">
+                  {{'status' | translate}}
+              </data-table-header-cell>
+              <data-table-header-cell columnName="time">
+                  {{'time' | translate}}
+              </data-table-header-cell>
+              <data-table-header-cell columnName="message">
+                  {{'message' | translate}}
+              </data-table-header-cell>
+
+              <data-table-cell class="stripped-mode" columnName="type">
+                  <ng-template let-item>
+                      <div class="ellipsis">
+                          {{getTypeTitle(item) | async}}
+                      </div>
+                  </ng-template>
+              </data-table-cell>
+
+              <data-table-cell class="stripped-mode" columnName="status">
+                  <ng-template let-item>
+                      <div class="ellipsis">
+                          {{getStatusTitle(item) | async}}
+                      </div>
+                  </ng-template>
+              </data-table-cell>
+
+              <data-table-cell class="stripped-mode" columnName="time">
+                  <ng-template let-item>
+                      <div class="ellipsis">
+                        {{item.time | formatDate:'YYYY/MM/DD HH:mm'}}
+                      </div>
+                  </ng-template>
+              </data-table-cell>
+
+              <data-table-cell class="stripped-mode" columnName="message">
+                  <ng-template let-item>
+                      <div class="ellipsis" tooltip [matTooltip]='item.notificationMessage'>
+                          {{item.notificationMessage}}
+                      </div>
+                  </ng-template>
+              </data-table-cell>
+
+          </data-table>
+      </div>
+  </div>
+</div>

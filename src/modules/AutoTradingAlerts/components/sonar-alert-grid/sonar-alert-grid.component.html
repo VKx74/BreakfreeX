@@ -1,0 +1,63 @@
+<div class="root flex flex-direction-column full-height">
+    <div class="flex flex-direction-column flex-grow-1 h-0">
+        <div class="content-wrapper full-height flex-grow-1 overflow-y-auto">
+            <data-table [rows]="alerts" (onDoubleClick)="doubleClicked($event)"
+                class="manage-alerts-table crypto-table crypto-table_fixed-header crypto-table_striped crypto-table_ellipsis crypto-table_selectable">
+                <data-table-header-cell columnName="symbol">
+                    {{'symbol' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="timeframe">
+                    {{'tradingAlert.timeframe' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="setup">
+                    {{'tradingAlert.setup' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="trigger">
+                    {{'tradingAlert.triggerType' | translate}}
+                </data-table-header-cell>
+
+                <data-table-header-cell columnName="status">
+                    <span class="right">{{'status' | translate}}</span>
+                </data-table-header-cell>
+
+                <data-table-cell class="stripped-mode" columnName="symbol">
+                    <ng-template let-item>
+                        <span class="flex">
+                            {{item.instrument || "All Instruments"}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell class="stripped-mode" columnName="timeframe">
+                    <ng-template let-item>
+                        <span class="flex">
+                            {{getTimeframeTitle(item) | async}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell class="stripped-mode" columnName="setup">
+                    <ng-template let-item>
+                        <span class="flex">
+                            {{getSetupTitle(item) | async}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>  
+                
+                <data-table-cell class="stripped-mode" columnName="trigger">
+                    <ng-template let-item>
+                        <span class="flex">
+                            {{getTriggerTitle(item) | async}}
+                        </span>
+                    </ng-template>
+                </data-table-cell>
+
+                <data-table-cell columnName="status">
+                    <ng-template let-item>
+                        <alert-grid-actions [item]="item" (onEdit)="handleEdit($event)" (onRemove)="handleRemove($event)"  (onLaunch)="handleLaunch($event)"></alert-grid-actions>
+                    </ng-template>
+                </data-table-cell>
+            </data-table>
+        </div>
+    </div>
+</div>

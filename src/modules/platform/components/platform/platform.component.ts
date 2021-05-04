@@ -27,6 +27,7 @@ import {PlatformTranslateService} from "@platform/localization/token";
 })
 export class PlatformComponent implements OnInit, AfterViewInit {
     private _saveBroker: boolean = true;
+    private _playSoundLoop: any;
 
 
     constructor(private _actions: Actions,
@@ -69,11 +70,26 @@ export class PlatformComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this._signalService.onPopupSignal.subscribe(value => {
-            this._alertService.info(value.message, value.title);
+            this._alertService.info(value.message, value.title, 60 * 30, () => {
+                if (this._playSoundLoop) {
+                    clearInterval(this._playSoundLoop);
+                    this._playSoundLoop = null; 
+                }
+            });
         });
 
         this._signalService.onSoundSignal.subscribe(value => {
-            this._audioService.playSound(value.soundId);
+            let soundId = value.soundId;
+
+            if (this._playSoundLoop) {
+                clearInterval(this._playSoundLoop);
+            }
+
+            this._audioService.playSound(soundId);
+                
+            this._playSoundLoop = setInterval(() => {
+                this._audioService.playSound(soundId);
+            }, 1000 * 5);
         });
     }
 

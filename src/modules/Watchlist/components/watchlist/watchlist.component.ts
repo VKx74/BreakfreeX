@@ -26,7 +26,7 @@ import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import bind from "bind-decorator";
 import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
 import {ITcdComponentState} from "Chart";
-import {AlertDialogComponent} from "../../../AutoTradingAlerts/components/alert-dialog/alert-dialog.component";
+import {PriceAlertDialogComponent} from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
 import {HistoryService} from "@app/services/history.service";
 import {IBarData} from "@app/models/common/barData";
 import { WatchlistService, IWatchlistItem } from 'modules/Watchlist/services/watchlist.service';
@@ -458,6 +458,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
     
     createWatchlist() {
+        if (this._identityService.isGuestMode) {
+            this.processCheckout();
+            return;
+        }
+
         if (this.activeWatchlist && !this.activeWatchlist.id && this.existingWatchlists.length === 1) {
             this._watchlistService.addWatchlist(this.activeWatchlist.name, this.activeWatchlist.data, this.activeWatchlist.trackingId).subscribe(response => {
                 // console.log(response);
@@ -521,6 +526,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     deleteWatchlist() {
+        if (this._identityService.isGuestMode) {
+            this.processCheckout();
+            return;
+        }
+        
         const watchlistToDelete = this.activeWatchlist;
         const index = this.existingWatchlists.indexOf(watchlistToDelete);
 
@@ -706,7 +716,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     setAlert(watchlistInstrument: WatchlistInstrumentVM) {
-        this._dialog.open(AlertDialogComponent, {
+        this._dialog.open(PriceAlertDialogComponent, {
             data: {
                 instrument: watchlistInstrument.instrument
             }

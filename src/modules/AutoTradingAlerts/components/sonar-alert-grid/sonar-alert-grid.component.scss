@@ -1,0 +1,19 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/variables";
+
+:host {
+  display: block;
+  height: 100%;
+
+  /deep/ .mat-row:hover {
+    cursor: pointer;
+    .running-status-wrapper {
+      display: none;
+    }
+
+    .alert-controls-wrapper {
+      display: flex !important;
+    }
+  }
+}

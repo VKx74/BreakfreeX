@@ -1,0 +1,101 @@
+
+
+<div class="content">
+  
+
+  <div class="crypto-form-unit margin-bottom">
+    <div clasS="alertoptions form-unit__label"> Alert Options</div>
+
+    <div class="two-columns" [ngClass]="{'disabled': !useExpirationProp}">
+
+      <p class="form-unit__label no-padding ">
+        <span class="margin-left">
+          {{'tradingAlert.expiration' | translate}}
+        </span>
+        <!-- <mat-slide-toggle [(ngModel)]="useExpirationProp"></mat-slide-toggle> -->
+      </p>
+
+
+      <mat-form-field class="crypto-time-input bft-form-input">
+        <input matInput [ngxTimepicker]="toggleTimepicker" (click)="toggleTimepicker.open()" [(ngModel)]="selectedTimeProp"
+          class="crypto-input datepicker cursor-pointer" placeholder="Time" [disableClick]="true" readonly [format]='24'>
+        <ngx-material-timepicker-toggle [for]="toggleTimepicker" matSuffix>
+        </ngx-material-timepicker-toggle>
+        <ngx-material-timepicker #toggleTimepicker></ngx-material-timepicker>
+      </mat-form-field>
+
+      <mat-form-field class="crypto-date-input bft-form-input">
+        <input matInput readonly [matDatepicker]="dateFrom" [min]="minDate" [max]="maxDate" placeholder="Datepicker"
+          (click)="dateFrom.open()" class="crypto-input datepicker cursor-pointer" [(ngModel)]="selectedDateProp">
+        <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+        <mat-datepicker #dateFrom></mat-datepicker>
+      </mat-form-field>
+
+
+    </div>
+  </div>
+
+  
+  <div class="crypto-form-unit margin-bottom hidden">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{ 'tradingAlert.showPopup' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="showPopupProp"></mat-slide-toggle>
+    </p>
+  </div>
+
+  <!-- <div class="crypto-form-unit margin-bottom">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+        <span>{{'tradingAlert.playSound' | translate}}</span>
+        <mat-slide-toggle></mat-slide-toggle>
+    </p>
+
+    <div class="flex">
+        <selector class="sound-selector flex-grow-1" [options]="alertsSound">
+        </selector>
+        
+        <div class="crypto-button-icon play-sound-btn" (click)="playSound()">
+            <i class="fa fa-play option-icon"></i>
+        </div>
+    </div>
+</div> -->
+
+  <div class="crypto-form-unit margin-bottom">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{'tradingAlert.sendSMS' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="sendSMSProp"></mat-slide-toggle>
+    </p>
+  </div>
+
+  <div class="crypto-form-unit margin-bottom">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{'tradingAlert.sendEmail' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="sendEmailProp"></mat-slide-toggle>
+    </p>
+  </div>
+
+  <div class="crypto-form-unit margin-bottom">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{'tradingAlert.playSound' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="playSoundProp"></mat-slide-toggle>
+    </p>
+  </div>
+
+ 
+
+  <!-- <div class="crypto-form-unit margin-bottom" *ngIf="canRunAlert">
+    <p class="form-unit__label flex align-items-center justify-space-between">
+      <span>{{'tradingAlert.saveAndStart' | translate}}</span>
+      <mat-slide-toggle [(ngModel)]="saveAndStartProp"></mat-slide-toggle>
+    </p>
+  </div> -->
+
+  <div class="crypto-form-unit margin-bottom">
+    <p class="form-unit__label">
+      <span class="margin-left">{{'tradingAlert.message' | translate}} (Max 70 chars):</span>
+    </p>
+    <textarea matInput [(ngModel)]="messageProp" class="crypto-textarea"
+      placeholder="{{'tradingAlert.message' | translate}}" maxlength="70">
+    </textarea>
+  </div>
+
+</div>

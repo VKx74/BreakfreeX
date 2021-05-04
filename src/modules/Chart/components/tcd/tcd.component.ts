@@ -12,17 +12,12 @@ import {ChartTranslateService} from "../../localization/token";
 import {Actions, LinkingAction} from "../../../Linking/models";
 import {CalendarEventsDatafeed} from "../../calendarEvents/CalendarEventsDatafeed";
 import {IndicatorAlertHandler} from 'modules/Chart/indicatorAlertHandler/indicatorAlertHandler';
-import {AutoTradingAlertConfigurationService} from 'modules/AutoTradingAlerts/services/auto-trading-alert-configuration.service';
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {EducationalTipsService} from "@app/services/educational-tips.service";
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import {IInstrument} from "@app/models/common/instrument";
 import IChartInstrument = TradingChartDesigner.IInstrument;
 import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
-import {BrokerService} from "@app/services/broker.service";
-import TradeAction = TradingChartDesigner.TradeAction;
-import {OrderTypes} from "../../../Trading/models/models";
-import {AlertService} from "@alert/services/alert.service";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { InstrumentService } from '@app/services/instrument.service';
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
@@ -32,6 +27,8 @@ import { TradeFromChartService } from '@chart/services/trade-from-chart.service'
 import {Store} from "@ngrx/store";
 import {AppState} from "@app/store/reducer";
 import { SaveStateAction } from '@app/store/actions/platform.actions';
+import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
+import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -64,7 +61,8 @@ interface ReplayWaiter {
             useExisting: ChartTranslateService
         },
         CalendarEventsDatafeed,
-        TradeFromChartService
+        TradeFromChartService,
+        AlertingFromChartService
     ]
 })
 export class TcdComponent extends BaseLayoutItemComponent {
@@ -90,10 +88,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _templateDataProviderService: TemplatesDataProviderService,
                 private _instrumentService: InstrumentService,
                 private _calendarEventsDatafeed: CalendarEventsDatafeed,
-                private _alertChartService: AutoTradingAlertConfigurationService,
+                private _alertsService: AlertsService,
                 private _indicatorRestrictionService: IndicatorRestrictionService,
                 private _indicatorDataProviderService: IndicatorDataProviderService,
                 private _tradingFromChartHandler: TradeFromChartService,
+                private _alertingFromChartService: AlertingFromChartService,
                 private _chartTrackerService: ChartTrackerService,
                 private _store: Store<AppState>,
                 protected _injector: Injector) {
@@ -150,7 +149,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         // const instrumentsNeeded = !state || !state.instrument;
         
         if (state && state.chartState) {
-            if (state.chartState.version !== 7) {
+            if (state.chartState.version !== 8) {
                 console.log("Set default theme");
                 theme = this._getTheme();
                 if (state.chartState.chart) {
@@ -176,7 +175,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 templateDataProvider: this._templateDataProviderService,
                 indicatorsDataProvider: this._indicatorDataProviderService,
                 marketEventsDatafeed: this._calendarEventsDatafeed,
-                indicatorAlertsHandler: new IndicatorAlertHandler(this._alertChartService),
+                indicatorAlertsHandler: new IndicatorAlertHandler(this._alertsService),
                 indicatorsRestrictionsProvider: this._indicatorRestrictionService,
                 // helpLinks: this.linksList,
                 showHelp: this._educationalTipsService.isTipsShown(),
@@ -184,13 +183,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 tradeHandler: this.tradeHandler.bind(this),
                 searchInstrumentHandler: this.searchInstrumentHandler.bind(this),
                 tradingFromChartHandler: this._tradingFromChartHandler,
+                alertingFromChartHandler: this._alertingFromChartService,
                 showScrollbar: false
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
             this.chart.showInstrumentWatermark = false;
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
-            this._tradingFromChartHandler.setChart(this.chart);
 
             if (state && state.chartState) {
                 // locale from app
@@ -277,6 +276,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     protected instrumentChanged(eventObject: TradingChartDesigner.IValueChangedEvent) {
         this._tradingFromChartHandler.refresh();
+        this._alertingFromChartService.refresh();
     }
 
     protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
@@ -291,6 +291,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }
 
         this.replayWaiter = null;
+        
+        this._tradingFromChartHandler.setChart(this.chart);
+        this._alertingFromChartService.setChart(this.chart);
     }
 
     protected useDefaultLinker(): boolean {
@@ -308,10 +311,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     private tradeHandler(params: ITradeHandlerParams) {
-        const instrument = this.chart.instrument as IInstrument;
-        const orderType = OrderTypes[params.orderName];
-
-        // not using
     }
 
     private _subscribeOnChartEvents(chart: TradingChartDesigner.Chart) {
@@ -340,8 +339,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             TradingChartDesigner.ChartEvent.CHART_TYPE_CHANGED,
             TradingChartDesigner.ChartEvent.CROSS_HAIR_CHANGED,
             TradingChartDesigner.ChartEvent.THEME_CHANGED,
-            TradingChartDesigner.ChartEvent.GLOBAL_THEME_CHANGED,
-            // TradingChartDesigner.ShapeEvent.POINTS_CHANGED
+            TradingChartDesigner.ChartEvent.GLOBAL_THEME_CHANGED
         ].join(' ');
     }
 
@@ -512,6 +510,12 @@ export class TcdComponent extends BaseLayoutItemComponent {
         
         try {
             this._tradingFromChartHandler.dispose();
+        } catch (e) {
+            console.log(e);
+        }
+
+        try {
+            this._alertingFromChartService.dispose();
         } catch (e) {
             console.log(e);
         }

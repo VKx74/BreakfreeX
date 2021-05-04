@@ -69,6 +69,10 @@ export class UserInfoMenuComponent implements OnInit {
         return this._tradingProfileService.level;
     }
 
+    public get isGuest(): boolean {
+        return this._identity.isGuestMode;
+    }
+
     constructor(private _identity: IdentityService,
         private _dialog: MatDialog,
         private _store: Store<AppState>,
@@ -87,6 +91,10 @@ export class UserInfoMenuComponent implements OnInit {
 
     onLogoutClick() {
         this.logOut.emit();
+    }
+
+    onLoginClick() {
+        window.location.href = "/";
     }
 
     resetLayout() {

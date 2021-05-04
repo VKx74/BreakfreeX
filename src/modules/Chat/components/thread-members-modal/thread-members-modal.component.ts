@@ -57,7 +57,6 @@ export class ThreadMembersModalComponent extends Modal<IInviteMembersModalConfig
                 private _threadService: ChatApiService,
                 private _identityService: IdentityService,
                 private _dialog: MatDialog,
-                private _notificationService: NotificationService,
                 private _alertService: AlertService,
                 injector: Injector) {
         super(injector);

@@ -119,6 +119,7 @@
   "maximise": "Розширити",
   "minimise": "Згорнути",
   "timeFrameToStr": {
+    "allTimeframes": "Всі Періоди",
     "1m": "1 Хвилина",
     "5m": "5 Хвилин",
     "15m": "15 Хвилин",
@@ -128,6 +129,12 @@
     "1w": "1 Тиждень",
     "1M": "1 Місяць",
     "1y": "1 Рік"
+  },
+  "triggerSetupStr": {
+    "allSetups": "Всі Збірки",
+    "swing": "Swing",
+    "brc": "BRC",
+    "ext": "EXT"
   },
   "timeFrameToShortStr": {
     "1m": "1Хв",
@@ -167,6 +174,8 @@
   "action": "Дія",
   "ipRegion": "IP Регіон",
   "value": "Значення",
+  "condition": "Умова",
+  "message": "Повідомлення",
   "app": {
     "type&broker": "тип & брокер",
     "server": "Сервер",
@@ -179,6 +188,7 @@
     "settings": "Налаштування",
     "adminPanel": "Панель адміністратора",
     "logout": "Вийти",
+    "login": "Ввійти",
     "addComponent": "Додати компонент",
     "forum": "Форум",
     "toPlatform": "Платформа",

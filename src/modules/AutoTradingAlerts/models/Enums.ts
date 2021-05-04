@@ -1,33 +1,24 @@
-export enum EAlertType {
-    PriceAlert = 'PriceAlert',
-    ChannelAlert = 'ChannelAlert',
-    MovingAlert = 'MovingAlert',
-    IndicatorAlert = 'IndicatorAlert'
-}
-
-export enum EDataSourceType {
-    RealtimeDataSource = 'RealtimeDataSource',
-    IndicatorDataSource = 'IndicatorDataSource'
-}
-
-export enum EPriceAlertCondition {
-    Crossing = 'Crossing',
-    CrossingUp = 'CrossingUp',
-    CrossingDown = 'CrossingDown',
+export enum AlertCondition {
     GreaterThan = 'GreaterThan',
     LessThan = 'LessThan'
 }
 
-export enum EChannelAlertCondition {
-    EnteringChannel = 'EnteringChannel',
-    ExitingChannel = 'ExitingChannel',
-    InsideChannel = 'InsideChannel',
-    OutsideChannel = 'OutsideChannel'
+export enum TriggerType {
+    NewSetup = "NewSetup",
+    SetupDisappeared = "SetupDisappeared"
 }
 
-export enum EMovingAlertCondition {
-    MovingUp = 'MovingUp',
-    MovingDown = 'MovingDown',
-    MovingUpPercentage = 'MovingUpPercentage',
-    MovingDownPercentage = 'MovingDownPercentage'
+export enum TriggerTimeframe {
+    AllTimeframes = "allTimeframes",
+    Min15 = "15m",
+    Hour1 = "1h",
+    Hour4 = "4h",
+    Day1 = "1d"
+}
+
+export enum TriggerSetup {
+    AllSetups = "allSetups",
+    Swing = "swing",
+    BRC = "brc",
+    EXT = "ext"
 }

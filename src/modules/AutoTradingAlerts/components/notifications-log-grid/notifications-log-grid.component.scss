@@ -1,0 +1,24 @@
+@import "../../../../global-styles/themes/themes";
+@import "../../../../global-styles/mixins/themify";
+@import "../../../../global-styles/variables";
+
+:host {
+  display: block;
+  height: 100%;
+  .limits-header {
+    font-size: 10px;
+    margin: 3px 10px;
+  }
+
+  .ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@include themify($themes, true) {
+  .limits-header {
+    color: themed('titleTextColor');
+  }
+}

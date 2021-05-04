@@ -25,6 +25,7 @@ import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -100,7 +101,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
-    private _levelRestriction: number = 4;
+    private get _levelRestriction(): number {
+        return this._identityService.basicLevel;
+    }
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
@@ -334,6 +337,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     scanMarkets() {
+        if (this._identityService.isGuestMode) {
+            return;
+        }
+        
         this.loading = true;
         this.scannerResults = [];
 
@@ -412,6 +419,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     trackByResult(index, res: IScannerResults) {
         return res.symbol + res.exchange + res.timeframe + res.origType;
+    }
+
+    addAlert() {
+        this._dialog.open(SonarAlertDialogComponent, {});
     }
 
     public getFeaturedDetails(scannerVM: IScannerResults): string {

@@ -62,6 +62,7 @@ import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.co
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
+import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
 
 
 export function sharedThemeService() {
@@ -285,6 +286,10 @@ export function sharedEducationalTipsService() {
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,
                             component: BreakfreeTradingBacktestComponent
+                        },
+                        {
+                            componentName: ComponentIdentifier.alertsManager,
+                            component: AlertWidgetComponent
                         }
                     ]
                 } as IGoldenLayoutComponentConfiguration;

@@ -81,7 +81,7 @@ export class ChangePhoneComponent implements OnInit {
         };
         this._personalInfoService.sendCodeViaSMSToAttachPhoneNumber(sendCodeViaSMSToAttachPhoneNumberModel)
             .subscribe(() => {
-                this._alertService.warning(this._appTranslateService.get('verificationCodeSent'));
+                this._alertService.info(this._appTranslateService.get('verificationCodeSent'));
                 this.loading = false;
                 this.isVerifyingCode = true;
             }, e => {
@@ -101,7 +101,7 @@ export class ChangePhoneComponent implements OnInit {
         };
         this._personalInfoService.sendCodeViaSMSToChangePhoneNumber(sendCodeViaSMSToChangePhoneNumberModel)
             .subscribe(() => {
-                this._alertService.warning(this._appTranslateService.get('verificationCodeSent'));
+                this._alertService.info(this._appTranslateService.get('verificationCodeSent'));
                 this.loading = false;
                 this.isVerifyingCode = true;
                 this.formGroup.controls['phone'].disable();
@@ -122,7 +122,7 @@ export class ChangePhoneComponent implements OnInit {
         };
         this._personalInfoService.sendCodeViaSMSToRemovePhoneNumber(sendCodeViaSMSToRemovePhoneNumberModel)
             .subscribe(() => {
-                this._alertService.warning(this._appTranslateService.get('verificationCodeSent'));
+                this._alertService.info(this._appTranslateService.get('verificationCodeSent'));
                 this.loading = false;
                 this.isVerifyingCode = true;
             }, e => {

@@ -1,0 +1,23 @@
+<div class="alert-description-cell">
+    <span class="running-status-wrapper">
+        <indicator *ngIf="!isRunning()" [colorClass]="'not-running'">
+        </indicator>
+        <indicator *ngIf="isRunning()" [colorClass]="'is-running'">
+        </indicator>
+    </span>
+    <span class="alert-controls-wrapper">
+
+        <i class="crypto-icon crypto-icon-alert-start control" title="{{('alertWidget.start'| translate)}}"
+            (click)="handleAlertLaunchButtonClick()" *ngIf="!isRunning()"></i>
+
+        <i class="fa fa-pause control control-pause" title="{{('alertWidget.stop'| translate)}}"
+            (click)="handleAlertLaunchButtonClick()" *ngIf="isRunning()"></i>
+
+        <i class="crypto-icon crypto-icon-alert-edit control" title="{{'edit'| translate}}"
+            (click)="showAlertDialog()"></i>
+
+        <i class="control" title="{{'remove'| translate}}">
+            <remove-button (click)="removeAlert()"></remove-button>
+        </i>
+    </span>
+</div>

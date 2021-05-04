@@ -1,0 +1,55 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="modal-content">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{data?.alert ? ('tradingAlert.editAlert' | translate) : ('tradingAlert.createAlert' | translate)}}</h4>
+        </div>
+
+        <div class="modal-body" [class.disabled]="processingSubmit">
+            <div class="flex-row form-wrapper">
+                <div class="flex-column-full padding-right">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span>{{'tradingAlert.instrument' | translate}}</span></p>
+                        <instrument-search [instrument]="instrument" (onSelect)="handleInstrumentChange($event)">
+                        </instrument-search>
+                    </div>
+                </div> 
+                <div class="flex-column padding-right">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span>{{'tradingAlert.condition' | translate}}</span></p>
+                        <selector class="condition-selector bft-form-select" [options]="conditions" [optionCaption]="conditionTitlesTranslate"
+                            [(ngModel)]="selectedCondition">
+                        </selector>
+                    </div>
+                </div>
+                <div class="flex-column padding-left">
+                    <div class="crypto-form-unit margin-bottom">
+                        <p class="form-unit__label"><span> {{'tradingAlert.value' | translate}}</span></p>
+                        <mat-form-field class="crypto-input bft-form-input full-width">
+                            <input matInput class="bftinput" type="number" numericInput [(ngModel)]="alertPrice">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="delimiter"></div>
+
+            <alert-setup-base
+                [(useExpiration)]="useExpiration" [(showPopup)]="showPopup" [(sendSMS)]="sendSMS" [canRunAlert]="canRunAlert" [(playSound)]="playSound"
+                [(sendEmail)]="sendEmail" [(message)]="message" [(saveAndStart)]="saveAndStart" [(expiration)]="expiration"></alert-setup-base>
+
+        </div>
+
+        <div class="delimiter"></div>
+        <div class="modal-footer">
+            <div class="buttons-wrap flex justify-flex-end">
+                <button class="crypto-button crypto-button_primary submit-btn crypto-button-w-100"
+                        (click)="submit()" [class.disabled]="!canCreateAlert()">
+                    {{ data?.alert ? ('edit' | translate) : ('create' | translate) }}
+                </button>
+            </div>
+        </div>
+        <bft-loader *ngIf="processingSubmit"></bft-loader>
+    </div>
+</div>
+ 
