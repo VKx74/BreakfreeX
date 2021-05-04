@@ -49,6 +49,7 @@ build-app-stage:
   only:
     - develop
     - feature/scope_rework
+    - feature/binance
     - ci-improvements
 #   tags:
 #     - web
@@ -101,6 +102,7 @@ build-latest:
     only:
         - develop
         - feature/scope_rework
+        - feature/binance
         - ci-improvements
 
 build-stable:
