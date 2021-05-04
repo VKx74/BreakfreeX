@@ -92,6 +92,7 @@ export class StrategyV2ModeBacktestComponent {
         
         let backtestParameters: IBFTBacktestV2AlgoParameters = {
             input_accountsize: 1000,
+            account_currency: "USD",
             input_risk: 3.5,
             input_splitpositions: 1,
             replay_back: this.barsCount,

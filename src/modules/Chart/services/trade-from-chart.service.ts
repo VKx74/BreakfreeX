@@ -327,7 +327,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public refresh() {
-        if (!this._chart) {
+        if (!this._isChartInitialized()) {
             return;
         }
 
@@ -507,7 +507,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        if (!this._chart || !this._chart.dataContext || !this._chart.dataContext.dateDataRows || !this._chart.dataContext.dateDataRows.length) {
+        if (!this._isChartInitialized()) {
             return;
         }
 
@@ -532,7 +532,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private fillOrderLines() {
-        if (!this._chart || !this._chart.dataContext || !this._chart.dataContext.dateDataRows || !this._chart.dataContext.dateDataRows.length) {
+        if (!this._isChartInitialized()) {
             return;
         }
 
@@ -682,7 +682,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private clearChart() {
-        if (!this._chart) {
+        if (!this._isChartInitialized()) {
             return;
         }
 
@@ -788,9 +788,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private setLinePendingState(shapeId: string, price?: number) {
-        if (!this._chart) {
+        if (!this._isChartInitialized()) {
             return;
         }
+        
         for (const shape of this._chart.primaryPane.shapes) {
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
                 const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
@@ -805,6 +806,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private handlePositionsParametersChanged() {
+        if (!this._isChartInitialized()) {
+            return;
+        }
+
         const positions = this.getActualPositions();
         if (!positions) {
             return;
@@ -827,7 +832,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     private handleOrdersParametersChanged(orders: IOrder[]) {
-        if (!this._chart) {
+        if (!this._isChartInitialized()) {
             return;
         }
 
@@ -1037,5 +1042,13 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         return this._broker.isPositionBased;
+    }
+
+    private _isChartInitialized(): boolean {
+        if (!this._chart || !this._chart.primaryPane || !this._chart.dataContext || !this._chart.dataContext.dateDataRows || !this._chart.dataContext.dateDataRows.length) {
+            return false;
+        }
+
+        return true;
     }
 }

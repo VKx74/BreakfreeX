@@ -32,6 +32,11 @@ export class IndicatorDataProviderService {
 
         if (this._broker.activeBroker instanceof MTBroker) {
             const broker = this._broker.activeBroker as MTBroker;
+
+            if (!bftParams.input_accountsize && broker.accountInfo && broker.accountInfo.Currency) {
+                bftParams.account_currency = broker.accountInfo.Currency;
+            }
+            
             if (!bftParams.input_accountsize && broker.accountInfo && broker.accountInfo.Balance) {
                 bftParams.input_accountsize = broker.accountInfo.Balance;
             }
