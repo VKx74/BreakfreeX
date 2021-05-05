@@ -2,7 +2,6 @@ stages:
     - analize
     - build
     - build-image
-    - deploy-maintenance
 
 .npmrc-settings-job: &npmrc-settings-job
     before_script:
@@ -131,7 +130,7 @@ build-maintenance:
     image: docker:stable
     services:
         - docker:dind
-    stage: deploy-maintenance
+    stage: analize
     when: manual
     script:
         - echo Build Docker Image
