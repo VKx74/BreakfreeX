@@ -30,9 +30,10 @@ export class InlineService {
 
   activateTopic(id: string) {
     try {
-      if (this._window.inline_manual_player)
-        this._window.inline_manual_player.activateTopic('89410');
-      else
+      if (this._window.inline_manual_player) {
+        this._window.inline_manual_player.activateTopic(id);
+        this._window.inline_manual_player.deactivate(id);
+      } else
         console.log('im player instance not found');
     } catch (error) {
       console.error(error);

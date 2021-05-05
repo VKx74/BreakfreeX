@@ -40,6 +40,8 @@ export class BaseNavComponent implements OnInit {
     email = this._identityService.email;
     opened: Subject<void> = new Subject<void>();
 
+    presentationMode: boolean;
+
     get userNameWithLevel(): string {
         if (this.level) {
             return `${this.firstName} ${this.level}`;
@@ -170,8 +172,10 @@ export class BaseNavComponent implements OnInit {
             }
         });
     }
-    runTestTopic() {
-        this._inlineService.activateTopic('89410');        
+    switchToPresentationMode() {
+        console.log('run');
+        this._inlineService.activateTopic('89442'); // activate/deactivate any topic
+        this.presentationMode = !this.presentationMode;
     }
 
     changeTheme() {
