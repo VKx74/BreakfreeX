@@ -125,3 +125,24 @@ build-stable:
     #     - docker
     only:
         - master
+
+build-maintenance:
+    image: docker:stable
+    services:
+        - docker:dind
+    stage: build-image
+    when: manual
+    script:
+        - echo Build Docker Image
+        - echo $CI_PROJECT_PATH
+        - CONTAINER_IMAGE=$(echo "$CI_REGISTRY/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - echo $CONTAINER_IMAGE
+        - echo $CI_REGISTRY
+        - echo $CI_BUILD_TOKEN
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - docker build --tag $CONTAINER_IMAGE:stable -f maintenance.dockerfile .
+        - docker push $CONTAINER_IMAGE:stable
+    # tags:
+    #     - docker
+    # only:
+    #     - master
