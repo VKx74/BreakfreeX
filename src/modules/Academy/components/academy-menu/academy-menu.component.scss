@@ -64,9 +64,7 @@
     border-radius: 5px;
     padding: 5px;
     transition: all 0.22s;
-    
   }
-
 
   .menuheader {
     display: flex;
@@ -107,17 +105,16 @@
     }
   }
 
-    .iconformedia {
-      background-image: url(/assets/img/academy/circle_half.svg);
-      background-repeat: no-repeat;
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      padding-left:30px;
-      transition: all 0.22s;
-      margin-top: 4px;
-    }
-
+  .iconformedia {
+    background-image: url(/assets/img/academy/circle_half.svg);
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    padding-left: 30px;
+    transition: all 0.22s;
+    margin-top: 4px;
+  }
 
   .video-content {
     display: flex;
@@ -137,19 +134,19 @@
       color: hsla(0, 0%, 100%, 0.7);
       font-size: 13px;
       margin-top: 10px;
-     // background-image: url(/assets/img/academy/circle_half.svg);
+      // background-image: url(/assets/img/academy/circle_half.svg);
       background-repeat: no-repeat;
       line-height: 24px;
-     // padding-left: 30px;
+      // padding-left: 30px;
       cursor: pointer;
       transition: all 0.22s;
-      max-width:220px;
-      display:flex;
+      max-width: 220px;
+      display: flex;
       align-items: initial;
-    justify-content: left;
+      justify-content: left;
       &:hover {
-        font-weight:bold;
-        color: rgba(255, 255, 255, 0.95)
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.95);
       }
       &:hover > .iconformedia {
         background-image: url(/assets/img/academy/circle.svg) !important;
@@ -157,7 +154,7 @@
         display: inline-block;
         width: 20px;
         height: 20px;
-        padding-left:30px;
+        padding-left: 30px;
         transition: all 0.22s;
         margin-top: 4px;
       }
@@ -167,8 +164,8 @@
       }
 
       &.is-active {
-        font-weight:bold;
-        color: rgba(255, 255, 255, 0.95)
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.95);
       }
     }
     .separator {
@@ -188,6 +185,13 @@
   }
 }
 
+::ng-deep .mat-menu-panel.academy-menu {
+  background-color: #151515 !important;
+  border-radius: 0px;
+  min-width: 280px;
+  box-shadow: none !important;
+}
+
 // need improve
 .weeks-menu-content {
   color: #fff;
@@ -202,11 +206,4 @@
       // text-decoration: underline;
     }
   }
-}
-
-/deep/.mat-menu-panel {
-  background-color: #151515 !important;
-  border-radius: 0px;
-  min-width: 280px;
-  box-shadow: none !important;
 }

@@ -141,7 +141,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
         let placeOrderRequest: IBinanceFuturesPlaceOrderData = {
             Side: position.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
-            Size: position.Size,
+            Size: Math.abs(position.Size),
             Symbol: position.Symbol,
             Type: OrderTypes.Market
         };
