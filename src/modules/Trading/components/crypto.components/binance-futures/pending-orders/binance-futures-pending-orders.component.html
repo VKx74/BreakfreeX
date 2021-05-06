@@ -20,8 +20,8 @@
         {{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Executed Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
         {{'tradeManager.executedPrice' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Stop Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
-        {{'tradeManager.stopPrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Trigger" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.triggerPrice' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Status" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
         {{'tradeManager.status' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="TIF" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
@@ -44,7 +44,7 @@
         <ng-template let-item><span class="symbol-column">{{item.Symbol}}</span></ng-template>
     </data-table-cell>
     <data-table-cell columnName="Type">
-        <ng-template let-item>{{item.Type}}</ng-template>
+        <ng-template let-item>{{item.Type ? item.Type.replace("_", " ") : ""}}</ng-template>
     </data-table-cell>
     <data-table-cell columnName="Size">
         <ng-template let-item>
@@ -66,7 +66,7 @@
         <ng-template let-item>{{item.ExecutedPrice ? item.ExecutedPrice.toFixed(getDecimals(item.Symbol)) : "-"}}
         </ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Stop Price">
+    <data-table-cell columnName="Trigger">
         <ng-template let-item>{{item.StopPrice ? item.StopPrice.toFixed(getDecimals(item.Symbol)) : "-"}}
         </ng-template>
     </data-table-cell>

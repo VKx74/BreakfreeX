@@ -18,6 +18,7 @@ import { TradingHelper } from "@app/services/mt/mt.helper";
 import { EBrokerInstance, IBroker, IPositionBasedBroker } from "@app/interfaces/broker/broker";
 import { BinanceOrderConfig } from "modules/Trading/components/crypto.components/binance/order-configurator/binance-order-configurator.component";
 import { BinanceFuturesOrderConfig } from "modules/Trading/components/crypto.components/binance-futures/order-configurator/binance-futures-order-configurator.component";
+import { BinanceFuturesOrder } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 
 export interface EditOrderPriceConfigBase {
     Ticket: any;
@@ -552,6 +553,23 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         });
 
         for (const order of orders) {
+            // show stop line
+            if (this._broker.instanceType === EBrokerInstance.BinanceFuturesCOIN || this._broker.instanceType === EBrokerInstance.BinanceFuturesUSD) {
+                const stopPrice = (order as BinanceFuturesOrder).StopPrice;
+                if (stopPrice) {
+                    const stop_shape = this.createBaseShape(order);
+                    stop_shape.linePrice = stopPrice;
+                    stop_shape.lineId = `stop_${order.Id.toString()}`;
+                    stop_shape.lineText = `#${order.Id}`;
+                    stop_shape.lineType = "sl";
+                    stop_shape.boxText = `TRIGGER`;
+                    stop_shape.showClose = false;
+                    stop_shape.isEditable = false;
+                    stop_shape.showSLTP = false;
+                    shapes.push(stop_shape);
+                }
+            }
+
             const shape = this.createBaseShape(order);
             const shapeOrderBox = this.createBaseOrderShape(order);
             if (shapeOrderBox) {

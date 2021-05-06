@@ -57,7 +57,7 @@
         <div class="flex-column  padding-right">
             <div class="crypto-form-unit margin-bottom" [class.disabled]="!isPriceRequired()">
                 <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
-                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.limit' | translate}}</span>
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.price' | translate}}</span>
                     <input matInput class="bftinput" type="number" numericInput [floatOnly]="true" [step]="priceStep"
                         [range]="{min: minPriceValue}" [(ngModel)]="config.price" placeholder="Entre price">
                 </mat-form-field>
@@ -66,7 +66,7 @@
         <div class="flex-column padding-left">
             <div class="crypto-form-unit margin-bottom" [class.disabled]="!isStopPriceRequired()">
                 <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
-                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.stop' | translate}}</span>
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.trigger' | translate}}</span>
                     <input matInput class="bftinput" type="number" numericInput [floatOnly]="true" [step]="priceStep"
                         [range]="{min: minPriceValue}" [(ngModel)]="config.stopPrice" placeholder="Entre price">
                 </mat-form-field>
