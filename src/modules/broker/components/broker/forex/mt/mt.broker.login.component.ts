@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from "@angular/forms";
 import { AlertService } from "@alert/services/alert.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -30,6 +30,7 @@ export class MTBrokerLoginComponent extends BrokerLogin {
     public _servers: MTServer[] = [];
     public brokerFormControl: FormControl = new FormControl();
     public serverFormControl: FormControl = new FormControl();
+    @ViewChild('pwdInput', {static: false}) public input: ElementRef;
 
     public get brokers(): string[] {
         return this._brokers;
@@ -156,6 +157,7 @@ export class MTBrokerLoginComponent extends BrokerLogin {
 
         if (account.state && account.state.Password) {
             this.password = (account.state as MTConnectionData).Password;
+            this.input.nativeElement.type = 'password';
         }
     }
 
