@@ -649,6 +649,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
                 if (existingPos.Symbol === posFromBroker.Symbol) {
                     positionExist = true;
                     existingPos.Price = posFromBroker.EntryPrice;
+                    existingPos.LiquidationPrice = posFromBroker.LiquidationPrice;
                     existingPos.Leverage = posFromBroker.Leverage;
                     existingPos.Size = posFromBroker.positionAmt;
                     existingPos.NetPL = posFromBroker.UnrealizedProfit;
@@ -669,7 +670,8 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
                     Symbol: posFromBroker.Symbol,
                     MaintMargin: posFromBroker.MaintMargin,
                     Margin: posFromBroker.PositionInitialMargin,
-                    Side: posFromBroker.positionAmt > 0 ? OrderSide.Buy : OrderSide.Sell
+                    Side: posFromBroker.positionAmt > 0 ? OrderSide.Buy : OrderSide.Sell,
+                    LiquidationPrice: posFromBroker.LiquidationPrice
                 });
             }
         }

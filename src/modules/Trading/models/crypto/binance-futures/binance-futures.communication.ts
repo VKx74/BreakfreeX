@@ -73,6 +73,7 @@ export interface IBinanceFuturePosition {
     EntryPrice: number;
     Leverage: number;
     UnrealizedProfit: number;
+    LiquidationPrice: number;
     PositionSide: string;
 }
 

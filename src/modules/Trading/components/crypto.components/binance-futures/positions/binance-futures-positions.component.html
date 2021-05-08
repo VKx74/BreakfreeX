@@ -8,12 +8,12 @@
         <data-table-header-cell columnName="Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'size' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Current Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
-        <!-- <data-table-header-cell columnName="Liq. Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.liqPrice' | translate}}</data-table-header-cell> -->
         <!-- <data-table-header-cell columnName="Margin Ratio" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.marginRatio' | translate}}</data-table-header-cell> -->
         <!-- <data-table-header-cell columnName="Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.margin' | translate}}</data-table-header-cell> -->
         <!-- <data-table-header-cell columnName="Mnt. Margin" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.mntMargin' | translate}}</data-table-header-cell> -->
         <!-- <data-table-header-cell columnName="Leverage" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.leverage' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="PNL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.pnl' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="LiqPrice" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.liqPrice' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
     
 
@@ -52,6 +52,11 @@
                 </span>
             </ng-template>
         </data-table-cell>
+
+        <data-table-cell columnName="LiqPrice">
+            <ng-template let-item>{{item.LiquidationPrice ? item.LiquidationPrice.toFixed(getDecimals(item.Symbol)) : "-"}}</ng-template>
+        </data-table-cell>
+
         <data-table-cell columnName="Close">
             <ng-template let-item>
                 <div class="flex justify-flex-end">

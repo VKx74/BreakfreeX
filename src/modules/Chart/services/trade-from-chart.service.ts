@@ -172,6 +172,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
+        if (id.toString().startsWith("trigger_")) {
+            let orderId = id.toString().replace("trigger_", "");
+            this.cancelOrder(Number(orderId), callback);
+            return;
+        }
+
         this.cancelOrder(Number(id), callback);
     }
 
@@ -544,65 +550,82 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
         const shapes = [];
         let orders = this._broker.orders.slice().filter((order) => {
-            if (order.Symbol !== symbol.symbol || !order.Price) {
+            if (order.Symbol !== symbol.symbol) {
                 return false;
             }
-            return true;
+
+            if (order.Price) {
+                return true;
+            }
+
+            if ((order as BinanceFuturesOrder).StopPrice) {
+                return true;
+            }
+
+            return false;
         }).sort((order1, order2) => {
             return this.getOrderPriceDiff(order1) - this.getOrderPriceDiff(order2);
         });
 
         for (const order of orders) {
-            // show stop line
-            if (this._broker.instanceType === EBrokerInstance.BinanceFuturesCOIN || this._broker.instanceType === EBrokerInstance.BinanceFuturesUSD) {
-                const stopPrice = (order as BinanceFuturesOrder).StopPrice;
-                if (stopPrice) {
-                    const stop_shape = this.createBaseShape(order);
-                    stop_shape.linePrice = stopPrice;
-                    stop_shape.lineId = `stop_${order.Id.toString()}`;
-                    stop_shape.lineText = `#${order.Id}`;
-                    stop_shape.lineType = "sl";
-                    stop_shape.boxText = `TRIGGER`;
+            // show trigger line
+            const stopPrice = (order as BinanceFuturesOrder).StopPrice;
+            const entryPrice = order.Price;
+            if (stopPrice) {
+                const stop_shape = this.createBaseShape(order);
+                stop_shape.lineId = order.Id.toString();
+                stop_shape.linePrice = stopPrice;
+                stop_shape.lineId = `trigger_${order.Id.toString()}`;
+                stop_shape.lineText = `#${order.Id}`;
+                stop_shape.boxText = `TRIGGER`;
+                stop_shape.isEditable = false;
+                stop_shape.showSLTP = false;
+                shapes.push(stop_shape);
+
+                if (entryPrice) {
                     stop_shape.showClose = false;
-                    stop_shape.isEditable = false;
-                    stop_shape.showSLTP = false;
-                    shapes.push(stop_shape);
+                    stop_shape.lineType = "sl";
+                } else {
+                    stop_shape.showClose = true;
+                    stop_shape.lineType = this.getOrderLineType(order);
                 }
             }
 
-            const shape = this.createBaseShape(order);
-            const shapeOrderBox = this.createBaseOrderShape(order);
-            if (shapeOrderBox) {
-                shapes.push(shapeOrderBox);
-            }
-            shape.showSLTP = this._canEditOrder();
-            shape.lineId = order.Id.toString();
-            shape.lineText = `#${order.Id}`;
-            shape.lineType = this.getOrderLineType(order);
-            shapes.push(shape);
+            if (entryPrice) {
+                const shape = this.createBaseShape(order);
+                const shapeOrderBox = this.createBaseOrderShape(order);
+                if (shapeOrderBox) {
+                    shapes.push(shapeOrderBox);
+                }
+                shape.showSLTP = this._canEditOrder();
+                shape.lineId = order.Id.toString();
+                shape.lineText = `#${order.Id}`;
+                shape.lineType = this.getOrderLineType(order);
+                shapes.push(shape);
 
-            this.setShapePriceAndBox(shape, order);
+                this.setShapePriceAndBox(shape, order);
 
-            if (order.SL) {
-                const sl_shape = this.createBaseShape(order);
-                sl_shape.lineId = `sl_${order.Id.toString()}`;
-                sl_shape.lineText = `#${order.Id}`;
-                sl_shape.lineType = "sl";
+                if (order.SL) {
+                    const sl_shape = this.createBaseShape(order);
+                    sl_shape.lineId = `sl_${order.Id.toString()}`;
+                    sl_shape.lineText = `#${order.Id}`;
+                    sl_shape.lineType = "sl";
 
-                this.setShapeSL(sl_shape, order);
+                    this.setShapeSL(sl_shape, order);
 
-                shapes.push(sl_shape);
-            }
+                    shapes.push(sl_shape);
+                }
 
-            if (order.TP) {
-                const tp_shape = this.createBaseShape(order);
-                tp_shape.lineId = `tp_${order.Id.toString()}`;
-                tp_shape.lineText = `#${order.Id}`;
-                tp_shape.lineType = "tp";
+                if (order.TP) {
+                    const tp_shape = this.createBaseShape(order);
+                    tp_shape.lineId = `tp_${order.Id.toString()}`;
+                    tp_shape.lineText = `#${order.Id}`;
+                    tp_shape.lineType = "tp";
 
-                this.setShapeTP(tp_shape, order);
+                    this.setShapeTP(tp_shape, order);
 
-                shapes.push(tp_shape);
+                    shapes.push(tp_shape);
+                }
             }
         }
 
@@ -809,7 +832,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (!this._isChartInitialized()) {
             return;
         }
-        
+
         for (const shape of this._chart.primaryPane.shapes) {
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
                 const orderLine = shape as TradingChartDesigner.ShapeOrderLine;

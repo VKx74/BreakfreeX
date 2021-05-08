@@ -195,7 +195,6 @@ const FILE_INPUT_CONFIG_PROVIDER = {
             provide: APP_INITIALIZER,
             useFactory: (appConfigService: AppConfigService,
                          identityService: IdentityService) => () => {
-                console.log(">>> APP module INIT" + identityService.isGuestMode);
                 return appConfigService.loadConfig()
                     .pipe(
                         switchMap(() => {

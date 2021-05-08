@@ -18,6 +18,7 @@ export interface BinanceFuturesAsset {
 
 export interface BinanceFuturesPosition extends IPosition {
     CurrentPrice?: number;
+    LiquidationPrice?: number;
     Leverage?: number;
     Margin?: number;
     MaintMargin?: number;
