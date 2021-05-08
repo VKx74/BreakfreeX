@@ -11,8 +11,10 @@ import { PriceAlert } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { NewPriceAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { InstrumentService } from '@app/services/instrument.service';
-import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertExecutionStrategy, AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
+import { IdentityService } from '@app/services/auth/identity.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 export interface IPriceAlertDialogPreSettings {
     instrument: IInstrument;
@@ -94,6 +96,8 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
         private _alertsService: AlertsService,
         private _alertService: AlertService,
         private _instrumentService: InstrumentService,
+        private _identity: IdentityService,
+        private _dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public data: IPriceAlertDialogConfig) {
         super(_injector);
 
@@ -144,6 +148,11 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
     }
 
     submit() {
+        if (this._identity.isGuestMode) {
+            this._processCheckout();
+            return;
+        }
+        
         if (this.data && this.data.alert) {
             this._edit();
         } else {
@@ -218,7 +227,8 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
             value: this.alertPrice,
             expiring: this.expiration,
             playSound: this.playSound,
-            status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
+            status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped,
+            triggerOptions: AlertExecutionStrategy.Once
         };
     }
 
@@ -240,5 +250,9 @@ export class PriceAlertDialogComponent extends Modal<IPriceAlertDialogConfig> im
         this.conditionTitlesTranslate(this.selectedCondition).subscribe((conditionTitle) => {
             this.message = `${this.instrument.symbol} ${conditionTitle} ${this.alertPrice}`;
         });
+    }
+
+    private _processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 }

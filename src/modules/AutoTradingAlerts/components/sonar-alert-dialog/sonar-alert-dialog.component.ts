@@ -1,5 +1,5 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { TranslateService } from "@ngx-translate/core";
 import { AutoTradingAlertsTranslateService } from "../../localization/token";
 import { IInstrument } from "@app/models/common/instrument";
@@ -12,10 +12,11 @@ import { SonarAlert } from "../../models/AlertBase";
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { InstrumentService } from '@app/services/instrument.service';
 import { NewSonarAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
-import { AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
+import { AlertExecutionStrategy, AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 export interface ISonarDialogConfig {
     alert?: SonarAlert;
@@ -36,9 +37,11 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     private _instrument: IInstrument;
     private _allowedTriggerTimeframe: TriggerTimeframe[] = [];
     private _selectedTriggerType: TriggerType = TriggerType.NewSetup;
+    private _selectedTriggerOptions: AlertExecutionStrategy = AlertExecutionStrategy.Once;
     private _selectedTriggerTimeframe: TriggerTimeframe;
     private _selectedTriggerSetup: TriggerSetup = TriggerSetup.AllSetups;
     TriggerType = TriggerType;
+    AlertExecutionStrategy = AlertExecutionStrategy;
     TriggerTimeframe = TriggerTimeframe;
 
     public get allowedTriggerTimeframe(): TriggerTimeframe[] {
@@ -78,9 +81,18 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         return this._selectedTriggerTimeframe;
     }
     public set selectedTriggerTimeframe(value: TriggerTimeframe) {
-        if (this._selectedTriggerTimeframe = value) {
+        if (this._selectedTriggerTimeframe !== value) {
             this._selectedTriggerTimeframe = value;
             this._setNotificationText();
+        }
+    }
+
+    public get selectedTriggerOptions(): AlertExecutionStrategy {
+        return this._selectedTriggerOptions;
+    }
+    public set selectedTriggerOptions(value: AlertExecutionStrategy) {
+        if (this._selectedTriggerOptions !== value) {
+            this._selectedTriggerOptions = value;
         }
     }
 
@@ -116,6 +128,8 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         private _instrumentService: InstrumentService,
         private _identityService: IdentityService,
         private _tradingProfileService: TradingProfileService,
+        private _identity: IdentityService,
+        private _dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public data: ISonarDialogConfig) {
         super(_injector);
 
@@ -126,7 +140,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         if (data && data.alert) {
             this.selectedTriggerType = data.alert.triggerType;
             this.selectedTriggerTimeframe = data.alert.timeframe;
-            this.selectedTriggerType = data.alert.triggerType;
+            this.selectedTriggerOptions = data.alert.executionStrategy;
             this.selectedTriggerSetup = data.alert.setup;
             this.sendEmail = data.alert.useEmail;
             this.sendSMS = data.alert.useSMS;
@@ -168,6 +182,11 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     }
 
     public submit() {
+        if (this._identity.isGuestMode) {
+            this._processCheckout();
+            return;
+        }
+
         if (this.data && this.data.alert) {
             this._edit();
         } else {
@@ -228,6 +247,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             setup: this.selectedTriggerSetup,
             timeframe: this.selectedTriggerTimeframe,
             triggerType: this.selectedTriggerType,
+            triggerOptions: this.selectedTriggerOptions,
             expiring: this.expiration,
             playSound: this.playSound,
             status: this.saveAndStart ? AlertStatus.Running : AlertStatus.Stopped
@@ -278,5 +298,9 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
         this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
         this._selectedTriggerTimeframe = this._allowedTriggerTimeframe[0];
+    }
+
+    private _processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 }

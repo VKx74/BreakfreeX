@@ -75,10 +75,6 @@ export class DashboardComponent {
         return 160;
     }
 
-    public get showTradingPanel(): boolean {
-        return this._brokerService.showTradingPanel;
-    }
-
     constructor(private _store: Store<AppState>,
         private _actions: Actions,
         private _intercom: Intercom,
@@ -203,9 +199,11 @@ export class DashboardComponent {
         const os = (window as any).OneSignal;
         if (os && os.push && os.setExternalUserId) {
             const userId = this._identityService.id;
-            os.push(function() {
-                os.setExternalUserId(userId);
-            });
+            if (userId) {
+                os.push(function() {
+                    os.setExternalUserId(userId);
+                });
+            }
         }
 
         try {
@@ -279,7 +277,7 @@ export class DashboardComponent {
     }
 
     private _saveLayoutState(async: boolean = true) {
-        if (this._identityService.isAuthorized && this._saveLayout) {
+        if (this._identityService.isAuthorized && this._saveLayout && !this._identityService.isGuestMode) {
             const layoutState = this.layout.saveState();
             this._layoutStorageService.saveLayoutState(layoutState, async)
                 .subscribe(

@@ -1,0 +1,32 @@
+<div class="accountInfo">
+    <data-table [rows]="accounts" [selectable]="true" [allowColumnsVisibilityChange]="false" [expandOnClick]="false"
+        [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)">
+        <data-table-header-cell columnName="State" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
+        <data-table-header-cell columnName="Environment" [sortable]="true">{{'broker.environment' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="API Key" [sortable]="true">{{'broker.apiKey' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Server" [sortable]="true">{{'broker.server' | translate}}</data-table-header-cell>
+        <!-- <data-table-header-cell columnName="Server" [sortable]="false">{{'broker.server' | translate}}</data-table-header-cell> -->
+        <data-table-header-cell columnName="Close" [sortable]="false" [columnWidth]="32"></data-table-header-cell>
+
+        <data-table-cell columnName="State">
+            <ng-template let-item>
+                <div class="color-column" [ngClass]="{'active': isActiveAccount(item)}"></div>
+            </ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Environment"><ng-template let-item>{{getEnvironment(item)}}</ng-template></data-table-cell>
+        <data-table-cell columnName="API Key"><ng-template let-item>{{getKeyText(item)}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Server"><ng-template let-item>{{item.server}}</ng-template></data-table-cell>
+        <!-- <data-table-cell columnName="Server"><ng-template let-item>{{item.server}}</ng-template></data-table-cell> -->
+
+        <data-table-cell columnName="Close">
+            <ng-template let-item>
+                <div class="flex justify-content-center">
+                    <div class="close-order-button" (click)="removeSavedAccount(item)">
+                        <i class="crypto-icon crypto-icon-close"></i>
+                    </div>
+                </div>
+            </ng-template>
+        </data-table-cell>
+       
+    </data-table>
+</div>

@@ -1,14 +1,12 @@
-import {Injectable} from "@angular/core";
-import {IInstrument} from "../models/common/instrument";
-import {EExchange} from "../models/common/exchange";
-import {IHealthable} from "../interfaces/healthcheck/healthable";
-import {BehaviorSubject, Observable, of, Subject, Subscription} from "rxjs";
-import {ApplicationType} from "../enums/ApplicationType";
-import {EBrokerInstance, IBroker, IBrokerState} from "../interfaces/broker/broker";
-import {ActionResult, IBrokerUserInfo, OrderTypes} from "../../modules/Trading/models/models";
-import {map} from "rxjs/operators";
-import {BrokerFactory, CreateBrokerActionResult} from "../factories/broker.factory";
-import {ApplicationTypeService} from "@app/services/application-type.service";
+import { Injectable } from "@angular/core";
+import { IInstrument } from "../models/common/instrument";
+import { EExchange } from "../models/common/exchange";
+import { IHealthable } from "../interfaces/healthcheck/healthable";
+import { BehaviorSubject, Observable, of, Subject, Subscription } from "rxjs";
+import { EBrokerInstance, IBroker, IBrokerState } from "../interfaces/broker/broker";
+import { ActionResult, OrderTypes } from "../../modules/Trading/models/models";
+import { map } from "rxjs/operators";
+import { BrokerFactory, CreateBrokerActionResult } from "../factories/broker.factory";
 import { IdentityService } from './auth/identity.service';
 import { InstrumentMappingService } from "./instrument-mapping.service";
 
@@ -18,8 +16,7 @@ export interface IBrokerServiceState {
 }
 
 @Injectable()
-export class BrokerService implements IHealthable {
-    // if initialization failed - false, succeed - true, otherwise - null
+export class BrokerService {
     private _activeState: IBrokerServiceState = {};
     private _brokerInitializationState$ = new BehaviorSubject<boolean>(null);
     public brokerInitializationState$ = this._brokerInitializationState$.asObservable();
@@ -38,28 +35,10 @@ export class BrokerService implements IHealthable {
         return this._isConnected;
     }
 
-    public get isHealthy(): boolean {
-        return true;
-    } 
-    
-    public get showTradingPanel(): boolean {
-        return true;
-    }
-
     public get isTradingAllowed(): boolean {
-        if (!this.showTradingPanel) {
-            return false;
-        } 
-
         // show MT Bridge for all users even without subscriptions
         return true;
         return this._identityService.isAuthorizedCustomer;
-    }  
-
-    private _applicationType: ApplicationType;
-
-    get supportedApplicationType(): ApplicationType {
-        return this._applicationType;
     }
 
     private _activeBroker$ = new BehaviorSubject<IBroker>(null);
@@ -69,11 +48,8 @@ export class BrokerService implements IHealthable {
     onSaveStateRequired: Subject<void> = new Subject<void>();
 
     constructor(private _brokerFactory: BrokerFactory,
-                private _identityService: IdentityService,
-                private _instrumentMappingService: InstrumentMappingService,
-                private _applicationTypeService: ApplicationTypeService) {
-        // Todo review
-        this._applicationType = this._applicationTypeService.applicationType;
+        private _identityService: IdentityService,
+        private _instrumentMappingService: InstrumentMappingService) {
         this._isConnected = false;
     }
 
@@ -98,14 +74,6 @@ export class BrokerService implements IHealthable {
                 result: false,
                 msg: 'You have no connected broker'
             });
-        }
-    }
-
-    isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes): boolean {
-        if (!this._activeBroker) {
-            return false;
-        } else {
-            return this._activeBroker.isInstrumentAvailable(instrument, orderType);
         }
     }
 
@@ -150,15 +118,20 @@ export class BrokerService implements IHealthable {
             }
         }
     }
-    
-    getSavedBroker(): IBrokerState[] {
+
+    getSavedBroker(brokerType?: EBrokerInstance): IBrokerState[] {
+        const res = [];
         if (this._activeState.previousConnected) {
-            return this._activeState.previousConnected;
+            for (const account of this._activeState.previousConnected) {
+                if (!brokerType || account.brokerType === brokerType) {
+                    res.push(account);
+                }
+            }
         }
 
-        return [];
-    }  
-    
+        return res;
+    }
+
     getActiveBroker(): IBrokerState {
         return this._activeState.activeBrokerState;
     }
@@ -166,32 +139,6 @@ export class BrokerService implements IHealthable {
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
         if (this._activeBroker) {
             return this._activeBroker.getInstruments(exchange, search);
-        }
-
-        return of([]);
-    }
-
-    tryMapInstrument(instrument: string, exchange: EExchange): Observable<IInstrument[]> {
-        let symbolsSimilar = (s1: string, s2: string): boolean => {
-            let _s1 = s1.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            let _s2 = s2.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            return _s1 === _s2;
-        };
-
-        if (this._activeBroker) {
-            return this._activeBroker.getInstruments(exchange, instrument[0]).pipe(map((instruments: IInstrument[]) => {
-                let res: IInstrument[] = [];
-
-                for (let i in instruments) {
-                    if (instruments[i].symbol === instrument) {
-                        res.unshift(instruments[i]);
-                    } else if (symbolsSimilar(instruments[i].symbol, instrument)) {
-                        res.push(instruments[i]);
-                    }
-                }
-
-                return res;
-            }));
         }
 
         return of([]);
@@ -215,6 +162,13 @@ export class BrokerService implements IHealthable {
     }
 
     loadState(state: IBrokerServiceState): Observable<ActionResult> {
+        // if (this._identityService.isGuestMode) {
+        //     return of({
+        //         result: false,
+        //         msg: 'Guest mode'
+        //     });
+        // }
+
         if (!state) {
             return of({
                 result: false,
@@ -277,25 +231,6 @@ export class BrokerService implements IHealthable {
         });
     }
 
-    setDefaultBroker(): Observable<ActionResult> {
-        switch (this._applicationTypeService.applicationType) {
-            // case ApplicationType.Crypto:
-            //     return this._restoreBrokerFromState({
-            //         brokerType: EBrokerInstance.BitmexBroker,
-            //         state: {}
-            //     });
-            // case ApplicationType.Forex:
-            //     return this._restoreBrokerFromState({
-            //         brokerType: EBrokerInstance.OandaBroker,
-            //         state: {}
-            //     });
-            default:
-                return of({
-                    result: true
-                });
-        }
-    }
-
     public setBrokerInitializationState(state = true) {
         this._brokerInitializationState$.next(state);
     }
@@ -304,7 +239,7 @@ export class BrokerService implements IHealthable {
         if (!this._activeState.previousConnected) {
             this._activeState.previousConnected = [];
         }
-        
+
         const currentState = this._activeState.activeBrokerState;
 
         if (!currentState) {
@@ -313,7 +248,14 @@ export class BrokerService implements IHealthable {
 
         let acctExist = false;
         for (const acct of this._activeState.previousConnected) {
-            if (acct.account === currentState.account && acct.server === currentState.server) {
+            try {
+                let acc1 = JSON.stringify(acct);
+                let acc2 = JSON.stringify(currentState);
+                if (acc1 === acc2) {
+                    acctExist = true;
+                    break;
+                }
+            } catch (ex) {
                 acctExist = true;
                 break;
             }

@@ -11,6 +11,9 @@ import { InstrumentSearchComponent } from "../../../../../instrument-search/comp
 import { DataTableComponent } from "../../../../../datatable/components/data-table/data-table.component";
 import { AlertService } from "../../../../../Alert";
 import { InstrumentMappingService } from "../../../../../../app/services/instrument-mapping.service";
+import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
+import { MatDialog } from "@angular/material/dialog";
+import { IdentityService } from "@app/services/auth/identity.service";
 
 export class MapPair {
     constructor(item1: string, item2: string) {
@@ -42,6 +45,8 @@ export class SymbolMappingComponent extends Modal<SymbolMapConfig> implements On
         private _alertService: AlertService,
         private _brokerService: BrokerService,
         private _instrumentService: InstrumentService,
+        private _identity: IdentityService,
+        private _dialog: MatDialog,
         private _symbolMappingService: InstrumentMappingService) {
         super(injector);
     }   
@@ -104,6 +109,11 @@ export class SymbolMappingComponent extends Modal<SymbolMapConfig> implements On
     }
 
     Remove(item: MapPair): void {
+        if (this._identity.isGuestMode) {
+            this._processCheckout();
+            return;
+        }
+        
         let index = this.MappedAray.indexOf(item, 0);
         if (index > -1) {
             this.loading = true;            
@@ -125,6 +135,11 @@ export class SymbolMappingComponent extends Modal<SymbolMapConfig> implements On
     }
 
     Add(): void {        
+        if (this._identity.isGuestMode) {
+            this._processCheckout();
+            return;
+        }
+        
         let errorMessage: string = '';
         if (!this.feedSymbol) {
             errorMessage = `Data feed symbol not set`;
@@ -165,5 +180,9 @@ export class SymbolMappingComponent extends Modal<SymbolMapConfig> implements On
                 console.log(err);
                 this.loading = false;
             });
+    }
+
+    private _processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 }

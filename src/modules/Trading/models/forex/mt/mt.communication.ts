@@ -1,6 +1,7 @@
-export enum EMTMessageType {
+import { BrokerRequestMessageBase, BrokerResponseMessageBase } from "../../communication";
+
+export enum MTMessageType {
     GetBrokers = "GetBrokers",
-    Auth = "Auth",
     Login = "Login",
     Logout = "Logout",
     SubscribeQuote = "SubscribeQuote",
@@ -13,26 +14,6 @@ export enum EMTMessageType {
     PlaceOrder = "PlaceOrder",
     CloseOrder = "CloseOrder",
     EditOrder = "EditOrder",
-}
-
-export abstract class MTRequestMessageBase {
-    private static counter = 1;
-
-    public MessageId: string;
-    public Type: EMTMessageType;
-
-    constructor(type: EMTMessageType) {
-        this.Type = type;
-        this.MessageId = `${new Date().getTime()}_${MTRequestMessageBase.counter++}`;
-    }
-}
-
-export abstract class MTResponseMessageBase {
-    public MessageId: string;
-    public IsSuccess: boolean;
-    public Data?: any;
-    public ErrorMessage?: string;
-    public Type?: string;
 }
 
 export interface IMTServer {
@@ -53,10 +34,6 @@ export interface IMTLoginData {
     User: number;
     Password: string;
     ServerName: string;
-}
-
-export interface IMTAuth {
-    Token: string;
 }
 
 export interface IMTSubscriptionData {
@@ -185,128 +162,120 @@ export interface IMTDateRangeData {
 
 // Responses
 
-export class MTGetServersResponse extends MTResponseMessageBase {
+export class MTGetServersResponse extends BrokerResponseMessageBase {
     public Data: IMTServer[];
 }
 
-export class MTQuoteResponse extends MTResponseMessageBase {
+export class MTQuoteResponse extends BrokerResponseMessageBase {
     public Data: IMTQuoteData;
 }
 
-export class MTSymbolTradeInfoResponse extends MTResponseMessageBase {
+export class MTSymbolTradeInfoResponse extends BrokerResponseMessageBase {
     public Data: IMTSymbolTradeInfoData;
 }
 
-export class MTAccountUpdateResponse extends MTResponseMessageBase {
+export class MTAccountUpdateResponse extends BrokerResponseMessageBase {
     public Data: IMTAccountUpdatedData;
 }
 
-export class MTOrdersUpdateResponse extends MTResponseMessageBase {
+export class MTOrdersUpdateResponse extends BrokerResponseMessageBase {
     public Data: IMTOrderData[];
 }
 
-export class MTLoginResponse extends MTResponseMessageBase {
+export class MTLoginResponse extends BrokerResponseMessageBase {
     public Data: IMTSymbolData[];
 }
 
-export class MTPlaceOrderResponse extends MTResponseMessageBase {
+export class MTPlaceOrderResponse extends BrokerResponseMessageBase {
     public Data: IMTOrderData;
 }
 
-export class MTEditOrderResponse extends MTResponseMessageBase {
+export class MTEditOrderResponse extends BrokerResponseMessageBase {
     public Data: IMTOrderData;
 }
 
-export class MTCloseOrderResponse extends MTResponseMessageBase {
+export class MTCloseOrderResponse extends BrokerResponseMessageBase {
     public Data: IMTOrderData;
 }
 
-export class MTGetOrderHistoryResponse extends MTResponseMessageBase {
+export class MTGetOrderHistoryResponse extends BrokerResponseMessageBase {
     public Data: IMTOrderData[];
 }
 
 // Requests
 
-export class MTLoginRequest extends MTRequestMessageBase {
+export class MTLoginRequest extends BrokerRequestMessageBase {
     public Data: IMTLoginData;
 
     constructor() {
-        super(EMTMessageType.Login);
+        super(MTMessageType.Login);
     }
 }
 
-export class MTAuthRequest extends MTRequestMessageBase {
-    public Data: IMTAuth;
-
+export class MTGetServersRequest extends BrokerRequestMessageBase {
     constructor() {
-        super(EMTMessageType.Auth);
+        super(MTMessageType.GetBrokers);
     }
 }
 
-export class MTGetServersRequest extends MTRequestMessageBase {
+export class MTLogoutRequest extends BrokerRequestMessageBase {
     constructor() {
-        super(EMTMessageType.GetBrokers);
+        super(MTMessageType.Logout);
     }
 }
 
-export class MTLogoutRequest extends MTRequestMessageBase {
-    constructor() {
-        super(EMTMessageType.Logout);
-    }
-}
-
-export class SubscribeQuote extends MTRequestMessageBase {
+export class SubscribeQuote extends BrokerRequestMessageBase {
     public Data: IMTSubscriptionData;
 
     constructor() {
-        super(EMTMessageType.SubscribeQuote);
+        super(MTMessageType.SubscribeQuote);
     }
 }
 
-export class GetQuote extends MTRequestMessageBase {
+export class GetQuote extends BrokerRequestMessageBase {
     public Data: IMTGetQuoteDate;
 
     constructor() {
-        super(EMTMessageType.GetQuote);
+        super(MTMessageType.GetQuote);
     }
 }
 
-export class GetSymbolTradeInfo extends MTRequestMessageBase {
+export class GetSymbolTradeInfo extends BrokerRequestMessageBase {
     public Data: string;
 
     constructor() {
-        super(EMTMessageType.SymbolTradeInfo);
+        super(MTMessageType.SymbolTradeInfo);
     }
 }
 
-export class MTPlaceOrderRequest extends MTRequestMessageBase {
+export class MTPlaceOrderRequest extends BrokerRequestMessageBase {
     public Data: IMTPlaceOrderData;
 
     constructor() {
-        super(EMTMessageType.PlaceOrder);
+        super(MTMessageType.PlaceOrder);
     }
 }
 
-export class MTCloseOrderRequest extends MTRequestMessageBase {
+export class MTCloseOrderRequest extends BrokerRequestMessageBase {
     public Data: IMTCloseOrderData;
 
     constructor() {
-        super(EMTMessageType.CloseOrder);
+        super(MTMessageType.CloseOrder);
     }
 }
 
-export class MTEditOrderRequest extends MTRequestMessageBase {
+export class MTEditOrderRequest extends BrokerRequestMessageBase {
     public Data: IMTEditOrderData;
 
     constructor() {
-        super(EMTMessageType.EditOrder);
+        super(MTMessageType.EditOrder);
     }
 }
 
-export class MTGetOrderHistoryRequest extends MTRequestMessageBase {
+export class MTGetOrderHistoryRequest extends BrokerRequestMessageBase {
     public Data: IMTDateRangeData;
 
     constructor() {
-        super(EMTMessageType.OrdersHistory);
+        super(MTMessageType.OrdersHistory);
     }
 }

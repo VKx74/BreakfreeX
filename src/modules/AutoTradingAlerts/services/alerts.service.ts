@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { IdentityService } from "@app/services/auth/identity.service";
 import { Console } from "console";
 import { Observable, of, Subject, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
@@ -59,7 +60,7 @@ export class AlertsService {
         return this._alertLimits;
     }
 
-    constructor(private _alertRestClient: AlertRestClient, private _ws: AlertSocketService) {
+    constructor(private _alertRestClient: AlertRestClient, private _ws: AlertSocketService, private _identityService: IdentityService) {
     }
 
     init() {
@@ -68,6 +69,11 @@ export class AlertsService {
         }
 
         this._isInitialized = true;
+
+
+        if (this._identityService.isGuestMode) {
+            return;
+        }
 
         this.reloadAlerts();
         this.reloadHistory();
@@ -202,14 +208,26 @@ export class AlertsService {
     }
 
     canUseSonarAlerts(): boolean {
+        if (this._identityService.isGuestMode) {
+            return true;
+        }
+
         return this._alertLimits.canUseSonarAlerts;
     }
 
     canAddMoreAlerts(): boolean {
+        if (this._identityService.isGuestMode) {
+            return true;
+        }
+
         return this.Alerts.length < this._alertLimits.alertsCount;
     }
 
     canRunMoreAlerts(alertType: AlertType): boolean {
+        if (this._identityService.isGuestMode) {
+            return true;
+        }
+        
         let priceAlertsCount = this.Alerts.filter(_ => _.type === AlertType.PriceAlert && _.status === AlertStatus.Running).length;
         let sonarAlertsCount = this.Alerts.filter(_ => _.type === AlertType.SonarAlert && _.status === AlertStatus.Running).length;
 

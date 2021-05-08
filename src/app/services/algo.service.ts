@@ -49,6 +49,7 @@ export interface IBFTScannerHistoryResponse {
 export interface IBFTAlgoParameters {
     contract_size?: number;
     input_accountsize: number;
+    account_currency: string;
     input_risk: number;
     input_splitpositions: number;
     input_stoplossratio: number;
@@ -62,6 +63,7 @@ export interface IBFTAlgoParameters {
 export interface IBFTAPositionSizeParameters {
     contract_size?: number;
     input_accountsize: number;
+    account_currency: string;
     input_risk: number;
     price_diff: number;
     instrument: IInstrument;

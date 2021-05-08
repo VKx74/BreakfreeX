@@ -335,30 +335,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
         RunningScriptsResolver,
         IdentityLogsService,
         DiscussionForumApiService,
-        IdentityLogsService,
-
-        // ExchangeFactory,
-        // CoinbaseInstrumentService,
-        // CoinbaseRealtimeService,
-        // CoinbaseHistoryService,
-        //
-        // BitmexInstrumentService,
-        // BitmexRealtimeService,
-        // BitmexHistoryService,
-        //
-        // ZenithInstrumentService,
-        // ZenithHistoryService,
-        // ZenithRealtimeService,
-        //
-        // OkexInstrumentService,
-        // OkexHistoryService,
-        // OkexRealtimeService,
-        //
-        // BinanceInstrumentService,
-        // BinanceHistoryService,
-        // BinanceRealtimeService,
-        //
-        // InstrumentService
+        IdentityLogsService
     ]
 })
 export class AdminModule {

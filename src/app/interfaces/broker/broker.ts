@@ -1,15 +1,15 @@
-import {ActionResult, IBrokerUserInfo, OrderTypes} from "../../../modules/Trading/models/models";
-import {EExchange} from "../../models/common/exchange";
-import {EMarketType} from "../../models/common/marketType";
-import {Observable, Subject} from "rxjs";
-import {IInstrument} from "../../models/common/instrument";
-import { EExchangeInstance } from '../exchange/exchange';
+import { ActionResult, BrokerConnectivityStatus, IOrder, IPlaceOrder, IPosition } from "../../../modules/Trading/models/models";
+import { EExchange } from "../../models/common/exchange";
+import { Observable, Subject, Subscription } from "rxjs";
+import { IInstrument } from "../../models/common/instrument";
+import { ITradeTick } from "@app/models/common/tick";
 
 export enum EBrokerInstance {
-    BitmexBroker = 'Bitmex',
-    OandaBroker = "Oanda",
     MT5 = "MT5",
-    MT4 = "MT4"
+    MT4 = "MT4",
+    Binance = "Binance",
+    BinanceFuturesUSD = "BinanceFuturesUSD",
+    BinanceFuturesCOIN = "BinanceFuturesCOIN"
 }
 
 export interface IBrokerState<T = any> {
@@ -19,21 +19,51 @@ export interface IBrokerState<T = any> {
     state: T;
 }
 
+export interface IPositionBasedBroker {
+    onPositionsUpdated: Subject<IPosition[]>;
+    onPositionsParametersUpdated: Subject<IPosition[]>;
+    positions: IPosition[];
+
+    closePosition(symbol: any, ...args): Observable<ActionResult>;
+}
+
 export interface IBroker {
-    accessToken: string;
-    // supportedMarkets: EMarketType[];
+    isOrderEditAvailable: boolean;
+    isPositionBased: boolean;
+
     instanceType: EBrokerInstance;
-    // userInfo: IBrokerUserInfo;
     onSaveStateRequired: Subject<void>;
-    // ExchangeInstance: EExchangeInstance;
+    onAccountInfoUpdated: Subject<any>;
+    onOrdersUpdated: Subject<IOrder[]>;
+    onOrdersParametersUpdated: Subject<IOrder[]>;
+    onHistoricalOrdersUpdated: Subject<IOrder[]>;
+    // onPositionsUpdated: Subject<any[]>;
+
+    status: BrokerConnectivityStatus;
+    orders: IOrder[];
+    ordersHistory: IOrder[];
+    // currencyRisks: any[];
+    accountInfo: any;
 
     getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]>;
-
-    isInstrumentAvailable(instrument: IInstrument, orderType: OrderTypes): boolean;
-
     init(initData: any): Observable<ActionResult>;
     dispose(): Observable<ActionResult>;
     saveState(): Observable<IBrokerState>;
     loadSate(state: IBrokerState): Observable<ActionResult>;
+    instrumentToBrokerFormat(symbol: string): IInstrument;
+    instrumentDecimals(symbol: string): number;
+
+    cancelAll(): Observable<any>;
+    placeOrder(order: IPlaceOrder): Observable<ActionResult>;
+    editOrder(order: any): Observable<ActionResult>;
+    editOrderPrice(order: any): Observable<ActionResult>;
+    cancelOrder(order: any, ...args): Observable<ActionResult>;
+    subscribeToTicks(instrument: string, subscription: (value: ITradeTick) => void): Subscription;
+    instrumentTickSize(symbol: string): number;
+    instrumentContractSize(symbol: string): number;
+    instrumentMinAmount(symbol: string): number;
+    instrumentAmountStep(symbol: string): number;
+    getOrderById(orderId: number): any;
+    getPrice(symbol: string): Observable<ITradeTick>;
 }
 

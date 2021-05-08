@@ -98,6 +98,7 @@ export class AlertConverters {
         let result: NewPriceAlertDTO = {
             expiring: options.expiring ? Math.trunc(options.expiring / 1000) : options.expiring,
             notificationMessage: options.notificationMessage,
+            executionStrategy: options.triggerOptions,
             exchange: options.exchange,
             instrument: options.instrument,
             status: options.status,
@@ -133,6 +134,7 @@ export class AlertConverters {
             expiring: options.expiring ? Math.trunc(options.expiring / 1000) : options.expiring,
             notificationMessage: options.notificationMessage,
             status: options.status,
+            executionStrategy: options.triggerOptions,
             description: "",
             name: "",
             action: {

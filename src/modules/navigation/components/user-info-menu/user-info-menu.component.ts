@@ -7,12 +7,8 @@ import {
 } from '@angular/core';
 import { IdentityService } from "@app/services/auth/identity.service";
 import { BrokerService } from "@app/services/broker.service";
-import { OandaBrokerService } from "@app/services/oanda.exchange/oanda.broker.service";
 import { UserAvatarShape } from "../../../UI/components/name-avatar/name-avatar.component";
-import { ApplicationTypeService } from "@app/services/application-type.service";
-import { ApplicationType } from "@app/enums/ApplicationType";
-import { Observable, Subject, Subscription } from "rxjs";
-import { CryptoBroker } from "@app/interfaces/broker/crypto.broker";
+import { Subject, Subscription } from "rxjs";
 import { TranslateService } from "@ngx-translate/core";
 import { AppTranslateService } from "@app/localization/token";
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
@@ -22,7 +18,6 @@ import { Store } from "@ngrx/store";
 import { AppState } from "@app/store/reducer";
 import { ResetLayoutAction } from '@app/store/actions/platform.actions';
 import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
-import { UsersProfileService } from "@app/services/users-profile.service";
 
 
 @Component({
@@ -44,10 +39,8 @@ export class UserInfoMenuComponent implements OnInit {
 
     @Input() avatarTemplate: TemplateRef<any>;
     @Input() opened: Subject<void>;
-    activeBroker$ = this._brokerService.activeBroker$ as Observable<CryptoBroker | OandaBrokerService>;
-    applicationType$ = this._appTypeService.applicationTypeChanged;
+    activeBroker$ = this._brokerService.activeBroker$;
     UserAvatarShape = UserAvatarShape;
-    ApplicationType = ApplicationType;
     userName = this._identity.preferredUsername;
     userId = this._identity.id;
     @Output() logOut = new EventEmitter();
@@ -76,8 +69,11 @@ export class UserInfoMenuComponent implements OnInit {
         return this._tradingProfileService.level;
     }
 
+    public get isGuest(): boolean {
+        return this._identity.isGuestMode;
+    }
+
     constructor(private _identity: IdentityService,
-        private _appTypeService: ApplicationTypeService,
         private _dialog: MatDialog,
         private _store: Store<AppState>,
         private _tradingProfileService: TradingProfileService,
@@ -95,6 +91,10 @@ export class UserInfoMenuComponent implements OnInit {
 
     onLogoutClick() {
         this.logOut.emit();
+    }
+
+    onLoginClick() {
+        window.location.href = "/";
     }
 
     resetLayout() {

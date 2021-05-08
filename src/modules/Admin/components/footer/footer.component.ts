@@ -4,7 +4,6 @@ import {AppTranslateService} from "@app/localization/token";
 import {TimeZone, TzUtils, UTCTimeZone} from "TimeZones";
 import {interval, Observable} from "rxjs";
 import {map, switchMap, takeUntil} from "rxjs/operators";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import {BrokerService} from "@app/services/broker.service";
 import {PersonalInfoService} from "@app/services/personal-info/personal-info.service";
 import {Roles} from "@app/models/auth/auth.models";
@@ -35,10 +34,6 @@ export class FooterComponent implements OnInit {
         return Roles;
     }
 
-    get appTypeCaption(): Observable<string> {
-        return this._translateService.get(`footer.${this._applicationTypeService.applicationType}`);
-    }
-
     get exchange(): string {
         return this._brokerService.activeBroker ?
             this._brokerService.activeBroker.instanceType : 'Not connected';
@@ -49,7 +44,6 @@ export class FooterComponent implements OnInit {
     }
 
     private _translateService: TranslateService;
-    private _applicationTypeService: ApplicationTypeService;
     private _brokerService: BrokerService;
 
     constructor(private _personalInfoService: PersonalInfoService,

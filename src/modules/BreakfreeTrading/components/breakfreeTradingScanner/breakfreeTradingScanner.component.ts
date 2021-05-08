@@ -337,6 +337,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     scanMarkets() {
+        if (this._identityService.isGuestMode) {
+            return;
+        }
+        
         this.loading = true;
         this.scannerResults = [];
 

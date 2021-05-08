@@ -1,0 +1,138 @@
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  flex-grow: 1;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  flex-direction: column;
+
+  .color-selector {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+  }
+
+  .trade-manager {
+    width: 100%;
+    overflow: auto;
+
+    sortable-table {
+      flex-grow: 1;
+    }
+  }
+
+  .controls {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .controls button {
+    background: none;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 0px 5px !important;
+    height: 25px;
+    margin: 0px 0px 0px 0px !important;
+    opacity: 0.8;
+    transition-duration: 0.22s;
+    border: 1px solid transparent;
+    &:hover {
+      border: 1px solid #ddd;
+      opacity: 1;
+      transition-duration: 0.22s;
+    }
+  }
+
+  .color-selector {
+    width: 15px;
+  }
+
+  /deep/ {
+    .low-risk {
+      color: $lightGreenColor;
+    }
+
+    .mid-risk {
+      color: $lightBlueColor;
+    }
+
+    .extreme-risk {
+      color: $lightRedColor;
+    }
+
+    .high-risk {
+      color: $yellowColor;
+    }
+    .high-risk-label {
+      color: $lightRedColor;
+      font-weight: 700;
+      margin-left: 5px;
+    }
+
+    .side-buy {
+      color: $lightGreenColor;
+    }
+
+    .side-sell {
+      color: $lightRedColor;
+    }
+
+    .color-column {
+      width: 6px;
+      height: 24px;
+      position: relative;
+      left: -10px;
+    }
+
+    .symbol-column {
+      font-weight: bolder;
+    }
+
+    .color-column.side-buy {
+      background-color: $lightGreenColor;
+    }
+
+    .color-column.side-sell {
+      background-color: $lightRedColor;
+    }
+
+    .positive-value {
+      color: $lightGreenColor;
+    }
+
+    .negative-value {
+      color: $lightRedColor;
+    }
+
+    .mat-tab-header {
+      margin-left: 32px;
+      margin-right: 32px;
+    }
+
+    .mat-tab-body-wrapper {
+      height: 100% !important;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .caption {
+    color: themed("valueTextColor");
+  }
+  .control .caption {
+    color: themed("valueTextColor");
+  }
+  .controls button {
+    color: themed("titleTextColor");
+    &:hover {
+      color: themed("titleTextColor");
+      border: 1px solid themed("titleTextColor");
+    }
+  }
+}

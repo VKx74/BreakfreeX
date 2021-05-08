@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
-import { OandaOrder } from 'modules/Trading/models/forex/oanda/oanda.models';
 import { MTItemsComponent } from '../mt-items.component';
 import { MTHistoricalOrder } from 'modules/Trading/models/forex/mt/mt.models';
 
@@ -15,8 +14,8 @@ export class MTHistoryOrdersComponent extends MTItemsComponent<MTHistoricalOrder
         return of(this._mtBroker.ordersHistory);
     }
 
-    trackById(index, item: OandaOrder) {
-        return item.id;
+    trackById(index, item: MTHistoricalOrder) {
+        return item.Id;
     }
 
     protected _subscribeOnUpdates(): Subscription {
@@ -25,7 +24,7 @@ export class MTHistoryOrdersComponent extends MTItemsComponent<MTHistoricalOrder
         });
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         // this.cdr.detectChanges();
     }
     

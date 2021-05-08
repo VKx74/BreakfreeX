@@ -1,6 +1,6 @@
-import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { Observable, of } from "rxjs";
 import {
     BlockchainDTO,
     CreateBlockchainDTO,
@@ -10,7 +10,6 @@ import {
     CurrenciesSummaryDTO,
     CurrencyDTO,
     DepositDTO,
-    DepositState,
     GetBlockchainResponse,
     GetCollectionResponse,
     GetCurrencyResponse,
@@ -27,8 +26,8 @@ import {
     WithdrawDTO,
     WithdrawState
 } from "@app/models/exchange/models";
-import {AppConfigService} from "@app/services/app.config.service";
-import {map} from "rxjs/operators";
+import { AppConfigService } from "@app/services/app.config.service";
+import { map } from "rxjs/operators";
 import {
     IExchangeAccount,
     IExchangeAccountFiltrationParams,
@@ -42,8 +41,7 @@ import {
     PaginationParams,
     toBasePaginationResponse
 } from "@app/models/pagination.model";
-import {IBaseUserModel} from "@app/models/auth/auth.models";
-import {IWalletTransaction} from "../../Trading/models/crypto/crypto.models";
+import { IBaseUserModel } from "@app/models/auth/auth.models";
 
 interface IBlobRequestOptions {
     headers?: HttpHeaders | {
@@ -67,7 +65,7 @@ export class ExchangeManagementApiService {
 
     getCurrencies(params = new PaginationParams()): Observable<GetCurrencyResponse> {
         let queryParams = QueryParamsConstructor.fromObject(params.toSkipTake());
-        return this._http.get<GetCurrencyResponse>(`${AppConfigService.config.apiUrls.exchangeManagementREST}Currencies`, {params: queryParams});
+        return this._http.get<GetCurrencyResponse>(`${AppConfigService.config.apiUrls.exchangeManagementREST}Currencies`, { params: queryParams });
     }
 
     getCurrency(id: string): Observable<CurrencyDTO> {
@@ -93,7 +91,7 @@ export class ExchangeManagementApiService {
 
     getBlockchains(params = new PaginationParams()): Observable<GetBlockchainResponse> {
         const queryParams = QueryParamsConstructor.fromObject(params.toSkipTake());
-        return this._http.get<GetBlockchainResponse>(`${AppConfigService.config.apiUrls.exchangeManagementREST}blockchains`, {params: queryParams});
+        return this._http.get<GetBlockchainResponse>(`${AppConfigService.config.apiUrls.exchangeManagementREST}blockchains`, { params: queryParams });
     }
 
     getBlockchain(id: number): Observable<BlockchainDTO> {
@@ -125,7 +123,7 @@ export class ExchangeManagementApiService {
 
     getMarkets(params = new PaginationParams()): Observable<GetMarketResponse> {
         return this._http.get<GetMarketResponse>(`${AppConfigService.config.apiUrls.exchangeManagementREST}markets`,
-            {params: QueryParamsConstructor.fromObject(params.toSkipTake())});
+            { params: QueryParamsConstructor.fromObject(params.toSkipTake()) });
     }
 
     getMarket(id: string): Observable<MarketDTO> {
@@ -158,7 +156,7 @@ export class ExchangeManagementApiService {
 
     getWallets(params = new PaginationParams()): Observable<IDataCountResponse<WalletDTO>> {
         return this._http.get<IDataCountResponse<WalletDTO>>(`${AppConfigService.config.apiUrls.exchangeManagementREST}Wallets`,
-            {params: QueryParamsConstructor.fromObject(params.toSkipTake())});
+            { params: QueryParamsConstructor.fromObject(params.toSkipTake()) });
     }
 
     createWallet(dto: CreateWalletDTO): Observable<WalletDTO> {
@@ -180,10 +178,9 @@ export class ExchangeManagementApiService {
             });
     }
 
-    getWithdrawsByEmailForUser(email: string): Observable<IWalletTransaction[]> {
-        let headers: HttpHeaders = new HttpHeaders();
-        headers = headers.append( "apiKey",  "8e738606c9ba4315aae2ef0ac15d6740");
-        return this._http.get<IWalletTransaction[]>(`${AppConfigService.config.apiUrls.exchangeManagementREST}Withdraws/ByEmail/${email}`, {headers});
+    getWithdrawsByEmailForUser(email: string): Observable<any[]> {
+        // not used
+        return of([]);
     }
 
     getWithdraw(id: number): Observable<WithdrawDTO> {
@@ -206,10 +203,9 @@ export class ExchangeManagementApiService {
             );
     }
 
-    getDepositsByEmailForUser(email: string): Observable<IWalletTransaction[]> {
-        let headers: HttpHeaders = new HttpHeaders();
-        headers = headers.append( "apiKey",  "8e738606c9ba4315aae2ef0ac15d6740");
-        return this._http.get<IWalletTransaction[]>(`${AppConfigService.config.apiUrls.exchangeManagementREST}Deposits/ByEmail/${email}`, {headers});
+    getDepositsByEmailForUser(email: string): Observable<any[]> {
+        // not used
+        return of([]);
     }
 
     // updateDeposit(id: number, status: string): Observable<any> {

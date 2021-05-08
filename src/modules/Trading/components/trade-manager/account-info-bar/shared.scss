@@ -1,0 +1,50 @@
+@import "../../../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+:host {
+    .status-img {
+        width: 12px;
+        height: 12px;
+        margin-right: 12px;
+    }
+
+    .connected {
+        .path-data {
+            fill: $lightGreenColor;
+        }
+    }
+    .pending {
+        .path-data {
+            fill: $yellowColor;
+        }
+    }
+    .not_connected {
+        .path-data {
+            fill: $lightRedColor;
+        }
+    }
+
+    .accountInfoRow {
+        font-size: 11px;
+        padding-top: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .additional-info {
+            display: none;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .accountInfoRow {
+            display: none;
+        }
+    }
+}
+
+@include themify($themes, true) {
+    .accountInfoRow {
+        color: themed("titleTextColor");
+    }
+}

@@ -1,5 +1,6 @@
 stages:
     - analize
+    - rollout-maintenance
     - build
     - build-image
 
@@ -48,7 +49,8 @@ build-app-stage:
             - dist/
   only:
     - develop
-    - feature/alerts
+    - feature/scope_rework
+    - feature/binance
     - ci-improvements
 #   tags:
 #     - web
@@ -100,7 +102,8 @@ build-latest:
     #     - docker
     only:
         - develop
-        - feature/alerts
+        - feature/scope_rework
+        - feature/binance
         - ci-improvements
 
 build-stable:
@@ -123,4 +126,44 @@ build-stable:
     #     - docker
     only:
         - master
+
+build-maintenance-stable:
+    image: docker:stable
+    services:
+        - docker:dind
+    stage: rollout-maintenance
+    when: manual
+    script:
+        - echo Build Docker Image
+        - echo $CI_PROJECT_PATH
+        - CONTAINER_IMAGE=$(echo "$CI_REGISTRY/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - echo $CONTAINER_IMAGE
+        - echo $CI_REGISTRY
+        - echo $CI_BUILD_TOKEN
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - docker build --tag $CONTAINER_IMAGE:stable -f maintenance.dockerfile .
+        - docker push $CONTAINER_IMAGE:stable
+    only:
+        - master
         
+build-maintenance-latest:
+    image: docker:stable
+    services:
+        - docker:dind
+    stage: rollout-maintenance
+    when: manual
+    script:
+        - echo Build Docker Image
+        - echo $CI_PROJECT_PATH
+        - CONTAINER_IMAGE=$(echo "$CI_REGISTRY/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - echo $CONTAINER_IMAGE
+        - echo $CI_REGISTRY
+        - echo $CI_BUILD_TOKEN
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - docker build --tag $CONTAINER_IMAGE:latest -f maintenance.dockerfile .
+        - docker push $CONTAINER_IMAGE:latest
+    only:
+        - develop
+        - feature/scope_rework
+        - feature/binance
+        - ci-improvements

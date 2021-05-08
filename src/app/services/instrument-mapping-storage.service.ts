@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { AppConfigService } from "./app.config.service";
+import { IdentityService } from "./auth/identity.service";
 
 export interface ISymbolMappingItem {
     id: string;
@@ -37,13 +38,21 @@ export class SymbolMappingStorageService {
         return `${AppConfigService.config.apiUrls.userDataStoreREST}SymbolMapping`; 
     }
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private _identity: IdentityService) { }
 
     public getAllMapping(): Observable<ISymbolMappingItem[]> {
+        if (this._identity.isGuestMode) {
+            return of([]);
+        }
+
         return this.http.get<ISymbolMappingItem[]>(this._templatesURL + '/GetAll');        
     }
 
-    public getSymbolMapping(brokerName: string, login: number): Observable<ISymbolMappingItem> {        
+    public getSymbolMapping(brokerName: string, login: number): Observable<ISymbolMappingItem> {  
+        if (this._identity.isGuestMode) {
+            return of(null);
+        }
+
         let params = new HttpParams();
         params = params.append("brokerName", brokerName);
         params = params.append("login", login.toString());
@@ -51,6 +60,10 @@ export class SymbolMappingStorageService {
     }
 
     public patchSymbolMapping(brokerName: string, login: number, patchRequest: PatchRequest): Observable<any> {
+        if (this._identity.isGuestMode) {
+            return of();
+        }
+
         let params = new HttpParams();
         params = params.append("brokerName", brokerName);
         params = params.append("login", login.toString());
@@ -58,6 +71,10 @@ export class SymbolMappingStorageService {
     }
 
     public postSymbolMapping(symbolMappingItems: ISymbolMappingItem): Observable<any> {
+        if (this._identity.isGuestMode) {
+            return of();
+        }
+        
         return this.http.post(this._templatesURL, symbolMappingItems);
     }
 }

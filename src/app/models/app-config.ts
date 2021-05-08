@@ -55,6 +55,8 @@ export interface ApiUrls {
     exchangeUserApi: string;
     MT5WS: string;
     MT4WS: string;
+    BinanceTestnetBrokerWS: string;
+    BinanceBrokerWS: string;
     bftAlertsWS: string;
     bftAlertsREST: string;
 }

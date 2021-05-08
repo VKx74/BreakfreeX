@@ -5,7 +5,7 @@ import {CookieService} from '../сookie.service';
 import {ComponentIdentifier} from "@app/models/app-config";
 import {IdentityTokenParser} from "@app/models/auth/identity-token-parser";
 import {AuthenticationService} from "@app/services/auth/auth.service";
-import {catchError, distinctUntilChanged, skip, tap} from "rxjs/operators";
+import {catchError, distinctUntilChanged, map, skip, tap} from "rxjs/operators";
 import {LogoutSuccessAction} from "@app/store/actions";
 import {Store} from "@ngrx/store";
 
@@ -13,22 +13,24 @@ import {Store} from "@ngrx/store";
 export class IdentityService {
     private readonly _refreshTokenKey = 'FgPoAz';
     private readonly _tokenKey = 'QsYnIwf';
+    private readonly _guestTokenKey = 'GsYnIwf';
     private readonly _isRemember = 'QsYnRem';
     private readonly _defaultExpirationCookieTime = 12 * 60; // 12hours
     private readonly _defaultMaxExpirationCookieTime = 24 * 60 * 365; // 1 year
 
+    private _isGuestMode: boolean = false;
 
     public id: string;
     public email: string;
     public firstName: string;
     public lastName: string;
-    public role: string;
+    public role: string = "";
     public preferredUsername: string;
     public phoneNumber: string;
-    public tags: string[];
-    public subscriptions: string[];
+    public tags: string[] = [];
+    public subscriptions: string[] = [];
     public isTwoFactorAuthEnable: boolean;
-    public restrictedComponents: ComponentIdentifier[];
+    public restrictedComponents: ComponentIdentifier[] = [];
     public token: string;
     public refreshToken: string;
     public expirationTime: number;
@@ -37,6 +39,10 @@ export class IdentityService {
     private _isAuthorized$ = new BehaviorSubject<boolean>(false);
     isAuthorizedChange$: Observable<boolean>;
 
+    get isGuestMode(): boolean {
+        return this._isGuestMode;
+    } 
+    
     get isAuthorized(): boolean {
         return this._isAuthorized$.value;
     }
@@ -166,24 +172,11 @@ export class IdentityService {
     }
 
     refreshTokens(): Observable<any> {
-        if (this._refreshToken$) {
-            return this._refreshToken$.asObservable();
+        if (this.isGuestMode) {
+            return this._refreshGuestTokens();
+        } else {
+            return this._refreshTokens();
         }
-
-        this._refreshToken$ = new ReplaySubject<any>(1);
-        return this._authService.refreshTokens(this.refreshToken)
-            .pipe(
-                tap((resp: GrantTokenResponse) => {
-                    this.insert(resp.accessToken, resp.refreshToken);
-                    this._setCookies(resp.accessToken, resp.refreshToken);
-
-                    this._refreshToken$.next();
-                    this._refreshToken$ = null;
-                }, (error) => {
-                    this._refreshToken$.error(error);
-                    this._refreshToken$ = null;
-                })
-            );
     }
 
     public insert(token: string, refreshToken: string): boolean {
@@ -210,6 +203,38 @@ export class IdentityService {
     }
 
     public refreshTokenFromStorage(): Observable<any> {
+       if (this.isGuestMode) {
+           return this._refreshGuestTokens();
+       } else {
+           return this._refreshTokenFromStorage();
+       }
+    }
+
+    public setGuestMode() {
+        this._isGuestMode = true;
+    }
+
+    private _clearCookies() {
+        this._coockieService.deleteCookie(this._refreshTokenKey);
+        this._coockieService.deleteCookie(this._tokenKey);
+    }
+
+    private _setCookies(token: string, refreshToken: string, rememberUser?: boolean) {
+        if (rememberUser === undefined) {
+            rememberUser = this._coockieService.getCookie(this._isRemember) ? true : false;
+        }
+
+        let expiration = rememberUser ? this._defaultMaxExpirationCookieTime : this._defaultExpirationCookieTime;
+
+        this._coockieService.setCookie(this._refreshTokenKey, refreshToken, expiration);
+        this._coockieService.setCookie(this._tokenKey, token, expiration);
+    }
+
+    private _setGuestCookies(token: string) {
+        this._coockieService.setCookie(this._guestTokenKey, token, this._defaultExpirationCookieTime);
+    }
+
+    private _refreshTokenFromStorage(): Observable<any> {
         const refreshToken = this._coockieService.getCookie(this._refreshTokenKey);
         const token = this._coockieService.getCookie(this._tokenKey);
 
@@ -231,20 +256,76 @@ export class IdentityService {
             );
     }
 
-    private _clearCookies() {
-        this._coockieService.deleteCookie(this._refreshTokenKey);
-        this._coockieService.deleteCookie(this._tokenKey);
-    }
+    private _refreshGuestTokens(): Observable<string> {
+        const token = this._coockieService.getCookie(this._guestTokenKey);
 
-    private _setCookies(token: string, refreshToken: string, rememberUser?: boolean) {
-        if (rememberUser === undefined) {
-            rememberUser = this._coockieService.getCookie(this._isRemember) ? true : false;
+        if (token) {
+            if (this._insertGuest(token)) {
+                return of(token);
+            }
         }
 
-        let expiration = rememberUser ? this._defaultMaxExpirationCookieTime : this._defaultExpirationCookieTime;
+        return this._authService.getGuestToken()
+            .pipe(
+                tap((resp: GrantTokenResponse) => {
+                    this._insertGuest(resp.accessToken);
+                    this._setGuestCookies(resp.accessToken);
+                }),
+                map((resp: GrantTokenResponse) => {
+                    return resp.accessToken;
+                }),
+                catchError((e) => {
+                    console.log(e);
+                    return of(null);
+                })
+            );
+    }
+    
+    private _refreshTokens(): Observable<any> {
+        if (this._refreshToken$) {
+            return this._refreshToken$.asObservable();
+        }
 
-        this._coockieService.setCookie(this._refreshTokenKey, refreshToken, expiration);
-        this._coockieService.setCookie(this._tokenKey, token, expiration);
+        this._refreshToken$ = new ReplaySubject<any>(1);
+        return this._authService.refreshTokens(this.refreshToken)
+            .pipe(
+                tap((resp: GrantTokenResponse) => {
+                    this.insert(resp.accessToken, resp.refreshToken);
+                    this._setCookies(resp.accessToken, resp.refreshToken);
+
+                    this._refreshToken$.next();
+                    this._refreshToken$ = null;
+                }, (error) => {
+                    this._refreshToken$.error(error);
+                    this._refreshToken$ = null;
+                })
+            );
+    }
+
+    public _insertGuest(token: string) {
+        const parsedToken = IdentityTokenParser.parseToken(token);
+        console.log('Token: ', token);
+        this.expirationTime = parsedToken.exp;
+        this.token = token;
+
+        if (this.isExpired) {
+            return false;
+        }
+        this.id = "";
+        this.role = "guest";
+        this.firstName = "Guest";
+        this.lastName = "User";
+        this.preferredUsername = "Guest User";
+        this.email = "guest@breackfreetraging.com";
+        this.phoneNumber = null;
+        this.isTwoFactorAuthEnable = false;
+        this.tags = [];
+        this.subscriptions = [];
+        this.restrictedComponents = [];
+        this.refreshToken = "";
+        
+        this._isAuthorized$.next(true);
+        return true;
     }
 
     // #endregion

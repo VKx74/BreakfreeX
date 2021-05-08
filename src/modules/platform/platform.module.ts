@@ -79,7 +79,6 @@ import {ProfileActivitiesModule} from "../user-settings/profile-activities.modul
 import {PlatformNavComponent} from "@platform/components/platform-nav/platform-nav.component";
 import {PlatformSidebarComponent} from "@platform/components/platform-sidebar/platform-sidebar.component";
 import {SidebarModule} from "../sidebar/sidebar.module";
-import {WalletsListComponent} from "@platform/components/wallets-list/wallets-list.component";
 import {MatRadioModule} from "@angular/material/radio";
 import {DashboardResolver} from "@app/resolvers/dashboard.resolver";
 import {ToggleBottomPanelSizeService} from "@platform/components/dashboard/toggle-bottom-panel-size.service";
@@ -110,7 +109,6 @@ import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.co
 import { SingleSessionService } from '@app/services/single-session.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
-import { TestOandaComponent } from '../Trading/components/forex.components/test-oanda/test-oanda.component';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 import { MissionTrackingService } from '@app/services/missions-tracking.service';
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
@@ -130,7 +128,6 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         // ChangePasswordComponent,
         PlatformNavComponent,
         PlatformSidebarComponent,
-        WalletsListComponent,
         WorkspacesComponent
     ],
     imports: [
@@ -398,13 +395,9 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                             component: BreakfreeTradingBacktestComponent
                         },
                         {
-                            componentName: ComponentIdentifier.forexTradeManager,
-                            component: TestOandaComponent
-                        },
-                        {
                             componentName: ComponentIdentifier.alertsManager,
                             component: AlertWidgetComponent
-                        },
+                        }
                     ]
                 } as IGoldenLayoutComponentConfiguration;
             },

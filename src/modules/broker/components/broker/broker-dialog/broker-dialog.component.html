@@ -5,37 +5,24 @@
         <div class="modal-header">
             <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
             <h4 class="modal-title">
-               
-                <span >MetaTrader Bridge</span>
+                <span>{{captionText()}} Bridge</span>
             </h4>
         </div>
      
 
         <div class="modal-body">
-            <!-- <ng-container [ngSwitch]="applicationType">
-                <ng-container *ngSwitchCase="ApplicationType.Stock">
-                </ng-container>
-                <ng-container *ngSwitchCase="ApplicationType.Crypto">
-                    <ng-container [ngSwitch]="brokerType">
-                        <bitmex-broker-login-component
-                                *ngSwitchCase="EBrokerInstance.BitmexBroker"></bitmex-broker-login-component>
-                    </ng-container>
-                </ng-container>
-                <ng-container *ngSwitchCase="ApplicationType.Forex">
-                    <ng-container [ngSwitch]="brokerType">
-                        <oanda-broker-login *ngSwitchCase="EBrokerInstance.OandaBroker"></oanda-broker-login>
-                        <mt-broker-login *ngSwitchCase="EBrokerInstance.MT5"></mt-broker-login>
-                    </ng-container>
-                </ng-container>
-            </ng-container> -->
             <div *ngIf="isTradingAllowed; else outOfAccess">
                 <ng-container [ngSwitch]="brokerType">
-                    <oanda-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.OandaBroker">
-                    </oanda-broker-login>
                     <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT5">
                     </mt-broker-login>
                     <mt-broker-login [brokerInstance]="EBrokerInstance.MT4" [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT4">
-                    </mt-broker-login>
+                    </mt-broker-login>  
+                    <binance-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.Binance" [brokerInstance]="EBrokerInstance.Binance">
+                    </binance-broker-login>
+                    <binance-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" [brokerInstance]="EBrokerInstance.BinanceFuturesUSD">
+                    </binance-broker-login>
+                    <binance-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" [brokerInstance]="EBrokerInstance.BinanceFuturesCOIN">
+                    </binance-broker-login>
                 </ng-container>
                 <div class="policy-agreement-wrapper">
                     <span>

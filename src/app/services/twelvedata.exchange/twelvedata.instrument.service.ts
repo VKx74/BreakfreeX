@@ -7,8 +7,6 @@ import {AppConfigService} from "../app.config.service";
 import {IInstrument} from "@app/models/common/instrument";
 import { Observable, Subject, of } from 'rxjs';
 import {map} from "rxjs/operators";
-import {ApplicationTypeService} from "@app/services/application-type.service";
-import { ApplicationType } from '@app/enums/ApplicationType';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
@@ -20,7 +18,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         return EExchangeInstance.TwelvedataExchange;
     }
 
-    constructor(protected _http: HttpClient, private _applicationTypeService: ApplicationTypeService) {
+    constructor(protected _http: HttpClient) {
         super(_http);
         this._supportedMarkets = [EMarketType.Crypto, EMarketType.Forex, EMarketType.Stocks, EMarketType.Indices];
         this._endpoint = `${AppConfigService.config.apiUrls.twelvedataREST}instruments/extended`;
@@ -122,12 +120,12 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
 
     protected _requestInstrumentsWithSearch(search: string = ""): Observable<any[]> {
         let market = "";
-        const appType = this._applicationTypeService.applicationType;
-        switch (appType) {
-            case ApplicationType.Crypto: market = "&Kind=crypto"; break;
-            case ApplicationType.Forex: market = "&Kind=forex"; break;
-            case ApplicationType.Stock: market = "&Kind=stock"; break;
-        }
+        // const appType = this._applicationTypeService.applicationType;
+        // switch (appType) {
+        //     case ApplicationType.Crypto: market = "&Kind=crypto"; break;
+        //     case ApplicationType.Forex: market = "&Kind=forex"; break;
+        //     case ApplicationType.Stock: market = "&Kind=stock"; break;
+        // }
 
         let takeAmount = 300;
         if (!search) {

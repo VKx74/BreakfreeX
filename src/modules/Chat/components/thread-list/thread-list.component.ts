@@ -57,12 +57,10 @@ export class ThreadListComponent {
         return ScrollDirection;
     }
 
-    constructor(private _threadService: ChatApiService,
-                private _notificationService: NotificationService,
+    constructor(
                 private _alertService: AlertService,
                 private _translateService: TranslateService,
                 private _identityService: IdentityService,
-                private _usersProfileService: UsersProfileService,
                 private _dialog: MatDialog,
                 private _facadeService: FacadeService) {
     }

@@ -104,7 +104,7 @@ export class StrategyModeBacktestComponent {
             return;
         }
         
-        let backtestParameters = {
+        let backtestParameters: IBFTBacktestAlgoParameters = {
             input_accountsize: 1000,
             input_risk: this.risk,
             input_splitpositions: this.posNumbers,
@@ -121,7 +121,8 @@ export class StrategyModeBacktestComponent {
             local_fast: this.local_fast,
             local_slow: this.local_slow,
             mesa_diff: this.mesa_diff,
-            trend_detector: this.trendDetector
+            trend_detector: this.trendDetector,
+            account_currency: "USD"
         };
 
         if (!this.validateInputParameters(backtestParameters)) {

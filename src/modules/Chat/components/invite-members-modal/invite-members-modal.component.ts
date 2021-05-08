@@ -67,7 +67,6 @@ export class InviteMembersModalComponent extends Modal<IInviteMembersModalConfig
     constructor(private _translateService: TranslateService,
                 private _usersProfileService: UsersProfileService,
                 private _chatApiService: ChatApiService,
-                private _threadService: ChatApiService,
                 private _identityService: IdentityService,
                 private _alertService: AlertService,
                 private _notificationService: NotificationService,

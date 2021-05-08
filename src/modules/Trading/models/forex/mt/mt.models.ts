@@ -1,12 +1,5 @@
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType } from 'modules/Trading/models/models';
-import { EOrderStatus } from 'modules/Trading/models/crypto/crypto.models';
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType, IConnectionData, IOrder, IOrderRisk, IPlaceOrder } from 'modules/Trading/models/models';
 import { IBFTATrend } from '@app/services/algo.service';
-
-export enum MTStatus {
-    Connected,
-    Pending,
-    NoConnection
-}
 
 export interface MTTradingAccount {
     Account: string;
@@ -21,24 +14,12 @@ export interface MTTradingAccount {
     RiskPercentage?: number;
 }
 
-export interface MTOrder {
-    Id: number;
-    Symbol: string;
-    Size: number;
-    Price: number;
-    CurrentPrice?: number;
+export interface MTOrder extends IOrder, IOrderRisk {
     Commission?: number;
     Swap?: number;
-    SL?: number;
-    TP?: number;
-    NetPL?: number;
     ProfitRate?: number;
     ContractSize?: number;
-    Risk?: number;
-    RiskPercentage?: number;
     PipPL?: number;
-    Side: OrderSide;
-    Type: OrderTypes;
     Status: string;
     Time: number;
     VAR: number;
@@ -46,7 +27,6 @@ export interface MTOrder {
     ExpirationType?: OrderExpirationType;
     ExpirationDate?: number;
     Recommendations?: MTOrderRecommendation;
-    RiskClass: RiskClass;
 }
 
 export interface MTHistoricalOrder extends MTOrder {
@@ -54,21 +34,13 @@ export interface MTHistoricalOrder extends MTOrder {
     ClosePrice: number;
 }
 
-export interface MTPlaceOrder {
-    Symbol: string;
-    Size: number;
-    Price: number;
+export interface MTPlaceOrder extends IPlaceOrder {
     SL: number;
     TP: number;
-    Side: OrderSide;
-    Type: OrderTypes;
     Comment: string;
     FillPolicy?: OrderFillPolicy;
     ExpirationType?: OrderExpirationType;
     ExpirationDate: number;
-    Timeframe?: number;
-    TradeType?: OrderTradeType;
-    PlacedFrom?: OrderPlacedFrom;
 }
 
 export interface MTEditOrder {
@@ -133,11 +105,10 @@ export interface MTServer {
     IsDemo: boolean;
 }
 
-export interface MTConnectionData {
+export interface MTConnectionData extends IConnectionData {
     ServerName: string;
     Login: number;
     Password: string;
-    Linker?: string;
 }
 
 export interface MTCurrencyVarRisk {

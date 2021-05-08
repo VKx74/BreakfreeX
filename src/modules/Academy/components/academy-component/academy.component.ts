@@ -2,7 +2,9 @@ import { Component, ElementRef } from "@angular/core";
 import { ChatbroService } from "@app/services/traking/ChatbroService";
 import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { Content } from "modules/Academy/models/dto";
+import { ContentSectors } from "modules/Academy/models/models";
 import { Intercom } from "ng-intercom";
+import { Subject } from "rxjs/internal/Subject";
 
 @Component({
     selector: 'academy-component',
@@ -13,17 +15,27 @@ export class AcademyComponent {
     private _srcBase: string = "https://fast.wistia.net/embed/iframe/";
     private _src: string;
     private _selectedMedia: Content;
-    private _prevVideo: Content;
-    private _nextVideo: Content;
+    private _canPrev: boolean;
+    private _canNext: boolean;
+    private _doNext: Subject<void> = new Subject<void>();
+    private _doPrev: Subject<void> = new Subject<void>();
 
     public sidebarOpen: boolean = false;
 
     public get canPrev(): boolean {
-        return !!(this._prevVideo);
+        return this._canPrev;
     }
 
     public get canNext(): boolean {
-        return !!(this._nextVideo);
+        return this._canNext;
+    } 
+    
+    public get doNext(): Subject<void> {
+        return this._doNext;
+    }
+
+    public get doPrev(): Subject<void> {
+        return this._doPrev;
     }
 
     public get src(): string {
@@ -57,15 +69,19 @@ export class AcademyComponent {
     }
 
     prevVideo() {
-        if (this._prevVideo) {
-            this.selectMedia(this._prevVideo);
-        }
+        this._doPrev.next();
     }
 
     nextVideo() {
-        if (this._nextVideo) {
-            this.selectMedia(this._nextVideo);
-        }
+        this._doNext.next();
+    }
+
+    canDoNext(value: boolean) {
+        this._canNext = value;
+    }
+
+    canDoPrev(value: boolean) {
+        this._canPrev = value;
     }
 
     getTiming(): string {
@@ -74,14 +90,6 @@ export class AcademyComponent {
         }
 
         return new Date(Math.round(this._selectedMedia.duration) * 1000).toISOString().substr(11, 8);
-    }
-
-    nextMediaChanged(media: Content) {
-        this._nextVideo = media;
-    }
-
-    prevMediaChanged(media: Content) {
-        this._prevVideo = media;
     }
 
     setSidebarState(state: boolean) {

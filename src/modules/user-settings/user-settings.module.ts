@@ -14,22 +14,16 @@ import {ChangePasswordComponent} from "./components/change-password/change-passw
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatMenuModule} from "@angular/material/menu";
-import { TradesComponent } from './components/trades/trades.component';
 import {DatatableModule} from "../datatable/datatable.module";
 import { TableWrapperComponent } from './components/table-wrapper/table-wrapper.component';
 import {ProfileUserComponent} from "./components/profile-user/profile-user.component";
-import {DepositsComponent} from "./components/deposits-user/deposits.component";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import {WithdrawsComponent} from "./components/withdraws-user/withdraws.component";
 import {MatDialogModule} from "@angular/material/dialog";
-import {TradingDialogModule} from "../trading-dialog/trading-dialog.module";
 import {WrapperModule} from "../ViewModules/wrapper/wrapper.module";
-import {TradesResolver} from "./resolvers/trades.resolver";
 import {ChangePhoneComponent} from "./components/change-phone/change-phone.component";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {IdentityLogsService} from "@app/services/identity-logs.service";
 import {LoaderModule} from "../loader/loader.module";
-import { ProfileActivitiesLoginComponent } from './components/profile-activities-login/profile-activities-login.component';
 import {ProfileActivitiesModule} from "./profile-activities.module";
 import {ProfileActivitiesResolver} from "./resolvers/profile-activities.resolver";
 import {ProfileLoginActivitiesResolver} from "./resolvers/login-activities.resolver";
@@ -42,11 +36,7 @@ import { ManageSubscriptionsComponent } from './components/manage-subscriptions/
         ProfileUserComponent,
         AuthSettingsComponent,
         ChangePasswordComponent,
-        TradesComponent,
         TableWrapperComponent,
-        DepositsComponent,
-        WithdrawsComponent,
-        TradesComponent,
         TableWrapperComponent,
         ChangePhoneComponent,
         ChangeUsernameComponent,
@@ -69,7 +59,6 @@ import { ManageSubscriptionsComponent } from './components/manage-subscriptions/
         DatatableModule,
         FormsModule,
         MatDialogModule,
-        TradingDialogModule,
         MatDialogModule,
         WrapperModule,
         MatSlideToggleModule,
@@ -78,7 +67,6 @@ import { ManageSubscriptionsComponent } from './components/manage-subscriptions/
     ],
     entryComponents: [],
     providers: [
-        TradesResolver,
         ProfileActivitiesResolver,
         ProfileLoginActivitiesResolver,
         IdentityLogsService

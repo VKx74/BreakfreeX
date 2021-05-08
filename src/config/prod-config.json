@@ -42,6 +42,8 @@
     "bftAlgoWS": "wss://fb.breakfreetrading.com",
     "MT5WS": "wss://mtapi.breakfreetrading.com/mt5/websocket",
     "MT4WS": "wss://mtapi.breakfreetrading.com/mt4/websocket",
+    "BinanceTestnetBrokerWS": "wss://cryptoapi.breakfreetrading.com/binance-testnet/websocket",
+    "BinanceBrokerWS": "wss://cryptoapi.breakfreetrading.com/binance/websocket",
     "bftAlgoREST": "https://algo.breakfreetrading.com/algoserver/",
     "bftTradingProfilesREST": "https://mtapi.breakfreetrading.com/portfolio/",
     "bftAlertsWS": "wss://notifications-alerts.breakfreetrading.com/websocket",

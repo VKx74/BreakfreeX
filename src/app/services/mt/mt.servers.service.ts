@@ -1,7 +1,8 @@
 import {Observable, Subject, Observer, of} from "rxjs";
-import { MTGetServersRequest, MTGetServersResponse, MTResponseMessageBase } from 'modules/Trading/models/forex/mt/mt.communication';
+import { MTGetServersRequest, MTGetServersResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { MTServer } from 'modules/Trading/models/forex/mt/mt.models';
 import { MTSocketService } from '../socket/mt.socket.service';
+import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 
 export abstract class MTBrokerServersProvider { 
     private _servers: MTServer[] = [];
@@ -19,7 +20,7 @@ export abstract class MTBrokerServersProvider {
             let request: MTGetServersRequest;
             const onMessageSubscription = this.ws.onMessage.subscribe(value => {
                 try {
-                    const msgData = value as MTResponseMessageBase;
+                    const msgData = value as BrokerResponseMessageBase;
                     if (msgData.MessageId === request.MessageId) {
                         const response = value as MTGetServersResponse;
     

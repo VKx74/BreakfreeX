@@ -2,14 +2,12 @@
     <div class="section-label hidden">{{'app.menu' | translate}}</div>
     <sidebar-section>
         
-        <div class="section-item flex-child" routerLink="">
+        <div class="section-item flex-child" routerLink="" (click)="chartClick()">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-platform"></i></div>
-
-<!--            <div class="item-text">{{'exchange' | translate}}</div>-->
             <div class="item-text" routerLink="/platform">{{'app.toPlatform' | translate}}</div>
         </div>
-        <div class="section-item flex-child" routerLink="/admin"  *ngIf="isAdminPanelShown">
+        <div class="section-item flex-child" routerLink="/admin" *ngIf="isAdminPanelShown">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-admin-dashboard"></i></div>
             <div class="item-text">{{'app.adminPanel' | translate}}</div>
@@ -19,7 +17,7 @@
                 <i class="crypto-icon crypto-icon-script"></i></div>
             <div class="item-text">{{'app.scripting' | translate}}</div>
         </div>
-        <div class="section-item flex-child" routerLink="settings">
+        <div class="section-item flex-child" routerLink="settings" [class.disabled]="isGuest">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-settings"></i></div>
             <div class="item-text">{{'app.settings' | translate}}</div>
@@ -68,12 +66,6 @@
             </div>
             <div class="item-text">{{'tools.alertsWidget' | translate}}</div>
         </div>
-<!--        <div class="section-item flex-child" routerLink="/platform/tools/trends">-->
-<!--            <div class="item-icon">-->
-<!--                <i class="crypto-icon crypto-icon-market-trend"></i>-->
-<!--            </div>-->
-<!--            <div class="item-text">{{'tools.trends' | translate}}</div>-->
-<!--        </div>-->
         <div class="section-item flex-child" routerLink="/platform/tools/economic-calendar">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-calendar"></i>
@@ -99,20 +91,6 @@
             <div class="item-text">{{'tools.privateChat' | translate}}</div>
         </div>
     </sidebar-section>
-    <sidebar-section *ngIf="showTradingPanel">
-        <div class="section-label">{{'app.type&broker' | translate}}</div>
-        <!-- <div class="app-type-select m-bottom-10">
-            <selector class="bordered"
-                      [options]="appTypes"
-                      [selectedOption]="selectedApplicationType"
-                      [optionCaption]="appTypeCaption"
-                      (onSelect)="setApplicationType($event)"></selector>
-        </div> -->        
-        <broker-select class="full-width" [applicationType]="applicationType$ | async"></broker-select> 
-    </sidebar-section>
-    <!-- <sidebar-section class="relative-wrapper buy-app-section">
-        <buy-app></buy-app>
-    </sidebar-section> -->
     <sidebar-section>
         
         <div class="section-item flex-child" (click)="supportClick()">
@@ -125,7 +103,7 @@
                 <i class="crypto-icon crypto-icon-information"></i></div>
             <div class="item-text">{{'app.academy' | translate}}</div>
         </div> 
-        <div class="section-item flex-child" (click)="clearSession()">
+        <div class="section-item flex-child" (click)="clearSession()" [class.disabled]="isGuest">
             <div class="item-icon">
                 <i class="crypto-icon crypto-icon-remove-records"></i></div>
             <div class="item-text">{{'app.clearSession' | translate}}</div>

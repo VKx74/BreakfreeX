@@ -1,6 +1,6 @@
 <div class="root flex flex-direction-column full-height">
   <div class="flex flex-direction-column flex-grow-1 h-0">
-      <div class="limits-header">
+      <div class="limits-header" *ngIf="NotificationLimits">
           24H Limits: Push({{NotificationLimits.pushUsed}}/{{NotificationLimits.pushLimit}}) Email({{NotificationLimits.emailUsed}}/{{NotificationLimits.emailLimit}}) SMS({{NotificationLimits.smsUsed}}/{{NotificationLimits.smsLimit}})
       </div>
       <div class="content-wrapper full-height flex-grow-1 overflow-y-auto">

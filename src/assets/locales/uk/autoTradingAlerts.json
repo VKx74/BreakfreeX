@@ -57,7 +57,10 @@
     "setup": "Збірка",
     "newSetup": "Нова Збірка",
     "setupDisappeared": "Збірка Зникла",
-    "triggerType": "Тип спрацювання"
+    "triggerType": "Тип спрацювання",
+    "triggerOptions": "Параметер сповіщення",
+    "triggerOptionOne": "Разово",
+    "triggerOptionsEveryTime": "Кожного разу"
   },
   "conditionTitles": {
     "Crossing": "Перехід",

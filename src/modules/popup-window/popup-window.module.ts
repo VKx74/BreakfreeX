@@ -37,7 +37,6 @@ import {MarketTradesModule} from "@market-trades/market-trades.module";
 import {ChatModule} from "../Chat/chat.module";
 import {NotificationService} from "@app/services/notification.service";
 import {NotificationWebSocketService} from "@app/services/socket/notification.socket.service";
-import {StoreModule} from "@ngrx/store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {EffectsModule} from "@ngrx/effects";
 import {
@@ -62,7 +61,6 @@ import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
-import { ForexTradeManagerComponent } from '../Trading/components/forex.components/forex-trade-manager.component';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
 
@@ -290,13 +288,9 @@ export function sharedEducationalTipsService() {
                             component: BreakfreeTradingBacktestComponent
                         },
                         {
-                            componentName: ComponentIdentifier.forexTradeManager,
-                            component: ForexTradeManagerComponent
-                        },
-                        {
                             componentName: ComponentIdentifier.alertsManager,
                             component: AlertWidgetComponent
-                        },
+                        }
                     ]
                 } as IGoldenLayoutComponentConfiguration;
             },

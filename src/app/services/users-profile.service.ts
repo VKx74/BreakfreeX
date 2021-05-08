@@ -40,6 +40,10 @@ export class UsersProfileService {
     }
 
     public getUserProfileById(userId: string, useCache: boolean = false): Observable<UserProfileModel> {
+        if (!userId) {
+            return of(null);
+        }
+
         if (useCache && this._cachedProfile) {
             return of(this._cachedProfile);
         }
@@ -51,6 +55,10 @@ export class UsersProfileService {
     }
 
     public patchUserAvatar(userId: string, avatarId: string): Observable<any> {
+        if (!userId) {
+            return of(null);
+        }
+
         let data = {
             userId: userId,
             avatarId: avatarId
@@ -59,6 +67,10 @@ export class UsersProfileService {
     }
 
     public patchUsingOfRandomNames(userId: string, useUserName: boolean): Observable<any> {
+        if (!userId) {
+            return of(null);
+        }
+        
         let data = {
             userId: userId,
             useUserName: useUserName

@@ -137,11 +137,12 @@ export abstract class DataFeedBase implements IDatafeedBase {
         //     console.log(`tick size: ${chart.instrument.tickSize}`);
         // }
 
+        let barsSet = false;
         switch (request.name) {
             case RequestKind.BARS:
                 dataManager.clearBarDataRows(instrument);
                 dataManager.appendInstrumentBars(instrument, bars);
-                chart.invokeValueChanged(TradingChartDesigner.ChartEvent.BARS_SETTED, bars);
+                barsSet = true;
 
                 if (isChartMainSeries) {
                     chart.canLoadMoreBars = true;
@@ -197,6 +198,12 @@ export abstract class DataFeedBase implements IDatafeedBase {
             chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
         }
         chart.scaleHorizontal.onCompleteMoreHistoryRequest();
+
+        if (barsSet) {
+            setTimeout(() => {
+                chart.invokeValueChanged(TradingChartDesigner.ChartEvent.BARS_SETTED, bars);
+            }, 1);
+        }
     }
 
     protected _processTick(tick: ITick, chart: TradingChartDesigner.Chart) {

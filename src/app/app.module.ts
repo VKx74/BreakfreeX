@@ -28,7 +28,6 @@ import {SharedTranslateService} from "@app/localization/shared.token";
 import {LocalizationModule, TranslateServiceFactory} from "Localization";
 import {BrokerService} from "@app/services/broker.service";
 import {BrokerFactory} from "@app/factories/broker.factory";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import {AppTranslateService} from "@app/localization/token";
 import {UserSettingsResolver} from "@app/services/user-settings.resolver";
 import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
@@ -41,7 +40,6 @@ import {LocalStorageService} from "Storage";
 import {SessionStorageService} from "Storage";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {MatNativeDateModule} from "@angular/material/core";
-import {BitmexBrokerService} from "@app/services/bitmex.exchange/bitmex.broker.service";
 import {BitmexInstrumentService} from "@app/services/bitmex.exchange/bitmex.instrument.service";
 import {ExchangeFactory} from "@app/factories/exchange.factory";
 import {BitmexRealtimeService} from "@app/services/bitmex.exchange/bitmex.realtime.service";
@@ -60,8 +58,7 @@ import {UploadFile} from "@file-uploader/data/UploadFIle";
 import {IUploadFileInputConfig} from "@file-uploader/components/upload-file-input/upload-file-input.component";
 import {FileUploaderTranslateService} from "@file-uploader/localization/token";
 import {ToasterAlertService} from "@alert/services/toaster-alert.service";
-import {FileUploaderLocalizationModule, FileUploaderModule} from "@file-uploader/file-uploader.module";
-import {OandaBrokerService} from "@app/services/oanda.exchange/oanda.broker.service";
+import {FileUploaderLocalizationModule} from "@file-uploader/file-uploader.module";
 import {OandaInstrumentService} from "@app/services/oanda.exchange/oanda.instrument.service";
 import {OandaHistoryService} from "@app/services/oanda.exchange/oanda.history.service";
 import {OandaRealtimeService} from "@app/services/oanda.exchange/oanda.realtime.service";
@@ -90,11 +87,8 @@ import { KaikoHistoryService } from './services/kaiko.exchange/kaiko.history.ser
 import { KaikoRealtimeService } from './services/kaiko.exchange/kaiko.realtime.service';
 import { KaikoSocketService } from './services/socket/kaiko.socket.service';
 import { MT5SocketService } from './services/socket/mt5.socket.service';
-import { MTBroker } from './services/mt/mt.broker';
 import { MT5BrokerServersProvider } from './services/mt/mt5.servers.service';
 import { MT4SocketService } from './services/socket/mt4.socket.service';
-import { MTSocketService } from './services/socket/mt.socket.service';
-import { MTBrokerServersProvider } from './services/mt/mt.servers.service';
 import { MT4BrokerServersProvider } from './services/mt/mt4.servers.service';
 import { MT4Broker } from './services/mt/mt4.broker';
 import { MT5Broker } from './services/mt/mt5.broker';
@@ -107,7 +101,15 @@ import { InstrumentMappingService } from './services/instrument-mapping.service'
 import { SymbolMappingStorageService } from './services/instrument-mapping-storage.service';
 import { FBPixelTrackingService } from './services/traking/fb.pixel.tracking.service';
 import { GTMTrackingService } from './services/traking/gtm.tracking.service';
+import { BinanceBroker } from './services/binance/binance.broker';
+import { BinanceFuturesUsdBroker } from './services/binance-futures/binance-futures-usd.broker';
+import { BinanceFuturesCoinBroker } from './services/binance-futures/binance-futures-coin.broker';
+import { BinanceFuturesUsdSocketService } from './services/socket/binance-futures-usd.socket.service';
+import { BinanceFuturesCoinSocketService } from './services/socket/binance-futures-coin.socket.service';
+import { BinanceSpotSocketService } from './services/socket/binance-spot.socket.service';
 import { ChatbroService } from './services/traking/ChatbroService';
+import { GuestGuard } from './services/auth/guest.guard';
+import { GuestResolver } from './reslovers/guest.resolver';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -169,6 +171,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         Angulartics2Segment,
         Angulartics2GoSquared,
         CookieService,
+        GuestResolver,
         AppConfigService,
         {
             provide: IdentityService,
@@ -263,9 +266,9 @@ const FILE_INPUT_CONFIG_PROVIDER = {
             }
         },
 
-        ApplicationTypeService,
         SettingsStorageService,
         AuthGuard,
+        GuestGuard,
         BlockIfPopupWindowGuard,
         BrokerService,
         BrokerFactory,
@@ -288,7 +291,6 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         ExchangeFactory,
         BitmexRealtimeService,
         BitmexHistoryService,
-        BitmexBrokerService,
         BitmexInstrumentService,
         BitmexSocketService,
         BFTSocketService,
@@ -300,7 +302,6 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         OandaInstrumentService,
         OandaHistoryService,
         OandaRealtimeService,
-        OandaBrokerService,
         OandaSocketService,
         PolygonSocketService,
         TwelvedataSocketService,
@@ -309,6 +310,13 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         MT5BrokerServersProvider,
         MT4Broker,
         MT5Broker,
+
+        BinanceFuturesUsdSocketService,
+        BinanceFuturesCoinSocketService,
+        BinanceSpotSocketService,
+        BinanceBroker,
+        BinanceFuturesUsdBroker,
+        BinanceFuturesCoinBroker,
 
         PolygonInstrumentService,
         PolygonHistoryService,

@@ -9,7 +9,7 @@ export interface ITick {
     time: number;
 }
 
-export interface IMTTick {
+export interface ITradeTick {
     symbol: string;
     volume: number;
     last: number;

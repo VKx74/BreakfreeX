@@ -1,12 +1,10 @@
-import { ChangeDetectionStrategy, Component, HostListener, Injector, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Injector, Output, ViewChild } from "@angular/core";
 import { TradingTranslateService } from "../../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BrokerService } from "@app/services/broker.service";
-import { MTOrderConfiguratorModalComponent } from './order-configurator-modal/mt-order-configurator-modal.component';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { OrderFillPolicy, OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
-import { Linker, LinkerFactory } from "@linking/linking-manager";
+import { OrderTypes, TradeManagerTab } from 'modules/Trading/models/models';
 import { MTOrder, MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
 import { MTOrderCloseModalComponent } from './order-close-modal/mt-order-close-modal.component';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
@@ -17,8 +15,8 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { MTHelper } from "@app/services/mt/mt.helper";
+import { Subscription } from 'rxjs';
+import { TradingHelper } from "@app/services/mt/mt.helper";
 import { SymbolMappingComponent } from "./symbol-mapping/symbol-mapping.component";
 import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/services/dataHighlight.service";
 
@@ -34,19 +32,12 @@ import { DataHighlightService, ITradePanelDataHighlight } from "modules/Trading/
     ]
 })
 export class MTTradeManagerComponent {
-    protected linker: Linker;
     protected _onTradePanelDataHighlightSubscription: Subscription;
     selectedIndex: number;
     selectedTabIndex: number;
     @ViewChild('tabGroup', {static: true}) tabGroup: MatTabGroup;
-    
-    get linkerColor(): string {
-        return this.linker.getLinkingId();
-    }
 
-    get brokerConnected(): boolean {
-        return this._broker != null;
-    }
+    @Output() onOpenChart = new EventEmitter<LinkingAction>();
     
     get showCancelAll(): boolean {
         return this.selectedTabIndex === 2 && this._broker.pendingOrders && this._broker.pendingOrders.length > 0;
@@ -97,11 +88,8 @@ export class MTTradeManagerComponent {
         private brokerService: BrokerService,
         protected _alertService: AlertService,
         protected _instrumentService: InstrumentService,
-        protected _dataHighlightService: DataHighlightService,
-        protected _injector: Injector) {
+        protected _dataHighlightService: DataHighlightService) {
 
-        this.linker = this._injector.get(LinkerFactory).getLinker();
-        this.linker.setDefaultLinking();
     }
 
     ngOnInit() {
@@ -121,49 +109,8 @@ export class MTTradeManagerComponent {
         }
     }
 
-    cancelAllPending() {
-        this._dialog.open(ConfirmModalComponent, {
-            data: {
-                title: 'Cancel orders',
-                message: `Do you want to cancel all pending orders?`,
-                onConfirm: () => {
-                   this._cancelAllPending();
-                }
-            }
-        });
-    }
-
-    placeOrder() {
-        this._dialog.open(MTOrderConfiguratorModalComponent);
-    }
-
-    reconnect() {
-        this._dialog.open(ConfirmModalComponent, {
-            data: {
-                title: 'Reconnect',
-                message: `Reconnect to current broker account?`,
-                onConfirm: () => {
-                   this._reconnect();
-                }
-            }
-        });
-    }
-
-    disconnect() {        
-        this.brokerService.disposeActiveBroker()
-        .subscribe(() => {});      
-    }
-
-    showSymbolMapping() {    
-        this._dialog.open(SymbolMappingComponent);    
-    }
-
     tabChanged(data: MatTabChangeEvent) {
         this.selectedTabIndex = data.index;
-    }
-
-    public handleColorSelected(color: string) {
-        this.linker.setLinking(color);
     }
 
     public handlePositionClose(position: MTPosition) { 
@@ -184,7 +131,7 @@ export class MTTradeManagerComponent {
                     title: 'Cancel order',
                     message: `Are you sure you want cancel #'${order.Id}' order?`,
                     onConfirm: () => {
-                        mt5Broker.cancelOrder(order.Id, OrderFillPolicy.FOK).subscribe((result) => {
+                        mt5Broker.cancelOrder(order.Id).subscribe((result) => {
                             if (result.result) {
                                 this._alertService.success("Order canceled");
                             } else {
@@ -217,14 +164,14 @@ export class MTTradeManagerComponent {
         let tf: number = null;
         if ((order as any).Comment) {
             const comment = (order as any).Comment;
-            tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+            tf = TradingHelper.getTradeTimeframeFromTechnicalComment(comment);
         } else {
             const marketOrders = mt5Broker.marketOrders;
 
             for (const marketOrder of marketOrders) {
                 if (marketOrder.Symbol === symbol && (marketOrder as any).Comment) {
                     const comment = (marketOrder as any).Comment;
-                    tf = MTHelper.getTradeTimeframeFromTechnicalComment(comment);
+                    tf = TradingHelper.getTradeTimeframeFromTechnicalComment(comment);
 
                     if (tf) {
                         break;
@@ -259,7 +206,7 @@ export class MTTradeManagerComponent {
                     timeframe: tf
                 };
             }
-            this.linker.sendAction(linkAction);
+            this.onOpenChart.emit(linkAction);
         }, (error) => {
             this._alertService.warning("Failed to view chart by order symbol");
         });
@@ -285,35 +232,6 @@ export class MTTradeManagerComponent {
             data: {
                 SelectedBrokerInstrument: brokerInstrument
             }
-        });
-    }
-
-
-    private _reconnect() {
-        this._alertService.info("Reconnecting");
-        this.brokerService.reconnect().subscribe((res) => {
-            if (res.result) {
-                this._alertService.success("Broker reconnected");
-            } else {
-                this._alertService.warning("Failed to reconnect to broker");
-            }
-        }, (error) => {
-            this._alertService.warning("Failed to reconnect to broker");
-        });
-    }
-
-    private _cancelAllPending() {
-        this._alertService.info("Canceling");
-        const pending =  this._broker.pendingOrders;
-        const subjects = [];
-        for (const order of pending) {
-            const subj = this._broker.cancelOrder(order.Id, OrderFillPolicy.FOK);
-            subjects.push(subj);
-        }
-        combineLatest(subjects).subscribe((response) => {
-            this._alertService.success("Canceled");
-          }, (error) => {
-            // this._alertService.info("Error to cancel one of the orders");
         });
     }
 

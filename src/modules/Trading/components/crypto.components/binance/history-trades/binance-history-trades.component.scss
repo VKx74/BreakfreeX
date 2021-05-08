@@ -1,0 +1,12 @@
+@import "../../../trade-manager/items-component/shared.scss";
+
+:host {
+  height: 100%;
+  .conatent-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .filter-row {
+    padding: 5px 0px;
+  }
+}

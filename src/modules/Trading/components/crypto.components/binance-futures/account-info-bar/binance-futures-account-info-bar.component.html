@@ -1,0 +1,10 @@
+<div class="accountInfoRow">
+  <span>
+    <svg class="status-img" [ngClass]="{'connected': status === BrokerConnectivityStatus.Connected, 'pending': status === BrokerConnectivityStatus.Pending, 'not_connected': status === BrokerConnectivityStatus.NoConnection}">
+      <path class="path-data" d="M0,6a6,6 0 1,0 12,0a6,6 0 1,0 -12,0"></path>
+    </svg>
+  </span>
+  <span class="additional-info">Broker: {{server}}, </span>
+  <span>Env: {{activeAccount?.BinanceEnvironment}}, </span>
+  <span>Acct: {{activeAccount?.APIKey}}</span>
+</div> 

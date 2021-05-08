@@ -1,0 +1,30 @@
+@import "../../../styles/themes/themes";
+@import "mixins/themify";
+@import "global-styles/variables";
+
+/deep/ {
+    .mat-cell {
+        @include themify($themes, true) {
+            color: themed("valueTextColor") !important;
+        }
+
+        .close-order-column {
+            width: 70px;
+        }
+        .order-item {
+            cursor: pointer;
+        }
+
+        .tableActions {
+            width: 20px;
+            text-align: center;
+            cursor: pointer;
+
+            i {
+                font-size: 19px;
+                position: relative;
+                top: 3px;
+            }
+        }
+    }
+}

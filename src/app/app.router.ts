@@ -9,6 +9,8 @@ import {ComponentsGuard} from "@app/guards/components.guard";
 import {AppComponent} from "@app/app.component";
 import {PopupWindowGuard} from "../modules/popup-window/popup-window.guard";
 import {UserSettingsResolver} from "@app/services/user-settings.resolver";
+import { GuestGuard } from './services/auth/guest.guard';
+import { GuestResolver } from './reslovers/guest.resolver';
 
 const routes: Routes = [
     {
@@ -45,6 +47,16 @@ const routes: Routes = [
                 canLoad: [AuthGuard, ComponentsGuard],
                 canActivate: [AuthGuard]
             },
+            // {
+            //     path: AppRoutes.Guest,
+            //     // pathMatch: 'full',
+            //     loadChildren: () => import('../modules/platform/platform.module').then(m => m.PlatformModule),
+            //     canLoad: [GuestGuard, ComponentsGuard],
+            //     canActivate: [GuestGuard],
+            //     resolve: {
+            //         guestToken: GuestResolver
+            //     }
+            // },
             {
                 path: AppRoutes.Pages,
                 // pathMatch: 'full',

@@ -5,6 +5,8 @@ import { UsersProfileService } from "@app/services/users-profile.service";
 import { Content } from "modules/Academy/models/dto";
 import { ContentSectors, GroupedMedia } from "modules/Academy/models/models";
 import { WistiaService } from "modules/Academy/services/wistia.service";
+import { Subscription } from "rxjs";
+import { Subject } from "rxjs/internal/Subject";
 @Component({
     selector: 'academy-menu',
     templateUrl: 'academy-menu.component.html',
@@ -20,31 +22,40 @@ export class AcademyMenuComponent {
     private _mediaDetails: Content[] = [];
     private _groupedMedia: GroupedMedia[] = [];
     private _selectedMedia: Content;
+    private _doNextSubscription: Subscription;
+    private _doPrevSubscription: Subscription;
 
+    @Input() doNext: Subject<void>;
+    @Input() doPrev: Subject<void>;
     @Input() showUserAvatar: boolean;
     @Input() hidable: boolean;
     @Input() public set selectedMedia(value: Content) {
         this._selectedMedia = value;
         this.selectedMediaChange.next(this._selectedMedia);
-        this.nextMediaChange.next(this.getNextVideo());
-        this.prevMediaChange.next(this.getPrevVideo());
+        this.canDoNext.next(!!(this.getNextVideo() || this.getNextContentSector()));
+        this.canDoPrev.next(!!(this.getPrevVideo() || this.getPrevContentSector()));
+    }
+    @Input() public set selectedContentSector(value: ContentSectors) {
+        if (this._selectedContentSector && value && this._selectedContentSector.Id === value.Id) {
+            return;
+        }
+
+        if (!value) {
+            return;
+        }
+
+        this._selectedContentSector = value;
+        this.selectedContentSectorChange.next(this._selectedContentSector);
     }
     @Output() selectedMediaChange = new EventEmitter<Content>();
-    @Output() nextMediaChange = new EventEmitter<Content>();
-    @Output() prevMediaChange = new EventEmitter<Content>();
+    @Output() selectedContentSectorChange = new EventEmitter<ContentSectors>();
+    @Output() canDoNext = new EventEmitter<boolean>();
+    @Output() canDoPrev = new EventEmitter<boolean>();
 
     public sidebarOpen: boolean = true;
 
     public get selectedMedia(): Content {
         return this._selectedMedia;
-    }
-
-    public get canPrev(): boolean {
-        return !!(this.getPrevVideo());
-    }
-
-    public get canNext(): boolean {
-        return !!(this.getNextVideo());
     }
 
     public get loading(): boolean {
@@ -79,15 +90,6 @@ export class AcademyMenuComponent {
         return this._selectedContentSector;
     }
 
-    public set selectedContentSector(value: ContentSectors) {
-        if (this._selectedContentSector && value && this._selectedContentSector.Id === value.Id) {
-            return;
-        }
-
-        this._selectedContentSector = value;
-        this.updateContent();
-    }
-
 
     contentSectors: ContentSectors[] = [{
         Id: "ufonh214hz",
@@ -107,10 +109,17 @@ export class AcademyMenuComponent {
 
     constructor(private _identityService: IdentityService, private _profileService: UsersProfileService, 
         private _wistiaService: WistiaService) {
-        this.selectedContentSector = this.contentSectors[0];
+        this.sectorSelected(this.contentSectors[0]);
     }
 
     ngOnInit() {
+        this._doNextSubscription = this.doNext.subscribe(() => {
+            this.nextVideo();
+        });
+        this._doPrevSubscription = this.doPrev.subscribe(() => {
+            this.prevVideo();
+        });
+
         if (!this.showUserAvatar) {
             return;
         }
@@ -128,10 +137,17 @@ export class AcademyMenuComponent {
     }
 
     ngOnDestroy() {
+        if (this._doNextSubscription) {
+            this._doNextSubscription.unsubscribe();
+        }
+        if (this._doPrevSubscription) {
+            this._doPrevSubscription.unsubscribe();
+        }
     }
 
-    sectorSelected(selected: ContentSectors) {
+    sectorSelected(selected: ContentSectors, selLastVideo: boolean = false) {
         this.selectedContentSector = selected;
+        this.updateContent(selLastVideo);
     }
 
     selectMedia(media: Content) {
@@ -142,6 +158,11 @@ export class AcademyMenuComponent {
         let prev = this.getPrevVideo();
         if (prev) {
             this.selectMedia(prev);
+        } else {
+            let prevContentSector = this.getPrevContentSector();
+            if (prevContentSector) {
+                this.sectorSelected(prevContentSector, true);
+            }
         }
     }
 
@@ -149,10 +170,15 @@ export class AcademyMenuComponent {
         let next = this.getNextVideo();
         if (next) {
             this.selectMedia(next);
+        } else {
+            let nextContentSector = this.getNextContentSector();
+            if (nextContentSector) {
+                this.sectorSelected(nextContentSector);
+            }
         }
     }
 
-    private updateContent() {
+    private updateContent(selLastVideo: boolean) {
         this._mediaDetails = [];
         this._groupedMedia = [];
 
@@ -187,6 +213,11 @@ export class AcademyMenuComponent {
 
             });
             
+
+            if (this._content) {
+                this.selectMedia(selLastVideo ? this._content[this._content.length - 1] : this._content[0]);
+            }
+
             this.updateMediaDetails();
         }, (error) => {
             console.error(error);
@@ -195,25 +226,7 @@ export class AcademyMenuComponent {
     }
 
     private updateMediaDetails() {
-        // let allTasks: Observable<MediaDetails>[] = [];
-        // for (const c of this._content) {
-        //     let obs = this._wistiaService.getVideoDetails(c.hashed_id);
-        //     allTasks.push(obs);
-        // }
-
-        // forkJoin(allTasks).subscribe(results => {
-        //     this.buildGroup(results);
-        // });
-        this.buildGroup();
-    }
-
-    private buildGroup() {
         this._loading = false;
-
-        if (this._content) {
-            this.selectMedia(this._content[0]);
-        }
-
         for (const detail of this._content) {
             let description = detail.description.replace(/<\/?[^>]+(>|$)/g, "");
             let startIndex = description.indexOf('[');
@@ -261,6 +274,23 @@ export class AcademyMenuComponent {
         return this._content[currentIndex - 1];
     }
 
+    private getNextContentSector(): ContentSectors {
+        let index = this.contentSectors.indexOf(this.selectedContentSector);
+        if (index === -1) {
+            return null;
+        }
+
+        return this.contentSectors[index + 1];
+    }
+
+    private getPrevContentSector(): ContentSectors {
+        let index = this.contentSectors.indexOf(this.selectedContentSector);
+        if (index < 1) {
+            return null;
+        }
+
+        return this.contentSectors[index - 1];
+    }
 
     setSidebarState(state: boolean) {
         this.sidebarOpen = state;

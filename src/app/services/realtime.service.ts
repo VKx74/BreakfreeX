@@ -1,16 +1,14 @@
-import {Injectable} from "@angular/core";
-import {IInstrument} from "../models/common/instrument";
-import {EExchange} from "../models/common/exchange";
-import {RealtimeServiceBase} from "../interfaces/exchange/realtime.service";
-import {ILevel2, ITick} from "../models/common/tick";
-import {Subject, Subscription} from "rxjs";
-import {auditTime} from 'rxjs/operators';
-import {JsUtil} from "../../utils/jsUtil";
-import {IHealthable} from "../interfaces/healthcheck/healthable";
-import {TimeZoneManager, TzUtils, UTCTimeZone} from "TimeZones";
-import {APP_TYPE_EXCHANGES} from "../enums/ApplicationType";
-import {ExchangeFactory} from "../factories/exchange.factory";
-import {ApplicationTypeService} from "./application-type.service";
+import { Injectable } from "@angular/core";
+import { IInstrument } from "../models/common/instrument";
+import { RealtimeServiceBase } from "../interfaces/exchange/realtime.service";
+import { ILevel2, ITick } from "../models/common/tick";
+import { Subject, Subscription } from "rxjs";
+import { auditTime } from 'rxjs/operators';
+import { JsUtil } from "../../utils/jsUtil";
+import { IHealthable } from "../interfaces/healthcheck/healthable";
+import { TimeZoneManager, TzUtils, UTCTimeZone } from "TimeZones";
+import { APP_TYPE_EXCHANGES } from "../enums/ApplicationType";
+import { ExchangeFactory } from "../factories/exchange.factory";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
@@ -38,8 +36,7 @@ export class RealtimeService implements IHealthable {
     }
 
     constructor(private exchangeFactory: ExchangeFactory,
-                private _timeZoneManager: TimeZoneManager,
-                private applicationTypeService: ApplicationTypeService) {
+        private _timeZoneManager: TimeZoneManager) {
         this._init();
     }
 
@@ -49,28 +46,25 @@ export class RealtimeService implements IHealthable {
 
     private _init() {
         setTimeout(() => {
-            let exchanges = APP_TYPE_EXCHANGES[this.applicationTypeService.applicationType];
-            if (exchanges) {
-                exchanges.forEach(value => {
-                    this.exchangeFactory.tryCreateRealtimeServiceInstance(value).subscribe(result => {
-                        if (result.serviceInstance && result.result) {
-                            const specificService = result.serviceInstance;
-                            specificService.open().subscribe(() => {
-                                specificService.onticks.subscribe(this._processTicks.bind(this));
-                                specificService.onlevel2.pipe(auditTime(500)).subscribe(this._processLevel2.bind(this));
-                                this.services.push(specificService);
-                                this._trySubscribe();
-                            }, error => {
-                                console.table(error);
-                            });
-                        } else {
-                            console.table(result);
-                        }
-                    }, error => {
-                        console.table(error);
-                    });
+            APP_TYPE_EXCHANGES.forEach(value => {
+                this.exchangeFactory.tryCreateRealtimeServiceInstance(value).subscribe(result => {
+                    if (result.serviceInstance && result.result) {
+                        const specificService = result.serviceInstance;
+                        specificService.open().subscribe(() => {
+                            specificService.onticks.subscribe(this._processTicks.bind(this));
+                            specificService.onlevel2.pipe(auditTime(500)).subscribe(this._processLevel2.bind(this));
+                            this.services.push(specificService);
+                            this._trySubscribe();
+                        }, error => {
+                            console.table(error);
+                        });
+                    } else {
+                        console.table(result);
+                    }
+                }, error => {
+                    console.table(error);
                 });
-            }
+            });
         });
     }
 
@@ -228,11 +222,11 @@ export class RealtimeService implements IHealthable {
             this._tradesCache[hash] = this._tradesCache[hash].slice(0, 20);
         }
 
-            if (this._tickSubscribers[hash] && this._tickSubscribers[hash].observers.length) {
-                this._tickSubscribers[hash].next(tick);
-            } else {
-                this._tryUnsubscribeFromTicks(instrument);
-            }
+        if (this._tickSubscribers[hash] && this._tickSubscribers[hash].observers.length) {
+            this._tickSubscribers[hash].next(tick);
+        } else {
+            this._tryUnsubscribeFromTicks(instrument);
+        }
     }
 
     private _processLevel2(l2: ILevel2) {

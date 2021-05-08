@@ -1,18 +1,27 @@
-import {EBrokerInstance} from "../../../app/interfaces/broker/broker";
-
-export interface IBrokerAccount {
-    id: string;
+export enum BrokerConnectivityStatus {
+    Connected,
+    Pending,
+    NoConnection
 }
 
-export interface IBrokerUserInfo {
-    username: string;
+export interface IConnectionData {
+    Linker?: string;
 }
 
 export enum OrderTypes {
     Market = 'Market',
     Limit = 'Limit',
     Stop = 'Stop',
-    StopLimit = 'StopLimit'
+    StopLimit = 'StopLimit',
+    StopLoss = 'StopLoss',
+    StopLossLimit = 'StopLossLimit',
+    StopMarket = 'StopMarket',
+    TakeProfit = 'TakeProfit',
+    TakeProfitMarket = 'TakeProfitMarket',
+    TakeProfitLimit = 'TakeProfitLimit',
+    LimitMaker = 'LimitMaker',
+    TrailingStopMarket = 'TrailingStopMarket',
+    Liquidation = 'Liquidation'
 }
 
 export enum OrderSide {
@@ -68,7 +77,18 @@ export enum TradeManagerTab {
     ActiveOrders = 'ActiveOrders',
     OrderHistory = 'OrderHistory',
     AccountInfo = 'AccountInfo',
-    CurrencyRisk = 'CurrencyRisk'
+    CurrencyRisk = 'CurrencyRisk',
+    TradeHistory = 'TradeHistory',
+    Funds = 'Funds',
+    Assets = 'Assets',
+}
+
+export enum TimeInForce {
+    GoodTillCancel = 'GoodTillCancel', 
+    ImmediateOrCancel = 'ImmediateOrCancel', 
+    FillOrKill = 'FillOrKill', 
+    GoodTillCrossing = 'GoodTillCrossing', 
+    GoodTillExpiredOrCanceled = 'GoodTillExpiredOrCanceled'
 }
 
 export enum OrderPlacedFrom {
@@ -100,4 +120,42 @@ export interface ICancelOrderAction {
 
 export interface ICloseTradeAction {
     Id: string;
+}
+
+export interface IOrder {
+    Id: number;
+    Symbol: string;
+    Size: number;
+    Price: number;
+    CurrentPrice?: number;
+    SL?: number;
+    TP?: number;
+    Side: OrderSide;
+    Type: OrderTypes;
+    NetPL?: number;
+}
+
+export interface IPosition {
+    Size: number;
+    Symbol: string;
+    Price: number;
+    NetPL?: number;
+    Side: OrderSide;
+}
+
+export interface IOrderRisk {
+    Risk?: number;
+    RiskPercentage?: number;
+    RiskClass?: RiskClass;
+}
+
+export interface IPlaceOrder {
+    Symbol: string;
+    Size: number;
+    Price?: number;
+    Side: OrderSide;
+    Type: OrderTypes;
+    Timeframe?: number;
+    TradeType?: OrderTradeType;
+    PlacedFrom?: OrderPlacedFrom;
 }

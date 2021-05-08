@@ -57,7 +57,10 @@
     "setup": "Setup",
     "newSetup": "New Setup",
     "setupDisappeared": "Setup Disappeared",
-    "triggerType": "Trigger Type"
+    "triggerType": "Trigger Type",
+    "triggerOptions": "Trigger Options",
+    "triggerOptionOne": "Only Once",
+    "triggerOptionsEveryTime": "Every Time"
   },
   "conditionTitles": {
     "Crossing": "Crossing",

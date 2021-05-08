@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ApplicationType } from "@app/enums/ApplicationType";
 import { Theme } from "@app/enums/Theme";
-import { map } from "rxjs/operators";
 import { TranslateService } from "@ngx-translate/core";
 import { ThemeService } from "@app/services/theme.service";
-import { BrokerService } from "@app/services/broker.service";
 import { LocalizationService } from "Localization";
-import { ApplicationTypeService } from "@app/services/application-type.service";
 import { UserSettings, UserSettingsService } from "@app/services/user-settings/user-settings.service";
 import { MatDialog } from "@angular/material/dialog";
-import { ConfirmModalComponent } from "UI";
 import { AppRoutes } from "AppRoutes";
 import { LandingRoutes } from "../../../Landing/landing.routes";
 import { AppTranslateService } from "@app/localization/token";
@@ -17,8 +12,6 @@ import { ADMIN_ITEMS, ComponentAccessService } from "@app/services/component-acc
 import { Roles } from "@app/models/auth/auth.models";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { Intercom } from 'ng-intercom';
-import { LayoutStorageService } from '@app/services/layout-storage.service';
-import { CookieService } from '@app/services/сookie.service';
 import { Store } from "@ngrx/store";
 import { AppState } from "@app/store/reducer";
 import { ClearSessionAction } from '@app/store/actions/platform.actions';
@@ -35,26 +28,18 @@ import { ClearSessionAction } from '@app/store/actions/platform.actions';
     ]
 })
 export class PlatformSidebarComponent implements OnInit {
-    applicationType$ = this._applicationTypeService.applicationTypeChanged;
-    appTypes = [ApplicationType.Forex, ApplicationType.Crypto, ApplicationType.Stock, ApplicationType.All];
-    selectedApplicationType: ApplicationType;
     Theme = Theme;
     AppRoutes = AppRoutes;
     LandingRoutes = LandingRoutes;
     role: string;
-    appTypeCaption = (appType: ApplicationType) => this._translateService.get(`footer.${appType}`)
-        .pipe(map(caption => caption.toUpperCase()))
 
-    public get showTradingPanel(): boolean {
-        // return this._brokerService.showTradingPanel;
-        return false;
+    public get isGuest(): boolean {
+        return this._identityService.isGuestMode;
     }
 
     constructor(private _translateService: TranslateService,
         private _themeService: ThemeService,
-        private _brokerService: BrokerService,
         private _localizationService: LocalizationService,
-        private _applicationTypeService: ApplicationTypeService,
         private _userSettingsService: UserSettingsService,
         private _dialog: MatDialog,
         private _intercom: Intercom,
@@ -64,7 +49,6 @@ export class PlatformSidebarComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.selectedApplicationType = this._applicationTypeService.applicationType;
         this.role = this._identityService.role;
         // Set download link  
         let userAgent = window.navigator.userAgent,
@@ -84,25 +68,6 @@ export class PlatformSidebarComponent implements OnInit {
         }
     }
 
-    setApplicationType(type: ApplicationType) {
-        const prev = this.selectedApplicationType;
-        this.selectedApplicationType = type;
-        this._dialog.open(ConfirmModalComponent, {
-            data: {
-                message: this._translateService.get(`changeAppTypeConfirmation`)
-            }
-        } as any)
-            .afterClosed()
-            .subscribe((isConfirmed) => {
-                if (!isConfirmed) {
-                    this.selectedApplicationType = prev;
-                } else {
-                    this._applicationTypeService.setApplicationType(type);
-                    this.save();
-                }
-            });
-    }
-
     supportClick() {
         this._intercom.show();
     }
@@ -111,13 +76,16 @@ export class PlatformSidebarComponent implements OnInit {
         this._store.dispatch(new ClearSessionAction());
     }
 
+    chartClick() {
+        if (this.isGuest) {
+            window.location.href = "/";
+        }
+    }
+
     save() {
         const settings: UserSettings = {
             theme: this._themeService.activeTheme,
             locale: this._localizationService.locale,
-            // timeZone: generalSettingsComponentValues.timeZone,
-            // showTips: generalSettingsComponentValues.showTips,
-            applicationType: this._applicationTypeService.applicationType,
         } as UserSettings;
 
         this._userSettingsService.saveSettings(settings, true)

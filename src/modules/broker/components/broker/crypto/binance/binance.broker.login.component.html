@@ -1,0 +1,50 @@
+<div class="connected-broker-area" *ngIf="!brokerConnected" [class.disabled]="showSpinner">
+    <div class="flex-row" *ngIf="savedAccountExists()">
+        <div class="connected-accounts">
+            <binance-connected-account-info [brokerInstance]="brokerInstance" (onBrokerSelected)="brokerSelected($event)">
+            </binance-connected-account-info>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit">
+                <span class="form-unit__label">Environment:</span>
+                <selector [options]="possibleEnvironments" [placeholder]="'Select environment'"
+                        [(ngModel)]="binanceEnvironment"></selector>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit">
+                <span class="form-unit__label">API Key:</span>
+                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="apiKey" placeholder="Binance API Key"
+                readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" autocorrect="off"  spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-row">
+        <div class="flex-column">
+            <div class="mat-form-field-wrapper crypto-form-unit">
+                <span class="form-unit__label">API Secret:</span>
+                <input type="text" class="full-width crypto-input mtInput" [(ngModel)]="apiSecret" placeholder="Binance API Secret"
+                readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" autocorrect="off"  spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="connectBrokerBlock" [class.disabled]="!policyAccepted">
+    <button class="crypto-button crypto-button_primary w-100" (click)="connect()" *ngIf="!brokerConnected">
+        {{'broker.connect' | translate}}
+    </button>
+    <button class="crypto-button crypto-button_primary w-100" (click)="disconnect()" *ngIf="brokerConnected">
+        {{'broker.disconnect' | translate}}
+    </button>
+</div>
+
+<bft-loader *ngIf="showSpinner"></bft-loader>

@@ -67,13 +67,8 @@ import {ChatMode} from "../../enums/chat-mode";
 @Injectable()
 export class ChatEffects {
     constructor(private actions$: Actions,
-                private _usersService: UsersService,
-                private _userProfileService: UsersProfileService,
                 private _chatApiService: ChatApiService,
                 private _store: Store<AppState>,
-                private _identityService: IdentityService,
-                private _notificationService: NotificationService,
-                private _fileStorage: FileStorageService,
                 private _helper: ChatHelperService) {
     }
 

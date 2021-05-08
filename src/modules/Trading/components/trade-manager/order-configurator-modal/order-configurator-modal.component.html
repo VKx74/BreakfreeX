@@ -1,0 +1,22 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="modal-content">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'tradeManager.orderDialogTitle' | translate}}: {{symbol}}</h4>
+        </div>
+        <div class="modal-body">
+            <div [ngSwitch]="brokerInstance" class="h-100">
+                <mt-order-configurator *ngSwitchCase="EBrokerInstance.MT4" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
+                    (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></mt-order-configurator>
+                <mt-order-configurator *ngSwitchCase="EBrokerInstance.MT5" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
+                    (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></mt-order-configurator>
+                <binance-order-configurator *ngSwitchCase="EBrokerInstance.Binance" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
+                    (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></binance-order-configurator>
+                <binance-futures-order-configurator *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
+                    (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></binance-futures-order-configurator>
+                <binance-futures-order-configurator *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" [config]="orderConfig" [submitHandler]="submitHandler" (onSubmitted)="hide()"
+                    (onOrderPlaced)="orderPlaced($event)" (onInstrumentSelected)="instrumentSelected($event)"></binance-futures-order-configurator>
+            </div>
+        </div>
+    </div>
+</div>

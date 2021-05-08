@@ -7,7 +7,6 @@ import {AppConfigService} from "../app.config.service";
 import {IInstrument} from "@app/models/common/instrument";
 import { Observable, Subject, of } from 'rxjs';
 import {map} from "rxjs/operators";
-import {ApplicationTypeService} from "@app/services/application-type.service";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 @Injectable()
@@ -19,7 +18,7 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
         return EExchangeInstance.KaikoExchange;
     }
 
-    constructor(protected _http: HttpClient, private _applicationTypeService: ApplicationTypeService) {
+    constructor(protected _http: HttpClient) {
         super(_http);
         this._supportedMarkets = [EMarketType.Crypto];
         this._endpoint = `${AppConfigService.config.apiUrls.kaikoREST}instruments/extended`;

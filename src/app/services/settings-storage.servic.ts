@@ -25,6 +25,13 @@ export class SettingsStorageService {
             return of(this._settings);
         }
 
+        if (this._identity.isGuestMode) {
+            this._settings = {
+                FeaturedInstruments: []
+            };
+            return of(this._settings);
+        }
+
         if (this._loadingSubject) {
             return this._loadingSubject;
         }
@@ -77,11 +84,19 @@ export class SettingsStorageService {
     }
 
     saveSettings(state: IUserSettings): Observable<any> {
+        if (this._identity.isGuestMode) {
+            return of();
+        }
+
         this._settings = state;
         return this.http.put(this._url, state);
     }
 
     removeSettings() {
+        if (this._identity.isGuestMode) {
+            return of();
+        }
+
         this._settings = null;
         return this.http.delete(this._url);
     }

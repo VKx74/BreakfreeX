@@ -1,0 +1,18 @@
+<mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedIndex">
+    <mat-tab label="{{'tradeManager.funds' | translate}} {{fundsAmount ? '[' + fundsAmount + ']' : ''}}">
+        <binance-funds [selectedTabIndex]="selectedTabIndex" [tabIndex]="0"></binance-funds>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.pendingOrders' | translate}} {{pendingAmount ? '[' + pendingAmount + ']' : ''}}">
+        <binance-pending-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="1"
+            (onOrderClose)="handleOrderClose($event)" (onOrderEdit)="handleOrderEdit($event)"
+            (onOpenChart)="handleOpenChart($event)"></binance-pending-orders>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
+        <binance-history-orders [selectedTabIndex]="selectedTabIndex" [selectedTabIndex]="selectedTabIndex" [tabIndex]="2"
+            (onOpenChart)="handleOpenChart($event)"></binance-history-orders>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.tradeHistory' | translate}}">
+        <binance-history-trades [selectedTabIndex]="selectedTabIndex" [selectedTabIndex]="selectedTabIndex" [tabIndex]="3"
+            (onOpenChart)="handleOpenChart($event)"></binance-history-trades>
+    </mat-tab>
+</mat-tab-group>

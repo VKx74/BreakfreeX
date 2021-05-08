@@ -41,7 +41,16 @@
     "market": "Market",
     "stop": "Stop",
     "limit": "Limit",
-    "stopLimit": "Stop Limit"
+    "stopLimit": "Stop Limit",
+    "limitMaker": "Limit Maker",
+    "liquidation": "Liquidation",
+    "stopLoss": "Stop Loss",
+    "stopLossLimit": "Stop Loss Limit",
+    "stopMarket": "Stop Market",
+    "takeProfit": "Take Profit",
+    "takeProfitLimit": "Take Profit Limit",
+    "takeProfitMarket": "Take Profit Market",
+    "trailingStopMarket": "Trailing Stop Market"
   },
   "barsCount": "Bars Count",
   "validationErrors": {
@@ -173,6 +182,7 @@
     "Admin": "Admin",
     "SocialMediaOfficer": "Social Media Officer",
     "SystemMonitoringOfficer": "System Monitoring Officer",
+    "FreeUser": "Free User",
     "TreasureOfficer": "Treasure Officer",
     "BusinessAccount": "Business Account",
     "InstitutionalAccount": "Institutional Account",

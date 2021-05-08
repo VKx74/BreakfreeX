@@ -1,0 +1,67 @@
+@import "../../../trade-manager/account-info-bar/shared.scss";
+
+:host {
+    .orders-parameters-selection {
+        display: flex;
+        font-size: 11px;
+        font-family: "Open Sans";
+    }
+
+    .instrument-filter-container,
+    .from-filter-container,
+    .to-filter-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .from-filter-input,
+    .to-filter-input,
+    .refre-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .from-date-filter-input,
+    .from-time-filter-input,
+    .to-date-filter-input,
+    .to-time-filter-input {
+        width: 90px;
+        margin-right: 10px;
+        padding: 3px 10px;
+    }
+
+    .filter-title,
+    .refre-button {
+        margin: 0px 10px 0px 20px;
+    }
+
+    .refre-button {
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+        border-radius: 3px;
+        opacity: 0.8;
+        transition-duration: 0.22s;
+        border: 1px solid transparent;
+        &:hover {
+            border: 1px solid #ddd;
+            transition-duration: 0.22s;
+        }
+    }
+}
+
+@include themify($themes, true) {
+    .filter-title,
+    .refre-button {
+        color: themed("titleTextColor");
+    }
+
+    .from-date-filter-input,
+    .from-time-filter-input,
+    .to-date-filter-input,
+    .to-time-filter-input {
+        background: themed("inputBackgroundColor");
+    }
+}

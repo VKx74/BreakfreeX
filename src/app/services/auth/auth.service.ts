@@ -108,6 +108,31 @@ export class AuthenticationService {
             );
     }
 
+    public getGuestToken(): Observable<GrantTokenResponse> {
+        const httpOptions = {
+            withCredentials: true,
+            headers: new HttpHeaders({
+                'Content-Type': 'application/x-www-form-urlencoded',
+                [AuthInterceptorSkipHeader]: 'true'
+            })
+        };
+
+        let body = new URLSearchParams();
+        body.set('grant_type', 'client_credentials');
+        body.set('client_id', 'atp.client.free.user');
+        body.set('client_secret', 'atp.client.free.user.key');
+
+        return this._http.post<any>(`${AppConfigService.config.apiUrls.identityUrl}connect/token`, body.toString(), httpOptions)
+            .pipe(
+                map((resp: any) => {
+                    return {
+                        accessToken: resp.access_token,
+                        expireIn: resp.expires_in
+                    } as GrantTokenResponse;
+                })
+            );
+    }
+
     public reconfirmEmail(user: ReconfirmEmailModel): Observable<any> {
         return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/reconfirm`, user, this._httpOptions);
     }
@@ -160,14 +185,21 @@ export class AuthenticationService {
         scopes += "%20UserDataStore";
         scopes += "%20FileStore";
         scopes += "%20Notification";
-        scopes += "%20EmailSmsNotification";
-        scopes += "%20EventConsolidatorUser";
-        scopes += "%20EventConsolidatorAdmin";
-        scopes += "%20DataConsolidatorUser";
-        scopes += "%20DataConsolidatorAdmin";
-        scopes += "%20SocialChat";
-        scopes += "%20SocialForum";
-        scopes += "%20UserApi";
+        // scopes += "%20EmailSmsNotification";
+        // scopes += "%20EventConsolidatorUser";
+        // scopes += "%20EventConsolidatorAdmin";
+        // scopes += "%20DataConsolidatorUser";
+        // scopes += "%20DataConsolidatorAdmin";
+        // scopes += "%20SocialChat";
+        // scopes += "%20SocialForum";
+        // scopes += "%20UserApi";
+        scopes += "%20Alerts";
+        scopes += "%20Datafeed";
+        scopes += "%20Algo";
+        scopes += "%20MT_Bridge";
+        scopes += "%20Binance_Bridge";
+        scopes += "%20Portfolio";
+        scopes += "%20Identity";
 
         return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}connect/authorize?response_type=code%20id_token&state&client_id=atp.client&scope=${scopes}&redirect_uri=${url}&nonce=test&response_mode=form_post`, httpOptions)
             .pipe(

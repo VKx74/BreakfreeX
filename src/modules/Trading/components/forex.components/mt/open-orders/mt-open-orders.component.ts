@@ -32,7 +32,7 @@ export class MTOpenOrdersComponent extends MTItemsComponent<MTOrder> {
         super.ngOnDestroy();
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         this.refresh();
     }
 }

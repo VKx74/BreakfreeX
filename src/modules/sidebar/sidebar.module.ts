@@ -5,7 +5,6 @@ import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {UIModule} from "UI";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatMenuModule} from "@angular/material/menu";
-import { BrokerSelectComponent } from './components/broker-select/broker-select.component';
 import {RouterModule} from "@angular/router";
 import {TranslateModule} from "@ngx-translate/core";
 import { BuyAppComponent } from './components/buy-app/buy-app.component';
@@ -30,12 +29,10 @@ const COMPONENTS = [
 @NgModule({
     declarations: [
         ...COMPONENTS,
-        SidebarComponent,
-        BrokerSelectComponent,
+        SidebarComponent
     ],
     exports: [
-        ...COMPONENTS,
-        BrokerSelectComponent,
+        ...COMPONENTS
     ],
     imports: [
         CommonModule,

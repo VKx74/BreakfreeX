@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import { MTItemsComponent } from '../mt-items.component';
-import { MTOrder, MTOrderRecommendation, MTPendingOrderRecommendation } from 'modules/Trading/models/forex/mt/mt.models';
-import { MTHelper } from '@app/services/mt/mt.helper';
+import { MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
 
 
 @Component({
@@ -37,7 +36,7 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
         return item.Id;
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         this.refresh();
     }
 }

@@ -1,27 +1,17 @@
-import {ActivatedRouteSnapshot, Resolve} from "@angular/router";
-import {forkJoin, Observable, of} from "rxjs";
-import {Injectable} from "@angular/core";
-import {BrokerService, IBrokerServiceState} from "@app/services/broker.service";
-import {ApplicationTypeService} from "@app/services/application-type.service";
-import {ApplicationType} from "@app/enums/ApplicationType";
-import {catchError, map, switchMap, tap} from "rxjs/operators";
-import {IdentityService} from "@app/services/auth/identity.service";
-import {BrokerStorage} from "@app/services/broker.storage";
-import {TranslateService} from "@ngx-translate/core";
-import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
-import {ThemeService} from "@app/services/theme.service";
-import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
+import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { forkJoin, Observable, of } from "rxjs";
+import { Injectable } from "@angular/core";
+import { BrokerService, IBrokerServiceState } from "@app/services/broker.service";
+import { catchError, switchMap, tap } from "rxjs/operators";
+import { BrokerStorage } from "@app/services/broker.storage";
+import { UserSettingsService } from "@app/services/user-settings/user-settings.service";
 
 @Injectable()
 export class AppDataResolver implements Resolve<any> {
     constructor(private _brokerService: BrokerService,
-                private _appTypeService: ApplicationTypeService,
-                private _brokerStorage: BrokerStorage,
-                private _translateService: TranslateService,
-                private _themeService: ThemeService,
-                private _userSettings: UserSettingsService,
-                private _userSettingsService: UserSettingsService,
-                private _identityService: IdentityService) {
+        private _brokerStorage: BrokerStorage,
+        private _userSettings: UserSettingsService,
+        private _userSettingsService: UserSettingsService) {
     }
 
     resolve(route: ActivatedRouteSnapshot): Observable<any> {
@@ -45,13 +35,6 @@ export class AppDataResolver implements Resolve<any> {
                     tap((settings) => this._userSettings.applySettings(settings))
                 )
         ];
-
-        if (this._appTypeService.applicationType === ApplicationType.Crypto) {
-            const activeBroker = this._brokerService.activeBroker as CryptoBroker;
-            if (activeBroker) {
-                obsList.push(activeBroker.getWallets());
-            }
-        }
 
         return forkJoin(obsList);
     }

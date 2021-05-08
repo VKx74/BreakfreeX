@@ -6,10 +6,10 @@
         <div class="drop-down flex">
             <div [matMenuTriggerFor]="menu" class="flex">
                 <div class="menuheader flex">
-                    <div class="menuheader-text flex">{{selectedContentSector.Title}}</div>
+                    <div class="menuheader-text flex">{{selectedContentSector?.Title}}</div>
                     <div class="dropdown-toggle flex">&#5121;</div>
                 </div>
-                <mat-menu #menu="matMenu" xPosition="before">
+                <mat-menu #menu="matMenu" xPosition="before" class="academy-menu">
                     <div class="weeks-menu-content flex">
                         <div class="weeks-menu-item flex" (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors">{{contentSector.Name}}</div>
                     </div>

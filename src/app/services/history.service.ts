@@ -7,7 +7,6 @@ import {IHistoryResponse} from "../models/common/historyResponse";
 import {IHealthable} from "../interfaces/healthcheck/healthable";
 import {TimeZoneManager, TzUtils, UTCTimeZone} from "TimeZones";
 import {map} from "rxjs/operators";
-import {ApplicationTypeService} from "./application-type.service";
 import {APP_TYPE_EXCHANGES} from "../enums/ApplicationType";
 import {ExchangeFactory} from "../factories/exchange.factory";
 import {IInstrument} from "@app/models/common/instrument";
@@ -34,13 +33,12 @@ export class HistoryService implements IHealthable {
     }
 
     constructor(private _timeZoneManager: TimeZoneManager,
-                private exchangeFactory: ExchangeFactory,
-                private applicationTypeService: ApplicationTypeService) {
+                private exchangeFactory: ExchangeFactory) {
         this._init();
     }
 
     private _init() {
-        let exchanges = APP_TYPE_EXCHANGES[this.applicationTypeService.applicationType];
+        let exchanges = APP_TYPE_EXCHANGES;
         if (exchanges) {
             exchanges.forEach(value => {
                 this.exchangeFactory.tryCreateHistoryServiceInstance(value).subscribe(result => {

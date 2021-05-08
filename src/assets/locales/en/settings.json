@@ -103,6 +103,7 @@
     "accountType": "Account type",
     "accountNickname": "Account nickname",
     "apiKey": "API Key",
+    "environment": "Environment",
     "broker": "Broker",
     "brokerDisconnected": "Broker disconnected",
     "connect": "Connect",

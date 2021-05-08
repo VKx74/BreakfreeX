@@ -1,11 +1,8 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {BrokerService, IBrokerServiceState} from "@app/services/broker.service";
+import {BrokerService} from "@app/services/broker.service";
 import {TranslateService} from "@ngx-translate/core";
-import {DataStorage} from "../../../Storage/services/data-storage";
-import {LayoutStorage} from "@app/services/layout.storage";
 import {IdentityService} from "@app/services/auth/identity.service";
-import {map, switchMap, takeUntil} from "rxjs/operators";
-import {EBrokerInstance, IBroker} from "@app/interfaces/broker/broker";
+import {takeUntil} from "rxjs/operators";
 import {AlertService} from "@alert/services/alert.service";
 import {SignalService} from "@app/services/signal.service";
 import {AudioService} from "@app/services/audio.service";
@@ -14,15 +11,8 @@ import {Actions, ofType} from "@ngrx/effects";
 import {ActionTypes} from "@platform/store/actions/platform.actions";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
-import {ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router} from "@angular/router";
-import {InstrumentService} from '@app/services/instrument.service';
-import {RealtimeService} from '@app/services/realtime.service';
-import {HistoryService} from '@app/services/history.service';
+import {ActivatedRoute} from "@angular/router";
 import {PlatformTranslateService} from "@platform/localization/token";
-import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
-import {SidebarService} from "@app/services/sidebar.service";
-import {of} from "rxjs";
-import {BitmexBrokerService} from "@app/services/bitmex.exchange/bitmex.broker.service";
 
 @Component({
     selector: 'platform',

@@ -3,19 +3,14 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {IDEModule} from "../ide/ide.module";
 import {TradingModule} from "Trading";
-import {BrokerComponent} from './components/broker/broker.component';
 import {LocalizationModule, TranslateServiceFactory} from "Localization";
 import {SettingsTranslateService} from "./localization/token";
 import {UIModule} from "UI";
 import {LoadingModule} from "ngx-loading";
 import {SharedModule} from "Shared";
-import {CryptoBrokerComponent} from "./components/broker/crypto/crypto.broker.component";
-import {BitmexBrokerLoginComponent} from "./components/broker/crypto/bitmex/bitmex.broker.login.component";
 import {MatInputModule} from "@angular/material/input";
 import {MatTabsModule} from "@angular/material/tabs";
 import {FormErrorDirectiveModule} from "@form-error-directive/form-error-directive.module";
-import {ForexBrokerComponent} from "./components/broker/forex/forex.broker.component";
-import {OandaBrokerLoginComponent} from "./components/broker/forex/oanda/oanda.broker.login.component";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {PersonalInfoService} from "@app/services/personal-info/personal-info.service";
 import {EducationalTipsModule} from "../educational-tips/educational-tips.module";
@@ -25,12 +20,14 @@ import {MatMenuModule} from "@angular/material/menu";
 import { BrokerDialogComponent } from './components/broker/broker-dialog/broker-dialog.component';
 import {LoaderModule} from "../loader/loader.module";
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
-import { ConnectedAccountInfoComponent } from './components/broker/forex/mt/connected-account-info/connected-account-info.component';
+import { MTConnectedAccountInfoComponent } from './components/broker/forex/mt/mt-connected-account-info/mt-connected-account-info.component';
 import { DatatableModule } from 'modules/datatable/datatable.module';
 import { MatTableModule } from '@angular/material/table';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MTBrokerLoginComponent } from './components/broker/forex/mt/mt.broker.login.component';
+import { BinanceBrokerLoginComponent } from './components/broker/crypto/binance/binance.broker.login.component';
+import { BinanceConnectedAccountInfoComponent } from './components/broker/crypto/binance/connected-account-info/binance-connected-account-info.component';
 
 
 @NgModule({
@@ -62,21 +59,18 @@ import { MTBrokerLoginComponent } from './components/broker/forex/mt/mt.broker.l
     declarations: [
         // AlertWidgetComponent,
         // ProfileActivitiesComponent,
-        BrokerComponent,
-        CryptoBrokerComponent,
-        BitmexBrokerLoginComponent,
-        ForexBrokerComponent,
-        OandaBrokerLoginComponent,
+        // ForexBrokerComponent,
         MTBrokerLoginComponent,
         BrokerDialogComponent,
-        ConnectedAccountInfoComponent
+        MTConnectedAccountInfoComponent,
+        BinanceBrokerLoginComponent,
+        BinanceConnectedAccountInfoComponent
     ],
     entryComponents: [
         BrokerDialogComponent,
         PrivacyPolicyTradingModalComponent
     ],
     exports: [
-        BrokerComponent,
         BrokerDialogComponent,
     ],
     providers: [

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, Subscription, of} from "rxjs";
 import { MTItemsComponent } from '../mt-items.component';
-import { MTCurrencyRisk, MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTCurrencyRisk } from 'modules/Trading/models/forex/mt/mt.models';
 
 
 @Component({
@@ -41,7 +41,7 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
         return "high-risk";
     }
 
-    protected ordersUpdated() {
+    protected collectionUpdated() {
         this.updateItems();
     }
 }

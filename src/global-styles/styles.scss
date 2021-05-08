@@ -980,3 +980,8 @@ input.timepicker-dial__control.timepicker-dial__item {
   padding-left: 15px  !important;
  
 }
+
+.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}

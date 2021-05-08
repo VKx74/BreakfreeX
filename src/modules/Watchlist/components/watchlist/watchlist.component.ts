@@ -25,11 +25,6 @@ import {
 import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import bind from "bind-decorator";
 import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
-import {
-    CryptoOrderConfiguratorModalComponent,
-    ICryptoOrderFormConfig
-} from "../../../Trading/components/crypto.components/crypto-order-configurator-modal/crypto-order-configurator-modal.component";
-import {OrderConfig} from "../../../Trading/components/crypto.components/crypto-order-configurator/crypto-order-configurator.component";
 import {ITcdComponentState} from "Chart";
 import {PriceAlertDialogComponent} from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
 import {HistoryService} from "@app/services/history.service";
@@ -463,6 +458,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
     
     createWatchlist() {
+        if (this._identityService.isGuestMode) {
+            this.processCheckout();
+            return;
+        }
+
         if (this.activeWatchlist && !this.activeWatchlist.id && this.existingWatchlists.length === 1) {
             this._watchlistService.addWatchlist(this.activeWatchlist.name, this.activeWatchlist.data, this.activeWatchlist.trackingId).subscribe(response => {
                 // console.log(response);
@@ -526,6 +526,11 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     deleteWatchlist() {
+        if (this._identityService.isGuestMode) {
+            this.processCheckout();
+            return;
+        }
+        
         const watchlistToDelete = this.activeWatchlist;
         const index = this.existingWatchlists.indexOf(watchlistToDelete);
 
@@ -698,15 +703,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     placeOrder(watchlistInstrument: WatchlistInstrumentVM) {
-        let tradeConfig = OrderConfig.create();
-        tradeConfig.instrument = watchlistInstrument.instrument;
-        const config: ICryptoOrderFormConfig = {
-            tradeConfig: tradeConfig,
-            skipOrderPlacing: false
-        };
-        this._dialog.open(CryptoOrderConfiguratorModalComponent, {
-            data: config
-        });
+        // not using
     }
 
     openChart(watchlistInstrument: WatchlistInstrumentVM) {

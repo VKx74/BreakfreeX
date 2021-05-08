@@ -18,11 +18,6 @@ import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import {IInstrument} from "@app/models/common/instrument";
 import IChartInstrument = TradingChartDesigner.IInstrument;
 import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
-import {CryptoBroker} from "@app/interfaces/broker/crypto.broker";
-import {BrokerService} from "@app/services/broker.service";
-import {ICryptoPlaceOrderAction} from "../../../Trading/models/crypto/crypto.models";
-import TradeAction = TradingChartDesigner.TradeAction;
-import {OrderSide, OrderTypes} from "../../../Trading/models/models";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { InstrumentService } from '@app/services/instrument.service';
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
@@ -32,8 +27,8 @@ import { TradeFromChartService } from '@chart/services/trade-from-chart.service'
 import {Store} from "@ngrx/store";
 import {AppState} from "@app/store/reducer";
 import { SaveStateAction } from '@app/store/actions/platform.actions';
-import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
+import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -93,7 +88,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _templateDataProviderService: TemplatesDataProviderService,
                 private _instrumentService: InstrumentService,
                 private _calendarEventsDatafeed: CalendarEventsDatafeed,
-                private _brokerService: BrokerService,
                 private _alertsService: AlertsService,
                 private _indicatorRestrictionService: IndicatorRestrictionService,
                 private _indicatorDataProviderService: IndicatorDataProviderService,
@@ -145,15 +139,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     ngAfterViewInit() {
-        // this._educationalTipsService.getLinkForComponent(ComponentIdentifier.chart)
-        //     .subscribe(links => {
-        //         // this.linksList = links;
-        //         this.init(this._state);
-        //     }, e => {
-        //         console.log(e);
-        //         this.init(this._state);
-        //     });
-
         setTimeout(() => {
             this.init(this._state);
         }, 1);
@@ -326,7 +311,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     private tradeHandler(params: ITradeHandlerParams) {
-       
     }
 
     private _subscribeOnChartEvents(chart: TradingChartDesigner.Chart) {

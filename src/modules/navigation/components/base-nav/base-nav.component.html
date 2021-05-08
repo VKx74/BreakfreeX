@@ -3,7 +3,7 @@
         <div class="flex sidebar-toggle-wrapper">
             <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()"></sidebar-toggle>
 
-            <a [routerLink]="logoRedirectRoute" class="logo flex align-items-center">
+            <a class="logo flex align-items-center" (click)="iconClick()">
                 <div class="flex BFTN">
 
                     <img class="desktopshow" src="assets/img/bftnavigatorlogo.svg">
@@ -12,10 +12,18 @@
             </a>
         </div>
 
-        <div class="flex"></div>
-
+        <div class="flex"></div>        
+        
         <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
             <ng-content></ng-content> 
+            <!-- <span *ngIf="presentationMode" id='secretspan'></span>
+            <nav-section [leftBorder]="true" [paddingRight]="true">
+                <div class="theme-nav-container" (click)="switchToPresentationMode()">
+                    <div class="theme-title" [ngClass]="{'presentModeSwitch': presentationMode}">
+                        <i class="fa fa-book" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </nav-section> -->
             <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">
                 <div class="xp-nav-container" (click)="openMissionDialog()">
                     <span *ngIf="isLoaded; else loading">

@@ -1,0 +1,100 @@
+<data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true"
+    [expandOnClick]="false" [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)"
+    (onDoubleClick)="doubleClicked($event)" [hiddenColumns]="['Id', 'Open Time']"
+    (onContextMenuSelected)="handleContextMenuSelected($event)">
+    <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false">
+    </data-table-header-cell>
+    <data-table-header-cell columnName="Id" [sortable]="true">{{'tradeManager.orderId' | translate}}
+    </data-table-header-cell>
+    <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.symbol' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Type" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.type' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.size' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Executed Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.executedSize' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Iceberg Qty" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.icebergQty' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Current Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.currentPrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Trigger" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.triggerPrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Status" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.status' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="TIF" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.tif' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Date" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.date' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
+
+    <data-table-cell columnName="Side">
+        <ng-template let-item>
+            <div class="color-column"
+                [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}"></div>
+        </ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Id">
+        <ng-template let-item>{{item.Id}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Symbol">
+        <ng-template let-item><span class="symbol-column">{{item.Symbol}}</span></ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Type">
+        <ng-template let-item>{{item.Type ? item.Type.replace("_", " ") : ""}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Size">
+        <ng-template let-item>
+            <div [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">
+                {{item.Size.toFixed(2)}}</div>
+        </ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Executed Size">
+        <ng-template let-item>{{item.ExecutedSize ? item.ExecutedSize : "-"}}
+        </ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Iceberg Qty">
+        <ng-template let-item>{{item.IcebergSize ? item.IcebergSize : "-"}}
+        </ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Price">
+        <ng-template let-item>{{item.Price?.toFixed(getDecimals(item.Symbol))}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Current Price">
+        <ng-template let-item>{{item.CurrentPrice?.toFixed(getDecimals(item.Symbol))}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Trigger">
+        <ng-template let-item>{{item.StopPrice ? item.StopPrice.toFixed(getDecimals(item.Symbol)) : "-"}}
+        </ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Status">
+        <ng-template let-item>{{item.Status}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="TIF">
+        <ng-template let-item>{{item.TIF}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Date">
+        <ng-template let-item>{{item.Date | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Close">
+        <ng-template let-item>
+            <div class="flex justify-flex-end">
+                <trading-close-button (click)="closeOrder(item)"></trading-close-button>
+            </div>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-menu-item [id]="'closeOrder'">
+        <ng-template>
+            {{'tradeManager.closeOrder' | translate}}
+        </ng-template>
+    </data-table-menu-item>
+    <data-table-menu-item [id]="'view'">
+        <ng-template>
+            {{'tradeManager.viewChart' | translate}}
+        </ng-template>
+    </data-table-menu-item>
+
+</data-table>

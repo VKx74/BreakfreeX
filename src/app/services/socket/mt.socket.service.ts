@@ -1,19 +1,15 @@
-import { WebsocketBase } from "../../interfaces/socket/socketBase";
-import { IWebSocketConfig, ReadyStateConstants } from "../../interfaces/socket/WebSocketConfig";
+import { IWebSocketConfig } from "../../interfaces/socket/WebSocketConfig";
 import { AppConfigService } from '../app.config.service';
-import { Injectable } from "@angular/core";
-import { Observable, Subscriber, Subscription, Subject } from 'rxjs';
-import { MTResponseMessageBase, MTLoginRequest, EMTMessageType, SubscribeQuote, MTQuoteResponse, MTPlaceOrderRequest, MTPlaceOrderResponse, MTLoginResponse, MTEditOrderRequest, MTEditOrderResponse, MTCloseOrderRequest, MTCloseOrderResponse, MTLogoutRequest, MTRequestMessageBase, MTGetOrderHistoryRequest, MTAccountUpdateResponse, IMTAccountUpdatedData, IMTOrderData, MTOrdersUpdateResponse, MTGetOrderHistoryResponse, MTAuthRequest, GetQuote, GetSymbolTradeInfo, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
-import { IMTTick } from '@app/models/common/tick';
+import { Observable, Subscription, Subject } from 'rxjs';
+import { MTLoginRequest, SubscribeQuote, MTQuoteResponse, MTPlaceOrderRequest, MTPlaceOrderResponse, MTLoginResponse, MTEditOrderRequest, MTEditOrderResponse, MTCloseOrderRequest, MTCloseOrderResponse, MTLogoutRequest, MTGetOrderHistoryRequest, MTAccountUpdateResponse, IMTAccountUpdatedData, IMTOrderData, MTOrdersUpdateResponse, MTGetOrderHistoryResponse, GetQuote, GetSymbolTradeInfo, MTSymbolTradeInfoResponse, MTMessageType } from 'modules/Trading/models/forex/mt/mt.communication';
+import { ITradeTick } from '@app/models/common/tick';
 import { IdentityService } from '../auth/identity.service';
+import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
+import { BrokerSocketService } from "./broker.socket.service";
 
-export abstract class MTSocketService extends WebsocketBase {
-  private _subscribers: { [id: string]: Subscriber<MTResponseMessageBase>; } = {};
-  private _authSucceeded: boolean;
-  private _brokerConnected: boolean;
-  private _token: string;
+export abstract class MTSocketService extends BrokerSocketService {
   private _onMessageSubscription: Subscription;
-  private _tickSubject: Subject<IMTTick> = new Subject<IMTTick>();
+  private _tickSubject: Subject<ITradeTick> = new Subject<ITradeTick>();
   private _accountUpdatedSubject: Subject<IMTAccountUpdatedData> = new Subject<IMTAccountUpdatedData>();
   private _ordersUpdatedSubject: Subject<IMTOrderData[]> = new Subject<IMTOrderData[]>();
 
@@ -21,7 +17,7 @@ export abstract class MTSocketService extends WebsocketBase {
     return false;
   }
 
-  get tickSubject(): Subject<IMTTick> {
+  get tickSubject(): Subject<ITradeTick> {
     return this._tickSubject;
   }
 
@@ -39,25 +35,25 @@ export abstract class MTSocketService extends WebsocketBase {
     };
   }
 
-  constructor(private _identityService: IdentityService) {
-    super();
+  constructor(protected _identityService: IdentityService) {
+    super(_identityService);
     this._token = "Bearer " + this._identityService.token;
     this._onMessageSubscription = this.onMessage.subscribe(value => {
       try {
-        const msgData = value as MTResponseMessageBase;
+        const msgData = value as BrokerResponseMessageBase;
         const msgTypeString = msgData && msgData.Type ? msgData.Type.toLowerCase() : "";
 
-        if (msgTypeString === EMTMessageType.Quote.toLowerCase()) {
+        if (msgTypeString === MTMessageType.Quote.toLowerCase()) {
           this._processNewQuote(msgData);
           return;
         }
 
-        if (msgTypeString === EMTMessageType.AccountUpdate.toLowerCase()) {
+        if (msgTypeString === MTMessageType.AccountUpdate.toLowerCase()) {
           this._processAccountUpdate(msgData);
           return;
         }
 
-        if (msgTypeString === EMTMessageType.OrdersUpdate.toLowerCase()) {
+        if (msgTypeString === MTMessageType.OrdersUpdate.toLowerCase()) {
           this._processOrdersUpdate(msgData);
           return;
         }
@@ -77,101 +73,9 @@ export abstract class MTSocketService extends WebsocketBase {
   }
 
   public dispose() {
-    // if (this._onMessageSubscription) {
-    //   this._onMessageSubscription.unsubscribe();
-    // }
     this._brokerConnected = false;
     this.send(new MTLogoutRequest());
     this.close();
-  }
-
-  sendAuth(): Observable<void> {
-    return new Observable<void>(subscriber => {
-      if (this._identityService.isExpired) {
-          this._identityService.refreshTokens().subscribe(() => {
-            this._open(subscriber);
-          }, (error) => {
-            this._open(subscriber);
-          });
-      } else {
-        this._open(subscriber);
-      }
-    });
-  }
-
-  setConnectivity(connected: boolean) {
-    this._brokerConnected = connected;
-  }
-
-  open(): Observable<void> {
-    return new Observable<void>(subscriber => {
-      if (this.readyState === ReadyStateConstants.OPEN) {
-          subscriber.next();
-          return;
-      }
-
-      if (this._identityService.isExpired) {
-          this._identityService.refreshTokens().subscribe(() => {
-            this._open(subscriber);
-          }, (error) => {
-            this._open(subscriber);
-          });
-      } else {
-        this._open(subscriber);
-      }
-
-    });
-  }
-
-  protected _open(subscriber: Subscriber<void>) {
-    super.open().subscribe(() => {
-      const authRequest = new MTAuthRequest();
-      authRequest.Data = {
-        Token: "Bearer " + this._identityService.token
-      }; 
-
-      // subscriber.next();
-      // subscriber.complete();
-
-      this.auth(authRequest).subscribe((res) => {
-        if (res.IsSuccess) {
-          this._authSucceeded = true;
-          subscriber.next();
-          subscriber.complete();
-        } else {
-          this._authSucceeded = false;
-          this.close();
-          subscriber.error(res.ErrorMessage);
-          subscriber.complete();
-        }
-      }, (error1) => {
-        this._authSucceeded = false;
-        this.close();
-        subscriber.error(error1);
-        subscriber.complete();
-      });
-
-    }, (error) => {
-      subscriber.error(error);
-      subscriber.complete();
-    });
-  }
-
-  protected _reconnect() {
-    if (!this._authSucceeded) {
-      return;
-    }
-
-    if (!this._brokerConnected) {
-      return;
-    }
-    super._reconnect();
-  }
-
-  protected auth(data: MTAuthRequest): Observable<MTResponseMessageBase> {
-    return new Observable<MTResponseMessageBase>(subscriber => {
-      this._send(data, subscriber);
-    });
   }
 
   public login(data: MTLoginRequest): Observable<MTLoginResponse> {
@@ -180,8 +84,8 @@ export abstract class MTSocketService extends WebsocketBase {
     });
   }
 
-  public logout(data: MTLogoutRequest): Observable<MTResponseMessageBase> {
-    return new Observable<MTResponseMessageBase>(subscriber => {
+  public logout(data: MTLogoutRequest): Observable<BrokerResponseMessageBase> {
+    return new Observable<BrokerResponseMessageBase>(subscriber => {
       this._send(data, subscriber);
     });
   }
@@ -228,8 +132,8 @@ export abstract class MTSocketService extends WebsocketBase {
     });
   }
 
-  public subscribeOnQuotes(symbol: string): Observable<MTResponseMessageBase> {
-    return new Observable<MTResponseMessageBase>(subscriber => {
+  public subscribeOnQuotes(symbol: string): Observable<BrokerResponseMessageBase> {
+    return new Observable<BrokerResponseMessageBase>(subscriber => {
       const message = new SubscribeQuote();
       message.Data = {
         Subscribe: true,
@@ -239,8 +143,8 @@ export abstract class MTSocketService extends WebsocketBase {
     });
   }
 
-  public unsubscribeFromQuotes(symbol: string): Observable<MTResponseMessageBase> {
-    return new Observable<MTResponseMessageBase>(subscriber => {
+  public unsubscribeFromQuotes(symbol: string): Observable<BrokerResponseMessageBase> {
+    return new Observable<BrokerResponseMessageBase>(subscriber => {
       const message = new SubscribeQuote();
       message.Data = {
         Subscribe: false,
@@ -250,7 +154,7 @@ export abstract class MTSocketService extends WebsocketBase {
     });
   }
 
-  private _processNewQuote(msgData: MTResponseMessageBase) {
+  private _processNewQuote(msgData: BrokerResponseMessageBase) {
     const quoteMessage = msgData as MTQuoteResponse;
     this._tickSubject.next({
       ask: quoteMessage.Data.Ask,
@@ -261,26 +165,12 @@ export abstract class MTSocketService extends WebsocketBase {
     });
   }
 
-  private _send(data: MTRequestMessageBase, subscriber: Subscriber<MTResponseMessageBase>) {
-    try {
-      this._subscribers[data.MessageId] = subscriber;
-      const sent = this.send(data);
-      if (!sent) {
-        subscriber.error("Failed to send message");
-        subscriber.complete();
-      }
-    } catch (error) {
-      subscriber.error(error.message);
-      subscriber.complete();
-    }
-  }
-
-  private _processAccountUpdate(msgData: MTResponseMessageBase) {
+  private _processAccountUpdate(msgData: BrokerResponseMessageBase) {
     const quoteMessage = msgData as MTAccountUpdateResponse;
     this._accountUpdatedSubject.next(quoteMessage.Data);
   }
 
-  private _processOrdersUpdate(msgData: MTResponseMessageBase) {
+  private _processOrdersUpdate(msgData: BrokerResponseMessageBase) {
     const quoteMessage = msgData as MTOrdersUpdateResponse;
     this._ordersUpdatedSubject.next(quoteMessage.Data);
   }

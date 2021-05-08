@@ -29,38 +29,7 @@ export class NotificationService {
     constructor(@Inject(NotificationWebSocketService) private _socket: WebsocketBase,
                 private _identityService: IdentityService,
                 private _http: HttpClient) {
-        this._socket.onMessage.subscribe((value) => {
-            this._handleMessage(value);
-        });
-
-        this._socket.onClose.subscribe(() => {
-            this.onClose$.next();
-        });
-
-        this._socket.open().subscribe(value => {
-            this._activationKeySubscription.subscribe(key => {
-                this._activateKey(key).subscribe(resp => {
-                    if (resp && resp.sessionKey) {
-                        this._sessionKey = resp.sessionKey;
-                        this._isOpened = true;
-                        this._ensureConnectedListeners.next(true);
-                        this._ensureConnectedListeners.complete();
-                    } else {
-                        this._isOpened = false;
-                        this._ensureConnectedListeners.error(resp);
-                        this._ensureConnectedListeners.complete();
-                    }
-                }, error => {
-                    this._ensureConnectedListeners.error(error);
-                    this._ensureConnectedListeners.complete();
-                    console.log('Failed to activate WebSocket session key');
-                    console.log(error);
-                });
-            });
-        }, error => {
-            this._ensureConnectedListeners.error(error);
-            this._ensureConnectedListeners.complete();
-        });
+        this._openConnection();
     }
 
     public ensureConnectionEstablished(): Observable<boolean> {
@@ -124,5 +93,40 @@ export class NotificationService {
             .append('userId', this._identityService.id);
 
         return this._http.post<ActivationKeyResponse>(`${AppConfigService.config.apiUrls.notificationREST}Auth/ActivateKey`, {}, {params: params});
+    }
+
+    private _openConnection() {
+        this._socket.onMessage.subscribe((value) => {
+            this._handleMessage(value);
+        });
+
+        this._socket.onClose.subscribe(() => {
+            this.onClose$.next();
+        });
+
+        this._socket.open().subscribe(value => {
+            this._activationKeySubscription.subscribe(key => {
+                this._activateKey(key).subscribe(resp => {
+                    if (resp && resp.sessionKey) {
+                        this._sessionKey = resp.sessionKey;
+                        this._isOpened = true;
+                        this._ensureConnectedListeners.next(true);
+                        this._ensureConnectedListeners.complete();
+                    } else {
+                        this._isOpened = false;
+                        this._ensureConnectedListeners.error(resp);
+                        this._ensureConnectedListeners.complete();
+                    }
+                }, error => {
+                    this._ensureConnectedListeners.error(error);
+                    this._ensureConnectedListeners.complete();
+                    console.log('Failed to activate WebSocket session key');
+                    console.log(error);
+                });
+            });
+        }, error => {
+            this._ensureConnectedListeners.error(error);
+            this._ensureConnectedListeners.complete();
+        });
     }
 }

@@ -9,12 +9,10 @@ import {Observable, Subject, throwError} from "rxjs";
 import {IdentityService} from "@app/services/auth/identity.service";
 import {BrokerService} from "@app/services/broker.service";
 import {HttpClient} from "@angular/common/http";
-import {NotificationService} from "@app/services/notification.service";
 import {NotificationAction, NotificationMessage} from "@app/models/notifications/notification";
 import {IInstrument} from '@app/models/common/instrument';
 import {RunningMetadata} from "@scripting/models/IScriptCloudRepositoryService";
 import {ScriptingApiService} from "@scripting/services/scripting-api.service";
-import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { EExchange } from '@app/models/common/exchange';
 
 enum EScriptStateMessage {
@@ -35,14 +33,11 @@ export class ScriptCloudExecutorService implements IScriptCloudExecutorService {
     onScriptStopped: Subject<ScriptStateEvtData> = new Subject<ScriptStateEvtData>();
 
     constructor(private _identity: IdentityService,
-                private _http: HttpClient,
                 private _brokerService: BrokerService,
-                private _scriptingApiService: ScriptingApiService,
-                private _notificationService: NotificationService) {
-
-        this._notificationService.onMessage$.subscribe((value: NotificationMessage) => {
-            this._processMessage(value);
-        });
+                private _scriptingApiService: ScriptingApiService) {
+        // this._notificationService.onMessage$.subscribe((value: NotificationMessage) => {
+        //     this._processMessage(value);
+        // });
     }
 
     startScript(scriptName: string, params: ScriptStartParameters): Observable<RunningMetadata> {
@@ -74,7 +69,7 @@ export class ScriptCloudExecutorService implements IScriptCloudExecutorService {
 
             if (this._brokerService.isConnected && this._brokerService.activeBroker) {
                 tradingParameters = {
-                    accessToken: this._brokerService.activeBroker.accessToken,
+                    accessToken: "",
                     broker: this._brokerService.activeBroker.instanceType,
                     symbol: undefined
                 };
@@ -83,17 +78,17 @@ export class ScriptCloudExecutorService implements IScriptCloudExecutorService {
                     tradingParameters.broker = "peatio";
                 }
 
-                this._brokerService.tryMapInstrument(params.symbol, params.exchange as EExchange).subscribe((instruments: IInstrument[]) => {
-                    if (instruments.length) {
-                        tradingParameters.symbol = instruments[0].symbol;
-                    } else {
-                        this.onScriptShowPopup.next(`Failed to map ${params.symbol} to broker format`);
-                    }
+                // this._brokerService.tryMapInstrument(params.symbol, params.exchange as EExchange).subscribe((instruments: IInstrument[]) => {
+                //     if (instruments.length) {
+                //         tradingParameters.symbol = instruments[0].symbol;
+                //     } else {
+                //         this.onScriptShowPopup.next(`Failed to map ${params.symbol} to broker format`);
+                //     }
 
-                    sendStartRequest();
-                }, error => {
-                    sendStartRequest();
-                });
+                //     sendStartRequest();
+                // }, error => {
+                //     sendStartRequest();
+                // });
             } else {
                 sendStartRequest();
             }

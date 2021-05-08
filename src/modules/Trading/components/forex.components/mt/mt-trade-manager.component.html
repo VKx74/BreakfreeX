@@ -1,58 +1,25 @@
-<div class="trade-manager full-height">
-    <div class="color-selector">
-        <color-selector [activeColor]="linkerColor" [path]="'flag'" (activeColorChange)='handleColorSelected($event)'>
-        </color-selector>
-    </div>
-    <mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedIndex">
-        <mat-tab label="{{'tradeManager.positions' | translate}} {{positionsAmount ? '[' + positionsAmount + ']' : ''}}">
-            <mt-positions [selectedTabIndex]="selectedTabIndex" [tabIndex]="0" (onPositionClose)="handlePositionClose($event)" (onOpenChart)="handleOpenChart($event)"></mt-positions>
-        </mat-tab>
-        <mat-tab label="{{'tradeManager.openOrders' | translate}} {{ordersAmount ? '[' + ordersAmount + ']' : ''}}">
-            <mt-open-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="1" (onOrderClose)="handleOrderClose($event)" (onOrderEdit)="handleOrderEdit($event)" (onOpenChart)="handleOpenChart($event)"></mt-open-orders>
-        </mat-tab> 
-         <mat-tab label="{{'tradeManager.pendingOrders' | translate}} {{pendingAmount ? '[' + pendingAmount + ']' : ''}}">
-            <mt-pending-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="2"  (onOrderClose)="handleOrderClose($event)" (onOrderEdit)="handleOrderEdit($event)" (onOpenChart)="handleOpenChart($event)"></mt-pending-orders>
-        </mat-tab>
-        <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
-            <mt-history-orders [selectedTabIndex]="selectedTabIndex" [selectedTabIndex]="selectedTabIndex" [tabIndex]="3"  (onOpenChart)="handleOpenChart($event)"></mt-history-orders>
-        </mat-tab>
-        <mat-tab label="{{'tradeManager.accountInfo' | translate}}">
-            <mt-account-info></mt-account-info>
-        </mat-tab>
-        <mat-tab label="{{'tradeManager.currencyRisk' | translate}}">
-            <mt-currency-risk [selectedTabIndex]="selectedTabIndex" [tabIndex]="5"></mt-currency-risk>
-        </mat-tab>
-    </mat-tab-group>
-</div>
-
-<div class="controls">
-    <mt-account-info-bar class="info-bar"></mt-account-info-bar>
-    <div>
-        <button (click)="cancelAllPending()"
-                style="margin:10px"
-                [disabled]="!brokerConnected"
-                *ngIf="showCancelAll"
-                class="crypto-button crypto-button_success">Cancel all Pending Orders
-        </button> 
-        <button (click)="placeOrder()"
-                style="margin:10px"
-                [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_success">Manual Order
-        </button> 
-        <button (click)="reconnect()"
-                style="margin:10px"
-                [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger">Reconnect
-        </button>
-        <button (click)="disconnect()"
-                style="margin:10px"
-                [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger">Disconnect
-        </button>
-        <button (click)="showSymbolMapping()"
-                style="margin:10px"
-                [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger">Mapping
-        </button>
-    </div>
-</div>
+<mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedIndex">
+    <mat-tab label="{{'tradeManager.positions' | translate}} {{positionsAmount ? '[' + positionsAmount + ']' : ''}}">
+        <mt-positions [selectedTabIndex]="selectedTabIndex" [tabIndex]="0"
+            (onPositionClose)="handlePositionClose($event)" (onOpenChart)="handleOpenChart($event)"></mt-positions>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.openOrders' | translate}} {{ordersAmount ? '[' + ordersAmount + ']' : ''}}">
+        <mt-open-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="1" (onOrderClose)="handleOrderClose($event)"
+            (onOrderEdit)="handleOrderEdit($event)" (onOpenChart)="handleOpenChart($event)"></mt-open-orders>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.pendingOrders' | translate}} {{pendingAmount ? '[' + pendingAmount + ']' : ''}}">
+        <mt-pending-orders [selectedTabIndex]="selectedTabIndex" [tabIndex]="2"
+            (onOrderClose)="handleOrderClose($event)" (onOrderEdit)="handleOrderEdit($event)"
+            (onOpenChart)="handleOpenChart($event)"></mt-pending-orders>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.orderHistory' | translate}}">
+        <mt-history-orders [selectedTabIndex]="selectedTabIndex" [selectedTabIndex]="selectedTabIndex" [tabIndex]="3"
+            (onOpenChart)="handleOpenChart($event)"></mt-history-orders>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.accountInfo' | translate}}">
+        <mt-account-info></mt-account-info>
+    </mat-tab>
+    <mat-tab label="{{'tradeManager.currencyRisk' | translate}}">
+        <mt-currency-risk [selectedTabIndex]="selectedTabIndex" [tabIndex]="5"></mt-currency-risk>
+    </mat-tab>
+</mat-tab-group>
