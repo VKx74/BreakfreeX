@@ -27,13 +27,13 @@
                         <div class="form-unit__label flex justify-space-between align-items-center">
                             {{"profileInfo.phoneNumber" | translate}}
                         </div>
-                        <mat-form-field *ngIf="phoneNumberStep === ChangePhoneNumberStep.Add" class="crypto-input disabled">
+                        <mat-form-field *ngIf="phoneNumberStep === ChangePhoneNumberStep.Add" class="crypto-input">
                             <input matInput ng-trim="false"
                                    type="text" placeholder="{{'profileInfo.phoneNumber' | translate}}"
                                    formControlName="addPhone">
                             <mat-error formError="addPhone"></mat-error>
                         </mat-form-field>
-                        <mat-form-field *ngIf="phoneNumberStep === ChangePhoneNumberStep.Change" class="crypto-input disabled">
+                        <mat-form-field *ngIf="phoneNumberStep === ChangePhoneNumberStep.Change" class="crypto-input">
                             <input matInput ng-trim="false"
                                    type="text" placeholder="{{'profileInfo.phoneNumber' | translate}}"
                                    formControlName="phone">
@@ -74,7 +74,7 @@
                 <div class="flex">
                     <div class="phone-number w-100">
                         <div class="form-unit__label">{{"profileInfo.verificationCode" | translate}}</div>
-                        <mat-form-field class="crypto-input disabled with-hint full-width">
+                        <mat-form-field class="crypto-input with-hint full-width">
                             <input matInput ng-trim="false" type="text"
                                    placeholder="{{'profileInfo.verificationCode' | translate}}"
                                    formControlName="code">
