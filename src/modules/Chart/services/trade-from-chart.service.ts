@@ -136,11 +136,6 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (!this.IsTradingEnabledHandler()) {
             return;
         }
-        const orderConfig = this._getOrderSettings(params);
-        if (!orderConfig) {
-            this._alertService.error("Broker not support trading from chart.");
-            return;
-        }
 
         if (!this.IsSymbolSupported()) {
             this.showMappingConfirmation()
@@ -152,6 +147,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                     }
                 });
         } else {
+            const orderConfig = this._getOrderSettings(params);
+            if (!orderConfig) {
+                this._alertService.error("Broker not support trading from chart.");
+                return;
+            }
             this.showOrderModal(orderConfig, callback, false);
         }
     }
