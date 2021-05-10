@@ -1,14 +1,14 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard} from "./services/auth/auth.guard";
-import {AppRoutes} from "./app.routes";
-import {IRoleGuardConfig, RoleGuard} from "./services/role/role.guard";
-import {Roles} from "@app/models/auth/auth.models";
-import {UnauthorizedGuard} from "@app/services/auth/unauthorized.guard";
-import {ComponentsGuard} from "@app/guards/components.guard";
-import {AppComponent} from "@app/app.component";
-import {PopupWindowGuard} from "../modules/popup-window/popup-window.guard";
-import {UserSettingsResolver} from "@app/services/user-settings.resolver";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from "./services/auth/auth.guard";
+import { AppRoutes } from "./app.routes";
+import { IRoleGuardConfig, RoleGuard } from "./services/role/role.guard";
+import { Roles } from "@app/models/auth/auth.models";
+import { UnauthorizedGuard } from "@app/services/auth/unauthorized.guard";
+import { ComponentsGuard } from "@app/guards/components.guard";
+import { AppComponent } from "@app/app.component";
+import { PopupWindowGuard } from "../modules/popup-window/popup-window.guard";
+import { UserSettingsResolver } from "@app/services/user-settings.resolver";
 import { GuestGuard } from './services/auth/guest.guard';
 import { GuestResolver } from './reslovers/guest.resolver';
 
@@ -47,16 +47,16 @@ const routes: Routes = [
                 canLoad: [AuthGuard, ComponentsGuard],
                 canActivate: [AuthGuard]
             },
-            // {
-            //     path: AppRoutes.Guest,
-            //     // pathMatch: 'full',
-            //     loadChildren: () => import('../modules/platform/platform.module').then(m => m.PlatformModule),
-            //     canLoad: [GuestGuard, ComponentsGuard],
-            //     canActivate: [GuestGuard],
-            //     resolve: {
-            //         guestToken: GuestResolver
-            //     }
-            // },
+            {
+                path: AppRoutes.Guest,
+                // pathMatch: 'full',
+                loadChildren: () => import('../modules/platform/platform.module').then(m => m.PlatformModule),
+                canLoad: [GuestGuard, ComponentsGuard],
+                canActivate: [GuestGuard],
+                resolve: {
+                    guestToken: GuestResolver
+                }
+            },
             {
                 path: AppRoutes.Pages,
                 // pathMatch: 'full',
@@ -97,7 +97,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true, enableTracing: false})],
+    imports: [RouterModule.forRoot(routes, { useHash: true, enableTracing: false })],
     exports: [RouterModule],
 })
 export class AppRoutingModule {
