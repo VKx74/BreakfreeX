@@ -42,38 +42,37 @@
             <div class="content-wrapper flex-grow-1 h-0">
                <div class="full-height padding-wrapper">
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
-                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container"
-                        [ngClass]="{'blur': !isAuthorizedCustomer}">
+                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container">
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
                         <div *ngIf="showRestrictions(groupedResult); else dataContainer">
-                           <div class="access-restrictions" (click)="manageSubscriptions()"
-                              *ngIf="isOutOfAccess(groupedResult); else restrictionTemplate">
+                           <div class="access-restrictions" (click)="manageSubscriptions()" *ngIf="is15MinSonarAccessRestriction(groupedResult)">
                               Upgrade to Pro for access to 15m Sonar setups.
                            </div>
-                           <ng-template #restrictionTemplate>
-                              <div class="timeframe-restrictions">
-                                 Before Sonar enables this timeframe, you need to achieve level 4. <br> Don't worry,
-                                 trades are still available if you dig through this timeframe manually.
-
-                                 <br><br>
-                                 <b>Enjoy your Breakfree journey.</b>
-                              </div>
-                           </ng-template>
+                           <div class="access-restrictions" (click)="manageSubscriptions()" *ngIf="is1HSonarAccessRestriction(groupedResult)">
+                              Upgrade to Discovery for access to 1H Sonar setups.
+                           </div>
+                           <div class="timeframe-restrictions" *ngIf="isLevelRestriction(groupedResult)">
+                              Before Sonar enables this timeframe, you need to achieve level 4. <br> Don't worry,
+                              trades are still available if you dig through this timeframe manually.
+                              <br><br>
+                              <b>Enjoy your Breakfree journey.</b>
+                           </div>
                         </div>
                         <ng-template #dataContainer>
                            <div class="timeframe-wrapper tiles-wrapper w-100">
                               <ng-container *ngFor="let group of groupedResult.data; trackBy: trackByMarketType">
-                                 <div class="sonar-tile-wrapper"
-                                    *ngFor="let result of group.data; trackBy: trackByResult">
-                                    <scanner-card [result]="result" (click)="handleScannerResultsClick(result)">
-                                    </scanner-card>
-                                    <div class="featured-settings" tooltip
-                                       [matTooltip]="'If you click the flag and select a color, Sonar will keep this trade in the top list even if it clears.'">
-                                       <color-selector [activeColor]="getFeaturedDetails(result)"
-                                          class="featured-selector result-data"
-                                          (activeColorChange)='handleColorSelected($event, result)'
-                                          (click)="click($event)" [path]="'flag'">
-                                       </color-selector>
+                                 <div class="sonar-tile-wrapper" *ngFor="let result of group.data; trackBy: trackByResult">
+                                    <div [ngClass]="{'blur': result.isMocked}">
+                                       <scanner-card [result]="result" (click)="handleScannerResultsClick(result)">
+                                       </scanner-card>
+                                       <div class="featured-settings" tooltip
+                                          [matTooltip]="'If you click the flag and select a color, Sonar will keep this trade in the top list even if it clears.'">
+                                          <color-selector [activeColor]="getFeaturedDetails(result)"
+                                             class="featured-selector result-data"
+                                             (activeColorChange)='handleColorSelected($event, result)'
+                                             (click)="click($event)" [path]="'flag'">
+                                          </color-selector>
+                                       </div>
                                     </div>
                                  </div>
                               </ng-container>

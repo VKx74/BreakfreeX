@@ -27,6 +27,7 @@ export interface IBFTScanInstrumentsResponseItem {
     type: IBFTATradeType;
     tte: number;
     tp: IBFTATradeProbability;
+    isMocked?: boolean;
     entry: number;
     stop: number;
 }

@@ -26,6 +26,7 @@ import { PersonalInfoService } from '@app/services/personal-info/personal-info.s
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component';
+import { mockedSonarData } from './mocked-data';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -64,6 +65,7 @@ export interface IScannerResults {
     marketType: string;
     trend: IBFTATrend;
     origType: IBFTATradeType;
+    isMocked: boolean;
 }
 
 interface IScannerHistoryResults extends IScannerResults {
@@ -176,6 +178,51 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (this._tradingProfileService.missions) {
             this._loadingProfile = false;
         }
+
+        // this._supportedTimeframes = this._supportedTimeframes.reverse();
+    }
+
+    is15MinSonarAccessRestriction(group: IGroupedResults): boolean {
+        const tfValue15Min = this.toTimeframe(60 * 15);
+        if (group.timeframe === tfValue15Min) {
+            return this.show15MinAccessRestriction();
+        }
+
+        return false;
+    }
+
+    is1HSonarAccessRestriction(group: IGroupedResults): boolean {
+        const tfValue1H = this.toTimeframe(60 * 60);
+        if (group.timeframe === tfValue1H) {
+            return this.show1HAccessRestriction();
+        }
+
+        return false;
+    }
+
+    isLevelRestriction(group: IGroupedResults): boolean {
+        const tfValue15Min = this.toTimeframe(60 * 15);
+        const _15MinLevelRestriction = this.show15MinLevelRestriction();
+        const _15MinAccessRestriction = this.show15MinAccessRestriction();
+        if (group.timeframe === tfValue15Min && _15MinLevelRestriction && !_15MinAccessRestriction) {
+            return true;
+        }
+
+        const tfValue1H = this.toTimeframe(60 * 60);
+        const _1HLevelRestriction = this.show1HLevelRestriction();
+        const _1HAccessRestriction = this.show1HAccessRestriction();
+        if (group.timeframe === tfValue1H && _1HLevelRestriction && !_1HAccessRestriction) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show15MinAccessRestriction(): boolean {
+        if (!this.isPro) {
+            return true;
+        }
+        return false;
     }
 
     show15MinLevelRestriction() {
@@ -183,17 +230,21 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             return false;
         }
 
-        const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
         if (this._loadingProfile) {
             return false;
         }
 
-        if (!this.isAuthorizedCustomer) {
+        let level = this._tradingProfileService.level;
+        const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
+        if (level < this._levelRestriction && is15MinSelected) {
             return true;
         }
 
-        let level = this._tradingProfileService.level;
-        if (this.isPro && level < this._levelRestriction && is15MinSelected) {
+        return false;
+    }
+
+    show1HAccessRestriction() {
+        if (!this.isAuthorizedCustomer) {
             return true;
         }
 
@@ -201,21 +252,21 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     show1HLevelRestriction() {
-        if (this.isAdmin) {
+        // if (this.isAdmin) {
+        //     return false;
+        // }
+
+        if (this.isPro) {
             return false;
         }
 
-        const is1HSelected = this.activeTimeframes.indexOf(TimeFrames.Hour1) !== -1;
         if (this._loadingProfile) {
             return false;
         }
 
-        if (!this.isAuthorizedCustomer) {
-            return true;
-        }
-
         let level = this._tradingProfileService.level;
-        if (!this.isPro && level < this._levelRestriction && is1HSelected) {
+        const is1HSelected = this.activeTimeframes.indexOf(TimeFrames.Hour1) !== -1;
+        if (level < this._levelRestriction && is1HSelected) {
             return true;
         }
 
@@ -235,31 +286,35 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         }, 1000 * 60 * 2);
     }
 
-    isOutOfAccess(group: IGroupedResults): boolean {
-        const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
-        const tfValue15Min = this.toTimeframe(60 * 15);
-        if (group.timeframe === tfValue15Min && is15MinSelected && !this.isPro) {
-            return true;
-        }
-        return false;
-    }
+    // isOutOfAccess(group: IGroupedResults): boolean {
+    //     const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
+    //     const tfValue15Min = this.toTimeframe(60 * 15);
+    //     if (group.timeframe === tfValue15Min && is15MinSelected && !this.isPro) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     showRestrictions(group: IGroupedResults): boolean {
-        if (!this.isAuthorizedCustomer) {
-            return false;
-        }
+        // if (!this.isAuthorizedCustomer) {
+        //     return false;
+        // }
 
         const tfValue15Min = this.toTimeframe(60 * 15);
-        if (group.timeframe === tfValue15Min && this.show15MinLevelRestriction()) {
+        const _15MinLevelRestriction = this.show15MinLevelRestriction();
+        const _15MinAccessRestriction = this.show15MinAccessRestriction();
+        if (group.timeframe === tfValue15Min && (_15MinLevelRestriction || _15MinAccessRestriction)) {
             return true;
         }
 
         const tfValue1H = this.toTimeframe(60 * 60);
-        if (group.timeframe === tfValue1H && this.show1HLevelRestriction()) {
+        const _1HLevelRestriction = this.show1HLevelRestriction();
+        const _1HAccessRestriction = this.show1HAccessRestriction();
+        if (group.timeframe === tfValue1H && (_1HLevelRestriction || _1HAccessRestriction)) {
             return true;
         }
 
-        return this.isOutOfAccess(group);
+        return false;
     }
 
     dataExistsInGroup(group: IGroupedResults): boolean {
@@ -268,9 +323,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 return true;
             }
         }
-
-
-        return this.showRestrictions(group);
+        return false;
     }
 
     groupedResults(): IGroupedResults[] {
@@ -337,29 +390,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     scanMarkets() {
-        if (this._identityService.isGuestMode) {
-            return;
+        if (this.isAuthorizedCustomer) {
+            this._scanFullMarket();
+        } else {
+            this._scanDemo();
         }
-        
-        this.loading = true;
-        this.scannerResults = [];
-
-        this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
-            this.loading = false;
-            this._processData(data.items);
-            if (!this.scannerResults.length) {
-                this.output = "No Results";
-            } else {
-                this.output = null;
-            }
-            this._refresh();
-        }, (error) => {
-            this.loading = false;
-            this.output = "Failed to scan";
-            this._refresh();
-        });
-
-        this._loadHistory();
     }
 
     @bind
@@ -565,7 +600,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 marketType: this._featuredGroupName,
                 trend: loaded ? loaded.trend : i.trend,
                 color: i.color,
-                origType: i.origType
+                origType: i.origType,
+                isMocked: false
             });
         }
 
@@ -583,7 +619,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 volatility: this._toVolatility(i.tp),
                 marketType: this._getMarketType(i.symbol),
                 trend: i.trend,
-                origType: i.type
+                origType: i.type,
+                isMocked: i.isMocked || false
             });
         }
 
@@ -623,9 +660,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
         const filteredByTimeframes = [];
         for (const i of filteredBySegments) {
-            if (!this._isTFAllowed(i.timeframe)) {
-                continue;
-            }
             if (this._isTimeframeSelected(i.timeframe)) {
                 filteredByTimeframes.push(i);
             }
@@ -731,7 +765,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                     trend: i.responseItem.trend,
                     time: date.toLocaleString(),
                     origType: i.responseItem.type,
-                    date: date
+                    date: date,
+                    isMocked: i.responseItem.isMocked || false
                 });
             }
             this._filterResults(true);
@@ -743,6 +778,38 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     private _refresh() {
         this._cdr.detectChanges();
+    }
+
+    private _scanFullMarket() {
+        this.loading = true;
+        this.scannerResults = [];
+
+        this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
+            this.loading = false;
+            this._processData(data.items);
+            if (!this.scannerResults.length) {
+                this.output = "No Results";
+            } else {
+                this.output = null;
+            }
+            this._refresh();
+        }, (error) => {
+            this.loading = false;
+            this.output = "Failed to scan";
+            this._refresh();
+        });
+
+        this._loadHistory();
+    }
+
+    private _scanDemo() {
+        this.loading = true;
+        this.scannerResults = [];
+        this.loading = false;
+        this._loadingProfile = false;
+        this._processData(mockedSonarData);
+        this._loadHistory();
+        this._refresh();
     }
 
 }
