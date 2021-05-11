@@ -130,6 +130,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         return IBFTATradeType;
     }
 
+    public get isGuest(): boolean {
+        return this._identityService.isGuestMode;
+    }
+
     public get isAuthorizedCustomer(): boolean {
         return this._identityService.isAuthorizedCustomer;
     }
@@ -252,9 +256,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     show1HLevelRestriction() {
-        // if (this.isAdmin) {
-        //     return false;
-        // }
+        if (this.isAdmin) {
+            return false;
+        }
 
         if (this.isPro) {
             return false;
@@ -296,9 +300,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     // }
 
     showRestrictions(group: IGroupedResults): boolean {
-        // if (!this.isAuthorizedCustomer) {
-        //     return false;
-        // }
+        if (this.isGuest) {
+            return false;
+        }
 
         const tfValue15Min = this.toTimeframe(60 * 15);
         const _15MinLevelRestriction = this.show15MinLevelRestriction();
@@ -729,24 +733,24 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         return `${tte} candles`;
     }
 
-    private _isTFAllowed(tf: number): boolean {
-        if (this.isAdmin) {
-            return true;
-        }
+    // private _isTFAllowed(tf: number): boolean {
+    //     if (this.isAdmin) {
+    //         return true;
+    //     }
 
-        let level = this._tradingProfileService.level;
-        if (this.isPro) {
-            if (tf < 60 * 60 && level < this._levelRestriction) {
-                return false;
-            }
-        } else {
-            if (tf < 60 * 60 * 4 && level < this._levelRestriction) {
-                return false;
-            }
-        }
+    //     let level = this._tradingProfileService.level;
+    //     if (this.isPro) {
+    //         if (tf < 60 * 60 && level < this._levelRestriction) {
+    //             return false;
+    //         }
+    //     } else {
+    //         if (tf < 60 * 60 * 4 && level < this._levelRestriction) {
+    //             return false;
+    //         }
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
     private _loadHistory() {
         this._alogService.scannerHistory().subscribe((data: IBFTScannerHistoryResponse) => {
