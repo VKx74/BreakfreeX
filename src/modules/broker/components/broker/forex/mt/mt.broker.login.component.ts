@@ -29,8 +29,7 @@ export class MTBrokerLoginComponent extends BrokerLogin {
     public _brokers: string[] = [];
     public _servers: MTServer[] = [];
     public brokerFormControl: FormControl = new FormControl();
-    public serverFormControl: FormControl = new FormControl();
-    @ViewChild('pwdInput', {static: false}) public input: ElementRef;
+    public serverFormControl: FormControl = new FormControl();    
 
     public get brokers(): string[] {
         return this._brokers;
@@ -156,8 +155,7 @@ export class MTBrokerLoginComponent extends BrokerLogin {
         }
 
         if (account.state && account.state.Password) {
-            this.password = (account.state as MTConnectionData).Password;
-            this.input.nativeElement.type = 'password';
+            this.password = (account.state as MTConnectionData).Password;            
         }
     }
 
