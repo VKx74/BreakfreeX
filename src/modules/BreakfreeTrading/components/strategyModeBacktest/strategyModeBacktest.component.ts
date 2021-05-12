@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTBacktestAlgoParameters, TrendDetectorType } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTABacktestResponse, IBFTAlgoParameters, IBFTBacktestAlgoParameters, TrendDetectorType, IBFTAAlgoResponse } from '@app/services/algo.service';
 import { of } from 'rxjs';
 import bind from "bind-decorator";
 import { AlertService } from '@alert/services/alert.service';
@@ -170,13 +170,14 @@ export class StrategyModeBacktestComponent {
             }
             
             // let lineEntry = this.generateLine(startDate, endDate, signal.data.algo_Entry, "#629320");
-            let isBuy = signal.data.algo_Entry > signal.data.algo_Stop;
+            let tradeResponse = signal.data as IBFTAAlgoResponse;
+            let isBuy = tradeResponse.trade.algo_Entry > tradeResponse.trade.algo_Stop;
             let backColor = this.calculateProfitabilityColor(signal.timestamp, groupedOrders);
-            let backArea = this.generateRect(startDate, endDate, signal.data.algo_TP2, signal.data.algo_Stop, backColor);
-            let entryRect = this.generateRect(startDate, endDate, signal.data.algo_Entry_high, signal.data.algo_Entry_low, isBuy ? "#3d93204f" : "#932b204f");
-            let tpRect = this.generateRect(startDate, endDate, signal.data.algo_TP1_high, signal.data.algo_TP1_low, "#2e5e9a4f");
-            let lineTP2 = this.generateLine(startDate, endDate, signal.data.algo_TP2, "#2e5e9a");
-            let lineSL = this.generateLine(startDate, endDate, signal.data.algo_Stop, "#d3bb42");
+            let backArea = this.generateRect(startDate, endDate, tradeResponse.trade.algo_TP2, tradeResponse.trade.algo_Stop, backColor);
+            let entryRect = this.generateRect(startDate, endDate, tradeResponse.trade.algo_Entry_high, tradeResponse.trade.algo_Entry_low, isBuy ? "#3d93204f" : "#932b204f");
+            let tpRect = this.generateRect(startDate, endDate, tradeResponse.trade.algo_TP1_high, tradeResponse.trade.algo_TP1_low, "#2e5e9a4f");
+            let lineTP2 = this.generateLine(startDate, endDate, tradeResponse.trade.algo_TP2, "#2e5e9a");
+            let lineSL = this.generateLine(startDate, endDate, tradeResponse.trade.algo_Stop, "#d3bb42");
             
             backArea.tooltip.text = this.getDescription(signal.timestamp, groupedOrders, pricePrecision);
 

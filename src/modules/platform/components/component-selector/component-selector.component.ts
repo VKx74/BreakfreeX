@@ -14,7 +14,7 @@ import {OrderBookTranslateService} from "@order-book/localization/token";
 import {ComponentAccessService} from "@app/services/component-access.service";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {NewsTranslateService} from "../../../News/localization/news.token";
-import { BreakfreeTradingAcademyComponent } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 import { AlertWidgetComponent } from "modules/AutoTradingAlerts/components/alert-widget/alert-widget.component";
@@ -88,12 +88,12 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
                 componentIdentifier: ComponentIdentifier.watchlist,
             }, 
-            // {
-            //     component: BreakfreeTradingBacktestComponent,
-            //     previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
-            //     componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
-            //     componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
-            // },  
+            {
+                component: BreakfreeTradingBacktestComponent,
+                previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
+                componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
+                componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
+            },  
             // {
             //     component: BreakfreeTradingDiscoveryComponent,
             //     previewImgClass: BreakfreeTradingDiscoveryComponent.previewImgClass,
