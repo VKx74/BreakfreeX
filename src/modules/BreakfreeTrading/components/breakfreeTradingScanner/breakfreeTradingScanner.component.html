@@ -42,7 +42,8 @@
             <div class="content-wrapper flex-grow-1 h-0">
                <div class="full-height padding-wrapper">
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
-                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container" [ngClass]="{'blur': !isAuthorizedCustomer && !isGuest}">
+                     <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container"
+                        [ngClass]="{'blur': !isAuthorizedCustomer && !isGuest}">
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
                         <div *ngIf="showRestrictions(groupedResult); else dataContainer">
                            <div class="access-restrictions" (click)="manageSubscriptions()"
@@ -99,7 +100,7 @@
          </mat-tab>
          <mat-tab label="History">
             <div class="content-wrapper flex-grow-1 h-0">
-               <div class="full-height padding-wrapper" [ngClass]="{'blur': !isAuthorizedCustomer}">
+               <div class="full-height padding-wrapper" [ngClass]="{'blur': !isAuthorizedCustomer && !isGuest}">
                   <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true"
                      [expandOnClick]="false" [selectedRow]="selectedScannerResult"
                      [allowColumnsVisibilityChange]="false" (onRowSelect)="handleScannerResultsClick($event, true)">

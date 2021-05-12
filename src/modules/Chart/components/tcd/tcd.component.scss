@@ -11,6 +11,12 @@
   width: 100%;
   height: 100%;
 
+  .blur-animated {
+    animation: blur 4s ease 0s infinite;
+    -webkit-animation: blur 4s ease 0s infinite;
+    -moz-animation: blur 4s ease 0s infinite;
+  }
+
   .tcd-component {
     width: 100%;
     height: calc(100% - 6px);
@@ -30,4 +36,32 @@
 // Global global-styles
 /deep/ .tcdDialog {
   bottom: unset;
+}
+
+@keyframes blur {
+  0% {
+    -webkit-filter: blur(0px);
+    -moz-filter: blur(0px);
+    -o-filter: blur(0px);
+    -ms-filter: blur(0px);
+  }
+  10% {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+  } 
+
+  90% {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+  }
+  100% {
+    -webkit-filter: blur(0px);
+    -moz-filter: blur(0px);
+    -o-filter: blur(0px);
+    -ms-filter: blur(0px);
+  }
 }

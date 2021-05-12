@@ -72,6 +72,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     private replayWaiter: ReplayWaiter;
 
+    blur: boolean = false;
     chart: TradingChartDesigner.Chart;
     // linksList: TradingChartDesigner.IHelpLinks;
     // showSpinner = true;
@@ -223,8 +224,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barsLoaded.bind(this));
 
             if (!state) {
-                let isProAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
-                let isDiscoveryAllowed = this._indicatorRestrictionService.validate(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+                let isProAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
+                let isDiscoveryAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
 
                 if (isProAllowed) {
                     this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingPro());
@@ -240,6 +241,28 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this._chartTrackerService.addChart(this.chart);
 
         });
+    }
+
+    startReplayMode() {
+        const dates = this.chart.dataContext.dateDataRows.values;
+        if (dates.length < 100) {
+            return;
+        }
+
+        this.blur = true;
+        this.chart.refreshAsync();
+
+        setTimeout(() => {
+            this.blur = false;
+            setTimeout(() => {
+                this.chart.replayMode.play();
+            }, 1000);
+        }, 3000); 
+        
+        setTimeout(() => {
+            this.chart.replayMode.replaySpeed = 500;
+            this.chart.setReplayByDate(dates[100]);
+        }, 2000);
     }
 
     protected indicatorAdded(eventObject: TradingChartDesigner.IValueChangedEvent) {
@@ -294,6 +317,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
         
         this._tradingFromChartHandler.setChart(this.chart);
         this._alertingFromChartService.setChart(this.chart);
+
+        setTimeout(() => {
+            this.startReplayMode();
+        }, 2000);
     }
 
     protected useDefaultLinker(): boolean {

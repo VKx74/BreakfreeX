@@ -6,16 +6,9 @@ import { AlertService } from '@alert/services/alert.service';
 @Injectable()
 export class IndicatorRestrictionService {
     private _restrictedIndicators: string[] = [];
+    private _demoInstrument: string = "eurusd";
 
     constructor(protected _identity: IdentityService) {
-        // const restrictedComponents = this._identity.restrictedComponents;
-
-        // for (const restrictions of restrictedComponents) {
-        //     if (restrictions.endsWith(this._indicatorSuffix)) {
-        //         this._restrictedIndicators.push(restrictions.replace(this._indicatorSuffix, ""));
-        //     }
-        // }
-
         if (this._identity.isAdmin) {
             return;
         }
@@ -33,19 +26,24 @@ export class IndicatorRestrictionService {
         }
     }
 
-    public getRestrictions(): string[] {
+    public getRestrictions(chart: TradingChartDesigner.Chart): string[] {
+        const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
+        if (this._identity.isGuestMode && chartInstrument === this._demoInstrument) {
+            return [TradingChartDesigner.BreakfreeTradingPro.instanceTypeName];
+        }
+        
         return this._restrictedIndicators;
     } 
     
-    public canRunStrategyReplay(): boolean {
+    public canRunStrategyReplay(chart: TradingChartDesigner.Chart): boolean {
         return this.isAdmin();
     }
     
-    public canRunXModeReplay(): boolean {
+    public canRunXModeReplay(chart: TradingChartDesigner.Chart): boolean {
         return true;
     }
 
-    public validate(name: string): boolean {
+    public validate(chart: TradingChartDesigner.Chart, name: string): boolean {
         for (const restriction of this._restrictedIndicators) {
             if (restriction.toUpperCase() === name.toUpperCase()) {
                 return false;

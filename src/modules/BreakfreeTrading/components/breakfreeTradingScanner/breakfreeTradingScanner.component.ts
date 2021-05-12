@@ -27,6 +27,7 @@ import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component';
 import { mockedSonarData } from './mocked-data';
+import { mockedHistory } from './mocked-history';
 
 interface IScannerState {
     featured: IFeaturedResult[];
@@ -281,13 +282,15 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this.loading = true;
         this.scanMarkets();
 
-        if (!this._identityService.isAuthorizedCustomer) {
-            return;
+        if (this.isAuthorizedCustomer) {
+            this._timer = setInterval(() => {
+                this.scanMarkets();
+            }, 1000 * 60 * 2);
+        } else {
+            this._timer = setInterval(() => {
+                this.scanMarkets();
+            }, 1000 * 10);
         }
-
-        this._timer = setInterval(() => {
-            this.scanMarkets();
-        }, 1000 * 60 * 2);
     }
 
     // isOutOfAccess(group: IGroupedResults): boolean {
@@ -551,6 +554,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
 
     private _sendInstrumentChange(scannerVM: IScannerResults, isHistoricalRecord: boolean) {
         if (!this.isAuthorizedCustomer) {
+            this.processCheckout();
             return false;
         }
 
@@ -752,6 +756,29 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     //     return true;
     // }
 
+    private _loadDemoHistory() {
+        const history = this._randomize(mockedHistory.reverse()).slice(0, 100);
+        for (const i of history) {
+            const date = new Date(i.time * 1000);
+            this.scannerHistoryResults.push({
+                exchange: i.responseItem.exchange,
+                symbol: i.responseItem.symbol,
+                timeframe: i.responseItem.timeframe,
+                tp: this._toTP(i.responseItem.tp),
+                tte: this._toTTE(i.responseItem.tte),
+                volatility: this._toVolatility(i.responseItem.tp),
+                marketType: this._getMarketType(i.responseItem.symbol),
+                trend: i.responseItem.trend,
+                time: date.toLocaleString(),
+                origType: i.responseItem.type,
+                date: date,
+                isMocked: i.responseItem.isMocked || false
+            });
+        }
+        this._filterResults(true);
+        this._refresh();
+    }
+
     private _loadHistory() {
         this._alogService.scannerHistory().subscribe((data: IBFTScannerHistoryResponse) => {
             const history = data.items.reverse().slice(0, 100);
@@ -811,10 +838,21 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         this.scannerResults = [];
         this.loading = false;
         this._loadingProfile = false;
-        this._processData(mockedSonarData);
-        this._loadHistory();
+        this._processData(this._randomize(mockedSonarData));
+        this._loadDemoHistory();
         this._refresh();
     }
 
+    private _randomize(data: any[]): any[] {
+        let result = [];
+        for (let i = 0; i < data.length; i++) {
+            let rand = Math.trunc(Math.random() * 4);
+            if (rand >= 1) {
+                result.push(data[i]);
+            }
+        }
+
+        return result;
+    }
 }
 
