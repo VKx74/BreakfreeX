@@ -90,6 +90,7 @@
     display: flex;
     padding: 10px 0px;
     margin-bottom: 30px;
+    margin-top: 30px;
     .greeting {
       margin-left: 10px;
       display: flex;
@@ -172,6 +173,33 @@
       width: 100%;
       border-bottom: 1px solid hsla(0, 0%, 100%, 0.7);
       margin: 15px 0px;
+    }
+  }
+
+  .sections {
+    flex-direction: column;
+    .section-container {
+      flex-direction: column;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    .section {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      margin-top: 10px;
+      background-repeat: no-repeat;
+      line-height: 24px;
+      cursor: pointer;
+      transition: all 0.22s;
+
+      &.is-active {
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.95);
+      }
     }
   }
 
