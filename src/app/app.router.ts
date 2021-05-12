@@ -47,16 +47,16 @@ const routes: Routes = [
                 canLoad: [AuthGuard, ComponentsGuard],
                 canActivate: [AuthGuard]
             },
-            // {
-            //     path: AppRoutes.Guest,
-            //     // pathMatch: 'full',
-            //     loadChildren: () => import('../modules/platform/platform.module').then(m => m.PlatformModule),
-            //     canLoad: [GuestGuard, ComponentsGuard],
-            //     canActivate: [GuestGuard],
-            //     resolve: {
-            //         guestToken: GuestResolver
-            //     }
-            // },
+            {
+                path: AppRoutes.Guest,
+                // pathMatch: 'full',
+                loadChildren: () => import('../modules/platform/platform.module').then(m => m.PlatformModule),
+                canLoad: [GuestGuard, ComponentsGuard],
+                canActivate: [GuestGuard],
+                resolve: {
+                    guestToken: GuestResolver
+                }
+            },
             {
                 path: AppRoutes.Pages,
                 // pathMatch: 'full',
