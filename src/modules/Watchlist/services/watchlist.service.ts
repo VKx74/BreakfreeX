@@ -4,14 +4,14 @@ import { map, tap } from "rxjs/operators";
 import { WatchlistStorageService } from './watchlist-storage.service';
 import { IInstrument } from '@app/models/common/instrument';
 
-import {MinorForexWatchlist} from './minorForex';
-import {MajorForexWatchlist} from './majorForex';
-import {ExoticsForexWatchlist} from './exoticForex';
-import {IndicesWatchlist} from './indicaes';
-import {EquitiesWatchlist} from './equities';
-import {CommoditiesWatchlist} from './commodities';
-import {BondsWatchlist} from './bonds';
-import {MetalsWatchlist} from './metals';
+import { MinorForexWatchlist } from './minorForex';
+import { MajorForexWatchlist } from './majorForex';
+import { ExoticsForexWatchlist } from './exoticForex';
+import { IndicesWatchlist } from './indicaes';
+import { EquitiesWatchlist } from './equities';
+import { CommoditiesWatchlist } from './commodities';
+import { BondsWatchlist } from './bonds';
+import { MetalsWatchlist } from './metals';
 import { SettingsStorageService } from '@app/services/settings-storage.servic';
 import { IFeaturedInstruments, IUserSettings } from '@app/models/settings/user-settings';
 
@@ -38,16 +38,16 @@ export class WatchlistService {
     private featuredWatchlists: IWatchlistItem[] = [];
 
     public lastActiveWatchlistComponentId: string;
-    
-    constructor(private _watchlistStorageService: WatchlistStorageService, private _settingsStorageService: SettingsStorageService) { 
-    
+
+    constructor(private _watchlistStorageService: WatchlistStorageService, private _settingsStorageService: SettingsStorageService) {
+
     }
 
-    public getDefaultWatchlist(): IWatchlistItem[] { 
+    public getDefaultWatchlist(): IWatchlistItem[] {
         return [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
     }
 
-    public getWatchlists(): Observable<IWatchlistItem[]> { 
+    public getWatchlists(): Observable<IWatchlistItem[]> {
         if (this._watchlists && this._watchlists.length) {
             return of(this._watchlists);
         }
@@ -55,14 +55,21 @@ export class WatchlistService {
         if (this._request) {
             return this._request;
         }
-        let r = this._watchlistStorageService.allWatchlists().pipe(tap(() => {
+        let r = this._watchlistStorageService.allWatchlists().pipe(tap((wl: IWatchlistItem[]) => {
+            if (wl) {
+                if (!this._watchlists)
+                    this._watchlists = [];
+                wl.forEach((item) => {
+                    this._watchlists.push(item);
+                });
+            }
             this._request = null;
         }));
         this._request = r;
         return r;
-    } 
+    }
 
-    public getFeaturedInstruments(): Observable<IFeaturedInstruments[]>  {
+    public getFeaturedInstruments(): Observable<IFeaturedInstruments[]> {
         return this._settingsStorageService.getSettings().pipe(
             map((data: IUserSettings) => {
                 if (!data) {
@@ -87,16 +94,16 @@ export class WatchlistService {
                     return w;
                 }
             }
-        }; 
-        
+        };
+
         const getFeaturedGroup = (instrument: IInstrument) => {
             for (const i of featuredInstruments) {
                 if (i.instrument.id === instrument.id && i.instrument.exchange === instrument.exchange) {
                     return i;
                 }
             }
-        };  
-        
+        };
+
         const generateName = (instruments: IInstrument[]) => {
             let name = "";
             for (const i of instruments) {
@@ -165,13 +172,13 @@ export class WatchlistService {
         return this.featuredWatchlists;
     }
 
-    public updateFeaturedInstruments(instruments: IFeaturedInstruments[]): Observable<void>  {
+    public updateFeaturedInstruments(instruments: IFeaturedInstruments[]): Observable<void> {
         return this._settingsStorageService.updateFeaturedInstruments(instruments).pipe(map(() => {
             this.onFeaturedListChanged.next(instruments);
         }));
     }
-    
-    public addWatchlist(name: string, data: IInstrument[], trackingId?: string): Observable<IWatchlistItem>  { 
+
+    public addWatchlist(name: string, data: IInstrument[], trackingId?: string): Observable<IWatchlistItem> {
         if (this._watchlists && this._watchlists.length >= 20) {
             return throwError(new Error('Maximum amount of watchlists reached.'));
         }
@@ -188,14 +195,14 @@ export class WatchlistService {
             }
             return response;
         }));
-    } 
-    
-    public deleteWatchlist(id: string): Observable<any>  {
+    }
+
+    public deleteWatchlist(id: string): Observable<any> {
         const existing = this._watchlists.findIndex(watchlist => watchlist.id === id);
         if (existing < 0) {
             return throwError("Watchlist not found");
         }
-        
+
         return this._watchlistStorageService.removeWatchlist(id).pipe(map((data: any) => {
             const watchlist = this._watchlists[existing];
             this._watchlists.splice(existing, 1);
@@ -203,13 +210,13 @@ export class WatchlistService {
             return data;
         }));
     }
-    
+
     public editWatchlist(id: string, newData: IInstrument[], name: string): Observable<any> {
         const existing = this._watchlists.find(watchlist => watchlist.id === id);
         if (!existing) {
             return throwError("Watchlist not found");
         }
-        
+
         return this._watchlistStorageService.editWatchlist(id, newData, name).pipe(map((data: any) => {
             existing.data = newData;
             existing.name = name;
