@@ -1,8 +1,5 @@
 import { Injectable } from "@angular/core";
 import { IdentityService } from "../../../app/services/auth/identity.service";
-import { TemplatesStorageService } from './templates-storage.service';
-import { AlertService } from '@alert/services/alert.service';
-
 @Injectable()
 export class IndicatorRestrictionService {
     private _restrictedIndicators: string[] = [];
@@ -36,6 +33,11 @@ export class IndicatorRestrictionService {
     } 
     
     public canRunStrategyReplay(chart: TradingChartDesigner.Chart): boolean {
+        const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
+        if (this._identity.isGuestMode && chartInstrument === this._demoInstrument) {
+            return true;
+        }
+
         return this.isAdmin();
     }
     
@@ -44,6 +46,14 @@ export class IndicatorRestrictionService {
     }
 
     public validate(chart: TradingChartDesigner.Chart, name: string): boolean {
+        const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
+        if (this._identity.isGuestMode && chartInstrument === this._demoInstrument) {
+            if (name === TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName ||
+                name === TradingChartDesigner.RTD.instanceTypeName) {
+                return true;
+            }
+        }
+
         for (const restriction of this._restrictedIndicators) {
             if (restriction.toUpperCase() === name.toUpperCase()) {
                 return false;

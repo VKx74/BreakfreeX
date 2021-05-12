@@ -429,6 +429,10 @@ export class AlgoService {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v2`, data).pipe(map(this._decrypt));
     }
 
+    calculateV2Guest(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v2_guest`, data).pipe(map(this._decrypt));
+    }
+
     calculatePositionSize(data: IBFTAPositionSizeParameters): Observable<IBFTAPositionSize> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_pos_size`, data).pipe(map(this._decrypt));
     }
@@ -451,6 +455,10 @@ export class AlgoService {
 
     calculateRTD(data: any): Observable<IRTDPayload> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
+    }
+
+    calculateRTDGuest(data: any): Observable<IRTDPayload> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd_guest`, data).pipe(map(this._decrypt));
     }
 
     getMarketInfo(instrument: IInstrument | string, granularity: number): Observable<IBFTAMarketInfo> {

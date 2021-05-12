@@ -1291,4 +1291,4 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
         "time": 1620743663,
         "avgEntry": 200
     }
-]
+];

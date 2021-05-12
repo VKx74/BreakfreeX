@@ -301,4 +301,4 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         stop: 0.00001682954676011028,
         isMocked: true
     }
-]
+];

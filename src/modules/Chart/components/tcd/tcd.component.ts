@@ -29,6 +29,7 @@ import {AppState} from "@app/store/reducer";
 import { SaveStateAction } from '@app/store/actions/platform.actions';
 import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
 import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
+import { IdentityService } from "@app/services/auth/identity.service";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -70,6 +71,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
     static componentName = 'Trading Chart Designer';
     static previewImgClass = 'crypto-icon-chart';
 
+    private isGuestModeReplayed: boolean;
     private replayWaiter: ReplayWaiter;
 
     blur: boolean = false;
@@ -96,6 +98,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _alertingFromChartService: AlertingFromChartService,
                 private _chartTrackerService: ChartTrackerService,
                 private _store: Store<AppState>,
+                private _identity: IdentityService,
                 protected _injector: Injector) {
         super(_injector);
     }
@@ -239,16 +242,20 @@ export class TcdComponent extends BaseLayoutItemComponent {
             }
 
             this._chartTrackerService.addChart(this.chart);
-
         });
     }
 
     startReplayMode() {
-        const dates = this.chart.dataContext.dateDataRows.values;
-        if (dates.length < 100) {
+        if (this.isGuestModeReplayed) {
             return;
         }
 
+        const dates = this.chart.dataContext.dateDataRows.values;
+        if (dates.length < 130) {
+            return;
+        }
+
+        this.isGuestModeReplayed = true;
         this.blur = true;
         this.chart.refreshAsync();
 
@@ -260,8 +267,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }, 3000); 
         
         setTimeout(() => {
-            this.chart.replayMode.replaySpeed = 500;
-            this.chart.setReplayByDate(dates[100]);
+            this.chart.replayMode.replaySpeed = 700;
+            this.chart.setReplayByDate(dates[130], true);
         }, 2000);
     }
 
@@ -318,9 +325,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
         this._tradingFromChartHandler.setChart(this.chart);
         this._alertingFromChartService.setChart(this.chart);
 
-        setTimeout(() => {
-            this.startReplayMode();
-        }, 2000);
+        if (this._identity.isGuestMode) {
+            setTimeout(() => {
+                this.startReplayMode();
+            }, 1000);
+        }
     }
 
     protected useDefaultLinker(): boolean {
@@ -348,6 +357,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
         chart.on(TradingChartDesigner.ChartEvent.TIME_FRAME_CHANGED, (e: TradingChartDesigner.IValueChangedEvent) => {
             this._handleChartStateChanged();
+        });
+        
+        chart.on(TradingChartDesigner.ChartEvent.REPLAY_MODE_STOPPED, (e: TradingChartDesigner.IValueChangedEvent) => {
+            this._replayModeFinished();
         });
 
         chart.on(this._getChartStateChangedEvents(), (e) => {
@@ -491,6 +504,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
         // this._handleChartStateChanged();
     }
 
+    private _replayModeFinished() {
+        if (this._identity.isGuestMode) {
+            this.chart.removeIndicators();
+            this.chart.removeShapes();
+        }
+    }
+
     private _handleChartStateChanged() {
         this.fireStateChanged();
     }
@@ -525,6 +545,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
             if (this.chart) {
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_ADDED);
                 this.chart.off(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED);
+                this.chart.off(TradingChartDesigner.ChartEvent.TIME_FRAME_CHANGED);
+                this.chart.off(TradingChartDesigner.ChartEvent.REPLAY_MODE_STOPPED);
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_REMOVED);
                 this.chart.off(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS);
                 this.chart.off(TradingChartDesigner.ChartEvent.SAVE_SESSION);
