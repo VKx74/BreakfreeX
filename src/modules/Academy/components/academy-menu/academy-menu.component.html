@@ -3,8 +3,8 @@
         <div *ngIf="hidable" class="close-button-container">
             <i class="fa fa-angle-double-left close-button" (click)="setSidebarState(false)"></i>
         </div>
-        <div class="drop-down flex">
-            <div [matMenuTriggerFor]="menu" class="flex">
+        <div class="flex sections">
+            <!-- <div [matMenuTriggerFor]="menu" class="flex">
                 <div class="menuheader flex">
                     <div class="menuheader-text flex">{{selectedContentSector?.Title}}</div>
                     <div class="dropdown-toggle flex">&#5121;</div>
@@ -14,6 +14,12 @@
                         <div class="weeks-menu-item flex" (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors">{{contentSector.Name}}</div>
                     </div>
                 </mat-menu>
+            </div> -->
+
+            <div class="section-title flex">Content</div>
+
+            <div class="section-container flex">
+                <div (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors" [ngClass]="{'is-active': selectedContentSector?.Id == contentSector.Id}" class="section flex">{{contentSector.Name}}</div>
             </div>
         </div>
     </div>
