@@ -46,6 +46,10 @@ export class TradeManagerComponent implements OnDestroy {
         return this._bottomPanelSizeService.sizeBottomPanel() < this.openBottomPanel;
     }
 
+    get isGuest(): boolean {
+        return this._brokerService.isGuest;
+    }
+
     constructor(private _timeZoneManager: TimeZoneManager,
                 private _brokerService: BrokerService,
                 private _tzUtils: TzUtils,

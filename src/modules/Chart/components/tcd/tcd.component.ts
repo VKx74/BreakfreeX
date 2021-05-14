@@ -1,36 +1,36 @@
-import { Component, ElementRef, Inject, Injector, ViewChild} from "@angular/core";
-import {ThemeService} from "@app/services/theme.service";
-import {Theme} from "@app/enums/Theme";
-import {takeUntil, tap} from "rxjs/operators";
-import {DataFeedBase} from "../../datafeed/DataFeedBase";
-import {DataFeed} from "../../datafeed/DataFeed";
-import {TemplatesDataProviderService} from "../../services/templates-data-provider.service";
-import {TimeZoneManager} from "../../../TimeZones/services/timeZone.manager";
-import {LocalizationService} from "Localization";
-import {TranslateService} from "@ngx-translate/core";
-import {ChartTranslateService} from "../../localization/token";
-import {Actions, LinkingAction} from "../../../Linking/models";
-import {CalendarEventsDatafeed} from "../../calendarEvents/CalendarEventsDatafeed";
-import {IndicatorAlertHandler} from 'modules/Chart/indicatorAlertHandler/indicatorAlertHandler';
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {EducationalTipsService} from "@app/services/educational-tips.service";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
-import {IInstrument} from "@app/models/common/instrument";
+import { Component, ElementRef, Inject, Injector, ViewChild } from "@angular/core";
+import { Theme } from "@app/enums/Theme";
+import { IInstrument } from "@app/models/common/instrument";
+import { IdentityService } from "@app/services/auth/identity.service";
+import { SignalsDemoBrokerService } from "@app/services/demo.broker/signals-demo-broker.service";
+import { EducationalTipsService } from "@app/services/educational-tips.service";
+import { InstrumentService } from '@app/services/instrument.service';
+import { ThemeService } from "@app/services/theme.service";
+import { SaveStateAction } from '@app/store/actions/platform.actions';
+import { AppState } from "@app/store/reducer";
+import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
+import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
+import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
+import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
+import { BaseLayoutItemComponent } from "@layout/base-layout-item.component";
+import { Store } from "@ngrx/store";
+import { TranslateService } from "@ngx-translate/core";
+import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
+import { GoldenLayoutItemState } from "angular-golden-layout";
+import { LocalizationService } from "Localization";
+import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
+import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
+import { IndicatorAlertHandler } from 'modules/Chart/indicatorAlertHandler/indicatorAlertHandler';
+import { takeUntil } from "rxjs/operators";
+import { Actions, LinkingAction } from "../../../Linking/models";
+import { TimeZoneManager } from "../../../TimeZones/services/timeZone.manager";
+import { CalendarEventsDatafeed } from "../../calendarEvents/CalendarEventsDatafeed";
+import { DataFeed } from "../../datafeed/DataFeed";
+import { DataFeedBase } from "../../datafeed/DataFeedBase";
+import { ChartTranslateService } from "../../localization/token";
+import { TemplatesDataProviderService } from "../../services/templates-data-provider.service";
 import IChartInstrument = TradingChartDesigner.IInstrument;
 import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
-import {GoldenLayoutItemState} from "angular-golden-layout";
-import { InstrumentService } from '@app/services/instrument.service';
-import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
-import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
-import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
-import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
-import {Store} from "@ngrx/store";
-import {AppState} from "@app/store/reducer";
-import { SaveStateAction } from '@app/store/actions/platform.actions';
-import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
-import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
-import { IdentityService } from "@app/services/auth/identity.service";
-import { DemoBroker } from "@chart/services/demo-broker";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -74,12 +74,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     private isGuestModeReplayed: boolean;
     private replayWaiter: ReplayWaiter;
-    private demoBroker: DemoBroker;
 
     blur: boolean = false;
     chart: TradingChartDesigner.Chart;
-    // linksList: TradingChartDesigner.IHelpLinks;
-    // showSpinner = true;
 
     @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
 
@@ -101,6 +98,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _chartTrackerService: ChartTrackerService,
                 private _store: Store<AppState>,
                 private _identity: IdentityService,
+                private _demoBroker: SignalsDemoBrokerService,
                 protected _injector: Injector) {
         super(_injector);
     }
@@ -257,6 +255,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
             return;
         }
 
+        if (!this.isRTDExists()) {
+            setTimeout(() => {
+                this.startReplayMode();
+            }, 1000);
+            return;
+        }
+
         this.isGuestModeReplayed = true;
         this.blur = true;
         this.chart.refreshAsync();
@@ -264,16 +269,28 @@ export class TcdComponent extends BaseLayoutItemComponent {
         setTimeout(() => {
             this.blur = false;
             setTimeout(() => {
-                this.demoBroker = new DemoBroker();
+                this._demoBroker.reset();
                 this.chart.on(TradingChartDesigner.ChartEvent.BARS_APPENDED, this.barAppended.bind(this));
                 this.chart.replayMode.play();
             }, 1000);
         }, 3000); 
         
         setTimeout(() => {
-            this.chart.replayMode.replaySpeed = 700;
+            this.chart.replayMode.replaySpeed = 1000;
             this.chart.setReplayByDate(dates[100], true);
         }, 2000);
+    }
+
+    protected isRTDExists() {
+        for (const indicator of this.chart.indicators) {
+            if (indicator.instanceTypeName === TradingChartDesigner.RTD.instanceTypeName) {
+                const payload = (indicator as TradingChartDesigner.RTD).payload;
+                if (payload) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     protected indicatorAdded(eventObject: TradingChartDesigner.IValueChangedEvent) {
@@ -314,20 +331,21 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     protected barAppended(eventObject: TradingChartDesigner.IValueChangedEvent) {
-        let lastBarIndex = this.chart.dataContext.dateDataRows.values.length
+        let lastBarIndex = this.chart.dataContext.dateDataRows.values.length;
         let lastBar = lastBarIndex > 0 ? this.chart.dataContext.bar(lastBarIndex - 1) : null;
-        if (!this.demoBroker) {
-            return;
-        }
         
-        this.demoBroker.appendBar(lastBar);
+        this._demoBroker.appendBar(lastBar);
 
         for (const indicator of this.chart.indicators) {
             if (indicator.instanceTypeName === TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName) {
-                const payload = (indicator as any).payload;
-                const trade = (indicator as any).trade;
+                const payload = (indicator as TradingChartDesigner.BreakfreeTradingDiscovery).payload;
+                const trade = (indicator as TradingChartDesigner.BreakfreeTradingDiscovery).trade;
                 if (payload && trade) {
-                    this.demoBroker.appendSignal(payload);
+                    this._demoBroker.appendSignal({
+                        levels: payload.levels,
+                        size: payload.size,
+                        trade: payload.trade as any
+                    });
                 }
             }
         }
@@ -533,7 +551,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.removeIndicators();
             this.chart.removeShapes();
             this.chart.off(TradingChartDesigner.ChartEvent.BARS_APPENDED);
-            console.log(this.demoBroker);
         }
     }
 

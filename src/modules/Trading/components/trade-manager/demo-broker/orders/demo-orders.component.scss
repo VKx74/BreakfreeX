@@ -1,0 +1,44 @@
+@import "../../../trade-manager/items-component/shared.scss";
+
+:host {
+  height: 100%;
+
+  .color-column {
+    width: 6px;
+    height: 24px;
+    position: relative;
+    left: -10px;
+  }
+
+  .symbol-column {
+    font-weight: bolder;
+  }
+
+  .color-column.side-buy {
+    background-color: $lightGreenColor;
+  }
+
+  .color-column.side-sell {
+    background-color: $lightRedColor;
+  }
+  
+  .side-buy {
+    color: $lightGreenColor;
+  }
+
+  .side-sell {
+    color: $lightRedColor;
+  }
+
+  .symbol-column {
+    font-weight: bolder;
+  }
+
+  .positive-value {
+    color: $lightGreenColor;
+  }
+
+  .negative-value {
+    color: $lightRedColor;
+  }
+}

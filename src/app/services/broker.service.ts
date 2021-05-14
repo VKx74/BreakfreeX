@@ -29,6 +29,10 @@ export class BrokerService {
     get activeBroker(): IBroker {
         return this._activeBroker;
     }
+    
+    get isGuest(): boolean {
+        return this._identityService.isGuestMode;
+    }
 
     private _isConnected: boolean;
     get isConnected(): boolean {

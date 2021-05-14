@@ -37,7 +37,14 @@
         </div>
         <div class="broker-not-connected flex align-items-center justify-content-center h-100 w-100 relative-wrapper">
             <div *ngIf="((brokerInitialized$ | async) !== null); else loader" class="shiftup">
-                <bridge-broker-connector></bridge-broker-connector>
+                <ng-container *ngIf="isGuest; else bridgeConnector">
+                    <div class="demo-broker-container">
+                        <demo-orders></demo-orders>
+                    </div>
+                </ng-container>
+                <ng-template #noBrokerConnected>
+                    <bridge-broker-connector></bridge-broker-connector>
+                </ng-template>
             </div>           
             <ng-template #loader>
                 <bft-loader *ngIf="!isMinimized"></bft-loader>

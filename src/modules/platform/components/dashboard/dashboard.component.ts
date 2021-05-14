@@ -116,8 +116,8 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._saveLayoutState();
-            });  
-            
+            });
+
         this._actions
             .pipe(
                 ofType(ActionTypes.ResetLayout),
@@ -163,8 +163,8 @@ export class DashboardComponent {
 
         if (!this._identityService.isAdmin) {
             this._singleSessionService.watchSessions();
-        } 
-        
+        }
+
         if (this._identityService.isAuthorizedCustomer) {
             this._missionTrackingService.initMissions();
             this._missionTrackingService.watchMissions();
@@ -200,7 +200,7 @@ export class DashboardComponent {
         if (os && os.push && os.setExternalUserId) {
             const userId = this._identityService.id;
             if (userId) {
-                os.push(function() {
+                os.push(function () {
                     os.setExternalUserId(userId);
                 });
             }
@@ -251,6 +251,15 @@ export class DashboardComponent {
     }
 
     private _loadLayoutState() {
+        if (this._identityService.isGuestMode) {
+            this._workspaceRepository.getGuestWorkspace()
+                .subscribe((data: Workspace) => {
+                    this._initializeLayout(data.layoutState);
+                });
+                
+            return;
+        }
+
         this._layoutStorageService.getLayoutState()
             .pipe(
                 catchError(() => { // no saved workspace
@@ -290,19 +299,19 @@ export class DashboardComponent {
 
     private _resetLayout() {
         this._workspaceRepository.loadWorkspaces()
-        .subscribe({
-            next: (workspaces: Workspace[]) => {
-                for (const w of workspaces) {
-                    if (w.id === "empty") {
-                        this._layoutManager.loadState(w.layoutState, true);
-                        break;
+            .subscribe({
+                next: (workspaces: Workspace[]) => {
+                    for (const w of workspaces) {
+                        if (w.id === "empty") {
+                            this._layoutManager.loadState(w.layoutState, true);
+                            break;
+                        }
                     }
+                },
+                error: (e) => {
+                    console.error(e);
                 }
-            },
-            error: (e) => {
-                console.error(e);
-            }
-        });
+            });
     }
 
     needSaveConfirm() {
@@ -390,7 +399,7 @@ export class DashboardComponent {
 
         if (this._intervalLink) {
             clearInterval(this._intervalLink);
-        }  
+        }
         if (this._freeUserPopupTimer) {
             clearTimeout(this._freeUserPopupTimer);
         }
