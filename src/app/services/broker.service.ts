@@ -162,12 +162,12 @@ export class BrokerService {
     }
 
     loadState(state: IBrokerServiceState): Observable<ActionResult> {
-        // if (this._identityService.isGuestMode) {
-        //     return of({
-        //         result: false,
-        //         msg: 'Guest mode'
-        //     });
-        // }
+        if (this._identityService.isGuestMode) {
+            return of({
+                result: false,
+                msg: 'Guest mode'
+            });
+        }
 
         if (!state) {
             return of({

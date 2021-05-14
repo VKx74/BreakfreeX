@@ -30,6 +30,7 @@ import { SaveStateAction } from '@app/store/actions/platform.actions';
 import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
 import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 import { IdentityService } from "@app/services/auth/identity.service";
+import { DemoBroker } from "@chart/services/demo-broker";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -73,6 +74,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     private isGuestModeReplayed: boolean;
     private replayWaiter: ReplayWaiter;
+    private demoBroker: DemoBroker;
 
     blur: boolean = false;
     chart: TradingChartDesigner.Chart;
@@ -251,7 +253,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }
 
         const dates = this.chart.dataContext.dateDataRows.values;
-        if (dates.length < 130) {
+        if (dates.length < 100) {
             return;
         }
 
@@ -262,13 +264,15 @@ export class TcdComponent extends BaseLayoutItemComponent {
         setTimeout(() => {
             this.blur = false;
             setTimeout(() => {
+                this.demoBroker = new DemoBroker();
+                this.chart.on(TradingChartDesigner.ChartEvent.BARS_APPENDED, this.barAppended.bind(this));
                 this.chart.replayMode.play();
             }, 1000);
         }, 3000); 
         
         setTimeout(() => {
             this.chart.replayMode.replaySpeed = 700;
-            this.chart.setReplayByDate(dates[130], true);
+            this.chart.setReplayByDate(dates[100], true);
         }, 2000);
     }
 
@@ -307,6 +311,26 @@ export class TcdComponent extends BaseLayoutItemComponent {
     protected instrumentChanged(eventObject: TradingChartDesigner.IValueChangedEvent) {
         this._tradingFromChartHandler.refresh();
         this._alertingFromChartService.refresh();
+    }
+
+    protected barAppended(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        let lastBarIndex = this.chart.dataContext.dateDataRows.values.length
+        let lastBar = lastBarIndex > 0 ? this.chart.dataContext.bar(lastBarIndex - 1) : null;
+        if (!this.demoBroker) {
+            return;
+        }
+        
+        this.demoBroker.appendBar(lastBar);
+
+        for (const indicator of this.chart.indicators) {
+            if (indicator.instanceTypeName === TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName) {
+                const payload = (indicator as any).payload;
+                const trade = (indicator as any).trade;
+                if (payload && trade) {
+                    this.demoBroker.appendSignal(payload);
+                }
+            }
+        }
     }
 
     protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
@@ -508,6 +532,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
         if (this._identity.isGuestMode) {
             this.chart.removeIndicators();
             this.chart.removeShapes();
+            this.chart.off(TradingChartDesigner.ChartEvent.BARS_APPENDED);
+            console.log(this.demoBroker);
         }
     }
 
