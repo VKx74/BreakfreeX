@@ -36,16 +36,18 @@
             </div>
         </div>
         <div class="broker-not-connected flex align-items-center justify-content-center h-100 w-100 relative-wrapper">
-            <div *ngIf="((brokerInitialized$ | async) !== null); else loader" class="shiftup">
+            <ng-container *ngIf="((brokerInitialized$ | async) !== null); else loader">
                 <ng-container *ngIf="isGuest; else bridgeConnector">
                     <div class="demo-broker-container">
                         <demo-orders></demo-orders>
                     </div>
                 </ng-container>
-                <ng-template #noBrokerConnected>
-                    <bridge-broker-connector></bridge-broker-connector>
+                <ng-template #bridgeConnector>
+                    <div class="shiftup">
+                        <bridge-broker-connector></bridge-broker-connector>
+                    </div>
                 </ng-template>
-            </div>           
+            </ng-container>           
             <ng-template #loader>
                 <bft-loader *ngIf="!isMinimized"></bft-loader>
             </ng-template>

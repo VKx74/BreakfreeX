@@ -36,7 +36,7 @@ export class DemoOrdersComponent {
                 ...o,
                 Type: OrderType.Pending
             });
-        }
+        } 
 
         for (const o of this._demoBroker.filledOrders) {
             res.push({
