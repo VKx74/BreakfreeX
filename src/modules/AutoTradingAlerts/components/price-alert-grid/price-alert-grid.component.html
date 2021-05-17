@@ -19,7 +19,7 @@
 
                 <data-table-cell class="stripped-mode" columnName="symbol">
                     <ng-template let-item>
-                        <span class="flex">
+                        <span>
                             {{item.instrument}}
                         </span>
                     </ng-template>
@@ -27,7 +27,7 @@
 
                 <data-table-cell class="stripped-mode" columnName="condition">
                     <ng-template let-item>
-                        <span class="flex">
+                        <span>
                             {{getConditionTitle(item) | async}}
                         </span>
                     </ng-template>
@@ -35,7 +35,7 @@
 
                 <data-table-cell class="stripped-mode" columnName="value">
                     <ng-template let-item>
-                        <span class="flex">
+                        <span>
                             {{item.value}}
                         </span>
                     </ng-template>

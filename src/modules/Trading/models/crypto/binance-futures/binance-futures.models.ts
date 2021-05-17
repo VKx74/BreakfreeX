@@ -69,4 +69,5 @@ export interface IBinanceFuturesPlaceOrderData {
     Price?: number;
     StopPrice?: number;
     TimeInForce?: TimeInForce;
+    ReduceOnly?: boolean;
 }
