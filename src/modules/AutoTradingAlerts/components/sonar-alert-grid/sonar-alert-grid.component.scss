@@ -6,6 +6,12 @@
   display: block;
   height: 100%;
 
+  /deep/ {
+    mat-table {
+      min-width: 400px !important;
+    }
+  }
+
   /deep/ .mat-row:hover {
     cursor: pointer;
     .running-status-wrapper {

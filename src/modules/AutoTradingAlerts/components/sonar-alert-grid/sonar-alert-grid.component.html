@@ -22,7 +22,7 @@
 
                 <data-table-cell class="stripped-mode" columnName="symbol">
                     <ng-template let-item>
-                        <span class="flex">
+                        <span>
                             {{item.instrument || "All Instruments"}}
                         </span>
                     </ng-template>
@@ -30,7 +30,7 @@
 
                 <data-table-cell class="stripped-mode" columnName="timeframe">
                     <ng-template let-item>
-                        <span class="flex">
+                        <span>
                             {{getTimeframeTitle(item) | async}}
                         </span>
                     </ng-template>
@@ -38,7 +38,7 @@
 
                 <data-table-cell class="stripped-mode" columnName="setup">
                     <ng-template let-item>
-                        <span class="flex">
+                        <span>
                             {{getSetupTitle(item) | async}}
                         </span>
                     </ng-template>
@@ -46,7 +46,7 @@
                 
                 <data-table-cell class="stripped-mode" columnName="trigger">
                     <ng-template let-item>
-                        <span class="flex">
+                        <span>
                             {{getTriggerTitle(item) | async}}
                         </span>
                     </ng-template>

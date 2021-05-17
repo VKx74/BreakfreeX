@@ -5,6 +5,12 @@
 :host {
   display: block;
   height: 100%;
+  
+  /deep/ {
+    mat-table {
+      min-width: 400px !important;
+    }
+  }
 
   .ellipsis {
     white-space: nowrap;

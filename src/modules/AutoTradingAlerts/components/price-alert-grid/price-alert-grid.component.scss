@@ -5,6 +5,11 @@
 :host {
   display: block;
   height: 100%;
+  /deep/ {
+    mat-table {
+      min-width: 320px !important;
+    }
+  }
 
   /deep/ .mat-row:hover {
     cursor: pointer;
