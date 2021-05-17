@@ -31,6 +31,10 @@ export class CheckoutComponent extends Modal<CheckoutComponent> implements OnIni
     ngOnDestroy() {
     }
 
+    startFreeNow() {
+        window.location.href = "/";
+    }
+
     checkoutDiscovery1M() {
         this.checkout("subscription_plan_246666");
     }

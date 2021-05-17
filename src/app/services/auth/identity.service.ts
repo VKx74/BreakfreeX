@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of, ReplaySubject} from "rxjs";
-import {GrantTokenResponse, Roles, SignInRequestModel, SignInWithThirdPartyRequestModel} from '../../models/auth/auth.models';
-import {CookieService} from '../сookie.service';
-import {ComponentIdentifier} from "@app/models/app-config";
-import {IdentityTokenParser} from "@app/models/auth/identity-token-parser";
-import {AuthenticationService} from "@app/services/auth/auth.service";
-import {catchError, distinctUntilChanged, map, skip, tap} from "rxjs/operators";
-import {LogoutSuccessAction} from "@app/store/actions";
-import {Store} from "@ngrx/store";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of, ReplaySubject } from "rxjs";
+import { GrantTokenResponse, Roles, SignInRequestModel, SignInWithThirdPartyRequestModel } from '../../models/auth/auth.models';
+import { CookieService } from '../сookie.service';
+import { ComponentIdentifier } from "@app/models/app-config";
+import { IdentityTokenParser } from "@app/models/auth/identity-token-parser";
+import { AuthenticationService } from "@app/services/auth/auth.service";
+import { catchError, distinctUntilChanged, map, skip, tap } from "rxjs/operators";
+import { LogoutSuccessAction } from "@app/store/actions";
+import { Store } from "@ngrx/store";
 
 @Injectable()
 export class IdentityService {
@@ -41,8 +41,8 @@ export class IdentityService {
 
     get isGuestMode(): boolean {
         return this._isGuestMode;
-    } 
-    
+    }
+
     get isAuthorized(): boolean {
         return this._isAuthorized$.value;
     }
@@ -61,8 +61,8 @@ export class IdentityService {
 
     get isAdmin(): boolean {
         return this.role.toLowerCase() === Roles.Admin.toLowerCase();
-    }  
-    
+    }
+
     get isBeta(): boolean {
         if (this.isAdmin) {
             return true;
@@ -85,8 +85,8 @@ export class IdentityService {
         // }
 
         return false;
-    }  
-    
+    }
+
     get isAuthorizedCustomer(): boolean {
         if (this.isAdmin) {
             return true;
@@ -97,8 +97,8 @@ export class IdentityService {
         }
 
         return false;
-    } 
-    
+    }
+
     get isPro(): boolean {
         if (!this.isAuthorizedCustomer) {
             return false;
@@ -111,20 +111,20 @@ export class IdentityService {
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Pro") !== -1) {
-                    return true;    
+                    return true;
                 }
             }
         }
-        
+
         return false;
-    } 
-    
+    }
+
     get basicLevel(): number {
         return 4;
     }
 
     constructor(private _authService: AuthenticationService,
-                private _coockieService: CookieService) {
+        private _coockieService: CookieService) {
         (window as any).identity = this;
         this.isAuthorizedChange$ = this._isAuthorized$.pipe(
             skip(1),
@@ -146,6 +146,7 @@ export class IdentityService {
 
     signIn(model: SignInRequestModel): Observable<any> {
         this._clearCookies();
+        this.clearGuestMode();
         return this._authService.signIn(model)
             .pipe(
                 tap((resp: GrantTokenResponse) => {
@@ -203,19 +204,28 @@ export class IdentityService {
     }
 
     public refreshTokenFromStorage(): Observable<any> {
-       if (this.isGuestMode) {
-           return this._refreshGuestTokens();
-       } else {
-           return this._refreshTokenFromStorage();
-       }
+        if (this.isGuestMode) {
+            return this._refreshGuestTokens();
+        } else {
+            return this._refreshTokenFromStorage();
+        }
     }
 
     public setGuestMode() {
-        this._isGuestMode = true;
+        // this.signOut().subscribe(() => {
+            this._clearCookies();
+            this._isGuestMode = true;
+        // });
+    }
+
+    public clearGuestMode() {
+        this._clearCookies();
+        this._isGuestMode = false;
     }
 
     private _clearCookies() {
         this._coockieService.deleteCookie(this._refreshTokenKey);
+        this._coockieService.deleteCookie(this._guestTokenKey);
         this._coockieService.deleteCookie(this._tokenKey);
     }
 
@@ -280,7 +290,7 @@ export class IdentityService {
                 })
             );
     }
-    
+
     private _refreshTokens(): Observable<any> {
         if (this._refreshToken$) {
             return this._refreshToken$.asObservable();
@@ -323,7 +333,7 @@ export class IdentityService {
         this.subscriptions = [];
         this.restrictedComponents = [];
         this.refreshToken = "";
-        
+
         this._isAuthorized$.next(true);
         return true;
     }

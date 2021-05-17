@@ -6,9 +6,7 @@ import {AuthenticationService} from "./auth.service";
 import {AuthRoutes} from "../../../modules/Auth/auth.routes";
 import {Observable, of} from "rxjs";
 
-interface GuestGuardSettings {
-    redirectUrl?: string;
-}
+const DefaultRedirect = `${AppRoutes.Platform}`;
 
 @Injectable()
 export class GuestGuard implements CanActivate, CanLoad {
@@ -18,13 +16,20 @@ export class GuestGuard implements CanActivate, CanLoad {
     }
 
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-        const settings: GuestGuardSettings = {
-            redirectUrl: null
-        };
-        return of(true);
+        if (this._identityService.isAuthorized && !this._identityService.isGuestMode) {
+            this._router.navigate([DefaultRedirect]);
+            return of(false);
+        } else {
+            return of(true);
+        }
     }
 
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-        return of(true);
+        if (this._identityService.isAuthorized && !this._identityService.isGuestMode) {
+            this._router.navigate([DefaultRedirect]);
+            return of(false);
+        } else {
+            return of(true);
+        }
     }
 }

@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate, CanLoad {
         };
 
         settings.redirectUrl = route.data['redirectUrl'] || DefaultRedirect;
-        if (this._identityService.isAuthorized) {
+        if (this._identityService.isAuthorized && !this._identityService.isGuestMode) {
             if ( this._identityService.isExpired) {
                 return this._identityService.refreshTokens()
                     .pipe(
@@ -46,7 +46,7 @@ export class AuthGuard implements CanActivate, CanLoad {
     }
 
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-        if (this._identityService.isAuthorized) {
+        if (this._identityService.isAuthorized && !this._identityService.isGuestMode) {
             if (this._identityService.isExpired) {
                 return this._identityService.refreshTokens()
                     .pipe(

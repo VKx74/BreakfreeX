@@ -15,7 +15,7 @@ export class UnauthorizedGuard implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-        if (!this._identityService.isAuthorized) {
+        if (!this._identityService.isAuthorized || this._identityService.isGuestMode) {
             return of(true);
         } else {
             this._router.navigate([DefaultRedirect]);
