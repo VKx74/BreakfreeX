@@ -143,7 +143,8 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
             Side: position.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
             Size: Math.abs(position.Size),
             Symbol: position.Symbol,
-            Type: OrderTypes.Market
+            Type: OrderTypes.Market,
+            ReduceOnly: true
         };
 
         return this.placeOrder(placeOrderRequest).pipe(map((data: ActionResult) => {

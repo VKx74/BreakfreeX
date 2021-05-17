@@ -5,6 +5,13 @@
 :host {
   display: block;
   height: 100%;
+
+  /deep/ {
+    mat-table {
+      min-width: 400px !important;
+    }
+  }
+  
   .limits-header {
     font-size: 10px;
     margin: 3px 10px;
