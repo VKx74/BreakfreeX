@@ -65,9 +65,15 @@ export class SignalsDemoBrokerService {
     }
 
     appendSignal(algoData: IBFTAAlgoResponseV2) {
-        if (algoData.trade.entry === this._algoSetupEntry && algoData.trade.stop === this._algoSetupSL) {
+        if (this.filledOrders.length > 0) {
             return;
         }
+
+        if (algoData.trade.entry === this._algoSetupEntry && this.pendingOrders.length > 0) {
+            return;
+        }
+
+        this._closeAllPending();
 
         this._algoSetupEntry = algoData.trade.entry;
         this._algoSetupSL = algoData.trade.stop;
@@ -122,6 +128,13 @@ export class SignalsDemoBrokerService {
         this.pendingOrders.push(order3);
     }
 
+    private _closeAllPending() {
+        for (let i = 0; i < this.pendingOrders.length; i++) {
+            this.canceledOrders.push(this.pendingOrders[i]);
+        }
+        this.pendingOrders.splice(0);
+    }
+
     private _calculateOrderSize(entry: number, sl: number): number {
         let diff = Math.abs(entry - sl);
         let size = TradingHelper.calculatePositionSize(this.balance, this.orderRisk, diff, this.contractSize);
@@ -148,12 +161,13 @@ export class SignalsDemoBrokerService {
                 this.filledOrders.push(order);
             }
 
-            let maxOrderLifetime = 25;
-            if (order.BarIndex > maxOrderLifetime && !entryHit) {
+            let maxOrderLifetime = 30;
+            let barIndex = this.barIndex - order.BarIndex;
+            if (barIndex > maxOrderLifetime && !entryHit) {
                 this.canceledOrders.push(order);
             }
 
-            if (entryHit || order.BarIndex > maxOrderLifetime) {
+            if (entryHit || barIndex > maxOrderLifetime) {
                 this.pendingOrders.splice(i, 1);
                 i--;
             }
@@ -183,6 +197,8 @@ export class SignalsDemoBrokerService {
             }
 
             this._calculatePL(order);
+            // let maxOrderLifetime = 20;
+            // let barIndex = this.barIndex - order.BarIndex;
 
             if (entrySL || entryTP) {
                 this.filledOrders.splice(i, 1);

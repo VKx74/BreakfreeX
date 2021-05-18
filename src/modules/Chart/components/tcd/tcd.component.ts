@@ -21,6 +21,7 @@ import { LocalizationService } from "Localization";
 import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
 import { IndicatorAlertHandler } from 'modules/Chart/indicatorAlertHandler/indicatorAlertHandler';
+import { OrderSide } from "modules/Trading/models/models";
 import { takeUntil } from "rxjs/operators";
 import { Actions, LinkingAction } from "../../../Linking/models";
 import { TimeZoneManager } from "../../../TimeZones/services/timeZone.manager";
@@ -349,6 +350,74 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 }
             }
         }
+
+        const shapes = this.chart.primaryPane.shapes;
+        const shapeForRemoving = [];
+        const shapeForAdding = [];
+        for (const shape of shapes) {
+            if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
+                shape.locked = false;
+                shape.selectable = true;
+                shape.removable = true;
+                shapeForRemoving.push(shape);
+            }
+        }
+
+        for (const order of this._demoBroker.pendingOrders) {
+            const shape = this.createLine();
+            shape.linePrice = order.Price;
+            shape.lineType = "pending";
+            shape.lineId = `${order.Id}${order.Price}`;
+            shapeForAdding.push(shape); 
+            
+            // const shapeSL = this.createLine();
+            // shapeSL.linePrice = order.SL;
+            // shapeSL.lineType = "sl";
+            // shapeSL.lineId = `sl_${order.Id}${order.Price}`;
+            // shapeForAdding.push(shapeSL);
+
+            // const shapeTP = this.createLine();
+            // shapeTP.linePrice = order.TP;
+            // shapeTP.lineType = "tp";
+            // shapeTP.lineId = `tp_${order.Id}${order.Price}`;
+            // shapeForAdding.push(shapeTP);
+        }
+
+        for (const order of this._demoBroker.filledOrders) {
+            // const shape = this.createLine();
+            // shape.linePrice = order.Price;
+            // shape.lineType = order.Side === OrderSide.Buy ? "market_buy" : "market_sell";
+            // shape.lineId = `${order.Id}${order.Price}`;
+            // shapeForAdding.push(shape); 
+            
+            const shapeSL = this.createLine();
+            shapeSL.linePrice = order.SL;
+            shapeSL.lineType = "sl";
+            shapeSL.lineId = `sl_${order.Id}${order.Price}`;
+            shapeForAdding.push(shapeSL);
+
+            const shapeTP = this.createLine();
+            shapeTP.linePrice = order.TP;
+            shapeTP.lineType = "tp";
+            shapeTP.lineId = `tp_${order.Id}${order.Price}`;
+            shapeForAdding.push(shapeTP);
+        }
+
+        if (shapeForRemoving.length) {
+            this.chart.primaryPane.removeShapes(shapeForRemoving);
+        }
+
+        if (shapeForAdding.length) {
+            this.chart.primaryPane.addShapes(shapeForAdding);
+        }
+    }
+
+    protected createLine(): TradingChartDesigner.ShapeOrderLine {
+        const shape = new TradingChartDesigner.ShapeOrderLine();
+        shape.showClose = false;
+        shape.isEditable = false;
+        shape.showSLTP = false;
+        return shape;
     }
 
     protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
