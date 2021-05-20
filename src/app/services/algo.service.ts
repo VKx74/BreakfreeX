@@ -99,6 +99,13 @@ export interface IBFTBacktestV2AlgoParameters extends IBFTAlgoParameters {
     trend_detector: TrendDetectorType;
 }
 
+export interface IBFTScannerBacktestAlgoParameters extends IBFTAlgoParameters {
+    breakeven_candles: number;
+    cancellation_candles: number;
+    single_position: boolean;
+    type: string;
+}
+
 export interface IBFTAHitTestAlgoParameters extends IBFTBacktestAlgoParameters {
     entry_target_box: number;
     stoploss_rr: number;
@@ -254,6 +261,12 @@ export interface IBFTASignalV2 {
     data: IBFTAStrategyV2Response;
 }
 
+export interface IBFTAScannerSignal {
+    timestamp: number;
+    end_timestamp: number;
+    data: IBFTAAlgoResponseV2;
+}
+
 export interface IBFTAOrder {
     id: string;
     open_timestamp: number;
@@ -280,6 +293,11 @@ export interface IBFTABacktestResponse {
 
 export interface IBFTABacktestV2Response {
     signals: IBFTASignalV2[];
+    orders: IBFTAOrder[];
+}
+
+export interface IBFTAScannerBacktestResponse {
+    signals: IBFTAScannerSignal[];
     orders: IBFTAOrder[];
 }
 
@@ -442,6 +460,10 @@ export class AlgoService {
 
     backtestV2(data: IBFTBacktestV2AlgoParameters): Observable<IBFTABacktestV2Response> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}strategy_v2_backtest`, data).pipe(map(this._decrypt));
+    }
+
+    backtestScanner(data: IBFTScannerBacktestAlgoParameters): Observable<IBFTAScannerBacktestResponse> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}backtest_scanner`, data).pipe(map(this._decrypt));
     }
 
     extHitTest(data: IBFTAHitTestAlgoParameters): Observable<IBFTAExtHitTestResult> {
