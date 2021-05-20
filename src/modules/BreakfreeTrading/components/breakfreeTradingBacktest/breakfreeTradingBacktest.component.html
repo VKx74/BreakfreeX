@@ -1,33 +1,35 @@
 <div class="bftBacktest flex">
    <bft-loader *ngIf="showSpinner"></bft-loader>
-   <div class="flex justify-space-between">
-      <div class="column"> 
-         <span class="bft-pannel-header hidden">Select chart</span>
-      </div>
-    
-   <div class="bft-backtest-panel-status" #content>
-  
-      <div class="row tradeoverview"> 
-         <span class="value header"> <span class="leftbord"></span>Backtest parameters: <div class="column marketoverview-selector">
-            <selector [options]="Charts" [placeholder]="'Select chart'"
-            [selectedOption]="SelectedChart"
-            [optionCaption]="captionText"
-            (onSelect)="itemSelected($event)"
-            class="watchlist-selector bft-form-select"></selector>
-         </div></span>
-      </div>
+   <div class="flex">
+      <div class="bft-backtest-panel-status" #content>
 
-      <mat-tab-group class="full-height tabs">
-         <mat-tab label="Strategy"> 
-            <BreakfreeStrategyBacktest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)" (ClearData)="clearData()"></BreakfreeStrategyBacktest>
-         </mat-tab> 
-         <mat-tab label="Strategy V2"> 
-            <BreakfreeStrategyV2Backtest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)" (ClearData)="clearData()"></BreakfreeStrategyV2Backtest>
-         </mat-tab>
-         <mat-tab label="Extensions">
-            <ExtensionHitTest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)" (ClearData)="clearData()"></ExtensionHitTest>
-         </mat-tab>
-     </mat-tab-group>
+         <div class="tradeoverview">
+            <span class="value header"> <span class="leftbord"></span>Backtest parameters: <div
+                  class="column marketoverview-selector">
+                  <selector [options]="Charts" [placeholder]="'Select chart'" [selectedOption]="SelectedChart"
+                     [optionCaption]="captionText" (onSelect)="itemSelected($event)"
+                     class="watchlist-selector bft-form-select"></selector>
+               </div></span>
+         </div>
 
-   
-</div>
+         <mat-tab-group class="full-height tabs">
+            <mat-tab label="Strategy">
+               <BreakfreeStrategyBacktest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)"
+                  (ClearData)="clearData()"></BreakfreeStrategyBacktest>
+            </mat-tab>
+            <mat-tab label="Strategy V2">
+               <BreakfreeStrategyV2Backtest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)"
+                  (ClearData)="clearData()"></BreakfreeStrategyV2Backtest>
+            </mat-tab>
+            <mat-tab label="Extensions">
+               <ExtensionHitTest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)"
+                  (ClearData)="clearData()"></ExtensionHitTest>
+            </mat-tab>
+            <mat-tab label="Sonar">
+               <ScannerStrategyBacktest [SelectedChart]="SelectedChart" (Processing)="onProcessing($event)"
+                  (ClearData)="clearData()"></ScannerStrategyBacktest>
+            </mat-tab>
+         </mat-tab-group>
+
+
+      </div>

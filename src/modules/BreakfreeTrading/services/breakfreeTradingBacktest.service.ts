@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlgoService, IBFTABacktestResponse, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters, IBFTAHitTestAlgoParameters, IBFTABacktestV2Response, IBFTBacktestV2AlgoParameters } from '@app/services/algo.service';
+import { AlgoService, IBFTABacktestResponse, IBFTAExtHitTestResult, IBFTBacktestAlgoParameters, IBFTAHitTestAlgoParameters, IBFTABacktestV2Response, IBFTBacktestV2AlgoParameters, IBFTScannerBacktestAlgoParameters, IBFTAScannerBacktestResponse } from '@app/services/algo.service';
 
 @Injectable()
 export class BreakfreeTradingBacktestService {
@@ -14,6 +14,11 @@ export class BreakfreeTradingBacktestService {
     public backtestV2(params: IBFTBacktestV2AlgoParameters): Promise<IBFTABacktestV2Response> {
 
         return this.alogService.backtestV2(params).toPromise();
+    } 
+
+    public backtestScanner(params: IBFTScannerBacktestAlgoParameters): Promise<IBFTAScannerBacktestResponse> {
+
+        return this.alogService.backtestScanner(params).toPromise();
     } 
     
     public extHitTest(params: IBFTAHitTestAlgoParameters): Promise<IBFTAExtHitTestResult> {

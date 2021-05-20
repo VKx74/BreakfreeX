@@ -48,12 +48,14 @@ import { TradeGuardRiskClassPipe } from './pipes/currencyGuardRiskClass.pipe';
 import { TradingPerformanceComponent } from './components/tradingPerformance/tradingPerformance.component';
 import { LeaderDashboardComponent } from './components/missions/leader-dashboard/leader-dashboard.component';
 import { AcademyModule } from 'modules/Academy/academy.module';
+import { ScannerStrategyBacktestComponent } from './components/scannerModeBacktest/scannerModeBacktest.component';
 
 @NgModule({
     // components here
     declarations: [
         StrategyModeBacktestComponent,
         StrategyV2ModeBacktestComponent,
+        ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
@@ -101,6 +103,7 @@ import { AcademyModule } from 'modules/Academy/academy.module';
     entryComponents: [
         StrategyModeBacktestComponent,
         StrategyV2ModeBacktestComponent,
+        ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
@@ -114,6 +117,7 @@ import { AcademyModule } from 'modules/Academy/academy.module';
     exports: [
         StrategyModeBacktestComponent,
         StrategyV2ModeBacktestComponent,
+        ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
