@@ -11,6 +11,7 @@ import { AppState } from "@app/store/reducer";
 import { AlertingFromChartService } from "@chart/services/alerting-from-chart.service";
 import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
+import { ReplayModeSync } from "@chart/services/replay-mode-sync.service";
 import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
 import { BaseLayoutItemComponent } from "@layout/base-layout-item.component";
 import { Store } from "@ngrx/store";
@@ -73,7 +74,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
     static componentName = 'Trading Chart Designer';
     static previewImgClass = 'crypto-icon-chart';
 
-    private isGuestModeReplayed: boolean;
+    private replayModeTimers: any[] = [];
     private replayWaiter: ReplayWaiter;
 
     blur: boolean = false;
@@ -102,6 +103,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _demoBroker: SignalsDemoBrokerService,
                 protected _injector: Injector) {
         super(_injector);
+        if (this._identity.isGuestMode) {
+            ReplayModeSync.IsChartReplay = true;
+        }
     }
     
     ngOnInit() {
@@ -247,39 +251,39 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     startReplayMode() {
-        if (this.isGuestModeReplayed) {
-            return;
-        }
-
         const dates = this.chart.dataContext.dateDataRows.values;
         if (dates.length < 100) {
             return;
         }
 
         if (!this.isRTDExists()) {
-            setTimeout(() => {
+            const timerId = setTimeout(() => {
                 this.startReplayMode();
             }, 1000);
+            this.replayModeTimers.push(timerId);
             return;
         }
 
-        this.isGuestModeReplayed = true;
         this.blur = true;
         this.chart.refreshAsync();
 
-        setTimeout(() => {
+        const timerId1 = setTimeout(() => {
             this.blur = false;
-            setTimeout(() => {
+            const timerId2 = setTimeout(() => {
                 this._demoBroker.reset();
                 this.chart.on(TradingChartDesigner.ChartEvent.BARS_APPENDED, this.barAppended.bind(this));
                 this.chart.replayMode.play();
             }, 1000);
+            this.replayModeTimers.push(timerId2);
         }, 3000); 
+
+        this.replayModeTimers.push(timerId1);
         
-        setTimeout(() => {
+        const timerId3 = setTimeout(() => {
             this.chart.replayMode.replaySpeed = 1000;
             this.chart.setReplayByDate(dates[100], true);
         }, 2000);
+        this.replayModeTimers.push(timerId3);
     }
 
     protected isRTDExists() {
@@ -384,11 +388,12 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }
 
         for (const order of this._demoBroker.filledOrders) {
-            // const shape = this.createLine();
-            // shape.linePrice = order.Price;
-            // shape.lineType = order.Side === OrderSide.Buy ? "market_buy" : "market_sell";
-            // shape.lineId = `${order.Id}${order.Price}`;
-            // shapeForAdding.push(shape); 
+            const shape = this.createLine();
+            shape.linePrice = order.Price;
+            shape.lineType = order.Side === OrderSide.Buy ? "position_buy" : "position_sell";
+            shape.lineId = `price_${order.Id}${order.Price}`;
+            shape.boxText = order.NetPL ? order.NetPL.toFixed(2) : "-";
+            shapeForAdding.push(shape); 
             
             const shapeSL = this.createLine();
             shapeSL.linePrice = order.SL;
@@ -436,10 +441,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
         this._tradingFromChartHandler.setChart(this.chart);
         this._alertingFromChartService.setChart(this.chart);
 
-        if (this._identity.isGuestMode) {
-            setTimeout(() => {
+        if (this._identity.isGuestMode && !ReplayModeSync.IsChartReplayStarted) {
+            ReplayModeSync.IsChartReplayStarted = true;
+            const timerId = setTimeout(() => {
                 this.startReplayMode();
             }, 1000);
+
+            this.replayModeTimers.push(timerId);
         }
     }
 
@@ -616,7 +624,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     private _replayModeFinished() {
-        if (this._identity.isGuestMode) {
+        if (ReplayModeSync.IsChartReplayStarted) {
+            ReplayModeSync.IsChartReplayFinished = true;
             this.chart.removeIndicators();
             this.chart.removeShapes();
             this.chart.off(TradingChartDesigner.ChartEvent.BARS_APPENDED);
@@ -651,6 +660,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
     ngOnDestroy() {
         super.ngOnDestroy();
+
+        if (this.replayModeTimers && this.replayModeTimers.length) {
+            for (const timerId of this.replayModeTimers)
+            {
+                clearTimeout(timerId);
+            }
+        }
 
         try {
             this._chartTrackerService.removeChart(this.chart);

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IdentityService } from "../../../app/services/auth/identity.service";
+import { ReplayModeSync } from "./replay-mode-sync.service";
 @Injectable()
 export class IndicatorRestrictionService {
     private _restrictedIndicators: string[] = [];
@@ -25,7 +26,7 @@ export class IndicatorRestrictionService {
 
     public getRestrictions(chart: TradingChartDesigner.Chart): string[] {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (this._identity.isGuestMode && chartInstrument === this._demoInstrument) {
+        if (ReplayModeSync.IsChartReplay && !ReplayModeSync.IsChartReplayStarted && chartInstrument === this._demoInstrument) {
             return [TradingChartDesigner.BreakfreeTradingPro.instanceTypeName];
         }
         
@@ -34,7 +35,7 @@ export class IndicatorRestrictionService {
     
     public canRunStrategyReplay(chart: TradingChartDesigner.Chart): boolean {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (this._identity.isGuestMode && chartInstrument === this._demoInstrument) {
+        if (ReplayModeSync.IsChartReplay && !ReplayModeSync.IsChartReplayFinished && chartInstrument === this._demoInstrument) {
             return true;
         }
 
@@ -47,7 +48,7 @@ export class IndicatorRestrictionService {
 
     public validate(chart: TradingChartDesigner.Chart, name: string): boolean {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (this._identity.isGuestMode && chartInstrument === this._demoInstrument) {
+        if (ReplayModeSync.IsChartReplay && !ReplayModeSync.IsChartReplayStarted && chartInstrument === this._demoInstrument) {
             if (name === TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName ||
                 name === TradingChartDesigner.RTD.instanceTypeName) {
                 return true;
