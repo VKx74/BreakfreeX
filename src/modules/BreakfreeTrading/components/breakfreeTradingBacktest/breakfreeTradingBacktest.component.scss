@@ -30,6 +30,14 @@
     }
   }
 
+  .leftbord {
+    width: 2px;
+    height: 13px;
+    display: inline-block;
+    margin-bottom: -2px;
+    margin-right: 4px;
+  }
+
   /deep/ {
     .top-line {
       padding: 5px;
@@ -105,28 +113,23 @@
       margin-bottom: 10px;
     }
 
-    span.leftbord {
+    .leftbord {
       width: 2px;
       height: 13px;
       display: inline-block;
       margin-bottom: -2px;
       margin-right: 4px;
-      margin-left: -5px;
     }
 
-    .row.targets span.leftbord {
+    .row.targets .leftbord {
       background: #2e5e9a;
     }
 
-    .row.entries span.leftbord {
+    .row.entries .leftbord {
       background: #629320;
     }
 
-    .row.tradeoverview span.leftbord {
-      background: #191919;
-    }
-
-    .row.stoploss span.leftbord {
+    .row.stoploss .leftbord {
       background: #d3bb42;
     }
 
@@ -136,10 +139,6 @@
 
     .row.entries .header {
       color: #629320;
-    }
-
-    .row.tradeoverview .header {
-      color: #191919;
     }
 
     .row.stoploss .header {
@@ -177,5 +176,13 @@
 
   /deep/.row {
     border-color: themed("inputBackgroundColor");
+  }
+
+  .tradeoverview .leftbord {
+    background: themed("valueTextColor");
+  }
+
+  .tradeoverview {
+    color: themed("valueTextColor");
   }
 }

@@ -312,7 +312,7 @@ export class ScannerStrategyBacktestComponent {
         let description = "";
         let totalPl = 0;
         for (const order of neededOrders) {
-            description += `# ${order.side} order (${order.comment}), entry: ${order.price.toFixed(precision)}, sl: ${order.sl_price.toFixed(precision)}, tp: ${order.tp_price.toFixed(precision)}, status - ${order.status}`;
+            description += `# ${order.side} order (${order.comment || "No comment"}), entry: ${order.price.toFixed(precision)}, sl: ${order.sl_price.toFixed(precision)}, tp: ${order.tp_price.toFixed(precision)}, status - ${order.status}`;
 
             if (order.pl) {
                 description += ` pl: ${order.pl.toFixed(precision)}`;
