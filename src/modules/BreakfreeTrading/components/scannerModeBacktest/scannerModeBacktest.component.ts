@@ -24,6 +24,10 @@ export class ScannerStrategyBacktestComponent {
     public maxCount: number = 100;
     public breakevenCandles: number = 10;
     public cancellationCandles: number = 0;
+    public global_fast: number = 0.25;
+    public global_slow: number = 0.05;
+    public local_fast: number = 1.2;
+    public local_slow: number = 0.6;
     public singlePosition: boolean = true;
     public type: string = this.availableType[0];
 
@@ -81,7 +85,11 @@ export class ScannerStrategyBacktestComponent {
             timenow: new Date().getTime(),
             cancellation_candles: this.cancellationCandles,
             single_position: this.singlePosition,
-            type: this.type
+            type: this.type,
+            global_fast: this.global_fast,
+            global_slow: this.global_slow,
+            local_fast: this.local_fast,
+            local_slow: this.local_slow
         };
 
         if (!this.validateInputParameters(backtestParameters)) {
@@ -205,6 +213,22 @@ export class ScannerStrategyBacktestComponent {
             this._alertService.error("Cancellation candles cant be less than 0.");
             return false;
         }
+        if (params.global_fast <= 0) {
+            this._alertService.error("Global Fast must be greater than 0.");
+            return false;
+        }  
+        if (params.global_slow <= 0) {
+            this._alertService.error("Global Slow must be greater than 0.");
+            return false;
+        }  
+        if (params.local_fast <= 0) {
+            this._alertService.error("Local Fast must be greater than 0.");
+            return false;
+        }  
+        if (params.local_slow <= 0) {
+            this._alertService.error("Local Slow must be greater than 0.");
+            return false;
+        } 
         
         return true;
     }

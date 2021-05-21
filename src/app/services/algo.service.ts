@@ -103,6 +103,10 @@ export interface IBFTBacktestV2AlgoParameters extends IBFTAlgoParameters {
 export interface IBFTScannerBacktestAlgoParameters extends IBFTAlgoParameters {
     breakeven_candles: number;
     cancellation_candles: number;
+    global_fast: number;
+    global_slow: number;
+    local_fast: number;
+    local_slow: number;
     single_position: boolean;
     type: string;
 }

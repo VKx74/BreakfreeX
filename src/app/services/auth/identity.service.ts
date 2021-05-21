@@ -61,8 +61,12 @@ export class IdentityService {
 
     get isAdmin(): boolean {
         return this.role.toLowerCase() === Roles.Admin.toLowerCase();
-    }
+    }  
 
+    get isSupportOfficer(): boolean {
+        return this.role.toLowerCase() === Roles.SupportOfficer.toLowerCase();
+    }  
+    
     get isBeta(): boolean {
         if (this.isAdmin) {
             return true;
