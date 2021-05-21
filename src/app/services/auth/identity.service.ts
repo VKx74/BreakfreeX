@@ -80,13 +80,21 @@ export class IdentityService {
             }
         }
 
-        // if (this.subscriptions && this.subscriptions.length) {
-        //     for (const sub of this.subscriptions) {
-        //         if (sub.indexOf("Friday") !== -1) {
-        //             return true;    
-        //         }
-        //     }
-        // }
+        return false;
+    }  
+
+    get isTrial(): boolean {
+        if (this.isAdmin) {
+            return false;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("Trial") !== -1) {
+                    return true;    
+                }
+            }
+        }
 
         return false;
     }  
@@ -94,6 +102,10 @@ export class IdentityService {
     get isAuthorizedCustomer(): boolean {
         if (this.isAdmin) {
             return true;
+        }
+
+        if (this.isTrial && !this.phoneNumber) {
+            return false;
         }
 
         if (this.subscriptions && this.subscriptions.length) {

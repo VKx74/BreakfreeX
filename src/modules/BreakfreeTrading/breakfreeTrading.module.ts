@@ -49,6 +49,7 @@ import { TradingPerformanceComponent } from './components/tradingPerformance/tra
 import { LeaderDashboardComponent } from './components/missions/leader-dashboard/leader-dashboard.component';
 import { AcademyModule } from 'modules/Academy/academy.module';
 import { ScannerStrategyBacktestComponent } from './components/scannerModeBacktest/scannerModeBacktest.component';
+import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNumberPopUp.component';
 
 @NgModule({
     // components here
@@ -61,6 +62,7 @@ import { ScannerStrategyBacktestComponent } from './components/scannerModeBackte
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
+        PhoneNumberPopUpComponent,
         MissionsComponent,
         DailyMissionsComponent,
         WeeklyMissionsComponent,
@@ -109,6 +111,7 @@ import { ScannerStrategyBacktestComponent } from './components/scannerModeBackte
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
+        PhoneNumberPopUpComponent,
         MissionsComponent,
         MissionsInfoComponent,
         TradeGuardComponent
@@ -123,6 +126,7 @@ import { ScannerStrategyBacktestComponent } from './components/scannerModeBackte
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
+        PhoneNumberPopUpComponent,
         MissionsInfoComponent,
         MissionsComponent,
         TradeGuardComponent,

@@ -1,0 +1,81 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  font-size: 13px;
+  .phone-number-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .crypto-icon-phone-contur {
+    color: #397dc4;
+    font-size: 30px;
+  }
+
+  .header-text {
+    font-size: 15px;
+    margin-left: 10px;
+  }
+
+  .header {
+    align-items: center;
+  }
+
+  .crypto-modal {
+    width: 300px;
+  }
+
+  .crypto-button {
+    width: max-content;
+    padding: 4px 14px;
+  }
+
+  .inputrow {
+    margin-top: 20px;
+  }
+
+  .phone-verification-input,
+  .phone-number-input {
+    justify-content: space-between;
+
+    input {
+      width: 150px;
+    }
+  }
+
+  .title {
+    margin-bottom: 5px;
+    margin-left: 5px;
+    font-size: 11px;
+    opacity: 0.5;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-disclaimer {
+    margin-top: 10px;
+    padding: 10px 5px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+  }
+}
+
+@include themify($themes, true) {
+  .header-text, .crypto-button, .title, .header-disclaimer {
+    color: themed("valueTextColor");
+  }
+
+  .header-disclaimer {
+    border-top-color: themed("inputBackgroundColor");
+    border-bottom-color: themed("inputBackgroundColor");
+  }
+
+  .crypto-button {
+    background-color: themed("inputBackgroundColor");
+  }
+}
