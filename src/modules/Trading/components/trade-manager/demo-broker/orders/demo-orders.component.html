@@ -48,7 +48,7 @@
     <data-table-cell columnName="Risk (%)">
         <ng-template let-item>
             <span>
-                {{item.RiskPercentage ? '(' + item.RiskPercentage.toFixed(2) + '%)' : ''}}
+                {{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : ''}}
             </span>
         </ng-template>
     </data-table-cell>
