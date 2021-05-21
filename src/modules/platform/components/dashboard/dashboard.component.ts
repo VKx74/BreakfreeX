@@ -38,6 +38,7 @@ import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/
 import { MissionTrackingService } from "@app/services/missions-tracking.service";
 import { InstrumentMappingService } from "../../../../app/services/instrument-mapping.service";
 import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
+import { PhoneNumberPopUpComponent } from "modules/BreakfreeTrading/components/phoneNumberPopUp/phoneNumberPopUp.component";
 
 
 @Component({
@@ -172,6 +173,7 @@ export class DashboardComponent {
 
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
+        setTimeout(this._showPhoneNumberPopup.bind(this), 5000);
     }
 
     ngAfterViewInit() {
@@ -415,6 +417,12 @@ export class DashboardComponent {
     private _showFreeUserPopup() {
         if (!this._identityService.isAuthorizedCustomer) {
             this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+        }
+    }
+
+    private _showPhoneNumberPopup() {
+        if (!this._identityService.phoneNumber && this._identityService.isTrial) {
+            this._dialog.open(PhoneNumberPopUpComponent, { backdropClass: 'backdrop-background', disableClose: true });
         }
     }
 }

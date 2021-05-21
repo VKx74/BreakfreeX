@@ -1,8 +1,16 @@
 {
   "breakfreeTrading": {
-
+    "addPhone": "Add phone",
+    "phoneNumber": "Phone number",
+    "verify": "Verify",
+    "verificationCode": "Verification Code",
+    "addYourPhoneNumber": "Add your phone number"
   },
   "breakfreeTradingBacktestComponentName": "BFT Backtest",
   "breakfreeTradingAcademyComponentName": "Academy",
-  "breakfreeTradingScannerComponentName": "Sonar"
+  "breakfreeTradingScannerComponentName": "Sonar",
+  "verificationCodeSent": "Verification code was sent on your phone number, enter it.",
+  "verificationCodeNotSent": "Failed to send verification code.",
+  "phoneAdded": "Phone number was successfully added.",
+  "failedAddPhone": "Failed to add phone number."
 }
