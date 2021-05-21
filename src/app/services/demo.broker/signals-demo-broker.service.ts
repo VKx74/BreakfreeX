@@ -32,7 +32,7 @@ export class SignalsDemoBrokerService {
     public barIndex: number = 0;
     public contractSize: number = 100000;
     public decimals: number = 5;
-    public orderRisk: number = 3;
+    public orderRisk: number = 10;
     public filledOrders: IDemoOrder[] = [];
     public pendingOrders: IDemoOrder[] = [];
     public closedOrders: IDemoOrder[] = [];

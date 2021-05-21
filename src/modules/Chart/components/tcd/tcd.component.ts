@@ -280,9 +280,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
         this.replayModeTimers.push(timerId1);
         
         const timerId3 = setTimeout(() => {
-            this.chart.replayMode.replaySpeed = 1000;
+            this.chart.replayMode.replaySpeed = 500;
             this.chart.setReplayByDate(dates[100], true);
-        }, 2000);
+        }, 3000);
         this.replayModeTimers.push(timerId3);
     }
 
