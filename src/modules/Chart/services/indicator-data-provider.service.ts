@@ -5,11 +5,21 @@ import { IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { TradingHelper } from "@app/services/mt/mt.helper";
+import { IdentityService } from "@app/services/auth/identity.service";
+import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class IndicatorDataProviderService {
 
-    constructor(protected _bftService: BreakfreeTradingService, protected _broker: BrokerService) {
+    private _cachedGuestModeData: any;
+
+    constructor(protected _bftService: BreakfreeTradingService, protected _broker: BrokerService, private _identity: IdentityService, private _http: HttpClient) {
+        if (this._identity.isGuestMode) {
+            _http.get("./assets/data/guest-mode-data-indicator.json").subscribe((data) => {
+                this._cachedGuestModeData = data;
+            });
+        }
     }
 
     getData(indicator: TradingChartDesigner.Indicator, params?: object): Promise<any> {
@@ -17,8 +27,11 @@ export class IndicatorDataProviderService {
 
         const chart = indicator.chart;
 
+        let replayCandleDate = null;
         if (chart.replayMode.isInPlayMode) {
             const replayBack = chart.replayMode.originDataRows[".close"].length - chart.dataContext.dataRows[".close"].length;
+            const datesCount = chart.dataContext.dateDataRows.values.length;
+            replayCandleDate = chart.dataContext.dateDataRows.values[datesCount - 1];
             bftParams.replay_back = replayBack;
 
             if (replayBack > 5000) {
@@ -27,6 +40,14 @@ export class IndicatorDataProviderService {
                         status: "Playback allowed on last 5000 candles." 
                     }
                 }).toPromise();
+            }
+        }
+
+        if (this._identity.isGuestMode && replayCandleDate) {
+            const result = this._cachedGuestModeData[replayCandleDate.getTime()];
+            if (result) {
+                result.id = bftParams.id;
+                return of(result).toPromise();
             }
         }
 

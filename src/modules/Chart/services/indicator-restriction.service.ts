@@ -4,7 +4,6 @@ import { ReplayModeSync } from "./replay-mode-sync.service";
 @Injectable()
 export class IndicatorRestrictionService {
     private _restrictedIndicators: string[] = [];
-    private _demoInstrument: string = "eurusd";
 
     constructor(protected _identity: IdentityService) {
         if (this._identity.isAdmin) {
@@ -26,7 +25,7 @@ export class IndicatorRestrictionService {
 
     public getRestrictions(chart: TradingChartDesigner.Chart): string[] {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (ReplayModeSync.IsChartReplay && !ReplayModeSync.IsChartReplayStarted && chartInstrument === this._demoInstrument) {
+        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF) {
             return [TradingChartDesigner.BreakfreeTradingPro.instanceTypeName];
         }
         
@@ -35,7 +34,7 @@ export class IndicatorRestrictionService {
     
     public canRunStrategyReplay(chart: TradingChartDesigner.Chart): boolean {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (ReplayModeSync.IsChartReplay && !ReplayModeSync.IsChartReplayFinished && chartInstrument === this._demoInstrument) {
+        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF) {
             return true;
         }
 
@@ -48,7 +47,7 @@ export class IndicatorRestrictionService {
 
     public validate(chart: TradingChartDesigner.Chart, name: string): boolean {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (ReplayModeSync.IsChartReplay && !ReplayModeSync.IsChartReplayStarted && chartInstrument === this._demoInstrument) {
+        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF) {
             if (name === TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName ||
                 name === TradingChartDesigner.RTD.instanceTypeName) {
                 return true;

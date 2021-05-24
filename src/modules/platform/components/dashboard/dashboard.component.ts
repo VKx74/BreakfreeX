@@ -258,7 +258,7 @@ export class DashboardComponent {
                 .subscribe((data: Workspace) => {
                     this._initializeLayout(data.layoutState);
                 });
-                
+
             return;
         }
 

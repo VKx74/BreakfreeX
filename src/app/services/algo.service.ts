@@ -59,6 +59,7 @@ export interface IBFTAlgoParameters {
     timenow: number;
     replay_back?: number;
     timeframe: ITimeFrame;
+    id?: string;
 }
 
 export interface IBFTAPositionSizeParameters {

@@ -280,7 +280,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         this.replayModeTimers.push(timerId1);
         
         const timerId3 = setTimeout(() => {
-            this.chart.replayMode.replaySpeed = 500;
+            this.chart.replayMode.replaySpeed = 250;
             this.chart.setReplayByDate(dates[100], true);
         }, 1500);
         this.replayModeTimers.push(timerId3);
@@ -338,6 +338,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
     protected barAppended(eventObject: TradingChartDesigner.IValueChangedEvent) {
         let lastBarIndex = this.chart.dataContext.dateDataRows.values.length;
         let lastBar = lastBarIndex > 0 ? this.chart.dataContext.bar(lastBarIndex - 1) : null;
+        if (lastBar.date.getTime() >= ReplayModeSync.ReplayModeEndTime) {
+            this.chart.replayMode.stopReplayMode();
+            this.chart.replayMode.toRealTime();
+            return;
+        }
         
         this._demoBroker.appendBar(lastBar);
 
