@@ -31,8 +31,10 @@ import { DataFeed } from "../../datafeed/DataFeed";
 import { DataFeedBase } from "../../datafeed/DataFeedBase";
 import { ChartTranslateService } from "../../localization/token";
 import { TemplatesDataProviderService } from "../../services/templates-data-provider.service";
+import { MatDialog } from '@angular/material/dialog';
 import IChartInstrument = TradingChartDesigner.IInstrument;
 import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
+import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -101,6 +103,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _store: Store<AppState>,
                 private _identity: IdentityService,
                 private _demoBroker: SignalsDemoBrokerService,
+                private _dialog: MatDialog,
                 protected _injector: Injector) {
         super(_injector);
         if (this._identity.isGuestMode) {
@@ -634,6 +637,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.removeIndicators();
             this.chart.removeShapes();
             this.chart.off(TradingChartDesigner.ChartEvent.BARS_APPENDED);
+
+            const timerId = setTimeout(() => {
+                this._showCheckout();
+            }, 1000 * 15);
+            this.replayModeTimers.push(timerId);
         }
     }
 
@@ -653,6 +661,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
         if (this.chart) {
             this.chart.refreshAsync();
         }
+    }
+
+    private _showCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     setTitle() {

@@ -1,0 +1,394 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  font-size: 13px;
+
+  img {
+    max-width: 100%;
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .button-text {
+    position: relative;
+    z-index: 1;
+    font-family: Lato, sans-serif;
+    font-size: 16px;
+  }
+  
+  .check-circle-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background-color: hsla(0, 0%, 100%, 0.06);
+    background-image: url('assets/img/checkout/check.svg');
+    background-position: 50% 50%;
+    background-size: 20px;
+    background-repeat: no-repeat;
+  }
+  
+  .pricing-list-item-4 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+    color: silver;
+    line-height: 20px;
+  }
+  
+  .button {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    height: 54px;
+    margin: -8px 0px;
+    padding: 13px 24px;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border: 8px solid transparent;
+    border-radius: 32px;
+    background-color: transparent;
+    color: #fff;
+    line-height: 20px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .button.full-width {
+    width: 70%;
+  }
+  
+  .wrapper-2 {
+    position: relative;
+    z-index: 2;
+    max-width: 400px;
+    margin: auto auto 0px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: transparent;
+  }
+  
+  .pricingsection {
+    position: relative;
+    z-index: 3;
+    margin-top: 0px;
+    // padding: 30px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    // background-color: #151515;
+  }
+  
+  .bold-text-2 {
+    font-weight: 400;
+  }
+
+  .plan-info-4 {
+    margin-bottom: 15px;
+    padding-right: 40px;
+    padding-left: 40px;
+    color: silver;
+    text-align: center;
+  }
+  
+  .page-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .text-block-41 {
+    font-weight: 400;
+  }
+  
+  .text-block-26 {
+    position: relative;
+    top: 20px;
+  }
+  
+  .text-block-27 {
+    font-weight: 400;
+  }
+  
+  .text-span-48 {
+    font-size: 16px;
+    font-weight: 400;
+  }
+  
+  .pricing-table-4 {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    padding: 0px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-radius: 20px;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#303030), to(#1a1a1a));
+    background-image: linear-gradient(180deg, #303030, #1a1a1a);
+    text-align: center;
+  }
+  
+  .text-label-3 {
+    display: inline-block;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    background-image: -webkit-gradient(linear, left top, right top, from(#058d3f), to(#66df57));
+    background-image: linear-gradient(90deg, #058d3f, #66df57);
+    color: #66df57;
+    line-height: 20px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .price-tag-4 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    padding-left: 0px;
+    font-size: 40px;
+    line-height: 56px;
+    height: 56px;
+    font-weight: 700;
+  }
+  
+  .price-tag-4.monthly {
+    padding-left: 0px;
+    color: #fff;
+  }
+  
+  .text-span-47 {
+    color: #058d3f;
+    font-weight: 700;
+  }
+  
+  .pricing-plan-line {
+    position: absolute;
+    left: 0%;
+    top: auto;
+    right: 0%;
+    bottom: -1px;
+    z-index: 1;
+    height: 1px;
+    background-color: hsla(0, 0%, 100%, 0.15);
+  }
+  
+  .pricing-plan-line.highlighted {
+    background-image: -webkit-gradient(linear, left top, right top, from(#058d3f), to(#66df57));
+    background-image: linear-gradient(90deg, #058d3f, #66df57);
+  }
+  
+  .pricing-list-3 {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding-top: 10px;
+    padding-right: 40px;
+    padding-left: 40px;
+    border-top: 1px solid hsla(0, 0%, 100%, 0.1);
+    text-align: left;
+  }
+  
+  .plan-name-3 {
+    position: relative;
+    left: 0%;
+    top: 0%;
+    right: 0%;
+    bottom: auto;
+    overflow: hidden;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 auto;
+    -ms-flex: 0 auto;
+    flex: 0 auto;
+    background-color: #1a1a1a;
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  
+  .bold-text-11 {
+    color: #fff;
+  }
+  
+  .button-bg-cta {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    width: 100%;
+    background-image: linear-gradient(125deg, #66df57, #058d3f 100%, #66df57);
+  }
+
+  @media screen and (max-width: 991px) {
+    .button-text {
+      font-size: 14px;
+    }
+  
+    .check-circle-icon {
+      display: none;
+    }
+  
+    .pricing-list-item-4 {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      font-size: 12px;
+    }
+  
+    .button.full-width {
+      width: 100%;
+    }
+  
+    .wrapper-2 {
+      padding-right: 16px;
+      padding-left: 16px;
+    }
+  
+    .plan-info-4 {
+      padding-right: 10px;
+      padding-left: 10px;
+      font-size: 12px;
+      line-height: 20px;
+      text-align: center;
+    }
+  
+    .plan-info-4.standalone {
+      margin-bottom: 35px;
+    }
+  
+    .text-block-27 {
+      font-size: 12px;
+    }
+  
+    .pricing-list-3 {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    .button-text {
+      font-size: 16px;
+    }
+  
+    .check-circle-icon {
+      display: block;
+    }
+  
+    .wrapper-2 {
+      padding-bottom: 2px;
+    }
+  
+    .pricing-table-4 {
+      margin-right: 60px;
+      margin-left: 60px;
+    }
+  
+    .price-tag-4 {
+      padding-left: 20px;
+      font-size: 38px;
+    }
+  
+    .price-tag-4.free {
+      font-size: 38px;
+    }
+  }
+  
+  @media screen and (max-width: 479px) {
+    .button-text {
+      font-size: 14px;
+    }
+  
+    .button-bg-cta {
+      padding-bottom: 0px;
+    }
+  
+    .pricing-list-item-4 {
+      font-size: 12px;
+    }
+  
+    .page-wrapper {
+      overflow: hidden;
+    }
+  
+    .pricing-table-4 {
+      margin-right: 0px;
+      margin-left: 0px;
+      padding: 0px 0px 40px;
+    }
+  
+    .price-tag-4 {
+      margin-top: 20px;
+      padding-left: 0px;
+      font-size: 38px;
+    }
+  
+    .pricing-list-3 {
+      margin-top: 32px;
+      padding-top: 24px;
+    }
+  }
+}

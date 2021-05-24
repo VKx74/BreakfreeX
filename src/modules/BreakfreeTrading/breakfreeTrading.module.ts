@@ -50,6 +50,8 @@ import { LeaderDashboardComponent } from './components/missions/leader-dashboard
 import { AcademyModule } from 'modules/Academy/academy.module';
 import { ScannerStrategyBacktestComponent } from './components/scannerModeBacktest/scannerModeBacktest.component';
 import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNumberPopUp.component';
+import { GuestCheckoutComponent } from './components/guest-checkout/guest-checkout.component';
+import { DefaultCheckoutComponent } from './components/default-checkout/default-checkout.component';
 
 @NgModule({
     // components here
@@ -62,6 +64,8 @@ import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNu
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
+        GuestCheckoutComponent,
+        DefaultCheckoutComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
         DailyMissionsComponent,
@@ -111,6 +115,8 @@ import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNu
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
+        GuestCheckoutComponent,
+        DefaultCheckoutComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
         MissionsInfoComponent,
@@ -126,6 +132,8 @@ import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNu
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
         CheckoutComponent,
+        GuestCheckoutComponent,
+        DefaultCheckoutComponent,
         PhoneNumberPopUpComponent,
         MissionsInfoComponent,
         MissionsComponent,
