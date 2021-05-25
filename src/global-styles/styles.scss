@@ -41,11 +41,14 @@
 @import "external/split-area";
 @import "material-default-theme";
 
-
-html, body { height: 100%;  transition-duration: 0.22s; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
-
-
+html,
+body {
+  height: 100%;
+  transition-duration: 0.22s;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .blur {
@@ -80,7 +83,6 @@ bs-dropdown-container {
   z-index: 10000;
 }
 
-
 .transparent-bg {
   background-color: transparent;
 }
@@ -89,12 +91,12 @@ bs-dropdown-container {
   vertical-align: middle;
 }
 
-
 ::-webkit-scrollbar-corner {
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
 }
 
-.cdk-global-scrollblock { // fix scroll in admin area when dialog is opened
+.cdk-global-scrollblock {
+  // fix scroll in admin area when dialog is opened
   overflow: auto;
 }
 
@@ -102,38 +104,34 @@ bs-dropdown-container {
   @include themify($themes, true);
 }
 
-
 .app-loading {
   body {
     background-color: red;
   }
 }
 
-
-
 // BFT //
 
-
 body.Dark-theme.thmFintatechDarkTheme {
-  background: #06060D;
+  background: #06060d;
 }
 
 // .tcdToolbarItemWrapper {
 //   margin-top: 14px;
 // }
 
-.tcdToolbarCompare,.tcdToolbarExport, .tcdTradePanel {
-  display:none !important;  
-
-
+.tcdToolbarCompare,
+.tcdToolbarExport,
+.tcdTradePanel {
+  display: none !important;
 }
 
 .tcdToolbarInput .tcdToolbarButton-dropdownElement-image {
   display: none !important;
 }
 
-.crypto-button_default, .navigatorlayouts {
-  
+.crypto-button_default,
+.navigatorlayouts {
   color: #ffffffd1 !important;
   background-color: #ffffff00 !important;
   font-size: 12px;
@@ -152,7 +150,7 @@ body.Dark-theme.thmFintatechDarkTheme {
   .add-elements-btn {
     padding: 0px 10px;
     height: 30px;
-    display:none;
+    display: none;
   }
   margin: 0px !important;
 }
@@ -160,17 +158,14 @@ body.Dark-theme.thmFintatechDarkTheme {
 .navigation {
   background-color: #191919 !important;
   visibility: visible;
-  
-
 }
 
-
-.telegramframe{
+.telegramframe {
   border: 0px !important;
 }
 
 .platform-container {
-    padding-top: 30px !important;
+  padding-top: 30px !important;
 }
 
 .sidebar-toggle-wrapper {
@@ -196,9 +191,7 @@ body.Dark-theme.thmFintatechDarkTheme {
 }
 
 nav-section div {
-
-margin: 0px !important;
-
+  margin: 0px !important;
 }
 
 .navigation .role {
@@ -209,16 +202,14 @@ margin: 0px !important;
   font-size: 12px !important;
   color: #ffffffd1 !important;
 }
-  
 
 .delimiter-left {
   border-left: 0.01em solid #edeff240 !important;
 }
 
-.toggle-container.toggle-container{
+.toggle-container.toggle-container {
   border-right: 0.01em solid #edeff240 !important;
 }
-
 
 span.logo__img {
   border-right: 0px !important;
@@ -234,21 +225,17 @@ span.logo__img {
 //   display: none !important;
 // }
 
-
 //menu
 
 .toggle {
   width: 35px !important;
   height: 20px !important;
-
-  
 }
 
 .toggle span {
   background: #ffffffd1 !important;
   height: 4px !important;
 }
-
 
 .toggle span:nth-child(1) {
   top: -4px !important;
@@ -260,14 +247,11 @@ span.logo__img {
   transform-origin: left center;
 }
 
-
 .toggle span:nth-child(3) {
   top: 20px !important;
   width: 100% !important;
   transform-origin: left center;
 }
-
-
 
 //General
 
@@ -275,7 +259,6 @@ button.crypto-button.crypto-button_default {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
-
 
 //DARK THEME
 
@@ -289,24 +272,21 @@ button.crypto-button.crypto-button_default {
 }
 
 span.bftn {
- 
   font-size: 12px;
   font-weight: 800;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   vertical-align: text-top;
 }
 
-.sidebar-toggle-wrapper{
+.sidebar-toggle-wrapper {
   background-color: transparent !important;
 }
-
 
 span.bftnlogo {
   color: #ffffffd1;
   font-size: 12px;
   font-weight: bold;
-  padding-top:3px;
- 
+  padding-top: 3px;
 }
 
 span.bftsvg {
@@ -318,14 +298,11 @@ span.bftsvg {
   width: auto;
 }
 
-
-.Light-theme .open span.bftsvg, .Light-theme .open span.bftnlogo {
-  fill:#191919 !important;
-  color:#191919 !important;
-
-
+.Light-theme .open span.bftsvg,
+.Light-theme .open span.bftnlogo {
+  fill: #191919 !important;
+  color: #191919 !important;
 }
-
 
 .flex.BFTN img {
   width: 170px;
@@ -335,9 +312,9 @@ span.bftsvg {
 }
 
 .Dark-theme {
-  .svgfiller { 
+  .svgfiller {
     filter: invert(98%) sepia(0%) saturate(7493%) hue-rotate(140deg) brightness(100%) contrast(105%);
-    opacity:0.9
+    opacity: 0.9;
   }
 }
 
@@ -347,7 +324,6 @@ span.bftsvg {
   filter: none;
   margin-left: 10px;
 }
-
 
 .Dark-theme .open .flex.BFTN img {
   width: 170px;
@@ -362,8 +338,6 @@ span.bftsvg {
   height: 13px;
 }
 
-
-
 .sidebar-container {
   display: flex;
   flex-direction: column;
@@ -377,11 +351,9 @@ span.bftsvg {
 
 // watchlist
 
-
-
 span.lm_title.bftn {
   max-width: 300px !important;
-  font-weight:800 !important;
+  font-weight: 800 !important;
 }
 
 lm_tab.bftn {
@@ -391,11 +363,6 @@ lm_tab.bftn {
 .bftlinks {
   padding-left: 15px;
 }
-
-
-
-
-
 
 .matMenuTrigger {
   line-height: 15px;
@@ -408,86 +375,68 @@ lm_tab.bftn {
   cursor: pointer;
 }
 
-
-
-.Dark-theme  .open span.bftsvg {
-
+.Dark-theme .open span.bftsvg {
   fill: #ffffffd1 !important;
 }
 
-.tcdToolbarNav a, .tcdToolbarNav li {
+.tcdToolbarNav a,
+.tcdToolbarNav li {
   text-decoration: none;
 }
 
 .Light-theme .tcdToolbar-top {
-  border-top:1px solid #f2f2f2;
+  border-top: 1px solid #f2f2f2;
 }
 .Dark-theme {
-border-top:1px solid #f8f8f82e;
+  border-top: 1px solid #f8f8f82e;
 }
 
-.Dark-theme  input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
+.Dark-theme input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
   border-left: 1px solid #f8f8f82e;
   background-color: transparent;
-
 }
 
-.Light-theme  input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
+.Light-theme input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
   border-left: 1px solid #ddd;
   background-color: transparent;
-
 }
 
-.Dark-theme  .tcdTimeFramePicker {
+.Dark-theme .tcdTimeFramePicker {
   border-left: 1px solid #f8f8f82e;
-
-
 }
 
-.Light-theme  .tcdTimeFramePicker{
+.Light-theme .tcdTimeFramePicker {
   border-left: 1px solid #ddd;
-
-
 }
-
-
-
-
 
 .Light-theme .tcdToolbar.tcdToolbarNav .tcdToolbarInput {
   background-color: transparent;
 }
 
-
-.Dark-theme .tcdToolbarButton:hover, .Dark-theme .tcdToolbarButton-dropdownElement-image.tcdSVGIcon:hover {
-  background: #2e3740 ;
-  cursor: default ;
+.Dark-theme .tcdToolbarButton:hover,
+.Dark-theme .tcdToolbarButton-dropdownElement-image.tcdSVGIcon:hover {
+  background: #2e3740;
+  cursor: default;
 }
 
 .Dark-theme span.spanlink {
-padding-right: 5px;
-color: #fff;
+  padding-right: 5px;
+  color: #fff;
 }
 
-
 .Dark-theme span.bftn {
-   color:#ffffffd1 !important;
-   font-size:12px;
-
-  }
-
-
- 
+  color: #ffffffd1 !important;
+  font-size: 12px;
+}
 
 .Dark-theme .lm_header .lm_tab.lm_active {
-background-color: #191919 !important;
-border-top: 0px solid #3d61cc !important;
+  background-color: #191919 !important;
+  border-top: 0px solid #3d61cc !important;
 }
 
 .Dark-theme .lm_header .lm_tab {
-background: #19191996 ;
+  background: #19191996;
 }
-
 
 //Light theme
 
@@ -496,12 +445,11 @@ background: #19191996 ;
   border-top: 0px solid #3d61cc !important;
 }
 
-
 .Light-theme .open .toggle span:nth-child(1) {
   transform: rotate(45deg);
   top: -3px;
   left: 8px;
-  background:#323232  !important;
+  background: #323232 !important;
 }
 
 .Light-theme .open .toggle span:nth-child(2) {
@@ -514,59 +462,47 @@ background: #19191996 ;
   width: 100%;
   top: 39px;
   left: 8px;
-  background:#323232  !important;
+  background: #323232 !important;
 }
 
-.Light-theme .open .bftn  {
+.Light-theme .open .bftn {
   transform: rotate(-45deg);
   width: 100%;
   top: 39px;
   left: 8px;
-  background:#323232  !important;
+  background: #323232 !important;
 }
 
-
-.Light-theme .tcdToolbarButton:hover, .Light-theme  .tcdToolbarButton-dropdownElement-image.tcdSVGIcon:hover {
-  background: #f5f5f5 ;
+.Light-theme .tcdToolbarButton:hover,
+.Light-theme .tcdToolbarButton-dropdownElement-image.tcdSVGIcon:hover {
+  background: #f5f5f5;
   cursor: default !important;
 }
 
 .Light-theme span.spanlink {
-padding-right: 5px;
-color: #000;
+  padding-right: 5px;
+  color: #000;
 }
-
-
 
 .Light-theme span.bftn {
-  color:#000 !important;
-  font-size:12px;
-
- }
-
-
- @media (max-width: 470px) {
-  
-  .hidebreakfreetrading {
-     display:none !important;
-  }
- 
+  color: #000 !important;
+  font-size: 12px;
 }
 
+@media (max-width: 470px) {
+  .hidebreakfreetrading {
+    display: none !important;
+  }
+}
 
 @media (max-width: 360px) {
-  
   .hidenavigator {
-     display:none !important;
+    display: none !important;
   }
- 
 }
 
-
-
 .hidden {
-
-  display:none !important;
+  display: none !important;
 }
 
 .Light-theme .tcdToolbar-scroll.tcdToolbar-left.tcdPhone {
@@ -576,16 +512,13 @@ color: #000;
   border-right: 1px solid #06060d;
 }
 
-
-
-
 /* Hide scrollbar for Chrome, Safari and Opera */
 .tcdToolbar-top .tcdToolbar-scroll-wrapper::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE and Edge */
-.tcdToolbar-top .tcdToolbar-scroll-wrapper  {
+.tcdToolbar-top .tcdToolbar-scroll-wrapper {
   -ms-overflow-style: none;
 }
 
@@ -595,12 +528,12 @@ color: #000;
 
 .Light-theme .root.current-user-message {
   justify-content: flex-start;
-  background-color:#EFF9E9 ;
+  background-color: #eff9e9;
 }
 
 .Dark-theme .root.current-user-message {
   justify-content: flex-start;
-  background-color:#201f1f ;
+  background-color: #201f1f;
 }
 
 .Dark-theme input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
@@ -608,64 +541,49 @@ color: #000;
 }
 
 .Light-theme .message-text {
- 
   font-size: 13px;
   overflow-wrap: break-word;
   line-height: 1.38;
-  color:#4a4a4a;
-  
+  color: #4a4a4a;
 }
 
 .Light-theme .root {
-
-  border-bottom:1px solid #e8e8e8
-
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .Light-theme .thread-list-item {
   border-bottom: 1px solid #e8e8e8;
   background: #fff;
-
 }
 
-.Light-theme .thread-list-item:hover  {
-
-background:#edeff2;
-
-
+.Light-theme .thread-list-item:hover {
+  background: #edeff2;
 }
 
-.Light-theme thread-list-item.active .thread-list-item, .Light-theme thread-list-item.active .thread-list-item {
+.Light-theme thread-list-item.active .thread-list-item,
+.Light-theme thread-list-item.active .thread-list-item {
   border-left: 2px solid #3d61cc !important;
   background: #edeff2 !important;
 }
 
 .Dark-theme .mat-tab-link {
-  color:#fff !important;;
+  color: #fff !important;
 }
 
 .Dark-theme .footer {
- 
   border: 1px solid #161616;
-
 }
 
 .Dark-theme .message-text {
-  
   font-size: 13px;
   overflow-wrap: break-word;
   line-height: 1.38;
   color: #ffffffd1;
-  
 }
 
 .Dark-theme .root {
-
-  border-bottom:1px solid #2d2b2b;
-
+  border-bottom: 1px solid #2d2b2b;
 }
-
-
 
 .Dark-theme .thread-list-item {
   border-bottom: 1px solid #2d2b2b;
@@ -673,82 +591,66 @@ background:#edeff2;
 }
 
 .Dark-theme .footer {
- 
   border: 1px solid #161616;
-
 }
 
 .Dark-theme .ggtop {
-border-top:2px solid #06060D;
+  border-top: 2px solid #06060d;
 }
 
-
-.Dark-theme .mat-tab-label-active  {
-  font-weight:600;
-  color:#fff !important;
+.Dark-theme .mat-tab-label-active {
+  font-weight: 600;
+  color: #fff !important;
 }
 
-.Dark-theme  .open .logo {
-  background-color:transparent !important;
-  
-  }
-
-
-
+.Dark-theme .open .logo {
+  background-color: transparent !important;
+}
 
 .Light-theme .mat-tab-link {
-  color:#191919 !important;
+  color: #191919 !important;
 }
 
-
-
-.Light-theme .mat-tab-label-active  {
-  font-weight:600;
-  color:#191919 !important;
+.Light-theme .mat-tab-label-active {
+  font-weight: 600;
+  color: #191919 !important;
 }
 
 .Light-theme .open .logo {
-background-color:transparent !important;
-
+  background-color: transparent !important;
 }
 
-a.wrapper-link[href="#/platform/settings/withdraws"],a.wrapper-link[href="#/platform/settings/trades"],a.wrapper-link[href="#/platform/settings/deposits"] {
+a.wrapper-link[href="#/platform/settings/withdraws"],
+a.wrapper-link[href="#/platform/settings/trades"],
+a.wrapper-link[href="#/platform/settings/deposits"] {
   display: none !important;
 }
 
-
 .Dark-theme .item-icon {
- 
-  background:#191919;
-  border:1px solid #dddddd21;
-  
+  background: #191919;
+  border: 1px solid #dddddd21;
 }
 
 .Dark-theme .section-item {
-  color:#fff;
-
+  color: #fff;
 }
 
 .Dark-theme .section-item:hover {
-  color:#0da4fa;
+  color: #0da4fa;
 }
-
-
 
 // .Light-theme .item-icon {
 //   background:#edeff2 ;
 //   border:1px solid #ddddddb3;
-  
+
 // }
 
-
 .Light-theme .section-item:hover {
-color:#0da4fa;
-
+  color: #0da4fa;
 }
 
 .mat-drawer-backdrop.mat-drawer-shown {
-  background:transparent !important;
+  background: transparent !important;
 }
 
 admin-root .section-label {
@@ -756,42 +658,38 @@ admin-root .section-label {
 }
 
 .remove-bottom-padding {
-  padding-bottom:0px !important;
+  padding-bottom: 0px !important;
 }
 
 // bft loves css
-
 
 .mat-autocomplete-panel {
   width: 300px !important;
   min-width: 300px !important;
   max-width: 300px !important;
-
 }
-
 
 img.sa-icon {
   width: 100%;
 }
 
-.sa-child{
-  margin-left:5px;
+.sa-child {
+  margin-left: 5px;
 }
 
 .sa-child a {
-  color:unset !important;
+  color: unset !important;
   text-decoration: unset !important;
 }
 
 .item-icon.sa-icon {
   width: 100%;
-  padding:15px;
-  border: none ;
+  padding: 15px;
+  border: none;
   background: #191919;
   padding: 8px 0px !important;
-  margin-left:0px !important;
+  margin-left: 0px !important;
 }
-
 
 .item-icon.sa-icon .sa-icon {
   -webkit-filter: invert(1);
@@ -801,22 +699,14 @@ img.sa-icon {
   margin: 0 auto;
 }
 
-
-.Dark-theme .sa-child:hover .item-icon.sa-icon  {
-
-
+.Dark-theme .sa-child:hover .item-icon.sa-icon {
   background: #fff;
   border: none;
-  
 }
 
-
-.Light-theme .sa-child:hover .item-icon.sa-icon  {
-
-
-  background: #EDEFF2;
+.Light-theme .sa-child:hover .item-icon.sa-icon {
+  background: #edeff2;
   border: none;
-  
 }
 .sa-child:hover .sa-icon {
   -webkit-filter: none;
@@ -826,63 +716,56 @@ img.sa-icon {
 .Dark-theme img.emptysvg {
   -webkit-filter: invert(1) !important;
   filter: invert(1) !important;
-
 }
 
 // darkmode for bft panel
 
-.Dark-theme span.value1, .Dark-theme span.value2 {
-
+.Dark-theme span.value1,
+.Dark-theme span.value2 {
   color: #ffffffd1 !important;
-
- 
 }
 
 .Dark-theme .row.tradeoverview span.leftbord {
-  background:#ffffffd1 !important;
-
+  background: #ffffffd1 !important;
 }
 
 .Dark-theme .row.tradeoverview .header {
-  color:#ffffffd1 !important;
-
+  color: #ffffffd1 !important;
 }
 
 .Dark-theme .bftpanel-status .row {
   border-bottom: 1px solid #2d2b2b !important;
 }
 
-.Dark-theme .bftpanel-status{
+.Dark-theme .bftpanel-status {
   border: 1px solid #2d2b2b !important;
 }
 
 .Dark-theme .value2.copyable::after {
   filter: invert(1);
-
 }
 
 .Dark-theme .BFTimage {
   filter: invert(1);
 }
 
-.Light-theme .lm_header .lm_controls .lm_tabdropdown:before{
-  color:#191919 !important;
+.Light-theme .lm_header .lm_controls .lm_tabdropdown:before {
+  color: #191919 !important;
 }
 
-.Dark-theme .lm_header .lm_controls .lm_tabdropdown:before{
-  color:#ffffffd1 !important;;
+.Dark-theme .lm_header .lm_controls .lm_tabdropdown:before {
+  color: #ffffffd1 !important;
 }
-
 
 // hide alerts on indicators
 span.tcdPaneTitleIcon.tcdIndicatorAlertIcon {
   display: none;
 }
 
-.app-loading .logo img{
-display: block;
-width: 50px;
-transition-duration: 0.22s;
+.app-loading .logo img {
+  display: block;
+  width: 50px;
+  transition-duration: 0.22s;
 }
 
 .app-loading {
@@ -892,9 +775,8 @@ transition-duration: 0.22s;
   align-items: center;
   justify-content: center;
   height: 100%;
-  background:#191919 ;
+  background: #191919;
   transition-duration: 0.22s;
-
 }
 
 .app-loading .spinner {
@@ -942,29 +824,30 @@ transition-duration: 0.22s;
 }
 
 .bft-form-select {
-    .mat-form-field-flex {
+  .mat-form-field-flex {
+    height: 24px !important;
+    mat-select {
       height: 24px !important;
-      mat-select {
-        height: 24px !important;
-      }
     }
-    .mat-select-value, input {
-      font-size: 10px !important;
-      font-weight: 700 !important;
-    }
+  }
+  .mat-select-value,
+  input {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+  }
 }
 
 .bft-form-input {
-    .mat-form-field-flex {
-      height: 24px !important;
-      input {
-        height: 24px !important;
-      }
-    }
+  .mat-form-field-flex {
+    height: 24px !important;
     input {
-      font-size: 10px !important;
-      font-weight: 700 !important;
+      height: 24px !important;
     }
+  }
+  input {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+  }
 }
 
 //Fix issue with timepicker dial, css overwritten from code above.
@@ -974,14 +857,98 @@ input.timepicker-dial__control.timepicker-dial__item {
   height: auto !important;
 }
 
-
 //Global override for padding-left in modal window, looks better aligned.
 .crypto-modal .modal-content .modal-title {
-  padding-left: 15px  !important;
- 
+  padding-left: 15px !important;
 }
 
 .disabled {
   opacity: 0.35;
   pointer-events: none;
+}
+
+.highlight-backdrop {
+  position: absolute;
+  display: none;
+  box-shadow: 0px 0px 0px 2000px #5a5a5a;
+  z-index: 100000;
+  opacity: 0.5;
+  -webkit-animation: fadein-bft_05 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  animation: fadein-bft_05 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.highlight-text {
+  position: absolute;
+  display: none;
+  z-index: 100001;
+  opacity: 1;
+  -webkit-animation: fadein-bft_1 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  animation: fadein-bft_1 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  background-color: whitesmoke;
+  border-radius: 3px;
+}
+
+.highlight-text-content {
+  padding: 10px;
+  font-size: 12px;
+  font-family: "Fira Sans", sans-serif;
+}
+
+
+.highlight-backdrop-arrow {
+	position: relative;
+	background: whitesmoke;
+}
+.highlight-backdrop-arrow:after, .highlight-backdrop-arrow:before {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: "";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.highlight-backdrop-arrow:before {
+	border-color: rgba(194, 225, 245, 0);
+	border-bottom-color: whitesmoke;
+	border-width: 10px;
+	margin-left: -10px;
+}
+
+@-webkit-keyframes fadein-bft_05 {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+@keyframes fadein-bft_05 {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+@-webkit-keyframes fadein-bft_1 {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadein-bft_1 {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

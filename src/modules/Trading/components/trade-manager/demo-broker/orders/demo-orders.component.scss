@@ -10,6 +10,16 @@
     left: -10px;
   }
 
+  .net-pl-cell {
+    &.highlight {
+      width: 100%;
+      height: 100%;
+      background: #5eaf803b;
+      padding: 5px;
+      font-weight: 600;
+    }
+  }
+
   .symbol-column {
     font-weight: bolder;
   }

@@ -35,6 +35,7 @@ import { MatDialog } from '@angular/material/dialog';
 import IChartInstrument = TradingChartDesigner.IInstrument;
 import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
 import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
+import { HighlightService } from "@app/services/highlight/highlight.service";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -104,6 +105,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 private _identity: IdentityService,
                 private _demoBroker: SignalsDemoBrokerService,
                 private _dialog: MatDialog,
+                private _highlightService: HighlightService,
                 protected _injector: Injector) {
         super(_injector);
         if (this._identity.isGuestMode) {
@@ -267,20 +269,23 @@ export class TcdComponent extends BaseLayoutItemComponent {
             return;
         }
 
-        this.blur = true;
+        this._highlightService.highlightBacktestChart();
+
+        // this.blur = true;
         this.chart.refreshAsync();
 
-        const timerId1 = setTimeout(() => {
-            this.blur = false;
+        // const timerId1 = setTimeout(() => {
+            // this.blur = false;
             const timerId2 = setTimeout(() => {
                 this._demoBroker.reset();
                 this.chart.on(TradingChartDesigner.ChartEvent.BARS_APPENDED, this.barAppended.bind(this));
                 this.chart.replayMode.play();
-            }, 1000);
+                this._highlightService.highlightBottomPanel(7000);
+            }, 7000);
             this.replayModeTimers.push(timerId2);
-        }, 3000); 
+        // }, 3000); 
 
-        this.replayModeTimers.push(timerId1);
+        // this.replayModeTimers.push(timerId1);
         
         const timerId3 = setTimeout(() => {
             this.chart.replayMode.replaySpeed = 250;
@@ -638,9 +643,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.removeShapes();
             this.chart.off(TradingChartDesigner.ChartEvent.BARS_APPENDED);
 
+            this._highlightService.highlightBottomOrdersPNL(7000);
+
             const timerId = setTimeout(() => {
                 this._showCheckout();
-            }, 1000 * 15);
+            }, 1000 * 30);
             this.replayModeTimers.push(timerId);
         }
     }
