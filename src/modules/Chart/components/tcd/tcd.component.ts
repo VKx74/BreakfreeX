@@ -271,27 +271,31 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
         this._highlightService.highlightBacktestChart();
 
-        // this.blur = true;
+        this.blur = true;
         this.chart.refreshAsync();
 
-        // const timerId1 = setTimeout(() => {
-            // this.blur = false;
+        const timerId1 = setTimeout(() => {
+            this.blur = false;
             const timerId2 = setTimeout(() => {
                 this._demoBroker.reset();
                 this.chart.on(TradingChartDesigner.ChartEvent.BARS_APPENDED, this.barAppended.bind(this));
                 this.chart.replayMode.play();
-                this._highlightService.highlightBottomPanel(7000);
-            }, 7000);
-            this.replayModeTimers.push(timerId2);
-        // }, 3000); 
+            }, 1000);
+            const timerId3 = setTimeout(() => {
+                this._highlightService.highlightBottomPanel(1000 * 15);
+            }, 10000);
 
-        // this.replayModeTimers.push(timerId1);
+            this.replayModeTimers.push(timerId2);
+            this.replayModeTimers.push(timerId3);
+        }, 3000); 
+
+        this.replayModeTimers.push(timerId1);
         
-        const timerId3 = setTimeout(() => {
+        const timerId4 = setTimeout(() => {
             this.chart.replayMode.replaySpeed = 250;
             this.chart.setReplayByDate(dates[100], true);
         }, 1500);
-        this.replayModeTimers.push(timerId3);
+        this.replayModeTimers.push(timerId4);
     }
 
     protected isRTDExists() {
@@ -643,11 +647,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.removeShapes();
             this.chart.off(TradingChartDesigner.ChartEvent.BARS_APPENDED);
 
-            this._highlightService.highlightBottomOrdersPNL(7000);
+            this._highlightService.highlightBottomOrdersPNL(1000 * 15);
 
             const timerId = setTimeout(() => {
                 this._showCheckout();
-            }, 1000 * 30);
+            }, 1000 * 20);
             this.replayModeTimers.push(timerId);
         }
     }

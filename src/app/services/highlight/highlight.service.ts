@@ -4,21 +4,23 @@ import { Injectable } from "@angular/core";
 export class HighlightService {
     private highlightFunction: (elementSelector: string, content: string) => void = (selector, text) => {
         let element = $(selector)[0];
-        let backdrop = $(".highlight-backdrop")[0];
         let textElement = $(".highlight-text")[0];
         let textContentElement = $(".highlight-text-content")[0];
-        let rect = element.getBoundingClientRect();
+        let elementRect = element.getBoundingClientRect();
+        let maxWidth = (elementRect.width - 10);
 
-        backdrop.style.left = rect.left + 'px';
-        backdrop.style.top = rect.top + 'px';
-        backdrop.style.width = rect.width + 'px';
-        backdrop.style.height = rect.height + 'px';
-        backdrop.style.display = "block";
-
-        textElement.style.left = rect.left + 10 + 'px';
-        textElement.style.top = rect.top + 10 + 'px';
-        textElement.style.display = "block";
         textContentElement.innerHTML = text;
+        textElement.style.maxWidth = Math.min(maxWidth, 500) + "px";
+        textElement.style.display = "block";
+        let textElementRect = textElement.getBoundingClientRect();
+
+        if (elementRect.top > textElementRect.height) {
+            textElement.style.top = elementRect.top - textElementRect.height + 'px';
+        } else {
+            textElement.style.top = '0px';
+        }
+
+        textElement.style.left = Math.trunc((elementRect.width - textElementRect.width) / 2) + "px";
     }
     
     private highlightOrderNetPNLFunction: () => void = () => {
@@ -27,8 +29,8 @@ export class HighlightService {
     }
 
     private removeHighlightFunction: () => void = () => {
-        let backdrop = $(".highlight-backdrop")[0];
-        backdrop.style.display = "none";
+        // let backdrop = $(".highlight-backdrop")[0];
+        // backdrop.style.display = "none";
         let backdropText = $(".highlight-text")[0];
         backdropText.style.display = "none";
     }
