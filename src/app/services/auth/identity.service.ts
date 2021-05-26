@@ -19,6 +19,7 @@ export class IdentityService {
     private readonly _defaultMaxExpirationCookieTime = 24 * 60 * 365; // 1 year
 
     private _isGuestMode: boolean = false;
+    private _isTrialExpired: boolean = false;
 
     public id: string;
     public email: string;
@@ -27,6 +28,7 @@ export class IdentityService {
     public role: string = "";
     public preferredUsername: string;
     public phoneNumber: string;
+    public artifSubExp: number;
     public tags: string[] = [];
     public subscriptions: string[] = [];
     public isTwoFactorAuthEnable: boolean;
@@ -53,6 +55,14 @@ export class IdentityService {
         }
 
         return this.expirationTime <= Date.now() / 1000;
+    }
+
+    get isArtifSubExp(): boolean {
+        if (!this.artifSubExp || !this.isTrial) {
+            return false;
+        }
+
+        return this.artifSubExp <= Date.now() / 1000;
     }
 
     get fullName() {
@@ -90,7 +100,7 @@ export class IdentityService {
 
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
-                if (sub.indexOf("Trial") !== -1) {
+                if (sub.indexOf("Trial") !== -1 && this.subscriptions.length === 1) {
                     return true;    
                 }
             }
@@ -105,6 +115,10 @@ export class IdentityService {
         }
 
         if (this.isTrial && !this.phoneNumber) {
+            return false;
+        }
+
+        if (this.isTrial && this._isTrialExpired) {
             return false;
         }
 
@@ -215,6 +229,11 @@ export class IdentityService {
         this.restrictedComponents = parsedToken.hasOwnProperty('restricted') ? [].concat(parsedToken.restricted) : [];
         this.token = token;
         this.refreshToken = refreshToken;
+
+        if (parsedToken.artifsub_exp) {
+            this.artifSubExp = Number(parsedToken.artifsub_exp);
+            this._isTrialExpired = this.isArtifSubExp;
+        }
 
         return true;
     }

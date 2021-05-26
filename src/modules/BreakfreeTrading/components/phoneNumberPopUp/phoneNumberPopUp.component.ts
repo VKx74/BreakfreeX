@@ -45,12 +45,16 @@ export class PhoneNumberPopUpComponent extends Modal<PhoneNumberPopUpComponent> 
     ngOnDestroy() {
     }
 
+    continueFree() {
+        this.close();
+    }
+
     handleAddPhoneNumberButtonClick() {
         this.loading = true;
         const sendCodeViaSMSToAttachPhoneNumberModel: SendCodeViaSMSToAttachPhoneNumberModel = {
             email: this._identityService.email,
             phoneNumber: this.phoneNumber,
-            isFreeTrial: true
+            isFreeTrial: this._identityService.isTrial
         };
         this._personalInfoService.sendCodeViaSMSToAttachPhoneNumber(sendCodeViaSMSToAttachPhoneNumberModel)
             .subscribe(() => {
@@ -58,7 +62,12 @@ export class PhoneNumberPopUpComponent extends Modal<PhoneNumberPopUpComponent> 
                 this.loading = false;
                 this.showVerification = true;
             }, e => {
-                this._alertService.error(this._translateService.get('verificationCodeNotSent'));
+                if (e.error && e.error.description) {
+                    this._alertService.error(e.error.description);
+                } else {
+                    this._alertService.error(this._translateService.get('verificationCodeNotSent'));
+                }
+
                 this.loading = false;
                 console.log(e);
             });

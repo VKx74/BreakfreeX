@@ -17,7 +17,10 @@
                         <input [(ngModel)]="phoneNumber" matInput ng-trim="false" type="text" placeholder="{{'breakfreeTrading.phoneNumber' | translate}}">
                     </mat-form-field>
                 </div>
-                <button class="crypto-button" (click)="handleAddPhoneNumberButtonClick()">{{'breakfreeTrading.addPhone'| translate}}</button>
+                <div class="flex">
+                    <button class="crypto-button" (click)="handleAddPhoneNumberButtonClick()">{{'breakfreeTrading.addPhone'| translate}}</button>
+                    <!-- <button class="crypto-button margin-left" (click)="continueFree()">{{'breakfreeTrading.continueFree'| translate}}</button> -->
+                </div>
             </div>
             <div class="flex phone-verification-input inputrow" *ngIf="showVerification">
                 <div class="input-container">

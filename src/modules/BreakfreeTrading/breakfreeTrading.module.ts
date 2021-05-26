@@ -52,6 +52,7 @@ import { ScannerStrategyBacktestComponent } from './components/scannerModeBackte
 import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNumberPopUp.component';
 import { GuestCheckoutComponent } from './components/guest-checkout/guest-checkout.component';
 import { DefaultCheckoutComponent } from './components/default-checkout/default-checkout.component';
+import { StorageModule } from 'modules/Storage/storage.module';
 
 @NgModule({
     // components here
@@ -82,6 +83,7 @@ import { DefaultCheckoutComponent } from './components/default-checkout/default-
     ],
     imports: [
         CommonModule,
+        StorageModule,
         LocalizationModule,
         InstrumentSearchModule,
         DatatableModule,

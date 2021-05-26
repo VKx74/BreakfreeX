@@ -9,6 +9,8 @@ import { AuthenticationService } from "@app/services/auth/auth.service";
 import { CrossFieldErrorMatcher } from "@app/Utils/crossFieldErrorMatcher";
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 import { MatDialog } from "@angular/material/dialog";
+import { LocalStorageService } from 'Storage';
+import { GTMTrackingService } from '@app/services/traking/gtm.tracking.service';
 
 @Component({
   selector: 'credentials-page',
@@ -25,6 +27,8 @@ export class CredentialsPageComponent implements OnInit {
     private _route: ActivatedRoute,
     private _formBuilder: FormBuilder,
     protected _dialog: MatDialog,
+    protected _GTMTrackingService: GTMTrackingService,
+    protected _localStorage: LocalStorageService,
     private _authService: AuthenticationService) {
 
     this.registerFormGroup = this._formBuilder.group({
@@ -49,6 +53,12 @@ export class CredentialsPageComponent implements OnInit {
       role: Roles.User.toString(),
       redirectUri: UrlsManager.registrationRedirectUrl(email)
     };
+
+    if (this._localStorage.isGuest()) {
+        this._localStorage.trunkGuest();
+        this._GTMTrackingService.load();
+        this._GTMTrackingService.guestRegistration();
+    }
 
     this.processing = true;
     this.serverError = null;

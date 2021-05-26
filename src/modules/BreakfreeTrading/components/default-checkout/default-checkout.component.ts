@@ -1,6 +1,7 @@
 import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angular/core';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { AppConfigService } from '@app/services/app.config.service';
+import { LocalStorageService } from 'modules/Storage/services/local-storage.service';
 
 enum CheckoutTab {
     Monthly,
@@ -17,7 +18,7 @@ export class DefaultCheckoutComponent implements OnInit {
     public SelectedTab: CheckoutTab = CheckoutTab.Monthly;
     public CheckoutTab: any = CheckoutTab;
 
-    constructor(protected _identityService: IdentityService) {
+    constructor(protected _identityService: IdentityService, protected _localStorageService: LocalStorageService) {
     }
 
     ngOnInit() {
@@ -29,8 +30,10 @@ export class DefaultCheckoutComponent implements OnInit {
     ngOnDestroy() {
     }
 
-    startFreeNow() {
-        window.location.href = "/";
+    guestStartFreeNow() {
+        this._localStorageService.setGuest();
+        window.location.href = "/#/auth/registration";
+        window.location.reload();
     }
 
     checkoutDiscovery1M() {

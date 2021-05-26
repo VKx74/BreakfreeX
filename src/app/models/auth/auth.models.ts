@@ -249,6 +249,7 @@ export interface IBaseUserModel {
 export interface IIdentityToken {
     sub: string;
     exp: number;
+    artifsub_exp: number;
     role: string;
     email: string;
     first_name: string;

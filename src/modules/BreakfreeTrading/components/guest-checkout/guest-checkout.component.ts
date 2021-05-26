@@ -1,5 +1,6 @@
 import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angular/core';
 import { IdentityService } from '@app/services/auth/identity.service';
+import { LocalStorageService } from 'modules/Storage/services/local-storage.service';
 import { DefaultCheckoutComponent } from '../default-checkout/default-checkout.component';
 
 @Component({
@@ -8,7 +9,7 @@ import { DefaultCheckoutComponent } from '../default-checkout/default-checkout.c
     styleUrls: ['./guest-checkout.component.scss']
 })
 export class GuestCheckoutComponent extends DefaultCheckoutComponent {
-    constructor(protected _identityService: IdentityService) {
-        super(_identityService);
+    constructor(protected _identityService: IdentityService, protected _localStorageService: LocalStorageService) {
+        super(_identityService, _localStorageService);
     }
 }

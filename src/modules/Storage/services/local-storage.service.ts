@@ -4,6 +4,8 @@ import {JsUtil} from "../../../utils/jsUtil";
 
 @Injectable()
 export class LocalStorageService extends DataStorage {
+    public static IsGuestKey = "isGuest";
+
     set(key: string, data: any): boolean {
         if (!this.canSave) {
             return false;
@@ -68,5 +70,17 @@ export class LocalStorageService extends DataStorage {
         } catch (e) {
             return false;
         }
+    }
+
+    setGuest() {
+        this.set(LocalStorageService.IsGuestKey, true);
+    }
+
+    isGuest() {
+        return !!(this.get(LocalStorageService.IsGuestKey));
+    }
+
+    trunkGuest() {
+        return this.remove(LocalStorageService.IsGuestKey);
     }
 }

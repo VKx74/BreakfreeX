@@ -25,7 +25,7 @@ export class IndicatorRestrictionService {
 
     public getRestrictions(chart: TradingChartDesigner.Chart): string[] {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF) {
+        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF && this._identity.isGuestMode) {
             return [TradingChartDesigner.BreakfreeTradingPro.instanceTypeName];
         }
         
@@ -34,7 +34,7 @@ export class IndicatorRestrictionService {
     
     public canRunStrategyReplay(chart: TradingChartDesigner.Chart): boolean {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF) {
+        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF && this._identity.isGuestMode) {
             return true;
         }
 
@@ -47,7 +47,7 @@ export class IndicatorRestrictionService {
 
     public validate(chart: TradingChartDesigner.Chart, name: string): boolean {
         const chartInstrument = chart.instrument.id.toLowerCase().replace("_", "");
-        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF) {
+        if (chartInstrument === ReplayModeSync.ReplayModeInstrument && chart.timeInterval === ReplayModeSync.ReplayModeTF && this._identity.isGuestMode) {
             if (name === TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName ||
                 name === TradingChartDesigner.RTD.instanceTypeName) {
                 return true;
