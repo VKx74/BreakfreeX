@@ -24,7 +24,6 @@ import { ReplayModeSync } from '@chart/services/replay-mode-sync.service';
 
 @Injectable()
 export class DataFeed extends DataFeedBase {
-    private _default_guest_mode_replay_start_time = 1578336874000;
     private _subscriptions: { [instrumentHash: string]: Subscription } = {};
 
     constructor(private _instrumentService: InstrumentService,
@@ -124,7 +123,7 @@ export class DataFeed extends DataFeedBase {
 
     private _getRequestStartDate(request: TradingChartDesigner.IBarsRequest, endDate: Date): Date {
         if (ReplayModeSync.IsChartReplay && !ReplayModeSync.IsChartReplayStarted) {
-            return new Date(this._default_guest_mode_replay_start_time);
+            return new Date(ReplayModeSync.ReplayModeStartTime);
         }
 
         let count = request.count;

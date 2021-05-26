@@ -277,13 +277,13 @@ export class TcdComponent extends BaseLayoutItemComponent {
         const timerId1 = setTimeout(() => {
             this.blur = false;
             const timerId2 = setTimeout(() => {
-                this._demoBroker.reset();
-                this.chart.on(TradingChartDesigner.ChartEvent.BARS_APPENDED, this.barAppended.bind(this));
-                this.chart.replayMode.play();
-            }, 1000);
+                this._highlightService.highlightBottomPanel(1000 * 30);
+            }, 1000 * 10);
             const timerId3 = setTimeout(() => {
-                this._highlightService.highlightBottomPanel(1000 * 15);
-            }, 10000);
+                this.chart.replayMode.stopReplayMode();
+                this.chart.replayMode.replaySpeed = 300;
+                this.chart.replayMode.play();
+            }, 1000 * 30);
 
             this.replayModeTimers.push(timerId2);
             this.replayModeTimers.push(timerId3);
@@ -292,8 +292,11 @@ export class TcdComponent extends BaseLayoutItemComponent {
         this.replayModeTimers.push(timerId1);
         
         const timerId4 = setTimeout(() => {
-            this.chart.replayMode.replaySpeed = 250;
+            this._demoBroker.reset();
+            this.chart.replayMode.replaySpeed = 1000;
             this.chart.setReplayByDate(dates[100], true);
+            this.chart.on(TradingChartDesigner.ChartEvent.BARS_APPENDED, this.barAppended.bind(this));
+            this.chart.replayMode.play();
         }, 1500);
         this.replayModeTimers.push(timerId4);
     }
