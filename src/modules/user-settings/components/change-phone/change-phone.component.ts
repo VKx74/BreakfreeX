@@ -77,7 +77,8 @@ export class ChangePhoneComponent implements OnInit {
         this.loading = true;
         const sendCodeViaSMSToAttachPhoneNumberModel: SendCodeViaSMSToAttachPhoneNumberModel = {
             email: this.email,
-            phoneNumber: this.formGroup.controls['addPhone'].value
+            phoneNumber: this.formGroup.controls['addPhone'].value,
+            isFreeTrial: false
         };
         this._personalInfoService.sendCodeViaSMSToAttachPhoneNumber(sendCodeViaSMSToAttachPhoneNumberModel)
             .subscribe(() => {

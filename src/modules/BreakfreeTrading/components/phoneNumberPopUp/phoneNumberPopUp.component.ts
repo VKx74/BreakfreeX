@@ -49,7 +49,8 @@ export class PhoneNumberPopUpComponent extends Modal<PhoneNumberPopUpComponent> 
         this.loading = true;
         const sendCodeViaSMSToAttachPhoneNumberModel: SendCodeViaSMSToAttachPhoneNumberModel = {
             email: this._identityService.email,
-            phoneNumber: this.phoneNumber
+            phoneNumber: this.phoneNumber,
+            isFreeTrial: true
         };
         this._personalInfoService.sendCodeViaSMSToAttachPhoneNumber(sendCodeViaSMSToAttachPhoneNumberModel)
             .subscribe(() => {

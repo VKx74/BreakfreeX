@@ -237,6 +237,7 @@ export interface IBillingDashboard {
 export interface SendCodeViaSMSToAttachPhoneNumberModel {
     email: string;
     phoneNumber: string;
+    isFreeTrial: boolean;
 }
 
 export interface SendCodeViaSMSToChangePhoneNumberModel {
