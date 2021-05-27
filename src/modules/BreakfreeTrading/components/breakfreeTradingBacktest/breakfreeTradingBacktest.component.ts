@@ -117,7 +117,7 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
     private _captionText(value: TradingChartDesigner.Chart) {
         const tf = value.timeFrame;
         const instr = value.instrument;
-        return `${instr.symbol} - ${instr.exchange} - ${tf.interval}${tf.periodicity}`;
+        return `${instr.symbol} - ${instr.exchange} - ${tf.interval}${tf.periodicity || 'min'}`;
     }
 
     private _handleChartRemoved(chart: TradingChartDesigner.Chart) {

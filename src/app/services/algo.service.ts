@@ -271,6 +271,8 @@ export interface IBFTAScannerSignal {
     timestamp: number;
     end_timestamp: number;
     data: IBFTAAlgoResponseV2;
+    local_trend: IBFTATrend;
+    global_trend: IBFTATrend;
 }
 
 export interface IBFTAOrder {

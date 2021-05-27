@@ -10,11 +10,13 @@ import { AlertService } from '@alert/services/alert.service';
     styleUrls: ['./scannerModeBacktest.component.scss']
 })
 export class ScannerStrategyBacktestComponent {
+    private _csvResult: string;
+
     @Input()
     public SelectedChart: TradingChartDesigner.Chart;
-    @Output() 
+    @Output()
     public Processing = new EventEmitter<boolean>();
-    @Output() 
+    @Output()
     public ClearData = new EventEmitter();
 
     public availableType: string[] = ["EXT", "SwingN", "SwingExt", "BRC"];
@@ -40,12 +42,11 @@ export class ScannerStrategyBacktestComponent {
     public LossTradeCount: string = "";
     public WinLossRatio: string = "";
     public TotalPerformance: string = "";
-    
+
     constructor(private _alertService: AlertService, protected _bftService: BreakfreeTradingBacktestService) {
     }
 
-    clear()
-    {
+    clear() {
         this.Processing.emit(true);
         this.Status = "-";
         this.Instrument = "";
@@ -70,7 +71,7 @@ export class ScannerStrategyBacktestComponent {
             this._alertService.error("Chart not selected");
             return;
         }
-        
+
         let backtestParameters: IBFTScannerBacktestAlgoParameters = {
             input_accountsize: 1000,
             account_currency: "USD",
@@ -123,11 +124,10 @@ export class ScannerStrategyBacktestComponent {
 
         this.Status = "Visualization...";
 
-        for (let i = start; i < backtestResults.signals.length; i++) 
-        {
+        for (let i = start; i < backtestResults.signals.length; i++) {
             let percent = (i - start) / (backtestResults.signals.length - start) * 100;
             this.Status = `Visualization ${percent.toFixed(2)}% ...`;
-            
+
             let signal = backtestResults.signals[i];
             let signalNext = backtestResults.signals[i + 1];
             let startDate = new Date(signal.timestamp * 1000);
@@ -135,7 +135,7 @@ export class ScannerStrategyBacktestComponent {
             if (signal.end_timestamp) {
                 endDate = new Date(signal.end_timestamp * 1000);
             }
-            
+
             // let lineEntry = this.generateLine(startDate, endDate, signal.data.algo_Entry, "#629320");
             // let isUpTrend = signal.data.daily_trend == IBFTATrend.Up && signal.data.hourly_trend != IBFTATrend.Down;
             // let isDownTrend = signal.data.daily_trend == IBFTATrend.Down && signal.data.hourly_trend != IBFTATrend.Up;
@@ -179,7 +179,7 @@ export class ScannerStrategyBacktestComponent {
             shapes.push(entryLine2);
             let entryLine3 = this.generateLine(startDate, endDate, trade.entry_l, "#2e5e9a", 1);
             shapes.push(entryLine3);
-            
+
             let description = this.getDescription(signal.timestamp, groupedOrders, pricePrecision);
             description += "\n----------- \n";
             description += `Trend: ${signal.data.trade.trend};`;
@@ -194,13 +194,25 @@ export class ScannerStrategyBacktestComponent {
 
         this.infoDateCalculation(backtestResults, chart);
         this.Status = "Done";
+        this._csvResult = this.generateOrderDataCSV(backtestResults);
     }
 
-    private validateInputParameters (params: IBFTScannerBacktestAlgoParameters): boolean {
+    export() {
+        let pom = document.createElement('a');
+        let csvContent = this._csvResult;
+        let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        let url = URL.createObjectURL(blob);
+        pom.href = url;
+        pom.setAttribute('download', 'backtest_result.csv');
+        pom.click();
+        pom.remove();
+    }
+
+    private validateInputParameters(params: IBFTScannerBacktestAlgoParameters): boolean {
         if (!params.replay_back || params.replay_back < 100 || params.replay_back > 10000) {
             this._alertService.error("Bars count incorrect. Min 100 Max 10000.");
             return false;
-        } 
+        }
         if (!params.input_stoplossratio || params.input_stoplossratio < 0.1 || params.input_stoplossratio > 100) {
             this._alertService.error("Risk ratio incorrect. Min 0.1 Max 100.0");
             return false;
@@ -216,24 +228,24 @@ export class ScannerStrategyBacktestComponent {
         if (params.global_fast <= 0) {
             this._alertService.error("Global Fast must be greater than 0.");
             return false;
-        }  
+        }
         if (params.global_slow <= 0) {
             this._alertService.error("Global Slow must be greater than 0.");
             return false;
-        }  
+        }
         if (params.local_fast <= 0) {
             this._alertService.error("Local Fast must be greater than 0.");
             return false;
-        }  
+        }
         if (params.local_slow <= 0) {
             this._alertService.error("Local Slow must be greater than 0.");
             return false;
-        } 
-        
+        }
+
         return true;
     }
 
-    private infoDateCalculation (backtestResults: IBFTAScannerBacktestResponse, chart: TradingChartDesigner.Chart) {
+    private infoDateCalculation(backtestResults: IBFTAScannerBacktestResponse, chart: TradingChartDesigner.Chart) {
         if (backtestResults.signals.length) {
             this.StartDate = new Date(backtestResults.signals[0].timestamp * 1000).toUTCString();
         } else {
@@ -244,7 +256,7 @@ export class ScannerStrategyBacktestComponent {
         this.Instrument = this._captionText(chart);
         this.SignalsCount = backtestResults.signals.length.toString();
         this.OrdersCount = backtestResults.orders.length.toString();
-        
+
         let winTradeCount = this.winTradeCount(backtestResults.orders);
         let lossTradeCount = this.loosTradeCount(backtestResults.orders);
         let winPerformance = this.winPerformance(backtestResults.orders);
@@ -253,13 +265,13 @@ export class ScannerStrategyBacktestComponent {
         this.LossTradeCount = lossTradeCount.toString();
         this.TotalPerformance = (winPerformance + lossPerformance).toFixed(pricePrecision);
 
-        let total =  (Math.abs(winPerformance) + Math.abs(lossPerformance));
+        let total = (Math.abs(winPerformance) + Math.abs(lossPerformance));
         let winRatio = Math.abs(winPerformance) / total * 100;
         let loosRatio = Math.abs(lossPerformance) / total * 100;
         this.WinLossRatio = `Win: ${winRatio.toFixed(1)}% - Loss: ${loosRatio.toFixed(1)}%`;
     }
 
-    private winTradeCount (orders: IBFTAOrder[]): number {
+    private winTradeCount(orders: IBFTAOrder[]): number {
         let count = 0;
         for (const order of orders) {
             if (order.pl && order.pl > 0) {
@@ -268,8 +280,8 @@ export class ScannerStrategyBacktestComponent {
         }
         return count;
     }
-    
-    private loosTradeCount (orders: IBFTAOrder[]): number {
+
+    private loosTradeCount(orders: IBFTAOrder[]): number {
         let count = 0;
         for (const order of orders) {
             if (order.pl && order.pl < 0) {
@@ -278,8 +290,8 @@ export class ScannerStrategyBacktestComponent {
         }
         return count;
     }
-    
-    private winPerformance (orders: IBFTAOrder[]): number {
+
+    private winPerformance(orders: IBFTAOrder[]): number {
         let performance = 0;
         for (const order of orders) {
             if (order.pl && order.pl > 0) {
@@ -288,8 +300,8 @@ export class ScannerStrategyBacktestComponent {
         }
         return performance;
     }
-    
-    private lossPerformance (orders: IBFTAOrder[]): number {
+
+    private lossPerformance(orders: IBFTAOrder[]): number {
         let performance = 0;
         for (const order of orders) {
             if (order.pl && order.pl < 0) {
@@ -299,7 +311,7 @@ export class ScannerStrategyBacktestComponent {
         return performance;
     }
 
-    private groupOrders (orders: IBFTAOrder[]): any {
+    private groupOrders(orders: IBFTAOrder[]): any {
         const res: { [id: string]: IBFTAOrder[]; } = {};
 
         for (const order of orders) {
@@ -313,7 +325,7 @@ export class ScannerStrategyBacktestComponent {
         return res;
     }
 
-    private calculateProfitabilityColor (timestamp: number, orders: { [id: string]: IBFTAOrder[]; }): string {
+    private calculateProfitabilityColor(timestamp: number, orders: { [id: string]: IBFTAOrder[]; }): string {
         const neededOrders: IBFTAOrder[] = orders[timestamp] || [];
         let totalPl = 0;
         for (const order of neededOrders) {
@@ -323,15 +335,15 @@ export class ScannerStrategyBacktestComponent {
         if (totalPl > 0) {
             return "#3d93202f";
         }
-        
+
         if (totalPl < 0) {
             return "#932b202f";
         }
 
         return neededOrders.length ? "#d6d6d62f" : "#fcba032f";
     }
-    
-    private getDescription (timestamp: number, orders: { [id: string]: IBFTAOrder[]; }, precision: number): string {
+
+    private getDescription(timestamp: number, orders: { [id: string]: IBFTAOrder[]; }, precision: number): string {
         const neededOrders: IBFTAOrder[] = orders[timestamp] || [];
         let description = "";
         let totalPl = 0;
@@ -353,7 +365,7 @@ export class ScannerStrategyBacktestComponent {
         if (!description) {
             return "No orders";
         }
-        
+
         return description;
     }
 
@@ -376,7 +388,7 @@ export class ScannerStrategyBacktestComponent {
         };
         lineSegment["is_backtest"] = true;
         return lineSegment;
-    } 
+    }
 
     private generateRect(date1: Date, date2: Date, value1: number, value2: number, color: any): TradingChartDesigner.ShapeRectangle {
         const rect = new TradingChartDesigner.ShapeRectangle();
@@ -405,6 +417,85 @@ export class ScannerStrategyBacktestComponent {
     private _captionText(value: TradingChartDesigner.Chart) {
         const tf = value.timeFrame;
         const instr = value.instrument;
-        return `${instr.symbol} - ${instr.exchange} - ${tf.interval}${tf.periodicity}`;
+        return `${instr.symbol} - ${instr.exchange} - ${tf.interval}${tf.periodicity || 'min'}`;
     }
+
+    protected generateOrderDataCSV(backtestResults: IBFTAScannerBacktestResponse): string {
+        let orders = backtestResults.orders;
+        let res = [];
+        let count = 1;
+
+        res.push(["#", "Open Time", "Close/Cancel Time", "Chart", "Setup", "Side", "Entry Price", "SL", "TP",
+            "SL Ratio", "Breakeven Candles", "Cancellation Candles",
+            "Single Position", "Fast Local", "Slow Local", "Local Trend",
+            "Fast Global", "Slow Global", "Global Trend", "Order Status", "PNL"
+        ]);
+
+        for (const order of orders) {
+            let closeTime = order.close_timestamp;
+            let closeTimeString = "-";
+            if (!closeTime) {
+                closeTime = order.cancel_timestamp;
+            }
+
+            if (closeTime) {
+                closeTimeString = new Date(closeTime * 1000).toUTCString().replace(",", "");
+            }
+
+            res.push([`${count}`,
+            `${new Date(order.open_timestamp * 1000).toUTCString().replace(",", "")}`,
+            `${closeTimeString}`,
+            `${this.Instrument}`,
+            `${this.type}`,
+            `${order.side}`,
+            `${order.price}`,
+            `${order.sl_price}`,
+            `${order.tp_price}`,
+            `${this.slRatio}`,
+            `${this.breakevenCandles}`,
+            `${this.cancellationCandles}`,
+            `${this.singlePosition}`,
+            `${this.local_fast}`,
+            `${this.local_slow}`,
+            `${this.getLocalTrend(backtestResults, order.open_timestamp)}`,
+            `${this.global_fast}`,
+            `${this.global_slow}`,
+            `${this.getGlobalTrend(backtestResults, order.open_timestamp)}`,
+            `${this.getOrderOutcome(order)}`,
+            `${order.pl}`
+            ]);
+            count++;
+        }
+
+        let csvContent = res.map(e => e.join(",")).join("\n");
+
+        return csvContent;
+    }
+
+    protected getLocalTrend(backtestResults: IBFTAScannerBacktestResponse, timestamp: number) {
+        const signals = backtestResults.signals;
+        for (const signal of signals) {
+            if (signal.timestamp === timestamp) {
+                return signal.local_trend;
+            }
+        }
+
+        return "Unknown";
+    }
+
+    protected getGlobalTrend(backtestResults: IBFTAScannerBacktestResponse, timestamp: number) {
+        const signals = backtestResults.signals;
+        for (const signal of signals) {
+            if (signal.timestamp === timestamp) {
+                return signal.global_trend;
+            }
+        }
+
+        return "Unknown";
+    }
+
+    protected getOrderOutcome(order: IBFTAOrder) {
+        return order.status;
+    }
+
 }
