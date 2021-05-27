@@ -1,6 +1,6 @@
 <data-table [rows]="items" [groups]="groups" [groupingField]="groupingField" [trackByIndex]="false" >
     <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false"></data-table-header-cell>
-    <data-table-header-cell columnName="Open Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="Open Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.openTime' | translate}}</data-table-header-cell> -->
     <!-- <data-table-header-cell columnName="Id"  [sortable]="true" >{{'tradeManager.orderId' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.symbol' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.size' | translate}}</data-table-header-cell>
@@ -8,16 +8,16 @@
     <data-table-header-cell columnName="SL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.SL' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="TP" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.TP' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Net PL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
+    <!-- <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.riskP' | translate}}</data-table-header-cell> -->
 
     <data-table-cell columnName="Side">
         <ng-template let-item>
             <div class="color-column" [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}"></div>
         </ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Open Time">
+    <!-- <data-table-cell columnName="Open Time">
         <ng-template let-item>{{item.Date | formatDate:'YYYY/MM/DD'}}</ng-template>
-    </data-table-cell>
+    </data-table-cell> -->
     <!-- <data-table-cell columnName="Id">
         <ng-template let-item>{{item.Id}}</ng-template>
     </data-table-cell> -->
@@ -45,12 +45,12 @@
             </div>
         </ng-template>
     </data-table-cell>
-    <data-table-cell columnName="Risk (%)">
+    <!-- <data-table-cell columnName="Risk (%)">
         <ng-template let-item>
             <span>
                 {{item.RiskPercentage ? item.RiskPercentage.toFixed(2) + '%' : ''}}
             </span>
         </ng-template>
-    </data-table-cell>
+    </data-table-cell> -->
     
 </data-table>

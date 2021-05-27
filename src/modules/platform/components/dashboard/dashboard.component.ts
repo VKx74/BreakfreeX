@@ -177,7 +177,6 @@ export class DashboardComponent {
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
         setTimeout(this._showPhoneNumberPopup.bind(this), 5000);
-        setTimeout(this._showStaticLogin.bind(this), 30000);
     }
 
     ngAfterViewInit() {
@@ -368,12 +367,6 @@ export class DashboardComponent {
         EventsHelper.triggerWindowResize();
     }
 
-    register() {
-        this._localStorageService.setGuest();
-        window.location.href = "/#/auth/registration";
-        window.location.reload();
-    }
-
     private setUpComponentSelectorDialog(parent: any) {
         const addComponentElement = parent.element[0].getElementsByClassName('lm_add-component')[0];
         const componentSelectorPortal = new ComponentPortal(ComponentSelectorComponent);
@@ -447,12 +440,6 @@ export class DashboardComponent {
     private _showPhoneNumberPopup() {
         if (!this._identityService.phoneNumber && this._identityService.isTrial) {
             this._dialog.open(PhoneNumberPopUpComponent, { backdropClass: 'backdrop-background', disableClose: true });
-        }
-    }
-
-    private _showStaticLogin() {
-        if (this._identityService.isGuestMode) {
-            this.showStaticLogin = true;
         }
     }
 }

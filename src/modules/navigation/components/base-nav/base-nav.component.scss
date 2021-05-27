@@ -9,8 +9,25 @@
   //  }
   //}
 
+  .static-login-popup {
+    position: fixed;
+    top: 4px;
+    right: 1vh;
+    background-image: linear-gradient(125deg, #52aa47, #058d3f 100%, #66df57);
+    z-index: 9999999999999999999999999999999;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #ffffff;
+    border: 1px solid #27282b;
+    cursor: pointer;
+    border-radius: 15px;
+  }
+
   .xp-bage-container {
-    
   }
 
   .main-menu {
@@ -18,18 +35,17 @@
     align-items: center;
   }
 
-  
   .xp-nav-container {
     font-size: 12px;
     cursor: pointer;
     color: #ffffffd1;
     .xp-title {
-        background-color: #27282B;
-        padding: 4px;
-        border-radius: 50%;
-        font-size: 10px;
-        font-weight: 700;
-        font-family: monospace;
+      background-color: #27282b;
+      padding: 4px;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: monospace;
     }
   }
 
@@ -38,19 +54,19 @@
     cursor: pointer;
     color: #ffffffd1;
     .theme-title {
-        background-color: #27282B;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
+      background-color: #27282b;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
 
-        .fa {
-          display: flex;
-          width: 100%;
-          height: 100%;
-          align-content: center;
-          justify-content: center;
-          align-items: center;
-        }
+      .fa {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 
@@ -59,7 +75,8 @@
 
     cursor: pointer;
 
-    .experiance-points, .experiance-level {
+    .experiance-points,
+    .experiance-level {
       display: flex;
       margin-top: 2px;
       margin-right: 15px;
@@ -123,7 +140,7 @@
   display: flex;
   align-items: center;
   height: 100%;
-  transition: width .5s ease-in-out;
+  transition: width 0.5s ease-in-out;
   cursor: pointer;
 
   &__img {
@@ -141,7 +158,7 @@
     width: 0;
     overflow: hidden;
     white-space: nowrap;
-    transition: all .5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 
     .title {
       font-size: 13px;
@@ -150,26 +167,25 @@
     .subtitle {
       font-size: 11px;
     }
-
   }
 }
 
 .open {
   .sidebar-toggle {
     @include themify($themes, true) {
-      background-color: themed('appModalsPanelColor');
+      background-color: themed("appModalsPanelColor");
     }
   }
 
   .sidebar-toggle-wrapper {
     @include themify($themes, true) {
-      background-color: themed('appPanelColor');
+      background-color: themed("appPanelColor");
     }
   }
 
   .logo {
     @include themify($themes, true) {
-      background-color: themed('appModalsPanelColor');
+      background-color: themed("appModalsPanelColor");
     }
 
     &__text {
@@ -224,23 +240,21 @@
 
 @media (max-width: 450px) {
   .mobileshow {
-    display:block;
-    
+    display: block;
   }
   .desktopshow {
-    display:none !important;
-  } 
+    display: none !important;
+  }
 }
 
 @media (min-width: 450px) {
   .mobileshow {
-    display:none !important;
+    display: none !important;
   }
   .desktopshow {
     display: block !important;
-  } 
+  }
 }
-
 
 img.mobileshow {
   height: 12px;
@@ -251,35 +265,34 @@ img.mobileshow {
 
 .navigation {
   @include themify($themes, true) {
-    background-color: themed('appPanelColor');
-    box-shadow: themed('box-shadowPanel');
+    background-color: themed("appPanelColor");
+    box-shadow: themed("box-shadowPanel");
 
     .logo__img {
-      color: themed('navigationIconColor');
-      border-right: 1px solid themed('appBackgroundColor');
+      color: themed("navigationIconColor");
+      border-right: 1px solid themed("appBackgroundColor");
     }
 
     .sidebar-toggle {
-      border-right: 1px solid themed('appBackgroundColor');
+      border-right: 1px solid themed("appBackgroundColor");
     }
 
     .title {
-      color: themed('valueTextColor');
+      color: themed("valueTextColor");
     }
 
     .subtitle {
-      color: themed('titleTextColor');
+      color: themed("titleTextColor");
     }
     .role {
-      color: themed('titleTextColor');
+      color: themed("titleTextColor");
     }
     .email {
-      color: themed('valueTextColor');
+      color: themed("valueTextColor");
     }
   }
 }
 
-.presentModeSwitch{
+.presentModeSwitch {
   color: #03a9f4;
 }
-

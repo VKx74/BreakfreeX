@@ -16,6 +16,7 @@ import { Theme } from '@app/enums/Theme';
 import { UserSettings, UserSettingsService } from '@app/services/user-settings/user-settings.service';
 import { LocalizationService } from 'Localization';
 import { InlineService } from '@app/services/inline-manual.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 @Component({
     selector: 'base-nav',
@@ -41,6 +42,7 @@ export class BaseNavComponent implements OnInit {
     opened: Subject<void> = new Subject<void>();
 
     presentationMode: boolean;
+    showStaticLogin: boolean;
 
     get userNameWithLevel(): string {
         if (this.level) {
@@ -93,6 +95,7 @@ export class BaseNavComponent implements OnInit {
         private _userSettingsService: UserSettingsService,
         private _route: ActivatedRoute,
         private _inlineService: InlineService) {
+        this.showStaticLogin = this._identityService.isGuestMode;
     }
 
     toggleSidebar() {
@@ -189,6 +192,10 @@ export class BaseNavComponent implements OnInit {
 
     iconClick() {
         window.location.href = "/";
+    }
+
+    register() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _save() {

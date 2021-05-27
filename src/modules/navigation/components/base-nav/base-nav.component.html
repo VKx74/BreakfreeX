@@ -1,69 +1,74 @@
 <div class="navigation" [class.open]="sidebarState$ | async">
-    <div class="flex justify-space-between align-items-center w-100 nav-top-row">
-        <div class="flex sidebar-toggle-wrapper">
-            <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()"></sidebar-toggle>
+        <div class="flex justify-space-between align-items-center w-100 nav-top-row">
+            <div class="flex sidebar-toggle-wrapper">
+                <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()"></sidebar-toggle>
 
-            <a class="logo flex align-items-center" (click)="iconClick()">
-                <div class="flex BFTN">
+                <a class="logo flex align-items-center" (click)="iconClick()">
+                    <div class="flex BFTN">
 
-                    <img class="desktopshow" src="assets/img/bftnavigatorlogo.svg">
-                    <img class="mobileshow" src="assets/img/bftnavigatorlogoshort.svg">
-                    </div>
-            </a>
+                        <img class="desktopshow" src="assets/img/bftnavigatorlogo.svg">
+                        <img class="mobileshow" src="assets/img/bftnavigatorlogoshort.svg">
+                        </div>
+                </a>
+            </div>
+
+            <div class="flex"></div>     
+            
+            <div class="static-login-popup" *ngIf="showStaticLogin; else menu" (click)="register()">
+                <div class="static-login-popup-text">2 DAYS FREE TRIAL</div>
+            </div>   
+            <ng-template #menu>
+                <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
+                    <ng-content></ng-content> 
+                    <span *ngIf="presentationMode" id='secretspan'></span>
+                    <!-- <nav-section [leftBorder]="true" [paddingRight]="true">
+                        <div class="theme-nav-container" (click)="switchToPresentationMode()">
+                            <div class="theme-title" [ngClass]="{'presentModeSwitch': presentationMode}">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </nav-section>  -->
+                    <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">
+                        <div class="xp-nav-container" (click)="openMissionDialog()">
+                            <span *ngIf="isLoaded; else loading">
+                                <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
+                                <!-- <span class="xp-title">LV</span> {{level}} -->
+                                <span [ngClass]="getOverviewClass()">
+                                    Dashboard
+                                </span>
+                            </span>
+                            <ng-template #loading>
+                                <span>Loading...</span>
+                            </ng-template>
+                        </div>
+                    </nav-section> 
+                    <nav-section [leftBorder]="true" [paddingRight]="true">
+                        <div class="theme-nav-container" (click)="changeTheme()">
+                            <div class="theme-title">
+                                <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>
+                                <ng-template #lightThemeIcon>
+                                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </nav-section> 
+                    <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
+                        <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex">
+                            <ng-container *ngTemplateOutlet="avatar"></ng-container>
+                            <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
+                                <badge></badge>
+                            </div>
+                            <mat-menu #menu="matMenu" xPosition="before">
+                                <user-info-menu [avatarTemplate]="avatarUserInfo" (logOut)="logout()" [opened]="opened"></user-info-menu>
+                            </mat-menu>
+                        </div>
+                    </nav-section>
+                    <nav-section [leftBorder]="false" [paddingRight]="true" [paddingLeft]="false" *ngIf="isAuthorizedCustomer">
+                    
+                    </nav-section>
+                </div>
+            </ng-template>
         </div>
-
-        <div class="flex"></div>        
-        
-        <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">
-            <ng-content></ng-content> 
-            <span *ngIf="presentationMode" id='secretspan'></span>
-            <nav-section [leftBorder]="true" [paddingRight]="true">
-                <div class="theme-nav-container" (click)="switchToPresentationMode()">
-                    <div class="theme-title" [ngClass]="{'presentModeSwitch': presentationMode}">
-                        <i class="fa fa-book" aria-hidden="true"></i>
-                    </div>
-                </div>
-            </nav-section> 
-            <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">
-                <div class="xp-nav-container" (click)="openMissionDialog()">
-                    <span *ngIf="isLoaded; else loading">
-                        <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
-                        <!-- <span class="xp-title">LV</span> {{level}} -->
-                        <span [ngClass]="getOverviewClass()">
-                            Dashboard
-                        </span>
-                    </span>
-                    <ng-template #loading>
-                        <span>Loading...</span>
-                    </ng-template>
-                </div>
-            </nav-section> 
-            <nav-section [leftBorder]="true" [paddingRight]="true">
-                <div class="theme-nav-container" (click)="changeTheme()">
-                    <div class="theme-title">
-                        <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>
-                        <ng-template #lightThemeIcon>
-                            <i class="fa fa-moon-o" aria-hidden="true"></i>
-                        </ng-template>
-                    </div>
-                </div>
-            </nav-section> 
-            <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
-                <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex">
-                    <ng-container *ngTemplateOutlet="avatar"></ng-container>
-                    <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
-                        <badge></badge>
-                    </div>
-                    <mat-menu #menu="matMenu" xPosition="before">
-                        <user-info-menu [avatarTemplate]="avatarUserInfo" (logOut)="logout()" [opened]="opened"></user-info-menu>
-                    </mat-menu>
-                </div>
-            </nav-section>
-            <nav-section [leftBorder]="false" [paddingRight]="true" [paddingLeft]="false" *ngIf="isAuthorizedCustomer">
-              
-            </nav-section>
-        </div>
-    </div>
 
 <!--    <div class="nav-bottom-row">-->
 <!--        <ng-content select=".nav-bottom-row"></ng-content>-->
