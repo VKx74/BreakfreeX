@@ -1,0 +1,31 @@
+{
+  "id": "guest-mobile",
+  "name": "Empty",
+  "layoutState": {
+    "version": "1",
+    "content": [
+      {
+        "type": "row",
+        "content": [
+          {
+            "type": "column",
+            "content": [
+              {
+                "type": "stack",
+                "content": [
+                  {
+                    "id": "1",
+                    "type": "component",
+                    "componentName": "chart",
+                    "isClosable": false
+                  }
+                ]
+              }
+             
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

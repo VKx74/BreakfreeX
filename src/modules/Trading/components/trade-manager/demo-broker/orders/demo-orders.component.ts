@@ -59,7 +59,7 @@ export class DemoOrdersComponent {
             });
         }
 
-        return res;
+        return res.reverse();
     }
     
     constructor(private _demoBroker: SignalsDemoBrokerService, 

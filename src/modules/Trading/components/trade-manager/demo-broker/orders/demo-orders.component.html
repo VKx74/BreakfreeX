@@ -41,7 +41,7 @@
     <data-table-cell columnName="Net PL">
         <ng-template let-item>
             <div class="net-pl-cell" [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}">
-                {{item.NetPL ? item.NetPL?.toFixed(2) + "$" : "-"}}
+                {{item.NetPL ? "$" + item.NetPL?.toFixed(2) : "-"}}
             </div>
         </ng-template>
     </data-table-cell>

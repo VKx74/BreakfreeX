@@ -39,6 +39,7 @@ import { MissionTrackingService } from "@app/services/missions-tracking.service"
 import { InstrumentMappingService } from "../../../../app/services/instrument-mapping.service";
 import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 import { PhoneNumberPopUpComponent } from "modules/BreakfreeTrading/components/phoneNumberPopUp/phoneNumberPopUp.component";
+import { LocalStorageService } from "modules/Storage/services/local-storage.service";
 
 
 @Component({
@@ -52,7 +53,7 @@ import { PhoneNumberPopUpComponent } from "modules/BreakfreeTrading/components/p
 export class DashboardComponent {
     private _updateInterval = 1000 * 60 * 5;
     private _autoSaveChecker = 1000 * 10;
-    private _freeUserPopup = 1000 * 60 * 4;
+    private _freeUserPopup = 1000 * 60 * 3;
     private _intervalLink: any;
     private _freeUserPopupTimer: any;
     private _saveLayout = true;
@@ -67,6 +68,7 @@ export class DashboardComponent {
     layoutSettings: IGoldenLayoutComponentSettings = {};
     destroy$ = new Subject();
     showExceptionPopup = false;
+    showStaticLogin = false;
 
     get isBrokerConnected(): boolean {
         return this._brokerService.isConnected;
@@ -86,6 +88,7 @@ export class DashboardComponent {
         private _layoutStorageService: LayoutStorageService,
         private _brokerService: BrokerService,
         private _alertsService: AlertsService,
+        protected _localStorageService: LocalStorageService,
         @Inject(LayoutTranslateService) private _layoutTranslateService: TranslateService,
         private _layoutManager: LayoutManagerService,
         private _workspaceRepository: WorkspaceRepository,
@@ -174,6 +177,7 @@ export class DashboardComponent {
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
         setTimeout(this._showPhoneNumberPopup.bind(this), 5000);
+        setTimeout(this._showStaticLogin.bind(this), 30000);
     }
 
     ngAfterViewInit() {
@@ -253,11 +257,21 @@ export class DashboardComponent {
     }
 
     private _loadLayoutState() {
+        let w = window.innerWidth;
+        let h = window.innerHeight;
+        let isSmallScreen = w <= 768 || h <= 768;
         if (this._identityService.isGuestMode) {
-            this._workspaceRepository.getGuestWorkspace()
-                .subscribe((data: Workspace) => {
-                    this._initializeLayout(data.layoutState);
-                });
+            if (isSmallScreen) {
+                this._workspaceRepository.getGuestMobileWorkspace()
+                    .subscribe((data: Workspace) => {
+                        this._initializeLayout(data.layoutState);
+                    });
+            } else {
+                this._workspaceRepository.getGuestWorkspace()
+                    .subscribe((data: Workspace) => {
+                        this._initializeLayout(data.layoutState);
+                    });
+            }
 
             return;
         }
@@ -354,6 +368,12 @@ export class DashboardComponent {
         EventsHelper.triggerWindowResize();
     }
 
+    register() {
+        this._localStorageService.setGuest();
+        window.location.href = "/#/auth/registration";
+        window.location.reload();
+    }
+
     private setUpComponentSelectorDialog(parent: any) {
         const addComponentElement = parent.element[0].getElementsByClassName('lm_add-component')[0];
         const componentSelectorPortal = new ComponentPortal(ComponentSelectorComponent);
@@ -415,6 +435,10 @@ export class DashboardComponent {
     }
 
     private _showFreeUserPopup() {
+        if (this._identityService.isGuestMode) {
+            return;
+        }
+
         if (!this._identityService.isAuthorizedCustomer) {
             this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
         }
@@ -423,6 +447,12 @@ export class DashboardComponent {
     private _showPhoneNumberPopup() {
         if (!this._identityService.phoneNumber && this._identityService.isTrial) {
             this._dialog.open(PhoneNumberPopUpComponent, { backdropClass: 'backdrop-background', disableClose: true });
+        }
+    }
+
+    private _showStaticLogin() {
+        if (this._identityService.isGuestMode) {
+            this.showStaticLogin = true;
         }
     }
 }

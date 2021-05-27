@@ -13,7 +13,8 @@ export enum WorkspaceIds {
     AdvancedTrader = 'advanced-trader',
     Institutional = 'institutional',
     Empty = 'empty',
-    Guest = 'guest'
+    Guest = 'guest',
+    GuestMobile = 'guest-mobile'
 }
 
 export const WorkspacesRootPath = './assets/workspaces';
@@ -24,7 +25,8 @@ const WorkspacesPaths = [
     `${WorkspacesRootPath}/advanced-trader.json`,
     `${WorkspacesRootPath}/institutional.json`,
     `${WorkspacesRootPath}/empty.json`,
-    `${WorkspacesRootPath}/guest.json`
+    `${WorkspacesRootPath}/guest.json`,
+    `${WorkspacesRootPath}/guest-mobile.json`
 ];
 
 
@@ -76,6 +78,15 @@ export class WorkspaceRepository {
             .pipe(
                 map((workspaces: Workspace[]) => {
                     return workspaces.find(w => w.id === WorkspaceIds.Guest);
+                })
+            );
+    }
+
+    getGuestMobileWorkspace(): Observable<Workspace> {
+        return this.loadWorkspaces()
+            .pipe(
+                map((workspaces: Workspace[]) => {
+                    return workspaces.find(w => w.id === WorkspaceIds.GuestMobile);
                 })
             );
     }
