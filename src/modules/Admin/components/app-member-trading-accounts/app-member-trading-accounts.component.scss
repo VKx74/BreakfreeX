@@ -1,0 +1,45 @@
+@import "../global-styles/variables";
+
+:host {
+  .new-account {
+    padding: 20px 0px;
+    display: flex;
+    .crypto-input {
+      max-width: 150px;
+      margin-left: 15px;
+    }
+    .crypto-button {
+      margin-left: 20px;
+      height: 32px;
+      padding: 0px 20px;
+      margin-left: 20px;
+    }
+  }
+
+  .detach-button {
+    cursor: pointer;
+  }
+
+  .modal-footer {
+    .crypto-button {
+      margin-left: 20px;
+    }
+  }
+}
+
+.modal-body {
+  max-height: 500px;
+  overflow: auto;
+}
+
+@media #{$medium-up} {
+  .crypto-modal {
+    width: 800px;
+  }
+}
+
+@media #{$small-only} {
+  .crypto-modal {
+    width: 100%;
+  }
+}

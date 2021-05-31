@@ -1,0 +1,54 @@
+<div class="crypto-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+      <h4 class="modal-title">Trading accounts</h4>
+    </div>
+    <div class="modal-body">
+      <table class="crypto-table crypto-table_fixed-header crypto-table_striped">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Is Live</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of items">
+            <td>{{item.id}}</td>
+            <td>{{item.isLive}}</td>
+            <td>
+              <div class="detach-button" (click)="detach(item)">Detach</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="new-account">
+      <input matInput type="text" [(ngModel)]="id" placeholder="Account ID" class="crypto-input bft-form-input">
+      <input matInput type="text" [(ngModel)]="pwd" placeholder="Password" class="crypto-input bft-form-input">
+      <selector [options]="accountTypes" [placeholder]="'Select Type'" [(ngModel)]="accountType"
+        class="crypto-input bft-form-input"></selector>
+        <button class="crypto-button crypto-button_action" (click)="attach()">
+          Attach
+        </button>
+    </div>
+
+    <div class="modal-footer">
+      <div class="flex justify-flex-end">
+        <button class="crypto-button crypto-button_action" (click)="create(false)">
+          Create Demo Trading Account
+        </button>
+        <button class="crypto-button crypto-button_action" (click)="create(true)">
+          Create Live Trading Account
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <bft-loader *ngIf="loading"></bft-loader>
+
+</div>

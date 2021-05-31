@@ -72,6 +72,11 @@ export class Subscription {
     intervalCount: number;
 }
 
+export class TradingAccount {
+    id: string;
+    isLive: boolean;
+}
+
 export class UserModel {
 
     public email: string;
@@ -101,6 +106,8 @@ export class UserModel {
     public tags: string[] = [];
 
     public subscriptions: Subscription[] = [];
+
+    public tradingAccounts: TradingAccount[] = [];
 }
 
 export class UserProfileModel {

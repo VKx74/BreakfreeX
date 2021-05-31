@@ -3,6 +3,7 @@ import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {
     ResetPasswordBySupportModel,
+    TradingAccount,
     UpdateUserModel,
     UserModel
 } from "../models/auth/auth.models";
@@ -94,5 +95,29 @@ export class UsersService {
     public updateUser(user: UpdateUserModel): Observable<UserModel> {
         return this._http.put<UserModel>(`${AppConfigService.config.apiUrls.identityUrl}User`, user, this._httpOptions);
     }
+
+    public getTradingAccounts(userId: string): Observable<TradingAccount[]> {
+        return this._http.get<TradingAccount[]>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/${userId}`, this._httpOptions);
+    }
+
+    public attachTradingAccount(id: string, pwd: string, userId: string, isLive: boolean): Observable<TradingAccount> {
+        return this._http.post<TradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/add`, {
+            id, pwd, userId, isLive
+        }, this._httpOptions);
+    }
+
+    public detachTradingAccount(id: string, userId: string): Observable<TradingAccount> {
+        return this._http.post<TradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/remove`, {
+            accountId: id, userId
+        }, this._httpOptions);
+    }
+
+    public createTradingAccount(userId: string, isLive: boolean): Observable<TradingAccount> {
+        return this._http.post<TradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/create`, {
+            isLive, userId
+        }, this._httpOptions);
+    }
+
+    
 
 }

@@ -52,6 +52,12 @@
         </data-table-header-cell> 
         <data-table-header-cell columnName="subscriptions">
             Subscriptions
+        </data-table-header-cell> 
+        <data-table-header-cell columnName="demoExist" [columnWidth]="50">
+            DTA
+        </data-table-header-cell> 
+        <data-table-header-cell columnName="liveExist" [columnWidth]="50">
+            LTA
         </data-table-header-cell>
         <data-table-header-cell columnName="active" [columnWidth]="100">
             Active
@@ -99,6 +105,20 @@
                         {{getSubscriptions(item.user)}}
                     </span>
             </ng-template>
+        </data-table-cell>   
+        <data-table-cell columnName="demoExist">
+            <ng-template let-item>
+                    <span>
+                        {{getAccountCount(item.user, false)}}
+                    </span>
+            </ng-template>
+        </data-table-cell>   
+        <data-table-cell columnName="liveExist">
+            <ng-template let-item>
+                    <span>
+                        {{getAccountCount(item.user, true)}}
+                    </span>
+            </ng-template>
         </data-table-cell>
         <data-table-cell columnName="active">
             <ng-template let-item>
@@ -132,6 +152,9 @@
                         <button mat-menu-item
                                 *ngIf="showDetailsBtn(item)"
                                 (click)="showUserInfo(item)">Details
+                        </button>
+                        <button mat-menu-item
+                                (click)="showTradingAccounts(item)">Trading Accounts
                         </button>
                         <ng-container *showIfRole="[Roles.Admin, Roles.KYCOfficer, Roles.SupportOfficer]">
                             <button mat-menu-item

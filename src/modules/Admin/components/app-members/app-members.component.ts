@@ -32,6 +32,7 @@ import {RolesHelper} from "@app/helpers/role.helper";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {SystemNotification} from "../../../Notifications/models/models";
 import { LayoutStorageService } from '@app/services/layout-storage.service';
+import { AppMemberTradingAccountsComponent, AppMemberTradingAccountsConfig } from '../app-member-trading-accounts/app-member-trading-accounts.component';
 
 
 @Component({
@@ -151,6 +152,16 @@ export class AppMembersComponent {
         }
 
         return `${model.subscriptions[0].name} (+${model.subscriptions.length - 1})`;
+    }
+
+    getAccountCount(model: UserModel, isLive: boolean): number {
+        let count = 0;
+        for (const account of model.tradingAccounts) {
+            if (account.isLive === isLive) {
+                count++;
+            }
+        }
+        return count;
     }
 
     registerMember() {
@@ -283,6 +294,14 @@ export class AppMembersComponent {
                 statusChangeHandler: (status: PersonalInfoStatus) => {
                     member.user.kycStatus = status;
                 }
+            }
+        });
+    }
+
+    showTradingAccounts(member: AppMemberModel) {
+        this._dialog.open<any, AppMemberTradingAccountsConfig>(AppMemberTradingAccountsComponent, {
+            data: {
+                user: member.user
             }
         });
     }
