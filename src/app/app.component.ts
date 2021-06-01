@@ -56,7 +56,6 @@ export class AppComponent {
             }
         });
 
-        this._angulartics2Segment.startTracking();
         // this._angulartics2GoSquared.startTracking();
         // [userId], [traits], [options], [callback]
 
@@ -65,6 +64,8 @@ export class AppComponent {
             const name = `${this._authService.firstName} ${this._authService.lastName}`;
             const email = this._authService.email;
             const subscriptions = this._authService.subscriptions.join(";");
+
+            this._angulartics2Segment.startTracking();
             this._angulartics2Segment.setUserProperties({
                 userId: email,
                 email: email,
