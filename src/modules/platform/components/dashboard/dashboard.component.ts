@@ -40,6 +40,7 @@ import { InstrumentMappingService } from "../../../../app/services/instrument-ma
 import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service";
 import { PhoneNumberPopUpComponent } from "modules/BreakfreeTrading/components/phoneNumberPopUp/phoneNumberPopUp.component";
 import { LocalStorageService } from "modules/Storage/services/local-storage.service";
+import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 
 
 @Component({
@@ -84,6 +85,7 @@ export class DashboardComponent {
         private _dialog: MatDialog,
         private _identityService: IdentityService,
         private _router: Router,
+        private _gtmTrackingService: GTMTrackingService,
         private _coockieService: CookieService,
         private _layoutStorageService: LayoutStorageService,
         private _brokerService: BrokerService,
@@ -216,6 +218,8 @@ export class DashboardComponent {
         } catch (error) {
             console.error(error);
         }
+        
+        this._gtmTrackingService.setPath(this._router.url);
     }
 
     clearSession() {
