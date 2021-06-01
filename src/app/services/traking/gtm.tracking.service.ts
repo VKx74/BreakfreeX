@@ -20,12 +20,16 @@ export class GTMTrackingService {
         })(window, document, 'script', 'dataLayer', 'GTM-TNPBKC9');
     }
 
+    setPath(path: string) {
+        this._setPath(path, 0);
+    }
+
     processRegistration(path: string) {
         this._processRegistration(path, 0);
     }
 
     guestRegistration() {
-        this._guestRegistration("guest-registered", 0);
+        this._setPath("guest-registered", 0);
     }
 
     private _processRegistration(path: string, attempts: number) {
@@ -45,7 +49,22 @@ export class GTMTrackingService {
         }
     }
 
-    private _guestRegistration(path: string, attempts: number) {
+    // private _guestRegistration(path: string, attempts: number) {
+    //     if ((window as any).gtag) {
+    //         (window as any).gtag('config', 'UA-118418177-3', { 'page_path': path });
+    //         console.log(`GTAG page_path set: ${path}`);
+    //     } else {
+    //         if (attempts > 10) {
+    //             console.error(`GTAG failed to load`);
+    //             return;
+    //         }
+    //         setTimeout(() => {
+    //             this._processRegistration(path, attempts++);
+    //         }, 300);
+    //     }
+    // }
+
+    private _setPath(path: string, attempts: number) {
         if ((window as any).gtag) {
             (window as any).gtag('config', 'UA-118418177-3', { 'page_path': path });
             console.log(`GTAG page_path set: ${path}`);
