@@ -191,10 +191,10 @@ export class DashboardComponent {
                 }
             });
 
-        this._intercom.boot({
-            app_id: "sv09ttz9",
-            hide_default_launcher: true
-        });
+        // this._intercom.boot({
+        //     app_id: "sv09ttz9",
+        //     hide_default_launcher: true
+        // });
 
         const loader = document.getElementById("initial-loader");
         if (loader) {
