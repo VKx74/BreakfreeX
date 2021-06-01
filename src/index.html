@@ -45,14 +45,18 @@
   <!-- <script src="https://fast.wistia.com/assets/external/channel.js" async></script> -->
 
   <!-- Google Tag Manager -->
-  <!-- <script>(function (w, d, s, l, i) {
+  <script>
+  window.intercomSettings = {
+    hide_default_launcher: true
+  };
+  (function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
         'gtm.start':
           new Date().getTime(), event: 'gtm.js'
       }); var f = d.getElementsByTagName(s)[0],
         j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
           'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-TNPBKC9');</script> -->
+    })(window, document, 'script', 'dataLayer', 'GTM-TNPBKC9');</script>
   <!-- End Google Tag Manager -->
 </head>
 
@@ -155,7 +159,7 @@
     var stripe = Stripe('pk_live_BNJ3Mq52FeMZpAjqzQkbNztn00X2pf2iLv');
   </script>
 
-  <script>
+  <!-- <script>
     !function () {
       var analytics = window.analytics = window.analytics || []; if (!analytics.initialize) if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else {
         analytics.invoked = !0; analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware"]; analytics.factory = function (e) { return function () { var t = Array.prototype.slice.call(arguments); t.unshift(e); analytics.push(t); return analytics } }; for (var e = 0; e < analytics.methods.length; e++) { var t = analytics.methods[e]; analytics[t] = analytics.factory(t) } analytics.load = function (e, t) { var n = document.createElement("script"); n.type = "text/javascript"; n.async = !0; n.src = "libs/analytics/GS.min.js"; var a = document.getElementsByTagName("script")[0]; a.parentNode.insertBefore(n, a); analytics._loadOptions = t }; analytics.SNIPPET_VERSION = "4.1.0";
@@ -163,7 +167,7 @@
         analytics.page();
       }
     }();
-  </script>
+  </script> -->
 
   <script>window.inlineManualOptions = { language: 'en' };</script>
   <script>!function () { var e = document.createElement("script"), t = document.getElementsByTagName("script")[0]; e.async = 1, e.src = "https://cdn.inlinemanual.com/embed/player.9adb2de75b4bc9021d1e0c750bcdd215.js", e.charset = "UTF-8", t.parentNode.insertBefore(e, t) }();</script>
