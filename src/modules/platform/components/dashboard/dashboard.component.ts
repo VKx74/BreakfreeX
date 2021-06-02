@@ -59,6 +59,9 @@ export class DashboardComponent {
     private _freeUserPopupTimer: any;
     private _saveLayout = true;
     private _lastExceptionTime: number = 0;
+    private _showPhoneNumberPopupInterval: any;
+    private _hardRefreshTimer: any;
+    private _hardRefreshNeeded: boolean = false;
     layoutChanged = false;
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 26;
@@ -178,7 +181,11 @@ export class DashboardComponent {
 
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
-        setTimeout(this._showPhoneNumberPopup.bind(this), 5000);
+
+        if (this._identityService.isTrial) {
+            this._hardRefreshNeeded = !this._identityService.isTrialNumberRequired();
+            this._showPhoneNumberPopupInterval = setInterval(this._showPhoneNumberPopup.bind(this), 1000 * 30);
+        }
     }
 
     ngAfterViewInit() {
@@ -421,6 +428,12 @@ export class DashboardComponent {
         }
         if (this._freeUserPopupTimer) {
             clearTimeout(this._freeUserPopupTimer);
+        }  
+        if (this._showPhoneNumberPopupInterval) {
+            clearInterval(this._showPhoneNumberPopupInterval);
+        }
+        if (this._hardRefreshTimer) {
+            clearTimeout(this._hardRefreshTimer);
         }
     }
 
@@ -442,8 +455,20 @@ export class DashboardComponent {
     }
 
     private _showPhoneNumberPopup() {
-        if (!this._identityService.phoneNumber && this._identityService.isTrial) {
+        this._identityService.updateTrialExpiration();
+        if (this._identityService.isTrialNumberRequired()) {
+            if (this._showPhoneNumberPopupInterval) {
+                clearInterval(this._showPhoneNumberPopupInterval);
+                this._showPhoneNumberPopupInterval = null;
+            }
+            this._dialog.closeAll();
             this._dialog.open(PhoneNumberPopUpComponent, { backdropClass: 'backdrop-background', disableClose: true });
+
+            if (this._hardRefreshNeeded) {
+                this._hardRefreshTimer = setTimeout(() => {
+                    window.location.reload();
+                }, 1000 * 60 * 10);
+            }
         }
     }
 }
