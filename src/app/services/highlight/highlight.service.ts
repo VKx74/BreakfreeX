@@ -44,7 +44,8 @@ export class HighlightService {
         console.log("highlightBacktestChart");
         this.removeHighlight();
         this.highlightFunction(".tcd-component", `
-        Welcome to a live backtest of BFT Algorithm on EURUSD from early 2020 to late 2021.
+        Welcome to a live backtest of the BFT Algorithm
+                     on EURUSD from early 2020 to late 2021.
         `);
 
         if (clearTimer) {
@@ -57,8 +58,8 @@ export class HighlightService {
     public highlightBottomPanel(clearTimer?: number) {
         this.removeHighlight();
         this.highlightFunction("trade-manager", `
-            As the backtest begins running, you will see how we traded EURUSD from 2020 to 2021, 
-            and orders will show up here, and with direct lines on the chart.
+        As the backtest starts running, you will see how we traded EURUSD from 2020 to 2021, 
+        and orders will show up shortly highlighted with direct lines on the chart.
         `);
 
         if (clearTimer) {
@@ -71,7 +72,8 @@ export class HighlightService {
     public highlightBottomOrdersPNL(clearTimer?: number) {
         this.removeHighlight();
         this.highlightFunction("trade-manager", `
-            Realized profits from a single market with algorithm assisted trading. 
+            Here you will see the realized profits from our trades assisted by the BFT algorithm. 
+            Are you ready to learn and start your free 2-day trial?. 
         `);
 
         this.highlightOrderNetPNLFunction();
