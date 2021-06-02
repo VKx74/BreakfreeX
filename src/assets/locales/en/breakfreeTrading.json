@@ -1,17 +1,17 @@
 {
   "breakfreeTrading": {
     "continueFree": "Continue Free",
-    "addPhone": "Add phone",
+    "addPhone": "Verify ",
     "phoneNumber": "Phone number",
-    "verify": "Verify",
-    "verificationCode": "Verification Code",
-    "addYourPhoneNumber": "Add your phone number"
+    "verify": "Complete",
+    "verificationCode": "Enter Verification Code",
+    "addYourPhoneNumber": "Enter your phone number"
   },
   "BreakfreeTradingBacktestComponentName": "BFT Backtest",
   "breakfreeTradingAcademyComponentName": "Academy",
   "breakfreeTradingScannerComponentName": "Sonar",
-  "verificationCodeSent": "Verification code was sent on your phone number, enter it.",
+  "verificationCodeSent": "Verification code has been sent to your phone number, please enter the received code.",
   "verificationCodeNotSent": "Failed to send verification code.",
-  "phoneAdded": "Phone number was successfully added.",
+  "phoneAdded": "Phone number was successfully verified and added to account.",
   "failedAddPhone": "Failed to add phone number."
 }

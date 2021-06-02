@@ -1,36 +1,88 @@
 <div class="crypto-modal modal-content">
     <div class="page-wrapper">
         <div class="phone-number-container flex">
-            <div class="flex header">
-                <i class="crypto-icon crypto-icon-phone-contur"></i>
-                <div class="header-text">{{'breakfreeTrading.addYourPhoneNumber' | translate}}</div>
+           
+
+            <div class="flex benefits">
+
+                <div class="pricing-table-4">
+                    
+                
+                    <div class="price-tag-4 monthlytrue">1 Step Away from your <br> Free 2-Day Trial</div>
+                    <div class="plan-info-4">Due to high demand, we are verifying users by phone number. </div>
+                   
+                       
+
+                            <div class="flex phone-number-input inputrow" [class.disabled]="showVerification">
+                                <div class="input-container">
+                                    <span class="title">Format '+[country_code][number]'</span>
+                                    <mat-form-field class="crypto-input bft-form-input">
+                                        <input [(ngModel)]="phoneNumber" matInput ng-trim="false" type="text" placeholder="{{'breakfreeTrading.phoneNumber' | translate}}">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex">
+                                    <button class="crypto-button" (click)="handleAddPhoneNumberButtonClick()">{{'breakfreeTrading.addPhone'| translate}}</button>
+                                    <!-- <button class="crypto-button margin-left" (click)="continueFree()">{{'breakfreeTrading.continueFree'| translate}}</button> -->
+                                </div>
+                            </div>
+                            <div class="flex phone-verification-input inputrow" *ngIf="showVerification">
+                                <div class="input-container">
+                                    <span class="title">Code sent on your phone</span>
+                                    <mat-form-field class="crypto-input bft-form-input">
+                                        <input [(ngModel)]="verificationCode" matInput ng-trim="false" type="text" placeholder="{{'breakfreeTrading.verificationCode' | translate}}">
+                                    </mat-form-field>
+                                </div>
+                                <button class="crypto-button" (click)="handleVerifyCodeButtonClick()">{{'breakfreeTrading.verify'| translate}}</button>
+                            </div>
+
+
+                       
+                   
+                    <div class="text-block-26"><strong class="bold-text-12">Awesome All-in-one Trading Platform</strong></div>
+                    <ul role="list" class="pricing-list-3">
+                        
+                        <li class="pricing-list-item-4">
+                            <div class="check-circle-icon"></div>
+                            <div class="text-block-41"><strong>Seamless integration with your Broker</strong>
+                            </div>
+                        </li>
+
+                        <li class="pricing-list-item-4">
+                            <div class="check-circle-icon"></div>
+                            <div class="text-block-41"><strong>Breakfree Trading™ Algorithm</strong>
+                                access to <strong>futures, forex, crypto, Indices, stocks, metals &amp; bonds</strong><strong></strong></div>
+                        </li>
+
+                       
+                    
+                        
+                        <li class="pricing-list-item-4">
+                            <div class="check-circle-icon"></div>
+                            <div class="text-block-41"><strong>Algorithmic Strategy Sonar included </strong></div>
+                        </li>
+                        <li class="pricing-list-item-4">
+                            <div class="check-circle-icon"></div>
+                            <div class="text-block-41"><strong>Alerts for new high probability trade setups</strong>
+                            </div>
+                        </li>
+
+                       
+                        <li class="pricing-list-item-4">
+                            <div class="check-circle-icon"></div>
+                            <div class="text-block-41"><strong>Legendary X-Mode on ALL timeframes</strong></div>
+                        </li>
+                        <li class="pricing-list-item-4">
+                            <div class="check-circle-icon"></div>
+                            <div class="text-block-41"><strong>TradeGuard Introducing our AI Intelligence helper.</strong></div>
+                        </li>
+                    </ul>
+                </div>
+
+
+
             </div>
 
-            <div class="flex header-disclaimer">
-                <span>To begin your free trial & receive new trade alerts via SMS, please enter your mobile phone number</span>
-            </div>
-
-            <div class="flex phone-number-input inputrow" [class.disabled]="showVerification">
-                <div class="input-container">
-                    <span class="title">Format '+[country_code][number]'</span>
-                    <mat-form-field class="crypto-input bft-form-input">
-                        <input [(ngModel)]="phoneNumber" matInput ng-trim="false" type="text" placeholder="{{'breakfreeTrading.phoneNumber' | translate}}">
-                    </mat-form-field>
-                </div>
-                <div class="flex">
-                    <button class="crypto-button" (click)="handleAddPhoneNumberButtonClick()">{{'breakfreeTrading.addPhone'| translate}}</button>
-                    <!-- <button class="crypto-button margin-left" (click)="continueFree()">{{'breakfreeTrading.continueFree'| translate}}</button> -->
-                </div>
-            </div>
-            <div class="flex phone-verification-input inputrow" *ngIf="showVerification">
-                <div class="input-container">
-                    <span class="title">Code sent on your phone</span>
-                    <mat-form-field class="crypto-input bft-form-input">
-                        <input [(ngModel)]="verificationCode" matInput ng-trim="false" type="text" placeholder="{{'breakfreeTrading.verificationCode' | translate}}">
-                    </mat-form-field>
-                </div>
-                <button class="crypto-button" (click)="handleVerifyCodeButtonClick()">{{'breakfreeTrading.verify'| translate}}</button>
-            </div>
+           
         </div>
     </div>
     <bft-loader *ngIf="loading"></bft-loader>
