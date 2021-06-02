@@ -29,6 +29,10 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
   public accountTypes: string[] = ["Demo", "Live"];
   public items: TradingAccount[] = [];
 
+  public get userId(): string {
+    return this.data.user.id;
+  }
+
   constructor(injector: Injector, private _usersService: UsersService, private _alertService: AlertService, private _dialog: MatDialog) {
     super(injector);
   }

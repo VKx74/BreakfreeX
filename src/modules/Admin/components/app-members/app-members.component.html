@@ -32,6 +32,9 @@
         </manual-search>
     </ng-container>
     <data-table [rows]="members" class="h-auto">
+        <data-table-header-cell columnName="id" [columnWidth]="250">
+            Id
+        </data-table-header-cell>
         <data-table-header-cell columnName="email">
             Email
         </data-table-header-cell>
@@ -62,10 +65,14 @@
         <data-table-header-cell columnName="active" [columnWidth]="100">
             Active
         </data-table-header-cell>
-        <data-table-header-cell columnName="2fa">
+        <!-- <data-table-header-cell columnName="2fa">
             2FA
-        </data-table-header-cell>
+        </data-table-header-cell> -->
         <data-table-header-cell columnName="actions" [columnWidth]="50"></data-table-header-cell>
+
+        <data-table-cell columnName="id">
+            <ng-template let-item>{{item.user.id}}</ng-template>
+        </data-table-cell>
 
         <data-table-cell columnName="email">
             <ng-template let-item>{{item.user.email}}</ng-template>
@@ -133,7 +140,7 @@
                 </ng-container>
             </ng-template>
         </data-table-cell>
-        <data-table-cell columnName="2fa">
+        <!-- <data-table-cell columnName="2fa">
             <ng-template let-item>
                 <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
                                 <span [ngClass]="item.user.twoFactorEnabled ? 'crypto-color-green' : 'crypto-color-red'">
@@ -141,7 +148,7 @@
                                 </span>
                 </ng-container>
             </ng-template>
-        </data-table-cell>
+        </data-table-cell> -->
 
         <data-table-cell columnName="actions">
             <ng-template let-item>
