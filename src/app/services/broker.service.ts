@@ -217,11 +217,12 @@ export class BrokerService {
     }
 
     initialize(): Observable<any> {
-        return this._loadDefaultTradingAccount().pipe(map((data) => {
-            if (data) {
-                this._defaultAccounts = data;
-            }
-        }));
+        return of({});
+        // return this._loadDefaultTradingAccount().pipe(map((data) => {
+        //     if (data) {
+        //         this._defaultAccounts = data;
+        //     }
+        // }));
     }
 
     connectDefaultDemoAccount(): Observable<ActionResult> {

@@ -156,11 +156,16 @@ export class AppMembersComponent {
 
     getAccountCount(model: UserModel, isLive: boolean): number {
         let count = 0;
+        if (!model.tradingAccounts) {
+            return count;
+        }
+
         for (const account of model.tradingAccounts) {
             if (account.isLive === isLive) {
                 count++;
             }
         }
+        
         return count;
     }
 
