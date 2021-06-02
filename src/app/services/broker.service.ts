@@ -5,14 +5,22 @@ import { IHealthable } from "../interfaces/healthcheck/healthable";
 import { BehaviorSubject, Observable, of, Subject, Subscription } from "rxjs";
 import { EBrokerInstance, IBroker, IBrokerState } from "../interfaces/broker/broker";
 import { ActionResult, OrderTypes } from "../../modules/Trading/models/models";
-import { map } from "rxjs/operators";
+import { catchError, map, switchMap } from "rxjs/operators";
 import { BrokerFactory, CreateBrokerActionResult } from "../factories/broker.factory";
 import { IdentityService } from './auth/identity.service';
 import { InstrumentMappingService } from "./instrument-mapping.service";
+import { HttpClient } from "@angular/common/http";
+import { AppConfigService } from "./app.config.service";
+import { MTConnectionData } from "modules/Trading/models/forex/mt/mt.models";
 
 export interface IBrokerServiceState {
     activeBrokerState?: IBrokerState;
     previousConnected?: IBrokerState[];
+}
+
+export interface IBFTTradingAccount {
+    id: string;
+    isLive: boolean;
 }
 
 @Injectable()
@@ -29,7 +37,7 @@ export class BrokerService {
     get activeBroker(): IBroker {
         return this._activeBroker;
     }
-    
+
     get isGuest(): boolean {
         return this._identityService.isGuestMode;
     }
@@ -37,6 +45,11 @@ export class BrokerService {
     private _isConnected: boolean;
     get isConnected(): boolean {
         return this._isConnected;
+    }
+
+    private _defaultAccounts: IBFTTradingAccount[] = [];
+    get defaultAccounts(): IBFTTradingAccount[] {
+        return this._defaultAccounts;
     }
 
     public get isTradingAllowed(): boolean {
@@ -53,6 +66,7 @@ export class BrokerService {
 
     constructor(private _brokerFactory: BrokerFactory,
         private _identityService: IdentityService,
+        private _http: HttpClient,
         private _instrumentMappingService: InstrumentMappingService) {
         this._isConnected = false;
     }
@@ -173,6 +187,145 @@ export class BrokerService {
             });
         }
 
+        return this._loadState(state);
+    }
+
+    reconnect(): Observable<ActionResult> {
+        return new Observable<ActionResult>(subscriber => {
+            this.setBrokerInitializationState(null);
+            this.saveState().subscribe((state) => {
+                this.loadState(state).subscribe((loadStateResult) => {
+                    subscriber.next(loadStateResult);
+                    subscriber.complete();
+
+                    if (loadStateResult.result) {
+                        this.setBrokerInitializationState(true);
+                    } else {
+                        this.setBrokerInitializationState(false);
+                    }
+                }, (error) => {
+                    this.setBrokerInitializationState(false);
+                    subscriber.error(error);
+                    subscriber.complete();
+                });
+            }, (error) => {
+                this.setBrokerInitializationState(false);
+                subscriber.error(error);
+                subscriber.complete();
+            });
+        });
+    }
+
+    initialize(): Observable<any> {
+        return this._loadDefaultTradingAccount().pipe(map((data) => {
+            if (data) {
+                this._defaultAccounts = data;
+            }
+        }));
+    }
+
+    connectDefaultDemoAccount(): Observable<ActionResult> {
+        const demoAccount = this._defaultAccounts.find(_ => !_.isLive);
+        if (!demoAccount) {
+            return of({
+                result: false,
+                msg: "Demo account not exist"
+            });
+        }
+
+        const initData: MTConnectionData = {
+            Password: "",
+            ServerName: EBrokerInstance.BFTDemo,
+            Login: Number(demoAccount.id)
+        };
+
+        return this._connectDefaultAccount(EBrokerInstance.BFTDemo, initData);
+    }
+
+    connectDefaultLiveAccount(): Observable<ActionResult> {
+        const liveAccount = this._defaultAccounts.find(_ => _.isLive);
+        if (!liveAccount) {
+            return of({
+                result: false,
+                msg: "Live account not exist"
+            });
+        }
+
+        const initData: MTConnectionData = {
+            Password: "",
+            ServerName: EBrokerInstance.BFTLive,
+            Login: Number(liveAccount.id)
+        };
+
+        return this._connectDefaultAccount(EBrokerInstance.BFTLive, initData);
+    }
+
+    public setBrokerInitializationState(state = true) {
+        this._brokerInitializationState$.next(state);
+    }
+
+    private _connectDefaultAccount(broker: EBrokerInstance, initData: any): Observable<ActionResult> {
+        return this._brokerFactory.tryCreateInstance(broker, initData).pipe(switchMap((value: CreateBrokerActionResult) => {
+            const brokerInstance = value.brokerInstance;
+            if (brokerInstance) {
+                return this.setActiveBroker(brokerInstance).pipe(map((setBrokerResult) => {
+                    if (!setBrokerResult.result) {
+                        brokerInstance.dispose().subscribe(disposeResult => { });
+                    }
+                    return setBrokerResult;
+                }));
+            } 
+            return of({
+                result: false,
+                msg: "Failed to connect default broker account"
+            });
+        }), catchError((error) => {
+            console.log(error);
+            return of({
+                result: false,
+                msg: "Failed to connect default broker account"
+            });
+        }));
+    }
+
+    private _loadDefaultTradingAccount(): Observable<IBFTTradingAccount[]> {
+        return this._http.get<IBFTTradingAccount[]>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount`, {
+            withCredentials: true
+        });
+    }
+
+    private _setSavedAccounts() {
+        if (!this._activeState.previousConnected) {
+            this._activeState.previousConnected = [];
+        }
+
+        const currentState = this._activeState.activeBrokerState;
+
+        if (!currentState) {
+            return;
+        }
+
+        let acctExist = false;
+        for (const acct of this._activeState.previousConnected) {
+            try {
+                let acc1 = JSON.stringify(acct);
+                let acc2 = JSON.stringify(currentState);
+                if (acc1 === acc2) {
+                    acctExist = true;
+                    break;
+                }
+            } catch (ex) {
+                acctExist = true;
+                break;
+            }
+        }
+
+        if (!acctExist) {
+            this._activeState.previousConnected.push(currentState);
+        }
+    }
+
+    private _loadState(state: IBrokerServiceState): Observable<ActionResult> {
         if (!state) {
             return of({
                 result: false,
@@ -206,67 +359,6 @@ export class BrokerService {
             });
         } else {
             return this._restoreBrokerFromState(state.activeBrokerState);
-        }
-    }
-
-    reconnect(): Observable<ActionResult> {
-        return new Observable<ActionResult>(subscriber => {
-            this.setBrokerInitializationState(null);
-            this.saveState().subscribe((state) => {
-                this.loadState(state).subscribe((loadStateResult) => {
-                    subscriber.next(loadStateResult);
-                    subscriber.complete();
-
-                    if (loadStateResult.result) {
-                        this.setBrokerInitializationState(true);
-                    } else {
-                        this.setBrokerInitializationState(false);
-                    }
-                }, (error) => {
-                    this.setBrokerInitializationState(false);
-                    subscriber.error(error);
-                    subscriber.complete();
-                });
-            }, (error) => {
-                this.setBrokerInitializationState(false);
-                subscriber.error(error);
-                subscriber.complete();
-            });
-        });
-    }
-
-    public setBrokerInitializationState(state = true) {
-        this._brokerInitializationState$.next(state);
-    }
-
-    private _setSavedAccounts() {
-        if (!this._activeState.previousConnected) {
-            this._activeState.previousConnected = [];
-        }
-
-        const currentState = this._activeState.activeBrokerState;
-
-        if (!currentState) {
-            return;
-        }
-
-        let acctExist = false;
-        for (const acct of this._activeState.previousConnected) {
-            try {
-                let acc1 = JSON.stringify(acct);
-                let acc2 = JSON.stringify(currentState);
-                if (acc1 === acc2) {
-                    acctExist = true;
-                    break;
-                }
-            } catch (ex) {
-                acctExist = true;
-                break;
-            }
-        }
-
-        if (!acctExist) {
-            this._activeState.previousConnected.push(currentState);
         }
     }
 

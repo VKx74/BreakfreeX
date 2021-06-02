@@ -40,11 +40,13 @@ export class AppDataResolver implements Resolve<any> {
     }
 
     private _initializeBroker(): Observable<any> {
-        let brokerState: IBrokerServiceState = this._brokerStorage.getBrokerState();
-        if (brokerState) {
-            return this._brokerService.loadState(brokerState);
-        }
-
-        return of(false);
+        return this._brokerService.initialize().pipe(switchMap(() => {
+            let brokerState: IBrokerServiceState = this._brokerStorage.getBrokerState();
+            if (brokerState) {
+                return this._brokerService.loadState(brokerState);
+            }
+    
+            return of(false);
+        }));
     }
 }

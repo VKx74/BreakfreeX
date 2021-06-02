@@ -61,6 +61,8 @@ export class BrokerFactory {
     private _getInstance(brokerType: EBrokerInstance): IBroker {
         switch (brokerType) {
             case EBrokerInstance.MT5:
+            case EBrokerInstance.BFTDemo:
+            case EBrokerInstance.BFTLive:
                 return this._injector.get(MT5Broker);
             case EBrokerInstance.MT4:
                 return this._injector.get(MT4Broker);

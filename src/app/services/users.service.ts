@@ -46,7 +46,6 @@ export class UsersService {
         return this._http.get<IRegistrationStats[]>(`${AppConfigService.config.apiUrls.identityUrl}Statistics/total_user_registrations_filtered_by_days?from=${from}&to=${to}`, this._httpOptions);
     }
 
-
     public getUsers(paginationParams = new PaginationParams(0, 50), filtrationParams = {}): Observable<IPaginationResponse<UserModel>> {
         return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}User`, {
             params: QueryParamsConstructor.fromObjects(paginationParams.toSkipTake(), filtrationParams), withCredentials: true
