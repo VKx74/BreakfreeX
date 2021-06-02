@@ -15,4 +15,5 @@
         <button class="crypto-button crypto-button_danger cursor-pointer"
                 (click)="disconnectCurrentBroker()">{{'tradeManager.disconnect' | translate}}</button>
     </div>
+    <bft-loader *ngIf="loading"></bft-loader>
 </div>

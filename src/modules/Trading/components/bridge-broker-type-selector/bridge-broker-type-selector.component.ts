@@ -7,6 +7,8 @@ import { tap } from 'rxjs/operators';
 import { APP_TYPE_BROKERS } from '@app/enums/ApplicationType';
 import bind from "bind-decorator";
 import { of } from 'rxjs';
+import { AlertService } from '@alert/services/alert.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'bridge-broker-type-selector',
@@ -16,6 +18,7 @@ import { of } from 'rxjs';
 export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     public availableBrokers: EBrokerInstance[] = [];
     public selectedBroker: EBrokerInstance;
+    public loading: boolean = false;
 
     get currentBrokerInstance(): EBrokerInstance {
         if (this._brokerService.activeBroker) {
@@ -31,12 +34,23 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
         return this._brokerService.activeBroker ? this._brokerService.activeBroker.instanceType : "None";
     }
 
-    constructor(private _brokerService: BrokerService,   
-                private _dialog: MatDialog) {
+    constructor(protected _translateService: TranslateService,
+                protected _brokerService: BrokerService,
+                protected _alertService: AlertService,
+                protected _dialog: MatDialog) {
     }
 
     ngOnInit() {
         this.availableBrokers = APP_TYPE_BROKERS;
+
+        if (this._brokerService.defaultAccounts.find(_ => !_.isLive)) {
+            this.availableBrokers.unshift(EBrokerInstance.BFTDemo);
+        }
+
+        if (this._brokerService.defaultAccounts.find(_ => _.isLive)) {
+            this.availableBrokers.unshift(EBrokerInstance.BFTLive);
+        }
+
         this.selectedBroker = this.availableBrokers[0];        
     }
 
@@ -60,17 +74,35 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
             case EBrokerInstance.Binance: return of("Binance (Spot)");
             case EBrokerInstance.BinanceFuturesUSD: return of("Binance (Futures USD)");
             case EBrokerInstance.BinanceFuturesCOIN: return of("Binance (Futures COIN)");
+            case EBrokerInstance.BFTDemo: return of("BFT Demo");
+            case EBrokerInstance.BFTLive: return of("BFT Live");
         }
 
         return of("Undefined");
     } 
     
     connectCurrentBroker() {
-        // show MT Bridge for all users even without subscriptions
-        // if (!this._identityService.isAuthorizedCustomer) {
-        //     this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
-        //     return;
-        // }
+        if (this.selectedBroker === EBrokerInstance.BFTDemo) {
+            this.loading = true;
+            this._brokerService.connectDefaultDemoAccount().subscribe((setBrokerResult) => {
+                if (!setBrokerResult.result) {
+                    this._alertService.error(setBrokerResult.msg, "Error");
+                }
+                this.loading = false;
+            });
+            return;
+        }
+
+        if (this.selectedBroker === EBrokerInstance.BFTLive) {
+            this.loading = true;
+            this._brokerService.connectDefaultLiveAccount().subscribe((setBrokerResult) => {
+                if (!setBrokerResult.result) {
+                    this._alertService.error(setBrokerResult.msg, "Error");
+                }
+                this.loading = false;
+            });
+            return;
+        }
 
         const ref = this._dialog.open<BrokerDialogComponent, BrokerDialogData>(BrokerDialogComponent, {
             data: {

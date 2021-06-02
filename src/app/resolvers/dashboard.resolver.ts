@@ -3,6 +3,7 @@ import { Observable, of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { BrokerService, IBrokerServiceState } from "@app/services/broker.service";
 import { BrokerStorage } from "@app/services/broker.storage";
+import { switchMap } from "rxjs/operators";
 
 @Injectable()
 export class DashboardResolver implements Resolve<any> {
@@ -25,11 +26,13 @@ export class DashboardResolver implements Resolve<any> {
     }
 
     private _initializeBroker(): Observable<any> {
-        let brokerState: IBrokerServiceState = this._brokerStorage.getBrokerState();
-        if (brokerState) {
-            return this._brokerService.loadState(brokerState);
-        }
-
-        return of(false);
+        return this._brokerService.initialize().pipe(switchMap(() => {
+            let brokerState: IBrokerServiceState = this._brokerStorage.getBrokerState();
+            if (brokerState) {
+                return this._brokerService.loadState(brokerState);
+            }
+    
+            return of(false);
+        }));
     }
 }

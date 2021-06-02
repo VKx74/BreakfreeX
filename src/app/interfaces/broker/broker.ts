@@ -9,7 +9,9 @@ export enum EBrokerInstance {
     MT4 = "MT4",
     Binance = "Binance",
     BinanceFuturesUSD = "BinanceFuturesUSD",
-    BinanceFuturesCOIN = "BinanceFuturesCOIN"
+    BinanceFuturesCOIN = "BinanceFuturesCOIN",
+    BFTDemo = "BFTDemo",
+    BFTLive = "BFTLive"
 }
 
 export interface IBrokerState<T = any> {
