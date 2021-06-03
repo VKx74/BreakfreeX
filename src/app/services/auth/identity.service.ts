@@ -17,12 +17,13 @@ export class IdentityService {
     private readonly _isRemember = 'QsYnRem';
     private readonly _defaultExpirationCookieTime = 12 * 60; // 12hours
     private readonly _defaultMaxExpirationCookieTime = 24 * 60 * 365; // 1 year
+
     private readonly _trialLIfeTime = 2 * 24 * 60;
     private readonly _freeTrialLIfeTime = 20;
+    private _free20MinTrialExpired: boolean = false;
 
     private _isGuestMode: boolean = false;
     private _isTrialExpired: boolean = false;
-    private _free20TrialExpired: boolean = false;
 
     public id: string;
     public email: string;
@@ -263,7 +264,7 @@ export class IdentityService {
     }
 
     public isTrialNumberRequired(): boolean {
-        return this.isTrial && !this.phoneNumber && this._free20TrialExpired;
+        return this.isTrial && !this.phoneNumber && this._free20MinTrialExpired;
     }
 
     public updateTrialExpiration() {
@@ -273,7 +274,7 @@ export class IdentityService {
 
         const trialingMins = this._trialLIfeTime - ((this.artifSubExp - new Date().getTime() / 1000) / 60);
         if (trialingMins > this._freeTrialLIfeTime) {
-            this._free20TrialExpired = true;
+            this._free20MinTrialExpired = true;
         }
     }
 
