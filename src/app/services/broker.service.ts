@@ -217,12 +217,12 @@ export class BrokerService {
     }
 
     initialize(): Observable<any> {
-        return of({});
-        // return this._loadDefaultTradingAccount().pipe(map((data) => {
-        //     if (data) {
-        //         this._defaultAccounts = data;
-        //     }
-        // }));
+        // return of({});
+        return this._loadDefaultTradingAccount().pipe(map((data) => {
+            if (data) {
+                this._defaultAccounts = data;
+            }
+        }));
     }
 
     connectDefaultDemoAccount(): Observable<ActionResult> {
@@ -305,6 +305,10 @@ export class BrokerService {
         if (!currentState) {
             return;
         }
+        
+        if (!currentState.state || !currentState.state.Password) {
+            return;
+        }
 
         let acctExist = false;
         for (const acct of this._activeState.previousConnected) {
@@ -328,10 +332,16 @@ export class BrokerService {
 
     private _loadState(state: IBrokerServiceState): Observable<ActionResult> {
         if (!state) {
-            return of({
-                result: false,
-                msg: 'Broker state is empty'
-            });
+            return this.connectDefaultDemoAccount();
+        } else {
+            const activeAccount = state.activeBrokerState;
+            if (activeAccount) {
+                if (activeAccount.server === EBrokerInstance.BFTDemo) {
+                    return this.connectDefaultDemoAccount();
+                } else if (activeAccount.server === EBrokerInstance.BFTLive) {
+                    return this.connectDefaultLiveAccount();
+                }
+            }
         }
 
         this._activeState.previousConnected = state.previousConnected || [];

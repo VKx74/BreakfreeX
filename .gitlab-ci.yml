@@ -102,8 +102,7 @@ build-latest:
     #     - docker
     only:
         - develop
-        - feature/guest_mode
-        - feature/binance
+        - feature/automated-acocunt-login
         - ci-improvements
 
 build-stable:
