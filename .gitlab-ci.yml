@@ -49,9 +49,7 @@ build-app-stage:
             - dist/
   only:
     - develop
-    - feature/guest_mode
-    - feature/binance
-    - ci-improvements
+    - feature/automated-acocunt-login
 #   tags:
 #     - web
 
@@ -163,6 +161,3 @@ build-maintenance-latest:
         - docker push $CONTAINER_IMAGE:latest
     only:
         - develop
-        - feature/guest_mode
-        - feature/binance
-        - ci-improvements
