@@ -7,9 +7,11 @@ import { BrokerService } from "./broker.service";
 import { MTBroker } from "./mt/mt.broker";
 import { OrderTypes } from "modules/Trading/models/models";
 import { MTCurrencyRiskType } from "modules/Trading/models/forex/mt/mt.models";
+import { LocalStorageService } from "Storage";
 
 @Injectable()
 export class MissionTrackingService {
+    private _localStorageLevelKey: string = "xplvl";
     private _brokerStateChangedSubscription: Subscription;
     private _ordersUpdatedSubscription: Subscription;
     private _onOrdersParametersUpdated: Subscription;
@@ -34,6 +36,7 @@ export class MissionTrackingService {
     constructor(private _identity: IdentityService,
         private _notificationService: NotificationsService,
         private _brokerService: BrokerService,
+        private _localStorageService: LocalStorageService,
         private _tradingProfileService: TradingProfileService) {
         
         this._tradingProfileService.MissionChanged.subscribe(() => {
@@ -156,6 +159,18 @@ export class MissionTrackingService {
         }
 
         this._tradingProfileService.setProcessedStateForReachedMissions();
+
+        const lastLevel = this._localStorageService.get(this._localStorageLevelKey);
+        if (lastLevel) {
+            const lastLevelNumber = Number(lastLevel);
+            if (lastLevelNumber && !Number.isNaN(lastLevelNumber) && this._tradingProfileService.level) {
+                if (lastLevelNumber < this._tradingProfileService.level) {
+                    this._notificationService.show(`Congratulation your account level increased to level ${this._tradingProfileService.level} "${this._tradingProfileService.levelName}"`);
+                }
+            }
+        }
+
+        this._localStorageService.set(this._localStorageLevelKey, 1);
 
         if (this._failedMissionsTimeout) {
             clearTimeout(this._failedMissionsTimeout);

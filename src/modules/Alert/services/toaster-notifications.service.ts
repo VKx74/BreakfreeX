@@ -10,14 +10,18 @@ export class ToasterNotificationsService extends NotificationsService {
         positionClass: 'toast-top-center',
         toastClass: 'toast-notifications-custom-success',
         timeOut: 1000 * 60
-
     };
 
     defaultErrorOptions: ToastrOptions = {
         positionClass: 'toast-top-center',
         toastClass: 'toast-notifications-custom-error',
         timeOut: 1000 * 60
+    };
 
+    defaultInfoOptions: ToastrOptions = {
+        positionClass: 'toast-top-center',
+        toastClass: 'toast-notifications-custom-info',
+        timeOut: 1000 * 60
     };
 
     constructor() {
@@ -29,7 +33,14 @@ export class ToasterNotificationsService extends NotificationsService {
         //     return true;
         // }
 
-        toastr.options = notificationType === NotificationType.Error ? this.defaultErrorOptions : this.defaultSuccessOptions;
+        if (notificationType === NotificationType.Error) {
+            toastr.options = this.defaultErrorOptions;
+        } else if (notificationType === NotificationType.Success) {
+            toastr.options = this.defaultSuccessOptions;
+        } else {
+            toastr.options = this.defaultInfoOptions;
+        }
+
         this._toasts = toastr;
         this._inited = true;
     }

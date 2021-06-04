@@ -2,7 +2,8 @@ import {Observable, of} from "rxjs";
 
 export enum NotificationType {
     Success,
-    Error
+    Error,
+    Info
 }
 
 export abstract class NotificationsService {

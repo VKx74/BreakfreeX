@@ -1,5 +1,5 @@
 import { Inject } from "@angular/core";
-import { EBrokerInstance, IBroker, IBrokerState } from "@app/interfaces/broker/broker";
+import { EBrokerInstance, IBroker, IBrokerNotification, IBrokerState } from "@app/interfaces/broker/broker";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { EExchange } from "@app/models/common/exchange";
@@ -52,6 +52,7 @@ export class BinanceBroker implements IBroker {
     onHistoricalOrdersUpdated: Subject<BinanceHistoricalOrder[]> = new Subject<BinanceHistoricalOrder[]>();
     onHistoricalTradesUpdated: Subject<BinanceHistoricalTrade[]> = new Subject<BinanceHistoricalTrade[]>();
     onFundsUpdated: Subject<BinanceFund[]> = new Subject<BinanceFund[]>();
+    onNotification: Subject<IBrokerNotification> = new Subject<IBrokerNotification>();
     onSaveStateRequired: Subject<void> = new Subject;
 
     funds: BinanceFund[] = [];

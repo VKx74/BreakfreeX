@@ -112,6 +112,7 @@ import { GuestGuard } from './services/auth/guest.guard';
 import { GuestResolver } from './reslovers/guest.resolver';
 import { SignalsDemoBrokerService } from './services/demo.broker/signals-demo-broker.service';
 import { HighlightService } from './services/highlight/highlight.service';
+import { TradeGuardTrackingService } from './services/trade-guard-tracking.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -289,6 +290,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         UserSettingsService,
         SingleSessionService,
         MissionTrackingService,
+        TradeGuardTrackingService,
 
 
         ExchangeFactory,

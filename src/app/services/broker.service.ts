@@ -3,7 +3,7 @@ import { IInstrument } from "../models/common/instrument";
 import { EExchange } from "../models/common/exchange";
 import { IHealthable } from "../interfaces/healthcheck/healthable";
 import { BehaviorSubject, Observable, of, Subject, Subscription } from "rxjs";
-import { EBrokerInstance, IBroker, IBrokerState } from "../interfaces/broker/broker";
+import { EBrokerInstance, IBroker, IBrokerNotification, IBrokerState } from "../interfaces/broker/broker";
 import { ActionResult, OrderTypes } from "../../modules/Trading/models/models";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { BrokerFactory, CreateBrokerActionResult } from "../factories/broker.factory";
@@ -52,6 +52,11 @@ export class BrokerService {
         return this._defaultAccounts;
     }
 
+    private _onNotification: Subject<IBrokerNotification> = new Subject<IBrokerNotification>();
+    public get onNotification(): Subject<IBrokerNotification> {
+        return this._onNotification;
+    }
+
     public get isTradingAllowed(): boolean {
         // show MT Bridge for all users even without subscriptions
         return true;
@@ -62,6 +67,7 @@ export class BrokerService {
     activeBroker$ = this._activeBroker$.asObservable();
 
     private _subscriptionOnBrokerStateChange: Subscription;
+    private _onNotificationSubject: Subscription;
     onSaveStateRequired: Subject<void> = new Subject<void>();
 
     constructor(private _brokerFactory: BrokerFactory,
@@ -83,6 +89,11 @@ export class BrokerService {
                     if (this._subscriptionOnBrokerStateChange) {
                         this._subscriptionOnBrokerStateChange.unsubscribe();
                         this._subscriptionOnBrokerStateChange = null;
+                    }
+                    
+                    if (this._onNotificationSubject) {
+                        this._onNotificationSubject.unsubscribe();
+                        this._onNotificationSubject = null;
                     }
                 }
                 return value;
@@ -112,9 +123,15 @@ export class BrokerService {
             if (this._subscriptionOnBrokerStateChange) {
                 this._subscriptionOnBrokerStateChange.unsubscribe();
             }
+            if (this._onNotificationSubject) {
+                this._onNotificationSubject.unsubscribe();
+            }
 
             this._subscriptionOnBrokerStateChange = this._activeBroker.onSaveStateRequired.subscribe(() => {
                 this.onSaveStateRequired.next();
+            });
+            this._onNotificationSubject = this._activeBroker.onNotification.subscribe((data) => {
+                this.onNotification.next(data);
             });
             return of({
                 result: true
