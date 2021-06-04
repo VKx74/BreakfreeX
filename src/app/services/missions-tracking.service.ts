@@ -170,7 +170,9 @@ export class MissionTrackingService {
             }
         }
 
-        this._localStorageService.set(this._localStorageLevelKey, 1);
+        if (this._tradingProfileService.level) {
+            this._localStorageService.set(this._localStorageLevelKey, this._tradingProfileService.level);
+        }
 
         if (this._failedMissionsTimeout) {
             clearTimeout(this._failedMissionsTimeout);

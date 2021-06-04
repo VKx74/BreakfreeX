@@ -1033,12 +1033,12 @@ export abstract class MTBroker implements IMTBroker {
         };
 
         this.ws.getOrderHistory(request).subscribe((data) => {
-            const oldHistory = this._ordersHistory.slice();
-            this._ordersHistory = [];
-
             if (!data.Data) {
                 return;
             }
+
+            const oldHistory = this._ordersHistory.slice();
+            this._ordersHistory = [];
 
             for (const order of data.Data) {
                 const ord = this._createHistoricalOrder(order);
