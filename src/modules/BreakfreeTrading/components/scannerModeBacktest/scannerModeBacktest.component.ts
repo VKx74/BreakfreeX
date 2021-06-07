@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTScannerBacktestAlgoParameters, IBFTAScannerBacktestResponse } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTScannerBacktestAlgoParameters, IBFTAScannerBacktestResponse, IBFTAScannerSignal } from '@app/services/algo.service';
 import { AlertService } from '@alert/services/alert.service';
 
 @Component({
@@ -428,7 +428,9 @@ export class ScannerStrategyBacktestComponent {
         res.push(["#", "Open Time", "Close/Cancel Time", "Chart", "Setup", "Side", "Entry Price", "SL", "TP",
             "SL Ratio", "Breakeven Candles", "Cancellation Candles",
             "Single Position", "Fast Local", "Slow Local", "Local Trend",
-            "Fast Global", "Slow Global", "Global Trend", "Order Status", "PNL"
+            "Fast Global", "Slow Global", "Global Trend", "Order Status", "PNL", 
+            "RTD Glob Fast", "RTD Glob Slow", "RTD Loc Fast", "RTD Loc Slow", "RTD Glob Sp", "RTD Loc Sp", "RTD Glob Avg Sp(%)", "RTD Loc Avg Sp(%)",
+            "EE", "EE1", "EE2", "EE3", "FE", "FE1", "FE2", "FE3", "ZE", "ZE1", "ZE2", "ZE3", "M18", "M28", "P18", "P28"
         ]);
 
         for (const order of orders) {
@@ -441,6 +443,8 @@ export class ScannerStrategyBacktestComponent {
             if (closeTime) {
                 closeTimeString = new Date(closeTime * 1000).toUTCString().replace(",", "");
             }
+
+            const signalData = this.getSignalByOrder(order.open_timestamp, backtestResults.signals);
 
             res.push([`${count}`,
             `${new Date(order.open_timestamp * 1000).toUTCString().replace(",", "")}`,
@@ -462,7 +466,32 @@ export class ScannerStrategyBacktestComponent {
             `${this.global_slow}`,
             `${this.getGlobalTrend(backtestResults, order.open_timestamp)}`,
             `${this.getOrderOutcome(order)}`,
-            `${order.pl}`
+            `${order.pl}`,
+
+            `${signalData.global_fast_value}`,
+            `${signalData.global_slow_value}`,
+            `${signalData.local_fast_value}`,
+            `${signalData.local_slow_value}`,
+            `${signalData.global_trend_spread_value}`,
+            `${signalData.local_trend_spread_value}`,
+            `${signalData.global_trend_spread * 100}`,
+            `${signalData.local_trend_spread * 100}`,
+            `${signalData.data.levels.ee}`,
+            `${signalData.data.levels.ee1}`,
+            `${signalData.data.levels.ee2}`,
+            `${signalData.data.levels.ee3}`,
+            `${signalData.data.levels.fe}`,
+            `${signalData.data.levels.fe1}`,
+            `${signalData.data.levels.fe2}`,
+            `${signalData.data.levels.fe3}`,
+            `${signalData.data.levels.ze}`,
+            `${signalData.data.levels.ze1}`,
+            `${signalData.data.levels.ze2}`,
+            `${signalData.data.levels.ze3}`,
+            `${signalData.data.levels.m18}`,
+            `${signalData.data.levels.m28}`,
+            `${signalData.data.levels.p18}`,
+            `${signalData.data.levels.p28}`
             ]);
             count++;
         }
@@ -470,6 +499,16 @@ export class ScannerStrategyBacktestComponent {
         let csvContent = res.map(e => e.join(",")).join("\n");
 
         return csvContent;
+    }
+
+    protected getSignalByOrder(timestamp: number, signals: IBFTAScannerSignal[]): IBFTAScannerSignal {
+        for (const signal of signals) {
+            if (signal.timestamp === timestamp) {
+                return signal;
+            }
+        }
+
+        return {} as IBFTAScannerSignal;
     }
 
     protected getLocalTrend(backtestResults: IBFTAScannerBacktestResponse, timestamp: number) {

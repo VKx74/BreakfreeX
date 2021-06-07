@@ -273,6 +273,14 @@ export interface IBFTAScannerSignal {
     data: IBFTAAlgoResponseV2;
     local_trend: IBFTATrend;
     global_trend: IBFTATrend;
+    local_trend_spread: number;
+    global_trend_spread: number;
+    local_trend_spread_value: number;
+    global_trend_spread_value: number;
+    global_fast_value: number;
+    global_slow_value: number;
+    local_fast_value: number;
+    local_slow_value: number;
 }
 
 export interface IBFTAOrder {
