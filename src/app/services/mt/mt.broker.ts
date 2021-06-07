@@ -1,7 +1,7 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
 import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
-import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
+import { EBrokerInstance, EBrokerNotification, IBrokerNotification, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
 import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass, BrokerConnectivityStatus } from 'modules/Trading/models/models';
@@ -28,6 +28,7 @@ export abstract class MTBroker implements IMTBroker {
     protected _onHistoricalOrdersUpdated: Subject<MTOrder[]> = new Subject<MTOrder[]>();
     protected _onOrdersParametersUpdated: Subject<MTOrder[]> = new Subject<MTOrder[]>();
     protected _onPositionsUpdated: Subject<MTPosition[]> = new Subject<MTPosition[]>();
+    protected _onNotification: Subject<IBrokerNotification> = new Subject<IBrokerNotification>();
     protected _instruments: IInstrument[] = [];
     protected _onReconnectSubscription: Subscription;
     protected _onTickSubscription: Subscription;
@@ -58,6 +59,9 @@ export abstract class MTBroker implements IMTBroker {
 
     protected _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
     protected _startHistory: number = this._endHistory - (60 * 60 * 24 * 14);
+
+    protected _historyInitialized: boolean = false;
+    protected _ordersInitialized: boolean = false;
 
     public get status(): BrokerConnectivityStatus {
         if (!this._lastUpdate || this.ws.readyState !== ReadyStateConstants.OPEN) {
@@ -96,6 +100,10 @@ export abstract class MTBroker implements IMTBroker {
         return this._onHistoricalOrdersUpdated;
     }
 
+    public get onNotification(): Subject<IBrokerNotification> {
+        return this._onNotification;
+    }
+
     public get onOrdersParametersUpdated(): Subject<MTOrder[]> {
         return this._onOrdersParametersUpdated;
     }
@@ -117,7 +125,7 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     public get ordersHistory(): MTHistoricalOrder[] {
-        return this._ordersHistory;
+        return this._ordersHistory.filter(order => order.Type === OrderTypes.Market);
     }
 
     public get positions(): MTPosition[] {
@@ -369,13 +377,13 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     cancelAll(): Observable<any> {
-        const pending =  this.pendingOrders;
+        const pending = this.pendingOrders;
         const subjects = [];
         for (const order of pending) {
             const subj = this.cancelOrder(order.Id, OrderFillPolicy.FOK);
             subjects.push(subj);
         }
-        
+
         return combineLatest(subjects);
     }
 
@@ -463,7 +471,7 @@ export abstract class MTBroker implements IMTBroker {
         if (this._onReconnectSubscription) {
             this._onReconnectSubscription.unsubscribe();
         }
-        
+
         this.ws.setConnectivity(false);
         this.ws.dispose();
 
@@ -528,8 +536,8 @@ export abstract class MTBroker implements IMTBroker {
                 } else {
                     res -= order.Risk || 0;
                 }
-            } 
-            
+            }
+
             if (s2Part1 === s1Part2 || s2Part2 === s1Part1) {
                 if (side === order.Side) {
                     res -= order.Risk || 0;
@@ -596,7 +604,7 @@ export abstract class MTBroker implements IMTBroker {
             });
         });
     }
-    
+
     public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
         return this._tradeRatingService.calculateOrderChecklist(parameters);
     }
@@ -695,7 +703,7 @@ export abstract class MTBroker implements IMTBroker {
             if (orderType && orderType !== order.Type) {
                 continue;
             }
-            
+
             if (order.RiskPercentage > res) {
                 res = order.RiskPercentage;
             }
@@ -783,7 +791,6 @@ export abstract class MTBroker implements IMTBroker {
             let exists = false;
             for (const existingOrder of this._orders) {
                 if (existingOrder.Id === newOrder.Ticket) {
-                    existingOrder.CurrentPrice = newOrder.CurrentPrice ? newOrder.CurrentPrice : null;
                     existingOrder.Comment = newOrder.Comment ? newOrder.Comment : null;
                     existingOrder.Commission = newOrder.Commission ? newOrder.Commission : null;
                     existingOrder.Swap = newOrder.Swap ? newOrder.Swap : null;
@@ -802,8 +809,9 @@ export abstract class MTBroker implements IMTBroker {
                     const netPl = newOrder.Profit;
                     const contractSize = newOrder.ContractSize;
                     const VAR = newOrder.VarRisk;
+                    const currentPrice = newOrder.CurrentPrice ? newOrder.CurrentPrice : null;
 
-                    if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Price !== price ||
+                    if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Price !== price || existingOrder.CurrentPrice !== currentPrice ||
                         existingOrder.Size !== size || existingOrder.NetPL !== netPl || existingOrder.Type !== type ||
                         existingOrder.Status !== status || existingOrder.ContractSize !== contractSize || existingOrder.VAR !== VAR) {
                         changedOrders.push(existingOrder);
@@ -812,6 +820,8 @@ export abstract class MTBroker implements IMTBroker {
                     if (existingOrder.SL !== sl || existingOrder.TP !== tp || existingOrder.Type !== type || existingOrder.Status !== status) {
                         updateRequired = true;
                     }
+
+                    this._checkOrderChanges(newOrder, existingOrder);
 
                     existingOrder.ContractSize = contractSize;
                     existingOrder.Type = type;
@@ -822,6 +832,7 @@ export abstract class MTBroker implements IMTBroker {
                     existingOrder.Size = size;
                     existingOrder.NetPL = netPl;
                     existingOrder.VAR = VAR;
+                    existingOrder.CurrentPrice = currentPrice;
 
                     this._calculatePipPL(existingOrder);
                     exists = true;
@@ -833,6 +844,7 @@ export abstract class MTBroker implements IMTBroker {
                 updateRequired = true;
                 const ord = this._createOrder(newOrder);
                 this._orders.push(ord);
+                this._checkOrderChanges(null, ord);
             }
         }
 
@@ -856,13 +868,13 @@ export abstract class MTBroker implements IMTBroker {
         this._buildPositions();
         this._buildRates();
         this._buildCurrencyRisks();
-        
+
         for (const o of this._orders) {
             if (o.Type === OrderTypes.Market) {
                 o.Recommendations = this._tradeRatingService.calculateMarketOrderRecommendations(o);
             } else {
                 o.Recommendations = this._tradeRatingService.calculatePendingOrderRecommendations(o);
-            } 
+            }
         }
 
         if (changedOrders.length && !updateRequired) {
@@ -872,6 +884,84 @@ export abstract class MTBroker implements IMTBroker {
         if (updateRequired) {
             this.onOrdersUpdated.next(this._orders);
             this._loadHistory();
+        }
+
+        this._ordersInitialized = true;
+    }
+
+    protected _checkOrderChanges(newOrder: IMTOrderData, existingOrder: MTOrder) {
+        if (!this._ordersInitialized) {
+            return;
+        }
+
+        if (!newOrder) {
+            this._onNotification.next({
+                order: existingOrder,
+                type: EBrokerNotification.OrderPlaced
+            });
+            return;
+        }
+
+        if (existingOrder.Type.toLowerCase() !== OrderTypes.Market.toLowerCase() && newOrder.Type.toLowerCase() === OrderTypes.Market.toLowerCase()) {
+            this._onNotification.next({
+                order: existingOrder,
+                type: EBrokerNotification.OrderFilled
+            });
+        } else if ((existingOrder.SL || 0) !== newOrder.StopLoss || (existingOrder.TP || 0) !== newOrder.TakeProfit || 
+                   (existingOrder.Price || 0) !== (newOrder.OpenPrice || 0)) {
+            this._onNotification.next({
+                order: existingOrder,
+                type: EBrokerNotification.OrderModified
+            });
+        }
+    }
+
+    protected _checkHistoricalOrderChanges(order: MTHistoricalOrder) {
+        if (!this._historyInitialized) {
+            return;
+        }
+
+        if (order.Type === OrderTypes.Market) {
+            if (order.Side === OrderSide.Buy) {
+                if (order.TP && order.ClosePrice >= order.TP) {
+                    this._onNotification.next({
+                        order: order,
+                        type: EBrokerNotification.OrderTPHit
+                    });
+                } else if (order.SL && order.ClosePrice <= order.SL) {
+                    this._onNotification.next({
+                        order: order,
+                        type: EBrokerNotification.OrderSLHit
+                    });
+                } else {
+                    this._onNotification.next({
+                        order: order,
+                        type: EBrokerNotification.OrderClosed
+                    });
+                }
+            } else {
+                if (order.TP && order.ClosePrice <= order.TP) {
+                    this._onNotification.next({
+                        order: order,
+                        type: EBrokerNotification.OrderTPHit
+                    });
+                } else if (order.SL && order.ClosePrice >= order.SL) {
+                    this._onNotification.next({
+                        order: order,
+                        type: EBrokerNotification.OrderSLHit
+                    });
+                } else {
+                    this._onNotification.next({
+                        order: order,
+                        type: EBrokerNotification.OrderClosed
+                    });
+                }
+            }
+        } else {
+            this._onNotification.next({
+                order: order,
+                type: EBrokerNotification.OrderCanceled
+            });
         }
     }
 
@@ -902,8 +992,8 @@ export abstract class MTBroker implements IMTBroker {
         this._calculatePipPL(ord);
 
         return ord;
-    } 
-    
+    }
+
     protected _createHistoricalOrder(data: IMTOrderData): MTHistoricalOrder {
         const ord: MTHistoricalOrder = {
             Id: data.Ticket,
@@ -943,23 +1033,30 @@ export abstract class MTBroker implements IMTBroker {
         };
 
         this.ws.getOrderHistory(request).subscribe((data) => {
-            this._ordersHistory = [];
-
             if (!data.Data) {
                 return;
             }
-            
+
+            const oldHistory = this._ordersHistory.slice();
+            this._ordersHistory = [];
+
             for (const order of data.Data) {
                 const ord = this._createHistoricalOrder(order);
 
-                if (ord.Type !== OrderTypes.Market) {
-                    continue;
-                }
+                // if (ord.Type !== OrderTypes.Market) {
+                //     continue;
+                // }
 
                 this._ordersHistory.push(ord);
+
+                const existingOrder = oldHistory.find(_ => _.Id === ord.Id);
+                if (!existingOrder) {
+                    this._checkHistoricalOrderChanges(ord);
+                }
             }
             this._ordersHistory.sort((a, b) => b.CloseTime - a.CloseTime);
             this._onHistoricalOrdersUpdated.next(this._ordersHistory);
+            this._historyInitialized = true;
         });
     }
 
@@ -1069,7 +1166,7 @@ export abstract class MTBroker implements IMTBroker {
                     i--;
                 }
             }
-        } 
+        }
 
         for (const i in actualRisks) {
             if (actualRisks[i] && actualRisks[i].Risk) {
@@ -1172,14 +1269,14 @@ export abstract class MTBroker implements IMTBroker {
 
         const totalPrice = (position.Size * position.Price) + (order.Size * order.Price);
         const avgPrice = totalPrice / (position.Size + order.Size);
-        
+
         if (order.Risk) {
             if (!position.Risk) {
                 position.Risk = 0;
             }
             position.Risk += order.Risk;
         }
-        
+
         if (order.VAR) {
             if (!position.VAR) {
                 position.VAR = 0;

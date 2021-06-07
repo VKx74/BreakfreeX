@@ -1,4 +1,4 @@
-import { EBrokerInstance, IBroker, IBrokerState, IPositionBasedBroker } from "@app/interfaces/broker/broker";
+import { EBrokerInstance, IBroker, IBrokerNotification, IBrokerState, IPositionBasedBroker } from "@app/interfaces/broker/broker";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { EExchange } from "@app/models/common/exchange";
@@ -51,6 +51,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
     onPositionsParametersUpdated: Subject<BinanceFuturesPosition[]> = new Subject<BinanceFuturesPosition[]>();
     onAssetsUpdated: Subject<BinanceFuturesAsset[]> = new Subject<BinanceFuturesAsset[]>();
     onSaveStateRequired: Subject<void> = new Subject;
+    onNotification: Subject<IBrokerNotification> = new Subject<IBrokerNotification>();
 
     orders: BinanceFuturesOrder[] = [];
     ordersHistory: BinanceFuturesHistoricalOrder[] = [];

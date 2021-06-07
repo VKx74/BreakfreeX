@@ -29,6 +29,22 @@ export interface IPositionBasedBroker {
     closePosition(symbol: any, ...args): Observable<ActionResult>;
 }
 
+export enum EBrokerNotification {
+    OrderPlaced,
+    OrderFilled,
+    OrderCanceled,
+    OrderClosed,
+    OrderModified,
+    OrderSLHit,
+    OrderTPHit,
+    OrderEntryHit
+}
+
+export interface IBrokerNotification {
+    type: EBrokerNotification;
+    order: IOrder;
+}
+
 export interface IBroker {
     isOrderEditAvailable: boolean;
     isPositionBased: boolean;
@@ -39,6 +55,7 @@ export interface IBroker {
     onOrdersUpdated: Subject<IOrder[]>;
     onOrdersParametersUpdated: Subject<IOrder[]>;
     onHistoricalOrdersUpdated: Subject<IOrder[]>;
+    onNotification: Subject<IBrokerNotification>;
     // onPositionsUpdated: Subject<any[]>;
 
     status: BrokerConnectivityStatus;

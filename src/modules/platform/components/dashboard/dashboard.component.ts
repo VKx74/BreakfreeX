@@ -41,6 +41,7 @@ import { AlertsService } from "modules/AutoTradingAlerts/services/alerts.service
 import { PhoneNumberPopUpComponent } from "modules/BreakfreeTrading/components/phoneNumberPopUp/phoneNumberPopUp.component";
 import { LocalStorageService } from "modules/Storage/services/local-storage.service";
 import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
+import { TradeGuardTrackingService } from "@app/services/trade-guard-tracking.service";
 
 
 @Component({
@@ -100,6 +101,7 @@ export class DashboardComponent {
         private _alertService: AlertService,
         private _singleSessionService: SingleSessionService,
         private _missionTrackingService: MissionTrackingService,
+        private _tradeGuardTrackingService: TradeGuardTrackingService,
         public bottomPanelSizeService: ToggleBottomPanelSizeService,
         private _overlay: Overlay,
         private _instrumentMappingService: InstrumentMappingService
@@ -177,6 +179,7 @@ export class DashboardComponent {
         if (this._identityService.isAuthorizedCustomer) {
             this._missionTrackingService.initMissions();
             this._missionTrackingService.watchMissions();
+            this._tradeGuardTrackingService.initTimer();
         }
 
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);

@@ -13,6 +13,8 @@ import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {UserSettingsService} from "@app/services/user-settings/user-settings.service";
 import {ActivatedRoute} from "@angular/router";
 import {PlatformTranslateService} from "@platform/localization/token";
+import { NotificationsService, NotificationType } from '@alert/services/notifications.service';
+import { EBrokerNotification } from '@app/interfaces/broker/broker';
 
 @Component({
     selector: 'platform',
@@ -38,8 +40,9 @@ export class PlatformComponent implements OnInit, AfterViewInit {
                 private _userSettingsService: UserSettingsService,
                 private _brokerService: BrokerService,
                 private _route: ActivatedRoute,
-                private _alertService: AlertService) {
-    }
+                private _alertService: AlertService,
+                private _notificationsService: NotificationsService) {
+    }   
 
     ngOnInit() {
         this._userSettingsService.applySettings(
@@ -66,6 +69,15 @@ export class PlatformComponent implements OnInit, AfterViewInit {
             }
         });
 
+        this._brokerService.onNotification.subscribe(value => {
+            if (value.type === EBrokerNotification.OrderSLHit) {
+                this._notificationsService.show(`${value.order.Symbol} order #${value.order.Id} - SL Hit`, "Stop Loss Hit", NotificationType.Info);
+            } else if (value.type === EBrokerNotification.OrderTPHit) {
+                this._notificationsService.show(`${value.order.Symbol} order #${value.order.Id} - TP Hit`, "Take Profit Hit", NotificationType.Info);
+            } else if (value.type === EBrokerNotification.OrderFilled) {
+                this._notificationsService.show(`${value.order.Symbol} order #${value.order.Id} - Filled`, "Order Filled", NotificationType.Info);
+            }
+        });
     }
 
     ngAfterViewInit() {
