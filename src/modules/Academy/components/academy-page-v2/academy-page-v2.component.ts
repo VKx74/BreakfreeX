@@ -23,8 +23,7 @@ export class AcademyPageV2Component extends AcademyComponent {
         } catch (error) {
             console.error(error);
         }
-
-        this._gtmService.load();
+        
         this._chatbroService.load();
     }
    
