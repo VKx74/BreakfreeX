@@ -2,7 +2,7 @@ import {APP_INITIALIZER, InjectionToken, Injector, NgModule, ErrorHandler} from 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from "./app.router";
 import {AuthGuard} from "./services/auth/auth.guard";
-import {RouteReuseStrategy} from "@angular/router";
+import {NavigationEnd, Router, RouteReuseStrategy} from "@angular/router";
 import {CustomRouteReuseStrategy} from "@app/router/reuse-strategy";
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
 import {MAT_CHIPS_DEFAULT_OPTIONS} from "@angular/material/chips";
@@ -389,7 +389,11 @@ const FILE_INPUT_CONFIG_PROVIDER = {
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor() {
-
+    constructor(private _router: Router, private _gtmTrackingService: GTMTrackingService) {
+        this._router.events.forEach(item => {
+            if (item instanceof NavigationEnd) {
+                this._gtmTrackingService.setPath(this._router.url);
+            }
+        });
     }
 }

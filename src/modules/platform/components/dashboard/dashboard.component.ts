@@ -89,7 +89,6 @@ export class DashboardComponent {
         private _dialog: MatDialog,
         private _identityService: IdentityService,
         private _router: Router,
-        private _gtmTrackingService: GTMTrackingService,
         private _coockieService: CookieService,
         private _layoutStorageService: LayoutStorageService,
         private _brokerService: BrokerService,
@@ -228,8 +227,6 @@ export class DashboardComponent {
         } catch (error) {
             console.error(error);
         }
-        
-        this._gtmTrackingService.setPath(this._router.url);
     }
 
     clearSession() {

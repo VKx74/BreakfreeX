@@ -56,7 +56,6 @@ export class CredentialsPageComponent implements OnInit {
 
     if (this._localStorage.isGuest()) {
         this._localStorage.trunkGuest();
-        this._GTMTrackingService.load();
         this._GTMTrackingService.guestRegistration();
     }
 
