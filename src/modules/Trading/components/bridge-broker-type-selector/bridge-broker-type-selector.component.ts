@@ -41,7 +41,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.availableBrokers = APP_TYPE_BROKERS;
+        this.availableBrokers = APP_TYPE_BROKERS.slice();
 
         if (this._brokerService.defaultAccounts.find(_ => !_.isLive)) {
             this.availableBrokers.unshift(EBrokerInstance.BFTDemo);
