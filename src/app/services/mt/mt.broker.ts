@@ -14,6 +14,7 @@ import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { TradingHelper } from "./mt.helper";
 import { MTTradeRatingService } from "./mt.trade-rating.service";
+import { map } from "rxjs/operators";
 
 export abstract class MTBroker implements IMTBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<ITradeTick>; } = {};
@@ -62,6 +63,8 @@ export abstract class MTBroker implements IMTBroker {
 
     protected _historyInitialized: boolean = false;
     protected _ordersInitialized: boolean = false;
+    protected _allowEmptySL: boolean = true;
+    protected _maxRisk: number = null;
 
     public get status(): BrokerConnectivityStatus {
         if (!this._lastUpdate || this.ws.readyState !== ReadyStateConstants.OPEN) {
@@ -148,6 +151,22 @@ export abstract class MTBroker implements IMTBroker {
         return false;
     }
 
+    public get allowEmptySL(): boolean {
+        return this._allowEmptySL;
+    }
+
+    public get maxRisk(): number {
+        return this._maxRisk;
+    }
+
+    public set allowEmptySL(value: boolean) {
+        this._allowEmptySL = value;
+    }
+
+    public set maxRisk(value: number) {
+        this._maxRisk = value;
+    }
+
     constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
         this._tradeRatingService = new MTTradeRatingService(this, algoService, _instrumentMappingService);
     }
@@ -171,14 +190,29 @@ export abstract class MTBroker implements IMTBroker {
             PlacedFrom: order.PlacedFrom
         };
 
+        if (!this.allowEmptySL && !order.SL) {
+            return throwError("SL can`t be empty.");
+        }
+
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
-            this.ws.placeOrder(request).subscribe((response) => {
-                if (response.IsSuccess) {
-                    observer.next({ result: true });
-                } else {
-                    observer.error(response.ErrorMessage);
+            this._validateOrderChecklist(order, null).subscribe((validationResult) => {
+                if (validationResult) {
+                    observer.error(validationResult);
+                    observer.complete();
+                    return;
                 }
-                observer.complete();
+
+                this.ws.placeOrder(request).subscribe((response) => {
+                    if (response.IsSuccess) {
+                        observer.next({ result: true });
+                    } else {
+                        observer.error(response.ErrorMessage);
+                    }
+                    observer.complete();
+                }, (error) => {
+                    observer.error(error);
+                    observer.complete();
+                });
             }, (error) => {
                 observer.error(error);
                 observer.complete();
@@ -202,17 +236,31 @@ export abstract class MTBroker implements IMTBroker {
             Ticket: order.Ticket
         };
 
+        if (!this.allowEmptySL && !order.SL) {
+            return throwError("SL can`t be empty.");
+        }
+        
+        const orderData = this.getOrderById(order.Ticket);
+
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
-            this.ws.editOrder(request).subscribe((response) => {
-                if (response.IsSuccess) {
-                    observer.next({ result: true });
-                } else {
-                    observer.error(response.ErrorMessage);
+            this._validateOrderChecklist(order, orderData).subscribe((validationResult) => {
+                if (validationResult) {
+                    observer.error(validationResult);
+                    observer.complete();
+                    return;
                 }
-                observer.complete();
-            }, (error) => {
-                observer.error(error);
-                observer.complete();
+
+                this.ws.editOrder(request).subscribe((response) => {
+                    if (response.IsSuccess) {
+                        observer.next({ result: true });
+                    } else {
+                        observer.error(response.ErrorMessage);
+                    }
+                    observer.complete();
+                }, (error) => {
+                    observer.error(error);
+                    observer.complete();
+                });
             });
         });
     }
@@ -239,17 +287,35 @@ export abstract class MTBroker implements IMTBroker {
             Ticket: order.Ticket
         };
 
+        if (!this.allowEmptySL && !order.SL) {
+            return throwError("SL can`t be empty.");
+        }
+
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
-            this.ws.editOrder(request).subscribe((response) => {
-                if (response.IsSuccess) {
-                    observer.next({ result: true });
-                } else {
-                    observer.error(response.ErrorMessage);
+            this._validateOrderChecklist({
+                Side: orderData.Side,
+                Size: orderData.Size,
+                Symbol: orderData.Symbol,
+                Price: order.Price,
+                SL: order.SL
+            }, orderData).subscribe((validationResult) => {
+                if (validationResult) {
+                    observer.error(validationResult);
+                    observer.complete();
+                    return;
                 }
-                observer.complete();
-            }, (error) => {
-                observer.error(error);
-                observer.complete();
+
+                this.ws.editOrder(request).subscribe((response) => {
+                    if (response.IsSuccess) {
+                        observer.next({ result: true });
+                    } else {
+                        observer.error(response.ErrorMessage);
+                    }
+                    observer.complete();
+                }, (error) => {
+                    observer.error(error);
+                    observer.complete();
+                });
             });
         });
     }
@@ -907,8 +973,8 @@ export abstract class MTBroker implements IMTBroker {
                 order: existingOrder,
                 type: EBrokerNotification.OrderFilled
             });
-        } else if ((existingOrder.SL || 0) !== newOrder.StopLoss || (existingOrder.TP || 0) !== newOrder.TakeProfit || 
-                   (existingOrder.Price || 0) !== (newOrder.OpenPrice || 0)) {
+        } else if ((existingOrder.SL || 0) !== newOrder.StopLoss || (existingOrder.TP || 0) !== newOrder.TakeProfit ||
+            (existingOrder.Price || 0) !== (newOrder.OpenPrice || 0)) {
             this._onNotification.next({
                 order: existingOrder,
                 type: EBrokerNotification.OrderModified
@@ -1389,5 +1455,22 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         return expiration as OrderExpirationType;
+    }
+
+    private _validateOrderChecklist(order: MTOrderValidationChecklistInput, existingOrder: MTOrder): Observable<string> {
+        if (!this.maxRisk) {
+            return of(null);
+        }
+
+        return this.calculateOrderChecklist(order).pipe(map((validationResult: MTOrderValidationChecklist) => {
+            if (!validationResult) {
+                throw new Error("Failed to process order validations");
+            }
+            let risk = validationResult.PositionRiskValue;
+            if (existingOrder) {
+                risk -= existingOrder.RiskPercentage || 0;
+            }
+            return risk > this.maxRisk ? `Leverage too high for position. Allowed max Leverage ${this.maxRisk}%` : null;
+        }));
     }
 }

@@ -12,6 +12,8 @@ import { InstrumentMappingService } from "./instrument-mapping.service";
 import { HttpClient } from "@angular/common/http";
 import { AppConfigService } from "./app.config.service";
 import { MTConnectionData } from "modules/Trading/models/forex/mt/mt.models";
+import { MTBroker } from "./mt/mt.broker";
+import { BFTDemoBroker, BFTLiveBroker } from "./mt/mt5.broker";
 
 export interface IBrokerServiceState {
     activeBrokerState?: IBrokerState;
@@ -21,6 +23,7 @@ export interface IBrokerServiceState {
 export interface IBFTTradingAccount {
     id: string;
     isLive: boolean;
+    riskLevel: number;
 }
 
 @Injectable()
@@ -133,6 +136,7 @@ export class BrokerService {
             this._onNotificationSubject = this._activeBroker.onNotification.subscribe((data) => {
                 this.onNotification.next(data);
             });
+            this._setBrokerRestrictions();
             return of({
                 result: true
             });
@@ -435,5 +439,28 @@ export class BrokerService {
                     subscriber.complete();
                 });
         });
+    }
+
+    private _setBrokerRestrictions() {
+        if (!(this.activeBroker instanceof BFTDemoBroker) && !(this.activeBroker instanceof BFTLiveBroker)) {
+            return;
+        }
+        
+        const isLive = this.activeBroker instanceof BFTLiveBroker;
+        const account = this._defaultAccounts.find(_ => _.isLive === isLive);
+
+        if (!account) {
+            return;
+        }
+
+        const mtBroker = this.activeBroker as MTBroker;
+
+        if (account.riskLevel === 1) {
+            mtBroker.allowEmptySL = false;
+            mtBroker.maxRisk = 1.5;
+        } else if (account.riskLevel === 2) {
+            mtBroker.allowEmptySL = false;
+            mtBroker.maxRisk = 3.0;
+        }
     }
 }

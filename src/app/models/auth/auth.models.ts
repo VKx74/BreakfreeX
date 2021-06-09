@@ -75,6 +75,7 @@ export class Subscription {
 export class TradingAccount {
     id: string;
     isLive: boolean;
+    riskLevel: number;
 }
 
 export class UserModel {

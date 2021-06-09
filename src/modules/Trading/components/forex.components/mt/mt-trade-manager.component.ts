@@ -44,39 +44,39 @@ export class MTTradeManagerComponent {
     }  
 
     get positionsAmount(): number {
-        const mt5Broker = this.brokerService.activeBroker as MTBroker;
-        if (!mt5Broker || !mt5Broker.positions) {
+        const mtBroker = this.brokerService.activeBroker as MTBroker;
+        if (!mtBroker || !mtBroker.positions) {
             return 0;
         }
 
-        return mt5Broker.positions.length;
+        return mtBroker.positions.length;
     }
 
     public get ordersAmount(): number {
-        const mt5Broker = this.brokerService.activeBroker as MTBroker;
-        if (!mt5Broker || !mt5Broker.orders) {
+        const mtBroker = this.brokerService.activeBroker as MTBroker;
+        if (!mtBroker || !mtBroker.orders) {
             return 0;
         }
 
-        return mt5Broker.orders.filter(_ => _.Type === OrderTypes.Market).length;
+        return mtBroker.orders.filter(_ => _.Type === OrderTypes.Market).length;
     }
 
     public get pendingAmount(): number {
-        const mt5Broker = this.brokerService.activeBroker as MTBroker;
-        if (!mt5Broker || !mt5Broker.orders) {
+        const mtBroker = this.brokerService.activeBroker as MTBroker;
+        if (!mtBroker || !mtBroker.orders) {
             return 0;
         }
 
-        return mt5Broker.orders.filter(_ => _.Type !== OrderTypes.Market).length;
+        return mtBroker.orders.filter(_ => _.Type !== OrderTypes.Market).length;
     }
 
     public get historyAmount(): number {
-        const mt5Broker = this.brokerService.activeBroker as MTBroker;
-        if (!mt5Broker || !mt5Broker.ordersHistory) {
+        const mtBroker = this.brokerService.activeBroker as MTBroker;
+        if (!mtBroker || !mtBroker.ordersHistory) {
             return 0;
         }
 
-        return mt5Broker.ordersHistory.length;
+        return mtBroker.ordersHistory.length;
     }
 
 
@@ -125,13 +125,13 @@ export class MTTradeManagerComponent {
                 data: order
             });
         } else {
-            const mt5Broker = this.brokerService.activeBroker as MTBroker;
+            const mtBroker = this.brokerService.activeBroker as MTBroker;
             this._dialog.open(ConfirmModalComponent, {
                 data: {
                     title: 'Cancel order',
                     message: `Are you sure you want cancel #'${order.Id}' order?`,
                     onConfirm: () => {
-                        mt5Broker.cancelOrder(order.Id).subscribe((result) => {
+                        mtBroker.cancelOrder(order.Id).subscribe((result) => {
                             if (result.result) {
                                 this._alertService.success("Order canceled");
                             } else {
@@ -155,8 +155,8 @@ export class MTTradeManagerComponent {
     }
 
     public handleOpenChart(order: MTOrder | MTPosition) { 
-        const mt5Broker = this.brokerService.activeBroker as MTBroker;
-        if (!mt5Broker) {
+        const mtBroker = this.brokerService.activeBroker as MTBroker;
+        if (!mtBroker) {
             return;
         }
 
@@ -166,7 +166,7 @@ export class MTTradeManagerComponent {
             const comment = (order as any).Comment;
             tf = TradingHelper.getTradeTimeframeFromTechnicalComment(comment);
         } else {
-            const marketOrders = mt5Broker.marketOrders;
+            const marketOrders = mtBroker.marketOrders;
 
             for (const marketOrder of marketOrders) {
                 if (marketOrder.Symbol === symbol && (marketOrder as any).Comment) {
@@ -182,7 +182,7 @@ export class MTTradeManagerComponent {
 
         this._instrumentService.instrumentToDatafeedFormat(symbol).subscribe((instrument: IInstrument) => {
             if (!instrument) {
-                mt5Broker.getInstruments(null, symbol).subscribe((brokerInstruments) => {
+                mtBroker.getInstruments(null, symbol).subscribe((brokerInstruments) => {
                     let brokerInstrument: IInstrument = null;
                     for (const i of brokerInstruments) {
                         if (i.symbol.toLowerCase() === symbol.toLowerCase()) {

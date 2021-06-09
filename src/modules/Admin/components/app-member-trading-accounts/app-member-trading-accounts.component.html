@@ -14,6 +14,8 @@
           <tr>
             <th>Id</th>
             <th>Is Live</th>
+            <th>Risk Level</th>
+            <th></th>
             <th></th>
           </tr>
         </thead>
@@ -21,9 +23,13 @@
         <tbody>
           <tr *ngFor="let item of items">
             <td>{{item.id}}</td>
-            <td>{{item.isLive}}</td>
+            <td>{{item.isLive ? "Live" : "Demo"}}</td>
+            <td>{{riskTypesCaption(item.riskLevel) | async}}</td>
             <td>
               <div class="detach-button" (click)="detach(item)">Detach</div>
+            </td>
+            <td>
+              <div class="edit-button" (click)="edit(item)">Edit</div>
             </td>
           </tr>
         </tbody>
@@ -33,8 +39,9 @@
     <div class="new-account">
       <input matInput type="text" [(ngModel)]="id" placeholder="Account ID" class="crypto-input bft-form-input">
       <input matInput type="text" [(ngModel)]="pwd" placeholder="Password" class="crypto-input bft-form-input">
-      <selector [options]="accountTypes" [placeholder]="'Select Type'" [(ngModel)]="accountType"
-        class="crypto-input bft-form-input"></selector>
+      <selector [options]="accountTypes" [placeholder]="'Select Type'" [(ngModel)]="accountType" class="crypto-input bft-form-input"></selector>
+      <selector [options]="riskTypes" [placeholder]="'Select Risk'" [(ngModel)]="riskType" class="crypto-input bft-form-input"
+                [optionCaption]="riskTypesCaption"></selector>
         <button class="crypto-button crypto-button_action" (click)="attach()">
           Attach
         </button>

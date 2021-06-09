@@ -136,6 +136,7 @@ import { TPMonitoringTradesHistComponent } from './components/trading-performanc
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AppMemberTradingAccountsComponent } from './components/app-member-trading-accounts/app-member-trading-accounts.component';
+import { AppMemberTradingAccountEditComponent } from './components/app-member-trading-account-edit/app-member-trading-account-edit.component';
 
 @NgModule({
     imports: [
@@ -194,6 +195,7 @@ import { AppMemberTradingAccountsComponent } from './components/app-member-tradi
         AppMembersComponent,
         AppMemberInfoComponent,
         AppMemberTradingAccountsComponent,
+        AppMemberTradingAccountEditComponent,
         AppMemberConfiguratorComponent,
         NotificationsComponent,
         NotificationEditorComponent,
@@ -251,6 +253,7 @@ import { AppMemberTradingAccountsComponent } from './components/app-member-tradi
         EventEditorComponent,
         AppMemberInfoComponent,
         AppMemberTradingAccountsComponent,
+        AppMemberTradingAccountEditComponent,
         TagsManagerComponent,
         AppMemberKycHistoryComponent,
         NotificationEditorComponent,

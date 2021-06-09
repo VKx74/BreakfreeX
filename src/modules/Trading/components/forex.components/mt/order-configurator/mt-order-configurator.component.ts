@@ -313,6 +313,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _recalculateTimeout: any;
     private _technicalComment: string;
     private _canChangeInstrument: boolean = true;
+    private _orderValidationChecklist: MTOrderValidationChecklist;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
@@ -411,6 +412,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._orderValidationChecklist = null;
         this.allowedOrderTypes = [OrderTypes.Market, OrderTypes.Limit, OrderTypes.Stop];
         if (this.config.instrument) {
             this._selectInstrument(this.config.instrument, false);
@@ -524,6 +526,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     private _buildCalculateChecklistResults(data: MTOrderValidationChecklist) {
+        this._orderValidationChecklist = data;
+
         this.checklistItems = [];
         this.orderScore = 10;
 

@@ -5,12 +5,13 @@ import {
   PersonalInfoStatus
 } from "@app/services/personal-info/personal-info.service";
 import { Modal } from "Shared";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { TradingAccount, UserModel } from '@app/models/auth/auth.models';
 import { UsersService } from '@app/services/users.service';
 import { AlertService } from '@alert/services/alert.service';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AppMemberTradingAccountEditComponent, AppMemberTradingAccountEditConfig } from '../app-member-trading-account-edit/app-member-trading-account-edit.component';
 
 export interface AppMemberTradingAccountsConfig {
   user: UserModel;
@@ -27,6 +28,8 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
   public pwd: string;
   public accountType: string;
   public accountTypes: string[] = ["Demo", "Live"];
+  public riskTypes: number[] = [1, 2, 0];
+  public riskType: number;
   public items: TradingAccount[] = [];
 
   public get userId(): string {
@@ -37,6 +40,15 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
     super(injector);
   }
 
+
+  riskTypesCaption = (status: number) => {
+    switch (status) {
+      case 0: return of("Not Specified");
+      case 1: return of("Low Risk");
+      case 2: return of("Aggressive Risk");
+    }
+  }
+
   ngOnInit() {
     this.load();
   }
@@ -44,13 +56,14 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
   attach() {
     let isLive = this.accountType === "Live";
     this.loading = true;
-    this._usersService.attachTradingAccount(this.id, this.pwd, this.data.user.id, isLive).subscribe((data) => {
-      this.load();
-      this._alertService.success("Attached");
-    }, (error) => {
-      this._alertService.error("Failed to attach");
-      this.loading = false;
-    });
+    this._usersService.
+      attachTradingAccount(this.id, this.pwd, this.data.user.id, isLive, this.riskType).subscribe((data) => {
+        this.load();
+        this._alertService.success("Attached");
+      }, (error) => {
+        this._alertService.error("Failed to attach");
+        this.loading = false;
+      });
   }
 
   detach(item: TradingAccount) {
@@ -63,6 +76,17 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
       if (dialogResult) {
         this._detach(item.id);
       }
+    });
+  }
+
+  edit(item: TradingAccount) {
+    this._dialog.open<any, AppMemberTradingAccountEditConfig>(AppMemberTradingAccountEditComponent, {
+      data: {
+        user: this.data.user,
+        tradingAccount: item
+      }
+    }).afterClosed().subscribe((dialogResult: any) => {
+      this.load();
     });
   }
 

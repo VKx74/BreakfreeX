@@ -15,7 +15,7 @@ export class MT5Broker extends MTBroker {
         return EBrokerInstance.MT5;
     }
 
-    constructor(@Inject(MT5SocketService) private _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
         super(_ws, _algoService, _instrumentMappingService);
     }
 
@@ -35,5 +35,17 @@ export class MT5Broker extends MTBroker {
         return of({
             result: false
         });
+    }
+}
+
+export class BFTDemoBroker extends MT5Broker {
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        super(_ws, _algoService, _instrumentMappingService);
+    }
+}
+
+export class BFTLiveBroker extends MT5Broker {
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        super(_ws, _algoService, _instrumentMappingService);
     }
 }

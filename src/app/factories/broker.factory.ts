@@ -3,7 +3,7 @@ import { Observable, of } from "rxjs";
 import { EBrokerInstance, IBroker, IBrokerState } from "../interfaces/broker/broker";
 import { ActionResult } from "../../modules/Trading/models/models";
 import { map } from "rxjs/operators";
-import { MT5Broker } from '@app/services/mt/mt5.broker';
+import { BFTDemoBroker, BFTLiveBroker, MT5Broker } from '@app/services/mt/mt5.broker';
 import { MT4Broker } from '@app/services/mt/mt4.broker';
 import { BinanceBroker } from "@app/services/binance/binance.broker";
 import { BinanceFuturesUsdBroker } from "@app/services/binance-futures/binance-futures-usd.broker";
@@ -60,9 +60,11 @@ export class BrokerFactory {
 
     private _getInstance(brokerType: EBrokerInstance): IBroker {
         switch (brokerType) {
-            case EBrokerInstance.MT5:
             case EBrokerInstance.BFTDemo:
+                return this._injector.get(BFTDemoBroker);
             case EBrokerInstance.BFTLive:
+                return this._injector.get(BFTLiveBroker);
+            case EBrokerInstance.MT5:
                 return this._injector.get(MT5Broker);
             case EBrokerInstance.MT4:
                 return this._injector.get(MT4Broker);
