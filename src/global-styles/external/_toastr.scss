@@ -66,6 +66,12 @@
   }
 }
 
+#toast-container > .toast-notifications-custom-info {
+  .toast-message {
+    margin-left: 45px;
+  }
+}
+
 #toast-container > .toast-custom:before {
   font-family: FontAwesome;
   font-size: 17px;
@@ -112,16 +118,8 @@
     content: url("/assets/img/error.png");
   }
   .toast-notifications-custom-info.toast-info:before {
-    content: url("/assets/img/bft_bird_fillable.svg");
-    width: 70px;
-  }
-}
-
-.Dark-theme {
-  #toast-container {
-    .toast-notifications-custom-info.toast-info:before {
-      filter: invert(1);
-    }
+    content: url("/assets/img/bulb.svg");
+    width: 45px;
   }
 }
 

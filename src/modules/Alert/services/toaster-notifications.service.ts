@@ -19,7 +19,7 @@ export class ToasterNotificationsService extends NotificationsService {
     };
 
     defaultInfoOptions: ToastrOptions = {
-        positionClass: 'toast-top-center',
+        positionClass: 'toast-top-right',
         toastClass: 'toast-notifications-custom-info',
         timeOut: 1000 * 60
     };
