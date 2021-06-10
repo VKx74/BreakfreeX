@@ -51,7 +51,7 @@ export class AppMemberTradingAccountEditComponent extends Modal<AppMemberTrading
     this.riskType = this.data.tradingAccount.riskLevel;
   }
 
-  edit(item: TradingAccount) {
+  edit() {
     let isLive = this.accountType === "Live";
     this.loading = true;
     this._usersService.updateTradingAccount(this.id, this.pwd, this.data.user.id, isLive, this.riskType).subscribe((data) => {
