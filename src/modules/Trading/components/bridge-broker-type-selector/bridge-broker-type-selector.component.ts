@@ -79,7 +79,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
             case EBrokerInstance.BinanceFuturesUSD: return of("Binance (Futures USD)");
             case EBrokerInstance.BinanceFuturesCOIN: return of("Binance (Futures COIN)");
             case EBrokerInstance.BFTDemo: return of("Breakfree Trading - Demo");
-            case EBrokerInstance.BFTFundingDemo: return of("Breakfree Funding - Stage");
+            case EBrokerInstance.BFTFundingDemo: return of("Breakfree Funding - Demo");
             case EBrokerInstance.BFTFundingLive: return of("Breakfree Funding - Live");
         }
 
