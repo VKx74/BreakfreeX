@@ -28,6 +28,8 @@ export class AppMemberTradingAccountEditComponent extends Modal<AppMemberTrading
   public pwd: string;
   public accountType: string;
   public accountTypes: string[] = ["Demo", "Live"];
+  public programType: string;
+  public programTypes: string[] = ["Demo", "Funding"];
   public riskTypes: number[] = [1, 2, 0];
   public riskType: number;
   public item: TradingAccount;
@@ -48,13 +50,15 @@ export class AppMemberTradingAccountEditComponent extends Modal<AppMemberTrading
   ngOnInit() {
     this.id = this.data.tradingAccount.id;
     this.accountType = this.data.tradingAccount.isLive ? "Live" : "Demo";
+    this.programType = this.data.tradingAccount.isFunded ? "Funding" : "Demo";
     this.riskType = this.data.tradingAccount.riskLevel;
   }
 
   edit() {
     let isLive = this.accountType === "Live";
+    let isFunding = this.programType === "Funding";
     this.loading = true;
-    this._usersService.updateTradingAccount(this.id, this.pwd, this.data.user.id, isLive, this.riskType).subscribe((data) => {
+    this._usersService.updateTradingAccount(this.id, this.pwd, this.data.user.id, isLive, isFunding, this.riskType).subscribe((data) => {
       this._alertService.success("Updated");
       this.close();
     }, (error) => {

@@ -13,7 +13,7 @@ import { HttpClient } from "@angular/common/http";
 import { AppConfigService } from "./app.config.service";
 import { MTConnectionData } from "modules/Trading/models/forex/mt/mt.models";
 import { MTBroker } from "./mt/mt.broker";
-import { BFTDemoBroker, BFTLiveBroker } from "./mt/mt5.broker";
+import { BFTDemoBroker, BFTFundingDemoBroker, BFTFundingLiveBroker } from "./mt/mt5.broker";
 
 export interface IBrokerServiceState {
     activeBrokerState?: IBrokerState;
@@ -23,6 +23,7 @@ export interface IBrokerServiceState {
 export interface IBFTTradingAccount {
     id: string;
     isLive: boolean;
+    isFunded: boolean;
     riskLevel: number;
 }
 
@@ -246,41 +247,54 @@ export class BrokerService {
         }));
     }
 
-    connectDefaultDemoAccount(): Observable<ActionResult> {
-        const demoAccount = this._defaultAccounts.find(_ => !_.isLive);
-        if (!demoAccount) {
+    connectBFTAccount(accountType?: EBrokerInstance): Observable<ActionResult> {
+        const isLive = accountType === EBrokerInstance.BFTFundingLive;
+        const isFunding = accountType !== EBrokerInstance.BFTDemo;
+        let account = this._defaultAccounts.find(_ => _.isLive === isLive && _.isFunded === isFunding);
+        if (!accountType) {
+            account = this._defaultAccounts[0];
+            if (account) {
+                if (account.isLive) {
+                    accountType = EBrokerInstance.BFTFundingLive;
+                } else {
+                    accountType = account.isFunded ? EBrokerInstance.BFTFundingDemo : EBrokerInstance.BFTDemo;
+                }
+            }
+        }
+
+        if (!account) {
             return of({
                 result: false,
-                msg: "Demo account not exist"
+                msg: "Trading account not exist, please connect BFT support team to create account."
             });
         }
 
         const initData: MTConnectionData = {
             Password: "",
-            ServerName: EBrokerInstance.BFTDemo,
-            Login: Number(demoAccount.id)
+            ServerName: accountType,
+            Login: Number(account.id)
         };
 
-        return this._connectDefaultAccount(EBrokerInstance.BFTDemo, initData);
+        return this._connectDefaultAccount(accountType, initData);
     }
 
-    connectDefaultLiveAccount(): Observable<ActionResult> {
-        const liveAccount = this._defaultAccounts.find(_ => _.isLive);
-        if (!liveAccount) {
-            return of({
-                result: false,
-                msg: "Live account not exist"
-            });
-        }
+    // connectDefaultLiveAccount(): Observable<ActionResult> {
+    //     const liveAccount = this._defaultAccounts.find(_ => _.isLive);
+    //     if (!liveAccount) {
+    //         return of({
+    //             result: false,
+    //             msg: "Trading account not exist, please connect BFT support team to create account."
+    //         });
+    //     }
 
-        const initData: MTConnectionData = {
-            Password: "",
-            ServerName: EBrokerInstance.BFTLive,
-            Login: Number(liveAccount.id)
-        };
+    //     const initData: MTConnectionData = {
+    //         Password: "",
+    //         ServerName: EBrokerInstance.BFTFundingLive,
+    //         Login: Number(liveAccount.id)
+    //     };
 
-        return this._connectDefaultAccount(EBrokerInstance.BFTLive, initData);
-    }
+    //     return this._connectDefaultAccount(EBrokerInstance.BFTFundingLive, initData);
+    // }
 
     public setBrokerInitializationState(state = true) {
         this._brokerInitializationState$.next(state);
@@ -353,14 +367,16 @@ export class BrokerService {
 
     private _loadState(state: IBrokerServiceState): Observable<ActionResult> {
         if (!state) {
-            return this.connectDefaultDemoAccount();
+            return this.connectBFTAccount();
         } else {
             const activeAccount = state.activeBrokerState;
             if (activeAccount) {
                 if (activeAccount.server === EBrokerInstance.BFTDemo) {
-                    return this.connectDefaultDemoAccount();
-                } else if (activeAccount.server === EBrokerInstance.BFTLive) {
-                    return this.connectDefaultLiveAccount();
+                    return this.connectBFTAccount(EBrokerInstance.BFTDemo);
+                } else if (activeAccount.server === EBrokerInstance.BFTFundingDemo) {
+                    return this.connectBFTAccount(EBrokerInstance.BFTFundingDemo);
+                } else if (activeAccount.server === EBrokerInstance.BFTFundingLive) {
+                    return this.connectBFTAccount(EBrokerInstance.BFTFundingLive);
                 }
             }
         }
@@ -442,11 +458,13 @@ export class BrokerService {
     }
 
     private _setBrokerRestrictions() {
-        if (!(this.activeBroker instanceof BFTDemoBroker) && !(this.activeBroker instanceof BFTLiveBroker)) {
+        if (!(this.activeBroker instanceof BFTDemoBroker) && 
+            !(this.activeBroker instanceof BFTFundingDemoBroker) &&
+            !(this.activeBroker instanceof BFTFundingLiveBroker)) {
             return;
         }
         
-        const isLive = this.activeBroker instanceof BFTLiveBroker;
+        const isLive = this.activeBroker instanceof BFTFundingLiveBroker;
         const account = this._defaultAccounts.find(_ => _.isLive === isLive);
 
         if (!account) {

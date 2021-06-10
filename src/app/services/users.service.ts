@@ -99,15 +99,15 @@ export class UsersService {
         return this._http.get<TradingAccount[]>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/${userId}`, this._httpOptions);
     }
 
-    public attachTradingAccount(id: string, pwd: string, userId: string, isLive: boolean, risk: number): Observable<TradingAccount> {
+    public attachTradingAccount(id: string, pwd: string, userId: string, isLive: boolean, isFunded: boolean, risk: number): Observable<TradingAccount> {
         return this._http.post<TradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/add`, {
-            id, pwd, userId, isLive, riskLevel: risk
+            id, pwd, userId, isLive, riskLevel: risk, isFunded
         }, this._httpOptions);
     }
 
-    public updateTradingAccount(id: string, pwd: string, userId: string, isLive: boolean, risk: number): Observable<TradingAccount> {
+    public updateTradingAccount(id: string, pwd: string, userId: string, isLive: boolean, isFunded: boolean, risk: number): Observable<TradingAccount> {
         return this._http.post<TradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/update`, {
-            id, pwd, userId, isLive, riskLevel: risk
+            id, pwd, userId, isLive, riskLevel: risk, isFunded
         }, this._httpOptions);
     }
 

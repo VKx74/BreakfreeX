@@ -28,6 +28,8 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
   public pwd: string;
   public accountType: string;
   public accountTypes: string[] = ["Demo", "Live"];
+  public programType: string;
+  public programTypes: string[] = ["Demo", "Funding"];
   public riskTypes: number[] = [1, 2, 0];
   public riskType: number;
   public items: TradingAccount[] = [];
@@ -55,9 +57,10 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
 
   attach() {
     let isLive = this.accountType === "Live";
+    let isFunding = this.programType === "Funding";
     this.loading = true;
     this._usersService.
-      attachTradingAccount(this.id, this.pwd, this.data.user.id, isLive, this.riskType).subscribe((data) => {
+      attachTradingAccount(this.id, this.pwd, this.data.user.id, isLive, isFunding, this.riskType).subscribe((data) => {
         this.load();
         this._alertService.success("Attached");
       }, (error) => {

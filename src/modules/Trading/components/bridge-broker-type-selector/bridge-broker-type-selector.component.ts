@@ -43,13 +43,17 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.availableBrokers = APP_TYPE_BROKERS.slice();
 
-        if (this._brokerService.defaultAccounts.find(_ => !_.isLive)) {
-            this.availableBrokers.unshift(EBrokerInstance.BFTDemo);
-        }
+        // if (this._brokerService.defaultAccounts.find(_ => !_.isLive)) {
+        //     this.availableBrokers.unshift(EBrokerInstance.BFTDemo);
+        // }
 
-        if (this._brokerService.defaultAccounts.find(_ => _.isLive)) {
-            this.availableBrokers.unshift(EBrokerInstance.BFTLive);
-        }
+        // if (this._brokerService.defaultAccounts.find(_ => _.isLive)) {
+        //     this.availableBrokers.unshift(EBrokerInstance.BFTFundingLive);
+        // }
+
+        this.availableBrokers.unshift(EBrokerInstance.BFTFundingLive);
+        this.availableBrokers.unshift(EBrokerInstance.BFTFundingDemo);
+        this.availableBrokers.unshift(EBrokerInstance.BFTDemo);
 
         this.selectedBroker = this.availableBrokers[0];        
     }
@@ -74,28 +78,20 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
             case EBrokerInstance.Binance: return of("Binance (Spot)");
             case EBrokerInstance.BinanceFuturesUSD: return of("Binance (Futures USD)");
             case EBrokerInstance.BinanceFuturesCOIN: return of("Binance (Futures COIN)");
-            case EBrokerInstance.BFTDemo: return of("BFT Demo");
-            case EBrokerInstance.BFTLive: return of("BFT Live");
+            case EBrokerInstance.BFTDemo: return of("Breakfree Trading - Demo");
+            case EBrokerInstance.BFTFundingDemo: return of("Breakfree Funding - Stage");
+            case EBrokerInstance.BFTFundingLive: return of("Breakfree Funding - Live");
         }
 
         return of("Undefined");
     } 
     
     connectCurrentBroker() {
-        if (this.selectedBroker === EBrokerInstance.BFTDemo) {
+        if (this.selectedBroker === EBrokerInstance.BFTDemo || 
+            this.selectedBroker === EBrokerInstance.BFTFundingDemo || 
+            this.selectedBroker === EBrokerInstance.BFTFundingLive) {
             this.loading = true;
-            this._brokerService.connectDefaultDemoAccount().subscribe((setBrokerResult) => {
-                if (!setBrokerResult.result) {
-                    this._alertService.error(setBrokerResult.msg, "Error");
-                }
-                this.loading = false;
-            });
-            return;
-        }
-
-        if (this.selectedBroker === EBrokerInstance.BFTLive) {
-            this.loading = true;
-            this._brokerService.connectDefaultLiveAccount().subscribe((setBrokerResult) => {
+            this._brokerService.connectBFTAccount(this.selectedBroker).subscribe((setBrokerResult) => {
                 if (!setBrokerResult.result) {
                     this._alertService.error(setBrokerResult.msg, "Error");
                 }

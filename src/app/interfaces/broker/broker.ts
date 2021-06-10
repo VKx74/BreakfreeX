@@ -11,7 +11,8 @@ export enum EBrokerInstance {
     BinanceFuturesUSD = "BinanceFuturesUSD",
     BinanceFuturesCOIN = "BinanceFuturesCOIN",
     BFTDemo = "BFTDemo",
-    BFTLive = "BFTLive"
+    BFTFundingDemo = "BFTFundingDemo",
+    BFTFundingLive = "BFTFundingLive"
 }
 
 export interface IBrokerState<T = any> {

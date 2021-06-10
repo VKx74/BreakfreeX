@@ -1,6 +1,6 @@
 import { Inject } from '@angular/core';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
-import { MTConnectionData } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTConnectionData, MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult } from 'modules/Trading/models/models';
 import { Observable, of } from 'rxjs';
 import { AlgoService } from '../algo.service';
@@ -39,12 +39,39 @@ export class MT5Broker extends MTBroker {
 }
 
 export class BFTDemoBroker extends MT5Broker {
+    public get accountInfo(): MTTradingAccount {
+        return {
+            ...this._accountInfo,
+            CompanyName: "Breakfree Trading - Demo"
+        };
+    }
+    
     constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
         super(_ws, _algoService, _instrumentMappingService);
     }
 }
 
-export class BFTLiveBroker extends MT5Broker {
+export class BFTFundingDemoBroker extends MT5Broker {
+    public get accountInfo(): MTTradingAccount {
+        return {
+            ...this._accountInfo,
+            CompanyName: "Breakfree Funding - Stage"
+        };
+    }
+    
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        super(_ws, _algoService, _instrumentMappingService);
+    }
+}
+
+export class BFTFundingLiveBroker extends MT5Broker {
+    public get accountInfo(): MTTradingAccount {
+        return {
+            ...this._accountInfo,
+            CompanyName: "Breakfree Funding - Live"
+        };
+    }
+    
     constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
         super(_ws, _algoService, _instrumentMappingService);
     }

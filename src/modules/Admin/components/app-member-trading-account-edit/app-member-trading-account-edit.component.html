@@ -5,18 +5,29 @@
       <h4 class="modal-title">Edit Trading account</h4>
     </div>
     <div class="edit-account">
-      <div class="crypto-text">Account ID:</div>
-      <input matInput type="text" [value]="id" readonly class="crypto-input bft-form-input">
-      <div class="crypto-text">Password (optional):</div>
-      <input matInput type="text" [(ngModel)]="pwd" placeholder="Password" class="crypto-input bft-form-input">
-      <div class="crypto-text">Account Type:</div>
-      <selector [options]="accountTypes" [placeholder]="'Select Type'" [(ngModel)]="accountType" class="crypto-input bft-form-input"></selector>
-      <div class="crypto-text">Account Risk Type:</div>
-      <selector [options]="riskTypes" [placeholder]="'Select Risk'" [(ngModel)]="riskType" class="crypto-input bft-form-input"
-                [optionCaption]="riskTypesCaption"></selector>
-        <button class="crypto-button crypto-button_action" (click)="edit()">
-          Edit
-        </button>
+      <div class="section">
+        <div class="crypto-text">Account ID:</div>
+        <input matInput type="text" [value]="id" readonly class="crypto-input bft-form-input">
+        <div class="crypto-text">Password (optional):</div>
+        <input matInput type="text" [(ngModel)]="pwd" placeholder="Password" class="crypto-input bft-form-input">
+        <div class="crypto-text">Account Type:</div>
+        <selector [options]="accountTypes" [placeholder]="'Select Type'" [(ngModel)]="accountType"
+          class="crypto-input bft-form-input"></selector>
+      </div>
+      <div class="section">
+        <div class="crypto-text">Account Risk Type:</div>
+        <selector [options]="riskTypes" [placeholder]="'Select Risk'" [(ngModel)]="riskType"
+          class="crypto-input bft-form-input" [optionCaption]="riskTypesCaption"></selector>
+        <div class="crypto-text">Program Type:</div>
+        <selector [options]="programTypes" [placeholder]="'Select Program'" [(ngModel)]="programType"
+          class="crypto-input bft-form-input"></selector>
+      </div>
+    </div>
+
+    <div class="bottom-section">    
+      <button class="crypto-button crypto-button_action" (click)="edit()">
+        Edit
+      </button>
     </div>
 
   </div>

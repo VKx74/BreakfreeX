@@ -91,7 +91,7 @@ import { MT5BrokerServersProvider } from './services/mt/mt5.servers.service';
 import { MT4SocketService } from './services/socket/mt4.socket.service';
 import { MT4BrokerServersProvider } from './services/mt/mt4.servers.service';
 import { MT4Broker } from './services/mt/mt4.broker';
-import { BFTDemoBroker, BFTLiveBroker, MT5Broker } from './services/mt/mt5.broker';
+import { BFTDemoBroker, BFTFundingDemoBroker, BFTFundingLiveBroker, MT5Broker } from './services/mt/mt5.broker';
 import { Angulartics2GoSquared } from 'angulartics2/gosquared';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { NotificationsService } from '@alert/services/notifications.service';
@@ -316,7 +316,8 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         MT4Broker,
         MT5Broker,
         BFTDemoBroker,
-        BFTLiveBroker,
+        BFTFundingDemoBroker,
+        BFTFundingLiveBroker,
 
         BinanceFuturesUsdSocketService,
         BinanceFuturesCoinSocketService,

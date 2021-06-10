@@ -17,6 +17,11 @@
   .new-account {
     padding: 20px 0px;
     display: flex;
+    flex-direction: column;
+    .section {
+      display: flex;
+      margin-bottom: 10px;
+    }
     .crypto-input {
       max-width: 150px;
       margin-left: 15px;
@@ -29,8 +34,10 @@
     }
   }
 
-  .detach-button, .edit-button {
+  .detach-button,
+  .edit-button {
     cursor: pointer;
+    text-decoration: underline;
   }
 
   .modal-footer {
