@@ -180,7 +180,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
             if (barsCount < visibleCount) {
                 visibleCount = barsCount;
             }
-            if (!Environment.isMobile && barsCount > 0) {
+            if (barsCount > 0) {
                 chart.firstVisibleRecord = barsCount - visibleCount;
                 chart.lastVisibleRecord = barsCount + (visibleCount * 0.4);
             }
