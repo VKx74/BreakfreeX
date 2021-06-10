@@ -368,7 +368,7 @@ export class BrokerService {
     private _loadState(state: IBrokerServiceState): Observable<ActionResult> {
         if (!state) {
             return this.connectBFTAccount();
-        } else if(!this._activeBroker) {
+        } else if (!this._activeBroker) {
             const activeAccount = state.activeBrokerState;
             if (activeAccount) {
                 if (activeAccount.server === EBrokerInstance.BFTDemo) {
