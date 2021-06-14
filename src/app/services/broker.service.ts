@@ -314,13 +314,14 @@ export class BrokerService {
             this._activeState.previousConnected = [];
         }
 
-        const currentState = this._activeState.activeBrokerState;
-
-        if (!currentState) {
+        if (this._activeBroker instanceof BFTDemoBroker ||
+            this._activeBroker instanceof BFTFundingDemoBroker ||
+            this._activeBroker instanceof BFTFundingLiveBroker) {
             return;
         }
 
-        if (!currentState.state || !currentState.state.Password) {
+        const currentState = this._activeState.activeBrokerState;
+        if (!currentState) {
             return;
         }
 
@@ -347,22 +348,25 @@ export class BrokerService {
     private _loadState(state: IBrokerServiceState): Observable<ActionResult> {
         if (!state) {
             return this.connectBFTAccount(EBrokerInstance.BFTDemo);
-        } else if (!this._activeBroker) {
-            const activeAccount = state.activeBrokerState;
-            if (activeAccount) {
-                if (activeAccount.server === EBrokerInstance.BFTDemo) {
-                    return this.connectBFTAccount(EBrokerInstance.BFTDemo);
-                } else if (activeAccount.server === EBrokerInstance.BFTFundingDemo) {
-                    return this.connectBFTAccount(EBrokerInstance.BFTFundingDemo);
-                } else if (activeAccount.server === EBrokerInstance.BFTFundingLive) {
-                    return this.connectBFTAccount(EBrokerInstance.BFTFundingLive);
+        } else {
+
+            this._activeState.previousConnected = state.previousConnected || [];
+            this._activeState.activeBrokerState = state.activeBrokerState;
+            this._instrumentMappingService.setActiveBroker(state.activeBrokerState);
+
+            if (!this._activeBroker) {
+                const activeAccount = state.activeBrokerState;
+                if (activeAccount) {
+                    if (activeAccount.server === EBrokerInstance.BFTDemo) {
+                        return this.connectBFTAccount(EBrokerInstance.BFTDemo);
+                    } else if (activeAccount.server === EBrokerInstance.BFTFundingDemo) {
+                        return this.connectBFTAccount(EBrokerInstance.BFTFundingDemo);
+                    } else if (activeAccount.server === EBrokerInstance.BFTFundingLive) {
+                        return this.connectBFTAccount(EBrokerInstance.BFTFundingLive);
+                    }
                 }
             }
         }
-
-        this._activeState.previousConnected = state.previousConnected || [];
-        this._activeState.activeBrokerState = state.activeBrokerState;
-        this._instrumentMappingService.setActiveBroker(state.activeBrokerState);
 
         if (!state.activeBrokerState) {
             return of({
