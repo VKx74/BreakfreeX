@@ -496,7 +496,7 @@ export class BrokerService {
 
     private _getBFTAccount(accountType?: EBrokerInstance): IBFTTradingAccount {
         const isLive = accountType === EBrokerInstance.BFTFundingLive;
-        const isFunding = accountType === EBrokerInstance.BFTFundingDemo;
+        const isFunding = accountType === EBrokerInstance.BFTFundingDemo || accountType === EBrokerInstance.BFTFundingLive;
         return this._defaultAccounts.find(_ => _.isLive === isLive && _.isFunded === isFunding);
     }
 
