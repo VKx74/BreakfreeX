@@ -108,8 +108,10 @@ export interface IBFTScannerBacktestAlgoParameters extends IBFTAlgoParameters {
     global_slow: number;
     local_fast: number;
     local_slow: number;
+    min_threshold: number;
     single_position: boolean;
     type: string;
+    validation_url: string;
 }
 
 export interface IBFTAHitTestAlgoParameters extends IBFTBacktestAlgoParameters {
@@ -267,6 +269,12 @@ export interface IBFTASignalV2 {
     data: IBFTAStrategyV2Response;
 }
 
+export interface IBFTAValidationData {
+    timestamp: number;
+    good_trade: number;
+    bad_trade: number;
+}
+
 export interface IBFTAScannerSignal {
     timestamp: number;
     end_timestamp: number;
@@ -314,6 +322,7 @@ export interface IBFTABacktestV2Response {
 
 export interface IBFTAScannerBacktestResponse {
     signals: IBFTAScannerSignal[];
+    validation_data: IBFTAValidationData[];
     orders: IBFTAOrder[];
 }
 

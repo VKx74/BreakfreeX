@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTScannerBacktestAlgoParameters, IBFTAScannerBacktestResponse, IBFTAScannerSignal } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTScannerBacktestAlgoParameters, IBFTAScannerBacktestResponse, IBFTAScannerSignal, IBFTAValidationData } from '@app/services/algo.service';
 import { AlertService } from '@alert/services/alert.service';
 
 @Component({
@@ -30,6 +30,8 @@ export class ScannerStrategyBacktestComponent {
     public global_slow: number = 0.05;
     public local_fast: number = 1.2;
     public local_slow: number = 0.6;
+    public min_threshold: number = 0.5;
+    public validation_url: string = "";
     public singlePosition: boolean = true;
     public type: string = this.availableType[0];
 
@@ -90,7 +92,9 @@ export class ScannerStrategyBacktestComponent {
             global_fast: this.global_fast,
             global_slow: this.global_slow,
             local_fast: this.local_fast,
-            local_slow: this.local_slow
+            local_slow: this.local_slow,
+            min_threshold: this.min_threshold,
+            validation_url: this.validation_url
         };
 
         if (!this.validateInputParameters(backtestParameters)) {
@@ -181,8 +185,13 @@ export class ScannerStrategyBacktestComponent {
             shapes.push(entryLine3);
 
             let description = this.getDescription(signal.timestamp, groupedOrders, pricePrecision);
+            let validationData = this.getValidationByTimestamp(signal.timestamp, backtestResults.validation_data);
             description += "\n----------- \n";
             description += `Trend: ${signal.data.trade.trend};`;
+            description += "\n----------- \n";
+            description += `Good Trade: ${validationData.good_trade} \n`;
+            description += `Bad Trade: ${validationData.bad_trade} \n`;
+
 
             backArea.tooltip.text = description;
         }
@@ -430,7 +439,7 @@ export class ScannerStrategyBacktestComponent {
             "Single Position", "Fast Local", "Slow Local", "Local Trend",
             "Fast Global", "Slow Global", "Global Trend", "Order Status", "PNL", 
             "RTD Glob Fast", "RTD Glob Slow", "RTD Loc Fast", "RTD Loc Slow", "RTD Glob Sp", "RTD Loc Sp", "RTD Glob Avg Sp(%)", "RTD Loc Avg Sp(%)",
-            "EE", "EE1", "EE2", "EE3", "FE", "FE1", "FE2", "FE3", "ZE", "ZE1", "ZE2", "ZE3", "M18", "M28", "P18", "P28"
+            "EE", "EE1", "EE2", "EE3", "FE", "FE1", "FE2", "FE3", "ZE", "ZE1", "ZE2", "ZE3", "M18", "M28", "P18", "P28", "Good Trade Prob", "Bad Trade Prob"
         ]);
 
         for (const order of orders) {
@@ -445,6 +454,7 @@ export class ScannerStrategyBacktestComponent {
             }
 
             const signalData = this.getSignalByOrder(order.open_timestamp, backtestResults.signals);
+            const validationData = this.getValidationByTimestamp(order.open_timestamp, backtestResults.validation_data);
 
             res.push([`${count}`,
             `${new Date(order.open_timestamp * 1000).toUTCString().replace(",", "")}`,
@@ -491,7 +501,9 @@ export class ScannerStrategyBacktestComponent {
             `${signalData.data.levels.m18}`,
             `${signalData.data.levels.m28}`,
             `${signalData.data.levels.p18}`,
-            `${signalData.data.levels.p28}`
+            `${signalData.data.levels.p28}`,
+            `${validationData.good_trade}`,
+            `${validationData.bad_trade}`
             ]);
             count++;
         }
@@ -509,6 +521,16 @@ export class ScannerStrategyBacktestComponent {
         }
 
         return {} as IBFTAScannerSignal;
+    }
+
+    protected getValidationByTimestamp(timestamp: number, signals: IBFTAValidationData[]): IBFTAValidationData {
+        for (const signal of signals) {
+            if (signal.timestamp === timestamp) {
+                return signal;
+            }
+        }
+
+        return {} as IBFTAValidationData;
     }
 
     protected getLocalTrend(backtestResults: IBFTAScannerBacktestResponse, timestamp: number) {
