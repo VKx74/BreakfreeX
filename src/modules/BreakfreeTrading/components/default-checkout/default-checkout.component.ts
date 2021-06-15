@@ -60,6 +60,14 @@ export class DefaultCheckoutComponent implements OnInit {
         this.checkout("subscription_plan_251974");
     }
 
+    checkoutPro1MNonTrial() {
+        this.checkout("subscription_plan_183584");
+    }
+
+    checkoutDiscovery1MNonTrial() {
+        this.checkout("subscription_plan_192806");
+    }
+
     checkout(subscription_id: string) {
         const redirectUrl = AppConfigService.config.apiUrls.successCheckoutRedirect;
         console.log(redirectUrl);
