@@ -264,7 +264,7 @@ const checklist: ChecklistItemDescription[] = [
             let minusScore = 0;
             if (data.FeedBrokerSpread !== null && data.FeedBrokerSpread !== undefined) {
                 value = data.FeedBrokerSpread.toFixed(2) + "%";
-                valid = data.FeedBrokerSpread < 0.2;
+                valid = data.FeedBrokerSpread < 0.05;
             }
             return {
                 name: "Price offset",
@@ -775,7 +775,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         const spread = Math.roundToDecimals(this._orderValidationChecklist.FeedBrokerSpreadValue, this.decimals);
 
         if (this._orderValidationChecklist.FeedBrokerSpread && spread &&
-            this._orderValidationChecklist.FeedBrokerSpread > 0.2 && (price || sl || tp)) {
+            this._orderValidationChecklist.FeedBrokerSpread > 0.05 && (price || sl || tp)) {
             this._dialog.open(SpreadNotificationComponent, {
                 data: {
                     spread: spread
