@@ -1,0 +1,40 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="modal-content">
+        <div class="modal-header">
+            <!-- <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button> -->
+            <h4 class="modal-title">Info</h4>
+        </div>
+        <div class="modal-body">
+            <div class="content">
+                <p>
+                    We have detected a considerable difference between our datafeed and your mapped broker instrument.
+                </p>
+
+                <p>
+                    This can result in entries and targets being hit correctly on our datafeed but will be missed on
+                    your brokerage account.
+                    Usually, this can be fixed by offsetting the orders by a few basis points to accommodate the
+                    difference, unless the contract or market is entirely different.
+                </p>
+
+                <p>
+                    We have already prepared the offset values for this order by: {{params.spread}}
+                </p>
+
+                <p>
+                    Do you wish to accept the suggested price offset?
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper flex">
+                <button class="crypto-button crypto-button_primary" (click)="accept()">
+                    {{'accept' | translate}}
+                </button>
+                <button class="crypto-button crypto-button_primary" (click)="refuse()">
+                    {{'refuse' | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

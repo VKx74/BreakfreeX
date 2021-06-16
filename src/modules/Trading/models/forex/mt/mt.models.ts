@@ -142,6 +142,8 @@ export interface MTOrderValidationChecklist {
     OrderRiskValue?: number;
     PositionRiskValue?: number;
     SpreadRiskValue?: number;
+    FeedBrokerSpread?: number;
+    FeedBrokerSpreadValue?: number;
     CorrelatedRiskValue?: number;
     cVar?: number;
     isSLReversed?: boolean;

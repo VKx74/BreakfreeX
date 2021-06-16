@@ -24,6 +24,8 @@
   "cancel": "Cancel",
   "closed": "Closed",
   "close": "Close",
+  "accept": "Accept",
+  "refuse": "Refuse",
   "submit": "Submit",
   "instrument": "Instrument",
   "timeFrame": "TimeFrame",

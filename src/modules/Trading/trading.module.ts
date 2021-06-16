@@ -72,6 +72,8 @@ import { BinanceFuturesAssetsComponent } from './components/crypto.components/bi
 import { BinanceFuturesAccountInfoComponent } from './components/crypto.components/binance-futures/account-info/binance-futures-account-info.component';
 import { BinanceFuturesOrderParametersSelectionComponent } from './components/crypto.components/binance-futures/order-parameters-selection/binance-futures-order-parameters-selection.component';
 import { DemoOrdersComponent } from './components/trade-manager/demo-broker/orders/demo-orders.component';
+import { InfoNotificationComponent } from './components/forex.components/mt/order-configurator/notifications/info/info-notification.component';
+import { SpreadNotificationComponent } from './components/forex.components/mt/order-configurator/notifications/spread/spread-notification.component';
 
 const components = [
     TradeManagerComponent,
@@ -115,7 +117,10 @@ const components = [
     BinanceFuturesAccountInfoComponent,
     BinanceFuturesOrderParametersSelectionComponent,
 
-    DemoOrdersComponent
+    DemoOrdersComponent,
+
+    InfoNotificationComponent,
+    SpreadNotificationComponent
 ];
 
 @NgModule({

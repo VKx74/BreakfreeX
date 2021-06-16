@@ -1,0 +1,24 @@
+@import "../../../../../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+    .modal-content {
+        max-width: 450px;
+    }
+    .content {
+        font-size: 12px;
+    }
+    .btns-wrapper {
+        justify-content: flex-end;
+
+        button {
+            margin-left: 20px;
+        }
+    }
+}
+
+@include themify($themes, true) {
+    .content {
+        color: themed("valueTextColor");
+    }
+}

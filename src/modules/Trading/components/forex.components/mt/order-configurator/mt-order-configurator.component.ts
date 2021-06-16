@@ -20,6 +20,19 @@ import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confi
 import { TradingHelper } from '@app/services/mt/mt.helper';
 import { TimeSpan } from '@app/helpers/timeFrame.helper';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
+import { InfoNotificationComponent } from './notifications/info/info-notification.component';
+import { SpreadNotificationComponent } from './notifications/spread/spread-notification.component';
+
+enum ChecklistItemType {
+    LocalRTD,
+    GlobalRTD,
+    Levels,
+    Leverage,
+    CorrelatedRisk,
+    Spread,
+    Stoploss,
+    PriceOffset
+}
 
 interface ChecklistItem {
     name: string;
@@ -27,6 +40,7 @@ interface ChecklistItem {
     value?: string;
     tooltip: string;
     minusScore: number;
+    type: ChecklistItemType;
 }
 
 interface ChecklistItemDescription {
@@ -74,7 +88,8 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Local Trend",
                 valid: acceptableTrend,
                 minusScore: acceptableTrend ? 0 : minusScore,
-                tooltip: tooltip
+                tooltip: tooltip,
+                type: ChecklistItemType.LocalRTD
             };
         }
     },
@@ -97,7 +112,8 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Global Trend",
                 valid: data.GlobalRTD,
                 minusScore: data.GlobalRTD ? 0 : minusScore,
-                tooltip: tooltip
+                tooltip: tooltip,
+                type: ChecklistItemType.GlobalRTD
             };
         }
     },
@@ -112,7 +128,8 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Trade Entry",
                 valid: data.Levels,
                 minusScore: data.Levels ? 0 : 2,
-                tooltip: tooltip
+                tooltip: tooltip,
+                type: ChecklistItemType.Levels
             };
         }
     },
@@ -142,7 +159,8 @@ const checklist: ChecklistItemDescription[] = [
                 valid: valid,
                 value: value,
                 minusScore: valid ? 0 : minusScore,
-                tooltip: tooltip
+                tooltip: tooltip,
+                type: ChecklistItemType.Leverage
             };
         }
     },
@@ -172,7 +190,8 @@ const checklist: ChecklistItemDescription[] = [
                 valid: valid,
                 value: value,
                 minusScore: valid ? 0 : minusScore,
-                tooltip: tooltip
+                tooltip: tooltip,
+                type: ChecklistItemType.CorrelatedRisk
             };
         }
     },
@@ -184,21 +203,14 @@ const checklist: ChecklistItemDescription[] = [
             if (data.SpreadRiskValue !== null && data.SpreadRiskValue !== undefined) {
                 value = data.SpreadRiskValue.toFixed(2) + "%";
                 valid = data.SpreadRiskValue < 0.1;
-
-                if (data.CorrelatedRiskValue > 0.2) {
-                    minusScore = 3;
-                } else if (data.CorrelatedRiskValue > 0.15) {
-                    minusScore = 2;
-                } else if (data.CorrelatedRiskValue > 0.1) {
-                    minusScore = 1;
-                }
             }
             return {
                 name: "Spread",
                 valid: valid,
                 value: value,
                 minusScore: valid ? 0 : minusScore,
-                tooltip: valid ? "Your broker has acceptable spread on this market." : "Warning! Your broker is offering you a bad spread on this market. Be very careful as this can lead to a total loss of your trading account on the wrong markets."
+                tooltip: valid ? "Your broker has acceptable spread on this market." : "Warning! Your broker is offering you a bad spread on this market. Be very careful as this can lead to a total loss of your trading account on the wrong markets.",
+                type: ChecklistItemType.Spread
             };
         }
     },
@@ -211,7 +223,8 @@ const checklist: ChecklistItemDescription[] = [
                     name: "Stoploss",
                     valid: false,
                     minusScore: 10,
-                    tooltip: "Your stoploss is on the wrong side of this trade, please pay attention."
+                    tooltip: "Your stoploss is on the wrong side of this trade, please pay attention.",
+                    type: ChecklistItemType.Stoploss
                 };
             }
 
@@ -220,7 +233,8 @@ const checklist: ChecklistItemDescription[] = [
                     name: "Stoploss",
                     valid: false,
                     minusScore: 2,
-                    tooltip: "This stoploss has a high risk of being stopped out with the current volatility of this market. Please rethink this stoploss."
+                    tooltip: "This stoploss has a high risk of being stopped out with the current volatility of this market. Please rethink this stoploss.",
+                    type: ChecklistItemType.Stoploss
                 };
             }
 
@@ -229,7 +243,8 @@ const checklist: ChecklistItemDescription[] = [
                     name: "Stoploss",
                     valid: false,
                     minusScore: 2,
-                    tooltip: "Stoploss unreasonable far from the entry price."
+                    tooltip: "Stoploss unreasonable far from the entry price.",
+                    type: ChecklistItemType.Stoploss
                 };
             }
 
@@ -237,11 +252,33 @@ const checklist: ChecklistItemDescription[] = [
                 name: "Stoploss",
                 valid: isValid,
                 minusScore: isValid ? 0 : 3,
-                tooltip: isValid ? "You have set a reasonable stoploss for the trade. A basic but very important discipline for successful trading, when it comes to humans." : "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. "
+                tooltip: isValid ? "You have set a reasonable stoploss for the trade. A basic but very important discipline for successful trading, when it comes to humans." : "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. ",
+                type: ChecklistItemType.Stoploss
+            };
+        }
+    },
+    {
+        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
+            let value = "";
+            let valid = null;
+            let minusScore = 0;
+            if (data.FeedBrokerSpread !== null && data.FeedBrokerSpread !== undefined) {
+                value = data.FeedBrokerSpread.toFixed(2) + "%";
+                valid = data.FeedBrokerSpread < 0.2;
+            }
+            return {
+                name: "Price offset",
+                valid: valid,
+                value: value,
+                minusScore: valid ? 0 : minusScore,
+                tooltip: valid ? "This market prices is aligned with datafeed." : "Warning! This market prices is not aligned with datafeed.",
+                type: ChecklistItemType.PriceOffset
             };
         }
     }
 ];
+
+
 
 export class MTOrderConfig {
     instrument: IInstrument;
@@ -340,7 +377,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this._selectedTime = value;
         }
     }
-    
+
     get selectedTime(): string {
         return this._selectedTime;
     }
@@ -559,6 +596,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 this._raiseCalculateChecklist();
             }, 3000);
         }
+
+        this._validateIsSymbolCorrect();
     }
 
     private _calculateChecklist() {
@@ -604,12 +643,12 @@ export class MTOrderConfiguratorComponent implements OnInit {
                         title: 'Overleverage detected',
                         message: `Warning! You are about to enter a terrible trade. You might be lucky to win this trade, but you will never be successful in the long run like this. Place trade?`,
                         onConfirm: () => {
-                            this._placeOrder();
+                            this._validateIsSymbolOffset();
                         }
                     }
                 });
             } else {
-                this._placeOrder();
+                this._validateIsSymbolOffset();
             }
         }
     }
@@ -717,4 +756,59 @@ export class MTOrderConfiguratorComponent implements OnInit {
             clearTimeout(this._recalculateTimeout);
         }
     }
+
+    private _validateIsSymbolCorrect() {
+        if (this._orderValidationChecklist.FeedBrokerSpread > 3) {
+            this._dialog.open(InfoNotificationComponent, {
+                data: {
+                    title: "Warning",
+                    data: "We have detected a large difference between our datafeed and your mapped broker instrument. Please make sure it's the correct instrument."
+                }
+            });
+        }
+    }
+
+    private _validateIsSymbolOffset() {
+        const price = this.config.type !== OrderTypes.Market ? Number(this.config.price) : 0;
+        const sl = this.config.sl ? Number(this.config.sl) : 0;
+        const tp = this.config.tp ? Number(this.config.tp) : 0;
+        const spread = Math.roundToDecimals(this._orderValidationChecklist.FeedBrokerSpreadValue, this.decimals);
+
+        if (this._orderValidationChecklist.FeedBrokerSpread && spread &&
+            this._orderValidationChecklist.FeedBrokerSpread > 0.2 && (price || sl || tp)) {
+            this._dialog.open(SpreadNotificationComponent, {
+                data: {
+                    spread: spread
+                }
+            }).afterClosed().subscribe((res) => {
+                if (res === undefined || res === null) {
+                    return;
+                }
+                if (res) {
+                    this._adjustOffset();
+                }
+                this._placeOrder();
+            });
+        } else {
+            this._placeOrder();
+        }
+    }
+
+    private _adjustOffset() {
+        const spread = Math.roundToDecimals(this._orderValidationChecklist.FeedBrokerSpreadValue, this.decimals);
+        if (!spread || Number.isNaN(spread)) {
+            return;
+        }
+
+        if (this.config.type !== OrderTypes.Market && this.config.price) {
+            this.config.price += spread;
+        }
+        if (this.config.sl) {
+            this.config.sl += spread;
+        }
+        if (this.config.tp) {
+            this.config.tp += spread;
+        }
+    }
+
 }

@@ -510,6 +510,12 @@ export class MTTradeRatingService {
 
             if (bid && ask) {
                 result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
+
+                if (marketInfo.last_price) {
+                    let avg = (bid + ask) / 2;
+                    result.FeedBrokerSpread = Math.abs(avg - marketInfo.last_price) / marketInfo.last_price * 100;
+                    result.FeedBrokerSpreadValue = avg - marketInfo.last_price;
+                }
             }
 
             result.cVar = symbolTradeInfo.Data.CVaR;
