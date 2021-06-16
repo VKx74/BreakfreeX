@@ -191,7 +191,7 @@ export abstract class MTBroker implements IMTBroker {
         };
 
         if (!this.allowEmptySL && !order.SL) {
-            return throwError("SL can`t be empty.");
+            return throwError("You must put a stoploss for this trade.");
         }
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
@@ -237,7 +237,7 @@ export abstract class MTBroker implements IMTBroker {
         };
 
         if (!this.allowEmptySL && !order.SL) {
-            return throwError("SL can`t be empty.");
+            return throwError("You must put a stoploss for this trade.");
         }
         
         const orderData = this.getOrderById(order.Ticket);
@@ -288,7 +288,7 @@ export abstract class MTBroker implements IMTBroker {
         };
 
         if (!this.allowEmptySL && !order.SL) {
-            return throwError("SL can`t be empty.");
+            return throwError("You must put a stoploss for this trade.");
         }
 
         return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
@@ -801,13 +801,13 @@ export abstract class MTBroker implements IMTBroker {
                     console.log("Reconnected");
                     this.ws.setConnectivity(true);
                 } else {
-                    console.error("Failed to Reconnected");
+                    console.error("Failed to Reconnect");
                 }
             }, (error) => {
-                console.error("Failed to Reconnected");
+                console.error("Failed to Reconnect");
             });
         }, (error) => {
-            console.error("Failed to Reconnected[Re-login]");
+            console.error("Failed to Reconnect[Re-login]");
         });
 
     }
@@ -1464,13 +1464,13 @@ export abstract class MTBroker implements IMTBroker {
 
         return this.calculateOrderChecklist(order).pipe(map((validationResult: MTOrderValidationChecklist) => {
             if (!validationResult) {
-                throw new Error("Failed to process order validations");
+                throw new Error("Failed to confirm the safety and exposure for this position");
             }
             let risk = validationResult.PositionRiskValue;
             if (existingOrder) {
                 risk -= existingOrder.RiskPercentage || 0;
             }
-            return risk > this.maxRisk ? `Leverage too high for position. Allowed max Leverage ${this.maxRisk}%` : null;
+            return risk > this.maxRisk ? `You are taking too much exposure for this position. Your max allowed exposure for this position is ${this.maxRisk}%` : null;
         }));
     }
 }

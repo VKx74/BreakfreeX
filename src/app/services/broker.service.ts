@@ -105,7 +105,7 @@ export class BrokerService {
         } else {
             return of({
                 result: false,
-                msg: 'You have no connected broker'
+                msg: 'Right now you are not connected to any broker.'
             });
         }
     }
@@ -114,7 +114,7 @@ export class BrokerService {
         if (!this.isTradingAllowed) {
             return of({
                 result: false,
-                msg: 'Trading not allowed'
+                msg: 'This broker has currently disabled trading on this account. Contact the broker directly.'
             });
         }
 
@@ -144,7 +144,7 @@ export class BrokerService {
         } else {
             return of({
                 result: false,
-                msg: 'You already have connected broker'
+                msg: 'You are already connected to a broker.'
             });
         }
     }
@@ -292,13 +292,13 @@ export class BrokerService {
             }
             return of({
                 result: false,
-                msg: "Failed to connect default broker account"
+                msg: "Failed to connect to the default broker account"
             });
         }), catchError((error) => {
             console.log(error);
             return of({
                 result: false,
-                msg: "Failed to connect default broker account"
+                msg: "Failed to connect to the default broker account"
             });
         }));
     }
@@ -397,7 +397,7 @@ export class BrokerService {
         if (!this.isTradingAllowed) {
             return of({
                 result: false,
-                msg: 'Trading not allowed'
+                msg: 'This broker has currently disabled trading on this account. Contact the broker directly.'
             });
         }
         return new Observable<ActionResult>(subscriber => {
@@ -471,7 +471,7 @@ export class BrokerService {
         if (!account) {
             return of({
                 result: false,
-                msg: "Trading account not exist, please connect BFT support team to create account."
+                msg: "Currently, no trading account exists. Please reach out to our support team for trading account creation. "
             });
         }
 
