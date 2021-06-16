@@ -271,7 +271,7 @@ const checklist: ChecklistItemDescription[] = [
                 valid: valid,
                 value: value,
                 minusScore: valid ? 0 : minusScore,
-                tooltip: valid ? "This market prices is aligned with datafeed." : "Warning! This market prices is not aligned with datafeed.",
+                tooltip: valid ? "The navigator datafeed and the connected broker feed for this market are aligned within an acceptable price range." : "Warning! The navigator datafeed and the connected broker feed for this market are not aligned within an acceptable price range. Price offset required.",
                 type: ChecklistItemType.PriceOffset
             };
         }
