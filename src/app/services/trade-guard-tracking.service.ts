@@ -30,9 +30,9 @@ export class TradeGuardTrackingService {
 
         if (tradeGuardItems) {
             if (tradeGuardItems.Score <= 5 && tradeGuardItems.Score < this._score) {
-                this._notificationsService.show("I have found some major issues with your trades, please open the TradeGuard Dashboard and review now.", "Trade Guard", NotificationType.Info);
+                this._notificationsService.show("I have found some major issues with your trades, please open the TradeGuard Dashboard and review now.", "TradeGuard", NotificationType.Info);
             } else if (tradeGuardItems.Items.length > this._count) {
-                this._notificationsService.show("I have some ideas to improve your current trades, check out the TradeGuard Dashboard now.", "Trade Guard", NotificationType.Info);
+                this._notificationsService.show("I have some ideas to improve your current trades, check out the TradeGuard Dashboard now.", "TradeGuard", NotificationType.Info);
             }
             this._score = tradeGuardItems.Score;
             this._count = tradeGuardItems.Items.length;
