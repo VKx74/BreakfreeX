@@ -159,6 +159,18 @@ export abstract class MTBroker implements IMTBroker {
         return this._maxRisk;
     }
 
+    public get account(): string {
+        if (this._accountInfo && this._accountInfo.Account) {
+            return this._accountInfo.Account;
+        }
+
+        if (this._initData && this._initData.Login) {
+            return this._initData.Login.toString();
+        }
+
+        return null;
+    }
+
     public set allowEmptySL(value: boolean) {
         this._allowEmptySL = value;
     }

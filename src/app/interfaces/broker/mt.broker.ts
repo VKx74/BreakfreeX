@@ -18,6 +18,7 @@ export interface IMT5Broker extends IBroker {
     positions: MTPosition[];
     currencyRisks: MTCurrencyRisk[];
     accountInfo: MTTradingAccount;
+    account: string;
 
     placeOrder(order: MTPlaceOrder): Observable<ActionResult>;
     editOrder(order: MTEditOrder): Observable<ActionResult>;

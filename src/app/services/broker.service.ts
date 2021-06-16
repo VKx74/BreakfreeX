@@ -441,20 +441,21 @@ export class BrokerService {
     }
 
     private _setBrokerRestrictions() {
+        const mtBroker = this.activeBroker as MTBroker;
+        mtBroker.allowEmptySL = true;
+        mtBroker.maxRisk = null;
+
         if (!(this.activeBroker instanceof BFTDemoBroker) &&
             !(this.activeBroker instanceof BFTFundingDemoBroker) &&
             !(this.activeBroker instanceof BFTFundingLiveBroker)) {
             return;
         }
 
-        const isLive = this.activeBroker instanceof BFTFundingLiveBroker;
-        const account = this._defaultAccounts.find(_ => _.isLive === isLive);
+        const account = this._defaultAccounts.find(_ => _.id === mtBroker.account);
 
         if (!account) {
             return;
         }
-
-        const mtBroker = this.activeBroker as MTBroker;
 
         if (account.riskLevel === 1) {
             mtBroker.allowEmptySL = false;
