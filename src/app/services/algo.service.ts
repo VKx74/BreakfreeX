@@ -239,6 +239,12 @@ export interface IBFTAMarketInfo {
     local_trend_spread: number;
 }
 
+
+export interface IBFTAMarketInfoData {
+    data: IBFTAMarketInfo;
+    instrument: IInstrument;
+}
+
 export interface IBFTAAlgoResponseV2 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
@@ -507,9 +513,9 @@ export class AlgoService {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd_guest`, data).pipe(map(this._decrypt));
     }
 
-    getMarketInfo(instrument: IInstrument | string, granularity: number): Observable<IBFTAMarketInfo> {
+    getMarketInfo(instrument: IInstrument | string, granularity: number): Observable<IBFTAMarketInfoData> {
         if (typeof (instrument) === 'string') {
-            return new Observable<IBFTAMarketInfo>((observer: Observer<IBFTAMarketInfo>) => {
+            return new Observable<IBFTAMarketInfoData>((observer: Observer<IBFTAMarketInfoData>) => {
                 this._instrumentService.instrumentToDatafeedFormat(instrument).subscribe((mappedInstrument: IInstrument) => {
                     if (!mappedInstrument) {
                         observer.next(null);
@@ -519,7 +525,10 @@ export class AlgoService {
                         instrument: mappedInstrument,
                         granularity: granularity
                     }).pipe(map(this._decrypt)).subscribe((res) => {
-                        observer.next(res);
+                        observer.next({
+                            data: res,
+                            instrument: mappedInstrument
+                        });
                     });
                 }, (error) => {
                     observer.next(null);

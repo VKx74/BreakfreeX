@@ -1,4 +1,4 @@
-import { Inject } from '@angular/core';
+import { Inject, Injector } from '@angular/core';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { MTConnectionData, MTTradingAccount } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult } from 'modules/Trading/models/models';
@@ -15,8 +15,8 @@ export class MT5Broker extends MTBroker {
         return EBrokerInstance.MT5;
     }
 
-    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-        super(_ws, _algoService, _instrumentMappingService);
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService, protected _injector: Injector) {
+        super(_ws, _algoService, _instrumentMappingService, _injector);
     }
 
     saveState(): Observable<IBrokerState<any>> {
@@ -46,8 +46,8 @@ export class BFTDemoBroker extends MT5Broker {
         };
     }
     
-    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-        super(_ws, _algoService, _instrumentMappingService);
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService, protected _injector: Injector) {
+        super(_ws, _algoService, _instrumentMappingService, _injector);
     }
 }
 
@@ -59,8 +59,8 @@ export class BFTFundingDemoBroker extends MT5Broker {
         };
     }
     
-    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-        super(_ws, _algoService, _instrumentMappingService);
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService, protected _injector: Injector) {
+        super(_ws, _algoService, _instrumentMappingService, _injector);
     }
 }
 
@@ -72,7 +72,7 @@ export class BFTFundingLiveBroker extends MT5Broker {
         };
     }
     
-    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-        super(_ws, _algoService, _instrumentMappingService);
+    constructor(@Inject(MT5SocketService) protected _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService, protected _injector: Injector) {
+        super(_ws, _algoService, _instrumentMappingService, _injector);
     }
 }

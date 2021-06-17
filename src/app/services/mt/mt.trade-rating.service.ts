@@ -4,8 +4,9 @@ import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRec
 import { OrderSide, OrderTypes, RiskClass, RiskType } from "modules/Trading/models/models";
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import { AlgoService, IBFTAMarketInfo, IBFTATrend } from "../algo.service";
+import { AlgoService, IBFTAMarketInfo, IBFTAMarketInfoData, IBFTATrend } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
+import { RealtimeService } from "../realtime.service";
 import { MTBroker } from "./mt.broker";
 import { TradingHelper } from "./mt.helper";
 
@@ -14,13 +15,19 @@ interface CacheItem<T> {
     Time: number;
 }
 
+interface PriceSpreadCache {
+    spread: number;
+    spreadValue: number;
+}
+
 export class MTTradeRatingService {
     protected _symbolTradeInfoCache: { [symbol: string]: CacheItem<MTSymbolTradeInfoResponse>; } = {};
-    protected _marketInfoCache: { [symbol: string]: CacheItem<IBFTAMarketInfo>; } = {};
+    protected _marketInfoCache: { [symbol: string]: CacheItem<IBFTAMarketInfoData>; } = {};
+    protected _priceSpreadCache: { [symbol: string]: CacheItem<PriceSpreadCache>; } = {};
     protected _marketInfoLoading: { [symbol: string]: boolean; } = {};
     protected _timeInterval: any;
 
-    constructor(protected mtBroker: MTBroker, protected algoService: AlgoService, protected mappingService: InstrumentMappingService) {
+    constructor(protected mtBroker: MTBroker, protected algoService: AlgoService, protected mappingService: InstrumentMappingService, protected _realtimeService: RealtimeService) {
         this._timeInterval = setInterval(() => {
             const dtNow = new Date().getTime();
 
@@ -38,6 +45,15 @@ export class MTTradeRatingService {
                     const minDiff = (dtNow - this._symbolTradeInfoCache[key].Time) / 1000 / 60;
                     if (minDiff > 10) {
                         delete this._symbolTradeInfoCache[key];
+                    }
+                }
+            }
+
+            for (const key of Object.keys(this._priceSpreadCache)) {
+                if (this._priceSpreadCache[key] && this._priceSpreadCache[key].Time) {
+                    const minDiff = (dtNow - this._priceSpreadCache[key].Time) / 1000 / 60;
+                    if (minDiff > 10) {
+                        delete this._priceSpreadCache[key];
                     }
                 }
             }
@@ -212,8 +228,8 @@ export class MTTradeRatingService {
                     });
                 }
             }
-        } 
-        
+        }
+
         if (res.IsRTDOverhit === true) {
             if (res.Timeframe < 60 * 60 * 24) {
                 res.FailedChecks.push({
@@ -329,19 +345,20 @@ export class MTTradeRatingService {
             };
         }
 
-        const globalRTDValue = marketInfo.global_trend;
-        const localRTDValue = marketInfo.local_trend;
-        const localRTDSpread = marketInfo.local_trend_spread;
-        const globalRTDSpread = marketInfo.global_trend_spread;
-        const isOverhit = marketInfo.is_overhit;
-        const globalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.global_trend_spread);
-        const localRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.local_trend_spread);
+        const marketInfoData = marketInfo.data;
+        const globalRTDValue = marketInfoData.global_trend;
+        const localRTDValue = marketInfoData.local_trend;
+        const localRTDSpread = marketInfoData.local_trend_spread;
+        const globalRTDSpread = marketInfoData.global_trend_spread;
+        const isOverhit = marketInfoData.is_overhit;
+        const globalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.global_trend_spread);
+        const localRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.local_trend_spread);
 
-        let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
-        let localRTD = marketInfo.local_trend === IBFTATrend.Up;
+        let globalRTD = marketInfoData.global_trend === IBFTATrend.Up;
+        let localRTD = marketInfoData.local_trend === IBFTATrend.Up;
         if (order.Side === OrderSide.Sell) {
-            globalRTD = marketInfo.global_trend === IBFTATrend.Down;
-            localRTD = marketInfo.local_trend === IBFTATrend.Down;
+            globalRTD = marketInfoData.global_trend === IBFTATrend.Down;
+            localRTD = marketInfoData.local_trend === IBFTATrend.Down;
         }
 
         let res: MTOrderRecommendation = {
@@ -360,8 +377,8 @@ export class MTTradeRatingService {
         };
 
         return res;
-    } 
-    
+    }
+
     private _createPositionsRecommendationBase(position: MTPosition): MTOrderRecommendation {
         const symbol = position.Symbol;
         let timeframe = null;
@@ -369,7 +386,7 @@ export class MTTradeRatingService {
             if (marketOrder.Symbol !== position.Symbol) {
                 continue;
             }
-            
+
             timeframe = TradingHelper.getTradeTimeframeFromTechnicalComment(marketOrder.Comment);
             if (timeframe) {
                 break;
@@ -396,20 +413,20 @@ export class MTTradeRatingService {
                 Type: MTOrderRecommendationType.Active
             };
         }
+        const marketInfoData = marketInfo.data;
+        const globalRTDValue = marketInfoData.global_trend;
+        const localRTDValue = marketInfoData.local_trend;
+        const localRTDSpread = marketInfoData.local_trend_spread;
+        const globalRTDSpread = marketInfoData.global_trend_spread;
+        const isOverhit = marketInfoData.is_overhit;
+        const globalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.global_trend_spread);
+        const localRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.local_trend_spread);
 
-        const globalRTDValue = marketInfo.global_trend;
-        const localRTDValue = marketInfo.local_trend;
-        const localRTDSpread = marketInfo.local_trend_spread;
-        const globalRTDSpread = marketInfo.global_trend_spread;
-        const isOverhit = marketInfo.is_overhit;
-        const globalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.global_trend_spread);
-        const localRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.local_trend_spread);
-
-        let globalRTD = marketInfo.global_trend === IBFTATrend.Up;
-        let localRTD = marketInfo.local_trend === IBFTATrend.Up;
+        let globalRTD = marketInfoData.global_trend === IBFTATrend.Up;
+        let localRTD = marketInfoData.local_trend === IBFTATrend.Up;
         if (position.Side === OrderSide.Sell) {
-            globalRTD = marketInfo.global_trend === IBFTATrend.Down;
-            localRTD = marketInfo.local_trend === IBFTATrend.Down;
+            globalRTD = marketInfoData.global_trend === IBFTATrend.Down;
+            localRTD = marketInfoData.local_trend === IBFTATrend.Down;
         }
 
         let res: MTOrderRecommendation = {
@@ -430,7 +447,7 @@ export class MTTradeRatingService {
         return res;
     }
 
-    protected _getOrLoadMarketInfo(symbol: string, timeframe: number): IBFTAMarketInfo {
+    protected _getOrLoadMarketInfo(symbol: string, timeframe: number): IBFTAMarketInfoData {
         const key = this._getMarketInfoKey(symbol, timeframe);
         if (!this._marketInfoCache[key]) {
             if (!this._marketInfoLoading[key]) {
@@ -445,7 +462,7 @@ export class MTTradeRatingService {
         return this._marketInfoCache[key].Data;
     }
 
-    protected _calculateOrderChecklist(marketInfo: IBFTAMarketInfo, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
+    protected _calculateOrderChecklist(marketInfo: IBFTAMarketInfoData, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
         let result: MTOrderValidationChecklist = {};
 
         if (parameters.SL && parameters.Price) {
@@ -458,39 +475,40 @@ export class MTTradeRatingService {
         }
 
         if (marketInfo) {
-            let allowedDiff = Math.abs(marketInfo.natural - marketInfo.support) / 3;
+            const marketInfoData = marketInfo.data;
+            let allowedDiff = Math.abs(marketInfoData.natural - marketInfoData.support) / 3;
             let minGranularity = TimeSpan.MILLISECONDS_IN_MINUTE / 1000 * 15;
-            let price = parameters.Price ? parameters.Price : marketInfo.last_price;
+            let price = parameters.Price ? parameters.Price : marketInfoData.last_price;
 
             if (parameters.Side === OrderSide.Buy) {
-                result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Up;
-                result.LocalRTD = marketInfo.local_trend === IBFTATrend.Up;
+                result.GlobalRTD = marketInfoData.global_trend === IBFTATrend.Up;
+                result.LocalRTD = marketInfoData.local_trend === IBFTATrend.Up;
 
-                let priceToTargetDiff = Math.abs(marketInfo.resistance - price);
-                if (parameters.Timeframe >= minGranularity && (price >= marketInfo.resistance || allowedDiff > priceToTargetDiff)) {
+                let priceToTargetDiff = Math.abs(marketInfoData.resistance - price);
+                if (parameters.Timeframe >= minGranularity && (price >= marketInfoData.resistance || allowedDiff > priceToTargetDiff)) {
                     result.Levels = false;
                 } else {
                     result.Levels = true;
                 }
             } else {
-                result.GlobalRTD = marketInfo.global_trend === IBFTATrend.Down;
-                result.LocalRTD = marketInfo.local_trend === IBFTATrend.Down;
+                result.GlobalRTD = marketInfoData.global_trend === IBFTATrend.Down;
+                result.LocalRTD = marketInfoData.local_trend === IBFTATrend.Down;
 
-                let priceToTargetDiff = Math.abs(marketInfo.support - price);
-                if (parameters.Timeframe >= minGranularity && (price <= marketInfo.support || allowedDiff > priceToTargetDiff)) {
+                let priceToTargetDiff = Math.abs(marketInfoData.support - price);
+                if (parameters.Timeframe >= minGranularity && (price <= marketInfoData.support || allowedDiff > priceToTargetDiff)) {
                     result.Levels = false;
                 } else {
                     result.Levels = true;
                 }
             }
 
-            result.GlobalRTDValue = marketInfo.global_trend;
-            result.LocalRTDValue = marketInfo.local_trend;
-            result.LocalRTDSpread = marketInfo.local_trend_spread;
-            result.GlobalRTDSpread = marketInfo.global_trend_spread;
+            result.GlobalRTDValue = marketInfoData.global_trend;
+            result.LocalRTDValue = marketInfoData.local_trend;
+            result.LocalRTDSpread = marketInfoData.local_trend_spread;
+            result.GlobalRTDSpread = marketInfoData.global_trend_spread;
 
-            result.GlobalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.global_trend_spread);
-            result.LocalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfo.local_trend_spread);
+            result.GlobalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.global_trend_spread);
+            result.LocalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.local_trend_spread);
         }
 
         if (symbolTradeInfo && symbolTradeInfo.Data) {
@@ -510,12 +528,41 @@ export class MTTradeRatingService {
 
             if (bid && ask) {
                 result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
+                if (marketInfo.instrument) {
+                    const key = `${marketInfo.instrument.id}${marketInfo.instrument.datafeed}`;
+                    const priceSpreadCache = this._tryGetPriceSpreadFromCache(key);
 
-                if (marketInfo.last_price) {
-                    let avg = (bid + ask) / 2;
-                    result.FeedBrokerSpread = Math.abs(avg - marketInfo.last_price) / marketInfo.last_price * 100;
-                    result.FeedBrokerSpreadValue = avg - marketInfo.last_price;
+                    if (priceSpreadCache) {
+                        result.FeedBrokerSpread = priceSpreadCache.spread;
+                        result.FeedBrokerSpreadValue = priceSpreadCache.spreadValue;
+                    } else {
+                        let lastTick = this._realtimeService.getLastTick(marketInfo.instrument);
+                        let lastPrice = lastTick ? lastTick.price : null;
+                        if (!lastPrice) {
+
+                            if (parameters.LastPrice) {
+                                lastPrice = parameters.LastPrice;
+                            } else {
+                                lastPrice = marketInfo.data.last_price;
+                            }
+                        }
+
+                        if (lastPrice) {
+                            let avg = (bid + ask) / 2;
+                            let spread = Math.abs(avg - lastPrice) / lastPrice * 100;
+                            let spreadValue = avg - lastPrice;
+
+                            result.FeedBrokerSpread = spread;
+                            result.FeedBrokerSpreadValue = spreadValue;
+
+                            this._tryAddPriceSpreadToCache(key, {
+                                spread: spread,
+                                spreadValue: spreadValue
+                            });
+                        }
+                    }
                 }
+
             }
 
             result.cVar = symbolTradeInfo.Data.CVaR;
@@ -540,7 +587,7 @@ export class MTTradeRatingService {
                 }
 
                 let slToPriceDiff = Math.abs(parameters.SL - parameters.Price);
-                
+
                 if (slToPriceDiff <= allowedMinDiff) {
                     result.isSLToClose = true;
                 }
@@ -577,7 +624,22 @@ export class MTTradeRatingService {
         };
     }
 
-    protected _tryGetMarketInfoFromCache(instrument: string, timeframe: number): Observable<IBFTAMarketInfo> {
+    protected _tryGetPriceSpreadFromCache(instrument: string): PriceSpreadCache {
+        if (this._priceSpreadCache[instrument]) {
+            return this._priceSpreadCache[instrument].Data;
+        }
+
+        return null;
+    }
+
+    protected _tryAddPriceSpreadToCache(instrument: string, data: PriceSpreadCache) {
+        this._priceSpreadCache[instrument] = {
+            Data: data,
+            Time: new Date().getTime()
+        };
+    }
+
+    protected _tryGetMarketInfoFromCache(instrument: string, timeframe: number): Observable<IBFTAMarketInfoData> {
         const key = this._getMarketInfoKey(instrument, timeframe);
         if (this._marketInfoCache[key]) {
             return of(this._marketInfoCache[key].Data);
@@ -586,7 +648,7 @@ export class MTTradeRatingService {
         return null;
     }
 
-    protected _tryAddMarketInfoToCache(instrument: string, timeframe: number, data: IBFTAMarketInfo) {
+    protected _tryAddMarketInfoToCache(instrument: string, timeframe: number, data: IBFTAMarketInfoData) {
         const key = this._getMarketInfoKey(instrument, timeframe);
         this._marketInfoCache[key] = {
             Data: data,

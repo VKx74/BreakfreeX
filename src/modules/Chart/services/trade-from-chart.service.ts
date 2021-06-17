@@ -329,6 +329,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(price, pricePrecision);
             orderConfig.timeframe = this._chart.timeInterval / 1000;
+            orderConfig.lastPrice = this._getLastPrice();
             this.showOrderModal(orderConfig, null, true);
         }
     }
@@ -1019,6 +1020,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
         orderConfig.amount = params.size;
         orderConfig.timeframe = params.timeframe;
+        orderConfig.lastPrice = this._getLastPrice();
         orderConfig.placedFrom = params.placedFrom;
         orderConfig.tradeType = params.tradeType;
         orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
@@ -1091,5 +1093,13 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         return true;
+    }
+
+    private _getLastPrice(): number {
+        if (!this._chart || !this._chart.dataContext) {
+            return null;
+        }
+
+        return this._chart.dataContext.barDataRows().close.lastValue as any;
     }
 }

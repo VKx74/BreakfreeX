@@ -67,8 +67,8 @@ export class BrokerService {
         return this._identityService.isAuthorizedCustomer;
     }
 
-    private _activeBroker$ = new BehaviorSubject<IBroker>(null);
-    activeBroker$ = this._activeBroker$.asObservable();
+    private _activeBroker$ = new Subject();
+    activeBroker$ = this._activeBroker$;
 
     private _subscriptionOnBrokerStateChange: Subscription;
     private _onNotificationSubject: Subscription;

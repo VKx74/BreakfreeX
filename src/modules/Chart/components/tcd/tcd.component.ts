@@ -36,6 +36,9 @@ import IChartInstrument = TradingChartDesigner.IInstrument;
 import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
 import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
 import { HighlightService } from "@app/services/highlight/highlight.service";
+import { BrokerService } from "@app/services/broker.service";
+import { Subscription } from "rxjs";
+import { MTBroker } from "@app/services/mt/mt.broker";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -73,46 +76,49 @@ interface ReplayWaiter {
     ]
 })
 export class TcdComponent extends BaseLayoutItemComponent {
-    
+
     static componentName = 'Trading Chart Designer';
     static previewImgClass = 'crypto-icon-chart';
 
     private replayModeTimers: any[] = [];
     private replayWaiter: ReplayWaiter;
+    private brokerStateChangedSubscription: Subscription;
+    private handleBrokerConnectTimeout: any;
 
     blur: boolean = false;
     chart: TradingChartDesigner.Chart;
 
-    @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
+    @ViewChild('chartContainer', { static: false }) chartContainer: ElementRef;
 
     constructor(@Inject(GoldenLayoutItemState) protected _state: ITcdComponentState,
-                private _datafeed: DataFeedBase,
-                private _themeService: ThemeService,
-                private _localizationService: LocalizationService,
-                private _educationalTipsService: EducationalTipsService,
-                private _translateService: TranslateService,
-                private _timeZoneManager: TimeZoneManager,
-                private _templateDataProviderService: TemplatesDataProviderService,
-                private _instrumentService: InstrumentService,
-                private _calendarEventsDatafeed: CalendarEventsDatafeed,
-                private _alertsService: AlertsService,
-                private _indicatorRestrictionService: IndicatorRestrictionService,
-                private _indicatorDataProviderService: IndicatorDataProviderService,
-                private _tradingFromChartHandler: TradeFromChartService,
-                private _alertingFromChartService: AlertingFromChartService,
-                private _chartTrackerService: ChartTrackerService,
-                private _store: Store<AppState>,
-                private _identity: IdentityService,
-                private _demoBroker: SignalsDemoBrokerService,
-                private _dialog: MatDialog,
-                private _highlightService: HighlightService,
-                protected _injector: Injector) {
+        private _datafeed: DataFeedBase,
+        private _themeService: ThemeService,
+        private _localizationService: LocalizationService,
+        private _educationalTipsService: EducationalTipsService,
+        private _translateService: TranslateService,
+        private _timeZoneManager: TimeZoneManager,
+        private _templateDataProviderService: TemplatesDataProviderService,
+        private _instrumentService: InstrumentService,
+        private _calendarEventsDatafeed: CalendarEventsDatafeed,
+        private _alertsService: AlertsService,
+        private _indicatorRestrictionService: IndicatorRestrictionService,
+        private _indicatorDataProviderService: IndicatorDataProviderService,
+        private _tradingFromChartHandler: TradeFromChartService,
+        private _alertingFromChartService: AlertingFromChartService,
+        private _chartTrackerService: ChartTrackerService,
+        private _store: Store<AppState>,
+        private _identity: IdentityService,
+        private _demoBroker: SignalsDemoBrokerService,
+        private _dialog: MatDialog,
+        private _highlightService: HighlightService,
+        private _brokerService: BrokerService,
+        protected _injector: Injector) {
         super(_injector);
         if (this._identity.isGuestMode) {
             ReplayModeSync.IsChartReplay = true;
         }
     }
-    
+
     ngOnInit() {
         TradingChartDesigner.UserAgent.directory.htmlDialogs = '../node_modules/trading-chart-designer/htmldialogs/';
         TradingChartDesigner.UserAgent.directory.localization = '../node_modules/trading-chart-designer/localization/';
@@ -161,7 +167,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
     init(state?: ITcdComponentState) {
         let theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
         // const instrumentsNeeded = !state || !state.instrument;
-        
+
         if (state && state.chartState) {
             if (state.chartState.version !== 8) {
                 console.log("Set default theme");
@@ -252,7 +258,35 @@ export class TcdComponent extends BaseLayoutItemComponent {
             }
 
             this._chartTrackerService.addChart(this.chart);
+
+            this.brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
+                if (!(this._brokerService.activeBroker instanceof MTBroker)) {
+                    return;
+                }
+                this._handleBrokerConnected();
+            });
         });
+    }
+
+    private _handleBrokerConnected() {
+        if (!(this._brokerService.activeBroker instanceof MTBroker)) {
+            return;
+        }
+
+        const account = (this._brokerService.activeBroker as MTBroker).accountInfo;
+        if (!account.Balance) {
+            this.handleBrokerConnectTimeout = setTimeout(() => { this._handleBrokerConnected(); }, 500);
+        } else {
+            this._refreshBFTIndicators();
+        }
+    }
+
+    private _refreshBFTIndicators() {
+        for (const indicator of this.chart.indicators) {
+            if (indicator instanceof TradingChartDesigner.BreakfreeTradingIndicatorBase) {
+                (indicator as TradingChartDesigner.BreakfreeTradingIndicatorBase).calculate(true);
+            }
+        }
     }
 
     startReplayMode() {
@@ -287,10 +321,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
             this.replayModeTimers.push(timerId2);
             this.replayModeTimers.push(timerId3);
-        }, 3000); 
+        }, 3000);
 
         this.replayModeTimers.push(timerId1);
-        
+
         const timerId4 = setTimeout(() => {
             this.chart.replayMode.replaySpeed = 250;
             this.chart.setReplayByDate(dates[100], true);
@@ -318,7 +352,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             return;
         }
     }
-    
+
     protected indicatorRemoved(eventObject: TradingChartDesigner.IValueChangedEvent) {
         console.log("Removed");
         const indicator = eventObject.value as TradingChartDesigner.Indicator;
@@ -326,8 +360,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
         if (!this.chart || this.chart.isDestroyed) {
             return;
         }
-    } 
-    
+    }
+
     protected setDefaultSettings(eventObject: TradingChartDesigner.IValueChangedEvent) {
         console.log("Set default");
         if (!this.chart || this.chart.isDestroyed) {
@@ -355,7 +389,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.replayMode.toRealTime();
             return;
         }
-        
+
         this._demoBroker.appendBar(lastBar);
 
         for (const indicator of this.chart.indicators) {
@@ -389,8 +423,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
             shape.linePrice = order.Price;
             shape.lineType = "pending";
             shape.lineId = `${order.Id}${order.Price}`;
-            shapeForAdding.push(shape); 
-            
+            shapeForAdding.push(shape);
+
             // const shapeSL = this.createLine();
             // shapeSL.linePrice = order.SL;
             // shapeSL.lineType = "sl";
@@ -410,8 +444,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
             shape.lineType = order.Side === OrderSide.Buy ? "position_buy" : "position_sell";
             shape.lineId = `price_${order.Id}${order.Price}`;
             shape.boxText = order.NetPL ? order.NetPL.toFixed(2) : "-";
-            shapeForAdding.push(shape); 
-            
+            shapeForAdding.push(shape);
+
             const shapeSL = this.createLine();
             shapeSL.linePrice = order.SL;
             shapeSL.lineType = "sl";
@@ -454,7 +488,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }
 
         this.replayWaiter = null;
-        
+
         this._tradingFromChartHandler.setChart(this.chart);
         this._alertingFromChartService.setChart(this.chart);
 
@@ -494,7 +528,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
         chart.on(TradingChartDesigner.ChartEvent.TIME_FRAME_CHANGED, (e: TradingChartDesigner.IValueChangedEvent) => {
             this._handleChartStateChanged();
         });
-        
+
         chart.on(TradingChartDesigner.ChartEvent.REPLAY_MODE_STOPPED, (e: TradingChartDesigner.IValueChangedEvent) => {
             this._replayModeFinished();
         });
@@ -548,7 +582,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     if (!instrument) {
                         return;
                     }
-                    
+
                     if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
 
                         chart.switchOffReplayMode();
@@ -591,7 +625,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             case Theme.Dark:
                 return fintatechDarkTheme;
             case Theme.Light:
-                // return fintatech;
+            // return fintatech;
             default:
                 return defaultTheme;
         }
@@ -689,9 +723,16 @@ export class TcdComponent extends BaseLayoutItemComponent {
     ngOnDestroy() {
         super.ngOnDestroy();
 
+        if (this.brokerStateChangedSubscription) {
+            this.brokerStateChangedSubscription.unsubscribe();
+        } 
+        
+        if (this.handleBrokerConnectTimeout) {
+            clearTimeout(this.handleBrokerConnectTimeout);
+        }
+
         if (this.replayModeTimers && this.replayModeTimers.length) {
-            for (const timerId of this.replayModeTimers)
-            {
+            for (const timerId of this.replayModeTimers) {
                 clearTimeout(timerId);
             }
         }
@@ -711,8 +752,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
             }
         } catch (e) {
             console.log(e);
-        } 
-        
+        }
+
         try {
             this._tradingFromChartHandler.dispose();
         } catch (e) {

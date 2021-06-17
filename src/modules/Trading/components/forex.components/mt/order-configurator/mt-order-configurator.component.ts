@@ -306,6 +306,7 @@ export class MTOrderConfig {
     tp?: number; // Stop price
     comment?: string; // Stop price
     timeframe?: number;
+    lastPrice?: number;
     tradeType?: OrderTradeType;
     placedFrom?: OrderPlacedFrom;
 
@@ -362,9 +363,11 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _recalculatePossible = true;
     private _recalculateTimeout: any;
     private _statusChangeInterval: any;
+    private _checklistTimeout: any;
     private _technicalComment: string;
     private _canChangeInstrument: boolean = true;
     private _destroyed: boolean = false;
+    private _wrongInstrumentShown: boolean = false;
     private _orderValidationChecklist: MTOrderValidationChecklist;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
@@ -559,6 +562,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.checklistItems = [];
             this._setCalculatingChecklistStatus(true);
             this._recalculatePossible = true;
+            this._wrongInstrumentShown = false;
 
             broker.getPrice(symbol).subscribe((tick: ITradeTick) => {
                 if (!tick || tick.symbol !== this.config.instrument.symbol) {
@@ -603,6 +607,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     private _buildCalculateChecklistResults(data: MTOrderValidationChecklist) {
+        if (this._destroyed) {
+            return;
+        }
+        
         this._orderValidationChecklist = data;
 
         this.checklistItems = [];
@@ -635,15 +643,25 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 this._recalculateTimeout = null;
                 this._raiseCalculateChecklist();
             }, 3000);
+        } else {
+            this._validateIsSymbolCorrect();
+            // if (this.config.timeframe) {
+            //     this._checklistTimeout = setTimeout(() => {
+            //         this._checklistSubject.next();
+            //     }, 5000);
+            // }
         }
-
-        this._validateIsSymbolCorrect();
     }
 
     private _calculateChecklist() {
         this._setCalculatingChecklistStatus(true);
+
         if (!this.lastTick) {
             return;
+        }
+
+        if (this._checklistTimeout) {
+            clearTimeout(this._checklistTimeout);
         }
 
         const broker = this._brokerService.activeBroker as MTBroker;
@@ -653,7 +671,8 @@ export class MTOrderConfiguratorComponent implements OnInit {
             Symbol: this.config.instrument.id,
             Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
             SL: this.config.sl ? this.config.sl : null,
-            Timeframe: this.config.timeframe
+            Timeframe: this.config.timeframe,
+            LastPrice: this.config.lastPrice
         }).subscribe((res) => {
             this._setCalculatingChecklistStatus(false);
             this._buildCalculateChecklistResults(res);
@@ -796,13 +815,19 @@ export class MTOrderConfiguratorComponent implements OnInit {
             clearTimeout(this._recalculateTimeout);
         }
 
+        if (this._checklistTimeout) {
+            clearTimeout(this._checklistTimeout);
+        }
+
         this._destroyed = true;
     }
 
     private _validateIsSymbolCorrect() {
-        if (this._destroyed) {
+        if (this._destroyed || this._wrongInstrumentShown) {
             return;
         }
+
+        this._wrongInstrumentShown = true;
 
         if (this._orderValidationChecklist.FeedBrokerSpread > 3) {
             this._dialog.open(InfoNotificationComponent, {
@@ -852,7 +877,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     private _adjustOffset() {
-        const spread = Math.roundToDecimals(this._orderValidationChecklist.FeedBrokerSpreadValue, this.decimals);
+        const spread = Math.roundToDecimals(this._orderValidationChecklist.FeedBrokerSpreadValue * 0.9, this.decimals);
         if (!spread || Number.isNaN(spread)) {
             return;
         }

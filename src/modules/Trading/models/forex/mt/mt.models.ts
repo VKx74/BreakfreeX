@@ -121,6 +121,7 @@ export interface MTCurrencyVarRisk {
 export interface MTOrderValidationChecklistInput {
     Symbol: string;
     Timeframe?: number;
+    LastPrice?: number;
     Side: OrderSide;
     Size: number;
     Price?: number;

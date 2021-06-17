@@ -1,11 +1,10 @@
-import { Inject } from '@angular/core';
+import { Inject, Injector } from '@angular/core';
 import { EBrokerInstance, IBrokerState } from '@app/interfaces/broker/broker';
 import { MTConnectionData } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult } from 'modules/Trading/models/models';
 import { Observable, of } from 'rxjs';
 import { AlgoService } from '../algo.service';
 import { InstrumentMappingService } from '../instrument-mapping.service';
-import { InstrumentService } from '../instrument.service';
 import { MTSocketService } from '../socket/mt.socket.service';
 import { MT4SocketService } from '../socket/mt4.socket.service';
 import { MTBroker } from './mt.broker';
@@ -16,8 +15,8 @@ export class MT4Broker extends MTBroker {
         return EBrokerInstance.MT4;
     }
   
-    constructor(@Inject(MT4SocketService) private _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-      super(_ws, _algoService, _instrumentMappingService);
+    constructor(@Inject(MT4SocketService) private _ws: MTSocketService, protected _algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService, protected _injector: Injector) {
+      super(_ws, _algoService, _instrumentMappingService, _injector);
     }
     
     saveState(): Observable<IBrokerState<any>> {

@@ -17,6 +17,7 @@ export interface BaseOrderConfig {
     type: OrderTypes;
     price?: number;
     timeframe?: number;
+    lastPrice?: number;
 }
 
 export interface OrderFormConfig {

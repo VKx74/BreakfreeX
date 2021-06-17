@@ -15,6 +15,8 @@ import { InstrumentMappingService } from "../instrument-mapping.service";
 import { TradingHelper } from "./mt.helper";
 import { MTTradeRatingService } from "./mt.trade-rating.service";
 import { map } from "rxjs/operators";
+import { RealtimeService } from "../realtime.service";
+import { Injector } from "@angular/core";
 
 export abstract class MTBroker implements IMTBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<ITradeTick>; } = {};
@@ -179,8 +181,9 @@ export abstract class MTBroker implements IMTBroker {
         this._maxRisk = value;
     }
 
-    constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
-        this._tradeRatingService = new MTTradeRatingService(this, algoService, _instrumentMappingService);
+    constructor(protected ws: MTSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService, protected _injector: Injector) {
+        const realtimeService = this._injector.get(RealtimeService);
+        this._tradeRatingService = new MTTradeRatingService(this, algoService, _instrumentMappingService, realtimeService);
     }
 
     placeOrder(order: MTPlaceOrder): Observable<ActionResult> {
@@ -1134,7 +1137,10 @@ export abstract class MTBroker implements IMTBroker {
             }
             this._ordersHistory.sort((a, b) => b.CloseTime - a.CloseTime);
             this._onHistoricalOrdersUpdated.next(this._ordersHistory);
-            this._historyInitialized = true;
+
+            if (this._ordersHistory.length) {
+                this._historyInitialized = true;
+            }
         });
     }
 
