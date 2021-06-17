@@ -5,6 +5,7 @@ import {JsUtil} from "../../../utils/jsUtil";
 @Injectable()
 export class LocalStorageService extends DataStorage {
     public static IsGuestKey = "isGuest";
+    public static IsSpreadAutoProcessing = "isSpreadAutoProcessing";
 
     set(key: string, data: any): boolean {
         if (!this.canSave) {

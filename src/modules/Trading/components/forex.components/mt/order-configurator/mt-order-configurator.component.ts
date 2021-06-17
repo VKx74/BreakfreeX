@@ -22,6 +22,19 @@ import { TimeSpan } from '@app/helpers/timeFrame.helper';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { InfoNotificationComponent } from './notifications/info/info-notification.component';
 import { SpreadNotificationComponent } from './notifications/spread/spread-notification.component';
+import { LocalStorageService } from 'modules/Storage/services/local-storage.service';
+
+const CalculatingChecklistStatuses = [
+    "Checking entry...",
+    "Checking leverage...",
+    "Checking spread...",
+    "Checking price offset...",
+    "Checking local trend...",
+    "Checking global trend...",
+    "Checking correlated risk...",
+    "Checking stop loss...",
+    "Calculating rate..."
+];
 
 enum ChecklistItemType {
     LocalRTD,
@@ -348,8 +361,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _checklistSubject: Subject<void> = new Subject();
     private _recalculatePossible = true;
     private _recalculateTimeout: any;
+    private _statusChangeInterval: any;
     private _technicalComment: string;
     private _canChangeInstrument: boolean = true;
+    private _destroyed: boolean = false;
     private _orderValidationChecklist: MTOrderValidationChecklist;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
@@ -418,6 +433,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     amountStep: number = 0.01;
     decimals: number = 5;
     calculatingChecklist: boolean = false;
+    calculatingChecklistStatus: string = CalculatingChecklistStatuses[0];
 
     checklistItems: ChecklistItem[] = [];
     orderScore: number = 10;
@@ -437,6 +453,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     constructor(private _dialog: MatDialog,
         private _alertService: AlertService,
         private _translateService: TranslateService,
+        private _localStorageService: LocalStorageService,
         private _brokerService: BrokerService) {
         this._config = MTOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
 
@@ -540,7 +557,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             }
 
             this.checklistItems = [];
-            this.calculatingChecklist = true;
+            this._setCalculatingChecklistStatus(true);
             this._recalculatePossible = true;
 
             broker.getPrice(symbol).subscribe((tick: ITradeTick) => {
@@ -559,6 +576,29 @@ export class MTOrderConfiguratorComponent implements OnInit {
             });
 
             this.onInstrumentSelected.emit(symbol);
+        }
+    }
+
+    private _setCalculatingChecklistStatus(status: boolean) {
+        this.calculatingChecklist = status;
+        if (status) {
+            if (this._statusChangeInterval) {
+                return;
+            }
+
+            this.calculatingChecklistStatus = CalculatingChecklistStatuses[0];
+            this._statusChangeInterval = setInterval(() => {
+                let index = CalculatingChecklistStatuses.indexOf(this.calculatingChecklistStatus) + 1;
+                if (!CalculatingChecklistStatuses[index]) {
+                    return;
+                }
+                this.calculatingChecklistStatus = CalculatingChecklistStatuses[index];
+            }, 2000);
+        } else {
+            if (this._statusChangeInterval) {
+                clearInterval(this._statusChangeInterval);
+                this._statusChangeInterval = null;
+            }
         }
     }
 
@@ -589,7 +629,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         }
 
         if (recalculateNeeded && this._recalculatePossible) {
-            this.calculatingChecklist = true;
+            this._setCalculatingChecklistStatus(true);
             this._recalculatePossible = false;
             this._recalculateTimeout = setTimeout(() => {
                 this._recalculateTimeout = null;
@@ -601,7 +641,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     }
 
     private _calculateChecklist() {
-        this.calculatingChecklist = true;
+        this._setCalculatingChecklistStatus(true);
         if (!this.lastTick) {
             return;
         }
@@ -615,10 +655,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
             SL: this.config.sl ? this.config.sl : null,
             Timeframe: this.config.timeframe
         }).subscribe((res) => {
-            this.calculatingChecklist = false;
+            this._setCalculatingChecklistStatus(false);
             this._buildCalculateChecklistResults(res);
         }, (error) => {
-            this.calculatingChecklist = false;
+            this._setCalculatingChecklistStatus(false);
             this._buildCalculateChecklistResults(null);
         });
     }
@@ -628,7 +668,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             return;
         }
 
-        this.calculatingChecklist = true;
+        this._setCalculatingChecklistStatus(true);
         this._checklistSubject.next();
     }
 
@@ -755,9 +795,15 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (this._recalculateTimeout) {
             clearTimeout(this._recalculateTimeout);
         }
+
+        this._destroyed = true;
     }
 
     private _validateIsSymbolCorrect() {
+        if (this._destroyed) {
+            return;
+        }
+        
         if (this._orderValidationChecklist.FeedBrokerSpread > 3) {
             this._dialog.open(InfoNotificationComponent, {
                 data: {
@@ -775,20 +821,31 @@ export class MTOrderConfiguratorComponent implements OnInit {
         const spread = Math.roundToDecimals(this._orderValidationChecklist.FeedBrokerSpreadValue, this.decimals);
 
         if (this._orderValidationChecklist.FeedBrokerSpread && spread &&
-            this._orderValidationChecklist.FeedBrokerSpread > 0.03 && (price || sl || tp)) {
-            this._dialog.open(SpreadNotificationComponent, {
-                data: {
-                    spread: spread
-                }
-            }).afterClosed().subscribe((res) => {
-                if (res === undefined || res === null) {
-                    return;
-                }
-                if (res) {
+            this._orderValidationChecklist.FeedBrokerSpread > 0 && (price || sl || tp)) {
+
+            const autoOffsetDecision = this._localStorageService.get(LocalStorageService.IsSpreadAutoProcessing);
+            if (autoOffsetDecision === true || autoOffsetDecision === false) {
+                if (autoOffsetDecision === true) {
                     this._adjustOffset();
+                    this._placeOrder();
+                } else {
+                    this._placeOrder();
                 }
-                this._placeOrder();
-            });
+            } else {
+                this._dialog.open(SpreadNotificationComponent, {
+                    data: {
+                        spread: spread
+                    }
+                }).afterClosed().subscribe((res) => {
+                    if (res === undefined || res === null) {
+                        return;
+                    }
+                    if (res) {
+                        this._adjustOffset();
+                    }
+                    this._placeOrder();
+                });
+            }
         } else {
             this._placeOrder();
         }

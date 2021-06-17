@@ -28,12 +28,18 @@
         </div>
         <div class="modal-footer">
             <div class="btns-wrapper flex">
-                <button class="crypto-button crypto-button_primary" (click)="accept()">
-                    {{'accept' | translate}}
-                </button>
-                <button class="crypto-button crypto-button_primary" (click)="refuse()">
-                    {{'refuse' | translate}}
-                </button>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="save-decision" [(ngModel)]="saveDecision">
+                    <label for="save-decision">{{'saveDecision' | translate}}</label>
+                </div>
+                <div class="buttons">
+                    <button class="crypto-button crypto-button_primary" (click)="accept()">
+                        {{'accept' | translate}}
+                    </button>
+                    <button class="crypto-button crypto-button_primary" (click)="refuse()">
+                        {{'decline' | translate}}
+                    </button>
+                </div>
             </div>
         </div>
     </div>

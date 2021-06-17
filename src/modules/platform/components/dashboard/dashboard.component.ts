@@ -247,6 +247,7 @@ export class DashboardComponent {
             .subscribe((isConfirmed) => {
                 if (isConfirmed) {
                     this._saveLayout = false;
+                    this._localStorageService.remove(LocalStorageService.IsSpreadAutoProcessing);
                     this._layoutStorageService.removeLayoutState().subscribe(data => {
                         this._identityService.signOut().subscribe(data1 => {
                             this._coockieService.deleteAllCookie();

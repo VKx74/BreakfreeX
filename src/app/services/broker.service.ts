@@ -314,10 +314,12 @@ export class BrokerService {
             this._activeState.previousConnected = [];
         }
 
-        if (this._activeBroker instanceof BFTDemoBroker ||
-            this._activeBroker instanceof BFTFundingDemoBroker ||
-            this._activeBroker instanceof BFTFundingLiveBroker) {
-            return;
+        if (this._activeBroker instanceof MTBroker) {
+            let accountId = (this._activeBroker as MTBroker).account;
+            let defaultAccount = this._defaultAccounts.find(_ => _.id === accountId);
+            if (defaultAccount) {
+                return;
+            }
         }
 
         const currentState = this._activeState.activeBrokerState;

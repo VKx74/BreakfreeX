@@ -26,6 +26,8 @@
   "close": "Закрити",
   "accept": "Прийняти",
   "refuse": "Відхилити",
+  "decline": "Відхилити",
+  "saveDecision": "Зберегти вибір",
   "submit": "Підтвердити",
   "instrument": "Інструмент",
   "timeFrame": "Період часу",

@@ -26,6 +26,8 @@
   "close": "Close",
   "accept": "Accept",
   "refuse": "Refuse",
+  "decline": "Decline",
+  "saveDecision": "Save decision",
   "submit": "Submit",
   "instrument": "Instrument",
   "timeFrame": "TimeFrame",

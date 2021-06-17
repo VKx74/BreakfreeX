@@ -2,6 +2,10 @@
 @import "mixins/themify";
 
 :host {
+    .crypto-modal {
+        min-width: 100px !important;
+    }
+
     .modal-content {
         max-width: 400px;
     }

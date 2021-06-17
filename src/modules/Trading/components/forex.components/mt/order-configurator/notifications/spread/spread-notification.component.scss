@@ -2,23 +2,37 @@
 @import "mixins/themify";
 
 :host {
+    .crypto-modal {
+        min-width: 100px !important;
+    }
+
     .modal-content {
         max-width: 450px;
     }
-    .content {
+    .content, .checkbox-container {
         font-size: 12px;
     }
     .btns-wrapper {
-        justify-content: flex-end;
+        justify-content: space-between;
 
         button {
             margin-left: 20px;
         }
     }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        label {
+            &::before {
+                background: #c7ccd4 !important;
+            }
+        } 
+    }
 }
 
 @include themify($themes, true) {
-    .content {
+    .content, .checkbox-container {
         color: themed("valueTextColor");
     }
 }
