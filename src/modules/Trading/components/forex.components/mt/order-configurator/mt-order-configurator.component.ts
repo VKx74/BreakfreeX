@@ -803,7 +803,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         if (this._destroyed) {
             return;
         }
-        
+
         if (this._orderValidationChecklist.FeedBrokerSpread > 3) {
             this._dialog.open(InfoNotificationComponent, {
                 data: {
@@ -821,7 +821,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
         const spread = Math.roundToDecimals(this._orderValidationChecklist.FeedBrokerSpreadValue, this.decimals);
 
         if (this._orderValidationChecklist.FeedBrokerSpread && spread &&
-            this._orderValidationChecklist.FeedBrokerSpread > 0 && (price || sl || tp)) {
+            this._orderValidationChecklist.FeedBrokerSpread > 0.03 && (price || sl || tp)) {
 
             const autoOffsetDecision = this._localStorageService.get(LocalStorageService.IsSpreadAutoProcessing);
             if (autoOffsetDecision === true || autoOffsetDecision === false) {
