@@ -165,7 +165,7 @@ export class MissionTrackingService {
             const lastLevelNumber = Number(lastLevel);
             if (lastLevelNumber && !Number.isNaN(lastLevelNumber) && this._tradingProfileService.level) {
                 if (lastLevelNumber < this._tradingProfileService.level) {
-                    let text = `Congratulation your account level increased to level ${this._tradingProfileService.level} "${this._tradingProfileService.levelName}"`;
+                    let text = `Congratulation you have reached level ${this._tradingProfileService.level} ${this._tradingProfileService.levelName}`;
                     this._notificationService.show(text, "", NotificationType.Success);
                 }
             }
