@@ -157,4 +157,5 @@ export interface IPlaceOrder {
     Type: OrderTypes;
     Timeframe?: number;
     TradeType?: OrderTradeType;
+    PlacedFrom?: OrderPlacedFrom;
 }
