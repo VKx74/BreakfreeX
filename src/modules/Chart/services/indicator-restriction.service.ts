@@ -6,9 +6,11 @@ export class IndicatorRestrictionService {
     private _restrictedIndicators: string[] = [];
 
     constructor(protected _identity: IdentityService) {
-        if (this._identity.isAdmin) {
+        if (this._identity.isStuff) {
             return;
         }
+
+        this._restrictedIndicators.push(TradingChartDesigner.MESA.instanceTypeName);
 
         if (!this._identity.isAuthorizedCustomer) {
             this._restrictedIndicators.push(TradingChartDesigner.RTD.instanceTypeName);
