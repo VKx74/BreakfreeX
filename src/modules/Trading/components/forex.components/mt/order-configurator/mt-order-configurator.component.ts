@@ -276,7 +276,7 @@ const checklist: ChecklistItemDescription[] = [
             let valid = null;
             let minusScore = 0;
             if (data.FeedBrokerSpread !== null && data.FeedBrokerSpread !== undefined) {
-                value = data.FeedBrokerSpread.toFixed(2) + "%";
+                value = (data.FeedBrokerSpread * 100).toFixed(0) + " BPS";
                 valid = data.FeedBrokerSpread < 0.03;
             }
             return {
@@ -859,7 +859,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
             } else {
                 this._dialog.open(SpreadNotificationComponent, {
                     data: {
-                        spread: spread
+                        spread: (this._orderValidationChecklist.FeedBrokerSpread * 100).toFixed(0)
                     }
                 }).afterClosed().subscribe((res) => {
                     if (res === undefined || res === null) {
