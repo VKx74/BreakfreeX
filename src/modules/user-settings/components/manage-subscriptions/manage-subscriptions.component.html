@@ -1,5 +1,5 @@
 <div class="section flex crypto-form-unit">
-  <div class="form-unit__label">{{"profileInfo.accounts" | translate}}</div>
+  <div class="form-unit__label tile-header">{{"profileInfo.accounts" | translate}}</div>
 
   <div class="account-row flex" *ngFor="let account of accounts">
     <div class="flex basic-row form-unit__label">
@@ -21,10 +21,10 @@
         {{account.created * 1000 | date}}
       </div>
       <div class="flex account-column">
-        {{account.name}}
+        {{account.name || "-"}}
       </div>
       <div class="flex account-column">
-        {{account.description}}
+        {{account.description || "-"}}
       </div>
       <div class="flex account-column">
         <div class="flex btns">

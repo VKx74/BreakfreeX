@@ -9,6 +9,11 @@
   display: block;
   height: 100%;
 
+  .tile-header {
+    font-size: 13px !important;
+    font-weight: 700;
+  }
+
   .subscriptions-area {
     margin: 15px 0px;
   }
@@ -37,10 +42,10 @@
     width: 100%;
     flex-direction: column;
     margin: 10px 0px;
-    padding: 10px;
-    // border-radius: 5px;
+    padding: 15px;
+    border-radius: 5px;
     // background: #7979792e;
-    border-top: 1px solid;
+    border: 1px solid;
   }
 
   .account-column {
@@ -106,6 +111,6 @@
   }
 
   .account-row {
-    border-top-color: themed('inputBackgroundColor');
+    border-color: themed('tableBorders');
   }
 }
