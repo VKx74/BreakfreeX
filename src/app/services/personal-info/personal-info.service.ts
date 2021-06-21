@@ -221,6 +221,16 @@ export interface ISubscription {
     interval: string;
     intervalCount: number;
     currency: string;
+    id: string;
+}
+
+export interface IPaymentAccount {
+    id: string;
+    email: string;
+    description: string;
+    name: string;
+    created: number;
+    subscriptions: string[];
 }
 
 export interface IBillingDashboard {
@@ -377,7 +387,8 @@ export class PersonalInfoService {
                         created: new Date(sub.created * 1000),
                         interval: sub.interval,
                         intervalCount: sub.intervalCount,
-                        currency: sub.currency
+                        currency: sub.currency,
+                        id: sub.id
                     });
                 }
 
@@ -386,8 +397,12 @@ export class PersonalInfoService {
         );
     } 
 
-    processUserBillingDashboard() {
-        this.getUserBillingDashboard().subscribe((result: IBillingDashboard) => {
+    getUserAccounts(): Observable<IPaymentAccount[]> {
+        return this._http.get<IPaymentAccount[]>(`${AppConfigService.config.apiUrls.identityUrl}striple/user_stripe_accounts`, this._httpOptions);
+    } 
+
+    processUserBillingDashboard(id: string) {
+        this.getUserBillingDashboard(id).subscribe((result: IBillingDashboard) => {
             if (result) {
                 if (result.url) {
                     let popUp = window.open(result.url, "_blank");
@@ -406,8 +421,8 @@ export class PersonalInfoService {
         });
     }
     
-    getUserBillingDashboard(): Observable<IBillingDashboard> {
-        return this._http.get<IBillingDashboard>(`${AppConfigService.config.apiUrls.identityUrl}striple/user_billing_dashboard`, this._httpOptions);
+    getUserBillingDashboard(id: string): Observable<IBillingDashboard> {
+        return this._http.get<IBillingDashboard>(`${AppConfigService.config.apiUrls.identityUrl}striple/user_billing_dashboard/${id}`, this._httpOptions);
     }
 
     getHealthStatus(): Observable<any> {

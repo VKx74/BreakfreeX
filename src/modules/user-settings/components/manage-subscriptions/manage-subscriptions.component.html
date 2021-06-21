@@ -1,39 +1,75 @@
-
 <div class="section flex crypto-form-unit">
-    <div class="form-unit__label">{{"profileInfo.subscriptions" | translate}}</div>
-    <div class="subscription-row justify-space-between flex" *ngFor="let sub of subscriptions">
+  <div class="form-unit__label">{{"profileInfo.accounts" | translate}}</div>
+
+  <div class="account-row flex" *ngFor="let account of accounts">
+    <div class="flex basic-row form-unit__label">
+      <div class="flex account-column header">
+        {{"profileInfo.accountCreated" | translate}}
+      </div>
+      <div class="flex account-column header form-unit__label">
+        {{"profileInfo.accountName" | translate}}
+      </div>
+      <div class="flex account-column header form-unit__label">
+        {{"profileInfo.accountDescription" | translate}}
+      </div>
+      <div class="flex account-column header">
+      </div>
+    </div>
+
+    <div class="flex basic-row">
+      <div class="flex account-column">
+        {{account.created * 1000 | date}}
+      </div>
+      <div class="flex account-column">
+        {{account.name}}
+      </div>
+      <div class="flex account-column">
+        {{account.description}}
+      </div>
+      <div class="flex account-column">
+        <div class="flex btns">
+          <button class="crypto-button crypto-button_success w-100"
+            (click)="manageSubscription(account.id)">{{"profileInfo.manageSubscriptions" | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- <hr /> -->
+
+    <div class="form-unit__label subscriptions-area">{{"profileInfo.subscriptions" | translate}}</div>
+
+    <div>
+      <div class="subscription-row justify-space-between flex" *ngFor="let sub of getSubscriptions(account)">
         <div class="flex status">
-            {{sub.status}}
+          {{sub.status}}
         </div>
         <div class="flex name">
-            {{sub.name}}
+          {{sub.name}}
         </div>
         <div class="flex price">
-            {{sub.price.toFixed(2)}}({{sub.currency}})
+          {{sub.price.toFixed(2)}}({{sub.currency}})
         </div>
         <div class="flex interval">
-            {{sub.intervalCount}} {{sub.interval}}(s)
+          {{sub.intervalCount}} {{sub.interval}}(s)
         </div>
         <div class="flex date">
-            {{sub.created.toDateString()}}
+          {{sub.created.toDateString()}}
         </div>
+      </div>
+      <div *ngIf="subscriptions != null && getSubscriptions(account).length == 0" class="flex no-content">
+        No subscriptions
+      </div>
     </div>
-    <div *ngIf="subscriptions == null"  class="flex">
-      Loading...
-    </div> 
-    <div *ngIf="subscriptions != null && subscriptions.length == 0" class="flex">
-      No subscriptions
-    </div>
-    <div class="flex btns">
-      <button class="crypto-button crypto-button_success w-100"
-          (click)="manageSubscription()">{{"profileInfo.manageSubscriptions" | translate}}
-      </button>
-    </div>
-    <ng-template *ngIf="!loading; else loader"></ng-template>
-    <ng-template #loader>
-      <bft-loader></bft-loader>
-    </ng-template>
-    <div class="flex description_info">
-      * To get your billing and subscription changes applied to application immediately please re-login. <span class="relogin-now" (click)="relogin()"> Re-login now.</span>
-    </div>
+
+  </div>
+
+  <ng-template *ngIf="!loading; else loader"></ng-template>
+  <ng-template #loader>
+    <bft-loader></bft-loader>
+  </ng-template>
+  <div class="flex description_info">
+    * To get your billing and subscription changes applied to application immediately please re-login. <span
+      class="relogin-now" (click)="relogin()"> Re-login now.</span>
+  </div>
 </div>

@@ -9,9 +9,48 @@
   display: block;
   height: 100%;
 
+  .subscriptions-area {
+    margin: 15px 0px;
+  }
+
+  .no-content {
+    justify-content: center;
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  hr {
+    width: 100%;
+  }
+
+  .header {
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .basic-row {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .account-row {
+    width: 100%;
+    flex-direction: column;
+    margin: 10px 0px;
+    padding: 10px;
+    // border-radius: 5px;
+    // background: #7979792e;
+    border-top: 1px solid;
+  }
+
+  .account-column {
+    width: 25%;
+    font-size: 12px;
+  }
+
   .btns {
     justify-content: flex-end;
-    margin-top: 14px;
+    margin-top: -20px;
   }
 
   .description_info {
@@ -66,20 +105,7 @@
     color: themed('valueTextColor');
   }
 
-  .data, .crypto-button {
-    color: themed('valueTextColor');
+  .account-row {
+    border-top-color: themed('inputBackgroundColor');
   }
-
-  .crypto-button {
-    background-color: themed('inputBackgroundColor');
-  }
-
-  .change-button {
-    background-color: themed('appPanelColor') !important;
-  }
-
-  .added {
-    color: themed('buyColor');
-  }
-
 }

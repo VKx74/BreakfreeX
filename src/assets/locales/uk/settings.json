@@ -28,6 +28,7 @@
   },
   "profileInfo": {
     "subscriptions": "Підписки",
+    "accounts": "Акаунти",
     "title": "Профіль користувача",
     "confirmPhone": "Пітдвердити номер телефону",
     "confirmEmail": "Пітдвердити email",
@@ -46,6 +47,9 @@
     "phoneNumber": "Номер телефону",
     "changeUsername": "Змінити юзернейм",
     "manageSubscriptions": "Керування підписками",
+    "accountCreated": "Час створення",
+    "accountName": "Назва",
+    "accountDescription": "Опис",
     "add": "Додати",
     "confirm": "Підтвердити",
     "verify": "Перевірити",

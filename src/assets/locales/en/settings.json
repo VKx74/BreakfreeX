@@ -28,6 +28,7 @@
   },
   "profileInfo": {
     "subscriptions": "Subscriptions",
+    "accounts": "Accounts",
     "title": "User profile",
     "confirmPhone": "Confirm phone number",
     "confirmEmail": "Confirm email",
@@ -44,6 +45,9 @@
     "addYourPhoneNumber": "Add your phone number",
     "changeUsername": "Change username",
     "manageSubscriptions": "Manage Subscriptions",
+    "accountCreated": "Creation Time",
+    "accountName": "Name",
+    "accountDescription": "Description",
     "addPhone": "Add phone",
     "phoneNumber": "Phone number",
     "add": "Add",

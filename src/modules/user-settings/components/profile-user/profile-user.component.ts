@@ -9,7 +9,7 @@ import {UsersProfileService} from "@app/services/users-profile.service";
 import {MatDialog} from "@angular/material/dialog";
 import {FileStorageService} from "@app/services/file-storage.service";
 import {AppConfigService} from "@app/services/app.config.service";
-import {AccountInfoModel, PersonalInfoService, ISubscription} from "@app/services/personal-info/personal-info.service";
+import {AccountInfoModel, PersonalInfoService, ISubscription, IPaymentAccount} from "@app/services/personal-info/personal-info.service";
 import {Observable} from "rxjs";
 import {tap} from "rxjs/internal/operators/tap";
 
@@ -45,6 +45,7 @@ export class ProfileUserComponent implements OnInit {
     username: string;
     personalData: IPersonalData;
     subscriptions: ISubscription[];
+    accounts: IPaymentAccount[];
 
     constructor(private _identityService: IdentityService,
                 private _profileService: UsersProfileService,
@@ -88,6 +89,13 @@ export class ProfileUserComponent implements OnInit {
         this._personalInfoService.getUserSubscriptions().subscribe( 
             data => {
                this.subscriptions = data;
+            }, error => {
+                
+            });
+
+        this._personalInfoService.getUserAccounts().subscribe( 
+            data => {
+               this.accounts = data;
             }, error => {
                 
             });

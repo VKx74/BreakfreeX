@@ -161,7 +161,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         private _identityService: IdentityService,
         private _alogService: AlgoService,
         private _cdr: ChangeDetectorRef,
-        private _personalInfoService: PersonalInfoService,
         private _tradingProfileService: TradingProfileService,
         protected _injector: Injector) {
         super(_injector);
@@ -432,7 +431,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     manageSubscriptions() {
-        this._personalInfoService.processUserBillingDashboard();
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     processCheckout() {
