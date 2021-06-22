@@ -20,6 +20,7 @@ export class ScannerStrategyBacktestComponent {
     public ClearData = new EventEmitter();
 
     public availableType: string[] = ["EXT", "SwingN", "SwingExt", "BRC"];
+    public availableRTDType: string[] = ["Daily", "Hourly", "Same"];
 
     public barsCount: number = 100;
     public slRatio: number = 1.7;
@@ -34,6 +35,7 @@ export class ScannerStrategyBacktestComponent {
     public validation_url: string = "";
     public singlePosition: boolean = true;
     public type: string = this.availableType[0];
+    public rtd_timeframe: string = this.availableRTDType[0];
 
     public Status: string = "-";
     public Instrument: string = "";
@@ -89,6 +91,7 @@ export class ScannerStrategyBacktestComponent {
             cancellation_candles: this.cancellationCandles,
             single_position: this.singlePosition,
             type: this.type,
+            rtd_timeframe: this.rtd_timeframe,
             global_fast: this.global_fast,
             global_slow: this.global_slow,
             local_fast: this.local_fast,
@@ -524,7 +527,7 @@ export class ScannerStrategyBacktestComponent {
     }
 
     protected getValidationByTimestamp(timestamp: number, signals: IBFTAValidationData[]): IBFTAValidationData {
-        for (const signal of signals) {
+        for (const signal of signals || []) {
             if (signal.timestamp === timestamp) {
                 return signal;
             }

@@ -111,6 +111,7 @@ export interface IBFTScannerBacktestAlgoParameters extends IBFTAlgoParameters {
     min_threshold: number;
     single_position: boolean;
     type: string;
+    rtd_timeframe: string;
     validation_url: string;
 }
 

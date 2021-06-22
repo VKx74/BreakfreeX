@@ -14,6 +14,13 @@
          </div>
 
          <div class="row">
+            <span class="value1">RTD timeframe:</span><span class="value2">
+               <selector [options]="availableRTDType" [placeholder]="'Select RTD Timeframe'" [(ngModel)]="rtd_timeframe"
+                  class="bft-form-select"></selector>
+            </span>
+         </div>
+
+         <div class="row">
             <span class="value1">Bars count:</span><span class="value2">
                <mat-form-field class="crypto-input bft-form-input">
                   <input matInput type="number" [(ngModel)]="barsCount" min="100" max="2000" step="1">
