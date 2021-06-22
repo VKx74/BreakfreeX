@@ -101,6 +101,12 @@
       width: 100%;
     }
   }
+
+  @media (max-width: 768px) {
+    .optional {
+      display: none !important;
+    }
+  }
 }
 
 @include themify($themes, true) {

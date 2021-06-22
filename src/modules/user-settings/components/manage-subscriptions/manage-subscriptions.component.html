@@ -6,10 +6,10 @@
       <div class="flex account-column header">
         {{"profileInfo.accountCreated" | translate}}
       </div>
-      <div class="flex account-column header form-unit__label">
+      <div class="flex account-column header form-unit__label optional">
         {{"profileInfo.accountName" | translate}}
       </div>
-      <div class="flex account-column header form-unit__label">
+      <div class="flex account-column header form-unit__label optional">
         {{"profileInfo.accountDescription" | translate}}
       </div>
       <div class="flex account-column header">
@@ -20,10 +20,10 @@
       <div class="flex account-column">
         {{account.created * 1000 | date}}
       </div>
-      <div class="flex account-column">
+      <div class="flex account-column optional">
         {{account.name || "-"}}
       </div>
-      <div class="flex account-column">
+      <div class="flex account-column optional">
         {{account.description || "-"}}
       </div>
       <div class="flex account-column">
@@ -47,13 +47,13 @@
         <div class="flex name">
           {{sub.name}}
         </div>
-        <div class="flex price">
+        <div class="flex price optional">
           {{sub.price.toFixed(2)}}({{sub.currency}})
         </div>
-        <div class="flex interval">
+        <div class="flex interval optional">
           {{sub.intervalCount}} {{sub.interval}}(s)
         </div>
-        <div class="flex date">
+        <div class="flex date optional">
           {{sub.created.toDateString()}}
         </div>
       </div>
