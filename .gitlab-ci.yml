@@ -49,7 +49,7 @@ build-app-stage:
             - dist/
   only:
     - develop
-    - feature/automated-acocunt-login
+    - feature/custom-timeframes
 #   tags:
 #     - web
 
@@ -100,7 +100,7 @@ build-latest:
     #     - docker
     only:
         - develop
-        - feature/automated-acocunt-login
+        - feature/custom-timeframes
         - ci-improvements
 
 build-stable:
