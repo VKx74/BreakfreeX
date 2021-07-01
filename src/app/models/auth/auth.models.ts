@@ -197,6 +197,7 @@ export enum Roles {
     SocialMediaOfficer = 'Social_Media_Officer',
     SystemMonitoringOfficer = 'System_Monitoring_Officer',
     FreeUser = 'Free_User',
+    Guest = 'guest',
     TreasureOfficer = 'Treasury_Officer',
     BusinessAccount = 'Business_Account',
     InstitutionalAccount = 'Institutional_Account',

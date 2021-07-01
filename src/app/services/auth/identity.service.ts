@@ -82,7 +82,7 @@ export class IdentityService {
     }  
 
     get isStuff(): boolean {
-        return this.role.toLowerCase() !== Roles.User.toLowerCase() && this.role.toLowerCase() !== Roles.FreeUser.toLowerCase();
+        return this.role.toLowerCase() !== Roles.User.toLowerCase() && this.role.toLowerCase() !== Roles.Guest.toLowerCase();
     }  
     
     get isBeta(): boolean {
