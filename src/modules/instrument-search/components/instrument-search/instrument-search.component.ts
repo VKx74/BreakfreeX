@@ -1,15 +1,17 @@
-import {Component, EventEmitter, forwardRef, Input, Output, ViewChild} from '@angular/core';
-import {IInstrument} from "@app/models/common/instrument";
-import {InstrumentService} from "@app/services/instrument.service";
-import {EExchange} from "@app/models/common/exchange";
-import {map, switchMap} from "rxjs/operators";
-import {TranslateService} from "@ngx-translate/core";
-import {debounceTime, distinctUntilChanged} from "rxjs/operators";
-import {Observable, of} from "rxjs";
-import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from "@angular/material/autocomplete";
-import {SharedTranslateService} from "@app/localization/shared.token";
+import { Component, ElementRef, EventEmitter, forwardRef, Input, Output, ViewChild } from '@angular/core';
+import { IInstrument } from "@app/models/common/instrument";
+import { InstrumentService } from "@app/services/instrument.service";
+import { EExchange } from "@app/models/common/exchange";
+import { map, switchMap } from "rxjs/operators";
+import { TranslateService } from "@ngx-translate/core";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { SharedTranslateService } from "@app/localization/shared.token";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { InstrumentSearchDialogComponent } from '../instrument-search-dialog/instrument-search-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export const INPUT_DEBOUNCE_TIME = 500;
 
@@ -35,8 +37,10 @@ export class InstrumentSearchComponent {
     @Input() formControlName: string;
     @Input() resetAfterSelection: boolean = false;
     @Input() openPanelOnClick = false;
+    @Input() showDropDown = false;
     @Output() onSelect = new EventEmitter<IInstrument>();
-    @ViewChild(MatAutocompleteTrigger, {static: true}) trigger;
+    @ViewChild(MatAutocompleteTrigger, { static: true }) trigger;
+    @ViewChild ('instrument_input', {static: true}) input: ElementRef;
 
     inputControl = new FormControl();
     filteredInstruments: Observable<IInstrument[]>;
@@ -49,7 +53,7 @@ export class InstrumentSearchComponent {
         }
     }
 
-    constructor(private _instrumentService: InstrumentService) {
+    constructor(private _instrumentService: InstrumentService, private _dialog: MatDialog) {
 
         this.filteredInstruments = this.inputControl.valueChanges
             .pipe(
@@ -89,7 +93,10 @@ export class InstrumentSearchComponent {
 
     handleInstrumentSelected(event: MatAutocompleteSelectedEvent) {
         const instrument = event.option.value;
-
+        this.setSelectedInstrument(instrument);
+    } 
+    
+    setSelectedInstrument(instrument: IInstrument) {
         this.onSelect.emit(instrument);
         this.writeValue(instrument);
 
@@ -104,10 +111,27 @@ export class InstrumentSearchComponent {
         }
     }
 
+    handleClick() {
+        if (!this.showDropDown) {
+            this.input.nativeElement.blur();
+            this._dialog.open(InstrumentSearchDialogComponent, {
+                data: {
+                    instrument: this.selectedInstrument
+                }
+            }).afterClosed().subscribe((data) => {
+                if (data) {
+                    this.setSelectedInstrument(data);
+                }
+            });
+        }
+    }
+
     onFocus() {
-        if (this.triggerDomElement.value === '') {
-            this.trigger._onChange("");
-            this.trigger.openPanel();
+        if (this.showDropDown) {
+            if (this.triggerDomElement.value === '') {
+                this.trigger._onChange("");
+                this.trigger.openPanel();
+            }
         }
     }
 
@@ -121,6 +145,10 @@ export class InstrumentSearchComponent {
     }
 
     handleBlur() {
+        if (!this.showDropDown) {
+            return;
+        }
+
         setTimeout(() => {
             if (this.selectedInstrument && this.inputControl.value !== this.displayWith(this.selectedInstrument)) {
                 this.inputControl.setValue(this.selectedInstrument);

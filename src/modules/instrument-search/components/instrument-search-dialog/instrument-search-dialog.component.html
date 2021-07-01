@@ -1,0 +1,38 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="modal-content">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">{{'symbolSearch' | translate}}</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="instrument-input-container">
+                <i class="fa search-icon fa-search"></i>
+                <input matInput type="text" [(ngModel)]="instrumentName" placeholder="Search"
+                    class="crypto-input bft-form-input" #input_control>
+            </div>
+            <div class="instrument-type-container">
+                <div *ngFor="let i of instrumentTypes" class="instrument-type"
+                    [class.active]="selectedInstrumentType === i" (click)="selectType(i)">
+                    <div class="instrument-type-name">{{i}}</div>
+                </div>
+            </div>
+            <div class="result-instruments">
+                <div [class.preselected]="preselectedInstrument === instrument"  class="result-instrument" *ngFor="let instrument of instruments" (click)="handleInstrumentSelected(instrument)"
+                    (mouseenter)="mouseenterOnElement(instrument)">
+                    <div class="instrument-name">{{instrument.symbol}}</div>
+                    <div class="instrument-company">{{instrument.company}}</div>
+                    <div class="instrument-datafeed">{{instrument.exchange}}</div>
+                </div> 
+                <div class="no-data" *ngIf="instruments && instruments.length === 0 && !loading">
+                    {{"noSymbols" | translate}}
+                </div>
+                <div class="loader" *ngIf="loading">
+                    <div class="loader-container">
+                        <bft-loader-block *ngIf="loading"></bft-loader-block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

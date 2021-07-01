@@ -37,8 +37,9 @@ import ITradeHandlerParams = TradingChartDesigner.ITradeHandlerParams;
 import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
 import { HighlightService } from "@app/services/highlight/highlight.service";
 import { BrokerService } from "@app/services/broker.service";
-import { Subscription } from "rxjs";
+import { of, Subscription } from "rxjs";
 import { MTBroker } from "@app/services/mt/mt.broker";
+import { PlatformInstrumentsDataProvider } from "./PlatformInstrumentsDataProvider";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -204,7 +205,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 searchInstrumentHandler: this.searchInstrumentHandler.bind(this),
                 tradingFromChartHandler: this._tradingFromChartHandler,
                 alertingFromChartHandler: this._alertingFromChartService,
-                showScrollbar: false
+                showScrollbar: false,
+                instrumentsDataProvider: new PlatformInstrumentsDataProvider(this._dialog)
             };
 
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
@@ -767,3 +769,5 @@ export class TcdComponent extends BaseLayoutItemComponent {
         }
     }
 }
+
+
