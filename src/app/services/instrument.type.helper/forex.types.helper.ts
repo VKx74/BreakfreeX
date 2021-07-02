@@ -1,5 +1,5 @@
 import { EMarketSpecific } from "@app/models/common/marketSpecific";
-import { BondsList, ForexExoticList, ForexMajorList, ForexMinorList, IndicesList, MetalsList } from "./forex.types";
+import { BondsList, CommoditiesList, ForexExoticList, ForexMajorList, ForexMinorList, IndicesList, MetalsList } from "./forex.types";
 
 export class ForexTypeHelper {
     public static GetTypeSpecific(symbol: string): EMarketSpecific {
@@ -44,6 +44,13 @@ export class ForexTypeHelper {
             const iNormalized = this.NormalizeInstrument(i);
             if (iNormalized === normalizedSymbol) {
                 return EMarketSpecific.Bonds;
+            }
+        }
+
+        for (const i of CommoditiesList) {
+            const iNormalized = this.NormalizeInstrument(i);
+            if (iNormalized === normalizedSymbol) {
+                return EMarketSpecific.Commodities;
             }
         }
 

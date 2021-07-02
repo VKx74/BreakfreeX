@@ -182,6 +182,12 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (this._tradingProfileService.missions) {
             this._loadingProfile = false;
         }
+
+        // let instruments = [];
+        // for (const i of CommoditiesWatchlist.data) {
+        //     instruments.push(i.symbol);
+        // }
+        // console.log(JSON.stringify(instruments));
     }
 
     is15MinSonarAccessRestriction(group: IGroupedResults): boolean {

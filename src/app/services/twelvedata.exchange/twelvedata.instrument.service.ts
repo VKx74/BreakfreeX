@@ -144,6 +144,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
 
     protected _requestInstrumentsWithSearch(search: string = ""): Observable<any> {
         let market = "";
+        let exchange = "";
         // const appType = this._applicationTypeService.applicationType;
         // switch (appType) {
         //     case ApplicationType.Crypto: market = "&Kind=crypto"; break;
@@ -151,10 +152,15 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         //     case ApplicationType.Stock: market = "&Kind=stock"; break;
         // }
 
+        if (!search) {
+            search = "A";
+            exchange = "&Exchange=NASDAQ";
+        }
+
         let takeAmount = 300;
         const request1 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=crypto"`);
         const request2 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=forex`);
-        const request3 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=stock`);
+        const request3 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=stock${exchange}`);
 
         return forkJoin([request1, request2, request3]).pipe(map((values) => {
             let res = {

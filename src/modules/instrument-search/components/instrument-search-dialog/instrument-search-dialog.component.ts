@@ -6,6 +6,7 @@ import { SettingsTranslateService } from 'modules/broker/localization/token';
 import { IInstrument } from '@app/models/common/instrument';
 import { InstrumentService } from '@app/services/instrument.service';
 import { EMarketSpecific } from '@app/models/common/marketSpecific';
+import { EExchange } from '@app/models/common/exchange';
 
 export interface InstrumentSearchDialogData {
     instrument: IInstrument;
@@ -32,7 +33,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
     public instrumentTypes: EMarketSpecific[] = [];
     public instruments: IInstrument[] = [];
     public preselectedInstrument: IInstrument;
-    @ViewChild ('input_control', {static: true}) input: ElementRef;
+    @ViewChild('input_control', { static: true }) input: ElementRef;
 
     public get instrumentName(): string {
         return this._instrumentName;
@@ -43,8 +44,8 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
             this._instrumentName = value;
             this._handleSearchChanged();
         }
-    } 
-    
+    }
+
     public get selectedInstrumentType(): string {
         return this._selectedInstrumentType;
     }
@@ -150,8 +151,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
 
     private _loadInstruments() {
         this.loading = true;
-        let search = this.instrumentName ? this.instrumentName : "A";
-        this._instrumentService.getInstruments(undefined, search).subscribe((originalData) => {
+        this._instrumentService.getInstruments(undefined, this.instrumentName).subscribe((originalData) => {
             const filteredData = this._filterDataByType(originalData);
             if (!this.instrumentName || this.instrumentName.length < 2) {
                 this.instruments = filteredData.splice(0, 300);
@@ -163,7 +163,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
                 if (this.preselectedInstrument) {
                     let existing = this.instruments.find(_ => _.id === this.preselectedInstrument.id && _.datafeed === this.preselectedInstrument.datafeed);
                     if (existing) {
-                        let index =  this.instruments.indexOf(existing);
+                        let index = this.instruments.indexOf(existing);
                         if (index < 10) {
                             this.preselectedInstrument = existing;
                         } else {
@@ -184,10 +184,27 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
     }
 
     private _filterDataByType(data: IInstrument[]): IInstrument[] {
+        const sortedData = data.sort((a, b) => {
+            let isAPrimary = a.exchange === EExchange.Oanda || a.exchange === EExchange.Binance || a.exchange === EExchange.NASDAQ;
+            let isBPrimary = b.exchange === EExchange.Oanda || b.exchange === EExchange.Binance || b.exchange === EExchange.NASDAQ;
+
+            if (isBPrimary && !isAPrimary) {
+                return 1;
+            }
+            if (isBPrimary && isAPrimary) {
+                return 0;
+            }
+            if (!isBPrimary && !isAPrimary) {
+                return 0;
+            }
+
+            return -1;
+        });
+        
         if (this.selectedInstrumentType === this._allTypes) {
-            return data;
+            return sortedData;
         }
 
-        return data.filter(_ => _.specific === this.selectedInstrumentType);
+        return sortedData.filter(_ => _.specific === this.selectedInstrumentType);
     }
 }
