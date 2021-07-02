@@ -5,22 +5,10 @@ import { TranslateService } from "@ngx-translate/core";
 import { SettingsTranslateService } from 'modules/broker/localization/token';
 import { IInstrument } from '@app/models/common/instrument';
 import { InstrumentService } from '@app/services/instrument.service';
+import { EMarketSpecific } from '@app/models/common/marketSpecific';
 
 export interface InstrumentSearchDialogData {
     instrument: IInstrument;
-}
-
-enum InstrumentType {
-    All = "All",
-    ForexMajor = "Forex Major",
-    ForexMinor = "Forex Minor",
-    ForexExotic = "Forex Exotic",
-    Indices = "Indices",
-    Commodities = "Commodities",
-    Metals = "Metals",
-    Bonds = "Bonds",
-    Stocks = "Stocks",
-    Crypto = "Crypto"
 }
 
 @Component({
@@ -37,10 +25,11 @@ enum InstrumentType {
 export class InstrumentSearchDialogComponent extends Modal implements OnInit {
     private _timeout: any;
     private _instrumentName: string;
+    private _allTypes: any = "All";
+    private _selectedInstrumentType: string = this._allTypes;
 
     public loading: boolean = true;
-    public selectedInstrumentType: InstrumentType = InstrumentType.All;
-    public instrumentTypes: InstrumentType[] = Object.keys(InstrumentType).map(_ => InstrumentType[_]);
+    public instrumentTypes: EMarketSpecific[] = [];
     public instruments: IInstrument[] = [];
     public preselectedInstrument: IInstrument;
     @ViewChild ('input_control', {static: true}) input: ElementRef;
@@ -54,12 +43,26 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
             this._instrumentName = value;
             this._handleSearchChanged();
         }
+    } 
+    
+    public get selectedInstrumentType(): string {
+        return this._selectedInstrumentType;
+    }
+
+    public set selectedInstrumentType(value: string) {
+        if (this._selectedInstrumentType !== value) {
+            this._selectedInstrumentType = value;
+            this._loadInstruments();
+        }
     }
 
     constructor(private _injector: Injector,
         private _instrumentService: InstrumentService,
         @Inject(MAT_DIALOG_DATA) public data: InstrumentSearchDialogData) {
         super(_injector);
+
+        this.instrumentTypes = Object.keys(EMarketSpecific).map(_ => EMarketSpecific[_]);
+        this.instrumentTypes.unshift(this._allTypes);
 
         if (this.data && this.data.instrument) {
             this.instrumentName = this.data.instrument.symbol;
@@ -76,7 +79,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
         this.input.nativeElement.focus();
     }
 
-    selectType(type: InstrumentType) {
+    selectType(type: EMarketSpecific) {
         this.selectedInstrumentType = type;
     }
 
@@ -112,6 +115,21 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
         }
     }
 
+    generateHighlight(data: string): string {
+        if (!this._instrumentName) {
+            return data;
+        }
+
+        let indexOfHighlight = data.toUpperCase().indexOf(this._instrumentName.toUpperCase());
+        if (indexOfHighlight === -1) {
+            return data;
+        }
+        let startString = data.substr(0, indexOfHighlight);
+        let highlightString = data.substr(indexOfHighlight, this._instrumentName.length);
+        let endString = data.substr(indexOfHighlight + this._instrumentName.length);
+        return `${startString}<span class="highlight">${highlightString}</span>${endString}`;
+    }
+
     private _handleArrow(isUp: boolean) {
         let index = this.instruments.indexOf(this.preselectedInstrument);
         let newValue = this.instruments[index + (isUp ? -1 : 1)];
@@ -132,20 +150,25 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
 
     private _loadInstruments() {
         this.loading = true;
-        this._instrumentService.getInstruments(undefined, this.instrumentName).subscribe((data) => {
+        let search = this.instrumentName ? this.instrumentName : "A";
+        this._instrumentService.getInstruments(undefined, search).subscribe((originalData) => {
+            const filteredData = this._filterDataByType(originalData);
             if (!this.instrumentName || this.instrumentName.length < 2) {
-                this.instruments = data.splice(0, 200);
+                this.instruments = filteredData.splice(0, 300);
             } else {
-                this.instruments = data;
+                this.instruments = filteredData;
             }
 
             if (this.instruments && this.instruments.length) {
                 if (this.preselectedInstrument) {
-                    let existing = this.instruments.find(_ => _.id === this.preselectedInstrument.id
-                        && _.datafeed === this.preselectedInstrument.datafeed);
-
+                    let existing = this.instruments.find(_ => _.id === this.preselectedInstrument.id && _.datafeed === this.preselectedInstrument.datafeed);
                     if (existing) {
-                        this.preselectedInstrument = existing;
+                        let index =  this.instruments.indexOf(existing);
+                        if (index < 10) {
+                            this.preselectedInstrument = existing;
+                        } else {
+                            this.preselectedInstrument = this.instruments[0];
+                        }
                     } else {
                         this.preselectedInstrument = this.instruments[0];
                     }
@@ -156,7 +179,15 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
                 this.preselectedInstrument = null;
             }
             this.loading = false;
-            this.input.nativeElement.focus();
+            // this.input.nativeElement.focus();
         });
+    }
+
+    private _filterDataByType(data: IInstrument[]): IInstrument[] {
+        if (this.selectedInstrumentType === this._allTypes) {
+            return data;
+        }
+
+        return data.filter(_ => _.specific === this.selectedInstrumentType);
     }
 }

@@ -5,9 +5,11 @@ import {EExchange} from "../../models/common/exchange";
 import {EMarketType} from "../../models/common/marketType";
 import {AppConfigService} from "../app.config.service";
 import {IInstrument} from "@app/models/common/instrument";
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, of, forkJoin } from 'rxjs';
 import {map} from "rxjs/operators";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { EMarketSpecific } from "@app/models/common/marketSpecific";
+import { ForexTypeHelper } from "../instrument.type.helper/forex.types.helper";
 
 @Injectable()
 export class TwelvedataInstrumentService extends InstrumentServiceBase {
@@ -115,10 +117,32 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             tickSizeCorrect: type === EMarketType.Stocks || type === EMarketType.Indices
         };
 
+        instrument.specific = this._marketSpecific(type, instrument.symbol);
+
         this._cachedSymbols.push(instrument);
     }
+    
+    protected _marketSpecific(type: EMarketType, symbol: string): EMarketSpecific {
+        if (type === EMarketType.Forex) {
+            return ForexTypeHelper.GetTypeSpecific(symbol);
+        }
 
-    protected _requestInstrumentsWithSearch(search: string = ""): Observable<any[]> {
+        if (type === EMarketType.Stocks) {
+            return EMarketSpecific.Stocks;
+        }
+
+        if (type === EMarketType.Crypto) {
+            return EMarketSpecific.Crypto;
+        }
+
+        if (type === EMarketType.Indices) {
+            return EMarketSpecific.Indices;
+        }
+
+        return null;
+    }
+
+    protected _requestInstrumentsWithSearch(search: string = ""): Observable<any> {
         let market = "";
         // const appType = this._applicationTypeService.applicationType;
         // switch (appType) {
@@ -128,11 +152,22 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         // }
 
         let takeAmount = 300;
-        if (!search) {
-            takeAmount = 100;
-        }
+        const request1 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=crypto"`);
+        const request2 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=forex`);
+        const request3 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=stock`);
 
-        return this._http.get<any[]>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}`);
+        return forkJoin([request1, request2, request3]).pipe(map((values) => {
+            let res = {
+                Data: []
+            };
+            
+            for (const v of values) {
+                if (v.Data) {
+                    res.Data = res.Data.concat(v.Data);
+                }
+            }
+            return res;
+        }));
     }
 
     private _getMarketType(market: string): EMarketType {

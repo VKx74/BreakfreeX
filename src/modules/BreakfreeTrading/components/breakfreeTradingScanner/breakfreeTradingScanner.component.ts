@@ -182,8 +182,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (this._tradingProfileService.missions) {
             this._loadingProfile = false;
         }
-
-        // this._supportedTimeframes = this._supportedTimeframes.reverse();
     }
 
     is15MinSonarAccessRestriction(group: IGroupedResults): boolean {

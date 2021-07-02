@@ -6,6 +6,8 @@ import {EExchange} from "../../models/common/exchange";
 import { EMarketType } from '@app/models/common/marketType';
 import { AppConfigService } from '../app.config.service';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { EMarketSpecific } from "@app/models/common/marketSpecific";
+import { ForexTypeHelper } from "../instrument.type.helper/forex.types.helper";
 
 @Injectable()
 export class OandaInstrumentService extends InstrumentServiceBase {
@@ -54,6 +56,8 @@ export class OandaInstrumentService extends InstrumentServiceBase {
                     tickSizeCorrect: true
                 };
 
+                instrument.specific = this._marketSpecific(instrument.symbol);
+
                 this._cachedSymbols.push(instrument);
             }
 
@@ -63,6 +67,10 @@ export class OandaInstrumentService extends InstrumentServiceBase {
         }
 
         return this._cachedSymbols;
+    }
+    
+    protected _marketSpecific(symbol: string): EMarketSpecific {
+        return ForexTypeHelper.GetTypeSpecific(symbol);
     }
 
     private _getTickSize(pricePrecision: number): number {

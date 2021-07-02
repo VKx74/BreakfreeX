@@ -20,8 +20,8 @@
             <div class="result-instruments">
                 <div [class.preselected]="preselectedInstrument === instrument"  class="result-instrument" *ngFor="let instrument of instruments" (click)="handleInstrumentSelected(instrument)"
                     (mouseenter)="mouseenterOnElement(instrument)">
-                    <div class="instrument-name">{{instrument.symbol}}</div>
-                    <div class="instrument-company">{{instrument.company}}</div>
+                    <div class="instrument-name" [innerHtml]="generateHighlight(instrument.symbol)"></div>
+                    <div class="instrument-company" [innerHtml]="generateHighlight(instrument.company)"></div>
                     <div class="instrument-datafeed">{{instrument.exchange}}</div>
                 </div> 
                 <div class="no-data" *ngIf="instruments && instruments.length === 0 && !loading">

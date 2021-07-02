@@ -121,7 +121,15 @@
     height: 75px;
   }
 
-  @media (max-width: 768px) { 
+  @media (max-height: 600px) {
+    .modal-body {
+      max-height: calc(100vh - 100px);
+    }
+  }
+  @media (max-height: 500px) {
+    .modal-body {
+      max-height: calc(100vh - 60px);
+    }
   }
 }
 
@@ -173,5 +181,9 @@
     label {
       color: themed('valueTextColor');
     }
+  }
+
+  /deep/.highlight {
+    color: themed('accentColor');
   }
 }
