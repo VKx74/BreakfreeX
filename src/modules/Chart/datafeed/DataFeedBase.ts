@@ -29,7 +29,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
         type: EMarketType.Forex
     };
 
-    static supportedTimeFramesStr: string[] = ['1 Minute', '5 Minutes', '15 Minutes', '1 Hour', '4 Hours', '1 Day', '1 Week'];
+    static supportedTimeFramesStr: string[] = ['1 Minute', '5 Minutes', '15 Minutes', '30 Minutes', '1 Hour', '2 Hours', '4 Hours', '12 Hours', '1 Day', '1 Week'];
     static supportedTimeFrames: ITimeFrame[] = [
 
         {
