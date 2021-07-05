@@ -7,9 +7,15 @@ import { IInstrument } from '@app/models/common/instrument';
 import { InstrumentService } from '@app/services/instrument.service';
 import { EMarketSpecific } from '@app/models/common/marketSpecific';
 import { EExchange } from '@app/models/common/exchange';
+import { InstrumentMappingService } from '@app/services/instrument-mapping.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 export interface InstrumentSearchDialogData {
     instrument: IInstrument;
+    isBrokerSearch: boolean;
+    instrumentSearchCallback?: (e?: EExchangeInstance, s?: string) => Observable<IInstrument[]>;
 }
 
 @Component({
@@ -38,6 +44,14 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
     public get instrumentName(): string {
         return this._instrumentName;
     }
+    
+    public get showCategory(): boolean {
+        return !this.data.isBrokerSearch;
+    }
+    
+    public get isBrokerSearch(): boolean {
+        return this.data.isBrokerSearch;
+    }
 
     public set instrumentName(value: string) {
         if (this._instrumentName !== value) {
@@ -59,6 +73,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
 
     constructor(private _injector: Injector,
         private _instrumentService: InstrumentService,
+        private _instrumentMapping: InstrumentMappingService,
         @Inject(MAT_DIALOG_DATA) public data: InstrumentSearchDialogData) {
         super(_injector);
 
@@ -77,7 +92,10 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
     }
 
     ngAfterViewInit() {
-        this.input.nativeElement.focus();
+        setTimeout(() => {
+            this.input.nativeElement.setSelectionRange(0, this.instrumentName.length);
+            this.input.nativeElement.focus();
+        }, 500);
     }
 
     selectType(type: EMarketSpecific) {
@@ -131,6 +149,40 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
         return `${startString}<span class="highlight">${highlightString}</span>${endString}`;
     }
 
+    isMappingExist(instrument: IInstrument): Observable<boolean> {
+        return this._instrumentMapping.getSymbolMapping().pipe(map((symbols) => {
+            if (this.isBrokerSearch) {
+                for (const i in symbols) {
+                    const symbol = symbols[i];
+                    if (symbol === instrument.symbol) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                const mappedInstrument = symbols[instrument.symbol];
+                return !!mappedInstrument;
+            }
+        }));
+    }
+
+    getMappingText(instrument: IInstrument): Observable<string> {
+        return this._instrumentMapping.getSymbolMapping().pipe(map((symbols) => {
+            if (this.isBrokerSearch) {
+                for (const i in symbols) {
+                    const symbol = symbols[i];
+                    if (symbol === instrument.symbol) {
+                        return `${instrument.symbol} mapped to ${i}`;
+                    }
+                }
+                return "";
+            } else {
+                const mappedInstrument = symbols[instrument.symbol];
+                return `${instrument.symbol} mapped to ${mappedInstrument}`;
+            }
+        }));
+    }
+
     private _handleArrow(isUp: boolean) {
         let index = this.instruments.indexOf(this.preselectedInstrument);
         let newValue = this.instruments[index + (isUp ? -1 : 1)];
@@ -151,24 +203,28 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
 
     private _loadInstruments() {
         this.loading = true;
-        this._instrumentService.getInstruments(undefined, this.instrumentName).subscribe((originalData) => {
-            const filteredData = this._filterDataByType(originalData);
-            if (!this.instrumentName || this.instrumentName.length < 2) {
-                this.instruments = filteredData.splice(0, 300);
-            } else {
-                this.instruments = filteredData;
-            }
+        if (this.data.instrumentSearchCallback) {
+            return this.data.instrumentSearchCallback(undefined, this.instrumentName).subscribe(this._mapData.bind(this));
+        } else {
+            return this._instrumentService.getInstruments(undefined, this.instrumentName).subscribe(this._mapData.bind(this));
+        }
+    }
 
-            if (this.instruments && this.instruments.length) {
-                if (this.preselectedInstrument) {
-                    let existing = this.instruments.find(_ => _.id === this.preselectedInstrument.id && _.datafeed === this.preselectedInstrument.datafeed);
-                    if (existing) {
-                        let index = this.instruments.indexOf(existing);
-                        if (index < 10) {
-                            this.preselectedInstrument = existing;
-                        } else {
-                            this.preselectedInstrument = this.instruments[0];
-                        }
+    private _mapData(originalData: IInstrument[]) {
+        const filteredData = this._filterDataByType(originalData);
+        if (!this.instrumentName || this.instrumentName.length < 2) {
+            this.instruments = filteredData.splice(0, 300);
+        } else {
+            this.instruments = filteredData;
+        }
+
+        if (this.instruments && this.instruments.length) {
+            if (this.preselectedInstrument) {
+                let existing = this.instruments.find(_ => _.id === this.preselectedInstrument.id && _.datafeed === this.preselectedInstrument.datafeed);
+                if (existing) {
+                    let index = this.instruments.indexOf(existing);
+                    if (index < 10) {
+                        this.preselectedInstrument = existing;
                     } else {
                         this.preselectedInstrument = this.instruments[0];
                     }
@@ -176,11 +232,12 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
                     this.preselectedInstrument = this.instruments[0];
                 }
             } else {
-                this.preselectedInstrument = null;
+                this.preselectedInstrument = this.instruments[0];
             }
-            this.loading = false;
-            // this.input.nativeElement.focus();
-        });
+        } else {
+            this.preselectedInstrument = null;
+        }
+        this.loading = false;
     }
 
     private _filterDataByType(data: IInstrument[]): IInstrument[] {
@@ -200,7 +257,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
 
             return -1;
         });
-        
+
         if (this.selectedInstrumentType === this._allTypes) {
             return sortedData;
         }

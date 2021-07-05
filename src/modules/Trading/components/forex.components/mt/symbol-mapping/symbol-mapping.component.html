@@ -42,7 +42,7 @@
                 [instrumentSearchCallback]="instrumentDFeedSearchCallback" class="left"></instrument-search>
                 
                 <instrument-search  (onSelect)="handleBrokerInstrumentChange($event)" #brokerInstrumentSearch            
-                [instrumentSearchCallback]="instrumentBrokerSearchCallback" class="left"></instrument-search>
+                [instrumentSearchCallback]="instrumentBrokerSearchCallback" [isBrokerSearch]="true" class="left"></instrument-search>
                 <div class="add-mapping">
                     <i (click)="Add()" class="crypto-icon crypto-icon-add"></i>
                 </div>

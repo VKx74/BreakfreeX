@@ -8,10 +8,10 @@
         <div class="modal-body">
             <div class="instrument-input-container">
                 <i class="fa search-icon fa-search"></i>
-                <input matInput type="text" [(ngModel)]="instrumentName" placeholder="Search"
+                <input type="search" autocomplete="off" matInput type="text" [(ngModel)]="instrumentName" placeholder="Search"
                     class="crypto-input bft-form-input" #input_control>
             </div>
-            <div class="instrument-type-container">
+            <div class="instrument-type-container" *ngIf="showCategory">
                 <div *ngFor="let i of instrumentTypes" class="instrument-type"
                     [class.active]="selectedInstrumentType === i" (click)="selectType(i)">
                     <div class="instrument-type-name">{{i}}</div>
@@ -21,6 +21,9 @@
                 <div [class.preselected]="preselectedInstrument === instrument"  class="result-instrument" *ngFor="let instrument of instruments" (click)="handleInstrumentSelected(instrument)"
                     (mouseenter)="mouseenterOnElement(instrument)">
                     <div class="instrument-name" [innerHtml]="generateHighlight(instrument.symbol)"></div>
+                    <div class="instrument-mapping">
+                        <i class="fa fa-clone" *ngIf="isMappingExist(instrument) | async" tooltip [matTooltip]="getMappingText(instrument) | async" aria-hidden="true"></i>
+                    </div>
                     <div class="instrument-company" [innerHtml]="generateHighlight(instrument.company)"></div>
                     <div class="instrument-datafeed">{{instrument.exchange}}</div>
                 </div> 

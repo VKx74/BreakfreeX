@@ -9,6 +9,7 @@ import {LocalizationModule} from "Localization";
 import { InstrumentSearchDialogComponent } from './components/instrument-search-dialog/instrument-search-dialog.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LoaderModule } from 'modules/loader/loader.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { LoaderModule } from 'modules/loader/loader.module';
         MatFormFieldModule,
         MatInputModule,
         MatAutocompleteModule,
+        MatTooltipModule,
         FormsModule,
         ReactiveFormsModule,
         LocalizationModule,

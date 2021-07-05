@@ -38,6 +38,7 @@ export class InstrumentSearchComponent {
     @Input() resetAfterSelection: boolean = false;
     @Input() openPanelOnClick = false;
     @Input() showDropDown = false;
+    @Input() isBrokerSearch = false;
     @Output() onSelect = new EventEmitter<IInstrument>();
     @ViewChild(MatAutocompleteTrigger, { static: true }) trigger;
     @ViewChild ('instrument_input', {static: true}) input: ElementRef;
@@ -116,7 +117,9 @@ export class InstrumentSearchComponent {
             this.input.nativeElement.blur();
             this._dialog.open(InstrumentSearchDialogComponent, {
                 data: {
-                    instrument: this.selectedInstrument
+                    instrument: this.selectedInstrument,
+                    instrumentSearchCallback: this.instrumentSearchCallback,
+                    isBrokerSearch: this.isBrokerSearch
                 }
             }).afterClosed().subscribe((data) => {
                 if (data) {
