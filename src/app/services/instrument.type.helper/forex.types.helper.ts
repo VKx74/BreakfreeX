@@ -1,7 +1,17 @@
 import { EMarketSpecific } from "@app/models/common/marketSpecific";
 import { BondsList, CommoditiesList, ForexExoticList, ForexMajorList, ForexMinorList, IndicesList, MetalsList } from "./forex.types";
+let AllInstruments: string[] = [];
+AllInstruments = AllInstruments.concat(ForexMajorList);
+AllInstruments = AllInstruments.concat(ForexMinorList);
+AllInstruments = AllInstruments.concat(ForexExoticList);
+AllInstruments = AllInstruments.concat(IndicesList);
+AllInstruments = AllInstruments.concat(MetalsList);
+AllInstruments = AllInstruments.concat(BondsList);
+AllInstruments = AllInstruments.concat(CommoditiesList);
+AllInstruments = AllInstruments.reverse();
 
 export class ForexTypeHelper {
+
     public static GetTypeSpecific(symbol: string): EMarketSpecific {
         const normalizedSymbol = this.NormalizeInstrument(symbol);
 
@@ -55,6 +65,19 @@ export class ForexTypeHelper {
         }
 
         return null;
+    }
+
+    public static GetIndexInList(symbol: string): number {
+        for (let i = 0; i < AllInstruments.length; i++) {
+            let normalizedA = ForexTypeHelper.NormalizeInstrument(AllInstruments[i]);
+            let normalizedB = ForexTypeHelper.NormalizeInstrument(symbol);
+
+            if (normalizedA === normalizedB) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     public static NormalizeInstrument(symbol: string): string {

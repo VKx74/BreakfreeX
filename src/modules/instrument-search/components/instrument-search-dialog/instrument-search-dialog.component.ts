@@ -11,6 +11,7 @@ import { InstrumentMappingService } from '@app/services/instrument-mapping.servi
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { ForexTypeHelper } from '@app/services/instrument.type.helper/forex.types.helper';
 
 export interface InstrumentSearchDialogData {
     instrument: IInstrument;
@@ -241,7 +242,21 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
     }
 
     private _filterDataByType(data: IInstrument[]): IInstrument[] {
-        const sortedData = data.sort((a, b) => {
+        let sortedData = data.sort((a, b) => {
+            let aIndex = ForexTypeHelper.GetIndexInList(a.symbol);
+            let bIndex = ForexTypeHelper.GetIndexInList(b.symbol);
+
+            if (aIndex === bIndex) {
+                return 0;
+            }
+
+            if (aIndex < bIndex) {
+                return 1;
+            }
+            return -1;
+        });
+
+        sortedData = data.sort((a, b) => {
             let isAPrimary = a.exchange === EExchange.Oanda || a.exchange === EExchange.Binance || a.exchange === EExchange.NASDAQ;
             let isBPrimary = b.exchange === EExchange.Oanda || b.exchange === EExchange.Binance || b.exchange === EExchange.NASDAQ;
 
@@ -256,7 +271,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
             }
 
             return -1;
-        });
+        }); 
 
         if (this.selectedInstrumentType === this._allTypes) {
             return sortedData;
