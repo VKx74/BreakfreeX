@@ -179,6 +179,7 @@
     background: themed('card-background-color');
 
     &.active {
+      font-weight: 700 !important;
       color: white;
       background: themed('accentColor');
     }

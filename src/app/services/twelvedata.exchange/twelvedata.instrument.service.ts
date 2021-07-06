@@ -119,7 +119,10 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
 
         instrument.specific = this._marketSpecific(type, instrument.symbol);
 
-        this._cachedSymbols.push(instrument);
+        let existing = this._cachedSymbols.find(i => i.id === instrument.id);
+        if (!existing) {
+            this._cachedSymbols.push(instrument);
+        }
     }
     
     protected _marketSpecific(type: EMarketType, symbol: string): EMarketSpecific {
@@ -152,17 +155,20 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         //     case ApplicationType.Stock: market = "&Kind=stock"; break;
         // }
 
+        let request4 = of([]);
+        let takeAmount = 200;
         if (!search) {
             search = "A";
             exchange = "&Exchange=NASDAQ";
+        } else {
+            request4 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}`);
         }
 
-        let takeAmount = 300;
-        const request1 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=crypto"`);
+        const request1 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=crypto`);
         const request2 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=forex`);
         const request3 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=stock${exchange}`);
 
-        return forkJoin([request1, request2, request3]).pipe(map((values) => {
+        return forkJoin([request1, request2, request3, request4]).pipe(map((values) => {
             let res = {
                 Data: []
             };
@@ -172,6 +178,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
                     res.Data = res.Data.concat(v.Data);
                 }
             }
+
             return res;
         }));
     }
