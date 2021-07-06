@@ -212,5 +212,7 @@
   "timeframe": "Time Frame",
   "trend": "Trend",
   "tte": "TTE",
-  "tp": "TP"
+  "tp": "TP",
+  "symbolSearch": "Пошук Інструментів",
+  "noSymbols": "Не знайдено символів"
 }

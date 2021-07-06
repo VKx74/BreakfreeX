@@ -707,7 +707,7 @@ export abstract class MTBroker implements IMTBroker {
                 id: instrument.Name,
                 symbol: instrument.Name,
                 company: instrument.Description,
-                exchange: null,
+                exchange: this.instanceType as any,
                 datafeed: null,
                 type: instrument.CalculatioType as EMarketType,
                 tickSize: tickSize,

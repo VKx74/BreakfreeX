@@ -6,22 +6,34 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InstrumentSearchComponent} from "./components/instrument-search/instrument-search.component";
 import {LocalizationModule} from "Localization";
+import { InstrumentSearchDialogComponent } from './components/instrument-search-dialog/instrument-search-dialog.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { LoaderModule } from 'modules/loader/loader.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
-        InstrumentSearchComponent
+        InstrumentSearchComponent,
+        InstrumentSearchDialogComponent
     ],
     imports: [
         CommonModule,
         MatFormFieldModule,
         MatInputModule,
         MatAutocompleteModule,
+        MatTooltipModule,
         FormsModule,
         ReactiveFormsModule,
-        LocalizationModule
+        LocalizationModule,
+        DragDropModule,
+        LoaderModule
     ],
     exports: [
-        InstrumentSearchComponent
+        InstrumentSearchComponent,
+        InstrumentSearchDialogComponent
+    ],
+    entryComponents: [
+        InstrumentSearchDialogComponent
     ]
 })
 export class InstrumentSearchModule {

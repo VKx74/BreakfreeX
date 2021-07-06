@@ -19,6 +19,7 @@ import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTrac
 import { TradeFromChartService } from './services/trade-from-chart.service';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { AlertingFromChartService } from './services/alerting-from-chart.service';
+import { InstrumentSearchModule } from '@instrument-search/instrument-search.module';
 
 export function sharedTemplatesDataProviderService() {
     return sharedProviderResolver('chartTemplatesDataProviderService');
@@ -36,7 +37,8 @@ export function sharedTemplatesDataProviderService() {
         LoadingModule,
         LinkingModule,
         LoaderModule,
-        BreakfreeTradingModule
+        BreakfreeTradingModule,
+        InstrumentSearchModule
     ],
     exports: [
         TcdComponent,

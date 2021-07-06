@@ -206,5 +206,7 @@
   "timeframe": "Time Frame",
   "trend": "Trend",
   "tte": "TTE",
-  "tp": "TP"
+  "tp": "TP",
+  "symbolSearch": "Symbol Search",
+  "noSymbols": "No symbols match your criteria"
 }

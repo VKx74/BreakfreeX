@@ -15,7 +15,7 @@
             <div class="flex"></div>     
             
             <div class="static-login-popup" *ngIf="showStaticLogin; else menu" (click)="register()">
-                <div class="static-login-popup-text">2 DAYS FREE TRIAL</div>
+                <div class="static-login-popup-text">START FREE NOW</div>
             </div>   
             <ng-template #menu>
                 <div class="navigation-right-side flex align-items-center h-100" [class.z-index-2]="!(debouncedSidebarState$ | async)">

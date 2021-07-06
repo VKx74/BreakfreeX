@@ -1,6 +1,7 @@
 import {EExchange} from "./exchange";
 import {EMarketType} from "./marketType";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { EMarketSpecific } from "./marketSpecific";
 
 export interface IInstrument {
     id: string;
@@ -8,6 +9,7 @@ export interface IInstrument {
     exchange: EExchange;
     datafeed: EExchangeInstance;
     type: EMarketType;
+    specific?: EMarketSpecific;
     tickSize: number;
     baseInstrument: string;
     dependInstrument: string;

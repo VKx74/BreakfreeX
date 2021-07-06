@@ -8,6 +8,7 @@ import {IInstrument} from "@app/models/common/instrument";
 import { Observable, Subject, of } from 'rxjs';
 import {map} from "rxjs/operators";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { EMarketSpecific } from "@app/models/common/marketSpecific";
 
 @Injectable()
 export class KaikoInstrumentService extends InstrumentServiceBase {
@@ -84,7 +85,8 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
                     baseInstrument: product.CurrencyBase ?  product.CurrencyBase.toUpperCase() : "",
                     dependInstrument: product.CurrencyQuote ?  product.CurrencyQuote.toUpperCase() : "",
                     company: description,
-                    tradable: false
+                    tradable: false,
+                    specific: this._marketSpecific(product.Kind)
                 };
         
                 this._cachedSymbols.push(instrument);
@@ -99,6 +101,18 @@ export class KaikoInstrumentService extends InstrumentServiceBase {
             this._cacheBySearch[search] = this._cachedSymbols.slice();
         }
         return this._filterResponse(exchange, search);
+    }
+
+    protected _marketSpecific(kind: string): EMarketSpecific {
+        if (kind) {
+            kind = kind.toLowerCase();
+        }
+        
+        if (kind === 'crypto') {
+            return EMarketSpecific.Crypto;
+        }
+
+        return null;
     }
 
     protected _requestInstrumentsWithSearch(search: string = ""): Observable<any[]> {

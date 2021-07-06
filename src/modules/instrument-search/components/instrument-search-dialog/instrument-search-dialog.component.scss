@@ -1,0 +1,200 @@
+@import "mixins/themify";
+@import "themes/themes";
+@import "global-styles/variables";
+
+:host {
+  .crypto-modal {
+    .crypto-icon-close {
+      font-size: 14px !important;
+    }
+    div.modal-body {
+      position: static;
+      margin-top:0px !important;
+      padding: 0px !important;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .modal-header {
+    background: transparent;
+    .modal-title {
+      font-size: 20px !important;
+    }
+  }
+
+  .instrument-type-container {
+    display: flex;
+    max-width: 550px;
+    flex-flow: wrap;
+    padding: 0px 10px;
+    .instrument-type {
+      display: flex;
+      font-size: 12px;
+      margin: 3px 6px;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 15px;
+    }
+  }
+
+  .instrument-input-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    padding: 0px 15px;
+    margin: 15px 0px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    .crypto-input {
+      width: 100%;
+      background-color: transparent;
+      margin: 0px 10px;
+      padding: 0px;
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+  }
+
+  .result-instruments {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    margin: 15px;
+    position: relative;
+    height: 30vh;
+  }
+
+  .loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .no-data {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .result-instrument {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 5px;
+    border-bottom: 1px solid;
+    cursor: pointer;
+  }
+
+  .instrument-name, .instrument-company, .instrument-datafeed {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .instrument-name {
+    max-width: 150px;
+    width: 25%;
+    font-weight: 700;
+  }
+
+  .instrument-mapping {
+    max-width: 50px;
+    width: 5%;
+    text-align: right;
+  }
+
+  .instrument-company {
+    max-width: 300px;
+    width: 45%;
+  }
+
+  .instrument-datafeed {
+    text-align: end;
+    text-transform: uppercase;
+    padding-right: 5px;
+    max-width: 80px;
+    width: 25%;
+  }
+
+  .loader-container {
+    width: 75px;
+    height: 75px;
+  }
+
+  @media (max-height: 600px) {
+    .modal-body {
+      max-height: calc(100vh - 100px);
+    }
+  }
+  @media (max-height: 500px) {
+    .modal-body {
+      max-height: calc(100vh - 60px);
+    }
+  }
+}
+
+@include themify($themes, true) {
+
+  .text {
+    color: themed('valueTextColor');
+  } 
+
+  .result-instrument {
+    border-bottom-color: themed('activeBackgroundColor');
+  }
+
+  .instrument-input-container {
+    border-top-color: themed('activeBackgroundColor');
+    border-bottom-color: themed('activeBackgroundColor');
+  } 
+
+  .search-icon, .crypto-input, .instrument-datafeed {
+    color: themed('titleTextColor');
+  }
+
+  .close, .modal-title, .instrument-name, .instrument-company, .no-data {
+    color: themed('valueTextColor');
+  }
+
+  .instrument-type {
+    color: themed('valueTextColor');
+    background: themed('tableBorders');
+  }
+
+  .result-instrument {
+    &.preselected {
+      background: themed('activeBackgroundColor');
+    }
+  }
+
+  .instrument-type {
+    color: themed('valueTextColor');
+    background: themed('card-background-color');
+
+    &.active {
+      color: white;
+      background: themed('accentColor');
+    }
+  }
+
+  .policy-agreement-wrapper {
+    label {
+      color: themed('valueTextColor');
+    }
+  }
+
+  .instrument-mapping {
+    color: themed('accentColor');
+  }
+
+  /deep/.highlight {
+    color: themed('accentColor');
+  }
+}

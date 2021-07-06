@@ -317,6 +317,7 @@
 
   .nborder {
     border-radius: 5px;
+    border: none;
   }
 
   .tradescoreholder {
@@ -430,10 +431,6 @@
 
   .orderpanelprefix {
     color: themed("orderpanelprefixcolor");
-  }
-
-  .nborder {
-    border: 1px solid themed("niceborder");
   }
 
   .orderheader {

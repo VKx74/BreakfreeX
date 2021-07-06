@@ -2,7 +2,7 @@
   <div class="instrument-filter-container">
     <div class="filter-title">Symbol:</div>
     <div class="instrument-filter-input">
-      <instrument-search [instrument]="instrument" (onSelect)="handleInstrumentChange($event)" [instrumentSearchCallback]="instrumentSearchCallback"></instrument-search>
+      <instrument-search [instrument]="instrument" (onSelect)="handleInstrumentChange($event)" [instrumentSearchCallback]="instrumentSearchCallback" [isBrokerSearch]="true"></instrument-search>
     </div>
   </div>
 
