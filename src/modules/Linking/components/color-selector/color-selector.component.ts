@@ -1,15 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-
-export const Colors = [
-    '#098BB8',
-    '#1A998A',
-    '#EF2C35',
-    '#DE8408',
-    '#5B3E84',
-    '#DCB0D1',
-    '#A8A135',
-    '#74D3C1'
-];
+import { Colors } from '@linking/linking-manager';
 
 @Component({
     selector: 'color-selector',

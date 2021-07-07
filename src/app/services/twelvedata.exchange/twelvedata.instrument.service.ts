@@ -160,7 +160,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
             requests.push(request2);
             requests.push(request3);
         } else {
-            requests.push(this._http.get<any>(`${this._endpoint}?Take=1000&Search=${search}${market}`));
+            requests.push(this._http.get<any>(`${this._endpoint}?Take=500&Search=${search}${market}`));
         }
 
         return forkJoin(requests).pipe(map((values) => {

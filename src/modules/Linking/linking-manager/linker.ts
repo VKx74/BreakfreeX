@@ -3,6 +3,16 @@ import {JsUtil} from "../../../utils/jsUtil";
 import {LinkingMessagesBus} from "../services/linking-channels-hub";
 import {LinkingAction, LinkingMessage} from '../models/models';
 
+export const Colors = [
+    '#098BB8',
+    '#1A998A',
+    '#EF2C35',
+    '#DE8408',
+    '#5B3E84',
+    '#DCB0D1',
+    '#A8A135',
+    '#74D3C1'
+];
 
 export class Linker {
     id: string = JsUtil.generateGUID();
@@ -30,6 +40,10 @@ export class Linker {
             return;
         }
         this.setLinking("#098BB8");
+    }
+
+    getLinkingColors(): string[] { 
+        return Colors;
     }
 
     setLinking(linkingId: string) {
