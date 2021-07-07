@@ -119,7 +119,7 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
 
         instrument.specific = this._marketSpecific(type, instrument.symbol);
 
-        let existing = this._cachedSymbols.find(i => i.id === instrument.id);
+        let existing = this._cachedSymbols.find(i => i.id === instrument.id && i.exchange === instrument.exchange);
         if (!existing) {
             this._cachedSymbols.push(instrument);
         }
@@ -148,27 +148,22 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
     protected _requestInstrumentsWithSearch(search: string = ""): Observable<any> {
         let market = "";
         let exchange = "";
-        // const appType = this._applicationTypeService.applicationType;
-        // switch (appType) {
-        //     case ApplicationType.Crypto: market = "&Kind=crypto"; break;
-        //     case ApplicationType.Forex: market = "&Kind=forex"; break;
-        //     case ApplicationType.Stock: market = "&Kind=stock"; break;
-        // }
-
-        let request4 = of([]);
         let takeAmount = 200;
+        let requests: Observable<any>[] = [];
         if (!search) {
             search = "A";
             exchange = "&Exchange=NASDAQ";
+            const request1 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=crypto`);
+            const request2 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=forex`);
+            const request3 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=stock${exchange}`);
+            requests.push(request1);
+            requests.push(request2);
+            requests.push(request3);
         } else {
-            request4 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}`);
+            requests.push(this._http.get<any>(`${this._endpoint}?Take=1000&Search=${search}${market}`));
         }
 
-        const request1 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=crypto`);
-        const request2 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=forex`);
-        const request3 = this._http.get<any>(`${this._endpoint}?Take=${takeAmount}&Search=${search}${market}&Kind=stock${exchange}`);
-
-        return forkJoin([request1, request2, request3, request4]).pipe(map((values) => {
+        return forkJoin(requests).pipe(map((values) => {
             let res = {
                 Data: []
             };
