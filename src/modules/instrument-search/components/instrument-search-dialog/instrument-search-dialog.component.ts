@@ -243,22 +243,8 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
 
     private _filterDataByType(data: IInstrument[]): IInstrument[] {
         let sortedData = data.sort((a, b) => {
-            let aIndex = ForexTypeHelper.GetIndexInList(a.symbol);
-            let bIndex = ForexTypeHelper.GetIndexInList(b.symbol);
-
-            if (aIndex === bIndex) {
-                return 0;
-            }
-
-            if (aIndex < bIndex) {
-                return 1;
-            }
-            return -1;
-        });
-
-        sortedData = data.sort((a, b) => {
-            let isAPrimary = a.exchange === EExchange.Oanda || a.exchange === EExchange.Binance || a.exchange === EExchange.NASDAQ;
-            let isBPrimary = b.exchange === EExchange.Oanda || b.exchange === EExchange.Binance || b.exchange === EExchange.NASDAQ;
+            let isAPrimary = a.exchange === EExchange.Oanda || a.exchange === EExchange.Binance || a.exchange === EExchange.NASDAQ || a.exchange === EExchange.NYSE;
+            let isBPrimary = b.exchange === EExchange.Oanda || b.exchange === EExchange.Binance || b.exchange === EExchange.NASDAQ || a.exchange === EExchange.NYSE;
 
             if (isBPrimary && !isAPrimary) {
                 return 1;
@@ -272,6 +258,32 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
 
             return -1;
         }); 
+
+        sortedData = sortedData.sort((a, b) => {
+            let aIndex = ForexTypeHelper.GetIndexInList(a.symbol);
+            let bIndex = ForexTypeHelper.GetIndexInList(b.symbol);
+
+            let isAPrimarySymbol = a.symbol.toUpperCase() === this.instrumentName.toUpperCase();
+            let isBPrimarySymbol = b.symbol.toUpperCase() === this.instrumentName.toUpperCase();
+
+            if (!isAPrimarySymbol && isBPrimarySymbol) {
+                return 1;
+            }
+
+            if (isAPrimarySymbol && !isBPrimarySymbol) {
+                return -1;
+            }
+
+            if (aIndex === bIndex) {
+                return 0;
+            }
+
+            if (aIndex < bIndex) {
+                return 1;
+            } 
+            
+            return -1;
+        });
 
         if (this.selectedInstrumentType === this._allTypes) {
             return sortedData;
