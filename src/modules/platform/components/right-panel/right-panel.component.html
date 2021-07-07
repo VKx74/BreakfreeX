@@ -1,0 +1,24 @@
+<div class="root">
+    <div class="widget-container">
+    </div>
+    <div class="widget-selector">
+        <div class="max-size-restrictor">
+            <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
+                [class.active]="SelectedComponent === Components.Sonar">
+                <i class="fa fa-th" aria-hidden="true"></i>
+            </div>
+            <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
+                [class.active]="SelectedComponent === Components.Watchlist">
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </div>
+            <div class="alerts-widget widget-selector-icon" (click)="selectComponent(Components.Alerts)"
+                [class.active]="SelectedComponent === Components.Alerts">
+                <i class="fa fa-bullhorn" aria-hidden="true"></i>
+            </div>
+            <div class="academy-widget widget-selector-icon" (click)="selectComponent(Components.Academy)"
+                [class.active]="SelectedComponent === Components.Academy">
+                <i class="fa fa-book" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+</div>

@@ -266,7 +266,8 @@ img.mobileshow {
 .navigation {
   @include themify($themes, true) {
     background-color: themed("appPanelColor");
-    box-shadow: themed("box-shadowPanel");
+    border-bottom: 1px solid;
+    border-bottom-color: themed("gutterColor");
 
     .logo__img {
       color: themed("navigationIconColor");

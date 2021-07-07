@@ -114,6 +114,7 @@ import { MissionTrackingService } from '@app/services/missions-tracking.service'
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { TradeGuardTrackingService } from '@app/services/trade-guard-tracking.service';
+import { RightPanelComponent } from './components/right-panel/right-panel.component';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -122,6 +123,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         PlatformComponent,
         DashboardComponent,
         BottomPanelComponent,
+        RightPanelComponent,
 
         ComponentSelectorComponent,
         FooterComponent,

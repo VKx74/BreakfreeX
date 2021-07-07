@@ -56,6 +56,8 @@ export class DashboardComponent {
     private _updateInterval = 1000 * 60 * 5;
     private _autoSaveChecker = 1000 * 10;
     private _freeUserPopup = 1000 * 60 * 3;
+    private _rightPanelMaxSize = 600;
+    private _rightPanelSize = 300;
     private _intervalLink: any;
     private _freeUserPopupTimer: any;
     private _saveLayout = true;
@@ -81,6 +83,22 @@ export class DashboardComponent {
 
     get bottomPanelMinSize() {
         return 160;
+    }
+
+    get rightPanelMinSize() {
+        return 150;
+    }
+
+    get rightPanelMaxSize() {
+        return this._rightPanelMaxSize;
+    }
+
+    get rightPanelSize() {
+        return this._rightPanelSize;
+    }
+
+    set rightPanelSize(value: number) {
+        this._rightPanelSize = value;
     }
 
     constructor(private _store: Store<AppState>,
@@ -367,7 +385,7 @@ export class DashboardComponent {
         this._saveLayoutState();
     }
 
-    handleSplitDragEnd(c) {
+    handleVerticalSplitDragEnd(c) {
         if (c.sizes[1] >= this.openBottomPanel) {
             this.bottomPanelSizeService.setBottomPanelSize(c.sizes[1]);
         } else if (this.bottomPanelSizeService.sizeBottomPanel() >= this.openBottomPanel) {
@@ -376,6 +394,10 @@ export class DashboardComponent {
             this.bottomPanelSizeService.setBottomPanelSize(this.openBottomPanel);
         }
 
+        EventsHelper.triggerWindowResize();
+    }
+
+    handleHorizontalSplitDragEnd(c) {
         EventsHelper.triggerWindowResize();
     }
 

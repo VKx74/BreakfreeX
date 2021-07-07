@@ -1,0 +1,55 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "modules/Layout/styles/themes/themes";
+
+:host {
+  .root {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+
+    .widget-container {
+      display: flex;
+      height: 100%;
+    }
+
+    .widget-selector {
+      display: flex;
+      justify-content: center;
+
+      .max-size-restrictor {
+        justify-content: space-around;
+        display: flex;
+        max-width: 400px;
+        width: 100%;
+      }
+
+      .widget-selector-icon {
+        width: 100%;
+        height: 30px;
+        display: flex;
+        font-size: 18px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .widget-selector {
+    background: themed('noactiveTabs');
+  }
+  .widget-selector-icon {
+    color: themed('titleTextColor');
+
+    &.active {
+      font-weight: 700 !important;
+      background: themed('accentLightColor');
+      border-top: 1px solid themed('titleTextColor');
+    }
+  }
+}
