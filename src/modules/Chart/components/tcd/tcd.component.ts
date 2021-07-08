@@ -177,6 +177,8 @@ export class TcdComponent extends BaseLayoutItemComponent {
                     state.chartState.chart.theme = theme;
                 }
             }
+        } else {
+            this._setLinkerColor();
         }
 
         this._datafeed.init(false).then(d => {
@@ -268,6 +270,17 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 this._handleBrokerConnected();
             });
         });
+    }
+
+    private _setLinkerColor() {
+        const colors = this.linker.getLinkingColors();
+        const charts = this._chartTrackerService.availableCharts;
+        if (charts.length >= colors.length) {
+            this.linker.setLinking(null);
+            return;
+        }
+        const neededColorId = charts.length % colors.length;
+        this.linker.setLinking(colors[neededColorId]);
     }
 
     private _handleBrokerConnected() {
@@ -505,7 +518,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     protected useDefaultLinker(): boolean {
-        return true;
+        return false;
     }
 
     private searchInstrumentHandler(symbol: string): Promise<IInstrument[]> {

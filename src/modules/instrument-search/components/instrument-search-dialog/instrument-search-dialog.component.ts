@@ -262,9 +262,10 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
         sortedData = sortedData.sort((a, b) => {
             let aIndex = ForexTypeHelper.GetIndexInList(a.symbol);
             let bIndex = ForexTypeHelper.GetIndexInList(b.symbol);
+            let searchingInstrument = this.instrumentName ? this.instrumentName.toUpperCase() : "";
 
-            let isAPrimarySymbol = a.symbol.toUpperCase() === this.instrumentName.toUpperCase();
-            let isBPrimarySymbol = b.symbol.toUpperCase() === this.instrumentName.toUpperCase();
+            let isAPrimarySymbol = a.symbol.toUpperCase() === searchingInstrument;
+            let isBPrimarySymbol = b.symbol.toUpperCase() === searchingInstrument;
 
             if (!isAPrimarySymbol && isBPrimarySymbol) {
                 return 1;

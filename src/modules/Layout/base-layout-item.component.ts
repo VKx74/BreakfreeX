@@ -55,6 +55,10 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
         return true;
     }
 
+    protected useRandomLinker(): boolean {
+        return false;
+    }
+
     protected getState(): any {
         return null;
     }
