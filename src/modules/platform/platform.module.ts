@@ -7,7 +7,7 @@ import {LoadingModule} from "ngx-loading";
 import {ChartModule, TcdComponent} from "Chart";
 import {UIModule} from "UI";
 import {TradingModule} from "Trading";
-import {WatchlistComponent, WatchlistModule} from "Watchlist";
+import {WatchlistModule} from "Watchlist";
 import {StorageModule} from "Storage";
 import {OrderBookChartComponent, OrderBookChartModule} from "../OrderBookChart";
 import {ScriptingModule} from "@scripting/scripting.module";
@@ -109,12 +109,13 @@ import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.co
 import { SingleSessionService } from '@app/services/single-session.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
-import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 import { MissionTrackingService } from '@app/services/missions-tracking.service';
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { TradeGuardTrackingService } from '@app/services/trade-guard-tracking.service';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
+import { BreakfreeTradingScannerWidget } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScanner.widget';
+import { WatchlistWidget } from 'modules/Watchlist/components/widget/watchlist.widget';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -359,8 +360,8 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                             component: TcdComponent
                         },
                         {
-                            componentName: ComponentIdentifier.watchlist,
-                            component: WatchlistComponent
+                            componentName: ComponentIdentifier.watchlistWidget,
+                            component: WatchlistWidget
                         },
                         {
                             componentName: ComponentIdentifier.orderBookChart,
@@ -391,8 +392,8 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                             component: BreakfreeTradingAcademyComponent
                         }, 
                         {
-                            componentName: ComponentIdentifier.breakfreeTradingScanner,
-                            component: BreakfreeTradingScannerComponent
+                            componentName: ComponentIdentifier.BreakfreeTradingScannerWidget,
+                            component: BreakfreeTradingScannerWidget
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,

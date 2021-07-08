@@ -1,0 +1,9 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+:host {
+  .widget-content {
+    width: 100%;
+    height: 100%;
+  }
+}

@@ -13,16 +13,35 @@
     .widget-container {
       display: flex;
       height: 100%;
+      width: 100%;
+      .widget {
+        display: flex;
+        height: 100%;
+        width: 100%;
+      }
     }
 
     .widget-selector {
       display: flex;
       justify-content: center;
 
+      .widget-selector-linker {
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       .max-size-restrictor {
-        justify-content: space-around;
+        justify-content: space-between;
         display: flex;
         max-width: 400px;
+        width: 100%;
+      }
+
+      .widget-selector-toolbar {
+        justify-content: space-around;
+        display: flex;
         width: 100%;
       }
 
@@ -40,16 +59,19 @@
 }
 
 @include themify($themes, true) {
+  .widget-container {
+    background: themed("lmContent") !important;
+  }
   .widget-selector {
-    background: themed('noactiveTabs');
+    background: themed("noactiveTabs");
   }
   .widget-selector-icon {
-    color: themed('titleTextColor');
+    color: themed("titleTextColor");
 
     &.active {
       font-weight: 700 !important;
-      background: themed('accentLightColor');
-      border-top: 1px solid themed('titleTextColor');
+      background: themed("accentLightColor");
+      border-top: 1px solid themed("titleTextColor");
     }
   }
 }

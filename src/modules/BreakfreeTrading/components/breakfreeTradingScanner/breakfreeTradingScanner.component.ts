@@ -1,5 +1,5 @@
 import { Component, Injector, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { BaseLayoutItemComponent } from "@layout/base-layout-item.component";
+import { BaseGoldenLayoutItemComponent } from "@layout/base-golden-layout-item.component";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import { GoldenLayoutItemState } from "angular-golden-layout";
@@ -28,8 +28,9 @@ import { TradingProfileService } from 'modules/BreakfreeTrading/services/trading
 import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component';
 import { mockedSonarData } from './mocked-data';
 import { mockedHistory } from './mocked-history';
+import { BaseLayoutItem } from '@layout/base-layout-item';
 
-interface IScannerState {
+export interface IScannerState {
     featured: IFeaturedResult[];
     timeframes: TimeFrames[];
     types: string[];
@@ -87,15 +88,12 @@ enum TradeTypes {
 }
 
 @Component({
-    selector: 'BreakfreeTradingScanner',
+    selector: 'breakfree-trading-scanner',
     templateUrl: './breakfreeTradingScanner.component.html',
     styleUrls: ['./breakfreeTradingScanner.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
-    static componentName = 'BreakfreeTradingScanner';
-    static previewImgClass = 'crypto-icon-news';
-
+export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _featured: IFeaturedResult[] = [];
     private _loaded: IBFTScanInstrumentsResponseItem[] = [];
     private _timer: any;
@@ -154,20 +152,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     constructor(@Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
-        @Inject(GoldenLayoutItemState) protected _state: IScannerState,
         private _dialog: MatDialog,
         private _alertService: AlertService,
         protected _instrumentService: InstrumentService,
         private _identityService: IdentityService,
         private _alogService: AlgoService,
         private _cdr: ChangeDetectorRef,
-        private _tradingProfileService: TradingProfileService,
-        protected _injector: Injector) {
-        super(_injector);
-        super.setTitle(
-            this._bftTranslateService.stream('breakfreeTradingScannerComponentName')
-        );
-        this._loadState(_state);
+        private _tradingProfileService: TradingProfileService) {
+        super();
         this.groups.push(this._featuredGroupName);
         this._types.forEach(_ => {
             this.groups.push(_.name);
@@ -182,12 +174,28 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         if (this._tradingProfileService.missions) {
             this._loadingProfile = false;
         }
+    }
 
-        // let instruments = [];
-        // for (const i of CommoditiesWatchlist.data) {
-        //     instruments.push(i.symbol);
-        // }
-        // console.log(JSON.stringify(instruments));
+    getState() {
+        return {
+            featured: this._featured.slice(),
+            timeframes: this.activeTimeframes.slice(),
+            types: this.activeTypes.slice()
+        };
+    }
+
+    setState(_state: IScannerState) {
+        if (_state && _state.featured && _state.featured.length) {
+            this._featured = _state.featured.slice();
+        }
+
+        if (_state && _state.timeframes && _state.timeframes.length) {
+            this.activeTimeframes = _state.timeframes.slice();
+        }
+
+        if (_state && _state.types && _state.types.length) {
+            this.activeTypes = _state.types.slice();
+        }
     }
 
     is15MinSonarAccessRestriction(group: IGroupedResults): boolean {
@@ -294,16 +302,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                 this.scanMarkets();
             }, 1000 * 10);
         }
-    }
 
-    // isOutOfAccess(group: IGroupedResults): boolean {
-    //     const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
-    //     const tfValue15Min = this.toTimeframe(60 * 15);
-    //     if (group.timeframe === tfValue15Min && is15MinSelected && !this.isPro) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
+        this.initialized.next(this);
+    }
 
     showRestrictions(group: IGroupedResults): boolean {
         if (this.isGuest) {
@@ -422,7 +423,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     }
 
     ngOnDestroy() {
-        super.ngOnDestroy();
+        this.beforeDestroy.next(this);
 
         if (this._timer) {
             clearInterval(this._timer);
@@ -433,6 +434,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
             this._missionsChangedSubscription.unsubscribe();
         }
     }
+    
 
     manageSubscriptions() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
@@ -486,28 +488,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
     public click(event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
-    }
-
-    protected getComponentState(): IScannerState {
-        return {
-            featured: this._featured.slice(),
-            timeframes: this.activeTimeframes.slice(),
-            types: this.activeTypes.slice()
-        };
-    }
-
-    private _loadState(_state: IScannerState) {
-        if (_state && _state.featured && _state.featured.length) {
-            this._featured = _state.featured.slice();
-        }
-
-        if (_state && _state.timeframes && _state.timeframes.length) {
-            this.activeTimeframes = _state.timeframes.slice();
-        }
-
-        if (_state && _state.types && _state.types.length) {
-            this.activeTypes = _state.types.slice();
-        }
     }
 
     private _getFeatured(item: IScannerResults | IFeaturedResult | IBFTScanInstrumentsResponseItem): IFeaturedResult {
@@ -591,7 +571,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
                     replayDate: date
                 }
             };
-            this.linker.sendAction(linkAction);
+            this.onOpenChart.next(linkAction);
         }, (error) => {
             this._alertService.warning("Failed to view chart by symbol");
         });
@@ -739,25 +719,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItemComponent {
         }
         return `${tte} candles`;
     }
-
-    // private _isTFAllowed(tf: number): boolean {
-    //     if (this.isAdmin) {
-    //         return true;
-    //     }
-
-    //     let level = this._tradingProfileService.level;
-    //     if (this.isPro) {
-    //         if (tf < 60 * 60 && level < this._levelRestriction) {
-    //             return false;
-    //         }
-    //     } else {
-    //         if (tf < 60 * 60 * 4 && level < this._levelRestriction) {
-    //             return false;
-    //         }
-    //     }
-
-    //     return true;
-    // }
 
     private _loadDemoHistory() {
         const history = this._randomize(mockedHistory.reverse()).slice(0, 100);

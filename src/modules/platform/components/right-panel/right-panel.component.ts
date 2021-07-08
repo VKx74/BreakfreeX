@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "@app/store/reducer";
 import { PlatformTranslateService } from "@platform/localization/token";
+import { Linker, LinkerFactory } from "@linking/linking-manager";
+import { LinkingAction } from "@linking/models";
 
 export enum Components {
     Sonar = "Sonar",
@@ -23,11 +25,20 @@ export enum Components {
     ]
 })
 export class RightPanelComponent implements OnInit {
+    protected linker: Linker;
+
     public Components = Components;
     public SelectedComponent: Components = Components.Sonar;
 
-    constructor(private _store: Store<AppState>,
+    get LinkerColor(): string {
+        return this.linker.getLinkingId();
+    }
+
+    constructor(protected _store: Store<AppState>,
+        protected _injector: Injector,
         @Inject(PlatformTranslateService) public platformTranslateService: TranslateService) {
+        this.linker = this._injector.get(LinkerFactory).getLinker();
+        this.linker.setDefaultLinking();
     }
 
     ngOnInit() {
@@ -35,11 +46,19 @@ export class RightPanelComponent implements OnInit {
 
     ngOnDestroy() {
     }
-    
+
     selectComponent(component: Components) {
         if (this.SelectedComponent !== component) {
             this.SelectedComponent = component;
         }
+    }
+
+    handleColorSelected(color: string) {
+        this.linker.setLinking(color);
+    }
+
+    handleOpenChart(action: LinkingAction) {
+        this.linker.sendAction(action);
     }
 
 }

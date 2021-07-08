@@ -13,7 +13,7 @@ import { IndicatorDataProviderService } from '@chart/services/indicator-data-pro
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
 import { ReplayModeSync } from "@chart/services/replay-mode-sync.service";
 import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
-import { BaseLayoutItemComponent } from "@layout/base-layout-item.component";
+import { BaseGoldenLayoutItemComponent } from "@layout/base-golden-layout-item.component";
 import { Store } from "@ngrx/store";
 import { TranslateService } from "@ngx-translate/core";
 import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
@@ -76,7 +76,7 @@ interface ReplayWaiter {
         AlertingFromChartService
     ]
 })
-export class TcdComponent extends BaseLayoutItemComponent {
+export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
     static componentName = 'Trading Chart Designer';
     static previewImgClass = 'crypto-icon-chart';

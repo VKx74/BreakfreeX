@@ -12,7 +12,7 @@ export interface ILayoutItemComponentWithLinkingState {
 
 const TabWithLinkerClass = 'tab-with-linker';
 
-export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
+export abstract class BaseGoldenLayoutItemComponent extends GoldenLayoutItem {
     protected linker: Linker;
 
     constructor(protected _injector: Injector) {

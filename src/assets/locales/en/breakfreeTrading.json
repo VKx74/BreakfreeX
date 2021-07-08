@@ -9,7 +9,7 @@
   },
   "BreakfreeTradingBacktestComponentName": "BFT Backtest",
   "breakfreeTradingAcademyComponentName": "Academy",
-  "breakfreeTradingScannerComponentName": "Sonar",
+  "BreakfreeTradingScannerWidgetName": "Sonar",
   "verificationCodeSent": "Verification code has been sent to your phone number, please enter the received code.",
   "verificationCodeNotSent": "Failed to send verification code.",
   "phoneAdded": "Phone number was successfully verified and added to account.",

@@ -21,7 +21,7 @@ export interface IAppEducationalTipsLinks {
     [ComponentIdentifier.orderBookChart]: string;
     [ComponentIdentifier.orderBook]: string;
     [ComponentIdentifier.marketTrades]: string;
-    [ComponentIdentifier.watchlist]: string;
+    [ComponentIdentifier.watchlistWidget]: string;
     [ComponentIdentifier.news]: string;
     [ComponentIdentifier.marketView]: string;
 

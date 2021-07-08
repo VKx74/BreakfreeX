@@ -1,6 +1,6 @@
 import { Component, Inject, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { BaseLayoutItemComponent } from '@layout/base-layout-item.component';
+import { BaseGoldenLayoutItemComponent } from '@layout/base-golden-layout-item.component';
 import { AutoTradingAlertsTranslateService } from 'modules/AutoTradingAlerts/localization/token';
 import { MatDialog } from "@angular/material/dialog";
 import { AlertBase, PriceAlert, SonarAlert } from 'modules/AutoTradingAlerts/models/AlertBase';
@@ -29,7 +29,7 @@ export enum AlertTabs {
   templateUrl: './alert-widget.component.html',
   styleUrls: ['alert-widget.component.scss']
 })
-export class AlertWidgetComponent extends BaseLayoutItemComponent {
+export class AlertWidgetComponent extends BaseGoldenLayoutItemComponent {
   static componentName = 'BreakfreeAlerts';
   static previewImgClass = 'crypto-icon-alert';
 

@@ -11,7 +11,7 @@ import {OrderBookTranslateService} from "../../localization/token";
 import {LocalizationService} from "Localization";
 import {Actions, LinkingAction} from "../../../Linking/models";
 import {ComponentIdentifier} from "@app/models/app-config";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 
 export interface IOrderBookComponentState {
@@ -44,7 +44,7 @@ export type OrderMode = 'orderBoth' | 'orderBuy' | 'orderSell';
         }
     ]
 })
-export class OrderBookComponent extends BaseLayoutItemComponent {
+export class OrderBookComponent extends BaseGoldenLayoutItemComponent {
     static componentName = 'Order Book';
     static previewImgClass = 'crypto-icon-ob';
     public readonly supportedPrecisions: number[] = [1, 0.1, 0.01, 0.001, 0.0001];

@@ -1,5 +1,5 @@
 import { Component, Injector, Inject } from '@angular/core';
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
@@ -16,7 +16,7 @@ export interface IBFTBacktestComponentState {
     templateUrl: './breakfreeTradingBacktest.component.html',
     styleUrls: ['./breakfreeTradingBacktest.component.scss']
 })
-export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
+export class BreakfreeTradingBacktestComponent extends BaseGoldenLayoutItemComponent {
     static componentName = 'BreakfreeTradingBacktest';
 
     static previewImgClass = 'crypto-icon-watchlist';

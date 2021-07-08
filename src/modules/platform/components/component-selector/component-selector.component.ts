@@ -5,9 +5,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {ChartTranslateService} from "../../../Chart/localization/token";
 import {TradingTranslateService} from "../../../Trading/localization/token";
 import {OrderBookChartTranslateService} from "../../../OrderBookChart/localization/token";
-import {WatchlistComponent} from "Watchlist";
 import {WatchListTranslateService} from "../../../Watchlist/localization/token";
-import {PublicChatComponent} from "../../../Chat/components/public-chat/public-chat.component";
 import {ChatTranslateService} from "../../../Chat/localization/token";
 import {MarketTradesTranslateService} from "@market-trades/localization/token";
 import {OrderBookTranslateService} from "@order-book/localization/token";
@@ -16,9 +14,10 @@ import {ComponentIdentifier} from "@app/models/app-config";
 import {NewsTranslateService} from "../../../News/localization/news.token";
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
-import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 import { AlertWidgetComponent } from "modules/AutoTradingAlerts/components/alert-widget/alert-widget.component";
 import { AutoTradingAlertsTranslateService } from "modules/AutoTradingAlerts/localization/token";
+import { BreakfreeTradingScannerWidget } from "modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScanner.widget";
+import { WatchlistWidget } from "modules/Watchlist/components/widget/watchlist.widget";
 
 interface IComponent {
     component: Type<any>;
@@ -83,10 +82,10 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentIdentifier: ComponentIdentifier.marketTrades,
             },*/
             {
-                component: WatchlistComponent,
-                previewImgClass: WatchlistComponent.previewImgClass,
-                componentName: this._watchlistTranslateService.stream('watchlistComponentName'),
-                componentIdentifier: ComponentIdentifier.watchlist,
+                component: WatchlistWidget,
+                previewImgClass: WatchlistWidget.previewImgClass,
+                componentName: this._watchlistTranslateService.stream('watchlistWidgetName'),
+                componentIdentifier: ComponentIdentifier.watchlistWidget,
             }, 
             {
                 component: BreakfreeTradingBacktestComponent,
@@ -107,10 +106,10 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentIdentifier: ComponentIdentifier.breakfreeTradingAcademy,
             },
             {
-                component: BreakfreeTradingScannerComponent,
-                previewImgClass: BreakfreeTradingScannerComponent.previewImgClass,
-                componentName: this._bftTranslateService.stream('breakfreeTradingScannerComponentName'),
-                componentIdentifier: ComponentIdentifier.breakfreeTradingScanner,
+                component: BreakfreeTradingScannerWidget,
+                previewImgClass: BreakfreeTradingScannerWidget.previewImgClass,
+                componentName: this._bftTranslateService.stream('BreakfreeTradingScannerWidgetName'),
+                componentIdentifier: ComponentIdentifier.BreakfreeTradingScannerWidget,
             },
             {
                 component: AlertWidgetComponent,

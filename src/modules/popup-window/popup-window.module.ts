@@ -6,7 +6,7 @@ import {ThemeService} from "@app/services/theme.service";
 import {sharedProviderResolver} from "./functions";
 import {LinkingModule} from "@linking/linking.module";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
-import {WatchlistComponent, WatchlistModule} from "Watchlist";
+import {WatchlistModule} from "Watchlist";
 import {SharedTranslateService} from "@app/localization/shared.token";
 import {AppTranslateService} from "@app/localization/token";
 import {PopupWindowRoutingModule} from "./popup-window.router";
@@ -61,8 +61,9 @@ import {PrivateChatLayoutWidgetComponent} from "../Chat/components/private-chat-
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
-import { BreakfreeTradingScannerComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/breakfreeTradingScanner.component';
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
+import { BreakfreeTradingScannerWidget } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScanner.widget';
+import { WatchlistWidget } from 'modules/Watchlist/components/widget/watchlist.widget';
 
 
 export function sharedThemeService() {
@@ -248,8 +249,8 @@ export function sharedEducationalTipsService() {
                             component: TcdComponent
                         },
                         {
-                            componentName: ComponentIdentifier.watchlist,
-                            component: WatchlistComponent
+                            componentName: ComponentIdentifier.watchlistWidget,
+                            component: WatchlistWidget
                         },
                         {
                             componentName: ComponentIdentifier.orderBookChart,
@@ -280,8 +281,8 @@ export function sharedEducationalTipsService() {
                             component: BreakfreeTradingAcademyComponent
                         }, 
                         {
-                            componentName: ComponentIdentifier.breakfreeTradingScanner,
-                            component: BreakfreeTradingScannerComponent
+                            componentName: ComponentIdentifier.BreakfreeTradingScannerWidget,
+                            component: BreakfreeTradingScannerWidget
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,

@@ -18,7 +18,7 @@ import {NewsTranslateService} from "../../localization/news.token";
 import {ActivatedRoute, NavigationEnd, Router, RouterEvent} from "@angular/router";
 import {AppRoutes} from "AppRoutes";
 import {memoize} from "@decorators/memoize";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 
 enum NewsTab {
     Rss,

@@ -28,11 +28,6 @@
             <instrument-search [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
                 [openPanelOnClick]="true" [resetAfterSelection]="true" (onSelect)="addInstrument($event)">
             </instrument-search>
-            <!-- <selector [options]="existingWatchlists" [title]="'watchlist' | translate"
-        [selectedOption]="activeWatchlist"
-        [optionCaption]="supportedWatchlistCaption"
-        (onSelect)="watchlistSelected($event)"
-        class="watchlist-selector"></selector> -->
 
             <div class="right-side flex align-items-center functional-icons">
                 <span class="crypto-button-icon control" (click)="createWatchlist()"

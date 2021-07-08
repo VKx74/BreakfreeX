@@ -11,7 +11,7 @@ import {Actions, LinkingAction} from "@linking/models";
 import {HistoryService} from "@app/services/history.service";
 import {MarketTradesTranslateService} from "../../localization/token";
 import {ComponentIdentifier} from "@app/models/app-config";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import {DataTableComponent} from 'modules/datatable/components/data-table/data-table.component';
 import {GoldenLayoutItemState} from "angular-golden-layout";
 
@@ -38,7 +38,7 @@ class LevelPrice {
         }
     ]
 })
-export class MarketTradesComponent extends BaseLayoutItemComponent {
+export class MarketTradesComponent extends BaseGoldenLayoutItemComponent {
     static componentName = 'Market Trades';
     static previewImgClass = 'crypto-icon-mt';
     public readonly supportedPrecisions: number[] = [1, 0.1, 0.01, 0.001, 0.0001];

@@ -3,7 +3,7 @@ import {ComponentIdentifier} from "@app/models/app-config";
 import {ChatModeToken} from "../../mode.token";
 import {ChatMode} from "../../enums/chat-mode";
 import {TranslateService} from "@ngx-translate/core";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import {ChatTranslateService} from "../../localization/token";
 
 @Component({
@@ -21,7 +21,7 @@ import {ChatTranslateService} from "../../localization/token";
         }
     ]
 })
-export class PrivateChatLayoutWidgetComponent extends BaseLayoutItemComponent {
+export class PrivateChatLayoutWidgetComponent extends BaseGoldenLayoutItemComponent {
     ComponentIdentifier = ComponentIdentifier;
 
     constructor(protected _translateService: TranslateService,

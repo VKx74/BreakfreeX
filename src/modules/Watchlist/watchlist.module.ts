@@ -1,7 +1,6 @@
 import {Injector, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {WatchlistComponent} from "./components";
-import {InstrumentService} from "app/services/instrument.service";
 import {LocalizationModule, TranslateServiceFactory} from "Localization";
 import {WatchListTranslateService} from "./localization/token";
 import {LinkingModule} from "../Linking";
@@ -14,8 +13,6 @@ import {SharedTranslateService} from "@app/localization/shared.token";
 import {TimeZonesModule} from "TimeZones";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatMenuModule} from "@angular/material/menu";
-import {HistoryService} from "@app/services/history.service";
-import {RealtimeService} from "@app/services/realtime.service";
 import {SharedModule} from "Shared";
 import { WatchlistStorageService } from './services/watchlist-storage.service';
 import { WatchlistService } from './services/watchlist.service';
@@ -26,13 +23,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { LoaderModule } from 'modules/loader/loader.module';
+import { WatchlistWidget } from './components/widget/watchlist.widget';
 
 @NgModule({
     declarations: [
         WatchlistTileComponent,
         WatchlistChartComponent,
         WatchlistNameModalComponent,
-        WatchlistComponent
+        WatchlistComponent,
+        WatchlistWidget
     ],
     imports: [
         CommonModule,
@@ -56,10 +55,12 @@ import { LoaderModule } from 'modules/loader/loader.module';
     ],
     entryComponents: [
         WatchlistComponent,
+        WatchlistWidget,
         WatchlistNameModalComponent
     ],
     exports: [
-        WatchlistComponent
+        WatchlistComponent,
+        WatchlistWidget
     ],
     providers: [
         WatchlistStorageService,
