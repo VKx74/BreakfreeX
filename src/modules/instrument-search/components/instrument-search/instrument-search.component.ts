@@ -139,6 +139,10 @@ export class InstrumentSearchComponent {
     }
 
     onClick() {
+        if (!this.showDropDown) {
+            return;
+        }
+        
         if (this.openPanelOnClick) {
             if (this.triggerDomElement.value === '') {
                 this.trigger._onChange('');
