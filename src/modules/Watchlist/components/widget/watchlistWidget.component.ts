@@ -9,17 +9,18 @@ import { WatchListTranslateService } from 'modules/Watchlist/localization/token'
 
 @Component({
     selector: 'WatchlistWidget',
-    templateUrl: './watchlist.widget.html',
-    styleUrls: ['./watchlist.widget.scss']
+    templateUrl: './watchlistWidget.component.html',
+    styleUrls: ['./watchlistWidget.component.scss']
 })
-export class WatchlistWidget extends BaseGoldenLayoutItemComponent {
+export class WatchlistWidgetComponent extends BaseGoldenLayoutItemComponent {
     static componentName = 'WatchlistWidget';
     static previewImgClass = 'crypto-icon-watchlist';
+
+    @ViewChild("watchlist", {static: false}) private _component: BaseLayoutItem;
+    
     protected useDefaultLinker(): boolean {
         return true;
     }
-
-    @ViewChild("watchlist", {static: false}) private _component: BaseLayoutItem;
 
     constructor(@Inject(WatchListTranslateService) private _watchlistTranslateService: TranslateService,
         @Inject(GoldenLayoutItemState) protected _state: IWatchlistComponentState,

@@ -114,8 +114,9 @@ import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
 import { TradeGuardTrackingService } from '@app/services/trade-guard-tracking.service';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
-import { BreakfreeTradingScannerWidget } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScanner.widget';
-import { WatchlistWidget } from 'modules/Watchlist/components/widget/watchlist.widget';
+import { BreakfreeTradingScannerWidgetComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
+import { WatchlistWidgetComponent } from 'modules/Watchlist/components/widget/watchlistWidget.component';
+import { AcademyModule } from 'modules/Academy/academy.module';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -202,7 +203,8 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         ProfileActivitiesModule.forPlatform(),
         NavigationModule,
         SidebarModule,
-        MatRadioModule
+        MatRadioModule,
+        AcademyModule
     ],
     entryComponents: [
         ComponentSelectorComponent,
@@ -361,7 +363,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         },
                         {
                             componentName: ComponentIdentifier.watchlistWidget,
-                            component: WatchlistWidget
+                            component: WatchlistWidgetComponent
                         },
                         {
                             componentName: ComponentIdentifier.orderBookChart,
@@ -393,7 +395,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         }, 
                         {
                             componentName: ComponentIdentifier.BreakfreeTradingScannerWidget,
-                            component: BreakfreeTradingScannerWidget
+                            component: BreakfreeTradingScannerWidgetComponent
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,

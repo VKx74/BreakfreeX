@@ -23,7 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { LoaderModule } from 'modules/loader/loader.module';
-import { WatchlistWidget } from './components/widget/watchlist.widget';
+import { WatchlistWidgetComponent } from './components/widget/watchlistWidget.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +31,7 @@ import { WatchlistWidget } from './components/widget/watchlist.widget';
         WatchlistChartComponent,
         WatchlistNameModalComponent,
         WatchlistComponent,
-        WatchlistWidget
+        WatchlistWidgetComponent
     ],
     imports: [
         CommonModule,
@@ -55,12 +55,12 @@ import { WatchlistWidget } from './components/widget/watchlist.widget';
     ],
     entryComponents: [
         WatchlistComponent,
-        WatchlistWidget,
+        WatchlistWidgetComponent,
         WatchlistNameModalComponent
     ],
     exports: [
         WatchlistComponent,
-        WatchlistWidget
+        WatchlistWidgetComponent
     ],
     providers: [
         WatchlistStorageService,

@@ -31,7 +31,7 @@ export class TradeManagerComponent implements OnDestroy {
     EBrokerInstance = EBrokerInstance;
     readonly openBottomPanel = 150;
     readonly openBottomPanelHeight = 250;
-    readonly minimizeBottomPanel = 26;
+    readonly minimizeBottomPanel = 30;
 
     get instanceType() {
         const broker = this._brokerService.activeBroker;

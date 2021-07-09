@@ -6,13 +6,21 @@
         <div class="widget" *ngIf="SelectedComponent === Components.Watchlist">
             <watchlist #watchlist (onOpenChart)="handleOpenChart($event)"></watchlist>
         </div>
+        <div class="widget" *ngIf="SelectedComponent === Components.Alerts">
+            <alerts (onOpenChart)="handleOpenChart($event)" #alerts></alerts>
+        </div>
+        <div class="widget" *ngIf="SelectedComponent === Components.Academy">
+            <div class="widget-scroller">
+                <academy-component [isSidebarOpenByDefault]="false"></academy-component>
+            </div>
+        </div>
     </div>
     <div class="widget-selector">
+        <div class="widget-selector-linker">
+            <color-selector [activeColor]="LinkerColor" [path]="'flag'" (activeColorChange)='handleColorSelected($event)'>
+            </color-selector>
+        </div>
         <div class="max-size-restrictor">
-            <div class="widget-selector-linker">
-                <color-selector [activeColor]="LinkerColor" [path]="'flag'" (activeColorChange)='handleColorSelected($event)'>
-                </color-selector>
-            </div>
             <div class="widget-selector-toolbar">
                 <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
                     [class.active]="SelectedComponent === Components.Sonar">

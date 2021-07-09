@@ -57,7 +57,7 @@ export class DashboardComponent {
     private _autoSaveChecker = 1000 * 10;
     private _freeUserPopup = 1000 * 60 * 3;
     private _rightPanelMaxSize = 600;
-    private _rightPanelSize = 300;
+    private _rightPanelSize = 400;
     private _intervalLink: any;
     private _freeUserPopupTimer: any;
     private _saveLayout = true;
@@ -67,7 +67,7 @@ export class DashboardComponent {
     private _hardRefreshNeeded: boolean = false;
     layoutChanged = false;
     readonly openBottomPanel = 150;
-    readonly minimizeBottomPanel = 26;
+    readonly minimizeBottomPanel = 30;
 
     @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
     @ViewChild('verticalSplit', { read: SplitComponent, static: false }) verticalSplit: SplitComponent;
@@ -86,7 +86,7 @@ export class DashboardComponent {
     }
 
     get rightPanelMinSize() {
-        return 150;
+        return 350;
     }
 
     get rightPanelMaxSize() {
@@ -140,7 +140,7 @@ export class DashboardComponent {
         this._actions
             .pipe(
                 ofType(ActionTypes.SaveState),
-                takeUntil(componentDestroyed(this))
+                // takeUntil(componentDestroyed(this))
             )
             .subscribe(() => {
                 this._saveLayoutState();

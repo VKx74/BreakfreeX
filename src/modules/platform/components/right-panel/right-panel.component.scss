@@ -12,12 +12,15 @@
 
     .widget-container {
       display: flex;
-      height: 100%;
+      height: calc(100% - 30px);
       width: 100%;
       .widget {
         display: flex;
         height: 100%;
         width: 100%;
+      }
+      .widget-scroller {
+        overflow: auto;
       }
     }
 
@@ -30,18 +33,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        /deep/ .color-selector {
+          margin-top: 5px;
+        }
       }
 
       .max-size-restrictor {
-        justify-content: space-between;
+        justify-content: center;
         display: flex;
-        max-width: 400px;
         width: 100%;
       }
 
       .widget-selector-toolbar {
         justify-content: space-around;
         display: flex;
+        max-width: 400px;
         width: 100%;
       }
 

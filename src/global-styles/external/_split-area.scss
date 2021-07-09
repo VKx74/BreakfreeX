@@ -10,7 +10,7 @@
 
 .platform-split-horizontal {
   .as-split-gutter {
-
+    z-index: 99;
     &::before {
       content: '';
       left: calc(50% - 40px);
@@ -27,6 +27,7 @@
 
 .platform-split-vertical {
   .as-split-gutter {
+    z-index: 99;
     &::before {
       content: '';
       left: calc(50% - 40px);

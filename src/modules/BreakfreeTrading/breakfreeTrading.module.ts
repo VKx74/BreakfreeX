@@ -53,7 +53,7 @@ import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNu
 import { GuestCheckoutComponent } from './components/guest-checkout/guest-checkout.component';
 import { DefaultCheckoutComponent } from './components/default-checkout/default-checkout.component';
 import { StorageModule } from 'modules/Storage/storage.module';
-import { BreakfreeTradingScannerWidget } from './components/breakfreeTradingScanner/widget/breakfreeTradingScanner.widget';
+import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
 
 @NgModule({
     // components here
@@ -65,7 +65,7 @@ import { BreakfreeTradingScannerWidget } from './components/breakfreeTradingScan
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
-        BreakfreeTradingScannerWidget,
+        BreakfreeTradingScannerWidgetComponent,
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
@@ -118,7 +118,7 @@ import { BreakfreeTradingScannerWidget } from './components/breakfreeTradingScan
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
-        BreakfreeTradingScannerWidget,
+        BreakfreeTradingScannerWidgetComponent,
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
@@ -136,7 +136,7 @@ import { BreakfreeTradingScannerWidget } from './components/breakfreeTradingScan
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
-        BreakfreeTradingScannerWidget,
+        BreakfreeTradingScannerWidgetComponent,
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,

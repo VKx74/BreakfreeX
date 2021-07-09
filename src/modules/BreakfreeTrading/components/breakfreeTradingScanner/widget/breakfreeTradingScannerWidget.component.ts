@@ -3,23 +3,24 @@ import { BaseGoldenLayoutItemComponent } from "@layout/base-golden-layout-item.c
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import { GoldenLayoutItemState } from "angular-golden-layout";
-import { BreakfreeTradingScannerComponent, IScannerState } from '../breakfreeTradingScanner.component';
+import { IScannerState } from '../breakfreeTradingScanner.component';
 import { LinkingAction } from '@linking/models';
 import { BaseLayoutItem } from '@layout/base-layout-item';
 
 @Component({
     selector: 'BreakfreeTradingScannerWidget',
-    templateUrl: './breakfreeTradingScanner.widget.html',
-    styleUrls: ['./breakfreeTradingScanner.widget.scss']
+    templateUrl: './breakfreeTradingScannerWidget.component.html',
+    styleUrls: ['./breakfreeTradingScannerWidget.component.scss']
 })
-export class BreakfreeTradingScannerWidget extends BaseGoldenLayoutItemComponent {
+export class BreakfreeTradingScannerWidgetComponent extends BaseGoldenLayoutItemComponent {
     static componentName = 'BreakfreeTradingScannerWidget';
     static previewImgClass = 'crypto-icon-news';
+
+    @ViewChild("scanner", {static: false}) private _scanner: BaseLayoutItem;
+
     protected useDefaultLinker(): boolean {
         return true;
     }
-
-    @ViewChild("scanner", {static: false}) private _scanner: BaseLayoutItem;
 
     constructor(@Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
         @Inject(GoldenLayoutItemState) protected _state: IScannerState,

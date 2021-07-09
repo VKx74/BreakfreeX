@@ -49,7 +49,7 @@ build-app-stage:
             - dist/
   only:
     - develop
-    - feature/instrument-search-dialog
+    - layout-rework
 #   tags:
 #     - web
 
@@ -100,7 +100,7 @@ build-latest:
     #     - docker
     only:
         - develop
-        - feature/instrument-search-dialog
+        - layout-rework
         - ci-improvements
 
 build-stable:

@@ -22,9 +22,8 @@ import {
     ColumnSortDataAccessor,
     DataTableComponent
 } from "../../../datatable/components/data-table/data-table.component";
-import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import bind from "bind-decorator";
-import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
+import {LayoutManagerService} from "angular-golden-layout";
 import {ITcdComponentState} from "Chart";
 import {PriceAlertDialogComponent} from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
 import {HistoryService} from "@app/services/history.service";
@@ -104,6 +103,7 @@ export class WatchlistComponent extends BaseLayoutItem {
     private _myId: string;
     private _changesDetected: boolean;
     private _updateInterval: any;
+    private _state: IWatchlistComponentState;
 
     get isAuthorizedCustomer(): boolean {
         return true;
@@ -144,6 +144,8 @@ export class WatchlistComponent extends BaseLayoutItem {
             return;
         }
 
+        this.initialized.next(this);
+        
         this.loading = true;
         
         this._updateInterval = setInterval(() => {
@@ -164,14 +166,7 @@ export class WatchlistComponent extends BaseLayoutItem {
 
             this._addDefaultWatchlists();
 
-            // if (this._state && this._state.activeWatchlist) {
-            //     for (const watchlist of this.existingWatchlists) {
-            //         if (this._state.activeWatchlist === watchlist.id) {
-            //             this.setWatchlist(watchlist);
-            //             break;
-            //         }
-            //     }
-            // }
+            this._trySetActiveWatchlist();
 
             this._watchlistAdded = this._watchlistService.onWatchlistAdded.subscribe(this._watchlistAddedHandler.bind(this));
             this._watchlistRemoved = this._watchlistService.onWatchlistRemoved.subscribe(this._watchlistRemovedHandler.bind(this));
@@ -181,16 +176,9 @@ export class WatchlistComponent extends BaseLayoutItem {
             this._watchlistService.getFeaturedInstruments().subscribe((featuredInstruments: IFeaturedInstruments[]) => {
                 this.featuredInstruments = featuredInstruments;
                 this.featuredWatchlists = this._watchlistService.updateFeaturedWatchlist(this.featuredInstruments);
-
-                // if (this._state && this._state.activeWatchlist) {
-                //     for (const watchlist of this.featuredWatchlists) {
-                //         if (this._state.activeWatchlist === watchlist.id) {
-                //             this.setWatchlist(watchlist);
-                //             break;
-                //         }
-                //     }
-                // }
     
+                this._trySetActiveWatchlist();
+
                 if (!this.activeWatchlist && this.existingWatchlists.length) {
                     this.setWatchlist(this.existingWatchlists[0]);
                 }
@@ -200,6 +188,26 @@ export class WatchlistComponent extends BaseLayoutItem {
                 }
             });
         });
+    }
+
+    private _trySetActiveWatchlist() {
+        if (this._state && this._state.activeWatchlist) {
+            for (const watchlist of this.existingWatchlists) {
+                if (this._state.activeWatchlist === watchlist.id) {
+                    this.setWatchlist(watchlist);
+                    break;
+                }
+            }
+        }
+
+        if (this._state && this._state.activeWatchlist) {
+            for (const watchlist of this.featuredWatchlists) {
+                if (this._state.activeWatchlist === watchlist.id) {
+                    this.setWatchlist(watchlist);
+                    break;
+                }
+            }
+        }
     }
 
     public getFeaturedDetails(instrument: IInstrument): string {
@@ -704,6 +712,8 @@ export class WatchlistComponent extends BaseLayoutItem {
     }
 
     setState(state: IWatchlistComponentState) {
+        this._state = state;
+
         if (state && state.hiddenColumns) {
             this.hiddenColumns = state.hiddenColumns;
         }
@@ -950,6 +960,8 @@ export class WatchlistComponent extends BaseLayoutItem {
     }
 
     ngOnDestroy() {
+        this.beforeDestroy.next(this);
+
         if (this._watchlistAdded) {
             this._watchlistAdded.unsubscribe();
         }

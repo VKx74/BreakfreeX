@@ -16,8 +16,8 @@ import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } f
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import { AlertWidgetComponent } from "modules/AutoTradingAlerts/components/alert-widget/alert-widget.component";
 import { AutoTradingAlertsTranslateService } from "modules/AutoTradingAlerts/localization/token";
-import { BreakfreeTradingScannerWidget } from "modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScanner.widget";
-import { WatchlistWidget } from "modules/Watchlist/components/widget/watchlist.widget";
+import { BreakfreeTradingScannerWidgetComponent } from "modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component";
+import { WatchlistWidgetComponent } from "modules/Watchlist/components/widget/watchlistWidget.component";
 
 interface IComponent {
     component: Type<any>;
@@ -82,8 +82,8 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentIdentifier: ComponentIdentifier.marketTrades,
             },*/
             {
-                component: WatchlistWidget,
-                previewImgClass: WatchlistWidget.previewImgClass,
+                component: WatchlistWidgetComponent,
+                previewImgClass: WatchlistWidgetComponent.previewImgClass,
                 componentName: this._watchlistTranslateService.stream('watchlistWidgetName'),
                 componentIdentifier: ComponentIdentifier.watchlistWidget,
             }, 
@@ -106,8 +106,8 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentIdentifier: ComponentIdentifier.breakfreeTradingAcademy,
             },
             {
-                component: BreakfreeTradingScannerWidget,
-                previewImgClass: BreakfreeTradingScannerWidget.previewImgClass,
+                component: BreakfreeTradingScannerWidgetComponent,
+                previewImgClass: BreakfreeTradingScannerWidgetComponent.previewImgClass,
                 componentName: this._bftTranslateService.stream('BreakfreeTradingScannerWidgetName'),
                 componentIdentifier: ComponentIdentifier.BreakfreeTradingScannerWidget,
             },

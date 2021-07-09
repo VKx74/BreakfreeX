@@ -62,8 +62,8 @@ import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.co
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
-import { BreakfreeTradingScannerWidget } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScanner.widget';
-import { WatchlistWidget } from 'modules/Watchlist/components/widget/watchlist.widget';
+import { BreakfreeTradingScannerWidgetComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
+import { WatchlistWidgetComponent } from 'modules/Watchlist/components/widget/watchlistWidget.component';
 
 
 export function sharedThemeService() {
@@ -250,7 +250,7 @@ export function sharedEducationalTipsService() {
                         },
                         {
                             componentName: ComponentIdentifier.watchlistWidget,
-                            component: WatchlistWidget
+                            component: WatchlistWidgetComponent
                         },
                         {
                             componentName: ComponentIdentifier.orderBookChart,
@@ -282,7 +282,7 @@ export function sharedEducationalTipsService() {
                         }, 
                         {
                             componentName: ComponentIdentifier.BreakfreeTradingScannerWidget,
-                            component: BreakfreeTradingScannerWidget
+                            component: BreakfreeTradingScannerWidgetComponent
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,
