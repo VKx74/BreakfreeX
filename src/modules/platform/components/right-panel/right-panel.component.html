@@ -1,5 +1,5 @@
 <div class="root">
-    <div class="widget-container">
+    <div class="widget-container" [class.hidden]="collapsed">
         <div class="widget" *ngIf="SelectedComponent === Components.Sonar">
             <breakfree-trading-scanner #scanner (onOpenChart)="handleOpenChart($event)"></breakfree-trading-scanner>
         </div>
@@ -16,11 +16,12 @@
         </div>
     </div>
     <div class="widget-selector">
-        <div class="widget-selector-linker">
-            <color-selector [activeColor]="LinkerColor" [path]="'flag'" (activeColorChange)='handleColorSelected($event)'>
-            </color-selector>
-        </div>
-        <div class="max-size-restrictor">
+        <div class="top-part">
+            <div class="widget-selector-linker">
+                <color-selector [activeColor]="LinkerColor" [path]="'circle'"
+                    (activeColorChange)='handleColorSelected($event)'>
+                </color-selector>
+            </div>
             <div class="widget-selector-toolbar">
                 <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
                     [class.active]="SelectedComponent === Components.Sonar">
@@ -38,6 +39,17 @@
                     [class.active]="SelectedComponent === Components.Academy">
                     <i class="fa fa-book" aria-hidden="true"></i>
                 </div>
+                <div class="support-widget widget-selector-icon" (click)="showSupport()">
+                    <i class="fa fa-comments-o" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-part">
+            <div class="widget-selector-icon" (click)="collapse()" *ngIf="!collapsed">
+                <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+            </div>
+            <div class="widget-selector-icon" (click)="open()" *ngIf="collapsed">
+                <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
         <div class="flex-grow-1 w-0">
 
             <as-split #horizontalSplit class="platform-split-horizontal" [direction]="'horizontal'" [gutterSize]="3"
-                (dragEnd)="handleHorizontalSplitDragEnd($event)" [unit]="'pixel'">
+                (dragEnd)="handleHorizontalSplitDragEnd($event)" [unit]="'pixel'" (gutterDblClick)="handleVerticalSplitDbClick()">
                 <as-split-area [order]="0" class="flex">
 
                     <as-split #verticalSplit class="platform-split-vertical" [direction]="'vertical'" [gutterSize]="3"
@@ -23,7 +23,7 @@
                     </as-split>
                 </as-split-area>
                 <as-split-area [order]="1" [(size)]="rightPanelSize" [minSize]="rightPanelMinSize" [maxSize]="rightPanelMaxSize">
-                    <right-panel></right-panel>
+                    <right-panel [(isCollapsed)]="isRightPanelCollapsed"></right-panel>
                 </as-split-area>
             </as-split>
         </div>

@@ -42,6 +42,7 @@ import { PhoneNumberPopUpComponent } from "modules/BreakfreeTrading/components/p
 import { LocalStorageService } from "modules/Storage/services/local-storage.service";
 import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { TradeGuardTrackingService } from "@app/services/trade-guard-tracking.service";
+import { RightPanelComponent } from "../right-panel/right-panel.component";
 
 
 @Component({
@@ -58,6 +59,7 @@ export class DashboardComponent {
     private _freeUserPopup = 1000 * 60 * 3;
     private _rightPanelMaxSize = 600;
     private _rightPanelSize = 400;
+    private _isRightPanelCollapsed: boolean = false;
     private _intervalLink: any;
     private _freeUserPopupTimer: any;
     private _saveLayout = true;
@@ -65,6 +67,7 @@ export class DashboardComponent {
     private _showPhoneNumberPopupInterval: any;
     private _hardRefreshTimer: any;
     private _hardRefreshNeeded: boolean = false;
+    private _lastBottomPanelSize: number = 0;
     layoutChanged = false;
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 30;
@@ -86,6 +89,10 @@ export class DashboardComponent {
     }
 
     get rightPanelMinSize() {
+        if (this.isRightPanelCollapsed) {
+            return 30;
+        }
+
         return 350;
     }
 
@@ -99,6 +106,20 @@ export class DashboardComponent {
 
     set rightPanelSize(value: number) {
         this._rightPanelSize = value;
+    }
+
+    get isRightPanelCollapsed(): boolean {
+        return this._isRightPanelCollapsed;
+    }
+
+    set isRightPanelCollapsed(value: boolean) {
+        this._isRightPanelCollapsed = value;
+
+        if (this._isRightPanelCollapsed) {
+            this.rightPanelCollapsed();
+        } else {
+            this.rightPanelOpened();
+        }
     }
 
     constructor(private _store: Store<AppState>,
@@ -275,6 +296,17 @@ export class DashboardComponent {
                 }
             });
     }
+
+    rightPanelCollapsed() {
+        this.rightPanelSize = 30;
+        EventsHelper.triggerWindowResize();
+    }
+
+    rightPanelOpened() {
+        this.rightPanelSize = this._lastBottomPanelSize >= this.rightPanelMinSize ? this._lastBottomPanelSize : this.rightPanelMinSize;
+        EventsHelper.triggerWindowResize();
+    }
+
     _processLayoutReady() {
         this._router.events
             .pipe(takeUntil(this.destroy$))
@@ -397,7 +429,20 @@ export class DashboardComponent {
         EventsHelper.triggerWindowResize();
     }
 
+    handleVerticalSplitDbClick() {
+        this.isRightPanelCollapsed = !this.isRightPanelCollapsed;
+        EventsHelper.triggerWindowResize();
+    }
+
     handleHorizontalSplitDragEnd(c) {
+        this._lastBottomPanelSize = c.sizes[1];
+
+        if (this.isRightPanelCollapsed) {
+            if (c.sizes[1] > 30) {
+                this.isRightPanelCollapsed = false;
+            }
+        }
+        
         EventsHelper.triggerWindowResize();
     }
 
@@ -451,7 +496,7 @@ export class DashboardComponent {
         }
         if (this._freeUserPopupTimer) {
             clearTimeout(this._freeUserPopupTimer);
-        }  
+        }
         if (this._showPhoneNumberPopupInterval) {
             clearInterval(this._showPhoneNumberPopupInterval);
         }

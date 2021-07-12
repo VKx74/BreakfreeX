@@ -5,6 +5,7 @@ import { AppState } from "@app/store/reducer";
 import { PlatformTranslateService } from "@platform/localization/token";
 import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { LinkingAction } from "@linking/models";
+import { Intercom } from 'ng-intercom';
 
 export enum Components {
     Sonar = "Sonar",
@@ -30,12 +31,25 @@ export class RightPanelComponent implements OnInit {
     public Components = Components;
     public SelectedComponent: Components = Components.Sonar;
 
+    @Input() isCollapsed: boolean = false;
+    @Output() isCollapsedChange = new EventEmitter<boolean>();
+
     get LinkerColor(): string {
         return this.linker.getLinkingId();
+    }  
+    
+    get collapsed(): boolean {
+        return this.isCollapsed;
+    }
+
+    set collapsed(value: boolean) {
+        this.isCollapsed = value;
+        this.isCollapsedChange.next(this.isCollapsed);
     }
 
     constructor(protected _store: Store<AppState>,
         protected _injector: Injector,
+        private _intercom: Intercom,
         @Inject(PlatformTranslateService) public platformTranslateService: TranslateService) {
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();
@@ -59,6 +73,18 @@ export class RightPanelComponent implements OnInit {
 
     handleOpenChart(action: LinkingAction) {
         this.linker.sendAction(action);
+    }
+
+    showSupport() {
+        this._intercom.show();
+    }
+
+    collapse() {
+        this.collapsed = true;
+    }
+
+    open() {
+        this.collapsed = false;
     }
 
 }
