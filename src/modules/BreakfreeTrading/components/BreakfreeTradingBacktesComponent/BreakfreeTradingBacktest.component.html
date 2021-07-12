@@ -4,12 +4,12 @@
       <div class="bft-backtest-panel-status" #content>
 
          <div class="tradeoverview">
-            <span class="value header"> <span class="leftbord"></span>Backtest parameters: <div
-                  class="column marketoverview-selector">
-                  <selector [options]="Charts" [placeholder]="'Select chart'" [selectedOption]="SelectedChart"
-                     [optionCaption]="captionText" (onSelect)="itemSelected($event)"
-                     class="watchlist-selector bft-form-select"></selector>
-               </div></span>
+            <span class="value header"><span class="leftbord"></span>Parameters</span>
+            <div class="column marketoverview-selector">
+               <selector [options]="Charts" [placeholder]="'Select chart'" [selectedOption]="SelectedChart"
+                  [optionCaption]="captionText" (onSelect)="itemSelected($event)"
+                  class="watchlist-selector bft-form-select"></selector>
+            </div>
          </div>
 
          <mat-tab-group class="full-height tabs">

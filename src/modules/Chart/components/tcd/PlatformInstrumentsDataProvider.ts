@@ -11,6 +11,7 @@ export class PlatformInstrumentsDataProvider implements TradingChartDesigner.Ins
     getInstrument(chart: TradingChartDesigner.Chart): Promise<IInstrument> {
         return new Promise((resolve, reject) => {
             this._dialog.open(InstrumentSearchDialogComponent, {
+                backdropClass: 'backdrop-background',
                 data: {
                     instrument: chart.instrument as IInstrument
                 }

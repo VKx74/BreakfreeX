@@ -3,9 +3,8 @@
         <div class="flex-grow-1 w-0">
 
             <as-split #horizontalSplit class="platform-split-horizontal" [direction]="'horizontal'" [gutterSize]="3"
-                (dragEnd)="handleHorizontalSplitDragEnd($event)" [unit]="'pixel'" (gutterDblClick)="handleVerticalSplitDbClick()">
-                <as-split-area [order]="0" class="flex">
-
+                (dragEnd)="handleHorizontalSplitDragEnd($event)" (dragStart)="handleHorizontalSplitDragStart($event)" [unit]="'pixel'" (gutterDblClick)="handleVerticalSplitDbClick()">
+                <as-split-area [order]="0" class="flex" [maxSize]="">
                     <as-split #verticalSplit class="platform-split-vertical" [direction]="'vertical'" [gutterSize]="3"
                         [unit]="'pixel'" (dragEnd)="handleVerticalSplitDragEnd($event)">
                         <as-split-area [order]="0" [size]="bottomPanelSizeService.sizePanel()" class="flex">
@@ -22,7 +21,7 @@
                         </as-split-area>
                     </as-split>
                 </as-split-area>
-                <as-split-area [order]="1" [(size)]="rightPanelSize" [minSize]="rightPanelMinSize" [maxSize]="rightPanelMaxSize">
+                <as-split-area [order]="1" [size]="rightPanelSize" [minSize]="rightPanelMinSize" [maxSize]="rightPanelMaxSize">
                     <right-panel [(isCollapsed)]="isRightPanelCollapsed"></right-panel>
                 </as-split-area>
             </as-split>

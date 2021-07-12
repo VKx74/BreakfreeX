@@ -28,6 +28,9 @@
   }
 
   .xp-bage-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
   }
 
   .main-menu {
@@ -36,7 +39,7 @@
   }
 
   .xp-nav-container {
-    font-size: 12px;
+    font-size: 13px;
     cursor: pointer;
     color: #ffffffd1;
     .xp-title {
@@ -55,8 +58,8 @@
     color: #ffffffd1;
     .theme-title {
       background-color: #27282b;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
 
       .fa {

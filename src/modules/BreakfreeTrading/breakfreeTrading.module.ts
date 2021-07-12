@@ -17,7 +17,7 @@ import {SharedModule} from "Shared";
 import { UIModule } from 'UI';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreakfreeTradingService } from './services/breakfreeTrading.service';
-import { BreakfreeTradingBacktestComponent, BreakfreeTradingAcademyComponent, BreakfreeTradingScannerComponent } from './components';
+import { BreakfreeTradingBacktestWidgetComponent, BreakfreeTradingAcademyComponent, BreakfreeTradingScannerComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBacktest.service';
@@ -54,6 +54,7 @@ import { GuestCheckoutComponent } from './components/guest-checkout/guest-checko
 import { DefaultCheckoutComponent } from './components/default-checkout/default-checkout.component';
 import { StorageModule } from 'modules/Storage/storage.module';
 import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
+import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTradingBacktesComponent/BreakfreeTradingBacktest.component';
 
 @NgModule({
     // components here
@@ -62,6 +63,7 @@ import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTr
         StrategyV2ModeBacktestComponent,
         ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
+        BreakfreeTradingBacktestWidgetComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
@@ -115,6 +117,7 @@ import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTr
         StrategyV2ModeBacktestComponent,
         ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
+        BreakfreeTradingBacktestWidgetComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
@@ -133,6 +136,7 @@ import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTr
         StrategyV2ModeBacktestComponent,
         ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
+        BreakfreeTradingBacktestWidgetComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,

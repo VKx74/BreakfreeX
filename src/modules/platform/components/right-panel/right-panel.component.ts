@@ -6,12 +6,14 @@ import { PlatformTranslateService } from "@platform/localization/token";
 import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { LinkingAction } from "@linking/models";
 import { Intercom } from 'ng-intercom';
+import { IdentityService } from '@app/services/auth/identity.service';
 
 export enum Components {
     Sonar = "Sonar",
     Watchlist = "Watchlist",
     Alerts = "Alerts",
-    Academy = "Academy"
+    Academy = "Academy",
+    Backtest = "Backtest",
 }
 
 @Component({
@@ -47,9 +49,14 @@ export class RightPanelComponent implements OnInit {
         this.isCollapsedChange.next(this.isCollapsed);
     }
 
+    get isBacktestAllowed(): boolean {
+        return this._identityService.isAdmin || this._identityService.isSupportOfficer;
+    }
+
     constructor(protected _store: Store<AppState>,
         protected _injector: Injector,
         private _intercom: Intercom,
+        private _identityService: IdentityService,
         @Inject(PlatformTranslateService) public platformTranslateService: TranslateService) {
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();

@@ -12,7 +12,7 @@ import {OrderBookTranslateService} from "@order-book/localization/token";
 import {ComponentAccessService} from "@app/services/component-access.service";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {NewsTranslateService} from "../../../News/localization/news.token";
-import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading';
+import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestWidgetComponent } from 'modules/BreakfreeTrading';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import { AlertWidgetComponent } from "modules/AutoTradingAlerts/components/alert-widget/alert-widget.component";
 import { AutoTradingAlertsTranslateService } from "modules/AutoTradingAlerts/localization/token";
@@ -88,8 +88,8 @@ export class ComponentSelectorComponent implements OnDestroy {
                 componentIdentifier: ComponentIdentifier.watchlistWidget,
             }, 
             {
-                component: BreakfreeTradingBacktestComponent,
-                previewImgClass: BreakfreeTradingBacktestComponent.previewImgClass,
+                component: BreakfreeTradingBacktestWidgetComponent,
+                previewImgClass: BreakfreeTradingBacktestWidgetComponent.previewImgClass,
                 componentName: this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName'),
                 componentIdentifier: ComponentIdentifier.breakfreeTradingBacktest,
             },  

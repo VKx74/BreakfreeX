@@ -43,7 +43,7 @@ export class InstrumentSearchDialogComponent extends Modal implements OnInit {
     @ViewChild('input_control', { static: true }) input: ElementRef;
 
     public get instrumentName(): string {
-        return this._instrumentName;
+        return this._instrumentName || "";
     }
     
     public get showCategory(): boolean {

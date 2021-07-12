@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, Injector, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, HostListener, Inject, Injector, ViewChild } from "@angular/core";
 import { of, Subject } from "rxjs";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -43,6 +43,7 @@ import { LocalStorageService } from "modules/Storage/services/local-storage.serv
 import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { TradeGuardTrackingService } from "@app/services/trade-guard-tracking.service";
 import { RightPanelComponent } from "../right-panel/right-panel.component";
+import { InstrumentSearchDialogComponent } from "@instrument-search/components/instrument-search-dialog/instrument-search-dialog.component";
 
 
 @Component({
@@ -68,9 +69,11 @@ export class DashboardComponent {
     private _hardRefreshTimer: any;
     private _hardRefreshNeeded: boolean = false;
     private _lastBottomPanelSize: number = 0;
+    private _minRightSidePanelSize = 350;
     layoutChanged = false;
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 30;
+    readonly minRightSidePanelCollapsedSize = 45;
 
     @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
     @ViewChild('verticalSplit', { read: SplitComponent, static: false }) verticalSplit: SplitComponent;
@@ -90,10 +93,10 @@ export class DashboardComponent {
 
     get rightPanelMinSize() {
         if (this.isRightPanelCollapsed) {
-            return 30;
+            return this.minRightSidePanelCollapsedSize;
         }
 
-        return 350;
+        return this._minRightSidePanelSize;
     }
 
     get rightPanelMaxSize() {
@@ -144,7 +147,7 @@ export class DashboardComponent {
         private _overlay: Overlay,
         private _instrumentMappingService: InstrumentMappingService
     ) {
-
+        // this._setRightPanelRestrictions();
     }
 
     ngOnInit() {
@@ -237,7 +240,9 @@ export class DashboardComponent {
             .pipe(takeUntil(componentDestroyed(this)))
             .subscribe({
                 next: (parent) => {
-                    this.setUpComponentSelectorDialog(parent);
+                    // debugger
+                    // this.setUpComponentSelectorDialog(parent);
+                    this.addChartComponent(parent);
                 }
             });
 
@@ -298,7 +303,7 @@ export class DashboardComponent {
     }
 
     rightPanelCollapsed() {
-        this.rightPanelSize = 30;
+        this.rightPanelSize = this.minRightSidePanelCollapsedSize;
         EventsHelper.triggerWindowResize();
     }
 
@@ -438,12 +443,15 @@ export class DashboardComponent {
         this._lastBottomPanelSize = c.sizes[1];
 
         if (this.isRightPanelCollapsed) {
-            if (c.sizes[1] > 30) {
+            if (c.sizes[1] > this.minRightSidePanelCollapsedSize) {
                 this.isRightPanelCollapsed = false;
             }
         }
-        
+
         EventsHelper.triggerWindowResize();
+    }
+
+    handleHorizontalSplitDragStart(c) {
     }
 
     private setUpComponentSelectorDialog(parent: any) {
@@ -486,6 +494,24 @@ export class DashboardComponent {
             });
     }
 
+    private addChartComponent(parent: any) {
+        this._dialog.open(InstrumentSearchDialogComponent, {
+            backdropClass: 'backdrop-background',
+            data: {
+            }
+        }).afterClosed().subscribe((data) => {
+            if (data) {
+                this._layoutManager.addComponent({
+                    layoutItemName: "chart",
+                    parent: parent,
+                    state: {
+                        instrument: data
+                    }
+                });
+            }
+        });
+    }
+
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
@@ -504,6 +530,16 @@ export class DashboardComponent {
             clearTimeout(this._hardRefreshTimer);
         }
     }
+    
+    // @HostListener('window:resize', ['$event'])
+    // onResize(event) {
+    //     this._setRightPanelRestrictions();
+    // }
+
+    // private _setRightPanelRestrictions() {
+    //     const width = window.innerWidth;
+    //     this._rightPanelMaxSize = Math.round(width / 2);
+    // }
 
     private _autoSave() {
         if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {

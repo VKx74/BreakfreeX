@@ -108,7 +108,7 @@ import {PublicChatLayoutWidgetComponent} from "../Chat/components/public-chat-la
 import {NewsWidgetComponent} from "../News/components/news-widget/news-widget.component";
 import { SingleSessionService } from '@app/services/single-session.service';
 import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
-import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestComponent } from 'modules/BreakfreeTrading/components';
+import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestWidgetComponent } from 'modules/BreakfreeTrading/components';
 import { MissionTrackingService } from '@app/services/missions-tracking.service';
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
 import { AlertsService } from 'modules/AutoTradingAlerts/services/alerts.service';
@@ -399,7 +399,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
                         }, 
                         {
                             componentName: ComponentIdentifier.breakfreeTradingBacktest,
-                            component: BreakfreeTradingBacktestComponent
+                            component: BreakfreeTradingBacktestWidgetComponent
                         },
                         {
                             componentName: ComponentIdentifier.alertsManager,
