@@ -14,12 +14,19 @@ export class TradeGuardTrackingService {
     private _timeout: number = 1000 * 60 * 1.5; // 1.5 min
     private _count: number = 0;
     private _score: number = 10;
+    private _initialized: boolean = false;
     
     constructor(private _notificationsService: NotificationsService,
                 private _tradeGuardService: TradeGuardService) {
     }
 
     initTimer() {
+        if (this._initialized) {
+            return;
+        }
+
+        this._initialized = true;
+
         setInterval(() => {
             this._checkTradeGuardItems();
         }, this._timeout);
@@ -28,11 +35,14 @@ export class TradeGuardTrackingService {
     private _checkTradeGuardItems() {
         const tradeGuardItems = this._tradeGuardService.GetRiskOverview();
 
+
         if (tradeGuardItems) {
-            if (tradeGuardItems.Score <= 5 && tradeGuardItems.Score < this._score) {
-                this._notificationsService.show("I have found some major issues with your trades, please open the TradeGuard Dashboard and review now.", "TradeGuard", NotificationType.Info);
-            } else if (tradeGuardItems.Items.length > this._count) {
-                this._notificationsService.show("I have some ideas to improve your current trades, check out the TradeGuard Dashboard now.", "TradeGuard", NotificationType.Info);
+            if (tradeGuardItems.Items.length > this._count || tradeGuardItems.Score < this._score) {
+                if (tradeGuardItems.Score <= 5) {
+                    this._notificationsService.show("I have found some major issues with your trades, please open the TradeGuard Dashboard and review now.", "TradeGuard", NotificationType.Info);
+                } else {
+                    this._notificationsService.show("I have some ideas to improve your current trades, check out the TradeGuard Dashboard now.", "TradeGuard", NotificationType.Info);
+                }
             }
             this._score = tradeGuardItems.Score;
             this._count = tradeGuardItems.Items.length;
