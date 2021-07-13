@@ -188,7 +188,7 @@ export class AlertComponent extends BaseLayoutItem {
         if (!searchExchange && searchSymbol === i.id) {
           instrument = i;
         } else if (searchExchange === i.exchange && searchSymbol === i.id) {
-
+          instrument = i;
         }
       }
 
