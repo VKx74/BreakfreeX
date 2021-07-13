@@ -63,9 +63,9 @@
                             </mat-menu>
                         </div>
                     </nav-section>
-                    <nav-section [leftBorder]="false" [paddingRight]="true" [paddingLeft]="false" *ngIf="isAuthorizedCustomer">
-                    
-                    </nav-section>
+                    <div class="settings-button" routerLink="/platform/settings" [class.disabled]="isGuest">
+                        <i _ngcontent-rjn-c4="" class="crypto-icon crypto-icon-settings"></i>
+                    </div>
                 </div>
             </ng-template>
         </div>

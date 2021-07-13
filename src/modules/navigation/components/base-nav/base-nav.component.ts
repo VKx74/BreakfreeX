@@ -56,6 +56,10 @@ export class BaseNavComponent implements OnInit {
         return this._themeService.activeTheme === Theme.Dark;
     }
 
+    get isGuest() {
+        return this._identityService.isGuestMode;
+    }
+
     get currentUserFullName() {
         return this._identityService.fullName;
     }
@@ -196,6 +200,10 @@ export class BaseNavComponent implements OnInit {
 
     register() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+    }
+
+    showSettings() {
+
     }
 
     private _save() {

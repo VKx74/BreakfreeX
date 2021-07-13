@@ -141,6 +141,7 @@
     }
 
     .user-settings,
+    .clear-session,
     .log-out,
     .reset-layout {
       ::before {
@@ -189,6 +190,7 @@
   }
 
   .user-settings,
+  .clear-session,
   .log-out,
   .reset-layout {
     background-color: themed("tableBorders");

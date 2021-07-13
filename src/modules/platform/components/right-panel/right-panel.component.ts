@@ -69,8 +69,15 @@ export class RightPanelComponent implements OnInit {
     }
 
     selectComponent(component: Components) {
-        if (this.SelectedComponent !== component) {
+        if (this.collapsed) {
+            this.collapsed = false;
             this.SelectedComponent = component;
+        } else {
+            if (this.SelectedComponent !== component) {
+                this.SelectedComponent = component;
+            } else {
+                this.collapsed = true;
+            }
         }
     }
 
