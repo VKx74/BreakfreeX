@@ -33,7 +33,7 @@
                             <span *ngIf="isLoaded; else loading">
                                 <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
                                 <!-- <span class="xp-title">LV</span> {{level}} -->
-                                <span [ngClass]="getOverviewClass()">
+                                <span class="dashb" [ngClass]="getOverviewClass()">
                                     Dashboard
                                 </span>
                             </span>
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                     </nav-section> 
-                    <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
+                    <nav-section class="avatarsec" *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
                         <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex">
                             <ng-container *ngTemplateOutlet="avatar"></ng-container>
                             <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
