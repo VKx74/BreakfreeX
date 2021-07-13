@@ -159,6 +159,11 @@ body.Dark-theme.thmFintatechDarkTheme {
 .navigation {
   background-color: #191919 !important;
   visibility: visible;
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  height: 45px;
 }
 
 .telegramframe {
