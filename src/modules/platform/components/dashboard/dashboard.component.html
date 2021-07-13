@@ -21,7 +21,7 @@
                         </as-split-area>
                     </as-split>
                 </as-split-area>
-                <as-split-area [order]="1" [size]="rightPanelSize" [minSize]="rightPanelMinSize" [maxSize]="rightPanelMaxSize">
+                <as-split-area [class.right-side-panel-area-full-size]="!isRightPanelCollapsed" [order]="1" [size]="rightPanelSize" [minSize]="rightPanelMinSize" [maxSize]="rightPanelMaxSize">
                     <right-panel [(isCollapsed)]="isRightPanelCollapsed"></right-panel>
                 </as-split-area>
             </as-split>

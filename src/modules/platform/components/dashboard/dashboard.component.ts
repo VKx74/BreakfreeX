@@ -74,6 +74,7 @@ export class DashboardComponent {
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 30;
     readonly minRightSidePanelCollapsedSize = 45;
+    readonly minRightPanelFullSize = 768;
 
     @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
     @ViewChild('verticalSplit', { read: SplitComponent, static: false }) verticalSplit: SplitComponent;
@@ -148,6 +149,7 @@ export class DashboardComponent {
         private _instrumentMappingService: InstrumentMappingService
     ) {
         // this._setRightPanelRestrictions();
+        this._setRightPanelInitialSize();
     }
 
     ngOnInit() {
@@ -538,8 +540,18 @@ export class DashboardComponent {
 
     // private _setRightPanelRestrictions() {
     //     const width = window.innerWidth;
-    //     this._rightPanelMaxSize = Math.round(width / 2);
+    //     if (width < this.minRightPanelFullSize) {
+    //         this._rightPanelMaxSize = width;
+    //         this._minRightSidePanelSize = width;
+    //     }
     // }
+
+    private _setRightPanelInitialSize() {
+        const width = window.innerWidth;
+        if (width < this.minRightPanelFullSize) {
+            this.isRightPanelCollapsed = true;
+        }
+    }
 
     private _autoSave() {
         if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {

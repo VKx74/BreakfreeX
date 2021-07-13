@@ -78,6 +78,20 @@
       }
     }
   }
+
+  @media (min-width: 768px) {
+
+  }
+
+  @media (max-height: 480px) {
+    .widget-selector-icon {
+      margin-top: 0px !important;
+      height: 40px !important;
+    }
+    .bottom-part {
+      display: none;
+    }
+  }
 }
 
 @include themify($themes, true) {

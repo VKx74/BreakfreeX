@@ -16,7 +16,7 @@
 </div>
 
 <div class="controls">
-    <div [ngSwitch]="brokerInstance" class="h-100">    
+    <div [ngSwitch]="brokerInstance" class="h-100" class="account-info-bar">
         <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT4" class="info-bar"></mt-account-info-bar>
         <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT5" class="info-bar"></mt-account-info-bar>
         <binance-account-info-bar *ngSwitchCase="EBrokerInstance.Binance" class="info-bar"></binance-account-info-bar>

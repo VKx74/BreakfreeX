@@ -93,6 +93,15 @@
   }
 }
 
+@media (max-width: 768px) {
+  .right-side-panel-area-full-size {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100000;
+  }
+}
+
 //}
 
 

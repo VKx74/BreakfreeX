@@ -10,7 +10,6 @@
   // overflow: auto;
   flex-direction: column;
 
-
   .buttons-control {
     min-width: 360px;
     display: flex;
@@ -129,6 +128,17 @@
 
     .mat-tab-body-wrapper {
       height: 100% !important;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .account-info-bar {
+      display: none;
+    }
+  }
+  @media (max-width: 420px) {
+    .buttons-control {
+      display: none;
     }
   }
 }
