@@ -42,6 +42,7 @@
     font-size: 12px;
     cursor: pointer;
     z-index: 2;
+    font-weight:700;
   }
 
   .avatar-line {
@@ -78,9 +79,7 @@
         width: 50px !important;
         height: 50px !important;
       }
-      .rank-level {
-        display: none;
-      }
+      
     }
   }
 
@@ -93,7 +92,7 @@
     margin-bottom: 15px;
 
     /deep/.rounded {
-      border-radius: 50% !important;
+      border-radius: 5px !important;
     }
   }
 
