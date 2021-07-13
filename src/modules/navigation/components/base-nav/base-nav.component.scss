@@ -11,20 +11,20 @@
   nav-section:hover {
     background: #5655554d;
     border-radius: 5px;
-    padding:5px;
+    padding: 5px;
   }
-    nav-section {
-      padding:5px;
-    }
+  nav-section {
+    padding: 5px;
+  }
 
-    span.dashb {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 10px 0px;
-     }
-   .avatarsec {
-    margin-right:10px;
-    }
+  span.dashb {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 10px 0px;
+  }
+  .avatarsec {
+    margin-right: 10px;
+  }
 
   margin-right: 10px;
 
@@ -139,8 +139,14 @@
   }
 }
 
+@media (max-width: 600px) {
+  .nav-section {
+    margin-right: 0px !important;
+  }
+}
+
 @include themify($themes, true) {
-  .settings-button {
+  .avatarsec {
     border-left: 1px solid themed("topToolbarSeparator");
   }
 }
@@ -161,7 +167,7 @@
 .email {
   font-size: 15px;
   text-transform: capitalize;
-  font-weight:700;
+  font-weight: 700;
 }
 
 .sidebar-toggle-wrapper {
@@ -280,7 +286,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 600px) {
   .mobileshow {
     display: block;
   }
@@ -289,7 +295,7 @@
   }
 }
 
-@media (min-width: 450px) {
+@media (min-width: 600px) {
   .mobileshow {
     display: none !important;
   }
