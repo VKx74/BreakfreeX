@@ -270,6 +270,7 @@ button.crypto-button.crypto-button_default {
 
 .Dark-theme .lm_header .lm_tab {
   background: #101013 !important;
+  opacity:0.6;
 }
 
 .Dark-theme li.lm_tab.bftn {
@@ -432,7 +433,8 @@ lm_tab.bftn {
 }
 
 .Dark-theme .lm_header .lm_tab.lm_active {
-  background-color: #191919 !important;
+  background-color: #06060d !important;
+  opacity:1 !important;
   border-top: 0px solid #3d61cc !important;
 }
 
@@ -777,7 +779,7 @@ span.tcdPaneTitleIcon.tcdIndicatorAlertIcon {
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: #191919;
+  background: #0e0e0e;
   transition-duration: 0.22s;
 }
 
