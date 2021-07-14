@@ -58,7 +58,7 @@ export class DashboardComponent {
     private _updateInterval = 1000 * 60 * 5;
     private _autoSaveChecker = 1000 * 10;
     private _freeUserPopup = 1000 * 60 * 3;
-    private _rightPanelMaxSize = 600;
+    private _rightPanelMaxSize = 800;
     private _rightPanelSize = 400;
     private _isRightPanelCollapsed: boolean = false;
     private _intervalLink: any;

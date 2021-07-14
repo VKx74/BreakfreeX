@@ -74,7 +74,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        margin-top: 10px;
+        margin-bottom: 10px;
       }
     }
   }
@@ -105,6 +105,10 @@
 
   .widget-selector-icon {
     color: themed("titleTextColor");
+
+    a {
+      color: themed("titleTextColor");
+    }
 
     &.active {
       font-weight: 700 !important;

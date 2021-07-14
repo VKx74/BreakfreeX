@@ -1,4 +1,4 @@
 <div class="link-selector">
-    <color-selector [activeColor]="activeLinking" (activeColorChange)='handleColorSelected($event)'  [path]="'circle'">
+    <color-selector *ngIf="showLinker" [activeColor]="activeLinking" (activeColorChange)='handleColorSelected($event)'  [path]="'circle'">
     </color-selector>
 </div>

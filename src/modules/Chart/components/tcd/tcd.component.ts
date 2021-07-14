@@ -156,7 +156,6 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         //     });
 
         this.setTitle();
-        this._initLinking();
     }
 
     ngAfterViewInit() {
@@ -178,7 +177,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                 }
             }
         } else {
-            this._setLinkerColor();
+            // this._setLinkerColor();
         }
 
         this._datafeed.init(false).then(d => {
@@ -246,7 +245,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED, this.instrumentChanged.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barsLoaded.bind(this));
 
-            if (!state) {
+            if (!state || !state.chartState) {
                 let isProAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 let isDiscoveryAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
 
@@ -518,7 +517,15 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     protected useDefaultLinker(): boolean {
+        return true;
+    }
+
+    protected showLinkerTab(): boolean {
         return false;
+    }
+
+    protected useActiveElementLinker(): boolean {
+        return true;
     }
 
     private searchInstrumentHandler(symbol: string): Promise<IInstrument[]> {
@@ -568,63 +575,61 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         ].join(' ');
     }
 
-    private _initLinking() {
-        this.linker.onAction((action: LinkingAction) => {
-            if (action.type === Actions.ChangeInstrument) {
-                if (this.chart) {
-                    const chart = this.chart;
-                    const instrument = action.data as IChartInstrument;
-                    const chartInstrument = chart.instrument;
+    protected handleLinkingAction(action: LinkingAction) {
+        if (action.type === Actions.ChangeInstrument) {
+            if (this.chart) {
+                const chart = this.chart;
+                const instrument = action.data as IChartInstrument;
+                const chartInstrument = chart.instrument;
 
-                    if (!instrument) {
-                        return;
-                    }
-
-                    if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange) {
-
-                        chart.instrument = Object.assign({}, instrument);
-                        chart.sendBarsRequest();
-                    }
+                if (!instrument) {
+                    return;
                 }
-            } else if (action.type === Actions.ChangeInstrumentAndTimeframe) {
-                if (this.chart) {
-                    const chart = this.chart;
-                    const replayDate = action.data.replayDate;
-                    const instrument = action.data.instrument as IChartInstrument;
-                    const timeInterval = (action.data.timeframe as number) * 1000;
-                    const chartInstrument = chart.instrument;
 
-                    if (!instrument) {
-                        return;
+                if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange) {
+
+                    chart.instrument = Object.assign({}, instrument);
+                    chart.sendBarsRequest();
+                }
+            }
+        } else if (action.type === Actions.ChangeInstrumentAndTimeframe) {
+            if (this.chart) {
+                const chart = this.chart;
+                const replayDate = action.data.replayDate;
+                const instrument = action.data.instrument as IChartInstrument;
+                const timeInterval = (action.data.timeframe as number) * 1000;
+                const chartInstrument = chart.instrument;
+
+                if (!instrument) {
+                    return;
+                }
+
+                if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
+
+                    chart.switchOffReplayMode();
+                    chart.refresh();
+                    chart.refreshIndicators();
+
+                    chart.instrument = Object.assign({}, instrument);
+                    chart.timeFrame = TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval);
+
+                    if (replayDate) {
+                        this.replayWaiter = {
+                            instrument: instrument.id,
+                            tf: timeInterval,
+                            date: replayDate
+                        };
                     }
-
-                    if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
-
-                        chart.switchOffReplayMode();
-                        chart.refresh();
-                        chart.refreshIndicators();
-
-                        chart.instrument = Object.assign({}, instrument);
-                        chart.timeFrame = TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval);
-
-                        if (replayDate) {
-                            this.replayWaiter = {
-                                instrument: instrument.id,
-                                tf: timeInterval,
-                                date: replayDate
-                            };
-                        }
-                        chart.sendBarsRequest();
+                    chart.sendBarsRequest();
+                } else {
+                    if (replayDate) {
+                        chart.setReplayByDate(replayDate);
                     } else {
-                        if (replayDate) {
-                            chart.setReplayByDate(replayDate);
-                        } else {
-                            chart.switchOffReplayMode();
-                        }
+                        chart.switchOffReplayMode();
                     }
                 }
             }
-        });
+        }
     }
 
     private _sendInstrumentChange(instrument: IChartInstrument) {
@@ -632,7 +637,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             type: Actions.ChangeInstrument,
             data: instrument
         };
-        this.linker.sendAction(linkAction);
+        this.sendLinkingAction(linkAction);
     }
 
     private _getTheme(): any {
@@ -740,8 +745,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
         if (this.brokerStateChangedSubscription) {
             this.brokerStateChangedSubscription.unsubscribe();
-        } 
-        
+        }
+
         if (this.handleBrokerConnectTimeout) {
             clearTimeout(this.handleBrokerConnectTimeout);
         }

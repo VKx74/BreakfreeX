@@ -68,12 +68,11 @@
   }
 
   .static-login-popup {
-    position: fixed;
-    top: 4px;
+    position: relative;
     right: 1vh;
     background-image: linear-gradient(125deg, #52aa47, #058d3f 100%, #66df57);
     z-index: 2;
-    padding: 3px 12px;
+    padding: 0px 12px;
     font-size: 11px;
     font-family: "Fira Sans", sans-serif;
     font-weight: 600;
@@ -83,6 +82,10 @@
     border: 1px solid #27282b;
     cursor: pointer;
     border-radius: 15px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .xp-bage-container {

@@ -6,6 +6,7 @@ import {LinkSelectorComponent, ColorSelectorComponent} from "./components";
 import {MatMenuModule} from "@angular/material/menu";
 import {CommonModule} from "@angular/common";
 import {sharedProviderResolver} from "../popup-window/functions";
+import { GoldenLayoutItemTracker } from "@layout/golden-layout-item-tracker";
 
 export function sharedLinkingMessageBus() {
     return sharedProviderResolver('linkingMessageBus');
@@ -28,7 +29,7 @@ export function sharedLinkingMessageBus() {
         LinkSelectorComponent
     ],
     providers: [
-
+        GoldenLayoutItemTracker
     ]
 })
 export class LinkingModule {

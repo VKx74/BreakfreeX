@@ -11,5 +11,13 @@
   },
   "tradingManager": "Trading manager",
   "tradingInitialized": "Trading initialized",
-  "failedInitTrading": "Failed to initialized trading: "
+  "failedInitTrading": "Failed to initialized trading: ",
+  "sonarWidget": "Sonar Widget",
+  "watchlistWidget": "Watchlist Widget",
+  "alertsWidget": "Alerts Widget",
+  "academyWidget": "Academy Widget",
+  "backtestWidget": "Backtest Widget",
+  "supportWidget": "Support Widget",
+  "downloadDesktopApplication": "Download Desktop Application",
+  "adminPanel": "Admin Panel"
 }

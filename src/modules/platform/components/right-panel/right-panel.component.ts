@@ -29,6 +29,7 @@ export enum Components {
 })
 export class RightPanelComponent implements OnInit {
     protected linker: Linker;
+    protected _downloadLink: string;
 
     public Components = Components;
     public SelectedComponent: Components = Components.Sonar;
@@ -38,8 +39,8 @@ export class RightPanelComponent implements OnInit {
 
     get LinkerColor(): string {
         return this.linker.getLinkingId();
-    }  
-    
+    }
+
     get collapsed(): boolean {
         return this.isCollapsed;
     }
@@ -53,6 +54,14 @@ export class RightPanelComponent implements OnInit {
         return this._identityService.isAdmin || this._identityService.isSupportOfficer;
     }
 
+    get isStuff(): boolean {
+        return this._identityService.isStuff;
+    }
+
+    get downloadLink(): string {
+        return this._downloadLink;
+    }
+
     constructor(protected _store: Store<AppState>,
         protected _injector: Injector,
         private _intercom: Intercom,
@@ -60,6 +69,21 @@ export class RightPanelComponent implements OnInit {
         @Inject(PlatformTranslateService) public platformTranslateService: TranslateService) {
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();
+
+        let platform = window.navigator.platform,
+            macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+            windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+            iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+            os = null;
+
+        if (macosPlatforms.indexOf(platform) !== -1) {
+            this._downloadLink = '/assets/Navigator_1.1_OSX.zip';
+            // document.getElementById('downloadlink').setAttribute('href', );
+        } else if (iosPlatforms.indexOf(platform) !== -1) {
+
+        } else if (windowsPlatforms.indexOf(platform) !== -1) {
+            this._downloadLink = '/assets/Navigator_1.1_WIN.zip';
+        }
     }
 
     ngOnInit() {

@@ -93,7 +93,7 @@ $baseIconPath: '../icons/';
       background-repeat: no-repeat;
       top: 5px !important;
       right: 5px !important;
-      opacity: 0.2;
+      opacity: 0.5;
       i {
         font-size: 7px;
       }
@@ -105,16 +105,16 @@ $baseIconPath: '../icons/';
 
     // If Tab is active, so if it's in foreground
     &.lm_active {
-      background: $activeTabBgColor;
-      color: $activeTabColor;
-      border-bottom: none;
+      // background: $activeTabBgColor;
+      // color: $activeTabColor;
+      // border-bottom: none;
       //box-shadow: 0 -2px 2px $color0;
       //padding-bottom: 3px;
 
       .lm_close_tab {
-        opacity: 0.8;
+        // opacity: 0.8;
         &:hover {
-          opacity: 1;
+          // opacity: 1;
         }
       }
     }
