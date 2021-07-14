@@ -16,10 +16,16 @@
     }
   }
 
+  .crypto-modal .modal-content .close {
+    right: 14px;
+    top: 21px;
+}
   .modal-header {
     background: transparent;
+    height:auto;
     .modal-title {
       font-size: 20px !important;
+      padding-top:15px;
     }
   }
 
@@ -31,7 +37,8 @@
     .instrument-type {
       display: flex;
       font-size: 12px;
-      margin: 3px 6px;
+      margin: 3px 3px;
+      font-weight:700;
       padding: 5px 10px;
       cursor: pointer;
       border-radius: 15px;
