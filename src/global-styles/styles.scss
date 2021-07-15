@@ -922,7 +922,67 @@ input.timepicker-dial__control.timepicker-dial__item {
 	margin-left: -10px;
 }
 
-@-webkit-keyframes fadein-bft_05 {
+.price-ticker-container {
+  display: inline-flex;
+  margin-left: 3px;
+  max-width: 100px;
+  height: 100%;
+  vertical-align: middle;
+  justify-content: left;
+  align-items: center;
+  margin-top: -4px;
+
+
+  .price-direction, .current-price, .price-change {
+    align-content: center;
+    margin-left: 3px;
+    display: block;
+    font-size: 10px;
+  }
+
+  .price-direction {
+    // display: none;
+  }
+
+  .current-price {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.Dark-theme {
+  .price-direction, .current-price, .price-change {
+    color: #d5d5dc;
+    &.upTrend {
+      color: lightgreen;
+    }
+    &.downTrend {
+      color: lightsalmon;
+    }
+  }
+}
+
+.Light-theme {
+  .price-direction, .current-price, .price-change {
+    color: #323232;
+    &.upTrend {
+      color: green;
+    }
+    &.downTrend {
+      color: darkred;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .price-ticker-container {
+    display: none !important;
+  }
+}
+
+
+@-webkit-keyframes fadein-bft_05 {  
   0% {
     opacity: 0;
   }

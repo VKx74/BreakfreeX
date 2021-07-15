@@ -56,6 +56,16 @@
   }
 }
 
+.lm_tabdropdown_list {
+  .lm_tab {
+    opacity: 1 !important;
+  }
+  .lm_title {
+    width: fit-content !important;
+    min-width: 50px;
+  }
+}
+
 @include globalThemifyFromComponent($themes) {
   .golden-layout {
     //background-color: themed('add-component-bg-color');
@@ -176,7 +186,7 @@
 }
 
 .tab-with-linker:not(.active-tab-with-linker) {
-  opacity: 0.5 !important;
+  opacity: 0.5;
 }
 
 .active-tab-with-linker {

@@ -40,6 +40,10 @@ import { BrokerService } from "@app/services/broker.service";
 import { of, Subscription } from "rxjs";
 import { MTBroker } from "@app/services/mt/mt.broker";
 import { PlatformInstrumentsDataProvider } from "./PlatformInstrumentsDataProvider";
+import { IHistoryRequest } from "@app/models/common/historyRequest";
+import { IPeriodicity } from "@app/models/common/periodicity";
+import { IHistoryResponse } from "@app/models/common/historyResponse";
+import { IBarData } from "@app/models/common/barData";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -85,6 +89,18 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     private replayWaiter: ReplayWaiter;
     private brokerStateChangedSubscription: Subscription;
     private handleBrokerConnectTimeout: any;
+
+    private _priceTickerContainerClass = "price-ticker-container";
+    private _priceDirectionClass = "price-direction";
+    private _currentPriceClass = "current-price";
+    private _priceChangeClass = "price-change";
+    private _insertAfterElementClass = "lm_title";
+
+    private _priceDirectionElement: HTMLDivElement;
+    private _currentPriceElement: HTMLDivElement;
+    private _priceChangeElement: HTMLDivElement;
+    private _headerUpdateTimer;
+    private _hourlyPriceCache: { [instrumentHash: string]: IBarData[] } = {};
 
     blur: boolean = false;
     chart: TradingChartDesigner.Chart;
@@ -268,6 +284,10 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                 }
                 this._handleBrokerConnected();
             });
+
+            this._headerUpdateTimer = setInterval(() => {
+                this._setTitlePrice();
+            }, 1000);
         });
     }
 
@@ -491,6 +511,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
+
+        this._getHistory();
+
         if (this.replayWaiter) {
             if (this.chart.instrument.id === this.replayWaiter.instrument && this.chart.timeInterval === this.replayWaiter.tf) {
 
@@ -733,11 +756,21 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     setTitle() {
-        super.setTitle(
-            this._translateService.stream('chartComponentTitle', {
-                symbol: this.chart ? this.chart.instrument.symbol : ''
-            })
-        );
+        super.setTitle(of(this.chart ? this.chart.instrument.symbol : ''));
+
+        if (this._tabElement) {
+            const priceTickerContainer = this._tabElement.find(`.${this._priceTickerContainerClass}`)[0];
+            if (!priceTickerContainer) {
+                this._createPriceTickerContainer();
+            }
+        }
+
+        this._setTitlePrice();
+    }
+
+    onShow() {
+        super.onShow();
+        this.setTitle();
     }
 
     ngOnDestroy() {
@@ -745,6 +778,10 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
         if (this.brokerStateChangedSubscription) {
             this.brokerStateChangedSubscription.unsubscribe();
+        }
+
+        if (this._headerUpdateTimer) {
+            clearInterval(this._headerUpdateTimer);
         }
 
         if (this.handleBrokerConnectTimeout) {
@@ -785,6 +822,122 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    protected _createPriceTickerContainer() {
+        if (!this._tabElement) {
+            return;
+        }
+
+        let priceTickerContainer = document.createElement("div");
+        priceTickerContainer.classList.add(this._priceTickerContainerClass);
+
+        let priceDirection = document.createElement("div");
+        priceDirection.classList.add(this._priceDirectionClass);
+        priceTickerContainer.appendChild(priceDirection);
+        this._priceDirectionElement = priceDirection;
+
+        let currentPrice = document.createElement("div");
+        currentPrice.classList.add(this._currentPriceClass);
+        priceTickerContainer.appendChild(currentPrice);
+        this._currentPriceElement = currentPrice;
+
+        let priceChange = document.createElement("div");
+        priceChange.classList.add(this._priceChangeClass);
+        priceTickerContainer.appendChild(priceChange);
+        this._priceChangeElement = priceChange;
+
+        this._tabElement[0].insertBefore(priceTickerContainer, this._tabElement.find(`.${this._insertAfterElementClass}`)[0].nextSibling);
+    }
+
+    protected _setEmptyTitlePrice() {
+        this._currentPriceElement.innerHTML = "";
+        this._priceChangeElement.innerHTML = "";
+        this._priceDirectionElement.innerHTML = "";
+    }
+
+    protected _setTitlePrice() {
+        if (!this.chart) {
+            return;
+        }
+
+        const instrument = this.chart.instrument as IInstrument;
+        if (!instrument) {
+            this._setEmptyTitlePrice();
+            return;
+        }
+
+        const key = this._getKeyForInstrumentsPriceHistory(instrument);
+        const barCache = this._hourlyPriceCache[key];
+        if (!barCache || !barCache.length) {
+            this._setEmptyTitlePrice();
+            return;
+        }
+
+        const currentPrice = this.chart.dataContext.dataRows[".close"].lastValue;
+        if (!currentPrice) {
+            this._setEmptyTitlePrice();
+            return;
+        }
+
+        const firstPrice = barCache[0].close;
+        const change = (currentPrice - firstPrice) / firstPrice * 100;
+
+        this._currentPriceElement.innerHTML = currentPrice.toFixed(instrument.pricePrecision);
+        this._priceChangeElement.innerHTML = `${Math.roundToDecimals(change, 2).toFixed(2)}%`;
+
+        if (change > 0) {
+            this._priceDirectionElement.innerHTML = "▲";
+            this._priceChangeElement.classList.remove("downTrend");
+            this._priceDirectionElement.classList.remove("downTrend");
+            this._priceChangeElement.classList.add("upTrend");
+            this._priceDirectionElement.classList.add("upTrend");
+        } else {
+            this._priceDirectionElement.innerHTML = "▼";
+            this._priceChangeElement.classList.remove("upTrend");
+            this._priceDirectionElement.classList.remove("upTrend");
+            this._priceChangeElement.classList.add("downTrend");
+            this._priceDirectionElement.classList.add("downTrend");
+        }
+
+    }
+
+    private _getHistory() {
+        const instrument = this.chart.instrument as IInstrument;
+        if (!instrument) {
+            return;
+        }
+
+        const key = this._getKeyForInstrumentsPriceHistory(instrument);
+        if (this._hourlyPriceCache[key]) {
+            return;
+        }
+
+        let requestMsg: IHistoryRequest = {
+            instrument: instrument,
+            timeFrame: {
+                periodicity: IPeriodicity.hour,
+                interval: 1
+            },
+            startDate: new Date(new Date().getTime() - (60 * 60 * 24 * 5 * 1000)), // 5 days
+            endDate: new Date(),
+            cacheToken: key
+        };
+
+        (this._datafeed as any)._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
+            if (response && response.data.length) {
+                const data = response.data;
+                if (data.length > 24) {
+                    data.reverse().length = 24;
+                    data.reverse();
+                }
+                this._hourlyPriceCache[key] = data;
+            }
+        });
+    }
+
+    private _getKeyForInstrumentsPriceHistory(instrument: IInstrument) {
+        return instrument.id + instrument.exchange;
     }
 }
 
