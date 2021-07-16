@@ -165,7 +165,6 @@
   }
   .tab-with-linker {
     background-color: themed("tabBgColor") !important;
-    opacity: 0.5;
   }
   .active-tab-with-linker {
     background-color: themed("activeTabBgColor") !important;
@@ -186,7 +185,7 @@
 }
 
 .tab-with-linker:not(.active-tab-with-linker) {
-  opacity: 0.5;
+ // opacity: 0.5;
 }
 
 .active-tab-with-linker {
