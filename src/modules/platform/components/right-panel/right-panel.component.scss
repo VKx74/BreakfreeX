@@ -99,20 +99,25 @@
     background: themed("lmContent") !important;
   }
   .widget-selector {
-    background: themed("noactiveTabs");
-    border-left: 1px solid themed("gutterColor");
+    // background: themed("noactiveTabs");
+    background: #121219  !important;
+   // border-left: 1px solid themed("gutterColor");
+   border-left:1px solid #0a0a0a;
   }
 
   .widget-selector-icon {
-    color: themed("titleTextColor");
+    // color: themed("titleTextColor");
+    color: #ffffffd1;
 
     a {
-      color: themed("titleTextColor");
+      //color: themed("titleTextColor");
+      color: #ffffffd1;
     }
 
     &.active {
       font-weight: 700 !important;
-      background: themed("accentLightColor");
+     // background: themed("accentLightColor");
+      background: #324254;
       // border-top: 1px solid themed("titleTextColor");
     }
   }
