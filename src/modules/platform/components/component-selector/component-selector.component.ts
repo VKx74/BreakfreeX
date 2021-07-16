@@ -18,6 +18,7 @@ import { AlertWidgetComponent } from "modules/AutoTradingAlerts/components/alert
 import { AutoTradingAlertsTranslateService } from "modules/AutoTradingAlerts/localization/token";
 import { BreakfreeTradingScannerWidgetComponent } from "modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component";
 import { WatchlistWidgetComponent } from "modules/Watchlist/components/widget/watchlistWidget.component";
+import { PublicChatComponent } from "modules/Chat/components/public-chat/public-chat.component";
 
 interface IComponent {
     component: Type<any>;
