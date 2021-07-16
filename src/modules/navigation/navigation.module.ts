@@ -52,6 +52,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         NavSectionComponent,
         // WorkspacesComponent,
     ],
+    
 })
 export class NavigationModule {
 }

@@ -21,8 +21,7 @@ import {GoldenLayoutComponent, LayoutManagerService} from "angular-golden-layout
         {
             provide: TranslateService,
             useExisting: PlatformTranslateService
-        },
-        LayoutStorageService
+        }
     ]
 })
 export class WorkspacesComponent implements OnInit, OnDestroy {
@@ -66,11 +65,12 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.layout.$stateChanged
-            .pipe(takeUntil(componentDestroyed(this)))
-            .subscribe(() => {
-                this._layoutStateChanged = true;
-            });
+        // this.layout.$stateChanged
+        //     // .pipe(takeUntil(componentDestroyed(this)))
+        //     .subscribe(() => {
+        //         console.log(">> state changed");
+        //         this._layoutStateChanged = true;
+        //     });
 
         
         // moved in dashboard

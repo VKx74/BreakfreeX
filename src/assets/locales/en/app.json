@@ -120,5 +120,7 @@
   "userActivityActionEnum": {
     "0": "Logged In",
     "1": "Login Failed"
-  }
+  },
+  "stateNotSaved": "Actual state not saved",
+  "stateSaved": "State saved"
 }

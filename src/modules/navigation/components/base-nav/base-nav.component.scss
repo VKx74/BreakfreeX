@@ -167,11 +167,29 @@
       color: white;
     }
   }
+  
+  .no-highlight {
+    // background-color: transparent !important;
+  }
+
+  .save-state {
+    color: white;
+    cursor: pointer;
+
+    &.save-needed {
+      color: #eac84c;
+      // cursor: pointer;
+    }
+  }
 }
 
 @media (max-width: 600px) {
   .nav-section {
     margin-right: 0px !important;
+  }
+
+  .autosave-nav-item {
+    display: none;
   }
 }
 

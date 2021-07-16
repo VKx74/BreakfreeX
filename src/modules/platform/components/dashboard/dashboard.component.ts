@@ -49,14 +49,10 @@ import { InstrumentSearchDialogComponent } from "@instrument-search/components/i
 @Component({
     selector: 'dashboard',
     templateUrl: 'dashboard.component.html',
-    styleUrls: ['dashboard.component.scss'],
-    providers: [
-        LayoutStorageService
-    ]
+    styleUrls: ['dashboard.component.scss']
 })
 export class DashboardComponent {
-    private _updateInterval = 1000 * 60 * 5;
-    private _autoSaveChecker = 1000 * 10;
+    private _updateInterval = 1000 * 10;
     private _freeUserPopup = 1000 * 60 * 3;
     private _rightPanelMaxSize = 800;
     private _rightPanelSize = 400;
@@ -70,7 +66,6 @@ export class DashboardComponent {
     private _hardRefreshNeeded: boolean = false;
     private _lastBottomPanelSize: number = 0;
     private _minRightSidePanelSize = 350;
-    layoutChanged = false;
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 30;
     readonly minRightSidePanelCollapsedSize = 45;
@@ -206,14 +201,14 @@ export class DashboardComponent {
                 }
             });
 
-        this._actions
-            .pipe(
-                ofType(AppActionTypes.LogoutSuccess),
-                first()
-            )
-            .subscribe((action: LogoutSuccessAction) => {
-                this._saveLayoutState();
-            });
+        // this._actions
+        //     .pipe(
+        //         ofType(AppActionTypes.LogoutSuccess),
+        //         first()
+        //     )
+        //     .subscribe((action: LogoutSuccessAction) => {
+        //         this._saveLayoutState();
+        //     });
 
         if (!this._identityService.isAdmin) {
             this._singleSessionService.watchSessions();
@@ -225,7 +220,6 @@ export class DashboardComponent {
             this._tradeGuardTrackingService.initTimer();
         }
 
-        this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
 
         if (this._identityService.isTrial) {
@@ -314,16 +308,6 @@ export class DashboardComponent {
         EventsHelper.triggerWindowResize();
     }
 
-    _processLayoutReady() {
-        this._router.events
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((event: any) => {
-                if (event instanceof NavigationStart) {
-                    this._saveLayoutState();
-                }
-            });
-    }
-
     private _loadLayoutState() {
         let w = window.innerWidth;
         let h = window.innerHeight;
@@ -366,16 +350,36 @@ export class DashboardComponent {
 
     private _initializeLayout(state: IGoldenLayoutComponentState) {
         this.layout.loadState(state);
-        this._processLayoutReady();
+
+        setTimeout(() => {
+            this._initAutoSave();
+        }, this._updateInterval);
+    }
+
+    private _initAutoSave() {
+        this._layoutManager.layout.$stateChanged
+        .pipe(takeUntil(componentDestroyed(this)))
+        .subscribe(() => {
+            if (!this._saveLayout) {
+                return;
+            }
+
+            this._layoutStorageService.lastUpdateTime = new Date().getTime();
+        });
+
+        this._layoutStorageService.autoSaveInitialized = true;
+        this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
     }
 
     private _saveLayoutState(async: boolean = true) {
+        this._layoutStorageService.lastUpdateTime = 0;
         if (this._identityService.isAuthorized && this._saveLayout && !this._identityService.isGuestMode) {
+            this._saveLayout = false;
             const layoutState = this.layout.saveState();
             this._layoutStorageService.saveLayoutState(layoutState, async)
                 .subscribe(
                     (data) => {
-                        this.layoutChanged = true;
+                        this._saveLayout = true;
                         this._alertService.success(this._layoutTranslateService.get("savedLayout"));
                     });
         }
@@ -398,31 +402,27 @@ export class DashboardComponent {
             });
     }
 
-    needSaveConfirm() {
-        return (() => {
-            return new Promise((resolve, reject) => {
-                if (this.layoutChanged)
-                    this._dialog.open<ConfirmModalComponent, IConfirmModalConfig>(ConfirmModalComponent, {
-                        data: {
-                            title: 'Logout',
-                            message: 'Layout is not saved. Do you want to continue?'
-                        }
-                    }).afterClosed()
-                        .subscribe(res => {
-                            if (res)
-                                resolve();
-                            else
-                                reject();
-                        });
-                else
-                    resolve();
-            });
-        });
-    }
-
-    saveLayoutState() {
-        this._saveLayoutState();
-    }
+    // needSaveConfirm() {
+    //     return (() => {
+    //         return new Promise((resolve, reject) => {
+    //             if (this.layoutChanged)
+    //                 this._dialog.open<ConfirmModalComponent, IConfirmModalConfig>(ConfirmModalComponent, {
+    //                     data: {
+    //                         title: 'Logout',
+    //                         message: 'Layout is not saved. Do you want to continue?'
+    //                     }
+    //                 }).afterClosed()
+    //                     .subscribe(res => {
+    //                         if (res)
+    //                             resolve();
+    //                         else
+    //                             reject();
+    //                     });
+    //             else
+    //                 resolve();
+    //         });
+    //     });
+    // }
 
     handleVerticalSplitDragEnd(c) {
         if (c.sizes[1] >= this.openBottomPanel) {
@@ -554,9 +554,19 @@ export class DashboardComponent {
     }
 
     private _autoSave() {
+        const lastUpdateTime = this._layoutStorageService.lastUpdateTime;
+        if (!lastUpdateTime || new Date().getTime() - lastUpdateTime < this._updateInterval) {
+            return;
+        }
+
+        this._layoutStorageService.lastUpdateTime = 0;
+
         if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
+            this._saveLayout = false;
             const layoutState = this.layout.saveState();
-            this._layoutStorageService.saveLayoutState(layoutState, true).subscribe();
+            this._layoutStorageService.saveLayoutState(layoutState, true).subscribe(() => {
+                this._saveLayout = true;
+            });
         }
     }
 

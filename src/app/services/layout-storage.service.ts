@@ -9,6 +9,8 @@ import {IGoldenLayoutComponentState} from "angular-golden-layout";
 @Injectable()
 export class LayoutStorageService {
     private _layoutExistsRemotely: boolean = false;
+    public lastUpdateTime: number;
+    public autoSaveInitialized: boolean;
 
     constructor(private http: HttpClient,
                 private _identity: IdentityService) {
