@@ -172,13 +172,15 @@
     // background-color: transparent !important;
   }
 
-  .save-state {
-    color: white;
+  .autosave-nav-item {
     cursor: pointer;
+    .save-state {
+      color: white;
 
-    &.save-needed {
-      color: #eac84c;
-      // cursor: pointer;
+      &.save-needed {
+        color: #eac84c;
+        // cursor: pointer;
+      }
     }
   }
 }
@@ -186,10 +188,6 @@
 @media (max-width: 600px) {
   .nav-section {
     margin-right: 0px !important;
-  }
-
-  .autosave-nav-item {
-    display: none;
   }
 }
 

@@ -28,8 +28,9 @@
                             </div>
                         </div>
                     </nav-section>  -->
-                    <nav-section class="autosave-nav-item" *ngIf="autoSaveInitialized && isAuthorizedCustomer" [leftBorder]="false" [class.no-highlight]="!saveNeeded" [paddingRight]="true" [paddingLeft]="true">
-                        <div class="autosave-container" (click)="saveLayout()">
+                    <nav-section class="autosave-nav-item" *ngIf="isAuthorizedCustomer" [leftBorder]="false" [class.no-highlight]="!saveNeeded" [paddingRight]="true" [paddingLeft]="true"
+                        [matMenuTriggerFor]="saveLayoutMenu">
+                        <div class="autosave-container">
                             <span class="save-state save-needed" *ngIf="saveNeeded; else saved" tooltip [matTooltip]="'stateNotSaved' | translate">
                                 <i class="fa fa-cloud-upload" aria-hidden="true" ></i>
                             </span>
@@ -38,6 +39,10 @@
                                     <i class="fa fa-cloud" aria-hidden="true"></i>
                                 </span>
                             </ng-template>
+
+                            <mat-menu #saveLayoutMenu="matMenu" xPosition="before">
+                                <layout-management-menu></layout-management-menu>
+                            </mat-menu>
                         </div>
                     </nav-section> 
                     <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">

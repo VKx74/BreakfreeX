@@ -122,5 +122,9 @@
     "1": "Login Failed"
   },
   "stateNotSaved": "Actual state not saved",
-  "stateSaved": "State saved"
+  "stateSaved": "State saved",
+  "saveLayout": "Save Layout",
+  "saveAsNewLayout": "Save Layout as New",
+  "newLayout": "Create New Layout",
+  "loadLayout": "Load Layout"
 }

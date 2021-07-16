@@ -161,10 +161,37 @@ export class DashboardComponent {
         this._actions
             .pipe(
                 ofType(ActionTypes.SaveState),
-                // takeUntil(componentDestroyed(this))
+                takeUntil(componentDestroyed(this))
             )
             .subscribe(() => {
                 this._saveLayoutState();
+            });
+
+        this._actions
+            .pipe(
+                ofType(ActionTypes.SaveLayoutAsNew),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._saveLayoutAsNew();
+            });
+
+        this._actions
+            .pipe(
+                ofType(ActionTypes.OpenNewLayout),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._openNewLayout();
+            });
+
+        this._actions
+            .pipe(
+                ofType(ActionTypes.LoadLayout),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._loadLayout();
             });
 
         this._actions
@@ -596,5 +623,15 @@ export class DashboardComponent {
                 }, 1000 * 60 * 10);
             }
         }
+    }
+
+    private _loadLayout() {
+        alert("Load Layout");
+    }
+    private _openNewLayout() {
+        alert("Open Layout");
+    }
+    private _saveLayoutAsNew() {
+        alert("Save as New Layout");
     }
 }

@@ -18,6 +18,7 @@ import { BaseNavComponent } from './components/base-nav/base-nav.component';
 import { NavDelimiterComponent } from './components/nav-delimiter/nav-delimiter.component';
 import { NavSectionComponent } from './components/nav-section/nav-section.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { LayoutManagementMenuComponent } from './components/layout-management-menu/layout-management-menu.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         SidebarToggleComponent,
         BaseNavComponent,
         NavDelimiterComponent,
-        NavSectionComponent
+        NavSectionComponent,
+        LayoutManagementMenuComponent
     ],
     imports: [
         CommonModule,
@@ -52,7 +54,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         NavSectionComponent,
         // WorkspacesComponent,
     ],
-    
+
 })
 export class NavigationModule {
 }
