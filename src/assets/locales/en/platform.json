@@ -19,5 +19,9 @@
   "backtestWidget": "Backtest",
   "supportWidget": "Support",
   "downloadDesktopApplication": "Download Desktop Application",
-  "adminPanel": "Admin Panel"
+  "adminPanel": "Admin Panel",
+  "layoutName": "Layout Name",
+  "saveLayout": "Save Layout",
+  "createLayout": "Create Layout",
+  "openLayout": "Open Layout"
 }

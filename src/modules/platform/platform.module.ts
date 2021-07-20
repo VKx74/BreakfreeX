@@ -117,6 +117,11 @@ import { RightPanelComponent } from './components/right-panel/right-panel.compon
 import { BreakfreeTradingScannerWidgetComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
 import { WatchlistWidgetComponent } from 'modules/Watchlist/components/widget/watchlistWidget.component';
 import { AcademyModule } from 'modules/Academy/academy.module';
+import { LayoutNameModalComponent } from './components/layout-name-component/layout-name.component';
+import { OpenLayoutModalComponent } from './components/open-layout-component/open-layout.component';
+import { DatatableModule } from 'modules/datatable/datatable.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { LoaderModule } from 'modules/loader/loader.module';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -133,7 +138,9 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         // ChangePasswordComponent,
         PlatformNavComponent,
         PlatformSidebarComponent,
-        WorkspacesComponent
+        WorkspacesComponent,
+        LayoutNameModalComponent,
+        OpenLayoutModalComponent
     ],
     imports: [
         CommonModule,
@@ -204,10 +211,15 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         NavigationModule,
         SidebarModule,
         MatRadioModule,
-        AcademyModule
+        AcademyModule,
+        DatatableModule,
+        DragDropModule,
+        LoaderModule
     ],
     entryComponents: [
         ComponentSelectorComponent,
+        LayoutNameModalComponent,
+        OpenLayoutModalComponent
     ],
     providers: [
         RolesService,

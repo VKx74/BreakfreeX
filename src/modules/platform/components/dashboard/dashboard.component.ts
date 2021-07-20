@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, HostListener, Inject, Injector, ViewChild } from "@angular/core";
-import { of, Subject } from "rxjs";
+import { Observable, of, Subject } from "rxjs";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LayoutTranslateService } from "@layout/localization/token";
-import { catchError, first, map, takeUntil } from "rxjs/operators";
+import { catchError, first, map, takeUntil, tap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { NavigationStart, Router } from "@angular/router";
 import { SplitComponent } from "angular-split";
@@ -24,6 +24,7 @@ import { BrokerService } from "@app/services/broker.service";
 import { ToggleBottomPanelSizeService } from "@platform/components/dashboard/toggle-bottom-panel-size.service";
 import {
     GoldenLayoutComponent,
+    GoldenLayoutState,
     IGoldenLayoutComponentSettings,
     IGoldenLayoutComponentState,
     LayoutManagerService
@@ -44,6 +45,9 @@ import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { TradeGuardTrackingService } from "@app/services/trade-guard-tracking.service";
 import { RightPanelComponent } from "../right-panel/right-panel.component";
 import { InstrumentSearchDialogComponent } from "@instrument-search/components/instrument-search-dialog/instrument-search-dialog.component";
+import { LayoutNameModalComponent } from "../layout-name-component/layout-name.component";
+import { OpenLayoutModalComponent } from "../open-layout-component/open-layout.component";
+import { ILayoutState } from "@app/models/layout-state";
 
 
 @Component({
@@ -155,7 +159,7 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._saveLayout = false;
-                this._layoutStorageService.removeLayoutState().subscribe(data => { });
+                this._layoutStorageService.removeDashboard().subscribe(data => { });
             });
 
         this._actions
@@ -200,7 +204,7 @@ export class DashboardComponent {
                 takeUntil(componentDestroyed(this))
             )
             .subscribe(() => {
-                this._resetLayout();
+                this._resetLayout().subscribe();
             });
 
         this._actions
@@ -315,7 +319,7 @@ export class DashboardComponent {
                 if (isConfirmed) {
                     this._saveLayout = false;
                     this._localStorageService.remove(LocalStorageService.IsSpreadAutoProcessing);
-                    this._layoutStorageService.removeLayoutState().subscribe(data => {
+                    this._layoutStorageService.removeDashboard().subscribe(data => {
                         this._identityService.signOut().subscribe(data1 => {
                             this._coockieService.deleteAllCookie();
                             window.location.reload(true);
@@ -333,6 +337,86 @@ export class DashboardComponent {
     rightPanelOpened() {
         this.rightPanelSize = this._lastBottomPanelSize >= this.rightPanelMinSize ? this._lastBottomPanelSize : this.rightPanelMinSize;
         EventsHelper.triggerWindowResize();
+    }
+
+    getGoldenLayoutState(): GoldenLayoutState {
+        return this.layout.saveState();
+    }
+
+    getLayoutState(): ILayoutState {
+        const glState = this.getGoldenLayoutState();
+        let name = "Default";
+        let id = "";
+        if (this._layoutStorageService.currentDashboardName) {
+            name = this._layoutStorageService.currentDashboardName;
+        }
+        if (this._layoutStorageService.currentDashboardId) {
+            id = this._layoutStorageService.currentDashboardId;
+        }
+        return {
+            state: glState,
+            name: name,
+            layoutId: id,
+            savedTime: new Date().getTime(),
+            description: this._getLayoutDescription(glState)
+        };
+    }
+
+    private _getLayoutDescription(state: GoldenLayoutState): string {
+        return this._getComponentDescription(state.content);
+    }
+
+    private _getComponentDescription(component: any): string {
+        if (Array.isArray(component)) {
+            let res: string[] = [];
+            for (const i of component) {
+                let description = this._getComponentDescription(i.content || i);
+                if (description) {
+                    res.push(description);
+                }
+            }
+
+            if (res.length) {
+                return res.join(', ');
+            }
+
+            return "";
+        }
+
+        if (component.componentName === "chart" && component.componentState && component.componentState.componentState) {
+            const state = component.componentState.componentState;
+            const instrument = state.instrument;
+            const timeFrame = state.timeFrame;
+
+            if (!instrument || !timeFrame) {
+                return "";
+            }
+
+            return `${instrument.symbol} ${this._getTimeframeDescription(timeFrame)}`;
+        }
+    }
+
+    private _getTimeframeDescription(timeFrame: any): string {
+        let interval = timeFrame.interval;
+        let periodicity = timeFrame.periodicity;
+
+        if (!interval || !periodicity) {
+            return "";
+        }
+
+        periodicity = periodicity.toUpperCase();
+
+        if (!periodicity) {
+            periodicity = "Min(s)";
+        } else if (periodicity === "H") {
+            periodicity = "Hour(s)";
+        } else if (periodicity === "D") {
+            periodicity = "Days(s)";
+        } else if (periodicity === "W") {
+            periodicity = "Week(s)";
+        }
+
+        return `${interval} ${periodicity}`;
     }
 
     private _loadLayoutState() {
@@ -355,7 +439,7 @@ export class DashboardComponent {
             return;
         }
 
-        this._layoutStorageService.getLayoutState()
+        this._layoutStorageService.getDashboard()
             .pipe(
                 catchError(() => { // no saved workspace
                     return this._workspaceRepository.getDefaultWorkspaceByUserTags(this._identityService.tags)
@@ -370,16 +454,33 @@ export class DashboardComponent {
                         );
                 })
             )
-            .subscribe((data: IGoldenLayoutComponentState) => {
+            .subscribe((data: IGoldenLayoutComponentState | ILayoutState) => {
                 this._initializeLayout(data);
             });
     }
 
-    private _initializeLayout(state: IGoldenLayoutComponentState) {
-        this.layout.loadState(state);
-
+    private _initializeLayout(state: IGoldenLayoutComponentState | ILayoutState) {
+        this._applyLayout(state);
         setTimeout(() => {
             this._initAutoSave();
+        }, this._updateInterval);
+    }
+
+    private _applyLayout(state: IGoldenLayoutComponentState | ILayoutState) {
+        this._saveLayout = false;
+        try {
+            if ((state as ILayoutState).state) {
+                const layout = (state as ILayoutState);
+                this.layout.loadState(layout.state);
+                this._layoutStorageService.setCurrentDashboard(layout.name, layout.layoutId);
+            } else {
+                this.layout.loadState((state as IGoldenLayoutComponentState));
+            }
+        } catch (error) {
+
+        }
+        setTimeout(() => {
+            this._saveLayout = true;
         }, this._updateInterval);
     }
 
@@ -398,12 +499,12 @@ export class DashboardComponent {
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
     }
 
-    private _saveLayoutState(async: boolean = true) {
+    private _saveLayoutState() {
         this._layoutStorageService.lastUpdateTime = 0;
         if (this._identityService.isAuthorized && this._saveLayout && !this._identityService.isGuestMode) {
             this._saveLayout = false;
-            const layoutState = this.layout.saveState();
-            this._layoutStorageService.saveLayoutState(layoutState, async)
+            const layoutState = this.getLayoutState();
+            this._layoutStorageService.updateActiveLayout(layoutState)
                 .subscribe(
                     (data) => {
                         this._saveLayout = true;
@@ -412,21 +513,16 @@ export class DashboardComponent {
         }
     }
 
-    private _resetLayout() {
-        this._workspaceRepository.loadWorkspaces()
-            .subscribe({
-                next: (workspaces: Workspace[]) => {
-                    for (const w of workspaces) {
-                        if (w.id === "empty") {
-                            this._layoutManager.loadState(w.layoutState, true);
-                            break;
-                        }
+    private _resetLayout(): Observable<any> {
+        return this._workspaceRepository.loadWorkspaces()
+            .pipe(tap((workspaces) => {
+                for (const w of workspaces) {
+                    if (w.id === "empty") {
+                        this._layoutManager.loadState(w.layoutState, true);
+                        break;
                     }
-                },
-                error: (e) => {
-                    console.error(e);
                 }
-            });
+            }));
     }
 
     // needSaveConfirm() {
@@ -590,8 +686,8 @@ export class DashboardComponent {
 
         if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
             this._saveLayout = false;
-            const layoutState = this.layout.saveState();
-            this._layoutStorageService.saveLayoutState(layoutState, true).subscribe(() => {
+            const layoutState = this.getLayoutState();
+            this._layoutStorageService.updateActiveLayout(layoutState).subscribe(() => {
                 this._saveLayout = true;
             });
         }
@@ -626,12 +722,53 @@ export class DashboardComponent {
     }
 
     private _loadLayout() {
-        alert("Load Layout");
+        this._dialog.open(OpenLayoutModalComponent, {}).afterClosed().subscribe((id) => {
+            if (!id) {
+                return;
+            }
+
+            this._layoutStorageService.loadLayout(id).subscribe((savedLayout) => {
+                if (savedLayout) {
+                   this._applyLayout(savedLayout);
+                }
+            });
+        });
     }
     private _openNewLayout() {
-        alert("Open Layout");
+        this._dialog.open(LayoutNameModalComponent, {
+            data: {}
+        }).afterClosed().subscribe((name) => {
+            if (!name) {
+                return;
+            }
+
+            this._resetLayout().subscribe(() => {
+                this._saveCurrentLayout(name);
+            });
+        });
     }
     private _saveLayoutAsNew() {
-        alert("Save as New Layout");
+        this._dialog.open(LayoutNameModalComponent, {
+            data: {
+                isSave: true
+            }
+        }).afterClosed().subscribe((name) => {
+            if (!name) {
+                return;
+            }
+
+            this._saveCurrentLayout(name);
+        });
+    }
+
+    private _saveCurrentLayout(name: string) {
+        const state = this.getGoldenLayoutState();
+        const description = this._getComponentDescription(state.content);
+        this._layoutStorageService.createLayout(state, name, description).subscribe((savedLayout) => {
+            if (savedLayout) {
+                this._layoutStorageService.setCurrentDashboard(savedLayout.name, savedLayout.layoutId);
+                this._saveLayoutState();
+            }
+        });
     }
 }

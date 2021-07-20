@@ -350,7 +350,7 @@ export class AppMembersComponent {
                 title: 'Clear user session',
                 message: `Are you sure you want to clear ${user.user.email} session?`,
                 onConfirm: () => {
-                    this._layoutStorageService.removeUserLayoutState(id)
+                    this._layoutStorageService.removeUserDashboard(id)
                         .subscribe({
                             next: () => {
                                 this._alertService.success('User session cleared');

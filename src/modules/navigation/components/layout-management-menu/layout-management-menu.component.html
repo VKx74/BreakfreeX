@@ -1,4 +1,8 @@
 <div class="layout-management-container">
+    <div class="current-layout">
+        <div class="current-layout-title">{{'currentLayout' | translate}}</div>
+        <div class="current-layout-name">{{layoutName}}</div>
+    </div>
     <div class="menu-item" (click)="saveLayout()">{{'saveLayout' | translate}}</div>
     <div class="menu-item" (click)="saveLayoutAsNew()">{{'saveAsNewLayout' | translate}}</div>
     <div class="separator"></div>

@@ -1,89 +1,78 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, map, tap} from "rxjs/operators";
-import {IdentityService} from './auth/identity.service';
-import {AppConfigService} from './app.config.service';
-import {IGoldenLayoutComponentState} from "angular-golden-layout";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, tap } from "rxjs/operators";
+import { IdentityService } from './auth/identity.service';
+import { AppConfigService } from './app.config.service';
+import { IGoldenLayoutComponentState } from "angular-golden-layout";
+import { ILayoutState } from '@app/models/layout-state';
+
+export class LayoutDto {
+    name: string;
+    description: string;
+    state: any;
+}
+
+export class UpdateLayoutDto {
+    name: string;
+    description: string;
+    layoutId: string;
+    state: any;
+}
+
+export class LayoutResponseDto {
+    layoutId: string;
+    name: string;
+    description: string;
+    savedTime: number;
+}
 
 @Injectable()
 export class LayoutStorageService {
     private _layoutExistsRemotely: boolean = false;
-    public lastUpdateTime: number;
-    public autoSaveInitialized: boolean;
-
-    constructor(private http: HttpClient,
-                private _identity: IdentityService) {
-    }
+    private _currentDashboardName: string;
+    private _currentDashboardLayoutId: string;
 
     private get _dashboardURL(): string {
         return `${AppConfigService.config.apiUrls.userDataStoreREST}Dashboard`;
+    }
+
+    private get _layoutURL(): string {
+        return `${AppConfigService.config.apiUrls.userDataStoreREST}Layouts`;
     }
 
     private get _isGuest(): boolean {
         return this._identity.isGuestMode;
     }
 
-    private _saveLayoutStateSync(state: IGoldenLayoutComponentState) {
-        let payload = JSON.stringify(state);
-        let method = this._layoutExistsRemotely ? "PUT" : "POST";
-        this._sendHttpRequestSync(method, payload);
+    public lastUpdateTime: number;
+    public autoSaveInitialized: boolean;
+
+    public get currentDashboardName(): string {
+        return this._currentDashboardName;
     }
 
-    private _sendHttpRequestSync(method: string, body: string) {
-        if (this._isGuest) {
-            return;
-        }
-
-        let httpRequest = new XMLHttpRequest();
-        httpRequest.onerror = (e) => {
-            console.log(e);
-        };
-        httpRequest.open(method, this._dashboardURL, false);
-        httpRequest.setRequestHeader('Authorization', 'Bearer ' + this._identity.token);
-        httpRequest.setRequestHeader('Content-Type', 'application/json');
-        if (body !== null)
-            httpRequest.send(body);
-        else
-            httpRequest.send();
+    public get currentDashboardId(): string {
+        return this._currentDashboardLayoutId;
     }
 
-    private _saveLayoutStateAsync(state: IGoldenLayoutComponentState): Observable<any> {
-        if (this._isGuest) {
-            return of(null);
-        }
-
-        if (this._layoutExistsRemotely) {
-            return this.http.put(this._dashboardURL, state);
-        } else {
-            return this.http.post(this._dashboardURL, state)
-                .pipe(
-                    tap(() => this._layoutExistsRemotely = true),
-                    catchError(e => {
-                        if (e.status === 409) {
-                            return this.http.put(this._dashboardURL, state);
-                        }
-
-                        this._layoutExistsRemotely = false;
-                        throw Error(e);
-                    })
-                );
-        }
+    constructor(private http: HttpClient,
+        private _identity: IdentityService) {
     }
 
-    getLayoutState(): Observable<IGoldenLayoutComponentState> {
+    getDashboard(): Observable<IGoldenLayoutComponentState | ILayoutState> {
         if (this._isGuest) {
             return throwError("");
         }
 
-        return this.http.get<IGoldenLayoutComponentState>(this._dashboardURL).pipe(
+        return this.http.get<any>(this._dashboardURL).pipe(
             tap((data) => {
-                    if (data) {
-                        this._layoutExistsRemotely = true;
-                    } else {
-                        this._layoutExistsRemotely = false;
-                    }
-                },
+                if (data) {
+                    this._layoutExistsRemotely = true;
+                } else {
+                    this._layoutExistsRemotely = false;
+                }
+            },
                 (error) => {
                     this._layoutExistsRemotely = false;
                 }),
@@ -92,19 +81,93 @@ export class LayoutStorageService {
             }));
     }
 
-    saveLayoutState(state: IGoldenLayoutComponentState, async: boolean = true): Observable<any> {
+    createLayout(state: any, name: any, description: string): Observable<LayoutResponseDto> {
         if (this._isGuest) {
             return of(null);
         }
-        
-        if (async) {
-            return this._saveLayoutStateAsync(state);
-        } else {
-            this._saveLayoutStateSync(state);
-        }
+
+        const data: LayoutDto = {
+            state: state,
+            description: description,
+            name: name
+        };
+
+        return this.http.post<LayoutResponseDto>(`${this._layoutURL}`, data)
+            .pipe(
+                tap(() => this._layoutExistsRemotely = true),
+                catchError(e => {
+                    throw Error(e);
+                })
+            );
     }
 
-    removeLayoutState(): Observable<any> {
+    loadLayouts(): Observable<LayoutResponseDto[]> {
+        if (this._isGuest) {
+            return of([]);
+        }
+
+        return this.http.get<LayoutResponseDto[]>(`${this._layoutURL}/all`)
+            .pipe(
+                tap(() => this._layoutExistsRemotely = true),
+                catchError(e => {
+                    throw Error(e);
+                })
+            );
+    }
+
+    loadLayout(id: string): Observable<any> {
+        if (this._isGuest) {
+            return of(null);
+        }
+
+        return this.http.get<any>(`${this._layoutURL}?id=${id}`)
+            .pipe(
+                tap(() => this._layoutExistsRemotely = true),
+                map((data: any) => {
+                    if (!data || !data.state) {
+                        return null;
+                    }
+                    
+                    return {
+                        ...data,
+                        state: JSON.parse(data.state)
+                    };
+                }),
+                catchError(e => {
+                    throw Error(e);
+                })
+            );
+    }
+
+    deleteLayout(id: string): Observable<any> {
+        if (this._isGuest) {
+            return of(null);
+        }
+
+        return this.http.delete<any>(`${this._layoutURL}?id=${id}`)
+            .pipe(
+                tap(() => this._layoutExistsRemotely = true),
+                catchError(e => {
+                    throw Error(e);
+                })
+            );
+    }
+
+    updateActiveLayout(state: ILayoutState): Observable<any> {
+        if (this._isGuest) {
+            return of(null);
+        }
+
+        return this.http.post(`${this._layoutURL}/update-active-layout`, state)
+            .pipe(
+                tap(() => this._layoutExistsRemotely = true),
+                catchError(e => {
+                    throw Error(e);
+                })
+            );
+    }
+
+    removeDashboard(): Observable<any> {
         if (this._isGuest) {
             return of(null);
         }
@@ -112,12 +175,17 @@ export class LayoutStorageService {
         return this.http.delete(this._dashboardURL, {});
     }
 
-    removeUserLayoutState(userId: string): Observable<any> {
+    removeUserDashboard(userId: string): Observable<any> {
         if (this._isGuest) {
             return of(null);
         }
 
         return this.http.delete(`${AppConfigService.config.apiUrls.userDataStoreREST}Dashboard/${userId}`);
+    }
+
+    setCurrentDashboard(name: string, id: string) {
+        this._currentDashboardName = name;
+        this._currentDashboardLayoutId = id;
     }
 
 }

@@ -18,6 +18,23 @@
     width: 100%;
     margin: 6px 0px;
   }
+  .current-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 15px;
+    margin-bottom: 7px;
+    background-color: #121219;
+
+    .current-layout-title {
+      font-size: 11px;
+      color: #d5d5dc;
+    }
+
+    .current-layout-name {
+      font-size: 15px;
+      color: #ffffff;
+    }
+  }
 }
 
 @media (max-width: 600px) {
@@ -33,5 +50,4 @@
   .separator {
     border-top: 1px solid themed('gutterColor');
   }
-  
 }

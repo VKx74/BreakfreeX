@@ -19,5 +19,9 @@
   "backtestWidget": "Віджет бектесту",
   "supportWidget": "Віджет підтримки",
   "downloadDesktopApplication": "Завантаження додатку",
-  "adminPanel": "Адмін панель"
+  "adminPanel": "Адмін панель",
+  "layoutName": "Назва макета",
+  "saveLayout": "Зберегти макет",
+  "createLayout": "Створити макет",
+  "openLayout": "Відкрити макет"
 }

@@ -54,16 +54,16 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.layout = this._layoutManager.layout;
-        this._workspacesSubscription = this._workspaceRepository.loadWorkspaces()
-            .subscribe({
-                next: (workspaces: Workspace[]) => {
-                    this.workspaces = workspaces;
-                },
-                error: (e) => {
-                    console.error(e);
-                }
-            });
+        // this.layout = this._layoutManager.layout;
+        // this._workspacesSubscription = this._workspaceRepository.loadWorkspaces()
+        //     .subscribe({
+        //         next: (workspaces: Workspace[]) => {
+        //             this.workspaces = workspaces;
+        //         },
+        //         error: (e) => {
+        //             console.error(e);
+        //         }
+        //     });
 
         // this.layout.$stateChanged
         //     // .pipe(takeUntil(componentDestroyed(this)))
@@ -78,30 +78,30 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this._workspacesSubscription) {
-            this._workspacesSubscription.unsubscribe();
-        }
+        // if (this._workspacesSubscription) {
+        //     this._workspacesSubscription.unsubscribe();
+        // }
 
         // if (this._intervalLink) {
         //     clearInterval(this._intervalLink);
         // }
     }
 
-    applyWorkspace(workspace: Workspace) {
-        this._layoutManager.loadState(workspace.layoutState, true);
-    }
+    // applyWorkspace(workspace: Workspace) {
+    //     this._layoutManager.loadState(workspace.layoutState, true);
+    // }
 
-    saveLayout() {
-        if (this._identityService.isAuthorized && this._saveLayout) {
-            const layoutState = this.layout.saveState();
-            this._layoutStorageService.saveLayoutState(layoutState, true)
-                .subscribe(
-                    (data) => {
-                        this._layoutStateChanged = false;
-                        this._alertManager.success(this._translateService.get("workspaceNames.savedLayout"));
-                    });
-        }
-    }
+    // saveLayout() {
+    //     if (this._identityService.isAuthorized && this._saveLayout) {
+    //         const layoutState = this.layout.saveState();
+    //         this._layoutStorageService.saveLayoutState(layoutState, true)
+    //             .subscribe(
+    //                 (data) => {
+    //                     this._layoutStateChanged = false;
+    //                     this._alertManager.success(this._translateService.get("workspaceNames.savedLayout"));
+    //                 });
+    //     }
+    // }
     
     // autoSave() {
     //     if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {

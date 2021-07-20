@@ -125,6 +125,7 @@
   "stateSaved": "State saved",
   "saveLayout": "Save Layout",
   "saveAsNewLayout": "Save Layout as New",
+  "currentLayout": "Current Layout",
   "newLayout": "Create New Layout",
   "loadLayout": "Load Layout"
 }

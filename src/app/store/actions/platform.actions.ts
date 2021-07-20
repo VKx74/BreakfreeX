@@ -14,7 +14,9 @@ export enum ActionTypes {
     ResetLayout = '[Platform] Reset Layout',
     SaveLayoutAsNew = '[Platform] Save Layout As New',
     OpenNewLayout = '[Platform] Open New Layout',
-    LoadLayout = '[Platform] Load Layout'
+    LoadLayout = '[Platform] Load Layout',
+    ApplyLayout = '[Platform] Apply Layout',
+    DeleteLayout = '[Platform] Delete Layout'
 }
 
 export class SelectBottomComponentAction implements Action {
@@ -111,6 +113,25 @@ export class LoadLayoutAction implements Action {
 }
 
 
+export class ApplyLayoutAction implements Action {
+    readonly type = ActionTypes.ApplyLayout;
+    public layoutId: string;
+
+    constructor(layoutId: string) {
+        this.layoutId = layoutId;
+    }
+}
+
+export class DeleteLayoutAction implements Action {
+    readonly type = ActionTypes.DeleteLayout;
+    public layoutId: string;
+
+    constructor(layoutId: string) {
+        this.layoutId = layoutId;
+    }
+}
+
+
 export type PlatformActions = SelectBottomComponentAction
     | SelectRightSideComponentAction
     | ShowCodeAction
@@ -123,4 +144,6 @@ export type PlatformActions = SelectBottomComponentAction
     | AppTypeChangedAction
     | SaveLayoutAsNewAction
     | OpenNewLayoutAction
+    | ApplyLayoutAction
+    | DeleteLayoutAction
     | LoadLayoutAction;
