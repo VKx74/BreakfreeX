@@ -204,7 +204,7 @@ export class DashboardComponent {
                 takeUntil(componentDestroyed(this))
             )
             .subscribe(() => {
-                this._resetLayout().subscribe();
+                this._resetLayout();
             });
 
         this._actions
@@ -471,10 +471,24 @@ export class DashboardComponent {
         try {
             if ((state as ILayoutState).state) {
                 const layout = (state as ILayoutState);
-                this.layout.loadState(layout.state);
+                const GLState = (layout.state as IGoldenLayoutComponentState);
+                this.layout.loadState(GLState, false).then(() => {
+                    this._actualizeLayout();
+                }, () => {
+                    this._resetLayout();
+                }).catch(() => {
+                    this._resetLayout();
+                });
                 this._layoutStorageService.setCurrentDashboard(layout.name, layout.layoutId);
             } else {
-                this.layout.loadState((state as IGoldenLayoutComponentState));
+                const GLState = (state as IGoldenLayoutComponentState);
+                this.layout.loadState(GLState, false).then(() => {
+                    this._actualizeLayout();
+                }, () => {
+                    this._resetLayout();
+                }).catch(() => {
+                    this._resetLayout();
+                });
             }
         } catch (error) {
 
@@ -484,16 +498,33 @@ export class DashboardComponent {
         }, this._updateInterval);
     }
 
+    private _actualizeLayout() {
+        const layoutComponents = this._layoutManager.layout.getAllComponents();
+
+        if (!layoutComponents || !layoutComponents.length) {
+            this._resetLayout();
+            return;
+        }
+
+        for (const layoutComponent of layoutComponents) {
+            const component = (layoutComponent as any);
+            const componentName = component.componentName;
+            if (componentName && componentName !== "chart" && component.close) {
+                component.close();
+            }
+        }
+    }
+
     private _initAutoSave() {
         this._layoutManager.layout.$stateChanged
-        .pipe(takeUntil(componentDestroyed(this)))
-        .subscribe(() => {
-            if (!this._saveLayout) {
-                return;
-            }
+            .pipe(takeUntil(componentDestroyed(this)))
+            .subscribe(() => {
+                if (!this._saveLayout) {
+                    return;
+                }
 
-            this._layoutStorageService.lastUpdateTime = new Date().getTime();
-        });
+                this._layoutStorageService.lastUpdateTime = new Date().getTime();
+            });
 
         this._layoutStorageService.autoSaveInitialized = true;
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
@@ -513,7 +544,7 @@ export class DashboardComponent {
         }
     }
 
-    private _resetLayout(): Observable<any> {
+    private _resetLayout$(): Observable<any> {
         return this._workspaceRepository.loadWorkspaces()
             .pipe(tap((workspaces) => {
                 for (const w of workspaces) {
@@ -523,6 +554,10 @@ export class DashboardComponent {
                     }
                 }
             }));
+    }
+
+    private _resetLayout() {
+        this._resetLayout$().subscribe(() => {});
     }
 
     // needSaveConfirm() {
@@ -620,6 +655,16 @@ export class DashboardComponent {
     }
 
     private addChartComponent(parent: any) {
+        if (!this._canAddComponent()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
+        if (!this._canAddMoreComponents()) {
+            this._alertService.info(this._layoutTranslateService.get("createComponentsRestriction"));
+            return;
+        }
+
         this._dialog.open(InstrumentSearchDialogComponent, {
             backdropClass: 'backdrop-background',
             data: {
@@ -655,7 +700,7 @@ export class DashboardComponent {
             clearTimeout(this._hardRefreshTimer);
         }
     }
-    
+
     // @HostListener('window:resize', ['$event'])
     // onResize(event) {
     //     this._setRightPanelRestrictions();
@@ -699,8 +744,12 @@ export class DashboardComponent {
         }
 
         if (!this._identityService.isAuthorizedCustomer) {
-            this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+            this._shoCheckoutPopup();
         }
+    }
+
+    private _shoCheckoutPopup() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _showPhoneNumberPopup() {
@@ -722,6 +771,11 @@ export class DashboardComponent {
     }
 
     private _loadLayout() {
+        if (!this._canUseLayout()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
         this._dialog.open(OpenLayoutModalComponent, {}).afterClosed().subscribe((id) => {
             if (!id) {
                 return;
@@ -729,35 +783,60 @@ export class DashboardComponent {
 
             this._layoutStorageService.loadLayout(id).subscribe((savedLayout) => {
                 if (savedLayout) {
-                   this._applyLayout(savedLayout);
+                    this._applyLayout(savedLayout);
                 }
             });
         });
     }
+
     private _openNewLayout() {
-        this._dialog.open(LayoutNameModalComponent, {
-            data: {}
-        }).afterClosed().subscribe((name) => {
-            if (!name) {
+        if (!this._canUseLayout()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
+        this._canSaveMoreLayouts().subscribe((value) => {
+            if (!value) {
+                this._alertService.info(this._layoutTranslateService.get("createLayoutRestriction"));
                 return;
             }
 
-            this._resetLayout().subscribe(() => {
-                this._saveCurrentLayout(name);
+            this._dialog.open(LayoutNameModalComponent, {
+                data: {}
+            }).afterClosed().subscribe((name) => {
+                if (!name) {
+                    return;
+                }
+
+                this._resetLayout$().subscribe(() => {
+                    this._saveCurrentLayout(name);
+                });
             });
         });
     }
     private _saveLayoutAsNew() {
-        this._dialog.open(LayoutNameModalComponent, {
-            data: {
-                isSave: true
-            }
-        }).afterClosed().subscribe((name) => {
-            if (!name) {
+        if (!this._canUseLayout()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
+        this._canSaveMoreLayouts().subscribe((value) => {
+            if (!value) {
+                this._alertService.info(this._layoutTranslateService.get("createLayoutRestriction"));
                 return;
             }
 
-            this._saveCurrentLayout(name);
+            this._dialog.open(LayoutNameModalComponent, {
+                data: {
+                    isSave: true
+                }
+            }).afterClosed().subscribe((name) => {
+                if (!name) {
+                    return;
+                }
+
+                this._saveCurrentLayout(name);
+            });
         });
     }
 
@@ -770,5 +849,35 @@ export class DashboardComponent {
                 this._saveLayoutState();
             }
         });
+    }
+
+    private _canUseLayout(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    } 
+    
+    private _canAddComponent(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }
+
+    private _canSaveMoreLayouts(): Observable<boolean> {
+        return this._layoutStorageService.loadLayouts().pipe(map((layouts) => {
+            if (!layouts) {
+                return true;
+            }
+
+            if (this._identityService.isPro) {
+                return layouts.length < 10;
+            } else {
+                return layouts.length < 5;
+            }
+        }));
+    }
+    private _canAddMoreComponents(): boolean {
+        const count = this._layoutManager.layout.getAllComponents().length;
+        if (this._identityService.isPro) {
+            return count < 8;
+        } else {
+            return count < 4;
+        }
     }
 }

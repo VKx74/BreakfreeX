@@ -29,7 +29,6 @@ export class LayoutResponseDto {
 
 @Injectable()
 export class LayoutStorageService {
-    private _layoutExistsRemotely: boolean = false;
     private _currentDashboardName: string;
     private _currentDashboardLayoutId: string;
 
@@ -66,16 +65,6 @@ export class LayoutStorageService {
         }
 
         return this.http.get<any>(this._dashboardURL).pipe(
-            tap((data) => {
-                if (data) {
-                    this._layoutExistsRemotely = true;
-                } else {
-                    this._layoutExistsRemotely = false;
-                }
-            },
-                (error) => {
-                    this._layoutExistsRemotely = false;
-                }),
             map((data: any) => {
                 return JSON.parse(data);
             }));
@@ -94,7 +83,6 @@ export class LayoutStorageService {
 
         return this.http.post<LayoutResponseDto>(`${this._layoutURL}`, data)
             .pipe(
-                tap(() => this._layoutExistsRemotely = true),
                 catchError(e => {
                     throw Error(e);
                 })
@@ -108,7 +96,6 @@ export class LayoutStorageService {
 
         return this.http.get<LayoutResponseDto[]>(`${this._layoutURL}/all`)
             .pipe(
-                tap(() => this._layoutExistsRemotely = true),
                 catchError(e => {
                     throw Error(e);
                 })
@@ -122,7 +109,6 @@ export class LayoutStorageService {
 
         return this.http.get<any>(`${this._layoutURL}?id=${id}`)
             .pipe(
-                tap(() => this._layoutExistsRemotely = true),
                 map((data: any) => {
                     if (!data || !data.state) {
                         return null;
@@ -146,7 +132,6 @@ export class LayoutStorageService {
 
         return this.http.delete<any>(`${this._layoutURL}?id=${id}`)
             .pipe(
-                tap(() => this._layoutExistsRemotely = true),
                 catchError(e => {
                     throw Error(e);
                 })
@@ -160,7 +145,6 @@ export class LayoutStorageService {
 
         return this.http.post(`${this._layoutURL}/update-active-layout`, state)
             .pipe(
-                tap(() => this._layoutExistsRemotely = true),
                 catchError(e => {
                     throw Error(e);
                 })
@@ -187,5 +171,4 @@ export class LayoutStorageService {
         this._currentDashboardName = name;
         this._currentDashboardLayoutId = id;
     }
-
 }

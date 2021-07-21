@@ -30,6 +30,7 @@ export enum Components {
 export class RightPanelComponent implements OnInit {
     protected linker: Linker;
     protected _downloadLink: string;
+    protected _panelFullScreenSize: number = 768;
 
     public Components = Components;
     public SelectedComponent: Components = Components.Sonar;
@@ -111,6 +112,9 @@ export class RightPanelComponent implements OnInit {
 
     handleOpenChart(action: LinkingAction) {
         this.linker.sendAction(action);
+        if (window.innerWidth <= this._panelFullScreenSize) {
+            this.collapse();
+        }
     }
 
     showSupport() {

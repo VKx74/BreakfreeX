@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </nav-section>  -->
-                    <nav-section class="autosave-nav-item" *ngIf="isAuthorizedCustomer" [leftBorder]="false" [class.no-highlight]="!saveNeeded" [paddingRight]="true" [paddingLeft]="true"
+                    <nav-section class="autosave-nav-item" [leftBorder]="false" [class.no-highlight]="!saveNeeded" [paddingRight]="true" [paddingLeft]="true"
                         [matMenuTriggerFor]="saveLayoutMenu">
                         <div class="autosave-container">
                             <span class="save-state save-needed" *ngIf="saveNeeded; else saved" tooltip [matTooltip]="'stateNotSaved' | translate">
