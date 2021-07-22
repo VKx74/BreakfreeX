@@ -14,7 +14,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 import { NewSonarAlertOptions } from 'modules/AutoTradingAlerts/models/NewAlertOptions';
 import { AlertExecutionStrategy, AlertStatus, AlertType } from 'modules/AutoTradingAlerts/models/EnumsDTO';
 import { AlertService } from '@alert/services/alert.service';
-import { IdentityService } from '@app/services/auth/identity.service';
+import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
@@ -40,6 +40,12 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     private _selectedTriggerOptions: AlertExecutionStrategy = AlertExecutionStrategy.Once;
     private _selectedTriggerTimeframe: TriggerTimeframe;
     private _selectedTriggerSetup: TriggerSetup = TriggerSetup.AllSetups;
+
+    private get _isPro(): boolean {
+        return this._identityService.subscriptionType === SubscriptionType.Pro ||
+        this._identityService.subscriptionType === SubscriptionType.Trial;
+    }
+
     TriggerType = TriggerType;
     AlertExecutionStrategy = AlertExecutionStrategy;
     TriggerTimeframe = TriggerTimeframe;
@@ -283,19 +289,20 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         let basicLevel = this._identityService.basicLevel;
         let level = this._tradingProfileService.level;
 
-        if (this._identityService.isPro) {
+        if (this._isPro) {
             if (level >= basicLevel) {
                 this._allowedTriggerTimeframe.push(TriggerTimeframe.AllTimeframes);
                 this._allowedTriggerTimeframe.push(TriggerTimeframe.Min15);
             }
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour1);
-        } else {
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
+        } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
             if (level >= basicLevel) {
                 this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour1);
             }
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
         }
 
-        this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
         this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
         this._selectedTriggerTimeframe = this._allowedTriggerTimeframe[0];
     }

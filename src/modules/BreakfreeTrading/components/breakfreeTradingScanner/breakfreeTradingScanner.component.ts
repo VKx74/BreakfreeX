@@ -19,7 +19,7 @@ import { CommoditiesWatchlist } from 'modules/Watchlist/services/commodities';
 import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
 import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
 import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
-import { IdentityService } from '@app/services/auth/identity.service';
+import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckoutComponent } from '../checkout/checkout.component';
 import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
@@ -102,6 +102,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
+    private _missionsChangedSubscription: Subscription;
+    
+    private get _isPro(): boolean {
+        return this._identityService.subscriptionType === SubscriptionType.Pro ||
+        this._identityService.subscriptionType === SubscriptionType.Trial;
+    }
+
     private get _levelRestriction(): number {
         return this._identityService.basicLevel;
     }
@@ -123,7 +130,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     public output: string;
     public loading: boolean;
     public trends: any = IBFTATrend;
-    private _missionsChangedSubscription: Subscription;
 
     public get origType() {
         return IBFTATradeType;
@@ -139,10 +145,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
     public get isAdmin(): boolean {
         return this._identityService.isAdmin;
-    }
-
-    public get isPro(): boolean {
-        return this._identityService.isPro;
     }
 
     @ViewChild('content', { static: false }) contentBox: ElementRef;
@@ -207,10 +209,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         return false;
     }
 
-    is1HSonarAccessRestriction(group: IGroupedResults): boolean {
+    isHourlySonarAccessRestriction(group: IGroupedResults): boolean {
         const tfValue1H = this.toTimeframe(60 * 60);
-        if (group.timeframe === tfValue1H) {
-            return this.show1HAccessRestriction();
+        const tfValue4H = this.toTimeframe(60 * 60 * 4);
+        if (group.timeframe === tfValue1H || group.timeframe === tfValue4H) {
+            return this.showHourlyAccessRestriction();
         }
 
         return false;
@@ -226,7 +229,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
         const tfValue1H = this.toTimeframe(60 * 60);
         const _1HLevelRestriction = this.show1HLevelRestriction();
-        const _1HAccessRestriction = this.show1HAccessRestriction();
+        const _1HAccessRestriction = this.showHourlyAccessRestriction();
         if (group.timeframe === tfValue1H && _1HLevelRestriction && !_1HAccessRestriction) {
             return true;
         }
@@ -235,7 +238,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     show15MinAccessRestriction(): boolean {
-        if (!this.isPro) {
+        if (!this._isPro) {
             return true;
         }
         return false;
@@ -259,8 +262,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         return false;
     }
 
-    show1HAccessRestriction() {
+    showHourlyAccessRestriction() {
         if (!this.isAuthorizedCustomer) {
+            return true;
+        }  
+        
+        if (this._identityService.subscriptionType !== SubscriptionType.Pro &&
+            this._identityService.subscriptionType !== SubscriptionType.Discovery) {
             return true;
         }
 
@@ -272,7 +280,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             return false;
         }
 
-        if (this.isPro) {
+        if (this._identityService.subscriptionType !== SubscriptionType.Discovery) {
             return false;
         }
 
@@ -320,8 +328,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
         const tfValue1H = this.toTimeframe(60 * 60);
         const _1HLevelRestriction = this.show1HLevelRestriction();
-        const _1HAccessRestriction = this.show1HAccessRestriction();
-        if (group.timeframe === tfValue1H && (_1HLevelRestriction || _1HAccessRestriction)) {
+        const _hourlyAccessRestriction = this.showHourlyAccessRestriction();
+        if (group.timeframe === tfValue1H && (_1HLevelRestriction || _hourlyAccessRestriction)) {
+            return true;
+        } 
+        
+        const tfValue4H = this.toTimeframe(60 * 60 * 4);
+        if (group.timeframe === tfValue4H && _hourlyAccessRestriction) {
             return true;
         }
 

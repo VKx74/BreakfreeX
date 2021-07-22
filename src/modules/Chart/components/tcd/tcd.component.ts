@@ -264,14 +264,17 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             if (!state || !state.chartState) {
                 let isProAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 let isDiscoveryAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+                let isStarterAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
 
                 if (isProAllowed) {
                     this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingPro());
                 } else if (isDiscoveryAllowed) {
                     this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
+                } else if (isStarterAllowed) {
+                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingStarter());
                 }
 
-                if ((isProAllowed || isDiscoveryAllowed) && this.chart.RTDMode) {
+                if ((isProAllowed || isDiscoveryAllowed || isStarterAllowed) && this.chart.RTDMode) {
                     this.chart.addIndicators(new TradingChartDesigner.RTD());
                 }
             }

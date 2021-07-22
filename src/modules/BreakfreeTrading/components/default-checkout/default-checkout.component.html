@@ -18,58 +18,61 @@
                 <div class="tabs-content w-tab-content">
                     <div #monthlyContent data-w-tab="Tab 1" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Monthly}" class="w-tab-pane">
                         <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4 display-none">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-7.png"
+                            <div class="pricing-table-4">
+                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
                                         loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-7-p-500.png 500w, assets/img/checkout/Add-a-heading-7-p-800.png 800w, assets/img/checkout/Add-a-heading-7.png 935w"
                                         alt="">
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
-                                <div class="price-tag-4 free">FREE</div>
-                                <div class="plan-info-4 standalone">Explore Breakfree Trading community and our
-                                    cutting-edge trading platform <strong>(without the algorithm)</strong> for
-                                    free.<br></div>
-                                <!-- <a class="button full-width w-inline-block">
-                                    <div class="button-text">Start Now For Free</div>
+                                <div class="price-tag-4 free">$15<span class="text-span-48">/mo</span></div>
+                                <div class="plan-info-4">Explore our community & next-generation trading algorithm on <strong>limited</strong> markets and <strong>one timeframe</strong><br></div>
+                                <a class="button full-width w-inline-block" (click)="checkoutStarter1M()">
+                                    <div class="button-text">Buy Now</div>
                                     <div class="button-bg-cta"></div>
-                                </a> -->
-                                <div class="text-block-26"><strong class="bold-text-13">Free Features</strong></div>
+                                </a>
+                                <div class="text-block-26"><strong class="bold-text-13">Features:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10"> Breakfree Trading™ Navigator</strong>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-50">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-64">Forex </strong>markets on daily timeframe
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong class="bold-text-10">Metatrader Bridge
-                                                -</strong> Place trades directly from our app</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10">Classic trading analysis tools</strong>
+                                        <div>
+                                            <strong class="bold-text-54">Sonar - </strong>Delivers high-probability trade feed in real-time (on 1D&nbsp;timeframe)
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10">Customizable charts &amp;
-                                            </strong>watchlists</div>
+                                        <div>
+                                            <strong class="bold-text-54">X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D timeframe)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Real-time &amp; historical market data
-                                            </strong>coverage (over 10,000 markets)</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Breakfree Trading</strong><strong
-                                                class="bold-text-2">™</strong><strong> Community</strong> with over
-                                            6000+ traders</div>
+                                        <div class="text-block-41">
+                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div>24/7 Community Support</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 2.0 <strong> - always know which way market is going</strong>
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Customizable charts &amp; </strong>watchlists
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -82,49 +85,45 @@
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
                                 <div class="price-tag-4 monthly">$69<span class="text-span-48">/mo</span></div>
-                                <div class="plan-info-4">Use latest version of Breakfree Trading™ algorithm to
-                                    discover high-probability trade opportunities across <strong>70 Forex
-                                        markets</strong></div>
+                                <div class="plan-info-4">
+                                    <strong>20x </strong><strong>your opportunities</strong>. Discover high-probability trades across even more markets and more timeframes
+                                </div>
                                 <a class="button full-width w-inline-block" (click)="checkoutDiscovery1M()">
                                     <div class="button-bg-cta"></div>
                                     <div class="button-text">Start 7-day free trial</div>
                                 </a>
                                 <div class="start-now">or skip trial and <a (click)="checkoutDiscovery1MNonTrial()">pay now</a></div>
-                                <div class="text-block-26"><strong class="bold-text-11">Features:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-11">All features from Starter plus:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-27"><strong>Breakfree Trading™ Algorithm</strong>
-                                            access to All Forex markets</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div><strong>Strategy Mode &amp; X-Mode — </strong>on 1H, 4H, 1D timeframe
+                                        <div class="text-block-27">
+                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver </strong>markets
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong>Real-Time Trend Detection</strong><strong class="bold-text-2">
-                                            </strong>2.0 <strong class="bold-text-2">— proprietary trend
-                                                recognition</strong></div>
+                                        <div>
+                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h timeframes)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>BFT Sonar — Delivers fresh 1h, 4h and
-                                                1D trade opportunities.</strong></div>
+                                        <div>
+                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h timeframes)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong class="bold-text-10">Metatrader and Binance Bridge
-                                                -</strong> Place trades directly from our app</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-70">Email, push and SMS alerts</strong> - never miss a trade
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div>Professional-level risk management module</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>Automatic Position Size Calc</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-63">24/7</strong> Support
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -137,39 +136,43 @@
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
                                 <div class="price-tag-4 monthly">$199<span class="text-span-48">/mo</span></div>
-                                <div class="plan-info-4">Use Breakfree Trading™ algorithm to discover high
-                                    probability trade opportunities across <strong>all available financial
-                                        markets</strong></div>
+                                <div class="plan-info-4"><strong class="bold-text-68">100x your opportunities</strong>. Discover high-probability trades across all possible markets and all timeframes</div>
                                 <a class="button full-width w-inline-block" (click)="checkoutPro1M()">
                                     <div class="button-text">Start 7-day free trial</div>
                                     <div class="button-bg-cta"></div>
                                 </a>
                                 <div class="start-now">or skip trial and <a (click)="checkoutPro1MNonTrial()">pay now</a></div>
-                                <div class="text-block-26"><strong class="bold-text-12">All features from Discovery
-                                        plus:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-12">All features from Discovery plus:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Breakfree Trading™ Algorithm</strong>
-                                            access to <strong>futures, forex, crypto, Indices, stocks, metals &amp; bonds</strong><strong></strong></div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>15m Strategy Mode </strong></div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>15min Sonar setups (lvl 4+)</strong>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-55">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-71">Forex, Stocks, Cryptocurrencies, Futures, Indices, Bond </strong>markets<strong></strong>
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>X-Mode on all
-                                                timeframes</strong><strong></strong></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-54">Sonar </strong> - on all timeframes
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">24/7 <strong>Priority </strong>Support</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-59">X-Mode </strong> - on all timeframes (down to 1-minute)
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-70">Unlimited email, push and SMS alerts</strong>
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-69">24/7 </strong><strong class="bold-text-60">Priority </strong>Support
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -177,58 +180,61 @@
                     </div>
                     <div #month3Content data-w-tab="Tab 4" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month3}" class="w-tab-pane">
                         <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4 display-none">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-7.png"
+                            <div class="pricing-table-4">
+                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
                                         loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-7-p-500.png 500w, assets/img/checkout/Add-a-heading-7-p-800.png 800w, assets/img/checkout/Add-a-heading-7.png 935w"
                                         alt="">
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
-                                <div class="price-tag-4 free">FREE</div>
-                                <div class="plan-info-4 standalone">Explore Breakfree Trading community and our
-                                    cutting-edge trading platform <strong>(without the algorithm)</strong> for
-                                    free.<br></div>
-                                <!-- <a class="button full-width w-inline-block">
-                                    <div class="button-text">Start Now For Free</div>
+                                <div class="price-tag-4 free">$40<span class="text-span-48">/3-mo</span></div>
+                                <div class="plan-info-4">Explore our community & next-generation trading algorithm on <strong>limited</strong> markets and <strong>one timeframe</strong><br></div>
+                                <a class="button full-width w-inline-block" (click)="checkoutStarter3M()">
+                                    <div class="button-text">Buy Now</div>
                                     <div class="button-bg-cta"></div>
-                                </a> -->
-                                <div class="text-block-26"><strong class="bold-text-19">Free Features</strong></div>
+                                </a>
+                                <div class="text-block-26"><strong class="bold-text-13">Features:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10"> Breakfree Trading™ Navigator</strong>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-50">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-64">Forex </strong>markets on daily timeframe
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong class="bold-text-10">Metatrader Bridge
-                                                -</strong> Place trades directly from our app</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10">Classic trading analysis tools</strong>
+                                        <div>
+                                            <strong class="bold-text-54">Sonar - </strong>Delivers high-probability trade feed in real-time (on 1D&nbsp;timeframe)
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10">Customizable charts &amp;
-                                            </strong>watchlists</div>
+                                        <div>
+                                            <strong class="bold-text-54">X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D timeframe)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Real-time &amp; historical market data
-                                            </strong>coverage (over 10,000 markets)</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Breakfree Trading</strong><strong
-                                                class="bold-text-2">™</strong><strong> Community</strong> with over
-                                            6000+ traders</div>
+                                        <div class="text-block-41">
+                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div>24/7 Community Support</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 2.0 <strong> - always know which way market is going</strong>
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Customizable charts &amp; </strong>watchlists
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -241,48 +247,44 @@
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
                                 <div class="price-tag-4 monthly">$147<span class="text-span-48">/3-mo</span></div>
-                                <div class="plan-info-4">Use latest version of Breakfree Trading™ algorithm to
-                                    discover high-probability trade opportunities across <strong>70 Forex
-                                        markets</strong></div>
+                                <div class="plan-info-4">
+                                    <strong>20x </strong><strong>your opportunities</strong>. Discover high-probability trades across even more markets and more timeframes
+                                </div>
                                 <a class="button full-width w-inline-block" (click)="checkoutDiscovery3M()">
                                     <div class="button-bg-cta"></div>
                                     <div class="button-text">Buy now for 28% off</div>
                                 </a>
-                                <div class="text-block-26"><strong class="bold-text-17">Features:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-17">All features from Starter plus:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-27"><strong>Breakfree Trading™ Algorithm</strong>
-                                            access to All Forex markets</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div><strong>Strategy Mode &amp; X-Mode — </strong>on 1H, 4H, 1D timeframe
+                                        <div class="text-block-27">
+                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver </strong>markets
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong>Real-Time Trend Detection</strong><strong class="bold-text-2">
-                                            </strong>2.0 <strong class="bold-text-2">— proprietary trend
-                                                recognition</strong></div>
+                                        <div>
+                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h timeframes)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>BFT Sonar — Delivers fresh 1h, 4h and
-                                                1D trade opportunities.</strong></div>
+                                        <div>
+                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h timeframes)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong class="bold-text-10">Metatrader and Binance Bridge
-                                                -</strong> Place trades directly from our app</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-70">Email, push and SMS alerts</strong> - never miss a trade
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div>Professional-level risk management module</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>Automatic Position Size Calc</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-63">24/7</strong> Support
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -295,38 +297,42 @@
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
                                 <div class="price-tag-4 monthly">$397<span class="text-span-48">/3-mo</span></div>
-                                <div class="plan-info-4">Use Breakfree Trading™ algorithm to discover high
-                                    probability trade opportunities across <strong>all available financial
-                                        markets</strong></div>
+                                <div class="plan-info-4"><strong class="bold-text-68">100x your opportunities</strong>. Discover high-probability trades across all possible markets and all timeframes</div>
                                 <a class="button full-width w-inline-block" (click)="checkoutPro3M()">
                                     <div class="button-text">Buy now for 33% off</div>
                                     <div class="button-bg-cta"></div>
                                 </a>
-                                <div class="text-block-26"><strong class="bold-text-18">All features from Discovery
-                                        plus:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-12">All features from Discovery plus:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Breakfree Trading™ Algorithm</strong>
-                                            access to <strong>futures, forex, crypto, Indices, stocks, metals &amp; bonds</strong><strong></strong></div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>15m Strategy Mode </strong></div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>15min Sonar setups (lvl 4+)</strong>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-55">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-71">Forex, Stocks, Cryptocurrencies, Futures, Indices, Bond </strong>markets<strong></strong>
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>X-Mode on all
-                                                timeframes</strong><strong></strong></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-54">Sonar </strong> - on all timeframes
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">24/7 <strong>Priority </strong>Support</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-59">X-Mode </strong> - on all timeframes (down to 1-minute)
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-70">Unlimited email, push and SMS alerts</strong>
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-69">24/7 </strong><strong class="bold-text-60">Priority </strong>Support
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -334,58 +340,61 @@
                     </div>
                     <div #month12Content data-w-tab="Tab 5" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month12}" class="w-tab-pane">
                         <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4 display-none">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-7.png"
+                            <div class="pricing-table-4">
+                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
                                         loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-7-p-500.png 500w, assets/img/checkout/Add-a-heading-7-p-800.png 800w, assets/img/checkout/Add-a-heading-7.png 935w"
                                         alt="">
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
-                                <div class="price-tag-4 free">FREE</div>
-                                <div class="plan-info-4 standalone">Explore Breakfree Trading community and our
-                                    cutting-edge trading platform <strong>(without the algorithm)</strong> for
-                                    free.<br></div>
-                                <!-- <a class="button full-width w-inline-block">
-                                    <div class="button-text">Start now for free</div>
+                                <div class="price-tag-4 free">$126<span class="text-span-48">/yr</span></div>
+                                <div class="plan-info-4">Explore our community & next-generation trading algorithm on <strong>limited</strong> markets and <strong>one timeframe</strong><br></div>
+                                <a class="button full-width w-inline-block" (click)="checkoutStarter12M()">
+                                    <div class="button-text">Buy Now</div>
                                     <div class="button-bg-cta"></div>
-                                </a> -->
-                                <div class="text-block-26"><strong class="bold-text-16">Free Features</strong></div>
+                                </a>
+                                <div class="text-block-26"><strong class="bold-text-13">Features:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10"> Breakfree Trading™ Navigator</strong>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-50">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-64">Forex </strong>markets on daily timeframe
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong class="bold-text-10">Metatrader Bridge
-                                                -</strong> Place trades directly from our app</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10">Classic trading analysis tools</strong>
+                                        <div>
+                                            <strong class="bold-text-54">Sonar - </strong>Delivers high-probability trade feed in real-time (on 1D&nbsp;timeframe)
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong class="bold-text-10">Customizable charts &amp;
-                                            </strong>watchlists</div>
+                                        <div>
+                                            <strong class="bold-text-54">X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D timeframe)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Real-time &amp; historical market data
-                                            </strong>coverage (over 10,000 markets)</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Breakfree Trading</strong><strong
-                                                class="bold-text-2">™</strong><strong> Community</strong> with over
-                                            6000+ traders</div>
+                                        <div class="text-block-41">
+                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div>24/7 Community Support</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 2.0 <strong> - always know which way market is going</strong>
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Customizable charts &amp; </strong>watchlists
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -398,48 +407,44 @@
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
                                 <div class="price-tag-4 monthly">$555<span class="text-span-48">/yr</span></div>
-                                <div class="plan-info-4">Use latest version of Breakfree Trading™ algorithm to
-                                    discover high-probability trade opportunities across <strong>70 Forex
-                                        markets</strong></div>
+                                <div class="plan-info-4">
+                                    <strong>20x </strong><strong>your opportunities</strong>. Discover high-probability trades across even more markets and more timeframes
+                                </div>
                                 <a class="button full-width w-inline-block" (click)="checkoutDiscovery12M()">
                                     <div class="button-bg-cta"></div>
                                     <div class="button-text">Buy now for 33% off</div>
                                 </a>
-                                <div class="text-block-26"><strong class="bold-text-15">Features:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-17">All features from Starter plus:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-27"><strong>Breakfree Trading™ Algorithm</strong>
-                                            access to All Forex markets</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div><strong>Strategy Mode &amp; X-Mode — </strong>on 1H, 4H, 1D timeframe
+                                        <div class="text-block-27">
+                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver </strong>markets
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div><strong>Real-Time Trend Detection</strong><strong class="bold-text-2">
-                                            </strong>2.0 <strong class="bold-text-2">— proprietary trend
-                                                recognition</strong></div>
+                                        <div>
+                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h timeframes)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>BFT Sonar — Delivers fresh 1h, 4h and
-                                                1D trade opportunities.</strong></div>
+                                        <div>
+                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h timeframes)
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong class="bold-text-10">Metatrader and Binance Bridge
-                                                -</strong> Place trades directly from our app</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-70">Email, push and SMS alerts</strong> - never miss a trade
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div>Professional-level risk management module</div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>Automatic Position Size Calc</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-63">24/7</strong> Support
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -452,38 +457,42 @@
                                     <div class="pricing-plan-line highlighted"></div>
                                 </div>
                                 <div class="price-tag-4 monthly">$1187<span class="text-span-48">/yr</span></div>
-                                <div class="plan-info-4">Use Breakfree Trading™ algorithm to discover high
-                                    probability trade opportunities across <strong>all available financial
-                                        markets</strong></div>
+                                <div class="plan-info-4"><strong class="bold-text-68">100x your opportunities</strong>. Discover high-probability trades across all possible markets and all timeframes</div>
                                 <a class="button full-width w-inline-block" (click)="checkoutPro12M()">
                                     <div class="button-text">Buy now for 50% off</div>
                                     <div class="button-bg-cta"></div>
                                 </a>
-                                <div class="text-block-26"><strong class="bold-text-14">All features from Discovery
-                                        plus:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-12">All features from Discovery plus:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>Breakfree Trading™ Algorithm</strong>
-                                            access to <strong>futures, forex, crypto, Indices, stocks, metals &amp; bonds</strong><strong></strong></div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>15m Strategy Mode </strong></div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>15min Sonar setups (lvl 4+)</strong>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-55">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-71">Forex, Stocks, Cryptocurrencies, Futures, Indices, Bond </strong>markets<strong></strong>
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41"><strong>X-Mode on all
-                                                timeframes</strong><strong></strong></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-54">Sonar </strong> - on all timeframes
+                                        </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">24/7 <strong>Priority </strong>Support</div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-59">X-Mode </strong> - on all timeframes (down to 1-minute)
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-70">Unlimited email, push and SMS alerts</strong>
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-69">24/7 </strong><strong class="bold-text-60">Priority </strong>Support
+                                        </div>
                                     </li>
                                 </ul>
                             </div>

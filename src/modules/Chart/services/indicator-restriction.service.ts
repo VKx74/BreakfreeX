@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IdentityService } from "../../../app/services/auth/identity.service";
+import { IdentityService, SubscriptionType } from "../../../app/services/auth/identity.service";
 import { ReplayModeSync } from "./replay-mode-sync.service";
 @Injectable()
 export class IndicatorRestrictionService {
@@ -16,10 +16,16 @@ export class IndicatorRestrictionService {
             this._restrictedIndicators.push(TradingChartDesigner.RTD.instanceTypeName);
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+            this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
         } else {
-            if (!this._identity.isPro) {
+            if (this._identity.subscriptionType === SubscriptionType.Pro) {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
+            } else if (this._identity.subscriptionType === SubscriptionType.Discovery) {
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
-            } else {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
+            } else if (this._identity.subscriptionType === SubscriptionType.Starter) {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
             }
         }

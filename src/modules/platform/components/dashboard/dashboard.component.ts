@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, HostListener, Inject, Injector, ViewChild } from "@angular/core";
 import { Observable, of, Subject } from "rxjs";
-import { IdentityService } from "@app/services/auth/identity.service";
+import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LayoutTranslateService } from "@layout/localization/token";
 import { catchError, first, map, takeUntil, tap } from "rxjs/operators";
@@ -74,6 +74,11 @@ export class DashboardComponent {
     readonly minimizeBottomPanel = 30;
     readonly minRightSidePanelCollapsedSize = 45;
     readonly minRightPanelFullSize = 768;
+
+    private get _isPro(): boolean {
+        return this._identityService.subscriptionType === SubscriptionType.Pro ||
+        this._identityService.subscriptionType === SubscriptionType.Trial;
+    }
 
     @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
     @ViewChild('verticalSplit', { read: SplitComponent, static: false }) verticalSplit: SplitComponent;
@@ -253,7 +258,7 @@ export class DashboardComponent {
 
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
 
-        if (this._identityService.isTrial) {
+        if (this._identityService.subscriptionType === SubscriptionType.Trial) {
             this._hardRefreshNeeded = !this._identityService.isTrialNumberRequired();
             this._showPhoneNumberPopupInterval = setInterval(this._showPhoneNumberPopup.bind(this), 1000 * 30);
         }
@@ -419,11 +424,15 @@ export class DashboardComponent {
         return `${interval} ${periodicity}`;
     }
 
+    private _isGuestMode(): boolean {
+        return this._identityService.isGuestMode;
+    }
+
     private _loadLayoutState() {
         let w = window.innerWidth;
         let h = window.innerHeight;
         let isSmallScreen = w <= 768 || h <= 768;
-        if (this._identityService.isGuestMode) {
+        if (this._isGuestMode()) {
             if (isSmallScreen) {
                 this._workspaceRepository.getGuestMobileWorkspace()
                     .subscribe((data: Workspace) => {
@@ -532,7 +541,7 @@ export class DashboardComponent {
 
     private _saveLayoutState() {
         this._layoutStorageService.lastUpdateTime = 0;
-        if (this._identityService.isAuthorized && this._saveLayout && !this._identityService.isGuestMode) {
+        if (this._identityService.isAuthorized && this._saveLayout && !this._isGuestMode()) {
             this._saveLayout = false;
             const layoutState = this.getLayoutState();
             this._layoutStorageService.updateActiveLayout(layoutState)
@@ -739,7 +748,7 @@ export class DashboardComponent {
     }
 
     private _showFreeUserPopup() {
-        if (this._identityService.isGuestMode) {
+        if (this._isGuestMode()) {
             return;
         }
 
@@ -865,19 +874,24 @@ export class DashboardComponent {
                 return true;
             }
 
-            if (this._identityService.isPro) {
+            if (this._isPro) {
                 return layouts.length < 10;
-            } else {
+            } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
                 return layouts.length < 5;
+            } else {
+                return layouts.length < 3;
             }
         }));
     }
     private _canAddMoreComponents(): boolean {
         const count = this._layoutManager.layout.getAllComponents().length;
-        if (this._identityService.isPro) {
+
+        if (this._isPro) {
             return count < 8;
-        } else {
+        } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
             return count < 4;
+        } else {
+            return count < 2;
         }
     }
 }
