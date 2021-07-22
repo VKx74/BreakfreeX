@@ -22,9 +22,7 @@
     font-weight: 700;
     padding: 10px 0px;
   }
-  .avatarsec {
-    margin-right: 10px;
-  }
+
 
 
     .flex.BFTN {
@@ -182,6 +180,12 @@
         // cursor: pointer;
       }
     }
+  }
+}
+
+@media (max-width: 740px) {
+  span.email {
+    display: none !important;
   }
 }
 
