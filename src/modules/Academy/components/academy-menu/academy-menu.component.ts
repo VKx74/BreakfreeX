@@ -29,6 +29,10 @@ export class AcademyMenuComponent {
     @Input() doPrev: Subject<void>;
     @Input() showUserAvatar: boolean;
     @Input() hidable: boolean;
+    @Input() public set isSidebarOpen(value: boolean) {
+        this.sidebarOpen = value;
+    }
+
     @Input() public set selectedMedia(value: Content) {
         this._selectedMedia = value;
         this.selectedMediaChange.next(this._selectedMedia);

@@ -13,7 +13,7 @@ import {UserSettingsRoutes} from "../../../user-settings/user-settings.routes";
 import {TranslateService} from "@ngx-translate/core";
 import {SharedTranslateService} from "@app/localization/shared.token";
 import {LandingRoutes} from "../../../Landing/landing.routes";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 
 @Component({
     selector: 'news-root',

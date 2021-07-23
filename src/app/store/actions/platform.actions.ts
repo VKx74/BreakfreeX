@@ -11,7 +11,12 @@ export enum ActionTypes {
     ShowCode = '[Platform] Show Code',
     ResetStore = '[Platform] Reset Store',
     SaveState = '[Platform] Save State',
-    ResetLayout = '[Platform] Reset Layout'
+    ResetLayout = '[Platform] Reset Layout',
+    SaveLayoutAsNew = '[Platform] Save Layout As New',
+    OpenNewLayout = '[Platform] Open New Layout',
+    LoadLayout = '[Platform] Load Layout',
+    ApplyLayout = '[Platform] Apply Layout',
+    DeleteLayout = '[Platform] Delete Layout'
 }
 
 export class SelectBottomComponentAction implements Action {
@@ -86,6 +91,47 @@ export class ResetLayoutAction implements Action {
     }
 }
 
+export class SaveLayoutAsNewAction implements Action {
+    readonly type = ActionTypes.SaveLayoutAsNew;
+
+    constructor() {
+    }
+}
+
+export class OpenNewLayoutAction implements Action {
+    readonly type = ActionTypes.OpenNewLayout;
+
+    constructor() {
+    }
+}
+
+export class LoadLayoutAction implements Action {
+    readonly type = ActionTypes.LoadLayout;
+
+    constructor() {
+    }
+}
+
+
+export class ApplyLayoutAction implements Action {
+    readonly type = ActionTypes.ApplyLayout;
+    public layoutId: string;
+
+    constructor(layoutId: string) {
+        this.layoutId = layoutId;
+    }
+}
+
+export class DeleteLayoutAction implements Action {
+    readonly type = ActionTypes.DeleteLayout;
+    public layoutId: string;
+
+    constructor(layoutId: string) {
+        this.layoutId = layoutId;
+    }
+}
+
+
 export type PlatformActions = SelectBottomComponentAction
     | SelectRightSideComponentAction
     | ShowCodeAction
@@ -95,4 +141,9 @@ export type PlatformActions = SelectBottomComponentAction
     | ResetLayoutAction
     | ClearSessionAction
     | GlobalErrorAction
-    | AppTypeChangedAction;
+    | AppTypeChangedAction
+    | SaveLayoutAsNewAction
+    | OpenNewLayoutAction
+    | ApplyLayoutAction
+    | DeleteLayoutAction
+    | LoadLayoutAction;

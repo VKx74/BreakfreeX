@@ -7,8 +7,13 @@
   display: flex;
   height: 100%;
   width: 100%;
-  overflow: auto;
+  // overflow: auto;
   flex-direction: column;
+
+  .buttons-control {
+    min-width: 360px;
+    display: flex;
+  }
 
   .color-selector {
     position: absolute;
@@ -18,6 +23,7 @@
 
   .trade-manager {
     width: 100%;
+    height: calc(100% - 30px);
     overflow: auto;
 
     sortable-table {
@@ -26,9 +32,14 @@
   }
 
   .controls {
-    padding: 10px;
+    padding-left: 10px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    .no-wrap {
+      flex: 1 0 auto;
+    }
   }
 
   .controls button {
@@ -119,11 +130,25 @@
       height: 100% !important;
     }
   }
+
+  @media (max-width: 1024px) {
+    .account-info-bar {
+      display: none;
+    }
+  }
+  @media (max-width: 420px) {
+    .buttons-control {
+      display: none;
+    }
+  }
 }
 
 @include themify($themes, true) {
   .caption {
     color: themed("valueTextColor");
+  }
+  .controls {
+    background: themed("noactiveTabs");
   }
   .control .caption {
     color: themed("valueTextColor");

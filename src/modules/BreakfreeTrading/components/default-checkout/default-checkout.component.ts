@@ -36,6 +36,18 @@ export class DefaultCheckoutComponent implements OnInit {
         window.location.reload();
     }
 
+    checkoutStarter1M() {
+        this.checkout("price_1JG3FNBI1GhkUGQt0OL7FuIC");
+    }
+
+    checkoutStarter3M() {
+        this.checkout("price_1JFWNBBI1GhkUGQtPG8qjP7m");
+    }
+
+    checkoutStarter12M() {
+        this.checkout("price_1JFWOBBI1GhkUGQtY0uhaBYi");
+    }
+
     checkoutDiscovery1M() {
         this.checkout("subscription_plan_246666");
     }
@@ -58,6 +70,10 @@ export class DefaultCheckoutComponent implements OnInit {
 
     checkoutPro12M() {
         this.checkout("subscription_plan_251974");
+    }
+
+    checkoutStarter1MNonTrial() {
+        this.checkout("price_1JFWJpBI1GhkUGQt0DQyHJvw");
     }
 
     checkoutPro1MNonTrial() {

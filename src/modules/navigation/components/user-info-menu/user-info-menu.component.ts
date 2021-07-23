@@ -18,7 +18,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "@app/store/reducer";
 import { ResetLayoutAction } from '@app/store/actions/platform.actions';
 import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
-
+import { ClearSessionAction } from '@app/store/actions/platform.actions';
 
 @Component({
     selector: 'user-info-menu',
@@ -91,6 +91,10 @@ export class UserInfoMenuComponent implements OnInit {
 
     onLogoutClick() {
         this.logOut.emit();
+    }
+
+    clearSession() {
+        this._store.dispatch(new ClearSessionAction());
     }
 
     onLoginClick() {

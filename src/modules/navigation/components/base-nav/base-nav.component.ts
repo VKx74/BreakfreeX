@@ -17,6 +17,10 @@ import { UserSettings, UserSettingsService } from '@app/services/user-settings/u
 import { LocalizationService } from 'Localization';
 import { InlineService } from '@app/services/inline-manual.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
+import { LayoutStorageService } from '@app/services/layout-storage.service';
+import { SaveStateAction } from '@app/store/actions/platform.actions';
+import { Store } from "@ngrx/store";
+import { AppState } from '@app/store/reducer';
 
 @Component({
     selector: 'base-nav',
@@ -27,6 +31,7 @@ export class BaseNavComponent implements OnInit {
     readonly avatarShape = UserAvatarShape.Rounded;
     @Input() showUserDashboard = false;
     @Input() showUserAvatar = false;
+    @Input() isAdminPanel = false;
     @Input() logoutConfirm: Function;
     sidebarState$ = this._sidebarService.state$;
     debouncedSidebarState$ = this._sidebarService.state$
@@ -54,6 +59,10 @@ export class BaseNavComponent implements OnInit {
 
     get isDarkTheme() {
         return this._themeService.activeTheme === Theme.Dark;
+    }
+
+    get isGuest() {
+        return this._identityService.isGuestMode;
     }
 
     get currentUserFullName() {
@@ -84,6 +93,14 @@ export class BaseNavComponent implements OnInit {
         return this._tradingProfileService.level;
     }
 
+    public get saveNeeded(): boolean {
+        return !!this._layoutStorageService.lastUpdateTime;
+    }
+
+    public get autoSaveInitialized(): boolean {
+        return this._layoutStorageService.autoSaveInitialized;
+    }
+
     constructor(private _identityService: IdentityService,
         private _usersProfileService: UsersProfileService,
         private _cdRef: ChangeDetectorRef,
@@ -94,6 +111,8 @@ export class BaseNavComponent implements OnInit {
         private _themeService: ThemeService,
         private _userSettingsService: UserSettingsService,
         private _route: ActivatedRoute,
+        private _layoutStorageService: LayoutStorageService,
+        private _store: Store<AppState>,
         private _inlineService: InlineService) {
         this.showStaticLogin = this._identityService.isGuestMode;
     }
@@ -175,6 +194,11 @@ export class BaseNavComponent implements OnInit {
             }
         });
     }
+
+    saveLayout() {
+        this._store.dispatch(new SaveStateAction());
+    }
+
     switchToPresentationMode() {
         console.log('run');
         this._inlineService.activateTopic('89442'); // activate/deactivate any topic
@@ -196,6 +220,10 @@ export class BaseNavComponent implements OnInit {
 
     register() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+    }
+
+    showSettings() {
+
     }
 
     private _save() {

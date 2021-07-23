@@ -1,4 +1,4 @@
-<div class="trade-manager full-height">
+<div class="trade-manager">
     <div class="color-selector">
         <color-selector [activeColor]="linkerColor" [path]="'flag'" (activeColorChange)='handleColorSelected($event)'>
         </color-selector>
@@ -16,39 +16,39 @@
 </div>
 
 <div class="controls">
-    <div [ngSwitch]="brokerInstance" class="h-100">    
+    <div [ngSwitch]="brokerInstance" class="h-100" class="account-info-bar">
         <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT4" class="info-bar"></mt-account-info-bar>
         <mt-account-info-bar *ngSwitchCase="EBrokerInstance.MT5" class="info-bar"></mt-account-info-bar>
         <binance-account-info-bar *ngSwitchCase="EBrokerInstance.Binance" class="info-bar"></binance-account-info-bar>
         <binance-futures-account-info-bar *ngSwitchCase="EBrokerInstance.BinanceFuturesUSD" class="date-container"></binance-futures-account-info-bar>
         <binance-futures-account-info-bar *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" class="date-container"></binance-futures-account-info-bar>
     </div>
-    <div>
+    <div class="buttons-control">
         <button (click)="cancelAllPending()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
                 *ngIf="showCancelAll"
-                class="crypto-button crypto-button_success">Cancel all Pending Orders
+                class="crypto-button crypto-button_success no-wrap">Cancel all Pending
         </button> 
         <button (click)="placeOrder()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_success">Manual Order
+                class="crypto-button crypto-button_success no-wrap">Place Order
         </button> 
         <button (click)="reconnect()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger">Reconnect
+                class="crypto-button crypto-button_danger no-wrap">Reconnect
         </button>
         <button (click)="disconnect()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger">Disconnect
+                class="crypto-button crypto-button_danger no-wrap">Disconnect
         </button>
         <button (click)="showSymbolMapping()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger">Mapping
+                class="crypto-button crypto-button_danger no-wrap">Mapping
         </button>
     </div>
 </div>

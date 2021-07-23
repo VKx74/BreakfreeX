@@ -1,0 +1,41 @@
+<div class="alert-container">
+    <mat-tab-group class="full-height" (selectedTabChange)="tabChanged($event)" #tabGroup [(selectedIndex)]="selectedTabIndex">
+      <mat-tab label="{{'alertWidget.priceAlerts' | translate}}">
+        <price-alert-grid (onOpenChart)="handleOpenChart($event)"></price-alert-grid>
+      </mat-tab>
+      <mat-tab label="{{'alertWidget.sonarAlerts' | translate}}">
+        <sonar-alert-grid (onOpenChart)="handleOpenChart($event)"></sonar-alert-grid>
+      </mat-tab>
+      <mat-tab label="{{'alertWidget.alertsLog' | translate}}">
+        <alert-log-grid></alert-log-grid>
+      </mat-tab>
+      <mat-tab label="{{'alertWidget.notificationsLog' | translate}}">
+        <notifications-log-grid></notifications-log-grid>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div class="add-button"
+      [class.disabled]="selectedTabIndex === AlertTabs.AlertsLog || selectedTabIndex === AlertTabs.NotificationLog">
+      <div class="crypto-button-icon control create-alert-control" (click)="showAlertDialog()"
+        title="{{'alertWidget.setAlert' | translate}}">
+        <span class="crypto-icon crypto-icon-midle-add"></span>
+      </div>
+      <!-- <div class="crypto-button-icon control" title="{{'app.settings' | translate}}" [matMenuTriggerFor]="alertsDropdown">
+        <span class="crypto-icon crypto-icon-more"></span>
+      </div> -->
+
+      <mat-menu #alertsDropdown="matMenu">
+        <div class="mat-menu-wrapper">
+          <div class="mat-menu-item" (click)="restartAllInactive()">
+            <span>{{'alertWidget.restartAllInactive' | translate}}</span>
+          </div>
+          <div class="mat-menu-item" (click)="stopAll()">
+            <span>{{'alertWidget.stopAll' | translate}}</span>
+          </div>
+          <div class="mat-menu-item" (click)="deleteAllInactive()">
+            <span>{{'alertWidget.deleteAllInactive' | translate}}</span>
+          </div>
+        </div>
+      </mat-menu>
+  </div>
+</div>

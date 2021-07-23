@@ -1,9 +1,9 @@
 import {JsUtil} from "../../../../utils/jsUtil";
 import {TcdComponent} from "Chart";
 import {OrderBookComponent} from "@order-book/components/order-book/order-book.component";
-import {WatchlistComponent} from "Watchlist";
 import {OrderBookChartComponent} from "../../../OrderBookChart/components";
 import {MarketTradesComponent} from "@market-trades/components/market-trades/market-trades.component";
+import { WatchlistWidgetComponent } from "modules/Watchlist/components/widget/watchlistWidget.component";
 
 export const DefaultState: GoldenLayoutNamespace.Config = {
     settings: {
@@ -52,7 +52,7 @@ export const DefaultState: GoldenLayoutNamespace.Config = {
                                 {
                                     id: JsUtil.generateGUID(),
                                     type: 'component',
-                                    componentName: WatchlistComponent.componentName
+                                    componentName: WatchlistWidgetComponent.componentName
                                 }
                             ]
                         },

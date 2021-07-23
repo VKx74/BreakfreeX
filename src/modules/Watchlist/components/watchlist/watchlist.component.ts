@@ -22,9 +22,8 @@ import {
     ColumnSortDataAccessor,
     DataTableComponent
 } from "../../../datatable/components/data-table/data-table.component";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
 import bind from "bind-decorator";
-import {GoldenLayoutItemState, LayoutManagerService} from "angular-golden-layout";
+import {LayoutManagerService} from "angular-golden-layout";
 import {ITcdComponentState} from "Chart";
 import {PriceAlertDialogComponent} from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
 import {HistoryService} from "@app/services/history.service";
@@ -37,6 +36,7 @@ import { IFeaturedInstruments } from '@app/models/settings/user-settings';
 import { MatSelectChange } from '@angular/material/select';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
+import { BaseLayoutItem } from "@layout/base-layout-item";
 
 export interface IWatchlistComponentState {
     viewMode: WatchlistViewMode;
@@ -74,7 +74,7 @@ interface IInstrumentOrderBookInfo {
         }
     ]
 })
-export class WatchlistComponent extends BaseLayoutItemComponent {
+export class WatchlistComponent extends BaseLayoutItem {
     static componentName = 'Watchlist';
     static previewImgClass = 'crypto-icon-watchlist';
     @ViewChild(InstrumentSearchComponent, {static: false}) instrumentSearch: InstrumentSearchComponent;
@@ -103,11 +103,10 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     private _myId: string;
     private _changesDetected: boolean;
     private _updateInterval: any;
+    private _state: IWatchlistComponentState;
 
     get isAuthorizedCustomer(): boolean {
-        // show watchlist for all users even without subscriptions
         return true;
-        return this._identityService.isAuthorizedCustomer;
     }  
 
     get ViewMode() {
@@ -126,30 +125,18 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     _visibleOrderBooks = new Map<IInstrument, boolean>();
     _instrumentsOrderBookInfo = new Map<IInstrument, IInstrumentOrderBookInfo>();
 
-    constructor(@Inject(GoldenLayoutItemState) protected _state: IWatchlistComponentState,
-                private _dialog: MatDialog,
-                private _datafeed: DataFeedBase,
-                private _historyService: HistoryService,
-                private _realtimeService: RealtimeService,
-                private _translateService: TranslateService,
-                private _layoutManagerService: LayoutManagerService,
-                private _watchlistService: WatchlistService,
-                private _alertManager: AlertService,
-                private _cdr: ChangeDetectorRef,
-                private _identityService: IdentityService,
-                protected _injector: Injector) {
-
-        super(_injector);
-
-        this.setTitle(
-            this._translateService.stream('watchlistComponentName')
-        );
-
+    constructor(protected _dialog: MatDialog,
+        protected _datafeed: DataFeedBase,
+        protected _historyService: HistoryService,
+        protected _realtimeService: RealtimeService,
+        protected _translateService: TranslateService,
+        protected _layoutManagerService: LayoutManagerService,
+        protected _watchlistService: WatchlistService,
+        protected _alertManager: AlertService,
+        protected _cdr: ChangeDetectorRef,
+        protected _identityService: IdentityService) {
+        super();
         this._myId = new Date().getTime().toString();
-
-        if (_state) {
-            this._loadState(_state);
-        }
     }
 
     ngOnInit() {
@@ -157,6 +144,8 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             return;
         }
 
+        this.initialized.next(this);
+        
         this.loading = true;
         
         this._updateInterval = setInterval(() => {
@@ -177,14 +166,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
             this._addDefaultWatchlists();
 
-            if (this._state && this._state.activeWatchlist) {
-                for (const watchlist of this.existingWatchlists) {
-                    if (this._state.activeWatchlist === watchlist.id) {
-                        this.setWatchlist(watchlist);
-                        break;
-                    }
-                }
-            }
+            this._trySetActiveWatchlist();
 
             this._watchlistAdded = this._watchlistService.onWatchlistAdded.subscribe(this._watchlistAddedHandler.bind(this));
             this._watchlistRemoved = this._watchlistService.onWatchlistRemoved.subscribe(this._watchlistRemovedHandler.bind(this));
@@ -194,16 +176,9 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             this._watchlistService.getFeaturedInstruments().subscribe((featuredInstruments: IFeaturedInstruments[]) => {
                 this.featuredInstruments = featuredInstruments;
                 this.featuredWatchlists = this._watchlistService.updateFeaturedWatchlist(this.featuredInstruments);
-
-                if (this._state && this._state.activeWatchlist) {
-                    for (const watchlist of this.featuredWatchlists) {
-                        if (this._state.activeWatchlist === watchlist.id) {
-                            this.setWatchlist(watchlist);
-                            break;
-                        }
-                    }
-                }
     
+                this._trySetActiveWatchlist();
+
                 if (!this.activeWatchlist && this.existingWatchlists.length) {
                     this.setWatchlist(this.existingWatchlists[0]);
                 }
@@ -213,6 +188,26 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 }
             });
         });
+    }
+
+    private _trySetActiveWatchlist() {
+        if (this._state && this._state.activeWatchlist) {
+            for (const watchlist of this.existingWatchlists) {
+                if (this._state.activeWatchlist === watchlist.id) {
+                    this.setWatchlist(watchlist);
+                    break;
+                }
+            }
+        }
+
+        if (this._state && this._state.activeWatchlist) {
+            for (const watchlist of this.featuredWatchlists) {
+                if (this._state.activeWatchlist === watchlist.id) {
+                    this.setWatchlist(watchlist);
+                    break;
+                }
+            }
+        }
     }
 
     public getFeaturedDetails(instrument: IInstrument): string {
@@ -400,7 +395,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                     }
                 }
                 if (!exists) {
-                    this._addInstrument(i2, false);
+                    this._addInstrument(i2);
                 }
             }
         }
@@ -416,7 +411,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         return true;
     }
 
-    protected getComponentState(): IWatchlistComponentState {
+    getState(): IWatchlistComponentState {
         return {
             viewMode: this.viewMode,
             activeWatchlist: this.activeWatchlist ? this.activeWatchlist.id : null,
@@ -424,7 +419,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         };
     }
 
-    setViewMode(viewMode: WatchlistViewMode, fireStateChanged: boolean = true) {
+    setViewMode(viewMode: WatchlistViewMode) {
         this.viewMode = viewMode;
 
         if (this.dataTableComponent) {
@@ -433,10 +428,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
         if (viewMode === WatchlistViewMode.Tile) {
             this.hideAllOrderBooks();
-        }
-
-        if (fireStateChanged) {
-            this.fireStateChanged();
         }
     }
 
@@ -580,9 +571,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             if (this.intervals[key]) {
                 clearInterval(this.intervals[key]);
             }
-            // this.intervals[key] = setInterval(() => {
-            //     this._getHistory(instrumentVM, d);
-            // }, 3600000); 
         });
     }
 
@@ -631,7 +619,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
             type: Actions.ChangeInstrument,
             data: instrument
         };
-        this.linker.sendAction(linkAction);
+        this.onOpenChart.next(linkAction);
     }
 
     handleInstrumentClick(instrumentVM: WatchlistInstrumentVM) {
@@ -644,13 +632,13 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         this._sendInstrumentChange(instrumentVM.instrument);
     }
 
-    addInstrument(instrument: IInstrument, fireStateChanged: boolean = true) {
+    addInstrument(instrument: IInstrument) {
         if (this.instrumentsVM && this.instrumentsVM.length >= 30) {
             this._alertManager.error(this._translateService.get("watchList.watchlistMaxLength"));
             return false;
         }
 
-        const addedInstrument = this._addInstrument(instrument, fireStateChanged);
+        const addedInstrument = this._addInstrument(instrument);
         if (addedInstrument) {
             if (this.activeWatchlist) {
                 this.activeWatchlist.data.push(instrument);
@@ -723,18 +711,20 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         });
     }
 
-    private _loadState(state: IWatchlistComponentState) {
+    setState(state: IWatchlistComponentState) {
+        this._state = state;
+
         if (state && state.hiddenColumns) {
             this.hiddenColumns = state.hiddenColumns;
         }
 
-        this.setViewMode(state.viewMode, false);
+        this.setViewMode(state.viewMode);
     }
     
     private _loadInstrumentsForWatchlist(instruments: IInstrument[]) {
         instruments.forEach((instrument) => {
             if (instrument) {
-                this._addInstrument(instrument, false);
+                this._addInstrument(instrument);
             }
         });
     }
@@ -780,8 +770,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
                 }
             }
         }
-
-        this.fireStateChanged();
     }
 
     private _removeAllInstruments() {
@@ -843,7 +831,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         this._changesDetected = true;
     }
 
-    private _addInstrument(instrument: IInstrument, fireStateChanged: boolean = true): WatchlistInstrumentVM {
+    private _addInstrument(instrument: IInstrument): WatchlistInstrumentVM {
         const alreadyExist = this.instrumentsVM.findIndex(i => i.instrument.symbol === instrument.symbol && i.instrument.exchange === instrument.exchange) !== -1;
 
         if (alreadyExist) {
@@ -855,10 +843,6 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         this.instrumentsVM = [...this.instrumentsVM, instrumentVM];
         this._initDatafeed(instrumentVM);
         this._subscribeOnInstrumentTick(instrumentVM);
-
-        if (fireStateChanged) {
-            this.fireStateChanged();
-        }
 
         if (this.instrumentSearch) {
             this.instrumentSearch.reset();
@@ -976,7 +960,7 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
     }
 
     ngOnDestroy() {
-        super.ngOnDestroy();
+        this.beforeDestroy.next(this);
 
         if (this._watchlistAdded) {
             this._watchlistAdded.unsubscribe();
@@ -986,6 +970,9 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
         }
         if (this._watchlistUpdated) {
             this._watchlistUpdated.unsubscribe();
+        }
+        if (this._featuredChanged) {
+            this._featuredChanged.unsubscribe();
         }
 
         Object.keys(this._realtimeSubscriptions).forEach((prop) => {
@@ -1003,43 +990,43 @@ export class WatchlistComponent extends BaseLayoutItemComponent {
 
     @HostListener('document:keydown', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) { 
-        if (!this._container.tab.isActive) {
-            return;
-        }
+        // if (!this._container.tab.isActive) {
+        //     return;
+        // }
 
-        try {
-            const allComponents = this._layoutManagerService.layout.getAllComponents();
-            const watchlistComponents = allComponents.filter(p => {
-                const componentName = (p as any).componentName;
-                const isActive = (p as any).tab.isActive;
-                return isActive && componentName && componentName.toLowerCase() === WatchlistComponent.componentName.toLowerCase();
-            });
+        // try {
+        //     const allComponents = this._layoutManagerService.layout.getAllComponents();
+        //     const watchlistComponents = allComponents.filter(p => {
+        //         const componentName = (p as any).componentName;
+        //         const isActive = (p as any).tab.isActive;
+        //         return isActive && componentName && componentName.toLowerCase() === WatchlistComponent.componentName.toLowerCase();
+        //     });
 
-            if (watchlistComponents.length > 1) {
-                if (this._watchlistService.lastActiveWatchlistComponentId !== this._myId) {
-                    return;
-                }
-            }
-        } catch (e) {}
+        //     if (watchlistComponents.length > 1) {
+        //         if (this._watchlistService.lastActiveWatchlistComponentId !== this._myId) {
+        //             return;
+        //         }
+        //     }
+        // } catch (e) {}
 
-        let selectedItemIndex = this.instrumentsVM.indexOf(this.selectedInstrumentVM);
-        if (selectedItemIndex === -1) {
-            return;
-        }
+        // let selectedItemIndex = this.instrumentsVM.indexOf(this.selectedInstrumentVM);
+        // if (selectedItemIndex === -1) {
+        //     return;
+        // }
 
-        if (event.key === "ArrowUp") {
-            event.preventDefault();
-            event.stopPropagation();
-            if (selectedItemIndex > 0) {
-                this.selectVMItem(this.instrumentsVM[--selectedItemIndex]);
-            }
-        } else if (event.key === "ArrowDown") {
-            event.preventDefault();
-            event.stopPropagation();
-            if (selectedItemIndex < this.instrumentsVM.length - 1) {
-                this.selectVMItem(this.instrumentsVM[++selectedItemIndex]);
-            }
-        }
+        // if (event.key === "ArrowUp") {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     if (selectedItemIndex > 0) {
+        //         this.selectVMItem(this.instrumentsVM[--selectedItemIndex]);
+        //     }
+        // } else if (event.key === "ArrowDown") {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     if (selectedItemIndex < this.instrumentsVM.length - 1) {
+        //         this.selectVMItem(this.instrumentsVM[++selectedItemIndex]);
+        //     }
+        // }
     }
 
     public click(event: MouseEvent) {

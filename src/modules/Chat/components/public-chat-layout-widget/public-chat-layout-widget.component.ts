@@ -4,7 +4,7 @@ import {ChatTranslateService} from "../../localization/token";
 import {ComponentIdentifier} from "@app/models/app-config";
 import {ChatModeToken} from "../../mode.token";
 import {ChatMode} from "../../enums/chat-mode";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 
 @Component({
     selector: 'public-chat-widget',
@@ -21,7 +21,7 @@ import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
         }
     ]
 })
-export class PublicChatLayoutWidgetComponent extends BaseLayoutItemComponent {
+export class PublicChatLayoutWidgetComponent extends BaseGoldenLayoutItemComponent {
     ComponentIdentifier = ComponentIdentifier;
 
     constructor(@Inject(ChatModeToken) public chatMode: ChatMode,

@@ -1,5 +1,7 @@
 @import "../../../trade-manager/account-info-bar/shared.scss";
 
 :host {
-
+    .no-wrap {
+        margin-right: 3px;
+    }
 }

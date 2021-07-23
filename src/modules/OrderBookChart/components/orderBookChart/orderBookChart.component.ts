@@ -16,7 +16,7 @@ import {LocalizationService} from "Localization";
 import {Actions, LinkingAction} from "@linking/models";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {ComponentIdentifier} from "@app/models/app-config";
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 
 export interface IOrderBookCartState {
@@ -39,7 +39,7 @@ export interface IOrderBookCartState {
     ]
 })
 
-export class OrderBookChartComponent extends BaseLayoutItemComponent {
+export class OrderBookChartComponent extends BaseGoldenLayoutItemComponent {
     static componentName = 'Order Book Chart';
     static previewImgClass = 'crypto-icon-obc';
     private static readonly ALL_DEEP_LEVELS = 0;

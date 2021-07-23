@@ -2,9 +2,7 @@
     <div class="menu-top flex flex-direction-column">
         <div class="top-line flex justify-space-between" *ngIf="isAuthorizedCustomer">
             <div class="level-container">
-                <div class="level">
-                    {{level}}
-                </div>
+               
                 <div class="badge-container">
                     <badge></badge>
                 </div>
@@ -43,8 +41,11 @@
             </div>
         </div>
         <div class="functiona-menu flex justify-content-center crypto-text is-large">
-            <div class="user-settings" routerLink="/platform/settings" [class.disabled]="isGuest">
+            <!-- <div class="user-settings" routerLink="/platform/settings" [class.disabled]="isGuest">
                 <span title="{{'app.settings' | translate}}">{{'app.settings' | translate}}</span>
+            </div>  -->
+            <div class="clear-session" [class.disabled]="isGuest" (click)="clearSession()">
+                <span title="{{'app.clearSession' | translate}}">{{'app.clearSession' | translate}}</span>
             </div>
             <div class="reset-layout" (click)="resetLayout()">
                 <span title="{{'app.resetLayout' | translate}}">{{'app.resetLayout' | translate}}</span>

@@ -11,17 +11,20 @@
     justify-content: center;
     align-items: center;
     img {
-      width: 25px;
-      height: 25px;
+      width: 30px;
+      height: 30px;
       margin-right: 2px;
+      opacity: 0.75;
     }
   }
   .rank-level {
-    display: flex;
-    color: #ffffffd1;
+    color: #ffffff;
     font-size: 12px;
-    justify-content: center;
-    align-items: center;
+    font-weight: 700;
+    position: fixed;
+    text-align:center;
+    text-shadow: 1px 1px #000000;
+    margin-left:-1px;
   }
 }
 

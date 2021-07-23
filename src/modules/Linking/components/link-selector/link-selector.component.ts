@@ -21,6 +21,10 @@ export class LinkSelectorComponent implements OnInit {
         return this.linker && this.linker.linkingId == null;
     }
 
+    get showLinker(): boolean {
+        return this.linker && this.linker.showLinkerTab;
+    }
+
     handleColorSelected(color: string) {
         this.linker.setLinking(color);
     }

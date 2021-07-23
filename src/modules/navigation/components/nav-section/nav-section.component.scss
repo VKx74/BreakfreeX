@@ -24,5 +24,10 @@ $default-space: 8px;
   &.padding-right {
     padding-right: $default-space;
   }
+}
 
+@media (max-width: 600px) {
+  .nav-section {
+    padding: 5px 0px !important;
+  }
 }

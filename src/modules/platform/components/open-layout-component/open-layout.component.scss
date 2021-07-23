@@ -1,0 +1,103 @@
+@import "../../styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    width: 100%;
+    height: 100px;
+  }
+
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    bft-loader-block {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  .crypto-modal {
+    max-width: 500px;
+  }
+
+  .modal-body {
+    padding: 15px 0px;
+    min-height: 120px;
+  }
+
+  .layout-name {
+    font-size: 13px;
+    font-weight: 700;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .layout-description {
+    font-size: 11px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .layout-row {
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 5px;
+    padding: 5px 5px 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    height: 42px;
+    min-width: 300px;
+  }
+
+  .layoutName-column {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 50px);
+  }
+
+  .delete-button {
+    font-size: 11px;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 32px;
+    border-radius: 3px;
+  }
+}
+
+@include themify($themes, true) {
+  .no-data,
+  .layout-description {
+    color: themed("titleTextColor");
+  }
+  .layout-name,
+  .delete-button {
+    color: themed("valueTextColor");
+  }
+  .delete-button {
+    &:hover {
+      background-color: themed("accentLightColor");
+    }
+  }
+  .layout-row {
+    background-color: themed("card-background-color");
+    &:hover {
+      background-color: themed("activeBackgroundColor");
+    }
+  }
+}

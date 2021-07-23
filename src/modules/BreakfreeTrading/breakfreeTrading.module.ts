@@ -17,7 +17,7 @@ import {SharedModule} from "Shared";
 import { UIModule } from 'UI';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreakfreeTradingService } from './services/breakfreeTrading.service';
-import { BreakfreeTradingBacktestComponent, BreakfreeTradingAcademyComponent, BreakfreeTradingScannerComponent } from './components';
+import { BreakfreeTradingBacktestWidgetComponent, BreakfreeTradingAcademyComponent, BreakfreeTradingScannerComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBacktest.service';
@@ -53,6 +53,8 @@ import { PhoneNumberPopUpComponent } from './components/phoneNumberPopUp/phoneNu
 import { GuestCheckoutComponent } from './components/guest-checkout/guest-checkout.component';
 import { DefaultCheckoutComponent } from './components/default-checkout/default-checkout.component';
 import { StorageModule } from 'modules/Storage/storage.module';
+import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
+import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTradingBacktesComponent/BreakfreeTradingBacktest.component';
 
 @NgModule({
     // components here
@@ -61,9 +63,11 @@ import { StorageModule } from 'modules/Storage/storage.module';
         StrategyV2ModeBacktestComponent,
         ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
+        BreakfreeTradingBacktestWidgetComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
+        BreakfreeTradingScannerWidgetComponent,
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
@@ -113,9 +117,11 @@ import { StorageModule } from 'modules/Storage/storage.module';
         StrategyV2ModeBacktestComponent,
         ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
+        BreakfreeTradingBacktestWidgetComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
+        BreakfreeTradingScannerWidgetComponent,
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
@@ -130,9 +136,11 @@ import { StorageModule } from 'modules/Storage/storage.module';
         StrategyV2ModeBacktestComponent,
         ScannerStrategyBacktestComponent,
         ExtensionHitTestComponent,
+        BreakfreeTradingBacktestWidgetComponent,
         BreakfreeTradingBacktestComponent,
         BreakfreeTradingAcademyComponent,
         BreakfreeTradingScannerComponent,
+        BreakfreeTradingScannerWidgetComponent,
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,

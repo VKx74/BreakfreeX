@@ -11,5 +11,17 @@
   },
   "tradingInitialized": "Трейдинг розпочато",
   "failedInitTrading": "Не вдалося розпочати трейдинг: ",
-  "tradingManager": "Торговий менеджер"
+  "tradingManager": "Торговий менеджер",
+  "sonarWidget": "Віджет 'Сонар'",
+  "watchlistWidget": "Віджет тікерів",
+  "alertsWidget": "Віджет сповіщень",
+  "academyWidget": "Віджет академії",
+  "backtestWidget": "Віджет бектесту",
+  "supportWidget": "Віджет підтримки",
+  "downloadDesktopApplication": "Завантаження додатку",
+  "adminPanel": "Адмін панель",
+  "layoutName": "Назва макета",
+  "saveLayout": "Зберегти макет",
+  "createLayout": "Створити макет",
+  "openLayout": "Відкрити макет"
 }

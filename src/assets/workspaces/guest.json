@@ -23,29 +23,6 @@
               }
              
             ]
-          },
-          {
-            "type": "column",
-            "width":"25",
-            "content": [
-              {
-                "type": "stack",
-                "content": [
-                  {
-                    "id": "3",
-                    "type": "component",
-                    "componentName": "breakfreeTradingScanner",
-                    "isClosable": true
-                  },
-                  {
-                    "id": "4",
-                    "type": "component",
-                    "componentName": "watchlist",
-                    "isClosable": true
-                  }
-                ]
-              }
-            ]
           }
         ]
       }

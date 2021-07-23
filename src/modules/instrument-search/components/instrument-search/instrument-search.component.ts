@@ -116,6 +116,7 @@ export class InstrumentSearchComponent {
         if (!this.showDropDown) {
             this.input.nativeElement.blur();
             this._dialog.open(InstrumentSearchDialogComponent, {
+                backdropClass: 'backdrop-background',
                 data: {
                     instrument: this.selectedInstrument,
                     instrumentSearchCallback: this.instrumentSearchCallback,

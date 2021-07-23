@@ -4,7 +4,7 @@
 .lm_tab {
   height: 27px !important;
   .lm_title {
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 13px;
     font-weight: 600;
   }
@@ -20,8 +20,8 @@
   padding: 0px 15px 0 15px !important;
   box-sizing: border-box !important;
   overflow: hidden;
-  border-top-left-radius: 5px !important;
-  border-top-right-radius: 5px !important;
+  border-top-left-radius: 2px !important;
+  border-top-right-radius: 2px !important;
 
   &.closable-tab {
     padding: 0px 22px 0 12px !important;
@@ -56,61 +56,72 @@
   }
 }
 
+.lm_tabdropdown_list {
+  .lm_tab {
+    opacity: 1 !important;
+  }
+  .lm_title {
+    width: fit-content !important;
+    min-width: 50px;
+  }
+}
+
 @include globalThemifyFromComponent($themes) {
   .golden-layout {
     //background-color: themed('add-component-bg-color');
   }
 
   .lm_goldenlayout {
-    background-color: themed('headerBgColor') !important;
+    background-color: themed("headerBgColor") !important;
+    padding-top:3px;
   }
 
   .lm_content {
-    background: themed('lmContent') !important;
+    background: themed("lmContent") !important;
     //background-color: transparent !important;
   }
 
-  .lm_tabdropdown_list  {
-    background-color: rgba(themed('tabBgColor'), 1);
+  .lm_tabdropdown_list {
+    background-color: themed("tabBgColor");
 
     .lm_tab {
-      background-color: rgba(themed('tabBgColor'), 1) !important;
+      background-color: themed("tabBgColor") !important;
     }
   }
 
   .lm_header {
-    background-color: themed('headerBgColor');
+    background-color: themed("headerBgColor");
 
     .lm_tab {
-      background: themed('tabBgColor');
+      background: themed("tabBgColor");
 
       .lm_title {
-        color: themed('tabColor') !important;
+        color: themed("activeTabColor") !important;
       }
 
       &.lm_active {
-        background-color: themed('activeTabBgColor');
-        border-top: 1px solid #3d61cc;
+        // background-color: themed("activeTabBgColor");
+        // border-top: 1px solid #3d61cc;
 
-        .lm_title {
-          color: themed('activeTabColor') !important;
-        }
+        // .lm_title {
+        //   color: themed("activeTabColor") !important;
+        // }
       }
     }
 
     .add-component-btn {
       .fa-plus {
-        color: themed('addTabBtnColor');
+        color: themed("addTabBtnColor");
       }
     }
   }
 
   .lm_splitter {
     opacity: 1;
-    background-color: themed('splitterBgColor');
+    background-color: themed("splitterBgColor");
 
     .lm_dragging {
-      background-color: themed('splitterDraggingBgColor');
+      background-color: themed("splitterDraggingBgColor");
     }
 
     z-index: 39;
@@ -118,7 +129,7 @@
 
   .lm_header {
     .crypto-icon {
-      color: themed('headerControlsColor');
+      color: themed("headerControlsColor");
     }
 
     .lm_tabdropdown {
@@ -126,7 +137,7 @@
       margin-top: 0px;
 
       &:before {
-        color: themed('headerControlsColor');
+        color: themed("headerControlsColor");
       }
     }
   }
@@ -146,31 +157,51 @@
   //}
 
   div.lm_dropTargetIndicator {
-    box-shadow: themed('dropTargetBoxShadow') !important;
+    box-shadow: themed("dropTargetBoxShadow") !important;
 
     .lm_inner {
       opacity: 1 !important;
-      background-color: themed('dropTargetInnerBgColor') !important;
+      background-color: themed("dropTargetInnerBgColor") !important;
+    }
+  }
+  .tab-with-linker {
+    background-color: themed("tabBgColor") !important;
+  }
+  .active-tab-with-linker {
+    background-color: themed("activeTabBgColor") !important;
+    border-top: 1px solid themed("activeTabTopBorderColor");
+    opacity: 1 !important;
+    .lm_title {
+      font-weight: 700 !important;
     }
   }
 }
 
-
 .lm_header .lm_title {
   font-size: 10px !important;
-  font-weight:700;
+  // font-weight:700;
   // white-space: nowrap;
   // max-width: 100px;
   margin-top: 6px;
 }
 
+.tab-with-linker:not(.active-tab-with-linker) {
+ // opacity: 0.5;
+}
+
+.active-tab-with-linker {
+  .lm_title {
+    font-weight: 700 !important;
+  }
+  // margin-top: 2px !important;
+}
 
 // li.lm_tab.closable-tab.tab-with-linker:hover .lm_close_tab{
 //   opacity:1 !important;
 //   transition-duration: 0.22s;
 //   transition-delay: 0.25s;
 //   animation-delay: 0.25s;
-  
+
 // }
 
 // .lm_close_tab {
@@ -194,4 +225,3 @@
 //   opacity: 0.5;
 //   transition-duration: 0.22s;
 //  }
- 

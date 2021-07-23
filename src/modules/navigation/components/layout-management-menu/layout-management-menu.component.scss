@@ -1,0 +1,78 @@
+@import "variables";
+@import "../../styles/themes/themes";
+@import "mixins/themify";
+
+:host {
+  .layout-management-container {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    border-radius:5px;
+  
+  }
+  .menu-item {
+    display: flex;
+    padding: 4px 15px;
+    cursor: pointer;
+   
+  }
+  .menu-item.last {
+   margin-bottom:8px;
+   
+  }
+  .separator {
+    display: flex;
+    width: 100%;
+    margin: 6px 0px;
+  }
+  .current-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 15px;
+    margin-bottom: 7px;
+    background-color: #121219;
+    margin-top:8px;
+
+    .current-layout-title {
+      font-size: 13px;
+      color: #d5d5dc;
+    }
+
+    .current-layout-name {
+      font-size: 12px;
+      font-weight:700;
+      color: #ffffff;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+}
+
+@include themify($themes, true) {
+  .menu-item {
+    color: themed('valueTextColor');
+    &:hover {
+      color: themed('accentColor');;
+    }
+  }
+  .separator {
+    border-top: 1px solid themed('gutterColor');
+  }
+
+}
+
+@include themify($themes, true) {
+  .layout-management-container {
+    border: 1px solid themed('gutterColor');
+  }
+}
+
+/deep/ .mat-menu-panel.ng-trigger {
+  margin-top: 3px !important;
+}
+/deep/ .mat-menu-content:not(:empty) {
+  padding:0px;
+  border-radius:5px;
+  overflow:hidden;
+}

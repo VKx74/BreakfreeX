@@ -1,4 +1,4 @@
-import { Component, ElementRef } from "@angular/core";
+import { Component, ElementRef, Input } from "@angular/core";
 import { ChatbroService } from "@app/services/traking/ChatbroService";
 import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { Content } from "modules/Academy/models/dto";
@@ -20,6 +20,12 @@ export class AcademyComponent {
     private _doNext: Subject<void> = new Subject<void>();
     private _doPrev: Subject<void> = new Subject<void>();
 
+    @Input() public set isSidebarOpenByDefault(value: boolean) {
+        this.sidebarOpened = value;
+    }
+
+    public sidebarOpened: boolean = true;
+    
     public sidebarOpen: boolean = false;
 
     public get canPrev(): boolean {

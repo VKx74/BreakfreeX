@@ -55,8 +55,8 @@ export class CredentialsPageComponent implements OnInit {
     };
 
     if (this._localStorage.isGuest()) {
-        this._localStorage.trunkGuest();
-        this._GTMTrackingService.guestRegistration();
+      this._localStorage.trunkGuest();
+      this._GTMTrackingService.guestRegistration();
     }
 
     this.processing = true;
@@ -87,11 +87,11 @@ export class CredentialsPageComponent implements OnInit {
   doLoginWithFB() {
     window.location.href = this._authService.signInWithFBEndpoint;
   }
-  
+
   privacyPolicy() {
     this._dialog.open(PrivacyPolicyTradingModalComponent, {
-        backdropClass: 'backdrop-background'
+      backdropClass: 'backdrop-background'
     });
-}
+  }
 
 }

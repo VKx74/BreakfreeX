@@ -19,6 +19,7 @@ export class Linker {
 
     private _onAction$ = new Subject<LinkingAction>();
     private _onMessageSubscription: Subscription;
+    private _showLinkerTab: boolean = true;
     private _linkingId: string;
 
     get linkingId(): string {
@@ -31,11 +32,26 @@ export class Linker {
         return this._linkingId === null;
     }
 
+    get showLinkerTab(): boolean {
+        return this._showLinkerTab;
+    }
+
+    set showLinkerTab(value: boolean) {
+        this._showLinkerTab = value;
+    }
+
     constructor(private _linkingMessagesBus: LinkingMessagesBus) {
         this.id = JsUtil.generateGUID();
     }
 
-    setDefaultLinking() { 
+    setDefaultLinking(force: boolean = false) { 
+        if (this._linkingId && !force) {
+            return;
+        }
+        this.setLinking("#098BB8");
+    }
+
+    useActiveElementLinker() { 
         if (this._linkingId) {
             return;
         }

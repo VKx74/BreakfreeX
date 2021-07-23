@@ -1,5 +1,5 @@
 import { Component, Injector, Inject } from '@angular/core';
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
@@ -7,20 +7,17 @@ import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/servic
 import { of, Subscription } from 'rxjs';
 import bind from "bind-decorator";
 import { ChartTrackerService } from 'modules/BreakfreeTrading/services/chartTracker.service';
+import { BaseLayoutItem } from '@layout/base-layout-item';
 
 export interface IBFTBacktestComponentState {
 }
 
 @Component({
-    selector: 'BreakfreeTradingBacktest',
-    templateUrl: './breakfreeTradingBacktest.component.html',
-    styleUrls: ['./breakfreeTradingBacktest.component.scss']
+    selector: 'breakfree-trading-backtest',
+    templateUrl: './BreakfreeTradingBacktest.component.html',
+    styleUrls: ['./BreakfreeTradingBacktest.component.scss']
 })
-export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
-    static componentName = 'BreakfreeTradingBacktest';
-
-    static previewImgClass = 'crypto-icon-watchlist';
-    
+export class BreakfreeTradingBacktestComponent extends BaseLayoutItem {
     private _chartRemoved: Subscription;
 
     public get Charts(): TradingChartDesigner.Chart[] {
@@ -31,15 +28,8 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
 
     public showSpinner: boolean = false;
     
-    constructor(@Inject(GoldenLayoutItemState) protected _state: IBFTBacktestComponentState, 
-        @Inject(BreakfreeTradingTranslateService) private _bftTranslateService: TranslateService,
-        protected _bftService: BreakfreeTradingBacktestService,
-        protected _injector: Injector, private _chartTrackerService: ChartTrackerService) {
-        super(_injector);
-
-         if (_state) {
-            this._loadState(_state);
-        }
+    constructor(protected _bftService: BreakfreeTradingBacktestService, private _chartTrackerService: ChartTrackerService) {
+        super();
     }
 
     @bind
@@ -53,10 +43,7 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
     }
 
     ngOnInit() {
-        // component visible and UI elements accessible
-        super.setTitle(
-            this._bftTranslateService.stream('BreakfreeTradingBacktestComponentName')
-        );
+        this.initialized.next(this);
         this._selectDefaultItem();
         this._chartRemoved = this._chartTrackerService.onChartRemoved.subscribe(this._handleChartRemoved.bind(this));
     }
@@ -68,7 +55,8 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
     }
 
     ngOnDestroy() {
-        super.ngOnDestroy();
+        this.beforeDestroy.next(this);
+
         try {
             this.clearData();
         } catch (e) {
@@ -104,14 +92,15 @@ export class BreakfreeTradingBacktestComponent extends BaseLayoutItemComponent {
         }
     }
 
-    protected useLinker(): boolean { 
-        return false;
+    getState() {
+        return null;
     }
 
-    private _loadState(state: IBFTBacktestComponentState) {
-        if (state) {
-            // restore your state
-        }
+    setState(state: any) {
+    }
+
+    protected useLinker(): boolean { 
+        return false;
     }
 
     private _captionText(value: TradingChartDesigner.Chart) {

@@ -1,6 +1,6 @@
 import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angular/core';
 import {Modal} from "Shared";
-import { IdentityService } from '@app/services/auth/identity.service';
+import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
 import { AppConfigService } from '@app/services/app.config.service';
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
@@ -54,7 +54,7 @@ export class PhoneNumberPopUpComponent extends Modal<PhoneNumberPopUpComponent> 
         const sendCodeViaSMSToAttachPhoneNumberModel: SendCodeViaSMSToAttachPhoneNumberModel = {
             email: this._identityService.email,
             phoneNumber: this.phoneNumber,
-            isFreeTrial: this._identityService.isTrial
+            isFreeTrial: this._identityService.subscriptionType === SubscriptionType.Trial
         };
         this._personalInfoService.sendCodeViaSMSToAttachPhoneNumber(sendCodeViaSMSToAttachPhoneNumberModel)
             .subscribe(() => {

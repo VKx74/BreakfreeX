@@ -37,6 +37,7 @@ import { AlertLogGridComponent } from './components/alert-log-grid/alert-log-gri
 import { NotificationsLogGridComponent } from './components/notifications-log-grid/notifications-log-grid.component';
 import { AlertSocketService } from './services/alert.socket.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AlertComponent } from './components/alerts-component/alerts.component';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         PriceAlertGridComponent,
         SonarAlertGridComponent,
         AlertLogGridComponent,
+        AlertComponent,
         AlertWidgetComponent,
         AlertSetupBaseComponent,
         AlertGridActionsComponent,
@@ -82,9 +84,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         PriceAlertDialogComponent,
         SonarAlertDialogComponent,
         AlertWidgetComponent,
+        AlertComponent,
         PriceAlertGridComponent
     ],
     exports: [
+        AlertComponent,
         PriceAlertGridComponent,
         AlertWidgetComponent
     ],

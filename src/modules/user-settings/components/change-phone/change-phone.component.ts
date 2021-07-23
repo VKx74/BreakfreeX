@@ -13,7 +13,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {digitValidator, phoneNumberValidator} from "Validators";
 import {AppTranslateService} from "@app/localization/token";
 import {OrderBookTranslateService} from "@order-book/localization/token";
-import { IdentityService } from '@app/services/auth/identity.service';
+import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
 
 enum ChangePhoneNumberStage {
     None,
@@ -78,7 +78,7 @@ export class ChangePhoneComponent implements OnInit {
         const sendCodeViaSMSToAttachPhoneNumberModel: SendCodeViaSMSToAttachPhoneNumberModel = {
             email: this.email,
             phoneNumber: this.formGroup.controls['addPhone'].value,
-            isFreeTrial: this._identity.isTrial
+            isFreeTrial: this._identity.subscriptionType === SubscriptionType.Trial
         };
         this._personalInfoService.sendCodeViaSMSToAttachPhoneNumber(sendCodeViaSMSToAttachPhoneNumberModel)
             .subscribe(() => {

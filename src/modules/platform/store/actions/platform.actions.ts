@@ -12,6 +12,11 @@ export enum ActionTypes {
     ResetStore = '[Platform] Reset Store',
     SaveState = '[Platform] Save State',
     ResetLayout = '[Platform] Reset Layout',
+    SaveLayoutAsNew = '[Platform] Save Layout As New',
+    OpenNewLayout = '[Platform] Open New Layout',
+    LoadLayout = '[Platform] Load Layout',
+    ApplyLayout = '[Platform] Apply Layout',
+    DeleteLayout = '[Platform] Delete Layout'
 }
 
 export class SelectBottomComponentAction implements Action {

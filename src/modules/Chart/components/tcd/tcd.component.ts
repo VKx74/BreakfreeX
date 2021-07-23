@@ -13,7 +13,7 @@ import { IndicatorDataProviderService } from '@chart/services/indicator-data-pro
 import { IndicatorRestrictionService } from '@chart/services/indicator-restriction.service';
 import { ReplayModeSync } from "@chart/services/replay-mode-sync.service";
 import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
-import { BaseLayoutItemComponent } from "@layout/base-layout-item.component";
+import { BaseGoldenLayoutItemComponent } from "@layout/base-golden-layout-item.component";
 import { Store } from "@ngrx/store";
 import { TranslateService } from "@ngx-translate/core";
 import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
@@ -40,6 +40,10 @@ import { BrokerService } from "@app/services/broker.service";
 import { of, Subscription } from "rxjs";
 import { MTBroker } from "@app/services/mt/mt.broker";
 import { PlatformInstrumentsDataProvider } from "./PlatformInstrumentsDataProvider";
+import { IHistoryRequest } from "@app/models/common/historyRequest";
+import { IPeriodicity } from "@app/models/common/periodicity";
+import { IHistoryResponse } from "@app/models/common/historyResponse";
+import { IBarData } from "@app/models/common/barData";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -76,7 +80,7 @@ interface ReplayWaiter {
         AlertingFromChartService
     ]
 })
-export class TcdComponent extends BaseLayoutItemComponent {
+export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
     static componentName = 'Trading Chart Designer';
     static previewImgClass = 'crypto-icon-chart';
@@ -85,6 +89,18 @@ export class TcdComponent extends BaseLayoutItemComponent {
     private replayWaiter: ReplayWaiter;
     private brokerStateChangedSubscription: Subscription;
     private handleBrokerConnectTimeout: any;
+
+    private _priceTickerContainerClass = "price-ticker-container";
+    private _priceDirectionClass = "price-direction";
+    private _currentPriceClass = "current-price";
+    private _priceChangeClass = "price-change";
+    private _insertAfterElementClass = "lm_title";
+
+    private _priceDirectionElement: HTMLDivElement;
+    private _currentPriceElement: HTMLDivElement;
+    private _priceChangeElement: HTMLDivElement;
+    private _headerUpdateTimer;
+    private _hourlyPriceCache: { [instrumentHash: string]: IBarData[] } = {};
 
     blur: boolean = false;
     chart: TradingChartDesigner.Chart;
@@ -156,7 +172,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
         //     });
 
         this.setTitle();
-        this._initLinking();
     }
 
     ngAfterViewInit() {
@@ -166,8 +181,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     init(state?: ITcdComponentState) {
+        this.linker.setDefaultLinking(true);
+
         let theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
-        // const instrumentsNeeded = !state || !state.instrument;
 
         if (state && state.chartState) {
             if (state.chartState.version !== 8) {
@@ -178,7 +194,6 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 }
             }
         } else {
-            this._setLinkerColor();
         }
 
         this._datafeed.init(false).then(d => {
@@ -246,17 +261,20 @@ export class TcdComponent extends BaseLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED, this.instrumentChanged.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barsLoaded.bind(this));
 
-            if (!state) {
+            if (!state || !state.chartState) {
                 let isProAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 let isDiscoveryAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+                let isStarterAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
 
                 if (isProAllowed) {
                     this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingPro());
                 } else if (isDiscoveryAllowed) {
                     this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
+                } else if (isStarterAllowed) {
+                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingStarter());
                 }
 
-                if ((isProAllowed || isDiscoveryAllowed) && this.chart.RTDMode) {
+                if ((isProAllowed || isDiscoveryAllowed || isStarterAllowed) && this.chart.RTDMode) {
                     this.chart.addIndicators(new TradingChartDesigner.RTD());
                 }
             }
@@ -269,6 +287,10 @@ export class TcdComponent extends BaseLayoutItemComponent {
                 }
                 this._handleBrokerConnected();
             });
+
+            this._headerUpdateTimer = setInterval(() => {
+                this._setTitlePrice();
+            }, 1000);
         });
     }
 
@@ -492,6 +514,9 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
+
+        this._getHistory();
+
         if (this.replayWaiter) {
             if (this.chart.instrument.id === this.replayWaiter.instrument && this.chart.timeInterval === this.replayWaiter.tf) {
 
@@ -518,7 +543,15 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     protected useDefaultLinker(): boolean {
+        return true;
+    }
+
+    protected showLinkerTab(): boolean {
         return false;
+    }
+
+    protected useActiveElementLinker(): boolean {
+        return true;
     }
 
     private searchInstrumentHandler(symbol: string): Promise<IInstrument[]> {
@@ -568,63 +601,61 @@ export class TcdComponent extends BaseLayoutItemComponent {
         ].join(' ');
     }
 
-    private _initLinking() {
-        this.linker.onAction((action: LinkingAction) => {
-            if (action.type === Actions.ChangeInstrument) {
-                if (this.chart) {
-                    const chart = this.chart;
-                    const instrument = action.data as IChartInstrument;
-                    const chartInstrument = chart.instrument;
+    protected handleLinkingAction(action: LinkingAction) {
+        if (action.type === Actions.ChangeInstrument) {
+            if (this.chart) {
+                const chart = this.chart;
+                const instrument = action.data as IChartInstrument;
+                const chartInstrument = chart.instrument;
 
-                    if (!instrument) {
-                        return;
-                    }
-
-                    if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange) {
-
-                        chart.instrument = Object.assign({}, instrument);
-                        chart.sendBarsRequest();
-                    }
+                if (!instrument) {
+                    return;
                 }
-            } else if (action.type === Actions.ChangeInstrumentAndTimeframe) {
-                if (this.chart) {
-                    const chart = this.chart;
-                    const replayDate = action.data.replayDate;
-                    const instrument = action.data.instrument as IChartInstrument;
-                    const timeInterval = (action.data.timeframe as number) * 1000;
-                    const chartInstrument = chart.instrument;
 
-                    if (!instrument) {
-                        return;
+                if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange) {
+
+                    chart.instrument = Object.assign({}, instrument);
+                    chart.sendBarsRequest();
+                }
+            }
+        } else if (action.type === Actions.ChangeInstrumentAndTimeframe) {
+            if (this.chart) {
+                const chart = this.chart;
+                const replayDate = action.data.replayDate;
+                const instrument = action.data.instrument as IChartInstrument;
+                const timeInterval = (action.data.timeframe as number) * 1000;
+                const chartInstrument = chart.instrument;
+
+                if (!instrument) {
+                    return;
+                }
+
+                if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
+
+                    chart.switchOffReplayMode();
+                    chart.refresh();
+                    chart.refreshIndicators();
+
+                    chart.instrument = Object.assign({}, instrument);
+                    chart.timeFrame = TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval);
+
+                    if (replayDate) {
+                        this.replayWaiter = {
+                            instrument: instrument.id,
+                            tf: timeInterval,
+                            date: replayDate
+                        };
                     }
-
-                    if (chartInstrument.symbol !== instrument.symbol || chartInstrument.exchange !== instrument.exchange || chart.timeInterval !== timeInterval) {
-
-                        chart.switchOffReplayMode();
-                        chart.refresh();
-                        chart.refreshIndicators();
-
-                        chart.instrument = Object.assign({}, instrument);
-                        chart.timeFrame = TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval);
-
-                        if (replayDate) {
-                            this.replayWaiter = {
-                                instrument: instrument.id,
-                                tf: timeInterval,
-                                date: replayDate
-                            };
-                        }
-                        chart.sendBarsRequest();
+                    chart.sendBarsRequest();
+                } else {
+                    if (replayDate) {
+                        chart.setReplayByDate(replayDate);
                     } else {
-                        if (replayDate) {
-                            chart.setReplayByDate(replayDate);
-                        } else {
-                            chart.switchOffReplayMode();
-                        }
+                        chart.switchOffReplayMode();
                     }
                 }
             }
-        });
+        }
     }
 
     private _sendInstrumentChange(instrument: IChartInstrument) {
@@ -632,7 +663,7 @@ export class TcdComponent extends BaseLayoutItemComponent {
             type: Actions.ChangeInstrument,
             data: instrument
         };
-        this.linker.sendAction(linkAction);
+        this.sendLinkingAction(linkAction);
     }
 
     private _getTheme(): any {
@@ -728,11 +759,21 @@ export class TcdComponent extends BaseLayoutItemComponent {
     }
 
     setTitle() {
-        super.setTitle(
-            this._translateService.stream('chartComponentTitle', {
-                symbol: this.chart ? this.chart.instrument.symbol : ''
-            })
-        );
+        super.setTitle(of(this.chart ? this.chart.instrument.symbol : ''));
+
+        if (this._tabElement) {
+            const priceTickerContainer = this._tabElement.find(`.${this._priceTickerContainerClass}`)[0];
+            if (!priceTickerContainer) {
+                this._createPriceTickerContainer();
+            }
+        }
+
+        this._setTitlePrice();
+    }
+
+    onShow() {
+        super.onShow();
+        this.setTitle();
     }
 
     ngOnDestroy() {
@@ -740,8 +781,12 @@ export class TcdComponent extends BaseLayoutItemComponent {
 
         if (this.brokerStateChangedSubscription) {
             this.brokerStateChangedSubscription.unsubscribe();
-        } 
-        
+        }
+
+        if (this._headerUpdateTimer) {
+            clearInterval(this._headerUpdateTimer);
+        }
+
         if (this.handleBrokerConnectTimeout) {
             clearTimeout(this.handleBrokerConnectTimeout);
         }
@@ -780,6 +825,122 @@ export class TcdComponent extends BaseLayoutItemComponent {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    protected _createPriceTickerContainer() {
+        if (!this._tabElement) {
+            return;
+        }
+
+        let priceTickerContainer = document.createElement("div");
+        priceTickerContainer.classList.add(this._priceTickerContainerClass);
+
+        let priceDirection = document.createElement("div");
+        priceDirection.classList.add(this._priceDirectionClass);
+        priceTickerContainer.appendChild(priceDirection);
+        this._priceDirectionElement = priceDirection;
+
+        let currentPrice = document.createElement("div");
+        currentPrice.classList.add(this._currentPriceClass);
+        priceTickerContainer.appendChild(currentPrice);
+        this._currentPriceElement = currentPrice;
+
+        let priceChange = document.createElement("div");
+        priceChange.classList.add(this._priceChangeClass);
+        priceTickerContainer.appendChild(priceChange);
+        this._priceChangeElement = priceChange;
+
+        this._tabElement[0].insertBefore(priceTickerContainer, this._tabElement.find(`.${this._insertAfterElementClass}`)[0].nextSibling);
+    }
+
+    protected _setEmptyTitlePrice() {
+        this._currentPriceElement.innerHTML = "";
+        this._priceChangeElement.innerHTML = "";
+        this._priceDirectionElement.innerHTML = "";
+    }
+
+    protected _setTitlePrice() {
+        if (!this.chart) {
+            return;
+        }
+
+        const instrument = this.chart.instrument as IInstrument;
+        if (!instrument) {
+            this._setEmptyTitlePrice();
+            return;
+        }
+
+        const key = this._getKeyForInstrumentsPriceHistory(instrument);
+        const barCache = this._hourlyPriceCache[key];
+        if (!barCache || !barCache.length) {
+            this._setEmptyTitlePrice();
+            return;
+        }
+
+        const currentPrice = this.chart.dataContext.dataRows[".close"].lastValue;
+        if (!currentPrice) {
+            this._setEmptyTitlePrice();
+            return;
+        }
+
+        const firstPrice = barCache[0].close;
+        const change = (currentPrice - firstPrice) / firstPrice * 100;
+
+        this._currentPriceElement.innerHTML = currentPrice.toFixed(instrument.pricePrecision);
+        this._priceChangeElement.innerHTML = `${Math.roundToDecimals(change, 2).toFixed(2)}%`;
+
+        if (change > 0) {
+            this._priceDirectionElement.innerHTML = "▲";
+            this._priceChangeElement.classList.remove("downTrend");
+            this._priceDirectionElement.classList.remove("downTrend");
+            this._priceChangeElement.classList.add("upTrend");
+            this._priceDirectionElement.classList.add("upTrend");
+        } else {
+            this._priceDirectionElement.innerHTML = "▼";
+            this._priceChangeElement.classList.remove("upTrend");
+            this._priceDirectionElement.classList.remove("upTrend");
+            this._priceChangeElement.classList.add("downTrend");
+            this._priceDirectionElement.classList.add("downTrend");
+        }
+
+    }
+
+    private _getHistory() {
+        const instrument = this.chart.instrument as IInstrument;
+        if (!instrument) {
+            return;
+        }
+
+        const key = this._getKeyForInstrumentsPriceHistory(instrument);
+        if (this._hourlyPriceCache[key]) {
+            return;
+        }
+
+        let requestMsg: IHistoryRequest = {
+            instrument: instrument,
+            timeFrame: {
+                periodicity: IPeriodicity.hour,
+                interval: 1
+            },
+            startDate: new Date(new Date().getTime() - (60 * 60 * 24 * 5 * 1000)), // 5 days
+            endDate: new Date(),
+            cacheToken: key
+        };
+
+        (this._datafeed as any)._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
+            if (response && response.data.length) {
+                const data = response.data;
+                if (data.length > 24) {
+                    data.reverse().length = 24;
+                    data.reverse();
+                }
+                this._hourlyPriceCache[key] = data;
+            }
+        });
+    }
+
+    private _getKeyForInstrumentsPriceHistory(instrument: IInstrument) {
+        return instrument.id + instrument.exchange;
     }
 }
 

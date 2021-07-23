@@ -1,7 +1,7 @@
 <div class="navigation" [class.open]="sidebarState$ | async">
         <div class="flex justify-space-between align-items-center w-100 nav-top-row">
             <div class="flex sidebar-toggle-wrapper">
-                <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()"></sidebar-toggle>
+                <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()" *ngIf="isAdminPanel"></sidebar-toggle>
 
                 <a class="logo flex align-items-center" (click)="iconClick()">
                     <div class="flex BFTN">
@@ -28,12 +28,29 @@
                             </div>
                         </div>
                     </nav-section>  -->
+                    <nav-section class="autosave-nav-item" [leftBorder]="false" [class.no-highlight]="!saveNeeded" [paddingRight]="true" [paddingLeft]="true"
+                        [matMenuTriggerFor]="saveLayoutMenu">
+                        <div class="autosave-container">
+                            <span class="save-state save-needed" *ngIf="saveNeeded; else saved" tooltip [matTooltip]="'stateNotSaved' | translate">
+                                <i class="fa fa-cloud-upload" aria-hidden="true" ></i>
+                            </span>
+                            <ng-template #saved>
+                                <span class="save-state saved" tooltip [matTooltip]="'stateSaved' | translate">
+                                    <i class="fa fa-cloud" aria-hidden="true"></i>
+                                </span>
+                            </ng-template>
+
+                            <mat-menu #saveLayoutMenu="matMenu" xPosition="before">
+                                <layout-management-menu></layout-management-menu>
+                            </mat-menu>
+                        </div>
+                    </nav-section> 
                     <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">
                         <div class="xp-nav-container" (click)="openMissionDialog()">
                             <span *ngIf="isLoaded; else loading">
                                 <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
                                 <!-- <span class="xp-title">LV</span> {{level}} -->
-                                <span [ngClass]="getOverviewClass()">
+                                <span class="dashb" [ngClass]="getOverviewClass()">
                                     Dashboard
                                 </span>
                             </span>
@@ -52,7 +69,7 @@
                             </div>
                         </div>
                     </nav-section> 
-                    <nav-section *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
+                    <nav-section class="avatarsec" *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
                         <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex">
                             <ng-container *ngTemplateOutlet="avatar"></ng-container>
                             <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
@@ -63,9 +80,9 @@
                             </mat-menu>
                         </div>
                     </nav-section>
-                    <nav-section [leftBorder]="false" [paddingRight]="true" [paddingLeft]="false" *ngIf="isAuthorizedCustomer">
-                    
-                    </nav-section>
+                    <div class="settings-button" routerLink="/platform/settings" [class.disabled]="isGuest">
+                        <i _ngcontent-rjn-c4="" class="crypto-icon crypto-icon-settings"></i>
+                    </div>
                 </div>
             </ng-template>
         </div>

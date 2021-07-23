@@ -1,0 +1,40 @@
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="reject()"><i
+                    class="crypto-icon crypto-icon-close cursor-pointer"></i>
+            </button>
+            <h4 class="modal-title">
+                <span>{{'openLayout' | translate}}</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+
+            <div class="layout-row" *ngFor="let item of items" (click)="openLayout(item)">
+                <div class="layoutName-column">
+                    <div class="layout-name">{{item.name}}</div>
+                    <div class="layout-description">{{item.description}}</div>
+                </div>
+                <div class="delete-button"  (click)="removeLayout(item, $event)">
+                    <i class="crypto-icon crypto-icon-close"></i>
+                </div>
+            </div>
+            
+            <div *ngIf="!isItemsExists && !loading" class="no-data">
+                No layouts saved
+            </div>
+
+            <div class="loader" *ngIf="loading">
+                <bft-loader-block></bft-loader-block>
+            </div>
+
+        </div>
+        <!-- <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_primary" [class.disabled]="!selectedItem">
+                    <span>{{'openLayout' | translate}}</span>
+                </button>
+            </div>
+        </div> -->
+    </div>
+</div>

@@ -190,7 +190,7 @@ export class AuthenticationService {
         // scopes += "%20EventConsolidatorAdmin";
         // scopes += "%20DataConsolidatorUser";
         // scopes += "%20DataConsolidatorAdmin";
-        // scopes += "%20SocialChat";
+        scopes += "%20SocialChat";
         // scopes += "%20SocialForum";
         // scopes += "%20UserApi";
         scopes += "%20Alerts";

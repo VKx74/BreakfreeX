@@ -6,8 +6,14 @@ import { ComponentIdentifier } from "@app/models/app-config";
 import { IdentityTokenParser } from "@app/models/auth/identity-token-parser";
 import { AuthenticationService } from "@app/services/auth/auth.service";
 import { catchError, distinctUntilChanged, map, skip, tap } from "rxjs/operators";
-import { LogoutSuccessAction } from "@app/store/actions";
-import { Store } from "@ngrx/store";
+
+export enum SubscriptionType {
+    Pro,
+    Discovery,
+    Starter,
+    Trial,
+    Free
+}
 
 @Injectable()
 export class IdentityService {
@@ -45,6 +51,26 @@ export class IdentityService {
     private _isAuthorized$ = new BehaviorSubject<boolean>(false);
     isAuthorizedChange$: Observable<boolean>;
 
+    // get isGuestMode(): SubscriptionType {
+    //     return this._isGuestMode;
+    // }
+
+    get subscriptionType(): SubscriptionType {
+        if (!this.isAuthorizedCustomer) {
+            return SubscriptionType.Free;
+        }
+        
+        if (this._isTrial) {
+            return SubscriptionType.Trial;
+        } else if (this._isPro) {
+            return SubscriptionType.Pro;
+        } else if (this._isStarter) {
+            return SubscriptionType.Starter;
+        } else {
+            return SubscriptionType.Discovery;
+        }
+    }
+
     get isGuestMode(): boolean {
         return this._isGuestMode;
     }
@@ -62,7 +88,7 @@ export class IdentityService {
     }
 
     get isArtifSubExp(): boolean {
-        if (!this.artifSubExp || !this.isTrial) {
+        if (!this.artifSubExp || !this._isTrial) {
             return false;
         }
 
@@ -84,24 +110,8 @@ export class IdentityService {
     get isStuff(): boolean {
         return this.role.toLowerCase() !== Roles.User.toLowerCase() && this.role.toLowerCase() !== Roles.Guest.toLowerCase();
     }  
-    
-    get isBeta(): boolean {
-        if (this.isAdmin) {
-            return true;
-        }
 
-        if (this.tags && this.tags.length) {
-            for (const tag of this.tags) {
-                if (tag.toLowerCase() === "beta") {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }  
-
-    get isTrial(): boolean {
+    private get _isTrial(): boolean {
         if (this.isAdmin) {
             return false;
         }
@@ -126,7 +136,7 @@ export class IdentityService {
             return false;
         }
 
-        if (this.isTrial && this._isTrialExpired) {
+        if (this._isTrial && this._isTrialExpired) {
             return false;
         }
 
@@ -137,7 +147,7 @@ export class IdentityService {
         return false;
     }
 
-    get isPro(): boolean {
+    private get _isPro(): boolean {
         if (!this.isAuthorizedCustomer) {
             return false;
         }
@@ -155,7 +165,27 @@ export class IdentityService {
         }
 
         return false;
-    }
+    }  
+    
+    private get _isStarter(): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
+        if (this.isAdmin) {
+            return false;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("Starter") !== -1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    } 
 
     get basicLevel(): number {
         return 4;
@@ -211,7 +241,7 @@ export class IdentityService {
     }
 
     refreshTokens(): Observable<any> {
-        if (this.isGuestMode) {
+        if (this._isGuestMode) {
             return this._refreshGuestTokens();
         } else {
             return this._refreshTokens();
@@ -248,7 +278,7 @@ export class IdentityService {
     }
 
     public refreshTokenFromStorage(): Observable<any> {
-        if (this.isGuestMode) {
+        if (this._isGuestMode) {
             return this._refreshGuestTokens();
         } else {
             return this._refreshTokenFromStorage();
@@ -268,11 +298,11 @@ export class IdentityService {
     }
 
     public isTrialNumberRequired(): boolean {
-        return this.isTrial && !this.phoneNumber && this._free20MinTrialExpired;
+        return this._isTrial && !this.phoneNumber && this._free20MinTrialExpired;
     }
 
     public updateTrialExpiration() {
-        if (!this.isTrial || !this.artifSubExp) {
+        if (!this._isTrial || !this.artifSubExp) {
             return;
         }
 

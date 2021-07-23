@@ -1,24 +1,35 @@
-import {Linker, LinkerFactory} from "@linking/linking-manager";
-import {ApplicationRef, ComponentFactoryResolver, EmbeddedViewRef, Injector} from "@angular/core";
-import {takeUntil} from "rxjs/operators";
-import {LinkSelectorComponent} from "@linking/components";
-import {LinkingAction} from "@linking/models";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {GoldenLayoutItem, GoldenLayoutItemState} from "angular-golden-layout";
+import { Linker, LinkerFactory } from "@linking/linking-manager";
+import { ApplicationRef, ComponentFactoryResolver, EmbeddedViewRef, Injector } from "@angular/core";
+import { takeUntil } from "rxjs/operators";
+import { LinkSelectorComponent } from "@linking/components";
+import { LinkingAction } from "@linking/models";
+import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
+import { GoldenLayoutItem, GoldenLayoutItemState } from "angular-golden-layout";
+import { GoldenLayoutItemTracker } from "./golden-layout-item-tracker";
+import { Subscription } from "rxjs";
 
 export interface ILayoutItemComponentWithLinkingState {
     linkingId: string;
 }
 
 const TabWithLinkerClass = 'tab-with-linker';
+const ActiveTabWithLinkerClass = 'active-tab-with-linker';
 
-export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
+export abstract class BaseGoldenLayoutItemComponent extends GoldenLayoutItem {
+    private _activeTabChangedSubscription: Subscription;
+    public get isActive(): boolean {
+        return this._container.tab.isActive;
+    }
+
     protected linker: Linker;
+    protected goldenLayoutItemTracker: GoldenLayoutItemTracker;
 
     constructor(protected _injector: Injector) {
         super(_injector);
 
         const _state = _injector.get(GoldenLayoutItemState);
+
+        this.goldenLayoutItemTracker = _injector.get(GoldenLayoutItemTracker);
 
         if (this.useLinker()) {
             this.linker = this._injector.get(LinkerFactory).getLinker();
@@ -31,6 +42,12 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
                 }
             }
 
+            this._activeTabChangedSubscription = this.goldenLayoutItemTracker.activeTabChanged.subscribe(() => {
+                this.trackActiveTab();
+            });
+
+            this.linker.showLinkerTab = this.showLinkerTab();
+
             this.linker.linkingChange$
                 .pipe(takeUntil(componentDestroyed(this)))
                 .subscribe(() => {
@@ -38,8 +55,28 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
                 });
 
             this.linker.onAction((action: LinkingAction) => {
-                this.handleLinkingAction(action);
+                if (this.useActiveElementLinker()) {
+                    if (this.goldenLayoutItemTracker.activeTab) {
+                        if (this.goldenLayoutItemTracker.activeTab === this) {
+                            this.handleLinkingAction(action);
+                        }
+                    } else {
+                        if (this.isActive) {
+                            this.handleLinkingAction(action);
+                        }
+                    }
+                } else {
+                    this.handleLinkingAction(action);
+                }
             });
+        }
+    }
+
+    protected trackActiveTab() {
+        if (this === this.goldenLayoutItemTracker.activeTab) {
+            this._tabElement.addClass(ActiveTabWithLinkerClass);
+        } else {
+            this._tabElement.removeClass(ActiveTabWithLinkerClass);
         }
     }
 
@@ -48,6 +85,14 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
     }
 
     protected useDefaultLinker(): boolean {
+        return false;
+    }
+
+    protected showLinkerTab(): boolean {
+        return true;
+    }
+
+    protected useActiveElementLinker(): boolean {
         return false;
     }
 
@@ -73,6 +118,8 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
     onTabCreated(tabElement: JQuery) {
         super.onTabCreated(tabElement);
 
+        // this.goldenLayoutItemTracker.setActiveTab(this);
+
         if (this.useLinker()) {
             const componentFactoryResolver = this._injector.get(ComponentFactoryResolver);
             const appRef = this._injector.get(ApplicationRef);
@@ -89,11 +136,23 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
             tabElement.prepend(componentDomElem);
             tabElement.addClass(TabWithLinkerClass);
 
+            tabElement.on("keydown touch click", () => {
+                this.goldenLayoutItemTracker.setActiveTab(this);
+            });
+
             if (this.useDefaultLinker()) {
                 this.linker.setDefaultLinking();
             }
-            
+
+            if (this.isActive) {
+                this.goldenLayoutItemTracker.setActiveTab(this);
+            }
         }
+    }
+
+    onShow() {
+        super.onShow();
+        this.goldenLayoutItemTracker.setActiveTab(this);
     }
 
     saveState() {
@@ -116,8 +175,14 @@ export abstract class BaseLayoutItemComponent extends GoldenLayoutItem {
     ngOnDestroy() {
         super.ngOnDestroy();
 
+        if (this._activeTabChangedSubscription) {
+            this._activeTabChangedSubscription.unsubscribe();
+            this._activeTabChangedSubscription = null;
+        }
+
         if (this.linker) {
             this.linker.destroy();
         }
     }
 }
+

@@ -120,5 +120,12 @@
   "userActivityActionEnum": {
     "0": "Logged In",
     "1": "Login Failed"
-  }
+  },
+  "stateNotSaved": "Actual state not saved",
+  "stateSaved": "State saved",
+  "saveLayout": "Save Layout",
+  "saveAsNewLayout": "Save Layout as New",
+  "currentLayout": "Current Layout",
+  "newLayout": "Create New Layout",
+  "loadLayout": "Load Layout"
 }

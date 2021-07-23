@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, Inject, Injector, ViewChild } from "@angular/core";
-import { of, Subject } from "rxjs";
-import { IdentityService } from "@app/services/auth/identity.service";
+import { ChangeDetectorRef, Component, HostListener, Inject, Injector, ViewChild } from "@angular/core";
+import { Observable, of, Subject } from "rxjs";
+import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LayoutTranslateService } from "@layout/localization/token";
-import { catchError, first, map, takeUntil } from "rxjs/operators";
+import { catchError, first, map, takeUntil, tap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { NavigationStart, Router } from "@angular/router";
 import { SplitComponent } from "angular-split";
@@ -24,6 +24,7 @@ import { BrokerService } from "@app/services/broker.service";
 import { ToggleBottomPanelSizeService } from "@platform/components/dashboard/toggle-bottom-panel-size.service";
 import {
     GoldenLayoutComponent,
+    GoldenLayoutState,
     IGoldenLayoutComponentSettings,
     IGoldenLayoutComponentState,
     LayoutManagerService
@@ -42,20 +43,24 @@ import { PhoneNumberPopUpComponent } from "modules/BreakfreeTrading/components/p
 import { LocalStorageService } from "modules/Storage/services/local-storage.service";
 import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { TradeGuardTrackingService } from "@app/services/trade-guard-tracking.service";
+import { RightPanelComponent } from "../right-panel/right-panel.component";
+import { InstrumentSearchDialogComponent } from "@instrument-search/components/instrument-search-dialog/instrument-search-dialog.component";
+import { LayoutNameModalComponent } from "../layout-name-component/layout-name.component";
+import { OpenLayoutModalComponent } from "../open-layout-component/open-layout.component";
+import { ILayoutState } from "@app/models/layout-state";
 
 
 @Component({
     selector: 'dashboard',
     templateUrl: 'dashboard.component.html',
-    styleUrls: ['dashboard.component.scss'],
-    providers: [
-        LayoutStorageService
-    ]
+    styleUrls: ['dashboard.component.scss']
 })
 export class DashboardComponent {
-    private _updateInterval = 1000 * 60 * 5;
-    private _autoSaveChecker = 1000 * 10;
+    private _updateInterval = 1000 * 10;
     private _freeUserPopup = 1000 * 60 * 3;
+    private _rightPanelMaxSize = 800;
+    private _rightPanelSize = 400;
+    private _isRightPanelCollapsed: boolean = false;
     private _intervalLink: any;
     private _freeUserPopupTimer: any;
     private _saveLayout = true;
@@ -63,9 +68,17 @@ export class DashboardComponent {
     private _showPhoneNumberPopupInterval: any;
     private _hardRefreshTimer: any;
     private _hardRefreshNeeded: boolean = false;
-    layoutChanged = false;
+    private _lastBottomPanelSize: number = 0;
+    private _minRightSidePanelSize = 350;
     readonly openBottomPanel = 150;
-    readonly minimizeBottomPanel = 26;
+    readonly minimizeBottomPanel = 30;
+    readonly minRightSidePanelCollapsedSize = 45;
+    readonly minRightPanelFullSize = 768;
+
+    private get _isPro(): boolean {
+        return this._identityService.subscriptionType === SubscriptionType.Pro ||
+        this._identityService.subscriptionType === SubscriptionType.Trial;
+    }
 
     @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
     @ViewChild('verticalSplit', { read: SplitComponent, static: false }) verticalSplit: SplitComponent;
@@ -81,6 +94,40 @@ export class DashboardComponent {
 
     get bottomPanelMinSize() {
         return 160;
+    }
+
+    get rightPanelMinSize() {
+        if (this.isRightPanelCollapsed) {
+            return this.minRightSidePanelCollapsedSize;
+        }
+
+        return this._minRightSidePanelSize;
+    }
+
+    get rightPanelMaxSize() {
+        return this._rightPanelMaxSize;
+    }
+
+    get rightPanelSize() {
+        return this._rightPanelSize;
+    }
+
+    set rightPanelSize(value: number) {
+        this._rightPanelSize = value;
+    }
+
+    get isRightPanelCollapsed(): boolean {
+        return this._isRightPanelCollapsed;
+    }
+
+    set isRightPanelCollapsed(value: boolean) {
+        this._isRightPanelCollapsed = value;
+
+        if (this._isRightPanelCollapsed) {
+            this.rightPanelCollapsed();
+        } else {
+            this.rightPanelOpened();
+        }
     }
 
     constructor(private _store: Store<AppState>,
@@ -105,7 +152,8 @@ export class DashboardComponent {
         private _overlay: Overlay,
         private _instrumentMappingService: InstrumentMappingService
     ) {
-
+        // this._setRightPanelRestrictions();
+        this._setRightPanelInitialSize();
     }
 
     ngOnInit() {
@@ -116,7 +164,7 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._saveLayout = false;
-                this._layoutStorageService.removeLayoutState().subscribe(data => { });
+                this._layoutStorageService.removeDashboard().subscribe(data => { });
             });
 
         this._actions
@@ -126,6 +174,33 @@ export class DashboardComponent {
             )
             .subscribe(() => {
                 this._saveLayoutState();
+            });
+
+        this._actions
+            .pipe(
+                ofType(ActionTypes.SaveLayoutAsNew),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._saveLayoutAsNew();
+            });
+
+        this._actions
+            .pipe(
+                ofType(ActionTypes.OpenNewLayout),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._openNewLayout();
+            });
+
+        this._actions
+            .pipe(
+                ofType(ActionTypes.LoadLayout),
+                takeUntil(componentDestroyed(this))
+            )
+            .subscribe(() => {
+                this._loadLayout();
             });
 
         this._actions
@@ -162,14 +237,14 @@ export class DashboardComponent {
                 }
             });
 
-        this._actions
-            .pipe(
-                ofType(AppActionTypes.LogoutSuccess),
-                first()
-            )
-            .subscribe((action: LogoutSuccessAction) => {
-                this._saveLayoutState();
-            });
+        // this._actions
+        //     .pipe(
+        //         ofType(AppActionTypes.LogoutSuccess),
+        //         first()
+        //     )
+        //     .subscribe((action: LogoutSuccessAction) => {
+        //         this._saveLayoutState();
+        //     });
 
         if (!this._identityService.isAdmin) {
             this._singleSessionService.watchSessions();
@@ -181,12 +256,11 @@ export class DashboardComponent {
             this._tradeGuardTrackingService.initTimer();
         }
 
-        this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
 
-        if (this._identityService.isTrial) {
+        if (this._identityService.subscriptionType === SubscriptionType.Trial || this._identityService.isTrialNumberRequired()) {
             this._hardRefreshNeeded = !this._identityService.isTrialNumberRequired();
-            this._showPhoneNumberPopupInterval = setInterval(this._showPhoneNumberPopup.bind(this), 1000 * 30);
+            this._showPhoneNumberPopupInterval = setInterval(this._showPhoneNumberPopup.bind(this), 1000 * 15);
         }
     }
 
@@ -198,7 +272,9 @@ export class DashboardComponent {
             .pipe(takeUntil(componentDestroyed(this)))
             .subscribe({
                 next: (parent) => {
-                    this.setUpComponentSelectorDialog(parent);
+                    // debugger
+                    // this.setUpComponentSelectorDialog(parent);
+                    this.addChartComponent(parent);
                 }
             });
 
@@ -248,7 +324,7 @@ export class DashboardComponent {
                 if (isConfirmed) {
                     this._saveLayout = false;
                     this._localStorageService.remove(LocalStorageService.IsSpreadAutoProcessing);
-                    this._layoutStorageService.removeLayoutState().subscribe(data => {
+                    this._layoutStorageService.removeDashboard().subscribe(data => {
                         this._identityService.signOut().subscribe(data1 => {
                             this._coockieService.deleteAllCookie();
                             window.location.reload(true);
@@ -257,21 +333,106 @@ export class DashboardComponent {
                 }
             });
     }
-    _processLayoutReady() {
-        this._router.events
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((event: any) => {
-                if (event instanceof NavigationStart) {
-                    this._saveLayoutState();
+
+    rightPanelCollapsed() {
+        this.rightPanelSize = this.minRightSidePanelCollapsedSize;
+        EventsHelper.triggerWindowResize();
+    }
+
+    rightPanelOpened() {
+        this.rightPanelSize = this._lastBottomPanelSize >= this.rightPanelMinSize ? this._lastBottomPanelSize : this.rightPanelMinSize;
+        EventsHelper.triggerWindowResize();
+    }
+
+    getGoldenLayoutState(): GoldenLayoutState {
+        return this.layout.saveState();
+    }
+
+    getLayoutState(): ILayoutState {
+        const glState = this.getGoldenLayoutState();
+        let name = "Default";
+        let id = "";
+        if (this._layoutStorageService.currentDashboardName) {
+            name = this._layoutStorageService.currentDashboardName;
+        }
+        if (this._layoutStorageService.currentDashboardId) {
+            id = this._layoutStorageService.currentDashboardId;
+        }
+        return {
+            state: glState,
+            name: name,
+            layoutId: id,
+            savedTime: new Date().getTime(),
+            description: this._getLayoutDescription(glState)
+        };
+    }
+
+    private _getLayoutDescription(state: GoldenLayoutState): string {
+        return this._getComponentDescription(state.content);
+    }
+
+    private _getComponentDescription(component: any): string {
+        if (Array.isArray(component)) {
+            let res: string[] = [];
+            for (const i of component) {
+                let description = this._getComponentDescription(i.content || i);
+                if (description) {
+                    res.push(description);
                 }
-            });
+            }
+
+            if (res.length) {
+                return res.join(', ');
+            }
+
+            return "";
+        }
+
+        if (component.componentName === "chart" && component.componentState && component.componentState.componentState) {
+            const state = component.componentState.componentState;
+            const instrument = state.instrument;
+            const timeFrame = state.timeFrame;
+
+            if (!instrument || !timeFrame) {
+                return "";
+            }
+
+            return `${instrument.symbol} ${this._getTimeframeDescription(timeFrame)}`;
+        }
+    }
+
+    private _getTimeframeDescription(timeFrame: any): string {
+        let interval = timeFrame.interval;
+        let periodicity = timeFrame.periodicity;
+
+        if (!interval || !periodicity) {
+            return "";
+        }
+
+        periodicity = periodicity.toUpperCase();
+
+        if (!periodicity) {
+            periodicity = "Min(s)";
+        } else if (periodicity === "H") {
+            periodicity = "Hour(s)";
+        } else if (periodicity === "D") {
+            periodicity = "Days(s)";
+        } else if (periodicity === "W") {
+            periodicity = "Week(s)";
+        }
+
+        return `${interval} ${periodicity}`;
+    }
+
+    private _isGuestMode(): boolean {
+        return this._identityService.isGuestMode;
     }
 
     private _loadLayoutState() {
         let w = window.innerWidth;
         let h = window.innerHeight;
         let isSmallScreen = w <= 768 || h <= 768;
-        if (this._identityService.isGuestMode) {
+        if (this._isGuestMode()) {
             if (isSmallScreen) {
                 this._workspaceRepository.getGuestMobileWorkspace()
                     .subscribe((data: Workspace) => {
@@ -287,7 +448,7 @@ export class DashboardComponent {
             return;
         }
 
-        this._layoutStorageService.getLayoutState()
+        this._layoutStorageService.getDashboard()
             .pipe(
                 catchError(() => { // no saved workspace
                     return this._workspaceRepository.getDefaultWorkspaceByUserTags(this._identityService.tags)
@@ -302,72 +463,135 @@ export class DashboardComponent {
                         );
                 })
             )
-            .subscribe((data: IGoldenLayoutComponentState) => {
+            .subscribe((data: IGoldenLayoutComponentState | ILayoutState) => {
                 this._initializeLayout(data);
             });
     }
 
-    private _initializeLayout(state: IGoldenLayoutComponentState) {
-        this.layout.loadState(state);
-        this._processLayoutReady();
+    private _initializeLayout(state: IGoldenLayoutComponentState | ILayoutState) {
+        this._applyLayout(state);
+        setTimeout(() => {
+            this._initAutoSave();
+        }, this._updateInterval);
     }
 
-    private _saveLayoutState(async: boolean = true) {
-        if (this._identityService.isAuthorized && this._saveLayout && !this._identityService.isGuestMode) {
-            const layoutState = this.layout.saveState();
-            this._layoutStorageService.saveLayoutState(layoutState, async)
+    private _applyLayout(state: IGoldenLayoutComponentState | ILayoutState) {
+        this._saveLayout = false;
+        try {
+            if ((state as ILayoutState).state) {
+                const layout = (state as ILayoutState);
+                const GLState = (layout.state as IGoldenLayoutComponentState);
+                this.layout.loadState(GLState, false).then(() => {
+                    this._actualizeLayout();
+                }, () => {
+                    this._resetLayout();
+                }).catch(() => {
+                    this._resetLayout();
+                });
+                this._layoutStorageService.setCurrentDashboard(layout.name, layout.layoutId);
+            } else {
+                const GLState = (state as IGoldenLayoutComponentState);
+                this.layout.loadState(GLState, false).then(() => {
+                    this._actualizeLayout();
+                }, () => {
+                    this._resetLayout();
+                }).catch(() => {
+                    this._resetLayout();
+                });
+            }
+        } catch (error) {
+
+        }
+        setTimeout(() => {
+            this._saveLayout = true;
+        }, this._updateInterval);
+    }
+
+    private _actualizeLayout() {
+        const layoutComponents = this._layoutManager.layout.getAllComponents();
+
+        if (!layoutComponents || !layoutComponents.length) {
+            this._resetLayout();
+            return;
+        }
+
+        for (const layoutComponent of layoutComponents) {
+            const component = (layoutComponent as any);
+            const componentName = component.componentName;
+            if (componentName && componentName !== "chart" && component.close) {
+                component.close();
+            }
+        }
+    }
+
+    private _initAutoSave() {
+        this._layoutManager.layout.$stateChanged
+            .pipe(takeUntil(componentDestroyed(this)))
+            .subscribe(() => {
+                if (!this._saveLayout) {
+                    return;
+                }
+
+                this._layoutStorageService.lastUpdateTime = new Date().getTime();
+            });
+
+        this._layoutStorageService.autoSaveInitialized = true;
+        this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
+    }
+
+    private _saveLayoutState() {
+        this._layoutStorageService.lastUpdateTime = 0;
+        if (this._identityService.isAuthorized && this._saveLayout && !this._isGuestMode()) {
+            this._saveLayout = false;
+            const layoutState = this.getLayoutState();
+            this._layoutStorageService.updateActiveLayout(layoutState)
                 .subscribe(
                     (data) => {
-                        this.layoutChanged = true;
+                        this._saveLayout = true;
                         this._alertService.success(this._layoutTranslateService.get("savedLayout"));
                     });
         }
     }
 
-    private _resetLayout() {
-        this._workspaceRepository.loadWorkspaces()
-            .subscribe({
-                next: (workspaces: Workspace[]) => {
-                    for (const w of workspaces) {
-                        if (w.id === "empty") {
-                            this._layoutManager.loadState(w.layoutState, true);
-                            break;
-                        }
+    private _resetLayout$(): Observable<any> {
+        return this._workspaceRepository.loadWorkspaces()
+            .pipe(tap((workspaces) => {
+                for (const w of workspaces) {
+                    if (w.id === "empty") {
+                        this._layoutManager.loadState(w.layoutState, true);
+                        break;
                     }
-                },
-                error: (e) => {
-                    console.error(e);
                 }
-            });
+            }));
     }
 
-    needSaveConfirm() {
-        return (() => {
-            return new Promise((resolve, reject) => {
-                if (this.layoutChanged)
-                    this._dialog.open<ConfirmModalComponent, IConfirmModalConfig>(ConfirmModalComponent, {
-                        data: {
-                            title: 'Logout',
-                            message: 'Layout is not saved. Do you want to continue?'
-                        }
-                    }).afterClosed()
-                        .subscribe(res => {
-                            if (res)
-                                resolve();
-                            else
-                                reject();
-                        });
-                else
-                    resolve();
-            });
-        });
+    private _resetLayout() {
+        this._resetLayout$().subscribe(() => {});
     }
 
-    saveLayoutState() {
-        this._saveLayoutState();
-    }
+    // needSaveConfirm() {
+    //     return (() => {
+    //         return new Promise((resolve, reject) => {
+    //             if (this.layoutChanged)
+    //                 this._dialog.open<ConfirmModalComponent, IConfirmModalConfig>(ConfirmModalComponent, {
+    //                     data: {
+    //                         title: 'Logout',
+    //                         message: 'Layout is not saved. Do you want to continue?'
+    //                     }
+    //                 }).afterClosed()
+    //                     .subscribe(res => {
+    //                         if (res)
+    //                             resolve();
+    //                         else
+    //                             reject();
+    //                     });
+    //             else
+    //                 resolve();
+    //         });
+    //     });
+    // }
 
-    handleSplitDragEnd(c) {
+    handleVerticalSplitDragEnd(c) {
         if (c.sizes[1] >= this.openBottomPanel) {
             this.bottomPanelSizeService.setBottomPanelSize(c.sizes[1]);
         } else if (this.bottomPanelSizeService.sizeBottomPanel() >= this.openBottomPanel) {
@@ -377,6 +601,26 @@ export class DashboardComponent {
         }
 
         EventsHelper.triggerWindowResize();
+    }
+
+    handleVerticalSplitDbClick() {
+        this.isRightPanelCollapsed = !this.isRightPanelCollapsed;
+        EventsHelper.triggerWindowResize();
+    }
+
+    handleHorizontalSplitDragEnd(c) {
+        this._lastBottomPanelSize = c.sizes[1];
+
+        if (this.isRightPanelCollapsed) {
+            if (c.sizes[1] > this.minRightSidePanelCollapsedSize) {
+                this.isRightPanelCollapsed = false;
+            }
+        }
+
+        EventsHelper.triggerWindowResize();
+    }
+
+    handleHorizontalSplitDragStart(c) {
     }
 
     private setUpComponentSelectorDialog(parent: any) {
@@ -419,6 +663,34 @@ export class DashboardComponent {
             });
     }
 
+    private addChartComponent(parent: any) {
+        if (!this._canAddComponent()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
+        if (!this._canAddMoreComponents()) {
+            this._alertService.info(this._layoutTranslateService.get("createComponentsRestriction"));
+            return;
+        }
+
+        this._dialog.open(InstrumentSearchDialogComponent, {
+            backdropClass: 'backdrop-background',
+            data: {
+            }
+        }).afterClosed().subscribe((data) => {
+            if (data) {
+                this._layoutManager.addComponent({
+                    layoutItemName: "chart",
+                    parent: parent,
+                    state: {
+                        instrument: data
+                    }
+                });
+            }
+        });
+    }
+
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
@@ -429,7 +701,7 @@ export class DashboardComponent {
         }
         if (this._freeUserPopupTimer) {
             clearTimeout(this._freeUserPopupTimer);
-        }  
+        }
         if (this._showPhoneNumberPopupInterval) {
             clearInterval(this._showPhoneNumberPopupInterval);
         }
@@ -438,21 +710,55 @@ export class DashboardComponent {
         }
     }
 
+    // @HostListener('window:resize', ['$event'])
+    // onResize(event) {
+    //     this._setRightPanelRestrictions();
+    // }
+
+    // private _setRightPanelRestrictions() {
+    //     const width = window.innerWidth;
+    //     if (width < this.minRightPanelFullSize) {
+    //         this._rightPanelMaxSize = width;
+    //         this._minRightSidePanelSize = width;
+    //     }
+    // }
+
+    private _setRightPanelInitialSize() {
+        const width = window.innerWidth;
+        if (width < this.minRightPanelFullSize) {
+            this.isRightPanelCollapsed = true;
+        }
+    }
+
     private _autoSave() {
+        const lastUpdateTime = this._layoutStorageService.lastUpdateTime;
+        if (!lastUpdateTime || new Date().getTime() - lastUpdateTime < this._updateInterval) {
+            return;
+        }
+
+        this._layoutStorageService.lastUpdateTime = 0;
+
         if (this._identityService.isAuthorized && this._identityService.isAuthorizedCustomer && this._saveLayout) {
-            const layoutState = this.layout.saveState();
-            this._layoutStorageService.saveLayoutState(layoutState, true).subscribe();
+            this._saveLayout = false;
+            const layoutState = this.getLayoutState();
+            this._layoutStorageService.updateActiveLayout(layoutState).subscribe(() => {
+                this._saveLayout = true;
+            });
         }
     }
 
     private _showFreeUserPopup() {
-        if (this._identityService.isGuestMode) {
+        if (this._isGuestMode()) {
             return;
         }
 
         if (!this._identityService.isAuthorizedCustomer) {
-            this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+            this._shoCheckoutPopup();
         }
+    }
+
+    private _shoCheckoutPopup() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _showPhoneNumberPopup() {
@@ -470,6 +776,122 @@ export class DashboardComponent {
                     window.location.reload();
                 }, 1000 * 60 * 10);
             }
+        }
+    }
+
+    private _loadLayout() {
+        if (!this._canUseLayout()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
+        this._dialog.open(OpenLayoutModalComponent, {}).afterClosed().subscribe((id) => {
+            if (!id) {
+                return;
+            }
+
+            this._layoutStorageService.loadLayout(id).subscribe((savedLayout) => {
+                if (savedLayout) {
+                    this._applyLayout(savedLayout);
+                }
+            });
+        });
+    }
+
+    private _openNewLayout() {
+        if (!this._canUseLayout()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
+        this._canSaveMoreLayouts().subscribe((value) => {
+            if (!value) {
+                this._alertService.info(this._layoutTranslateService.get("createLayoutRestriction"));
+                return;
+            }
+
+            this._dialog.open(LayoutNameModalComponent, {
+                data: {}
+            }).afterClosed().subscribe((name) => {
+                if (!name) {
+                    return;
+                }
+
+                this._resetLayout$().subscribe(() => {
+                    this._saveCurrentLayout(name);
+                });
+            });
+        });
+    }
+    private _saveLayoutAsNew() {
+        if (!this._canUseLayout()) {
+            this._shoCheckoutPopup();
+            return;
+        }
+
+        this._canSaveMoreLayouts().subscribe((value) => {
+            if (!value) {
+                this._alertService.info(this._layoutTranslateService.get("createLayoutRestriction"));
+                return;
+            }
+
+            this._dialog.open(LayoutNameModalComponent, {
+                data: {
+                    isSave: true
+                }
+            }).afterClosed().subscribe((name) => {
+                if (!name) {
+                    return;
+                }
+
+                this._saveCurrentLayout(name);
+            });
+        });
+    }
+
+    private _saveCurrentLayout(name: string) {
+        const state = this.getGoldenLayoutState();
+        const description = this._getComponentDescription(state.content);
+        this._layoutStorageService.createLayout(state, name, description).subscribe((savedLayout) => {
+            if (savedLayout) {
+                this._layoutStorageService.setCurrentDashboard(savedLayout.name, savedLayout.layoutId);
+                this._saveLayoutState();
+            }
+        });
+    }
+
+    private _canUseLayout(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    } 
+    
+    private _canAddComponent(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }
+
+    private _canSaveMoreLayouts(): Observable<boolean> {
+        return this._layoutStorageService.loadLayouts().pipe(map((layouts) => {
+            if (!layouts) {
+                return true;
+            }
+
+            if (this._isPro) {
+                return layouts.length < 10;
+            } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
+                return layouts.length < 5;
+            } else {
+                return layouts.length < 3;
+            }
+        }));
+    }
+    private _canAddMoreComponents(): boolean {
+        const count = this._layoutManager.layout.getAllComponents().length;
+
+        if (this._isPro) {
+            return count < 8;
+        } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            return count < 4;
+        } else {
+            return count < 2;
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Component, Injector, Inject, ElementRef, ViewChild } from '@angular/core';
-import {BaseLayoutItemComponent} from "@layout/base-layout-item.component";
+import {BaseGoldenLayoutItemComponent} from "@layout/base-golden-layout-item.component";
 import {GoldenLayoutItemState} from "angular-golden-layout";
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
@@ -15,7 +15,7 @@ export interface IBFTAcademyComponentState {
     templateUrl: './breakfreeTradingAcademy.component.html',
     styleUrls: ['./breakfreeTradingAcademy.component.scss']
 })
-export class BreakfreeTradingAcademyComponent extends BaseLayoutItemComponent {
+export class BreakfreeTradingAcademyComponent extends BaseGoldenLayoutItemComponent {
 
     static componentName = 'BreakfreeTradingAcademy';
 

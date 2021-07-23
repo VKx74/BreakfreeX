@@ -113,6 +113,7 @@ import { GuestResolver } from './reslovers/guest.resolver';
 import { SignalsDemoBrokerService } from './services/demo.broker/signals-demo-broker.service';
 import { HighlightService } from './services/highlight/highlight.service';
 import { TradeGuardTrackingService } from './services/trade-guard-tracking.service';
+import { LayoutStorageService } from './services/layout-storage.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -175,6 +176,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         Angulartics2GoSquared,
         CookieService,
         GuestResolver,
+        LayoutStorageService,
         AppConfigService,
         {
             provide: IdentityService,
