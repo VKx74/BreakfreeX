@@ -31,6 +31,7 @@ export class BaseNavComponent implements OnInit {
     readonly avatarShape = UserAvatarShape.Rounded;
     @Input() showUserDashboard = false;
     @Input() showUserAvatar = false;
+    @Input() isAdminPanel = false;
     @Input() logoutConfirm: Function;
     sidebarState$ = this._sidebarService.state$;
     debouncedSidebarState$ = this._sidebarService.state$

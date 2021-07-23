@@ -1,7 +1,7 @@
 <div class="navigation" [class.open]="sidebarState$ | async">
         <div class="flex justify-space-between align-items-center w-100 nav-top-row">
             <div class="flex sidebar-toggle-wrapper">
-                <!-- <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()"></sidebar-toggle> -->
+                <sidebar-toggle [sidebarShown]="sidebarState$ | async" (click)="toggleSidebar()" *ngIf="isAdminPanel"></sidebar-toggle>
 
                 <a class="logo flex align-items-center" (click)="iconClick()">
                     <div class="flex BFTN">
