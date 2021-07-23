@@ -28,19 +28,19 @@
             <div class="widget-selector-toolbar">
                 <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
                     [class.active]="SelectedComponent === Components.Sonar && !collapsed" tooltip [matTooltip]="'sonarWidget' | translate">
-                    <i class="fa fa-th" aria-hidden="true"></i>
+                    <img class="widget-icon" src="/assets/img/right-panel/radar-solid.svg" />
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
                     [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip [matTooltip]="'watchlistWidget' | translate">
-                    <i class="fa fa-list" aria-hidden="true"></i>
+                    <img class="widget-icon" src="/assets/img/right-panel/list-dropdown-solid.svg" />
                 </div>
                 <div class="alerts-widget widget-selector-icon" (click)="selectComponent(Components.Alerts)"
                     [class.active]="SelectedComponent === Components.Alerts && !collapsed" tooltip [matTooltip]="'alertsWidget' | translate">
-                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <img class="widget-icon" src="/assets/img/right-panel/bell-on-solid.svg" />
                 </div>
                 <div class="academy-widget widget-selector-icon" (click)="selectComponent(Components.Academy)"
                     [class.active]="SelectedComponent === Components.Academy && !collapsed" tooltip [matTooltip]="'academyWidget' | translate">
-                    <i class="fa fa-book" aria-hidden="true"></i>
+                    <img class="widget-icon" src="/assets/img/right-panel/graduation-cap-solid.svg" />
                 </div>
                 <div class="backtest-widget widget-selector-icon" (click)="selectComponent(Components.Backtest)"
                     [class.active]="SelectedComponent === Components.Backtest && !collapsed" *ngIf="isBacktestAllowed" tooltip [matTooltip]="'backtestWidget' | translate">
