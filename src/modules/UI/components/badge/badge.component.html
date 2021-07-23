@@ -1,5 +1,5 @@
 <div class="badge-container">
-    <div class="rank-avatar">
+    <div class="rank-avatar" *ngIf="rank !== Ranks.Newbie">
         <ng-container [ngSwitch]="rank">
             <ng-container *ngSwitchCase="Ranks.Bronze">
                 <img src="/assets/img/ranks/badge_bronze.png" />
