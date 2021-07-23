@@ -18,7 +18,7 @@ export class IndicatorRestrictionService {
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
         } else {
-            if (this._identity.subscriptionType === SubscriptionType.Pro) {
+            if (this._identity.subscriptionType === SubscriptionType.Pro || this._identity.subscriptionType === SubscriptionType.Trial) {
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
             } else if (this._identity.subscriptionType === SubscriptionType.Discovery) {

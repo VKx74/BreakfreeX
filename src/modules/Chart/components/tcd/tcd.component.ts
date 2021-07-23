@@ -181,8 +181,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     init(state?: ITcdComponentState) {
+        this.linker.setDefaultLinking(true);
+
         let theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
-        // const instrumentsNeeded = !state || !state.instrument;
 
         if (state && state.chartState) {
             if (state.chartState.version !== 8) {
@@ -193,7 +194,6 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                 }
             }
         } else {
-            // this._setLinkerColor();
         }
 
         this._datafeed.init(false).then(d => {

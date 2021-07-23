@@ -44,8 +44,8 @@ export class Linker {
         this.id = JsUtil.generateGUID();
     }
 
-    setDefaultLinking() { 
-        if (this._linkingId) {
+    setDefaultLinking(force: boolean = false) { 
+        if (this._linkingId && !force) {
             return;
         }
         this.setLinking("#098BB8");

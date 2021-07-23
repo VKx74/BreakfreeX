@@ -258,9 +258,9 @@ export class DashboardComponent {
 
         this._freeUserPopupTimer = setTimeout(this._showFreeUserPopup.bind(this), this._freeUserPopup);
 
-        if (this._identityService.subscriptionType === SubscriptionType.Trial) {
+        if (this._identityService.subscriptionType === SubscriptionType.Trial || this._identityService.isTrialNumberRequired()) {
             this._hardRefreshNeeded = !this._identityService.isTrialNumberRequired();
-            this._showPhoneNumberPopupInterval = setInterval(this._showPhoneNumberPopup.bind(this), 1000 * 30);
+            this._showPhoneNumberPopupInterval = setInterval(this._showPhoneNumberPopup.bind(this), 1000 * 15);
         }
     }
 

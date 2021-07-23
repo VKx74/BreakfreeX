@@ -268,6 +268,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         }  
         
         if (this._identityService.subscriptionType !== SubscriptionType.Pro &&
+            this._identityService.subscriptionType !== SubscriptionType.Trial &&
             this._identityService.subscriptionType !== SubscriptionType.Discovery) {
             return true;
         }
