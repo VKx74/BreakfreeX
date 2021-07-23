@@ -37,7 +37,7 @@ export class DefaultCheckoutComponent implements OnInit {
     }
 
     checkoutStarter1M() {
-        this.checkout("price_1JFWJpBI1GhkUGQt0DQyHJvw");
+        this.checkout("price_1JG3FNBI1GhkUGQt0OL7FuIC");
     }
 
     checkoutStarter3M() {
@@ -70,6 +70,10 @@ export class DefaultCheckoutComponent implements OnInit {
 
     checkoutPro12M() {
         this.checkout("subscription_plan_251974");
+    }
+
+    checkoutStarter1MNonTrial() {
+        this.checkout("price_1JFWJpBI1GhkUGQt0DQyHJvw");
     }
 
     checkoutPro1MNonTrial() {
