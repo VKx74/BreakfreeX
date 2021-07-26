@@ -1,22 +1,33 @@
 <div class="root">
     <div class="widget-container" [class.hidden]="collapsed">
-        <div class="widget" *ngIf="SelectedComponent === Components.Sonar">
-            <breakfree-trading-scanner (onOpenChart)="handleOpenChart($event)"></breakfree-trading-scanner>
-        </div>
-        <div class="widget" *ngIf="SelectedComponent === Components.Watchlist">
-            <watchlist (onOpenChart)="handleOpenChart($event)"></watchlist>
-        </div>
-        <div class="widget" *ngIf="SelectedComponent === Components.Alerts">
-            <alerts (onOpenChart)="handleOpenChart($event)" #alerts></alerts>
-        </div>
-        <div class="widget" *ngIf="SelectedComponent === Components.Academy">
-            <div class="widget-scroller">
-                <academy-component [isSidebarOpenByDefault]="false"></academy-component>
+        <ng-container *ngIf="initialized; else loader">
+            <div class="widget" *ngIf="SelectedComponent === Components.Sonar">
+                <breakfree-trading-scanner (stateChanged)="componentStateChanged($event)"
+                    (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
+                    (onOpenChart)="handleOpenChart($event)"></breakfree-trading-scanner>
             </div>
-        </div>
-        <div class="widget" *ngIf="SelectedComponent === Components.Backtest">
-            <breakfree-trading-backtest></breakfree-trading-backtest>
-        </div>
+            <div class="widget" *ngIf="SelectedComponent === Components.Watchlist">
+                <watchlist (stateChanged)="componentStateChanged($event)"
+                    (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
+                    (onOpenChart)="handleOpenChart($event)"></watchlist>
+            </div>
+            <div class="widget" *ngIf="SelectedComponent === Components.Alerts">
+                <alerts (onOpenChart)="handleOpenChart($event)" #alerts></alerts>
+            </div>
+            <div class="widget" *ngIf="SelectedComponent === Components.Academy">
+                <div class="widget-scroller">
+                    <academy-component [isSidebarOpenByDefault]="false"></academy-component>
+                </div>
+            </div>
+            <div class="widget" *ngIf="SelectedComponent === Components.Backtest">
+                <breakfree-trading-backtest></breakfree-trading-backtest>
+            </div>
+        </ng-container>
+        <ng-template #loader>
+            <div class="lader-container">
+                <bft-loader></bft-loader>
+            </div>
+        </ng-template>
     </div>
     <div class="widget-selector">
         <div class="top-part">
@@ -27,29 +38,36 @@
             </div> -->
             <div class="widget-selector-toolbar">
                 <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
-                    [class.active]="SelectedComponent === Components.Sonar && !collapsed" tooltip [matTooltip]="'sonarWidget' | translate">
+                    [class.active]="SelectedComponent === Components.Sonar && !collapsed" tooltip
+                    [matTooltip]="'sonarWidget' | translate">
                     <img class="widget-icon" src="/assets/img/right-panel/radar-solid.svg" />
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
-                    [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip [matTooltip]="'watchlistWidget' | translate">
+                    [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip
+                    [matTooltip]="'watchlistWidget' | translate">
                     <img class="widget-icon" src="/assets/img/right-panel/list-dropdown-solid.svg" />
                 </div>
                 <div class="alerts-widget widget-selector-icon" (click)="selectComponent(Components.Alerts)"
-                    [class.active]="SelectedComponent === Components.Alerts && !collapsed" tooltip [matTooltip]="'alertsWidget' | translate">
+                    [class.active]="SelectedComponent === Components.Alerts && !collapsed" tooltip
+                    [matTooltip]="'alertsWidget' | translate">
                     <img class="widget-icon" src="/assets/img/right-panel/bell-on-solid.svg" />
                 </div>
                 <div class="academy-widget widget-selector-icon" (click)="selectComponent(Components.Academy)"
-                    [class.active]="SelectedComponent === Components.Academy && !collapsed" tooltip [matTooltip]="'academyWidget' | translate">
+                    [class.active]="SelectedComponent === Components.Academy && !collapsed" tooltip
+                    [matTooltip]="'academyWidget' | translate">
                     <img class="widget-icon" src="/assets/img/right-panel/graduation-cap-solid.svg" />
                 </div>
                 <div class="backtest-widget widget-selector-icon" (click)="selectComponent(Components.Backtest)"
-                    [class.active]="SelectedComponent === Components.Backtest && !collapsed" *ngIf="isBacktestAllowed" tooltip [matTooltip]="'backtestWidget' | translate">
+                    [class.active]="SelectedComponent === Components.Backtest && !collapsed" *ngIf="isBacktestAllowed"
+                    tooltip [matTooltip]="'backtestWidget' | translate">
                     <i class="fa fa-line-chart" aria-hidden="true"></i>
                 </div>
-                <div class="support-widget widget-selector-icon" (click)="showSupport()" tooltip [matTooltip]="'supportWidget' | translate">
+                <div class="support-widget widget-selector-icon" (click)="showSupport()" tooltip
+                    [matTooltip]="'supportWidget' | translate">
                     <i class="fa fa-life-ring" aria-hidden="true"></i>
                 </div>
-                <div class="admin-widget widget-selector-icon" *ngIf="isStuff" routerLink="/admin" tooltip [matTooltip]="'adminPanel' | translate">
+                <div class="admin-widget widget-selector-icon" *ngIf="isStuff" routerLink="/admin" tooltip
+                    [matTooltip]="'adminPanel' | translate">
                     <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                 </div>
             </div>
@@ -61,7 +79,8 @@
             <div class="widget-selector-icon" (click)="open()" *ngIf="collapsed">
                 <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
             </div> -->
-            <div class="admin-widget widget-selector-icon" *ngIf="downloadLink" tooltip [matTooltip]="'downloadDesktopApplication' | translate">
+            <div class="admin-widget widget-selector-icon" *ngIf="downloadLink" tooltip
+                [matTooltip]="'downloadDesktopApplication' | translate">
                 <a href="{{downloadLink}}">
                     <i class="fa fa-cloud-download" aria-hidden="true"></i>
                 </a>

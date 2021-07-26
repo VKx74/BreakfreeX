@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, Inject, Injector, ViewChild } from "@angular/core";
-import { Observable, of, Subject } from "rxjs";
+import { Observable, of, Subject, Subscription } from "rxjs";
 import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LayoutTranslateService } from "@layout/localization/token";
@@ -48,6 +48,7 @@ import { InstrumentSearchDialogComponent } from "@instrument-search/components/i
 import { LayoutNameModalComponent } from "../layout-name-component/layout-name.component";
 import { OpenLayoutModalComponent } from "../open-layout-component/open-layout.component";
 import { ILayoutState } from "@app/models/layout-state";
+import { RightSidePanelStateService } from "@platform/services/right-side-panel-state.service";
 
 
 @Component({
@@ -74,6 +75,7 @@ export class DashboardComponent {
     readonly minimizeBottomPanel = 30;
     readonly minRightSidePanelCollapsedSize = 45;
     readonly minRightPanelFullSize = 768;
+    private _rightSidePanelStateChanged: Subscription;
 
     private get _isPro(): boolean {
         return this._identityService.subscriptionType === SubscriptionType.Pro ||
@@ -149,6 +151,7 @@ export class DashboardComponent {
         private _missionTrackingService: MissionTrackingService,
         private _tradeGuardTrackingService: TradeGuardTrackingService,
         public bottomPanelSizeService: ToggleBottomPanelSizeService,
+        public _rightSidePanelStateService: RightSidePanelStateService,
         private _overlay: Overlay,
         private _instrumentMappingService: InstrumentMappingService
     ) {
@@ -363,7 +366,8 @@ export class DashboardComponent {
             name: name,
             layoutId: id,
             savedTime: new Date().getTime(),
-            description: this._getLayoutDescription(glState)
+            description: this._getLayoutDescription(glState),
+            rightSidePanelState: this._rightSidePanelStateService.getState()
         };
     }
 
@@ -480,6 +484,7 @@ export class DashboardComponent {
         try {
             if ((state as ILayoutState).state) {
                 const layout = (state as ILayoutState);
+                const rightSidePanelState = layout.rightSidePanelState;
                 const GLState = (layout.state as IGoldenLayoutComponentState);
                 this.layout.loadState(GLState, false).then(() => {
                     this._actualizeLayout();
@@ -489,6 +494,7 @@ export class DashboardComponent {
                     this._resetLayout();
                 });
                 this._layoutStorageService.setCurrentDashboard(layout.name, layout.layoutId);
+                this._rightSidePanelStateService.initialize(rightSidePanelState);
             } else {
                 const GLState = (state as IGoldenLayoutComponentState);
                 this.layout.loadState(GLState, false).then(() => {
@@ -537,6 +543,11 @@ export class DashboardComponent {
 
         this._layoutStorageService.autoSaveInitialized = true;
         this._intervalLink = setInterval(this._autoSave.bind(this), this._updateInterval);
+        this._rightSidePanelStateService.stateChanged
+            .pipe(takeUntil(componentDestroyed(this)))
+            .subscribe(() => {
+                this._layoutStorageService.lastUpdateTime = new Date().getTime();
+            });
     }
 
     private _saveLayoutState() {
