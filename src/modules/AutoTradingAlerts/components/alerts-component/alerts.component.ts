@@ -31,13 +31,19 @@ export enum AlertTabs {
   styleUrls: ['alerts.component.scss']
 })
 export class AlertComponent extends BaseLayoutItem {
+  static componentName = 'BreakfreeAlerts';
+
   AlertTabs = AlertTabs;
   selectedTabIndex: AlertTabs = AlertTabs.PriceAlerts;
+
+  get componentId(): string {
+    return AlertComponent.componentName;
+  }
 
   constructor(@Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService,
     private _alertService: AlertService, protected _instrumentService: InstrumentService,
     private _dialog: MatDialog) {
-      super();
+    super();
   }
 
   ngOnInit() {
@@ -204,7 +210,7 @@ export class AlertComponent extends BaseLayoutItem {
       } else {
         linkAction = {
           type: Actions.ChangeInstrument,
-          data:  instrument
+          data: instrument
         };
       }
       this.onOpenChart.next(linkAction);

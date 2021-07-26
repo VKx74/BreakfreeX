@@ -94,6 +94,9 @@ enum TradeTypes {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
+    static componentName = 'BreakfreeTradingScannerWidget';
+
+    private _initialized: boolean;
     private _featured: IFeaturedResult[] = [];
     private _loaded: IBFTScanInstrumentsResponseItem[] = [];
     private _timer: any;
@@ -103,10 +106,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
     private _missionsChangedSubscription: Subscription;
-    
+
     private get _isPro(): boolean {
         return this._identityService.subscriptionType === SubscriptionType.Pro ||
-        this._identityService.subscriptionType === SubscriptionType.Trial;
+            this._identityService.subscriptionType === SubscriptionType.Trial;
     }
 
     private get _levelRestriction(): number {
@@ -130,6 +133,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     public output: string;
     public loading: boolean;
     public trends: any = IBFTATrend;
+
+    get componentId(): string {
+        return BreakfreeTradingScannerComponent.componentName;
+    }
 
     public get origType() {
         return IBFTATradeType;
@@ -198,6 +205,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         if (_state && _state.types && _state.types.length) {
             this.activeTypes = _state.types.slice();
         }
+
+        this._initialized = true;
     }
 
     is15MinSonarAccessRestriction(group: IGroupedResults): boolean {
@@ -265,8 +274,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     showHourlyAccessRestriction() {
         if (!this.isAuthorizedCustomer) {
             return true;
-        }  
-        
+        }
+
         if (this._identityService.subscriptionType !== SubscriptionType.Pro &&
             this._identityService.subscriptionType !== SubscriptionType.Trial &&
             this._identityService.subscriptionType !== SubscriptionType.Discovery) {
@@ -332,8 +341,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         const _hourlyAccessRestriction = this.showHourlyAccessRestriction();
         if (group.timeframe === tfValue1H && (_1HLevelRestriction || _hourlyAccessRestriction)) {
             return true;
-        } 
-        
+        }
+
         const tfValue4H = this.toTimeframe(60 * 60 * 4);
         if (group.timeframe === tfValue4H && _hourlyAccessRestriction) {
             return true;
@@ -400,18 +409,24 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         // this.activeSegments = item;
         this._filterResults(false);
         this._filterResults(true);
+
+        this._raiseStateChanged();
     }
 
     timeframeSelected(item: any) {
         // this.activeTimeframes = item;
         this._filterResults(false);
         this._filterResults(true);
+
+        this._raiseStateChanged();
     }
 
     typeSelected(item: any) {
         // this.activeTypes = item;
         this._filterResults(false);
         this._filterResults(true);
+
+        this._raiseStateChanged();
     }
 
     scanMarkets() {
@@ -448,7 +463,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             this._missionsChangedSubscription.unsubscribe();
         }
     }
-    
+
 
     manageSubscriptions() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
@@ -831,6 +846,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         }
 
         return result;
+    }
+
+    private _raiseStateChanged() {
+        if (!this._initialized) {
+            return;
+        }
+
+        this.stateChanged.next(this);
     }
 }
 

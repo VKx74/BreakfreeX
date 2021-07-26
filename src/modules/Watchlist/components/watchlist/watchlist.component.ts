@@ -1,33 +1,33 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewChild} from "@angular/core";
-import {TrendDirection, WatchlistInstrumentVM} from "../../models/models";
-import {ConfirmModalComponent} from "UI";
-import {IInstrument} from "@app/models/common/instrument";
-import {Subscription, of} from "rxjs";
-import {RealtimeService} from "@app/services/realtime.service";
-import {ILevel2, ITick} from "@app/models/common/tick";
-import {JsUtil} from "../../../../utils/jsUtil";
-import {map} from "rxjs/operators";
-import {WatchListTranslateService} from "../../localization/token";
-import {TranslateService} from "@ngx-translate/core";
-import {InstrumentSearchComponent} from "@instrument-search/components/instrument-search/instrument-search.component";
-import {MatDialog} from "@angular/material/dialog";
-import {Actions, LinkingAction} from "../../../Linking/models";
-import {IHistoryRequest} from "@app/models/common/historyRequest";
-import {IPeriodicity} from "@app/models/common/periodicity";
-import {IHistoryResponse} from "@app/models/common/historyResponse";
-import {DataFeedBase} from "@chart/datafeed/DataFeedBase";
-import {DataFeed} from "@chart/datafeed/DataFeed";
-import {ComponentIdentifier} from "@app/models/app-config";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewChild } from "@angular/core";
+import { TrendDirection, WatchlistInstrumentVM } from "../../models/models";
+import { ConfirmModalComponent } from "UI";
+import { IInstrument } from "@app/models/common/instrument";
+import { Subscription, of } from "rxjs";
+import { RealtimeService } from "@app/services/realtime.service";
+import { ILevel2, ITick } from "@app/models/common/tick";
+import { JsUtil } from "../../../../utils/jsUtil";
+import { map } from "rxjs/operators";
+import { WatchListTranslateService } from "../../localization/token";
+import { TranslateService } from "@ngx-translate/core";
+import { InstrumentSearchComponent } from "@instrument-search/components/instrument-search/instrument-search.component";
+import { MatDialog } from "@angular/material/dialog";
+import { Actions, LinkingAction } from "../../../Linking/models";
+import { IHistoryRequest } from "@app/models/common/historyRequest";
+import { IPeriodicity } from "@app/models/common/periodicity";
+import { IHistoryResponse } from "@app/models/common/historyResponse";
+import { DataFeedBase } from "@chart/datafeed/DataFeedBase";
+import { DataFeed } from "@chart/datafeed/DataFeed";
+import { ComponentIdentifier } from "@app/models/app-config";
 import {
     ColumnSortDataAccessor,
     DataTableComponent
 } from "../../../datatable/components/data-table/data-table.component";
 import bind from "bind-decorator";
-import {LayoutManagerService} from "angular-golden-layout";
-import {ITcdComponentState} from "Chart";
-import {PriceAlertDialogComponent} from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
-import {HistoryService} from "@app/services/history.service";
-import {IBarData} from "@app/models/common/barData";
+import { LayoutManagerService } from "angular-golden-layout";
+import { ITcdComponentState } from "Chart";
+import { PriceAlertDialogComponent } from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
+import { HistoryService } from "@app/services/history.service";
+import { IBarData } from "@app/models/common/barData";
 import { WatchlistService, IWatchlistItem } from 'modules/Watchlist/services/watchlist.service';
 import { WatchlistNameModalComponent, WatchlistNameModalMode } from '../watchlist-name-modal/watchlist-name-modal';
 import { AlertService } from '@alert/services/alert.service';
@@ -77,8 +77,8 @@ interface IInstrumentOrderBookInfo {
 export class WatchlistComponent extends BaseLayoutItem {
     static componentName = 'Watchlist';
     static previewImgClass = 'crypto-icon-watchlist';
-    @ViewChild(InstrumentSearchComponent, {static: false}) instrumentSearch: InstrumentSearchComponent;
-    @ViewChild(DataTableComponent, {static: false}) dataTableComponent: DataTableComponent;
+    @ViewChild(InstrumentSearchComponent, { static: false }) instrumentSearch: InstrumentSearchComponent;
+    @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
 
     instrumentsVM: WatchlistInstrumentVM[] = [];
     activeWatchlist: IWatchlistItem;
@@ -94,8 +94,13 @@ export class WatchlistComponent extends BaseLayoutItem {
 
     intervals: { [symbolName: string]: any } = {};
 
+    get componentId(): string {
+        return WatchlistComponent.componentName;
+    }
+
     private _realtimeSubscriptions: { [instrumentHash: string]: Subscription } = {};
 
+    private _initialized: boolean;
     private _watchlistAdded: Subscription;
     private _watchlistRemoved: Subscription;
     private _watchlistUpdated: Subscription;
@@ -107,7 +112,7 @@ export class WatchlistComponent extends BaseLayoutItem {
 
     get isAuthorizedCustomer(): boolean {
         return true;
-    }  
+    }
 
     get ViewMode() {
         return WatchlistViewMode;
@@ -145,9 +150,9 @@ export class WatchlistComponent extends BaseLayoutItem {
         }
 
         this.initialized.next(this);
-        
+
         this.loading = true;
-        
+
         this._updateInterval = setInterval(() => {
             if (this._changesDetected) {
                 this._cdr.markForCheck();
@@ -157,7 +162,7 @@ export class WatchlistComponent extends BaseLayoutItem {
 
         this._watchlistService.getWatchlists().subscribe((data: IWatchlistItem[]) => {
             this.loading = false;
-            
+
             if (!data || !data.length) {
                 this.existingWatchlists = [];
             } else {
@@ -176,7 +181,7 @@ export class WatchlistComponent extends BaseLayoutItem {
             this._watchlistService.getFeaturedInstruments().subscribe((featuredInstruments: IFeaturedInstruments[]) => {
                 this.featuredInstruments = featuredInstruments;
                 this.featuredWatchlists = this._watchlistService.updateFeaturedWatchlist(this.featuredInstruments);
-    
+
                 this._trySetActiveWatchlist();
 
                 if (!this.activeWatchlist && this.existingWatchlists.length) {
@@ -268,7 +273,7 @@ export class WatchlistComponent extends BaseLayoutItem {
             }
 
             if (!exist) {
-                this.existingWatchlists.push({...defaultWatchlist});
+                this.existingWatchlists.push({ ...defaultWatchlist });
             }
         }
     }
@@ -289,7 +294,7 @@ export class WatchlistComponent extends BaseLayoutItem {
             this.setWatchlist(item);
         }
     }
-    
+
     protected _watchlistRemovedHandler(item: IWatchlistItem) {
         const existingWatchlistIndex = this.existingWatchlists.findIndex(i => i.id === item.id);
         if (existingWatchlistIndex >= 0) {
@@ -299,15 +304,15 @@ export class WatchlistComponent extends BaseLayoutItem {
         if (this.activeWatchlist && this.activeWatchlist.id === item.id) {
             if (this.existingWatchlists.length) {
                 this.setWatchlist(this.existingWatchlists[0]);
-            } else  {
+            } else {
                 this._addDefaultWatchlists();
                 if (this.existingWatchlists.length) {
                     this.setWatchlist(this.existingWatchlists[0]);
-                } 
+                }
             }
         }
     }
-    
+
     protected _featuredListChangedHandler() {
         let watchlists = this._watchlistService.updateFeaturedWatchlist(this.featuredInstruments);
 
@@ -415,7 +420,7 @@ export class WatchlistComponent extends BaseLayoutItem {
         return {
             viewMode: this.viewMode,
             activeWatchlist: this.activeWatchlist ? this.activeWatchlist.id : null,
-            hiddenColumns:  this.dataTableComponent ? this.dataTableComponent.hiddenColumns$.getValue() : this.hiddenColumns
+            hiddenColumns: this.dataTableComponent ? this.dataTableComponent.hiddenColumns$.getValue() : this.hiddenColumns
         };
     }
 
@@ -429,6 +434,8 @@ export class WatchlistComponent extends BaseLayoutItem {
         if (viewMode === WatchlistViewMode.Tile) {
             this.hideAllOrderBooks();
         }
+
+        this._raiseStateChanged();
     }
 
     @bind
@@ -439,15 +446,16 @@ export class WatchlistComponent extends BaseLayoutItem {
     supportedWatchlistCaption(watchlist: IWatchlistItem) {
         return of(watchlist.name);
     }
-    
+
     watchlistSelected(change: MatSelectChange) {
         const watchlist = change.value as IWatchlistItem;
         if (this.activeWatchlist === watchlist) {
             return;
         }
         this.setWatchlist(watchlist);
+        this._raiseStateChanged();
     }
-    
+
     createWatchlist() {
         if (this._identityService.isGuestMode) {
             this.processCheckout();
@@ -498,8 +506,8 @@ export class WatchlistComponent extends BaseLayoutItem {
                 }
             }
         });
-    }  
-    
+    }
+
     protected _removeFeaturedWatchlist(watchlistToDelete: IWatchlistItem) {
         for (const instrument of watchlistToDelete.data) {
             for (let i = 0; i < this.featuredInstruments.length; i++) {
@@ -521,15 +529,15 @@ export class WatchlistComponent extends BaseLayoutItem {
             this.processCheckout();
             return;
         }
-        
+
         const watchlistToDelete = this.activeWatchlist;
         const index = this.existingWatchlists.indexOf(watchlistToDelete);
 
         if (this.existingWatchlists.length <= 1) {
             this._alertManager.error(this._translateService.get("watchList.youCantRemoveLastWatchlist"));
             return;
-        } 
-        
+        }
+
         if (watchlistToDelete.isDefault && !watchlistToDelete.isFeatured) {
             this._alertManager.error(this._translateService.get("watchList.youCantRemoveDefaultWatchlist"));
             return;
@@ -588,7 +596,7 @@ export class WatchlistComponent extends BaseLayoutItem {
         };
 
         datafeed._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
-           this._processHistory(response, instrumentVM);
+            this._processHistory(response, instrumentVM);
         });
 
         this._changesDetected = true;
@@ -645,8 +653,8 @@ export class WatchlistComponent extends BaseLayoutItem {
 
                 if (this.activeWatchlist.isFeatured) {
                     this.handleColorSelected(this.activeWatchlist.id, addedInstrument);
-                } 
-                
+                }
+
                 if (this.activeWatchlist.isDefault) {
                     return;
                 }
@@ -712,15 +720,21 @@ export class WatchlistComponent extends BaseLayoutItem {
     }
 
     setState(state: IWatchlistComponentState) {
-        this._state = state;
+        if (state) {
+            this._state = state;
 
-        if (state && state.hiddenColumns) {
-            this.hiddenColumns = state.hiddenColumns;
+            if (state.hiddenColumns) {
+                this.hiddenColumns = state.hiddenColumns;
+            }
+            
+            if (state.viewMode) {
+                this.setViewMode(state.viewMode);
+            }
         }
 
-        this.setViewMode(state.viewMode);
+        this._initialized = true;
     }
-    
+
     private _loadInstrumentsForWatchlist(instruments: IInstrument[]) {
         instruments.forEach((instrument) => {
             if (instrument) {
@@ -778,7 +792,7 @@ export class WatchlistComponent extends BaseLayoutItem {
             this._removeInstrument(instrument);
         }
     }
-    
+
     private _removeInstrument(instrumentVM: WatchlistInstrumentVM) {
         this.instrumentsVM = this.instrumentsVM.filter(vm => vm.instrument.symbol !== instrumentVM.instrument.symbol || vm.instrument.exchange !== instrumentVM.instrument.exchange);
         this._unsubscribeFromInstrumentTick(instrumentVM);
@@ -913,7 +927,7 @@ export class WatchlistComponent extends BaseLayoutItem {
 
         this._historyService.getHistoryByBackBarsCount({
             instrument: instrument,
-            timeFrame: {interval: 1, periodicity: IPeriodicity.day},
+            timeFrame: { interval: 1, periodicity: IPeriodicity.day },
             barsCount: 1,
             endDate: new Date()
         })
@@ -989,7 +1003,7 @@ export class WatchlistComponent extends BaseLayoutItem {
     }
 
     @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent(event: KeyboardEvent) { 
+    handleKeyboardEvent(event: KeyboardEvent) {
         // if (!this._container.tab.isActive) {
         //     return;
         // }
@@ -1032,5 +1046,13 @@ export class WatchlistComponent extends BaseLayoutItem {
     public click(event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
+    }
+
+    private _raiseStateChanged() {
+        if (!this._initialized) {
+            return;
+        }
+
+        this.stateChanged.next(this);
     }
 }

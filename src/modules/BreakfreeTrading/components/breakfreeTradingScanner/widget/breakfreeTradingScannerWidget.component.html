@@ -1,3 +1,3 @@
 <div class="widget-content">
-   <breakfree-trading-scanner (initialized)="componentInitialized($event)" (onOpenChart)="handleOpenChart($event)" #scanner></breakfree-trading-scanner>
+   <breakfree-trading-scanner  (stateChanged)="componentStateChanged($event)" (initialized)="componentInitialized($event)" (onOpenChart)="handleOpenChart($event)" #scanner></breakfree-trading-scanner>
 </div>

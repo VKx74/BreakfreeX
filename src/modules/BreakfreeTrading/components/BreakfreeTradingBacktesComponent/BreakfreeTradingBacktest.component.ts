@@ -18,7 +18,13 @@ export interface IBFTBacktestComponentState {
     styleUrls: ['./BreakfreeTradingBacktest.component.scss']
 })
 export class BreakfreeTradingBacktestComponent extends BaseLayoutItem {
+    static componentName = 'BreakfreeTradingBacktest';
+    
     private _chartRemoved: Subscription;
+
+    get componentId(): string {
+        return BreakfreeTradingBacktestComponent.componentName;
+    }
 
     public get Charts(): TradingChartDesigner.Chart[] {
         return this._chartTrackerService.availableCharts;

@@ -122,6 +122,7 @@ import { OpenLayoutModalComponent } from './components/open-layout-component/ope
 import { DatatableModule } from 'modules/datatable/datatable.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LoaderModule } from 'modules/loader/loader.module';
+import { RightSidePanelStateService } from './services/right-side-panel-state.service';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -424,6 +425,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         },
         DashboardResolver,
         ToggleBottomPanelSizeService,
+        RightSidePanelStateService
     ]
 })
 export class PlatformModule {

@@ -4,4 +4,5 @@ export interface ILayoutState {
     description: string;
     savedTime: number;
     state: any;
+    rightSidePanelState: any;
 }

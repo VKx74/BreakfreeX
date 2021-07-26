@@ -7,6 +7,9 @@ import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { LinkingAction } from "@linking/models";
 import { Intercom } from 'ng-intercom';
 import { IdentityService } from '@app/services/auth/identity.service';
+import { BaseLayoutItem } from '@layout/base-layout-item';
+import { RightSidePanelStateService } from '@platform/services/right-side-panel-state.service';
+import { Subscription } from 'rxjs';
 
 export enum Components {
     Sonar = "Sonar",
@@ -40,6 +43,10 @@ export class RightPanelComponent implements OnInit {
 
     get LinkerColor(): string {
         return this.linker.getLinkingId();
+    } 
+    
+    get initialized(): boolean {
+        return this._rightSidePanelStateService.isInitialized;
     }
 
     get collapsed(): boolean {
@@ -67,6 +74,7 @@ export class RightPanelComponent implements OnInit {
         protected _injector: Injector,
         private _intercom: Intercom,
         private _identityService: IdentityService,
+        private _rightSidePanelStateService: RightSidePanelStateService,
         @Inject(PlatformTranslateService) public platformTranslateService: TranslateService) {
         this.linker = this._injector.get(LinkerFactory).getLinker();
         this.linker.setDefaultLinking();
@@ -127,6 +135,19 @@ export class RightPanelComponent implements OnInit {
 
     open() {
         this.collapsed = false;
+    }
+
+    componentInitialized(widget: BaseLayoutItem) {
+        const state = this._rightSidePanelStateService.getWidgetState(widget.componentId);
+        widget.setState(state);
+    }
+
+    componentStateChanged(widget: BaseLayoutItem) {
+        this._rightSidePanelStateService.setWidgetState(widget.componentId, widget.getState());
+    }
+
+    componentBeforeDestroy(widget: BaseLayoutItem) {
+        
     }
 
 }

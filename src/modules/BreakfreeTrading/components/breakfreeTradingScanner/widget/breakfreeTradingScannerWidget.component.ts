@@ -39,6 +39,10 @@ export class BreakfreeTradingScannerWidgetComponent extends BaseGoldenLayoutItem
         component.setState(this._state);
     }
 
+    componentStateChanged(component: BaseLayoutItem) {
+        this.fireStateChanged();
+    }
+
     protected loadState(state: IScannerState) {
 
     }
