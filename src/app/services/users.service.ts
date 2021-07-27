@@ -111,9 +111,9 @@ export class UsersService {
         }, this._httpOptions);
     }
 
-    public detachTradingAccount(id: string, userId: string): Observable<TradingAccount> {
+    public detachTradingAccount(id: string, userId: string, isLive: boolean): Observable<TradingAccount> {
         return this._http.post<TradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/remove`, {
-            accountId: id, userId
+            accountId: id, userId, isLive
         }, this._httpOptions);
     }
 
