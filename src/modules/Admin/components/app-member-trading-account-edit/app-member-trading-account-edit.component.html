@@ -11,8 +11,8 @@
         <div class="crypto-text">Password (optional):</div>
         <input matInput type="text" [(ngModel)]="pwd" placeholder="Password" class="crypto-input bft-form-input">
         <div class="crypto-text">Account Type:</div>
-        <selector [options]="accountTypes" [placeholder]="'Select Type'" [(ngModel)]="accountType"
-          class="crypto-input bft-form-input"></selector>
+        <selector  [options]="accountTypes" [placeholder]="'Select Type'" [(ngModel)]="accountType"
+          class="crypto-input bft-form-input disabled"></selector>
       </div>
       <div class="section">
         <div class="crypto-text">Account Risk Type:</div>

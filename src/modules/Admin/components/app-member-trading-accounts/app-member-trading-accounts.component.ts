@@ -77,7 +77,7 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
       }
     }).afterClosed().subscribe((dialogResult: any) => {
       if (dialogResult) {
-        this._detach(item.id);
+        this._detach(item.id, item.isLive);
       }
     });
   }
@@ -115,9 +115,9 @@ export class AppMemberTradingAccountsComponent extends Modal<AppMemberTradingAcc
     });
   }
 
-  _detach(id: string) {
+  _detach(id: string, isLive: boolean) {
     this.loading = true;
-    this._usersService.detachTradingAccount(id, this.data.user.id).subscribe((data) => {
+    this._usersService.detachTradingAccount(id, this.data.user.id, isLive).subscribe((data) => {
       this.load();
       this._alertService.success("Detached");
     }, (error) => {
