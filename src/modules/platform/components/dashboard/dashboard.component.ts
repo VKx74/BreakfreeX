@@ -504,9 +504,10 @@ export class DashboardComponent {
                 }).catch(() => {
                     this._resetLayout();
                 });
+                this._rightSidePanelStateService.initialize(null);
             }
         } catch (error) {
-
+            this._rightSidePanelStateService.initialize(null);
         }
         setTimeout(() => {
             this._saveLayout = true;
