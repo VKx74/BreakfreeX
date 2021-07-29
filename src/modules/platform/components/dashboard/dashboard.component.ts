@@ -48,7 +48,7 @@ import { InstrumentSearchDialogComponent } from "@instrument-search/components/i
 import { LayoutNameModalComponent } from "../layout-name-component/layout-name.component";
 import { OpenLayoutModalComponent } from "../open-layout-component/open-layout.component";
 import { ILayoutState } from "@app/models/layout-state";
-import { RightSidePanelStateService } from "@platform/services/right-side-panel-state.service";
+import { Components, RightSidePanelStateService } from "@platform/services/right-side-panel-state.service";
 
 
 @Component({
@@ -75,7 +75,6 @@ export class DashboardComponent {
     readonly minimizeBottomPanel = 30;
     readonly minRightSidePanelCollapsedSize = 45;
     readonly minRightPanelFullSize = 768;
-    private _rightSidePanelStateChanged: Subscription;
 
     private get _isPro(): boolean {
         return this._identityService.subscriptionType === SubscriptionType.Pro ||
@@ -504,10 +503,10 @@ export class DashboardComponent {
                 }).catch(() => {
                     this._resetLayout();
                 });
-                this._rightSidePanelStateService.initialize(null);
+                this._rightSidePanelStateService.initialize(RightSidePanelStateService.GetDefaultState(Components.Academy));
             }
         } catch (error) {
-            this._rightSidePanelStateService.initialize(null);
+            this._rightSidePanelStateService.initialize(RightSidePanelStateService.GetDefaultState(Components.Academy));
         }
         setTimeout(() => {
             this._saveLayout = true;
