@@ -3,6 +3,15 @@ import { BehaviorSubject, Subject } from "rxjs";
 
 export class RightSidePanelState {
     public widgetState: {[key: string]: any};
+    public component: Components;
+}
+
+export enum Components {
+    Sonar = "Sonar",
+    Watchlist = "Watchlist",
+    Alerts = "Alerts",
+    Academy = "Academy",
+    Backtest = "Backtest",
 }
 
 @Injectable()
@@ -13,13 +22,15 @@ export class RightSidePanelStateService {
     get isInitialized(): boolean {
         return this._isInitialized$.value;
     }
+    
+    get isInitialized$(): Subject<boolean> {
+        return this._isInitialized$;
+    }
 
     stateChanged: Subject<RightSidePanelState> = new Subject<RightSidePanelState>();
 
     constructor() {
-        this._rightSidePanelState = {
-            widgetState: {}
-        };
+        this._rightSidePanelState = RightSidePanelStateService.GetDefaultState();
     }
 
     getState(): RightSidePanelState {
@@ -36,13 +47,31 @@ export class RightSidePanelStateService {
 
     setWidgetState(widget: string, state: any) {
         if (!this._rightSidePanelState) {
-            this._rightSidePanelState = {
-                widgetState: {}
-            };
+            this._rightSidePanelState = RightSidePanelStateService.GetDefaultState();
         }
         
         this._rightSidePanelState[widget] = state;
         this.stateChanged.next(this._rightSidePanelState);
+    }
+
+    setActiveComponent(component: Components) {
+        if (!this._rightSidePanelState) {
+            this._rightSidePanelState = RightSidePanelStateService.GetDefaultState();
+        }
+        
+        this._rightSidePanelState.component = component;
+    }
+
+    getActiveComponent(): Components {
+        if (!this._rightSidePanelState) {
+            return null;
+        }
+
+        if (this._rightSidePanelState.component === Components.Backtest) {
+            return Components.Sonar;
+        }
+
+        return this._rightSidePanelState.component;
     }
 
     initialize(state: RightSidePanelState) {
@@ -51,6 +80,14 @@ export class RightSidePanelStateService {
         }
 
         this._rightSidePanelState = state;
+        this._rightSidePanelState = state;
         this._isInitialized$.next(true);
+    }
+
+    static GetDefaultState(component?: Components): RightSidePanelState {
+        return {
+            widgetState: {},
+            component: component || Components.Sonar
+        };
     }
 }

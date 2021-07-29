@@ -8,16 +8,8 @@ import { LinkingAction } from "@linking/models";
 import { Intercom } from 'ng-intercom';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { BaseLayoutItem } from '@layout/base-layout-item';
-import { RightSidePanelStateService } from '@platform/services/right-side-panel-state.service';
+import { Components, RightSidePanelStateService } from '@platform/services/right-side-panel-state.service';
 import { Subscription } from 'rxjs';
-
-export enum Components {
-    Sonar = "Sonar",
-    Watchlist = "Watchlist",
-    Alerts = "Alerts",
-    Academy = "Academy",
-    Backtest = "Backtest",
-}
 
 @Component({
     selector: 'right-panel',
@@ -40,6 +32,7 @@ export class RightPanelComponent implements OnInit {
 
     @Input() isCollapsed: boolean = false;
     @Output() isCollapsedChange = new EventEmitter<boolean>();
+    private _isInitializedSubscription: Subscription;
 
     get LinkerColor(): string {
         return this.linker.getLinkingId();
@@ -93,6 +86,20 @@ export class RightPanelComponent implements OnInit {
         } else if (windowsPlatforms.indexOf(platform) !== -1) {
             this._downloadLink = '/assets/Navigator_1.1_WIN.zip';
         }
+
+        this._isInitializedSubscription = this._rightSidePanelStateService.isInitialized$.subscribe(() => {
+            if (!this._rightSidePanelStateService.isInitialized) {
+                return;
+            }
+            const savedComponent = this._rightSidePanelStateService.getActiveComponent();
+            if (savedComponent && savedComponent !== this.SelectedComponent) {
+                this.SelectedComponent = savedComponent;
+            } else {
+                this.SelectedComponent = Components.Sonar;
+            }
+
+            this._isInitializedSubscription.unsubscribe();
+        });
     }
 
     ngOnInit() {
@@ -112,6 +119,8 @@ export class RightPanelComponent implements OnInit {
                 this.collapsed = true;
             }
         }
+
+        this._rightSidePanelStateService.setActiveComponent(this.SelectedComponent);
     }
 
     handleColorSelected(color: string) {
