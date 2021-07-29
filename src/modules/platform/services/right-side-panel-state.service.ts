@@ -33,6 +33,13 @@ export class RightSidePanelStateService {
         this._rightSidePanelState = RightSidePanelStateService.GetDefaultState();
     }
 
+    static GetDefaultState(component?: Components): RightSidePanelState {
+        return {
+            widgetState: {},
+            component: component || Components.Sonar
+        };
+    }
+
     getState(): RightSidePanelState {
         return this._rightSidePanelState;
     }
@@ -82,12 +89,5 @@ export class RightSidePanelStateService {
         this._rightSidePanelState = state;
         this._rightSidePanelState = state;
         this._isInitialized$.next(true);
-    }
-
-    static GetDefaultState(component?: Components): RightSidePanelState {
-        return {
-            widgetState: {},
-            component: component || Components.Sonar
-        };
     }
 }
