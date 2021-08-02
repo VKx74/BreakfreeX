@@ -11,7 +11,6 @@
   flex-direction: column;
 
   .buttons-control {
-    width: 100%;
     display: flex;
   }
 
@@ -137,6 +136,9 @@
   @media (max-width: 1024px) {
     .account-info-bar {
       display: none;
+    }
+    .buttons-control {
+      width: 100%;
     }
   }
   @media (max-width: 420px) {
