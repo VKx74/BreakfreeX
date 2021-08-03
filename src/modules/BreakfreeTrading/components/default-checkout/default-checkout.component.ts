@@ -92,7 +92,8 @@ export class DefaultCheckoutComponent implements OnInit {
             mode: 'subscription',
             successUrl: redirectUrl + "?sub=" + subscription_id + "&session_id={CHECKOUT_SESSION_ID}",
             cancelUrl: window.location.origin,
-            customerEmail: this._identityService.email || ""
+            customerEmail: this._identityService.email || "",
+            clientReferenceId: this.getClientReferenceId()
           })
           .then(function (result) {
            
@@ -109,5 +110,9 @@ export class DefaultCheckoutComponent implements OnInit {
 
     month12Clicked() {
         this.SelectedTab = CheckoutTab.Month12;
+    }
+
+    private getClientReferenceId() {
+        return (window as any).Rewardful && (window as any).Rewardful.referral || ('checkout_' + (new Date).getTime());
     }
 }
