@@ -156,7 +156,6 @@ import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTrading
         HistoryService,
         ClipboardService,
         InstrumentService,
-        RealtimeService,
         BreakfreeTradingService,
         ChartTrackerService,
         TradeGuardService,

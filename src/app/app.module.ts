@@ -284,7 +284,6 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         LocalStorageService,
         SessionStorageService,
         PopupWindowGuard,
-        RealtimeService,
         RoleGuard,
         ThemeService,
         UnauthorizedGuard,
