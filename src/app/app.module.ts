@@ -114,6 +114,10 @@ import { SignalsDemoBrokerService } from './services/demo.broker/signals-demo-br
 import { HighlightService } from './services/highlight/highlight.service';
 import { TradeGuardTrackingService } from './services/trade-guard-tracking.service';
 import { LayoutStorageService } from './services/layout-storage.service';
+import { BinanceSocketService } from './services/socket/binance.socket.service';
+import { BinanceInstrumentService } from './services/binance.exchange/binance.instrument.service';
+import { BinanceHistoryService } from './services/binance.exchange/binance.history.service';
+import { BinanceRealtimeService } from './services/binance.exchange/binance.realtime.service';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -312,6 +316,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         PolygonSocketService,
         TwelvedataSocketService,
         KaikoSocketService,
+        BinanceSocketService,
         MT4BrokerServersProvider,
         MT5BrokerServersProvider,
         MT4Broker,
@@ -338,6 +343,10 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         KaikoInstrumentService,
         KaikoHistoryService,
         KaikoRealtimeService,
+
+        BinanceInstrumentService,
+        BinanceHistoryService,
+        BinanceRealtimeService,
 
         InstrumentService,
         RealtimeService,

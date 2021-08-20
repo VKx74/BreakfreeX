@@ -13,6 +13,8 @@
     "twelvedataWS": "wss://feed.breakfreetrading.com/twelvedata/subscribe/realtime/",
     "kaikoREST": "https://feed.breakfreetrading.com/kaiko/",
     "kaikoWS": "wss://feed.breakfreetrading.com/kaiko/subscribe/realtime/",
+    "binanceREST": "https://feed.breakfreetrading.com/binance/",
+    "binanceWS": "wss://feed.breakfreetrading.com/binance/websocket",
     "onadaWS": "wss://feed.breakfreetrading.com/oanda/subscribe/realtime/",
     "coinigyREST": "https://feed.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
     "coinigyWS": "wss://feed.breakfreetrading.com/data/vendor/coinigy/ws",

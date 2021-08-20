@@ -10,6 +10,7 @@ import { TimeZoneManager, TzUtils, UTCTimeZone } from "TimeZones";
 import { APP_TYPE_EXCHANGES } from "../enums/ApplicationType";
 import { ExchangeFactory } from "../factories/exchange.factory";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+import { InstrumentHelper } from "./instrument.service";
 
 @Injectable()
 export class RealtimeService implements IHealthable {
@@ -69,6 +70,9 @@ export class RealtimeService implements IHealthable {
     }
 
     subscribeToTicks(instrument: IInstrument, subscription: (value: ITick) => void): Subscription {
+        
+        InstrumentHelper.KaikoToBinanceConverter(instrument);
+
         const hash = RealtimeService.getInstrumentHash(instrument);
 
         if (!this._tickSubscribers[hash]) {
@@ -96,6 +100,9 @@ export class RealtimeService implements IHealthable {
     }
 
     subscribeToL2(instrument: IInstrument, subscription: (value: ILevel2) => void): Subscription {
+
+        InstrumentHelper.KaikoToBinanceConverter(instrument);
+
         const hash = RealtimeService.getInstrumentHash(instrument);
 
         if (!this._l2Subscribers[hash]) {
@@ -123,16 +130,25 @@ export class RealtimeService implements IHealthable {
     }
 
     getLastTick(instrument: IInstrument): ITick {
+
+        InstrumentHelper.KaikoToBinanceConverter(instrument);
+
         const hash = RealtimeService.getInstrumentHash(instrument);
         return this._tickCache[hash];
     }
 
     getLastL2Ticks(instrument: IInstrument): ILevel2 {
+        
+        InstrumentHelper.KaikoToBinanceConverter(instrument);
+
         const hash = RealtimeService.getInstrumentHash(instrument);
         return this._cloneL2(this._l2Cache[hash]);
     }
 
     getLastTicks(instrument: IInstrument): ITick[] {
+        
+        InstrumentHelper.KaikoToBinanceConverter(instrument);
+
         const hash = RealtimeService.getInstrumentHash(instrument);
         return this._tradesCache[hash];
     }
@@ -195,6 +211,10 @@ export class RealtimeService implements IHealthable {
     }
 
     private _getService(datafeed: EExchangeInstance): RealtimeServiceBase {
+        if (datafeed === EExchangeInstance.KaikoExchange) {
+            datafeed = EExchangeInstance.BinanceExchange;
+        }
+        
         for (let i = 0; i < this.services.length; i++) {
             if (this.services[i].ExchangeInstance === datafeed) {
                 return this.services[i];

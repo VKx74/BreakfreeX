@@ -21,6 +21,8 @@ export interface ApiUrls {
     twelvedataWS: string;
     kaikoREST: string;
     kaikoWS: string;
+    binanceREST: string;
+    binanceWS: string;
     onadaWS: string;
     coinigyREST: string;
     coinigyWS: string;
