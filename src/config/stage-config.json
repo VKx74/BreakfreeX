@@ -11,7 +11,7 @@
     "polygonWS": "wss://feed-stage.breakfreetrading.com/polygon/subscribe/realtime/",
     "twelvedataREST": "https://feed-stage.breakfreetrading.com/twelvedata/",
     "twelvedataWS": "wss://feed-stage.breakfreetrading.com/twelvedata/subscribe/realtime/",
-    "kaikoREST": "http://feed-stage.breakfreetrading.com/binance/",
+    "kaikoREST": "https://feed-stage.breakfreetrading.com/binance/",
     "kaikoWS": "wss://feed-stage.breakfreetrading.com/binance/websocket",
     "onadaWS": "wss://feed-stage.breakfreetrading.com/oanda/subscribe/realtime/",
     "coinigyREST": "https://feed-stage.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
