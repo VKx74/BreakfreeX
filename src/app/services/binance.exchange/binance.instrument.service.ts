@@ -30,6 +30,8 @@ export class BinanceInstrumentService extends InstrumentServiceBase {
             search = search.toLowerCase();
         }
 
+        search = search.replace("-", "");
+
         if (this._cacheBySearch && search !== undefined && this._cacheBySearch[search]) {
             this._cachedSymbols = this._cacheBySearch[search];
             return of(this._filterResponse(exchange, search));
