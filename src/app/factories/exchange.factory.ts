@@ -23,6 +23,9 @@ import { TwelvedataRealtimeService } from '@app/services/twelvedata.exchange/twe
 import { KaikoInstrumentService } from '@app/services/kaiko.exchange/kaiko.instrument.service';
 import { KaikoHistoryService } from '@app/services/kaiko.exchange/kaiko.history.service';
 import { KaikoRealtimeService } from '@app/services/kaiko.exchange/kaiko.realtime.service';
+import { BinanceInstrumentService } from "@app/services/binance.exchange/binance.instrument.service";
+import { BinanceHistoryService } from "@app/services/binance.exchange/binance.history.service";
+import { BinanceRealtimeService } from "@app/services/binance.exchange/binance.realtime.service";
 
 export interface CreateInstrumentServiceActionResult extends ActionResult {
     serviceInstance?: InstrumentServiceBase;
@@ -59,6 +62,9 @@ export class ExchangeFactory {
             case EExchangeInstance.KaikoExchange:
                 service = this._injector.get(KaikoInstrumentService);
                 break;
+            case EExchangeInstance.BinanceExchange:
+                service = this._injector.get(BinanceInstrumentService);
+                break;
         }
 
         if (service) {
@@ -93,6 +99,9 @@ export class ExchangeFactory {
             case EExchangeInstance.KaikoExchange:
                 service = this._injector.get(KaikoHistoryService);
                 break;
+            case EExchangeInstance.BinanceExchange:
+                service = this._injector.get(BinanceHistoryService);
+                break;
         }
 
         if (service) {
@@ -126,6 +135,9 @@ export class ExchangeFactory {
                 break;
             case EExchangeInstance.KaikoExchange:
                 service = this._injector.get(KaikoRealtimeService);
+                break;
+            case EExchangeInstance.BinanceExchange:
+                service = this._injector.get(BinanceRealtimeService);
                 break;
         }
 

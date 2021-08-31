@@ -16,7 +16,7 @@ import {EExchangeInstance} from "../interfaces/exchange/exchange";
 
 // APP_TYPE_EXCHANGES[ApplicationType.Stock]  = [EExchangeInstance.TwelvedataExchange];
 // APP_TYPE_EXCHANGES[ApplicationType.Forex] = [EExchangeInstance.OandaExchange, EExchangeInstance.TwelvedataExchange];
-export const APP_TYPE_EXCHANGES = [EExchangeInstance.OandaExchange, EExchangeInstance.KaikoExchange, EExchangeInstance.TwelvedataExchange];
+export const APP_TYPE_EXCHANGES = [EExchangeInstance.OandaExchange, EExchangeInstance.BinanceExchange, EExchangeInstance.TwelvedataExchange];
 export const APP_TYPE_BROKERS = [EBrokerInstance.MT4, EBrokerInstance.MT5, EBrokerInstance.Binance, EBrokerInstance.BinanceFuturesUSD, EBrokerInstance.BinanceFuturesCOIN];
 
 // APP_TYPE_BROKERS[ApplicationType.Crypto] = [];

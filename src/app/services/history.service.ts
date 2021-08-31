@@ -14,6 +14,7 @@ import {ITick} from "@app/models/common/tick";
 import {TimeFrameHelper} from "@app/helpers/timeFrame.helper";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { IBarData } from "@app/models/common/barData";
+import { InstrumentHelper } from "./instrument.service";
 
 @Injectable()
 export class HistoryService implements IHealthable {
@@ -63,6 +64,8 @@ export class HistoryService implements IHealthable {
             } as IHistoryResponse);
         }
 
+        InstrumentHelper.KaikoToBinanceConverter(request.instrument);
+
         return service.getHistory(request)
             .pipe(
                 map((resp) => {
@@ -80,6 +83,9 @@ export class HistoryService implements IHealthable {
     }
 
     getHistoryByBackBarsCount(request: IHistoryByBackBarsCountRequest): Observable<IHistoryResponse> {
+
+        InstrumentHelper.KaikoToBinanceConverter(request.instrument);
+
         return this.getHistory({
             instrument: request.instrument,
             timeFrame: request.timeFrame,
@@ -94,6 +100,9 @@ export class HistoryService implements IHealthable {
         if (!service) {
             return of([]);
         }
+
+        InstrumentHelper.KaikoToBinanceConverter(instrument);
+
         return service.getLastTrades(instrument);
     }
 
@@ -109,6 +118,10 @@ export class HistoryService implements IHealthable {
     }
 
     private _getServiceByDatafeed(datafeed: EExchangeInstance): HistoryServiceBase {
+        if (datafeed === EExchangeInstance.KaikoExchange) {
+            datafeed = EExchangeInstance.BinanceExchange;
+        }
+        
         for (let i = 0; i < this.services.length; i++) {
             if (this.services[i].ExchangeInstance === datafeed) {
                 return this.services[i];

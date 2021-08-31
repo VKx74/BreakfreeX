@@ -131,11 +131,24 @@ export class InstrumentService implements IHealthable {
     }
 
     private _getServiceByDatafeed(datafeed: EExchangeInstance): InstrumentServiceBase {
+        if (datafeed === EExchangeInstance.KaikoExchange) {
+            datafeed = EExchangeInstance.BinanceExchange;
+        }
+        
         for (let i = 0; i < this.services.length; i++) {
             if (this.services[i].ExchangeInstance === datafeed) {
                 return this.services[i];
             }
         }
         return this.services[0];
+    }
+}
+
+export class InstrumentHelper {
+    public static KaikoToBinanceConverter(instrument: IInstrument) {
+        if (instrument.datafeed === EExchangeInstance.KaikoExchange) {
+            instrument.datafeed = EExchangeInstance.BinanceExchange;
+            instrument.id = instrument.symbol;
+        }
     }
 }
