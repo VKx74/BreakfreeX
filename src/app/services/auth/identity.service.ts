@@ -64,10 +64,12 @@ export class IdentityService {
             return SubscriptionType.Trial;
         } else if (this._isPro) {
             return SubscriptionType.Pro;
-        } else if (this._isStarter) {
+        } else if (this._isDiscovery) {
+            return SubscriptionType.Discovery;
+        }  else if (this._isStarter) {
             return SubscriptionType.Starter;
         } else {
-            return SubscriptionType.Discovery;
+            return SubscriptionType.Free;
         }
     }
 
@@ -159,6 +161,22 @@ export class IdentityService {
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Pro") !== -1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }  
+
+    private get _isDiscovery(): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("Discovery") !== -1) {
                     return true;
                 }
             }
