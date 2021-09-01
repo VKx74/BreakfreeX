@@ -1,0 +1,18 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+    width: 100%;
+    height: 100%;
+
+    .tcd-component {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@include themify($themes, true) {
+}

@@ -1,0 +1,61 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+    width: 100%;
+    height: 100%;
+
+    .sonar-card {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .card-header {
+        display: flex;
+        width: 100%;
+        height: 40px;
+    }
+    .card-header {
+        display: flex;
+        width: 100%;
+        height: 32px;
+    }
+    .card-chart {
+        display: flex;
+        width: 100%;
+        min-height: 160px;
+    }
+    .card-footer {
+        display: flex;
+        width: 100%;
+        height: 32px;
+    }
+    .card-left-comment {
+        display: flex;
+        width: 100%;
+        height: 32px;
+    }
+}
+
+@include themify($themes, true) {
+    .sonar-card {
+        background-color: themed("tableBorders");
+        color: themed("valueTextColor");
+    }
+
+    .sonar-card:hover {
+        border: 1px solid themed("valueTextColor");
+        transition-duration: 0.22s;
+    }
+
+    .sonar-card {
+        border: 1px solid transparent;
+        transition-duration: 0.22s;
+    }
+}

@@ -64,6 +64,8 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
     private static _requestId = 0;
 
+    protected _visibleCount = 200;
+
     private MAX_BARS_PER_CHART = 2000;
 
     private _requests = new Dictionary<number, IRequest>();
@@ -129,14 +131,6 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
         const isChartMainSeries = !instrument || (instrument.symbol === chart.instrument.symbol && instrument.exchange === chart.instrument.exchange);
 
-        // if (isChartMainSeries) {
-        //     let pricePrecision = this._calculatePricePrecision(bars);
-        //     chart.instrument.tickSize = this._buildTickSizeByPricePrecision(pricePrecision);
-        //     chart.invokeValueChanged(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED);
-        //     console.log(`price precision: ${pricePrecision}`);
-        //     console.log(`tick size: ${chart.instrument.tickSize}`);
-        // }
-
         let barsSet = false;
         switch (request.name) {
             case RequestKind.BARS:
@@ -176,7 +170,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
         }
 
         if (request.name === RequestKind.BARS) {
-            let visibleCount = 200;
+            let visibleCount = this._visibleCount;
             if (barsCount < visibleCount) {
                 visibleCount = barsCount;
             }
@@ -317,6 +311,15 @@ export abstract class DataFeedBase implements IDatafeedBase {
      */
     requestBusy(request: IRequest): boolean {
         return this._requests.containsKey(request.requestNumber);
+    }
+
+    protected _buildTickSizeByPricePrecision(pricePrecision: number) {
+        let tickSize = "0.";
+        for (let i = 0; i < pricePrecision - 1; i++) {
+            tickSize += "0";
+        }
+        tickSize += "1";
+        return Number.parseFloat(tickSize);
     }
 
     private _getLastBar(chart: TradingChartDesigner.Chart): TradingChartDesigner.IBar {

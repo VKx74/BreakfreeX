@@ -8,6 +8,7 @@ export class RightSidePanelState {
 
 export enum Components {
     Sonar = "Sonar",
+    SonarFeed = "Sonar Feed",
     Watchlist = "Watchlist",
     Alerts = "Alerts",
     Academy = "Academy",

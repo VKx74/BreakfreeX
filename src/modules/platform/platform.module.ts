@@ -123,6 +123,7 @@ import { DatatableModule } from 'modules/datatable/datatable.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LoaderModule } from 'modules/loader/loader.module';
 import { RightSidePanelStateService } from './services/right-side-panel-state.service';
+import { BreakfreeTradingSocialModule } from 'modules/BreakfreeTradingSocial';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -179,6 +180,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         TradingModule,
         WatchlistModule,
         BreakfreeTradingModule.forRoot(),
+        BreakfreeTradingSocialModule.forRoot(),
         MarketTradesModule,
         OrderBookModule,
         NewsModule.forRoot(),

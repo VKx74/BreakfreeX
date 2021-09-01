@@ -6,6 +6,9 @@
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
                     (onOpenChart)="handleOpenChart($event)"></breakfree-trading-scanner>
             </div>
+            <div class="widget" *ngIf="SelectedComponent === Components.SonarFeed">
+                <sonar-feed></sonar-feed>
+            </div>
             <div class="widget" *ngIf="SelectedComponent === Components.Watchlist">
                 <watchlist (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
@@ -40,6 +43,11 @@
                 <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
                     [class.active]="SelectedComponent === Components.Sonar && !collapsed" tooltip
                     [matTooltip]="'sonarWidget' | translate">
+                    <img class="widget-icon" src="/assets/img/right-panel/radar-solid.svg" />
+                </div>
+                <div class="sonar-feed-widget widget-selector-icon" (click)="selectComponent(Components.SonarFeed)"
+                    [class.active]="SelectedComponent === Components.SonarFeed && !collapsed" tooltip
+                    [matTooltip]="'sonarFeed' | translate">
                     <img class="widget-icon" src="/assets/img/right-panel/radar-solid.svg" />
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"

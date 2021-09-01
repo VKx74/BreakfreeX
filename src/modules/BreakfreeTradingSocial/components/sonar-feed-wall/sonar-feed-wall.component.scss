@@ -1,0 +1,26 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+    width: 100%;
+    height: 100%;
+
+    .sonar-wall {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    .card-container {
+        display: flex;
+        height: 100%;
+        margin: 10px 10px 0px 10px;
+    }
+}
+
+@include themify($themes, true) {
+}
