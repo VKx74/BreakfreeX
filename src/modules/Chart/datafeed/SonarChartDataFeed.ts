@@ -22,7 +22,8 @@ export class SonarChartDataFeed extends DataFeedBase {
                 private _historyService: HistoryService) {
 
         super(_timeZoneManager);
-        this._visibleCount = 80;    
+        this._visibleCount = 80;
+        this._visibleCountRatio = 0.6; 
     }
 
     /**
@@ -159,5 +160,7 @@ export class SonarChartDataFeed extends DataFeedBase {
         }
 
         this.onRequestCompleted(request, response.data);
+
+        chart.canLoadMoreBars = false;
     }
 }

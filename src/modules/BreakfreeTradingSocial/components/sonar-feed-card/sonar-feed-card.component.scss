@@ -13,18 +13,27 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
-        cursor: pointer;
+        // cursor: pointer;
         border-radius: 5px;
+        font-size: 12px;
     }
     .card-header {
         display: flex;
-        width: 100%;
-        height: 40px;
-    }
-    .card-header {
-        display: flex;
-        width: 100%;
         height: 32px;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0px 10px;
+
+        .card-header-description {
+            display: flex;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .card-header-timestamp {
+            display: flex;
+            font-size: 11px;
+        }
     }
     .card-chart {
         display: flex;
@@ -33,13 +42,57 @@
     }
     .card-footer {
         display: flex;
-        width: 100%;
-        height: 32px;
+
+        .card-footer-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            border-top: 1px solid;
+            border-bottom: 1px solid;
+            margin: 5px;
+
+            .like-button {
+                margin-left: 8px;
+                margin-right: 3px;
+            }
+
+            .card-footer-like-button,
+            .card-footer-share-button,
+            .card-footer-comments-button {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+                padding: 5px 0px;
+                cursor: pointer;
+            }
+        }
     }
     .card-left-comment {
         display: flex;
         width: 100%;
-        height: 32px;
+
+        textarea {
+            height: 28px;
+            margin: 5px 0px 5px 5px;
+            font-size: 11px !important;
+            line-height: 14px;
+            border-radius: 12px 0px 0px 12px;
+            resize: none;
+        }
+
+        .send-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 28px;
+            margin: 5px 5px 5px 0px;
+            padding: 0px 10px;
+            border-radius: 0px 12px 12px 0px;
+            font-weight: 500;
+            cursor: pointer;
+        }
     }
 }
 
@@ -49,13 +102,29 @@
         color: themed("valueTextColor");
     }
 
-    .sonar-card:hover {
-        border: 1px solid themed("valueTextColor");
-        transition-duration: 0.22s;
-    }
+    // .sonar-card:hover {
+    //     border: 1px solid themed("valueTextColor");
+    //     transition-duration: 0.22s;
+    // }
 
     .sonar-card {
         border: 1px solid transparent;
         transition-duration: 0.22s;
+    }
+
+    .card-footer-buttons {
+        border-color: themed("sonar-feed-border") !important;
+    }
+
+    .card-footer-like-button,
+    .card-footer-share-button,
+    .card-footer-comments-button {
+        &:hover {
+            background-color: themed("sonar-feed-post-button");
+        }
+    }
+
+    .send-button {
+        background-color: themed("sonar-feed-post-button");
     }
 }

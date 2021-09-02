@@ -199,8 +199,6 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         this._datafeed.init(false).then(d => {
             const config = {
                 chartContainer: this.chartContainer.nativeElement,
-                width: '100%',
-                height: '100%',
                 theme: theme,
                 addThemeClass: false,
                 // chartType: 'hollowCandle',

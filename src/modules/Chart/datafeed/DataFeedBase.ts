@@ -65,6 +65,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
     private static _requestId = 0;
 
     protected _visibleCount = 200;
+    protected _visibleCountRatio = 0.4;
 
     private MAX_BARS_PER_CHART = 2000;
 
@@ -176,7 +177,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
             }
             if (barsCount > 0) {
                 chart.firstVisibleRecord = barsCount - visibleCount;
-                chart.lastVisibleRecord = barsCount + (visibleCount * 0.4);
+                chart.lastVisibleRecord = barsCount + (visibleCount * this._visibleCountRatio);
             }
         } else if (request.name === RequestKind.MORE_BARS && !instrument) {
             chart.firstVisibleRecord = barsCount < 0 ? 0 : oldFirstVisibleRecord + barsCount;
