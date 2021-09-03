@@ -66,6 +66,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
     protected _visibleCount = 200;
     protected _visibleCountRatio = 0.4;
+    protected _refreshOnRequestCompleted = true;
 
     private MAX_BARS_PER_CHART = 2000;
 
@@ -163,7 +164,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
                 throw new Error(`Unknown request kind: ${request.name}`);
         }
 
-        chart.refresh(true);
+        // chart.refresh(true);
 
         let barsCount = chart.primaryBarDataRows().low.length - oldPrimaryBarsCount;
         if (instrument) {
@@ -186,11 +187,14 @@ export abstract class DataFeedBase implements IDatafeedBase {
         this._requests.remove(request.requestNumber);
 
         chart.hideWaiting();
-        chart.refreshIndicators();
-        if (request.name === RequestKind.BARS) {
-            chart.refreshAsync(true);
-        } else {
-            chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
+
+        if (this._refreshOnRequestCompleted) {
+            chart.refreshIndicators();
+            if (request.name === RequestKind.BARS) {
+                chart.refreshAsync(true);
+            } else {
+                chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
+            }
         }
         chart.scaleHorizontal.onCompleteMoreHistoryRequest();
 

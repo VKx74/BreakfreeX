@@ -81,6 +81,7 @@ enum TimeFrames {
     Hour4 = "4 Hour",
     Day = "Daily",
 }
+
 enum TradeTypes {
     Ext = "Extension",
     BRC = "Break Retest & Continuation",

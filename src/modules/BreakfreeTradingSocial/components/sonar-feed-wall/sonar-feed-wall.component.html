@@ -1,29 +1,6 @@
-<div class="sonar-wall">
-    <div class="card-container">
-        <sonar-feed-card></sonar-feed-card>
-    </div>
-
-    <div class="card-container">
-        <sonar-feed-card></sonar-feed-card>
-    </div>
-
-    <div class="card-container">
-        <sonar-feed-card></sonar-feed-card>
-    </div>
-
-    <div class="card-container">
-        <sonar-feed-card></sonar-feed-card>
-    </div>
-
-    <div class="card-container">
-        <sonar-feed-card></sonar-feed-card>
-    </div>
-
-    <div class="card-container">
-        <sonar-feed-card></sonar-feed-card>
-    </div>
-
-    <div class="card-container">
-        <sonar-feed-card></sonar-feed-card>
+<div class="sonar-wall" (scroll)="onScroll($event)">
+    <div class="card-container" *ngFor="let card of cards">
+        <sonar-feed-card [granularity]="card.granularity" [instrument]="card.instrument" [time]="card.time"
+            [title]="card.title" [isVisible]="isCardVisible(card)"></sonar-feed-card>
     </div>
 </div>

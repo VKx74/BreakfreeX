@@ -24,6 +24,7 @@ export class SonarChartDataFeed extends DataFeedBase {
         super(_timeZoneManager);
         this._visibleCount = 80;
         this._visibleCountRatio = 0.6; 
+        this._refreshOnRequestCompleted = false; 
     }
 
     /**

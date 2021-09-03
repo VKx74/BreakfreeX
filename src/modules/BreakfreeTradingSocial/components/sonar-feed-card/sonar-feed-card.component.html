@@ -1,14 +1,14 @@
 <div class="sonar-card" #cardContainer>
     <div class="card-header">
         <div class="card-header-description">
-            4H XEM/BTC BRC LONG
+            {{title}}
         </div>
         <div class="card-header-timestamp">
-            Yesterday at 02:30
+            {{createTimeString()}}
         </div>
     </div>
     <div class="card-chart" #chartContainer>
-        <sonar-chart></sonar-chart>
+        <sonar-chart [instrument]="instrument" [time]="time" [granularity]="granularity" [isVisible]="isVisible"></sonar-chart>
     </div>
     <div class="card-footer">
         <div class="card-footer-buttons">
