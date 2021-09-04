@@ -3,15 +3,14 @@ import { Theme } from "@app/enums/Theme";
 import { IInstrument } from "@app/models/common/instrument";
 import { ThemeService } from "@app/services/theme.service";
 import { DataFeedBase } from "@chart/datafeed/DataFeedBase";
-import { SonarChartDataFeed } from "@chart/datafeed/SonarChartDataFeed";
 import { IndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
+import { TradeFromChartService } from "@chart/services/trade-from-chart.service";
 import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
 import { LocalizationService } from "Localization";
 import { takeUntil } from "rxjs/operators";
 
 declare var ResizeObserver;
 declare let defaultTheme: any;
-declare let darkTheme: any;
 declare let fintatechDarkTheme: any;
 
 class RestrictionManager {
@@ -30,13 +29,10 @@ class RestrictionManager {
     selector: 'sonar-chart',
     templateUrl: './sonar-chart.component.html',
     styleUrls: ['./sonar-chart.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        {
-            provide: DataFeedBase,
-            useClass: SonarChartDataFeed
-        }
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+        TradeFromChartService,
+    ]
 })
 export class SonarChartComponent implements OnInit {
     private _visibleCount = 140;
@@ -45,6 +41,7 @@ export class SonarChartComponent implements OnInit {
     private _initialized: boolean; 
     private _attached: boolean; 
     private _detachedHost: any; 
+    private _sizeChangeObserver: any; 
 
     private chart: TradingChartDesigner.Chart;
 
@@ -74,6 +71,7 @@ export class SonarChartComponent implements OnInit {
         private host: ElementRef,
         private _indicatorDataProviderService: IndicatorDataProviderService,
         private _localizationService: LocalizationService,
+        private _tradingFromChartHandler: TradeFromChartService,
         protected _cdr: ChangeDetectorRef) {
         this._themeService.activeThemeChange$
             .pipe(takeUntil(componentDestroyed(this)))
@@ -81,13 +79,13 @@ export class SonarChartComponent implements OnInit {
     }
 
     ngOnInit() {
-        const observer = new ResizeObserver(entries => {
+        this._sizeChangeObserver = new ResizeObserver(entries => {
             if (this.chart) {
                 this.chart.refresh();
             }
             this._cdr.detectChanges();
         });
-        observer.observe(this.host.nativeElement);
+        this._sizeChangeObserver.observe(this.host.nativeElement);
     }
 
     ngAfterViewInit() {
@@ -102,6 +100,15 @@ export class SonarChartComponent implements OnInit {
                 this.chart.destroy();
                 this.chart = null;
             }
+            if (this._sizeChangeObserver) {
+                this._sizeChangeObserver.unobserve(this.host.nativeElement);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        try {
+            this._tradingFromChartHandler.dispose();
         } catch (e) {
             console.log(e);
         }
@@ -162,7 +169,8 @@ export class SonarChartComponent implements OnInit {
             showScrollbar: false,
             indicatorsDataProvider: this._indicatorDataProviderService,
             isRestrictedMode: true,
-            indicatorsRestrictionsProvider: new RestrictionManager()
+            indicatorsRestrictionsProvider: new RestrictionManager(),
+            tradingFromChartHandler: this._tradingFromChartHandler
         };
 
         this.chart = $(config.chartContainer).TradingChartDesigner(config);
@@ -223,5 +231,7 @@ export class SonarChartComponent implements OnInit {
         this.chart.crossHair.destroy();
         this.chart.refreshAsync(true);
         this._attached = true;
+
+        this._tradingFromChartHandler.setChart(this.chart);
     }
 }

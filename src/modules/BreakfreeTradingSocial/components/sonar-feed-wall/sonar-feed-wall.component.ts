@@ -1,11 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit } from "@angular/core";
 import { IInstrument } from "@app/models/common/instrument";
 import { AlgoService, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem } from "@app/services/algo.service";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { InstrumentService } from "@app/services/instrument.service";
-import { BaseLayoutItem } from "@layout/base-layout-item";
-import { IScannerResults } from "modules/BreakfreeTrading";
-import { SonarFeedWidgetComponent } from "../sonar-feed-widget/sonar-feed-widget.component";
 
 export interface ISonarFeedCard {
     instrument: IInstrument;
@@ -22,15 +19,17 @@ export interface ISonarFeedCard {
 })
 export class SonarFeedWallComponent implements OnInit {
     private _firstVisible: any = 0;
-    private _lastVisible: any = 1;
+    private _lastVisible: any = 5;
     private _timer: any;
     private _refreshNeeded: boolean = false;
     private _items: IBFTScanInstrumentsResponseItem[] = [];
 
     public cards: ISonarFeedCard[] = [];
+    public loading: boolean;
 
     constructor(protected _identityService: IdentityService,
-        private _alogService: AlgoService,
+        protected _alogService: AlgoService,
+        protected _host: ElementRef,
         protected _instrumentService: InstrumentService,
         protected _cdr: ChangeDetectorRef) {
         this._scanMarket();
@@ -57,20 +56,7 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     onScroll(event) {
-        const height = event.target.clientHeight;
-        const cards = $(event.target).find(".card-container");
-        if (!cards || !cards.length) {
-            return;
-        }
-        const cardHeight = cards[0].clientHeight;
-        const scrollHeight = event.target.scrollHeight;
-        const scrolledTop = event.target.scrollTop;
-
-        const firstVisibleItem = Math.trunc(scrolledTop / cardHeight);
-        const lastVisibleItem = Math.trunc((scrolledTop + height) / cardHeight) + 1;
-
-        this._firstVisible = firstVisibleItem;
-        this._lastVisible = lastVisibleItem;
+        this._updateVisibleRecords(event.target);
     }
 
     isCardVisible(card: ISonarFeedCard) {
@@ -78,7 +64,25 @@ export class SonarFeedWallComponent implements OnInit {
         return index >= this._firstVisible && index <= this._lastVisible;
     }
 
+    private _updateVisibleRecords(target: any) {
+        const height = target.clientHeight;
+        const cards = $(target).find(".card-container");
+        if (!cards || !cards.length) {
+            return;
+        }
+
+        const cardHeight = cards[0].clientHeight + cards[0].offsetTop;
+        const scrolledTop = target.scrollTop;
+
+        const firstVisibleItem = Math.trunc(scrolledTop / cardHeight);
+        const lastVisibleItem = Math.trunc((scrolledTop + height) / cardHeight) + 1;
+
+        this._firstVisible = firstVisibleItem;
+        this._lastVisible = lastVisibleItem + 3;
+    }
+
     private _scanMarket() {
+        this.loading = true;
         this.cards = [];
 
         this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
@@ -90,10 +94,12 @@ export class SonarFeedWallComponent implements OnInit {
     
 
     private _renderCards() {
-
         for (const i of this._items) {
             this._mapInstrumentAndAdd(i);
         }
+
+        
+        this.loading = false;
     }
 
     private _mapInstrumentAndAdd(setupItem: IBFTScanInstrumentsResponseItem) {

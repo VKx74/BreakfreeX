@@ -16,6 +16,7 @@ export class SonarFeedCardComponent implements OnInit {
     private _time: number;
     private _title: string;
     private _isVisible: boolean;
+    private _sizeChangeObserver: any;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
@@ -66,18 +67,25 @@ export class SonarFeedCardComponent implements OnInit {
     }
 
     ngOnInit() {
-        const observer = new ResizeObserver(entries => {
+        this._sizeChangeObserver = new ResizeObserver(entries => {
             const width = entries[0].contentRect.width;
             this._adjustChartHeight(width);
         });
 
-        observer.observe(this.host.nativeElement);
+        this._sizeChangeObserver.observe(this.host.nativeElement);
     }
 
     ngAfterViewInit() {
     }
 
     ngOnDestroy() {
+        try {
+            if (this._sizeChangeObserver) {
+                this._sizeChangeObserver.unobserve(this.host.nativeElement);
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     createTimeString(): string {

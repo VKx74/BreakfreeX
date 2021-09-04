@@ -1,30 +1,39 @@
-import {DataFeedBase} from './DataFeedBase';
-import {Injectable} from "@angular/core";
-import {HistoryService} from "../../../app/services/history.service";
-import {EExchange} from "../../../app/models/common/exchange";
-import {IHistoryResponse} from "../../../app/models/common/historyResponse";
-import {IHistoryRequest} from "../../../app/models/common/historyRequest";
-import {IPeriodicity} from "../../../app/models/common/periodicity";
-import {IInstrument} from "../../../app/models/common/instrument";
-import {ITimeFrame} from "../../../app/models/common/timeFrame";
-import {TimeZoneManager, UTCTimeZone} from "TimeZones";
-import {TzUtils} from "../../TimeZones/utils/TzUtils";
-import {JsUtil} from "../../../utils/jsUtil";
+import { DataFeedBase } from './DataFeedBase';
+import { Injectable } from "@angular/core";
+import { HistoryService } from "../../../app/services/history.service";
+import { EExchange } from "../../../app/models/common/exchange";
+import { IHistoryResponse } from "../../../app/models/common/historyResponse";
+import { IHistoryRequest } from "../../../app/models/common/historyRequest";
+import { IPeriodicity } from "../../../app/models/common/periodicity";
+import { IInstrument } from "../../../app/models/common/instrument";
+import { ITimeFrame } from "../../../app/models/common/timeFrame";
+import { TimeZoneManager, UTCTimeZone } from "TimeZones";
+import { TzUtils } from "../../TimeZones/utils/TzUtils";
+import { JsUtil } from "../../../utils/jsUtil";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { EMarketType } from '@app/models/common/marketType';
 import { ReplayModeSync } from '@chart/services/replay-mode-sync.service';
+import { HistoryHelperService } from '@app/helpers/history.helper.service';
+
+interface IHistoryCache {
+    response: IHistoryResponse;
+    instrument: IInstrument;
+    granularity: number;
+    time: number;
+}
 
 @Injectable()
 export class SonarChartDataFeed extends DataFeedBase {
     private _endDate: Date;
-    
+    private _historyCache: IHistoryCache[] = [];
+
     constructor(protected _timeZoneManager: TimeZoneManager,
-                private _historyService: HistoryService) {
+        private _historyService: HistoryService) {
 
         super(_timeZoneManager);
         this._visibleCount = 80;
-        this._visibleCountRatio = 0.6; 
-        this._refreshOnRequestCompleted = false; 
+        this._visibleCountRatio = 0.6;
+        this._refreshOnRequestCompleted = false;
     }
 
     /**
@@ -54,18 +63,26 @@ export class SonarChartDataFeed extends DataFeedBase {
             startDate: startDate,
         };
 
-        this._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
-            if (!response) {
-                this._processResult(response, request, requestMsg.instrument);
-            } else {
-                if (this.requestBusy(request)) {
-                    this._processResult(response, request, requestMsg.instrument);
+        const granularity = HistoryHelperService.getGranularity(requestMsg.timeFrame);
+
+        const cachedData = this._getFromCache(requestMsg.instrument, granularity);
+
+        if (cachedData) {
+            this._processResult(cachedData.response, request, requestMsg.instrument, granularity);
+        } else {
+            this._historyService.getHistory(requestMsg).subscribe((response: IHistoryResponse) => {
+                if (!response) {
+                    this._processResult(response, request, requestMsg.instrument, granularity);
+                } else {
+                    if (this.requestBusy(request)) {
+                        this._processResult(response, request, requestMsg.instrument, granularity);
+                    }
                 }
-            }
-        }, (error) => {
-            this.cancel(request);
-            console.error(error);
-        });
+            }, (error) => {
+                this.cancel(request);
+                console.error(error);
+            });
+        }
     }
 
     private _getRequestEndDate(): Date {
@@ -97,7 +114,7 @@ export class SonarChartDataFeed extends DataFeedBase {
         let startDate = TzUtils.convertDateTz(JsUtil.UTCDate(startDateTimestamp), UTCTimeZone, this._timeZoneManager.timeZone);
         const day = startDate.getDay();
         const oneDayTimeShift = 1000 * 60 * 60 * 24;
-        
+
         if (day === 0) {
             // Sunday
             startDate.setTime(startDate.getTime() - (oneDayTimeShift * 3));
@@ -150,7 +167,7 @@ export class SonarChartDataFeed extends DataFeedBase {
         return res;
     }
 
-    private _processResult(response: IHistoryResponse, request: TradingChartDesigner.IBarsRequest, instrument: IInstrument) {
+    private _processResult(response: IHistoryResponse, request: TradingChartDesigner.IBarsRequest, instrument: IInstrument, granularity: number) {
         const chart = request.chart;
         const isChartMainSeries = !instrument || (instrument.symbol === chart.instrument.symbol && instrument.exchange === chart.instrument.exchange);
 
@@ -160,8 +177,37 @@ export class SonarChartDataFeed extends DataFeedBase {
             chart.invokeValueChanged(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED);
         }
 
+        this._addToCache(response, instrument, granularity);
+
         this.onRequestCompleted(request, response.data);
 
         chart.canLoadMoreBars = false;
+    }
+
+    private _addToCache(response: IHistoryResponse, instrument: IInstrument, granularity: number) {
+        for (const item of this._historyCache) {
+            if (item.instrument.id === instrument.id && item.instrument.exchange === instrument.exchange && item.granularity === granularity) {
+                return;
+            }
+        }
+
+        this._historyCache.push({
+            granularity: granularity,
+            instrument: instrument,
+            response: response,
+            time: new Date().getTime()
+        });
+    }
+
+    private _getFromCache(instrument: IInstrument, granularity: number): IHistoryCache {
+        for (const item of this._historyCache) {
+            if (item.instrument.id === instrument.id && item.instrument.exchange === instrument.exchange && item.granularity === granularity) {
+                const timePassed = (new Date().getTime() - item.time) / 1000;
+
+                if (timePassed < granularity) {
+                    return item;
+                }
+            }
+        }
     }
 }

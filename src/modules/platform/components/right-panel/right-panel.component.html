@@ -48,7 +48,7 @@
                 <div class="sonar-feed-widget widget-selector-icon" (click)="selectComponent(Components.SonarFeed)"
                     [class.active]="SelectedComponent === Components.SonarFeed && !collapsed" tooltip
                     [matTooltip]="'sonarFeed' | translate">
-                    <img class="widget-icon" src="/assets/img/right-panel/radar-solid.svg" />
+                    <i class="fa fa-rss" aria-hidden="true"></i>
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
                     [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip

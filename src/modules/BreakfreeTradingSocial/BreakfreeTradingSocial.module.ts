@@ -23,6 +23,10 @@ import { SonarFeedWallComponent } from './components/sonar-feed-wall/sonar-feed-
 import { SonarFeedWidgetComponent } from './components/sonar-feed-widget/sonar-feed-widget.component';
 import { SonarFeedCardComponent } from './components/sonar-feed-card/sonar-feed-card.component';
 import { SonarChartComponent } from './components/sonar-chart/sonar-chart.component';
+import { DataFeedBase } from '@chart/datafeed/DataFeedBase';
+import { SonarChartDataFeed } from '@chart/datafeed/SonarChartDataFeed';
+import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
+import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
 
 @NgModule({
     // components here
@@ -62,10 +66,15 @@ import { SonarChartComponent } from './components/sonar-chart/sonar-chart.compon
     ],
     providers: [
         HistoryService,
+        IndicatorDataProviderService,
         {
             provide: BreakfreeTradingSocialTranslateService,
             useFactory: TranslateServiceFactory('BreakfreeTradingSocial'),
             deps: [Injector, SharedTranslateService]
+        },
+        {
+            provide: DataFeedBase,
+            useClass: SonarChartDataFeed
         }
     ]
 })
