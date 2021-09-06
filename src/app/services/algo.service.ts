@@ -38,6 +38,13 @@ export interface IBFTScannerResponseHistoryItem {
     avgEntry: number;
 }
 
+export interface IBFTScannerCacheItem {
+    responseItem: IBFTScanInstrumentsResponseItem;
+    time: number;
+    avgEntry: number;
+    trade: IBFTATradeV2;
+}
+
 export interface IBFTScanInstrumentsResponse {
     items: IBFTScanInstrumentsResponseItem[];
     scanning_time: number;
@@ -250,6 +257,7 @@ export interface IBFTAAlgoResponseV2 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
     size: number;
+    id: any;
 }
 
 export interface IBFTAPositionSize {
@@ -549,6 +557,12 @@ export class AlgoService {
 
     scannerHistory(): Observable<IBFTScannerHistoryResponse> {
         return this._http.get<IBFTAEncryptedResponse>(`${this.url}scanner_history_results`).pipe(map(this._decrypt));
+    }
+
+    getSonarHistoryCache(symbol: string, exchange: string, timeframe: number, time: number): Observable<IBFTScannerCacheItem> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}sonar_history_cache`, {
+            symbol, exchange, timeframe, time
+        }).pipe(map(this._decrypt));
     }
 
     private _decrypt(encrypted: IBFTAEncryptedResponse): any {

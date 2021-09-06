@@ -25,8 +25,7 @@ import { SonarFeedCardComponent } from './components/sonar-feed-card/sonar-feed-
 import { SonarChartComponent } from './components/sonar-chart/sonar-chart.component';
 import { DataFeedBase } from '@chart/datafeed/DataFeedBase';
 import { SonarChartDataFeed } from '@chart/datafeed/SonarChartDataFeed';
-import { TradeFromChartService } from '@chart/services/trade-from-chart.service';
-import { IndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
+import { SonarChartIndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
 
 @NgModule({
     // components here
@@ -66,7 +65,7 @@ import { IndicatorDataProviderService } from '@chart/services/indicator-data-pro
     ],
     providers: [
         HistoryService,
-        IndicatorDataProviderService,
+        SonarChartIndicatorDataProviderService,
         {
             provide: BreakfreeTradingSocialTranslateService,
             useFactory: TranslateServiceFactory('BreakfreeTradingSocial'),

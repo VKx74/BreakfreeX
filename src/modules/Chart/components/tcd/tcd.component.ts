@@ -435,7 +435,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                     this._demoBroker.appendSignal({
                         levels: payload.levels,
                         size: payload.size,
-                        trade: payload.trade as any
+                        trade: payload.trade as any,
+                        id: new Date().getTime()
                     });
                 }
             }

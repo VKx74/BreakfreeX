@@ -3,7 +3,7 @@ import { Theme } from "@app/enums/Theme";
 import { IInstrument } from "@app/models/common/instrument";
 import { ThemeService } from "@app/services/theme.service";
 import { DataFeedBase } from "@chart/datafeed/DataFeedBase";
-import { IndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
+import { IndicatorDataProviderService, SonarChartIndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
 import { TradeFromChartService } from "@chart/services/trade-from-chart.service";
 import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
 import { LocalizationService } from "Localization";
@@ -31,17 +31,17 @@ class RestrictionManager {
     styleUrls: ['./sonar-chart.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        TradeFromChartService,
+        TradeFromChartService
     ]
 })
 export class SonarChartComponent implements OnInit {
     private _visibleCount = 140;
-    private _visibleCountRatio = 0.6; 
-    private _isVisible: boolean; 
-    private _initialized: boolean; 
-    private _attached: boolean; 
-    private _detachedHost: any; 
-    private _sizeChangeObserver: any; 
+    private _visibleCountRatio = 0.6;
+    private _isVisible: boolean;
+    private _initialized: boolean;
+    private _attached: boolean;
+    private _detachedHost: any;
+    private _sizeChangeObserver: any;
 
     private chart: TradingChartDesigner.Chart;
 
@@ -51,7 +51,7 @@ export class SonarChartComponent implements OnInit {
     @Input() public instrument: IInstrument;
     @Input() public granularity: number;
     @Input() public time: number;
-    
+
     @Input() public set isVisible(value: boolean) {
         this._isVisible = value;
 
@@ -69,7 +69,7 @@ export class SonarChartComponent implements OnInit {
     constructor(private _datafeed: DataFeedBase,
         private _themeService: ThemeService,
         private host: ElementRef,
-        private _indicatorDataProviderService: IndicatorDataProviderService,
+        private _indicatorDataProviderService: SonarChartIndicatorDataProviderService,
         private _localizationService: LocalizationService,
         private _tradingFromChartHandler: TradeFromChartService,
         protected _cdr: ChangeDetectorRef) {
@@ -120,8 +120,8 @@ export class SonarChartComponent implements OnInit {
         }
         this._detachedHost = $(this.chartContainer.nativeElement).detach();
         this._attached = false;
-    }  
-    
+    }
+
     private _attachChart() {
         if (!this.chart || this._attached || !this._detachedHost) {
             return;
