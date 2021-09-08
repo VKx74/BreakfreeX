@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { BaseLayoutItem } from "@layout/base-layout-item";
+import { LinkingAction } from "@linking/models";
 import { SonarFeedWidgetComponent } from "../sonar-feed-widget/sonar-feed-widget.component";
 
 @Component({
@@ -34,5 +35,9 @@ export class SonarFeedComponent extends BaseLayoutItem  implements OnInit {
     }
 
     ngOnDestroy() {
+    }
+
+    viewOnChart(linkingAction: LinkingAction) {
+        this.onOpenChart.next(linkingAction);
     }
 }

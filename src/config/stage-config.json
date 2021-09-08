@@ -49,7 +49,9 @@
     "bftAlgoREST": "https://algo-stage.breakfreetrading.com/algoserver/",
     "bftTradingProfilesREST": "https://mtapi-stage.breakfreetrading.com/portfolio/",
     "bftAlertsWS": "wss://notifications-alerts-stage.breakfreetrading.com/websocket",
-    "bftAlertsREST": "https://user-api-alerts-stage.breakfreetrading.com/"
+    "bftAlertsREST": "https://user-api-alerts-stage.breakfreetrading.com/",
+    "socialFeedREST": "https://socialfeed-social-stage.breakfreetrading.com/",
+    "socialFeedWS": "socialFeedWS"
   },
   "systemMonitoringUrls": {
     "platform": {
@@ -133,6 +135,7 @@
     "https://platform-stage.breakfreetrading.com",
     "https://algo-stage.breakfreetrading.com",
     "https://mtapi-stage.breakfreetrading.com",
-    "https://user-api-alerts-stage.breakfreetrading.com"
+    "https://user-api-alerts-stage.breakfreetrading.com",
+    "https://socialfeed-social-stage.breakfreetrading.com"
   ]
 }

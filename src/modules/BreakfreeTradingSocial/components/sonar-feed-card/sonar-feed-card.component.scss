@@ -59,12 +59,18 @@
 
             .card-footer-like-button,
             .card-footer-share-button,
-            .card-footer-comments-button {
+            .card-footer-view-button {
                 display: flex;
                 width: 100%;
                 align-items: center;
                 justify-content: center;
-                padding: 5px 0px;
+                height: 28px;
+            }
+
+            .card-footer-share-button,
+            .card-footer-view-button,
+            .like-container,
+            .dislike-container {
                 cursor: pointer;
             }
         }
@@ -94,6 +100,28 @@
             cursor: pointer;
         }
     }
+
+    .like-container,
+    .dislike-container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px 10px;
+    }
+    .like-container {
+        margin-right: 5px;
+        .like-counter {
+            margin-left: 5px;
+        }
+    }
+
+    .dislike-container {
+        margin-left: 5px;
+        .dislike-counter {
+            margin-left: 5px;
+        }
+    }
 }
 
 @include themify($themes, true) {
@@ -116,9 +144,10 @@
         border-color: themed("sonar-feed-border") !important;
     }
 
-    .card-footer-like-button,
     .card-footer-share-button,
-    .card-footer-comments-button {
+    .card-footer-view-button,
+    .like-container,
+    .dislike-container {
         &:hover {
             background-color: themed("sonar-feed-post-button");
         }

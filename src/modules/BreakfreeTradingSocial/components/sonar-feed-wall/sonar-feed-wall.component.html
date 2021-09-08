@@ -1,8 +1,10 @@
 <div class="sonar-wall" (scroll)="onScroll($event)">
     <div class="card-container" *ngFor="let card of cards">
-        <sonar-feed-card [granularity]="card.granularity" [instrument]="card.instrument" [time]="card.time"
-            [title]="card.title" [isVisible]="isCardVisible(card)"></sonar-feed-card>
+        <sonar-feed-card [isVisible]="isCardVisible(card)" [hasMyLike]="card.hasMyLike" [hasMyDislike]="card.hasMyDislike"
+            [likeCount]="card.likeCount" [dislikeCount]="card.dislikeCount" [granularity]="card.granularity"
+            [time]="card.time" [title]="card.title" [instrument]="card.instrument"
+            (onOpenChart)="viewOnChart(card)" (onLike)="like(card)" (onDislike)="dislike(card)"></sonar-feed-card>
     </div>
 </div>
 
-<bft-loader *ngIf="loading && loading"></bft-loader>
+<bft-loader *ngIf="loading"></bft-loader>

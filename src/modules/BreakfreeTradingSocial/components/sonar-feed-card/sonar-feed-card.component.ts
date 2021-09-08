@@ -1,28 +1,66 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { IInstrument } from "@app/models/common/instrument";
 import { IdentityService } from "@app/services/auth/identity.service";
 declare var ResizeObserver;
+
+export interface SonarFeedCardVM {
+   id: any;
+   instrument: IInstrument;
+   granularity: number;
+   time: number;
+   title: string;
+   hasMyLike: boolean;
+   hasMyDislike: boolean;
+   likeCount: number;
+   dislikeCount: number;
+}
 
 @Component({
     selector: 'sonar-feed-card',
     templateUrl: './sonar-feed-card.component.html',
     styleUrls: ['./sonar-feed-card.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarFeedCardComponent implements OnInit {
-
     private _instrument: IInstrument;
     private _granularity: number;
     private _time: number;
     private _title: string;
     private _isVisible: boolean;
     private _sizeChangeObserver: any;
+    private _hasMyLike: boolean;
+    private _hasMyDislike: boolean;
+    private _likeCount: number = 0;
+    private _dislikeCount: number = 0;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
 
-    @Input() public set instrument(value: IInstrument) {
-        this._instrument = value;
+    @Output() onOpenChart = new EventEmitter<void>();
+    @Output() onLike = new EventEmitter<void>();
+    @Output() onDislike = new EventEmitter<void>();
+    @Output() onShare = new EventEmitter<void>();
+    @Output() onAddComment = new EventEmitter<string>();
+    @Output() onRemoveComment = new EventEmitter<any>();
+
+    @Input() public set isVisible(value: boolean) {
+        this._isVisible = value;
+    } 
+    
+    @Input() public set hasMyLike(value: boolean) {
+        this._hasMyLike = value;
+    }
+    
+    @Input() public set hasMyDislike(value: boolean) {
+        this._hasMyDislike = value;
+    }
+
+    @Input() public set likeCount(value: number) {
+        this._likeCount = value;
+    }
+
+    @Input() public set dislikeCount(value: number) {
+        this._dislikeCount = value;
     }
 
     @Input() public set granularity(value: number) {
@@ -37,8 +75,8 @@ export class SonarFeedCardComponent implements OnInit {
         this._title = value;
     }
 
-    @Input() public set isVisible(value: boolean) {
-        this._isVisible = value;
+    @Input() public set instrument(value: IInstrument) {
+        this._instrument = value;
     }
 
     public get instrument(): IInstrument {
@@ -59,6 +97,22 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get isVisible(): boolean {
         return this._isVisible;
+    }
+
+    public get hasMyLike(): boolean {
+        return this._hasMyLike;
+    }
+
+    public get hasMyDislike(): boolean {
+        return this._hasMyDislike;
+    }
+
+    public get likeCount(): number {
+        return this._likeCount;
+    }
+
+    public get dislikeCount(): number {
+        return this._dislikeCount;
     }
 
     constructor(protected _identityService: IdentityService, 
@@ -103,7 +157,7 @@ export class SonarFeedCardComponent implements OnInit {
             const mins = Math.trunc(timeDiff / 60);
             return mins > 1 ? `${mins} minutes ago` : "Minute ago";
         } else if (timeDiff < 60 * 60 * 24) {
-            const hours = Math.trunc(timeDiff / 60 / 24);
+            const hours = Math.trunc(timeDiff / 60 / 60);
             return hours > 1 ? `${hours} hours ago` : `Hour ago`;
         } else {
             const secondsInDay = 60 * 60 * 24;
@@ -124,6 +178,18 @@ export class SonarFeedCardComponent implements OnInit {
 
             return `${dateString} ${timeString}`;
         }
+    }
+
+    viewOnChart() {
+        this.onOpenChart.next();
+    }
+
+    like() {
+        this.onLike.next();
+    }
+
+    dislike() {
+        this.onDislike.next();
     }
 
     private _adjustChartHeight(containerWidth: number) {

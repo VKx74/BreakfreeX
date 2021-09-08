@@ -206,7 +206,7 @@ export class SonarChartComponent implements OnInit {
 
         this._cdr.detectChanges();
         try {
-            // this.chart.setReplayByDate(new Date('05/26/2021'), true);
+            this.chart.setReplayByDate(new Date(this.time * 1000), true);
         } catch (error) {
             console.error(error);
             return;

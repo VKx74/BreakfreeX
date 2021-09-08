@@ -61,6 +61,8 @@ export interface ApiUrls {
     BinanceBrokerWS: string;
     bftAlertsWS: string;
     bftAlertsREST: string;
+    socialFeedREST: string;
+    socialFeedWS: string;
 }
 
 export interface AppConfig {

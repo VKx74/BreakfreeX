@@ -14,6 +14,7 @@
   "failedInitTrading": "Failed to initialized trading: ",
   "sonarWidget": "Sonar",
   "watchlistWidget": "Watchlist",
+  "sonarFeed": "Sonar Feed",
   "alertsWidget": "Alerts",
   "academyWidget": "Academy",
   "backtestWidget": "Backtest",

@@ -12,13 +12,25 @@
     </div>
     <div class="card-footer">
         <div class="card-footer-buttons">
-            <div class="card-footer-like-button">
-                <span>Like</span>
-                <span class="like-button"><i class="fa fa-heart" aria-hidden="true"></i></span>
-                <span>5</span>
+            <div class="card-footer-view-button" (click)="viewOnChart()">
+                View chart
             </div>
-            <div class="card-footer-comments-button">
-                Comments
+            <div class="card-footer-like-button">
+                <div class="like-container" (click)="like()">
+                    <i class="fa fa-thumbs-up" aria-hidden="true" *ngIf="hasMyLike; else nonActiveLike"></i>
+                    <ng-template #nonActiveLike>
+                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                    </ng-template>
+                    <span class="like-counter">{{likeCount}}</span>
+                </div>
+                <div>Rate</div>
+                <div class="dislike-container" (click)="dislike()">
+                    <i class="fa fa-thumbs-down" aria-hidden="true" *ngIf="hasMyDislike; else nonActiveDislike"></i>
+                    <ng-template #nonActiveDislike>
+                        <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                    </ng-template>
+                    <span class="dislike-counter">{{dislikeCount}}</span>
+                </div>
             </div>
             <div class="card-footer-share-button">
                 Share

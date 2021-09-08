@@ -69,6 +69,7 @@ export class DashboardComponent {
     private _showPhoneNumberPopupInterval: any;
     private _hardRefreshTimer: any;
     private _hardRefreshNeeded: boolean = false;
+    private _rightSideResizing: boolean = false;
     private _lastBottomPanelSize: number = 0;
     private _minRightSidePanelSize = 350;
     readonly openBottomPanel = 150;
@@ -91,6 +92,10 @@ export class DashboardComponent {
 
     get isBrokerConnected(): boolean {
         return this._brokerService.isConnected;
+    }
+
+    get rightSideResizing(): boolean {
+        return this._rightSideResizing;
     }
 
     get bottomPanelMinSize() {
@@ -620,6 +625,7 @@ export class DashboardComponent {
     }
 
     handleHorizontalSplitDragEnd(c) {
+        this._rightSideResizing = false;
         this._lastBottomPanelSize = c.sizes[1];
 
         if (this.isRightPanelCollapsed) {
@@ -632,6 +638,7 @@ export class DashboardComponent {
     }
 
     handleHorizontalSplitDragStart(c) {
+        this._rightSideResizing = true;
     }
 
     private setUpComponentSelectorDialog(parent: any) {
