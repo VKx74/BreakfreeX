@@ -1,13 +1,44 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { IInstrument } from "@app/models/common/instrument";
 import { IBFTATrend } from "@app/services/algo.service";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { Actions, LinkingAction } from "@linking/models";
-import { SonarFeedItem } from "modules/BreakfreeTradingSocial/models/sonar.feed.models";
+import { SonarFeedComment, SonarFeedItem } from "modules/BreakfreeTradingSocial/models/sonar.feed.models";
 import { SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
+import { ConfirmModalComponent } from "modules/UI/components";
 import { Subscription } from "rxjs";
-import { SonarFeedCardVM } from "../sonar-feed-card/sonar-feed-card.component";
+
+export interface SonarFeedCommentVM {
+    id: any;
+    text: string;
+    userName: string;
+    userAvatarId: string;
+    userLevel: string;
+    likesCount: number;
+    dislikesCount: number;
+    hasUserLike: boolean;
+    hasUserDislike: boolean;
+    parentCommentId: any;
+    isOwnComment: boolean;
+    time: number;
+}
+
+export interface SonarFeedCardVM {
+    id: any;
+    instrument: IInstrument;
+    granularity: number;
+    time: number;
+    title: string;
+    hasMyLike: boolean;
+    hasMyDislike: boolean;
+    likeCount: number;
+    dislikeCount: number;
+    commentsTotal: number;
+    isFavorite: boolean;
+    comments: SonarFeedCommentVM[];
+}
 
 export interface ISonarFeedCard {
     instrument: IInstrument;
@@ -42,6 +73,7 @@ export class SonarFeedWallComponent implements OnInit {
     constructor(protected _identityService: IdentityService,
         protected _sonarFeedService: SonarFeedService,
         protected _host: ElementRef,
+        protected _dialog: MatDialog,
         protected _instrumentService: InstrumentService,
         protected _cdr: ChangeDetectorRef) {
         this._initData();
@@ -88,8 +120,8 @@ export class SonarFeedWallComponent implements OnInit {
         const itemIndex = this._items.findIndex(_ => _.id === item.id);
         if (itemIndex !== -1) {
             this._items[itemIndex] = item;
-        } 
-        
+        }
+
         const cardIndex = this.cards.findIndex(_ => _.id === item.id);
         if (cardIndex !== -1) {
             this._updateVM(this.cards[cardIndex], item);
@@ -110,6 +142,17 @@ export class SonarFeedWallComponent implements OnInit {
         this.onOpenChart.next(linkAction);
     }
 
+    showAllComments(card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.getComments(card.id).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
     like(card: SonarFeedCardVM) {
         this.loading = true;
         this._sonarFeedService.likeItem(card.id).subscribe(() => {
@@ -124,6 +167,73 @@ export class SonarFeedWallComponent implements OnInit {
     dislike(card: SonarFeedCardVM) {
         this.loading = true;
         this._sonarFeedService.dislikeItem(card.id).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
+    favorite(card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.setFavorite(card.id).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
+
+    commentLike(commentId: any, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.likeComment(card.id, commentId).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
+    commentDislike(commentId: any, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.dislikeComment(card.id, commentId).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
+    removeComment(commentId: any, card: SonarFeedCardVM) {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                message: "Do you really want to remove this comment?",
+                onConfirm: () => {
+                    this._removeComment(commentId, card);
+                }
+            }
+        });
+    }
+
+    addComment(comment: string, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.postComment(card.id, comment).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
+    private _removeComment(commentId: any, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.deleteComment(card.id, commentId).subscribe(() => {
             this.loading = false;
             this._refreshNeeded = true;
         }, () => {
@@ -228,16 +338,53 @@ export class SonarFeedWallComponent implements OnInit {
             hasMyLike: item.hasUserLike,
             instrument: instrument,
             time: item.time,
-            title: this._getTitle(item.granularity, item.symbol, item.type, item.side === IBFTATrend.Up ? "Long" : "Short")
+            title: this._getTitle(item.granularity, item.symbol, item.type, item.side === IBFTATrend.Up ? "Long" : "Short"),
+            comments: this._getComments(item),
+            commentsTotal: item.commentsTotal,
+            isFavorite: item.isFavorite
         };
     }
-    
+
+    private _getComments(item: SonarFeedItem): SonarFeedCommentVM[] {
+        const comments: SonarFeedComment[] = [];
+        if (item.comments) {
+            comments.push(...item.comments);
+        }
+        if (item.lastComment) {
+            const existing = comments.find(_ => _.id === item.lastComment.id);
+            if (!existing) {
+                comments.push(item.lastComment);
+            }
+        }
+        return comments.map(_ => this._convertCommentToVM(_));
+    }
+
+    private _convertCommentToVM(comment: SonarFeedComment): SonarFeedCommentVM {
+        return {
+            id: comment.id,
+            dislikesCount: comment.dislikesCount,
+            likesCount: comment.likesCount,
+            hasUserDislike: comment.hasUserDislike,
+            hasUserLike: comment.hasUserLike,
+            isOwnComment: comment.isOwnComment,
+            text: comment.text,
+            time: comment.time,
+            userAvatarId: comment.user.avatarId,
+            userLevel: comment.user.level,
+            userName: comment.user.name,
+            parentCommentId: comment.parentComment ? comment.parentComment.id : null
+        };
+    }
+
     private _updateVM(vm: SonarFeedCardVM, item: SonarFeedItem) {
         // const vm = this.cards[cardIndex];
         vm.dislikeCount = item.dislikesCount;
         vm.likeCount = item.likesCount;
         vm.hasMyDislike = item.hasUserDislike;
         vm.hasMyLike = item.hasUserLike;
+        vm.comments = this._getComments(item);
+        vm.commentsTotal = item.commentsTotal;
+        vm.isFavorite = item.isFavorite;
         // this.cards[cardIndex] = vm;
     }
 

@@ -37,12 +37,23 @@ export interface SonarFeedItemDTO {
     hasUserLike: boolean;
     hasUserDislike: boolean;
     lastComment: SonarFeedCommentDTO;
+    commentsTotal: number;
+    isFavorite: boolean;
 }
 
 export interface SonarFeedItemLikeResponseDTO {
     dislikesCount: number;
     hasUserDislike: boolean;
     hasUserLike: boolean;
+    isFavorite: boolean;
     likesCount: number;
     postId: number;
+}
+
+export interface SonarFeedItemCommentLikeResponseDTO {
+    dislikesCount: number;
+    hasUserDislike: boolean;
+    hasUserLike: boolean;
+    likesCount: number;
+    commentId: number;
 }

@@ -8,7 +8,7 @@ import {
     HttpRequest,
     HttpResponse
 } from "@angular/common/http";
-import {Observable, Observer} from "rxjs";
+import {Observable, Observer, of} from "rxjs";
 import {AppConfigService} from "./app.config.service";
 import {
     Base64File,
@@ -36,6 +36,7 @@ export class FileStorageService {
     static FormDataFileKey = 'uploadedFile';
     static ChatThreadDefaultPhotoId = '00000000-0000-0000-0000-000000000000';
 
+    private _cache: { [symbol: string]: string; } = {};
 
     private _baseUrl: string = AppConfigService.config.apiUrls.fileStorageREST;
 
@@ -67,9 +68,16 @@ export class FileStorageService {
     }
 
     getImageBase64(id: string): Observable<string> {
+        if (this._cache[id]) {
+            return of(this._cache[id]);
+        }
+        
         return this.getFile(id)
             .pipe(
-                mergeMap((blob: Blob) => this._blobToBase64(blob))
+                mergeMap((blob: Blob) => this._blobToBase64(blob).pipe(map((data) => {
+                    this._cache[id] = data;
+                    return data;
+                })))
             );
     }
 

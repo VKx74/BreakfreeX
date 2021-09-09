@@ -32,4 +32,6 @@ export interface SonarFeedItem {
     hasUserDislike: boolean;
     lastComment: SonarFeedComment;
     comments?: SonarFeedComment[];
+    commentsTotal: number;
+    isFavorite: boolean;
 }

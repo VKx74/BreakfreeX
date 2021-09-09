@@ -21,7 +21,7 @@ export enum UserAvatarShape {
     selector: 'name-avatar',
     templateUrl: './name-avatar.component.html',
     styleUrls: ['./name-avatar.component.scss'],
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NameAvatarComponent implements OnInit, OnChanges {
     avatarSrc: string = '';
@@ -55,6 +55,7 @@ export class NameAvatarComponent implements OnInit, OnChanges {
     setImage() {
         if (!this.src || this.src === FileStorageService.ChatThreadDefaultPhotoId) {
             this.avatarSrc = this._getDefaultAvatar(this.name);
+            this._cdRef.detectChanges();
         } else {
             this._fileStorageService.getImageBase64(this.src)
                 .subscribe(i => {
@@ -63,9 +64,11 @@ export class NameAvatarComponent implements OnInit, OnChanges {
                     } else {
                         this.avatarSrc = i;
                     }
+                    this._cdRef.detectChanges();
                 }, e => {
                     console.log(e);
                     this.avatarSrc = this._getDefaultAvatar(this.name);
+                    this._cdRef.detectChanges();
                 });
         }
     }
@@ -109,6 +112,7 @@ export class NameAvatarComponent implements OnInit, OnChanges {
 
     onImageError() {
         this.avatarSrc = this._getDefaultAvatar(this.name);
+        this._cdRef.detectChanges();
     }
 
 }

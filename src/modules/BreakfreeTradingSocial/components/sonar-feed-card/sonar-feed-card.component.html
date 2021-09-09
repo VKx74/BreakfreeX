@@ -1,14 +1,23 @@
 <div class="sonar-card" #cardContainer>
     <div class="card-header">
         <div class="card-header-description">
-            {{title}}
+            <div class="favorite-icon" (click)="favorite()">
+                <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
+                <ng-template #notFavorite>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                </ng-template>
+            </div>
+            <div class="card-header-title">
+                {{title}}
+            </div>
         </div>
         <div class="card-header-timestamp">
-            {{createTimeString()}}
+            {{createTimeString(time)}}
         </div>
     </div>
     <div class="card-chart" #chartContainer>
-        <sonar-chart [instrument]="instrument" [time]="time" [granularity]="granularity" [isVisible]="isVisible"></sonar-chart>
+        <sonar-chart [instrument]="instrument" [time]="time" [granularity]="granularity" [isVisible]="isVisible">
+        </sonar-chart>
     </div>
     <div class="card-footer">
         <div class="card-footer-buttons">
@@ -37,10 +46,64 @@
             </div>
         </div>
     </div>
+    <div class="card-comments">
+        <div class="show-all-comments" *ngIf="commentsTotal > 1 && comments.length <= 1" (click)="showAllComment()">
+            View all {{commentsTotal}} comments
+        </div>
+        <div class="comment-row" *ngFor="let c of comments" [ngClass]="{'own-comment': c.isOwnComment}">
+            <div class="comment-item">
+                <div class="comment-avatar" *ngIf="!c.isOwnComment">
+                    <div class="comment-avatar-img">
+                        <name-avatar [name]="c.userName" [src]="c.userAvatarId"></name-avatar>
+                    </div>
+                </div>
+                <div class="comment-content">
+                    <div class="comment-content-header">
+                        <div class="comment-content-header-left">
+                            <div class="comment-content-username">{{c.userName}}{{c.isOwnComment ? " (You)" : ""}}</div>
+                            <div class="comment-content-user-level">{{c.userLevel}}</div>
+                        </div>
+                        <div class="comment-content-header-right">
+                            <div class="card-time">{{createTimeString(c.time)}}</div>
+                            <div class="remove-comment" *ngIf="c.isOwnComment">
+                                <i class="crypto-icon crypto-icon-close" (click)="removeComment(c)"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-content-data">
+                        {{c.text}}
+                    </div>
+                    <div class="comment-content-footer" [ngClass]="{'disabled': c.isOwnComment}">
+                        <div class="comment-like-container" (click)="likeComment(c)">
+                            <i class="fa fa-thumbs-up" aria-hidden="true"
+                                *ngIf="c.hasUserLike; else nonActiveCommentLike"></i>
+                            <ng-template #nonActiveCommentLike>
+                                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                            </ng-template>
+                            <span class="comment-like-counter">{{c.likesCount}}</span>
+                        </div>
+                        <div class="comment-dislike-container" (click)="dislikeComment(c)">
+                            <i class="fa fa-thumbs-down" aria-hidden="true"
+                                *ngIf="c.hasUserDislike; else nonActiveCommentDislike"></i>
+                            <ng-template #nonActiveCommentDislike>
+                                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                            </ng-template>
+                            <span class="comment-dislike-counter">{{c.dislikesCount}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hide-all-comments" *ngIf="commentsTotal > 1 && comments.length > 1" (click)="hideAllComment()">
+            Hide comments
+        </div>
+    </div>
     <div class="card-left-comment">
         <!-- <mat-form-field class="crypto-input bft-form-input full-width"> -->
-        <textarea class="crypto-textarea nborder comment-textarea" placeholder="Write a public comment..."></textarea>
-        <div class="send-button">Send</div>
+        <textarea class="crypto-textarea nborder comment-textarea" placeholder="Write a public comment..."
+            [(ngModel)]="comment"></textarea>
+        <div class="send-button" [ngClass]="{'disabled': !comment || comment.length === 0}" (click)="sendComment()">Send
+        </div>
         <!-- </mat-form-field> -->
     </div>
 </div>

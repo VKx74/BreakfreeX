@@ -1,25 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { IInstrument } from "@app/models/common/instrument";
 import { IdentityService } from "@app/services/auth/identity.service";
+import { SonarFeedCommentVM } from "../sonar-feed-wall/sonar-feed-wall.component";
 declare var ResizeObserver;
-
-export interface SonarFeedCardVM {
-   id: any;
-   instrument: IInstrument;
-   granularity: number;
-   time: number;
-   title: string;
-   hasMyLike: boolean;
-   hasMyDislike: boolean;
-   likeCount: number;
-   dislikeCount: number;
-}
 
 @Component({
     selector: 'sonar-feed-card',
     templateUrl: './sonar-feed-card.component.html',
     styleUrls: ['./sonar-feed-card.component.scss'],
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarFeedCardComponent implements OnInit {
     private _instrument: IInstrument;
@@ -32,6 +21,11 @@ export class SonarFeedCardComponent implements OnInit {
     private _hasMyDislike: boolean;
     private _likeCount: number = 0;
     private _dislikeCount: number = 0;
+    private _comment: string;
+    private _comments: SonarFeedCommentVM[] = [];
+    private _commentsTotal: number = 0;
+    private _isFavorite: boolean;
+    private _showLastComment: boolean = true;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
@@ -39,18 +33,22 @@ export class SonarFeedCardComponent implements OnInit {
     @Output() onOpenChart = new EventEmitter<void>();
     @Output() onLike = new EventEmitter<void>();
     @Output() onDislike = new EventEmitter<void>();
+    @Output() onCommentLike = new EventEmitter<any>();
+    @Output() onCommentDislike = new EventEmitter<any>();
     @Output() onShare = new EventEmitter<void>();
     @Output() onAddComment = new EventEmitter<string>();
     @Output() onRemoveComment = new EventEmitter<any>();
+    @Output() onShowAllComments = new EventEmitter<void>();
+    @Output() onFavorite = new EventEmitter<void>();
 
     @Input() public set isVisible(value: boolean) {
         this._isVisible = value;
-    } 
-    
+    }
+
     @Input() public set hasMyLike(value: boolean) {
         this._hasMyLike = value;
     }
-    
+
     @Input() public set hasMyDislike(value: boolean) {
         this._hasMyDislike = value;
     }
@@ -77,6 +75,22 @@ export class SonarFeedCardComponent implements OnInit {
 
     @Input() public set instrument(value: IInstrument) {
         this._instrument = value;
+    }
+
+    @Input() public set comments(value: SonarFeedCommentVM[]) {
+        this._comments = value;
+    }
+
+    @Input() public set commentsTotal(value: number) {
+        this._commentsTotal = value;
+    }
+
+    @Input() public set isFavorite(value: boolean) {
+        this._isFavorite = value;
+    }
+
+    public set comment(value: string) {
+        this._comment = value;
     }
 
     public get instrument(): IInstrument {
@@ -115,7 +129,33 @@ export class SonarFeedCardComponent implements OnInit {
         return this._dislikeCount;
     }
 
-    constructor(protected _identityService: IdentityService, 
+    public get comment(): string {
+        return this._comment;
+    }
+
+    public get comments(): SonarFeedCommentVM[] {
+        if (this._showLastComment && this._comments) {
+            const length = this._comments.length;
+            if (length > 1) {
+                return this._comments.slice(length - 1);
+            }
+        }
+        return this._comments;
+    }
+
+    public get commentsTotal(): number {
+        return this._commentsTotal;
+    }
+
+    public get isFavorite(): boolean {
+        return this._isFavorite;
+    }
+
+    public get showLastComment(): boolean {
+        return this._showLastComment;
+    }
+
+    constructor(protected _identityService: IdentityService,
         private host: ElementRef,
         protected _cdr: ChangeDetectorRef) {
     }
@@ -142,14 +182,14 @@ export class SonarFeedCardComponent implements OnInit {
         }
     }
 
-    createTimeString(): string {
-        if (!this._time) {
+    createTimeString(time: number): string {
+        if (!time) {
             return "";
         }
 
         const timeNow = Math.trunc(new Date().getTime() / 1000);
-        const dateOfCreation = new Date(this._time * 1000);
-        const timeDiff = Math.trunc(timeNow - this._time);
+        const dateOfCreation = new Date(time * 1000);
+        const timeDiff = Math.trunc(timeNow - time);
 
         if (timeDiff < 60) {
             return `${timeDiff} seconds ago`;
@@ -162,7 +202,7 @@ export class SonarFeedCardComponent implements OnInit {
         } else {
             const secondsInDay = 60 * 60 * 24;
             const days1 = Math.trunc(timeNow / secondsInDay);
-            const days2 = Math.trunc(this._time / secondsInDay);
+            const days2 = Math.trunc(time / secondsInDay);
             const timeStringSplitted = dateOfCreation.toLocaleTimeString().split(":");
             const timeString = `${timeStringSplitted[0]}:${timeStringSplitted[1]}`;
             const dateString = dateOfCreation.toLocaleDateString();
@@ -190,6 +230,41 @@ export class SonarFeedCardComponent implements OnInit {
 
     dislike() {
         this.onDislike.next();
+    }
+
+    favorite() {
+        this.onFavorite.next();
+    }
+
+    likeComment(comment: SonarFeedCommentVM) {
+        this.onCommentLike.next(comment.id);
+    }
+
+    dislikeComment(comment: SonarFeedCommentVM) {
+        this.onCommentDislike.next(comment.id);
+    }
+
+    sendComment() {
+        if (!this.comment || !this.comment.length) {
+            return;
+        }
+
+        this.onAddComment.next(this.comment);
+        this.comment = null;
+    }
+
+    showAllComment() {
+        this._showLastComment = false;
+        this.onShowAllComments.next();
+    }
+
+    removeComment(comment: SonarFeedCommentVM) {
+        this.onRemoveComment.next(comment.id);
+    }
+
+    hideAllComment() {
+        this._showLastComment = true;
+        this._cdr.detectChanges();
     }
 
     private _adjustChartHeight(containerWidth: number) {

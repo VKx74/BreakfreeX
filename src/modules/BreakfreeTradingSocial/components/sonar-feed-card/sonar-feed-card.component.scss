@@ -28,11 +28,27 @@
             display: flex;
             font-weight: 500;
             text-transform: uppercase;
+
+            .favorite-icon {
+                margin-right: 10px;
+                cursor: pointer;
+
+                .fa-star {
+                    color: gold;
+                }
+            }
         }
 
         .card-header-timestamp {
             display: flex;
             font-size: 11px;
+        }
+
+        .card-header-timestamp,
+        .card-header-title {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
     .card-chart {
@@ -122,6 +138,116 @@
             margin-left: 5px;
         }
     }
+
+    .card-comments {
+        max-height: 400px;
+        overflow: scroll;
+    }
+
+    .comment-row {
+        display: flex;
+        // margin: 5px;
+        margin: 5px 15px;
+
+        .comment-item {
+            display: flex;
+            width: 100%;
+
+            .comment-avatar {
+                display: flex;
+                flex-direction: column;
+                width: 50px;
+                height: 100%;
+
+                .comment-avatar-img {
+                    display: flex;
+                    width: 32px;
+                    height: 32px;
+                    justify-content: center;
+                }
+            }
+
+            .remove-comment {
+                display: flex;
+                justify-content: left;
+
+                i {
+                    padding: 4px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    font-size: 8px;
+                    height: fit-content;
+                }
+            }
+
+            .comment-content {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+
+                .comment-content-header {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .comment-content-header-left {
+                        display: flex;
+                        justify-content: left;
+                        align-items: center;
+
+                        .comment-content-username {
+                            font-weight: 700;
+                        }
+
+                        .comment-content-user-level {
+                            font-size: 0.8em;
+                            margin-left: 5px;
+                        }
+                    }
+                    .comment-content-header-right {
+                        display: flex;
+                        justify-content: right;
+                        font-size: 0.8em;
+                        align-items: center;
+
+                        .card-time {
+                            margin-right: 8px;
+                        }
+                    }
+                }
+
+                .comment-content-data {
+                    margin-top: 5px;
+                    text-align: justify;
+                }
+
+                .comment-content-footer {
+                    display: flex;
+                    justify-content: right;
+                    margin-bottom: 1px;
+
+                    .comment-like-container,
+                    .comment-dislike-container {
+                        padding: 5px 8px;
+                        cursor: pointer;
+                        border-radius: 3px;
+                        i {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .show-all-comments,
+    .hide-all-comments {
+        display: flex;
+        justify-content: center;
+        font-size: 00.8em;
+        padding: 5px;
+        cursor: pointer;
+        opacity: 0.5;
+    }
 }
 
 @include themify($themes, true) {
@@ -144,12 +270,32 @@
         border-color: themed("sonar-feed-border") !important;
     }
 
+    .comment-row {
+        border-bottom: 1px solid;
+        border-color: themed("sonar-feed-border") !important;
+    }
+
     .card-footer-share-button,
     .card-footer-view-button,
     .like-container,
     .dislike-container {
         &:hover {
             background-color: themed("sonar-feed-post-button");
+        }
+    }
+
+    .comment-like-container,
+    .comment-dislike-container {
+        &:hover {
+            background-color: themed("sonar-feed-post-button");
+        }
+    }
+
+    .remove-comment {
+        i {
+            &:hover {
+                background-color: themed("sonar-feed-post-button");
+            }
         }
     }
 

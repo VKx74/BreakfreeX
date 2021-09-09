@@ -15,7 +15,9 @@ export class SocialFeedModelConverter {
             dislikesCount: dto.dislikesCount,
             hasUserLike: dto.hasUserLike,
             hasUserDislike: dto.hasUserDislike,
-            lastComment: dto.lastComment
+            lastComment: dto.lastComment,
+            commentsTotal: dto.commentsTotal,
+            isFavorite: dto.isFavorite
         };
     } 
     

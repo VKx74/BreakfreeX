@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AppConfigService } from "@app/services/app.config.service";
+import { switchmap } from "@decorators/switchmap";
 import { Observable, of, Subject } from "rxjs";
-import { map } from "rxjs/operators";
-import { SonarFeedCommentDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO } from "../models/sonar.feed.dto.models";
+import { map, switchMap } from "rxjs/operators";
+import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO } from "../models/sonar.feed.dto.models";
 import { SonarFeedComment, SonarFeedItem } from "../models/sonar.feed.models";
 import { SocialFeedModelConverter } from "./models.convertter";
 
@@ -36,13 +37,22 @@ export class SonarFeedService {
     getComments(postId: any): Observable<SonarFeedComment[]> {
         const existing = this._items.find(_ => _.id === postId);
 
-        if (existing && existing.comments) {
-            return of(existing.comments);
-        }
+        // if (!forceReload) {
+        //     if (existing && existing.comments) {
+        //         return of(existing.comments);
+        //     }
+        // }
 
         return this._loadComments(postId).pipe(map((items) => {
             if (existing) {
                 existing.comments = items;
+                if (items) {
+                    existing.lastComment = items[items.length - 1];
+                } else {
+                    existing.lastComment = null;
+                }
+                existing.commentsTotal = existing.comments ? existing.comments.length : 0;
+                this.onItemChanged.next(existing);
             }
             return items;
         }));
@@ -86,6 +96,30 @@ export class SonarFeedService {
             this._updateItemLikes(post, response);
             return post;
         }));
+    } 
+    
+    setFavorite(postId: any): Observable<SonarFeedItem> {
+        const post = this._getPost(postId);
+        if (post.isFavorite) {
+            return this.deleteFavorite(postId);
+        }
+
+        return this._http.post<SonarFeedItemLikeResponseDTO>(`${this._url}api/post/${postId}/favorite`, {}).pipe(map((response) => {
+            this._updateItemLikes(post, response);
+            return post;
+        }));
+    }
+
+    deleteFavorite(postId: any): Observable<SonarFeedItem> {
+        const post = this._getPost(postId);
+        if (!post.isFavorite) {
+            return of(post);
+        }
+
+        return this._http.delete<SonarFeedItemLikeResponseDTO>(`${this._url}api/post/${postId}/favorite`).pipe(map((response) => {
+            this._updateItemLikes(post, response);
+            return post;
+        }));
     }
 
     likeComment(postId: any, commentId: any): Observable<SonarFeedComment> {
@@ -94,18 +128,16 @@ export class SonarFeedService {
             return of(null);
         }
 
+        if (comment.hasUserLike) {
+            return this.deleteLikeComment(postId, commentId);
+        }
+
         const post = this._getPost(postId);
 
-        return this._http.post<any>(`${this._url}api/comment/${commentId}/like`, {
+        return this._http.post<SonarFeedItemCommentLikeResponseDTO>(`${this._url}api/comment/${commentId}/like?isLike=true`, {
             isLike: true
-        }).pipe(map(() => {
-            comment.likesCount++;
-            comment.hasUserLike = true;
-            if (comment.hasUserDislike) {
-                comment.dislikesCount--;
-                comment.hasUserDislike = false;
-            }
-            this.onItemChanged.next(post);
+        }).pipe(map((response) => {
+            this._updateCommentLikes(post, comment, response);
             return comment;
         }));
     }
@@ -116,18 +148,16 @@ export class SonarFeedService {
             return of(null);
         }
 
+        if (comment.hasUserDislike) {
+            return this.deleteLikeComment(postId, commentId);
+        }
+
         const post = this._getPost(postId);
 
-        return this._http.post<any>(`${this._url}api/comment/${commentId}/like`, {
+        return this._http.post<SonarFeedItemCommentLikeResponseDTO>(`${this._url}api/comment/${commentId}/like?isLike=false`, {
             isLike: false
-        }).pipe(map(() => {
-            comment.dislikesCount++;
-            comment.hasUserDislike = true;
-            if (comment.hasUserLike) {
-                comment.likesCount--;
-                comment.hasUserLike = false;
-            }
-            this.onItemChanged.next(post);
+        }).pipe(map((response) => {
+            this._updateCommentLikes(post, comment, response);
             return comment;
         }));
     }
@@ -140,16 +170,8 @@ export class SonarFeedService {
 
         const post = this._getPost(postId);
 
-        return this._http.delete<any>(`${this._url}api/comment/${commentId}/like`).pipe(map(() => {
-            if (comment.hasUserLike) {
-                comment.likesCount--;
-            }
-            if (comment.hasUserDislike) {
-                comment.dislikesCount--;
-            }
-            comment.hasUserLike = false;
-            comment.hasUserDislike = false;
-            this.onItemChanged.next(post);
+        return this._http.delete<SonarFeedItemCommentLikeResponseDTO>(`${this._url}api/comment/${commentId}/like`).pipe(map((response) => {
+            this._updateCommentLikes(post, comment, response);
             return comment;
         }));
     }
@@ -162,10 +184,11 @@ export class SonarFeedService {
         }
 
         return this._http.post<any>(`${this._url}api/post/${postId}/comment`, {
-            comment: comment
-        }).pipe(map(() => {
-            // todo: reload post
-            return post;
+            text: comment
+        }).pipe(switchMap(() => {
+            return this.getComments(postId).pipe(map((item) => {
+                return post;
+            }));
         }));
     }
     
@@ -177,9 +200,10 @@ export class SonarFeedService {
             return of(null);
         }
 
-        return this._http.delete<any>(`${this._url}api/comment/${commentId}`).pipe(map(() => {
-           // todo: reload post
-            return post;
+        return this._http.delete<any>(`${this._url}api/comment/${commentId}`).pipe(switchMap(() => {
+            return this.getComments(postId).pipe(map((item) => {
+                return post;
+            }));
         }));
     }
 
@@ -222,6 +246,12 @@ export class SonarFeedService {
             }
             return res;
         }));
+    } 
+    
+    private _loadItem(id: any): Observable<SonarFeedItem> {
+        return this._http.get<SonarFeedItemDTO>(`${this._url}api/post/${id}`).pipe(map((item) => {
+           return SocialFeedModelConverter.ConvertToSonarFeedItem(item);
+        }));
     }
 
     private _loadComments(postId: any): Observable<SonarFeedComment[]> {
@@ -244,6 +274,20 @@ export class SonarFeedService {
         post.likesCount = response.likesCount;
         post.hasUserDislike = response.hasUserDislike;
         post.hasUserLike = response.hasUserLike;
+        post.isFavorite = response.isFavorite;
+
+        this.onItemChanged.next(post);
+    }
+
+    private _updateCommentLikes(post: SonarFeedItem, comment: SonarFeedComment, response: SonarFeedItemCommentLikeResponseDTO) {
+        if (!response || !comment || !post) {
+            return;
+        }
+
+        comment.dislikesCount = response.dislikesCount;
+        comment.likesCount = response.likesCount;
+        comment.hasUserDislike = response.hasUserDislike;
+        comment.hasUserLike = response.hasUserLike;
 
         this.onItemChanged.next(post);
     }
