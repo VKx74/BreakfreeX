@@ -93,27 +93,54 @@
     }
     .card-left-comment {
         display: flex;
+        flex-direction: column;
         width: 100%;
 
-        textarea {
-            height: 28px;
-            margin: 5px 0px 5px 5px;
-            font-size: 11px !important;
-            line-height: 14px;
-            border-radius: 12px 0px 0px 12px;
-            resize: none;
+        .replay-description {
+            display: inline-flex;
+            justify-content: space-between;
+            margin: 0px 20px 0px 10px;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-top: 8px;
+
+            .replay-comment-text {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin-right: 15px;
+            }
         }
 
-        .send-button {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 28px;
-            margin: 5px 5px 5px 0px;
-            padding: 0px 10px;
-            border-radius: 0px 12px 12px 0px;
-            font-weight: 500;
+        .replay-comment-close {
             cursor: pointer;
+        }
+
+        .card-left-comment-input {
+            display: flex;
+            margin-right: 10px;
+
+            textarea {
+                height: 28px;
+                margin: 5px 0px 5px 5px;
+                font-size: 11px !important;
+                line-height: 14px;
+                border-radius: 12px 0px 0px 12px;
+                resize: none;
+            }
+
+            .send-button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 28px;
+                margin: 5px 5px 5px 0px;
+                padding: 0px 10px;
+                border-radius: 0px 12px 12px 0px;
+                font-weight: 500;
+                cursor: pointer;
+            }
         }
     }
 
@@ -141,13 +168,12 @@
 
     .card-comments {
         max-height: 400px;
-        overflow: scroll;
+        overflow-y: auto;
     }
 
     .comment-row {
         display: flex;
-        // margin: 5px;
-        margin: 5px 15px;
+        margin: 10px 20px 5px 10px;
 
         .comment-item {
             display: flex;
@@ -156,7 +182,7 @@
             .comment-avatar {
                 display: flex;
                 flex-direction: column;
-                width: 50px;
+                min-width: 50px;
                 height: 100%;
 
                 .comment-avatar-img {
@@ -183,6 +209,7 @@
             .comment-content {
                 display: flex;
                 width: 100%;
+                // max-width: calc(100% - 50px);
                 flex-direction: column;
 
                 .comment-content-header {
@@ -217,7 +244,23 @@
 
                 .comment-content-data {
                     margin-top: 5px;
-                    text-align: justify;
+                    display: flex;
+                    flex-direction: column;
+
+                    .comment-content-data-replay {
+                        margin-bottom: 8px;
+                        padding: 8px;
+                        border-radius: 5px;
+                        font-size: 0.8em;
+                        // overflow: hidden;
+                        // white-space: nowrap;
+                        // text-overflow: ellipsis;
+                    }
+
+                    .comment-content-data-text {
+                        text-align: justify;
+                        display: flex;
+                    }
                 }
 
                 .comment-content-footer {
@@ -233,6 +276,15 @@
                         i {
                             margin-right: 5px;
                         }
+                    }
+
+                    .replay-button {
+                        display: flex;
+                        justify-content: left;
+                        align-items: center;
+                        font-size: 0.8em;
+                        margin-right: 10px;
+                        cursor: pointer;
                     }
                 }
             }
@@ -297,6 +349,14 @@
                 background-color: themed("sonar-feed-post-button");
             }
         }
+    }
+
+    .replay-description {
+        background-color: themed("sonar-feed-border");
+    }
+
+    .comment-content-data-replay {
+        background-color: themed("sonar-feed-border");
     }
 
     .send-button {

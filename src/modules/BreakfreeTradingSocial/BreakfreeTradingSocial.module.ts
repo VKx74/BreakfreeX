@@ -27,6 +27,7 @@ import { DataFeedBase } from '@chart/datafeed/DataFeedBase';
 import { SonarChartDataFeed } from '@chart/datafeed/SonarChartDataFeed';
 import { SonarChartIndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
 import { SonarFeedService } from './services/sonar.feed.service';
+import { SonarFeedSocketService } from './services/sonar.feed.socket.service';
 
 @NgModule({
     // components here
@@ -76,7 +77,8 @@ import { SonarFeedService } from './services/sonar.feed.service';
             provide: DataFeedBase,
             useClass: SonarChartDataFeed
         },
-        SonarFeedService
+        SonarFeedService,
+        SonarFeedSocketService
     ]
 })
 export class BreakfreeTradingSocialModule {

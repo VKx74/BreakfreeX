@@ -51,7 +51,7 @@
     "bftAlertsWS": "wss://notifications-alerts-stage.breakfreetrading.com/websocket",
     "bftAlertsREST": "https://user-api-alerts-stage.breakfreetrading.com/",
     "socialFeedREST": "https://socialfeed-social-stage.breakfreetrading.com/",
-    "socialFeedWS": "socialFeedWS"
+    "socialFeedWS": "wss://socialfeed-social-stage.breakfreetrading.com/websocket"
   },
   "systemMonitoringUrls": {
     "platform": {

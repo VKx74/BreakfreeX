@@ -1,8 +1,8 @@
 import { SonarFeedCommentDTO, SonarFeedItemDTO } from "../models/sonar.feed.dto.models";
-import { SonarFeedComment, SonarFeedItem } from "../models/sonar.feed.models";
+import { SocialFeedCommentAddedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem } from "../models/sonar.feed.models";
 
 export class SocialFeedModelConverter {
-    public static ConvertToSonarFeedItem(dto: SonarFeedItemDTO): SonarFeedItem {
+    public static ConvertToSonarFeedPost(dto: SonarFeedItemDTO): SonarFeedItem {
         return {
             id: dto.id,
             symbol: dto.body.symbol,
@@ -23,5 +23,41 @@ export class SocialFeedModelConverter {
     
     public static ConvertToSonarFeedComment(dto: SonarFeedCommentDTO): SonarFeedComment {
         return dto;
+    }
+
+    public static ConvertNotificationToSonarFeedComment(dto: SocialFeedCommentAddedNotification): SonarFeedComment {
+        return {
+            comments: null,
+            dislikesCount: dto.dislikesCount,
+            hasUserDislike: false,
+            hasUserLike: false,
+            id: dto.id,
+            isOwnComment: false,
+            likesCount: dto.likesCount,
+            parentComment: null,
+            text: dto.text,
+            time: dto.time,
+            user: dto.user
+        };
+    }
+
+    public static ConvertNotificationToSonarFeedPost(dto: SocialFeedPostAddedNotification): SonarFeedItem {
+        return {
+            comments: null,
+            lastComment: null,
+            dislikesCount: dto.dislikesCount,
+            hasUserDislike: false,
+            hasUserLike: false,
+            id: dto.id,
+            likesCount: dto.likesCount,
+            time: dto.time,
+            commentsTotal: 0,
+            exchange: dto.exchange,
+            granularity: dto.granularity,
+            isFavorite: false,
+            side: dto.side,
+            symbol: dto.symbol,
+            type: dto.type
+        };
     }
 }

@@ -9,6 +9,7 @@ import { SonarFeedComment, SonarFeedItem } from "modules/BreakfreeTradingSocial/
 import { SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { ConfirmModalComponent } from "modules/UI/components";
 import { Subscription } from "rxjs";
+import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
 
 export interface SonarFeedCommentVM {
     id: any;
@@ -21,6 +22,7 @@ export interface SonarFeedCommentVM {
     hasUserLike: boolean;
     hasUserDislike: boolean;
     parentCommentId: any;
+    parentCommentText: any;
     isOwnComment: boolean;
     time: number;
 }
@@ -36,6 +38,7 @@ export interface SonarFeedCardVM {
     likeCount: number;
     dislikeCount: number;
     commentsTotal: number;
+    sortIndex: number;
     isFavorite: boolean;
     comments: SonarFeedCommentVM[];
 }
@@ -82,9 +85,9 @@ export class SonarFeedWallComponent implements OnInit {
                 this._refreshNeeded = false;
                 this._cdr.detectChanges();
             }
-        }, 1000);
+        }, 300);
 
-        this._itemChangedSubscription = this._sonarFeedService.onItemChanged.subscribe((_: SonarFeedItem) => {
+        this._itemChangedSubscription = this._sonarFeedService.onPostChanged.subscribe((_: SonarFeedItem) => {
             this.updateItem(_);
         });
     }
@@ -231,6 +234,17 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
+    addReplay(replayData: IReplayData, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.postReplay(card.id, replayData.commentId, replayData.text).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
     private _removeComment(commentId: any, card: SonarFeedCardVM) {
         this.loading = true;
         this._sonarFeedService.deleteComment(card.id, commentId).subscribe(() => {
@@ -242,6 +256,18 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
+    private _isInside(a1: number, a2: number, b1: number, b2: number): boolean {
+        if (a1 < b1 && a2 < b1) {
+            return false;
+        } 
+        
+        if (a1 > b2 && a2 > b1) {
+            return false;
+        }
+
+        return true;
+    }
+
     private _updateVisibleRecords(target: any) {
         const height = target.clientHeight;
         const cards = $(target).find(".card-container");
@@ -249,14 +275,31 @@ export class SonarFeedWallComponent implements OnInit {
             return;
         }
 
-        const cardHeight = cards[0].clientHeight + cards[0].offsetTop;
+        const cardsHeight: number[] = [];
+        for (const card of cards) {
+            cardsHeight.push($(card).outerHeight(true));
+        }
+
         const scrolledTop = target.scrollTop;
 
-        const firstVisibleItem = Math.trunc(scrolledTop / cardHeight);
-        const lastVisibleItem = Math.trunc((scrolledTop + height) / cardHeight) + 1;
+        let totalHeight = 0;
+        let index = 0;
+        let visibleItems: number[] = [];
 
-        this._firstVisible = firstVisibleItem;
-        this._lastVisible = lastVisibleItem + 2;
+        for (const cardHeight of cardsHeight) {
+            const start = totalHeight;
+            const end = start + cardHeight;
+            totalHeight += cardHeight;
+            const isVisible = this._isInside(start, end, scrolledTop, scrolledTop + height);
+            if (isVisible) {
+                visibleItems.push(index);
+            }
+            index++;
+        }
+
+        this._firstVisible = Math.min(...visibleItems);
+        this._lastVisible = Math.max(...visibleItems) + 2;
+        // console.log(`!!! ${this._firstVisible} - ${this._lastVisible}`);
 
         if (this._items && this._lastVisible >= this._items.length && this._canLoadMore && !this._loadingMore) {
             this._loadMore();
@@ -293,12 +336,12 @@ export class SonarFeedWallComponent implements OnInit {
             const existing = this._items.find(_ => _.id === i.id);
             if (!existing) {
                 this._items.push(i);
-                this._mapInstrumentAndAdd(i);
+                this._mapInstrumentAndAdd(i, this._items.length);
             }
         }
     }
 
-    private _mapInstrumentAndAdd(setupItem: SonarFeedItem) {
+    private _mapInstrumentAndAdd(setupItem: SonarFeedItem, index: number) {
         this._instrumentService.getInstruments(null, setupItem.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
                 return;
@@ -319,7 +362,8 @@ export class SonarFeedWallComponent implements OnInit {
                 return;
             }
 
-            this.cards.push(this._convertToVM(setupItem, instrument));
+            this.cards.push(this._convertToVM(setupItem, instrument, index));
+            this.cards.sort((a, b) => a.sortIndex - b.sortIndex);
 
             this._refreshNeeded = true;
 
@@ -328,7 +372,7 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
-    private _convertToVM(item: SonarFeedItem, instrument: IInstrument): SonarFeedCardVM {
+    private _convertToVM(item: SonarFeedItem, instrument: IInstrument, index: number): SonarFeedCardVM {
         return {
             id: item.id,
             dislikeCount: item.dislikesCount,
@@ -341,7 +385,8 @@ export class SonarFeedWallComponent implements OnInit {
             title: this._getTitle(item.granularity, item.symbol, item.type, item.side === IBFTATrend.Up ? "Long" : "Short"),
             comments: this._getComments(item),
             commentsTotal: item.commentsTotal,
-            isFavorite: item.isFavorite
+            isFavorite: item.isFavorite,
+            sortIndex: index
         };
     }
 
@@ -372,7 +417,8 @@ export class SonarFeedWallComponent implements OnInit {
             userAvatarId: comment.user.avatarId,
             userLevel: comment.user.level,
             userName: comment.user.name,
-            parentCommentId: comment.parentComment ? comment.parentComment.id : null
+            parentCommentId: comment.parentComment ? comment.parentComment.id : null,
+            parentCommentText: comment.parentComment ? comment.parentComment.text : null,
         };
     }
 

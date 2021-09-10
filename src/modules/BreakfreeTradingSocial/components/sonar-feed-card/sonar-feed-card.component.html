@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="card-comments">
+    <div class="card-comments" #scroll>
         <div class="show-all-comments" *ngIf="commentsTotal > 1 && comments.length <= 1" (click)="showAllComment()">
             View all {{commentsTotal}} comments
         </div>
@@ -71,9 +71,17 @@
                         </div>
                     </div>
                     <div class="comment-content-data">
-                        {{c.text}}
+                        <div class="comment-content-data-replay" *ngIf="c.parentCommentText">
+                            {{c.parentCommentText}}
+                        </div>
+                        <div class="comment-content-data-text">
+                            {{c.text}}
+                        </div>
                     </div>
                     <div class="comment-content-footer" [ngClass]="{'disabled': c.isOwnComment}">
+                        <div class="replay-button" *ngIf="!c.isOwnComment" (click)="replay(c)">
+                            Replay
+                        </div>
                         <div class="comment-like-container" (click)="likeComment(c)">
                             <i class="fa fa-thumbs-up" aria-hidden="true"
                                 *ngIf="c.hasUserLike; else nonActiveCommentLike"></i>
@@ -99,10 +107,21 @@
         </div>
     </div>
     <div class="card-left-comment">
+        <div class="replay-description" *ngIf="replayComment">
+            <div class="replay-comment-text">
+                {{replayComment.text}}
+            </div>
+            <div class="replay-comment-close">
+                <i class="crypto-icon crypto-icon-close" (click)="stopReplay()"></i>
+            </div>
+        </div>
         <!-- <mat-form-field class="crypto-input bft-form-input full-width"> -->
-        <textarea class="crypto-textarea nborder comment-textarea" placeholder="Write a public comment..."
-            [(ngModel)]="comment"></textarea>
-        <div class="send-button" [ngClass]="{'disabled': !comment || comment.length === 0}" (click)="sendComment()">Send
+        <div class="card-left-comment-input">
+            <textarea class="crypto-textarea nborder comment-textarea" placeholder="Write a public comment..."
+                [(ngModel)]="comment" #textarea></textarea>
+            <div class="send-button" [ngClass]="{'disabled': !comment || comment.length === 0}" (click)="sendComment()">
+                Send
+            </div>
         </div>
         <!-- </mat-form-field> -->
     </div>

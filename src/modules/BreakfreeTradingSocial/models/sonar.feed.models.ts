@@ -35,3 +35,43 @@ export interface SonarFeedItem {
     commentsTotal: number;
     isFavorite: boolean;
 }
+
+export interface SocialFeedPostAddedNotification {
+    id: any;
+    symbol: string;
+    exchange: string;
+    type: string;
+    side: string;
+    granularity: number;
+    time: number;
+    likesCount: number;
+    dislikesCount: number;
+}
+
+export interface SocialFeedCommentRemovedNotification {
+    id: any;
+    postId: number;
+}
+
+export interface SocialFeedCommentEditedNotification {
+    id: any;
+    postId: number;
+    parentCommentId: number;
+    text: string;
+    user: SonarFeedUserInfo;
+    likesCount: number;
+    dislikesCount: number;
+    time: number;
+}
+
+export interface SocialFeedCommentAddedNotification extends SocialFeedCommentEditedNotification {
+}
+
+export interface SocialFeedCommentPostReactionNotification {
+    id: any;
+    likesCount: number;
+    dislikesCount: number;
+}
+
+export interface SocialFeedCommentCommentReactionNotification extends SocialFeedCommentPostReactionNotification {
+}

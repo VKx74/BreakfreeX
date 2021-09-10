@@ -4,6 +4,11 @@ import { IdentityService } from "@app/services/auth/identity.service";
 import { SonarFeedCommentVM } from "../sonar-feed-wall/sonar-feed-wall.component";
 declare var ResizeObserver;
 
+export interface IReplayData {
+    commentId: any;
+    text: string;
+}
+
 @Component({
     selector: 'sonar-feed-card',
     templateUrl: './sonar-feed-card.component.html',
@@ -26,9 +31,13 @@ export class SonarFeedCardComponent implements OnInit {
     private _commentsTotal: number = 0;
     private _isFavorite: boolean;
     private _showLastComment: boolean = true;
+    private _scrollDownNeed: boolean = false;
+    private _replayCommentId: any;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
+    @ViewChild('scroll', { static: true }) scroll: ElementRef;
+    @ViewChild('textarea', { static: true }) textarea: ElementRef;
 
     @Output() onOpenChart = new EventEmitter<void>();
     @Output() onLike = new EventEmitter<void>();
@@ -37,6 +46,7 @@ export class SonarFeedCardComponent implements OnInit {
     @Output() onCommentDislike = new EventEmitter<any>();
     @Output() onShare = new EventEmitter<void>();
     @Output() onAddComment = new EventEmitter<string>();
+    @Output() onAddReplay = new EventEmitter<IReplayData>();
     @Output() onRemoveComment = new EventEmitter<any>();
     @Output() onShowAllComments = new EventEmitter<void>();
     @Output() onFavorite = new EventEmitter<void>();
@@ -79,6 +89,7 @@ export class SonarFeedCardComponent implements OnInit {
 
     @Input() public set comments(value: SonarFeedCommentVM[]) {
         this._comments = value;
+        this._scrollToBottom();
     }
 
     @Input() public set commentsTotal(value: number) {
@@ -155,6 +166,11 @@ export class SonarFeedCardComponent implements OnInit {
         return this._showLastComment;
     }
 
+    public get replayComment(): SonarFeedCommentVM {
+        const comment = this._comments.find(_ => _.id === this._replayCommentId);
+        return comment;
+    }
+
     constructor(protected _identityService: IdentityService,
         private host: ElementRef,
         protected _cdr: ChangeDetectorRef) {
@@ -213,7 +229,7 @@ export class SonarFeedCardComponent implements OnInit {
 
             if (timeDiff < secondsInDay * 7) {
                 const days = Math.trunc(timeDiff / secondsInDay);
-                return days > 1 ? `${days} hours ago` : `Day ago`;
+                return days > 1 ? `${days} days ago` : `Day ago`;
             }
 
             return `${dateString} ${timeString}`;
@@ -249,12 +265,21 @@ export class SonarFeedCardComponent implements OnInit {
             return;
         }
 
-        this.onAddComment.next(this.comment);
+        if (this._replayCommentId) {
+            this.onAddReplay.next({
+                commentId: this._replayCommentId,
+                text: this.comment
+            });
+            this._replayCommentId = null;
+        } else {
+            this.onAddComment.next(this.comment);
+        }
         this.comment = null;
     }
 
     showAllComment() {
         this._showLastComment = false;
+        this._scrollDownNeed = true;
         this.onShowAllComments.next();
     }
 
@@ -265,6 +290,36 @@ export class SonarFeedCardComponent implements OnInit {
     hideAllComment() {
         this._showLastComment = true;
         this._cdr.detectChanges();
+    }
+
+    replay(comment: SonarFeedCommentVM) {
+        this._replayCommentId = comment.id;
+        this.textarea.nativeElement.focus();
+        this._cdr.detectChanges();
+    }
+
+    stopReplay() {
+        this._replayCommentId = null;
+        this.comment = "";
+        this.textarea.nativeElement.blur();
+        this._cdr.detectChanges();
+    }
+
+    private _scrollToBottom(): void {
+        if (!this._scrollDownNeed) {
+            return;
+        }
+        
+        this._scrollDownNeed = false;
+        try {
+            if (this.scroll) {
+                this._cdr.detectChanges();
+                setTimeout(() => {
+                    this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
+                    this._cdr.detectChanges();
+                }, 1);
+            }
+        } catch (err) { }
     }
 
     private _adjustChartHeight(containerWidth: number) {
