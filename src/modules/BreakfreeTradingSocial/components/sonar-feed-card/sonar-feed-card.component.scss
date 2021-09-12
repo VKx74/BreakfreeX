@@ -173,7 +173,7 @@
 
     .comment-row {
         display: flex;
-        margin: 10px 20px 5px 10px;
+        margin: 10px 20px 7px 10px;
 
         .comment-item {
             display: flex;
@@ -182,7 +182,7 @@
             .comment-avatar {
                 display: flex;
                 flex-direction: column;
-                min-width: 50px;
+                min-width: 40px;
                 height: 100%;
 
                 .comment-avatar-img {
@@ -208,13 +208,15 @@
 
             .comment-content {
                 display: flex;
-                width: 100%;
+                width: auto;
                 // max-width: calc(100% - 50px);
                 flex-direction: column;
 
                 .comment-content-header {
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: left;
+                    align-items:baseline;
+                   
 
                     .comment-content-header-left {
                         display: flex;
@@ -223,6 +225,8 @@
 
                         .comment-content-username {
                             font-weight: 700;
+                            text-transform: capitalize;
+                            font-size:11px;
                         }
 
                         .comment-content-user-level {
@@ -234,16 +238,14 @@
                         display: flex;
                         justify-content: right;
                         font-size: 0.8em;
-                        align-items: center;
+                        
 
-                        .card-time {
-                            margin-right: 8px;
-                        }
+                      
                     }
                 }
 
                 .comment-content-data {
-                    margin-top: 5px;
+                    margin-top: 2px;
                     display: flex;
                     flex-direction: column;
 
@@ -258,19 +260,22 @@
                     }
 
                     .comment-content-data-text {
-                        text-align: justify;
-                        display: flex;
+                        display: inline-block;
                     }
+
+            
                 }
 
                 .comment-content-footer {
                     display: flex;
-                    justify-content: right;
-                    margin-bottom: 1px;
+                    justify-content: left;
+                    margin-bottom: 2px;
+                    margin-top:2px; 
 
                     .comment-like-container,
                     .comment-dislike-container {
-                        padding: 5px 8px;
+                        padding: 3px 3px;
+                        margin: 2px;
                         cursor: pointer;
                         border-radius: 3px;
                         i {
@@ -281,10 +286,29 @@
                     .replay-button {
                         display: flex;
                         justify-content: left;
+                        border-radius: 3px;
                         align-items: center;
                         font-size: 0.8em;
-                        margin-right: 10px;
+                        padding: 3px 3px;
+                        margin: 2px;
                         cursor: pointer;
+                    }
+
+                    .card-time {
+                        padding: 3px 3px;
+                        margin: 2px;
+                        cursor: pointer;
+                        border-radius: 3px;
+                        font-size: 10px;
+                        display: flex;
+                        align-self: center;
+                        opacity: 0.7;
+                    }
+                    .remove-comment {
+                        padding: 3px 3px;
+                        margin: 2px;
+                        cursor: pointer;
+                        border-radius: 3px;
                     }
                 }
             }
@@ -302,6 +326,15 @@
     }
 }
 
+
+
+
+.comment-content-data-text::first-letter {
+    text-transform: uppercase;
+}
+
+
+
 @include themify($themes, true) {
     .sonar-card {
         background-color: themed("tableBorders");
@@ -312,6 +345,12 @@
     //     border: 1px solid themed("valueTextColor");
     //     transition-duration: 0.22s;
     // }
+
+    .comment-wrapper {
+        background:themed("comment-wrapper-bg");
+        border-radius: 15px;
+        padding: 5px 10px 5px 10px;
+    }
 
     .sonar-card {
         border: 1px solid transparent;
@@ -337,7 +376,7 @@
     }
 
     .comment-like-container,
-    .comment-dislike-container {
+    .comment-dislike-container, .replay-button {
         &:hover {
             background-color: themed("sonar-feed-post-button");
         }
