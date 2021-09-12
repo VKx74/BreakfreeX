@@ -208,13 +208,13 @@ export class SonarFeedCardComponent implements OnInit {
         const timeDiff = Math.trunc(timeNow - time);
 
         if (timeDiff < 60) {
-            return `${timeDiff} seconds ago`;
+            return `${timeDiff} s ago `;
         } else if (timeDiff < 60 * 60) {
             const mins = Math.trunc(timeDiff / 60);
-            return mins > 1 ? `${mins} minutes ago` : "Minute ago";
+            return mins > 1 ? `${mins} m` : "M";
         } else if (timeDiff < 60 * 60 * 24) {
             const hours = Math.trunc(timeDiff / 60 / 60);
-            return hours > 1 ? `${hours} hours ago` : `Hour ago`;
+            return hours > 1 ? `${hours} h` : `H`;
         } else {
             const secondsInDay = 60 * 60 * 24;
             const days1 = Math.trunc(timeNow / secondsInDay);
@@ -229,7 +229,7 @@ export class SonarFeedCardComponent implements OnInit {
 
             if (timeDiff < secondsInDay * 7) {
                 const days = Math.trunc(timeDiff / secondsInDay);
-                return days > 1 ? `${days} days ago` : `Day ago`;
+                return days > 1 ? `${days} d` : `D`;
             }
 
             return `${dateString} ${timeString}`;
