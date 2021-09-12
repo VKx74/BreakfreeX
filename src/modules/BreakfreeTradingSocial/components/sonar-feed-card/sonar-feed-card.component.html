@@ -52,37 +52,36 @@
         </div>
         <div class="comment-row" *ngFor="let c of comments" [ngClass]="{'own-comment': c.isOwnComment}">
             <div class="comment-item">
-                <div class="comment-avatar" *ngIf="!c.isOwnComment">
+                <div class="comment-avatar">
                     <div class="comment-avatar-img">
                         <name-avatar [name]="c.userName" [src]="c.userAvatarId"></name-avatar>
                     </div>
                 </div>
                 <div class="comment-content">
-                    <div class="comment-content-header">
-                        <div class="comment-content-header-left">
-                            <div class="comment-content-username">{{c.userName}}{{c.isOwnComment ? " (You)" : ""}}</div>
-                            <div class="comment-content-user-level">{{c.userLevel}}</div>
+                     <div class="comment-wrapper">
+                        <div class="comment-content-header">
+                            <div class="comment-content-header-left">
+                                <div class="comment-content-username">{{c.userName}}{{c.isOwnComment ? " (You)" : ""}}</div>
+                                <div class="comment-content-user-level">{{c.userLevel}}</div>
+                            </div>
+                            <div class="comment-content-header-right">
+                               
+                                
+                            </div>
                         </div>
-                        <div class="comment-content-header-right">
-                            <div class="card-time">{{createTimeString(c.time)}}</div>
-                            <div class="remove-comment" *ngIf="c.isOwnComment">
-                                <i class="crypto-icon crypto-icon-close" (click)="removeComment(c)"></i>
+                        <div class="comment-content-data">
+                            <div class="comment-content-data-replay" *ngIf="c.parentCommentText">
+                                {{c.parentCommentText}}
+                            </div>
+                            <div class="comment-content-data-text">
+                                {{c.text}}
                             </div>
                         </div>
                     </div>
-                    <div class="comment-content-data">
-                        <div class="comment-content-data-replay" *ngIf="c.parentCommentText">
-                            {{c.parentCommentText}}
-                        </div>
-                        <div class="comment-content-data-text">
-                            {{c.text}}
-                        </div>
-                    </div>
-                    <div class="comment-content-footer" [ngClass]="{'disabled': c.isOwnComment}">
-                        <div class="replay-button" *ngIf="!c.isOwnComment" (click)="replay(c)">
-                            Replay
-                        </div>
-                        <div class="comment-like-container" (click)="likeComment(c)">
+
+
+                    <div class="comment-content-footer" >
+                        <div class="comment-like-container" [ngClass]="{'disabled': c.isOwnComment}" (click)="likeComment(c)">
                             <i class="fa fa-thumbs-up" aria-hidden="true"
                                 *ngIf="c.hasUserLike; else nonActiveCommentLike"></i>
                             <ng-template #nonActiveCommentLike>
@@ -90,7 +89,7 @@
                             </ng-template>
                             <span class="comment-like-counter">{{c.likesCount}}</span>
                         </div>
-                        <div class="comment-dislike-container" (click)="dislikeComment(c)">
+                        <div class="comment-dislike-container" [ngClass]="{'disabled': c.isOwnComment}" (click)="dislikeComment(c)">
                             <i class="fa fa-thumbs-down" aria-hidden="true"
                                 *ngIf="c.hasUserDislike; else nonActiveCommentDislike"></i>
                             <ng-template #nonActiveCommentDislike>
@@ -98,7 +97,16 @@
                             </ng-template>
                             <span class="comment-dislike-counter">{{c.dislikesCount}}</span>
                         </div>
+                        <div class="replay-button" *ngIf="!c.isOwnComment" (click)="replay(c)">
+                            Reply
+                        </div>
+                        <div class="card-time">{{createTimeString(c.time)}}</div>
+                        <div class="remove-comment" *ngIf="c.isOwnComment">
+                            <i class="crypto-icon crypto-icon-close" (click)="removeComment(c)"></i>
+                        </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
