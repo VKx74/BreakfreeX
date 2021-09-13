@@ -23,18 +23,16 @@
     padding: 10px 0px;
   }
 
-
-
-    .flex.BFTN {
-      padding: 10px;
-      margin-left: 5px;
+  .flex.BFTN {
+    padding: 10px;
+    margin-left: 5px;
   }
-  
+
   .flex.BFTN:hover {
-      background: #5655554d;
-      border-radius: 5px;
-      padding: 10px;
-      margin-left: 5px;
+    background: #5655554d;
+    border-radius: 5px;
+    padding: 10px;
+    margin-left: 5px;
   }
 
   .settings-button {
@@ -166,7 +164,7 @@
       color: white;
     }
   }
-  
+
   .no-highlight {
     // background-color: transparent !important;
   }
@@ -179,6 +177,26 @@
       &.save-needed {
         color: #eac84c;
         // cursor: pointer;
+      }
+    }
+  }
+
+  .platform-pages-nav {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+
+    .platform-pages-item {
+      display: flex;
+      margin: 0px 8px;
+      padding: 5px;
+      align-items: center;
+      color: #ffffffd1 !important;
+      cursor: pointer;
+      &:hover {
+        background: #5655554d;
+        border-radius: 5px;
       }
     }
   }
@@ -355,11 +373,18 @@
   }
 }
 
+img.desktopshow {
+  height: 12px;
+  width: auto !important;
+  vertical-align: middle;
+  // margin-top: 4px;
+}
+
 img.mobileshow {
   height: 12px;
   width: auto !important;
   vertical-align: middle;
-  margin-top: 4px;
+  // margin-top: 4px;
 }
 
 .navigation {

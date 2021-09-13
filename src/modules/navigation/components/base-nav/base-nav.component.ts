@@ -101,6 +101,14 @@ export class BaseNavComponent implements OnInit {
         return this._layoutStorageService.autoSaveInitialized;
     }
 
+    public get socialFeedRoute(): string {
+        return AppRoutes.SocialFeed;
+    }
+
+    public get academyRoute(): string {
+        return AppRoutes.Academy;
+    }
+
     constructor(private _identityService: IdentityService,
         private _usersProfileService: UsersProfileService,
         private _cdRef: ChangeDetectorRef,

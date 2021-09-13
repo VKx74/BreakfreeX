@@ -32,6 +32,7 @@ export class SonarFeedCardComponent implements OnInit {
     private _isFavorite: boolean;
     private _showLastComment: boolean = true;
     private _scrollDownNeed: boolean = false;
+    private _showAllCommentsOnExpand: boolean = false;
     private _replayCommentId: any;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
@@ -98,6 +99,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     @Input() public set isFavorite(value: boolean) {
         this._isFavorite = value;
+    } 
+    
+    @Input() public set showAllCommentsOnExpand(value: boolean) {
+        this._showAllCommentsOnExpand = value;
     }
 
     public set comment(value: string) {
@@ -142,6 +147,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get comment(): string {
         return this._comment;
+    }
+
+    public get showAllCommentsOnExpand(): boolean {
+        return this._showAllCommentsOnExpand;
     }
 
     public get comments(): SonarFeedCommentVM[] {
@@ -252,6 +261,10 @@ export class SonarFeedCardComponent implements OnInit {
         this.onFavorite.next();
     }
 
+    share() {
+        this.onShare.next();
+    }
+
     likeComment(comment: SonarFeedCommentVM) {
         this.onCommentLike.next(comment.id);
     }
@@ -332,7 +345,8 @@ export class SonarFeedCardComponent implements OnInit {
             requiredHeigh = 160;
         }
 
-        this.chartContainer.nativeElement.style.height = `${requiredHeigh}px`;
+        this.chartContainer.nativeElement.style["min-height"] = `${requiredHeigh}px`;
+        this.chartContainer.nativeElement.style["height"] = `${requiredHeigh}px`;
         this._cdr.detectChanges();
     }
 }

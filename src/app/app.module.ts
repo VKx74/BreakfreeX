@@ -118,6 +118,7 @@ import { BinanceSocketService } from './services/socket/binance.socket.service';
 import { BinanceInstrumentService } from './services/binance.exchange/binance.instrument.service';
 import { BinanceHistoryService } from './services/binance.exchange/binance.history.service';
 import { BinanceRealtimeService } from './services/binance.exchange/binance.realtime.service';
+import { BreakfreeTradingSocialModule } from 'modules/BreakfreeTradingSocial';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -159,6 +160,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         LocalizationModule.forRoot(),
         TranslateModule.forRoot(),
         TimeZonesModule.forRoot(),
+        BreakfreeTradingSocialModule.forRoot(),
         MatNativeDateModule,
         StoreModule.forRoot(REDUCER_TOKEN, {
             runtimeChecks: {

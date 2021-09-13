@@ -1,5 +1,5 @@
 <!--Depend to broker type show specific component-->
-<ng-container *ngIf="activeBroker$ | async; else noBrokerConnected">
+<ng-container *ngIf="isConnected; else noBrokerConnected">
     <div class="trade-manager h-100 flex" style="position: relative">
         <ng-template #accountInfo>
             <div class="account-info-panel flex-grow-1 flex justify-flex-end align-items-center">

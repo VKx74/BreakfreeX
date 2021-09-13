@@ -39,6 +39,10 @@ const routes: Routes = [
                 path: AppRoutes.Academy,
                 loadChildren: () => import('../Academy/academy.module').then(m => m.AcademyModule)
             },
+            {
+                path: AppRoutes.SocialFeed,
+                loadChildren: () => import('../SocialFeed/social-feed.module').then(m => m.SocialFeedModule)
+            },
         ]
     },
     {

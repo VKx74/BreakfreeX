@@ -20,6 +20,7 @@ export class MissionTrackingService {
     private _timeout: number = 1000 * 60 * 1.5; // 1.5 min
     private _recalculateRequired: boolean = true;
     private _failedMissionsTimeout: any;
+    private _isInitialized: boolean = false;
 
     public get nextUpdateTime(): number {
         return this._nextUpdateTime;
@@ -82,6 +83,12 @@ export class MissionTrackingService {
     }
 
     public initMissions() {
+        if (this._isInitialized) {
+            return;
+        }
+
+        this._isInitialized = true;
+        
         this._tradingProfileService.initMissions();
 
         setTimeout(() => {

@@ -1,4 +1,5 @@
 import {Component} from "@angular/core";
+import { MissionTrackingService } from "@app/services/missions-tracking.service";
 import {ThemeService} from "@app/services/theme.service";
 
 @Component({
@@ -7,6 +8,7 @@ import {ThemeService} from "@app/services/theme.service";
     styleUrls: ['academy-root.component.scss']
 })
 export class AcademyRootComponent {
-    constructor() {
+    constructor(protected _missionTrackingService: MissionTrackingService) {
+        this._missionTrackingService.initMissions();
     }
 }

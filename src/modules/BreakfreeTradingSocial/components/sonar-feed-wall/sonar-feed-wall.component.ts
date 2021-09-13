@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output } from "@angular/core";
+import { AlertService } from "@alert/services/alert.service";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
+import { AppRoutes } from "@app/app.routes";
 import { IInstrument } from "@app/models/common/instrument";
 import { IBFTATrend } from "@app/services/algo.service";
 import { IdentityService } from "@app/services/auth/identity.service";
@@ -9,6 +11,7 @@ import { SonarFeedComment, SonarFeedItem } from "modules/BreakfreeTradingSocial/
 import { SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { ConfirmModalComponent } from "modules/UI/components";
 import { Subscription } from "rxjs";
+import { JsUtil } from "utils/jsUtil";
 import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
 
 export interface SonarFeedCommentVM {
@@ -66,8 +69,15 @@ export class SonarFeedWallComponent implements OnInit {
     private _refreshNeeded: boolean = false;
     private _itemChangedSubscription: Subscription;
     private _items: SonarFeedItem[] = [];
+    private _cardId: any;
 
     @Output() onOpenChart = new EventEmitter<LinkingAction>();
+
+    @Input() isSingleCard: boolean = false;
+    @Input() set cardId(value: any) {
+        this._cardId = value;
+        this._loadItem();
+    }
 
     public cards: SonarFeedCardVM[] = [];
     public loading: boolean;
@@ -77,22 +87,25 @@ export class SonarFeedWallComponent implements OnInit {
         protected _sonarFeedService: SonarFeedService,
         protected _host: ElementRef,
         protected _dialog: MatDialog,
+        protected _alertService: AlertService,
         protected _instrumentService: InstrumentService,
         protected _cdr: ChangeDetectorRef) {
-        this._initData();
+            
         this._timer = setInterval(() => {
             if (this._refreshNeeded) {
                 this._refreshNeeded = false;
                 this._cdr.detectChanges();
             }
         }, 300);
-
-        this._itemChangedSubscription = this._sonarFeedService.onPostChanged.subscribe((_: SonarFeedItem) => {
-            this.updateItem(_);
-        });
     }
 
     ngOnInit() {
+        if (!this.isSingleCard) {
+            this._initData();
+        }
+        this._itemChangedSubscription = this._sonarFeedService.onPostChanged.subscribe((_: SonarFeedItem) => {
+            this.updateItem(_);
+        });
     }
 
     ngAfterViewInit() {
@@ -111,10 +124,16 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     onScroll(event) {
+        if (this.isSingleCard) {
+            return;
+        }
         this._updateVisibleRecords(event.target);
     }
 
     isCardVisible(card: SonarFeedCardVM) {
+        if (this.isSingleCard) {
+            return true;
+        }
         const index = this.cards.indexOf(card);
         return index >= this._firstVisible && index <= this._lastVisible;
     }
@@ -189,6 +208,11 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
+    share(card: SonarFeedCardVM) {
+        const host = `${window.location.origin}/#/${AppRoutes.Platform}/${AppRoutes.SocialFeed}/${card.id}`;
+        JsUtil.copyStringToClipboard(host);
+        this._alertService.success("Share link copied to clipboard.");  
+    }
 
     commentLike(commentId: any, card: SonarFeedCardVM) {
         this.loading = true;
@@ -310,6 +334,18 @@ export class SonarFeedWallComponent implements OnInit {
         this.loading = true;
         this._sonarFeedService.getItems(0, this._loadCount).subscribe((data: SonarFeedItem[]) => {
             this._renderCards(data);
+            this.initialized = true;
+            this.loading = false;
+        }, (error) => {
+        });
+    }  
+    
+    private _loadItem() {
+        this.loading = true;
+        this.cards = [];
+        this._items = [];
+        this._sonarFeedService.getItem(this._cardId).subscribe((data: SonarFeedItem) => {
+            this._renderCards([data]);
             this.initialized = true;
             this.loading = false;
         }, (error) => {

@@ -438,6 +438,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             this._onOrdersParametersUpdated.unsubscribe();
             this._onOrdersParametersUpdated = null;
         }
+
+        this._chart = null;
     }
 
     private _calculatePositionSize(request: IPositionSizeCalculationRequest) {

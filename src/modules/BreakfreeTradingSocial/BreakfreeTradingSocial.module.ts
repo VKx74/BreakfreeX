@@ -63,10 +63,10 @@ import { SonarFeedSocketService } from './services/sonar.feed.socket.service';
     // components here
     exports: [
         SonarFeedWidgetComponent,
-        SonarFeedComponent
+        SonarFeedComponent,
+        SonarFeedWallComponent
     ],
     providers: [
-        HistoryService,
         SonarChartIndicatorDataProviderService,
         {
             provide: BreakfreeTradingSocialTranslateService,
@@ -76,9 +76,7 @@ import { SonarFeedSocketService } from './services/sonar.feed.socket.service';
         {
             provide: DataFeedBase,
             useClass: SonarChartDataFeed
-        },
-        SonarFeedService,
-        SonarFeedSocketService
+        }
     ]
 })
 export class BreakfreeTradingSocialModule {
@@ -86,6 +84,8 @@ export class BreakfreeTradingSocialModule {
         return {
             ngModule: BreakfreeTradingSocialModule,
             providers: [
+                SonarFeedService,
+                SonarFeedSocketService
             ]
         };
     }

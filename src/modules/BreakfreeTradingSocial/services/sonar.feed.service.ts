@@ -13,6 +13,7 @@ import { SonarFeedSocketService } from "./sonar.feed.socket.service";
 @Injectable()
 export class SonarFeedService {
     private _items: SonarFeedItem[] = [];
+    private _unlistedItems: { [id: string]: SonarFeedItem; } = {};
     private _url: string;
     private _commentReactionSubscription: Subscription;
     private _commentAddedSubscription: Subscription;
@@ -53,16 +54,14 @@ export class SonarFeedService {
         return this._loadItems(take * 5, Math.trunc(requestDate)).pipe(map(() => {
             return this._items.slice(skip, skip + take);
         }));
+    } 
+    
+    getItem(id: any): Observable<SonarFeedItem> {
+        return this._loadItem(id); 
     }
 
     getComments(postId: any): Observable<SonarFeedComment[]> {
-        const existing = this._items.find(_ => _.id === postId);
-
-        // if (!forceReload) {
-        //     if (existing && existing.comments) {
-        //         return of(existing.comments);
-        //     }
-        // }
+        const existing = this._getPost(postId);
 
         return this._loadComments(postId).pipe(map((items) => {
             if (existing) {
@@ -81,7 +80,8 @@ export class SonarFeedService {
 
     likeItem(postId: any): Observable<SonarFeedItem> {
         const post = this._getPost(postId);
-        if (post.hasUserLike) {
+
+        if (post && post.hasUserLike) {
             return this.deleteLikeItem(postId);
         }
 
@@ -95,7 +95,7 @@ export class SonarFeedService {
 
     dislikeItem(postId: any): Observable<SonarFeedItem> {
         const post = this._getPost(postId);
-        if (post.hasUserDislike) {
+        if (post && post.hasUserDislike) {
             return this.deleteLikeItem(postId);
         }
 
@@ -109,6 +109,10 @@ export class SonarFeedService {
 
     deleteLikeItem(postId: any): Observable<SonarFeedItem> {
         const post = this._getPost(postId);
+        if (!post) {
+            return of(null);
+        }
+
         if (!post.hasUserLike && !post.hasUserDislike) {
             return of(post);
         }
@@ -121,7 +125,7 @@ export class SonarFeedService {
 
     setFavorite(postId: any): Observable<SonarFeedItem> {
         const post = this._getPost(postId);
-        if (post.isFavorite) {
+        if (post && post.isFavorite) {
             return this.deleteFavorite(postId);
         }
 
@@ -133,7 +137,7 @@ export class SonarFeedService {
 
     deleteFavorite(postId: any): Observable<SonarFeedItem> {
         const post = this._getPost(postId);
-        if (!post.isFavorite) {
+        if (post && !post.isFavorite) {
             return of(post);
         }
 
@@ -248,8 +252,18 @@ export class SonarFeedService {
         }));
     }
 
+    refresh() {
+        this._items = [];
+        this._unlistedItems = {};
+    }
+
     private _getPost(postId: any): SonarFeedItem {
-        return this._items.find(_ => _.id === postId);
+        const post = this._items.find(_ => _.id === postId);
+        if (post) {
+            return post;
+        }
+
+        return this._unlistedItems[postId];
     }
 
     private _getComment(postId: any, commentId: any): SonarFeedComment {
@@ -288,6 +302,22 @@ export class SonarFeedService {
                 }
             }
         }
+
+        for (const item in this._unlistedItems) {
+            const post = this._unlistedItems[item];
+
+            if (post.lastComment && post.lastComment.id === commentId) {
+                return { comment: post.lastComment, post: post };
+            }
+
+            if (post.comments) {
+                for (const comment of post.comments) {
+                    if (comment.id === commentId) {
+                        return { comment: comment, post: post };
+                    }
+                }
+            }
+        }
     }
 
     private _loadItems(limit: number, dateTo: number): Observable<SonarFeedItem[]> {
@@ -303,11 +333,17 @@ export class SonarFeedService {
             }
             return res;
         }));
-    }
+    } 
 
     private _loadItem(id: any): Observable<SonarFeedItem> {
         return this._http.get<SonarFeedItemDTO>(`${this._url}api/post/${id}`).pipe(map((item) => {
-            return SocialFeedModelConverter.ConvertToSonarFeedPost(item);
+            if (!item) {
+                return null;
+            }
+
+            const convertedItem = SocialFeedModelConverter.ConvertToSonarFeedPost(item);
+            this._unlistedItems[convertedItem.id] = convertedItem;
+            return convertedItem;
         }));
     }
 
@@ -477,6 +513,10 @@ export class SonarFeedService {
     }
 
     private _processPostAdded(data: SocialFeedPostAddedNotification) {
+        if (!this._items || !this._items.length) {
+            return;
+        }
+        
         const post = this._getPost(data.id);
         if (post) {
             return;

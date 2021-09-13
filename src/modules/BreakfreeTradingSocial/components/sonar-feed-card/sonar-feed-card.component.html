@@ -41,12 +41,12 @@
                     <span class="dislike-counter">{{dislikeCount}}</span>
                 </div>
             </div>
-            <div class="card-footer-share-button">
+            <div class="card-footer-share-button" (click)="share()">
                 Share
             </div>
         </div>
     </div>
-    <div class="card-comments" #scroll>
+    <div class="card-comments" #scroll [ngClass]="{'limit-comments': !showAllCommentsOnExpand}">
         <div class="show-all-comments" *ngIf="commentsTotal > 1 && comments.length <= 1" (click)="showAllComment()">
             View all {{commentsTotal}} comments
         </div>

@@ -6,5 +6,6 @@ export const AppRoutes = {
     Admin: 'admin',
     Pages: 'pages',
     Landing: 'landing',
-    Academy: 'academy'
+    Academy: 'academy',
+    SocialFeed: 'social-feed'
 };

@@ -1,4 +1,4 @@
-<base-nav [showUserAvatar]="true" [showUserDashboard]="!(isAcademy$ | async)">
+<base-nav [showUserAvatar]="true" [showUserDashboard]="!(showUserDashboard$ | async)">
     <!--    LAYOUT   -->
     <ng-container *ngIf="isPlatformRoot$ | async">
         <!-- <nav-section [paddingRight]="false">

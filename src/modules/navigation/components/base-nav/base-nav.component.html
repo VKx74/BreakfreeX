@@ -6,10 +6,16 @@
                 <a class="logo flex align-items-center" (click)="iconClick()">
                     <div class="flex BFTN">
 
-                        <img class="desktopshow" src="assets/img/bftnavigatorlogo.svg">
+                        <!-- <img class="desktopshow" src="assets/img/bftnavigatorlogo.svg"> -->
+                        <img class="desktopshow" src="assets/img/bftnavigatorlogoshort.svg">
                         <img class="mobileshow" src="assets/img/bftnavigatorlogoshort.svg">
                         </div>
                 </a>
+                <div class="platform-pages-nav">
+                    <div class="platform-pages-item" routerLink="">Platform</div>
+                    <div class="platform-pages-item" routerLink="{{socialFeedRoute}}">Feed</div>
+                    <div class="platform-pages-item" routerLink="{{academyRoute}}">Academy</div>
+                </div>
             </div>
 
             <div class="flex"></div>     
@@ -29,7 +35,7 @@
                         </div>
                     </nav-section>  -->
                     <nav-section class="autosave-nav-item" [leftBorder]="false" [class.no-highlight]="!saveNeeded" [paddingRight]="true" [paddingLeft]="true"
-                        [matMenuTriggerFor]="saveLayoutMenu">
+                        [matMenuTriggerFor]="saveLayoutMenu" *ngIf="isAuthorizedCustomer && showUserDashboard">
                         <div class="autosave-container">
                             <span class="save-state save-needed" *ngIf="saveNeeded; else saved" tooltip [matTooltip]="'stateNotSaved' | translate">
                                 <i class="fa fa-cloud-upload" aria-hidden="true" ></i>
@@ -59,7 +65,7 @@
                             </ng-template>
                         </div>
                     </nav-section> 
-                    <nav-section [leftBorder]="true" [paddingRight]="true">
+                    <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer && showUserDashboard">
                         <div class="theme-nav-container" (click)="changeTheme()">
                             <div class="theme-title">
                                 <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>

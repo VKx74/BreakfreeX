@@ -126,7 +126,7 @@ export class IndicatorDataProviderService {
 
 @Injectable()
 export class SonarChartIndicatorDataProviderService extends IndicatorDataProviderService {
-    private _cache: { [symbol: string]: any } = {};
+    private static _cache: { [symbol: string]: any } = {};
 
     getData(indicator: TradingChartDesigner.Indicator, params?: object): Promise<any> {
         const chart = indicator.chart;
@@ -143,17 +143,19 @@ export class SonarChartIndicatorDataProviderService extends IndicatorDataProvide
         const key = this._getKey(symbol, exchange, timeframe, endTime);
         const id = (params as any).id;
 
-        if (this._cache[key]) {
+        if (SonarChartIndicatorDataProviderService._cache[key]) {
             const res = {
-                ...this._cache[key]
+                ...SonarChartIndicatorDataProviderService._cache[key]
             };
             res.id = id;
             return of(res).toPromise();
         }
 
         return this._getDataFromCache(symbol, exchange, timeframe, endTime, id).then((_) => {
-            this._cache[key] = _;
-            return _;
+            if (_) {
+                SonarChartIndicatorDataProviderService._cache[key] = _;
+            }
+            return _ || {};
         });
     }
 

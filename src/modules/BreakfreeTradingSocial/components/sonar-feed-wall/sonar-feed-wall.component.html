@@ -6,7 +6,8 @@
             (onOpenChart)="viewOnChart(card)" (onLike)="like(card)" (onDislike)="dislike(card)" (onShowAllComments)="showAllComments(card)"
             (onAddComment)="addComment($event, card)" (onCommentLike)="commentLike($event, card)" (onCommentDislike)="commentDislike($event, card)"
             (onRemoveComment)="removeComment($event, card)" (onFavorite)="favorite(card)" (onAddReplay)="addReplay($event, card)"
-            [comments]="card.comments" [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"></sonar-feed-card>
+            [comments]="card.comments" [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"
+            [showAllCommentsOnExpand]="isSingleCard" (onShare)="share(card)"></sonar-feed-card>
     </div>
 </div>
 

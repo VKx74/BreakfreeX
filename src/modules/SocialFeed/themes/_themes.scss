@@ -1,0 +1,10 @@
+@import "themes/themes";
+@import "functions/map-extend";
+
+@import "Light";
+@import "Dark";
+
+$themes: map-extend($themes, (
+        Light: $LightTheme,
+        Dark: $DarkTheme,
+), true)
