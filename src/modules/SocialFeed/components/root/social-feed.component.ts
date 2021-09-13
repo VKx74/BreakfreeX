@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { MissionTrackingService } from "@app/services/missions-tracking.service";
 import { ThemeService } from "@app/services/theme.service";
+import { Intercom } from 'ng-intercom';
 
 @Component({
     selector: 'social-feed',
@@ -8,15 +9,16 @@ import { ThemeService } from "@app/services/theme.service";
     styleUrls: ['social-feed.component.scss']
 })
 export class SocialFeedRootComponent {
-    constructor(protected _missionTrackingService: MissionTrackingService) {
+    constructor(protected _missionTrackingService: MissionTrackingService, private _intercom: Intercom) {
         this._missionTrackingService.initMissions();
     }
 
     ngAfterViewInit() {
         try {
-            if ((window as any).Intercom) {
-                (window as any).Intercom('update', { "hide_default_launcher": false });
-            }
+            this._intercom.boot({
+                app_id: "sv09ttz9",
+                hide_default_launcher: true
+            });
         } catch (error) {
             console.error(error);
         }

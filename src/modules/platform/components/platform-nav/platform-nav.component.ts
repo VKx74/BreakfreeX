@@ -28,8 +28,8 @@ export class PlatformNavComponent implements OnInit, AfterViewInit, OnDestroy {
             startWith(new NavigationEnd(0, this._router.url, this._router.url)),
             filter((e: RouterEvent) => e instanceof NavigationEnd),
             map((e: NavigationEnd) => {
-                return e.urlAfterRedirects === `/${AppRoutes.Platform}/${AppRoutes.Academy}` ||
-                    e.urlAfterRedirects === `/${AppRoutes.Platform}/${AppRoutes.SocialFeed}`;
+                return e.urlAfterRedirects.indexOf(`/${AppRoutes.Platform}/${AppRoutes.Academy}`) !== -1 ||
+                    e.urlAfterRedirects.indexOf(`/${AppRoutes.Platform}/${AppRoutes.SocialFeed}`) !== -1;
             }),
         );
 
