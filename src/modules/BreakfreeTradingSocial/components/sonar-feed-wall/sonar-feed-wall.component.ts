@@ -20,6 +20,7 @@ export interface SonarFeedCommentVM {
     userName: string;
     userAvatarId: string;
     userLevel: string;
+    levelName: string;
     likesCount: number;
     dislikesCount: number;
     hasUserLike: boolean;
@@ -452,6 +453,7 @@ export class SonarFeedWallComponent implements OnInit {
             time: comment.time,
             userAvatarId: comment.user.avatarId,
             userLevel: comment.user.level,
+            levelName: comment.user.levelName,
             userName: comment.user.name,
             parentCommentId: comment.parentComment ? comment.parentComment.id : null,
             parentCommentText: comment.parentComment ? comment.parentComment.text : null,

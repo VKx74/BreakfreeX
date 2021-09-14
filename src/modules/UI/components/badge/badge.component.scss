@@ -5,26 +5,31 @@
 :host {
   .badge-container {
     display: flex;
+    position: relative;
   }
   .rank-avatar {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 30px;
+    height: 30px;
+
     img {
       width: 30px;
       height: 30px;
-      margin-right: 2px;
+      // margin-right: 2px;
       opacity: 0.75;
     }
   }
   .rank-level {
     color: #ffffff;
     font-size: 12px;
-    font-weight: 700;
-    position: fixed;
-    text-align:center;
+    font-weight: 500;
+    position: absolute;
+    text-align: center;
+    display: flex;
     text-shadow: 1px 1px #000000;
-    margin-left:-1px;
+    // font-family: monospace;
   }
 }
 

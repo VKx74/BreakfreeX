@@ -79,7 +79,7 @@
                         <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex">
                             <ng-container *ngTemplateOutlet="avatar"></ng-container>
                             <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
-                                <badge></badge>
+                                <my-badge></my-badge>
                             </div>
                             <mat-menu #menu="matMenu" xPosition="before">
                                 <user-info-menu [avatarTemplate]="avatarUserInfo" (logOut)="logout()" [opened]="opened"></user-info-menu>

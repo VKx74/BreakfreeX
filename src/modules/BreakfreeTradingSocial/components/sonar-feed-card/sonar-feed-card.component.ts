@@ -233,7 +233,7 @@ export class SonarFeedCardComponent implements OnInit {
             const dateString = dateOfCreation.toLocaleDateString();
 
             if (days1 - days2 === 1) {
-                return `Yesterday at ${timeString[0]}:${timeString[1]}`;
+                return `Yesterday at ${timeString}`;
             }
 
             if (timeDiff < secondsInDay * 7) {

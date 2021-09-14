@@ -8,6 +8,24 @@
     width: 100%;
     height: 100%;
 
+    .comment-content-user-level {
+        display: flex;
+        /deep/ {
+            .rank-avatar {
+                width: 20px !important;
+                height: 20px !important;
+                img {
+                    width: 20px !important;
+                    height: 20px !important;
+                }
+                .rank-level {
+                    font-size: 10px !important;
+                    font-weight: 500 !important;
+                }
+            }
+        }
+    }
+
     .sonar-card {
         display: flex;
         flex-direction: column;
@@ -218,8 +236,7 @@
                 .comment-content-header {
                     display: flex;
                     justify-content: left;
-                    align-items:baseline;
-                   
+                    align-items: baseline;
 
                     .comment-content-header-left {
                         display: flex;
@@ -229,21 +246,18 @@
                         .comment-content-username {
                             font-weight: 700;
                             text-transform: capitalize;
-                            font-size:11px;
+                            font-size: 11px;
                         }
 
                         .comment-content-user-level {
-                            font-size: 0.8em;
                             margin-left: 5px;
+                            margin-top: -2px;
                         }
                     }
                     .comment-content-header-right {
                         display: flex;
                         justify-content: right;
                         font-size: 0.8em;
-                        
-
-                      
                     }
                 }
 
@@ -265,24 +279,33 @@
                     .comment-content-data-text {
                         display: inline-block;
                     }
-
-            
                 }
 
                 .comment-content-footer {
                     display: flex;
                     justify-content: left;
+                    align-items: center;
                     margin-bottom: 2px;
-                    margin-top:2px; 
+                    margin-top: 2px;
 
                     .comment-like-container,
                     .comment-dislike-container {
-                        padding: 3px 3px;
-                        margin: 2px;
+                        display: flex;
+                        align-items: center;
                         cursor: pointer;
                         border-radius: 3px;
+                        height: 100%;
+                        margin-right: 3px;
+                        padding: 2px 5px;
+
                         i {
                             margin-right: 5px;
+                            display: flex;
+                            align-items: center;
+                        }
+                        .comment-like-counter {
+                            display: flex;
+                            align-items: center;
                         }
                     }
 
@@ -292,26 +315,27 @@
                         border-radius: 3px;
                         align-items: center;
                         font-size: 0.8em;
-                        padding: 3px 3px;
-                        margin: 2px;
+                        margin-right: 3px;
+                        padding: 2px 5px;
                         cursor: pointer;
+                        height: 100%;
                     }
 
                     .card-time {
-                        padding: 3px 3px;
-                        margin: 2px;
+                        margin-left: 8px;
                         cursor: pointer;
                         border-radius: 3px;
-                        font-size: 10px;
+                        font-size: 0.8em;
                         display: flex;
-                        align-self: center;
+                        align-items: center;
                         opacity: 0.7;
+                        height: 100%;
                     }
                     .remove-comment {
-                        padding: 3px 3px;
-                        margin: 2px;
+                        margin-left: 8px;
                         cursor: pointer;
                         border-radius: 3px;
+                        height: 100%;
                     }
                 }
             }
@@ -329,14 +353,9 @@
     }
 }
 
-
-
-
 .comment-content-data-text::first-letter {
     text-transform: uppercase;
 }
-
-
 
 @include themify($themes, true) {
     .sonar-card {
@@ -350,7 +369,7 @@
     // }
 
     .comment-wrapper {
-        background:themed("comment-wrapper-bg");
+        background: themed("comment-wrapper-bg");
         border-radius: 15px;
         padding: 5px 10px 5px 10px;
     }
@@ -379,7 +398,8 @@
     }
 
     .comment-like-container,
-    .comment-dislike-container, .replay-button {
+    .comment-dislike-container,
+    .replay-button {
         &:hover {
             background-color: themed("sonar-feed-post-button");
         }

@@ -2,6 +2,7 @@ export interface SonarFeedUserInfoDTO {
     name: string;
     avatarId: string;
     level: string;
+    levelName: string;
 }
 
 export interface SonarFeedCommentDTO {

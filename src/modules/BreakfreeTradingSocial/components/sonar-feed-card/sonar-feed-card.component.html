@@ -62,7 +62,9 @@
                         <div class="comment-content-header">
                             <div class="comment-content-header-left">
                                 <div class="comment-content-username">{{c.userName}}{{c.isOwnComment ? " (You)" : ""}}</div>
-                                <div class="comment-content-user-level">{{c.userLevel}}</div>
+                                <div class="comment-content-user-level">
+                                    <badge [level]="c.userLevel" [rank]="c.levelName"></badge>
+                                </div>
                             </div>
                             <div class="comment-content-header-right">
                                

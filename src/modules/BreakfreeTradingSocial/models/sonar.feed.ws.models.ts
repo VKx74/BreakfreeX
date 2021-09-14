@@ -16,6 +16,7 @@ export interface ISocialFeedUserDescription {
     name: string;
     avatarId: string;
     level: string;
+    levelName: string;
 }
 
 export interface ISocialFeedSetupDescription {

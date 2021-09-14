@@ -44,7 +44,7 @@ import { SvgEmptyComponent } from '../Shared/components/svg-empty/svg-empty.comp
 import { TooltipDirective } from './directives/tooltip.directive';
 import { EmojiComponent } from './components/emoji/emoji.component';
 import { ChartWrapperComponent } from './components/chartWrapper/chart-wrapper.component';
-import { BadgeComponent } from './components/badge/badge.component';
+import { BadgeComponent, MyBadgeComponent } from './components/badge/badge.component';
 import { StaticBadgeComponent } from './components/static-badge/static-badge.component';
 
 @NgModule({
@@ -75,6 +75,7 @@ import { StaticBadgeComponent } from './components/static-badge/static-badge.com
         PinInputModalComponent,
         EmojiComponent,
         ChartWrapperComponent,
+        MyBadgeComponent,
         BadgeComponent,
         StaticBadgeComponent
     ],
@@ -122,6 +123,7 @@ import { StaticBadgeComponent } from './components/static-badge/static-badge.com
         HeaderComponent,
         EmojiComponent,
         ChartWrapperComponent,
+        MyBadgeComponent,
         BadgeComponent,
         StaticBadgeComponent
     ],
