@@ -42,6 +42,7 @@ export class SonarChartComponent implements OnInit {
     private _attached: boolean;
     private _detachedHost: any;
     private _sizeChangeObserver: any;
+    private _isReplay: boolean = true;
 
     private chart: TradingChartDesigner.Chart;
 
@@ -64,6 +65,10 @@ export class SonarChartComponent implements OnInit {
         } else {
             this._detachChart();
         }
+    }
+
+    get isReplay(): boolean {
+        return this._isReplay;
     }
 
     constructor(private _datafeed: DataFeedBase,
@@ -112,6 +117,18 @@ export class SonarChartComponent implements OnInit {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    setNow() {
+        if (!this.chart) {
+            return;
+        }
+
+        this._addVLine();
+        this.chart.replayMode.toRealTime();
+        this._isReplay = false;
+        // this._justifyVisibleDataOnChart();
+        this.chart.refresh();
     }
 
     private _detachChart() {
@@ -211,6 +228,27 @@ export class SonarChartComponent implements OnInit {
             console.error(error);
             return;
         }
+        
+        this._justifyVisibleDataOnChart();
+
+        let pane = this.chart.primaryPane;
+        pane.preserveAutoScaling();
+        this.chart.autoScalePanes(TradingChartDesigner.AutoScalePanesKind.PanesWithPreservingAutoScaling);
+
+        const indicator = new TradingChartDesigner.BreakfreeTradingPro();
+        indicator.lockShape = true;
+        indicator.lockShapeOnSameCandle = true;
+        indicator.singleAction = true;
+        this.chart.addIndicators(indicator);
+        this.chart.XMode = false;
+        this.chart.crossHair.destroy();
+        this.chart.refreshAsync(true);
+        this._attached = true;
+
+        this._tradingFromChartHandler.setChart(this.chart);
+    }
+
+    private _justifyVisibleDataOnChart() {
         let barsCount = this.chart.primaryBarDataRows().low.length;
         let visibleCount = this._visibleCount;
         if (barsCount < visibleCount) {
@@ -220,18 +258,19 @@ export class SonarChartComponent implements OnInit {
             this.chart.firstVisibleRecord = barsCount - visibleCount;
             this.chart.lastVisibleRecord = barsCount + (visibleCount * this._visibleCountRatio);
         }
+    }
 
-        let pane = this.chart.primaryPane;
-        pane.preserveAutoScaling();
-        this.chart.autoScalePanes(TradingChartDesigner.AutoScalePanesKind.PanesWithPreservingAutoScaling);
+    private _addVLine() {
+        let date = this.chart.dataContext.dateDataRows.lastValue as Date;
+        if (!date) {
+            return;
+        }
 
-        const indicator = new TradingChartDesigner.BreakfreeTradingPro();
-        this.chart.addIndicators(indicator);
-        this.chart.XMode = false;
-        this.chart.crossHair.destroy();
-        this.chart.refreshAsync(true);
-        this._attached = true;
-
-        this._tradingFromChartHandler.setChart(this.chart);
+        const vLine = new TradingChartDesigner.ShapeVerticalLine();
+        vLine.visualDataPoints[0].date = date;
+        vLine.locked = true;
+        vLine.selectable = false;
+        vLine.hoverable = false;
+        this.chart.primaryPane.addShapes(vLine);
     }
 }

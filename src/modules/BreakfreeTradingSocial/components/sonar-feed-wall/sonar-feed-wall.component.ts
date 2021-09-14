@@ -158,7 +158,7 @@ export class SonarFeedWallComponent implements OnInit {
             data: {
                 instrument: card.instrument,
                 timeframe: card.granularity,
-                replayDate: new Date(card.time * 1000)
+                // replayDate: new Date(card.time * 1000)
             }
         };
         this.onOpenChart.next(linkAction);

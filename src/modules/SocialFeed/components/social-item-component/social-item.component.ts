@@ -1,5 +1,8 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, UrlSegment } from "@angular/router";
+import { ActivatedRoute, Router, UrlSegment } from "@angular/router";
+import { AppRoutes } from "@app/app.routes";
+import { LinkingAction } from "@linking/models";
+import { InMemoryStorageService } from "modules/Storage/services/in-memory-storage.service";
 import { map } from "rxjs/operators";
 
 @Component({
@@ -10,13 +13,18 @@ import { map } from "rxjs/operators";
 export class SocialItemComponent {
     postId: any;
 
-    constructor(route: ActivatedRoute) {
-        this.postId = route.snapshot.params.id;
+    constructor(protected _route: ActivatedRoute, protected _router: Router) {
+        this.postId = _route.snapshot.params.id;
 
-        route.params.subscribe(routeParams => {
+        _route.params.subscribe(routeParams => {
             if (routeParams.id && routeParams.id !== this.postId) {
                 this.postId = routeParams.id;
             }
         });
+    }
+
+    openChart(linking: LinkingAction) {
+        InMemoryStorageService.setLinking(linking);
+        this._router.navigate([AppRoutes.Platform]);
     }
 }

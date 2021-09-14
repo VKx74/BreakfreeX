@@ -1,4 +1,7 @@
 <div class="tcd-component-host" #chartContainerHost>
     <div class="tcd-component" #chartContainer>
     </div>
+    <span class="play-button" *ngIf="isReplay" (click)="setNow()">
+        <i class="fa fa-play-circle" aria-hidden="true"></i>
+    </span>
 </div>

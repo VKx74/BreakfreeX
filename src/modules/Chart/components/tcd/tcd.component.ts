@@ -44,6 +44,7 @@ import { IHistoryRequest } from "@app/models/common/historyRequest";
 import { IPeriodicity } from "@app/models/common/periodicity";
 import { IHistoryResponse } from "@app/models/common/historyResponse";
 import { IBarData } from "@app/models/common/barData";
+import { InMemoryStorageService } from "modules/Storage/services/in-memory-storage.service";
 
 export interface ITcdComponentState {
     chartState?: any;

@@ -49,6 +49,9 @@ import { LayoutNameModalComponent } from "../layout-name-component/layout-name.c
 import { OpenLayoutModalComponent } from "../open-layout-component/open-layout.component";
 import { ILayoutState } from "@app/models/layout-state";
 import { Components, RightSidePanelStateService } from "@platform/services/right-side-panel-state.service";
+import { Linker, LinkerFactory } from "@linking/linking-manager";
+import { InMemoryStorageService } from "modules/Storage/services/in-memory-storage.service";
+import { LinkingAction } from "@linking/models";
 
 
 @Component({
@@ -141,7 +144,6 @@ export class DashboardComponent {
         private _intercom: Intercom,
         private _dialog: MatDialog,
         private _identityService: IdentityService,
-        private _router: Router,
         private _coockieService: CookieService,
         private _layoutStorageService: LayoutStorageService,
         private _brokerService: BrokerService,
@@ -533,6 +535,25 @@ export class DashboardComponent {
                 component.close();
             }
         }
+
+        this._trySetLinking();
+    }
+
+    private _trySetLinking() {
+        const action = InMemoryStorageService.getLinking() as LinkingAction;
+        InMemoryStorageService.deleteLinking();
+
+        if (action) {
+            const instrument = action.data.instrument;
+            const timeInterval = (action.data.timeframe as number) * 1000;
+            this._layoutManager.addComponent({
+                layoutItemName: "chart",
+                state: {
+                    instrument: instrument,
+                    timeFrame: TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval)
+                }
+            });
+        }
     }
 
     private _initAutoSave() {
@@ -582,7 +603,9 @@ export class DashboardComponent {
     }
 
     private _resetLayout() {
-        this._resetLayout$().subscribe(() => {});
+        this._resetLayout$().subscribe(() => {
+            this._trySetLinking();
+        });
     }
 
     // needSaveConfirm() {
