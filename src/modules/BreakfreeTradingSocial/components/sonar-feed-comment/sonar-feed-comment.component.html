@@ -1,0 +1,61 @@
+<div class="comment-container">
+    <div class="comment-item">
+        <div class="comment-avatar">
+            <div class="comment-avatar-img">
+                <name-avatar [name]="comment.userName" [src]="comment.userAvatarId"></name-avatar>
+            </div>
+        </div>
+        <div class="comment-content">
+            <div class="comment-wrapper">
+                <div class="comment-content-header">
+                    <div class="comment-content-header-left">
+                        <div class="comment-content-username">{{comment.userName}}{{comment.isOwnComment ? " (You)" : ""}}</div>
+                        <div class="comment-content-user-level">
+                            <badge [level]="comment.userLevel" [rank]="comment.levelName"></badge>
+                        </div>
+                    </div>
+                    <div class="comment-content-header-right">
+                    </div>
+                </div>
+                <div class="comment-content-data">
+                    <div class="comment-content-data-text">
+                        {{comment.text}}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="comment-content-footer" >
+                <div class="comment-like-container" [ngClass]="{'disabled': comment.isOwnComment}" (click)="likeComment(comment.id)">
+                    <i class="fa fa-thumbs-up" aria-hidden="true"
+                        *ngIf="comment.hasUserLike; else nonActiveCommentLike"></i>
+                    <ng-template #nonActiveCommentLike>
+                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                    </ng-template>
+                    <span class="comment-like-counter">{{comment.likesCount}}</span>
+                </div>
+                <div class="comment-dislike-container" [ngClass]="{'disabled': comment.isOwnComment}" (click)="dislikeComment(comment.id)">
+                    <i class="fa fa-thumbs-down" aria-hidden="true"
+                        *ngIf="comment.hasUserDislike; else nonActiveCommentDislike"></i>
+                    <ng-template #nonActiveCommentDislike>
+                        <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                    </ng-template>
+                    <span class="comment-dislike-counter">{{comment.dislikesCount}}</span>
+                </div>
+                <div class="replay-button" *ngIf="!comment.isOwnComment" (click)="replay(comment.id)">
+                    Reply
+                </div>
+                <div class="card-time">{{createTimeString(comment.time)}}</div>
+                <div class="remove-comment" *ngIf="comment.isOwnComment">
+                    <i class="crypto-icon crypto-icon-close" (click)="removeComment(comment.id)"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sub-comments-container" *ngIf="comment.comments && comment.comments.length">
+        <div class="sub-comment-item" *ngFor="let c of comment.comments" [ngClass]="{'own-comment': c.isOwnComment}">
+            <sonar-feed-comment [comment]="c" (onCommentLike)="likeComment($event)" (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)" (onRemoveComment)="removeComment($event)"></sonar-feed-comment>
+        </div>
+    </div>
+</div>

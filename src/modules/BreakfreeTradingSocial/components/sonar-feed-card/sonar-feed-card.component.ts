@@ -176,7 +176,11 @@ export class SonarFeedCardComponent implements OnInit {
     }
 
     public get replayComment(): SonarFeedCommentVM {
-        const comment = this._comments.find(_ => _.id === this._replayCommentId);
+        if (!this._replayCommentId) {
+            return null;
+        }
+
+        const comment = this._findRecursiveComments(this._replayCommentId, this._comments);
         return comment;
     }
 
@@ -265,12 +269,12 @@ export class SonarFeedCardComponent implements OnInit {
         this.onShare.next();
     }
 
-    likeComment(comment: SonarFeedCommentVM) {
-        this.onCommentLike.next(comment.id);
+    likeComment(commentId: any) {
+        this.onCommentLike.next(commentId);
     }
 
-    dislikeComment(comment: SonarFeedCommentVM) {
-        this.onCommentDislike.next(comment.id);
+    dislikeComment(commentId: any) {
+        this.onCommentDislike.next(commentId);
     }
 
     sendComment() {
@@ -296,8 +300,8 @@ export class SonarFeedCardComponent implements OnInit {
         this.onShowAllComments.next();
     }
 
-    removeComment(comment: SonarFeedCommentVM) {
-        this.onRemoveComment.next(comment.id);
+    removeComment(commentId: any) {
+        this.onRemoveComment.next(commentId);
     }
 
     hideAllComment() {
@@ -305,10 +309,10 @@ export class SonarFeedCardComponent implements OnInit {
         this._cdr.detectChanges();
     }
 
-    replay(comment: SonarFeedCommentVM) {
-        this._replayCommentId = comment.id;
-        this.textarea.nativeElement.focus();
+    replay(commentId: any) {
+        this._replayCommentId = commentId;
         this._cdr.detectChanges();
+        this.textarea.nativeElement.focus();
     }
 
     stopReplay() {
@@ -348,5 +352,20 @@ export class SonarFeedCardComponent implements OnInit {
         this.chartContainer.nativeElement.style["min-height"] = `${requiredHeigh}px`;
         this.chartContainer.nativeElement.style["height"] = `${requiredHeigh}px`;
         this._cdr.detectChanges();
+    }
+
+    private _findRecursiveComments(commentId: any, comments: SonarFeedCommentVM[]): SonarFeedCommentVM {
+        for (const c of comments) {
+            if (c.id === commentId) {
+                return c;
+            }
+
+            if (c.comments && c.comments.length) {
+                const commentInside = this._findRecursiveComments(commentId, c.comments);
+                if (commentInside) {
+                    return commentInside;
+                }
+            }
+        }
     }
 }

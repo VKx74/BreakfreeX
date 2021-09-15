@@ -1,6 +1,7 @@
 export interface SonarFeedUserInfo {
     name: string;
     avatarId: string;
+    userId: string;
     level: string;
     levelName: string;
 }

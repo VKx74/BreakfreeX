@@ -28,6 +28,7 @@ import { SonarChartDataFeed } from '@chart/datafeed/SonarChartDataFeed';
 import { SonarChartIndicatorDataProviderService } from '@chart/services/indicator-data-provider.service';
 import { SonarFeedService } from './services/sonar.feed.service';
 import { SonarFeedSocketService } from './services/sonar.feed.socket.service';
+import { SonarFeedCommentComponent } from './components/sonar-feed-comment/sonar-feed-comment.component';
 
 @NgModule({
     // components here
@@ -36,7 +37,8 @@ import { SonarFeedSocketService } from './services/sonar.feed.socket.service';
         SonarFeedComponent,
         SonarFeedWidgetComponent,
         SonarFeedCardComponent,
-        SonarChartComponent
+        SonarChartComponent,
+        SonarFeedCommentComponent
     ],
     imports: [
         CommonModule,

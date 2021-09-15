@@ -25,8 +25,7 @@ export interface SonarFeedCommentVM {
     dislikesCount: number;
     hasUserLike: boolean;
     hasUserDislike: boolean;
-    parentCommentId: any;
-    parentCommentText: any;
+    comments: SonarFeedCommentVM[];
     isOwnComment: boolean;
     time: number;
 }
@@ -455,8 +454,7 @@ export class SonarFeedWallComponent implements OnInit {
             userLevel: comment.user.level,
             levelName: comment.user.levelName,
             userName: comment.user.name,
-            parentCommentId: comment.parentComment ? comment.parentComment.id : null,
-            parentCommentText: comment.parentComment ? comment.parentComment.text : null,
+            comments: comment.comments ? comment.comments.map(_ => this._convertCommentToVM(_)) : []
         };
     }
 

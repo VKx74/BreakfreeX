@@ -2,6 +2,7 @@ import { F } from "@angular/cdk/keycodes";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AppConfigService } from "@app/services/app.config.service";
+import { IdentityService } from "@app/services/auth/identity.service";
 import { switchmap } from "@decorators/switchmap";
 import { Observable, of, Subject, Subscription } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
@@ -25,7 +26,7 @@ export class SonarFeedService {
     public onPostChanged: Subject<SonarFeedItem> = new Subject<SonarFeedItem>();
     public onPostAdded: Subject<SonarFeedItem> = new Subject<SonarFeedItem>();
 
-    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService) {
+    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService, private _identity: IdentityService) {
         this._url = AppConfigService.config.apiUrls.socialFeedREST;
         this._socketService.open().subscribe(() => {
             console.log("Sonar Feed Socket opened");
@@ -54,10 +55,10 @@ export class SonarFeedService {
         return this._loadItems(take * 5, Math.trunc(requestDate)).pipe(map(() => {
             return this._items.slice(skip, skip + take);
         }));
-    } 
-    
+    }
+
     getItem(id: any): Observable<SonarFeedItem> {
-        return this._loadItem(id); 
+        return this._loadItem(id);
     }
 
     getComments(postId: any): Observable<SonarFeedComment[]> {
@@ -210,11 +211,13 @@ export class SonarFeedService {
 
         return this._http.post<any>(`${this._url}api/post/${postId}/comment`, {
             text: comment
-        }).pipe(switchMap(() => {
-            return of(post);
-            // return this.getComments(postId).pipe(map((item) => {
-            //     return post;
-            // }));
+        }).pipe(map((response: SonarFeedCommentDTO) => {
+            if (!response) {
+                return;
+            }
+            const commentItem = SocialFeedModelConverter.ConvertToSonarFeedComment(response);
+            this._addCommentToPost(post, commentItem);
+            return post;
         }));
     }
 
@@ -229,11 +232,13 @@ export class SonarFeedService {
 
         return this._http.post<any>(`${this._url}api/comment/${commentId}`, {
             text: text
-        }).pipe(switchMap(() => {
-            return of(post);
-            // return this.getComments(postId).pipe(map((item) => {
-            //     return post;
-            // }));
+        }).pipe(map((response: SonarFeedCommentDTO) => {
+            if (!response) {
+                return;
+            }
+            const replayedComment = SocialFeedModelConverter.ConvertToSonarFeedComment(response);
+            this._addCommentToComment(post, comment, replayedComment);
+            return post;
         }));
     }
 
@@ -245,16 +250,77 @@ export class SonarFeedService {
             return of(null);
         }
 
-        return this._http.delete<any>(`${this._url}api/comment/${commentId}`).pipe(switchMap(() => {
-            return this.getComments(postId).pipe(map((item) => {
-                return post;
-            }));
+        return this._http.delete<any>(`${this._url}api/comment/${commentId}`).pipe(map((response) => {
+            this._deleteCommentFromPost(post, commentId);
+            return post;
         }));
     }
 
     refresh() {
         this._items = [];
         this._unlistedItems = {};
+    }
+
+    private _addCommentToPost(post: SonarFeedItem, comment: SonarFeedComment) {
+        const existingComments = this._getComment(post.id, comment.id);
+        if (existingComments) {
+            return;
+        }
+
+        if (post.comments) {
+            post.comments.push(comment);
+        }
+
+        post.lastComment = comment;
+        post.commentsTotal++;
+
+        this.onPostChanged.next(post);
+    }
+
+    private _addCommentToComment(post: SonarFeedItem, parentComment: SonarFeedComment, comment: SonarFeedComment) {
+        const existingComments = this._getComment(post.id, comment.id);
+        if (existingComments) {
+            return;
+        }
+
+        if (!parentComment.comments) {
+            parentComment.comments = [];
+        }
+
+        parentComment.comments.push(comment);
+        post.commentsTotal++;
+
+        this.onPostChanged.next(post);
+    }
+
+    private _deleteCommentFromPost(post: SonarFeedItem, commentId: any) {
+        this._deleteCommentFromCommentsList(post.comments, commentId);
+        if (post.commentsTotal > 0) {
+            post.commentsTotal--;
+        }
+
+        if (post.comments && post.lastComment && post.lastComment.id === commentId) {
+            post.lastComment = post.comments[post.comments.length - 1];
+        }
+
+        this.onPostChanged.next(post);
+    }
+
+    private _deleteCommentFromCommentsList(comments: SonarFeedComment[], commentId: any) {
+        if (!comments) {
+            return;
+        }
+
+        for (let i = 0; i < comments.length; i++) {
+            if (comments[i].id === commentId) {
+                comments.splice(i, 1);
+                i--;
+            }
+
+            if (comments[i].comments) {
+                this._deleteCommentFromCommentsList(comments[i].comments, commentId);
+            }
+        }
     }
 
     private _getPost(postId: any): SonarFeedItem {
@@ -273,7 +339,7 @@ export class SonarFeedService {
         }
 
         if (post.comments) {
-            const comment = post.comments.find(_ => _.id === commentId);
+            const comment = this._findRecursiveComments(commentId, post.comments);
             if (comment) {
                 return comment;
             }
@@ -288,6 +354,21 @@ export class SonarFeedService {
         return null;
     }
 
+    private _findRecursiveComments(commentId: any, comments: SonarFeedComment[]): SonarFeedComment {
+        for (const c of comments) {
+            if (c.id === commentId) {
+                return c;
+            }
+
+            if (c.comments && c.comments.length) {
+                const commentInside = this._findRecursiveComments(commentId, c.comments);
+                if (commentInside) {
+                    return commentInside;
+                }
+            }
+        }
+    }
+
     private _searchCommentById(commentId: any): { comment: SonarFeedComment, post: SonarFeedItem } {
         for (const item of this._items) {
             if (item.lastComment && item.lastComment.id === commentId) {
@@ -295,10 +376,9 @@ export class SonarFeedService {
             }
 
             if (item.comments) {
-                for (const comment of item.comments) {
-                    if (comment.id === commentId) {
-                        return { comment: comment, post: item };
-                    }
+                const comment = this._findRecursiveComments(commentId, item.comments);
+                if (comment) {
+                    return { comment: comment, post: item };
                 }
             }
         }
@@ -311,10 +391,9 @@ export class SonarFeedService {
             }
 
             if (post.comments) {
-                for (const comment of post.comments) {
-                    if (comment.id === commentId) {
-                        return { comment: comment, post: post };
-                    }
+                const comment = this._findRecursiveComments(commentId, post.comments);
+                if (comment) {
+                    return { comment: comment, post: post };
                 }
             }
         }
@@ -333,7 +412,7 @@ export class SonarFeedService {
             }
             return res;
         }));
-    } 
+    }
 
     private _loadItem(id: any): Observable<SonarFeedItem> {
         return this._http.get<SonarFeedItemDTO>(`${this._url}api/post/${id}`).pipe(map((item) => {
@@ -348,7 +427,7 @@ export class SonarFeedService {
     }
 
     private _loadComments(postId: any): Observable<SonarFeedComment[]> {
-        return this._http.get<SonarFeedCommentDTO[]>(`${this._url}api/post/${postId}/comments`).pipe(map((items) => {
+        return this._http.get<SonarFeedCommentDTO[]>(`${this._url}api/post/${postId}/comments?tree=true`).pipe(map((items) => {
             const res: SonarFeedComment[] = [];
             for (const item of items) {
                 const converted = SocialFeedModelConverter.ConvertToSonarFeedComment(item);
@@ -421,46 +500,32 @@ export class SonarFeedService {
             return;
         }
 
-        if (post.lastComment && post.lastComment.id === data.id) {
+        const existingComments = this._getComment(post.id, data.id);
+        if (existingComments) {
             return;
         }
 
-        if (post.comments) {
-            const existing = post.comments.find(_ => _.id === data.id);
-            if (existing) {
-                return;
-            }
-        }
-        
-        this.getComments(post.id).subscribe();
-        return;
+        const comment = SocialFeedModelConverter.ConvertNotificationToSonarFeedComment(data, this._identity.id);
 
-        // todo: optimize
         if (data.parentCommentId) {
-            this.getComments(post.id).subscribe();
-            return;
+            const parentComment = this._getComment(post.id, data.parentCommentId);
+            this._addCommentToComment(post, parentComment, comment);
+        } else {
+            this._addCommentToPost(post, comment);
         }
 
-        const comment = SocialFeedModelConverter.ConvertNotificationToSonarFeedComment(data);
-        post.lastComment = comment;
-
-        if (post.comments) {
-            post.comments.push(comment);
-        }
-
-        post.commentsTotal++;
-
-        this.onPostChanged.next(post);
+        // this.getComments(post.id).subscribe();
+        return;
     }
 
     private _processCommentEdited(data: SocialFeedCommentEditedNotification) {
-        const comment = this._getComment(data.postId, data.id);
-        if (!comment) {
+        const post = this._getPost(data.postId);
+        if (!post) {
             return;
         }
 
-        const post = this._getPost(data.postId);
-        if (!post) {
+        const comment = this._getComment(data.postId, data.id);
+        if (!comment) {
             return;
         }
 
@@ -481,20 +546,7 @@ export class SonarFeedService {
             return;
         }
 
-        if (post.lastComment && post.lastComment.id === data.id) {
-            this.getComments(post.id).subscribe();
-            return;
-        }
-
-        if (post.comments) {
-            const index = post.comments.findIndex(_ => _.id === data.id);
-            if (index !== -1) {
-                post.comments.splice(index, 1);
-                post.commentsTotal--;
-            }
-        }
-
-        this.onPostChanged.next(post);
+        this._deleteCommentFromPost(post, data.id);
     }
 
     private _processPostReaction(data: SocialFeedCommentPostReactionNotification) {
@@ -516,7 +568,7 @@ export class SonarFeedService {
         if (!this._items || !this._items.length) {
             return;
         }
-        
+
         const post = this._getPost(data.id);
         if (post) {
             return;

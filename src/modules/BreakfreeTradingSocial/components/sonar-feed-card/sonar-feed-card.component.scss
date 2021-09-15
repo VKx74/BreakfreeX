@@ -8,24 +8,6 @@
     width: 100%;
     height: 100%;
 
-    .comment-content-user-level {
-        display: flex;
-        /deep/ {
-            .rank-avatar {
-                width: 20px !important;
-                height: 20px !important;
-                img {
-                    width: 20px !important;
-                    height: 20px !important;
-                }
-                .rank-level {
-                    font-size: 10px !important;
-                    font-weight: 500 !important;
-                }
-            }
-        }
-    }
-
     .sonar-card {
         display: flex;
         flex-direction: column;
@@ -35,6 +17,7 @@
         border-radius: 5px;
         font-size: 12px;
     }
+
     .card-header {
         display: flex;
         height: 32px;
@@ -69,11 +52,13 @@
             text-overflow: ellipsis;
         }
     }
+
     .card-chart {
         display: flex;
         width: 100%;
         min-height: 160px;
     }
+
     .card-footer {
         display: flex;
 
@@ -109,6 +94,7 @@
             }
         }
     }
+
     .card-left-comment {
         display: flex;
         flex-direction: column;
@@ -170,6 +156,7 @@
         align-items: center;
         padding: 0px 10px;
     }
+
     .like-container {
         margin-right: 5px;
         .like-counter {
@@ -184,9 +171,6 @@
         }
     }
 
-    .card-comments {
-    }
-
     .limit-comments {
         max-height: 400px;
         overflow-y: auto;
@@ -195,151 +179,6 @@
     .comment-row {
         display: flex;
         margin: 10px 20px 7px 10px;
-
-        .comment-item {
-            display: flex;
-            width: 100%;
-
-            .comment-avatar {
-                display: flex;
-                flex-direction: column;
-                min-width: 40px;
-                height: 100%;
-
-                .comment-avatar-img {
-                    display: flex;
-                    width: 32px;
-                    height: 32px;
-                    justify-content: center;
-                }
-            }
-
-            .remove-comment {
-                display: flex;
-                justify-content: left;
-
-                i {
-                    padding: 4px;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    font-size: 8px;
-                    height: fit-content;
-                }
-            }
-
-            .comment-content {
-                display: flex;
-                width: auto;
-                // max-width: calc(100% - 50px);
-                flex-direction: column;
-
-                .comment-content-header {
-                    display: flex;
-                    justify-content: left;
-                    align-items: baseline;
-
-                    .comment-content-header-left {
-                        display: flex;
-                        justify-content: left;
-                        align-items: center;
-
-                        .comment-content-username {
-                            font-weight: 700;
-                            text-transform: capitalize;
-                            font-size: 11px;
-                        }
-
-                        .comment-content-user-level {
-                            margin-left: 5px;
-                            margin-top: -2px;
-                        }
-                    }
-                    .comment-content-header-right {
-                        display: flex;
-                        justify-content: right;
-                        font-size: 0.8em;
-                    }
-                }
-
-                .comment-content-data {
-                    margin-top: 2px;
-                    display: flex;
-                    flex-direction: column;
-
-                    .comment-content-data-replay {
-                        margin-bottom: 8px;
-                        padding: 8px;
-                        border-radius: 5px;
-                        font-size: 0.8em;
-                        // overflow: hidden;
-                        // white-space: nowrap;
-                        // text-overflow: ellipsis;
-                    }
-
-                    .comment-content-data-text {
-                        display: inline-block;
-                    }
-                }
-
-                .comment-content-footer {
-                    display: flex;
-                    justify-content: left;
-                    align-items: center;
-                    margin-bottom: 2px;
-                    margin-top: 2px;
-
-                    .comment-like-container,
-                    .comment-dislike-container {
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        border-radius: 3px;
-                        height: 100%;
-                        margin-right: 3px;
-                        padding: 2px 5px;
-
-                        i {
-                            margin-right: 5px;
-                            display: flex;
-                            align-items: center;
-                        }
-                        .comment-like-counter {
-                            display: flex;
-                            align-items: center;
-                        }
-                    }
-
-                    .replay-button {
-                        display: flex;
-                        justify-content: left;
-                        border-radius: 3px;
-                        align-items: center;
-                        font-size: 0.8em;
-                        margin-right: 3px;
-                        padding: 2px 5px;
-                        cursor: pointer;
-                        height: 100%;
-                    }
-
-                    .card-time {
-                        margin-left: 8px;
-                        cursor: pointer;
-                        border-radius: 3px;
-                        font-size: 0.8em;
-                        display: flex;
-                        align-items: center;
-                        opacity: 0.7;
-                        height: 100%;
-                    }
-                    .remove-comment {
-                        margin-left: 8px;
-                        cursor: pointer;
-                        border-radius: 3px;
-                        height: 100%;
-                    }
-                }
-            }
-        }
     }
 
     .show-all-comments,
@@ -353,20 +192,11 @@
     }
 }
 
-.comment-content-data-text::first-letter {
-    text-transform: uppercase;
-}
-
 @include themify($themes, true) {
     .sonar-card {
         background-color: themed("tableBorders");
         color: themed("valueTextColor");
     }
-
-    // .sonar-card:hover {
-    //     border: 1px solid themed("valueTextColor");
-    //     transition-duration: 0.22s;
-    // }
 
     .comment-wrapper {
         background: themed("comment-wrapper-bg");
@@ -383,10 +213,10 @@
         border-color: themed("sonar-feed-border") !important;
     }
 
-    .comment-row {
-        border-bottom: 1px solid;
-        border-color: themed("sonar-feed-border") !important;
-    }
+    // .comment-row {
+    //     border-bottom: 1px solid;
+    //     border-color: themed("sonar-feed-border") !important;
+    // }
 
     .card-footer-share-button,
     .card-footer-view-button,
@@ -397,30 +227,10 @@
         }
     }
 
-    .comment-like-container,
-    .comment-dislike-container,
-    .replay-button {
-        &:hover {
-            background-color: themed("sonar-feed-post-button");
-        }
-    }
-
-    .remove-comment {
-        i {
-            &:hover {
-                background-color: themed("sonar-feed-post-button");
-            }
-        }
-    }
-
     .replay-description {
         background-color: themed("sonar-feed-border");
     }
-
-    .comment-content-data-replay {
-        background-color: themed("sonar-feed-border");
-    }
-
+    
     .send-button {
         background-color: themed("sonar-feed-post-button");
     }

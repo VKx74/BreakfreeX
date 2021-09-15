@@ -25,14 +25,14 @@ export class SocialFeedModelConverter {
         return dto;
     }
 
-    public static ConvertNotificationToSonarFeedComment(dto: SocialFeedCommentAddedNotification): SonarFeedComment {
+    public static ConvertNotificationToSonarFeedComment(dto: SocialFeedCommentAddedNotification, myId: any): SonarFeedComment {
         return {
             comments: null,
             dislikesCount: dto.dislikesCount,
             hasUserDislike: false,
             hasUserLike: false,
             id: dto.id,
-            isOwnComment: false,
+            isOwnComment: dto.user.userId === myId,
             likesCount: dto.likesCount,
             parentComment: null,
             text: dto.text,
