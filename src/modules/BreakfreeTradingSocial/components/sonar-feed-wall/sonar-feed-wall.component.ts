@@ -435,12 +435,12 @@ export class SonarFeedWallComponent implements OnInit {
                 } else {
                     this._items.push(i);
                 }
-                this._mapInstrumentAndAdd(i, this._items.indexOf(i));
+                this._mapInstrumentAndAdd(i);
             }
         }
     }
 
-    private _mapInstrumentAndAdd(setupItem: SonarFeedItem, index: number) {
+    private _mapInstrumentAndAdd(setupItem: SonarFeedItem) {
         this._instrumentService.getInstruments(null, setupItem.symbol).subscribe((data: IInstrument[]) => {
             if (!data || !data.length) {
                 return;
@@ -461,7 +461,13 @@ export class SonarFeedWallComponent implements OnInit {
                 return;
             }
 
-            this.cards.push(this._convertToVM(setupItem, instrument, index));
+            this.cards.push(this._convertToVM(setupItem, instrument));
+
+            for (const card of this.cards) {
+                const index = this._items.findIndex(_ => _.id === card.id);
+                card.sortIndex = index;
+            }
+
             this.cards.sort((a, b) => a.sortIndex - b.sortIndex);
 
             this._refreshNeeded = true;
@@ -471,7 +477,7 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
-    private _convertToVM(item: SonarFeedItem, instrument: IInstrument, index: number): SonarFeedCardVM {
+    private _convertToVM(item: SonarFeedItem, instrument: IInstrument): SonarFeedCardVM {
         return {
             id: item.id,
             dislikeCount: item.dislikesCount,
@@ -485,7 +491,7 @@ export class SonarFeedWallComponent implements OnInit {
             comments: this._getComments(item),
             commentsTotal: item.commentsTotal,
             isFavorite: item.isFavorite,
-            sortIndex: index
+            sortIndex: -1
         };
     }
 
