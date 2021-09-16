@@ -1,6 +1,7 @@
 import { F } from "@angular/cdk/keycodes";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { AlgoService } from "@app/services/algo.service";
 import { AppConfigService } from "@app/services/app.config.service";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { switchmap } from "@decorators/switchmap";
@@ -25,6 +26,10 @@ export class SonarFeedService {
 
     public onPostChanged: Subject<SonarFeedItem> = new Subject<SonarFeedItem>();
     public onPostAdded: Subject<SonarFeedItem> = new Subject<SonarFeedItem>();
+
+    public get items(): SonarFeedItem[] {
+        return this._items.slice();
+    }
 
     constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService, private _identity: IdentityService) {
         this._url = AppConfigService.config.apiUrls.socialFeedREST;
@@ -278,6 +283,10 @@ export class SonarFeedService {
     }
 
     private _addCommentToComment(post: SonarFeedItem, parentComment: SonarFeedComment, comment: SonarFeedComment) {
+        if (!parentComment) {
+            return;
+        }
+
         const existingComments = this._getComment(post.id, comment.id);
         if (existingComments) {
             return;
@@ -488,7 +497,7 @@ export class SonarFeedService {
 
     private _processCommentReaction(data: SocialFeedCommentCommentReactionNotification) {
         const item = this._searchCommentById(data.id);
-        if (!data) {
+        if (!data || !item) {
             return;
         }
 

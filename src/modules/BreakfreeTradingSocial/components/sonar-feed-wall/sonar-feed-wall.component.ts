@@ -68,7 +68,9 @@ export class SonarFeedWallComponent implements OnInit {
     private _loadingMore: boolean = false;
     private _refreshNeeded: boolean = false;
     private _itemChangedSubscription: Subscription;
+    private _itemAddedSubscription: Subscription;
     private _items: SonarFeedItem[] = [];
+    private _temporaryItems: SonarFeedItem[] = [];
     private _cardId: any;
 
     @Output() onOpenChart = new EventEmitter<LinkingAction>();
@@ -82,6 +84,10 @@ export class SonarFeedWallComponent implements OnInit {
     public cards: SonarFeedCardVM[] = [];
     public loading: boolean;
     public initialized: boolean;
+    
+    public get IsNewUpdatesExists(): boolean {
+        return this._temporaryItems && this._temporaryItems.length > 0;
+    }
 
     constructor(protected _identityService: IdentityService,
         protected _sonarFeedService: SonarFeedService,
@@ -90,7 +96,7 @@ export class SonarFeedWallComponent implements OnInit {
         protected _alertService: AlertService,
         protected _instrumentService: InstrumentService,
         protected _cdr: ChangeDetectorRef) {
-            
+
         this._timer = setInterval(() => {
             if (this._refreshNeeded) {
                 this._refreshNeeded = false;
@@ -103,8 +109,16 @@ export class SonarFeedWallComponent implements OnInit {
         if (!this.isSingleCard) {
             this._initData();
         }
+
         this._itemChangedSubscription = this._sonarFeedService.onPostChanged.subscribe((_: SonarFeedItem) => {
             this.updateItem(_);
+        });
+
+        this._itemAddedSubscription = this._sonarFeedService.onPostAdded.subscribe((_: SonarFeedItem) => {
+            if (!this.isSingleCard) {
+                this.addItem(_);
+                // this.addItem(_);
+            }
         });
     }
 
@@ -120,6 +134,11 @@ export class SonarFeedWallComponent implements OnInit {
         if (this._itemChangedSubscription) {
             this._itemChangedSubscription.unsubscribe();
             this._itemChangedSubscription = null;
+        }
+
+        if (this._itemAddedSubscription) {
+            this._itemAddedSubscription.unsubscribe();
+            this._itemAddedSubscription = null;
         }
     }
 
@@ -150,6 +169,46 @@ export class SonarFeedWallComponent implements OnInit {
         }
 
         this._cdr.detectChanges();
+    }
+
+    addItem(item: SonarFeedItem) {
+        const itemIndex = this._items.findIndex(_ => _.id === item.id);
+        if (itemIndex !== -1) {
+            return;
+        }
+
+        const cardIndex = this.cards.findIndex(_ => _.id === item.id);
+        if (cardIndex !== -1) {
+            return;
+        }
+
+        if (this._temporaryItems && this._temporaryItems.find(_ => _.id === item.id)) {
+            return;
+        }
+
+        this._temporaryItems.push(item);
+        this._refreshNeeded = true;
+
+        // this._renderCards([item], true);
+    }
+
+    addUpdates() {
+        if (!this._temporaryItems || !this._temporaryItems.length) {
+            return;
+        }
+
+        const updatedItems = this._sonarFeedService.items;
+        const itemsToAdd: SonarFeedItem[] = [];
+        for (const tempItem of this._temporaryItems) {
+            const existing = updatedItems.find(_ => _.id === tempItem.id);
+            if (existing) {
+                itemsToAdd.push(existing);
+            }
+        }
+
+        this._renderCards(itemsToAdd, true);
+        this._temporaryItems = [];
+        this._refreshNeeded = true;
     }
 
     viewOnChart(card: SonarFeedCardVM) {
@@ -211,7 +270,7 @@ export class SonarFeedWallComponent implements OnInit {
     share(card: SonarFeedCardVM) {
         const host = `${window.location.origin}/#/${AppRoutes.Platform}/${AppRoutes.SocialFeed}/${card.id}`;
         JsUtil.copyStringToClipboard(host);
-        this._alertService.success("Share link copied to clipboard.");  
+        this._alertService.success("Share link copied to clipboard.");
     }
 
     commentLike(commentId: any, card: SonarFeedCardVM) {
@@ -283,8 +342,8 @@ export class SonarFeedWallComponent implements OnInit {
     private _isInside(a1: number, a2: number, b1: number, b2: number): boolean {
         if (a1 < b1 && a2 < b1) {
             return false;
-        } 
-        
+        }
+
         if (a1 > b2 && a2 > b1) {
             return false;
         }
@@ -338,8 +397,8 @@ export class SonarFeedWallComponent implements OnInit {
             this.loading = false;
         }, (error) => {
         });
-    }  
-    
+    }
+
     private _loadItem() {
         this.loading = true;
         this.cards = [];
@@ -367,12 +426,16 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
 
-    private _renderCards(items: SonarFeedItem[]) {
+    private _renderCards(items: SonarFeedItem[], addToStart = false) {
         for (const i of items) {
             const existing = this._items.find(_ => _.id === i.id);
             if (!existing) {
-                this._items.push(i);
-                this._mapInstrumentAndAdd(i, this._items.length);
+                if (addToStart) {
+                    this._items.unshift(i);
+                } else {
+                    this._items.push(i);
+                }
+                this._mapInstrumentAndAdd(i, this._items.indexOf(i));
             }
         }
     }

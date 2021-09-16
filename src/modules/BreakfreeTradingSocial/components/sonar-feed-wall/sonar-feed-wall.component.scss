@@ -25,7 +25,27 @@
         width: 100%;
         margin: 10px 10px 0px 10px;
     }
+
+    .new-update {
+        position: absolute;
+        top: 5px;
+        left: calc(50% - 50px);
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 21px;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 10px;
+        cursor: pointer;
+        color: whitesmoke;
+        z-index: 100;
+    }
 }
 
 @include themify($themes, true) {
+    .new-update {
+        background-color: themed("accentColor");
+    }
 }
