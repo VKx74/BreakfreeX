@@ -60,4 +60,38 @@ export class SocialFeedModelConverter {
             type: dto.type
         };
     }
+
+    public static ConvertTimeDiffToString(time: number): string {
+        const timeNow = Math.trunc(new Date().getTime() / 1000);
+        const dateOfCreation = new Date(time * 1000);
+        const timeDiff = Math.trunc(timeNow - time);
+
+        if (timeDiff < 60) {
+            return `${timeDiff} s ago `;
+        } else if (timeDiff < 60 * 60) {
+            const mins = Math.trunc(timeDiff / 60);
+            return `${mins} m`;
+        } else if (timeDiff < 60 * 60 * 24) {
+            const hours = Math.trunc(timeDiff / 60 / 60);
+            return `${hours} h`;
+        } else {
+            const secondsInDay = 60 * 60 * 24;
+            const days1 = Math.trunc(timeNow / secondsInDay);
+            const days2 = Math.trunc(time / secondsInDay);
+            const timeStringSplitted = dateOfCreation.toLocaleTimeString().split(":");
+            const timeString = `${timeStringSplitted[0]}:${timeStringSplitted[1]}`;
+            const dateString = dateOfCreation.toLocaleDateString();
+
+            if (days1 - days2 === 1) {
+                return `Yesterday at ${timeString}`;
+            }
+
+            if (timeDiff < secondsInDay * 7) {
+                const days = Math.trunc(timeDiff / secondsInDay);
+                return `${days} d`;
+            }
+
+            return `${dateString} ${timeString}`;
+        }
+    }
 }

@@ -163,8 +163,10 @@ export abstract class DataFeedBase implements IDatafeedBase {
             default:
                 throw new Error(`Unknown request kind: ${request.name}`);
         }
-
-        // chart.refresh(true);
+        
+        if (this._refreshOnRequestCompleted) {
+            chart.refresh(true);
+        }
 
         let barsCount = chart.primaryBarDataRows().low.length - oldPrimaryBarsCount;
         if (instrument) {
@@ -196,6 +198,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
                 chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
             }
         }
+        
         chart.scaleHorizontal.onCompleteMoreHistoryRequest();
 
         if (barsSet) {
@@ -306,6 +309,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
     }
 
     // endregion
+
 
     /**
      * Determines whether request is alive.

@@ -85,9 +85,11 @@ export class SonarChartComponent implements OnInit {
 
     ngOnInit() {
         this._sizeChangeObserver = new ResizeObserver(entries => {
-            if (this.chart) {
-                this.chart.refresh();
+            if (!this.chart) {
+                return;
             }
+            
+            this.chart.refresh();
             this._cdr.detectChanges();
         });
         this._sizeChangeObserver.observe(this.host.nativeElement);
@@ -107,6 +109,7 @@ export class SonarChartComponent implements OnInit {
             }
             if (this._sizeChangeObserver) {
                 this._sizeChangeObserver.unobserve(this.host.nativeElement);
+                this._sizeChangeObserver = null;
             }
         } catch (e) {
             console.log(e);
@@ -217,7 +220,7 @@ export class SonarChartComponent implements OnInit {
     }
 
     protected barAppended(eventObject: TradingChartDesigner.IValueChangedEvent) {
-        if (!this.chart) {
+        if (!this.chart || this.chart.isDestroyed) {
             return;
         }
 

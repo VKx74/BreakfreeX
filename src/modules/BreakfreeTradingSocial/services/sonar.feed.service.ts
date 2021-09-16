@@ -317,7 +317,7 @@ export class SonarFeedService {
                 i--;
             }
 
-            if (comments[i].comments) {
+            if (comments[i] && comments[i].comments) {
                 this._deleteCommentFromCommentsList(comments[i].comments, commentId);
             }
         }
@@ -348,6 +348,13 @@ export class SonarFeedService {
         if (post.lastComment) {
             if (post.lastComment.id === commentId) {
                 return post.lastComment;
+            }
+
+            if (post.lastComment.comments) {
+                const comment = this._findRecursiveComments(commentId, post.lastComment.comments);
+                if (comment) {
+                    return comment;
+                }
             }
         }
 

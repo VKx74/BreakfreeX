@@ -97,6 +97,7 @@ enum TradeTypes {
 export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     static componentName = 'BreakfreeTradingScannerWidget';
 
+    private _destroyed: boolean = false;
     private _initialized: boolean;
     private _featured: IFeaturedResult[] = [];
     private _loaded: IBFTScanInstrumentsResponseItem[] = [];
@@ -453,6 +454,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     ngOnDestroy() {
+        this._destroyed = true;
         this.beforeDestroy.next(this);
 
         if (this._timer) {
@@ -802,6 +804,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     private _refresh() {
+        if (this._destroyed) {
+            return;
+        }
         this._cdr.detectChanges();
     }
 
