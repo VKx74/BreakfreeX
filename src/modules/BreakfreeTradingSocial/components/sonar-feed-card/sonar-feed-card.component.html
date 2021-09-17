@@ -32,7 +32,7 @@
                     </ng-template>
                     <span class="like-counter">{{likeCount}}</span>
                 </div>
-                <div>Rate</div>
+                <div class="hidden">Rate</div>
                 <div class="dislike-container" (click)="dislike()">
                     <i class="fa fa-thumbs-down" aria-hidden="true" *ngIf="hasMyDislike; else nonActiveDislike"></i>
                     <ng-template #nonActiveDislike>

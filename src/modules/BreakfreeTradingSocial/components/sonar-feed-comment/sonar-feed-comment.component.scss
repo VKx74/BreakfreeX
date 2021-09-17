@@ -20,13 +20,29 @@
         flex-direction: column;
         position: relative;
         height: 100%;
-        margin: 5px 0px 0px 17px;
-        padding-left: 17px;
+        margin: 5px 0px 0px 16px;
+        padding-left: 8px;
     }
 
     .sub-comment-item {
 
     }
+    
+
+    .sub-comment-item .comment-avatar{
+        min-width: 30px !important;
+    }
+    
+    .sub-comment-item .comment-avatar .comment-avatar-img  {
+        width:24px !important;
+        height:24px !important;
+    }
+
+    .sub-comment-item .sub-comments-container {
+        margin: 5px 0px 0px 12px !important;
+    }
+    
+    
 
     .comment-content-user-level {
         display: flex;
@@ -39,8 +55,10 @@
                     height: 20px !important;
                 }
                 .rank-level {
-                    font-size: 10px !important;
-                    font-weight: 500 !important;
+                    font-size: 9px !important;
+                    font-weight: 700 !important;
+                    line-height: 1px;
+
                 }
             }
         }
@@ -129,6 +147,8 @@
 
                 .comment-content-data-text {
                     display: inline-block;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
             }
 
@@ -202,6 +222,8 @@
         background: themed("comment-wrapper-bg");
         border-radius: 15px;
         padding: 5px 10px 5px 10px;
+        max-width: 280px;
+        overflow: hidden;
     }
 
     .comment-row {

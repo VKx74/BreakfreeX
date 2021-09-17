@@ -14,7 +14,7 @@
         width: 100%;
         height: fit-content;
         // cursor: pointer;
-        border-radius: 5px;
+        border-radius: 15px;
         font-size: 12px;
     }
 
@@ -178,7 +178,7 @@
 
     .comment-row {
         display: flex;
-        margin: 10px 20px 7px 10px;
+        margin: 10px 20px 7px 6px;
     }
 
     .show-all-comments,
@@ -202,6 +202,8 @@
         background: themed("comment-wrapper-bg");
         border-radius: 15px;
         padding: 5px 10px 5px 10px;
+        max-width: 280px;
+        overflow: hidden;
     }
 
     .sonar-card {
