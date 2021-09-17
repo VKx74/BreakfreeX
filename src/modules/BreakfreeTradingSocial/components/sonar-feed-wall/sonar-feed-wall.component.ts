@@ -8,6 +8,7 @@ import { IdentityService } from "@app/services/auth/identity.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { Actions, LinkingAction } from "@linking/models";
 import { SonarFeedComment, SonarFeedItem } from "modules/BreakfreeTradingSocial/models/sonar.feed.models";
+import { InstrumentCacheService } from "modules/BreakfreeTradingSocial/services/instrument.cache.service";
 import { SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { ConfirmModalComponent } from "modules/UI/components";
 import { Subscription } from "rxjs";
@@ -102,7 +103,7 @@ export class SonarFeedWallComponent implements OnInit {
         protected _host: ElementRef,
         protected _dialog: MatDialog,
         protected _alertService: AlertService,
-        protected _instrumentService: InstrumentService,
+        protected _instrumentService: InstrumentCacheService,
         protected _cdr: ChangeDetectorRef) {
 
         this._timer = setInterval(() => {
@@ -472,22 +473,7 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     private _mapInstrumentAndAdd(setupItem: SonarFeedItem) {
-        this._instrumentService.getInstruments(null, setupItem.symbol).subscribe((data: IInstrument[]) => {
-            if (!data || !data.length) {
-                return;
-            }
-
-            let instrument = data[0];
-
-            for (const i of data) {
-                try {
-                    if (i.exchange && i.exchange.toLowerCase() === setupItem.exchange.toLowerCase() && i.id.toLowerCase() === setupItem.symbol.toLowerCase()) {
-                        instrument = i;
-                    }
-                } catch (e) {
-                }
-            }
-
+        this._instrumentService.getInstrument(setupItem.symbol, setupItem.exchange).subscribe((instrument: IInstrument) => {
             if (!instrument) {
                 return;
             }

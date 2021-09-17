@@ -8,7 +8,7 @@ import { switchmap } from "@decorators/switchmap";
 import { Observable, of, Subject, Subscription } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO } from "../models/sonar.feed.dto.models";
-import { SocialFeedCommentAddedNotification, SocialFeedCommentCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedCommentPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem } from "../models/sonar.feed.models";
+import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem } from "../models/sonar.feed.models";
 import { SocialFeedModelConverter } from "./models.convertter";
 import { SonarFeedSocketService } from "./sonar.feed.socket.service";
 
@@ -495,7 +495,7 @@ export class SonarFeedService {
         this.onPostChanged.next(post);
     }
 
-    private _processCommentReaction(data: SocialFeedCommentCommentReactionNotification) {
+    private _processCommentReaction(data: SocialFeedCommentReactionNotification) {
         const item = this._searchCommentById(data.id);
         if (!data || !item) {
             return;
@@ -565,7 +565,7 @@ export class SonarFeedService {
         this._deleteCommentFromPost(post, data.id);
     }
 
-    private _processPostReaction(data: SocialFeedCommentPostReactionNotification) {
+    private _processPostReaction(data: SocialFeedPostReactionNotification) {
         const post = this._getPost(data.id);
         if (!post) {
             return;

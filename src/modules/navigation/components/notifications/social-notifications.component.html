@@ -1,0 +1,29 @@
+<div class="notifications" *ngIf="notifications && notifications.length; else noNotification">
+    <div class="notification" *ngFor="let notification of notifications">
+        <div class="columns">
+            <div class="avatar">
+                <name-avatar [name]="notification.userName" [src]="notification.userAvatarId"></name-avatar>
+            </div>
+            <div class="content">
+                <div class="header">
+                    <div class="header-left">
+                        <div class="username">{{notification.userName}}</div>
+                        <div class="user-level">
+                            <badge [level]="notification.userLevel" [rank]="notification.levelName"></badge>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        {{notification.time}}
+                        <span class="unread" *ngIf="!notification.isRead"></span>
+                    </div>
+                </div>
+                <div class="data">
+                    {{notification.text}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #noNotification>
+    <div class="no-notifications">Empty</div>
+</ng-template>

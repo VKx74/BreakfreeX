@@ -200,6 +200,23 @@
       }
     }
   }
+
+  .notifications {
+    cursor: pointer;
+    color: white;
+
+    .bell-image {
+      position: relative;
+      .new-notifications {
+        position: absolute;
+        background-color: #3d61cc;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        right: -4px;
+      }
+    }
+  }
 }
 
 @media (max-width: 740px) {

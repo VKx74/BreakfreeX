@@ -3,7 +3,7 @@ import { WebsocketBase } from "@app/interfaces/socket/socketBase";
 import { IWebSocketConfig, ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { AppConfigService } from "@app/services/app.config.service";
 import { Observable, Subject, Subscriber, Subscription } from "rxjs";
-import { SocialFeedCommentAddedNotification, SocialFeedCommentCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedCommentPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification } from "../models/sonar.feed.models";
+import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification } from "../models/sonar.feed.models";
 import { ISocialFeedCommentAdded, ISocialFeedCommentEdited, ISocialFeedCommentReaction, ISocialFeedCommentRemoved, ISocialFeedMessage, ISocialFeedPostAdded, ISocialFeedPostReaction, SocialFeedMessageSubject, SocialFeedMessageType } from "../models/sonar.feed.ws.models";
 
 @Injectable()
@@ -12,8 +12,8 @@ export class SonarFeedSocketService extends WebsocketBase {
     private _authSucceeded: boolean;
     private _onMessageSubscription: Subscription;
 
-    private _commentReaction: Subject<SocialFeedCommentCommentReactionNotification> = new Subject<SocialFeedCommentCommentReactionNotification>();
-    private _postReaction: Subject<SocialFeedCommentPostReactionNotification> = new Subject<SocialFeedCommentPostReactionNotification>();
+    private _commentReaction: Subject<SocialFeedCommentReactionNotification> = new Subject<SocialFeedCommentReactionNotification>();
+    private _postReaction: Subject<SocialFeedPostReactionNotification> = new Subject<SocialFeedPostReactionNotification>();
     private _postAdded: Subject<SocialFeedPostAddedNotification> = new Subject<SocialFeedPostAddedNotification>();
     private _commentAdded: Subject<SocialFeedCommentAddedNotification> = new Subject<SocialFeedCommentAddedNotification>();
     private _commentEdited: Subject<SocialFeedCommentEditedNotification> = new Subject<SocialFeedCommentEditedNotification>();
@@ -25,11 +25,11 @@ export class SonarFeedSocketService extends WebsocketBase {
         };
     }
 
-    get commentReaction(): Subject<SocialFeedCommentCommentReactionNotification> {
+    get commentReaction(): Subject<SocialFeedCommentReactionNotification> {
         return this._commentReaction;
     }
 
-    get postReaction(): Subject<SocialFeedCommentPostReactionNotification> {
+    get postReaction(): Subject<SocialFeedPostReactionNotification> {
         return this._postReaction;
     }
 
@@ -183,7 +183,10 @@ export class SonarFeedSocketService extends WebsocketBase {
         this._commentReaction.next({
             id: msgData.id,
             likesCount: data.likesCount,
-            dislikesCount: data.dislikesCount
+            dislikesCount: data.dislikesCount,
+            postId: data.postId,
+            subjectOwner: data.subjectOwner,
+            lastReactor: data.lastReactor
         });
     }
 
@@ -192,7 +195,8 @@ export class SonarFeedSocketService extends WebsocketBase {
         this._postReaction.next({
             id: msgData.id,
             likesCount: data.likesCount,
-            dislikesCount: data.dislikesCount
+            dislikesCount: data.dislikesCount,
+            postId: null
         });
     }
 
@@ -209,7 +213,8 @@ export class SonarFeedSocketService extends WebsocketBase {
                 postId: data.postId,
                 text: data.text,
                 time: data.time,
-                user: data.user
+                user: data.user,
+                parentCommentUser: data.parentCommentUser
             });
         } else if (type === SocialFeedMessageType.Update) {
             const data = msgData.data as ISocialFeedCommentEdited;

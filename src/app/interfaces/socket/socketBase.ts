@@ -87,7 +87,10 @@ export abstract class WebsocketBase {
 
     protected _connect(isReconnect: boolean = false): void {
         try {
-            this._socket = null;
+            if (this._socket) {
+                return;
+            }
+
             this._socket = new WebSocket(this.config.url, this.config.providers);
 
             // setInterval(() => {
@@ -141,6 +144,7 @@ export abstract class WebsocketBase {
     protected _reconnect() {
         console.log("Socket reconnect");
         setTimeout(() => {
+            this._socket = null;
             this._connect(true);
         }, this._getBackoffDelay(++this._reconnectAttempts));
     }

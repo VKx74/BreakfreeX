@@ -67,13 +67,17 @@ export interface SocialFeedCommentEditedNotification {
 }
 
 export interface SocialFeedCommentAddedNotification extends SocialFeedCommentEditedNotification {
+    parentCommentUser: SonarFeedUserInfo;
 }
 
-export interface SocialFeedCommentPostReactionNotification {
+export interface SocialFeedPostReactionNotification {
     id: any;
     likesCount: number;
     dislikesCount: number;
+    postId: number;
 }
 
-export interface SocialFeedCommentCommentReactionNotification extends SocialFeedCommentPostReactionNotification {
+export interface SocialFeedCommentReactionNotification extends SocialFeedPostReactionNotification {
+    subjectOwner: SonarFeedUserInfo;
+    lastReactor: SonarFeedUserInfo;
 }

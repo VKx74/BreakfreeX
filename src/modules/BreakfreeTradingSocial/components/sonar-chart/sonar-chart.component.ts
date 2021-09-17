@@ -257,7 +257,7 @@ export class SonarChartComponent implements OnInit {
         this.chart.refreshAsync(true);
         this._attached = true;
 
-        this._tradingFromChartHandler.setChart(this.chart);
+        this._tradingFromChartHandler.setChart(this.chart, true);
     }
 
     private _justifyVisibleDataOnChart() {

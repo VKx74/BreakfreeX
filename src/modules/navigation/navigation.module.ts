@@ -19,6 +19,7 @@ import { NavDelimiterComponent } from './components/nav-delimiter/nav-delimiter.
 import { NavSectionComponent } from './components/nav-section/nav-section.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LayoutManagementMenuComponent } from './components/layout-management-menu/layout-management-menu.component';
+import { SocialNotificationsComponent } from './components/notifications/social-notifications.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import { LayoutManagementMenuComponent } from './components/layout-management-me
         BaseNavComponent,
         NavDelimiterComponent,
         NavSectionComponent,
-        LayoutManagementMenuComponent
+        LayoutManagementMenuComponent,
+        SocialNotificationsComponent
     ],
     imports: [
         CommonModule,
@@ -52,6 +54,7 @@ import { LayoutManagementMenuComponent } from './components/layout-management-me
         NavigationComponent,
         BaseNavComponent,
         NavSectionComponent,
+        SocialNotificationsComponent
         // WorkspacesComponent,
     ],
 

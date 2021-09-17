@@ -22,5 +22,10 @@ export class SocialFeedRootComponent {
         } catch (error) {
             console.error(error);
         }
+
+        const loader = document.getElementById("initial-loader");
+        if (loader) {
+            loader.remove();
+        }
     }
 }

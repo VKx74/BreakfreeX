@@ -15,6 +15,7 @@ import {ActivatedRoute} from "@angular/router";
 import {PlatformTranslateService} from "@platform/localization/token";
 import { NotificationsService, NotificationType } from '@alert/services/notifications.service';
 import { EBrokerNotification } from '@app/interfaces/broker/broker';
+import { SocialRealtimeNotificationsService } from 'modules/BreakfreeTradingSocial/services/realtime.notifications.service';
 
 @Component({
     selector: 'platform',
@@ -39,6 +40,7 @@ export class PlatformComponent implements OnInit, AfterViewInit {
                 private _audioService: AudioService,
                 private _userSettingsService: UserSettingsService,
                 private _brokerService: BrokerService,
+                private _socialRealtimeNotificationsService: SocialRealtimeNotificationsService,
                 private _route: ActivatedRoute,
                 private _alertService: AlertService,
                 private _notificationsService: NotificationsService) {

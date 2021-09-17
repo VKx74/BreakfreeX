@@ -44,6 +44,7 @@ interface IPositionSizeCalculationRequest {
 @Injectable()
 export class TradeFromChartService implements TradingChartDesigner.ITradingFromChartHandler {
     private _chart: TradingChartDesigner.Chart;
+    private _preventModification: boolean;
     private _brokerStateChangedSubscription: Subscription;
     private _ordersUpdatedSubscription: Subscription;
     private _positionsUpdatedSubscription: Subscription;
@@ -62,54 +63,74 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
     constructor(private _brokerService: BrokerService, private _dialog: MatDialog,
         @Inject(AlertService) protected _alertService: AlertService, protected _alogService: AlgoService) {
+
         this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
-            this._prevSymbol = null;
-            this.refresh();
-            if (this._broker) {
-                this._ordersUpdatedSubscription = this._broker.onOrdersUpdated.subscribe(() => {
-                    this._pendingEdit = {};
-                    this.refresh();
-                });
-
-                this._onOrdersParametersUpdated = this._broker.onOrdersParametersUpdated.subscribe((orders: any[]) => {
-                    this.handleOrdersParametersChanged(orders);
-                });
-
-                if (this._broker.isPositionBased) {
-                    const positionBasedBroker: IPositionBasedBroker = this._broker as any;
-                    this._positionsUpdatedSubscription = positionBasedBroker.onPositionsUpdated.subscribe(() => {
-                        this.refresh();
-                    });
-
-                    this._positionsParametersUpdatedSubscription = positionBasedBroker.onPositionsParametersUpdated.subscribe(() => {
-                        this.handlePositionsParametersChanged();
-                    });
-                }
-            } else {
-                if (this._ordersUpdatedSubscription) {
-                    this._ordersUpdatedSubscription.unsubscribe();
-                    this._ordersUpdatedSubscription = null;
-                }
-                if (this._positionsUpdatedSubscription) {
-                    this._positionsUpdatedSubscription.unsubscribe();
-                    this._positionsUpdatedSubscription = null;
-                }
-                if (this._positionsParametersUpdatedSubscription) {
-                    this._positionsParametersUpdatedSubscription.unsubscribe();
-                    this._positionsParametersUpdatedSubscription = null;
-                }
-                if (this._onOrdersParametersUpdated) {
-                    this._onOrdersParametersUpdated.unsubscribe();
-                    this._onOrdersParametersUpdated = null;
-                }
-            }
+            this._refreshBrokerSubscriptions();
         });
+
+        this._refreshBrokerSubscriptions();
 
         this._posSizeSubject.pipe(
             debounceTime(1000)
         ).subscribe((request) => {
             this._calculatePositionSize(request);
         });
+    }
+
+    private _refreshBrokerSubscriptions() {
+        this._prevSymbol = null;
+        this.refresh();
+        if (this._broker) {
+            if (!this._ordersUpdatedSubscription) {
+                this._ordersUpdatedSubscription = this._broker.onOrdersUpdated.subscribe(() => {
+                    this._pendingEdit = {};
+                    this.refresh();
+                });
+            }
+
+            if (!this._onOrdersParametersUpdated) {
+                this._onOrdersParametersUpdated = this._broker.onOrdersParametersUpdated.subscribe((orders: any[]) => {
+                    this.handleOrdersParametersChanged(orders);
+                });
+            }
+
+            if (this._broker.isPositionBased) {
+                const positionBasedBroker: IPositionBasedBroker = this._broker as any;
+
+                if (!this._positionsUpdatedSubscription) {
+                    this._positionsUpdatedSubscription = positionBasedBroker.onPositionsUpdated.subscribe(() => {
+                        this.refresh();
+                    });
+                }
+
+                if (!this._positionsParametersUpdatedSubscription) {
+                    this._positionsParametersUpdatedSubscription = positionBasedBroker.onPositionsParametersUpdated.subscribe(() => {
+                        this.handlePositionsParametersChanged();
+                    });
+                }
+            }
+        } else {
+            if (this._ordersUpdatedSubscription) {
+                this._ordersUpdatedSubscription.unsubscribe();
+                this._ordersUpdatedSubscription = null;
+            }
+            if (this._positionsUpdatedSubscription) {
+                this._positionsUpdatedSubscription.unsubscribe();
+                this._positionsUpdatedSubscription = null;
+            }
+            if (this._positionsParametersUpdatedSubscription) {
+                this._positionsParametersUpdatedSubscription.unsubscribe();
+                this._positionsParametersUpdatedSubscription = null;
+            }
+            if (this._onOrdersParametersUpdated) {
+                this._onOrdersParametersUpdated.unsubscribe();
+                this._onOrdersParametersUpdated = null;
+            }
+        }
+
+        if (this._isChartInitialized()) {
+            this._chart.refreshAsync();
+        }
     }
 
     public IsTradePlaced(): boolean {
@@ -125,9 +146,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         return this._orderConfig.Symbol === instrument.id;
     }
 
-    public setChart(chart: TradingChartDesigner.Chart) {
+    public setChart(chart: TradingChartDesigner.Chart, preventModification: boolean) {
         if (this._chart !== chart) {
             this._chart = chart;
+            this._preventModification = preventModification;
             this.refresh();
         }
     }
@@ -356,6 +378,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
         this.fillOrderLines();
         this.fillPositionsLines();
+
+        if (this._chart.isRestrictedMode) {
+            this._chart.refreshAsync();
+        }
     }
 
     public GetOrderSize(priceDiff: number, risk: number, callback: (size: any) => void, skipMapping: boolean = false): void {
@@ -697,6 +723,13 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         shape.showClose = true;
         shape.isEditable = this._canEditOrder();
         shape.boxSize = order.Size.toString();
+
+        if (this._preventModification) {
+            shape.showClose = false;
+            shape.isEditable = false;
+            shape.showSLTP = false;
+        }
+
         return shape;
     }
 
@@ -880,6 +913,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
+        let updateNeeded = false;
+
         for (const shape of this._chart.primaryPane.shapes) {
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
                 const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
@@ -887,6 +922,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
                     if (order.Id === Number(orderLine.lineId)) {
                         this.setShapePriceAndBox(orderLine, order);
+                        updateNeeded = true;
                     }
 
                     const slId = `sl_${order.Id.toString()}`;
@@ -894,10 +930,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
                     if (slId === orderLine.lineId) {
                         this.setShapeSL(orderLine, order);
+                        updateNeeded = true;
                     }
 
                     if (tpId === orderLine.lineId) {
                         this.setShapeTP(orderLine, order);
+                        updateNeeded = true;
                     }
                 }
             } else if (shape instanceof TradingChartDesigner.ShapeSimpleTrade) {
@@ -905,9 +943,14 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 for (const order of orders) {
                     if (order.Id === Number(orderShape.orderId)) {
                         this.updatePositionShape(orderShape, order);
+                        updateNeeded = true;
                     }
                 }
             }
+        }
+
+        if (updateNeeded && this._chart.isRestrictedMode) {
+            this._chart.refreshAsync();
         }
     }
 
@@ -1075,6 +1118,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
     private _canEditOrder(): boolean {
         if (!this._broker) {
+            return false;
+        }
+
+        if (this._preventModification) {
             return false;
         }
 

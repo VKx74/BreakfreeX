@@ -21,6 +21,7 @@ import { LayoutStorageService } from '@app/services/layout-storage.service';
 import { SaveStateAction } from '@app/store/actions/platform.actions';
 import { Store } from "@ngrx/store";
 import { AppState } from '@app/store/reducer';
+import { SocialRealtimeNotificationsService } from 'modules/BreakfreeTradingSocial/services/realtime.notifications.service';
 
 @Component({
     selector: 'base-nav',
@@ -48,6 +49,7 @@ export class BaseNavComponent implements OnInit {
 
     presentationMode: boolean;
     showStaticLogin: boolean;
+    reactionMenuOpened: boolean = false;
 
     get userNameWithLevel(): string {
         if (this.level) {
@@ -108,6 +110,10 @@ export class BaseNavComponent implements OnInit {
     public get academyRoute(): string {
         return AppRoutes.Academy;
     }
+    
+    public get isUnreadMessages(): boolean {
+        return this._socialRealtimeNotificationsService.unreadExists;
+    }
 
     constructor(private _identityService: IdentityService,
         private _usersProfileService: UsersProfileService,
@@ -121,6 +127,7 @@ export class BaseNavComponent implements OnInit {
         private _route: ActivatedRoute,
         private _layoutStorageService: LayoutStorageService,
         private _store: Store<AppState>,
+        private _socialRealtimeNotificationsService: SocialRealtimeNotificationsService,
         private _inlineService: InlineService) {
         this.showStaticLogin = this._identityService.isGuestMode;
     }
@@ -232,6 +239,15 @@ export class BaseNavComponent implements OnInit {
 
     showSettings() {
 
+    }
+
+    onNotificationsMenuOpened() {
+        this.reactionMenuOpened = true;
+    }
+
+    onNotificationsMenuClosed() {
+        this.reactionMenuOpened = false;
+        this._socialRealtimeNotificationsService.setAsRead();
     }
 
     private _save() {

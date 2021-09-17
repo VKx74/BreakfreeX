@@ -32,9 +32,12 @@ export interface ISocialFeedSetupDescription {
 export interface ISocialFeedPostReaction {
     likesCount: number;
     dislikesCount: number;
+    postId: number;
 }
 
 export interface ISocialFeedCommentReaction extends ISocialFeedPostReaction {
+    subjectOwner: ISocialFeedUserDescription;
+    lastReactor: ISocialFeedUserDescription;
 }
 
 export interface ISocialFeedCommentEdited {
@@ -52,6 +55,7 @@ export interface ISocialFeedCommentRemoved {
 }
 
 export interface ISocialFeedCommentAdded extends ISocialFeedCommentEdited {
+    parentCommentUser: ISocialFeedUserDescription;
 }
 
 export interface ISocialFeedPostAdded {

@@ -529,7 +529,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
         this.replayWaiter = null;
 
-        this._tradingFromChartHandler.setChart(this.chart);
+        this._tradingFromChartHandler.setChart(this.chart, false);
         this._alertingFromChartService.setChart(this.chart);
 
         if (this._identity.isGuestMode && !ReplayModeSync.IsChartReplayStarted) {
