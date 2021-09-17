@@ -34,6 +34,7 @@ export class SonarFeedCardComponent implements OnInit {
     private _showLastComment: boolean = true;
     private _scrollDownNeed: boolean = false;
     private _showAllCommentsOnExpand: boolean = false;
+    private _selected: boolean = false;
     private _replayCommentId: any;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
@@ -52,6 +53,7 @@ export class SonarFeedCardComponent implements OnInit {
     @Output() onRemoveComment = new EventEmitter<any>();
     @Output() onShowAllComments = new EventEmitter<void>();
     @Output() onFavorite = new EventEmitter<void>();
+    @Output() chartClick = new EventEmitter<void>();
 
     @Input() public set isVisible(value: boolean) {
         this._isVisible = value;
@@ -104,6 +106,10 @@ export class SonarFeedCardComponent implements OnInit {
     
     @Input() public set showAllCommentsOnExpand(value: boolean) {
         this._showAllCommentsOnExpand = value;
+    }
+
+    @Input() public set selected(value: boolean) {
+        this._selected = value;
     }
 
     public set comment(value: string) {
@@ -174,6 +180,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get showLastComment(): boolean {
         return this._showLastComment;
+    } 
+    
+    public get selected(): boolean {
+        return this._selected;
     }
 
     public get replayComment(): SonarFeedCommentVM {
@@ -291,6 +301,16 @@ export class SonarFeedCardComponent implements OnInit {
         this.comment = "";
         this.textarea.nativeElement.blur();
         this._cdr.detectChanges();
+    }
+
+    clickOnChart() {
+        this.chartClick.next();
+    }
+
+    keyUpOnTextArea(data: KeyboardEvent) {
+        if (data.code === "Enter" && !data.shiftKey) {
+            this.sendComment();
+        }
     }
 
     private _scrollToBottom(): void {

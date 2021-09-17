@@ -1,5 +1,5 @@
 import { AlertService } from "@alert/services/alert.service";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { AppRoutes } from "@app/app.routes";
 import { IInstrument } from "@app/models/common/instrument";
@@ -72,7 +72,11 @@ export class SonarFeedWallComponent implements OnInit {
     private _items: SonarFeedItem[] = [];
     private _temporaryItems: SonarFeedItem[] = [];
     private _cardId: any;
+    private _scrollTop: number = 0;
+    private _selectedCard: SonarFeedCardVM;
 
+    @ViewChild('scroll', { static: true }) scroll: ElementRef;
+    
     @Output() onOpenChart = new EventEmitter<LinkingAction>();
 
     @Input() isSingleCard: boolean = false;
@@ -87,6 +91,10 @@ export class SonarFeedWallComponent implements OnInit {
     
     public get IsNewUpdatesExists(): boolean {
         return this._temporaryItems && this._temporaryItems.length > 0;
+    } 
+    
+    public get selectedCard(): SonarFeedCardVM {
+        return this._selectedCard;
     }
 
     constructor(protected _identityService: IdentityService,
@@ -189,7 +197,9 @@ export class SonarFeedWallComponent implements OnInit {
         this._temporaryItems.push(item);
         this._refreshNeeded = true;
 
-        // this._renderCards([item], true);
+        if (this._scrollTop <= 10) {
+            this.addUpdates();
+        }
     }
 
     addUpdates() {
@@ -208,6 +218,7 @@ export class SonarFeedWallComponent implements OnInit {
 
         this._renderCards(itemsToAdd, true);
         this._temporaryItems = [];
+        this._scrollToTop();
         this._refreshNeeded = true;
     }
 
@@ -328,6 +339,25 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
+    clickOnCard(card: SonarFeedCardVM) {
+       this._selectedCard = card;
+    }
+
+    clickOnWall(data: any) {
+        if (!data.target || !data.target.attributes || !data.target.attributes['class']) {
+            return;
+        }
+
+        const classValue = data.target.attributes['class'].value as string;
+        if (classValue && classValue.indexOf("tcdCrossHairContainer") === -1) {
+            this._selectedCard = null;
+        }
+    }
+
+    private _scrollToTop() {
+        this.scroll.nativeElement.scrollTop = 0;
+    }
+
     private _removeComment(commentId: any, card: SonarFeedCardVM) {
         this.loading = true;
         this._sonarFeedService.deleteComment(card.id, commentId).subscribe(() => {
@@ -364,6 +394,7 @@ export class SonarFeedWallComponent implements OnInit {
         }
 
         const scrolledTop = target.scrollTop;
+        this._scrollTop = scrolledTop;
 
         let totalHeight = 0;
         let index = 0;

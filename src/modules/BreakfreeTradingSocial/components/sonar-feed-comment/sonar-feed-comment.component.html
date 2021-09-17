@@ -42,7 +42,7 @@
                     </ng-template>
                     <span class="comment-dislike-counter">{{comment.dislikesCount}}</span>
                 </div>
-                <div class="replay-button" *ngIf="!comment.isOwnComment" (click)="replay(comment.id)">
+                <div class="replay-button" (click)="replay(comment.id)">
                     Reply
                 </div>
                 <div class="card-time">{{createTimeString(comment.time)}}</div>

@@ -43,6 +43,7 @@ export class SonarChartComponent implements OnInit {
     private _detachedHost: any;
     private _sizeChangeObserver: any;
     private _isReplay: boolean = true;
+    private _selected: boolean = false;
 
     private chart: TradingChartDesigner.Chart;
 
@@ -52,6 +53,13 @@ export class SonarChartComponent implements OnInit {
     @Input() public instrument: IInstrument;
     @Input() public granularity: number;
     @Input() public time: number;
+    @Input() public set selected(value: boolean) {
+        this._selected = value;
+
+        if (this.chart) {
+            this.chart.preventMouseEvents = !this._selected;
+        }
+    }
 
     @Input() public set isVisible(value: boolean) {
         this._isVisible = value;
@@ -195,6 +203,7 @@ export class SonarChartComponent implements OnInit {
 
         this.chart = $(config.chartContainer).TradingChartDesigner(config);
         this.chart.showInstrumentWatermark = false;
+        this.chart.preventMouseEvents = true;
         this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barAppended.bind(this));
     }
 

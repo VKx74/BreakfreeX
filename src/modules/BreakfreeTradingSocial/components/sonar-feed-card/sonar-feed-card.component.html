@@ -15,8 +15,8 @@
             {{createTimeString(time)}}
         </div>
     </div>
-    <div class="card-chart" #chartContainer>
-        <sonar-chart [instrument]="instrument" [time]="time" [granularity]="granularity" [isVisible]="isVisible">
+    <div class="card-chart" #chartContainer [ngClass]="{'chart-selected': selected}" (click)="clickOnChart()">
+        <sonar-chart [selected]="selected" [instrument]="instrument" [time]="time" [granularity]="granularity" [isVisible]="isVisible">
         </sonar-chart>
     </div>
     <div class="card-footer">
@@ -30,15 +30,17 @@
                     <ng-template #nonActiveLike>
                         <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
                     </ng-template>
-                    <span class="like-counter">{{likeCount}}</span>
+                    <!-- <span class="like-counter">{{likeCount}}</span> -->
                 </div>
-                <div class="hidden">Rate</div>
+                <div class="rate-count">
+                    {{likeCount - dislikeCount}}
+                </div>
                 <div class="dislike-container" (click)="dislike()">
                     <i class="fa fa-thumbs-down" aria-hidden="true" *ngIf="hasMyDislike; else nonActiveDislike"></i>
                     <ng-template #nonActiveDislike>
                         <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
                     </ng-template>
-                    <span class="dislike-counter">{{dislikeCount}}</span>
+                    <!-- <span class="dislike-counter">{{dislikeCount}}</span> -->
                 </div>
             </div>
             <div class="card-footer-share-button" (click)="share()">
@@ -69,7 +71,7 @@
         <!-- <mat-form-field class="crypto-input bft-form-input full-width"> -->
         <div class="card-left-comment-input">
             <textarea class="crypto-textarea nborder comment-textarea" placeholder="Write a public comment..."
-                [(ngModel)]="comment" #textarea></textarea>
+                [(ngModel)]="comment" #textarea (keyup)="keyUpOnTextArea($event)"></textarea>
             <div class="send-button" [ngClass]="{'disabled': !comment || comment.length === 0}" (click)="sendComment()">
                 Send
             </div>

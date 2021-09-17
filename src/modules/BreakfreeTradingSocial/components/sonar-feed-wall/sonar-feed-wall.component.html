@@ -1,4 +1,4 @@
-<div class="sonar-wall" (scroll)="onScroll($event)">
+<div class="sonar-wall" (scroll)="onScroll($event)" #scroll (click)="clickOnWall($event)">
     <div class="card-container" *ngFor="let card of cards">
         <sonar-feed-card [isVisible]="isCardVisible(card)" [hasMyLike]="card.hasMyLike" [hasMyDislike]="card.hasMyDislike"
             [likeCount]="card.likeCount" [dislikeCount]="card.dislikeCount" [granularity]="card.granularity"
@@ -7,7 +7,8 @@
             (onAddComment)="addComment($event, card)" (onCommentLike)="commentLike($event, card)" (onCommentDislike)="commentDislike($event, card)"
             (onRemoveComment)="removeComment($event, card)" (onFavorite)="favorite(card)" (onAddReplay)="addReplay($event, card)"
             [comments]="card.comments" [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"
-            [showAllCommentsOnExpand]="isSingleCard" (onShare)="share(card)"></sonar-feed-card>
+            [showAllCommentsOnExpand]="isSingleCard" (onShare)="share(card)" (chartClick)="clickOnCard(card)"
+            [selected]="selectedCard && selectedCard == card"></sonar-feed-card>
     </div>
 </div>
 

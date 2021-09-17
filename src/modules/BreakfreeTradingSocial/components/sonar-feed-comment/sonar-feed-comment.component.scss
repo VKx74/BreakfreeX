@@ -180,6 +180,10 @@
                     }
                 }
 
+                .comment-dislike-container {
+                    display: none;
+                }
+
                 .replay-button {
                     display: flex;
                     justify-content: left;
@@ -201,7 +205,11 @@
                     align-items: center;
                     opacity: 0.7;
                     height: 100%;
+                    width: 100%;
+                    justify-content: right;
+                    margin-right: 5px;
                 }
+                
                 .remove-comment {
                     margin-left: 8px;
                     cursor: pointer;
