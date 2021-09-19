@@ -79,7 +79,7 @@ export class SocialNotificationsComponent  implements OnDestroy {
                 userName: likeReaction.user.name,
                 levelName: likeReaction.user.levelName,
                 userLevel: likeReaction.user.level,
-                text: `Replied "${replyText}" to your comment your comment`
+                text: `Replied "${replyText}" to your comment`
             });
         }
     }

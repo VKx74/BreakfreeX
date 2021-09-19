@@ -1,4 +1,5 @@
 <div class="notifications" *ngIf="notifications && notifications.length; else noNotification">
+    <div class="notifications-header">Notifications</div>
     <div class="notification" *ngFor="let notification of notifications">
         <div class="columns">
             <div class="avatar">
@@ -25,5 +26,12 @@
     </div>
 </div>
 <ng-template #noNotification>
-    <div class="no-notifications">Empty</div>
+    <div class="notifications-header">Notifications</div>
+    
+    <div class="no-notifications">
+        <img class="widget-icon" src="/assets/img/bells-solid.svg">
+        <span class="emptynotifications">
+            This is where you get updates on your activity.
+        </span> 
+    </div>
 </ng-template>
