@@ -73,11 +73,11 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     @bind
     captionText(value: EBrokerInstance) {
         switch (value) {
-            case EBrokerInstance.MT4: return of("MT4");
-            case EBrokerInstance.MT5: return of("MT5");
+            case EBrokerInstance.MT4: return of("Metatrader 4 (MT4)");
+            case EBrokerInstance.MT5: return of("Metatrader 5 (MT5)");
             case EBrokerInstance.Binance: return of("Binance (Spot)");
-            case EBrokerInstance.BinanceFuturesUSD: return of("Binance (Futures USD)");
-            case EBrokerInstance.BinanceFuturesCOIN: return of("Binance (Futures COIN)");
+            case EBrokerInstance.BinanceFuturesUSD: return of("Binance (USDT Futures)");
+            case EBrokerInstance.BinanceFuturesCOIN: return of("Binance (COIN Futures)");
             case EBrokerInstance.BFTDemo: return of("Breakfree Trading - Demo");
             case EBrokerInstance.BFTFundingDemo: return of("Breakfree Funding - Demo");
             case EBrokerInstance.BFTFundingLive: return of("Breakfree Funding - Live");
