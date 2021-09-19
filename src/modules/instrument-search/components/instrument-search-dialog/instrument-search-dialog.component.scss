@@ -13,6 +13,7 @@
       padding: 0px !important;
       display: flex;
       flex-direction: column;
+      border-radius:15px;
     }
   }
 
@@ -33,7 +34,8 @@
     display: flex;
     max-width: 550px;
     flex-flow: wrap;
-    padding: 0px 10px;
+    padding: 5px 10px;
+    border-bottom: 2px solid;
     .instrument-type {
       display: flex;
       font-size: 12px;
@@ -42,6 +44,7 @@
       padding: 5px 10px;
       cursor: pointer;
       border-radius: 15px;
+      opacity:0.75;
     }
   }
 
@@ -49,16 +52,14 @@
     display: flex;
     align-items: center;
     font-size: 16px;
-    padding: 0px 15px;
-    margin: 15px 0px;
-    border-top: 1px solid;
-    border-bottom: 1px solid;
+    padding: 15px 10px;
+    border-bottom: 2px solid;
     .crypto-input {
       width: 100%;
       background-color: transparent;
-      margin: 0px 10px;
       padding: 0px;
-      font-size: 16px;
+      font-size: 23px;
+      font-weight: 700;
       text-transform: uppercase;
     }
   }
@@ -67,7 +68,7 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
-    margin: 15px;
+    margin: 10px;
     position: relative;
     height: 30vh;
   }
@@ -94,9 +95,12 @@
     display: flex;
     justify-content: space-between;
     font-size: 13px;
-    padding: 5px;
+    padding: 10px 10px;
     border-bottom: 1px solid;
     cursor: pointer;
+    border-radius: 5px;
+    border: 0px;
+    margin-right:5px;
   }
 
   .instrument-name, .instrument-company, .instrument-datafeed {
@@ -120,14 +124,20 @@
   .instrument-company {
     max-width: 300px;
     width: 45%;
+    opacity: 0.75;
   }
 
   .instrument-datafeed {
-    text-align: end;
     text-transform: uppercase;
-    padding-right: 5px;
     max-width: 80px;
     width: 25%;
+    background: #5f5f5f2e;
+    text-align: center;
+    border-radius: 2px;
+    font-weight: 700;
+    font-size: 11px;
+    padding-top: 2px;
+    opacity:0.75;
   }
 
   .loader-container {
@@ -158,12 +168,15 @@
   }
 
   .instrument-input-container {
-    border-top-color: themed('activeBackgroundColor');
-    border-bottom-color: themed('activeBackgroundColor');
+    border-bottom-color: themed('new-search-field-selector-bg');
   } 
 
-  .search-icon, .crypto-input, .instrument-datafeed {
+  .search-icon, .crypto-input {
     color: themed('titleTextColor');
+  }
+
+  .instrument-datafeed {
+    color: themed('provider-text-color');
   }
 
   .close, .modal-title, .instrument-name, .instrument-company, .no-data {
@@ -177,7 +190,7 @@
 
   .result-instrument {
     &.preselected {
-      background: themed('activeBackgroundColor');
+      background: themed('new-search-field-selector-bg');
     }
   }
 
@@ -188,7 +201,7 @@
     &.active {
       font-weight: 700 !important;
       color: white;
-      background: themed('accentColor');
+      background: themed('new-sort-color-bg');
     }
   }
 
@@ -198,11 +211,22 @@
     }
   }
 
+  .instrument-type-container{
+    border-bottom-color: themed('new-search-field-selector-bg');
+  }
+
   .instrument-mapping {
     color: themed('accentColor');
   }
 
+  div.modal-body {
+    background-color: themed('new-search-field-bg');
+  }
+
   /deep/.highlight {
-    color: themed('accentColor');
+    //color: themed('accentColor');
+    color: #6170f3;
+    background: #5858ff30;
+    padding: 2px 0px;
   }
 }

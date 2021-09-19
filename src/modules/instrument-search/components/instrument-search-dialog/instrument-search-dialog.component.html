@@ -2,12 +2,11 @@
     <div class="modal-content">
         <div class="modal-header" cdkDragHandle>
             <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
-            <h4 class="modal-title">{{'symbolSearch' | translate}}</h4>
+            <h4 class="modal-title hidden">{{'symbolSearch' | translate}}</h4>
         </div>
 
         <div class="modal-body">
             <div class="instrument-input-container">
-                <i class="fa search-icon fa-search"></i>
                 <input type="search" autocomplete="off" matInput type="text" [(ngModel)]="instrumentName" placeholder="Search"
                     class="crypto-input bft-form-input" #input_control>
             </div>
