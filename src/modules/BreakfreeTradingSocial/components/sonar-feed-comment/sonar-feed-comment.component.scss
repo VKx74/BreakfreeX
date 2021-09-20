@@ -25,24 +25,26 @@
     }
 
     .sub-comment-item {
-
     }
-    
 
-    .sub-comment-item .comment-avatar{
+    .continue-thread {
+        cursor: pointer;
+        display: inline-flex;
+        margin: 5px 32px;
+    }
+
+    .sub-comment-item .comment-avatar {
         min-width: 30px !important;
     }
-    
-    .sub-comment-item .comment-avatar .comment-avatar-img  {
-        width:24px !important;
-        height:24px !important;
+
+    .sub-comment-item .comment-avatar .comment-avatar-img {
+        width: 24px !important;
+        height: 24px !important;
     }
 
     .sub-comment-item .sub-comments-container {
         margin: 5px 0px 0px 12px !important;
     }
-    
-    
 
     .comment-content-user-level {
         display: flex;
@@ -58,7 +60,6 @@
                     font-size: 9px !important;
                     font-weight: 700 !important;
                     line-height: 1px;
-
                 }
             }
         }
@@ -83,7 +84,7 @@
             }
         }
 
-        .remove-comment {
+        .remove-comment, .edit-comment {
             display: flex;
             justify-content: left;
 
@@ -91,9 +92,17 @@
                 padding: 4px;
                 cursor: pointer;
                 border-radius: 5px;
-                font-size: 8px;
                 height: fit-content;
             }
+        }
+
+        .edit-comment {
+            font-size: 10px;
+            margin-left: 20px;
+        }
+
+        .remove-comment {
+            font-size: 8px;
         }
 
         .comment-content {
@@ -209,8 +218,8 @@
                     justify-content: right;
                     margin-right: 5px;
                 }
-                
-                .remove-comment {
+
+                .remove-comment, .edit-comment {
                     margin-left: 8px;
                     cursor: pointer;
                     border-radius: 3px;
@@ -239,8 +248,12 @@
         border-color: themed("sonar-feed-border") !important;
     }
 
+    .continue-thread {
+        color: themed("accentColor");
+    }
+
     .sub-comments-container::before {
-        content: '';
+        content: "";
         position: absolute;
         height: 100%;
         width: 1px;
@@ -258,7 +271,7 @@
         }
     }
 
-    .remove-comment {
+    .remove-comment, .edit-comment {
         i {
             &:hover {
                 background-color: themed("sonar-feed-post-button");

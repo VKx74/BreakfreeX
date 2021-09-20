@@ -225,6 +225,27 @@ export class SonarFeedService {
             return post;
         }));
     }
+    
+    editComment(postId: any, commentId: any, text: string): Observable<SonarFeedItem> {
+        const comment = this._getComment(postId, commentId);
+
+        if (!comment) {
+            return of(null);
+        }
+
+        const post = this._getPost(postId);
+
+        return this._http.patch<any>(`${this._url}api/comment/${commentId}`, {
+            text: text
+        }).pipe(map((response: SonarFeedCommentDTO) => {
+            if (!response) {
+                return;
+            }
+            const replayedComment = SocialFeedModelConverter.ConvertToSonarFeedComment(response);
+            this._editComment(post, comment, text);
+            return post;
+        }));
+    }
 
     postReplay(postId: any, commentId: any, text: string): Observable<SonarFeedItem> {
         const comment = this._getComment(postId, commentId);
@@ -279,6 +300,11 @@ export class SonarFeedService {
         post.lastComment = comment;
         post.commentsTotal++;
 
+        this.onPostChanged.next(post);
+    }
+
+    private _editComment(post: SonarFeedItem, comment: SonarFeedComment, text: string) {
+        comment.text = text;
         this.onPostChanged.next(post);
     }
 

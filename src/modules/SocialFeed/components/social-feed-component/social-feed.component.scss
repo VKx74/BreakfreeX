@@ -1,6 +1,7 @@
-@import "../../themes/themes";
-@import "mixins/themify";
 @import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "modules/Layout/styles/themes/themes";
 
 :host {
   font-family: "Fira Sans", sans-serif;

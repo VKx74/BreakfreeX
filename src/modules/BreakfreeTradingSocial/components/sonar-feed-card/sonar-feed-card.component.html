@@ -8,7 +8,12 @@
                 </ng-template>
             </div>
             <div class="card-header-title">
-                {{title}}
+                <div class="card-header-symbol">{{symbol}}</div>    
+                <div class="card-header-timeframe">{{timeFrame}}</div>    
+                <div class="card-header-setup" [ngClass]="{'setup-long': side == 'Long', 'setup-short': side == 'Short'}">
+                    <i class="fa" [ngClass]="{'fas fa-arrow-up': side == 'Long', 'fas fa-arrow-down': side == 'Short'}"></i>
+                    {{side}} {{setup}}
+                </div>
             </div>
         </div>
         <div class="card-header-timestamp">
@@ -53,7 +58,9 @@
             View all {{commentsTotal}} comments
         </div>
         <div class="comment-row" *ngFor="let c of comments" [ngClass]="{'own-comment': c.isOwnComment}">
-            <sonar-feed-comment [comment]="c" (onCommentLike)="likeComment($event)" (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)" (onRemoveComment)="removeComment($event)"></sonar-feed-comment>
+            <sonar-feed-comment [isExpanded]="true" [expandedComments]="expandedComments" [comment]="c" 
+            (onExpandComment)="expandComment($event)" (onCommentLike)="likeComment($event)" (onCommentDislike)="dislikeComment($event)" 
+            (onAddReplay)="replay($event)" (onRemoveComment)="removeComment($event)" (onEditComment)="editComment($event)"></sonar-feed-comment>
         </div>
         <div class="hide-all-comments" *ngIf="commentsTotal > 1 && comments.length > 1" (click)="hideAllComment()">
             Hide comments

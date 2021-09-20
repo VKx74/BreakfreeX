@@ -33,6 +33,9 @@
             .favorite-icon {
                 margin-right: 10px;
                 cursor: pointer;
+                display: flex;
+                align-items: center;
+                font-size: 14px;
 
                 .fa-star {
                     color: gold;
@@ -50,6 +53,39 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            display: flex;
+        }
+
+        .card-header-timeframe {
+            border: 1px solid #ddaf0bad;
+            border-radius: 3px;
+            padding: 5px;
+            display: flex;
+            font-weight: 700;
+            margin: 0px 10px;
+            height: 24px;
+            align-items: center;
+            font-size: 10px;
+        }
+
+        .card-header-symbol {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-header-setup {
+            border-radius: 3px;
+            padding: 5px;
+            display: flex;
+            font-weight: 700;
+            // margin: 0px 10px;
+            font-size: 10px;
+            height: 24px;
+            align-items: center;
+            .fa {
+                margin-right: 3px;
+            }
         }
     }
 
@@ -238,8 +274,22 @@
     .replay-description {
         background-color: themed("sonar-feed-border");
     }
-    
+
     .send-button {
         background-color: themed("sonar-feed-post-button");
+    }
+
+    .card-header-timeframe {
+        border-color: themed("scanner-card-tf-border");
+        color: themed("scanner-card-tf-color");
+    }
+    .setup-short {
+        background-color: themed("scanner-card-setup-short-background");
+        color: themed("scanner-card-setup-short-color");
+    }
+
+    .setup-long {
+        background-color: themed("scanner-card-setup-long-background");
+        color: themed("scanner-card-setup-long-color");
     }
 }

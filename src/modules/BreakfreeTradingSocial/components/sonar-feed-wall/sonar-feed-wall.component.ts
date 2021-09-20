@@ -28,6 +28,7 @@ export interface SonarFeedCommentVM {
     hasUserDislike: boolean;
     comments: SonarFeedCommentVM[];
     isOwnComment: boolean;
+    isRootComment: boolean;
     time: number;
 }
 
@@ -37,6 +38,10 @@ export interface SonarFeedCardVM {
     granularity: number;
     time: number;
     title: string;
+    timeFrame: string;
+    symbol: string;
+    setup: string;
+    side: string;
     hasMyLike: boolean;
     hasMyDislike: boolean;
     likeCount: number;
@@ -339,6 +344,17 @@ export class SonarFeedWallComponent implements OnInit {
             this._refreshNeeded = true;
         });
     }
+    
+    editComment(replayData: IReplayData, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.editComment(card.id, replayData.commentId, replayData.text).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
 
     clickOnCard(card: SonarFeedCardVM) {
        this._selectedCard = card;
@@ -508,7 +524,11 @@ export class SonarFeedWallComponent implements OnInit {
             comments: this._getComments(item),
             commentsTotal: item.commentsTotal,
             isFavorite: item.isFavorite,
-            sortIndex: -1
+            sortIndex: -1,
+            timeFrame: this._getTimeFrame(item.granularity),
+            setup: item.type,
+            symbol: item.symbol,
+            side: item.side === IBFTATrend.Up ? "Long" : "Short"
         };
     }
 
@@ -523,10 +543,10 @@ export class SonarFeedWallComponent implements OnInit {
                 comments.push(item.lastComment);
             }
         }
-        return comments.map(_ => this._convertCommentToVM(_));
+        return comments.map(_ => this._convertCommentToVM(_, true));
     }
 
-    private _convertCommentToVM(comment: SonarFeedComment): SonarFeedCommentVM {
+    private _convertCommentToVM(comment: SonarFeedComment, isRoot: boolean = false): SonarFeedCommentVM {
         return {
             id: comment.id,
             dislikesCount: comment.dislikesCount,
@@ -540,7 +560,8 @@ export class SonarFeedWallComponent implements OnInit {
             userLevel: comment.user.level,
             levelName: comment.user.levelName,
             userName: comment.user.name,
-            comments: comment.comments ? comment.comments.map(_ => this._convertCommentToVM(_)) : []
+            comments: comment.comments ? comment.comments.map(_ => this._convertCommentToVM(_)) : [],
+            isRootComment: isRoot
         };
     }
 
@@ -557,6 +578,11 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     private _getTitle(granularity: number, symbol: string, setup: string, side: string) {
+        let timeFrame = this._getTimeFrame(granularity);
+        return `${timeFrame} ${symbol} ${setup} ${side}`;
+    }
+
+    private _getTimeFrame(granularity: number): string {
         let timeFrame = "";
         let min = 60;
         let hour = min * 60;
@@ -570,7 +596,7 @@ export class SonarFeedWallComponent implements OnInit {
             timeFrame = `${granularity / day}D`;
         }
 
-        return `${timeFrame} ${symbol} ${setup} ${side}`;
+        return timeFrame;
     }
 
 

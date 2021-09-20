@@ -21,6 +21,10 @@ export class SonarFeedCardComponent implements OnInit {
     private _granularity: number;
     private _time: number;
     private _title: string;
+    private _timeFrame: string;
+    private _symbol: string;
+    private _setup: string;
+    private _side: string;
     private _isVisible: boolean;
     private _sizeChangeObserver: any;
     private _hasMyLike: boolean;
@@ -36,6 +40,8 @@ export class SonarFeedCardComponent implements OnInit {
     private _showAllCommentsOnExpand: boolean = false;
     private _selected: boolean = false;
     private _replayCommentId: any;
+    private _editComment: boolean;
+    private _expandedComments: any[] = [];
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
@@ -49,6 +55,7 @@ export class SonarFeedCardComponent implements OnInit {
     @Output() onCommentDislike = new EventEmitter<any>();
     @Output() onShare = new EventEmitter<void>();
     @Output() onAddComment = new EventEmitter<string>();
+    @Output() onEditComment = new EventEmitter<IReplayData>();
     @Output() onAddReplay = new EventEmitter<IReplayData>();
     @Output() onRemoveComment = new EventEmitter<any>();
     @Output() onShowAllComments = new EventEmitter<void>();
@@ -85,6 +92,22 @@ export class SonarFeedCardComponent implements OnInit {
 
     @Input() public set title(value: string) {
         this._title = value;
+    } 
+    
+    @Input() public set timeFrame(value: string) {
+        this._timeFrame = value;
+    }
+
+    @Input() public set symbol(value: string) {
+        this._symbol = value;
+    }
+
+    @Input() public set setup(value: string) {
+        this._setup = value;
+    }
+
+    @Input() public set side(value: string) {
+        this._side = value;
     }
 
     @Input() public set instrument(value: IInstrument) {
@@ -102,8 +125,8 @@ export class SonarFeedCardComponent implements OnInit {
 
     @Input() public set isFavorite(value: boolean) {
         this._isFavorite = value;
-    } 
-    
+    }
+
     @Input() public set showAllCommentsOnExpand(value: boolean) {
         this._showAllCommentsOnExpand = value;
     }
@@ -130,6 +153,22 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get title(): string {
         return this._title;
+    }
+
+    public get timeFrame(): string {
+        return this._timeFrame;
+    }
+
+    public get symbol(): string {
+        return this._symbol;
+    }
+
+    public get setup(): string {
+        return this._setup;
+    }
+
+    public get side(): string {
+        return this._side;
     }
 
     public get isVisible(): boolean {
@@ -160,6 +199,10 @@ export class SonarFeedCardComponent implements OnInit {
         return this._showAllCommentsOnExpand;
     }
 
+    public get expandedComments(): any[] {
+        return this._expandedComments;
+    }
+
     public get comments(): SonarFeedCommentVM[] {
         if (this._showLastComment && this._comments) {
             const length = this._comments.length;
@@ -180,8 +223,8 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get showLastComment(): boolean {
         return this._showLastComment;
-    } 
-    
+    }
+
     public get selected(): boolean {
         return this._selected;
     }
@@ -258,16 +301,29 @@ export class SonarFeedCardComponent implements OnInit {
         this.onCommentDislike.next(commentId);
     }
 
+    expandComment(commentId: any) {
+        this._expandedComments.push(commentId);
+        this._expandedComments = this._expandedComments.slice();
+    }
+
     sendComment() {
         if (!this.comment || !this.comment.length) {
             return;
         }
 
         if (this._replayCommentId) {
-            this.onAddReplay.next({
-                commentId: this._replayCommentId,
-                text: this.comment
-            });
+            if (this._editComment) {
+                this._editComment = false;
+                this.onEditComment.next({
+                    commentId: this._replayCommentId,
+                    text: this.comment
+                });
+            } else {
+                this.onAddReplay.next({
+                    commentId: this._replayCommentId,
+                    text: this.comment
+                });
+            }
             this._replayCommentId = null;
         } else {
             this.onAddComment.next(this.comment);
@@ -296,8 +352,16 @@ export class SonarFeedCardComponent implements OnInit {
         this.textarea.nativeElement.focus();
     }
 
+    editComment(commentId: any) {
+        this._replayCommentId = commentId;
+        this._editComment = true;
+        this._cdr.detectChanges();
+        this.textarea.nativeElement.focus();
+    }
+
     stopReplay() {
         this._replayCommentId = null;
+        this._editComment = false;
         this.comment = "";
         this.textarea.nativeElement.blur();
         this._cdr.detectChanges();
@@ -317,7 +381,7 @@ export class SonarFeedCardComponent implements OnInit {
         if (!this._scrollDownNeed) {
             return;
         }
-        
+
         this._scrollDownNeed = false;
         try {
             if (this.scroll) {

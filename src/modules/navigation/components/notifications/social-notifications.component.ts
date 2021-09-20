@@ -63,7 +63,7 @@ export class SocialNotificationsComponent  implements OnDestroy {
                 userName: likeReaction.user.name,
                 levelName: likeReaction.user.levelName,
                 userLevel: likeReaction.user.level,
-                text: "Like your comment",
+                text: "Liked your comment",
 
             });
         } else if (reaction.type === SocialFeedReactionType.Replay) {

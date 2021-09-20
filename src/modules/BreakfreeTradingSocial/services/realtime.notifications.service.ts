@@ -105,6 +105,10 @@ export class SocialRealtimeNotificationsService {
     private _processCommentAdded(data: SocialFeedCommentAddedNotification) {
         if (!data.parentCommentUser || data.parentCommentUser.userId !== this._identity.id) {
             return;
+        }  
+        
+        if (!data.user || data.user.userId === this._identity.id) {
+            return;
         }
 
         const commentReaction: ISocialFeedReplayReaction = {
@@ -113,7 +117,7 @@ export class SocialRealtimeNotificationsService {
             postId: data.postId,
             read: false,
             type: SocialFeedReactionType.Replay,
-            user: data.parentCommentUser
+            user: data.user
         };
 
         this._reactions.push(commentReaction);

@@ -9,7 +9,8 @@
             <div class="comment-wrapper">
                 <div class="comment-content-header">
                     <div class="comment-content-header-left">
-                        <div class="comment-content-username">{{comment.userName}}{{comment.isOwnComment ? " (You)" : ""}}</div>
+                        <div class="comment-content-username">{{comment.userName}}{{comment.isOwnComment ? " (You)" :
+                            ""}}</div>
                         <div class="comment-content-user-level">
                             <badge [level]="comment.userLevel" [rank]="comment.levelName"></badge>
                         </div>
@@ -25,8 +26,9 @@
             </div>
 
 
-            <div class="comment-content-footer" >
-                <div class="comment-like-container" [ngClass]="{'disabled': comment.isOwnComment}" (click)="likeComment(comment.id)">
+            <div class="comment-content-footer">
+                <div class="comment-like-container" [ngClass]="{'disabled': comment.isOwnComment}"
+                    (click)="likeComment(comment.id)">
                     <i class="fa fa-thumbs-up" aria-hidden="true"
                         *ngIf="comment.hasUserLike; else nonActiveCommentLike"></i>
                     <ng-template #nonActiveCommentLike>
@@ -34,7 +36,8 @@
                     </ng-template>
                     <span class="comment-like-counter">{{comment.likesCount}}</span>
                 </div>
-                <div class="comment-dislike-container" [ngClass]="{'disabled': comment.isOwnComment}" (click)="dislikeComment(comment.id)">
+                <div class="comment-dislike-container" [ngClass]="{'disabled': comment.isOwnComment}"
+                    (click)="dislikeComment(comment.id)">
                     <i class="fa fa-thumbs-down" aria-hidden="true"
                         *ngIf="comment.hasUserDislike; else nonActiveCommentDislike"></i>
                     <ng-template #nonActiveCommentDislike>
@@ -46,6 +49,9 @@
                     Reply
                 </div>
                 <div class="card-time">{{createTimeString(comment.time)}}</div>
+                <div class="edit-comment" *ngIf="comment.isOwnComment">
+                    <i class="fa fa-pencil" (click)="editComment(comment.id)"></i>
+                </div>
                 <div class="remove-comment" *ngIf="comment.isOwnComment">
                     <i class="crypto-icon crypto-icon-close" (click)="removeComment(comment.id)"></i>
                 </div>
@@ -54,8 +60,27 @@
     </div>
 
     <div class="sub-comments-container" *ngIf="comment.comments && comment.comments.length">
-        <div class="sub-comment-item" *ngFor="let c of comment.comments" [ngClass]="{'own-comment': c.isOwnComment}">
-            <sonar-feed-comment [comment]="c" (onCommentLike)="likeComment($event)" (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)" (onRemoveComment)="removeComment($event)"></sonar-feed-comment>
-        </div>
+        <ng-container *ngIf="comment.isRootComment && !isRootExpanded() && hasSubCommentsThread; else expanded">
+            <div class="sub-comment-item" [ngClass]="{'own-comment': comment.comments[0].isOwnComment}">
+                <sonar-feed-comment [comment]="comment.comments[0]" (onCommentLike)="likeComment($event)"
+                    (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
+                    (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
+                    (onEditComment)="editComment($event)"
+                    [expandedComments]="expandedComments" [isExpanded]="false"></sonar-feed-comment>
+                <div class="continue-thread" (click)="continueThread()">Continue this thread</div>
+            </div>
+        </ng-container>
+        <ng-template #expanded>
+            <ng-container *ngIf="isExpanded">
+                <div class="sub-comment-item" *ngFor="let c of comment.comments"
+                    [ngClass]="{'own-comment': c.isOwnComment}">
+                    <sonar-feed-comment [comment]="c" (onCommentLike)="likeComment($event)"
+                        (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
+                        (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
+                        (onEditComment)="editComment($event)"
+                        [expandedComments]="expandedComments" [isExpanded]="true"></sonar-feed-comment>
+                </div>
+            </ng-container>
+        </ng-template>
     </div>
 </div>

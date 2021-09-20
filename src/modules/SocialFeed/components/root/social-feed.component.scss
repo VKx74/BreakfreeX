@@ -1,10 +1,14 @@
-@import "../../themes/themes";
-@import "mixins/themify";
 @import "global-styles/variables";
-
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "modules/Layout/styles/themes/themes";
 
 :host {
   height: 100%;
   width: 100%;
   overflow: auto;
+}
+
+@include themify($themes, true) {
+    background: themed("lmContent") !important;
 }
