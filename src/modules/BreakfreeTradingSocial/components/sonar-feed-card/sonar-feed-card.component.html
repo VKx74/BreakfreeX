@@ -10,13 +10,13 @@
             <div class="card-header-title">
                 <div class="card-header-setup" [ngClass]="{'setup-long': side == 'Long', 'setup-short': side == 'Short'}">
                     <i class="fa" [ngClass]="{'fas fa-arrow-up': side == 'Long', 'fas fa-arrow-down': side == 'Short'}"></i>
-                    {{side}}
+                   <span>{{side}}</span>
                 </div>
-                <div class="hidden"> {{setup}}</div> 
+                
                    
                 <div class="card-header-symbol"> {{symbol}}</div>   
 
-                    <div class="card-header-timeframe hidden">{{timeFrame}}</div>  
+                    
                     
                 
                 <div class="card-header-timestamp">
@@ -30,6 +30,14 @@
         <sonar-chart [selected]="selected" [instrument]="instrument" [time]="time" [granularity]="granularity" [isVisible]="isVisible">
         </sonar-chart>
     </div>
+
+    <div class="tags-category-holder">
+        <div class="tag-setup"> <img class="widget-icon" src="/assets/img/chart-candlestick-solid.svg"> <span>{{setup}}</span></div> 
+        <div class="tag-timeframe"><img class="widget-icon" src="/assets/img/flux-capacitor-solid.svg"><span>{{timeFrame}}</span></div>  
+        <div class="tag-RTD-trend"><img class="widget-icon" src="/assets/img/chart-radar-solid.svg"> <span> Strong (110/80)</span></div> 
+
+    </div>
+    
     <div class="card-footer">
         <div class="card-footer-buttons">
             <div class="card-footer-view-button" (click)="viewOnChart()">

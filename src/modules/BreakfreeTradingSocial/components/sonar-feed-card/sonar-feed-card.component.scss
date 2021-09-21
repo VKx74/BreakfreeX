@@ -19,10 +19,41 @@
         overflow:hidden;
     }
 
+    .tags-category-holder {
+        display: flex;
+        padding: 5px 5px;
+    }
+    
+    .tag-setup, .tag-timeframe, .tag-RTD-trend {
+        background: #242627;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-size: 10px;
+        text-align: center;
+        font-weight: 700;
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        box-shadow: 0px 1px 0px 0px #00000075;
+    }
+
+    .tag-setup img,.tag-timeframe img,.tag-RTD-trend img   {
+        display: flex;
+        height: 11px;
+        margin-right: 3px;
+        -webkit-filter: invert(1);
+        filter: invert(1);
+        opacity: 0.8;
+    }
+
+    
+
     .card-header {
         display: flex;
         padding:8px;
-        background: #121219;
+        background: rgb(27,26,29);
+        background: linear-gradient(0deg, rgba(27,26,29,1) 0%, rgba(31,31,33,1) 100%);
         align-items: center;
         padding: 5px 5px;
 
@@ -66,11 +97,16 @@
             height:18px;
         }
 
+        .card-header-setup.setup-long .fa-arrow-up {
+            margin-top: -1px; 
+        }
+
         .card-header-title{
         display: flex;
 	    flex-direction: row;
 	    justify-content: space-between;
         width: 100%;
+        align-items: center;
          }
 
         .card-header-timeframe {
