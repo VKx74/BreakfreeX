@@ -1,5 +1,6 @@
 import { EMarketSpecific } from "@app/models/common/marketSpecific";
-import { BondsList, CommoditiesList, ForexExoticList, ForexMajorList, ForexMinorList, IndicesList, MetalsList } from "./forex.types";
+import { EquitiesWatchlist } from "modules/Watchlist/services/equities";
+import { BondsList, CommoditiesList, EquitiesList, ForexExoticList, ForexMajorList, ForexMinorList, IndicesList, MetalsList } from "./forex.types";
 let AllInstruments: string[] = [];
 AllInstruments = AllInstruments.concat(ForexMajorList);
 AllInstruments = AllInstruments.concat(ForexMinorList);
@@ -61,6 +62,13 @@ export class ForexTypeHelper {
             const iNormalized = this.NormalizeInstrument(i);
             if (iNormalized === normalizedSymbol) {
                 return EMarketSpecific.Commodities;
+            }
+        }
+        
+        for (const i of EquitiesList) {
+            const iNormalized = this.NormalizeInstrument(i);
+            if (iNormalized === normalizedSymbol) {
+                return EMarketSpecific.Stocks;
             }
         }
 

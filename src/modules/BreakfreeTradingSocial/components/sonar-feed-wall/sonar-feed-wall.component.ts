@@ -5,11 +5,13 @@ import { AppRoutes } from "@app/app.routes";
 import { IInstrument } from "@app/models/common/instrument";
 import { IBFTATrend } from "@app/services/algo.service";
 import { IdentityService } from "@app/services/auth/identity.service";
-import { InstrumentService } from "@app/services/instrument.service";
+import { EMarketSpecific } from "@app/models/common/marketSpecific";
+import { ForexTypeHelper } from "@app/services/instrument.type.helper/forex.types.helper";
 import { Actions, LinkingAction } from "@linking/models";
-import { SonarFeedComment, SonarFeedItem } from "modules/BreakfreeTradingSocial/models/sonar.feed.models";
+import { SocialFeedCommentAddedNotification, SocialFeedCommentEditedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostReactionNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemCommentLikeResponse, SonarFeedItemLikeResponse } from "modules/BreakfreeTradingSocial/models/sonar.feed.models";
 import { InstrumentCacheService } from "modules/BreakfreeTradingSocial/services/instrument.cache.service";
-import { SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
+import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
+import { ESonarFeedMarketTypes, ESonarFeedSetupTypes, ISonarSetupFilters, SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { ConfirmModalComponent } from "modules/UI/components";
 import { Subscription } from "rxjs";
 import { JsUtil } from "utils/jsUtil";
@@ -59,6 +61,31 @@ export interface ISonarFeedCard {
     title: string;
 }
 
+enum TimeFrames {
+    Min15 = "15 Min",
+    Hour1 = "1 Hour",
+    Hour4 = "4 Hour",
+    Day = "Daily",
+}
+
+enum TradeTypes {
+    Ext = "Extension",
+    BRC = "Break Retest & Continuation",
+    Swing = "Swing"
+}
+
+enum SonarFeedMarketTypes {
+    MajorForex = "Major Forex",
+    ForexMinors = "Forex Minors",
+    ForexExotic = "Forex Exotic",
+    Metals = "Metals",
+    Indices = "Indices",
+    Equities = "Equities",
+    Crypto = "Crypto",
+    Commodities = "Commodities",
+    Bonds = "Bonds"
+}
+
 @Component({
     selector: 'sonar-feed-wall',
     templateUrl: './sonar-feed-wall.component.html',
@@ -66,26 +93,36 @@ export interface ISonarFeedCard {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarFeedWallComponent implements OnInit {
-    private _loadCount: number = 20;
+    private _loadCount: number = 25;
     private _firstVisible: number = 0;
     private _lastVisible: number = 5;
     private _timer: any;
     private _canLoadMore: boolean = true;
     private _loadingMore: boolean = false;
     private _refreshNeeded: boolean = false;
-    private _itemChangedSubscription: Subscription;
+    private _commentReactionSubscription: Subscription;
+    private _postReactionSubscription: Subscription;
+    private _commentAddedSubscription: Subscription;
+    private _commentEditedSubscription: Subscription;
+    private _commentRemovedSubscription: Subscription;
     private _itemAddedSubscription: Subscription;
-    private _items: SonarFeedItem[] = [];
-    private _temporaryItems: SonarFeedItem[] = [];
     private _cardId: any;
     private _scrollTop: number = 0;
     private _selectedCard: SonarFeedCardVM;
+    private _isNewUpdatesExists: boolean;
+    private _filterChanged: boolean = false;
+    private _filteringParameters: ISonarSetupFilters;
 
     @ViewChild('scroll', { static: true }) scroll: ElementRef;
-    
+
     @Output() onOpenChart = new EventEmitter<LinkingAction>();
 
+    @Output() stateChanged = new EventEmitter<ISonarSetupFilters>();
+
     @Input() isSingleCard: boolean = false;
+
+    @Input() state: ISonarSetupFilters;
+
     @Input() set cardId(value: any) {
         this._cardId = value;
         this._loadItem();
@@ -94,11 +131,28 @@ export class SonarFeedWallComponent implements OnInit {
     public cards: SonarFeedCardVM[] = [];
     public loading: boolean;
     public initialized: boolean;
-    
+
+    public allowedTimeFrames: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public selectedTimeFrames: TimeFrames[];
+    public prevSelectedTimeFrames: TimeFrames[];
+
+    public allowedTradeTypes: TradeTypes[] = [TradeTypes.BRC, TradeTypes.Ext, TradeTypes.Swing];
+    public selectedTradeTypes: TradeTypes[];
+    public prevSelectedTradeTypes: TradeTypes[];
+
+    public allowedMarketTypes: SonarFeedMarketTypes[] = [SonarFeedMarketTypes.MajorForex, SonarFeedMarketTypes.ForexMinors, SonarFeedMarketTypes.ForexExotic,
+    SonarFeedMarketTypes.Equities, SonarFeedMarketTypes.Indices, SonarFeedMarketTypes.Metals, SonarFeedMarketTypes.Commodities, SonarFeedMarketTypes.Bonds, SonarFeedMarketTypes.Crypto];
+    public selectedMarketTypes: SonarFeedMarketTypes[];
+    public prevSelectedMarketTypes: SonarFeedMarketTypes[];
+
     public get IsNewUpdatesExists(): boolean {
-        return this._temporaryItems && this._temporaryItems.length > 0;
-    } 
-    
+        return this._isNewUpdatesExists;
+    }
+
+    public get FilterChanged(): boolean {
+        return this._filterChanged;
+    }
+
     public get selectedCard(): SonarFeedCardVM {
         return this._selectedCard;
     }
@@ -108,6 +162,7 @@ export class SonarFeedWallComponent implements OnInit {
         protected _host: ElementRef,
         protected _dialog: MatDialog,
         protected _alertService: AlertService,
+        protected _identity: IdentityService,
         protected _instrumentService: InstrumentCacheService,
         protected _cdr: ChangeDetectorRef) {
 
@@ -117,26 +172,52 @@ export class SonarFeedWallComponent implements OnInit {
                 this._cdr.detectChanges();
             }
         }, 300);
+
+        this.selectedTimeFrames = this.allowedTimeFrames.slice();
+        this.selectedMarketTypes = this.allowedMarketTypes.slice();
+        this.selectedTradeTypes = this.allowedTradeTypes.slice();
+
     }
 
     ngOnInit() {
-        if (!this.isSingleCard) {
-            this._initData();
-        }
+        this._commentReactionSubscription = this._sonarFeedService.onCommentReaction.subscribe((_: SocialFeedCommentReactionNotification) => {
+            this._commentReaction(_);
+        });
 
-        this._itemChangedSubscription = this._sonarFeedService.onPostChanged.subscribe((_: SonarFeedItem) => {
-            this.updateItem(_);
+        this._postReactionSubscription = this._sonarFeedService.onPostReaction.subscribe((_: SocialFeedPostReactionNotification) => {
+            this._postReaction(_);
+        });
+
+        this._commentAddedSubscription = this._sonarFeedService.onCommentAdded.subscribe((_: SocialFeedCommentAddedNotification) => {
+            this._commentAdded(_);
+        });
+
+        this._commentEditedSubscription = this._sonarFeedService.onCommentEdited.subscribe((_: SocialFeedCommentEditedNotification) => {
+            this._commentEdited(_);
+        });
+
+        this._commentRemovedSubscription = this._sonarFeedService.onCommentRemoved.subscribe((_: SocialFeedCommentRemovedNotification) => {
+            this._commentRemoved(_);
         });
 
         this._itemAddedSubscription = this._sonarFeedService.onPostAdded.subscribe((_: SonarFeedItem) => {
             if (!this.isSingleCard) {
-                this.addItem(_);
-                // this.addItem(_);
+                const isAllowed = this._isFitCardCurrentFilters(_);
+                if (isAllowed) {
+                    this.addItem(_);
+                }
             }
         });
     }
 
     ngAfterViewInit() {
+        if (!this.isSingleCard) {
+            if (this.state) {
+                this._mapToSettings(this.state);
+                this._filteringParameters = this._mapToTilters();
+            }
+            this._initData();
+        }
     }
 
     ngOnDestroy() {
@@ -145,14 +226,34 @@ export class SonarFeedWallComponent implements OnInit {
             this._timer = null;
         }
 
-        if (this._itemChangedSubscription) {
-            this._itemChangedSubscription.unsubscribe();
-            this._itemChangedSubscription = null;
-        }
-
         if (this._itemAddedSubscription) {
             this._itemAddedSubscription.unsubscribe();
             this._itemAddedSubscription = null;
+        }
+
+        if (this._commentReactionSubscription) {
+            this._commentReactionSubscription.unsubscribe();
+            this._commentReactionSubscription = null;
+        }
+
+        if (this._postReactionSubscription) {
+            this._postReactionSubscription.unsubscribe();
+            this._postReactionSubscription = null;
+        }
+
+        if (this._commentAddedSubscription) {
+            this._commentAddedSubscription.unsubscribe();
+            this._commentAddedSubscription = null;
+        }
+
+        if (this._commentEditedSubscription) {
+            this._commentEditedSubscription.unsubscribe();
+            this._commentEditedSubscription = null;
+        }
+
+        if (this._commentRemovedSubscription) {
+            this._commentRemovedSubscription.unsubscribe();
+            this._commentRemovedSubscription = null;
         }
     }
 
@@ -171,59 +272,22 @@ export class SonarFeedWallComponent implements OnInit {
         return index >= this._firstVisible && index <= this._lastVisible;
     }
 
-    updateItem(item: SonarFeedItem) {
-        const itemIndex = this._items.findIndex(_ => _.id === item.id);
-        if (itemIndex !== -1) {
-            this._items[itemIndex] = item;
-        }
-
-        const cardIndex = this.cards.findIndex(_ => _.id === item.id);
-        if (cardIndex !== -1) {
-            this._updateVM(this.cards[cardIndex], item);
-        }
-
-        this._cdr.detectChanges();
-    }
-
     addItem(item: SonarFeedItem) {
-        const itemIndex = this._items.findIndex(_ => _.id === item.id);
-        if (itemIndex !== -1) {
-            return;
-        }
-
         const cardIndex = this.cards.findIndex(_ => _.id === item.id);
         if (cardIndex !== -1) {
             return;
         }
 
-        if (this._temporaryItems && this._temporaryItems.find(_ => _.id === item.id)) {
-            return;
-        }
-
-        this._temporaryItems.push(item);
         this._refreshNeeded = true;
+        this._renderCards([item]);
 
-        if (this._scrollTop <= 10) {
-            this.addUpdates();
+        if (this._scrollTop > 10) {
+            this._isNewUpdatesExists = true;
         }
     }
 
-    addUpdates() {
-        if (!this._temporaryItems || !this._temporaryItems.length) {
-            return;
-        }
-
-        const updatedItems = this._sonarFeedService.items;
-        const itemsToAdd: SonarFeedItem[] = [];
-        for (const tempItem of this._temporaryItems) {
-            const existing = updatedItems.find(_ => _.id === tempItem.id);
-            if (existing) {
-                itemsToAdd.push(existing);
-            }
-        }
-
-        this._renderCards(itemsToAdd, true);
-        this._temporaryItems = [];
+    scrollTop() {
+        this._isNewUpdatesExists = false;
         this._scrollToTop();
         this._refreshNeeded = true;
     }
@@ -242,30 +306,61 @@ export class SonarFeedWallComponent implements OnInit {
 
     showAllComments(card: SonarFeedCardVM) {
         this.loading = true;
-        this._sonarFeedService.getComments(card.id).subscribe(() => {
+        this._sonarFeedService.getComments(card.id).subscribe((comments: SonarFeedComment[]) => {
             this.loading = false;
+            this._setComments(card, comments);
             this._refreshNeeded = true;
         }, () => {
             this.loading = false;
             this._refreshNeeded = true;
         });
+    }
+
+    private _setComments(card: SonarFeedCardVM, comments: SonarFeedComment[]) {
+        card.comments = comments.map(_ => this._convertCommentToVM(_, true));
     }
 
     like(card: SonarFeedCardVM) {
-        this.loading = true;
-        this._sonarFeedService.likeItem(card.id).subscribe(() => {
-            this.loading = false;
-            this._refreshNeeded = true;
-        }, () => {
-            this.loading = false;
-            this._refreshNeeded = true;
-        });
+        if (!card.hasMyLike) {
+            this.loading = true;
+            this._sonarFeedService.likeItem(card.id).subscribe((response: SonarFeedItemLikeResponse) => {
+                this.loading = false;
+                this._updatePostLikes(response);
+                this._refreshNeeded = true;
+            }, () => {
+                this.loading = false;
+                this._refreshNeeded = true;
+            });
+        } else {
+            this.deleteLike(card);
+        }
     }
 
     dislike(card: SonarFeedCardVM) {
+        if (!card.hasMyDislike) {
+            this.loading = true;
+            this._sonarFeedService.dislikeItem(card.id).subscribe((response: SonarFeedItemLikeResponse) => {
+                this.loading = false;
+                this._updatePostLikes(response);
+                this._refreshNeeded = true;
+            }, () => {
+                this.loading = false;
+                this._refreshNeeded = true;
+            });
+        } else {
+            this.deleteLike(card);
+        }
+    }
+
+    deleteLike(card: SonarFeedCardVM) {
+        if (!card.hasMyLike && !card.hasMyDislike) {
+            return;
+        }
+
         this.loading = true;
-        this._sonarFeedService.dislikeItem(card.id).subscribe(() => {
+        this._sonarFeedService.deleteLikeItem(card.id).subscribe((response: SonarFeedItemLikeResponse) => {
             this.loading = false;
+            this._updatePostLikes(response);
             this._refreshNeeded = true;
         }, () => {
             this.loading = false;
@@ -274,14 +369,27 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     favorite(card: SonarFeedCardVM) {
-        this.loading = true;
-        this._sonarFeedService.setFavorite(card.id).subscribe(() => {
-            this.loading = false;
-            this._refreshNeeded = true;
-        }, () => {
-            this.loading = false;
-            this._refreshNeeded = true;
-        });
+        if (card.isFavorite) {
+            this.loading = true;
+            this._sonarFeedService.deleteFavorite(card.id).subscribe(() => {
+                this.loading = false;
+                card.isFavorite = false;
+                this._refreshNeeded = true;
+            }, () => {
+                this.loading = false;
+                this._refreshNeeded = true;
+            });
+        } else {
+            this.loading = true;
+            this._sonarFeedService.setFavorite(card.id).subscribe(() => {
+                this.loading = false;
+                card.isFavorite = true;
+                this._refreshNeeded = true;
+            }, () => {
+                this.loading = false;
+                this._refreshNeeded = true;
+            });
+        }
     }
 
     share(card: SonarFeedCardVM) {
@@ -292,8 +400,21 @@ export class SonarFeedWallComponent implements OnInit {
 
     commentLike(commentId: any, card: SonarFeedCardVM) {
         this.loading = true;
-        this._sonarFeedService.likeComment(card.id, commentId).subscribe(() => {
+        this._sonarFeedService.likeComment(commentId).subscribe((response: SonarFeedItemCommentLikeResponse) => {
             this.loading = false;
+            this._updateCommentLikes(response, card.id);
+            this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    }
+
+    commentLikeDelete(commentId: any, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.deleteLikeComment(commentId).subscribe((response: SonarFeedItemCommentLikeResponse) => {
+            this.loading = false;
+            this._updateCommentLikes(response, card.id);
             this._refreshNeeded = true;
         }, () => {
             this.loading = false;
@@ -303,8 +424,9 @@ export class SonarFeedWallComponent implements OnInit {
 
     commentDislike(commentId: any, card: SonarFeedCardVM) {
         this.loading = true;
-        this._sonarFeedService.dislikeComment(card.id, commentId).subscribe(() => {
+        this._sonarFeedService.dislikeComment(commentId).subscribe((response: SonarFeedItemCommentLikeResponse) => {
             this.loading = false;
+            this._updateCommentLikes(response, card.id);
             this._refreshNeeded = true;
         }, () => {
             this.loading = false;
@@ -325,8 +447,9 @@ export class SonarFeedWallComponent implements OnInit {
 
     addComment(comment: string, card: SonarFeedCardVM) {
         this.loading = true;
-        this._sonarFeedService.postComment(card.id, comment).subscribe(() => {
+        this._sonarFeedService.postComment(card.id, comment).subscribe((commentResponse: SonarFeedComment) => {
             this.loading = false;
+            this._addComment(commentResponse, card.id);
             this._refreshNeeded = true;
         }, () => {
             this.loading = false;
@@ -336,7 +459,7 @@ export class SonarFeedWallComponent implements OnInit {
 
     addReplay(replayData: IReplayData, card: SonarFeedCardVM) {
         this.loading = true;
-        this._sonarFeedService.postReplay(card.id, replayData.commentId, replayData.text).subscribe(() => {
+        this._sonarFeedService.postReplay(replayData.commentId, replayData.text).subscribe(() => {
             this.loading = false;
             this._refreshNeeded = true;
         }, () => {
@@ -344,10 +467,10 @@ export class SonarFeedWallComponent implements OnInit {
             this._refreshNeeded = true;
         });
     }
-    
+
     editComment(replayData: IReplayData, card: SonarFeedCardVM) {
         this.loading = true;
-        this._sonarFeedService.editComment(card.id, replayData.commentId, replayData.text).subscribe(() => {
+        this._sonarFeedService.editComment(replayData.commentId, replayData.text).subscribe(() => {
             this.loading = false;
             this._refreshNeeded = true;
         }, () => {
@@ -357,7 +480,7 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     clickOnCard(card: SonarFeedCardVM) {
-       this._selectedCard = card;
+        this._selectedCard = card;
     }
 
     clickOnWall(data: any) {
@@ -371,14 +494,35 @@ export class SonarFeedWallComponent implements OnInit {
         }
     }
 
+    filterChanged(data: any) {
+        const filter = this._mapToTilters();
+        this._filterChanged = !this._isFiltersSame(this._filteringParameters, filter);
+    }
+
+    applyFilters() {
+        this._filteringParameters = this._mapToTilters();
+        this.stateChanged.next(this._filteringParameters);
+        this._initData();
+    }
+
+    cancelFilters(event: MouseEvent) {
+        this.selectedMarketTypes = this.prevSelectedMarketTypes;
+        this.selectedTradeTypes = this.prevSelectedTradeTypes;
+        this.selectedTimeFrames = this.prevSelectedTimeFrames;
+        this._filterChanged = false;
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
     private _scrollToTop() {
         this.scroll.nativeElement.scrollTop = 0;
     }
 
     private _removeComment(commentId: any, card: SonarFeedCardVM) {
         this.loading = true;
-        this._sonarFeedService.deleteComment(card.id, commentId).subscribe(() => {
+        this._sonarFeedService.deleteComment(commentId).subscribe(() => {
             this.loading = false;
+            this._deleteCommentFromCommentsList(card.comments, commentId);
             this._refreshNeeded = true;
         }, () => {
             this.loading = false;
@@ -413,6 +557,10 @@ export class SonarFeedWallComponent implements OnInit {
         const scrolledTop = target.scrollTop;
         this._scrollTop = scrolledTop;
 
+        if (scrolledTop < 10 && this._isNewUpdatesExists) {
+            this._isNewUpdatesExists = false;
+        }
+
         let totalHeight = 0;
         let index = 0;
         let visibleItems: number[] = [];
@@ -432,14 +580,21 @@ export class SonarFeedWallComponent implements OnInit {
         this._lastVisible = Math.max(...visibleItems) + 2;
         // console.log(`!!! ${this._firstVisible} - ${this._lastVisible}`);
 
-        if (this._items && this._lastVisible >= this._items.length && this._canLoadMore && !this._loadingMore) {
+        if (this.cards && this.cards.length && this._lastVisible >= this.cards.length && this._canLoadMore && !this._loadingMore) {
             this._loadMore();
         }
     }
 
     private _initData() {
         this.loading = true;
-        this._sonarFeedService.getItems(0, this._loadCount).subscribe((data: SonarFeedItem[]) => {
+        this.cards = [];
+
+        this.prevSelectedMarketTypes = this.selectedMarketTypes;
+        this.prevSelectedTradeTypes = this.selectedTradeTypes;
+        this.prevSelectedTimeFrames = this.selectedTimeFrames;
+
+        this._filterChanged = false;
+        this._sonarFeedService.getItems(this._loadCount, this._filteringParameters).subscribe((data: SonarFeedItem[]) => {
             this._renderCards(data);
             this.initialized = true;
             this.loading = false;
@@ -450,7 +605,6 @@ export class SonarFeedWallComponent implements OnInit {
     private _loadItem() {
         this.loading = true;
         this.cards = [];
-        this._items = [];
         this._sonarFeedService.getItem(this._cardId).subscribe((data: SonarFeedItem) => {
             this._renderCards([data]);
             this.initialized = true;
@@ -461,7 +615,7 @@ export class SonarFeedWallComponent implements OnInit {
 
     private _loadMore() {
         this._loadingMore = true;
-        this._sonarFeedService.getItems(this._items.length, this._loadCount).subscribe((data: SonarFeedItem[]) => {
+        this._sonarFeedService.getFromIdItems(this.cards[this.cards.length - 1].id, this._loadCount, this._filteringParameters).subscribe((data: SonarFeedItem[]) => {
             this._renderCards(data);
             this._loadingMore = false;
 
@@ -474,17 +628,15 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
 
-    private _renderCards(items: SonarFeedItem[], addToStart = false) {
+    private _renderCards(items: SonarFeedItem[]) {
+
         for (const i of items) {
-            const existing = this._items.find(_ => _.id === i.id);
-            if (!existing) {
-                if (addToStart) {
-                    this._items.unshift(i);
-                } else {
-                    this._items.push(i);
-                }
-                this._mapInstrumentAndAdd(i);
+            const existing = this.cards.find(_ => _.id === i.id);
+            if (existing) {
+                continue;
             }
+
+            this._mapInstrumentAndAdd(i);
         }
     }
 
@@ -494,14 +646,11 @@ export class SonarFeedWallComponent implements OnInit {
                 return;
             }
 
-            this.cards.push(this._convertToVM(setupItem, instrument));
+            const card = this._convertToVM(setupItem, instrument);
+            card.sortIndex = setupItem.id;
 
-            for (const card of this.cards) {
-                const index = this._items.findIndex(_ => _.id === card.id);
-                card.sortIndex = index;
-            }
-
-            this.cards.sort((a, b) => a.sortIndex - b.sortIndex);
+            this.cards.push(card);
+            this.cards.sort((a, b) => b.sortIndex - a.sortIndex);
 
             this._refreshNeeded = true;
 
@@ -565,18 +714,6 @@ export class SonarFeedWallComponent implements OnInit {
         };
     }
 
-    private _updateVM(vm: SonarFeedCardVM, item: SonarFeedItem) {
-        // const vm = this.cards[cardIndex];
-        vm.dislikeCount = item.dislikesCount;
-        vm.likeCount = item.likesCount;
-        vm.hasMyDislike = item.hasUserDislike;
-        vm.hasMyLike = item.hasUserLike;
-        vm.comments = this._getComments(item);
-        vm.commentsTotal = item.commentsTotal;
-        vm.isFavorite = item.isFavorite;
-        // this.cards[cardIndex] = vm;
-    }
-
     private _getTitle(granularity: number, symbol: string, setup: string, side: string) {
         let timeFrame = this._getTimeFrame(granularity);
         return `${timeFrame} ${symbol} ${setup} ${side}`;
@@ -599,5 +736,431 @@ export class SonarFeedWallComponent implements OnInit {
         return timeFrame;
     }
 
+    // #region Realtime updates
+
+    private _commentRemoved(reaction: SocialFeedCommentRemovedNotification) {
+        const card = this._findCard(reaction.postId);
+
+        if (!card) {
+            return;
+        }
+
+        this._deleteCommentFromCommentsList(card.comments, reaction.id);
+
+        this._refreshNeeded = true;
+    }
+
+    private _commentEdited(reaction: SocialFeedCommentEditedNotification) {
+        const card = this._findCard(reaction.postId);
+
+        if (!card) {
+            return;
+        }
+
+        const comment = this._findRecursiveComments(reaction.id, card.comments);
+
+        if (!comment) {
+            return;
+        }
+
+        comment.text = reaction.text;
+        this._refreshNeeded = true;
+    }
+
+    private _commentReaction(reaction: SocialFeedCommentReactionNotification) {
+        const card = this._findCard(reaction.postId);
+
+        if (!card) {
+            return;
+        }
+
+        const comment = this._findRecursiveComments(reaction.id, card.comments);
+
+        if (!comment) {
+            return;
+        }
+
+        comment.dislikesCount = reaction.dislikesCount;
+        comment.likesCount = reaction.likesCount;
+        this._refreshNeeded = true;
+    }
+
+    private _postReaction(reaction: SocialFeedPostReactionNotification) {
+        const card = this._findCard(reaction.id);
+
+        if (!card) {
+            return;
+        }
+
+        card.likeCount = reaction.likesCount;
+        card.dislikeCount = reaction.dislikesCount;
+        this._refreshNeeded = true;
+    }
+
+    private _updatePostLikes(response: SonarFeedItemLikeResponse) {
+        const card = this._findCard(response.postId);
+
+        if (!card) {
+            return;
+        }
+
+        card.likeCount = response.likesCount;
+        card.dislikeCount = response.dislikesCount;
+        card.hasMyLike = response.hasUserLike;
+        card.hasMyDislike = response.hasUserDislike;
+        this._refreshNeeded = true;
+    }
+
+    private _updateCommentLikes(response: SonarFeedItemCommentLikeResponse, cardId: any) {
+        const card = this._findCard(cardId);
+        if (!card) {
+            return;
+        }
+
+        const comment = this._findRecursiveComments(response.commentId, card.comments);
+        if (!comment) {
+            return;
+        }
+
+        comment.likesCount = response.likesCount;
+        comment.dislikesCount = response.dislikesCount;
+        comment.hasUserLike = response.hasUserLike;
+        comment.hasUserDislike = response.hasUserDislike;
+        this._refreshNeeded = true;
+    }
+
+    private _commentAdded(reaction: SocialFeedCommentAddedNotification) {
+        const comment = SocialFeedModelConverter.ConvertNotificationToSonarFeedComment(reaction, this._identity.id);
+        const card = this._findCard(reaction.postId);
+        if (!card) {
+            return;
+        }
+
+        if (reaction.parentCommentId) {
+            const commentVW = this._convertCommentToVM(comment);
+            this._addCommentToComment(card, reaction.parentCommentId, commentVW);
+        } else {
+            const commentVW = this._convertCommentToVM(comment, true);
+            this._addCommentToPost(card, commentVW);
+        }
+
+        this._refreshNeeded = true;
+    }
+
+    private _addCommentToPost(post: SonarFeedCardVM, comment: SonarFeedCommentVM) {
+        const existingComments = this._findRecursiveComments(comment.id, post.comments);
+        if (existingComments) {
+            return;
+        }
+
+        if (post.comments) {
+            post.comments.push(comment);
+        }
+
+        post.commentsTotal++;
+    }
+
+    private _addCommentToComment(post: SonarFeedCardVM, parentCommentId: any, comment: SonarFeedCommentVM) {
+        if (!parentCommentId) {
+            return;
+        }
+
+        const existingComments = this._findRecursiveComments(comment.id, post.comments);
+        if (existingComments) {
+            return;
+        }
+
+        const parentComment = this._findRecursiveComments(parentCommentId, post.comments);
+        if (!parentComment.comments) {
+            parentComment.comments = [];
+        }
+
+        parentComment.comments.push(comment);
+        post.commentsTotal++;
+    }
+
+    private _addComment(comment: SonarFeedComment, postId: any) {
+        if (!comment) {
+            return;
+        }
+
+        const card = this._findCard(postId);
+        if (!card) {
+            return;
+        }
+
+        if (comment.parentComment) {
+            const commentVW = this._convertCommentToVM(comment);
+            this._addCommentToComment(card, comment.parentComment.id, commentVW);
+        } else {
+            const commentVW = this._convertCommentToVM(comment, true);
+            this._addCommentToPost(card, commentVW);
+        }
+
+        this._refreshNeeded = true;
+    }
+
+    private _findCard(id: any): SonarFeedCardVM {
+        for (const card of this.cards) {
+            if (card.id === id) {
+                return card;
+            }
+        }
+    }
+
+    private _findRecursiveComments(commentId: any, comments: SonarFeedCommentVM[]): SonarFeedCommentVM {
+        for (const c of comments) {
+            if (c.id === commentId) {
+                return c;
+            }
+
+            if (c.comments && c.comments.length) {
+                const commentInside = this._findRecursiveComments(commentId, c.comments);
+                if (commentInside) {
+                    return commentInside;
+                }
+            }
+        }
+    }
+
+    private _deleteCommentFromCommentsList(comments: SonarFeedCommentVM[], commentId: any) {
+        if (!comments) {
+            return;
+        }
+
+        for (let i = 0; i < comments.length; i++) {
+            if (comments[i].id === commentId) {
+                comments.splice(i, 1);
+                i--;
+            }
+
+            if (comments[i] && comments[i].comments) {
+                this._deleteCommentFromCommentsList(comments[i].comments, commentId);
+            }
+        }
+    }
+
+    //#endregion
+
+    // #region Filters
+
+    private _isFitCardCurrentFilters(item: SonarFeedItem): boolean {
+        if (!this._filteringParameters) {
+            return true;
+        }
+
+        if (this._filteringParameters.granularity && this._filteringParameters.granularity.length) {
+            const isGranularityAllowed = this._filteringParameters.granularity.indexOf(item.granularity) !== -1;
+            if (!isGranularityAllowed) {
+                return false;
+            }
+        }
+
+        if (this._filteringParameters.setup && this._filteringParameters.setup.length) {
+            const isSetupAllowed = this._filteringParameters.setup.indexOf(this._mapSetupType(item.type)) !== -1;
+            if (!isSetupAllowed) {
+                return false;
+            }
+        }
+
+        if (this._filteringParameters.type && this._filteringParameters.type.length) {
+            const marketType = this._mapMarketType(item.symbol, item.exchange);
+            if (marketType) {
+                const isTypeAllowed = this._filteringParameters.type.indexOf(marketType) !== -1;
+                if (!isTypeAllowed) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private _mapSetupType(type: string): ESonarFeedSetupTypes {
+        if (type.toLowerCase() === "ext") {
+            return ESonarFeedSetupTypes.EXT;
+        }
+        if (type.toLowerCase() === "brc") {
+            return ESonarFeedSetupTypes.BRC;
+        }
+        if (type.toLowerCase() === "swingn" || type.toLowerCase() === "swingext") {
+            return ESonarFeedSetupTypes.Swing;
+        }
+    }
+
+    private _mapMarketType(symbol: string, exchange: string): ESonarFeedMarketTypes {
+        if (exchange && exchange.toLowerCase() === "binance") {
+            return ESonarFeedMarketTypes.Crypto;
+        }
+
+        const internalMarketType = ForexTypeHelper.GetTypeSpecific(symbol);
+        switch (internalMarketType) {
+            case EMarketSpecific.Bonds: return ESonarFeedMarketTypes.Bonds;
+            case EMarketSpecific.Commodities: return ESonarFeedMarketTypes.Commodities;
+            case EMarketSpecific.Crypto: return ESonarFeedMarketTypes.Crypto;
+            case EMarketSpecific.ForexExotic: return ESonarFeedMarketTypes.ForexExotic;
+            case EMarketSpecific.ForexMajor: return ESonarFeedMarketTypes.MajorForex;
+            case EMarketSpecific.ForexMinor: return ESonarFeedMarketTypes.ForexMinors;
+            case EMarketSpecific.Indices: return ESonarFeedMarketTypes.Indices;
+            case EMarketSpecific.Metals: return ESonarFeedMarketTypes.Metals;
+            case EMarketSpecific.Stocks: return ESonarFeedMarketTypes.Equities;
+        }
+    }
+    
+    private _mapToTilters(): ISonarSetupFilters {
+        const res: ISonarSetupFilters = {};
+
+        if (this.selectedTimeFrames) {
+            if (this.selectedTimeFrames.length !== this.allowedTimeFrames.length) {
+                res.granularity = [];
+                for (const tf of this.selectedTimeFrames) {
+                    res.granularity.push(this._timeframeToGranularity(tf));
+                }
+            }
+        }
+
+        if (this.selectedTradeTypes) {
+            if (this.allowedTradeTypes.length !== this.selectedTradeTypes.length) {
+                res.setup = [];
+                for (const type of this.selectedTradeTypes) {
+                    res.setup.push(this._mapTradeTypesToFilter(type));
+                }
+            }
+        }
+
+        if (this.selectedMarketTypes) {
+            if (this.allowedMarketTypes.length !== this.selectedMarketTypes.length) {
+                res.type = [];
+                for (const type of this.selectedMarketTypes) {
+                    res.type.push(this._mapSetupTypesToFilter(type));
+                }
+            }
+        }
+
+        return res;
+    }
+
+    private _mapToSettings(filteringParameters: ISonarSetupFilters) {
+        if (!filteringParameters) {
+            return;
+        }
+
+        if (filteringParameters.granularity && filteringParameters.granularity.length) {
+            this.selectedTimeFrames = [];
+            for (const g of filteringParameters.granularity) {
+                const i = this._granularityToTimeframe(g);
+                if (this.allowedTimeFrames.indexOf(i) !== -1) {
+                    this.selectedTimeFrames.push(i);
+                }
+            }
+
+            if (!this.selectedTimeFrames.length) {
+                this.selectedTimeFrames = this.allowedTimeFrames;
+            }
+
+            this.prevSelectedTimeFrames = this.selectedTimeFrames;
+        } 
+        
+        if (filteringParameters.setup && filteringParameters.setup.length) {
+            this.selectedTradeTypes = [];
+            for (const s of filteringParameters.setup) {
+                const i = this._mapTradeTypesToSetting(s);
+                if (this.allowedTradeTypes.indexOf(i) !== -1) {
+                    this.selectedTradeTypes.push(i);
+                }
+            }
+
+            if (!this.selectedTradeTypes.length) {
+                this.selectedTradeTypes = this.allowedTradeTypes;
+            }
+
+            this.prevSelectedTradeTypes = this.selectedTradeTypes;
+        } 
+        
+        if (filteringParameters.type && filteringParameters.type.length) {
+            this.selectedMarketTypes = [];
+            for (const t of filteringParameters.type) {
+                const i = this._mapSetupTypesToSetting(t);
+                if (this.allowedMarketTypes.indexOf(i) !== -1) {
+                    this.selectedMarketTypes.push(i);
+                }
+            }
+
+            if (!this.selectedMarketTypes.length) {
+                this.selectedMarketTypes = this.allowedMarketTypes;
+            }
+
+            this.prevSelectedMarketTypes = this.selectedMarketTypes;
+        }
+    }
+
+    private _timeframeToGranularity(tf: TimeFrames): number {
+        switch (tf) {
+            case TimeFrames.Min15: return 60 * 15;
+            case TimeFrames.Hour1: return 60 * 60;
+            case TimeFrames.Hour4: return 60 * 60 * 4;
+            case TimeFrames.Day: return 60 * 60 * 24;
+        }
+    }
+
+    private _granularityToTimeframe(granularity: number): TimeFrames {
+        switch (granularity) {
+            case 60 * 15: return TimeFrames.Min15;
+            case 60 * 60: return TimeFrames.Hour1;
+            case 60 * 60 * 4: return TimeFrames.Hour4;
+            case 60 * 60 * 24: return TimeFrames.Day;
+        }
+    }
+
+    private _mapTradeTypesToFilter(type: TradeTypes): ESonarFeedSetupTypes {
+        switch (type) {
+            case TradeTypes.BRC: return ESonarFeedSetupTypes.BRC;
+            case TradeTypes.Ext: return ESonarFeedSetupTypes.EXT;
+            case TradeTypes.Swing: return ESonarFeedSetupTypes.Swing;
+        }
+    }
+
+    private _mapTradeTypesToSetting(type: ESonarFeedSetupTypes): TradeTypes {
+        switch (type) {
+            case ESonarFeedSetupTypes.BRC: return TradeTypes.BRC;
+            case ESonarFeedSetupTypes.EXT: return TradeTypes.Ext;
+            case ESonarFeedSetupTypes.Swing: return TradeTypes.Swing;
+        }
+    }
+
+    private _mapSetupTypesToFilter(type: SonarFeedMarketTypes): ESonarFeedMarketTypes {
+        switch (type) {
+            case SonarFeedMarketTypes.Bonds: return ESonarFeedMarketTypes.Bonds;
+            case SonarFeedMarketTypes.Commodities: return ESonarFeedMarketTypes.Commodities;
+            case SonarFeedMarketTypes.Crypto: return ESonarFeedMarketTypes.Crypto;
+            case SonarFeedMarketTypes.Equities: return ESonarFeedMarketTypes.Equities;
+            case SonarFeedMarketTypes.ForexExotic: return ESonarFeedMarketTypes.ForexExotic;
+            case SonarFeedMarketTypes.ForexMinors: return ESonarFeedMarketTypes.ForexMinors;
+            case SonarFeedMarketTypes.Indices: return ESonarFeedMarketTypes.Indices;
+            case SonarFeedMarketTypes.MajorForex: return ESonarFeedMarketTypes.MajorForex;
+            case SonarFeedMarketTypes.Metals: return ESonarFeedMarketTypes.Metals;
+        }
+    }
+
+    private _mapSetupTypesToSetting(type: ESonarFeedMarketTypes): SonarFeedMarketTypes {
+        switch (type) {
+            case ESonarFeedMarketTypes.Bonds: return SonarFeedMarketTypes.Bonds;
+            case ESonarFeedMarketTypes.Commodities: return SonarFeedMarketTypes.Commodities;
+            case ESonarFeedMarketTypes.Crypto: return SonarFeedMarketTypes.Crypto;
+            case ESonarFeedMarketTypes.Equities: return SonarFeedMarketTypes.Equities;
+            case ESonarFeedMarketTypes.ForexExotic: return SonarFeedMarketTypes.ForexExotic;
+            case ESonarFeedMarketTypes.ForexMinors: return SonarFeedMarketTypes.ForexMinors;
+            case ESonarFeedMarketTypes.Indices: return SonarFeedMarketTypes.Indices;
+            case ESonarFeedMarketTypes.MajorForex: return SonarFeedMarketTypes.MajorForex;
+            case ESonarFeedMarketTypes.Metals: return SonarFeedMarketTypes.Metals;
+        }
+    }
+
+    private _isFiltersSame(f1: ISonarSetupFilters, f2: ISonarSetupFilters): boolean {
+        const f1String = JSON.stringify(f1);
+        const f2String = JSON.stringify(f2);
+        return f1String === f2String;
+    }
+
+    //#endregion
 
 }

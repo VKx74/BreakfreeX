@@ -5,3 +5,4 @@ export const IndicesList: string[] = ["AU200AUD", "CN50USD", "EU50EUR", "FR40EUR
 export const MetalsList: string[] = ["XAGEUR", "XAGUSD", "XAUEUR", "XAUUSD", "XAUXAG", "XPDUSD", "XPTUSD"];
 export const BondsList: string[] = ["DE10YBEUR", "UK10YBGBP", "UK100GBP", "USB02YUSD", "USB05YUSD", "USB30YUSD"];
 export const CommoditiesList: string[] = ["BCOUSD", "CORNUSD", "NATGASUSD", "SOYBNUSD", "SUGARUSD", "WHEATUSD", "WTICOUSD", "XCUUSD"];
+export const EquitiesList: string[] = ["AAPL", "AMD", "AMZN", "ATVI", "BA", "BAC-A", "BIDU", "C-J", "FB", "FCX", "FSLR", "GM", "GOOG", "GOOGL", "GS", "GWPH", "JPM", "MCD", "MSFT", "NFLX", "NKE", "NVDA", "PFE", "PGHH", "PTON", "QCOM", "RACE", "SNAP", "TLRY", "BYND", "TSLA", "TWTR", "UBER", "WMT", "XOM", "ZM", "GE", "AAL", "DELTA", "GPRO", "ACB", "CUK", "CCL", "NCLH", "FIT", "PLUG", "UAL", "WEED", "CSCO"];

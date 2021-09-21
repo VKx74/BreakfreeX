@@ -7,7 +7,8 @@
                     (onOpenChart)="handleOpenChart($event)"></breakfree-trading-scanner>
             </div>
             <div class="widget" *ngIf="SelectedComponent === Components.SonarFeed">
-                <sonar-feed (onOpenChart)="handleOpenChart($event)"></sonar-feed>
+                <sonar-feed (onOpenChart)="handleOpenChart($event)" (stateChanged)="componentStateChanged($event)"
+                    (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"></sonar-feed>
             </div>
             <div class="widget" *ngIf="SelectedComponent === Components.Watchlist">
                 <watchlist (stateChanged)="componentStateChanged($event)"

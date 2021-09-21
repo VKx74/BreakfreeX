@@ -10,15 +10,16 @@ export interface IReplayData {
     selector: 'sonar-feed-comment',
     templateUrl: './sonar-feed-comment.component.html',
     styleUrls: ['./sonar-feed-comment.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarFeedCommentComponent implements OnInit {
     private _comment: SonarFeedCommentVM;
     private _expandedComments: any[];
     private _isExpanded: boolean;
 
-    @Output() onCommentLike = new EventEmitter<any>();
-    @Output() onCommentDislike = new EventEmitter<any>();
+    @Output() onCommentLike = new EventEmitter<SonarFeedCommentVM>();
+    @Output() onCommentLikeDelete = new EventEmitter<SonarFeedCommentVM>();
+    @Output() onCommentDislike = new EventEmitter<SonarFeedCommentVM>();
     @Output() onAddReplay = new EventEmitter<any>();
     @Output() onRemoveComment = new EventEmitter<any>();
     @Output() onEditComment = new EventEmitter<any>();
@@ -85,12 +86,20 @@ export class SonarFeedCommentComponent implements OnInit {
         return SocialFeedModelConverter.ConvertTimeDiffToString(time);
     }
 
-    likeComment(commentId: any) {
-        this.onCommentLike.next(commentId);
+    likeComment(comment: SonarFeedCommentVM) {
+        if (comment.hasUserLike) {
+            this.onCommentLikeDelete.next(comment);
+        } else {
+            this.onCommentLike.next(comment);
+        }
     }
 
-    dislikeComment(commentId: any) {
-        this.onCommentDislike.next(commentId);
+    dislikeComment(comment: SonarFeedCommentVM) {
+        if (comment.hasUserDislike) {
+            this.onCommentLikeDelete.next(comment);
+        } else {
+            this.onCommentDislike.next(comment);
+        }
     }
 
     removeComment(commentId: any) {

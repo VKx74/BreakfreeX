@@ -74,10 +74,27 @@ export interface SocialFeedPostReactionNotification {
     id: any;
     likesCount: number;
     dislikesCount: number;
-    postId: number;
 }
 
 export interface SocialFeedCommentReactionNotification extends SocialFeedPostReactionNotification {
+    postId: number;
     subjectOwner: SonarFeedUserInfo;
     lastReactor: SonarFeedUserInfo;
+}
+
+export interface SonarFeedItemLikeResponse {
+    dislikesCount: number;
+    hasUserDislike: boolean;
+    hasUserLike: boolean;
+    isFavorite: boolean;
+    likesCount: number;
+    postId: number;
+}
+
+export interface SonarFeedItemCommentLikeResponse {
+    dislikesCount: number;
+    hasUserDislike: boolean;
+    hasUserLike: boolean;
+    likesCount: number;
+    commentId: number;
 }

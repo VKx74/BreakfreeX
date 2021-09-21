@@ -8,14 +8,38 @@ import { switchmap } from "@decorators/switchmap";
 import { Observable, of, Subject, Subscription } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO } from "../models/sonar.feed.dto.models";
-import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem } from "../models/sonar.feed.models";
+import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemLikeResponse, SonarFeedItemCommentLikeResponse } from "../models/sonar.feed.models";
 import { SocialFeedModelConverter } from "./models.convertter";
 import { SonarFeedSocketService } from "./sonar.feed.socket.service";
 
+export enum ESonarFeedMarketTypes {
+    MajorForex = "MajorForex",
+    ForexMinors = "ForexMinors",
+    ForexExotic = "ForexExotic",
+    Metals = "Metals",
+    Indices = "Indices",
+    Equities = "Equities",
+    Crypto = "Crypto",
+    Commodities = "Commodities",
+    Bonds = "Bonds"
+}
+
+export enum ESonarFeedSetupTypes {
+    Swing = "Swing",
+    BRC = "BRC",
+    EXT = "EXT"
+}
+
+export interface ISonarSetupFilters {
+    type?: ESonarFeedMarketTypes[];
+    setup?: ESonarFeedSetupTypes[];
+    granularity?: number[];
+}
+
 @Injectable()
 export class SonarFeedService {
-    private _items: SonarFeedItem[] = [];
-    private _unlistedItems: { [id: string]: SonarFeedItem; } = {};
+    // private _items: SonarFeedItem[] = [];
+    // private _unlistedItems: { [id: string]: SonarFeedItem; } = {};
     private _url: string;
     private _commentReactionSubscription: Subscription;
     private _commentAddedSubscription: Subscription;
@@ -24,14 +48,14 @@ export class SonarFeedService {
     private _postReactionSubscription: Subscription;
     private _postAddedSubscription: Subscription;
 
-    public onPostChanged: Subject<SonarFeedItem> = new Subject<SonarFeedItem>();
     public onPostAdded: Subject<SonarFeedItem> = new Subject<SonarFeedItem>();
+    public onCommentReaction: Subject<SocialFeedCommentReactionNotification> = new Subject<SocialFeedCommentReactionNotification>();
+    public onPostReaction: Subject<SocialFeedPostReactionNotification> = new Subject<SocialFeedPostReactionNotification>();
+    public onCommentAdded: Subject<SocialFeedCommentAddedNotification> = new Subject<SocialFeedCommentAddedNotification>();
+    public onCommentEdited: Subject<SocialFeedCommentEditedNotification> = new Subject<SocialFeedCommentEditedNotification>();
+    public onCommentRemoved: Subject<SocialFeedCommentRemovedNotification> = new Subject<SocialFeedCommentRemovedNotification>();
 
-    public get items(): SonarFeedItem[] {
-        return this._items.slice();
-    }
-
-    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService, private _identity: IdentityService) {
+    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService) {
         this._url = AppConfigService.config.apiUrls.socialFeedREST;
         this._socketService.open().subscribe(() => {
             console.log("Sonar Feed Socket opened");
@@ -48,414 +72,287 @@ export class SonarFeedService {
         this._postAddedSubscription = this._socketService.postAdded.subscribe((data) => this._processPostAdded(data));
     }
 
-    getItems(skip: number, take: number): Observable<SonarFeedItem[]> {
-        const count = skip + take;
-        if (this._items.length >= count) {
-            return of(this._items.slice(skip, skip + take));
-        }
-
-        const lastItem = this._items[this._items.length - 1];
-        const requestDate = lastItem ? lastItem.time : (new Date().getTime() / 1000);
-
-        return this._loadItems(take * 5, Math.trunc(requestDate)).pipe(map(() => {
-            return this._items.slice(skip, skip + take);
-        }));
-    }
-
+    getItems(take: number, filters: ISonarSetupFilters = null): Observable<SonarFeedItem[]> {
+        const requestDate = new Date().getTime() / 1000;
+        return this._loadItemsByDate(take, Math.trunc(requestDate), filters);
+    }  
+    
+    getFromIdItems(id: any, take: number, filters: ISonarSetupFilters = null): Observable<SonarFeedItem[]> {
+        return this._loadItemsById(id, take, filters);
+    } 
+    
     getItem(id: any): Observable<SonarFeedItem> {
         return this._loadItem(id);
     }
 
     getComments(postId: any): Observable<SonarFeedComment[]> {
-        const existing = this._getPost(postId);
-
         return this._loadComments(postId).pipe(map((items) => {
-            if (existing) {
-                existing.comments = items;
-                if (items) {
-                    existing.lastComment = items[items.length - 1];
-                } else {
-                    existing.lastComment = null;
-                }
-                existing.commentsTotal = existing.comments ? existing.comments.length : 0;
-                this.onPostChanged.next(existing);
-            }
             return items;
         }));
     }
 
-    likeItem(postId: any): Observable<SonarFeedItem> {
-        const post = this._getPost(postId);
-
-        if (post && post.hasUserLike) {
-            return this.deleteLikeItem(postId);
-        }
-
+    likeItem(postId: any): Observable<SonarFeedItemLikeResponse> {
         return this._http.post<SonarFeedItemLikeResponseDTO>(`${this._url}api/post/${postId}/like?isLike=true`, {
             isLike: true
         }).pipe(map((response) => {
-            this._updateItemLikes(post, response);
-            return post;
+            return response;
         }));
     }
 
-    dislikeItem(postId: any): Observable<SonarFeedItem> {
-        const post = this._getPost(postId);
-        if (post && post.hasUserDislike) {
-            return this.deleteLikeItem(postId);
-        }
-
+    dislikeItem(postId: any): Observable<SonarFeedItemLikeResponse> {
         return this._http.post<SonarFeedItemLikeResponseDTO>(`${this._url}api/post/${postId}/like?isLike=false`, {
             isLike: false
         }).pipe(map((response) => {
-            this._updateItemLikes(post, response);
-            return post;
+            return response;
         }));
     }
 
-    deleteLikeItem(postId: any): Observable<SonarFeedItem> {
-        const post = this._getPost(postId);
-        if (!post) {
-            return of(null);
-        }
-
-        if (!post.hasUserLike && !post.hasUserDislike) {
-            return of(post);
-        }
-
+    deleteLikeItem(postId: any): Observable<SonarFeedItemLikeResponse> {
         return this._http.delete<SonarFeedItemLikeResponseDTO>(`${this._url}api/post/${postId}/like`).pipe(map((response) => {
-            this._updateItemLikes(post, response);
-            return post;
+            return response;
         }));
     }
 
-    setFavorite(postId: any): Observable<SonarFeedItem> {
-        const post = this._getPost(postId);
-        if (post && post.isFavorite) {
-            return this.deleteFavorite(postId);
-        }
-
-        return this._http.post<SonarFeedItemLikeResponseDTO>(`${this._url}api/post/${postId}/favorite`, {}).pipe(map((response) => {
-            this._updateItemLikes(post, response);
-            return post;
+    setFavorite(postId: any): Observable<any> {
+        return this._http.post<any>(`${this._url}api/post/${postId}/favorite`, {}).pipe(map((response) => {
+            return response;
         }));
     }
 
-    deleteFavorite(postId: any): Observable<SonarFeedItem> {
-        const post = this._getPost(postId);
-        if (post && !post.isFavorite) {
-            return of(post);
-        }
-
-        return this._http.delete<SonarFeedItemLikeResponseDTO>(`${this._url}api/post/${postId}/favorite`).pipe(map((response) => {
-            this._updateItemLikes(post, response);
-            return post;
+    deleteFavorite(postId: any): Observable<any> {
+        return this._http.delete<any>(`${this._url}api/post/${postId}/favorite`).pipe(map((response) => {
+            return response;
         }));
     }
 
-    likeComment(postId: any, commentId: any): Observable<SonarFeedComment> {
-        const comment = this._getComment(postId, commentId);
-        if (!comment) {
-            return of(null);
-        }
-
-        if (comment.hasUserLike) {
-            return this.deleteLikeComment(postId, commentId);
-        }
-
-        const post = this._getPost(postId);
-
+    likeComment(commentId: any): Observable<SonarFeedItemCommentLikeResponse> {
         return this._http.post<SonarFeedItemCommentLikeResponseDTO>(`${this._url}api/comment/${commentId}/like?isLike=true`, {
             isLike: true
         }).pipe(map((response) => {
-            this._updateCommentLikes(post, comment, response);
-            return comment;
+            return response;
         }));
     }
 
-    dislikeComment(postId: any, commentId: any): Observable<SonarFeedComment> {
-        const comment = this._getComment(postId, commentId);
-        if (!comment) {
-            return of(null);
-        }
-
-        if (comment.hasUserDislike) {
-            return this.deleteLikeComment(postId, commentId);
-        }
-
-        const post = this._getPost(postId);
-
+    dislikeComment(commentId: any): Observable<SonarFeedItemCommentLikeResponse> {
         return this._http.post<SonarFeedItemCommentLikeResponseDTO>(`${this._url}api/comment/${commentId}/like?isLike=false`, {
             isLike: false
         }).pipe(map((response) => {
-            this._updateCommentLikes(post, comment, response);
-            return comment;
+            return response;
         }));
     }
 
-    deleteLikeComment(postId: any, commentId: any): Observable<SonarFeedComment> {
-        const comment = this._getComment(postId, commentId);
-        if (!comment) {
-            return of(null);
-        }
-
-        const post = this._getPost(postId);
-
+    deleteLikeComment(commentId: any): Observable<SonarFeedItemCommentLikeResponse> {
         return this._http.delete<SonarFeedItemCommentLikeResponseDTO>(`${this._url}api/comment/${commentId}/like`).pipe(map((response) => {
-            this._updateCommentLikes(post, comment, response);
-            return comment;
+            return response;
         }));
     }
 
-    postComment(postId: any, comment: string): Observable<SonarFeedItem> {
-        const post = this._getPost(postId);
-
-        if (!post) {
-            return of(null);
-        }
-
+    postComment(postId: any, comment: string): Observable<SonarFeedComment> {
         return this._http.post<any>(`${this._url}api/post/${postId}/comment`, {
             text: comment
         }).pipe(map((response: SonarFeedCommentDTO) => {
             if (!response) {
                 return;
             }
-            const commentItem = SocialFeedModelConverter.ConvertToSonarFeedComment(response);
-            this._addCommentToPost(post, commentItem);
-            return post;
+
+            return response;
         }));
     }
     
-    editComment(postId: any, commentId: any, text: string): Observable<SonarFeedItem> {
-        const comment = this._getComment(postId, commentId);
-
-        if (!comment) {
-            return of(null);
-        }
-
-        const post = this._getPost(postId);
-
+    editComment(commentId: any, text: string): Observable<SonarFeedComment> {
         return this._http.patch<any>(`${this._url}api/comment/${commentId}`, {
             text: text
         }).pipe(map((response: SonarFeedCommentDTO) => {
             if (!response) {
                 return;
             }
-            const replayedComment = SocialFeedModelConverter.ConvertToSonarFeedComment(response);
-            this._editComment(post, comment, text);
-            return post;
+
+            return response;
         }));
     }
 
-    postReplay(postId: any, commentId: any, text: string): Observable<SonarFeedItem> {
-        const comment = this._getComment(postId, commentId);
-
-        if (!comment) {
-            return of(null);
-        }
-
-        const post = this._getPost(postId);
-
+    postReplay(commentId: any, text: string): Observable<SonarFeedComment> {
         return this._http.post<any>(`${this._url}api/comment/${commentId}`, {
             text: text
         }).pipe(map((response: SonarFeedCommentDTO) => {
             if (!response) {
                 return;
             }
-            const replayedComment = SocialFeedModelConverter.ConvertToSonarFeedComment(response);
-            this._addCommentToComment(post, comment, replayedComment);
-            return post;
+            return response;
         }));
     }
 
-    deleteComment(postId: any, commentId: any): Observable<SonarFeedItem> {
-        const comment = this._getComment(postId, commentId);
-        const post = this._getPost(postId);
-
-        if (!post || !comment) {
-            return of(null);
-        }
-
+    deleteComment(commentId: any): Observable<any> {
         return this._http.delete<any>(`${this._url}api/comment/${commentId}`).pipe(map((response) => {
-            this._deleteCommentFromPost(post, commentId);
-            return post;
+            return response;
         }));
     }
 
-    refresh() {
-        this._items = [];
-        this._unlistedItems = {};
-    }
+    // private _addCommentToPost(post: SonarFeedItem, comment: SonarFeedComment) {
+    //     const existingComments = this._getComment(post, comment.id);
+    //     if (existingComments) {
+    //         return;
+    //     }
 
-    private _addCommentToPost(post: SonarFeedItem, comment: SonarFeedComment) {
-        const existingComments = this._getComment(post.id, comment.id);
-        if (existingComments) {
-            return;
-        }
+    //     if (post.comments) {
+    //         post.comments.push(comment);
+    //     }
 
-        if (post.comments) {
-            post.comments.push(comment);
-        }
+    //     post.lastComment = comment;
+    //     post.commentsTotal++;
+    // }
 
-        post.lastComment = comment;
-        post.commentsTotal++;
+    // private _editComment(post: SonarFeedItem, comment: SonarFeedComment, text: string) {
+    //     comment.text = text;
+    // }
 
-        this.onPostChanged.next(post);
-    }
+    // private _addCommentToComment(post: SonarFeedItem, parentComment: SonarFeedComment, comment: SonarFeedComment) {
+    //     if (!parentComment) {
+    //         return;
+    //     }
 
-    private _editComment(post: SonarFeedItem, comment: SonarFeedComment, text: string) {
-        comment.text = text;
-        this.onPostChanged.next(post);
-    }
+    //     const existingComments = this._getComment(post.id, comment.id);
+    //     if (existingComments) {
+    //         return;
+    //     }
 
-    private _addCommentToComment(post: SonarFeedItem, parentComment: SonarFeedComment, comment: SonarFeedComment) {
-        if (!parentComment) {
-            return;
-        }
+    //     if (!parentComment.comments) {
+    //         parentComment.comments = [];
+    //     }
 
-        const existingComments = this._getComment(post.id, comment.id);
-        if (existingComments) {
-            return;
-        }
+    //     parentComment.comments.push(comment);
+    //     post.commentsTotal++;
+    // }
 
-        if (!parentComment.comments) {
-            parentComment.comments = [];
-        }
+    // private _deleteCommentFromPost(post: SonarFeedItem, commentId: any) {
+    //     this._deleteCommentFromCommentsList(post.comments, commentId);
+    //     if (post.commentsTotal > 0) {
+    //         post.commentsTotal--;
+    //     }
 
-        parentComment.comments.push(comment);
-        post.commentsTotal++;
+    //     if (post.comments && post.lastComment && post.lastComment.id === commentId) {
+    //         post.lastComment = post.comments[post.comments.length - 1];
+    //     }
+    // }
 
-        this.onPostChanged.next(post);
-    }
+    // private _deleteCommentFromCommentsList(comments: SonarFeedComment[], commentId: any) {
+    //     if (!comments) {
+    //         return;
+    //     }
 
-    private _deleteCommentFromPost(post: SonarFeedItem, commentId: any) {
-        this._deleteCommentFromCommentsList(post.comments, commentId);
-        if (post.commentsTotal > 0) {
-            post.commentsTotal--;
-        }
+    //     for (let i = 0; i < comments.length; i++) {
+    //         if (comments[i].id === commentId) {
+    //             comments.splice(i, 1);
+    //             i--;
+    //         }
 
-        if (post.comments && post.lastComment && post.lastComment.id === commentId) {
-            post.lastComment = post.comments[post.comments.length - 1];
-        }
+    //         if (comments[i] && comments[i].comments) {
+    //             this._deleteCommentFromCommentsList(comments[i].comments, commentId);
+    //         }
+    //     }
+    // }
 
-        this.onPostChanged.next(post);
-    }
+    // private _getComment(post: SonarFeedItem, commentId: any): SonarFeedComment {
+    //     if (!post) {
+    //         return null;
+    //     }
 
-    private _deleteCommentFromCommentsList(comments: SonarFeedComment[], commentId: any) {
-        if (!comments) {
-            return;
-        }
+    //     if (post.comments) {
+    //         const comment = this._findRecursiveComments(commentId, post.comments);
+    //         if (comment) {
+    //             return comment;
+    //         }
+    //     }
 
-        for (let i = 0; i < comments.length; i++) {
-            if (comments[i].id === commentId) {
-                comments.splice(i, 1);
-                i--;
-            }
+    //     if (post.lastComment) {
+    //         if (post.lastComment.id === commentId) {
+    //             return post.lastComment;
+    //         }
 
-            if (comments[i] && comments[i].comments) {
-                this._deleteCommentFromCommentsList(comments[i].comments, commentId);
-            }
-        }
-    }
+    //         if (post.lastComment.comments) {
+    //             const comment = this._findRecursiveComments(commentId, post.lastComment.comments);
+    //             if (comment) {
+    //                 return comment;
+    //             }
+    //         }
+    //     }
 
-    private _getPost(postId: any): SonarFeedItem {
-        const post = this._items.find(_ => _.id === postId);
-        if (post) {
-            return post;
-        }
+    //     return null;
+    // }
 
-        return this._unlistedItems[postId];
-    }
+    // private _findRecursiveComments(commentId: any, comments: SonarFeedComment[]): SonarFeedComment {
+    //     for (const c of comments) {
+    //         if (c.id === commentId) {
+    //             return c;
+    //         }
 
-    private _getComment(postId: any, commentId: any): SonarFeedComment {
-        const post = this._getPost(postId);
-        if (!post) {
-            return null;
-        }
+    //         if (c.comments && c.comments.length) {
+    //             const commentInside = this._findRecursiveComments(commentId, c.comments);
+    //             if (commentInside) {
+    //                 return commentInside;
+    //             }
+    //         }
+    //     }
+    // }
 
-        if (post.comments) {
-            const comment = this._findRecursiveComments(commentId, post.comments);
-            if (comment) {
-                return comment;
-            }
-        }
+    // private _searchCommentById(commentId: any, items: SonarFeedItem[]): { comment: SonarFeedComment, post: SonarFeedItem } {
+    //     for (const item of items) {
+    //         if (item.lastComment && item.lastComment.id === commentId) {
+    //             return { comment: item.lastComment, post: item };
+    //         }
 
-        if (post.lastComment) {
-            if (post.lastComment.id === commentId) {
-                return post.lastComment;
-            }
+    //         if (item.comments) {
+    //             const comment = this._findRecursiveComments(commentId, item.comments);
+    //             if (comment) {
+    //                 return { comment: comment, post: item };
+    //             }
+    //         }
+    //     }
+    // }
 
-            if (post.lastComment.comments) {
-                const comment = this._findRecursiveComments(commentId, post.lastComment.comments);
-                if (comment) {
-                    return comment;
-                }
-            }
-        }
+    // private _updateItemLikes(post: SonarFeedItem, response: SonarFeedItemLikeResponseDTO) {
+    //     if (!response || !post) {
+    //         return;
+    //     }
 
-        return null;
-    }
+    //     if (post.dislikesCount === response.dislikesCount &&
+    //         post.likesCount === response.likesCount &&
+    //         post.hasUserDislike === response.hasUserDislike &&
+    //         post.hasUserLike === response.hasUserLike &&
+    //         post.isFavorite === response.isFavorite) {
+    //         return;
+    //     }
 
-    private _findRecursiveComments(commentId: any, comments: SonarFeedComment[]): SonarFeedComment {
-        for (const c of comments) {
-            if (c.id === commentId) {
-                return c;
-            }
+    //     post.dislikesCount = response.dislikesCount;
+    //     post.likesCount = response.likesCount;
+    //     post.hasUserDislike = response.hasUserDislike;
+    //     post.hasUserLike = response.hasUserLike;
+    //     post.isFavorite = response.isFavorite;
 
-            if (c.comments && c.comments.length) {
-                const commentInside = this._findRecursiveComments(commentId, c.comments);
-                if (commentInside) {
-                    return commentInside;
-                }
-            }
-        }
-    }
+    //     this.onPostChanged.next(post);
+    // }
 
-    private _searchCommentById(commentId: any): { comment: SonarFeedComment, post: SonarFeedItem } {
-        for (const item of this._items) {
-            if (item.lastComment && item.lastComment.id === commentId) {
-                return { comment: item.lastComment, post: item };
-            }
+    // private _updateCommentLikes(post: SonarFeedItem, comment: SonarFeedComment, response: SonarFeedItemCommentLikeResponseDTO) {
+    //     if (!response || !comment || !post) {
+    //         return;
+    //     }
 
-            if (item.comments) {
-                const comment = this._findRecursiveComments(commentId, item.comments);
-                if (comment) {
-                    return { comment: comment, post: item };
-                }
-            }
-        }
+    //     if (comment.dislikesCount === response.dislikesCount &&
+    //         comment.likesCount === response.likesCount &&
+    //         comment.hasUserDislike === response.hasUserDislike &&
+    //         comment.hasUserLike === response.hasUserLike) {
+    //         return;
+    //     }
 
-        for (const item in this._unlistedItems) {
-            const post = this._unlistedItems[item];
+    //     comment.dislikesCount = response.dislikesCount;
+    //     comment.likesCount = response.likesCount;
+    //     comment.hasUserDislike = response.hasUserDislike;
+    //     comment.hasUserLike = response.hasUserLike;
 
-            if (post.lastComment && post.lastComment.id === commentId) {
-                return { comment: post.lastComment, post: post };
-            }
+    //     this.onPostChanged.next(post);
+    // }
 
-            if (post.comments) {
-                const comment = this._findRecursiveComments(commentId, post.comments);
-                if (comment) {
-                    return { comment: comment, post: post };
-                }
-            }
-        }
-    }
-
-    private _loadItems(limit: number, dateTo: number): Observable<SonarFeedItem[]> {
-        return this._http.get<SonarFeedItemDTO[]>(`${this._url}api/post?dateTo=${dateTo}&limit=${limit}`).pipe(map((items) => {
-            const res: SonarFeedItem[] = [];
-            for (const item of items) {
-                const converted = SocialFeedModelConverter.ConvertToSonarFeedPost(item);
-                const existing = this._items.find(_ => _.id === converted.id);
-                if (!existing) {
-                    this._items.push(converted);
-                }
-                res.push(converted);
-            }
-            return res;
-        }));
-    }
-
+    
     private _loadItem(id: any): Observable<SonarFeedItem> {
         return this._http.get<SonarFeedItemDTO>(`${this._url}api/post/${id}`).pipe(map((item) => {
             if (!item) {
@@ -463,9 +360,60 @@ export class SonarFeedService {
             }
 
             const convertedItem = SocialFeedModelConverter.ConvertToSonarFeedPost(item);
-            this._unlistedItems[convertedItem.id] = convertedItem;
             return convertedItem;
         }));
+    }
+
+    private _loadItemsByDate(limit: number, dateTo: number, filters: ISonarSetupFilters): Observable<SonarFeedItem[]> {
+        const filterString = this._createFilterString(filters);
+        return this._http.get<SonarFeedItemDTO[]>(`${this._url}api/post?dateTo=${dateTo}&limit=${limit}${filterString}`).pipe(map((items) => {
+            const res: SonarFeedItem[] = [];
+            for (const item of items) {
+                const converted = SocialFeedModelConverter.ConvertToSonarFeedPost(item);
+                res.push(converted);
+            }
+            return res;
+        }));
+    }
+
+    private _loadItemsById(id: any, take: number, filters: ISonarSetupFilters): Observable<SonarFeedItem[]> {
+        const filterString = this._createFilterString(filters);
+        return this._http.get<SonarFeedItemDTO[]>(`${this._url}api/post/${id}/before?limit=${take}${filterString}`).pipe(map((items) => {
+            const res: SonarFeedItem[] = [];
+            for (const item of items) {
+                const converted = SocialFeedModelConverter.ConvertToSonarFeedPost(item);
+                res.push(converted);
+            }
+            return res;
+        }));
+    }
+
+    private _createFilterString(filters: ISonarSetupFilters): string {
+        let res = '';
+
+        if (!filters) {
+            return res;
+        }
+
+        if (filters.granularity) {
+            for (const g of filters.granularity) {
+                res += `&granularities=${g}`;
+            }
+        }
+        
+        if (filters.setup) {
+            for (const s of filters.setup) {
+                res += `&setupTypes=${s}`;
+            }
+        }
+        
+        if (filters.type) {
+            for (const t of filters.type) {
+                res += `&marketTypes=${t}`;
+            }
+        }
+
+        return res;
     }
 
     private _loadComments(postId: any): Observable<SonarFeedComment[]> {
@@ -479,144 +427,46 @@ export class SonarFeedService {
         }));
     }
 
-    private _updateItemLikes(post: SonarFeedItem, response: SonarFeedItemLikeResponseDTO) {
-        if (!response || !post) {
-            return;
-        }
-
-        if (post.dislikesCount === response.dislikesCount &&
-            post.likesCount === response.likesCount &&
-            post.hasUserDislike === response.hasUserDislike &&
-            post.hasUserLike === response.hasUserLike &&
-            post.isFavorite === response.isFavorite) {
-            return;
-        }
-
-        post.dislikesCount = response.dislikesCount;
-        post.likesCount = response.likesCount;
-        post.hasUserDislike = response.hasUserDislike;
-        post.hasUserLike = response.hasUserLike;
-        post.isFavorite = response.isFavorite;
-
-        this.onPostChanged.next(post);
-    }
-
-    private _updateCommentLikes(post: SonarFeedItem, comment: SonarFeedComment, response: SonarFeedItemCommentLikeResponseDTO) {
-        if (!response || !comment || !post) {
-            return;
-        }
-
-        if (comment.dislikesCount === response.dislikesCount &&
-            comment.likesCount === response.likesCount &&
-            comment.hasUserDislike === response.hasUserDislike &&
-            comment.hasUserLike === response.hasUserLike) {
-            return;
-        }
-
-        comment.dislikesCount = response.dislikesCount;
-        comment.likesCount = response.likesCount;
-        comment.hasUserDislike = response.hasUserDislike;
-        comment.hasUserLike = response.hasUserLike;
-
-        this.onPostChanged.next(post);
-    }
-
     private _processCommentReaction(data: SocialFeedCommentReactionNotification) {
-        const item = this._searchCommentById(data.id);
-        if (!data || !item) {
-            return;
-        }
-
-        if (item.comment.likesCount === data.likesCount && item.comment.dislikesCount === data.dislikesCount) {
-            return;
-        }
-
-        item.comment.likesCount = data.likesCount;
-        item.comment.dislikesCount = data.dislikesCount;
-        this.onPostChanged.next(item.post);
+        this.onCommentReaction.next(data);
     }
 
     private _processCommentAdded(data: SocialFeedCommentAddedNotification) {
-        const post = this._getPost(data.postId);
-        if (!post) {
-            return;
-        }
-
-        const existingComments = this._getComment(post.id, data.id);
-        if (existingComments) {
-            return;
-        }
-
-        const comment = SocialFeedModelConverter.ConvertNotificationToSonarFeedComment(data, this._identity.id);
-
-        if (data.parentCommentId) {
-            const parentComment = this._getComment(post.id, data.parentCommentId);
-            this._addCommentToComment(post, parentComment, comment);
-        } else {
-            this._addCommentToPost(post, comment);
-        }
-
-        // this.getComments(post.id).subscribe();
-        return;
+        this.onCommentAdded.next(data);
     }
 
     private _processCommentEdited(data: SocialFeedCommentEditedNotification) {
-        const post = this._getPost(data.postId);
-        if (!post) {
-            return;
-        }
+        // const post = this._getPost(data.postId);
+        // if (!post) {
+        //     return;
+        // }
 
-        const comment = this._getComment(data.postId, data.id);
-        if (!comment) {
-            return;
-        }
+        // const comment = this._getComment(data.postId, data.id);
+        // if (!comment) {
+        //     return;
+        // }
 
-        if (comment.likesCount === data.likesCount && comment.dislikesCount === data.dislikesCount && comment.text === data.text) {
-            return;
-        }
+        // if (comment.likesCount === data.likesCount && comment.dislikesCount === data.dislikesCount && comment.text === data.text) {
+        //     return;
+        // }
 
-        comment.likesCount = data.likesCount;
-        comment.dislikesCount = data.dislikesCount;
-        comment.text = data.text;
+        // comment.likesCount = data.likesCount;
+        // comment.dislikesCount = data.dislikesCount;
+        // comment.text = data.text;
 
-        this.onPostChanged.next(post);
+        this.onCommentEdited.next(data);
     }
 
     private _processCommentRemoved(data: SocialFeedCommentRemovedNotification) {
-        const post = this._getPost(data.postId);
-        if (!post) {
-            return;
-        }
-
-        this._deleteCommentFromPost(post, data.id);
+        this.onCommentRemoved.next(data);
     }
 
     private _processPostReaction(data: SocialFeedPostReactionNotification) {
-        const post = this._getPost(data.id);
-        if (!post) {
-            return;
-        }
-
-        if (post.likesCount === data.likesCount && post.dislikesCount === data.dislikesCount) {
-            return;
-        }
-
-        post.likesCount = data.likesCount;
-        post.dislikesCount = data.dislikesCount;
-        this.onPostChanged.next(post);
+        this.onPostReaction.next(data);
     }
 
     private _processPostAdded(data: SocialFeedPostAddedNotification) {
-        if (!this._items || !this._items.length) {
-            return;
-        }
-
-        const post = this._getPost(data.id);
-        if (post) {
-            return;
-        }
         const newPost = SocialFeedModelConverter.ConvertNotificationToSonarFeedPost(data);
-        this._items.unshift(newPost);
         this.onPostAdded.next(newPost);
     }
 }

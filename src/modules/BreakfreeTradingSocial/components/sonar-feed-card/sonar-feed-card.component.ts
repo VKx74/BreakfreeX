@@ -14,7 +14,7 @@ export interface IReplayData {
     selector: 'sonar-feed-card',
     templateUrl: './sonar-feed-card.component.html',
     styleUrls: ['./sonar-feed-card.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarFeedCardComponent implements OnInit {
     private _instrument: IInstrument;
@@ -52,6 +52,7 @@ export class SonarFeedCardComponent implements OnInit {
     @Output() onLike = new EventEmitter<void>();
     @Output() onDislike = new EventEmitter<void>();
     @Output() onCommentLike = new EventEmitter<any>();
+    @Output() onCommentLikeDelete = new EventEmitter<any>();
     @Output() onCommentDislike = new EventEmitter<any>();
     @Output() onShare = new EventEmitter<void>();
     @Output() onAddComment = new EventEmitter<string>();
@@ -293,12 +294,16 @@ export class SonarFeedCardComponent implements OnInit {
         this.onShare.next();
     }
 
-    likeComment(commentId: any) {
-        this.onCommentLike.next(commentId);
+    likeComment(comment: SonarFeedCommentVM) {
+        this.onCommentLike.next(comment.id);
     }
 
-    dislikeComment(commentId: any) {
-        this.onCommentDislike.next(commentId);
+    deleteCommentLike(comment: SonarFeedCommentVM) {
+        this.onCommentLikeDelete.next(comment.id);
+    }
+
+    dislikeComment(comment: SonarFeedCommentVM) {
+        this.onCommentDislike.next(comment.id);
     }
 
     expandComment(commentId: any) {

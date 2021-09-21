@@ -1,19 +1,63 @@
-<div class="sonar-wall" (scroll)="onScroll($event)" #scroll (click)="clickOnWall($event)">
-    <div class="card-container" *ngFor="let card of cards">
-        <sonar-feed-card [isVisible]="isCardVisible(card)" [hasMyLike]="card.hasMyLike" [hasMyDislike]="card.hasMyDislike"
-            [likeCount]="card.likeCount" [dislikeCount]="card.dislikeCount" [granularity]="card.granularity"
-            [time]="card.time" [title]="card.title" [instrument]="card.instrument"
-            (onOpenChart)="viewOnChart(card)" (onLike)="like(card)" (onDislike)="dislike(card)" (onShowAllComments)="showAllComments(card)"
-            (onAddComment)="addComment($event, card)" (onCommentLike)="commentLike($event, card)" (onCommentDislike)="commentDislike($event, card)"
-            (onRemoveComment)="removeComment($event, card)" (onFavorite)="favorite(card)" (onAddReplay)="addReplay($event, card)" (onEditComment)="editComment($event, card)"
-            [comments]="card.comments" [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"
-            [showAllCommentsOnExpand]="isSingleCard" (onShare)="share(card)" (chartClick)="clickOnCard(card)"
-            [selected]="selectedCard && selectedCard == card" [timeFrame]="card.timeFrame" [symbol]="card.symbol" [setup]="card.setup" [side]="card.side"></sonar-feed-card>
+<div class="sonar-wall">
+    <div class="filtering-header">
+        <div class="filter-select">
+            <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedTimeFrames"
+                    multiple>
+                    <mat-option *ngFor="let option of allowedTimeFrames" [value]="option">
+                        {{option}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="filter-select">
+            <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedMarketTypes"
+                    multiple>
+                    <mat-option *ngFor="let option of allowedMarketTypes" [value]="option">
+                        {{option}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="filter-select">
+            <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedTradeTypes"
+                    multiple>
+                    <mat-option *ngFor="let option of allowedTradeTypes" [value]="option">
+                        {{option}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="filter-changed" *ngIf="FilterChanged" (click)="applyFilters()">
+            <i class="fa fa-search"></i>
+            <div>Apply filters</div>
+            <i class="fa fa-close" (click)="cancelFilters($event)"></i>
+        </div>
+    </div>
+
+    <div class="cards-container" (scroll)="onScroll($event)" #scroll (click)="clickOnWall($event)">
+        <div class="card-container" *ngFor="let card of cards">
+            <sonar-feed-card [isVisible]="isCardVisible(card)" [hasMyLike]="card.hasMyLike"
+                [hasMyDislike]="card.hasMyDislike" [likeCount]="card.likeCount" [dislikeCount]="card.dislikeCount"
+                [granularity]="card.granularity" [time]="card.time" [title]="card.title" [instrument]="card.instrument"
+                (onOpenChart)="viewOnChart(card)" (onLike)="like(card)" (onDislike)="dislike(card)"
+                (onShowAllComments)="showAllComments(card)" (onAddComment)="addComment($event, card)"
+                (onCommentLike)="commentLike($event, card)" (onCommentLikeDelete)="commentLikeDelete($event, card)"
+                (onCommentDislike)="commentDislike($event, card)" (onRemoveComment)="removeComment($event, card)"
+                (onFavorite)="favorite(card)" (onAddReplay)="addReplay($event, card)"
+                (onEditComment)="editComment($event, card)" [comments]="card.comments"
+                [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"
+                [showAllCommentsOnExpand]="isSingleCard" (onShare)="share(card)" (chartClick)="clickOnCard(card)"
+                [selected]="selectedCard && selectedCard == card" [timeFrame]="card.timeFrame" [symbol]="card.symbol"
+                [setup]="card.setup" [side]="card.side"></sonar-feed-card>
+        </div>
     </div>
 </div>
 
 <bft-loader *ngIf="loading"></bft-loader>
 
-<div class="new-update" (click)="addUpdates()" *ngIf="IsNewUpdatesExists">
+<div class="new-update" (click)="scrollTop()" *ngIf="IsNewUpdatesExists">
     New Setups
 </div>

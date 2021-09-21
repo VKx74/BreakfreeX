@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { IdentityService } from "@app/services/auth/identity.service";
 import { BaseLayoutItem } from "@layout/base-layout-item";
 import { LinkingAction } from "@linking/models";
+import { ISonarSetupFilters } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { SonarFeedWidgetComponent } from "../sonar-feed-widget/sonar-feed-widget.component";
 
 @Component({
@@ -11,6 +12,11 @@ import { SonarFeedWidgetComponent } from "../sonar-feed-widget/sonar-feed-widget
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarFeedComponent extends BaseLayoutItem  implements OnInit {
+    private _state: ISonarSetupFilters;
+
+    get state(): ISonarSetupFilters {
+        return this._state;
+    }
     
     get componentId(): string {
         return SonarFeedWidgetComponent.componentName;
@@ -20,21 +26,34 @@ export class SonarFeedComponent extends BaseLayoutItem  implements OnInit {
         super();
     }
 
+    handleStateChanged(state: ISonarSetupFilters) {
+        if (state) {
+            this._state = state;
+            this.stateChanged.next(this);
+        }
+    }
 
     getState() {
-        throw new Error("Method not implemented.");
+        return this._state;
     }
-    setState(state: any) {
-        throw new Error("Method not implemented.");
+
+    setState(state: ISonarSetupFilters) {
+        if (!state) {
+            return;
+        }
+
+        this._state = state;
     }
 
     ngOnInit() {
+        this.initialized.next(this);
     }
 
     ngAfterViewInit() {
     }
 
     ngOnDestroy() {
+        this.beforeDestroy.next(this);
     }
 
     viewOnChart(linkingAction: LinkingAction) {

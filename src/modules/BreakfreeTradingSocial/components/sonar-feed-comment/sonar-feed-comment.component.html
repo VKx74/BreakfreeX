@@ -28,7 +28,7 @@
 
             <div class="comment-content-footer">
                 <div class="comment-like-container" [ngClass]="{'disabled': comment.isOwnComment}"
-                    (click)="likeComment(comment.id)">
+                    (click)="likeComment(comment)">
                     <i class="fa fa-thumbs-up" aria-hidden="true"
                         *ngIf="comment.hasUserLike; else nonActiveCommentLike"></i>
                     <ng-template #nonActiveCommentLike>
@@ -37,7 +37,7 @@
                     <span class="comment-like-counter">{{comment.likesCount}}</span>
                 </div>
                 <div class="comment-dislike-container" [ngClass]="{'disabled': comment.isOwnComment}"
-                    (click)="dislikeComment(comment.id)">
+                    (click)="dislikeComment(comment)">
                     <i class="fa fa-thumbs-down" aria-hidden="true"
                         *ngIf="comment.hasUserDislike; else nonActiveCommentDislike"></i>
                     <ng-template #nonActiveCommentDislike>

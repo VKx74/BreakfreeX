@@ -195,8 +195,7 @@ export class SonarFeedSocketService extends WebsocketBase {
         this._postReaction.next({
             id: msgData.id,
             likesCount: data.likesCount,
-            dislikesCount: data.dislikesCount,
-            postId: null
+            dislikesCount: data.dislikesCount
         });
     }
 

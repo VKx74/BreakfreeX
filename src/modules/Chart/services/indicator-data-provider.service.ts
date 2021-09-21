@@ -136,9 +136,9 @@ export class SonarChartIndicatorDataProviderService extends IndicatorDataProvide
             return null;
         }
 
-        if (!chart.replayMode.isInPlayMode) {
-            return super.getData(indicator, params);
-        }
+        // if (!chart.replayMode.isInPlayMode) {
+        //     return super.getData(indicator, params);
+        // }
 
         const symbol = chart.instrument.id;
         const exchange = chart.instrument.exchange;
