@@ -37,6 +37,14 @@
             [isVisible]="isVisible">
         </sonar-chart>
     </div>
+
+    <div class="tags-category-holder">
+        <div class="tag-setup"> <img class="widget-icon" src="/assets/img/chart-candlestick-solid.svg"> <span>{{setup}}</span></div> 
+        <div class="tag-timeframe"><img class="widget-icon" src="/assets/img/flux-capacitor-solid.svg"><span>{{timeFrame}}</span></div>  
+        <div class="tag-RTD-trend"><img class="widget-icon" src="/assets/img/chart-radar-solid.svg"> <span> Strong (110/80)</span></div> 
+
+    </div>
+    
     <div class="card-footer">
         <div class="card-footer-buttons">
             <div class="card-footer-view-button" (click)="viewOnChart()">
