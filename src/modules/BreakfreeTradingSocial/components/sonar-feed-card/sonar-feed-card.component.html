@@ -1,24 +1,29 @@
 <div class="sonar-card" #cardContainer>
     <div class="card-header">
         <div class="card-header-description">
-            <div class="favorite-icon" (click)="favorite()">
+            <div class="favorite-icon hidden" (click)="favorite()">
                 <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
                 <ng-template #notFavorite>
                     <i class="fa fa-star-o" aria-hidden="true"></i>
                 </ng-template>
             </div>
             <div class="card-header-title">
-                <div class="card-header-symbol">{{symbol}}</div>    
-                <div class="card-header-timeframe">{{timeFrame}}</div>    
                 <div class="card-header-setup" [ngClass]="{'setup-long': side == 'Long', 'setup-short': side == 'Short'}">
                     <i class="fa" [ngClass]="{'fas fa-arrow-up': side == 'Long', 'fas fa-arrow-down': side == 'Short'}"></i>
-                    {{side}} {{setup}}
+                    {{side}}
+                </div>
+                <div class="hidden"> {{setup}}</div> 
+                   
+                <div class="card-header-symbol">
+                    <div class="card-header-timeframe">{{timeFrame}} {{setup}} {{symbol}} </div>  
+                   
+                </div>   
+                <div class="card-header-timestamp">
+                    {{createTimeString(time)}}
                 </div>
             </div>
         </div>
-        <div class="card-header-timestamp">
-            {{createTimeString(time)}}
-        </div>
+       
     </div>
     <div class="card-chart" #chartContainer [ngClass]="{'chart-selected': selected}" (click)="clickOnChart()">
         <sonar-chart [selected]="selected" [instrument]="instrument" [time]="time" [granularity]="granularity" [isVisible]="isVisible">
