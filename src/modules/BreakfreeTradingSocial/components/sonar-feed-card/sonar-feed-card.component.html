@@ -1,12 +1,7 @@
 <div class="sonar-card" #cardContainer>
     <div class="card-header">
         <div class="card-header-description">
-            <div class="favorite-icon hidden" (click)="favorite()">
-                <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
-                <ng-template #notFavorite>
-                    <i class="fa fa-star-o" aria-hidden="true"></i>
-                </ng-template>
-            </div>
+            
             <div class="card-header-title">
                 <div class="header-left-part">
                     <div class="card-header-setup"
@@ -68,6 +63,13 @@
                     <!-- <span class="dislike-counter">{{dislikeCount}}</span> -->
                 </div>
             </div>
+
+            <div class="card-footer-follow-button"> <div class="favorite-icon " (click)="favorite()">
+                <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
+                <ng-template #notFavorite>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                </ng-template>
+            </div></div>
             <div class="card-footer-share-button" (click)="share()">
                 Share
             </div>

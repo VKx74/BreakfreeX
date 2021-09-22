@@ -48,22 +48,177 @@
         animation: slidein-bft 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     }
 
+    img.widget-icon.border-circle {
+        border: 1px solid #fff;
+        border-radius: 50%;
+        height: 10px;
+        margin-right: 5px;
+        -webkit-filter: invert(1);
+        filter: invert(1);
+        opacity: 0.8;
+    }
+    
+    .sonar-feed-header {
+        display: flex;
+        color: #fff;
+        width: 100%;
+        flex-direction: column;
+        background: #1C1E22;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        padding: 5px;
+    }
+    
+    .filters-search {
+        width: 100%;
+        display: flex;
+        font-size: 10px;
+        flex-direction: row;
+        background: #171718;
+        border: 0px;
+        border-radius: 15px;
+        padding: 5px 5px 5px 10px;
+    }
+    
+    .pre-filter-header {
+        display: flex;
+        width: 100%;
+        padding: 5px 5px;
+        border-bottom: 1px solid #dddddd24;
+        color: #d5d5dc;
+    }
+    
+    .filters-holder {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-right: 5px;
+        font-size: 11px;
+        font-weight: 500;
+        border-radius: 15px;
+        border: 1px solid #dddddd24;
+        padding: 2px 8px;
+        color: #ffffffc4;
+    }
+    
+    .item-all {
+        font-size: 11px;
+        font-weight: 700;
+        margin-right: 15px;
+        
+    }
+    
+    
+    .item-favs {
+        font-size: 11px;
+        font-weight: 700;
+        margin-right: 15px;
+        
+    }
+
+    .filters-and-search {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-radius: 15px;
+        padding: 3px;
+    }
+
+    .filter-modal {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .filtering-footer {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 10px 15px;
+        border-top: 1px solid #dddddd21;
+
+    }
+    
+    .filtering-footer .cancel {
+        display: flex;
+        
+        padding: 2px 8px;
+        border: 1px solid #eee;
+        color: #dddd;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 700;
+        margin-right: 5px;
+    }
+    
+    .filtering-footer .save {
+        display: flex;
+        padding: 2px 8px;
+        border: 1px solid #eee;
+        color: #dddd;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 700;
+        margin-right:15px;
+    }
+    
+    .apply {
+        display: flex;
+        
+        padding: 2px 8px;
+        border: 1px solid #eee;
+        color: #dddd;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    
+    .filtering-footer .align-right {
+        justify-content: right;
+        display: flex;
+        width: 100%;
+    }
+    
+    .filtering-footer .align-left {
+        display: flex;
+        justify-content: left;
+    }
+
+    .filter-label {
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+    
+    
+
+
+
+
     .filtering-header {
         display: flex;
         justify-content: space-around;
+        flex-direction: column;
         width: 100%;
-        max-width: 820px;
-        // border-bottom-right-radius: 15px;
-        // border-bottom-left-radius: 15px;
-        // position: absolute;
+         max-width: 820px;
         z-index: 101;
-        padding-top: 5px;
-        padding-bottom: 3px;
+        padding: 15px;
+        border-radius: 15px;
 
         .filter-select {
             display: flex;
-            width: 30%;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-top: 5px;
         }
+            
+        
+        
 
         .filter-changed {
             position: absolute;
@@ -110,7 +265,7 @@
     .new-update, .filter-changed {
         background-color: themed("accentColor");
     }
-    .filtering-header {
+    .filter-modal {
         background-color: themed("card-background-color");
     }
 }

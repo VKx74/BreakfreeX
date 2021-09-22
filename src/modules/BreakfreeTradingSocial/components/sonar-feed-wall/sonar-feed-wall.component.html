@@ -1,7 +1,25 @@
 <div class="sonar-wall">
-    <div class="filtering-header">
+
+    <div class="sonar-feed-header">
+        
+       <div class="pre-filter-header">
+            <div class="item-all">All</div>
+            <div class="item-favs">Following </div>
+       </div>
+
+        <div class="filters-and-search" > 
+        <div class="filters-holder"><img class="widget-icon border-circle" src="/assets/img/bars-filter-solid.svg">Filters</div>
+        <input class="filters-search" placeholder="Search Sonar">
+        </div>
+        
+
+    </div>
+
+    <div class="filter-modal">
+    <div class="filtering-header ">
         <div class="filter-select">
             <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                <mat-label class="filter-label">Timeframes</mat-label>
                 <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedTimeFrames"
                     multiple>
                     <mat-option *ngFor="let option of allowedTimeFrames" [value]="option">
@@ -12,6 +30,7 @@
         </div>
         <div class="filter-select">
             <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                <mat-label class="filter-label">Markets</mat-label>
                 <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedMarketTypes"
                     multiple>
                     <mat-option *ngFor="let option of allowedMarketTypes" [value]="option">
@@ -22,6 +41,7 @@
         </div>
         <div class="filter-select">
             <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                <mat-label class="filter-label">Setup</mat-label>
                 <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedTradeTypes"
                     multiple>
                     <mat-option *ngFor="let option of allowedTradeTypes" [value]="option">
@@ -35,6 +55,16 @@
             <div>Apply filters</div>
             <i class="fa fa-close" (click)="cancelFilters($event)"></i>
         </div>
+    </div>
+    <div class="filtering-footer">
+        <div class="align-left">
+             <div class="cancel">Cancel</div>
+         </div>
+        <div class="align-right" >
+             <div class="save">Save</div>
+             <div class="apply">Apply</div>
+        </div>
+    </div>
     </div>
 
     <div class="cards-container" (scroll)="onScroll($event)" #scroll (click)="clickOnWall($event)">
