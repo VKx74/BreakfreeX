@@ -1,8 +1,6 @@
-import { Component, Injector, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { BaseGoldenLayoutItemComponent } from "@layout/base-golden-layout-item.component";
+import { Component, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
-import { GoldenLayoutItemState } from "angular-golden-layout";
 import bind from "bind-decorator";
 import { Observable, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
@@ -19,10 +17,9 @@ import { CommoditiesWatchlist } from 'modules/Watchlist/services/commodities';
 import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
 import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
 import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
-import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
+import { IdentityService } from '@app/services/auth/identity.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckoutComponent } from '../checkout/checkout.component';
-import { PersonalInfoService } from '@app/services/personal-info/personal-info.service';
 import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component';
@@ -108,15 +105,6 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
     private _missionsChangedSubscription: Subscription;
-
-    private get _isPro(): boolean {
-        return this._identityService.subscriptionType === SubscriptionType.Pro ||
-            this._identityService.subscriptionType === SubscriptionType.Trial;
-    }
-
-    private get _levelRestriction(): number {
-        return this._identityService.basicLevel;
-    }
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
@@ -249,14 +237,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     show15MinAccessRestriction(): boolean {
-        if (!this._isPro) {
-            return true;
-        }
-        return false;
+        const is15MinAllowed = this._identityService.is15MinAllowed();
+        return !is15MinAllowed;
     }
 
     show15MinLevelRestriction() {
-        if (this.isAdmin) {
+        const level = this._tradingProfileService.level;
+        const is15MinAllowedByLevel = this._identityService.is15MinAllowedByLevel(level);
+        if (is15MinAllowedByLevel) {
             return false;
         }
 
@@ -264,9 +252,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             return false;
         }
 
-        let level = this._tradingProfileService.level;
         const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
-        if (level < this._levelRestriction && is15MinSelected) {
+        if (is15MinSelected) {
             return true;
         }
 
@@ -274,25 +261,14 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     showHourlyAccessRestriction() {
-        if (!this.isAuthorizedCustomer) {
-            return true;
-        }
-
-        if (this._identityService.subscriptionType !== SubscriptionType.Pro &&
-            this._identityService.subscriptionType !== SubscriptionType.Trial &&
-            this._identityService.subscriptionType !== SubscriptionType.Discovery) {
-            return true;
-        }
-
-        return false;
+        const isHourAllowed = this._identityService.isHourAllowed();
+        return !isHourAllowed;
     }
 
     show1HLevelRestriction() {
-        if (this.isAdmin) {
-            return false;
-        }
-
-        if (this._identityService.subscriptionType !== SubscriptionType.Discovery) {
+        const level = this._tradingProfileService.level;
+        const isHourAllowedByLevel = this._identityService.isHourAllowedByLevel(level);
+        if (isHourAllowedByLevel) {
             return false;
         }
 
@@ -300,9 +276,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             return false;
         }
 
-        let level = this._tradingProfileService.level;
         const is1HSelected = this.activeTimeframes.indexOf(TimeFrames.Hour1) !== -1;
-        if (level < this._levelRestriction && is1HSelected) {
+        if (is1HSelected) {
             return true;
         }
 

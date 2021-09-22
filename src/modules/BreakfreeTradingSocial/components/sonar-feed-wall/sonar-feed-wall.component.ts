@@ -4,7 +4,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AppRoutes } from "@app/app.routes";
 import { IInstrument } from "@app/models/common/instrument";
 import { IBFTATrend } from "@app/services/algo.service";
-import { IdentityService } from "@app/services/auth/identity.service";
+import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { EMarketSpecific } from "@app/models/common/marketSpecific";
 import { ForexTypeHelper } from "@app/services/instrument.type.helper/forex.types.helper";
 import { Actions, LinkingAction } from "@linking/models";
@@ -16,6 +16,7 @@ import { ConfirmModalComponent } from "modules/UI/components";
 import { Subscription } from "rxjs";
 import { JsUtil } from "utils/jsUtil";
 import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
+import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 
 export interface SonarFeedCommentVM {
     id: any;
@@ -93,7 +94,7 @@ enum SonarFeedMarketTypes {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SonarFeedWallComponent implements OnInit {
-    private _loadCount: number = 25;
+    private _loadCount: number = 30;
     private _firstVisible: number = 0;
     private _lastVisible: number = 5;
     private _timer: any;
@@ -106,12 +107,14 @@ export class SonarFeedWallComponent implements OnInit {
     private _commentEditedSubscription: Subscription;
     private _commentRemovedSubscription: Subscription;
     private _itemAddedSubscription: Subscription;
+    private _missionsInitializedSubscription: Subscription;
     private _cardId: any;
     private _scrollTop: number = 0;
     private _selectedCard: SonarFeedCardVM;
     private _isNewUpdatesExists: boolean;
     private _filterChanged: boolean = false;
     private _filteringParameters: ISonarSetupFilters;
+    private _lastId: any;
 
     @ViewChild('scroll', { static: true }) scroll: ElementRef;
 
@@ -125,7 +128,6 @@ export class SonarFeedWallComponent implements OnInit {
 
     @Input() set cardId(value: any) {
         this._cardId = value;
-        this._loadItem();
     }
 
     public cards: SonarFeedCardVM[] = [];
@@ -164,6 +166,7 @@ export class SonarFeedWallComponent implements OnInit {
         protected _alertService: AlertService,
         protected _identity: IdentityService,
         protected _instrumentService: InstrumentCacheService,
+        protected _tradingProfileService: TradingProfileService,
         protected _cdr: ChangeDetectorRef) {
 
         this._timer = setInterval(() => {
@@ -177,6 +180,11 @@ export class SonarFeedWallComponent implements OnInit {
         this.selectedMarketTypes = this.allowedMarketTypes.slice();
         this.selectedTradeTypes = this.allowedTradeTypes.slice();
 
+        if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            this._loadCount = 100;
+        } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
+            this._loadCount = 150;
+        }
     }
 
     ngOnInit() {
@@ -202,8 +210,9 @@ export class SonarFeedWallComponent implements OnInit {
 
         this._itemAddedSubscription = this._sonarFeedService.onPostAdded.subscribe((_: SonarFeedItem) => {
             if (!this.isSingleCard) {
-                const isAllowed = this._isFitCardCurrentFilters(_);
-                if (isAllowed) {
+                const isFitFilters = this._isFitCardCurrentFilters(_);
+                const isInAccess = this._isCardAllowed(_.granularity);
+                if (isFitFilters && isInAccess) {
                     this.addItem(_);
                 }
             }
@@ -216,8 +225,19 @@ export class SonarFeedWallComponent implements OnInit {
                 this._mapToSettings(this.state);
                 this._filteringParameters = this._mapToTilters();
             }
-            this._initData();
         }
+        
+        this.loading = true;
+
+        this._missionsInitializedSubscription = this._tradingProfileService.MissionsInitialized.subscribe((isInitialized) => {
+            if (isInitialized && !this.initialized) {
+                if (this.isSingleCard && this._cardId) {
+                    this._loadItem();
+                } else {
+                    this._initData();
+                }
+            }
+        });
     }
 
     ngOnDestroy() {
@@ -254,6 +274,11 @@ export class SonarFeedWallComponent implements OnInit {
         if (this._commentRemovedSubscription) {
             this._commentRemovedSubscription.unsubscribe();
             this._commentRemovedSubscription = null;
+        }
+        
+        if (this._missionsInitializedSubscription) {
+            this._missionsInitializedSubscription.unsubscribe();
+            this._missionsInitializedSubscription = null;
         }
     }
 
@@ -595,9 +620,28 @@ export class SonarFeedWallComponent implements OnInit {
 
         this._filterChanged = false;
         this._sonarFeedService.getItems(this._loadCount, this._filteringParameters).subscribe((data: SonarFeedItem[]) => {
-            this._renderCards(data);
+
             this.initialized = true;
             this.loading = false;
+
+            if (data && data.length) {
+                this._lastId = data[data.length - 1].id;
+                this._canLoadMore = true;
+            } else {
+                this._lastId = null;
+                this._canLoadMore = false;
+            }
+
+            const filtered = this._filterVisibleItems(data);
+
+            this._renderCards(filtered);
+
+            if (filtered.length < 10) {
+                this._loadMore();
+            }
+
+            this._refreshNeeded = true;
+
         }, (error) => {
         });
     }
@@ -613,20 +657,37 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
+    private _tempRecursiveLoadingCounter = 0;
+
     private _loadMore() {
         this._loadingMore = true;
-        this._sonarFeedService.getFromIdItems(this.cards[this.cards.length - 1].id, this._loadCount, this._filteringParameters).subscribe((data: SonarFeedItem[]) => {
-            this._renderCards(data);
+        this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._filteringParameters).subscribe((data: SonarFeedItem[]) => {
+
             this._loadingMore = false;
 
             if (data.length < this._loadCount) {
                 this._canLoadMore = false;
+            } else {
+                this._lastId = data[data.length - 1].id;
+                this._canLoadMore = true;
             }
+
+            const filtered = this._filterVisibleItems(data);
+            this._renderCards(filtered);
+            this._tempRecursiveLoadingCounter += filtered.length;
+
+            if (this._canLoadMore && this._lastId && this._tempRecursiveLoadingCounter < 10) {
+                this._loadMore();
+            } else {
+                this._tempRecursiveLoadingCounter = 0;
+            }
+
+            this._refreshNeeded = true;
+
         }, (error) => {
             this._loadingMore = false;
         });
     }
-
 
     private _renderCards(items: SonarFeedItem[]) {
 
@@ -1005,7 +1066,7 @@ export class SonarFeedWallComponent implements OnInit {
             case EMarketSpecific.Stocks: return ESonarFeedMarketTypes.Equities;
         }
     }
-    
+
     private _mapToTilters(): ISonarSetupFilters {
         const res: ISonarSetupFilters = {};
 
@@ -1058,8 +1119,8 @@ export class SonarFeedWallComponent implements OnInit {
             }
 
             this.prevSelectedTimeFrames = this.selectedTimeFrames;
-        } 
-        
+        }
+
         if (filteringParameters.setup && filteringParameters.setup.length) {
             this.selectedTradeTypes = [];
             for (const s of filteringParameters.setup) {
@@ -1074,8 +1135,8 @@ export class SonarFeedWallComponent implements OnInit {
             }
 
             this.prevSelectedTradeTypes = this.selectedTradeTypes;
-        } 
-        
+        }
+
         if (filteringParameters.type && filteringParameters.type.length) {
             this.selectedMarketTypes = [];
             for (const t of filteringParameters.type) {
@@ -1161,6 +1222,44 @@ export class SonarFeedWallComponent implements OnInit {
         return f1String === f2String;
     }
 
+    //#endregion
+
+    //#region Access restrictions
+
+    private _isCardAllowed(granularity: number) {
+        if (granularity <= 60 * 15) {
+            if (!this._identityService.is15MinAllowed()) {
+                return false;
+            }
+            if (!this._identityService.is15MinAllowedByLevel(this._tradingProfileService.level)) {
+                return false;
+            }
+        } else if (granularity <= 60 * 60 * 4) {
+            if (!this._identityService.isHourAllowed()) {
+                return false;
+            }
+
+            if (granularity <= 60 * 60) {
+                if (!this._identityService.isHourAllowedByLevel(this._tradingProfileService.level)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private _filterVisibleItems(data: SonarFeedItem[]) {
+        const res: SonarFeedItem[] = [];
+
+        for (const item of data) {
+            if (this._isCardAllowed(item.granularity)) {
+                res.push(item);
+            }
+        }
+
+        return res;
+    }
     //#endregion
 
 }

@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { IInstrument } from "@app/models/common/instrument";
 import { IdentityService } from "@app/services/auth/identity.service";
+import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
 import { SonarFeedCommentVM } from "../sonar-feed-wall/sonar-feed-wall.component";
 declare var ResizeObserver;
@@ -93,8 +95,8 @@ export class SonarFeedCardComponent implements OnInit {
 
     @Input() public set title(value: string) {
         this._title = value;
-    } 
-    
+    }
+
     @Input() public set timeFrame(value: string) {
         this._timeFrame = value;
     }
@@ -240,7 +242,7 @@ export class SonarFeedCardComponent implements OnInit {
     }
 
     constructor(protected _identityService: IdentityService,
-        private host: ElementRef,
+        protected host: ElementRef,
         protected _cdr: ChangeDetectorRef) {
     }
 
@@ -390,6 +392,22 @@ export class SonarFeedCardComponent implements OnInit {
         const commentsCount = this._countCommentsRecursive(this.comments);
         return commentsCount !== this.commentsTotal;
     }
+
+    // is15Min() {
+    //     return this.granularity <= 60 * 15;
+    // } 
+    
+    // isHourly() {
+    //     return this.granularity <= 60 * 60 * 4 && !this.is15Min();
+    // }
+
+    // isAccessRestriction() {
+    //    return !this._isCardVisible;
+    // } 
+    
+    // isLevelRestriction() {
+    //    return !this._isCardVisibleByLevel && this._isCardVisible;
+    // }
 
     private _countCommentsRecursive(comments: SonarFeedCommentVM[]): number {
         let count = 0;

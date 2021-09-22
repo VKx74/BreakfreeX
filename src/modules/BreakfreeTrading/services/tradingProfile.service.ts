@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from '@app/services/app.config.service';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 export interface IBFTTradingProfile {
     accountsCount: number;
@@ -45,6 +45,7 @@ export class TradingProfileService {
     private _timeInterval: number = 1000 * 60 * 10; // 10 min
 
     public MissionChanged: Subject<void> = new Subject();
+    public MissionsInitialized: BehaviorSubject<boolean> = new BehaviorSubject(false);
     
     public get missions(): IBFTMissions {
         return this._missions;
@@ -135,6 +136,7 @@ export class TradingProfileService {
     initMissions() {
         this._getTradingMissions().subscribe((data: IBFTMissions) => {
             this._missions = data;
+            this.MissionsInitialized.next(true);
             this._raiseCallbacks();
         }, () => {
         });

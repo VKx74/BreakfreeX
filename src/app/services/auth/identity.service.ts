@@ -206,7 +206,7 @@ export class IdentityService {
     } 
 
     get basicLevel(): number {
-        return 4;
+        return 40;
     }
 
     constructor(private _authService: AuthenticationService,
@@ -266,6 +266,64 @@ export class IdentityService {
         }
     }
 
+    is15MinAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this._isPro || this._isTrial) {
+            return true;
+        }
+
+        return false;
+    }
+
+    isHourAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial ||
+            this.subscriptionType === SubscriptionType.Discovery) {
+            return true;
+        }
+
+        return false;
+    }
+
+    is15MinAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.is15MinAllowed()) {
+            return false;
+        }
+
+        if (level < this.basicLevel) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    isHourAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.isHourAllowed()) {
+            return false;
+        }
+
+        if (level < this.basicLevel) {
+            return false;
+        }
+
+        return true;
+    }
+
     public insert(token: string, refreshToken: string): boolean {
         const parsedToken = IdentityTokenParser.parseToken(token);
 
@@ -285,6 +343,9 @@ export class IdentityService {
         this.restrictedComponents = parsedToken.hasOwnProperty('restricted') ? [].concat(parsedToken.restricted) : [];
         this.token = token;
         this.refreshToken = refreshToken;
+
+        this.subscriptions = ["Discovery"];
+        this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
             this.artifSubExp = Number(parsedToken.artifsub_exp);

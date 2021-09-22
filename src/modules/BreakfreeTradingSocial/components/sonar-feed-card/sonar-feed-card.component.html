@@ -39,11 +39,13 @@
     </div>
 
     <div class="tags-category-holder">
-        <div class="tag-setup"> <img class="widget-icon" src="/assets/img/chart-candlestick-solid.svg"> <span>{{setup}}</span></div> 
-        <div class="tag-timeframe"><img class="widget-icon" src="/assets/img/flux-capacitor-solid.svg"><span>{{timeFrame}}</span></div>  
+        <div class="tag-setup"> <img class="widget-icon" src="/assets/img/chart-candlestick-solid.svg">
+            <span>{{setup}}</span></div>
+        <div class="tag-timeframe"><img class="widget-icon"
+                src="/assets/img/flux-capacitor-solid.svg"><span>{{timeFrame}}</span></div>
         <!-- <div class="tag-RTD-trend"><img class="widget-icon" src="/assets/img/chart-radar-solid.svg"> <span> Strong (110/80)</span></div>  -->
     </div>
-    
+
     <div class="card-footer">
         <div class="card-footer-buttons">
             <div class="card-footer-view-button" (click)="viewOnChart()">
@@ -108,3 +110,29 @@
         <!-- </mat-form-field> -->
     </div>
 </div>
+
+<!-- <ng-template #outOfAccess>
+    <div class="sonar-card out-of-access">
+        <div class="out-of-access-center">
+            <div class="out-of-access-icon">
+                <i class="fa fa-bar-chart"></i>
+            </div>
+            <div class="out-of-access-text">
+                <div class="access-restrictions" (click)="manageSubscriptions()"
+                    *ngIf="is15Min() && isAccessRestriction()">
+                    Upgrade to Pro for access to 15m Sonar setups.
+                </div>
+                <div class="access-restrictions" (click)="manageSubscriptions()"
+                    *ngIf="isHourly() && isAccessRestriction()">
+                    Upgrade to Discovery for access to Hourly Sonar setups.
+                </div>
+                <div class="timeframe-restrictions" *ngIf="isLevelRestriction()">
+                    Before Sonar enables this timeframe, you need to achieve level 4. <br> Don't worry,
+                    trades are still available if you dig through this timeframe manually.
+                    <br><br>
+                    <b>Enjoy your Breakfree journey.</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template> -->

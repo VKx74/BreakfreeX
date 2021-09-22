@@ -1,12 +1,9 @@
-import { F } from "@angular/cdk/keycodes";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { AlgoService } from "@app/services/algo.service";
 import { AppConfigService } from "@app/services/app.config.service";
-import { IdentityService } from "@app/services/auth/identity.service";
-import { switchmap } from "@decorators/switchmap";
+import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { Observable, of, Subject, Subscription } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO } from "../models/sonar.feed.dto.models";
 import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemLikeResponse, SonarFeedItemCommentLikeResponse } from "../models/sonar.feed.models";
 import { SocialFeedModelConverter } from "./models.convertter";
@@ -55,7 +52,7 @@ export class SonarFeedService {
     public onCommentEdited: Subject<SocialFeedCommentEditedNotification> = new Subject<SocialFeedCommentEditedNotification>();
     public onCommentRemoved: Subject<SocialFeedCommentRemovedNotification> = new Subject<SocialFeedCommentRemovedNotification>();
 
-    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService) {
+    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService, private _identityService: IdentityService) {
         this._url = AppConfigService.config.apiUrls.socialFeedREST;
         this._socketService.open().subscribe(() => {
             console.log("Sonar Feed Socket opened");
@@ -186,6 +183,14 @@ export class SonarFeedService {
         return this._http.delete<any>(`${this._url}api/comment/${commentId}`).pipe(map((response) => {
             return response;
         }));
+    }
+
+    blockUser(userId: any): Observable<any> {
+        return this._http.patch<any>(`${this._url}block/${userId}`, {});
+    }  
+    
+    unblockUser(userId: any): Observable<any> {
+        return this._http.patch<any>(`${this._url}unblock/${userId}`, {});
     }
 
     // private _addCommentToPost(post: SonarFeedItem, comment: SonarFeedComment) {
