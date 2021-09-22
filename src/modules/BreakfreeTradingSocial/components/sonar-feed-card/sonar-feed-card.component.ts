@@ -271,7 +271,7 @@ export class SonarFeedCardComponent implements OnInit {
             return "";
         }
 
-        return SocialFeedModelConverter.ConvertTimeDiffToString(time);
+        return SocialFeedModelConverter.ConvertTimeDiffToSonarTimeString(time);
     }
 
     viewOnChart() {
@@ -380,6 +380,29 @@ export class SonarFeedCardComponent implements OnInit {
         if (data.code === "Enter" && !data.shiftKey) {
             this.sendComment();
         }
+    }
+
+    hasMoreComments() {
+        if (this.comments.length > 1) {
+            return false;
+        }
+
+        const commentsCount = this._countCommentsRecursive(this.comments);
+        return commentsCount !== this.commentsTotal;
+    }
+
+    private _countCommentsRecursive(comments: SonarFeedCommentVM[]): number {
+        let count = 0;
+
+        for (const c of comments) {
+            count++;
+            if (c.comments || c.comments.length) {
+                let subCommentCount = this._countCommentsRecursive(c.comments);
+                count += subCommentCount;
+            }
+        }
+
+        return count;
     }
 
     private _scrollToBottom(): void {

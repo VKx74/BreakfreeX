@@ -41,8 +41,7 @@
     <div class="tags-category-holder">
         <div class="tag-setup"> <img class="widget-icon" src="/assets/img/chart-candlestick-solid.svg"> <span>{{setup}}</span></div> 
         <div class="tag-timeframe"><img class="widget-icon" src="/assets/img/flux-capacitor-solid.svg"><span>{{timeFrame}}</span></div>  
-        <div class="tag-RTD-trend"><img class="widget-icon" src="/assets/img/chart-radar-solid.svg"> <span> Strong (110/80)</span></div> 
-
+        <!-- <div class="tag-RTD-trend"><img class="widget-icon" src="/assets/img/chart-radar-solid.svg"> <span> Strong (110/80)</span></div>  -->
     </div>
     
     <div class="card-footer">
@@ -75,7 +74,7 @@
         </div>
     </div>
     <div class="card-comments" #scroll [ngClass]="{'limit-comments': !showAllCommentsOnExpand}">
-        <div class="show-all-comments" *ngIf="commentsTotal > 1 && comments.length <= 1" (click)="showAllComment()">
+        <div class="show-all-comments" *ngIf="hasMoreComments()" (click)="showAllComment()">
             View all {{commentsTotal}} comments
         </div>
         <div class="comment-row" *ngFor="let c of comments" [ngClass]="{'own-comment': c.isOwnComment}">

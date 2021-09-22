@@ -94,4 +94,38 @@ export class SocialFeedModelConverter {
             return `${dateString} ${timeString}`;
         }
     }
+    
+    public static ConvertTimeDiffToSonarTimeString(time: number): string {
+        const timeNow = Math.trunc(new Date().getTime() / 1000);
+        const dateOfCreation = new Date(time * 1000);
+        const timeDiff = Math.trunc(timeNow - time);
+
+        if (timeDiff < 60) {
+            return `Found ${timeDiff} S ago`;
+        } else if (timeDiff < 60 * 60) {
+            const mins = Math.trunc(timeDiff / 60);
+            return `Found ${mins} M ago`;
+        } else if (timeDiff < 60 * 60 * 24) {
+            const hours = Math.trunc(timeDiff / 60 / 60);
+            return `Found ${hours} H ago`;
+        } else {
+            const secondsInDay = 60 * 60 * 24;
+            const days1 = Math.trunc(timeNow / secondsInDay);
+            const days2 = Math.trunc(time / secondsInDay);
+            const timeStringSplitted = dateOfCreation.toLocaleTimeString().split(":");
+            const timeString = `${timeStringSplitted[0]}:${timeStringSplitted[1]}`;
+            const dateString = dateOfCreation.toLocaleDateString();
+
+            if (days1 - days2 === 1) {
+                return `Yesterday at ${timeString}`;
+            }
+
+            if (timeDiff < secondsInDay * 7) {
+                const days = Math.trunc(timeDiff / secondsInDay);
+                return `Found ${days} D ago`;
+            }
+
+            return `${dateString} ${timeString}`;
+        }
+    }
 }
