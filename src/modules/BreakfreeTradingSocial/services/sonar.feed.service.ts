@@ -69,13 +69,13 @@ export class SonarFeedService {
         this._postAddedSubscription = this._socketService.postAdded.subscribe((data) => this._processPostAdded(data));
     }
 
-    getItems(take: number, filters: ISonarSetupFilters = null): Observable<SonarFeedItem[]> {
+    getItems(take: number, filters: ISonarSetupFilters = null, searchText: string = null): Observable<SonarFeedItem[]> {
         const requestDate = new Date().getTime() / 1000;
-        return this._loadItemsByDate(take, Math.trunc(requestDate), filters);
+        return this._loadItemsByDate(take, Math.trunc(requestDate), filters, searchText);
     }  
     
-    getFromIdItems(id: any, take: number, filters: ISonarSetupFilters = null): Observable<SonarFeedItem[]> {
-        return this._loadItemsById(id, take, filters);
+    getFromIdItems(id: any, take: number, filters: ISonarSetupFilters = null, searchText: string = null): Observable<SonarFeedItem[]> {
+        return this._loadItemsById(id, take, filters, searchText);
     } 
     
     getItem(id: any): Observable<SonarFeedItem> {
@@ -369,8 +369,8 @@ export class SonarFeedService {
         }));
     }
 
-    private _loadItemsByDate(limit: number, dateTo: number, filters: ISonarSetupFilters): Observable<SonarFeedItem[]> {
-        const filterString = this._createFilterString(filters);
+    private _loadItemsByDate(limit: number, dateTo: number, filters: ISonarSetupFilters, searchText: string): Observable<SonarFeedItem[]> {
+        const filterString = this._createFilterString(filters, searchText);
         return this._http.get<SonarFeedItemDTO[]>(`${this._url}api/post?dateTo=${dateTo}&limit=${limit}${filterString}`).pipe(map((items) => {
             const res: SonarFeedItem[] = [];
             for (const item of items) {
@@ -381,8 +381,8 @@ export class SonarFeedService {
         }));
     }
 
-    private _loadItemsById(id: any, take: number, filters: ISonarSetupFilters): Observable<SonarFeedItem[]> {
-        const filterString = this._createFilterString(filters);
+    private _loadItemsById(id: any, take: number, filters: ISonarSetupFilters, searchText: string): Observable<SonarFeedItem[]> {
+        const filterString = this._createFilterString(filters, searchText);
         return this._http.get<SonarFeedItemDTO[]>(`${this._url}api/post/${id}/before?limit=${take}${filterString}`).pipe(map((items) => {
             const res: SonarFeedItem[] = [];
             for (const item of items) {
@@ -393,7 +393,7 @@ export class SonarFeedService {
         }));
     }
 
-    private _createFilterString(filters: ISonarSetupFilters): string {
+    private _createFilterString(filters: ISonarSetupFilters, searchText: string): string {
         let res = '';
 
         if (!filters) {
@@ -416,6 +416,10 @@ export class SonarFeedService {
             for (const t of filters.type) {
                 res += `&marketTypes=${t}`;
             }
+        }
+
+        if (searchText) {
+            res += `&symbol=${searchText}`;
         }
 
         return res;

@@ -17,6 +17,7 @@ import { Subscription } from "rxjs";
 import { JsUtil } from "utils/jsUtil";
 import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
+import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
 
 export interface SonarFeedCommentVM {
     id: any;
@@ -113,7 +114,9 @@ export class SonarFeedWallComponent implements OnInit {
     private _selectedCard: SonarFeedCardVM;
     private _isNewUpdatesExists: boolean;
     private _filterChanged: boolean = false;
+    private _isFilterVisible: boolean = false;
     private _filteringParameters: ISonarSetupFilters;
+    private _tempRecursiveLoadingCounter = 0;
     private _lastId: any;
 
     @ViewChild('scroll', { static: true }) scroll: ElementRef;
@@ -128,11 +131,14 @@ export class SonarFeedWallComponent implements OnInit {
 
     @Input() set cardId(value: any) {
         this._cardId = value;
-    }
+    } 
+    public searchText: string;
+    public prevSearchText: string;
 
     public cards: SonarFeedCardVM[] = [];
-    public loading: boolean;
+    public loading: boolean = true;
     public initialized: boolean;
+    public isSingleCardAllowed: boolean = true;
 
     public allowedTimeFrames: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
     public selectedTimeFrames: TimeFrames[];
@@ -151,13 +157,25 @@ export class SonarFeedWallComponent implements OnInit {
         return this._isNewUpdatesExists;
     }
 
-    public get FilterChanged(): boolean {
+    public get isFilterChanged(): boolean {
         return this._filterChanged;
+    }
+
+    public get isFilterVisible(): boolean {
+        return this._isFilterVisible;
     }
 
     public get selectedCard(): SonarFeedCardVM {
         return this._selectedCard;
-    }
+    } 
+    
+    public get hasSubscription(): boolean {
+        return this._identityService.isGuestMode || this._identityService.isAuthorizedCustomer;
+    } 
+
+    public get hasAccess(): boolean {
+        return this.hasSubscription && this.isSingleCardAllowed;
+    } 
 
     constructor(protected _identityService: IdentityService,
         protected _sonarFeedService: SonarFeedService,
@@ -188,6 +206,32 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ngAfterViewInit() {
+        if (!this.hasAccess) {
+            return;
+        }
+
+        if (!this.isSingleCard) {
+            if (this.state) {
+                this._mapToSettings(this.state);
+                this._filteringParameters = this._mapToTilters();
+            }
+        }
+        
+        this.loading = true;
+
+        this._missionsInitializedSubscription = this._tradingProfileService.MissionsInitialized.subscribe((isInitialized) => {
+            if (isInitialized && !this.initialized) {
+                if (this.isSingleCard && this._cardId) {
+                    this._loadItem();
+                } else {
+                    this._initData();
+                }
+            }
+        });
+
         this._commentReactionSubscription = this._sonarFeedService.onCommentReaction.subscribe((_: SocialFeedCommentReactionNotification) => {
             this._commentReaction(_);
         });
@@ -214,27 +258,6 @@ export class SonarFeedWallComponent implements OnInit {
                 const isInAccess = this._isCardAllowed(_.granularity);
                 if (isFitFilters && isInAccess) {
                     this.addItem(_);
-                }
-            }
-        });
-    }
-
-    ngAfterViewInit() {
-        if (!this.isSingleCard) {
-            if (this.state) {
-                this._mapToSettings(this.state);
-                this._filteringParameters = this._mapToTilters();
-            }
-        }
-        
-        this.loading = true;
-
-        this._missionsInitializedSubscription = this._tradingProfileService.MissionsInitialized.subscribe((isInitialized) => {
-            if (isInitialized && !this.initialized) {
-                if (this.isSingleCard && this._cardId) {
-                    this._loadItem();
-                } else {
-                    this._initData();
                 }
             }
         });
@@ -527,16 +550,37 @@ export class SonarFeedWallComponent implements OnInit {
     applyFilters() {
         this._filteringParameters = this._mapToTilters();
         this.stateChanged.next(this._filteringParameters);
+        this._isFilterVisible = false;
         this._initData();
     }
 
-    cancelFilters(event: MouseEvent) {
+    cancelFilters() {
         this.selectedMarketTypes = this.prevSelectedMarketTypes;
         this.selectedTradeTypes = this.prevSelectedTradeTypes;
         this.selectedTimeFrames = this.prevSelectedTimeFrames;
+        this.searchText = this.prevSearchText;
         this._filterChanged = false;
-        event.stopPropagation();
-        event.preventDefault();
+        this._isFilterVisible = false;
+    } 
+    
+    hideShowFilters() {
+        this._isFilterVisible = !this._isFilterVisible;
+    }
+
+    searchTextInput(data: KeyboardEvent) {
+        if (data.code === "Enter" && !data.shiftKey) {
+            this.applyFilters();
+        }
+    } 
+    
+    searchIconClick() {
+        if (this.prevSearchText !== this.searchText) {
+            this.applyFilters();
+        }
+    }
+
+    processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _scrollToTop() {
@@ -617,12 +661,14 @@ export class SonarFeedWallComponent implements OnInit {
         this.prevSelectedMarketTypes = this.selectedMarketTypes;
         this.prevSelectedTradeTypes = this.selectedTradeTypes;
         this.prevSelectedTimeFrames = this.selectedTimeFrames;
+        this.prevSearchText = this.searchText;
 
         this._filterChanged = false;
-        this._sonarFeedService.getItems(this._loadCount, this._filteringParameters).subscribe((data: SonarFeedItem[]) => {
+        this._sonarFeedService.getItems(this._loadCount, this._filteringParameters, this.searchText).subscribe((data: SonarFeedItem[]) => {
 
             this.initialized = true;
             this.loading = false;
+            this._refreshNeeded = true;
 
             if (data && data.length) {
                 this._lastId = data[data.length - 1].id;
@@ -636,13 +682,14 @@ export class SonarFeedWallComponent implements OnInit {
 
             this._renderCards(filtered);
 
-            if (filtered.length < 10) {
+            if (this._canLoadMore && this._lastId && filtered.length < 10) {
                 this._loadMore();
             }
 
-            this._refreshNeeded = true;
-
         }, (error) => {
+            this.initialized = true;
+            this.loading = false;
+            this._refreshNeeded = true;
         });
     }
 
@@ -650,20 +697,28 @@ export class SonarFeedWallComponent implements OnInit {
         this.loading = true;
         this.cards = [];
         this._sonarFeedService.getItem(this._cardId).subscribe((data: SonarFeedItem) => {
-            this._renderCards([data]);
+            this.isSingleCardAllowed = this._isCardAllowed(data.granularity);
+            if (this.isSingleCardAllowed) {
+                this._renderCards([data]);
+            }
             this.initialized = true;
             this.loading = false;
+            this._refreshNeeded = true;
         }, (error) => {
+            this.initialized = true;
+            this.loading = false;
+            this._refreshNeeded = true;
         });
     }
 
-    private _tempRecursiveLoadingCounter = 0;
-
     private _loadMore() {
+        this.loading = true;
         this._loadingMore = true;
-        this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._filteringParameters).subscribe((data: SonarFeedItem[]) => {
+        this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._filteringParameters, this.searchText).subscribe((data: SonarFeedItem[]) => {
 
             this._loadingMore = false;
+            this.loading = false;
+            this._refreshNeeded = true;
 
             if (data.length < this._loadCount) {
                 this._canLoadMore = false;
@@ -681,11 +736,10 @@ export class SonarFeedWallComponent implements OnInit {
             } else {
                 this._tempRecursiveLoadingCounter = 0;
             }
-
-            this._refreshNeeded = true;
-
         }, (error) => {
             this._loadingMore = false;
+            this.loading = false;
+            this._refreshNeeded = true;
         });
     }
 
@@ -1033,6 +1087,14 @@ export class SonarFeedWallComponent implements OnInit {
                 }
             }
         }
+
+        if (this.searchText) {
+            const searchTextExists = item.symbol.toLowerCase().indexOf(this.searchText.toLowerCase()) !== -1;
+            if (!searchTextExists) {
+                return false;
+            }
+        }
+
         return true;
     }
 

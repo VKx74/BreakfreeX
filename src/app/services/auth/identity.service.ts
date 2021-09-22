@@ -206,7 +206,7 @@ export class IdentityService {
     } 
 
     get basicLevel(): number {
-        return 40;
+        return 4;
     }
 
     constructor(private _authService: AuthenticationService,
@@ -344,8 +344,8 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        this.subscriptions = ["Discovery"];
-        this.role = Roles.User;
+        // this.subscriptions = [];
+        // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
             this.artifSubExp = Number(parsedToken.artifsub_exp);
