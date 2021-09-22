@@ -27,7 +27,6 @@
     .tag-setup,
     .tag-timeframe,
     .tag-RTD-trend {
-        background: #242627;
         padding: 2px 4px;
         border-radius: 3px;
         font-size: 10px;
@@ -37,7 +36,6 @@
         display: flex;
         align-items: center;
         align-content: center;
-        box-shadow: 0px 1px 0px 0px #00000075;
     }
 
     .tag-setup img,
@@ -54,8 +52,6 @@
     .card-header {
         display: flex;
         padding: 8px;
-        background: rgb(27, 26, 29);
-        background: linear-gradient(0deg, rgba(27, 26, 29, 1) 0%, rgba(31, 31, 33, 1) 100%);
         align-items: center;
         padding: 5px 5px;
         font-family: "Rubik Medium";
@@ -84,18 +80,17 @@
             font-weight: 700;
             font-size: 10px;
             align-items: center;
-            width: 100%;
-            justify-content: right;
+            display: flex;
         }
 
-        .card-header-timestamp,
-        .card-header-title {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            display: flex;
-            height: 18px;
-        }
+        // .card-header-timestamp,
+        // .card-header-title {
+        //     overflow: hidden;
+        //     white-space: nowrap;
+        //     text-overflow: ellipsis;
+        //     display: flex;
+        //     height: 18px;
+        // }
 
         .card-header-title {
             display: flex;
@@ -350,12 +345,28 @@
 
     .send-button {
         background-color: themed("sonar-feed-post-button");
+    } 
+    
+    .send-button {
+        background-color: themed("sonar-feed-post-button");
     }
 
     .card-header-timeframe {
         background-color: themed("scanner-card-tf-border");
         color: themed("scanner-card-tf-color");
     }
+
+    .card-header {
+        background-color: themed("sonar-feed-header");
+    }
+
+    .tag-setup,
+    .tag-timeframe,
+    .tag-RTD-trend {
+        background-color: themed("sonar-feed-tag");
+        box-shadow: 0px 1px 0px 0px themed("sonar-feed-tag-shadow");
+    }
+
     .setup-short {
         background-color: themed("scanner-card-setup-short-background");
         color: themed("scanner-card-setup-short-color");
