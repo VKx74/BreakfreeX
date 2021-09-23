@@ -58,26 +58,26 @@
 
     .sonar-feed-header {
         display: flex;
-        color: #fff;
-        width: 100%;
         flex-direction: column;
+        color: #ffffffba;
+        width: 100%;
         background: #121219;
-        border-top: 1px solid #0a0a0a;
-        border-bottom: 1px solid #0a0a0a;
-        padding: 5px;
+        padding: 5px 5px;
+        border-bottom: 2px solid #06060d;
+     
     }
 
     .filters-search {
         width: 100%;
         display: flex;
-        font-size: 10px;
+        font-size: 11px;
         flex-direction: row;
-        background: #171718;
+        background: #1f1f21;
         border: 0px;
-        border-radius: 15px;
+        border-radius: 5px;
         padding: 5px 5px 5px 10px;
         font-family: 'Open Sans';
-        font-weight:700;
+        font-weight: 700;
     }
 
     .pre-filter-header {
@@ -88,7 +88,20 @@
         color: #d5d5dc;
     }
 
-    .filters-holder {
+    .outside-search-holder {
+        display: flex;
+        margin-right: 5px;
+        align-items: center;
+    }
+    
+    .outside-filters-holder {
+        display: flex;
+    }
+    .outside-filters-holder .item-favs .fa {
+        margin-right: 3px;
+    }
+
+    .filters-holder, .item-favs {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -112,24 +125,20 @@
         margin-right: 15px;
     }
 
-    .item-favs {
-        font-size: 11px;
-        font-weight: 700;
-        margin-right: 15px;
-    }
+
 
     .filters-and-search {
         display: flex;
-        justify-content: space-evenly;
         align-items: center;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        border-radius: 15px;
-        padding: 3px;
+        justify-content: space-between;
+
+  
 
         .filters-search-icon {
             margin-left: 5px;
             cursor: pointer;
+            font-size: 13px;
+            margin-right: 5px;
 
             &:hover {
                 opacity: 0.8;
