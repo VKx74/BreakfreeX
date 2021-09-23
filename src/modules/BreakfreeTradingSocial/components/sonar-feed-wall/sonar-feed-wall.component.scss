@@ -64,7 +64,7 @@
         background: #121219;
         padding: 5px 5px;
         border-bottom: 2px solid #06060d;
-     
+        align-items: center;
     }
 
     .filters-search {
@@ -92,6 +92,8 @@
         display: flex;
         margin-right: 5px;
         align-items: center;
+        max-width: 50%;
+        width: 50%;
     }
     
     .outside-filters-holder {
@@ -131,8 +133,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-
-  
+        max-width: 800px;
+        width: 100%;
 
         .filters-search-icon {
             margin-left: 5px;
@@ -150,6 +152,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
+        max-width: 800px;
 
         /deep/ {
             .mat-form-field-label-wrapper {
