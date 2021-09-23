@@ -117,7 +117,7 @@
         </div>
         <!-- <mat-form-field class="crypto-input bft-form-input full-width"> -->
         <div class="card-left-comment-input">
-            <textarea class="crypto-textarea nborder comment-textarea" placeholder="Write a public comment..."
+            <textarea class="crypto-textarea nborder comment-textarea" placeholder="What are your thoughts?"
                 [(ngModel)]="comment" #textarea (keyup)="keyUpOnTextArea($event)"></textarea>
             <div class="send-button" [ngClass]="{'disabled': !comment || comment.length === 0}" (click)="sendComment()">
                 Send
