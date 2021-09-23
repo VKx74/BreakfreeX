@@ -153,6 +153,8 @@ export class SonarFeedWallComponent implements OnInit {
     public selectedMarketTypes: SonarFeedMarketTypes[];
     public prevSelectedMarketTypes: SonarFeedMarketTypes[];
 
+    public isFollowFilterUsed: boolean = false;
+
     public get IsNewUpdatesExists(): boolean {
         return this._isNewUpdatesExists;
     }
@@ -566,6 +568,11 @@ export class SonarFeedWallComponent implements OnInit {
     hideShowFilters() {
         this._isFilterVisible = !this._isFilterVisible;
     }
+    
+    useFollowFilter() {
+        this.isFollowFilterUsed = !this.isFollowFilterUsed;
+        this.applyFilters();
+    }
 
     searchTextInput(data: KeyboardEvent) {
         if (data.code === "Enter" && !data.shiftKey) {
@@ -675,6 +682,10 @@ export class SonarFeedWallComponent implements OnInit {
                 this._canLoadMore = true;
             } else {
                 this._lastId = null;
+                this._canLoadMore = false;
+            }
+
+            if (data && data.length < this._loadCount) {
                 this._canLoadMore = false;
             }
 
@@ -1095,6 +1106,10 @@ export class SonarFeedWallComponent implements OnInit {
             }
         }
 
+        if (this._filteringParameters.granularity) {
+            return false;
+        }
+
         return true;
     }
 
@@ -1159,6 +1174,8 @@ export class SonarFeedWallComponent implements OnInit {
             }
         }
 
+        res.following = this.isFollowFilterUsed;
+
         return res;
     }
 
@@ -1214,6 +1231,8 @@ export class SonarFeedWallComponent implements OnInit {
 
             this.prevSelectedMarketTypes = this.selectedMarketTypes;
         }
+
+        this.isFollowFilterUsed = !!(filteringParameters.following);
     }
 
     private _timeframeToGranularity(tf: TimeFrames): number {

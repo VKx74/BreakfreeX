@@ -281,12 +281,19 @@
     .filter-changed {
         background-color: themed("accentColor");
     }
+
+    .active-follow-filter {
+        background-color: themed("accentColor");
+    }
+
     .filter-modal {
         background-color: themed("card-background-color");
     }
+
     .empty-result {
         color: themed("titleTextColor");
     }
+
     .out-of-access-box {
         background-color: themed("appPanelColor");
     }

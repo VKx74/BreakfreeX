@@ -5,20 +5,21 @@
 
             <div class="filters-and-search">
 
-                <div class="outside-search-holder"> 
-                       <input class="filters-search" placeholder="{{prevSearchText || 'Search Sonar'}}"
-                       [(ngModel)]="searchText" (keyup)="searchTextInput($event)">
-                       <div class="filters-search-icon" (click)="searchIconClick()"><i class="fa fa-search"></i></div>
+                <div class="outside-search-holder">
+                    <input class="filters-search" placeholder="{{prevSearchText || 'Search Sonar'}}"
+                        [(ngModel)]="searchText" (keyup)="searchTextInput($event)">
+                    <div class="filters-search-icon" (click)="searchIconClick()"><i class="fa fa-search"></i></div>
                 </div>
 
                 <div class="outside-filters-holder">
-                       <div class="item-favs" ><i class="fa fa-star ng-star-inserted"></i> Following </div>
+                    <div class="item-favs" [ngClass]="{'active-follow-filter': isFollowFilterUsed}" (click)="useFollowFilter()"><i class="fa fa-star ng-star-inserted"></i> Following </div>
 
-                  <div class="filters-holder" (click)="hideShowFilters()">
-                    <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters</div>
+                    <div class="filters-holder" (click)="hideShowFilters()">
+                        <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters
+                    </div>
 
                 </div>
-               
+
             </div>
 
 

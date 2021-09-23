@@ -31,6 +31,7 @@ export interface ISonarSetupFilters {
     type?: ESonarFeedMarketTypes[];
     setup?: ESonarFeedSetupTypes[];
     granularity?: number[];
+    following?: boolean;
 }
 
 @Injectable()
@@ -416,6 +417,10 @@ export class SonarFeedService {
             for (const t of filters.type) {
                 res += `&marketTypes=${t}`;
             }
+        }
+        
+        if (filters.following) {
+            res += `&favorite=true`;
         }
 
         if (searchText) {
