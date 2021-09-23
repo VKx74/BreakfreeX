@@ -329,6 +329,25 @@
     }
 }
 
+.card-footer img.widget-icon {
+    width: 12px;
+    margin-right: 7px;
+    transition:all 0.22s;
+}
+
+:host-context(body.Dark-theme) .card-footer-share-button img.widget-icon {
+
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
+
+:host-context(body.Dark-theme) .card-footer-view-button img.widget-icon {
+
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
+
+
 @include themify($themes, true) {
     .sonar-card {
         background-color: themed("tableBorders");
@@ -357,12 +376,8 @@
     //     border-color: themed("sonar-feed-border") !important;
     // }
 
-    .card-footer-view-button img.widget-icon, .card-footer-share-button img.widget-icon {
-        width: 12px;
-        margin-right: 7px;
-         -webkit-filter: invert(1);
-            filter: invert(1);
-    }
+ 
+
     
     
 
