@@ -99,7 +99,7 @@
             <sonar-feed-comment [isExpanded]="true" [expandedComments]="expandedComments" [comment]="c"
                 (onExpandComment)="expandComment($event)" (onCommentLike)="likeComment($event)"
                 (onCommentLikeDelete)="deleteCommentLike($event)" (onCommentDislike)="dislikeComment($event)"
-                (onAddReplay)="replay($event)" (onRemoveComment)="removeComment($event)"
+                (onAddReplay)="replay($event)" (onRemoveComment)="removeComment($event)" (onBanUser)="banUser($event)"
                 (onEditComment)="editComment($event)"></sonar-feed-comment>
         </div>
         <div class="hide-all-comments" *ngIf="commentsTotal > 1 && comments.length > 1" (click)="hideAllComment()">

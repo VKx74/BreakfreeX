@@ -24,6 +24,8 @@ export enum UserAvatarShape {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NameAvatarComponent implements OnInit, OnChanges {
+    private _isDestroyed: boolean;
+
     avatarSrc: string = '';
     @Input() shape: UserAvatarShape = UserAvatarShape.Circle;
     @Input() highlighted = false;
@@ -43,16 +45,32 @@ export class NameAvatarComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        if (this._isDestroyed) {
+            return;
+        }
+
         this.setImage();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        if (this._isDestroyed) {
+            return;
+        }
+
         if (changes.name || changes.src) {
             this.setImage();
         }
     }
 
+    ngOnDestroy() {
+        this._isDestroyed = true;
+    }
+
     setImage() {
+        if (this._isDestroyed) {
+            return;
+        }
+
         if (!this.src || this.src === FileStorageService.ChatThreadDefaultPhotoId) {
             this.avatarSrc = this._getDefaultAvatar(this.name);
             this._cdRef.detectChanges();
@@ -111,6 +129,10 @@ export class NameAvatarComponent implements OnInit, OnChanges {
     }
 
     onImageError() {
+        if (this._isDestroyed) {
+            return;
+        }
+        
         this.avatarSrc = this._getDefaultAvatar(this.name);
         this._cdRef.detectChanges();
     }

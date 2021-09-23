@@ -2,6 +2,14 @@
     <div class="comment-item">
         <div class="comment-avatar">
             <div class="comment-avatar-img">
+                <div [matMenuTriggerFor]="menu" class="flex user-management" *ngIf="isAdmin"></div>
+                <mat-menu #menu="matMenu" xPosition="before">
+                    <div class="sonar-user-management-menu">
+                        <div class="ban">
+                            <button class="crypto-button crypto-button_action" (click)="banUser(comment)">Ban this user</button>
+                        </div>
+                    </div>
+                </mat-menu>
                 <name-avatar [name]="comment.userName" [src]="comment.userAvatarId"></name-avatar>
             </div>
         </div>
@@ -65,7 +73,7 @@
                 <sonar-feed-comment [comment]="comment.comments[0]" (onCommentLike)="likeComment($event)"
                     (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
                     (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
-                    (onEditComment)="editComment($event)"
+                    (onEditComment)="editComment($event)" (onBanUser)="banUser($event)"
                     [expandedComments]="expandedComments" [isExpanded]="false"></sonar-feed-comment>
                 <div class="continue-thread" (click)="continueThread()">Continue this thread</div>
             </div>
@@ -77,7 +85,7 @@
                     <sonar-feed-comment [comment]="c" (onCommentLike)="likeComment($event)"
                         (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
                         (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
-                        (onEditComment)="editComment($event)"
+                        (onEditComment)="editComment($event)" (onBanUser)="banUser($event)"
                         [expandedComments]="expandedComments" [isExpanded]="true"></sonar-feed-comment>
                 </div>
             </ng-container>

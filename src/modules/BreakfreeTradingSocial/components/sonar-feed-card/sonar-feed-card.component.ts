@@ -56,6 +56,7 @@ export class SonarFeedCardComponent implements OnInit {
     @Output() onCommentLike = new EventEmitter<any>();
     @Output() onCommentLikeDelete = new EventEmitter<any>();
     @Output() onCommentDislike = new EventEmitter<any>();
+    @Output() onBanUser = new EventEmitter<any>();
     @Output() onShare = new EventEmitter<void>();
     @Output() onAddComment = new EventEmitter<string>();
     @Output() onEditComment = new EventEmitter<IReplayData>();
@@ -306,6 +307,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     dislikeComment(comment: SonarFeedCommentVM) {
         this.onCommentDislike.next(comment.id);
+    }
+
+    banUser(comment: SonarFeedCommentVM) {
+        this.onBanUser.next(comment.userId);
     }
 
     expandComment(commentId: any) {

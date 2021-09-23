@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { IdentityService } from "@app/services/auth/identity.service";
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
 import { SonarFeedCommentVM } from "../sonar-feed-wall/sonar-feed-wall.component";
 export interface IReplayData {
@@ -24,6 +25,7 @@ export class SonarFeedCommentComponent implements OnInit {
     @Output() onRemoveComment = new EventEmitter<any>();
     @Output() onEditComment = new EventEmitter<any>();
     @Output() onExpandComment = new EventEmitter<any>();
+    @Output() onBanUser = new EventEmitter<SonarFeedCommentVM>();
 
     @Input() public set comment(value: SonarFeedCommentVM) {
         this._comment = value;
@@ -66,7 +68,11 @@ export class SonarFeedCommentComponent implements OnInit {
         }
     }
 
-    constructor(protected _cdr: ChangeDetectorRef) {
+    public get isAdmin(): boolean {
+        return this._identity.isAdmin || this._identity.isSupportOfficer;
+    }
+
+    constructor(protected _cdr: ChangeDetectorRef, protected _identity: IdentityService) {
     }
 
     ngOnInit() {
@@ -133,5 +139,9 @@ export class SonarFeedCommentComponent implements OnInit {
         }
 
         return false;
+    }
+
+    banUser(comment: SonarFeedCommentVM) {
+        this.onBanUser.next(comment);
     }
 }

@@ -78,10 +78,19 @@
                 width: 32px;
                 height: 32px;
                 justify-content: center;
+                position: relative;
+
+                .user-management {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                }
             }
         }
 
-        .remove-comment, .edit-comment {
+        .remove-comment,
+        .edit-comment {
             display: flex;
             justify-content: left;
 
@@ -216,7 +225,8 @@
                     margin-right: 5px;
                 }
 
-                .remove-comment, .edit-comment {
+                .remove-comment,
+                .edit-comment {
                     margin-left: 8px;
                     cursor: pointer;
                     border-radius: 3px;
@@ -268,11 +278,30 @@
         }
     }
 
-    .remove-comment, .edit-comment {
+    .remove-comment,
+    .edit-comment {
         i {
             &:hover {
                 background-color: themed("sonar-feed-post-button");
             }
         }
+    }
+}
+
+.sonar-user-management-menu {
+    font-size: 14px;
+    padding: 5px 0px;
+    display: flex;
+    flex-direction: column;
+
+    .ban {
+        display: flex;
+        padding: auto;
+        padding: 5px;
+    }
+
+    .crypto-button {
+        width: 100%;
+        padding: 0px;
     }
 }

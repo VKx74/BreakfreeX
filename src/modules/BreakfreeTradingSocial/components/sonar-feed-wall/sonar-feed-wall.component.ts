@@ -21,6 +21,7 @@ import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/
 
 export interface SonarFeedCommentVM {
     id: any;
+    userId: any;
     text: string;
     userName: string;
     userAvatarId: string;
@@ -495,6 +496,17 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
+    banUser(userId: any, card: SonarFeedCardVM) {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                message: "Do you really want to ban this user?",
+                onConfirm: () => {
+                    this._banUser(userId, card);
+                }
+            }
+        });
+    }
+
     addComment(comment: string, card: SonarFeedCardVM) {
         this.loading = true;
         this._sonarFeedService.postComment(card.id, comment).subscribe((commentResponse: SonarFeedComment) => {
@@ -600,6 +612,18 @@ export class SonarFeedWallComponent implements OnInit {
             this.loading = false;
             this._deleteCommentFromCommentsList(card.comments, commentId);
             this._refreshNeeded = true;
+        }, () => {
+            this.loading = false;
+            this._refreshNeeded = true;
+        });
+    } 
+    
+    private _banUser(userId: any, card: SonarFeedCardVM) {
+        this.loading = true;
+        this._sonarFeedService.blockUser(userId).subscribe(() => {
+            this.loading = false;
+            this._refreshNeeded = true;
+            this._alertService.success("User banned");
         }, () => {
             this.loading = false;
             this._refreshNeeded = true;
@@ -824,6 +848,7 @@ export class SonarFeedWallComponent implements OnInit {
     private _convertCommentToVM(comment: SonarFeedComment, isRoot: boolean = false): SonarFeedCommentVM {
         return {
             id: comment.id,
+            userId: comment.user.userId,
             dislikesCount: comment.dislikesCount,
             likesCount: comment.likesCount,
             hasUserDislike: comment.hasUserDislike,
