@@ -26,7 +26,7 @@
         // height: 100%;
         width: 100%;
         // margin: 10px 10px 0px 10px;
-        padding: 5px;
+        padding: 5px 0px 5px 5px;
     }
 
     .new-update {
@@ -76,6 +76,8 @@
         border: 0px;
         border-radius: 15px;
         padding: 5px 5px 5px 10px;
+        font-family: 'Open Sans';
+        font-weight:700;
     }
 
     .pre-filter-header {
@@ -98,6 +100,7 @@
         padding: 2px 8px;
         color: #ffffffc4;
         cursor: pointer;
+        font-family: 'Open Sans';
         &:hover {
             opacity: 0.8;
         }

@@ -67,13 +67,13 @@ export class SocialFeedModelConverter {
         const timeDiff = Math.trunc(timeNow - time);
 
         if (timeDiff < 60) {
-            return `${timeDiff} s ago `;
+            return `${timeDiff}s ago `;
         } else if (timeDiff < 60 * 60) {
             const mins = Math.trunc(timeDiff / 60);
-            return `${mins} m`;
+            return `${mins}m`;
         } else if (timeDiff < 60 * 60 * 24) {
             const hours = Math.trunc(timeDiff / 60 / 60);
-            return `${hours} h`;
+            return `${hours}h`;
         } else {
             const secondsInDay = 60 * 60 * 24;
             const days1 = Math.trunc(timeNow / secondsInDay);
@@ -88,7 +88,7 @@ export class SocialFeedModelConverter {
 
             if (timeDiff < secondsInDay * 7) {
                 const days = Math.trunc(timeDiff / secondsInDay);
-                return `${days} d`;
+                return `${days}d`;
             }
 
             return `${dateString} ${timeString}`;
@@ -101,13 +101,13 @@ export class SocialFeedModelConverter {
         const timeDiff = Math.trunc(timeNow - time);
 
         if (timeDiff < 60) {
-            return `Found ${timeDiff} S ago`;
+            return `Found ${timeDiff}s ago`;
         } else if (timeDiff < 60 * 60) {
             const mins = Math.trunc(timeDiff / 60);
-            return `Found ${mins} M ago`;
+            return `Found ${mins}m ago`;
         } else if (timeDiff < 60 * 60 * 24) {
             const hours = Math.trunc(timeDiff / 60 / 60);
-            return `Found ${hours} H ago`;
+            return `Found ${hours}h ago`;
         } else {
             const secondsInDay = 60 * 60 * 24;
             const days1 = Math.trunc(timeNow / secondsInDay);
@@ -122,7 +122,7 @@ export class SocialFeedModelConverter {
 
             if (timeDiff < secondsInDay * 7) {
                 const days = Math.trunc(timeDiff / secondsInDay);
-                return `Found ${days} D ago`;
+                return `Found ${days}d ago`;
             }
 
             return `${dateString} ${timeString}`;
