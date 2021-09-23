@@ -26,6 +26,7 @@ import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/
 import { mockedSonarData } from './mocked-data';
 import { mockedHistory } from './mocked-history';
 import { BaseLayoutItem } from '@layout/base-layout-item';
+import { EMarketType } from '@app/models/common/marketType';
 
 export interface IScannerState {
     featured: IFeaturedResult[];
@@ -524,7 +525,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         this._featured.push({
             color: color,
             exchange: loaded.exchange,
-            marketType: this._getMarketType(loaded.symbol),
+            marketType: this._getMarketType(loaded.symbol, loaded.exchange),
             symbol: loaded.symbol,
             timeframe: loaded.timeframe,
             trend: loaded.trend,
@@ -615,7 +616,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                 tp: this._toTP(i.tp),
                 tte: this._toTTE(i.tte),
                 volatility: this._toVolatility(i.tp),
-                marketType: this._getMarketType(i.symbol),
+                marketType: this._getMarketType(i.symbol, i.exchange),
                 trend: i.trend,
                 origType: i.type,
                 isMocked: i.isMocked || false
@@ -691,7 +692,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         this._reloadData();
     }
 
-    private _getMarketType(symbol: string): string {
+    private _getMarketType(symbol: string, exchange: string): string {
+        if (exchange && exchange.toLowerCase() === "binance") {
+            return EMarketType.Crypto;
+        }
+        
         for (const type of this._types) {
             for (const inst of type.data) {
                 let normalized_id = inst.id.replace("_", "").replace("/", "");
@@ -738,7 +743,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                 tp: this._toTP(i.responseItem.tp),
                 tte: this._toTTE(i.responseItem.tte),
                 volatility: this._toVolatility(i.responseItem.tp),
-                marketType: this._getMarketType(i.responseItem.symbol),
+                marketType: this._getMarketType(i.responseItem.symbol, i.responseItem.exchange),
                 trend: i.responseItem.trend,
                 time: date.toLocaleString(),
                 origType: i.responseItem.type,
@@ -763,7 +768,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                     tp: this._toTP(i.responseItem.tp),
                     tte: this._toTTE(i.responseItem.tte),
                     volatility: this._toVolatility(i.responseItem.tp),
-                    marketType: this._getMarketType(i.responseItem.symbol),
+                    marketType: this._getMarketType(i.responseItem.symbol, i.responseItem.exchange),
                     trend: i.responseItem.trend,
                     time: date.toLocaleString(),
                     origType: i.responseItem.type,
