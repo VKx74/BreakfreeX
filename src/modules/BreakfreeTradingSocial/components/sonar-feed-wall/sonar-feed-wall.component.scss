@@ -267,4 +267,11 @@
     .empty-result {
         color: themed("titleTextColor");
     }
+    .out-of-access-box {
+        background-color: themed("appPanelColor");
+    }
+
+    .text {
+        color: themed("valueTextColor");
+    }
 }

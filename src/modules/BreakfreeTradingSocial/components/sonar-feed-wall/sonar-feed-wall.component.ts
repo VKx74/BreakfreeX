@@ -210,6 +210,8 @@ export class SonarFeedWallComponent implements OnInit {
 
     ngAfterViewInit() {
         if (!this.hasAccess) {
+            this.loading = false;
+            this._refreshNeeded = true;
             return;
         }
 
@@ -219,8 +221,6 @@ export class SonarFeedWallComponent implements OnInit {
                 this._filteringParameters = this._mapToTilters();
             }
         }
-        
-        this.loading = true;
 
         this._missionsInitializedSubscription = this._tradingProfileService.MissionsInitialized.subscribe((isInitialized) => {
             if (isInitialized && !this.initialized) {
