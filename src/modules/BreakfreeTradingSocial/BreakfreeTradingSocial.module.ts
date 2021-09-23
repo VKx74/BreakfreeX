@@ -30,7 +30,7 @@ import { SonarFeedService } from './services/sonar.feed.service';
 import { SonarFeedSocketService } from './services/sonar.feed.socket.service';
 import { SonarFeedCommentComponent } from './components/sonar-feed-comment/sonar-feed-comment.component';
 import { InstrumentCacheService } from './services/instrument.cache.service';
-import { SocialRealtimeNotificationsService } from './services/realtime.notifications.service';
+import { SocialReactionsService } from './services/social.reactions.service';
 
 @NgModule({
     // components here
@@ -91,7 +91,7 @@ export class BreakfreeTradingSocialModule {
                 SonarFeedService,
                 SonarFeedSocketService,
                 InstrumentCacheService,
-                SocialRealtimeNotificationsService
+                SocialReactionsService
             ]
         };
     }

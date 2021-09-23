@@ -98,6 +98,10 @@ export class SonarFeedCommentComponent implements OnInit {
         } else {
             this.onCommentLike.next(comment);
         }
+    } 
+    
+    deleteLike(comment: SonarFeedCommentVM) {
+        this.onCommentLikeDelete.next(comment);
     }
 
     dislikeComment(comment: SonarFeedCommentVM) {

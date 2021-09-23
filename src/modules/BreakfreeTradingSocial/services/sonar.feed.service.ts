@@ -1,11 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AppConfigService } from "@app/services/app.config.service";
-import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
-import { Observable, of, Subject, Subscription } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
-import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO } from "../models/sonar.feed.dto.models";
-import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemLikeResponse, SonarFeedItemCommentLikeResponse } from "../models/sonar.feed.models";
+import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO, SonarFeedNotificationResponseDTO } from "../models/sonar.feed.dto.models";
+import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemLikeResponse, SonarFeedItemCommentLikeResponse, ISocialFeedReaction, ISocialFeedLikeReaction, SocialFeedReactionType, ISocialFeedReplayReaction } from "../models/sonar.feed.models";
 import { SocialFeedModelConverter } from "./models.convertter";
 import { SonarFeedSocketService } from "./sonar.feed.socket.service";
 
@@ -53,7 +52,7 @@ export class SonarFeedService {
     public onCommentEdited: Subject<SocialFeedCommentEditedNotification> = new Subject<SocialFeedCommentEditedNotification>();
     public onCommentRemoved: Subject<SocialFeedCommentRemovedNotification> = new Subject<SocialFeedCommentRemovedNotification>();
 
-    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService, private _identityService: IdentityService) {
+    constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService) {
         this._url = AppConfigService.config.apiUrls.socialFeedREST;
         this._socketService.open().subscribe(() => {
             console.log("Sonar Feed Socket opened");
@@ -192,6 +191,44 @@ export class SonarFeedService {
     
     unblockUser(userId: any): Observable<any> {
         return this._http.patch<any>(`${this._url}unblock/${userId}`, {});
+    } 
+    
+    getNotifications(): Observable<ISocialFeedReaction[]> {
+        return this._http.get<SonarFeedNotificationResponseDTO[]>(`${this._url}notifications`).pipe(map((data: SonarFeedNotificationResponseDTO[]) => {
+            const res: ISocialFeedReaction[] = [];
+
+            for (const item of data) {
+                if (item.isLike) {
+                    const likeReaction: ISocialFeedLikeReaction = {
+                        commentId: item.commentId,
+                        time: new Date(item.time * 1000),
+                        postId: item.postId,
+                        read: false,
+                        type: SocialFeedReactionType.Like,
+                        user: item.reactor
+                    };
+                    
+                    res.push(likeReaction);
+                } else if (item.replyComment) {
+                    const replayReaction: ISocialFeedReplayReaction = {
+                        time: new Date(item.time * 1000),
+                        postId: item.postId,
+                        read: false,
+                        type: SocialFeedReactionType.Like,
+                        user: item.reactor,
+                        replayText: item.replyComment.text
+                    };
+                    
+                    res.push(replayReaction);
+                }
+            }
+
+            return res;
+        }));
+    }   
+    
+    setAsReadNotifications(): Observable<any> {
+        return this._http.patch<SonarFeedNotificationResponseDTO[]>(`${this._url}notifications/read`, {});
     }
 
     // private _addCommentToPost(post: SonarFeedItem, comment: SonarFeedComment) {

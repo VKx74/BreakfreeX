@@ -98,3 +98,26 @@ export interface SonarFeedItemCommentLikeResponse {
     likesCount: number;
     commentId: number;
 }
+
+export enum SocialFeedReactionType {
+    Replay = 0,
+    Like = 1
+}
+
+export interface ReactionUserInfo extends SonarFeedUserInfo {
+}
+
+export interface ISocialFeedReaction {
+    postId: any;
+    time: Date;
+    read: boolean;
+    type: SocialFeedReactionType;
+    user: ReactionUserInfo;
+}
+
+export interface ISocialFeedLikeReaction extends ISocialFeedReaction {
+    commentId: any;
+}
+export interface ISocialFeedReplayReaction extends ISocialFeedReaction {
+    replayText: string;
+}

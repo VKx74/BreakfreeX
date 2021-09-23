@@ -59,3 +59,12 @@ export interface SonarFeedItemCommentLikeResponseDTO {
     likesCount: number;
     commentId: number;
 }
+
+export interface SonarFeedNotificationResponseDTO {
+    postId: number;
+    commentId: number;
+    reactor: SonarFeedUserInfoDTO;
+    replyComment: SonarFeedCommentDTO;
+    isLike: boolean;
+    time: number;
+}

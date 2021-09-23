@@ -21,7 +21,7 @@ import { LayoutStorageService } from '@app/services/layout-storage.service';
 import { SaveStateAction } from '@app/store/actions/platform.actions';
 import { Store } from "@ngrx/store";
 import { AppState } from '@app/store/reducer';
-import { SocialRealtimeNotificationsService } from 'modules/BreakfreeTradingSocial/services/realtime.notifications.service';
+import { SocialReactionsService } from 'modules/BreakfreeTradingSocial/services/social.reactions.service';
 
 @Component({
     selector: 'base-nav',
@@ -127,7 +127,7 @@ export class BaseNavComponent implements OnInit {
         private _route: ActivatedRoute,
         private _layoutStorageService: LayoutStorageService,
         private _store: Store<AppState>,
-        private _socialRealtimeNotificationsService: SocialRealtimeNotificationsService,
+        private _socialRealtimeNotificationsService: SocialReactionsService,
         private _inlineService: InlineService) {
         this.showStaticLogin = this._identityService.isGuestMode;
     }

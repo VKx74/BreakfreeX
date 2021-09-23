@@ -1,40 +1,11 @@
 import { Injectable } from "@angular/core";
-import { IInstrument } from "@app/models/common/instrument";
 import { IdentityService } from "@app/services/auth/identity.service";
-import { Subject, Subscription } from "rxjs";
-import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SonarFeedUserInfo } from "../models/sonar.feed.models";
-import { SonarFeedSocketService } from "./sonar.feed.socket.service";
-
-interface IInstrumentCache {
-    instrument: IInstrument;
-    time: number;
-}
-
-export enum SocialFeedReactionType {
-    Replay = 0,
-    Like = 1
-}
-
-export interface ReactionUserInfo extends SonarFeedUserInfo {
-}
-
-export interface ISocialFeedReaction {
-    postId: any;
-    time: Date;
-    read: boolean;
-    type: SocialFeedReactionType;
-    user: ReactionUserInfo;
-}
-
-export interface ISocialFeedLikeReaction extends ISocialFeedReaction {
-    commentId: any;
-}
-export interface ISocialFeedReplayReaction extends ISocialFeedReaction {
-    replayText: string;
-}
+import { Observable, of, Subject, Subscription } from "rxjs";
+import { ISocialFeedLikeReaction, ISocialFeedReaction, ISocialFeedReplayReaction, SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedReactionType, SonarFeedUserInfo } from "../models/sonar.feed.models";
+import { SonarFeedService } from "./sonar.feed.service";
 
 @Injectable()
-export class SocialRealtimeNotificationsService {
+export class SocialReactionsService {
     private _newReaction: Subject<ISocialFeedReaction> = new Subject<ISocialFeedReaction>();
     private _commentReactionSubscription: Subscription;
     private _commentAddedSubscription: Subscription;
@@ -44,9 +15,9 @@ export class SocialRealtimeNotificationsService {
         return this._newReaction;
     }
 
-    public get reactions(): ISocialFeedReaction[] {
-        return this._reactions.slice();
-    }
+    // public get reactions(): ISocialFeedReaction[] {
+    //     return this._reactions.slice();
+    // }
     
     public get unreadExists(): boolean {
         if (!this._reactions || !this._reactions.length) {
@@ -60,26 +31,34 @@ export class SocialRealtimeNotificationsService {
         }
     }
 
-    constructor(private _socketService: SonarFeedSocketService, private _identity: IdentityService) {
+    constructor(private _sonarFeedService: SonarFeedService, private _identity: IdentityService) {
 
-        this._commentReactionSubscription = this._socketService.commentReaction.subscribe((data: SocialFeedCommentReactionNotification) => {
+        this._commentReactionSubscription = this._sonarFeedService.onCommentReaction.subscribe((data: SocialFeedCommentReactionNotification) => {
             this._processCommentReaction(data);
         });
 
-        this._commentAddedSubscription = this._socketService.commentAdded.subscribe((data: SocialFeedCommentAddedNotification) => {
+        this._commentAddedSubscription = this._sonarFeedService.onCommentAdded.subscribe((data: SocialFeedCommentAddedNotification) => {
             this._processCommentAdded(data);
         });
 
-        this._socketService.open().subscribe(() => {
-            console.log("Sonar Feed Socket opened");
-        }, () => {
-            console.error("Sonar Feed Socket failed to open");
-        });
+        this._init();
     }
 
     setAsRead() {
         this._reactions.forEach((item) => {
             item.read = true;
+        });
+
+        this._sonarFeedService.setAsReadNotifications().subscribe();
+    }
+
+    getReactions(): Observable<ISocialFeedReaction[]> {
+        return of(this._reactions.slice());
+    }
+
+    private _init() {
+        this._sonarFeedService.getNotifications().subscribe((data: ISocialFeedReaction[]) => {
+            this._reactions = data || [];
         });
     }
 

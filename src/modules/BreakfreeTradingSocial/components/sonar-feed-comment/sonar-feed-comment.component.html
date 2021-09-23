@@ -74,6 +74,7 @@
                     (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
                     (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
                     (onEditComment)="editComment($event)" (onBanUser)="banUser($event)"
+                    (onCommentLikeDelete)="deleteLike($event)"
                     [expandedComments]="expandedComments" [isExpanded]="false"></sonar-feed-comment>
                 <div class="continue-thread" (click)="continueThread()">Continue this thread</div>
             </div>
@@ -86,6 +87,7 @@
                         (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
                         (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
                         (onEditComment)="editComment($event)" (onBanUser)="banUser($event)"
+                        (onCommentLikeDelete)="deleteLike($event)"
                         [expandedComments]="expandedComments" [isExpanded]="true"></sonar-feed-comment>
                 </div>
             </ng-container>

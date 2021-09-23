@@ -1,13 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LoadLayoutAction, OpenNewLayoutAction, SaveLayoutAsNewAction, SaveStateAction } from '@app/store/actions/platform.actions';
-import { Store } from "@ngrx/store";
-import { AppState } from '@app/store/reducer';
-import { LayoutStorageService } from '@app/services/layout-storage.service';
-import { ISocialFeedLikeReaction, ISocialFeedReaction, ISocialFeedReplayReaction, SocialFeedReactionType, SocialRealtimeNotificationsService } from 'modules/BreakfreeTradingSocial/services/realtime.notifications.service';
-import { SocialFeedModelConverter } from 'modules/BreakfreeTradingSocial/services/models.convertter';
-import { Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy } from '@angular/core';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { ISocialFeedLikeReaction, ISocialFeedReaction, ISocialFeedReplayReaction, SocialFeedReactionType } from 'modules/BreakfreeTradingSocial/models/sonar.feed.models';
+import { SocialFeedModelConverter } from 'modules/BreakfreeTradingSocial/services/models.convertter';
+import { SocialReactionsService } from 'modules/BreakfreeTradingSocial/services/social.reactions.service';
+import { takeUntil } from 'rxjs/operators';
 
 interface SocialNotification {
     isRead: boolean;
@@ -28,7 +24,7 @@ export class SocialNotificationsComponent  implements OnDestroy {
     
     public notifications: SocialNotification[] = [];
     
-    constructor(private _socialRealtimeNotificationsService: SocialRealtimeNotificationsService) {
+    constructor(private _socialRealtimeNotificationsService: SocialReactionsService) {
         this._setNotifications();
         this._socialRealtimeNotificationsService.newReaction.pipe(
             takeUntil(componentDestroyed(this))
@@ -47,10 +43,11 @@ export class SocialNotificationsComponent  implements OnDestroy {
 
     private _setNotifications() {
         this.notifications = [];
-        const reactions = this._socialRealtimeNotificationsService.reactions;
-        for (const reaction of reactions) {
-            this._addReaction(reaction);
-        }
+        this._socialRealtimeNotificationsService.getReactions().subscribe((reactions: ISocialFeedReaction[]) => {
+            for (const reaction of reactions) {
+                this._addReaction(reaction);
+            }
+        });
     }
 
     private _addReaction(reaction: ISocialFeedReaction) {
