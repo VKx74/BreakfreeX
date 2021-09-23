@@ -348,6 +348,10 @@
     filter: invert(1);
 }
 
+:host-context(body.Light-theme) .card-footer-buttons {
+    opacity:0.8;
+  
+    }
 
 @include themify($themes, true) {
     .sonar-card {
