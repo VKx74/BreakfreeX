@@ -9,7 +9,8 @@
 
             <div class="filters-and-search">
                 <div class="filters-holder" (click)="hideShowFilters()">
-                    <img class="widget-icon border-circle" src="/assets/img/bars-filter-solid.svg">Filters
+                   
+                    <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters
                 </div>
                 <input class="filters-search" placeholder="{{prevSearchText || 'Search Sonar'}}"
                     [(ngModel)]="searchText" (keyup)="searchTextInput($event)">
@@ -33,7 +34,7 @@
                     </mat-form-field>
                 </div>
                 <div class="filter-select crypto-form-unit">
-                    <div class="form-unit__label filter-label">Markets</div>
+                    <div class="form-unit__label filter-label">Market categories</div>
                     <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
                         <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedMarketTypes"
                             multiple>
@@ -44,7 +45,7 @@
                     </mat-form-field>
                 </div>
                 <div class="filter-select crypto-form-unit">
-                    <div class="form-unit__label filter-label">Setup</div>
+                    <div class="form-unit__label filter-label">Setups</div>
                     <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
                         <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedTradeTypes"
                             multiple>
