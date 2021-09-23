@@ -152,8 +152,7 @@ body.Dark-theme.thmFintatechDarkTheme {
     height: 30px;
     display: none;
   }
-  height: 28px;
-  margin: 0px !important;
+    
 }
 
 .navigation {
@@ -163,27 +162,19 @@ body.Dark-theme.thmFintatechDarkTheme {
   width: 100%;
   top: 0px;
   left: 0px;
-  height: 45px;
+  height: 44px;
 }
 
 .telegramframe {
   border: 0px !important;
 }
 
-.platform-container {
-  padding-top: 44px !important;
-}
 
 .sidebar-toggle-wrapper {
   position: absolute;
   z-index: 2;
   height: 17px !important;
   width: $sidebar-width !important;
-}
-
-.nav-top-row {
-  padding: 0px;
-  height: 45px !important;
 }
 
 .navigation .avatar {
@@ -390,9 +381,7 @@ lm_tab.bftn {
 .Light-theme .tcdToolbar-top {
   border-top: 1px solid #f2f2f2;
 }
-.Dark-theme {
-  border-top: 1px solid #f8f8f82e;
-}
+
 
 .Dark-theme input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
   border-left: 1px solid #06060d;
