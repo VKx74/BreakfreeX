@@ -10,7 +10,13 @@
                             [ngClass]="{'fas fa-arrow-up': side == 'Long', 'fas fa-arrow-down': side == 'Short'}"></i>
                         {{side}}
                     </div>
-                    <div class="hidden"> {{setup}}</div>
+                    <div class="tags-category-holder">
+                        <div class="tag-timeframe"><span>{{timeFrame}}</span></div>
+
+                        <!--  <div class="tag-setup"> <img class="widget-icon" src="/assets/img/chart-candlestick-solid.svg">
+                            <span>{{setup}}</span></div>
+                         <div class="tag-RTD-trend"><img class="widget-icon" src="/assets/img/chart-radar-solid.svg"> <span> Strong (110/80)</span></div>  -->
+                    </div>
                 </div>
 
                 <div class="header-center-part">
@@ -27,25 +33,19 @@
         </div>
 
     </div>
+
+   
+
     <div class="card-chart" #chartContainer [ngClass]="{'chart-selected': selected}" (click)="clickOnChart()">
         <sonar-chart [selected]="selected" [instrument]="instrument" [time]="time" [granularity]="granularity"
             [isVisible]="isVisible">
         </sonar-chart>
     </div>
 
-    <div class="tags-category-holder">
-        <div class="tag-setup"> <img class="widget-icon" src="/assets/img/chart-candlestick-solid.svg">
-            <span>{{setup}}</span></div>
-        <div class="tag-timeframe"><img class="widget-icon"
-                src="/assets/img/flux-capacitor-solid.svg"><span>{{timeFrame}}</span></div>
-        <!-- <div class="tag-RTD-trend"><img class="widget-icon" src="/assets/img/chart-radar-solid.svg"> <span> Strong (110/80)</span></div>  -->
-    </div>
-
+    
     <div class="card-footer">
         <div class="card-footer-buttons">
-            <div class="card-footer-view-button" (click)="viewOnChart()">
-                View chart
-            </div>
+        
             <div class="card-footer-like-button">
                 <div class="like-container" (click)="like()">
                     <i class="fa fa-thumbs-up" aria-hidden="true" *ngIf="hasMyLike; else nonActiveLike"></i>
@@ -54,6 +54,8 @@
                     </ng-template>
                     <!-- <span class="like-counter">{{likeCount}}</span> -->
                 </div>
+
+
                 <div class="rate-count">
                     {{likeCount - dislikeCount}}
                 </div>
@@ -65,14 +67,26 @@
                     <!-- <span class="dislike-counter">{{dislikeCount}}</span> -->
                 </div>
             </div>
+            
+            <div class="card-footer-view-button" (click)="viewOnChart()">
+                <img class="widget-icon" src="/assets/img/view.svg">
+                View
+            </div>
 
-            <div class="card-footer-follow-button"> <div class="favorite-icon " (click)="favorite()">
-                <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
-                <ng-template #notFavorite>
-                    <i class="fa fa-star-o" aria-hidden="true"></i>
-                </ng-template>
-            </div></div>
+
+            <div class="card-footer-follow-button"> 
+                <div class="favorite-icon " (click)="favorite()">
+              
+                 <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
+                    <ng-template #notFavorite>
+                        <i class="fa fa-star-o" aria-hidden="true"></i> 
+                    </ng-template>
+                  
+                    Follow
+            </div>
+        </div>
             <div class="card-footer-share-button" (click)="share()">
+                <img class="widget-icon" src="/assets/img/arrow-up-from-bracket-solid.svg">
                 Share
             </div>
         </div>
@@ -103,7 +117,7 @@
         </div>
         <!-- <mat-form-field class="crypto-input bft-form-input full-width"> -->
         <div class="card-left-comment-input">
-            <textarea class="crypto-textarea nborder comment-textarea" placeholder="Write a public comment..."
+            <textarea class="crypto-textarea nborder comment-textarea" placeholder="What are your thoughts?"
                 [(ngModel)]="comment" #textarea (keyup)="keyUpOnTextArea($event)"></textarea>
             <div class="send-button" [ngClass]="{'disabled': !comment || comment.length === 0}" (click)="sendComment()">
                 Send

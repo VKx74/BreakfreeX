@@ -2,18 +2,23 @@
     <ng-container *ngIf="hasAccess; else outOfAccess">
         <div class="sonar-feed-header" *ngIf="!isSingleCard">
 
-            <div class="pre-filter-header">
-                <div class="item-all">All</div>
-                <div class="item-favs">Following </div>
-            </div>
 
             <div class="filters-and-search">
-                <div class="filters-holder" (click)="hideShowFilters()">
-                    <img class="widget-icon border-circle" src="/assets/img/bars-filter-solid.svg">Filters
+
+                <div class="outside-search-holder"> 
+                       <input class="filters-search" placeholder="{{prevSearchText || 'Search Sonar'}}"
+                       [(ngModel)]="searchText" (keyup)="searchTextInput($event)">
+                       <div class="filters-search-icon" (click)="searchIconClick()"><i class="fa fa-search"></i></div>
                 </div>
-                <input class="filters-search" placeholder="{{prevSearchText || 'Search Sonar'}}"
-                    [(ngModel)]="searchText" (keyup)="searchTextInput($event)">
-                <div class="filters-search-icon" (click)="searchIconClick()"><i class="fa fa-search"></i></div>
+
+                <div class="outside-filters-holder">
+                       <div class="item-favs" ><i class="fa fa-star ng-star-inserted"></i> Following </div>
+
+                  <div class="filters-holder" (click)="hideShowFilters()">
+                    <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters</div>
+
+                </div>
+               
             </div>
 
 
@@ -33,7 +38,7 @@
                     </mat-form-field>
                 </div>
                 <div class="filter-select crypto-form-unit">
-                    <div class="form-unit__label filter-label">Markets</div>
+                    <div class="form-unit__label filter-label">Market categories</div>
                     <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
                         <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedMarketTypes"
                             multiple>
@@ -44,7 +49,7 @@
                     </mat-form-field>
                 </div>
                 <div class="filter-select crypto-form-unit">
-                    <div class="form-unit__label filter-label">Setup</div>
+                    <div class="form-unit__label filter-label">Setups</div>
                     <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
                         <mat-select (selectionChange)="filterChanged($event.value)" [(ngModel)]="selectedTradeTypes"
                             multiple>

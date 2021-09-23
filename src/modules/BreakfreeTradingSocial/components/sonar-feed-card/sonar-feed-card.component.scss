@@ -15,26 +15,33 @@
         height: fit-content;
         // cursor: pointer;
         border-radius: 15px;
-        font-size: 12px;
+        font-size: 11px;
         overflow: hidden;
     }
 
     .tags-category-holder {
         display: flex;
-        padding: 5px 5px;
+      
+    }
+
+    .tag-timeframe{
+        border-radius: 3px;
+        padding: 2px 4px;
+        font-weight: 700;
+        font-family: 'Open Sans';
+    
     }
 
     .tag-setup,
     .tag-timeframe,
     .tag-RTD-trend {
-        padding: 2px 4px;
+       
         border-radius: 3px;
         font-size: 10px;
         text-align: center;
         font-weight: 700;
         margin-right: 5px;
         display: flex;
-        align-items: center;
         align-content: center;
     }
 
@@ -47,13 +54,13 @@
         -webkit-filter: invert(1);
         filter: invert(1);
         opacity: 0.8;
+        margin-top:1px;
     }
 
     .card-header {
         display: flex;
-        padding: 8px;
         align-items: center;
-        padding: 5px 5px;
+        padding: 8px 8px;
         font-family: "Rubik Medium";
 
         .card-header-description {
@@ -75,12 +82,18 @@
         }
 
         .card-header-timestamp {
-            border-radius: 10px;
-            padding: 0px 4px;
-            font-weight: 700;
-            font-size: 10px;
+            padding: 2px 4px;
+            font-weight: 600;
+            font-size: 9px;
             align-items: center;
+            justify-content: right;
+            justify-self: right;
             display: flex;
+            flex: 1 0 auto;  //Fixes right alignment issueson ios
+            float: right;
+            text-align: right;
+            font-family: 'Open Sans';
+            opacity: 0.8;
         }
 
         // .card-header-timestamp,
@@ -138,10 +151,12 @@
         }
 
         .card-header-setup {
-            border-radius: 50px;
-            padding: 0px 4px;
+            border-radius: 3px;
+            padding: 2px 4px;
+            margin-right:5px;
             display: flex;
             font-weight: 700;
+            font-family: 'Open Sans';
             font-size: 10px;
             align-items: center;
             justify-content: left;
@@ -151,10 +166,15 @@
                 margin-right: 3px;
             }
 
-            .fa-arrow-up {
-                margin-top: -1px;
-            }
+           
         }
+    }
+
+    .card-header-setup.setup-long .fa {
+        margin-top: -1px !important;
+    }
+    .card-header-setup.setup-short .fa {
+        margin-top: 1px !important;
     }
 
     .card-chart {
@@ -167,6 +187,7 @@
     .chart-selected {
         outline: 1px solid lightblue;
         cursor: auto;
+        z-index: 105;
     }
 
     .card-footer {
@@ -174,17 +195,19 @@
 
         .card-footer-buttons {
             display: flex;
+            font-weight:700;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            border-top: 1px solid;
             border-bottom: 1px solid;
-            margin: 5px;
+            padding: 0px 0px 0px 5px;
 
             .like-button {
                 margin-left: 8px;
                 margin-right: 3px;
             }
+
+          
 
             .card-footer-like-button,
             .card-footer-share-button,
@@ -194,6 +217,10 @@
                 align-items: center;
                 justify-content: center;
                 height: 28px;
+                cursor: pointer;
+                border-radius: 2px;
+                margin: 0 4px 0 0;
+                transition-duration: 0.22s;
             }
 
             .card-footer-share-button,
@@ -233,7 +260,7 @@
 
         .card-left-comment-input {
             display: flex;
-            margin-right: 10px;
+           
 
             textarea {
                 height: 28px;
@@ -265,19 +292,20 @@
         justify-content: center;
         align-items: center;
         padding: 0px 10px;
+        border-radius:2px;
     }
 
     .like-container {
-        margin-right: 5px;
+        margin-right: 3px;
         .like-counter {
-            margin-left: 5px;
+            margin-left: 3px;
         }
     }
 
     .dislike-container {
-        margin-left: 5px;
+        margin-left: 3px;
         .dislike-counter {
-            margin-left: 5px;
+            margin-left: 3px;
         }
     }
 
@@ -330,8 +358,18 @@
     //     border-color: themed("sonar-feed-border") !important;
     // }
 
+    .card-footer-view-button img.widget-icon, .card-footer-share-button img.widget-icon {
+        width: 12px;
+        margin-right: 7px;
+         -webkit-filter: invert(1);
+            filter: invert(1);
+    }
+    
+    
+
     .card-footer-share-button,
     .card-footer-view-button,
+    .card-footer-follow-button,
     .like-container,
     .dislike-container {
         &:hover {
@@ -364,7 +402,12 @@
     .tag-timeframe,
     .tag-RTD-trend {
         background-color: themed("sonar-feed-tag");
-        box-shadow: 0px 1px 0px 0px themed("sonar-feed-tag-shadow");
+    }
+
+    .tag-timeframe
+    {
+        color: themed("sonar-timeframe-tag-color");
+
     }
 
     .setup-short {
