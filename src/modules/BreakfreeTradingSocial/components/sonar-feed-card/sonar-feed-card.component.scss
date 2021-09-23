@@ -278,7 +278,7 @@
                 margin: 5px 5px 5px 0px;
                 padding: 0px 10px;
                 border-radius: 0px 12px 12px 0px;
-                font-weight: 500;
+                font-weight: 700;
                 cursor: pointer;
             }
         }
@@ -330,9 +330,10 @@
 }
 
 .card-footer img.widget-icon {
-    width: 12px;
-    margin-right: 7px;
+    width: 10px;
+    margin-right: 5px;
     transition:all 0.22s;
+    margin-top: -1px;
 }
 
 :host-context(body.Dark-theme) .card-footer-share-button img.widget-icon {
@@ -350,7 +351,7 @@
 
 @include themify($themes, true) {
     .sonar-card {
-        background-color: themed("tableBorders");
+        background-color: themed("sonar-card-bg");
         color: themed("valueTextColor");
     }
 
@@ -363,7 +364,7 @@
     }
 
     .sonar-card {
-        border: 1px solid transparent;
+        border: 1px solid themed("sonar-card-bg-border");
         transition-duration: 0.22s;
     }
 

@@ -6,8 +6,8 @@ $LightTheme: (
         gutterColor: #e0e3eb,
         topToolbarSeparator: #4e4e50,
 
-        tradescoreitembg: #414142,
-        tradescoreitembTextColor: #ffffffde,
+        tradescoreitembg: #ddd,
+        tradescoreitembTextColor: #070709,
         tradescoreholderbg:#f3f3f3,
         tradescoreSecondColor: #2e2e38,
         tradescoretext: #3b3c40,
@@ -60,9 +60,9 @@ $LightTheme: (
         card-title: #6a6a6a,
         card-background-color: #edeff2,
 
-        sonar-feed-border: #fafafa,
+        sonar-feed-border: #ddd,
         sonar-feed-post-button: #e2e4e6,
-        sonar-feed-header: #f3f3f3,
+        sonar-feed-header: #f4f4f4,
         sonar-feed-tag: #c9cbce,
         sonar-feed-tag-shadow: #00000030,
         comment-wrapper-bg: #d9dadc,
@@ -70,6 +70,11 @@ $LightTheme: (
         new-search-field-bg: #ffffff,
         new-sort-color-bg: #353638,
         provider-text-color: #2c343e,
-        sonar-timeframe-tag-color: #a26a36, 
-        sonar-timeframe-tag-bg: #e1e1e1, 
+        sonar-timeframe-tag-color: #ae7146, 
+        sonar-timeframe-tag-bg: #dddddd, 
+
+        sonar-card-bg: #f4f4f4,
+        sonar-card-bg-border: #ddd,
+
+       
 )
