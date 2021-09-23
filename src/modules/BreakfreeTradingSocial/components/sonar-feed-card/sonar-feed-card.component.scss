@@ -89,6 +89,7 @@
             justify-content: right;
             justify-self: right;
             display: flex;
+            flex: 1 0 auto;  //Fixes right alignment issueson ios
             float: right;
             text-align: right;
             font-family: 'Open Sans';
@@ -295,16 +296,16 @@
     }
 
     .like-container {
-        margin-right: 5px;
+        margin-right: 3px;
         .like-counter {
-            margin-left: 5px;
+            margin-left: 3px;
         }
     }
 
     .dislike-container {
-        margin-left: 5px;
+        margin-left: 3px;
         .dislike-counter {
-            margin-left: 5px;
+            margin-left: 3px;
         }
     }
 

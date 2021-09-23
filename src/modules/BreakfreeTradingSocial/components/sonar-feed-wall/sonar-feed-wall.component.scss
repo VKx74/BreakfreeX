@@ -206,16 +206,7 @@
         }
     }
 
-    //Hide scroll-bar
-    .cards-container {
-        -ms-overflow-style: none; /* for Internet Explorer, Edge */
-        scrollbar-width: none; /* for Firefox */
-        overflow-y: scroll; 
-    }
-    
-    .cards-container::-webkit-scrollbar {
-        display: none; /* for Chrome, Safari, and Opera */
-    }
+
 
     .cards-container {
         display: flex;
