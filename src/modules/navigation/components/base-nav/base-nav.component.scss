@@ -11,10 +11,25 @@
   nav-section:hover {
     background: #5655554d;
     border-radius: 5px;
-    padding: 5px;
+    
   }
   nav-section {
-    padding: 5px;
+    margin:0px 5px !important;
+  }
+  .insidecorrector{
+    display: flex;
+    width: 33px;
+    height: 33px;
+    justify-content: center;
+    align-items: center;
+  }
+  .insidecorrector.avatarelement{
+    display: flex;
+    justify-content: center;
+    width: 120px;
+    height: 33px;
+    justify-content: center;
+    align-items: center;
   }
 
   span.dashb {
@@ -22,6 +37,12 @@
     font-weight: 700;
     padding: 10px 0px;
   }
+
+  .xp-nav-container span img {
+    height: 14px;
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
 
   .flex.BFTN {
     padding: 10px;
@@ -37,16 +58,13 @@
 
   .settings-button {
     width: 34px;
-    height: 77%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
     color: white;
     cursor: pointer;
-    padding: 10px 0px;
     margin-right: 6px;
-    margin-left: 6px;
   }
 
   .settings-button:hover {
@@ -114,11 +132,10 @@
     font-size: 13px;
     cursor: pointer;
     color: #ffffffd1;
-    padding: 10px 0px;
     .theme-title {
       background-color: #27282b;
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
 
       .fa {
@@ -201,12 +218,17 @@
     }
   }
 
+  .autosave-container  {
+  font-size:14px;
+  }
+
   .notifications {
     cursor: pointer;
     color: white;
 
     .bell-image {
       position: relative;
+      font-size:14px;
       .new-notifications {
         position: absolute;
         background-color: #cc3d3d;
@@ -335,7 +357,7 @@
 
 .nav-top-row {
   padding: 0;
-  height: 57px;
+  height: 44px;
 }
 
 .z-index-2 {
@@ -407,8 +429,6 @@ img.mobileshow {
 .navigation {
   @include themify($themes, true) {
     background-color: themed("appPanelColor");
-    border-bottom: 1px solid;
-    border-bottom-color: themed("gutterColor");
 
     .logo__img {
       color: themed("navigationIconColor");
