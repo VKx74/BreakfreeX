@@ -317,6 +317,11 @@ export class IdentityService {
             return false;
         }
 
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial) {
+            return true;
+        }
+
         if (level < this.basicLevel) {
             return false;
         }
@@ -344,7 +349,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Pro"];
+        // this.subscriptions = ["Discovery"];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {

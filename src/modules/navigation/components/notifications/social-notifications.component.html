@@ -1,7 +1,7 @@
 <div class="notifications" *ngIf="notifications && notifications.length; else noNotification">
     <div class="notifications-header">Notifications</div>
     <div class="notification" *ngFor="let notification of notifications">
-        <div class="columns">
+        <div class="columns" (click)="openPost(notification)">
             <div class="avatar">
                 <name-avatar [name]="notification.userName" [src]="notification.userAvatarId"></name-avatar>
             </div>

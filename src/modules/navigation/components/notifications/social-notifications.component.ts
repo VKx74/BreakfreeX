@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
+import { AppRoutes } from '@app/app.routes';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ISocialFeedLikeReaction, ISocialFeedReaction, ISocialFeedReplayReaction, SocialFeedReactionType } from 'modules/BreakfreeTradingSocial/models/sonar.feed.models';
 import { SocialFeedModelConverter } from 'modules/BreakfreeTradingSocial/services/models.convertter';
@@ -13,6 +14,7 @@ interface SocialNotification {
     userLevel: string;
     levelName: string;
     text: string;
+    postId: any;
 }
 
 @Component({
@@ -41,6 +43,11 @@ export class SocialNotificationsComponent  implements OnDestroy {
     ngAfterViewInit() {
     }
 
+    openPost(reaction: ISocialFeedReaction) {
+        const host = `${window.location.origin}/#/${AppRoutes.Platform}/${AppRoutes.SocialFeed}/${reaction.postId}`;
+        window.open(host, '_blank').focus();
+    }
+
     private _setNotifications() {
         this.notifications = [];
         this._socialRealtimeNotificationsService.getReactions().subscribe((reactions: ISocialFeedReaction[]) => {
@@ -61,6 +68,7 @@ export class SocialNotificationsComponent  implements OnDestroy {
                 levelName: likeReaction.user.levelName,
                 userLevel: likeReaction.user.level,
                 text: "Liked your comment",
+                postId: likeReaction.postId
 
             });
         } else if (reaction.type === SocialFeedReactionType.Replay) {
@@ -76,7 +84,8 @@ export class SocialNotificationsComponent  implements OnDestroy {
                 userName: likeReaction.user.name,
                 levelName: likeReaction.user.levelName,
                 userLevel: likeReaction.user.level,
-                text: `Replied "${replyText}" to your comment`
+                text: `Replied "${replyText}" to your comment`,
+                postId: likeReaction.postId
             });
         }
     }
