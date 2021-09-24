@@ -132,7 +132,7 @@ export class SonarFeedWallComponent implements OnInit {
 
     @Input() set cardId(value: any) {
         this._cardId = value;
-    } 
+    }
     public searchText: string;
     public prevSearchText: string;
 
@@ -141,7 +141,8 @@ export class SonarFeedWallComponent implements OnInit {
     public initialized: boolean;
     public isSingleCardAllowed: boolean = true;
 
-    public allowedTimeFrames: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public allTimeFrames: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public allowedTimeFrames: TimeFrames[] = [];
     public selectedTimeFrames: TimeFrames[];
     public prevSelectedTimeFrames: TimeFrames[];
 
@@ -149,8 +150,9 @@ export class SonarFeedWallComponent implements OnInit {
     public selectedTradeTypes: TradeTypes[];
     public prevSelectedTradeTypes: TradeTypes[];
 
-    public allowedMarketTypes: SonarFeedMarketTypes[] = [SonarFeedMarketTypes.MajorForex, SonarFeedMarketTypes.ForexMinors, SonarFeedMarketTypes.ForexExotic,
+    public allMarketTypes: SonarFeedMarketTypes[] = [SonarFeedMarketTypes.MajorForex, SonarFeedMarketTypes.ForexMinors, SonarFeedMarketTypes.ForexExotic,
     SonarFeedMarketTypes.Equities, SonarFeedMarketTypes.Indices, SonarFeedMarketTypes.Metals, SonarFeedMarketTypes.Commodities, SonarFeedMarketTypes.Bonds, SonarFeedMarketTypes.Crypto];
+    public allowedMarketTypes: SonarFeedMarketTypes[] = [];
     public selectedMarketTypes: SonarFeedMarketTypes[];
     public prevSelectedMarketTypes: SonarFeedMarketTypes[];
 
@@ -170,15 +172,15 @@ export class SonarFeedWallComponent implements OnInit {
 
     public get selectedCard(): SonarFeedCardVM {
         return this._selectedCard;
-    } 
-    
+    }
+
     public get hasSubscription(): boolean {
         return this._identityService.isAuthorizedCustomer;
-    } 
+    }
 
     public get hasAccess(): boolean {
         return this.hasSubscription && this.isSingleCardAllowed;
-    } 
+    }
 
     constructor(protected _identityService: IdentityService,
         protected _sonarFeedService: SonarFeedService,
@@ -197,15 +199,11 @@ export class SonarFeedWallComponent implements OnInit {
             }
         }, 300);
 
-        this.selectedTimeFrames = this.allowedTimeFrames.slice();
-        this.selectedMarketTypes = this.allowedMarketTypes.slice();
-        this.selectedTradeTypes = this.allowedTradeTypes.slice();
-
-        if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
-            this._loadCount = 150;
-        } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
-            this._loadCount = 200;
-        }
+        // if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
+        //     this._loadCount = 50;
+        // } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
+        //     this._loadCount = 50;
+        // }
     }
 
     ngOnInit() {
@@ -218,18 +216,16 @@ export class SonarFeedWallComponent implements OnInit {
             return;
         }
 
-        if (!this.isSingleCard) {
-            if (this.state) {
-                this._mapToSettings(this.state);
-                this._filteringParameters = this._mapToTilters();
-            }
-        }
-
         this._missionsInitializedSubscription = this._tradingProfileService.MissionsInitialized.subscribe((isInitialized) => {
             if (isInitialized && !this.initialized) {
+                this._setAllowedFilters();
                 if (this.isSingleCard && this._cardId) {
                     this._loadItem();
                 } else {
+                    if (this.state) {
+                        this._mapToSettings(this.state);
+                        this._filteringParameters = this._mapToTilters();
+                    }
                     this._initData();
                 }
             }
@@ -301,7 +297,7 @@ export class SonarFeedWallComponent implements OnInit {
             this._commentRemovedSubscription.unsubscribe();
             this._commentRemovedSubscription = null;
         }
-        
+
         if (this._missionsInitializedSubscription) {
             this._missionsInitializedSubscription.unsubscribe();
             this._missionsInitializedSubscription = null;
@@ -557,6 +553,12 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     filterChanged(data: any) {
+        if (!this.selectedTimeFrames.length || !this.selectedTradeTypes.length || !this.selectedMarketTypes.length) {
+            this._filterChanged = false;
+            this._alertService.warning("Invalid filtering parameters, please specify at least one filtering item");
+            return;
+        }
+
         const filter = this._mapToTilters();
         this._filterChanged = !this._isFiltersSame(this._filteringParameters, filter);
     }
@@ -575,12 +577,12 @@ export class SonarFeedWallComponent implements OnInit {
         this.searchText = this.prevSearchText;
         this._filterChanged = false;
         this._isFilterVisible = false;
-    } 
-    
+    }
+
     hideShowFilters() {
         this._isFilterVisible = !this._isFilterVisible;
     }
-    
+
     useFollowFilter() {
         this.isFollowFilterUsed = !this.isFollowFilterUsed;
         this.applyFilters();
@@ -590,8 +592,8 @@ export class SonarFeedWallComponent implements OnInit {
         if (data.code === "Enter" && !data.shiftKey) {
             this.applyFilters();
         }
-    } 
-    
+    }
+
     searchIconClick() {
         if (this.prevSearchText !== this.searchText) {
             this.applyFilters();
@@ -600,6 +602,69 @@ export class SonarFeedWallComponent implements OnInit {
 
     processCheckout() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+    }
+
+
+    public isMarketTypeAllowed(marketType: ESonarFeedMarketTypes) {
+        if (this._identityService.subscriptionType === SubscriptionType.Starter || this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            if (marketType === ESonarFeedMarketTypes.MajorForex ||
+                marketType === ESonarFeedMarketTypes.ForexMinors ||
+                marketType === ESonarFeedMarketTypes.ForexExotic) {
+                return true;
+            }
+
+            if (marketType === ESonarFeedMarketTypes.Metals && this._identityService.subscriptionType === SubscriptionType.Discovery) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+    
+    public isTimeFrameAllowed(granularity: number) {
+        const is15MinAllowedByLevel = this._identityService.is15MinAllowedByLevel(this._tradingProfileService.level);
+        const isHourAllowedByLevel = this._identityService.isHourAllowedByLevel(this._tradingProfileService.level);
+        const is4HourAllowed = this._identityService.is4HourAllowed();
+
+        if (is15MinAllowedByLevel && isHourAllowedByLevel && is4HourAllowed) {
+            return true;
+        }
+
+        const hour4G = this._timeframeToGranularity(TimeFrames.Hour4);
+        const hour1G = this._timeframeToGranularity(TimeFrames.Hour1);
+        const min15G = this._timeframeToGranularity(TimeFrames.Min15);
+
+        if (granularity === hour4G && !is4HourAllowed) {
+            return false;
+        } 
+        if (granularity === hour1G && !isHourAllowedByLevel) {
+            return false;
+        } 
+        if (granularity === min15G && !is15MinAllowedByLevel) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private _setAllowedFilters() {
+        for (const tf of this.allTimeFrames) {
+            if (this.isTimeFrameAllowed(this._timeframeToGranularity(tf))) {
+                this.allowedTimeFrames.push(tf);
+            }
+        }
+        
+        for (const type of this.allMarketTypes) {
+            if (this.isMarketTypeAllowed(this._mapSetupTypesToFilter(type))) {
+                this.allowedMarketTypes.push(type);
+            }
+        }
+
+        this.selectedTimeFrames = this.allowedTimeFrames.slice();
+        this.selectedMarketTypes = this.allowedMarketTypes.slice();
+        this.selectedTradeTypes = this.allowedTradeTypes.slice();
     }
 
     private _scrollToTop() {
@@ -616,8 +681,8 @@ export class SonarFeedWallComponent implements OnInit {
             this.loading = false;
             this._refreshNeeded = true;
         });
-    } 
-    
+    }
+
     private _banUser(userId: any, card: SonarFeedCardVM) {
         this.loading = true;
         this._sonarFeedService.blockUser(userId).subscribe(() => {
@@ -695,7 +760,7 @@ export class SonarFeedWallComponent implements OnInit {
         this.prevSearchText = this.searchText;
 
         this._filterChanged = false;
-        this._sonarFeedService.getItems(this._loadCount, this._filteringParameters, this.searchText).subscribe((data: SonarFeedItem[]) => {
+        this._sonarFeedService.getItems(this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText).subscribe((data: SonarFeedItem[]) => {
 
             this.initialized = true;
             this.loading = false;
@@ -728,6 +793,103 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
+    private _setDefaultMarketTypeLimitations(settings: ISonarSetupFilters) {
+        settings.type = [];
+        settings.type.push(ESonarFeedMarketTypes.MajorForex);
+        settings.type.push(ESonarFeedMarketTypes.ForexMinors);
+        settings.type.push(ESonarFeedMarketTypes.ForexExotic);
+        if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            settings.type.push(ESonarFeedMarketTypes.Metals);
+        }
+    }
+
+    private _setDefaultTimeFrameLimitations(settings: ISonarSetupFilters) {
+        const dailyG = this._timeframeToGranularity(TimeFrames.Day);
+        const hour4G = this._timeframeToGranularity(TimeFrames.Hour4);
+        const hour1G = this._timeframeToGranularity(TimeFrames.Hour1);
+        const min15G = this._timeframeToGranularity(TimeFrames.Min15);
+
+        settings.granularity = [];
+        settings.granularity.push(dailyG);
+        
+        if (this.isTimeFrameAllowed(hour4G)) {
+            settings.granularity.push(hour4G);
+        }
+        if (this.isTimeFrameAllowed(hour1G)) {
+            settings.granularity.push(hour1G);
+        }
+        if (this.isTimeFrameAllowed(min15G)) {
+            settings.granularity.push(min15G);
+        }
+    }
+
+    private _adjustFilterinfParametersDependToSubscriptions(): ISonarSetupFilters {
+        const settings: ISonarSetupFilters = this._filteringParameters ? JSON.parse(JSON.stringify(this._filteringParameters)) : {};
+
+        if (this._identityService.subscriptionType === SubscriptionType.Starter || this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            if (!settings.type || !settings.type.length) {
+                this._setDefaultMarketTypeLimitations(settings);
+            } else {
+                for (let i = 0; i < settings.type.length; i++) {
+                    if (this.isMarketTypeAllowed(settings.type[i])) {
+                        continue;
+                    }
+
+                    settings.type.splice(i, 1);
+                    i--;
+                }
+
+                if (!settings.type || !settings.type.length) {
+                    this._setDefaultMarketTypeLimitations(settings);
+                }
+            }
+        }
+
+        const is15MinAllowedByLevel = this._identityService.is15MinAllowedByLevel(this._tradingProfileService.level);
+        const isHourAllowedByLevel = this._identityService.isHourAllowedByLevel(this._tradingProfileService.level);
+        const is4HourAllowed = this._identityService.is4HourAllowed();
+
+        if (!is15MinAllowedByLevel || !isHourAllowedByLevel || !is4HourAllowed) {
+
+            if (!settings.granularity || !settings.granularity.length) {
+                this._setDefaultTimeFrameLimitations(settings);
+            } else {
+
+                const hour4G = this._timeframeToGranularity(TimeFrames.Hour4);
+                const hour1G = this._timeframeToGranularity(TimeFrames.Hour1);
+                const min15G = this._timeframeToGranularity(TimeFrames.Min15);
+
+                if (!is4HourAllowed) {
+                    const index = settings.granularity.indexOf(hour4G);
+                    if (index !== -1) {
+                        settings.granularity.splice(index, 1);
+                    }
+                }
+
+                if (!isHourAllowedByLevel) {
+                    const index = settings.granularity.indexOf(hour1G);
+                    if (index !== -1) {
+                        settings.granularity.splice(index, 1);
+                    }
+                }
+
+                if (!is15MinAllowedByLevel) {
+                    const index = settings.granularity.indexOf(min15G);
+                    if (index !== -1) {
+                        settings.granularity.splice(index, 1);
+                    }
+                }
+            }
+
+            if (!settings.granularity || !settings.granularity.length) {
+                this._setDefaultTimeFrameLimitations(settings);
+            }
+
+        }
+
+        return settings;
+    }
+
     private _loadItem() {
         this.loading = true;
         this.cards = [];
@@ -749,7 +911,7 @@ export class SonarFeedWallComponent implements OnInit {
     private _loadMore() {
         this.loading = true;
         this._loadingMore = true;
-        this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._filteringParameters, this.searchText).subscribe((data: SonarFeedItem[]) => {
+        this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText).subscribe((data: SonarFeedItem[]) => {
 
             this._loadingMore = false;
             this.loading = false;
@@ -1096,28 +1258,30 @@ export class SonarFeedWallComponent implements OnInit {
     // #region Filters
 
     private _isFitCardCurrentFilters(item: SonarFeedItem): boolean {
-        if (!this._filteringParameters) {
+        const parameters = this._adjustFilterinfParametersDependToSubscriptions();
+
+        if (!parameters) {
             return true;
         }
 
-        if (this._filteringParameters.granularity && this._filteringParameters.granularity.length) {
-            const isGranularityAllowed = this._filteringParameters.granularity.indexOf(item.granularity) !== -1;
+        if (parameters.granularity && parameters.granularity.length) {
+            const isGranularityAllowed = parameters.granularity.indexOf(item.granularity) !== -1;
             if (!isGranularityAllowed) {
                 return false;
             }
         }
 
-        if (this._filteringParameters.setup && this._filteringParameters.setup.length) {
-            const isSetupAllowed = this._filteringParameters.setup.indexOf(this._mapSetupType(item.type)) !== -1;
+        if (parameters.setup && parameters.setup.length) {
+            const isSetupAllowed = parameters.setup.indexOf(this._mapSetupType(item.type)) !== -1;
             if (!isSetupAllowed) {
                 return false;
             }
         }
 
-        if (this._filteringParameters.type && this._filteringParameters.type.length) {
+        if (parameters.type && parameters.type.length) {
             const marketType = this._mapMarketType(item.symbol, item.exchange);
             if (marketType) {
-                const isTypeAllowed = this._filteringParameters.type.indexOf(marketType) !== -1;
+                const isTypeAllowed = parameters.type.indexOf(marketType) !== -1;
                 if (!isTypeAllowed) {
                     return false;
                 }
@@ -1129,10 +1293,6 @@ export class SonarFeedWallComponent implements OnInit {
             if (!searchTextExists) {
                 return false;
             }
-        }
-
-        if (this._filteringParameters.granularity) {
-            return false;
         }
 
         return true;
@@ -1334,41 +1494,13 @@ export class SonarFeedWallComponent implements OnInit {
 
     private _isCardAllowed(item: SonarFeedItem) {
         const granularity = item.granularity;
-
-        if (granularity <= 60 * 15) {
-            if (!this._identityService.is15MinAllowed()) {
-                return false;
-            }
-            if (!this._identityService.is15MinAllowedByLevel(this._tradingProfileService.level)) {
-                return false;
-            }
-        } else if (granularity <= 60 * 60 * 4) {
-            if (!this._identityService.isHourAllowed()) {
-                return false;
-            }
-
-            if (granularity <= 60 * 60) {
-                if (!this._identityService.isHourAllowedByLevel(this._tradingProfileService.level)) {
-                    return false;
-                }
-            }
+        if (!this.isTimeFrameAllowed(granularity)) {
+            return false;
         }
 
         const marketType = this._mapMarketType(item.symbol, item.exchange);
-
-        if (this._identityService.subscriptionType === SubscriptionType.Starter) {
-            if (marketType !== ESonarFeedMarketTypes.MajorForex && 
-                marketType !== ESonarFeedMarketTypes.ForexMinors && 
-                marketType !== ESonarFeedMarketTypes.ForexExotic) {
-                    return false;
-                }
-        } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
-            if (marketType !== ESonarFeedMarketTypes.MajorForex && 
-                marketType !== ESonarFeedMarketTypes.ForexMinors && 
-                marketType !== ESonarFeedMarketTypes.ForexExotic &&
-                marketType !== ESonarFeedMarketTypes.Metals) {
-                    return false;
-                }
+        if (!this.isMarketTypeAllowed(marketType)) {
+            return false;
         }
 
         return true;

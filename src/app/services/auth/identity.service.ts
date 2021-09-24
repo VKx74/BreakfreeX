@@ -291,6 +291,20 @@ export class IdentityService {
 
         return false;
     }
+    
+    is4HourAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial ||
+            this.subscriptionType === SubscriptionType.Discovery) {
+            return true;
+        }
+
+        return false;
+    }
 
     is15MinAllowedByLevel(level: number): boolean {
         if (this.isAdmin) {
@@ -349,7 +363,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Starter"];
+        // this.subscriptions = ["Pro"];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {

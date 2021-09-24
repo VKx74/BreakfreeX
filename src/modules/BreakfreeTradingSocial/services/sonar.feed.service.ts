@@ -11,7 +11,7 @@ import { SonarFeedSocketService } from "./sonar.feed.socket.service";
 export enum ESonarFeedMarketTypes {
     MajorForex = "MajorForex",
     ForexMinors = "ForexMinors",
-    ForexExotic = "ForexExotic",
+    ForexExotic = "ForexExotics",
     Metals = "Metals",
     Indices = "Indices",
     Equities = "Equities",
