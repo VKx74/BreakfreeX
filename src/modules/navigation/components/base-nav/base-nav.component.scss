@@ -44,6 +44,10 @@
     filter: invert(1);
 }
 
+.xp-nav-container .dashb img {
+  margin-top: -3px;
+}
+
   .flex.BFTN {
     padding: 10px;
     margin-left: 5px;
@@ -241,9 +245,12 @@
   }
 }
 
-@media (max-width: 740px) {
+@media (max-width: 425px) {
   span.email {
     display: none !important;
+  }
+  .insidecorrector.avatarelement{
+  width: 80px !important;
   }
 }
 
@@ -399,6 +406,13 @@
     display: block;
   }
   .desktopshow {
+    display: none !important;
+  }
+}
+
+@media (max-width: 350px) {
+
+  .lightswitch {
     display: none !important;
   }
 }
