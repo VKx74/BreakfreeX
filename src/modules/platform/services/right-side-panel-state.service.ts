@@ -7,7 +7,7 @@ export class RightSidePanelState {
 }
 
 export enum Components {
-    Sonar = "Sonar",
+    // Sonar = "Sonar",
     SonarFeed = "Sonar Feed",
     Watchlist = "Watchlist",
     Alerts = "Alerts",
@@ -37,7 +37,7 @@ export class RightSidePanelStateService {
     static GetDefaultState(component?: Components): RightSidePanelState {
         return {
             widgetState: {},
-            component: component || Components.Sonar
+            component: component || Components.SonarFeed
         };
     }
 
@@ -76,7 +76,7 @@ export class RightSidePanelStateService {
         }
 
         if (this._rightSidePanelState.component === Components.Backtest) {
-            return Components.Sonar;
+            return Components.Academy;
         }
 
         return this._rightSidePanelState.component;

@@ -180,6 +180,8 @@ body.Dark-theme.thmFintatechDarkTheme {
 .navigation .avatar {
   width: 22px !important;
   height: 22px !important;
+  min-width: 22px;
+  min-height: 22px;
 }
 
 .navigation .avatar-wrapper img.rounded {

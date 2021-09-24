@@ -28,7 +28,7 @@ export class RightPanelComponent implements OnInit {
     protected _panelFullScreenSize: number = 768;
 
     public Components = Components;
-    public SelectedComponent: Components = Components.Sonar;
+    public SelectedComponent: Components = Components.SonarFeed;
 
     @Input() isCollapsed: boolean = false;
     @Output() isCollapsedChange = new EventEmitter<boolean>();
@@ -91,11 +91,16 @@ export class RightPanelComponent implements OnInit {
             if (!this._rightSidePanelStateService.isInitialized) {
                 return;
             }
+
             const savedComponent = this._rightSidePanelStateService.getActiveComponent();
+
+            // debugger
+
             if (savedComponent && savedComponent !== this.SelectedComponent) {
-                this.SelectedComponent = savedComponent;
+                const isExist =  Object.getOwnPropertyNames(Components).indexOf(savedComponent) !== -1;
+                this.SelectedComponent = isExist ? savedComponent : Components.SonarFeed;
             } else {
-                this.SelectedComponent = Components.Sonar;
+                this.SelectedComponent = Components.SonarFeed;
             }
 
             this._isInitializedSubscription.unsubscribe();

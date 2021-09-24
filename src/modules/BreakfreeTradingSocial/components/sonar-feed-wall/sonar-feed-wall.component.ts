@@ -173,7 +173,7 @@ export class SonarFeedWallComponent implements OnInit {
     } 
     
     public get hasSubscription(): boolean {
-        return this._identityService.isGuestMode || this._identityService.isAuthorizedCustomer;
+        return this._identityService.isAuthorizedCustomer;
     } 
 
     public get hasAccess(): boolean {
