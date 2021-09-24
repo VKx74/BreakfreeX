@@ -71,7 +71,7 @@ export class InstrumentCacheService {
         const timeDiff = new Date().getTime() - cacheObject.time;
         const timeDiffInHours = timeDiff / 1000 / 60 / 60;
 
-        if (timeDiffInHours > 48) {
+        if (timeDiffInHours > (24 * 5)) {
             localStorage.removeItem(key);
             return null;
         }

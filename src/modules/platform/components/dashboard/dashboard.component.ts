@@ -281,7 +281,6 @@ export class DashboardComponent {
             .pipe(takeUntil(componentDestroyed(this)))
             .subscribe({
                 next: (parent) => {
-                    // debugger
                     // this.setUpComponentSelectorDialog(parent);
                     this.addChartComponent(parent);
                 }
@@ -546,13 +545,13 @@ export class DashboardComponent {
         if (action) {
             const instrument = action.data.instrument;
             const timeInterval = (action.data.timeframe as number) * 1000;
-            this._layoutManager.addComponent({
-                layoutItemName: "chart",
-                state: {
+            this._layoutManager.layout.addComponentAsColumn(
+                "chart",
+                {
                     instrument: instrument,
                     timeFrame: TradingChartDesigner.TimeFrame.intervalTimeFrame(timeInterval)
                 }
-            });
+            );
         }
     }
 

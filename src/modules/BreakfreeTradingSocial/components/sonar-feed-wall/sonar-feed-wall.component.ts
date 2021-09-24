@@ -202,9 +202,9 @@ export class SonarFeedWallComponent implements OnInit {
         this.selectedTradeTypes = this.allowedTradeTypes.slice();
 
         if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
-            this._loadCount = 100;
-        } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
             this._loadCount = 150;
+        } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
+            this._loadCount = 200;
         }
     }
 
@@ -258,7 +258,7 @@ export class SonarFeedWallComponent implements OnInit {
         this._itemAddedSubscription = this._sonarFeedService.onPostAdded.subscribe((_: SonarFeedItem) => {
             if (!this.isSingleCard) {
                 const isFitFilters = this._isFitCardCurrentFilters(_);
-                const isInAccess = this._isCardAllowed(_.granularity);
+                const isInAccess = this._isCardAllowed(_);
                 if (isFitFilters && isInAccess) {
                     this.addItem(_);
                 }
@@ -732,7 +732,7 @@ export class SonarFeedWallComponent implements OnInit {
         this.loading = true;
         this.cards = [];
         this._sonarFeedService.getItem(this._cardId).subscribe((data: SonarFeedItem) => {
-            this.isSingleCardAllowed = this._isCardAllowed(data.granularity);
+            this.isSingleCardAllowed = this._isCardAllowed(data);
             if (this.isSingleCardAllowed) {
                 this._renderCards([data]);
             }
@@ -1332,7 +1332,9 @@ export class SonarFeedWallComponent implements OnInit {
 
     //#region Access restrictions
 
-    private _isCardAllowed(granularity: number) {
+    private _isCardAllowed(item: SonarFeedItem) {
+        const granularity = item.granularity;
+
         if (granularity <= 60 * 15) {
             if (!this._identityService.is15MinAllowed()) {
                 return false;
@@ -1352,6 +1354,23 @@ export class SonarFeedWallComponent implements OnInit {
             }
         }
 
+        const marketType = this._mapMarketType(item.symbol, item.exchange);
+
+        if (this._identityService.subscriptionType === SubscriptionType.Starter) {
+            if (marketType !== ESonarFeedMarketTypes.MajorForex && 
+                marketType !== ESonarFeedMarketTypes.ForexMinors && 
+                marketType !== ESonarFeedMarketTypes.ForexExotic) {
+                    return false;
+                }
+        } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            if (marketType !== ESonarFeedMarketTypes.MajorForex && 
+                marketType !== ESonarFeedMarketTypes.ForexMinors && 
+                marketType !== ESonarFeedMarketTypes.ForexExotic &&
+                marketType !== ESonarFeedMarketTypes.Metals) {
+                    return false;
+                }
+        }
+
         return true;
     }
 
@@ -1359,7 +1378,7 @@ export class SonarFeedWallComponent implements OnInit {
         const res: SonarFeedItem[] = [];
 
         for (const item of data) {
-            if (this._isCardAllowed(item.granularity)) {
+            if (this._isCardAllowed(item)) {
                 res.push(item);
             }
         }
