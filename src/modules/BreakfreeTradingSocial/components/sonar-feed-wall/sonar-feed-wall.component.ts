@@ -120,7 +120,7 @@ export class SonarFeedWallComponent implements OnInit {
     private _tempRecursiveLoadingCounter = 0;
     private _lastId: any;
 
-    @ViewChild('scroll', { static: true }) scroll: ElementRef;
+    @ViewChild('scroller', { static: false }) scroll: ElementRef;
 
     @Output() onOpenChart = new EventEmitter<LinkingAction>();
 

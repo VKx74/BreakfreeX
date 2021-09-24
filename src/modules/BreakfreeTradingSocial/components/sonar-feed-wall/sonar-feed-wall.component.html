@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <div class="cards-container" (scroll)="onScroll($event)" #scroll (click)="clickOnWall($event)">
+        <div class="cards-container" (scroll)="onScroll($event)" #scroller (click)="clickOnWall($event)">
             <div class="card-container" *ngFor="let card of cards">
                 <sonar-feed-card [isVisible]="isCardVisible(card)" [hasMyLike]="card.hasMyLike"
                     [hasMyDislike]="card.hasMyDislike" [likeCount]="card.likeCount" [dislikeCount]="card.dislikeCount"
