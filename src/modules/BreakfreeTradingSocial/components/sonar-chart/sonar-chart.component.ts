@@ -254,7 +254,7 @@ export class SonarChartComponent implements OnInit {
         this.chart.addIndicators(indicator);
         this.chart.XMode = false;
         this.chart.crossHair.destroy();
-        this.chart.refreshAsync(true);
+        this.chart.refresh(true);
         this._attached = true;
 
         this._tradingFromChartHandler.setChart(this.chart, true);

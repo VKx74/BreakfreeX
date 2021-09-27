@@ -82,10 +82,16 @@ export class NameAvatarComponent implements OnInit, OnChanges {
                     } else {
                         this.avatarSrc = i;
                     }
+                    if (this._isDestroyed) {
+                        return;
+                    }
                     this._cdRef.detectChanges();
                 }, e => {
                     console.log(e);
                     this.avatarSrc = this._getDefaultAvatar(this.name);
+                    if (this._isDestroyed) {
+                        return;
+                    }
                     this._cdRef.detectChanges();
                 });
         }
