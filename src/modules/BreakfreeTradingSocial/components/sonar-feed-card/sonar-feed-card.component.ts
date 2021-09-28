@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { IInstrument } from "@app/models/common/instrument";
+import { IBFTATrend } from "@app/services/algo.service";
 import { IdentityService } from "@app/services/auth/identity.service";
+import { TradingHelper } from "@app/services/mt/mt.helper";
 import { SonarChartIndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
@@ -46,6 +48,8 @@ export class SonarFeedCardComponent implements OnInit {
     private _editComment: boolean;
     private _expandedComments: any[] = [];
     private _trend: SonarFeedCardTrendVM;
+
+    IBFTATrend = IBFTATrend;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
@@ -406,6 +410,24 @@ export class SonarFeedCardComponent implements OnInit {
 
         const commentsCount = this._countCommentsRecursive(this.comments);
         return commentsCount !== this.commentsTotal;
+    }
+
+    getGlobalTrendDescription() {
+        if (!this.trend) {
+            return "";
+        }
+
+        const strength = TradingHelper.convertTrendSpread(this.trend.globalTrendSpread);
+        return `Global ${strength} ${this.trend.globalTrend}`
+    }
+
+    getLocalTrendDescription() {
+        if (!this.trend) {
+            return "";
+        }
+
+        const strength = TradingHelper.convertTrendSpread(this.trend.localTrendSpread);
+        return `Local ${strength} ${this.trend.localTrend}`
     }
 
     // is15Min() {

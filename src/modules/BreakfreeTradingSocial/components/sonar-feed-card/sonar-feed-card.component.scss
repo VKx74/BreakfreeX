@@ -21,21 +21,18 @@
 
     .tags-category-holder {
         display: flex;
-      
     }
 
-    .tag-timeframe{
+    .tag-timeframe {
         border-radius: 3px;
         padding: 2px 4px;
         font-weight: 700;
-        font-family: 'Open Sans';
-    
+        font-family: "Open Sans";
     }
 
     .tag-setup,
     .tag-timeframe,
     .tag-RTD-trend {
-       
         border-radius: 3px;
         font-size: 10px;
         text-align: center;
@@ -54,7 +51,7 @@
         -webkit-filter: invert(1);
         filter: invert(1);
         opacity: 0.8;
-        margin-top:1px;
+        margin-top: 1px;
     }
 
     .card-header {
@@ -88,10 +85,10 @@
             align-items: center;
             justify-content: right;
             justify-self: right;
-            flex: 1 0 auto;  //Fixes right alignment issueson ios
+            flex: 1 0 auto; //Fixes right alignment issueson ios
             float: right;
             text-align: right;
-            font-family: 'Open Sans';
+            font-family: "Open Sans";
             opacity: 0.8;
         }
 
@@ -152,10 +149,10 @@
         .card-header-setup {
             border-radius: 3px;
             padding: 2px 4px;
-            margin-right:5px;
+            margin-right: 5px;
             display: flex;
             font-weight: 700;
-            font-family: 'Open Sans';
+            font-family: "Open Sans";
             font-size: 10px;
             align-items: center;
             justify-content: left;
@@ -164,8 +161,6 @@
             .fa {
                 margin-right: 3px;
             }
-
-           
         }
     }
 
@@ -181,6 +176,33 @@
         width: 100%;
         min-height: 160px;
         cursor: pointer;
+        position: relative;
+
+        .chart-tends {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            z-index: 1;
+
+            .global-trend,
+            .local-trend {
+                padding: 3px;
+                margin: 3px;
+                font-size: 10px;
+                font-weight: 700;
+                border-radius: 3px;
+            }
+
+            .uptrend {
+                background-color: #274a3a87;
+                color: #48c062;
+            }
+            
+            .downtrend {
+                background-color: #8e26264d;
+                color: #F1574F;
+            }
+        }
     }
 
     .chart-selected {
@@ -194,7 +216,7 @@
 
         .card-footer-buttons {
             display: flex;
-            font-weight:700;
+            font-weight: 700;
             justify-content: space-between;
             align-items: center;
             width: 100%;
@@ -206,11 +228,10 @@
                 margin-right: 3px;
             }
 
-          
-
             .card-footer-like-button,
             .card-footer-share-button,
-            .card-footer-view-button, .card-footer-follow-button {
+            .card-footer-view-button,
+            .card-footer-follow-button {
                 display: flex;
                 width: 100%;
                 align-items: center;
@@ -259,7 +280,6 @@
 
         .card-left-comment-input {
             display: flex;
-           
 
             textarea {
                 height: 28px;
@@ -291,7 +311,7 @@
         justify-content: center;
         align-items: center;
         padding: 0px 10px;
-        border-radius:2px;
+        border-radius: 2px;
     }
 
     .like-container {
@@ -332,26 +352,23 @@
 .card-footer img.widget-icon {
     width: 10px;
     margin-right: 5px;
-    transition:all 0.22s;
+    transition: all 0.22s;
     margin-top: -1px;
 }
 
 :host-context(body.Dark-theme) .card-footer-share-button img.widget-icon {
-
     -webkit-filter: invert(1);
     filter: invert(1);
 }
 
 :host-context(body.Dark-theme) .card-footer-view-button img.widget-icon {
-
     -webkit-filter: invert(1);
     filter: invert(1);
 }
 
 :host-context(body.Light-theme) .card-footer-buttons {
-    opacity:0.8;
-  
-    }
+    opacity: 0.8;
+}
 
 @include themify($themes, true) {
     .sonar-card {
@@ -381,11 +398,6 @@
     //     border-color: themed("sonar-feed-border") !important;
     // }
 
- 
-
-    
-    
-
     .card-footer-share-button,
     .card-footer-view-button,
     .card-footer-follow-button,
@@ -402,8 +414,8 @@
 
     .send-button {
         background-color: themed("sonar-feed-post-button");
-    } 
-    
+    }
+
     .send-button {
         background-color: themed("sonar-feed-post-button");
     }
@@ -423,10 +435,8 @@
         background-color: themed("sonar-feed-tag");
     }
 
-    .tag-timeframe
-    {
+    .tag-timeframe {
         color: themed("sonar-timeframe-tag-color");
-
     }
 
     .setup-short {

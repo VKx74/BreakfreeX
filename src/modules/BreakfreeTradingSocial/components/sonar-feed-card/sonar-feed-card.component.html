@@ -38,6 +38,14 @@
    
 
     <div class="card-chart" #chartContainer [ngClass]="{'chart-selected': selected}" (click)="clickOnChart()">
+        <div class="chart-tends" *ngIf="this.trend">
+            <div class="global-trend" [ngClass]="this.trend.globalTrend == IBFTATrend.Up ? 'uptrend' : 'downtrend'">
+                {{getGlobalTrendDescription()}}
+            </div>
+            <div class="local-trend" [ngClass]="this.trend.globalTrend == IBFTATrend.Up ? 'uptrend' : 'downtrend'">
+                {{getLocalTrendDescription()}}
+            </div>
+        </div>
         <sonar-chart [selected]="selected" [instrument]="instrument" [time]="time" [granularity]="granularity"
             [isVisible]="isVisible">
         </sonar-chart>

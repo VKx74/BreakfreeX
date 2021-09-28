@@ -39,7 +39,16 @@ export interface SonarFeedCommentVM {
 }
 
 export interface SonarFeedCardTrendVM {
-    globalTrendValue: number;
+    globalTrend: IBFTATrend;
+    localTrend: IBFTATrend;
+    localTrendSpread: number;
+    globalTrendSpread: number;
+    localTrendSpreadValue: number;
+    globalTrendSpreadValue: number;
+    globalFastValue: number;
+    globalSlowValue: number;
+    localFastValue: number;
+    localSlowValue: number;
 }
 
 export interface SonarFeedCardVM {
@@ -1206,7 +1215,7 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     private _addCommentToComment(post: SonarFeedCardVM, parentCommentId: any, comment: SonarFeedCommentVM) {
-        if (!parentCommentId) {
+        if (!parentCommentId || !post || !comment) {
             return;
         }
 
@@ -1553,7 +1562,16 @@ export class SonarFeedWallComponent implements OnInit {
 
     private _setTrend(card: SonarFeedCardVM, tend: IBFTAAlgoTrendResponse) {
         card.trend = {
-            globalTrendValue: tend.globalTrendSpreadValue
-        }
+            globalFastValue: tend.globalFastValue,
+            globalSlowValue: tend.globalSlowValue,
+            globalTrend: tend.globalTrend,
+            globalTrendSpread: tend.globalTrendSpread,
+            globalTrendSpreadValue: tend.globalTrendSpreadValue,
+            localFastValue: tend.localFastValue,
+            localSlowValue: tend.localSlowValue,
+            localTrend: tend.localTrend,
+            localTrendSpread: tend.localTrendSpread,
+            localTrendSpreadValue: tend.localTrendSpreadValue
+        };
     }
 }
