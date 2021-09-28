@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { AppConfigService } from "@app/services/app.config.service";
 import { Observable, Subject, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
-import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO, SonarFeedNotificationResponseDTO } from "../models/sonar.feed.dto.models";
+import { SonarFeedCommentDTO, SonarFeedItemCommentLikeResponseDTO, SonarFeedItemDTO, SonarFeedItemLikeResponseDTO, SonarFeedNotificationResponseDTO, SonarFeedNotificationsHistoryResponseDTO } from "../models/sonar.feed.dto.models";
 import { SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentEditedNotification, SocialFeedPostReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostAddedNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemLikeResponse, SonarFeedItemCommentLikeResponse, ISocialFeedReaction, ISocialFeedLikeReaction, SocialFeedReactionType, ISocialFeedReplayReaction } from "../models/sonar.feed.models";
 import { SocialFeedModelConverter } from "./models.convertter";
 import { SonarFeedSocketService } from "./sonar.feed.socket.service";
@@ -72,12 +72,12 @@ export class SonarFeedService {
     getItems(take: number, filters: ISonarSetupFilters = null, searchText: string = null): Observable<SonarFeedItem[]> {
         const requestDate = new Date().getTime() / 1000;
         return this._loadItemsByDate(take, Math.trunc(requestDate), filters, searchText);
-    }  
-    
+    }
+
     getFromIdItems(id: any, take: number, filters: ISonarSetupFilters = null, searchText: string = null): Observable<SonarFeedItem[]> {
         return this._loadItemsById(id, take, filters, searchText);
-    } 
-    
+    }
+
     getItem(id: any): Observable<SonarFeedItem> {
         return this._loadItem(id);
     }
@@ -155,7 +155,7 @@ export class SonarFeedService {
             return response;
         }));
     }
-    
+
     editComment(commentId: any, text: string): Observable<SonarFeedComment> {
         return this._http.patch<any>(`${this._url}api/comment/${commentId}`, {
             text: text
@@ -187,46 +187,59 @@ export class SonarFeedService {
 
     blockUser(userId: any): Observable<any> {
         return this._http.patch<any>(`${this._url}block/${userId}`, {});
-    }  
-    
+    }
+
     unblockUser(userId: any): Observable<any> {
         return this._http.patch<any>(`${this._url}unblock/${userId}`, {});
-    } 
-    
+    }
+
     getNotifications(): Observable<ISocialFeedReaction[]> {
         return this._http.get<SonarFeedNotificationResponseDTO[]>(`${this._url}notifications`).pipe(map((data: SonarFeedNotificationResponseDTO[]) => {
-            const res: ISocialFeedReaction[] = [];
-
-            for (const item of data) {
-                if (item.isLike) {
-                    const likeReaction: ISocialFeedLikeReaction = {
-                        commentId: item.commentId,
-                        time: new Date(item.time * 1000),
-                        postId: item.postId,
-                        read: false,
-                        type: SocialFeedReactionType.Like,
-                        user: item.reactor
-                    };
-                    
-                    res.push(likeReaction);
-                } else if (item.replyComment) {
-                    const replayReaction: ISocialFeedReplayReaction = {
-                        time: new Date(item.time * 1000),
-                        postId: item.postId,
-                        read: false,
-                        type: SocialFeedReactionType.Like,
-                        user: item.reactor,
-                        replayText: item.replyComment.text
-                    };
-                    
-                    res.push(replayReaction);
-                }
-            }
-
-            return res;
+            return this._mapNotifications(data);
         }));
-    }   
-    
+    }
+
+    getNotificationsHistory(skip: number, take: number): Observable<ISocialFeedReaction[]> {
+        return this._http.get<SonarFeedNotificationsHistoryResponseDTO>(`${this._url}notifications/all?skip=${skip}&take=${take}`).pipe(map((data: SonarFeedNotificationsHistoryResponseDTO) => {
+            if (data && data.notifications) {
+                return this._mapNotifications(data.notifications);
+            }
+            return [];
+        }));
+    }
+
+    private _mapNotifications(data: SonarFeedNotificationResponseDTO[]): ISocialFeedReaction[] {
+        const res: ISocialFeedReaction[] = [];
+
+        for (const item of data) {
+            if (item.isLike) {
+                const likeReaction: ISocialFeedLikeReaction = {
+                    commentId: item.commentId,
+                    time: new Date(item.time * 1000),
+                    postId: item.postId,
+                    read: item.isRead,
+                    type: SocialFeedReactionType.Like,
+                    user: item.reactor
+                };
+
+                res.push(likeReaction);
+            } else if (item.replyComment) {
+                const replayReaction: ISocialFeedReplayReaction = {
+                    time: new Date(item.time * 1000),
+                    postId: item.postId,
+                    read: item.isRead,
+                    type: SocialFeedReactionType.Like,
+                    user: item.reactor,
+                    replayText: item.replyComment.text
+                };
+
+                res.push(replayReaction);
+            }
+        }
+
+        return res;
+    }
+
     setAsReadNotifications(): Observable<any> {
         return this._http.patch<SonarFeedNotificationResponseDTO[]>(`${this._url}notifications/read`, {});
     }
@@ -395,7 +408,7 @@ export class SonarFeedService {
     //     this.onPostChanged.next(post);
     // }
 
-    
+
     private _loadItem(id: any): Observable<SonarFeedItem> {
         return this._http.get<SonarFeedItemDTO>(`${this._url}api/post/${id}`).pipe(map((item) => {
             if (!item) {
@@ -443,19 +456,19 @@ export class SonarFeedService {
                 res += `&granularities=${g}`;
             }
         }
-        
+
         if (filters.setup) {
             for (const s of filters.setup) {
                 res += `&setupTypes=${s}`;
             }
         }
-        
+
         if (filters.type) {
             for (const t of filters.type) {
                 res += `&marketTypes=${t}`;
             }
         }
-        
+
         if (filters.following) {
             res += `&favorite=true`;
         }

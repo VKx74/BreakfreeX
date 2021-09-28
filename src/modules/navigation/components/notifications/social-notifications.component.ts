@@ -22,17 +22,24 @@ interface SocialNotification {
     templateUrl: './social-notifications.component.html',
     styleUrls: ['./social-notifications.component.scss']
 })
-export class SocialNotificationsComponent  implements OnDestroy {
-    
+export class SocialNotificationsComponent implements OnDestroy {
+
     public notifications: SocialNotification[] = [];
-    
+    public loading: boolean = false;
+
+    public get canLoadMore(): boolean {
+        return this._socialRealtimeNotificationsService.canLoadMore && this.notifications && this.notifications.length > 0;
+    }
+
     constructor(private _socialRealtimeNotificationsService: SocialReactionsService) {
-        this._setNotifications();
+        this.loadReactions();
+
         this._socialRealtimeNotificationsService.newReaction.pipe(
             takeUntil(componentDestroyed(this))
         ).subscribe((reaction) => {
             if (reaction) {
-                this._addReaction(reaction);
+                const item = this._mapReaction(reaction);
+                this.notifications.unshift(item);
             }
         });
     }
@@ -48,19 +55,31 @@ export class SocialNotificationsComponent  implements OnDestroy {
         window.open(host, '_blank').focus();
     }
 
-    private _setNotifications() {
-        this.notifications = [];
-        this._socialRealtimeNotificationsService.getReactions().subscribe((reactions: ISocialFeedReaction[]) => {
-            for (const reaction of reactions) {
-                this._addReaction(reaction);
-            }
+    loadMore(event: MouseEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.loading = true;
+        this._socialRealtimeNotificationsService.loadReactions().subscribe(() => {
+            this.loadReactions();
         });
     }
 
-    private _addReaction(reaction: ISocialFeedReaction) {
+    private loadReactions() {
+        this.loading = true;
+        this._socialRealtimeNotificationsService.getReactions().subscribe((reactions: ISocialFeedReaction[]) => {
+            this.notifications = [];
+            for (const reaction of reactions) {
+                const item = this._mapReaction(reaction);
+                this.notifications.push(item);
+            }
+            this.loading = false;
+        });
+    }
+
+    private _mapReaction(reaction: ISocialFeedReaction): SocialNotification {
         if (reaction.type === SocialFeedReactionType.Like) {
             const likeReaction = reaction as ISocialFeedLikeReaction;
-            this.notifications.unshift({
+            return {
                 isRead: likeReaction.read,
                 time: SocialFeedModelConverter.ConvertTimeDiffToString(likeReaction.time.getTime() / 1000),
                 userAvatarId: likeReaction.user.avatarId,
@@ -70,14 +89,14 @@ export class SocialNotificationsComponent  implements OnDestroy {
                 text: "Liked your comment",
                 postId: likeReaction.postId
 
-            });
+            };
         } else if (reaction.type === SocialFeedReactionType.Replay) {
             const likeReaction = reaction as ISocialFeedReplayReaction;
             let replyText = likeReaction.replayText.slice(0, 100);
             if (likeReaction.replayText.length > 100) {
                 replyText += "...";
             }
-            this.notifications.unshift({
+            return {
                 isRead: likeReaction.read,
                 time: SocialFeedModelConverter.ConvertTimeDiffToString(likeReaction.time.getTime() / 1000),
                 userAvatarId: likeReaction.user.avatarId,
@@ -86,7 +105,7 @@ export class SocialNotificationsComponent  implements OnDestroy {
                 userLevel: likeReaction.user.level,
                 text: `Replied "${replyText}" to your comment`,
                 postId: likeReaction.postId
-            });
+            };
         }
     }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { Observable, of, Subject, Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 import { ISocialFeedLikeReaction, ISocialFeedReaction, ISocialFeedReplayReaction, SocialFeedCommentAddedNotification, SocialFeedCommentReactionNotification, SocialFeedReactionType, SonarFeedUserInfo } from "../models/sonar.feed.models";
 import { SonarFeedService } from "./sonar.feed.service";
 
@@ -10,7 +11,13 @@ export class SocialReactionsService {
     private _commentReactionSubscription: Subscription;
     private _commentAddedSubscription: Subscription;
     private _reactions: ISocialFeedReaction[] = [];
+    private _reactionsCanLoadMore: boolean = true;
+    private _reactionsLoadCount: number = 25;
 
+    public get canLoadMore(): boolean {
+        return this._reactionsCanLoadMore;
+    } 
+    
     public get newReaction(): Subject<ISocialFeedReaction> {
         return this._newReaction;
     }
@@ -41,7 +48,7 @@ export class SocialReactionsService {
             this._processCommentAdded(data);
         });
 
-        this._init();
+        this.loadReactions().subscribe();
     }
 
     setAsRead() {
@@ -56,10 +63,12 @@ export class SocialReactionsService {
         return of(this._reactions.slice());
     }
 
-    private _init() {
-        this._sonarFeedService.getNotifications().subscribe((data: ISocialFeedReaction[]) => {
-            this._reactions = data || [];
-        });
+    loadReactions() {
+        return this._sonarFeedService.getNotificationsHistory(this._reactions.length, this._reactionsLoadCount).pipe(map((data: ISocialFeedReaction[]) => {
+            data.sort((a, b) => b.time.getTime() - a.time.getTime());
+            this._reactions.push(...data);
+            this._reactionsCanLoadMore = data && data.length === this._reactionsLoadCount;
+        }));  
     }
 
     private _processCommentReaction(data: SocialFeedCommentReactionNotification) {
@@ -76,7 +85,7 @@ export class SocialReactionsService {
             user: data.lastReactor
         };
 
-        this._reactions.push(commentReaction);
+        this._reactions.unshift(commentReaction);
 
         this._newReaction.next(commentReaction);
     }
@@ -99,7 +108,7 @@ export class SocialReactionsService {
             user: data.user
         };
 
-        this._reactions.push(commentReaction);
+        this._reactions.unshift(commentReaction);
 
         this._newReaction.next(commentReaction);
     }

@@ -20,6 +20,7 @@ import { NavSectionComponent } from './components/nav-section/nav-section.compon
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LayoutManagementMenuComponent } from './components/layout-management-menu/layout-management-menu.component';
 import { SocialNotificationsComponent } from './components/notifications/social-notifications.component';
+import { LoaderModule } from 'modules/loader/loader.module';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { SocialNotificationsComponent } from './components/notifications/social-
         MatDividerModule,
         MatRadioModule,
         ReactiveFormsModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        LoaderModule
     ],
     entryComponents: [
         ExchangeStatusConfiguratorComponent

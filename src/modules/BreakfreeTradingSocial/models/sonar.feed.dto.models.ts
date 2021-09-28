@@ -68,5 +68,11 @@ export interface SonarFeedNotificationResponseDTO {
     reactor: SonarFeedUserInfoDTO;
     replyComment: SonarFeedCommentDTO;
     isLike: boolean;
+    isRead: boolean;
     time: number;
+}
+
+export interface SonarFeedNotificationsHistoryResponseDTO {
+    notifications: SonarFeedNotificationResponseDTO[];
+    total: number;
 }
