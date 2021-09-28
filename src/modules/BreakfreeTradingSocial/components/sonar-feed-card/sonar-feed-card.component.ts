@@ -2,9 +2,10 @@ import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, 
 import { MatDialog } from "@angular/material/dialog";
 import { IInstrument } from "@app/models/common/instrument";
 import { IdentityService } from "@app/services/auth/identity.service";
+import { SonarChartIndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
-import { SonarFeedCommentVM } from "../sonar-feed-wall/sonar-feed-wall.component";
+import { SonarFeedCardTrendVM, SonarFeedCommentVM } from "../sonar-feed-wall/sonar-feed-wall.component";
 declare var ResizeObserver;
 
 export interface IReplayData {
@@ -44,6 +45,7 @@ export class SonarFeedCardComponent implements OnInit {
     private _replayCommentId: any;
     private _editComment: boolean;
     private _expandedComments: any[] = [];
+    private _trend: SonarFeedCardTrendVM;
 
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
@@ -139,6 +141,10 @@ export class SonarFeedCardComponent implements OnInit {
         this._selected = value;
     }
 
+    @Input() public set trend(value: SonarFeedCardTrendVM) {
+        this._trend = value;
+    }
+
     public set comment(value: string) {
         this._comment = value;
     }
@@ -205,6 +211,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get expandedComments(): any[] {
         return this._expandedComments;
+    }
+
+    public get trend(): SonarFeedCardTrendVM {
+        return this._trend;
     }
 
     public get comments(): SonarFeedCommentVM[] {

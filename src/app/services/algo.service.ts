@@ -43,6 +43,7 @@ export interface IBFTScannerCacheItem {
     time: number;
     avgEntry: number;
     trade: IBFTATradeV2;
+    trend: IBFTAAlgoTrendResponse;
 }
 
 export interface IBFTScanInstrumentsResponse {
@@ -258,6 +259,24 @@ export interface IBFTAAlgoResponseV2 {
     trade: IBFTATradeV2;
     size: number;
     id: any;
+}
+
+export interface IBFTAAlgoTrendResponse {
+    globalTrend: IBFTATrend;
+    localTrend: IBFTATrend;
+    localTrendSpread: number;
+    globalTrendSpread: number;
+    localTrendSpreadValue: number;
+    globalTrendSpreadValue: number;
+    globalFastValue: number;
+    globalSlowValue: number;
+    localFastValue: number;
+    localSlowValue: number;
+}
+
+export interface IBFTAAlgoCacheItemResponse {
+    setup: IBFTAAlgoResponseV2;
+    trend: IBFTAAlgoTrendResponse;
 }
 
 export interface IBFTAPositionSize {

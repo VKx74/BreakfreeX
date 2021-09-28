@@ -250,7 +250,9 @@ export class SonarFeedSocketService extends WebsocketBase {
                 side: data.body.side,
                 symbol: data.body.symbol,
                 time: data.body.time,
-                type: data.body.type
+                type: data.body.type,
+                algoId: data.body.algoId,
+                algoTime: data.body.algoTime
             });
         }
     }

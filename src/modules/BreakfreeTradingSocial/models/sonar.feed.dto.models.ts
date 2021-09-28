@@ -27,6 +27,8 @@ export interface SonarFeedItemBodyDTO {
     symbol: string;
     time: number;
     type: string;
+    algoId: string;
+    algoTime: number;
 }
 
 export interface SonarFeedItemDTO {

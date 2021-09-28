@@ -36,6 +36,8 @@ export interface SonarFeedItem {
     comments?: SonarFeedComment[];
     commentsTotal: number;
     isFavorite: boolean;
+    algoId: string;
+    algoTime: number;
 }
 
 export interface SocialFeedPostAddedNotification {
@@ -48,6 +50,8 @@ export interface SocialFeedPostAddedNotification {
     time: number;
     likesCount: number;
     dislikesCount: number;
+    algoId: string;
+    algoTime: number;
 }
 
 export interface SocialFeedCommentRemovedNotification {

@@ -84,7 +84,7 @@
                     (onAddComment)="addComment($event, card)" (onCommentLike)="commentLike($event, card)"
                     (onCommentLikeDelete)="commentLikeDelete($event, card)"
                     (onCommentDislike)="commentDislike($event, card)" (onRemoveComment)="removeComment($event, card)"
-                    (onBanUser)="banUser($event, card)"
+                    (onBanUser)="banUser($event, card)" [trend]="card.trend"
                     (onFavorite)="favorite(card)" (onAddReplay)="addReplay($event, card)"
                     (onEditComment)="editComment($event, card)" [comments]="card.comments"
                     [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"

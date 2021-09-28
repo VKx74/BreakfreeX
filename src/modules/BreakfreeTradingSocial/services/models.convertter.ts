@@ -17,7 +17,9 @@ export class SocialFeedModelConverter {
             hasUserDislike: dto.hasUserDislike,
             lastComment: dto.lastComment,
             commentsTotal: dto.commentsTotal,
-            isFavorite: dto.isFavorite
+            isFavorite: dto.isFavorite,
+            algoId: dto.body.algoId,
+            algoTime: dto.body.algoTime
         };
     } 
     
@@ -57,7 +59,9 @@ export class SocialFeedModelConverter {
             isFavorite: false,
             side: dto.side,
             symbol: dto.symbol,
-            type: dto.type
+            type: dto.type,
+            algoId: dto.algoId,
+            algoTime: dto.algoTime
         };
     }
 

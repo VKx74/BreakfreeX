@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
-import { of } from 'rxjs';
-import { IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
+import { Observable, of, Subject } from 'rxjs';
+import { IBFTAAlgoCacheItemResponse, IBFTAAlgoTrendResponse, IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { TradingHelper } from "@app/services/mt/mt.helper";
@@ -123,10 +123,16 @@ export class IndicatorDataProviderService {
     }
 }
 
+export interface IBFTAAlgoCacheItemAdded {
+    id: string;
+    item: IBFTAAlgoCacheItemResponse;
+}
 
 @Injectable()
 export class SonarChartIndicatorDataProviderService extends IndicatorDataProviderService {
-    private static _cache: { [symbol: string]: any } = {};
+    private static _cache: { [symbol: string]: IBFTAAlgoCacheItemResponse } = {};
+
+    dataAddedToCache: Subject<IBFTAAlgoCacheItemAdded> = new Subject();
 
     getData(indicator: TradingChartDesigner.Indicator, params?: object): Promise<any> {
         const chart = indicator.chart;
@@ -149,7 +155,7 @@ export class SonarChartIndicatorDataProviderService extends IndicatorDataProvide
 
         if (SonarChartIndicatorDataProviderService._cache[key]) {
             const res = {
-                ...SonarChartIndicatorDataProviderService._cache[key]
+                ...SonarChartIndicatorDataProviderService._cache[key].setup
             };
             res.id = id;
             return of(res).toPromise();
@@ -158,9 +164,23 @@ export class SonarChartIndicatorDataProviderService extends IndicatorDataProvide
         return this._getDataFromCache(symbol, exchange, timeframe, endTime, id).then((_) => {
             if (_) {
                 SonarChartIndicatorDataProviderService._cache[key] = _;
+                this.dataAddedToCache.next({
+                    item: _,
+                    id: key
+                });
+                return _.setup;
             }
-            return _ || {};
+
+            return {};
         });
+    }
+
+    getTrend(symbol: string, exchange: string, timeframe: number, endTime: number): IBFTAAlgoTrendResponse {
+        const key = this._getKey(symbol, exchange, timeframe, endTime);
+        if (SonarChartIndicatorDataProviderService._cache[key]) {
+            return SonarChartIndicatorDataProviderService._cache[key].trend;
+        }
+        return null;
     }
 
     private _getDataFromCache(symbol: string, exchange: string, timeframe: number, time: number, id: any): Promise<any> {

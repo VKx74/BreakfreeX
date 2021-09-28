@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { MatDialog } from "@angular/material/dialog";
 import { AppRoutes } from "@app/app.routes";
 import { IInstrument } from "@app/models/common/instrument";
-import { IBFTATrend } from "@app/services/algo.service";
+import { IBFTAAlgoCacheItemResponse, IBFTAAlgoTrendResponse, IBFTATrend } from "@app/services/algo.service";
 import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { EMarketSpecific } from "@app/models/common/marketSpecific";
 import { ForexTypeHelper } from "@app/services/instrument.type.helper/forex.types.helper";
@@ -18,6 +18,7 @@ import { JsUtil } from "utils/jsUtil";
 import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
+import { IBFTAAlgoCacheItemAdded, SonarChartIndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
 
 export interface SonarFeedCommentVM {
     id: any;
@@ -37,6 +38,10 @@ export interface SonarFeedCommentVM {
     time: number;
 }
 
+export interface SonarFeedCardTrendVM {
+    globalTrendValue: number;
+}
+
 export interface SonarFeedCardVM {
     id: any;
     instrument: IInstrument;
@@ -53,6 +58,7 @@ export interface SonarFeedCardVM {
     dislikeCount: number;
     commentsTotal: number;
     sortIndex: number;
+    trend?: SonarFeedCardTrendVM;
     isFavorite: boolean;
     comments: SonarFeedCommentVM[];
 }
@@ -110,6 +116,7 @@ export class SonarFeedWallComponent implements OnInit {
     private _commentRemovedSubscription: Subscription;
     private _itemAddedSubscription: Subscription;
     private _missionsInitializedSubscription: Subscription;
+    private _dataAddedToCacheSubscription: Subscription;
     private _cardId: any;
     private _scrollTop: number = 0;
     private _selectedCard: SonarFeedCardVM;
@@ -190,6 +197,7 @@ export class SonarFeedWallComponent implements OnInit {
         protected _identity: IdentityService,
         protected _instrumentService: InstrumentCacheService,
         protected _tradingProfileService: TradingProfileService,
+        protected _indicatorDataProviderService: SonarChartIndicatorDataProviderService,
         protected _cdr: ChangeDetectorRef) {
 
         this._timer = setInterval(() => {
@@ -215,6 +223,18 @@ export class SonarFeedWallComponent implements OnInit {
             this._refreshNeeded = true;
             return;
         }
+
+        this._dataAddedToCacheSubscription = this._indicatorDataProviderService.dataAddedToCache.subscribe((data: IBFTAAlgoCacheItemAdded) => {
+            for (const card of this.cards) {
+                const trendData = this._indicatorDataProviderService.getTrend(card.instrument.id, card.instrument.exchange, card.granularity, card.time);
+                if (!trendData) {
+                    continue;
+                }
+
+                this._setTrend(card, trendData);
+            }
+            this._refreshNeeded = true;
+        });
 
         this._missionsInitializedSubscription = this._tradingProfileService.MissionsInitialized.subscribe((isInitialized) => {
             if (isInitialized && !this.initialized) {
@@ -301,6 +321,11 @@ export class SonarFeedWallComponent implements OnInit {
         if (this._missionsInitializedSubscription) {
             this._missionsInitializedSubscription.unsubscribe();
             this._missionsInitializedSubscription = null;
+        }
+
+        if (this._dataAddedToCacheSubscription) {
+            this._dataAddedToCacheSubscription.unsubscribe();
+            this._dataAddedToCacheSubscription = null;
         }
     }
 
@@ -972,7 +997,7 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     private _convertToVM(item: SonarFeedItem, instrument: IInstrument): SonarFeedCardVM {
-        return {
+        const card = {
             id: item.id,
             dislikeCount: item.dislikesCount,
             likeCount: item.likesCount,
@@ -980,7 +1005,7 @@ export class SonarFeedWallComponent implements OnInit {
             hasMyDislike: item.hasUserDislike,
             hasMyLike: item.hasUserLike,
             instrument: instrument,
-            time: item.time,
+            time: item.algoTime || item.time,
             title: this._getTitle(item.granularity, item.symbol, item.type, item.side === IBFTATrend.Up ? "Long" : "Short"),
             comments: this._getComments(item),
             commentsTotal: item.commentsTotal,
@@ -991,6 +1016,13 @@ export class SonarFeedWallComponent implements OnInit {
             symbol: item.symbol,
             side: item.side === IBFTATrend.Up ? "Long" : "Short"
         };
+
+        const trendData = this._indicatorDataProviderService.getTrend(card.instrument.id, card.instrument.exchange, card.granularity, card.time);
+        if (trendData) {
+            this._setTrend(card, trendData);
+        }
+
+        return card;
     }
 
     private _getComments(item: SonarFeedItem): SonarFeedCommentVM[] {
@@ -1519,4 +1551,9 @@ export class SonarFeedWallComponent implements OnInit {
     }
     //#endregion
 
+    private _setTrend(card: SonarFeedCardVM, tend: IBFTAAlgoTrendResponse) {
+        card.trend = {
+            globalTrendValue: tend.globalTrendSpreadValue
+        }
+    }
 }
