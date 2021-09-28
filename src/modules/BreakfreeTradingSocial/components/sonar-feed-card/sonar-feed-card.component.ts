@@ -418,7 +418,7 @@ export class SonarFeedCardComponent implements OnInit {
         }
 
         const strength = TradingHelper.convertTrendSpread(this.trend.globalTrendSpread);
-        return `Global ${strength} ${this.trend.globalTrend}`
+        return `Global ${strength} ${this.trend.globalTrend}`;
     }
 
     getLocalTrendDescription() {
@@ -427,7 +427,7 @@ export class SonarFeedCardComponent implements OnInit {
         }
 
         const strength = TradingHelper.convertTrendSpread(this.trend.localTrendSpread);
-        return `Local ${strength} ${this.trend.localTrend}`
+        return `Local ${strength} ${this.trend.localTrend}`;
     }
 
     // is15Min() {
