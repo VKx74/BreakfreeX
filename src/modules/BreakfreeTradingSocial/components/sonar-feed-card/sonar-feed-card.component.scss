@@ -36,7 +36,6 @@
         justify-content: right;
         padding: 7px 0px 8px 0px;
         border-top: 1px solid;
-        
     }
 
     .tag-setup,
@@ -49,20 +48,17 @@
         font-weight: 700;
         margin-right: 5px;
         padding: 2px 4px;
-        font-family: 'Open Sans';
+        font-family: "Open Sans";
         display: flex;
         opacity: 0.7;
-        transition:all 0.22s;
-    }
-    .tag-setup:hover,
-    .tag-market:hover,
-    .tag-RTD-trend:hover {
-    
-        opacity: 1;
+        transition: all 0.22s;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 
-
-    .tag-timeframe{
+    .tag-timeframe {
         border-radius: 3px;
         font-size: 10px;
         text-align: center;
@@ -205,12 +201,15 @@
         display: flex;
         width: 100%;
         min-height: 200px;
-        cursor: pointer;
         position: relative;
         display: flex;
         flex-direction: column;
         border-radius: 5px;
         overflow: hidden;
+
+        .chart {
+            cursor: pointer;
+        }
 
         .trend-arrow {
             margin-right: 3px;
@@ -218,7 +217,7 @@
             &.uptrend {
                 color: #48c062;
             }
-            
+
             &.downtrend {
                 color: #f1574f;
             }
@@ -454,13 +453,13 @@
     }
 
     .tags-holder {
-       
         background-color: themed("tags-holder-bg");
-        border-color:  themed("holder-tags-border-color");
+        border-color: themed("holder-tags-border-color");
     }
 
-    .tag-setup, .tag-market, .tag-RTD-trend {
-       
+    .tag-setup,
+    .tag-market,
+    .tag-RTD-trend {
         background-color: themed("actual-tags-bg");
         color: themed("actual-tags-color");
     }
