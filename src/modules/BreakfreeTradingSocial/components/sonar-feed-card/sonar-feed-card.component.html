@@ -1,7 +1,7 @@
 <div class="sonar-card" #cardContainer>
     <div class="card-header">
         <div class="card-header-description">
-            
+
             <div class="card-header-title">
                 <div class="header-left-part">
                     <div class="card-header-setup"
@@ -35,34 +35,38 @@
 
     </div>
 
-   
+
 
     <div class="card-chart" #chartContainer [ngClass]="{'chart-selected': selected}" (click)="clickOnChart()">
-        <div class="chart-tends" *ngIf="this.trend">
+        <!-- <div class="chart-tends" *ngIf="this.trend">
             <div class="global-trend hidden" [ngClass]="this.trend.globalTrend == IBFTATrend.Up ? 'uptrend' : 'downtrend'">
                 {{getGlobalTrendDescription()}}
             </div>
             <div class="local-trend hidden" [ngClass]="this.trend.globalTrend == IBFTATrend.Up ? 'uptrend' : 'downtrend'">
                 {{getLocalTrendDescription()}}
             </div>
-        </div>
+        </div> -->
         <sonar-chart [selected]="selected" [instrument]="instrument" [time]="time" [granularity]="granularity"
             [isVisible]="isVisible">
         </sonar-chart>
         <div class="tags-holder">
-            <div class="tag-setup">{{setup}}</div> 
-            <div class="tag-market">Forex</div>  
-             <div class="tag-RTD-trend">Strong (110/80)</div>
+            <div class="tag-setup">{{setup}}</div>
+            <div class="tag-market">{{getMarketType()}}</div>
+            <div *ngIf="this.trend" class="tag-RTD-trend">
+                <span class="trend-arrow" [ngClass]="this.trend.globalTrend == IBFTATrend.Up ? 'uptrend' : 'downtrend'">
+                    <i class="fa"
+                        [ngClass]="{'fas fa-arrow-up': (this.trend.globalTrend == IBFTATrend.Up), 'fas fa-arrow-down': (this.trend.globalTrend == IBFTATrend.Down)}"></i>
+                </span>
+                <span class="trend-description">
+                    {{getTrendDescription()}}
+                </span>
+            </div>
         </div>
     </div>
 
-
-  
-
-    
     <div class="card-footer">
         <div class="card-footer-buttons">
-        
+
             <div class="card-footer-like-button">
                 <div class="like-container" (click)="like()">
                     <i class="fa fa-thumbs-up" aria-hidden="true" *ngIf="hasMyLike; else nonActiveLike"></i>
@@ -84,24 +88,24 @@
                     <!-- <span class="dislike-counter">{{dislikeCount}}</span> -->
                 </div>
             </div>
-            
+
             <div class="card-footer-view-button" (click)="viewOnChart()">
                 <img class="widget-icon" src="/assets/img/view.svg">
                 View
             </div>
 
 
-            <div class="card-footer-follow-button"> 
+            <div class="card-footer-follow-button">
                 <div class="favorite-icon " (click)="favorite()">
-              
-                 <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
+
+                    <i class="fa fa-star" *ngIf="isFavorite; else notFavorite" aria-hidden="true"></i>
                     <ng-template #notFavorite>
-                        <i class="fa fa-star-o" aria-hidden="true"></i> 
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
                     </ng-template>
-                  
+
                     Follow
+                </div>
             </div>
-        </div>
             <div class="card-footer-share-button" (click)="share()">
                 <img class="widget-icon" src="/assets/img/arrow-up-from-bracket-solid.svg">
                 Share

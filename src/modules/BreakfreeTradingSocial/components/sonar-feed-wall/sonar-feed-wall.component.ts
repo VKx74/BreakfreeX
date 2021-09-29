@@ -70,6 +70,7 @@ export interface SonarFeedCardVM {
     trend?: SonarFeedCardTrendVM;
     isFavorite: boolean;
     comments: SonarFeedCommentVM[];
+    marketType: ESonarFeedMarketTypes;
 }
 
 export interface ISonarFeedCard {
@@ -1023,7 +1024,8 @@ export class SonarFeedWallComponent implements OnInit {
             timeFrame: this._getTimeFrame(item.granularity),
             setup: item.type,
             symbol: item.symbol,
-            side: item.side === IBFTATrend.Up ? "Long" : "Short"
+            side: item.side === IBFTATrend.Up ? "Long" : "Short",
+            marketType: this._mapMarketType(item.symbol, item.exchange)
         };
 
         const trendData = this._indicatorDataProviderService.getTrend(card.instrument.id, card.instrument.exchange, card.granularity, card.time);

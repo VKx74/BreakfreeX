@@ -211,30 +211,15 @@
         flex-direction: column;
         border-radius: 5px;
         overflow: hidden;
-    
 
-        .chart-tends {
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            z-index: 1;
+        .trend-arrow {
+            margin-right: 3px;
 
-            .global-trend,
-            .local-trend {
-                padding: 3px;
-                margin: 3px;
-                font-size: 10px;
-                font-weight: 700;
-                border-radius: 3px;
-            }
-
-            .uptrend {
-                background-color: #38ab7130;
+            &.uptrend {
                 color: #48c062;
             }
             
-            .downtrend {
-                background-color: #ff3f3f40;
+            &.downtrend {
                 color: #f1574f;
             }
         }

@@ -7,6 +7,7 @@ import { TradingHelper } from "@app/services/mt/mt.helper";
 import { SonarChartIndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
+import { ESonarFeedMarketTypes } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { SonarFeedCardTrendVM, SonarFeedCommentVM } from "../sonar-feed-wall/sonar-feed-wall.component";
 declare var ResizeObserver;
 
@@ -48,6 +49,7 @@ export class SonarFeedCardComponent implements OnInit {
     private _editComment: boolean;
     private _expandedComments: any[] = [];
     private _trend: SonarFeedCardTrendVM;
+    private _marketType: ESonarFeedMarketTypes;
 
     IBFTATrend = IBFTATrend;
 
@@ -149,6 +151,10 @@ export class SonarFeedCardComponent implements OnInit {
         this._trend = value;
     }
 
+    @Input() public set marketType(value: ESonarFeedMarketTypes) {
+        this._marketType = value;
+    }
+
     public set comment(value: string) {
         this._comment = value;
     }
@@ -219,6 +225,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get trend(): SonarFeedCardTrendVM {
         return this._trend;
+    }
+
+    public get marketType(): ESonarFeedMarketTypes {
+        return this._marketType;
     }
 
     public get comments(): SonarFeedCommentVM[] {
@@ -412,22 +422,31 @@ export class SonarFeedCardComponent implements OnInit {
         return commentsCount !== this.commentsTotal;
     }
 
-    getGlobalTrendDescription() {
+    getTrendDescription() {
         if (!this.trend) {
             return "";
         }
 
-        const strength = TradingHelper.convertTrendSpread(this.trend.globalTrendSpread);
-        return `Global ${strength} ${this.trend.globalTrend}`;
+        const strength = TradingHelper.convertTrendSpread((this.trend.globalTrendSpread + this.trend.localTrendSpread) / 2);
+        const localValue = Math.trunc(this.trend.localTrendSpread * 100);
+        const globalValue = Math.trunc(this.trend.globalTrendSpread * 100);
+        return `${strength} (${localValue}/${globalValue})`;
     }
 
-    getLocalTrendDescription() {
-        if (!this.trend) {
-            return "";
+    getMarketType() {
+        switch (this.marketType) {
+            case ESonarFeedMarketTypes.MajorForex: return "Forex Major";
+            case ESonarFeedMarketTypes.ForexMinors: return "Forex Minor";
+            case ESonarFeedMarketTypes.ForexExotic: return "Forex Exotic";
+            case ESonarFeedMarketTypes.Bonds: return "Bonds";
+            case ESonarFeedMarketTypes.Commodities: return "Commodities";
+            case ESonarFeedMarketTypes.Crypto: return "Crypto";
+            case ESonarFeedMarketTypes.Equities: return "Equities";
+            case ESonarFeedMarketTypes.Indices: return "Indices";
+            case ESonarFeedMarketTypes.Metals: return "Metals";
         }
-
-        const strength = TradingHelper.convertTrendSpread(this.trend.localTrendSpread);
-        return `Local ${strength} ${this.trend.localTrend}`;
+        
+        return "Other";
     }
 
     // is15Min() {
