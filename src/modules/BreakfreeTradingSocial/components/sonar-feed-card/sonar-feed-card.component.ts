@@ -483,8 +483,8 @@ export class SonarFeedCardComponent implements OnInit {
         }
 
         let requiredHeigh = Math.trunc(containerWidth / 4 * 2);
-        if (requiredHeigh < 160) {
-            requiredHeigh = 160;
+        if (requiredHeigh < 200) {
+            requiredHeigh = 200;
         }
 
         this.chartContainer.nativeElement.style["min-height"] = `${requiredHeigh}px`;

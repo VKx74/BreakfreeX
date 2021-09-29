@@ -30,9 +30,39 @@
         font-family: "Open Sans";
     }
 
+    .tags-holder {
+        display: flex;
+        align-items: center;
+        justify-content: right;
+        padding: 7px 0px 8px 0px;
+        border-top: 1px solid;
+        
+    }
+
     .tag-setup,
-    .tag-timeframe,
+    .tag-market,
     .tag-RTD-trend {
+        border-radius: 3px;
+        font-size: 9px;
+        text-align: center;
+        line-height: normal;
+        font-weight: 700;
+        margin-right: 5px;
+        padding: 2px 4px;
+        font-family: 'Open Sans';
+        display: flex;
+        opacity: 0.7;
+        transition:all 0.22s;
+    }
+    .tag-setup:hover,
+    .tag-market:hover,
+    .tag-RTD-trend:hover {
+    
+        opacity: 1;
+    }
+
+
+    .tag-timeframe{
         border-radius: 3px;
         font-size: 10px;
         text-align: center;
@@ -174,9 +204,14 @@
     .card-chart {
         display: flex;
         width: 100%;
-        min-height: 160px;
+        min-height: 200px;
         cursor: pointer;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        border-radius: 5px;
+        overflow: hidden;
+    
 
         .chart-tends {
             display: flex;
@@ -428,15 +463,21 @@
     .card-header {
         background-color: themed("sonar-feed-header");
     }
-
-    .tag-setup,
-    .tag-timeframe,
-    .tag-RTD-trend {
+    .tag-timeframe {
+        color: themed("sonar-timeframe-tag-color");
         background-color: themed("sonar-feed-tag");
     }
 
-    .tag-timeframe {
-        color: themed("sonar-timeframe-tag-color");
+    .tags-holder {
+       
+        background-color: themed("tags-holder-bg");
+        border-color:  themed("holder-tags-border-color");
+    }
+
+    .tag-setup, .tag-market, .tag-RTD-trend {
+       
+        background-color: themed("actual-tags-bg");
+        color: themed("actual-tags-color");
     }
 
     .setup-short {
