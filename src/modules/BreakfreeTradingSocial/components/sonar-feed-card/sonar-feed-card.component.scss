@@ -31,6 +31,7 @@
     }
 
     .tags-holder {
+        flex: 1 0 auto;
         display: flex;
         align-items: center;
         justify-content: right;
@@ -50,7 +51,7 @@
         padding: 2px 4px;
         font-family: "Open Sans";
         display: flex;
-        opacity: 0.7;
+        opacity: 0.85;
         transition: all 0.22s;
 
         &:hover {
