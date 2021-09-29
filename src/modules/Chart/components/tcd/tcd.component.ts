@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Injector, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Injector, ViewChild } from "@angular/core";
 import { Theme } from "@app/enums/Theme";
 import { IInstrument } from "@app/models/common/instrument";
 import { IdentityService } from "@app/services/auth/identity.service";
@@ -66,7 +66,7 @@ interface ReplayWaiter {
     selector: 'tcd',
     templateUrl: 'tcd.component.html',
     styleUrls: ['tcd.component.scss'],
-    // changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         {
             provide: DataFeedBase,
@@ -100,6 +100,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     private _priceDirectionElement: HTMLDivElement;
     private _currentPriceElement: HTMLDivElement;
     private _priceChangeElement: HTMLDivElement;
+    private _detachedElement: JQuery<HTMLElement>;
     private _headerUpdateTimer;
     private _hourlyPriceCache: { [instrumentHash: string]: IBarData[] } = {};
 
@@ -107,8 +108,14 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     chart: TradingChartDesigner.Chart;
 
     @ViewChild('chartContainer', { static: false }) chartContainer: ElementRef;
+    @ViewChild('chartComponentContainer', { static: false }) chartComponentContainer: ElementRef;
+
+    public get isDetached(): boolean {
+        return !!this._detachedElement;
+    }
 
     constructor(@Inject(GoldenLayoutItemState) protected _state: ITcdComponentState,
+        private _ref: ChangeDetectorRef,
         private _datafeed: DataFeedBase,
         private _themeService: ThemeService,
         private _localizationService: LocalizationService,
@@ -135,6 +142,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         if (this._identity.isGuestMode) {
             ReplayModeSync.IsChartReplay = true;
         }
+        super.setTitle(of("Loading"));
     }
 
     ngOnInit() {
@@ -178,6 +186,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     ngAfterViewInit() {
         setTimeout(() => {
             this.init(this._state);
+            this._ref.detach();
         }, 1);
     }
 
@@ -279,6 +288,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             }
 
             this._chartTrackerService.addChart(this.chart);
+            this._chartTrackerService.addChartComponent(this);
 
             this.brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
                 if (!(this._brokerService.activeBroker instanceof MTBroker)) {
@@ -289,7 +299,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
             this._headerUpdateTimer = setInterval(() => {
                 this._setTitlePrice();
-            }, 1000);
+            }, 2000);
         });
     }
 
@@ -366,6 +376,27 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart.setReplayByDate(dates[100], true);
         }, 1500);
         this.replayModeTimers.push(timerId4);
+    }
+
+    detach() {
+        if (!this.chartContainer || this._detachedElement) {
+            return;
+        }
+        this.chart.preventRefresh = true;
+        this._detachedElement = $(this.chartContainer.nativeElement).detach();
+    }  
+    
+    attach() {
+        if (!this._detachedElement) {
+            return;
+        }
+
+        this._detachedElement.appendTo($(this.chartComponentContainer.nativeElement));
+        this._detachedElement = null;
+        
+        setTimeout(() => {
+            this.chart.preventRefresh = false;
+        }, 100);
     }
 
     protected isRTDExists() {
@@ -759,7 +790,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     setTitle() {
-        super.setTitle(of(this.chart ? this.chart.instrument.symbol : ''));
+        if (this.chart && this.chart.instrument) {
+            super.setTitle(of(this.chart ? this.chart.instrument.symbol : ''));
+        }
 
         if (this._tabElement) {
             const priceTickerContainer = this._tabElement.find(`.${this._priceTickerContainerClass}`)[0];
@@ -799,6 +832,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
         try {
             this._chartTrackerService.removeChart(this.chart);
+            this._chartTrackerService.removeChartComponent(this);
             if (this.chart) {
                 this.chart.off(TradingChartDesigner.ChartEvent.INDICATOR_ADDED);
                 this.chart.off(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED);

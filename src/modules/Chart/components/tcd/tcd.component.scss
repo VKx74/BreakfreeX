@@ -17,6 +17,12 @@
     -moz-animation: blur 4s ease 0s infinite;
   }
 
+  .tcd-component-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+  
   .tcd-component {
     width: 100%;
     height: calc(100% - 2px);
