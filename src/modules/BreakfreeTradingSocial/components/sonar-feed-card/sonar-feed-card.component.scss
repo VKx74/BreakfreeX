@@ -34,7 +34,7 @@
         flex: 1 0 auto;
         display: flex;
         align-items: center;
-        justify-content: right;
+        justify-content: flex-end;
         padding: 7px 0px 8px 0px;
         border-top: 1px solid;
     }
@@ -187,6 +187,8 @@
 
             .fa {
                 margin-right: 3px;
+                margin-top:1px;
+                font-size:9px;
             }
         }
     }
