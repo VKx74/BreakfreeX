@@ -710,7 +710,7 @@ export class SonarFeedWallComponent implements OnInit {
         this.loading = true;
         this._sonarFeedService.deleteComment(commentId).subscribe(() => {
             this.loading = false;
-            this._deleteCommentFromCommentsList(card.comments, commentId);
+            this._deleteCommentFromCommentsList(card.comments, commentId, card);
             this._refreshNeeded = true;
         }, () => {
             this.loading = false;
@@ -1101,7 +1101,7 @@ export class SonarFeedWallComponent implements OnInit {
             return;
         }
 
-        this._deleteCommentFromCommentsList(card.comments, reaction.id);
+        this._deleteCommentFromCommentsList(card.comments, reaction.id, card);
 
         this._refreshNeeded = true;
     }
@@ -1279,7 +1279,7 @@ export class SonarFeedWallComponent implements OnInit {
         }
     }
 
-    private _deleteCommentFromCommentsList(comments: SonarFeedCommentVM[], commentId: any) {
+    private _deleteCommentFromCommentsList(comments: SonarFeedCommentVM[], commentId: any, card: SonarFeedCardVM) {
         if (!comments) {
             return;
         }
@@ -1288,10 +1288,14 @@ export class SonarFeedWallComponent implements OnInit {
             if (comments[i].id === commentId) {
                 comments.splice(i, 1);
                 i--;
+
+                if (card.commentsTotal > 0) {
+                    card.commentsTotal--;
+                }
             }
 
             if (comments[i] && comments[i].comments) {
-                this._deleteCommentFromCommentsList(comments[i].comments, commentId);
+                this._deleteCommentFromCommentsList(comments[i].comments, commentId, card);
             }
         }
     }

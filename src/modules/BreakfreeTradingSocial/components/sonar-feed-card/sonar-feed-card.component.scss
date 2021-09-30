@@ -307,17 +307,16 @@
 
             textarea {
                 display: flex;
-                min-height: 30px;
                 margin: 5px;
                 font-size: 11px !important;
                 line-height: 14px;
                 text-align: left;
                 border-radius: 10px;
                 width: 99%;
-             
+                padding: 8px 30px 8px 10px !important;
+                min-height: 32px !important;
+                height: 32px;
                 resize: none;
-
-                
             }
 
             .send-button {

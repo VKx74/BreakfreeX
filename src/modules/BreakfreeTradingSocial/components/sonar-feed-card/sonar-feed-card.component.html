@@ -139,7 +139,7 @@
         <!-- <mat-form-field class="crypto-input bft-form-input full-width"> -->
         <div class="card-left-comment-input">
             <textarea  class="crypto-textarea nborder comment-textarea" placeholder="What are your thoughts?"
-                [(ngModel)]="comment" #textarea (keyup)="keyUpOnTextArea($event)"    ></textarea>
+                [(ngModel)]="comment" #textarea (keypress)="keyUpOnTextArea($event)" TextMode="MultiLine"></textarea>
             <img src="/assets/img/paper-plane-top-solid.svg"class="send-button" [ngClass]="{'disabled': !comment || comment.length === 0}" (click)="sendComment()">
                
             

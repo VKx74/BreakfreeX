@@ -157,6 +157,7 @@ export class SonarFeedCardComponent implements OnInit {
 
     public set comment(value: string) {
         this._comment = value;
+        this._setTextAreaHeight();
     }
 
     public get instrument(): IInstrument {
@@ -364,7 +365,12 @@ export class SonarFeedCardComponent implements OnInit {
         } else {
             this.onAddComment.next(this.comment);
         }
-        this.comment = null;
+        this.comment = "";
+        this._cdr.detectChanges();
+    }
+
+    textChanged() {
+        this._setTextAreaHeight();
     }
 
     showAllComment() {
@@ -410,6 +416,9 @@ export class SonarFeedCardComponent implements OnInit {
     keyUpOnTextArea(data: KeyboardEvent) {
         if (data.code === "Enter" && !data.shiftKey) {
             this.sendComment();
+            data.preventDefault();
+            data.stopPropagation();
+            return;
         }
     }
 
@@ -445,14 +454,14 @@ export class SonarFeedCardComponent implements OnInit {
             case ESonarFeedMarketTypes.Indices: return "Indices";
             case ESonarFeedMarketTypes.Metals: return "Metals";
         }
-        
+
         return "Other";
     }
 
     // is15Min() {
     //     return this.granularity <= 60 * 15;
     // } 
-    
+
     // isHourly() {
     //     return this.granularity <= 60 * 60 * 4 && !this.is15Min();
     // }
@@ -460,10 +469,22 @@ export class SonarFeedCardComponent implements OnInit {
     // isAccessRestriction() {
     //    return !this._isCardVisible;
     // } 
-    
+
     // isLevelRestriction() {
     //    return !this._isCardVisibleByLevel && this._isCardVisible;
     // }
+
+    private _setTextAreaHeight() {
+        if (!this.textarea || !this.textarea.nativeElement) {
+            return;
+        }
+        this.textarea.nativeElement.style.height = `0px`;
+
+        if (this.comment) {
+            const scroll = this.textarea.nativeElement.scrollHeight + 2;
+            this.textarea.nativeElement.style.height = `${scroll}px`;
+        }
+    }
 
     private _countCommentsRecursive(comments: SonarFeedCommentVM[]): number {
         let count = 0;
