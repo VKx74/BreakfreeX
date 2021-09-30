@@ -326,9 +326,7 @@ export class DashboardComponent {
         }, false);
 
         document.addEventListener('gl-drag-ended', () => {
-            setTimeout(() => {
-                this._attach();
-            }, 500);
+            this._attach();
         }, false);
     }
 

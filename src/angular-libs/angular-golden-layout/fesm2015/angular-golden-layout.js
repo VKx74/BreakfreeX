@@ -1100,8 +1100,10 @@ class GoldenLayoutComponent {
          */
         function (x, y) {
             document.dispatchEvent(new Event('gl-drag-started'));
-            dragElement.appendTo('body');
-            origin.call(tab, x, y);
+            setTimeout(() => {
+                origin.call(tab, x, y);
+                dragElement.appendTo('body');
+            }, 100);
         });
         tab._onDragStart = onDragStart;
         dragListener.on('dragStart', ((/** @type {?} */ (tab)))._onDragStart, tab);
@@ -1110,7 +1112,9 @@ class GoldenLayoutComponent {
          */
         () => {
             dragElement.remove();
-            document.dispatchEvent(new Event('gl-drag-ended'));
+            setTimeout(() => {
+                document.dispatchEvent(new Event('gl-drag-ended'));
+            }, 300);
         }), null);
     }
     /**

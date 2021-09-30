@@ -384,6 +384,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         }
         this.chart.preventRefresh = true;
         this._detachedElement = $(this.chartContainer.nativeElement).detach();
+        this._ref.detectChanges();
     }  
     
     attach() {
@@ -393,6 +394,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
         this._detachedElement.appendTo($(this.chartComponentContainer.nativeElement));
         this._detachedElement = null;
+        this._ref.detectChanges();
         
         setTimeout(() => {
             this.chart.preventRefresh = false;

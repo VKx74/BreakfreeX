@@ -1,8 +1,15 @@
 :host-context(.lm_dragging),
-:host-context(.as-dragging){ // Class added when user resize or dragging panel
+:host-context(.as-dragging) {
+  // Class added when user resize or dragging panel
   .tcdRootContainer {
     pointer-events: none !important;
     //padding-bottom: 7px;
+  }
+}
+
+.lm_dragProxy {
+  .tcd-component-loader {
+    display: none;
   }
 }
 
@@ -22,7 +29,7 @@
     width: 100%;
     height: 100%;
   }
-  
+
   .tcd-component {
     width: 100%;
     height: calc(100% - 2px);
@@ -56,5 +63,5 @@
     -moz-filter: blur(5px);
     -o-filter: blur(5px);
     -ms-filter: blur(5px);
-  } 
+  }
 }
