@@ -128,26 +128,21 @@
 @import "global-styles/mixins/themify";
 @import "global-styles/variables";
 
-
-
-
 :host {
   flex-shrink: 0;
 }
 
 file-info-simple {
-  width: 100%
+  width: 100%;
 }
 
 .root {
   display: flex;
-  padding-top:8px;
-  padding-bottom:8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   margin-left: -3px;
   margin-right: -3px;
   justify-content: flex-start;
- 
-  
 
   &:last-of-type {
     margin-top: auto;
@@ -160,8 +155,6 @@ file-info-simple {
     margin-right: 0px;
     margin-top: 2px;
     margin-left: 11px;
-    
-    
 
     ::ng-deep img {
       border-radius: 15%;
@@ -194,8 +187,8 @@ file-info-simple {
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
-    font-weight:bold;
-    min-width:100px;
+    font-weight: bold;
+    min-width: 100px;
   }
 
   .message-time {
@@ -208,9 +201,6 @@ file-info-simple {
     display: flex;
     justify-content: flex-start;
   }
-
- 
-
 }
 
 .message-sending-status {
@@ -234,7 +224,6 @@ file-info-simple {
   }
 }
 
-
 .root.current-user-message {
   justify-content: flex-start;
 
@@ -243,12 +232,10 @@ file-info-simple {
   }
 
   .creator-avatar {
-    
   }
 
   .message-body {
     .creator-name {
-      
     }
 
     .file-view {
@@ -267,10 +254,6 @@ file-info-simple {
   }
 }
 
-
-
-
-
 @include themify($themes, true) {
   .message-body {
     //background-color: transparentize(themed('panelBorderColor'), 0.85);
@@ -280,7 +263,7 @@ file-info-simple {
     //background: themed('inputBackgroundColor');
 
     .creator-name {
-    //  color: themed('accentColor');
+      //  color: themed('accentColor');
     }
 
     .message-time {
@@ -305,4 +288,3 @@ file-info-simple {
     }
   }
 }
-
