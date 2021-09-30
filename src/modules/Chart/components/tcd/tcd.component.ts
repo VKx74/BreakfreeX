@@ -196,7 +196,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         let theme = state && state.chartState && state.chartState.chart.theme ? state.chartState.chart.theme : this._getTheme();
 
         if (state && state.chartState) {
-            if (state.chartState.version !== 8) {
+            if (state.chartState.version !== 9) {
                 console.log("Set default theme");
                 theme = this._getTheme();
                 if (state.chartState.chart) {
