@@ -275,6 +275,7 @@
     .card-left-comment {
         display: flex;
         flex-direction: column;
+        align-items: center;
         width: 100%;
 
         .replay-description {
@@ -288,8 +289,7 @@
 
             .replay-comment-text {
                 overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
+                display: block;
                 margin-right: 15px;
             }
         }
@@ -299,15 +299,24 @@
         }
 
         .card-left-comment-input {
+          
             display: flex;
+            align-items: end;
+            width: 100%;
 
             textarea {
-                height: 28px;
-                margin: 5px 0px 5px 5px;
+                display: flex;
+                height: 30px;
+                min-height: 30px;
+                margin: 5px;
                 font-size: 11px !important;
                 line-height: 14px;
-                border-radius: 12px 0px 0px 12px;
+                text-align: left;
+                border-radius: 10px;
+                width: 99%;
+                overflow: hidden;
                 resize: none;
+                
             }
 
             .send-button {
@@ -320,6 +329,7 @@
                 border-radius: 0px 12px 12px 0px;
                 font-weight: 700;
                 cursor: pointer;
+                min-width: 15%;
             }
         }
     }
@@ -349,7 +359,6 @@
     }
 
     .limit-comments {
-        max-height: 400px;
         overflow-y: auto;
     }
 
@@ -457,7 +466,9 @@
         background-color: themed("tags-holder-bg");
         border-color: themed("holder-tags-border-color");
     }
-
+    .card-chart{
+        background-color: themed("appPanelColor");
+    }
     .tag-setup,
     .tag-market,
     .tag-RTD-trend {

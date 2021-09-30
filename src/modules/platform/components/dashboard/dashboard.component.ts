@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, Inject, Injector, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, Injector, NgZone, ViewChild } from "@angular/core";
 import { Observable, of, Subject, Subscription } from "rxjs";
 import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -52,12 +52,14 @@ import { Components, RightSidePanelStateService } from "@platform/services/right
 import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { InMemoryStorageService } from "modules/Storage/services/in-memory-storage.service";
 import { LinkingAction } from "@linking/models";
+import { ChartTrackerService } from "modules/BreakfreeTrading/services/chartTracker.service";
 
 
 @Component({
     selector: 'dashboard',
     templateUrl: 'dashboard.component.html',
-    styleUrls: ['dashboard.component.scss']
+    styleUrls: ['dashboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
     private _updateInterval = 1000 * 10;
@@ -82,7 +84,7 @@ export class DashboardComponent {
 
     private get _isPro(): boolean {
         return this._identityService.subscriptionType === SubscriptionType.Pro ||
-        this._identityService.subscriptionType === SubscriptionType.Trial;
+            this._identityService.subscriptionType === SubscriptionType.Trial;
     }
 
     @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
@@ -140,6 +142,8 @@ export class DashboardComponent {
     }
 
     constructor(private _store: Store<AppState>,
+        private _ref: ChangeDetectorRef,
+        private _chartTrackerService: ChartTrackerService,
         private _actions: Actions,
         private _intercom: Intercom,
         private _dialog: MatDialog,
@@ -281,7 +285,6 @@ export class DashboardComponent {
             .pipe(takeUntil(componentDestroyed(this)))
             .subscribe({
                 next: (parent) => {
-                    // this.setUpComponentSelectorDialog(parent);
                     this.addChartComponent(parent);
                 }
             });
@@ -311,6 +314,20 @@ export class DashboardComponent {
         } catch (error) {
             console.error(error);
         }
+
+        this._layoutManager.layout.$stateChanged
+            .pipe(takeUntil(componentDestroyed(this)))
+            .subscribe(() => {
+                this._ref.markForCheck();
+            });
+
+        document.addEventListener('gl-drag-started', () => {
+            this._detach();
+        }, false);
+
+        document.addEventListener('gl-drag-ended', () => {
+            this._attach();
+        }, false);
     }
 
     clearSession() {
@@ -553,12 +570,15 @@ export class DashboardComponent {
                 }
             );
         }
+
+        this._ref.markForCheck();
     }
 
     private _initAutoSave() {
         this._layoutManager.layout.$stateChanged
             .pipe(takeUntil(componentDestroyed(this)))
             .subscribe(() => {
+                this._ref.markForCheck();
                 if (!this._saveLayout) {
                     return;
                 }
@@ -703,6 +723,21 @@ export class DashboardComponent {
             });
     }
 
+    private _detach() {
+        this._chartTrackerService.detach();
+        this._ref.detach();
+    }
+
+    private _attach() {
+        this._ref.detectChanges();
+        this._chartTrackerService.attach();
+
+        setTimeout(() => {
+            this._ref.reattach();
+            // this._ref.markForCheck();
+        }, 1);
+    }
+
     private addChartComponent(parent: any) {
         if (!this._canAddComponent()) {
             this._shoCheckoutPopup();
@@ -720,6 +755,7 @@ export class DashboardComponent {
             }
         }).afterClosed().subscribe((data) => {
             if (data) {
+                this._detach();
                 this._layoutManager.addComponent({
                     layoutItemName: "chart",
                     parent: parent,
@@ -727,6 +763,8 @@ export class DashboardComponent {
                         instrument: data
                     }
                 });
+
+                this._attach();
             }
         });
     }
@@ -902,8 +940,8 @@ export class DashboardComponent {
 
     private _canUseLayout(): boolean {
         return this._identityService.isAuthorizedCustomer;
-    } 
-    
+    }
+
     private _canAddComponent(): boolean {
         return this._identityService.isAuthorizedCustomer;
     }

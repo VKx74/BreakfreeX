@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from "@angular/core";
 import { IdentityService } from "./services/auth/identity.service";
 import { TranslateService } from "@ngx-translate/core";
 import { AppTranslateService } from "./localization/token";
@@ -21,7 +21,8 @@ import { Angulartics2GoSquared } from 'angulartics2/gosquared';
 @Component({
     selector: 'app',
     templateUrl: 'app.component.html',
-    styleUrls: ['app.component.scss']
+    styleUrls: ['app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
     static isGAInitialized = false;
@@ -43,7 +44,7 @@ export class AppComponent {
 
     constructor(private _authService: IdentityService,
         private _router: Router,
-        private _route: ActivatedRoute,
+        private _ref: ChangeDetectorRef,
         private _ss: SidebarService,
         private _loaderService: LoaderService,
         private _angulartics2Segment: Angulartics2Segment,
@@ -82,6 +83,14 @@ export class AppComponent {
     }
 
     ngOnInit() {
+        document.addEventListener('detach-ng-zone', () => {
+            this._ref.detach();
+        }, false);
+
+        document.addEventListener('reattach-ng-zone', () => {
+            this._ref.reattach();
+        }, false);
+
         const currentRoute = this._router.routerState.snapshot.url;
         if (currentRoute && currentRoute.endsWith(AppRoutes.ClearSession)) {
             this._authService.signOut().subscribe();
