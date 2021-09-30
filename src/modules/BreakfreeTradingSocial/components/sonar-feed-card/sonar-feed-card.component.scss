@@ -456,7 +456,9 @@
         background-color: themed("tags-holder-bg");
         border-color: themed("holder-tags-border-color");
     }
-
+    .card-chart{
+        background-color: themed("appPanelColor");
+    }
     .tag-setup,
     .tag-market,
     .tag-RTD-trend {
