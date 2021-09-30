@@ -320,6 +320,16 @@ export class DashboardComponent {
             .subscribe(() => {
                 this._ref.markForCheck();
             });
+
+        document.addEventListener('gl-drag-started', () => {
+            this._detach();
+        }, false);
+
+        document.addEventListener('gl-drag-ended', () => {
+            setTimeout(() => {
+                this._attach();
+            }, 500);
+        }, false);
     }
 
     clearSession() {
@@ -715,6 +725,21 @@ export class DashboardComponent {
             });
     }
 
+    private _detach() {
+        this._chartTrackerService.detach();
+        this._ref.detach();
+    }
+
+    private _attach() {
+        this._ref.detectChanges();
+        this._chartTrackerService.attach();
+
+        setTimeout(() => {
+            this._ref.reattach();
+            // this._ref.markForCheck();
+        }, 1);
+    }
+
     private addChartComponent(parent: any) {
         if (!this._canAddComponent()) {
             this._shoCheckoutPopup();
@@ -732,8 +757,7 @@ export class DashboardComponent {
             }
         }).afterClosed().subscribe((data) => {
             if (data) {
-                this._chartTrackerService.detach();
-                this._ref.detach();
+                this._detach();
                 this._layoutManager.addComponent({
                     layoutItemName: "chart",
                     parent: parent,
@@ -742,13 +766,7 @@ export class DashboardComponent {
                     }
                 });
 
-                this._ref.detectChanges();
-                this._chartTrackerService.attach();
-
-                setTimeout(() => {
-                    this._ref.reattach();
-                    this._ref.markForCheck();
-                }, 1);
+                this._attach();
             }
         });
     }

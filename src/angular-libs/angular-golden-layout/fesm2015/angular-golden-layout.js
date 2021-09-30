@@ -1099,6 +1099,7 @@ class GoldenLayoutComponent {
          * @return {?}
          */
         function (x, y) {
+            document.dispatchEvent(new Event('gl-drag-started'));
             dragElement.appendTo('body');
             origin.call(tab, x, y);
         });
@@ -1109,6 +1110,7 @@ class GoldenLayoutComponent {
          */
         () => {
             dragElement.remove();
+            document.dispatchEvent(new Event('gl-drag-ended'));
         }), null);
     }
     /**
