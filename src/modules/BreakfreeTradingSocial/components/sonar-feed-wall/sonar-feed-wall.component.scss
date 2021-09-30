@@ -19,11 +19,11 @@
         height: 100%;
         align-items: center;
         -webkit-touch-callout: text;
-    -webkit-user-select: text;
-    -khtml-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
+        -webkit-user-select: text;
+        -khtml-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
     }
 
     .card-container {
@@ -59,7 +59,6 @@
         filter: invert(1);
         opacity: 0.8;
         margin-top: -1px;
-
     }
 
     .sonar-feed-header {
@@ -76,7 +75,6 @@
         border-bottom-right-radius: 10px;
         border-bottom-left-radius: 10px;
     }
-    
 
     .filters-search {
         width: 100%;
@@ -87,7 +85,7 @@
         border: 0px;
         border-radius: 5px;
         padding: 6px 4px 6px 8px;
-        font-family: 'Open Sans';
+        font-family: "Open Sans";
         font-weight: 700;
     }
 
@@ -106,7 +104,7 @@
         max-width: 50%;
         width: 50%;
     }
-    
+
     .outside-filters-holder {
         display: flex;
     }
@@ -114,7 +112,8 @@
         margin-right: 3px;
     }
 
-    .filters-holder, .item-favs {
+    .filters-holder,
+    .item-favs {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -126,7 +125,7 @@
         padding: 2px 8px;
         color: #ffffffc4;
         cursor: pointer;
-        font-family: 'Open Sans';
+        font-family: "Open Sans";
         &:hover {
             opacity: 0.8;
         }
@@ -137,8 +136,6 @@
         font-weight: 700;
         margin-right: 15px;
     }
-
-
 
     .filters-and-search {
         display: flex;
@@ -176,7 +173,7 @@
         width: 100%;
         align-items: center;
         padding-bottom: 5px;
-        padding-right:5px;
+        padding-right: 5px;
 
         .cancel,
         .apply {
@@ -227,8 +224,6 @@
             padding: 8px 5px 5px 5px;
         }
     }
-
-
 
     .cards-container {
         display: flex;
