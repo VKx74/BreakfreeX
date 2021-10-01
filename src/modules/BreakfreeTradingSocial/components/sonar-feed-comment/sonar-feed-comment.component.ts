@@ -148,4 +148,12 @@ export class SonarFeedCommentComponent implements OnInit {
     banUser(comment: SonarFeedCommentVM) {
         this.onBanUser.next(comment);
     }
+
+    collapseComment(comment: SonarFeedCommentVM) {
+        comment.isCollapsed = true;
+    }
+
+    showComment(comment: SonarFeedCommentVM) {
+        comment.isCollapsed = false;
+    }
 }

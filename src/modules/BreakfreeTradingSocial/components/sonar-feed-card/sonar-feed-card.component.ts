@@ -236,7 +236,7 @@ export class SonarFeedCardComponent implements OnInit {
         if (this._showLastComment && this._comments) {
             const length = this._comments.length;
             if (length > 1) {
-                return this._comments.slice(length - 1);
+                return this._comments.slice(0, 1);
             }
         }
         return this._comments;

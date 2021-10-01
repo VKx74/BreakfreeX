@@ -35,6 +35,7 @@ export interface SonarFeedCommentVM {
     comments: SonarFeedCommentVM[];
     isOwnComment: boolean;
     isRootComment: boolean;
+    isCollapsed: boolean;
     time: number;
 }
 
@@ -1066,7 +1067,8 @@ export class SonarFeedWallComponent implements OnInit {
             levelName: comment.user.levelName,
             userName: comment.user.name,
             comments: comment.comments ? comment.comments.map(_ => this._convertCommentToVM(_)) : [],
-            isRootComment: isRoot
+            isRootComment: isRoot,
+            isCollapsed: false
         };
     }
 

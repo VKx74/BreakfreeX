@@ -6,11 +6,17 @@
                 <mat-menu #menu="matMenu" xPosition="before">
                     <div class="sonar-user-management-menu">
                         <div class="ban">
-                            <button class="crypto-button crypto-button_action" (click)="banUser(comment)">Ban this user</button>
+                            <button class="crypto-button crypto-button_action" (click)="banUser(comment)">Ban this
+                                user</button>
                         </div>
                     </div>
                 </mat-menu>
                 <name-avatar [name]="comment.userName" [src]="comment.userAvatarId"></name-avatar>
+            </div>
+            <div class="extend-comment" *ngIf="comment.isCollapsed">
+                <div class="extend-comment-button" (click)="showComment(comment)">
+                    <i class="fa fa-expand" aria-hidden="true"></i>
+                </div>
             </div>
         </div>
         <div class="comment-content">
@@ -68,29 +74,37 @@
     </div>
 
     <div class="sub-comments-container" *ngIf="comment.comments && comment.comments.length">
-        <ng-container *ngIf="comment.isRootComment && !isRootExpanded() && hasSubCommentsThread; else expanded">
-            <div class="sub-comment-item" [ngClass]="{'own-comment': comment.comments[0].isOwnComment}">
-                <sonar-feed-comment [comment]="comment.comments[0]" (onCommentLike)="likeComment($event)"
-                    (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
-                    (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
-                    (onEditComment)="editComment($event)" (onBanUser)="banUser($event)"
-                    (onCommentLikeDelete)="deleteLike($event)"
-                    [expandedComments]="expandedComments" [isExpanded]="false"></sonar-feed-comment>
-                <div class="continue-thread" (click)="continueThread()">Continue this thread</div>
+        <ng-container *ngIf="!comment.isCollapsed; else collapsedCommentContainer">
+            <div class="sub-comments-splitter" (click)="collapseComment(comment)">
+                <div class="sub-comments-splitter-line"></div>
             </div>
-        </ng-container>
-        <ng-template #expanded>
-            <ng-container *ngIf="isExpanded">
-                <div class="sub-comment-item" *ngFor="let c of comment.comments"
-                    [ngClass]="{'own-comment': c.isOwnComment}">
-                    <sonar-feed-comment [comment]="c" (onCommentLike)="likeComment($event)"
+
+            <ng-container *ngIf="comment.isRootComment && !isRootExpanded() && hasSubCommentsThread; else expanded">
+                <div class="sub-comment-item" [ngClass]="{'own-comment': comment.comments[0].isOwnComment}">
+                    <sonar-feed-comment [comment]="comment.comments[0]" (onCommentLike)="likeComment($event)"
                         (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
                         (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
                         (onEditComment)="editComment($event)" (onBanUser)="banUser($event)"
-                        (onCommentLikeDelete)="deleteLike($event)"
-                        [expandedComments]="expandedComments" [isExpanded]="true"></sonar-feed-comment>
+                        (onCommentLikeDelete)="deleteLike($event)" [expandedComments]="expandedComments"
+                        [isExpanded]="false"></sonar-feed-comment>
+                    <div class="continue-thread" (click)="continueThread()">Continue this thread</div>
                 </div>
             </ng-container>
+            <ng-template #expanded>
+                <ng-container *ngIf="isExpanded">
+                    <div class="sub-comment-item" *ngFor="let c of comment.comments"
+                        [ngClass]="{'own-comment': c.isOwnComment}">
+                        <sonar-feed-comment [comment]="c" (onCommentLike)="likeComment($event)"
+                            (onCommentDislike)="dislikeComment($event)" (onAddReplay)="replay($event)"
+                            (onRemoveComment)="removeComment($event)" (onExpandComment)="expandComment($event)"
+                            (onEditComment)="editComment($event)" (onBanUser)="banUser($event)"
+                            (onCommentLikeDelete)="deleteLike($event)" [expandedComments]="expandedComments"
+                            [isExpanded]="true"></sonar-feed-comment>
+                    </div>
+                </ng-container>
+            </ng-template>
+        </ng-container>
+        <ng-template #collapsedCommentContainer>
         </ng-template>
     </div>
 </div>

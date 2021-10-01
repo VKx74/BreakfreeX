@@ -69,21 +69,35 @@
 
         .comment-avatar {
             display: flex;
-            flex-direction: column;
             min-width: 40px;
-            height: 100%;
+            min-height: 100%;
+            flex-direction: column;
 
             .comment-avatar-img {
                 display: flex;
-                width: 32px;
-                height: 32px;
+                width: 100%;
                 justify-content: center;
                 position: relative;
-
+                name-avatar {
+                    width: 32px;
+                }
                 .user-management {
                     position: absolute;
                     width: 100%;
                     height: 100%;
+                    cursor: pointer;
+                }
+            }
+
+            .extend-comment {
+                font-size: 16px;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: end;
+                justify-content: center;
+                .extend-comment-button {
+                    padding: 3px;
                     cursor: pointer;
                 }
             }
@@ -259,15 +273,27 @@
         color: themed("accentColor");
     }
 
-    .sub-comments-container::before {
-        content: "";
+    .sub-comments-splitter {
         position: absolute;
         height: 100%;
-        width: 1px;
+        width: 10px;
         bottom: 15px;
-        left: 0px;
-        border-left: 1px solid;
-        border-color: themed("sonar-feed-border") !important;
+        left: -6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .sub-comments-splitter-line {
+            background: themed("sonar-feed-border") !important;
+            height: 100%;
+            width: 1px;
+            display: flex;
+        }
+        &:hover {
+            .sub-comments-splitter-line {
+                width: 3px !important;
+            }
+        }
     }
 
     .comment-like-container,
