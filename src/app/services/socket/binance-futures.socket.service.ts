@@ -53,7 +53,13 @@ export abstract class BinanceFuturesSocketService extends BrokerSocketService {
     this._onMessageSubscription = this.onMessage.subscribe(value => {
       try {
         const msgData = value as BrokerResponseMessageBase;
-        const msgTypeString = msgData && msgData.Type ? msgData.Type.toLowerCase() : "";
+        let msgTypeString = msgData && msgData.Type ? msgData.Type.toLowerCase() : "";
+
+        if (!msgTypeString) {
+          if (msgData.Data && msgData.Data.Type) {
+            msgTypeString =  msgData.Data.Type.toLowerCase();
+          }
+        }
 
         if (msgTypeString === "tick") {
           this._processNewQuote(msgData);

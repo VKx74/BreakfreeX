@@ -437,9 +437,22 @@ export class SonarFeedCardComponent implements OnInit {
         }
 
         const strength = TradingHelper.convertTrendSpread((this.trend.globalTrendSpread + this.trend.localTrendSpread) / 2);
+        return `${strength}`;
+        // return `${strength} (${localValue}/${globalValue})`;
+    }  
+    
+    getTrendDescriptionTooltip() {
+        if (!this.trend) {
+            return "";
+        }
+
+        const localStrength = TradingHelper.convertTrendSpread(this.trend.localTrendSpread);
+        const globalStrength = TradingHelper.convertTrendSpread(this.trend.globalTrendSpread);
         const localValue = Math.trunc(this.trend.localTrendSpread * 100);
         const globalValue = Math.trunc(this.trend.globalTrendSpread * 100);
-        return `${strength} (${localValue}/${globalValue})`;
+        const localTrendString = `Local - ${this.trend.localTrend} Trend ${localStrength}(${localValue}%)`;
+        const globalTrendString = `Global - ${this.trend.globalTrend} Trend ${globalStrength}(${globalValue}%)`;
+        return `${localTrendString}\n\n${globalTrendString}`;
     }
 
     getMarketType() {

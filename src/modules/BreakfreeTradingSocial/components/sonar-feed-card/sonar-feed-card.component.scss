@@ -59,6 +59,10 @@
         }
     }
 
+    .tag-RTD-trend {
+        cursor: pointer;
+    }
+
     .tag-timeframe {
         border-radius: 3px;
         font-size: 10px;
@@ -479,6 +483,7 @@
     .tag-RTD-trend {
         background-color: themed("actual-tags-bg");
         color: themed("actual-tags-color");
+        user-select: none;
     }
 
     .setup-short {

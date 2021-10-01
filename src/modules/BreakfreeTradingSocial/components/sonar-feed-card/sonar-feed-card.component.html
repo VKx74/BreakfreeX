@@ -52,13 +52,13 @@
         <div class="tags-holder">
             <div class="tag-setup">{{setup}}</div>
             <div class="tag-market">{{getMarketType()}}</div>
-            <div *ngIf="this.trend" class="tag-RTD-trend">
+            <div *ngIf="this.trend" class="tag-RTD-trend" tooltip [matTooltip]="getTrendDescriptionTooltip()">
                 <span class="trend-arrow" [ngClass]="this.trend.globalTrend == IBFTATrend.Up ? 'uptrend' : 'downtrend'">
                     <i class="fa"
                         [ngClass]="{'fas fa-arrow-up': (this.trend.globalTrend == IBFTATrend.Up), 'fas fa-arrow-down': (this.trend.globalTrend == IBFTATrend.Down)}"></i>
                 </span>
                 <span class="trend-description">
-                    {{getTrendDescription()}}
+                    {{getTrendDescription()}} Trend
                 </span>
             </div>
         </div>
