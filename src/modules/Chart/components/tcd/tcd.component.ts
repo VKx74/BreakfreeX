@@ -332,7 +332,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             if (indicator instanceof TradingChartDesigner.BreakfreeTradingIndicatorBase) {
                 try {
                     (indicator as TradingChartDesigner.BreakfreeTradingIndicatorBase).calculate(true);
-                } catch(e) {
+                } catch (e) {
                     console.log(e);
                 }
             }
