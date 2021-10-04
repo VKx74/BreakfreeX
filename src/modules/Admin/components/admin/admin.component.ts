@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router} from "@angular/router";
 import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
 import {takeUntil} from "rxjs/operators";
@@ -16,6 +16,7 @@ import {SidebarService} from "@app/services/sidebar.service";
     ]
 })
 export class AdminComponent implements OnInit {
+    _updateTimer: any;
     showProgressBar: boolean = false;
     NavigationMode = NavigationMode;
 
@@ -30,17 +31,9 @@ export class AdminComponent implements OnInit {
     constructor(private _themeService: ThemeService,
                 private _sidebarService: SidebarService,
                 private _router: Router,
+                private _ref: ChangeDetectorRef,
                 private _route: ActivatedRoute
-                // private _userSettingsService:
                 ) {
-
-        // this._themeService.setAdminAreaTheme();
-        // this._themeService.activeTheme$
-        //     .subscribe(theme => {
-        //         if (theme) {
-        //             this._themeService.setActiveTheme(theme, false)
-        //         }
-        //     });
     }
 
     ngOnInit() {
@@ -60,9 +53,14 @@ export class AdminComponent implements OnInit {
                     this.showProgressBar = false;
                 }
             });
+
+        this._updateTimer = setInterval(() => {
+            this._ref.markForCheck();
+        }, 1000);
     }
 
     ngOnDestroy() {
+        clearInterval(this._updateTimer);
     }
 
     setSidebarState(value: boolean) {
