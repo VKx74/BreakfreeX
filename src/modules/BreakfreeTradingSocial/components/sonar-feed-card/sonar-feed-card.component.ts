@@ -450,9 +450,11 @@ export class SonarFeedCardComponent implements OnInit {
         const globalStrength = TradingHelper.convertTrendSpread(this.trend.globalTrendSpread);
         const localValue = Math.trunc(this.trend.localTrendSpread * 100);
         const globalValue = Math.trunc(this.trend.globalTrendSpread * 100);
-        const localTrendString = `Local - ${this.trend.localTrend} Trend ${localStrength}(${localValue}%)`;
-        const globalTrendString = `Global - ${this.trend.globalTrend} Trend ${globalStrength}(${globalValue}%)`;
-        return `${localTrendString}\n\n${globalTrendString}`;
+        const localTrendName = this.trend.localTrend === IBFTATrend.Down ? "Downtrend" : "Uptrend";
+        const globalTrendName = this.trend.globalTrend === IBFTATrend.Down ? "Downtrend" : "Uptrend";
+        const localTrendString = `Local - ${localTrendName} ${localStrength} (${localValue}%)`;
+        const globalTrendString = `Global - ${globalTrendName} ${globalStrength} (${globalValue}%)`;
+        return `${localTrendString}\n${globalTrendString}`;
     }
 
     getMarketType() {
