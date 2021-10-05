@@ -12,10 +12,10 @@
                     <img class="mobileshow" src="assets/img/bftnavigatorlogoshort.svg">
                 </div>
             </a>
-            <div class="platform-pages-nav hidden">
-                <div class="platform-pages-item" routerLink="">Platform</div>
-                <div class="platform-pages-item" routerLink="{{socialFeedRoute}}">Feed</div>
-                <div class="platform-pages-item" routerLink="{{academyRoute}}">Academy</div>
+            <div class="platform-pages-nav">
+                <div class="platform-pages-item" routerLink="">Chart</div>
+                <div class="platform-pages-item" routerLink="{{socialFeedRoute}}">Sonar</div>
+                <div class="platform-pages-item sm-hidden" routerLink="{{academyRoute}}">Academy</div>
             </div>
         </div>
 
@@ -51,7 +51,7 @@
                     </div>
                  </div>
                 </nav-section>
-                <nav-section class="autosave-nav-item" [leftBorder]="false" [class.no-highlight]="!saveNeeded"
+                <nav-section class="autosave-nav-item sm-hidden" [leftBorder]="false" [class.no-highlight]="!saveNeeded"
                     [paddingRight]="true" [paddingLeft]="true" [matMenuTriggerFor]="saveLayoutMenu"
                     *ngIf="isAuthorizedCustomer && showUserDashboard">
                     <div class="insidecorrector">

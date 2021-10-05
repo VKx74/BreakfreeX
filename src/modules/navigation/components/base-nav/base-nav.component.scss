@@ -14,7 +14,8 @@
     
   }
   nav-section {
-    margin:0px 5px !important;
+    margin:0px 5px ;
+    transition: all 0.22s;
   }
   .insidecorrector{
     display: flex;
@@ -213,11 +214,18 @@
 
     .platform-pages-item {
       display: flex;
-      margin: 0px 8px;
-      padding: 5px;
+      height: 33px;
+      padding: 5px 8px;
       align-items: center;
       color: #ffffffd1 !important;
       cursor: pointer;
+      font-size: 11px;
+      font-weight:600;
+      font-family: 'Open Sans';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: all 0.22s;
+
       &:hover {
         background: #5655554d;
         border-radius: 5px;
@@ -248,7 +256,7 @@
   }
 }
 
-@media (max-width: 470px) {
+@media (max-width: 540px) {
   span.email {
     display: none !important;
   }
@@ -256,14 +264,23 @@
     .avatar {
       margin-right: 10px;
     }
-    // width: 80px !important;
   }
+    .sm-hidden {
+      display:none !important;
+    }
+     nav-section{
+      margin:0px !important;;
+    }
+ 
+  
 }
 
 @media (max-width: 600px) {
   .nav-section {
     margin-right: 0px !important;
   }
+
+
 }
 
 @include themify($themes, true) {
