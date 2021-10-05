@@ -22,7 +22,7 @@ import { Angulartics2GoSquared } from 'angulartics2/gosquared';
     selector: 'app',
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
     static isGAInitialized = false;
