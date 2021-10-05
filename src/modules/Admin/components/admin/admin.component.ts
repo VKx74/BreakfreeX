@@ -16,7 +16,7 @@ import {SidebarService} from "@app/services/sidebar.service";
     ]
 })
 export class AdminComponent implements OnInit {
-    _updateTimer: any;
+    // _updateTimer: any;
     showProgressBar: boolean = false;
     NavigationMode = NavigationMode;
 
@@ -54,13 +54,13 @@ export class AdminComponent implements OnInit {
                 }
             });
 
-        this._updateTimer = setInterval(() => {
-            this._ref.markForCheck();
-        }, 1000);
+        // this._updateTimer = setInterval(() => {
+        //     this._ref.markForCheck();
+        // }, 1000);
     }
 
     ngOnDestroy() {
-        clearInterval(this._updateTimer);
+        // clearInterval(this._updateTimer);
     }
 
     setSidebarState(value: boolean) {
