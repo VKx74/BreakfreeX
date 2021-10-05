@@ -120,7 +120,7 @@
 
 @include themify($themes, true) {
   .widget-container {
-    background: themed("lmContent") !important;
+    background: themed("widget-wall-bg") !important;
   }
   .widget-selector {
     // background: themed("noactiveTabs");

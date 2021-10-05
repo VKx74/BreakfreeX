@@ -75,7 +75,7 @@ export class DashboardComponent {
     private _hardRefreshTimer: any;
     private _hardRefreshNeeded: boolean = false;
     private _rightSideResizing: boolean = false;
-    private _lastBottomPanelSize: number = 0;
+    private _lastRightPanelSize: number = 0;
     private _minRightSidePanelSize = 350;
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 30;
@@ -89,6 +89,7 @@ export class DashboardComponent {
 
     @ViewChild(GoldenLayoutComponent, { static: true }) layout: GoldenLayoutComponent;
     @ViewChild('verticalSplit', { read: SplitComponent, static: false }) verticalSplit: SplitComponent;
+    @ViewChild('horizontalSplit', { read: SplitComponent, static: false }) horizontalSplit: SplitComponent;
 
     layoutSettings: IGoldenLayoutComponentSettings = {};
     destroy$ = new Subject();
@@ -117,7 +118,7 @@ export class DashboardComponent {
 
     get rightPanelMaxSize() {
         return this._rightPanelMaxSize;
-    }
+    } 
 
     get rightPanelSize() {
         return this._rightPanelSize;
@@ -328,6 +329,9 @@ export class DashboardComponent {
         document.addEventListener('gl-drag-ended', () => {
             this._attach();
         }, false);
+
+        // set min size for chart GL area
+        this.horizontalSplit.displayedAreas[0].minSize = 200;
     }
 
     clearSession() {
@@ -365,7 +369,7 @@ export class DashboardComponent {
     }
 
     rightPanelOpened() {
-        this.rightPanelSize = this._lastBottomPanelSize >= this.rightPanelMinSize ? this._lastBottomPanelSize : this.rightPanelMinSize;
+        this.rightPanelSize = this._lastRightPanelSize >= this.rightPanelMinSize ? this._lastRightPanelSize : this.rightPanelMinSize;
         EventsHelper.triggerWindowResize();
     }
 
@@ -668,7 +672,7 @@ export class DashboardComponent {
 
     handleHorizontalSplitDragEnd(c) {
         this._rightSideResizing = false;
-        this._lastBottomPanelSize = c.sizes[1];
+        this._lastRightPanelSize = c.sizes[1];
 
         if (this.isRightPanelCollapsed) {
             if (c.sizes[1] > this.minRightSidePanelCollapsedSize) {
@@ -794,11 +798,14 @@ export class DashboardComponent {
     // }
 
     // private _setRightPanelRestrictions() {
-    //     const width = window.innerWidth;
-    //     if (width < this.minRightPanelFullSize) {
-    //         this._rightPanelMaxSize = width;
-    //         this._minRightSidePanelSize = width;
+    //     const width = window.innerWidth * 0.7;
+
+    //     if (this.rightPanelSize > width) {
+    //         this.rightPanelSize = width;
+    //         this._ref.detectChanges();
+    //         EventsHelper.triggerWindowResize();
     //     }
+      
     // }
 
     private _setRightPanelInitialSize() {

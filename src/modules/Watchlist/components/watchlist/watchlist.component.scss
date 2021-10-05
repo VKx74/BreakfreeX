@@ -12,7 +12,7 @@
     }
   }
 
-  .out-of-access { 
+  .out-of-access {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,7 +27,7 @@
       text-align: center;
       text-decoration: underline;
     }
-  
+
     .image {
       display: flex;
       justify-content: center;
@@ -49,9 +49,9 @@
   }
 
   .disabled {
-    opacity: 0.0;
+    opacity: 0;
     pointer-events: none;
-    display:none !important;
+    display: none !important;
     transition-duration: 0.22s;
     transition-delay: 0.25s;
     animation-delay: 0.25s;
@@ -62,10 +62,10 @@
     max-width: 120px;
   }
 
-
-.crypto-button-delete, .remove-instrument-button {
-  background-color: transparent !important;
-}
+  .crypto-button-delete,
+  .remove-instrument-button {
+    background-color: transparent !important;
+  }
 
   .root {
     width: 100%;
@@ -76,34 +76,59 @@
     display: flex;
     flex-direction: column;
   }
+  .break {
+    flex-basis: 100%;
+    height: 0;
+  }
 
   .top-line {
-    overflow-y: hidden;
     display: flex;
-    flex-shrink: 0;
+    flex-direction: column;
     padding: 5px;
+    border: 1px solid;
+    align-items: center;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    flex-flow: wrap;
+
+    .right-side {
+      display: flex;
+    }
+
+    .left-side {
+      display: flex;
+      height: 35px;
+      align-items: center;
+      .mat-form-field-flex {
+        height: 28px !important;
+      }
+    }
   }
 
   .up-trend {
     color: $greenColor;
-    text-align:right;
+    text-align: right;
     float: right;
   }
 
   .down-trend {
     color: $redColor;
-    text-align:right;
+    text-align: right;
     float: right;
   }
 
   .no-trend {
-      text-align:right;
-      float: right;
-    }
+    text-align: right;
+    float: right;
+  }
 
-    .remove-instrument-button {
-      display: none;
-    }
+  .remove-instrument-button {
+    display: none;
+  }
 
   .small-column {
     width: 30px;
@@ -123,7 +148,7 @@
       border-radius: 5px;
       position: relative;
       cursor: pointer;
-      margin:2px;
+      margin: 3px;
 
       &:hover {
         .remove-instrument-button {
@@ -154,7 +179,6 @@
         transition-duration: 0.22s;
         transition-delay: 0.25s;
         animation-delay: 0.25s;
-        
       }
     }
   }
@@ -242,66 +266,67 @@
     }
   }
 
-  .control, .crypto-button-icon  {
+  .control,
+  .crypto-button-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24px;
-    height: 24px;
-
-    font-size: 15px;  
-    font-weight:bold;
+    margin-right: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 15px;
+    border: 1px solid;
+    padding: 6px 8px;
     cursor: pointer;
+    font-family: "Open Sans";
+    transition: all 0.22s;
+    font-size: 13px;
   }
 
   .watchlist-separator {
     margin: 5px 0px !important;
   }
-  
 }
 
 @include themify($themes, true) {
   .functional-icons {
     .crypto-icon {
-      color: themed('valueTextColor');
+      color: themed("valueTextColor");
     }
   }
-  .crypto-button-delete, .remove-instrument-button {
+  .crypto-button-delete,
+  .remove-instrument-button {
     &:hover {
-      color: themed('valueTextColor');
+      color: themed("valueTextColor");
     }
-    color: themed('valueTextColor');
+    color: themed("valueTextColor");
     background-color: transparent !important;
   }
 
   .underlay {
-    background-color: themed('appPanelColor');
+    background-color: themed("appPanelColor");
   }
   .mat-cell {
-    font-weight:600;
-
+    font-weight: 600;
   }
 
   .text {
-    color: themed('valueTextColor');
+    color: themed("valueTextColor");
   }
 
   .top-line {
-    background-color: themed('appPanelColor');
-    border-bottom: 1px solid themed('rejectButtonBackgroundColor');
-  }
-
-  .content-wrapper {
-    background-color: themed('appPanelColor');
+    background: themed("sonar-feed-header");
+    border-color: themed("sonar-card-bg-border");
+    color: themed("sonar-common-text-color");
   }
 
   .watchlist-tile-wrapper {
-    border: 1px solid themed('appBackgroundColor');
+    border: 1px solid themed("appBackgroundColor");
   }
 
   .order-book-tables-wrapper {
     table:first-child {
-      border-right: 1px solid themed('appBackgroundColor');
+      border-right: 1px solid themed("appBackgroundColor");
     }
   }
 
@@ -312,7 +337,7 @@
   /deep/ {
     mat-row {
       &:hover {
-        background-color: themed('activeBackgroundColor') !important;
+        background-color: themed("activeBackgroundColor") !important;
         .remove-instrument-button {
           display: flex;
         }
@@ -320,32 +345,44 @@
     }
 
     .watchlist-tile:hover {
-      border: 1px solid themed('valueTextColor');
-       transition-duration: 0.22s;
+      border: 1px solid themed("valueTextColor");
+      transition-duration: 0.22s;
     }
 
     .watchlist-tile {
       border: 1px solid transparent;
-    
-       transition-duration: 0.22s;
+
+      transition-duration: 0.22s;
     }
 
-    .control, .crypto-button-icon  {
-      color: themed('valueTextColor');
-      background-color: themed('tableBorders');
-      
+    .control,
+    .crypto-button-icon {
+      color: themed("valueTextColor");
+      background-color: themed("sonar-search-bg");
+      border-color: themed("sonar-search-border");
 
-      &:hover {
-        color: themed('accentColor');
-        transition-duration: 0.22s;
-        background-color: themed('accentLightColor');
+      &:hover,
+      &:active {
+        background-color: themed("sonar-search-bg-active");
+        border-color: themed("sonar-search-border-active");
+      }
+    }
 
+    input,
+    mat-select {
+      border-radius: 3px !important;
+      border: 1px solid !important;
+      background-color: themed("sonar-search-bg") !important;
+      border-color: themed("sonar-search-border") !important;
+
+      &:hover,
+      &:active {
+        background-color: themed("sonar-search-bg-active") !important;
+        border-color: themed("sonar-search-border-active") !important;
       }
     }
   }
-
 }
-
 
 :host {
   /deep/ .mat-row {
@@ -372,7 +409,6 @@
     .matMenuTrigger {
       width: 14px !important;
       height: 14px !important;
-
     }
   }
   .watchlist-separator {
@@ -388,7 +424,7 @@
     height: 12px;
     display: flex;
     margin-right: 5px;
-  } 
+  }
 
   .featured-instruments-row-text {
     max-width: 220px;

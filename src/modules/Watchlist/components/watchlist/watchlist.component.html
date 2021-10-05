@@ -1,33 +1,35 @@
 <div class="root" *ngIf="isAuthorizedCustomer; else outOfAccess">
     <div>
-        <div class="top-line ">
+        <div class="top-line">
 
-            <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
-                <mat-select (selectionChange)="watchlistSelected($event)" [value]="activeWatchlist">
-                    <mat-option *ngFor="let option of existingWatchlists" [value]="option">
-                        {{supportedWatchlistCaption(option) | async }}
-                    </mat-option>
-                    <hr *ngIf="featuredWatchlists?.length > 0" class="watchlist-separator" />
-                    <mat-option *ngFor="let option of featuredWatchlists" [value]="option">
-                        <div class="featured-instruments-row">
-                            <div class="featured-instruments-row-color">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon"
-                                    [ngStyle]="{'color': option.id}" fill="currentColor" focusable="false"
-                                    preserveAspectRatio="none">
-                                    <path d='M14 12l-4-6 4-6H0v12z' />
-                                </svg>
+            <div class="left-side">
+                <mat-form-field floatLabel="never" class="crypto-select full-width bft-form-select">
+                    <mat-select (selectionChange)="watchlistSelected($event)" [value]="activeWatchlist">
+                        <mat-option *ngFor="let option of existingWatchlists" [value]="option">
+                            {{supportedWatchlistCaption(option) | async }}
+                        </mat-option>
+                        <hr *ngIf="featuredWatchlists?.length > 0" class="watchlist-separator" />
+                        <mat-option *ngFor="let option of featuredWatchlists" [value]="option">
+                            <div class="featured-instruments-row">
+                                <div class="featured-instruments-row-color">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon"
+                                        [ngStyle]="{'color': option.id}" fill="currentColor" focusable="false"
+                                        preserveAspectRatio="none">
+                                        <path d='M14 12l-4-6 4-6H0v12z' />
+                                    </svg>
+                                </div>
+                                <div class="featured-instruments-row-text">
+                                    {{supportedWatchlistCaption(option) | async }}
+                                </div>
                             </div>
-                            <div class="featured-instruments-row-text">
-                                {{supportedWatchlistCaption(option) | async }}
-                            </div>
-                        </div>
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-            <instrument-search [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
-                [openPanelOnClick]="true" [resetAfterSelection]="true" (onSelect)="addInstrument($event)">
-            </instrument-search>
+                <instrument-search [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
+                    [openPanelOnClick]="true" [resetAfterSelection]="true" (onSelect)="addInstrument($event)">
+                </instrument-search>
+            </div>
 
             <div class="right-side flex align-items-center functional-icons">
                 <span class="crypto-button-icon control" (click)="createWatchlist()"
@@ -187,7 +189,8 @@
                 (onRowSelect)="handleInstrumentClick($event)">
 
 
-                <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="24" [columnMinWidth]="24">
+                <data-table-header-cell columnName="featured" [sortable]="false" [columnWidth]="24"
+                    [columnMinWidth]="24">
                 </data-table-header-cell>
 
                 <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="80">
@@ -210,7 +213,8 @@
                     {{'watchList.volume24h' | translate}}
                 </data-table-header-cell> -->
 
-                <data-table-header-cell columnName="price" [dataAccessor]="priceDataAccessor" [sortable]="true" [columnMinWidth]="80">
+                <data-table-header-cell columnName="price" [dataAccessor]="priceDataAccessor" [sortable]="true"
+                    [columnMinWidth]="80">
                     {{'price' | translate}}
                 </data-table-header-cell>
 
@@ -300,7 +304,7 @@
                 </data-table-cell>
             </data-table>
 
-            <div class="underlay" *ngIf="viewMode === ViewMode.Tile">
+            <div *ngIf="viewMode === ViewMode.Tile">
                 <div class="tiles-wrapper w-100">
                     <div class="watchlist-tile-wrapper" (click)="handleInstrumentClick(instrumentVM)"
                         *ngFor="let instrumentVM of instrumentsVM">
