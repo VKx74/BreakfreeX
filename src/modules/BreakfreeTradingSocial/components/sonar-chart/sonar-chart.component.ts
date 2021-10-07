@@ -56,9 +56,9 @@ export class SonarChartComponent implements OnInit {
     @Input() public set selected(value: boolean) {
         this._selected = value;
 
-        // if (this.chart) {
-        //     this.chart.preventMouseEvents = !this._selected;
-        // }
+        if (this.chart) {
+            this.chart.preventMouseEvents = !this._selected;
+        }
     }
 
     @Input() public set isVisible(value: boolean) {
@@ -203,7 +203,7 @@ export class SonarChartComponent implements OnInit {
 
         this.chart = $(config.chartContainer).TradingChartDesigner(config);
         this.chart.showInstrumentWatermark = false;
-        // this.chart.preventMouseEvents = true;
+        this.chart.preventMouseEvents = true;
         this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barAppended.bind(this));
     }
 
