@@ -616,7 +616,7 @@ export class SonarFeedWallComponent implements OnInit {
         this._isFilterVisible = false;
     }
 
-    changeOrder(eventArgs:ESonarFeedOrderTypes){
+    changeOrder(eventArgs: ESonarFeedOrderTypes) {
         this.feedOrderType = eventArgs;
     }
 
