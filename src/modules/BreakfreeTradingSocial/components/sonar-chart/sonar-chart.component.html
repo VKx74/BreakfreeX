@@ -1,7 +1,10 @@
 <div class="tcd-component-host" #chartContainerHost>
     <div class="tcd-component" #chartContainer>
     </div>
-    <span class="play-button" *ngIf="isReplay" (click)="setNow()">
+    <span class="play-button" *ngIf="isReplay && attached" (click)="setNow()">
         <i class="fa fa-play-circle" aria-hidden="true"></i>
+    </span> 
+    <span class="loading-text" *ngIf="!attached">
+        Loading...
     </span>
 </div>

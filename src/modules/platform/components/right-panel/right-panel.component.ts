@@ -103,7 +103,9 @@ export class RightPanelComponent implements OnInit {
                 this.SelectedComponent = Components.SonarFeed;
             }
 
-            this._isInitializedSubscription.unsubscribe();
+            if (this._isInitializedSubscription) {
+                this._isInitializedSubscription.unsubscribe();
+            }
         });
     }
 
@@ -111,6 +113,9 @@ export class RightPanelComponent implements OnInit {
     }
 
     ngOnDestroy() {
+        if (this._isInitializedSubscription) {
+            this._isInitializedSubscription.unsubscribe();
+        }
     }
 
     selectComponent(component: Components) {

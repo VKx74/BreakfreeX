@@ -35,8 +35,9 @@ class RestrictionManager {
     ]
 })
 export class SonarChartComponent implements OnInit {
-    private _visibleCount = 140;
+    private _visibleCount = 100;
     private _visibleCountRatio = 0.6;
+    private _timeout: any;
     private _isVisible: boolean;
     private _initialized: boolean;
     private _attached: boolean;
@@ -44,6 +45,7 @@ export class SonarChartComponent implements OnInit {
     private _sizeChangeObserver: any;
     private _isReplay: boolean = true;
     private _selected: boolean = false;
+    private _destroyed: boolean = false;
 
     private chart: TradingChartDesigner.Chart;
 
@@ -66,17 +68,36 @@ export class SonarChartComponent implements OnInit {
 
         if (this._isVisible) {
             if (!this.chart) {
-                this._initChart();
+                if (this._timeout) {
+                    clearTimeout(this._timeout);
+                    this._timeout = null;
+                }
+
+                this._timeout = setTimeout(() => {
+                    this._timeout = null;
+                    if (this._isVisible && !this._destroyed) {
+                        this._initChart();
+                    }
+                }, 1000);
             } else {
                 this._attachChart();
             }
         } else {
+            if (this._timeout) {
+                clearTimeout(this._timeout);
+                this._timeout = null;
+            }
+
             this._detachChart();
         }
     }
 
     get isReplay(): boolean {
         return this._isReplay;
+    }  
+    
+    get attached(): boolean {
+        return this._attached;
     }
 
     constructor(private _datafeed: DataFeedBase,
@@ -96,7 +117,7 @@ export class SonarChartComponent implements OnInit {
             if (!this.chart) {
                 return;
             }
-            
+
             this.chart.refresh();
             this._cdr.detectChanges();
         });
@@ -105,10 +126,21 @@ export class SonarChartComponent implements OnInit {
 
     ngAfterViewInit() {
         this._initialized = true;
-        this._initChart();
+        this._cdr.detach();
+
+        setTimeout(() => {
+            this._initChart();
+        }, Math.trunc(Math.random() * 1000));
     }
 
     ngOnDestroy() {
+        this._destroyed = true;
+
+        if (this._timeout) {
+            clearTimeout(this._timeout);
+            this._timeout = null;
+        }
+
         try {
             if (this.chart) {
                 this.chart.off(TradingChartDesigner.ChartEvent.BARS_SETTED);
@@ -146,6 +178,7 @@ export class SonarChartComponent implements OnInit {
         if (!this.chart || !this._attached || this._detachedHost) {
             return;
         }
+        this.chart.preventRefresh = true;
         this._detachedHost = $(this.chartContainer.nativeElement).detach();
         this._attached = false;
     }
@@ -158,6 +191,7 @@ export class SonarChartComponent implements OnInit {
         this._detachedHost.appendTo($(this.chartContainerHost.nativeElement));
         this._detachedHost = null;
         this._attached = true;
+        this.chart.preventRefresh = false;
         this.chart.refreshAsync(true);
     }
 
@@ -233,14 +267,13 @@ export class SonarChartComponent implements OnInit {
             return;
         }
 
-        this._cdr.detectChanges();
         try {
             this.chart.setReplayByDate(new Date(this.time * 1000), true);
         } catch (error) {
             console.error(error);
             return;
         }
-        
+
         this._justifyVisibleDataOnChart();
 
         let pane = this.chart.primaryPane;
@@ -254,10 +287,14 @@ export class SonarChartComponent implements OnInit {
         this.chart.addIndicators(indicator);
         this.chart.XMode = false;
         this.chart.crossHair.destroy();
-        this.chart.refresh(true);
         this._attached = true;
 
-        this._tradingFromChartHandler.setChart(this.chart, true);
+        if (this._isVisible) {
+            this.chart.refresh(true);
+            this._cdr.detectChanges();
+        }
+
+        // this._tradingFromChartHandler.setChart(this.chart, true);
     }
 
     private _justifyVisibleDataOnChart() {
