@@ -85,6 +85,10 @@ export class SonarFeedService {
         return this._loadItemsById(id, take, filters, searchText);
     }
 
+    getOrderedItems(skip: number, take: number, postOrderType: ESonarFeedOrderTypes, filters: ISonarSetupFilters = null, searchText: string = null): Observable<SonarFeedItem[]> {
+        return this._loadOrderedItems(skip, take, postOrderType, filters, searchText);
+    }
+
     getItem(id: any): Observable<SonarFeedItem> {
         return this._loadItem(id);
     }
@@ -442,6 +446,18 @@ export class SonarFeedService {
     private _loadItemsById(id: any, take: number, filters: ISonarSetupFilters, searchText: string): Observable<SonarFeedItem[]> {
         const filterString = this._createFilterString(filters, searchText);
         return this._http.get<SonarFeedItemDTO[]>(`${this._url}api/post/${id}/before?limit=${take}${filterString}`).pipe(map((items) => {
+            const res: SonarFeedItem[] = [];
+            for (const item of items) {
+                const converted = SocialFeedModelConverter.ConvertToSonarFeedPost(item);
+                res.push(converted);
+            }
+            return res;
+        }));
+    }
+
+    private _loadOrderedItems(skip: number, take: number, postOrderType: ESonarFeedOrderTypes, filters: ISonarSetupFilters, searchText: string): Observable<SonarFeedItem[]> {
+        const filterString = this._createFilterString(filters, searchText);
+        return this._http.get<SonarFeedItemDTO[]>(`${this._url}api/post/ordered?skip=${skip}&take=${take}&orderPostType=${postOrderType}${filterString}`).pipe(map((items) => {
             const res: SonarFeedItem[] = [];
             for (const item of items) {
                 const converted = SocialFeedModelConverter.ConvertToSonarFeedPost(item);

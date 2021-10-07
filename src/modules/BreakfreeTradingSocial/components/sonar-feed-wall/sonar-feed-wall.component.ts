@@ -13,7 +13,7 @@ import { InstrumentCacheService } from "modules/BreakfreeTradingSocial/services/
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
 import { ESonarFeedMarketTypes, ESonarFeedOrderTypes, ESonarFeedSetupTypes, ISonarSetupFilters, SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { ConfirmModalComponent } from "modules/UI/components";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { JsUtil } from "utils/jsUtil";
 import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
@@ -137,6 +137,7 @@ export class SonarFeedWallComponent implements OnInit {
     private _filteringParameters: ISonarSetupFilters;
     private _tempRecursiveLoadingCounter = 0;
     private _lastId: any;
+    private _loadedCount: number;
 
     @ViewChild('scroller', { static: false }) scroll: ElementRef;
 
@@ -173,7 +174,7 @@ export class SonarFeedWallComponent implements OnInit {
     public allowedMarketTypes: SonarFeedMarketTypes[] = [];
     public selectedMarketTypes: SonarFeedMarketTypes[];
     public prevSelectedMarketTypes: SonarFeedMarketTypes[];
-    public feedOrderType: ESonarFeedOrderTypes = ESonarFeedOrderTypes.Hot;
+    public feedOrderType: ESonarFeedOrderTypes = ESonarFeedOrderTypes.New;
 
     public isFollowFilterUsed: boolean = false;
 
@@ -618,6 +619,7 @@ export class SonarFeedWallComponent implements OnInit {
 
     changeOrder(eventArgs: ESonarFeedOrderTypes) {
         this.feedOrderType = eventArgs;
+        // this._initData();
     }
 
     hideShowFilters() {
@@ -663,7 +665,7 @@ export class SonarFeedWallComponent implements OnInit {
 
         return true;
     }
-    
+
     public isTimeFrameAllowed(granularity: number) {
         const is15MinAllowedByLevel = this._identityService.is15MinAllowedByLevel(this._tradingProfileService.level);
         const isHourAllowedByLevel = this._identityService.isHourAllowedByLevel(this._tradingProfileService.level);
@@ -679,10 +681,10 @@ export class SonarFeedWallComponent implements OnInit {
 
         if (granularity === hour4G && !is4HourAllowed) {
             return false;
-        } 
+        }
         if (granularity === hour1G && !isHourAllowedByLevel) {
             return false;
-        } 
+        }
         if (granularity === min15G && !is15MinAllowedByLevel) {
             return false;
         }
@@ -696,7 +698,7 @@ export class SonarFeedWallComponent implements OnInit {
                 this.allowedTimeFrames.push(tf);
             }
         }
-        
+
         for (const type of this.allMarketTypes) {
             if (this.isMarketTypeAllowed(this._mapSetupTypesToFilter(type))) {
                 this.allowedMarketTypes.push(type);
@@ -795,14 +797,22 @@ export class SonarFeedWallComponent implements OnInit {
         this.loading = true;
         this.cards = [];
 
+
         this.prevSelectedMarketTypes = this.selectedMarketTypes;
         this.prevSelectedTradeTypes = this.selectedTradeTypes;
         this.prevSelectedTimeFrames = this.selectedTimeFrames;
         this.prevSearchText = this.searchText;
 
         this._filterChanged = false;
-        this._sonarFeedService.getItems(this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText).subscribe((data: SonarFeedItem[]) => {
 
+        let result: Observable<SonarFeedItem[]> = null;
+
+        // if (this.feedOrderType === ESonarFeedOrderTypes.New)
+            result = this._sonarFeedService.getItems(this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
+        // else
+          //  result = this._sonarFeedService.getOrderedItems(0, this._loadCount, this.feedOrderType, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
+
+        result.subscribe((data: SonarFeedItem[]) => {
             this.initialized = true;
             this.loading = false;
             this._refreshNeeded = true;
@@ -826,12 +836,12 @@ export class SonarFeedWallComponent implements OnInit {
             if (this._canLoadMore && this._lastId && filtered.length < 10) {
                 this._loadMore();
             }
-
         }, (error) => {
             this.initialized = true;
             this.loading = false;
             this._refreshNeeded = true;
         });
+
     }
 
     private _setDefaultMarketTypeLimitations(settings: ISonarSetupFilters) {
@@ -852,7 +862,7 @@ export class SonarFeedWallComponent implements OnInit {
 
         settings.granularity = [];
         settings.granularity.push(dailyG);
-        
+
         if (this.isTimeFrameAllowed(hour4G)) {
             settings.granularity.push(hour4G);
         }
@@ -952,7 +962,14 @@ export class SonarFeedWallComponent implements OnInit {
     private _loadMore() {
         this.loading = true;
         this._loadingMore = true;
-        this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText).subscribe((data: SonarFeedItem[]) => {
+
+        let result: Observable<SonarFeedItem[]> = null;
+        // if (this.feedOrderType === ESonarFeedOrderTypes.New)
+            result = this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
+        // else
+          //  result = this._sonarFeedService.getOrderedItems(this.cards.length, this._loadCount, this.feedOrderType, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
+
+        result.subscribe((data: SonarFeedItem[]) => {
 
             this._loadingMore = false;
             this.loading = false;
@@ -1003,9 +1020,11 @@ export class SonarFeedWallComponent implements OnInit {
             card.sortIndex = setupItem.id;
 
             this.cards.push(card);
-            this.cards.sort((a, b) => b.sortIndex - a.sortIndex);
 
-            this._refreshNeeded = true;
+            // if (this.feedOrderType === ESonarFeedOrderTypes.New) {                
+                this.cards.sort((a, b) => b.sortIndex - a.sortIndex);
+                this._refreshNeeded = true;
+            // }
 
         }, (error) => {
 
