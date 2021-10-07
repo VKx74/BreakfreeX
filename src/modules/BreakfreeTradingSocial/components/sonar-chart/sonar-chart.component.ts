@@ -196,7 +196,7 @@ export class SonarChartComponent implements OnInit {
             locale: this._localizationService.locale,
             showScrollbar: false,
             indicatorsDataProvider: this._indicatorDataProviderService,
-            isRestrictedMode: true,
+            // isRestrictedMode: true,
             indicatorsRestrictionsProvider: new RestrictionManager(),
             tradingFromChartHandler: this._tradingFromChartHandler
         };
