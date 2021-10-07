@@ -397,7 +397,7 @@
     .highlights-subitem,
     .highlights-subitem {
         &:hover,
-        &:active {
+        &.active {
             background: themed("sonar-feed-hover-color");
             opacity: 1;
         }

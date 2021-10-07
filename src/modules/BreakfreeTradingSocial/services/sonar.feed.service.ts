@@ -26,6 +26,13 @@ export enum ESonarFeedSetupTypes {
     EXT = "EXT"
 }
 
+export enum ESonarFeedOrderTypes {
+    Hot = "Hot",
+    New = "New",
+    Top = "Top",
+    Rising = "Rising",
+}
+
 export interface ISonarSetupFilters {
     type?: ESonarFeedMarketTypes[];
     setup?: ESonarFeedSetupTypes[];

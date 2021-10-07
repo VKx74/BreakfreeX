@@ -81,14 +81,18 @@
 
 
                 <div class="algo-highlights">
-                    <div class="highlights-subitem active"> <img class="widget-icon"
-                            src="/assets/img/hotjar-brands.svg">Hot</div>
-                    <div class="highlights-subitem"> <img class="widget-icon"
-                            src="/assets/img/square-plus-solid.svg">New</div>
-                    <div class="highlights-subitem"> <img class="widget-icon"
-                            src="/assets/img/arrow-up-to-line-solid.svg">Top</div>
-                    <div class="highlights-subitem"> <img class="widget-icon"
-                            src="/assets/img/arrow-trend-up-solid.svg">Rising</div>
+                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Hot'}" 
+                    (click)="changeOrder('Hot')">
+                         <img class="widget-icon" src="/assets/img/hotjar-brands.svg">Hot</div>
+                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='New'}"
+                    (click)="changeOrder('New')">
+                        <img class="widget-icon" src="/assets/img/square-plus-solid.svg">New</div>
+                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Top'}"
+                    (click)="changeOrder('Top')">
+                         <img class="widget-icon" src="/assets/img/arrow-up-to-line-solid.svg">Top</div>
+                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Rising'}"
+                    (click)="changeOrder('Rising')">
+                         <img class="widget-icon" src="/assets/img/arrow-trend-up-solid.svg">Rising</div>
                 </div>
 
 

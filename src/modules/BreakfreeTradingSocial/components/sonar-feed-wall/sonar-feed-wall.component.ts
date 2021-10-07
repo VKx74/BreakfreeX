@@ -11,7 +11,7 @@ import { Actions, LinkingAction } from "@linking/models";
 import { SocialFeedCommentAddedNotification, SocialFeedCommentEditedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostReactionNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemCommentLikeResponse, SonarFeedItemLikeResponse } from "modules/BreakfreeTradingSocial/models/sonar.feed.models";
 import { InstrumentCacheService } from "modules/BreakfreeTradingSocial/services/instrument.cache.service";
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
-import { ESonarFeedMarketTypes, ESonarFeedSetupTypes, ISonarSetupFilters, SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
+import { ESonarFeedMarketTypes, ESonarFeedOrderTypes, ESonarFeedSetupTypes, ISonarSetupFilters, SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { ConfirmModalComponent } from "modules/UI/components";
 import { Subscription } from "rxjs";
 import { JsUtil } from "utils/jsUtil";
@@ -173,6 +173,7 @@ export class SonarFeedWallComponent implements OnInit {
     public allowedMarketTypes: SonarFeedMarketTypes[] = [];
     public selectedMarketTypes: SonarFeedMarketTypes[];
     public prevSelectedMarketTypes: SonarFeedMarketTypes[];
+    public feedOrderType: ESonarFeedOrderTypes = ESonarFeedOrderTypes.Hot;
 
     public isFollowFilterUsed: boolean = false;
 
@@ -613,6 +614,10 @@ export class SonarFeedWallComponent implements OnInit {
         this.searchText = this.prevSearchText;
         this._filterChanged = false;
         this._isFilterVisible = false;
+    }
+
+    changeOrder(eventArgs:ESonarFeedOrderTypes){
+        this.feedOrderType = eventArgs;
     }
 
     hideShowFilters() {
