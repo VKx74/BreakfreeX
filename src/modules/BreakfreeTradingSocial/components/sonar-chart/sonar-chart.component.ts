@@ -196,7 +196,7 @@ export class SonarChartComponent implements OnInit {
             locale: this._localizationService.locale,
             showScrollbar: false,
             indicatorsDataProvider: this._indicatorDataProviderService,
-            // isRestrictedMode: true,
+            isRestrictedMode: true,
             indicatorsRestrictionsProvider: new RestrictionManager(),
             tradingFromChartHandler: this._tradingFromChartHandler
         };
@@ -205,6 +205,7 @@ export class SonarChartComponent implements OnInit {
         this.chart.showInstrumentWatermark = false;
         this.chart.preventMouseEvents = true;
         this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barAppended.bind(this));
+        (this.chart.scaleHorizontal.bottomPane as any)._isVisible = true;
     }
 
     private _clone(object: any): any {
