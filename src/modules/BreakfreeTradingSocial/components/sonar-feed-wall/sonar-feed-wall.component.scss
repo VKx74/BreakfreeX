@@ -272,7 +272,7 @@
         flex-direction: column;
         width: 100%;
         align-items: center;
-        padding: 10px 10px;
+        padding: 10px;
         overflow: auto;
     }
     .out-of-access {
@@ -320,6 +320,12 @@
         align-items: center;
         font-size: 14px;
     }
+
+    @media (max-width: 767px) {
+        .cards-container {
+          padding: 5px;
+        }
+      }
 }
 
 :host-context(body.Dark-theme) .highlights-subitem .widget-icon {

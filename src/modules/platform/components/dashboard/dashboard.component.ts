@@ -76,7 +76,7 @@ export class DashboardComponent {
     private _hardRefreshNeeded: boolean = false;
     private _rightSideResizing: boolean = false;
     private _lastRightPanelSize: number = 0;
-    private _minRightSidePanelSize = 350;
+    private _minRightSidePanelSize = 370;
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 30;
     readonly minRightSidePanelCollapsedSize = 45;

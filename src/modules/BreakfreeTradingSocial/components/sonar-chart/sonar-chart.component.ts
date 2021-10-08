@@ -172,6 +172,7 @@ export class SonarChartComponent implements OnInit {
         this._isReplay = false;
         // this._justifyVisibleDataOnChart();
         this.chart.refresh();
+        this._cdr.detectChanges();
     }
 
     private _detachChart() {
