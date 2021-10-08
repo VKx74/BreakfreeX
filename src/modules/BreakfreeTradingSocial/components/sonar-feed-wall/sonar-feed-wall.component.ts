@@ -619,7 +619,7 @@ export class SonarFeedWallComponent implements OnInit {
 
     changeOrder(eventArgs: ESonarFeedOrderTypes) {
         this.feedOrderType = eventArgs;
-        // this._initData();
+        this._initData();
     }
 
     hideShowFilters() {
@@ -807,10 +807,10 @@ export class SonarFeedWallComponent implements OnInit {
 
         let result: Observable<SonarFeedItem[]> = null;
 
-        // if (this.feedOrderType === ESonarFeedOrderTypes.New)
+        if (this.feedOrderType === ESonarFeedOrderTypes.New)
             result = this._sonarFeedService.getItems(this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
-        // else
-          //  result = this._sonarFeedService.getOrderedItems(0, this._loadCount, this.feedOrderType, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
+        else
+            result = this._sonarFeedService.getOrderedItems(0, this._loadCount, this.feedOrderType, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
 
         result.subscribe((data: SonarFeedItem[]) => {
             this.initialized = true;
@@ -964,10 +964,10 @@ export class SonarFeedWallComponent implements OnInit {
         this._loadingMore = true;
 
         let result: Observable<SonarFeedItem[]> = null;
-        // if (this.feedOrderType === ESonarFeedOrderTypes.New)
+        if (this.feedOrderType === ESonarFeedOrderTypes.New)
             result = this._sonarFeedService.getFromIdItems(this._lastId, this._loadCount, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
-        // else
-          //  result = this._sonarFeedService.getOrderedItems(this.cards.length, this._loadCount, this.feedOrderType, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
+        else
+            result = this._sonarFeedService.getOrderedItems(this.cards.length, this._loadCount, this.feedOrderType, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
 
         result.subscribe((data: SonarFeedItem[]) => {
 
@@ -1021,10 +1021,10 @@ export class SonarFeedWallComponent implements OnInit {
 
             this.cards.push(card);
 
-            // if (this.feedOrderType === ESonarFeedOrderTypes.New) {                
+            if (this.feedOrderType === ESonarFeedOrderTypes.New) {
                 this.cards.sort((a, b) => b.sortIndex - a.sortIndex);
                 this._refreshNeeded = true;
-            // }
+            }
 
         }, (error) => {
 
