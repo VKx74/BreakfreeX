@@ -191,8 +191,8 @@
 
             .fa {
                 margin-right: 3px;
-                margin-top:1px;
-                font-size:9px;
+                margin-top: 1px;
+                font-size: 9px;
             }
         }
     }
@@ -206,7 +206,8 @@
 
     .card-chart {
         display: flex;
-        width: 100%;
+        left: 1px;
+        width: calc(100% - 2px);
         min-height: 200px;
         position: relative;
         display: flex;
@@ -305,11 +306,10 @@
         }
 
         .card-left-comment-input {
-          
             display: flex;
             align-items: flex-end;
             width: 100%;
-            position:relative;
+            position: relative;
 
             textarea {
                 display: flex;
@@ -323,7 +323,7 @@
                 min-height: 38px !important;
                 height: 38px;
                 resize: none;
-                line-height:20px;
+                line-height: 20px;
             }
 
             .send-button {
@@ -335,13 +335,13 @@
                 background-color: transparent;
                 right: 11px;
                 bottom: 16px;
-                opacity:0.7;
+                opacity: 0.7;
             }
         }
     }
 
     .send-button.disabled {
-        opacity:0.35 !important;;
+        opacity: 0.35 !important;
     }
 
     .like-container,
@@ -481,7 +481,7 @@
         background-color: themed("tags-holder-bg");
         border-color: themed("holder-tags-border-color");
     }
-    .card-chart{
+    .card-chart {
         background-color: themed("appPanelColor");
     }
     .tag-setup,
@@ -502,8 +502,7 @@
         color: themed("scanner-card-setup-long-color");
     }
 
-    .card-left-comment-input .comment-textarea{
-        border:1px solid themed("sonar-search-border");
-      
+    .card-left-comment-input .comment-textarea {
+        border: 1px solid themed("sonar-search-border");
     }
 }

@@ -163,7 +163,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
             default:
                 throw new Error(`Unknown request kind: ${request.name}`);
         }
-        
+
         if (this._refreshOnRequestCompleted) {
             chart.refresh(true);
         }
@@ -198,7 +198,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
                 chart.refreshAsync(chart.primaryPane.moveName === "autoscaled");
             }
         }
-        
+
         chart.scaleHorizontal.onCompleteMoreHistoryRequest();
 
         if (barsSet) {
@@ -279,7 +279,9 @@ export abstract class DataFeedBase implements IDatafeedBase {
     sendRequest(request: IRequest) {
         this._requests.add(request.requestNumber, request);
         if (request.name === RequestKind.BARS) {
-            request.chart.showWaitingBar();
+            if (!request.chart.isRestrictedMode) {
+                request.chart.showWaitingBar();
+            }
         }
     }
 

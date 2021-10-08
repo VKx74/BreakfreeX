@@ -31,6 +31,13 @@
         cursor: pointer;
         z-index: 100;
     }
+
+    .loading-text {
+        position: absolute;
+        top: 50%;
+        left: calc(50% - 36px);
+        font-size: 18px;
+    }
 }
 
 @include themify($themes, true) {
