@@ -77,8 +77,7 @@
 
             </div>
 
-            <div class="sonar-feed-highlights" *ngIf="!isSingleCard">
-
+            <div class="sonar-feed-highlights" *ngIf="!isSingleCard && isStuff">
 
                 <div class="algo-highlights">
                     <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Hot'}" 
@@ -95,13 +94,7 @@
                          <img class="widget-icon" src="/assets/img/arrow-trend-up-solid.svg">Rising</div>
                 </div>
 
-
-
-
             </div>
-
-
-
 
 
             <div class="card-container" *ngFor="let card of cards">

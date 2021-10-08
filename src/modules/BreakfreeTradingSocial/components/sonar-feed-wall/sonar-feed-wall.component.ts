@@ -200,6 +200,10 @@ export class SonarFeedWallComponent implements OnInit {
 
     public get hasAccess(): boolean {
         return this.hasSubscription && this.isSingleCardAllowed;
+    } 
+    
+    public get isStuff(): boolean {
+        return this._identityService && this._identityService.isStuff;
     }
 
     constructor(protected _identityService: IdentityService,
