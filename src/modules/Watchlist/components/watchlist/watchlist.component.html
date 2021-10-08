@@ -37,14 +37,14 @@
                     <i class="crypto-icon crypto-icon-add"></i>
                 </span>
 
-                <span [class.disabled]="activeWatchlist?.isDefault && !activeWatchlist?.isFeatured"
+                <span [class.disabled]="!activeWatchlist || (activeWatchlist?.isDefault && !activeWatchlist?.isFeatured)"
                     class="crypto-button-icon control" (click)="deleteWatchlist()"
                     [title]="'deleteWatchlist' | translate">
                     <i class="crypto-icon crypto-icon-remove-records"></i>
                 </span>
                 <div>
-                    <div class="crypto-button-icon">
-                        <span class="crypto-icon crypto-icon-settings" [matMenuTriggerFor]="menu"></span>
+                    <div class="crypto-button-icon" [matMenuTriggerFor]="menu">
+                        <span class="crypto-icon crypto-icon-settings"></span>
                     </div>
                     <mat-menu #menu="matMenu">
                         <button [class.active]="viewMode === ViewMode.Table" mat-menu-item

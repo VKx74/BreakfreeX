@@ -289,7 +289,7 @@ export class SonarChartComponent implements OnInit {
         this.chart.crossHair.destroy();
         this._attached = true;
 
-        if (this._isVisible) {
+        if (this._isVisible && !this._destroyed) {
             this.chart.refresh(true);
             this._cdr.detectChanges();
         }
