@@ -364,7 +364,7 @@ export class SonarFeedWallComponent implements OnInit {
         }
 
         this._refreshNeeded = true;
-        this._renderCards([item]);
+        this._renderCards([item], true);
 
         if (this._scrollTop > 10) {
             this._isNewUpdatesExists = true;
@@ -998,7 +998,17 @@ export class SonarFeedWallComponent implements OnInit {
         });
     }
 
-    private _renderCards(items: SonarFeedItem[]) {
+    private _renderCards(items: SonarFeedItem[], inTop: boolean = false) {
+        let index = this.cards.length;
+
+        if (inTop) {
+            index = 0;
+            let shift = items.length;
+            let currentIndex = shift;
+            for (const card of this.cards) {
+                card.sortIndex = currentIndex++;
+            }
+        }
 
         for (const i of items) {
             const existing = this.cards.find(_ => _.id === i.id);
@@ -1006,23 +1016,23 @@ export class SonarFeedWallComponent implements OnInit {
                 continue;
             }
 
-            this._mapInstrumentAndAdd(i);
+            this._mapInstrumentAndAdd(i, index++);
         }
     }
 
-    private _mapInstrumentAndAdd(setupItem: SonarFeedItem) {
+    private _mapInstrumentAndAdd(setupItem: SonarFeedItem, index: number) {
         this._instrumentService.getInstrument(setupItem.symbol, setupItem.exchange).subscribe((instrument: IInstrument) => {
             if (!instrument) {
                 return;
             }
 
             const card = this._convertToVM(setupItem, instrument);
-            card.sortIndex = setupItem.id;
+            card.sortIndex = index;
 
             this.cards.push(card);
 
             if (this.feedOrderType === ESonarFeedOrderTypes.New) {
-                this.cards.sort((a, b) => b.sortIndex - a.sortIndex);
+                this.cards.sort((a, b) => a.sortIndex - b.sortIndex);
                 this._refreshNeeded = true;
             }
 
