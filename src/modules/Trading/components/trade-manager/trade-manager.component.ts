@@ -26,7 +26,7 @@ import { EBrokerInstance } from '@app/interfaces/broker/broker';
 })
 export class TradeManagerComponent implements OnDestroy {
     date: string;
-    //activeBroker$ = this._brokerService.activeBroker$;
+    // activeBroker$ = this._brokerService.activeBroker$;
     brokerInitialized$ = this._brokerService.brokerInitializationState$;
     EBrokerInstance = EBrokerInstance;
     readonly openBottomPanel = 150;
