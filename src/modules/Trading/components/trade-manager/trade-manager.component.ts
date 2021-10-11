@@ -1,17 +1,17 @@
-import {Component, OnDestroy} from "@angular/core";
-import {TradingTranslateService} from "../../localization/token";
-import {TranslateService} from "@ngx-translate/core";
-import {LocalizationService} from "Localization";
-import {TimeZone, TimeZoneManager, TzUtils, UTCTimeZone} from "TimeZones";
-import {interval, Observable} from "rxjs";
-import {map, switchMap, takeUntil, tap} from "rxjs/operators";
-import {JsUtil} from "../../../../utils/jsUtil";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {BrokerService} from "@app/services/broker.service";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from "@angular/core";
+import { TradingTranslateService } from "../../localization/token";
+import { TranslateService } from "@ngx-translate/core";
+import { LocalizationService } from "Localization";
+import { TimeZone, TimeZoneManager, TzUtils, UTCTimeZone } from "TimeZones";
+import { interval, Observable } from "rxjs";
+import { map, switchMap, takeUntil, takeWhile, tap } from "rxjs/operators";
+import { JsUtil } from "../../../../utils/jsUtil";
+import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
+import { BrokerService } from "@app/services/broker.service";
 // @ts-ignore
 import moment = require('moment');
-import {ToggleBottomPanelSizeService} from "@platform/components/dashboard/toggle-bottom-panel-size.service";
-import {EventsHelper} from "@app/helpers/events.helper";
+import { ToggleBottomPanelSizeService } from "@platform/components/dashboard/toggle-bottom-panel-size.service";
+import { EventsHelper } from "@app/helpers/events.helper";
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
 @Component({
     selector: 'trade-manager',
@@ -26,7 +26,7 @@ import { EBrokerInstance } from '@app/interfaces/broker/broker';
 })
 export class TradeManagerComponent implements OnDestroy {
     date: string;
-    // activeBroker$ = this._brokerService.activeBroker$;
+    //activeBroker$ = this._brokerService.activeBroker$;
     brokerInitialized$ = this._brokerService.brokerInitializationState$;
     EBrokerInstance = EBrokerInstance;
     readonly openBottomPanel = 150;
@@ -42,7 +42,7 @@ export class TradeManagerComponent implements OnDestroy {
         return !!this._brokerService.activeBroker;
     }
 
-    get isOpen () {
+    get isOpen() {
         return this._bottomPanelSizeService.sizeBottomPanel() >= this.openBottomPanel;
     }
 
@@ -55,10 +55,11 @@ export class TradeManagerComponent implements OnDestroy {
     }
 
     constructor(private _timeZoneManager: TimeZoneManager,
-                private _brokerService: BrokerService,
-                private _tzUtils: TzUtils,
-                private _bottomPanelSizeService: ToggleBottomPanelSizeService,
-                ) {
+        private _brokerService: BrokerService,
+        private _tzUtils: TzUtils,
+        private _bottomPanelSizeService: ToggleBottomPanelSizeService,
+        private ref: ChangeDetectorRef
+    ) {
     }
 
     ngOnInit() {
@@ -72,14 +73,25 @@ export class TradeManagerComponent implements OnDestroy {
             .subscribe((formattedDate: string) => {
                 this.date = formattedDate;
             });
+
+        this._brokerService.activeBroker$.subscribe((broker) => {
+            this.ref.detectChanges();
+            let times = 0;
+            if (broker != null)
+                interval(1000)
+                    .pipe(takeWhile(() => times++ <= 5))
+                    .subscribe(() => {
+                        this.ref.detectChanges();
+                    });
+        });
     }
 
     ngOnDestroy(): void {
     }
 
     minimize() {
-       this._bottomPanelSizeService.setBottomPanelSize(this.minimizeBottomPanel);
-       EventsHelper.triggerWindowResize();
+        this._bottomPanelSizeService.setBottomPanelSize(this.minimizeBottomPanel);
+        EventsHelper.triggerWindowResize();
     }
 
     open() {
