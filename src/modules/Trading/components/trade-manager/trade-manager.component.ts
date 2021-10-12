@@ -57,7 +57,8 @@ export class TradeManagerComponent implements OnDestroy {
     constructor(private _timeZoneManager: TimeZoneManager,
         private _brokerService: BrokerService,
         private _tzUtils: TzUtils,
-        private _bottomPanelSizeService: ToggleBottomPanelSizeService
+        private _bottomPanelSizeService: ToggleBottomPanelSizeService,
+        private ref: ChangeDetectorRef
     ) {
     }
 
@@ -72,6 +73,22 @@ export class TradeManagerComponent implements OnDestroy {
             .subscribe((formattedDate: string) => {
                 this.date = formattedDate;
             });
+
+        // need some review how to update account bar more correct way
+        this._brokerService.activeBroker$.pipe(
+            takeUntil(componentDestroyed(this))
+        ).subscribe((broker) => {
+            this.ref.detectChanges();
+            let times = 0;
+            if (broker != null)
+                interval(2000)
+                    .pipe(
+                        takeUntil(componentDestroyed(this)),
+                        takeWhile(() => times++ <= 5))
+                    .subscribe(() => {
+                        this.ref.detectChanges();
+                    });
+        });
     }
 
     ngOnDestroy(): void {
