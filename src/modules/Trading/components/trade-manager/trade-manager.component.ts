@@ -57,8 +57,7 @@ export class TradeManagerComponent implements OnDestroy {
     constructor(private _timeZoneManager: TimeZoneManager,
         private _brokerService: BrokerService,
         private _tzUtils: TzUtils,
-        private _bottomPanelSizeService: ToggleBottomPanelSizeService,
-        private ref: ChangeDetectorRef
+        private _bottomPanelSizeService: ToggleBottomPanelSizeService
     ) {
     }
 
@@ -73,17 +72,6 @@ export class TradeManagerComponent implements OnDestroy {
             .subscribe((formattedDate: string) => {
                 this.date = formattedDate;
             });
-
-        this._brokerService.activeBroker$.subscribe((broker) => {
-            this.ref.detectChanges();
-            let times = 0;
-            if (broker != null)
-                interval(1000)
-                    .pipe(takeWhile(() => times++ <= 5))
-                    .subscribe(() => {
-                        this.ref.detectChanges();
-                    });
-        });
     }
 
     ngOnDestroy(): void {
