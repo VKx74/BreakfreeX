@@ -53,6 +53,7 @@ import { Linker, LinkerFactory } from "@linking/linking-manager";
 import { InMemoryStorageService } from "modules/Storage/services/in-memory-storage.service";
 import { LinkingAction } from "@linking/models";
 import { ChartTrackerService } from "modules/BreakfreeTrading/services/chartTracker.service";
+import { Console } from "console";
 
 
 @Component({
@@ -171,6 +172,14 @@ export class DashboardComponent {
     }
 
     ngOnInit() {
+        this._brokerService.activeBroker$.pipe(
+            takeUntil(componentDestroyed(this))
+        )
+        .subscribe(() => {
+            this._ref.detectChanges();
+            console.log(">>> Broker state changed");
+        });
+
         this._actions
             .pipe(
                 ofType(ActionTypes.AppTypeChanged, ActionTypes.DeleteSession),

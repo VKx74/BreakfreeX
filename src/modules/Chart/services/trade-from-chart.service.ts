@@ -558,9 +558,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             shapes.push(shape);
         }
 
-        if (shapes.length) {
-            this._chart.primaryPane.addShapes(shapes);
-        }
+        // if (shapes.length) {
+        //     this._chart.primaryPane.addShapes(shapes);
+        // }
+        
+        this.addShapes(shapes);
     }
 
     private getPositionOrderLineId(position: IPosition) {
@@ -658,8 +660,20 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             }
         }
 
-        if (shapes.length) {
-            this._chart.primaryPane.addShapes(shapes);
+        // if (shapes.length) {
+        //     this._chart.primaryPane.addShapes(shapes);
+        // }
+
+        this.addShapes(shapes);
+    }
+
+    private addShapes(shapes: TradingChartDesigner.Shape[]) {
+        try {
+            if (shapes.length) {
+                this._chart.primaryPane.addShapes(shapes);
+            }
+        } catch (ex) {
+            console.error(ex);
         }
     }
 

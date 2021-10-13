@@ -291,11 +291,13 @@ export class SonarChartComponent implements OnInit {
         this._attached = true;
 
         if (this._isVisible && !this._destroyed) {
-            this.chart.refresh(true);
             this._cdr.detectChanges();
         }
 
-        // this._tradingFromChartHandler.setChart(this.chart, true);
+        if (!this._destroyed) {
+            this.chart.refresh(true);
+            this._tradingFromChartHandler.setChart(this.chart, true);
+        }
     }
 
     private _justifyVisibleDataOnChart() {
