@@ -10,6 +10,13 @@ import { MTPosition } from 'modules/Trading/models/forex/mt/mt.models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MTPositionsComponent extends MTItemsComponent<MTPosition> {
+    protected get _defaultHiddenColumns(): string[] {
+        return ['Net Risk'];
+    }
+    
+    protected get componentKey(): string {
+        return "MTPositionsComponent";
+    }
 
     protected loadItems(): Observable<MTPosition[]> {
         return of(this._mtBroker.positions);

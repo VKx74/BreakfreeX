@@ -8,18 +8,29 @@ import { TradingHelper } from "@app/services/mt/mt.helper";
 import { DataHighlightService } from "modules/Trading/services/dataHighlight.service";
 import { IBFTATrend } from "@app/services/algo.service";
 import { ItemsComponent } from "../../trade-manager/items-component/items.component";
+import { LocalStorageService } from "modules/Storage/services/local-storage.service";
 
 export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
+    protected _hiddenColumns: string[] = this._getHiddenColumns();
+    protected abstract get _defaultHiddenColumns(): string[];
+
+    protected abstract get componentKey(): string;
+
     protected get _mtBroker(): MTBroker {
         return this._broker.activeBroker as MTBroker;
     }
 
+    public get hiddenColumns(): string[] {
+        return this._hiddenColumns;
+    }
+
     constructor(protected _broker: BrokerService,
         protected _dataHighlightService: DataHighlightService,
+        protected _localStorageService: LocalStorageService,
         @Inject(AlertService) protected _alertService: AlertService,
-        protected _dialog: MatDialog, 
+        protected _dialog: MatDialog,
         protected _cdr: ChangeDetectorRef) {
-            super(_broker, _dataHighlightService, _alertService, _dialog, _cdr);
+        super(_broker, _dataHighlightService, _alertService, _dialog, _cdr);
     }
 
 
@@ -108,6 +119,19 @@ export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
         }
 
         return rec.FailedChecks[0].Recommendation;
+    }
+
+    onHiddenColumnsChanged(columns: string[]) {
+        this._localStorageService.set(`${this.componentKey}_hiddenColumns`, columns);
+    }
+
+    protected _getHiddenColumns() {
+        const hiddenColumns = this._localStorageService.get(`${this.componentKey}_hiddenColumns`);
+        if (!hiddenColumns) {
+            return this._defaultHiddenColumns;
+        }
+
+        return hiddenColumns;
     }
 
     protected _getTrendName(trend: IBFTATrend) {
