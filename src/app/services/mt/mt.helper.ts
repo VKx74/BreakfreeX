@@ -178,7 +178,11 @@ export class TradingHelper {
     }
 
     public static convertValueToOrderRiskClass(value: number): RiskClass {
-        if (!value) {
+        if (value === null || value === undefined) {
+            return RiskClass.Calculating;
+        } 
+        
+        if (value === 0) {
             return RiskClass.NoRisk;
         }
         

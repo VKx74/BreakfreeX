@@ -49,6 +49,7 @@ export enum OrderTradeType {
 }
 
 export enum RiskClass {
+    Calculating = 5,
     Extreme = 4,
     High = 3,
     Medium = 2,
