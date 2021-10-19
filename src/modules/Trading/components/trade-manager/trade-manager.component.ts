@@ -74,12 +74,17 @@ export class TradeManagerComponent implements OnDestroy {
                 this.date = formattedDate;
             });
 
-        this._brokerService.activeBroker$.subscribe((broker) => {
+        // need some review how to update account bar more correct way
+        this._brokerService.activeBroker$.pipe(
+            takeUntil(componentDestroyed(this))
+        ).subscribe((broker) => {
             this.ref.detectChanges();
             let times = 0;
             if (broker != null)
-                interval(1000)
-                    .pipe(takeWhile(() => times++ <= 5))
+                interval(2000)
+                    .pipe(
+                        takeUntil(componentDestroyed(this)),
+                        takeWhile(() => times++ <= 5))
                     .subscribe(() => {
                         this.ref.detectChanges();
                     });

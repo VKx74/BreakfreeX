@@ -1,31 +1,47 @@
-<data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
-            [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
-            [hiddenColumns]="['Id', 'Open Time']">
-    <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false"></data-table-header-cell>
-    <data-table-header-cell columnName="Id" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.orderId' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.symbol' | translate}}</data-table-header-cell>
+<data-table [rows]="items" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false"
+    [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
+    [hiddenColumns]="hiddenColumns" (onHiddenColumnsChanged)="onHiddenColumnsChanged($event)">
+    <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false">
+    </data-table-header-cell>
+    <data-table-header-cell columnName="Id" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.orderId' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.symbol' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="Side" [sortable]="true">{{'side' | translate}}</data-table-header-cell> -->
-    <data-table-header-cell columnName="Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.size' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Type" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.type' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Close Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.closePrice' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="SL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.SL' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="TP" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.TP' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Net PL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.netPl' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Size" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.size' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Type" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.type' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.entryPrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Close Price" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.closePrice' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="SL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.SL' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="TP" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.TP' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Net PL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.netPl' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="Pip PL" [sortable]="true">{{'tradeManager.pipPl' | translate}}</data-table-header-cell> -->
-    <data-table-header-cell columnName="Open Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.openTime' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Close Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.closeTime' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Open Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.openTime' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Close Time" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.closeTime' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="ExpirationType" [sortable]="false">{{'tradeManager.expirationType' | translate}}</data-table-header-cell> -->
     <!-- <data-table-header-cell columnName="ExpirationDate" [sortable]="true">{{'tradeManager.expirationDate' | translate}}</data-table-header-cell> -->
     <!-- <data-table-header-cell columnName="Status" [sortable]="true">{{'status' | translate}}</data-table-header-cell> -->
-    <data-table-header-cell columnName="Commission" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.commission' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Swap" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.swap' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="Comment" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.comment' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Commission" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.commission' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Swap" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.swap' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Comment" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">
+        {{'tradeManager.comment' | translate}}</data-table-header-cell>
     <!-- <data-table-header-cell columnName="close" [columnWidth]="36"></data-table-header-cell> -->
 
     <data-table-cell columnName="Side">
         <ng-template let-item>
-            <div class="color-column" [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}"></div>
+            <div class="color-column"
+                [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}"></div>
         </ng-template>
     </data-table-cell>
     <data-table-cell columnName="Id">
@@ -41,7 +57,8 @@
     </data-table-cell> -->
     <data-table-cell columnName="Size">
         <ng-template let-item>
-            <div [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">{{item.Size.toFixed(2)}}</div>
+            <div [ngClass]="{'side-buy': item.Side === OrderSide.Buy, 'side-sell': item.Side === OrderSide.Sell}">
+                {{item.Size.toFixed(2)}}</div>
         </ng-template>
     </data-table-cell>
     <data-table-cell columnName="Type">

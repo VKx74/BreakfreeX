@@ -1,6 +1,7 @@
 <data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
             [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
-            [hiddenColumns]="['Id', 'Open Time', 'Commission', 'Swap', 'Comment', 'Net Risk']"
+            [hiddenColumns]="hiddenColumns"
+            (onHiddenColumnsChanged)="onHiddenColumnsChanged($event)"
             (onContextMenuSelected)="handleContextMenuSelected($event)">
     <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false"></data-table-header-cell>
     <data-table-header-cell columnName="Id"  [sortable]="true" >{{'tradeManager.orderId' | translate}}</data-table-header-cell>

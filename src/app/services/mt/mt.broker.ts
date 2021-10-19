@@ -1149,27 +1149,41 @@ export abstract class MTBroker implements IMTBroker {
             let risk = 0;
             let contractSize = order.ContractSize;
 
+            order.RiskClass = RiskClass.Calculating;
+
             if (!contractSize) {
-                order.Risk = 0;
-                order.RiskPercentage = 0;
                 continue;
             }
 
             if (order.SL) {
                 risk = TradingHelper.buildRiskByPrice(contractSize, order.ProfitRate, order.Size, order.Price, order.SL, this.accountInfo.Balance);
+                if (order.Side === OrderSide.Buy) {
+                    if (order.Price <= order.SL) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                } else {
+                    if (order.Price >= order.SL) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                }
             } else if (order.VAR) {
                 risk = order.VAR;
-            }
-
-            if (!risk) {
-                order.Risk = 0;
-                order.RiskPercentage = 0;
-                continue;
+                if (!risk) {
+                    continue;
+                }
             }
 
             order.Risk = Math.roundToDecimals(this.accountInfo.Balance / 100 * risk, 2);
             order.RiskPercentage = Math.roundToDecimals(risk, 2);
-            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(order.RiskPercentage);
+            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(risk);
         }
     }
 
@@ -1267,9 +1281,13 @@ export abstract class MTBroker implements IMTBroker {
         for (const risk of this._currencyRisks) {
             risk.Side = risk.Risk > 0 ? OrderSide.Buy : OrderSide.Sell;
             risk.Risk = Math.abs(risk.Risk);
-            risk.RiskPercentage = Math.roundToDecimals(risk.Risk / this.accountInfo.Balance * 100, 2);
             risk.Risk = Math.roundToDecimals(risk.Risk, 2);
-            risk.RiskClass = TradingHelper.convertValueToAssetRiskClass(risk.RiskPercentage);
+            const riskPercentage = risk.Risk / this.accountInfo.Balance * 100;
+            risk.RiskPercentage = Math.roundToDecimals(riskPercentage, 2);
+            if (risk.RiskPercentage <= 0) {
+                risk.RiskPercentage = 0.01; // min risk
+            }
+            risk.RiskClass = TradingHelper.convertValueToAssetRiskClass(riskPercentage);
         }
     }
 
@@ -1421,7 +1439,7 @@ export abstract class MTBroker implements IMTBroker {
             RiskPercentage: order.RiskPercentage,
             CurrentPrice: order.CurrentPrice,
             VAR: order.VAR || 0,
-            RiskClass: RiskClass.NoRisk
+            RiskClass: RiskClass.Calculating
         };
     }
 

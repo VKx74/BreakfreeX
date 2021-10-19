@@ -10,6 +10,14 @@ import { MTHistoricalOrder } from 'modules/Trading/models/forex/mt/mt.models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MTHistoryOrdersComponent extends MTItemsComponent<MTHistoricalOrder> {
+    protected get _defaultHiddenColumns(): string[] {
+        return ['Id', 'Open Time'];
+    }
+    
+    protected get componentKey(): string {
+        return "MTHistoryOrdersComponent";
+    }
+
     protected loadItems(): Observable<MTHistoricalOrder[]> {
         return of(this._mtBroker.ordersHistory);
     }
