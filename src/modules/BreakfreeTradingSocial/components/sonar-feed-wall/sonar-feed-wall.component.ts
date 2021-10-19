@@ -638,6 +638,9 @@ export class SonarFeedWallComponent implements OnInit {
 
     hideShowFilters() {
         this._isFilterVisible = !this._isFilterVisible;
+        if (this._isFilterVisible) {
+            this.showTimeIntervalPop = false;
+        }
     }
 
     useFollowFilter() {
@@ -647,6 +650,9 @@ export class SonarFeedWallComponent implements OnInit {
 
     showTimeIntervalPopup() {
         this.showTimeIntervalPop = !this.showTimeIntervalPop;
+        if (this.showTimeIntervalPop) {
+            this._isFilterVisible = false;
+        }
     }
 
     searchTextInput(data: KeyboardEvent) {
