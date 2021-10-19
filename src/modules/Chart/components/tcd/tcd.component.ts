@@ -44,7 +44,6 @@ import { IHistoryRequest } from "@app/models/common/historyRequest";
 import { IPeriodicity } from "@app/models/common/periodicity";
 import { IHistoryResponse } from "@app/models/common/historyResponse";
 import { IBarData } from "@app/models/common/barData";
-import { InMemoryStorageService } from "modules/Storage/services/in-memory-storage.service";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -55,6 +54,7 @@ export interface ITcdComponentState {
 declare let defaultTheme: any;
 declare let darkTheme: any;
 declare let fintatechDarkTheme: any;
+declare var ResizeObserver;
 
 interface ReplayWaiter {
     instrument: string;
@@ -103,6 +103,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     private _detachedElement: JQuery<HTMLElement>;
     private _headerUpdateTimer;
     private _hourlyPriceCache: { [instrumentHash: string]: IBarData[] } = {};
+    private _sizeChangeObserver: any;
+    private _barsSet: boolean;
 
     blur: boolean = false;
     chart: TradingChartDesigner.Chart;
@@ -300,6 +302,16 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this._headerUpdateTimer = setInterval(() => {
                 this._setTitlePrice();
             }, 2000);
+
+            this._sizeChangeObserver = new ResizeObserver(entries => {
+                if (!this.chart || this.isDetached || !this._barsSet) {
+                    return;
+                }
+
+                this.chart.refresh();
+                this.chart.refresh();
+            });
+            this._sizeChangeObserver.observe(this.chartContainer.nativeElement);
         });
     }
 
@@ -394,8 +406,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         this.chart.preventRefresh = true;
         this._detachedElement = $(this.chartContainer.nativeElement).detach();
         this._ref.detectChanges();
-    }  
-    
+    }
+
     attach() {
         if (!this._detachedElement) {
             return;
@@ -571,6 +583,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             }
         }
 
+        this._barsSet = true;
+        
         this.replayWaiter = null;
 
         this._tradingFromChartHandler.setChart(this.chart, false);
@@ -841,6 +855,15 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             for (const timerId of this.replayModeTimers) {
                 clearTimeout(timerId);
             }
+        }
+
+        try {
+            if (this._sizeChangeObserver) {
+                this._sizeChangeObserver.unobserve(this.chartContainer.nativeElement);
+                this._sizeChangeObserver = null;
+            }
+        } catch (e) {
+            console.log(e);
         }
 
         try {
