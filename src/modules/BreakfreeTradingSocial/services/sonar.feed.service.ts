@@ -33,11 +33,21 @@ export enum ESonarFeedOrderTypes {
     Rising = "Rising",
 }
 
+export enum ESonarFeedIntervalTypes {
+    Now = "Now",
+    Today = "Today",
+    ThisWeek = "This Week",
+    ThisMonth = "This Month",
+    ThisYear = "This Year",
+    AllTime = "All Time"
+}
+
 export interface ISonarSetupFilters {
     type?: ESonarFeedMarketTypes[];
     setup?: ESonarFeedSetupTypes[];
     granularity?: number[];
     following?: boolean;
+    timeInterval?: ESonarFeedIntervalTypes;
 }
 
 @Injectable()
@@ -60,7 +70,7 @@ export class SonarFeedService {
     public onCommentRemoved: Subject<SocialFeedCommentRemovedNotification> = new Subject<SocialFeedCommentRemovedNotification>();
 
     constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService) {
-        this._url = AppConfigService.config.apiUrls.socialFeedREST;
+        this._url = AppConfigService.config.apiUrls.socialFeedREST;        
         this._socketService.open().subscribe(() => {
             console.log("Sonar Feed Socket opened");
         }, () => {
@@ -498,6 +508,14 @@ export class SonarFeedService {
 
         if (searchText) {
             res += `&symbol=${searchText}`;
+        }
+
+        if (filters.timeInterval) {
+            let index = Object.values(ESonarFeedIntervalTypes).indexOf(filters.timeInterval);
+            if (index >= 0) {
+                let val = Object.keys(ESonarFeedIntervalTypes)[index];
+                res += `&timeIntervalType=${val}`;
+            }
         }
 
         return res;
