@@ -727,7 +727,7 @@ export class WatchlistComponent extends BaseLayoutItem {
                 this.hiddenColumns = state.hiddenColumns;
             }
             
-            if (state.viewMode) {
+            if (state.viewMode !== null && state.viewMode !== undefined) {
                 this.setViewMode(state.viewMode);
             }
         }
@@ -863,6 +863,8 @@ export class WatchlistComponent extends BaseLayoutItem {
         }
 
         this._changesDetected = true;
+
+        this.instrumentsVM.sort((a, b) =>  ('' + a.symbol).localeCompare(b.symbol));
 
         return instrumentVM;
     }

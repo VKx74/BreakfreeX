@@ -11,6 +11,13 @@ import { MTOrder } from 'modules/Trading/models/forex/mt/mt.models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MTOpenOrdersComponent extends MTItemsComponent<MTOrder> {
+    protected get _defaultHiddenColumns(): string[] {
+        return ['Id', 'Open Time', 'Commission', 'Swap', 'Comment', 'Net Risk'];
+    }
+
+    protected get componentKey(): string {
+        return "MTOpenOrdersComponent";
+    }
 
     protected loadItems(): Observable<MTOrder[]> {
        return of(this._mtBroker.marketOrders);

@@ -82,6 +82,7 @@ export class DataTableComponent {
     @Output() onRowSelect = new EventEmitter();
     @Output() onDoubleClick = new EventEmitter();
     @Output() onContextMenuSelected = new EventEmitter<any>();
+    @Output() onHiddenColumnsChanged = new EventEmitter<string[]>();
     viewMode: DataTableViewMode = DataTableViewMode.Default;
     DataTableViewMode = DataTableViewMode;
 
@@ -558,6 +559,7 @@ export class DataTableComponent {
         }
 
         this.hiddenColumns$.next(hiddenColumns);
+        this.onHiddenColumnsChanged.next(hiddenColumns);
     }
 
     expandRow(rowIndex: number) {

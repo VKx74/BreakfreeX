@@ -11,6 +11,14 @@ import { MTCurrencyRisk } from 'modules/Trading/models/forex/mt/mt.models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
+    protected get _defaultHiddenColumns(): string[] {
+        return [];
+    }
+    
+    protected get componentKey(): string {
+        return "MTCurrencyRiskComponent";
+    }
+
     public groups: string[] = ["Actual", "Pending"];
     public groupingField: string = "Type";
     public maxRisk: number = 5;
