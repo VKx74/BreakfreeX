@@ -25,38 +25,6 @@
                                 <div class="item-favs" (click)="showTimeIntervalPopup()">
                                     <span style="white-space:nowrap">{{feedIntervalType}}</span>
                                 </div>
-                                <div class="details-modal-overlay" 
-                                [ngClass]="{'dohide': !showTimeIntervalPop}"
-                                (click)="showTimeIntervalPopup()"></div>
-                            </div>
-                            <div class="details-modal" [ngClass]="{'dohide': !showTimeIntervalPop}">
-                                <div class="triangle-up"></div>
-                                <div class="sonar-feed-highlights time-interval">
-                                    <div class="algo-highlights">
-                                        <div class="highlights-subitem" 
-                                        (click)="changeInterval('Now')">Now</div>
-                                    </div>
-                                    <div class="algo-highlights">
-                                        <div class="highlights-subitem"
-                                        (click)="changeInterval('Today')">Today</div>
-                                    </div>
-                                    <div class="algo-highlights">
-                                        <div class="highlights-subitem"
-                                        (click)="changeInterval('ThisWeek')">This Week</div>
-                                    </div>
-                                    <div class="algo-highlights">
-                                        <div class="highlights-subitem"
-                                        (click)="changeInterval('ThisMonth')">This Month</div>
-                                    </div>
-                                    <div class="algo-highlights">
-                                        <div class="highlights-subitem"
-                                        (click)="changeInterval('ThisYear')">This Year</div>
-                                    </div>
-                                    <div class="algo-highlights">
-                                        <div class="highlights-subitem"
-                                        (click)="changeInterval('AllTime')">All Time</div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -128,6 +96,35 @@
                                 <button class="crypto-button crypto-button_primary"
                                     [ngClass]="{'disabled': !isFilterChanged}" (click)="applyFilters()">Apply</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-modal" *ngIf="showTimeIntervalPop">
+                    <div class="time-interval">
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem" 
+                            (click)="changeInterval('Now')">Now</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('Today')">Today</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('ThisWeek')">This Week</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('ThisMonth')">This Month</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('ThisYear')">This Year</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('AllTime')">All Time</div>
                         </div>
                     </div>
                 </div>

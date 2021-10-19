@@ -89,44 +89,6 @@
 
     // -------------------------------------
 
-    .details-modal {
-        z-index: 102;
-        background: transparent;        
-        margin-left: -312px;        
-        position: absolute;
-        top: 4%;        
-    }
-
-    .dohide {
-        display: none;
-    }
-
-    .triangle-up {
-        margin-left: 80%;
-        width: 0;
-        height: 0;
-        border-left: 7px solid transparent;
-        border-right: 7px solid transparent;
-        // border-bottom: 10px solid red;
-    }
-
-    .details-modal-overlay {
-        z-index: 101;
-        transition: opacity 0.2s ease-out;
-        // pointer-events: none;
-        background: rgba(#0f172a, 0.8);
-        position: fixed;
-        opacity: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        top: 0;
-
-        details[open] & {
-            pointer-events: all;
-            opacity: 0.5;
-        }
-    }  
 
     details {
         summary {
@@ -139,10 +101,6 @@
                 display: none;
             }
         }
-    }
-
-    .time-interval {        
-        width: 405px;
     }
     
     .algo-highlights {
@@ -385,6 +343,11 @@
         font-size: 14px;
     }
 
+    .time-interval {
+        display: flex;
+        margin: 10px 0px 0px 0px;
+    }
+
     @media (max-width: 767px) {
         .cards-container {
             padding: 5px;
@@ -444,9 +407,6 @@
         background: themed("sonar-feed-header");
         border-color: themed("sonar-card-bg-border");
         color: themed("sonar-common-text-color");
-    }
-    .triangle-up{        
-        border-bottom: 10px solid themed("sonar-feed-header");             
     }
 
     .filters-search,
