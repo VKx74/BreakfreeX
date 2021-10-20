@@ -1,0 +1,39 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+    width: 100%;
+    height: 100%;
+
+    .time-interval {
+        display: flex;
+        padding: 5px;
+        font-size: 12px;
+
+        .algo-highlights {
+            display: flex;
+            margin: 1px;
+            padding: 5px;
+            cursor: pointer;
+            opacity: 0.8;
+            border-radius: 5px;
+        }
+    }
+}
+
+@include themify($themes, true) {
+    .time-interval {
+        color: themed("sonar-common-text-color");
+    }
+
+    .algo-highlights {
+        &:hover,
+        &.active {
+            background: themed("sonar-feed-hover-color");
+            opacity: 1;
+        }
+    }
+}

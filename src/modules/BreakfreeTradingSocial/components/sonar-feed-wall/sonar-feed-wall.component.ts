@@ -180,7 +180,6 @@ export class SonarFeedWallComponent implements OnInit {
     public feedIntervalType: ESonarFeedIntervalTypes = ESonarFeedIntervalTypes.AllTime;
 
     public isFollowFilterUsed: boolean = false;
-    public showTimeIntervalPop: boolean = false;
 
     public get IsNewUpdatesExists(): boolean {
         return this._isNewUpdatesExists;
@@ -632,29 +631,18 @@ export class SonarFeedWallComponent implements OnInit {
 
     changeInterval(eventArgs: string) {
         this.feedIntervalType = ESonarFeedIntervalTypes[eventArgs];
-        this.showTimeIntervalPop = false;
         this.applyFilters();
     }
 
     hideShowFilters() {
         this._isFilterVisible = !this._isFilterVisible;
-        if (this._isFilterVisible) {
-            this.showTimeIntervalPop = false;
-        }
     }
 
     useFollowFilter() {
         this.isFollowFilterUsed = !this.isFollowFilterUsed;
         this.applyFilters();
     }
-
-    showTimeIntervalPopup() {
-        this.showTimeIntervalPop = !this.showTimeIntervalPop;
-        if (this.showTimeIntervalPop) {
-            this._isFilterVisible = false;
-        }
-    }
-
+    
     searchTextInput(data: KeyboardEvent) {
         if (data.code === "Enter" && !data.shiftKey) {
             this.applyFilters();

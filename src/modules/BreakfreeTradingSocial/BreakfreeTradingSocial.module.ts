@@ -31,6 +31,7 @@ import { SonarFeedSocketService } from './services/sonar.feed.socket.service';
 import { SonarFeedCommentComponent } from './components/sonar-feed-comment/sonar-feed-comment.component';
 import { InstrumentCacheService } from './services/instrument.cache.service';
 import { SocialReactionsService } from './services/social.reactions.service';
+import { SonarTimeFilterComponent } from './components/sonar-time-filter/sonar-time-filter.component';
 
 @NgModule({
     // components here
@@ -40,7 +41,8 @@ import { SocialReactionsService } from './services/social.reactions.service';
         SonarFeedWidgetComponent,
         SonarFeedCardComponent,
         SonarChartComponent,
-        SonarFeedCommentComponent
+        SonarFeedCommentComponent,
+        SonarTimeFilterComponent
     ],
     imports: [
         CommonModule,
