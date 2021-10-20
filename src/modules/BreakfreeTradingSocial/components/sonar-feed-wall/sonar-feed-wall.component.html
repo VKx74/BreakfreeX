@@ -20,13 +20,6 @@
                         <div class="filters-holder" (click)="hideShowFilters()">
                             <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters
                         </div>
-                        <div [attr.open]="showTimeIntervalPop ? '' : null">
-                            <div>
-                                <div class="item-favs" (click)="showTimeIntervalPopup()">
-                                    <span style="white-space:nowrap">{{feedIntervalType}}</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -100,35 +93,6 @@
                     </div>
                 </div>
 
-                <div class="details-modal" *ngIf="showTimeIntervalPop">
-                    <div class="time-interval">
-                        <div class="algo-highlights">
-                            <div class="highlights-subitem" 
-                            (click)="changeInterval('Now')">Now</div>
-                        </div>
-                        <div class="algo-highlights">
-                            <div class="highlights-subitem"
-                            (click)="changeInterval('Today')">Today</div>
-                        </div>
-                        <div class="algo-highlights">
-                            <div class="highlights-subitem"
-                            (click)="changeInterval('ThisWeek')">This Week</div>
-                        </div>
-                        <div class="algo-highlights">
-                            <div class="highlights-subitem"
-                            (click)="changeInterval('ThisMonth')">This Month</div>
-                        </div>
-                        <div class="algo-highlights">
-                            <div class="highlights-subitem"
-                            (click)="changeInterval('ThisYear')">This Year</div>
-                        </div>
-                        <div class="algo-highlights">
-                            <div class="highlights-subitem"
-                            (click)="changeInterval('AllTime')">All Time</div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             <div class="sonar-feed-highlights" *ngIf="!isSingleCard">
@@ -146,10 +110,21 @@
                         (click)="changeOrder('Top')">
                         <img class="widget-icon" src="/assets/img/arrow-up-to-line-solid.svg">Top
                     </div>
-                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Rising'}"
+                    <div *ngIf="feedOrderType =='Top'" class="timeframe-filters">
+                        <div class="item-favs" [matMenuTriggerFor]="timeFilters">
+                            <span style="white-space:nowrap">{{feedIntervalType}}</span>
+                        </div>
+
+                        <mat-menu #timeFilters="matMenu" xPosition="after" class="sonar-time-filter-menu">
+                            <div class="details-modal">
+                               <sonar-time-filter [value]="feedIntervalType" (valueChange)="changeInterval($event)"></sonar-time-filter>
+                            </div>
+                        </mat-menu>
+                    </div>
+                    <!-- <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Rising'}"
                         (click)="changeOrder('Rising')">
                         <img class="widget-icon" src="/assets/img/arrow-trend-up-solid.svg">Rising
-                    </div>
+                    </div> -->
                 </div>
 
             </div>

@@ -89,7 +89,6 @@
 
     // -------------------------------------
 
-
     details {
         summary {
             list-style: none;
@@ -102,7 +101,7 @@
             }
         }
     }
-    
+
     .algo-highlights {
         display: flex;
 
@@ -343,9 +342,8 @@
         font-size: 14px;
     }
 
-    .time-interval {
-        display: flex;
-        margin: 10px 0px 0px 0px;
+    .timeframe-filters {
+        margin-left: 5px;
     }
 
     @media (max-width: 767px) {
@@ -353,6 +351,10 @@
             padding: 5px;
         }
     }
+}
+
+/deep/.sonar-time-filter-menu {
+    max-width: none !important;
 }
 
 :host-context(body.Dark-theme) .highlights-subitem .widget-icon {
