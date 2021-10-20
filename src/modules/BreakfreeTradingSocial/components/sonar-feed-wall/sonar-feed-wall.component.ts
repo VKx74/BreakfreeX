@@ -670,6 +670,10 @@ export class SonarFeedWallComponent implements OnInit {
 
             if (marketType === ESonarFeedMarketTypes.Metals && this._identityService.subscriptionType === SubscriptionType.Discovery) {
                 return true;
+            } 
+            
+            if (marketType === ESonarFeedMarketTypes.Indices && this._identityService.subscriptionType === SubscriptionType.Discovery) {
+                return true;
             }
 
             return false;
@@ -863,6 +867,7 @@ export class SonarFeedWallComponent implements OnInit {
         settings.type.push(ESonarFeedMarketTypes.ForexExotic);
         if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
             settings.type.push(ESonarFeedMarketTypes.Metals);
+            settings.type.push(ESonarFeedMarketTypes.Indices);
         }
     }
 

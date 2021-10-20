@@ -206,7 +206,7 @@ export class IdentityService {
     } 
 
     get basicLevel(): number {
-        return 4;
+        return 0;
     }
 
     constructor(private _authService: AuthenticationService,
@@ -271,7 +271,9 @@ export class IdentityService {
             return true;
         }
 
-        if (this._isPro || this._isTrial) {
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial ||
+            this.subscriptionType === SubscriptionType.Discovery) {
             return true;
         }
 
@@ -363,7 +365,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Pro"];
+        // this.subscriptions = ["Starter"];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
