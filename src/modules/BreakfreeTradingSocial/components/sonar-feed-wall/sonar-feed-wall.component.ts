@@ -11,7 +11,7 @@ import { Actions, LinkingAction } from "@linking/models";
 import { SocialFeedCommentAddedNotification, SocialFeedCommentEditedNotification, SocialFeedCommentReactionNotification, SocialFeedCommentRemovedNotification, SocialFeedPostReactionNotification, SonarFeedComment, SonarFeedItem, SonarFeedItemCommentLikeResponse, SonarFeedItemLikeResponse } from "modules/BreakfreeTradingSocial/models/sonar.feed.models";
 import { InstrumentCacheService } from "modules/BreakfreeTradingSocial/services/instrument.cache.service";
 import { SocialFeedModelConverter } from "modules/BreakfreeTradingSocial/services/models.convertter";
-import { ESonarFeedMarketTypes, ESonarFeedOrderTypes, ESonarFeedSetupTypes, ISonarSetupFilters, SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
+import { ESonarFeedIntervalTypes, ESonarFeedMarketTypes, ESonarFeedOrderTypes, ESonarFeedSetupTypes, ISonarSetupFilters, SonarFeedService } from "modules/BreakfreeTradingSocial/services/sonar.feed.service";
 import { ConfirmModalComponent } from "modules/UI/components";
 import { Observable, Subscription } from "rxjs";
 import { JsUtil } from "utils/jsUtil";
@@ -19,6 +19,8 @@ import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
 import { IBFTAAlgoCacheItemAdded, SonarChartIndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
+import { EnumHelper } from "modules/Admin/data/tp-monitoring/TPMonitoringData";
+import { Console } from "console";
 
 export interface SonarFeedCommentVM {
     id: any;
@@ -175,8 +177,10 @@ export class SonarFeedWallComponent implements OnInit {
     public selectedMarketTypes: SonarFeedMarketTypes[];
     public prevSelectedMarketTypes: SonarFeedMarketTypes[];
     public feedOrderType: ESonarFeedOrderTypes = ESonarFeedOrderTypes.New;
+    public feedIntervalType: ESonarFeedIntervalTypes = ESonarFeedIntervalTypes.AllTime;
 
     public isFollowFilterUsed: boolean = false;
+    public showTimeIntervalPop: boolean = false;
 
     public get IsNewUpdatesExists(): boolean {
         return this._isNewUpdatesExists;
@@ -200,8 +204,8 @@ export class SonarFeedWallComponent implements OnInit {
 
     public get hasAccess(): boolean {
         return this.hasSubscription && this.isSingleCardAllowed;
-    } 
-    
+    }
+
     /*public get isStuff(): boolean {
         return this._identityService && this._identityService.isStuff;
     }*/
@@ -626,13 +630,29 @@ export class SonarFeedWallComponent implements OnInit {
         this._initData();
     }
 
+    changeInterval(eventArgs: string) {
+        this.feedIntervalType = ESonarFeedIntervalTypes[eventArgs];
+        this.showTimeIntervalPop = false;
+        this.applyFilters();
+    }
+
     hideShowFilters() {
         this._isFilterVisible = !this._isFilterVisible;
+        if (this._isFilterVisible) {
+            this.showTimeIntervalPop = false;
+        }
     }
 
     useFollowFilter() {
         this.isFollowFilterUsed = !this.isFollowFilterUsed;
         this.applyFilters();
+    }
+
+    showTimeIntervalPopup() {
+        this.showTimeIntervalPop = !this.showTimeIntervalPop;
+        if (this.showTimeIntervalPop) {
+            this._isFilterVisible = false;
+        }
     }
 
     searchTextInput(data: KeyboardEvent) {
@@ -1447,6 +1467,9 @@ export class SonarFeedWallComponent implements OnInit {
         }
 
         res.following = this.isFollowFilterUsed;
+        res.timeInterval = this.feedIntervalType;
+        console.log('this.feedIntervalType');
+        console.log(this.feedIntervalType);
 
         return res;
     }

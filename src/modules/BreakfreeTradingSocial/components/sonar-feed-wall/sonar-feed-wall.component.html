@@ -20,9 +20,14 @@
                         <div class="filters-holder" (click)="hideShowFilters()">
                             <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters
                         </div>
-
+                        <div [attr.open]="showTimeIntervalPop ? '' : null">
+                            <div>
+                                <div class="item-favs" (click)="showTimeIntervalPopup()">
+                                    <span style="white-space:nowrap">{{feedIntervalType}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
 
                 <div class="filter-modal" *ngIf="isFilterVisible">
@@ -60,6 +65,26 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+                        <!-- <div class="sonar-feed-highlights time-interval">
+                            <div class="algo-highlights">
+                                <div class="highlights-subitem">Now</div>
+                            </div>
+                            <div class="algo-highlights">
+                                <div class="highlights-subitem">Today</div>
+                            </div>
+                            <div class="algo-highlights">
+                                <div class="highlights-subitem">This week</div>
+                            </div>
+                            <div class="algo-highlights">
+                                <div class="highlights-subitem">This Month</div>
+                            </div>
+                            <div class="algo-highlights">
+                                <div class="highlights-subitem">This Year</div>
+                            </div>
+                            <div class="algo-highlights">
+                                <div class="highlights-subitem">All Time</div>
+                            </div>
+                        </div> -->
                     </div>
                     <div class="filtering-footer">
                         <div class="align-right">
@@ -75,23 +100,56 @@
                     </div>
                 </div>
 
+                <div class="details-modal" *ngIf="showTimeIntervalPop">
+                    <div class="time-interval">
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem" 
+                            (click)="changeInterval('Now')">Now</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('Today')">Today</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('ThisWeek')">This Week</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('ThisMonth')">This Month</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('ThisYear')">This Year</div>
+                        </div>
+                        <div class="algo-highlights">
+                            <div class="highlights-subitem"
+                            (click)="changeInterval('AllTime')">All Time</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="sonar-feed-highlights" *ngIf="!isSingleCard">
 
                 <div class="algo-highlights">
-                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Hot'}" 
-                    (click)="changeOrder('Hot')">
-                         <img class="widget-icon" src="/assets/img/hotjar-brands.svg">Hot</div>
+                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Hot'}"
+                        (click)="changeOrder('Hot')">
+                        <img class="widget-icon" src="/assets/img/hotjar-brands.svg">Hot
+                    </div>
                     <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='New'}"
-                    (click)="changeOrder('New')">
-                        <img class="widget-icon" src="/assets/img/square-plus-solid.svg">New</div>
+                        (click)="changeOrder('New')">
+                        <img class="widget-icon" src="/assets/img/square-plus-solid.svg">New
+                    </div>
                     <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Top'}"
-                    (click)="changeOrder('Top')">
-                         <img class="widget-icon" src="/assets/img/arrow-up-to-line-solid.svg">Top</div>
+                        (click)="changeOrder('Top')">
+                        <img class="widget-icon" src="/assets/img/arrow-up-to-line-solid.svg">Top
+                    </div>
                     <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Rising'}"
-                    (click)="changeOrder('Rising')">
-                         <img class="widget-icon" src="/assets/img/arrow-trend-up-solid.svg">Rising</div>
+                        (click)="changeOrder('Rising')">
+                        <img class="widget-icon" src="/assets/img/arrow-trend-up-solid.svg">Rising
+                    </div>
                 </div>
 
             </div>
