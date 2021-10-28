@@ -18,7 +18,7 @@
                 <div class="tabs-content w-tab-content">
                     <div #monthlyContent data-w-tab="Tab 1" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Monthly}" class="w-tab-pane">
                         <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4">
+                            <div class="pricing-table-4 starter-plan">
                                 <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
                                         loading="lazy"
                                         alt="">
@@ -94,24 +94,43 @@
                                     <div class="button-text">Start 7-day free trial</div>
                                 </a>
                                 <div class="start-now">or skip trial and <a (click)="checkoutDiscovery1MNonTrial()">pay now</a></div>
-                                <div class="text-block-26"><strong class="bold-text-11">All features from Starter plus:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-11">Features:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div class="text-block-27">
-                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver </strong>markets
+                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver, Indices </strong>markets
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div>
-                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h timeframes)
+                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h, 15min timeframes)
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div>
-                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h timeframes)
+                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h, 15min timeframes)
+                                        </div>
+                                    </li>
+
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 2.0 <strong> - always know which way market is going</strong>
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
@@ -181,7 +200,7 @@
                     </div>
                     <div #month3Content data-w-tab="Tab 4" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month3}" class="w-tab-pane">
                         <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4">
+                            <div class="pricing-table-4 starter-plan">
                                 <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
                                         loading="lazy"
                                         alt="">
@@ -255,24 +274,43 @@
                                     <div class="button-bg-cta"></div>
                                     <div class="button-text">Buy now for 28% off</div>
                                 </a>
-                                <div class="text-block-26"><strong class="bold-text-17">All features from Starter plus:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-17">Features:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div class="text-block-27">
-                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver </strong>markets
+                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver, Indices </strong>markets
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div>
-                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h timeframes)
+                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h, 15min timeframes)
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div>
-                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h timeframes)
+                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h, 15min timeframes)
+                                        </div>
+                                    </li>
+
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 2.0 <strong> - always know which way market is going</strong>
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
@@ -341,7 +379,7 @@
                     </div>
                     <div #month12Content data-w-tab="Tab 5" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month12}" class="w-tab-pane">
                         <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4">
+                            <div class="pricing-table-4 starter-plan">
                                 <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
                                         loading="lazy"
                                         alt="">
@@ -415,24 +453,43 @@
                                     <div class="button-bg-cta"></div>
                                     <div class="button-text">Buy now for 33% off</div>
                                 </a>
-                                <div class="text-block-26"><strong class="bold-text-17">All features from Starter plus:</strong></div>
+                                <div class="text-block-26"><strong class="bold-text-17">Features:</strong></div>
                                 <ul role="list" class="pricing-list-3">
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div class="text-block-27">
-                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver </strong>markets
+                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver, Indices </strong>markets
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div>
-                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h timeframes)
+                                            <strong>Sonar</strong> - high-probability trade feed (on 1D, 4h, 1h, 15min timeframes)
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
                                         <div class="check-circle-icon"></div>
                                         <div>
-                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h timeframes)
+                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 1D, 4h, 1h, 15min timeframes)
+                                        </div>
+                                    </li>
+
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
+                                        </div>
+                                    </li>
+                                    <li class="pricing-list-item-4">
+                                        <div class="check-circle-icon"></div>
+                                        <div class="text-block-41">
+                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 2.0 <strong> - always know which way market is going</strong>
                                         </div>
                                     </li>
                                     <li class="pricing-list-item-4">
