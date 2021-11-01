@@ -61,15 +61,18 @@ export class DefaultCheckoutComponent implements OnInit {
     }
 
     checkoutPro1M() {
-        this.checkout("subscription_plan_206914");
+        this.checkout("price_1Jr22xBI1GhkUGQthrKBOAzq");
+        // this.checkout("subscription_plan_206914");
     }
 
     checkoutPro3M() {
-        this.checkout("subscription_plan_200724");
+        this.checkout("price_1Jr24ZBI1GhkUGQtGjsmg2Jk");
+        // this.checkout("subscription_plan_200724");
     }
 
     checkoutPro12M() {
-        this.checkout("subscription_plan_251974");
+        this.checkout("price_1Jr25GBI1GhkUGQtB1lKwVhy");
+        // this.checkout("subscription_plan_251974");
     }
 
     checkoutStarter1MNonTrial() {
@@ -77,7 +80,8 @@ export class DefaultCheckoutComponent implements OnInit {
     }
 
     checkoutPro1MNonTrial() {
-        this.checkout("subscription_plan_183584");
+        this.checkout("price_1Jr2J4BI1GhkUGQtY9aGGAdF");
+        // this.checkout("subscription_plan_183584");
     }
 
     checkoutDiscovery1MNonTrial() {

@@ -1,5 +1,4 @@
 import { EMarketSpecific } from "@app/models/common/marketSpecific";
-import { EquitiesWatchlist } from "modules/Watchlist/services/equities";
 import { BondsList, CommoditiesList, EquitiesList, ForexExoticList, ForexMajorList, ForexMinorList, IndicesList, MetalsList } from "./forex.types";
 let AllInstruments: string[] = [];
 AllInstruments = AllInstruments.concat(ForexMajorList);
