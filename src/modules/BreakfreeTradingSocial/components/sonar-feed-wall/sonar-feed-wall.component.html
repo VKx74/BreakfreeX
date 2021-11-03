@@ -110,6 +110,10 @@
                         (click)="changeOrder('Top')">
                         <img class="widget-icon" src="/assets/img/arrow-up-to-line-solid.svg">Top
                     </div>
+                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Active'}"
+                        (click)="changeOrder('Active')">
+                        <img class="widget-icon" src="/assets/img/signal-stream-solid.svg">Active
+                    </div>
                     <div *ngIf="feedOrderType =='Top'" class="timeframe-filters">
                         <div class="item-favs" [matMenuTriggerFor]="timeFilters">
                             <span style="white-space:nowrap">{{feedIntervalType}}</span>
