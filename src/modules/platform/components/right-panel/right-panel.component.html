@@ -1,11 +1,11 @@
 <div class="root">
     <div class="widget-container" [class.hidden]="collapsed">
         <ng-container *ngIf="initialized; else loader">
-            <!-- <div class="widget" *ngIf="SelectedComponent === Components.Sonar">
+            <div class="widget" *ngIf="SelectedComponent === Components.Sonar">
                 <breakfree-trading-scanner (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
                     (onOpenChart)="handleOpenChart($event)"></breakfree-trading-scanner>
-            </div> -->
+            </div>
             <div class="widget" *ngIf="SelectedComponent === Components.SonarFeed">
                 <sonar-feed (onOpenChart)="handleOpenChart($event)" (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"></sonar-feed>
@@ -41,11 +41,11 @@
                 </color-selector>
             </div> -->
             <div class="widget-selector-toolbar">
-                <!-- <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
+                <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
                     [class.active]="SelectedComponent === Components.Sonar && !collapsed" tooltip
                     [matTooltip]="'sonarWidget' | translate">
                     <img class="widget-icon" src="/assets/img/right-panel/radar-solid.svg" />
-                </div> -->
+                </div>
                 <div class="sonar-feed-widget widget-selector-icon" (click)="selectComponent(Components.SonarFeed)"
                     [class.active]="SelectedComponent === Components.SonarFeed && !collapsed" tooltip
                     [matTooltip]="'sonarFeed' | translate">

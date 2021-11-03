@@ -47,6 +47,7 @@ export class SonarFeedCardComponent implements OnInit {
     private _selected: boolean = false;
     private _replayCommentId: any;
     private _editComment: boolean;
+    private _isActive: boolean;
     private _expandedComments: any[] = [];
     private _trend: SonarFeedCardTrendVM;
     private _marketType: ESonarFeedMarketTypes;
@@ -145,6 +146,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     @Input() public set selected(value: boolean) {
         this._selected = value;
+    } 
+    
+    @Input() public set isActive(value: boolean) {
+        this._isActive = value;
     }
 
     @Input() public set trend(value: SonarFeedCardTrendVM) {
@@ -256,6 +261,10 @@ export class SonarFeedCardComponent implements OnInit {
 
     public get selected(): boolean {
         return this._selected;
+    } 
+    
+    public get isActive(): boolean {
+        return this._isActive;
     }
 
     public get replayComment(): SonarFeedCommentVM {

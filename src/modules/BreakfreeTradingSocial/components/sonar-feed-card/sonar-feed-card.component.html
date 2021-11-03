@@ -28,14 +28,12 @@
                 <div class="header-right-part">
                     <div class="card-header-timestamp">
                         {{createTimeString(time)}}
-                    </div>
+                    </div>  
                 </div>
             </div>
         </div>
 
     </div>
-
-
 
     <div class="card-chart" #chartContainer [ngClass]="{'chart-selected': selected}" (click)="clickOnChart()">
         <!-- <div class="chart-tends" *ngIf="this.trend">
@@ -50,6 +48,7 @@
             [isVisible]="isVisible">
         </sonar-chart>
         <div class="tags-holder">
+            <div class="tag-active" *ngIf="isActive">Active</div>
             <div class="tag-setup">{{setup}}</div>
             <div class="tag-market">{{getMarketType()}}</div>
             <div *ngIf="this.trend" class="tag-RTD-trend" tooltip [matTooltip]="getTrendDescriptionTooltip()">

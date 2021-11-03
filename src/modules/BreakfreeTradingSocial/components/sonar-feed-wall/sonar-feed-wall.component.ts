@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { MatDialog } from "@angular/material/dialog";
 import { AppRoutes } from "@app/app.routes";
 import { IInstrument } from "@app/models/common/instrument";
-import { IBFTAAlgoCacheItemResponse, IBFTAAlgoTrendResponse, IBFTATrend } from "@app/services/algo.service";
+import { AlgoService, IBFTAAlgoTrendResponse, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem } from "@app/services/algo.service";
 import { IdentityService, SubscriptionType } from "@app/services/auth/identity.service";
 import { EMarketSpecific } from "@app/models/common/marketSpecific";
 import { ForexTypeHelper } from "@app/services/instrument.type.helper/forex.types.helper";
@@ -19,8 +19,6 @@ import { IReplayData } from "../sonar-feed-card/sonar-feed-card.component";
 import { TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
 import { CheckoutComponent } from "modules/BreakfreeTrading/components/checkout/checkout.component";
 import { IBFTAAlgoCacheItemAdded, SonarChartIndicatorDataProviderService } from "@chart/services/indicator-data-provider.service";
-import { EnumHelper } from "modules/Admin/data/tp-monitoring/TPMonitoringData";
-import { Console } from "console";
 
 export interface SonarFeedCommentVM {
     id: any;
@@ -56,6 +54,7 @@ export interface SonarFeedCardTrendVM {
 
 export interface SonarFeedCardVM {
     id: any;
+    algoId: string;
     instrument: IInstrument;
     granularity: number;
     time: number;
@@ -119,6 +118,7 @@ export class SonarFeedWallComponent implements OnInit {
     private _firstVisible: number = 0;
     private _lastVisible: number = 5;
     private _timer: any;
+    private _activeRefreshTimer: any;
     private _canLoadMore: boolean = true;
     private _loadingMore: boolean = false;
     private _refreshNeeded: boolean = false;
@@ -140,6 +140,8 @@ export class SonarFeedWallComponent implements OnInit {
     private _tempRecursiveLoadingCounter = 0;
     private _lastId: any;
     private _loadedCount: number;
+    private _activeSetups: IBFTScanInstrumentsResponseItem[] = [];
+    private _scanningInProgress: boolean = false;
 
     @ViewChild('scroller', { static: false }) scroll: ElementRef;
 
@@ -214,6 +216,7 @@ export class SonarFeedWallComponent implements OnInit {
         protected _host: ElementRef,
         protected _dialog: MatDialog,
         protected _alertService: AlertService,
+        protected _alogService: AlgoService,
         protected _identity: IdentityService,
         protected _instrumentService: InstrumentCacheService,
         protected _tradingProfileService: TradingProfileService,
@@ -227,6 +230,7 @@ export class SonarFeedWallComponent implements OnInit {
             }
         }, 300);
 
+        this._scanFullMarket();
         // if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
         //     this._loadCount = 50;
         // } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
@@ -235,6 +239,21 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    private _scanFullMarket() {
+        if (this._scanningInProgress) {
+            return;
+        }
+
+        this._scanningInProgress = true;
+        this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
+            this._activeSetups = data.items;
+            this._refreshNeeded = true;
+            this._scanningInProgress = false;
+        }, (error) => {
+            this._scanningInProgress = false;
+        });
     }
 
     ngAfterViewInit() {
@@ -298,14 +317,25 @@ export class SonarFeedWallComponent implements OnInit {
                 if (isFitFilters && isInAccess) {
                     this.addItem(_);
                 }
+
+                this._scanFullMarket();
             }
         });
+
+        this._activeRefreshTimer = setInterval(() => {
+            this._scanFullMarket();
+        }, 1000 * 60 * 2);
     }
 
     ngOnDestroy() {
         if (this._timer) {
             clearInterval(this._timer);
             this._timer = null;
+        } 
+        
+        if (this._activeRefreshTimer) {
+            clearInterval(this._activeRefreshTimer);
+            this._activeRefreshTimer = null;
         }
 
         if (this._itemAddedSubscription) {
@@ -427,7 +457,7 @@ export class SonarFeedWallComponent implements OnInit {
             this.deleteLike(card);
         }
     }
-
+    
     dislike(card: SonarFeedCardVM) {
         if (!card.hasMyDislike) {
             this.loading = true;
@@ -659,6 +689,19 @@ export class SonarFeedWallComponent implements OnInit {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
+    isCardActive(card: SonarFeedCardVM): boolean {
+        if (!this._activeSetups) {
+            return false;
+        }
+
+        for (const item of this._activeSetups) {
+            if (item.id === card.algoId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public isMarketTypeAllowed(marketType: ESonarFeedMarketTypes) {
         if (this._identityService.subscriptionType === SubscriptionType.Starter || this._identityService.subscriptionType === SubscriptionType.Discovery) {
@@ -1077,7 +1120,8 @@ export class SonarFeedWallComponent implements OnInit {
             setup: item.type,
             symbol: item.symbol,
             side: item.side === IBFTATrend.Up ? "Long" : "Short",
-            marketType: this._mapMarketType(item.symbol, item.exchange)
+            marketType: this._mapMarketType(item.symbol, item.exchange),
+            algoId: item.algoId
         };
 
         const trendData = this._indicatorDataProviderService.getTrend(card.instrument.id, card.instrument.exchange, card.granularity, card.time);

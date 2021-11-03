@@ -145,7 +145,8 @@
                     [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"
                     [showAllCommentsOnExpand]="isSingleCard" (onShare)="share(card)" (chartClick)="clickOnCard(card)"
                     [selected]="selectedCard && selectedCard == card" [timeFrame]="card.timeFrame"
-                    [symbol]="card.symbol" [setup]="card.setup" [side]="card.side"></sonar-feed-card>
+                    [symbol]="card.symbol" [setup]="card.setup" [side]="card.side"
+                    [isActive]="isCardActive(card)"></sonar-feed-card>
             </div>
         </div>
 

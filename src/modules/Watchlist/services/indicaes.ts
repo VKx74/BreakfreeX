@@ -2,6 +2,7 @@ import { IWatchlistItem } from './watchlist.service';
 import { EExchange } from '@app/models/common/exchange';
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { EMarketType } from '@app/models/common/marketType';
+import { EMarketSpecific } from '@app/models/common/marketSpecific';
 
 export const IndicesWatchlist: IWatchlistItem = {
     id: "defaultIndices",
@@ -20,7 +21,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "AU200",
         "company": "AU200 vs AUD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "CN50_USD",
@@ -34,7 +36,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "CN50",
         "company": "CN50 vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "EU50_EUR",
@@ -48,7 +51,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "EU50",
         "company": "EU50 vs EUR",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "FR40_EUR",
@@ -62,7 +66,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "FR40",
         "company": "FR40 vs EUR",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "DE30_EUR",
@@ -76,7 +81,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "DE30",
         "company": "DE30 vs EUR",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "HK33_HKD",
@@ -90,7 +96,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "HK33",
         "company": "HK33 vs HKD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "IN50_USD",
@@ -104,7 +111,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "IN50",
         "company": "IN50 vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "JP225_USD",
@@ -118,7 +126,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "JP225",
         "company": "JP225 vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "NL25_EUR",
@@ -132,7 +141,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "NL25",
         "company": "NL25 vs EUR",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "SG30_SGD",
@@ -146,7 +156,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "SG30",
         "company": "SG30 vs SGD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "TWIX_USD",
@@ -160,7 +171,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "TWIX",
         "company": "TWIX vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "UK100_GBP",
@@ -174,7 +186,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "UK100",
         "company": "UK100 vs GBP",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "NAS100_USD",
@@ -188,7 +201,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "NAS100",
         "company": "NAS100 vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "US2000_USD",
@@ -202,7 +216,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "US2000",
         "company": "US2000 vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "SPX500_USD",
@@ -216,7 +231,8 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "SPX500",
         "company": "SPX500 vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         },
         {
         "id": "US30_USD",
@@ -230,6 +246,7 @@ export const IndicesWatchlist: IWatchlistItem = {
         "dependInstrument": "US30",
         "company": "US30 vs USD",
         "tradable": true,
-        "tickSizeCorrect": true
+        "tickSizeCorrect": true,
+        "specific": EMarketSpecific.Indices
         }]
 };
