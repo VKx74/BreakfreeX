@@ -539,10 +539,10 @@ export class DashboardComponent {
                 }).catch(() => {
                     this._resetLayout();
                 });
-                this._rightSidePanelStateService.initialize(RightSidePanelStateService.GetDefaultState(Components.Academy));
+                this._rightSidePanelStateService.initialize(RightSidePanelStateService.GetDefaultState(Components.Sonar));
             }
         } catch (error) {
-            this._rightSidePanelStateService.initialize(RightSidePanelStateService.GetDefaultState(Components.Academy));
+            this._rightSidePanelStateService.initialize(RightSidePanelStateService.GetDefaultState(Components.Sonar));
         }
         setTimeout(() => {
             this._saveLayout = true;

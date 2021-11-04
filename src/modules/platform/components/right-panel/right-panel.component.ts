@@ -28,7 +28,7 @@ export class RightPanelComponent implements OnInit {
     protected _panelFullScreenSize: number = 768;
 
     public Components = Components;
-    public SelectedComponent: Components = Components.SonarFeed;
+    public SelectedComponent: Components = Components.Sonar;
 
     @Input() isCollapsed: boolean = false;
     @Output() isCollapsedChange = new EventEmitter<boolean>();
@@ -98,9 +98,9 @@ export class RightPanelComponent implements OnInit {
 
             if (savedComponent && savedComponent !== this.SelectedComponent) {
                 const isExist =  Object.getOwnPropertyNames(Components).indexOf(savedComponent) !== -1;
-                this.SelectedComponent = isExist ? savedComponent : Components.SonarFeed;
+                this.SelectedComponent = isExist ? savedComponent : Components.Sonar;
             } else {
-                this.SelectedComponent = Components.SonarFeed;
+                this.SelectedComponent = Components.Sonar;
             }
 
             if (this._isInitializedSubscription) {
