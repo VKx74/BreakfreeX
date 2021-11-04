@@ -19,7 +19,7 @@ import { InstrumentService } from '@app/services/instrument.service';
 // import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
 // import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 
-import { IdentityService } from '@app/services/auth/identity.service';
+import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckoutComponent } from '../checkout/checkout.component';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
@@ -210,7 +210,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             }
         }
 
-        this._initialized = true;   
+        this._initialized = true;
     }
 
     is15MinSonarAccessRestriction(group: IGroupedResults): boolean {
@@ -650,6 +650,28 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         return false;
     }
 
+    private _isTypeAllowed(marketType: string): boolean {
+        if (this._identityService.subscriptionType === SubscriptionType.Starter || this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            if (marketType === InstrumentTypeName.MajorForex ||
+                marketType === InstrumentTypeName.ForexMinors ||
+                marketType === InstrumentTypeName.ForexExotics) {
+                return true;
+            }
+
+            if (marketType === InstrumentTypeName.Metals && this._identityService.subscriptionType === SubscriptionType.Discovery) {
+                return true;
+            }
+
+            if (marketType === InstrumentTypeName.Indices && this._identityService.subscriptionType === SubscriptionType.Discovery) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
     private _isTimeframeSelected(timeframe: number): boolean {
         for (const activeTimeframe of this.activeTimeframes) {
             const tfValue = this._getTfValue(activeTimeframe);
@@ -665,7 +687,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         const filteringData = isHistory ? this.scannerHistoryResults : this.scannerResults;
         const filteredBySegments = [];
         for (const i of filteringData) {
-            if (this._isTypeSelected(i.marketType)) {
+            if (this._isTypeSelected(i.marketType) && this._isTypeAllowed(i.marketType)) {
                 filteredBySegments.push(i);
             }
         }
