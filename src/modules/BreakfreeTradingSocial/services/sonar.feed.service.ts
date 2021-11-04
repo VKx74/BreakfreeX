@@ -227,6 +227,16 @@ export class SonarFeedService {
             }
             return [];
         }));
+    } 
+    
+    getActiveSubscriptions(): Observable<number[]> {
+        return this._http.get<number[]>(`${this._url}api/post/activePostsIds?skip=0&take=1000`).pipe(map((data: number[]) => {
+           if (data) {
+               return data;
+           }
+
+           return [];
+        }));
     }
 
     private _mapNotifications(data: SonarFeedNotificationResponseDTO[]): ISocialFeedReaction[] {

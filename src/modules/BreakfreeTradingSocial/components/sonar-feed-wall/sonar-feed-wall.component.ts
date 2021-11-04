@@ -140,7 +140,7 @@ export class SonarFeedWallComponent implements OnInit {
     private _tempRecursiveLoadingCounter = 0;
     private _lastId: any;
     private _loadedCount: number;
-    private _activeSetups: IBFTScanInstrumentsResponseItem[] = [];
+    private _activeSetups: number[] = [];
     private _scanningInProgress: boolean = false;
 
     @ViewChild('scroller', { static: false }) scroll: ElementRef;
@@ -216,7 +216,6 @@ export class SonarFeedWallComponent implements OnInit {
         protected _host: ElementRef,
         protected _dialog: MatDialog,
         protected _alertService: AlertService,
-        protected _alogService: AlgoService,
         protected _identity: IdentityService,
         protected _instrumentService: InstrumentCacheService,
         protected _tradingProfileService: TradingProfileService,
@@ -247,8 +246,8 @@ export class SonarFeedWallComponent implements OnInit {
         }
 
         this._scanningInProgress = true;
-        this._alogService.scanInstruments().subscribe((data: IBFTScanInstrumentsResponse) => {
-            this._activeSetups = data.items;
+        this._sonarFeedService.getActiveSubscriptions().subscribe((data: any) => {
+            this._activeSetups = data;
             this._refreshNeeded = true;
             this._scanningInProgress = false;
         }, (error) => {
@@ -695,7 +694,7 @@ export class SonarFeedWallComponent implements OnInit {
         }
 
         for (const item of this._activeSetups) {
-            if (item.id === card.algoId) {
+            if (item === card.id) {
                 return true;
             }
         }
