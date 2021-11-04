@@ -40,7 +40,7 @@
       <mat-tab-group class="full-height tabs">
          <mat-tab label="Realtime">
             <div class="content-wrapper flex-grow-1 h-0">
-               <div class="full-height padding-wrapper">
+               <div class="full-height padding-wrapper result-wrapper">
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
                      <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container"
                         [ngClass]="{'blur': !isAuthorizedCustomer && !isGuest}">

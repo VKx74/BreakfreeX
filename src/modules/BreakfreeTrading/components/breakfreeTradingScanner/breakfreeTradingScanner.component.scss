@@ -237,6 +237,10 @@
     margin: 0px 5px;
     cursor: pointer;
   }
+
+  .result-wrapper {
+    padding-top: 10px;
+  }
 }
 
 @include themify($themes, true) {
