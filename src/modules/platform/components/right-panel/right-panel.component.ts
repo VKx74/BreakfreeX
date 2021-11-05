@@ -100,7 +100,7 @@ export class RightPanelComponent implements OnInit {
                 for (const key of keys) {
                     if (Components[key] === savedComponent) {
                         isExist = true;
-                        break
+                        break;
                     }
                 }
                 this.SelectedComponent = isExist ? savedComponent : Components.Academy;
