@@ -206,6 +206,8 @@ export class SonarFeedWallComponent implements OnInit {
     public get hasAccess(): boolean {
         return this.hasSubscription && this.isSingleCardAllowed;
     }
+    
+    @Output() changeView = new EventEmitter<void>();
 
     /*public get isStuff(): boolean {
         return this._identityService && this._identityService.isStuff;
@@ -665,6 +667,10 @@ export class SonarFeedWallComponent implements OnInit {
 
     hideShowFilters() {
         this._isFilterVisible = !this._isFilterVisible;
+    }
+
+    changeViewTrigger() {
+        this.changeView.next();
     }
 
     useFollowFilter() {

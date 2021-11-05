@@ -31,15 +31,19 @@
                   </mat-select>
                </mat-form-field>
             </div>
+            <div class="alerts">
+               <i class="fa fa-clock-o" (click)="addAlert()"></i>
+            </div>
          </div>
-         <div class="alerts">
-            <i class="fa fa-clock-o" (click)="addAlert()"></i>
+         <div class="new-sonar">
+            <div class="item-favs"
+            (click)="changeViewTrigger()">New Sonar</div>
          </div>
       </div>
 
       <mat-tab-group class="full-height tabs">
          <mat-tab label="Realtime">
-            <div class="content-wrapper flex-grow-1 h-0">
+            <div class="content-wrapper flex-grow-1">
                <div class="full-height padding-wrapper result-wrapper">
                   <ng-container *ngFor="let groupedResult of groupedResults(); trackBy: trackByTimeframe">
                      <div *ngIf="dataExistsInGroup(groupedResult)" class="timeframe-container"
@@ -99,7 +103,7 @@
             </div>
          </mat-tab>
          <mat-tab label="History">
-            <div class="content-wrapper flex-grow-1 h-0">
+            <div class="content-wrapper flex-grow-1">
                <div class="full-height padding-wrapper" [ngClass]="{'blur': !isAuthorizedCustomer && !isGuest}">
                   <data-table #dataTableComponent [rows]="scannerHistoryResultsFiltered" [selectable]="true"
                      [expandOnClick]="false" [selectedRow]="selectedScannerResult"

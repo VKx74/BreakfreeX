@@ -1,4 +1,4 @@
-import { Component, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import bind from "bind-decorator";
@@ -148,7 +148,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     @ViewChild('content', { static: false }) contentBox: ElementRef;
-
+    @Output() changeView = new EventEmitter<void>();
+    
     protected useDefaultLinker(): boolean {
         return true;
     }
@@ -491,6 +492,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
     addAlert() {
         this._dialog.open(SonarAlertDialogComponent, {});
+    }
+
+    changeViewTrigger() {
+        this.changeView.next();
     }
 
     public getFeaturedDetails(scannerVM: IScannerResults): string {

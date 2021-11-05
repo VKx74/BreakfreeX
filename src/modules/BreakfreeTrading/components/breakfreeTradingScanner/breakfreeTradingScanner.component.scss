@@ -234,13 +234,35 @@
   }
 
   .alerts {
-    margin: 0px 5px;
+    margin-left: 10px;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .new-sonar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .result-wrapper {
     padding-top: 10px;
   }
+
+  .item-favs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 15px;
+    border: 1px solid;
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: all 0.22s;
+}
 }
 
 @include themify($themes, true) {
@@ -293,6 +315,18 @@
   .timeframe-name { 
     color: themed('valueTextColor') !important;
     background-color:themed('tableBorders') !important;
+  }
+
+  .item-favs {
+      background-color: themed("sonar-search-bg");
+      border-color: themed("sonar-search-border");
+      color: themed("sonar-common-text-color");
+
+      &:hover,
+      &:active {
+          background-color: themed("sonar-search-bg-active");
+          border-color: themed("sonar-search-border-active");
+      }
   }
 }
 

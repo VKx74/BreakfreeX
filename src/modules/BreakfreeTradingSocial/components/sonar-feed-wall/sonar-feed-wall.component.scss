@@ -170,6 +170,11 @@
 
     .outside-filters-holder {
         display: flex;
+        justify-content: space-between;;
+        width: 100%;
+        .left-side-icons, .right-side-icons {
+            display: flex;
+        }
     }
     .outside-filters-holder .item-favs .fa {
         margin-right: 3px;
