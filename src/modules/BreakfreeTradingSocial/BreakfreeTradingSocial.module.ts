@@ -32,6 +32,7 @@ import { SonarFeedCommentComponent } from './components/sonar-feed-comment/sonar
 import { InstrumentCacheService } from './services/instrument.cache.service';
 import { SocialReactionsService } from './services/social.reactions.service';
 import { SonarTimeFilterComponent } from './components/sonar-time-filter/sonar-time-filter.component';
+import { BreakfreeTradingModule } from 'modules/BreakfreeTrading/breakfreeTrading.module';
 
 @NgModule({
     // components here
@@ -59,7 +60,8 @@ import { SonarTimeFilterComponent } from './components/sonar-time-filter/sonar-t
         FormsModule,
         LoaderModule,
         MatFormFieldModule,
-        MatSelectModule
+        MatSelectModule,
+        BreakfreeTradingModule
     ],
     // components here
     entryComponents: [

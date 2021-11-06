@@ -1,26 +1,27 @@
-import { Component, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/localization/token';
 import bind from "bind-decorator";
 import { Observable, Subscription } from 'rxjs';
 import { IInstrument } from '@app/models/common/instrument';
 import { AlertService } from "@alert/services/alert.service";
-import { AlgoService, IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem } from '@app/services/algo.service';
+import { AlgoService, IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponse, IBFTScanInstrumentsResponseItem, IBFTScannerHistoryResponse, IBFTScannerResponseHistoryItem, InstrumentTypeId, InstrumentTypeName } from '@app/services/algo.service';
 import { Actions, LinkingAction } from '@linking/models/models';
 import { InstrumentService } from '@app/services/instrument.service';
-import { IWatchlistItem } from 'modules/Watchlist/services/watchlist.service';
-import { MajorForexWatchlist } from 'modules/Watchlist/services/majorForex';
-import { MinorForexWatchlist } from 'modules/Watchlist/services/minorForex';
-import { ExoticsForexWatchlist } from 'modules/Watchlist/services/exoticForex';
-import { IndicesWatchlist } from 'modules/Watchlist/services/indicaes';
-import { CommoditiesWatchlist } from 'modules/Watchlist/services/commodities';
-import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
-import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
-import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
-import { IdentityService } from '@app/services/auth/identity.service';
+
+// import { MajorForexWatchlist } from 'modules/Watchlist/services/majorForex';
+// import { MinorForexWatchlist } from 'modules/Watchlist/services/minorForex';
+// import { ExoticsForexWatchlist } from 'modules/Watchlist/services/exoticForex';
+// import { IndicesWatchlist } from 'modules/Watchlist/services/indicaes';
+// import { CommoditiesWatchlist } from 'modules/Watchlist/services/commodities';
+// import { MetalsWatchlist } from 'modules/Watchlist/services/metals';
+// import { BondsWatchlist } from 'modules/Watchlist/services/bonds';
+// import { EquitiesWatchlist } from 'modules/Watchlist/services/equities';
+// import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
+
+import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckoutComponent } from '../checkout/checkout.component';
-import { CryptoWatchlist } from 'modules/Watchlist/services/crypto';
 import { TradingProfileService } from 'modules/BreakfreeTrading/services/tradingProfile.service';
 import { SonarAlertDialogComponent } from 'modules/AutoTradingAlerts/components/sonar-alert-dialog/sonar-alert-dialog.component';
 import { mockedSonarData } from './mocked-data';
@@ -86,6 +87,7 @@ enum TradeTypes {
     Swing = "Swing"
 }
 
+
 @Component({
     selector: 'breakfree-trading-scanner',
     templateUrl: './breakfreeTradingScanner.component.html',
@@ -102,7 +104,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _timer: any;
     private _featuredGroupName: string = "Featured";
     private _otherGroupName: string = "Other";
-    private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
+    // private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
     private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
     private _missionsChangedSubscription: Subscription;
@@ -110,9 +112,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
     public timeframes: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
-    public types: string[] = [this._featuredGroupName, MajorForexWatchlist.name, MinorForexWatchlist.name, ExoticsForexWatchlist.name, IndicesWatchlist.name, CommoditiesWatchlist.name, MetalsWatchlist.name, BondsWatchlist.name, EquitiesWatchlist.name, CryptoWatchlist.name, this._otherGroupName];
+    public types: string[] = [this._featuredGroupName, InstrumentTypeName.MajorForex, InstrumentTypeName.ForexMinors, InstrumentTypeName.ForexExotics, InstrumentTypeName.Indices, InstrumentTypeName.Commodities, InstrumentTypeName.Metals, InstrumentTypeName.Bonds, InstrumentTypeName.Equities, InstrumentTypeName.Crypto, InstrumentTypeName.Other];
     public groupingField: string = "marketType";
-    public groups: string[] = [];
+    // public groups: string[] = [];
     public activeSegments: TradeTypes[] = this.segments.slice();
     public activeTimeframes: TimeFrames[] = this.timeframes.slice();
     public activeTypes: string[] = this.types.slice();
@@ -146,7 +148,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     @ViewChild('content', { static: false }) contentBox: ElementRef;
-
+    @Output() changeView = new EventEmitter<void>();
+    
     protected useDefaultLinker(): boolean {
         return true;
     }
@@ -160,11 +163,11 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         private _cdr: ChangeDetectorRef,
         private _tradingProfileService: TradingProfileService) {
         super();
-        this.groups.push(this._featuredGroupName);
-        this._types.forEach(_ => {
-            this.groups.push(_.name);
-        });
-        this.groups.push(this._otherGroupName);
+        // this.groups.push(this._featuredGroupName);
+        // this._types.forEach(_ => {
+        //     this.groups.push(_.name);
+        // });
+        // this.groups.push(this._otherGroupName);
         this._missionsChangedSubscription = this._tradingProfileService.MissionChanged.subscribe(() => {
             this._loadingProfile = false;
             this._filterResults(false);
@@ -195,6 +198,17 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
         if (_state && _state.types && _state.types.length) {
             this.activeTypes = _state.types.slice();
+
+            if (this.activeTypes && this.activeTypes.length) {
+                for (const t of this.activeTypes) {
+                    if (this.types.indexOf(t) === -1) {
+                        this.activeTypes = this.types.slice();
+                        break;
+                    }
+                }
+            } else {
+                this.activeTypes = this.types.slice();
+            }
         }
 
         this._initialized = true;
@@ -352,9 +366,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                 marketType: this._featuredGroupName
             });
 
-            for (const marketType of this._types) {
+            for (const marketType of this.types) {
                 item.data.push({
-                    marketType: marketType.name,
+                    marketType: marketType,
                     data: []
                 });
             }
@@ -480,6 +494,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         this._dialog.open(SonarAlertDialogComponent, {});
     }
 
+    changeViewTrigger() {
+        this.changeView.next();
+    }
+
     public getFeaturedDetails(scannerVM: IScannerResults): string {
         return scannerVM.color;
     }
@@ -525,7 +543,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         this._featured.push({
             color: color,
             exchange: loaded.exchange,
-            marketType: this._getMarketType(loaded.symbol, loaded.exchange),
+            marketType: this._getMarketType(loaded),
             symbol: loaded.symbol,
             timeframe: loaded.timeframe,
             trend: loaded.trend,
@@ -616,7 +634,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                 tp: this._toTP(i.tp),
                 tte: this._toTTE(i.tte),
                 volatility: this._toVolatility(i.tp),
-                marketType: this._getMarketType(i.symbol, i.exchange),
+                marketType: this._getMarketType(i),
                 trend: i.trend,
                 origType: i.type,
                 isMocked: i.isMocked || false
@@ -637,6 +655,28 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         return false;
     }
 
+    private _isTypeAllowed(marketType: string): boolean {
+        if (this._identityService.subscriptionType === SubscriptionType.Starter || this._identityService.subscriptionType === SubscriptionType.Discovery) {
+            if (marketType === InstrumentTypeName.MajorForex ||
+                marketType === InstrumentTypeName.ForexMinors ||
+                marketType === InstrumentTypeName.ForexExotics) {
+                return true;
+            }
+
+            if (marketType === InstrumentTypeName.Metals && this._identityService.subscriptionType === SubscriptionType.Discovery) {
+                return true;
+            }
+
+            if (marketType === InstrumentTypeName.Indices && this._identityService.subscriptionType === SubscriptionType.Discovery) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
     private _isTimeframeSelected(timeframe: number): boolean {
         for (const activeTimeframe of this.activeTimeframes) {
             const tfValue = this._getTfValue(activeTimeframe);
@@ -652,7 +692,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         const filteringData = isHistory ? this.scannerHistoryResults : this.scannerResults;
         const filteredBySegments = [];
         for (const i of filteringData) {
-            if (this._isTypeSelected(i.marketType)) {
+            if (this._isTypeSelected(i.marketType) && this._isTypeAllowed(i.marketType)) {
                 filteredBySegments.push(i);
             }
         }
@@ -692,22 +732,19 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         this._reloadData();
     }
 
-    private _getMarketType(symbol: string, exchange: string): string {
-        if (exchange && exchange.toLowerCase() === "binance") {
-            return EMarketType.Crypto;
+    private _getMarketType(item: IBFTScanInstrumentsResponseItem): string {
+        switch (item.marketType) {
+            case InstrumentTypeId.Bonds: return InstrumentTypeName.Bonds;
+            case InstrumentTypeId.Commodities: return InstrumentTypeName.Commodities;
+            case InstrumentTypeId.Crypto: return InstrumentTypeName.Crypto;
+            case InstrumentTypeId.Equities: return InstrumentTypeName.Equities;
+            case InstrumentTypeId.ForexExotics: return InstrumentTypeName.ForexExotics;
+            case InstrumentTypeId.ForexMinors: return InstrumentTypeName.ForexMinors;
+            case InstrumentTypeId.Indices: return InstrumentTypeName.Indices;
+            case InstrumentTypeId.MajorForex: return InstrumentTypeName.MajorForex;
+            case InstrumentTypeId.Metals: return InstrumentTypeName.Metals;
         }
-        
-        for (const type of this._types) {
-            for (const inst of type.data) {
-                let normalized_id = inst.id.replace("_", "").replace("/", "");
-                let normalized_symbol = inst.symbol.replace("_", "").replace("/", "");
-                let normalized_search = symbol.replace("_", "").replace("/", "");
-                if (normalized_id === normalized_search || normalized_symbol === normalized_search) {
-                    return type.name;
-                }
-            }
-        }
-        return this._otherGroupName;
+        return InstrumentTypeId.Other;
     }
 
     private _toVolatility(tp: IBFTATradeProbability): string {
@@ -743,7 +780,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                 tp: this._toTP(i.responseItem.tp),
                 tte: this._toTTE(i.responseItem.tte),
                 volatility: this._toVolatility(i.responseItem.tp),
-                marketType: this._getMarketType(i.responseItem.symbol, i.responseItem.exchange),
+                marketType: this._getMarketType(i.responseItem),
                 trend: i.responseItem.trend,
                 time: date.toLocaleString(),
                 origType: i.responseItem.type,
@@ -768,7 +805,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                     tp: this._toTP(i.responseItem.tp),
                     tte: this._toTTE(i.responseItem.tte),
                     volatility: this._toVolatility(i.responseItem.tp),
-                    marketType: this._getMarketType(i.responseItem.symbol, i.responseItem.exchange),
+                    marketType: this._getMarketType(i.responseItem),
                     trend: i.responseItem.trend,
                     time: date.toLocaleString(),
                     origType: i.responseItem.type,

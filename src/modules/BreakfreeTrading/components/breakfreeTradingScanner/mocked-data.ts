@@ -1,4 +1,4 @@
-import { IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponseItem } from "@app/services/algo.service";
+import { IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScanInstrumentsResponseItem, InstrumentTypeId } from "@app/services/algo.service";
 
 export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
     {
@@ -11,7 +11,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "CAD_SGD",
         entry: 1.07421875,
         stop: 1.0598575367647058,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Other
     },
     {
         trend: IBFTATrend.Down,
@@ -23,7 +24,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "HK33_HKD",
         entry: 29687.5000000001,
         stop: 30606.617647058923,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Indices
     },
     {
         trend: IBFTATrend.Down,
@@ -35,7 +37,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "SGD_CHF",
         entry: 0.683593750000001,
         stop: 0.6979549632352952,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Other
     },
     {
         trend: IBFTATrend.Up,
@@ -47,7 +50,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "CHF_JPY",
         entry: 118.75,
         stop: 115.07352941176471,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.ForexMinors
     },
     {
         trend: IBFTATrend.Down,
@@ -59,7 +63,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "EUR_CHF",
         entry: 1.0986328125,
         stop: 1.105813419117647,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.ForexMinors
     },
     {
         trend: IBFTATrend.Up,
@@ -71,7 +76,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "SOYBN_USD",
         entry: 15.625,
         stop: 15.234375,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Commodities
     },
     {
         trend: IBFTATrend.Up,
@@ -83,7 +89,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "AU200_AUD",
         entry: 7109.37500000001,
         stop: 7089.84375000001,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Indices
     },
     {
         trend: IBFTATrend.Up,
@@ -95,7 +102,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "AU200_AUD",
         entry: 7109.37500000001,
         stop: 7089.84375000001,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Indices
     },
     {
         trend: IBFTATrend.Up,
@@ -107,7 +115,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "XAU_EUR",
         entry: 1437.5,
         stop: 1363.9705882352941,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Metals
     },
     {
         trend: IBFTATrend.Up,
@@ -119,7 +128,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "XAU_USD",
         entry: 1750,
         stop: 1676.4705882352941,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Metals
     },
     {
         trend: IBFTATrend.Down,
@@ -131,7 +141,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "GBP_CHF",
         entry: 1.26953125,
         stop: 1.3269761029411764,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.ForexMinors
     },
     {
         trend: IBFTATrend.Up,
@@ -143,7 +154,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "EUR_GBP",
         entry: 0.859832763671876,
         stop: 0.857086181640626,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.ForexMinors
     },
     {
         trend: IBFTATrend.Down,
@@ -155,7 +167,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "BA",
         entry: 250,
         stop: 259.19117647058823,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Commodities
     },
     {
         trend: IBFTATrend.Down,
@@ -167,7 +180,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "BYND",
         entry: 137.5,
         stop: 152.2058823529412,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Commodities
     },
     {
         trend: IBFTATrend.Up,
@@ -179,7 +193,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "FB",
         entry: 312.5,
         stop: 294.11764705882354,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Commodities
     },
     {
         trend: IBFTATrend.Down,
@@ -191,7 +206,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "FIT",
         entry: 7.03125,
         stop: 7.146139705882353,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Commodities
     },
     {
         trend: IBFTATrend.Up,
@@ -203,7 +219,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "WMT",
         entry: 137.5,
         stop: 133.8235294117647,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Commodities
     },
     {
         trend: IBFTATrend.Up,
@@ -215,7 +232,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "eth-btc",
         entry: 0.04882812500000005,
         stop: 0.034466911764705906,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     },
     {
         trend: IBFTATrend.Up,
@@ -227,7 +245,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "eth-usdt",
         entry: 4062.500000000005,
         stop: 3984.3750000000036,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     },
     {
         trend: IBFTATrend.Up,
@@ -239,7 +258,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "link-btc",
         entry: 0.0007629394531250005,
         stop: 0.0005385454963235302,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     },
     {
         trend: IBFTATrend.Up,
@@ -251,7 +271,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "link-usdt",
         entry: 50,
         stop: 49.21875,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     },
     {
         trend: IBFTATrend.Up,
@@ -263,7 +284,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "ltc-btc",
         entry: 0.006103515625,
         stop: 0.004308363970588236,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     },
     {
         trend: IBFTATrend.Up,
@@ -275,7 +297,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "ltc-usdt",
         entry: 375,
         stop: 359.375,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     },
     {
         trend: IBFTATrend.Up,
@@ -287,7 +310,8 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "xrp-btc",
         entry: 0.00002682209014892585,
         stop: 0.00002644956111907966,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     },
     {
         trend: IBFTATrend.Up,
@@ -299,6 +323,7 @@ export const mockedSonarData: IBFTScanInstrumentsResponseItem[] = [
         symbol: "xrp-btc",
         entry: 0.00002384185791015625,
         stop: 0.00001682954676011028,
-        isMocked: true
+        isMocked: true,
+        marketType: InstrumentTypeId.Crypto
     }
 ];

@@ -1,4 +1,4 @@
-import { IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScannerResponseHistoryItem } from "@app/services/algo.service";
+import { IBFTATradeProbability, IBFTATradeType, IBFTATrend, IBFTScannerResponseHistoryItem, InstrumentTypeId } from "@app/services/algo.service";
 
 export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
     {
@@ -11,7 +11,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "AUD_SGD",
             "entry": 1.03759765625,
-            "stop": 1.0345458984375
+            "stop": 1.0345458984375,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620659067,
         "avgEntry": 1.03759765625
@@ -26,7 +27,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "TSLA",
             "entry": 750,
-            "stop": 823.5294117647056
+            "stop": 823.5294117647056,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620659968,
         "avgEntry": 750
@@ -41,7 +43,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NYSE",
             "symbol": "XOM",
             "entry": 62.5,
-            "stop": 61.71875
+            "stop": 61.71875,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620659968,
         "avgEntry": 62.5
@@ -56,7 +59,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAG_EUR",
             "entry": 22.4365234375,
-            "stop": 22.3486328125
+            "stop": 22.3486328125,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620660057,
         "avgEntry": 22.4365234375
@@ -71,7 +75,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "AAL",
             "entry": 21.875,
-            "stop": 21.6796875
+            "stop": 21.6796875,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620661138,
         "avgEntry": 21.875
@@ -86,7 +91,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "ada-usdt",
             "entry": 1.5625,
-            "stop": 1.3671875
+            "stop": 1.3671875,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620662656,
         "avgEntry": 1.5625
@@ -101,7 +107,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "TSLA",
             "entry": 656.250000000001,
-            "stop": 664.062500000001
+            "stop": 664.062500000001,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620663248,
         "avgEntry": 656.250000000001
@@ -116,7 +123,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "CORN_USD",
             "entry": 7.2021484375,
-            "stop": 7.1142578125
+            "stop": 7.1142578125,
+            "marketType": InstrumentTypeId.Commodities
         },
         "time": 1620664754,
         "avgEntry": 7.2021484375
@@ -131,7 +139,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "BYND",
             "entry": 112.5,
-            "stop": 115.625
+            "stop": 115.625,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620665453,
         "avgEntry": 112.5
@@ -146,7 +155,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "UK100_GBP",
             "entry": 7031.25000000001,
-            "stop": 6992.18750000001
+            "stop": 6992.18750000001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620666151,
         "avgEntry": 7031.25000000001
@@ -161,7 +171,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "GBP_AUD",
             "entry": 1.8096923828125,
-            "stop": 1.8206787109375
+            "stop": 1.8206787109375,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620666152,
         "avgEntry": 1.8096923828125
@@ -176,7 +187,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "NAS100_USD",
             "entry": 13398.4375,
-            "stop": 13257.8125
+            "stop": 13257.8125,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620668116,
         "avgEntry": 13398.4375
@@ -191,7 +203,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "xlm-btc",
             "entry": 0.00001192092895507815,
-            "stop": 0.000011548399925231962
+            "stop": 0.000011548399925231962,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620669855,
         "avgEntry": 0.00001192092895507815
@@ -206,7 +219,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EU50_EUR",
             "entry": 4001.46484375001,
-            "stop": 3992.67578125001
+            "stop": 3992.67578125001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620671467,
         "avgEntry": 4001.46484375001
@@ -221,7 +235,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SPX500_USD",
             "entry": 4196.77734375001,
-            "stop": 4187.98828125001
+            "stop": 4187.98828125001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620671467,
         "avgEntry": 4196.77734375001
@@ -236,7 +251,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EUR_CAD",
             "entry": 1.470947265625,
-            "stop": 1.47247314453125
+            "stop": 1.47247314453125,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620671467,
         "avgEntry": 1.470947265625
@@ -251,7 +267,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NYSE",
             "symbol": "GE",
             "entry": 13.28125,
-            "stop": 13.18359375
+            "stop": 13.18359375,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620672141,
         "avgEntry": 13.28125
@@ -266,7 +283,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "ada-btc",
             "entry": 0.000028125941753387505,
-            "stop": 0.000027455389499664368
+            "stop": 0.000027455389499664368,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620677057,
         "avgEntry": 0.000028125941753387505
@@ -281,7 +299,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "CSCO",
             "entry": 53.125,
-            "stop": 52.34375
+            "stop": 52.34375,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620677302,
         "avgEntry": 53.125
@@ -296,7 +315,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "ltc-btc",
             "entry": 0.0060558319091796875,
-            "stop": 0.0058841705322265625
+            "stop": 0.0058841705322265625,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620677994,
         "avgEntry": 0.0060558319091796875
@@ -311,7 +331,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "yfi-usdt",
             "entry": 49609.3750000001,
-            "stop": 48203.1250000001
+            "stop": 48203.1250000001,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620678622,
         "avgEntry": 49609.3750000001
@@ -326,7 +347,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "xmr-usdt",
             "entry": 433.59374999999994,
-            "stop": 419.5312499999997
+            "stop": 419.5312499999997,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620678622,
         "avgEntry": 433.59374999999994
@@ -341,7 +363,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "link-btc",
             "entry": 0.0007510185241699238,
-            "stop": 0.0007081031799316426
+            "stop": 0.0007081031799316426,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620678622,
         "avgEntry": 0.0007510185241699238
@@ -356,7 +379,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "AUD_SGD",
             "entry": 1.0372161865234375,
-            "stop": 1.0358428955078125
+            "stop": 1.0358428955078125,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620679788,
         "avgEntry": 1.0372161865234375
@@ -371,7 +395,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EUR_SGD",
             "entry": 1.6078948974609375,
-            "stop": 1.6065216064453125
+            "stop": 1.6065216064453125,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620679788,
         "avgEntry": 1.6078948974609375
@@ -386,7 +411,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "link-btc",
             "entry": 0.0007510185241699238,
-            "stop": 0.0007081031799316426
+            "stop": 0.0007081031799316426,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620680529,
         "avgEntry": 0.0007510185241699238
@@ -401,7 +427,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "AAL",
             "entry": 21.875,
-            "stop": 21.484375
+            "stop": 21.484375,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620680760,
         "avgEntry": 21.875
@@ -416,7 +443,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "xem-btc",
             "entry": 0.00000633299350738527,
-            "stop": 0.000006426125764846818
+            "stop": 0.000006426125764846818,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620683336,
         "avgEntry": 0.00000633299350738527
@@ -431,7 +459,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SPX500_USD",
             "entry": 4174.80468750001,
-            "stop": 4157.22656250001
+            "stop": 4157.22656250001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620684222,
         "avgEntry": 4174.80468750001
@@ -446,7 +475,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "AUD_USD",
             "entry": 0.780487060546876,
-            "stop": 0.777740478515626
+            "stop": 0.777740478515626,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620684222,
         "avgEntry": 0.780487060546876
@@ -461,7 +491,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "GBP_JPY",
             "entry": 153.125,
-            "stop": 152.734375
+            "stop": 152.734375,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620684222,
         "avgEntry": 153.125
@@ -476,7 +507,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAG_USD",
             "entry": 26.5625,
-            "stop": 26.171875
+            "stop": 26.171875,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620684222,
         "avgEntry": 26.5625
@@ -491,7 +523,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_HUF",
             "entry": 295.0439453125,
-            "stop": 295.4833984375
+            "stop": 295.4833984375,
+            "marketType": InstrumentTypeId.Other
         },
         "time": 1620685201,
         "avgEntry": 295.0439453125
@@ -506,7 +539,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_SGD",
             "entry": 1.3278961181640625,
-            "stop": 1.3292694091796875
+            "stop": 1.3292694091796875,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620685201,
         "avgEntry": 1.3278961181640625
@@ -521,7 +555,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "NZD_USD",
             "entry": 0.7259368896484385,
-            "stop": 0.7245635986328135
+            "stop": 0.7245635986328135,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620685201,
         "avgEntry": 0.7259368896484385
@@ -536,7 +571,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_SEK",
             "entry": 8.35266113281251,
-            "stop": 8.36364746093751
+            "stop": 8.36364746093751,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620685201,
         "avgEntry": 8.35266113281251
@@ -551,7 +587,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EUR_AUD",
             "entry": 1.551055908203125,
-            "stop": 1.553802490234375
+            "stop": 1.553802490234375,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620685527,
         "avgEntry": 1.551055908203125
@@ -566,7 +603,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAU_EUR",
             "entry": 1500,
-            "stop": 1426.4705882352941
+            "stop": 1426.4705882352941,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620687889,
         "avgEntry": 1500
@@ -581,7 +619,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "ltc-btc",
             "entry": 0.006103515625,
-            "stop": 0.0057220458984375
+            "stop": 0.0057220458984375,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620691516,
         "avgEntry": 0.006103515625
@@ -596,7 +635,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAG_USD",
             "entry": 27.294921875,
-            "stop": 27.119140625
+            "stop": 27.119140625,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620693197,
         "avgEntry": 27.294921875
@@ -611,7 +651,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_CHF",
             "entry": 0.9019851684570322,
-            "stop": 0.9026718139648447
+            "stop": 0.9026718139648447,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620693197,
         "avgEntry": 0.9019851684570322
@@ -626,7 +667,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EUR_USD",
             "entry": 1.2111663818359375,
-            "stop": 1.2097930908203125
+            "stop": 1.2097930908203125,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620694910,
         "avgEntry": 1.2111663818359375
@@ -641,7 +683,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_MXN",
             "entry": 19.976806640625,
-            "stop": 19.998779296875
+            "stop": 19.998779296875,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620694910,
         "avgEntry": 19.976806640625
@@ -656,7 +699,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "US30_USD",
             "entry": 34375.0000000001,
-            "stop": 34179.6875000001
+            "stop": 34179.6875000001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620694910,
         "avgEntry": 34375.0000000001
@@ -671,7 +715,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_HUF",
             "entry": 296.875,
-            "stop": 298.828125
+            "stop": 298.828125,
+            "marketType": InstrumentTypeId.Other
         },
         "time": 1620694910,
         "avgEntry": 296.875
@@ -686,7 +731,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EUR_SEK",
             "entry": 10.13336181640625,
-            "stop": 10.13885498046875
+            "stop": 10.13885498046875,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620694910,
         "avgEntry": 10.13336181640625
@@ -701,7 +747,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "AUD_USD",
             "entry": 0.781250000000001,
-            "stop": 0.775146484375001
+            "stop": 0.775146484375001,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620694910,
         "avgEntry": 0.781250000000001
@@ -716,7 +763,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_SEK",
             "entry": 8.3984375,
-            "stop": 8.4228515625
+            "stop": 8.4228515625,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620694910,
         "avgEntry": 8.3984375
@@ -731,7 +779,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "AUD_JPY",
             "entry": 85.1074218750001,
-            "stop": 84.9316406250001
+            "stop": 84.9316406250001,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620694910,
         "avgEntry": 85.1074218750001
@@ -746,7 +795,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAU_USD",
             "entry": 1812.5,
-            "stop": 1796.875
+            "stop": 1796.875,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620694911,
         "avgEntry": 1812.5
@@ -761,7 +811,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "yfi-btc",
             "entry": 0.9765625000000006,
-            "stop": 0.9277343750000007
+            "stop": 0.9277343750000007,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620695286,
         "avgEntry": 0.9765625000000006
@@ -776,7 +827,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "yfi-usdt",
             "entry": 56250.00000000015,
-            "stop": 54687.50000000014
+            "stop": 54687.50000000014,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620695912,
         "avgEntry": 56250.00000000015
@@ -791,7 +843,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "HK33_HKD",
             "entry": 28125.0000000001,
-            "stop": 28320.3125000001
+            "stop": 28320.3125000001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620703957,
         "avgEntry": 28125.0000000001
@@ -806,7 +859,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "eth-usdt",
             "entry": 3750.000000000005,
-            "stop": 3437.5000000000036
+            "stop": 3437.5000000000036,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620705678,
         "avgEntry": 3750.000000000005
@@ -821,7 +875,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SGD_CHF",
             "entry": 0.679016113281251,
-            "stop": 0.6793975830078135
+            "stop": 0.6793975830078135,
+            "marketType": InstrumentTypeId.Other
         },
         "time": 1620712044,
         "avgEntry": 0.679016113281251
@@ -836,7 +891,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USB05Y_USD",
             "entry": 124.40185546875,
-            "stop": 124.35791015625
+            "stop": 124.35791015625,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620713126,
         "avgEntry": 124.40185546875
@@ -851,7 +907,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "JP225_USD",
             "entry": 28906.2500000001,
-            "stop": 29101.5625000001
+            "stop": 29101.5625000001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620713126,
         "avgEntry": 28906.2500000001
@@ -866,7 +923,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_CHF",
             "entry": 0.9037017822265635,
-            "stop": 0.9050750732421885
+            "stop": 0.9050750732421885,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620716860,
         "avgEntry": 0.9037017822265635
@@ -881,7 +939,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SGD_CHF",
             "entry": 0.6807327270507822,
-            "stop": 0.6814193725585947
+            "stop": 0.6814193725585947,
+            "marketType": InstrumentTypeId.Other
         },
         "time": 1620717522,
         "avgEntry": 0.6807327270507822
@@ -896,7 +955,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_HUF",
             "entry": 296.0205078125,
-            "stop": 296.4599609375
+            "stop": 296.4599609375,
+            "marketType": InstrumentTypeId.Other
         },
         "time": 1620718512,
         "avgEntry": 296.0205078125
@@ -911,7 +971,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "yfi-usdt",
             "entry": 62500.00000000015,
-            "stop": 59375.00000000014
+            "stop": 59375.00000000014,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620722954,
         "avgEntry": 62500.00000000015
@@ -926,7 +987,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Binance",
             "symbol": "yfi-btc",
             "entry": 1.1718750000000004,
-            "stop": 1.1230468750000007
+            "stop": 1.1230468750000007,
+            "marketType": InstrumentTypeId.Crypto
         },
         "time": 1620722954,
         "avgEntry": 1.1718750000000004
@@ -941,7 +1003,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "USD_CAD",
             "entry": 1.220703125,
-            "stop": 1.23291015625
+            "stop": 1.23291015625,
+            "marketType": InstrumentTypeId.MajorForex
         },
         "time": 1620724649,
         "avgEntry": 1.220703125
@@ -956,7 +1019,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SGD_JPY",
             "entry": 82.0190429687501,
-            "stop": 81.9750976562501
+            "stop": 81.9750976562501,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620728696,
         "avgEntry": 82.0190429687501
@@ -971,7 +1035,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EUR_SGD",
             "entry": 1.611328125,
-            "stop": 1.610565185546875
+            "stop": 1.610565185546875,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620729028,
         "avgEntry": 1.611328125
@@ -986,7 +1051,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "CHF_JPY",
             "entry": 120.263671875,
-            "stop": 120.087890625
+            "stop": 120.087890625,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620730018,
         "avgEntry": 120.263671875
@@ -1001,7 +1067,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "DE10YB_EUR",
             "entry": 170.703125,
-            "stop": 170.80078125
+            "stop": 170.80078125,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620730018,
         "avgEntry": 170.703125
@@ -1016,7 +1083,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "CAD_JPY",
             "entry": 89.6240234375001,
-            "stop": 89.5361328125001
+            "stop": 89.5361328125001,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620733732,
         "avgEntry": 89.6240234375001
@@ -1031,7 +1099,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SGD_JPY",
             "entry": 81.8115234375001,
-            "stop": 81.7236328125001
+            "stop": 81.7236328125001,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620737161,
         "avgEntry": 81.8115234375001
@@ -1046,7 +1115,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAU_EUR",
             "entry": 1507.32421875,
-            "stop": 1505.56640625
+            "stop": 1505.56640625,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620737161,
         "avgEntry": 1507.32421875
@@ -1061,7 +1131,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SG30_SGD",
             "entry": 350.5859375,
-            "stop": 347.0703125
+            "stop": 347.0703125,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620738248,
         "avgEntry": 350.5859375
@@ -1076,7 +1147,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAU_EUR",
             "entry": 1499.0234375,
-            "stop": 1495.5078125
+            "stop": 1495.5078125,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620738248,
         "avgEntry": 1499.0234375
@@ -1091,7 +1163,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAU_USD",
             "entry": 1827.1484375,
-            "stop": 1823.6328125
+            "stop": 1823.6328125,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620738248,
         "avgEntry": 1827.1484375
@@ -1106,7 +1179,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EU50_EUR",
             "entry": 3896.484375,
-            "stop": 3861.328125
+            "stop": 3861.328125,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620738248,
         "avgEntry": 3896.484375
@@ -1121,7 +1195,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "EUR_CAD",
             "entry": 1.4743804931640625,
-            "stop": 1.4757537841796875
+            "stop": 1.4757537841796875,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620738923,
         "avgEntry": 1.4743804931640625
@@ -1136,7 +1211,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "CAD_SGD",
             "entry": 1.0921478271484375,
-            "stop": 1.0907745361328125
+            "stop": 1.0907745361328125,
+            "marketType": InstrumentTypeId.Other
         },
         "time": 1620739265,
         "avgEntry": 1.0921478271484375
@@ -1151,7 +1227,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "CAD_JPY",
             "entry": 89.4042968750001,
-            "stop": 89.2285156250001
+            "stop": 89.2285156250001,
+            "marketType": InstrumentTypeId.ForexMinors
         },
         "time": 1620739265,
         "avgEntry": 89.4042968750001
@@ -1166,7 +1243,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAU_USD",
             "entry": 1810.546875,
-            "stop": 1803.515625
+            "stop": 1803.515625,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620740270,
         "avgEntry": 1810.546875
@@ -1181,7 +1259,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "XAG_EUR",
             "entry": 22.216796875,
-            "stop": 22.041015625
+            "stop": 22.041015625,
+            "marketType": InstrumentTypeId.Metals
         },
         "time": 1620741599,
         "avgEntry": 22.216796875
@@ -1196,7 +1275,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "HK33_HKD",
             "entry": 28125.0000000001,
-            "stop": 28320.3125000001
+            "stop": 28320.3125000001,
+            "marketType": InstrumentTypeId.Indices
         },
         "time": 1620742034,
         "avgEntry": 28125.0000000001
@@ -1211,7 +1291,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "Oanda",
             "symbol": "SGD_JPY",
             "entry": 81.5917968750001,
-            "stop": 81.4160156250001
+            "stop": 81.4160156250001,
+            "marketType": InstrumentTypeId.ForexExotics
         },
         "time": 1620742034,
         "avgEntry": 81.5917968750001
@@ -1226,7 +1307,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "BIDU",
             "entry": 187.5,
-            "stop": 190.625
+            "stop": 190.625,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620742107,
         "avgEntry": 187.5
@@ -1241,7 +1323,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "BIDU",
             "entry": 225,
-            "stop": 254.41176470588235
+            "stop": 254.41176470588235,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620742107,
         "avgEntry": 225
@@ -1256,7 +1339,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "PTON",
             "entry": 100,
-            "stop": 112.5
+            "stop": 112.5,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620742107,
         "avgEntry": 100
@@ -1271,7 +1355,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NASDAQ",
             "symbol": "PLUG",
             "entry": 21.875,
-            "stop": 22.65625
+            "stop": 22.65625,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620742447,
         "avgEntry": 21.875
@@ -1286,7 +1371,8 @@ export const mockedHistory: IBFTScannerResponseHistoryItem[] = [
             "exchange": "NYSE",
             "symbol": "RACE",
             "entry": 200,
-            "stop": 214.7058823529412
+            "stop": 214.7058823529412,
+            "marketType": InstrumentTypeId.Equities
         },
         "time": 1620743663,
         "avgEntry": 200

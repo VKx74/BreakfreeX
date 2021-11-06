@@ -314,5 +314,33 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "company": "USD vs ZAR",
         "tradable": true,
         "tickSizeCorrect": true
+        },
+        {
+        "id": "NZD_SGD",
+        "symbol": "NZDSGD",
+        "exchange": EExchange.Oanda,
+        "datafeed": EExchangeInstance.OandaExchange,
+        "type": EMarketType.Forex,
+        "tickSize": 0.00001,
+        "pricePrecision": 5,
+        "baseInstrument": "SGD",
+        "dependInstrument": "NZD",
+        "company": "NZD vs SGD",
+        "tradable": true,
+        "tickSizeCorrect": true
+        },
+        {
+        "id": "GBP_SGD",
+        "symbol": "GBPSGD",
+        "exchange": EExchange.Oanda,
+        "datafeed": EExchangeInstance.OandaExchange,
+        "type": EMarketType.Forex,
+        "tickSize": 0.00001,
+        "pricePrecision": 5,
+        "baseInstrument": "SGD",
+        "dependInstrument": "GBP",
+        "company": "GBP vs SGD",
+        "tradable": true,
+        "tickSizeCorrect": true
         }]
 };

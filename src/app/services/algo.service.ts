@@ -8,6 +8,35 @@ import { AppConfigService } from './app.config.service';
 import * as CryptoJS from 'crypto-js';
 import { InstrumentService } from "./instrument.service";
 
+
+export enum InstrumentTypeId 
+{
+    Bonds = "Bonds",
+    Commodities = "Commodities",
+    Crypto = "Crypto",
+    Equities = "Equities",
+    ForexExotics = "ForexExotics",
+    Indices = "Indices",
+    MajorForex = "MajorForex",
+    Metals = "Metals",
+    ForexMinors = "ForexMinors",
+    Other = "Other"
+}
+
+export enum InstrumentTypeName
+{
+    Bonds = "Bonds",
+    Commodities = "Commodities",
+    Crypto = "Crypto",
+    Equities = "Equities",
+    ForexExotics = "Forex Exotics",
+    Indices = "Indices",
+    MajorForex = "Major Forex",
+    Metals = "Metals",
+    ForexMinors = "Forex Minors",
+    Other = "Other"
+}
+
 export enum TrendDetectorType {
     hma = "hma",
     mesa = "mesa"
@@ -20,8 +49,10 @@ export interface ITimeFrame {
 
 
 export interface IBFTScanInstrumentsResponseItem {
+    id?: string;
     symbol: string;
     exchange: string;
+    marketType: string;
     timeframe: number;
     trend: IBFTATrend;
     type: IBFTATradeType;

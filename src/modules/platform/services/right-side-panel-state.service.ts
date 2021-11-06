@@ -37,7 +37,7 @@ export class RightSidePanelStateService {
     static GetDefaultState(component?: Components): RightSidePanelState {
         return {
             widgetState: {},
-            component: component || Components.SonarFeed
+            component: component || Components.Academy
         };
     }
 

@@ -286,20 +286,20 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             return;
         }
 
-        let basicLevel = this._identityService.basicLevel;
-        let level = this._tradingProfileService.level;
+        let is15MinAllowed = this._identityService.is15MinAllowed();
+        let isHourAllowed = this._identityService.isHourAllowed();
+        let is4HourAllowed = this._identityService.is4HourAllowed();
 
-        if (this._isPro) {
-            if (level >= basicLevel) {
-                this._allowedTriggerTimeframe.push(TriggerTimeframe.AllTimeframes);
-                this._allowedTriggerTimeframe.push(TriggerTimeframe.Min15);
-            }
+        if (is15MinAllowed) {
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.AllTimeframes);
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Min15);
+        }
+
+        if (isHourAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour1);
-            this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
-        } else if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
-            if (level >= basicLevel) {
-                this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour1);
-            }
+        }
+        
+        if (is4HourAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
         }
 

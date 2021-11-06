@@ -18,6 +18,7 @@ import { IFeaturedInstruments, IUserSettings } from '@app/models/settings/user-s
 export interface IWatchlistItem {
     id: string;
     name: string;
+    specific?: string;
     data: IInstrument[];
     trackingId?: string;
     isDefault?: boolean;

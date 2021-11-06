@@ -14,11 +14,17 @@
                     </div>
 
                     <div class="outside-filters-holder">
-                        <div class="item-favs" [ngClass]="{'active-follow-filter': isFollowFilterUsed}"
-                            (click)="useFollowFilter()"><i class="fa fa-star ng-star-inserted"></i> Following </div>
+                        <div class="left-side-icons">
+                            <div class="item-favs" [ngClass]="{'active-follow-filter': isFollowFilterUsed}"
+                                (click)="useFollowFilter()"><i class="fa fa-star ng-star-inserted"></i> Following </div>
 
-                        <div class="filters-holder" (click)="hideShowFilters()">
-                            <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters
+                            <div class="filters-holder" (click)="hideShowFilters()">
+                                <img class="widget-icon border-circle" src="/assets/img/filter-solid.svg">Filters
+                            </div>
+                        </div>
+
+                        <div class="right-side-icons">
+                            <div class="item-favs" (click)="changeViewTrigger()">Legacy</div>
                         </div>
                     </div>
                 </div>
@@ -110,6 +116,10 @@
                         (click)="changeOrder('Top')">
                         <img class="widget-icon" src="/assets/img/arrow-up-to-line-solid.svg">Top
                     </div>
+                    <div class="highlights-subitem" [ngClass]="{'active' : feedOrderType =='Active'}"
+                        (click)="changeOrder('Active')">
+                        <img class="widget-icon" src="/assets/img/signal-stream-solid.svg">Active
+                    </div>
                     <div *ngIf="feedOrderType =='Top'" class="timeframe-filters">
                         <div class="item-favs" [matMenuTriggerFor]="timeFilters">
                             <span style="white-space:nowrap">{{feedIntervalType}}</span>
@@ -117,7 +127,8 @@
 
                         <mat-menu #timeFilters="matMenu" xPosition="after" class="sonar-time-filter-menu">
                             <div class="details-modal">
-                               <sonar-time-filter [value]="feedIntervalType" (valueChange)="changeInterval($event)"></sonar-time-filter>
+                                <sonar-time-filter [value]="feedIntervalType" (valueChange)="changeInterval($event)">
+                                </sonar-time-filter>
                             </div>
                         </mat-menu>
                     </div>
@@ -145,7 +156,8 @@
                     [commentsTotal]="card.commentsTotal" [isFavorite]="card.isFavorite"
                     [showAllCommentsOnExpand]="isSingleCard" (onShare)="share(card)" (chartClick)="clickOnCard(card)"
                     [selected]="selectedCard && selectedCard == card" [timeFrame]="card.timeFrame"
-                    [symbol]="card.symbol" [setup]="card.setup" [side]="card.side"></sonar-feed-card>
+                    [symbol]="card.symbol" [setup]="card.setup" [side]="card.side" [isActive]="isCardActive(card)">
+                </sonar-feed-card>
             </div>
         </div>
 

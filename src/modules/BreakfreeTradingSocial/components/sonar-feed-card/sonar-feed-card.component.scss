@@ -40,6 +40,7 @@
     }
 
     .tag-setup,
+    .tag-active,
     .tag-market,
     .tag-RTD-trend {
         border-radius: 3px;
@@ -498,6 +499,11 @@
     }
 
     .setup-long {
+        background-color: themed("scanner-card-setup-long-background");
+        color: themed("scanner-card-setup-long-color");
+    } 
+    
+    .tag-active {
         background-color: themed("scanner-card-setup-long-background");
         color: themed("scanner-card-setup-long-color");
     }
