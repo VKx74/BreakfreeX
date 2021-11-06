@@ -1003,6 +1003,10 @@ export class SonarFeedWallComponent implements OnInit {
 
         }
 
+        if (this.feedOrderType !== ESonarFeedOrderTypes.Top) {
+            settings.timeInterval = undefined;
+        }
+
         return settings;
     }
 
@@ -1035,7 +1039,6 @@ export class SonarFeedWallComponent implements OnInit {
             result = this._sonarFeedService.getOrderedItems(this.cards.length, this._loadCount, this.feedOrderType, this._adjustFilterinfParametersDependToSubscriptions(), this.searchText);
 
         result.subscribe((data: SonarFeedItem[]) => {
-
             this._loadingMore = false;
             this.loading = false;
             this._refreshNeeded = true;

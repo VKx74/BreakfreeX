@@ -365,8 +365,8 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        this.subscriptions = ["Pro"];
-        this.role = Roles.User;
+        // this.subscriptions = ["Starter"];
+        // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
             this.artifSubExp = Number(parsedToken.artifsub_exp);

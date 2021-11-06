@@ -299,7 +299,16 @@ export class AlertsService {
 
     private reloadLimits() {
         this.getLimits().subscribe((limits) => {
-            this._alertLimits = limits;
+            this._alertLimits = {
+                alertsCount: 10,
+                canUseSonarAlerts: true,
+                emailCount: 10,
+                pushCount: 10,
+                runningAlertsCount: 10,
+                runningPriceAlertsCount: 10,
+                smsCount: 10
+            };
+            // this._alertLimits = limits;
         });
     }
 
