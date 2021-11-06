@@ -14,4 +14,10 @@
     width: 100%;
     display: flex;
   }
+
+  /deep/ {
+    .legacy-button {
+      display: none !important;
+    }
+  }
 }
