@@ -87,6 +87,10 @@ export class SonarFeedComponent extends BaseLayoutItem implements OnInit {
     }
 
     setState(state: ISonarWidgetState) {
+        if (!state) {
+            return;
+        }
+        
         if (state.legacyState || state.wallState) {
             this._state = state;
         }
