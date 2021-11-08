@@ -152,7 +152,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
             this.selectedBroker.broker === EBrokerInstance.BFTFundingDemo || 
             this.selectedBroker.broker === EBrokerInstance.BFTFundingLive) {
             this.loading = true;
-            this._brokerService.connectBFTAccount(this.selectedBroker.broker, this.selectedBroker.broker).subscribe((setBrokerResult) => {
+            this._brokerService.connectBFTAccount(this.selectedBroker.broker, this.selectedBroker.brokerId).subscribe((setBrokerResult) => {
                 if (!setBrokerResult.result) {
                     this._alertService.error(setBrokerResult.msg, "Error");
                 }
