@@ -247,7 +247,11 @@ export class BrokerService {
         }));
     }
 
-    connectBFTAccount(accountType: EBrokerInstance): Observable<ActionResult> {
+    connectBFTAccount(accountType: EBrokerInstance, id?: any): Observable<ActionResult> {
+        if (id) {
+            return this._connectBFTAccount(accountType, id);
+        }
+
         if (accountType !== EBrokerInstance.BFTDemo) {
             return this._connectBFTAccount(accountType);
         }
@@ -255,6 +259,15 @@ export class BrokerService {
         return this._ensureDemoAccountExists().pipe(flatMap(() => {
             return this._connectBFTAccount(accountType);
         }));
+    }
+
+    getBFTAccount(accountType?: EBrokerInstance): IBFTTradingAccount[] {
+        if (!accountType) {
+            return this._defaultAccounts.slice();
+        }
+        const isLive = accountType === EBrokerInstance.BFTFundingLive;
+        const isFunding = accountType === EBrokerInstance.BFTFundingDemo || accountType === EBrokerInstance.BFTFundingLive;
+        return this._defaultAccounts.filter(_ => _.isLive === isLive && _.isFunded === isFunding);
     }
 
     // connectDefaultLiveAccount(): Observable<ActionResult> {
@@ -468,20 +481,25 @@ export class BrokerService {
         }
     }
 
-    private _connectBFTAccount(accountType: EBrokerInstance): Observable<ActionResult> {
-        let account = this._getBFTAccount(accountType);
+    private _connectBFTAccount(accountType: EBrokerInstance, id?: any): Observable<ActionResult> {
 
-        if (!account) {
-            return of({
-                result: false,
-                msg: "Currently, no trading account exists. Please reach out to our support team for trading account creation. "
-            });
+        if (!id) {
+            let account = this._getBFTAccount(accountType);
+
+            if (!account) {
+                return of({
+                    result: false,
+                    msg: "Currently, no trading account exists. Please reach out to our support team for trading account creation. "
+                });
+            }
+
+            id = account.id;
         }
 
         const initData: MTConnectionData = {
             Password: "",
             ServerName: accountType,
-            Login: Number(account.id)
+            Login: Number(id)
         };
 
         return this._connectDefaultAccount(accountType, initData);
