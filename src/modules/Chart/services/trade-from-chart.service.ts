@@ -384,7 +384,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
     }
 
-    public GetOrderSize(priceDiff: number, risk: number, callback: (size: any) => void, skipMapping: boolean = false): void {
+    public GetOrderSize(priceDiff: number, risk: number, balance: number, callback: (size: any) => void, skipMapping: boolean = false): void {
         if (!(this._broker instanceof MTBroker)) {
             callback("Calculate manually");
             return;
@@ -395,8 +395,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             input_risk: risk,
             price_diff: priceDiff,
             instrument: this._chart.instrument as any,
-            input_accountsize: mtBroker.accountInfo.Balance,
-            account_currency: mtBroker.accountInfo.Currency
+            input_accountsize: balance || mtBroker.accountInfo.Balance,
+            account_currency: balance ? "USD" : mtBroker.accountInfo.Currency
         };
 
         if (!params.input_accountsize) {
@@ -416,7 +416,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 .subscribe((dialogResult: any) => {
                     if (dialogResult) {
                         this.showMappingModal(() => {
-                            this.GetOrderSize(priceDiff, risk, callback, true);
+                            this.GetOrderSize(priceDiff, risk, balance, callback, true);
                         });
                     } else {
                         this._alertService.warning("Can`t map instruments to your broker format");
