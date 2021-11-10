@@ -44,7 +44,7 @@ export class BinanceOrderConfig {
         return {
             instrument: null,
             side: OrderSide.Buy,
-            amount: 0.1,
+            amount: 0.01,
             type: OrderTypes.Market,
             tif: TimeInForce.GoodTillCancel
         };
