@@ -1,19 +1,40 @@
 import { Injectable } from "@angular/core";
+import { create } from "domain";
+import { IdentityService } from "./auth/identity.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class InlineService {
   _window: any;
+  private _created: boolean = false;
 
-  constructor() {
+  constructor(private _identityService: IdentityService) {
     this._window = window;
+  }
+
+  track(): void {
+    let userCreated = 0;
+    if (!!this._identityService.artifSubExp) {
+      userCreated = this._identityService.artifSubExp - 172800;
+    }
+    if (!userCreated || userCreated <= 0) {
+      userCreated = 1;
+    }
+    this._window.inlineManualTracking = {
+      uid: this._identityService.id,
+      created: userCreated
+    };
+    this.createPlayer();
   }
 
   createPlayer() {
     const trackingData = this._window.inlineManualPlayerData || null;
     try {
+      // console.log("try createPlayer");
       this._window.createInlineManualPlayer(trackingData);
+      console.log("createPlayer");
+      // console.log(trackingData);
     } catch (error) {
       console.error(error);
     }

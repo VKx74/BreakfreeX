@@ -133,7 +133,7 @@ export class BaseNavComponent implements OnInit {
     }
 
     toggleSidebar() {
-        this._sidebarService.toggle();
+        this._sidebarService.toggle();        
     }
 
     ngOnInit() {
@@ -146,7 +146,7 @@ export class BaseNavComponent implements OnInit {
             }
             this.logoRedirectRoute = `/${rootPath}`;
         });
-
+        this._inlineService.track();
         // this.login = this._identityService.email;
         // if (!this.login) {
         //     this.login = 'Logged In';
