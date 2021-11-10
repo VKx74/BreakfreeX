@@ -334,7 +334,7 @@ export class MTOrderConfig {
         return {
             instrument: null,
             side: OrderSide.Buy,
-            amount: 0.1,
+            amount: 0.01,
             type: OrderTypes.Market,
             expirationType: OrderExpirationType.GTC,
             fillPolicy: OrderFillPolicy.IOC
