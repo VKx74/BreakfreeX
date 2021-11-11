@@ -408,7 +408,7 @@ export class IdentityService {
 
         const trialingMins = this._trialLIfeTime - ((this.artifSubExp - new Date().getTime() / 1000) / 60);
         if (trialingMins > this._freeTrialLIfeTime) {
-            this._free20MinTrialExpired = true;
+            // this._free20MinTrialExpired = true;
         }
     }
 

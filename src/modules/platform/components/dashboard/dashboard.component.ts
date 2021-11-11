@@ -64,7 +64,7 @@ import { Console } from "console";
 })
 export class DashboardComponent {
     private _updateInterval = 1000 * 10;
-    private _freeUserPopup = 1000 * 60 * 3;
+    private _freeUserPopup = 1000 * 60 * 1;
     private _rightPanelMaxSize = 1100;
     private _rightPanelSize = 600;
     private _isRightPanelCollapsed: boolean = false;

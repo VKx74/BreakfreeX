@@ -29,13 +29,13 @@ export class PersonalInfoComponent implements ResetableComponent {
 
     constructor(private _personalInfoService: PersonalInfoService) {
 
-        this._personalInfoService.getSupportedCountriesList()
-            .subscribe((countries: string[]) => {
-                this.countriesList = countries;
-                this.formGroup.controls['country'].setValue(this.countriesList[0]);
-            }, (error) => {
-                console.log(error);
-            });
+        // this._personalInfoService.getSupportedCountriesList()
+        //     .subscribe((countries: string[]) => {
+        //         this.countriesList = countries;
+        //         this.formGroup.controls['country'].setValue(this.countriesList[0]);
+        //     }, (error) => {
+        //         console.log(error);
+        //     });
 
         this.formGroup = this._getFormGroup();
     }
@@ -48,10 +48,14 @@ export class PersonalInfoComponent implements ResetableComponent {
         const info: PersonalInformationModel = {
             firstName: controls['firstName'].value,
             lastName: controls['lastName'].value,
-            birthDay: this._convertLocalTimeToUTC(new Date(controls['birth'].value).getTime()) / 1000,
-            country: controls['country'].value,
-            address: controls['address'].value,
-            city: controls['city'].value,
+            birthDay: 0,
+            country: "Unknown",
+            address: "Unknown",
+            city: "Unknown",
+            // birthDay: this._convertLocalTimeToUTC(new Date(controls['birth'].value).getTime()) / 1000,
+            // country: controls['country'].value,
+            // address: controls['address'].value,
+            // city: controls['city'].value,
             // postcode: controls['postcode'].value,
             postcode: 0, // temp solution DB accept just digits
         };
@@ -99,11 +103,11 @@ export class PersonalInfoComponent implements ResetableComponent {
         return new FormGroup({
             firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
             lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
-            birth: new FormControl('', [Validators.required]),
-            country: new FormControl('', Validators.required),
-            address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
-            city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
-            postcode: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(9)])
+            // birth: new FormControl('', [Validators.required]),
+            // country: new FormControl('', Validators.required),
+            // address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
+            // city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
+            // postcode: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(9)])
         });
     }
 
