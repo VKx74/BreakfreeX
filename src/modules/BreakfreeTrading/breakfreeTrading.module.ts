@@ -19,7 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreakfreeTradingService } from './services/breakfreeTrading.service';
 import { BreakfreeTradingBacktestWidgetComponent, BreakfreeTradingAcademyComponent, BreakfreeTradingScannerComponent } from './components';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
-import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 import { BreakfreeTradingBacktestService } from './services/breakfreeTradingBacktest.service';
 import { ChartTrackerService } from './services/chartTracker.service';
 import { MatInputModule } from '@angular/material/input';
@@ -105,7 +104,6 @@ import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTrading
         FormsModule,
         ReactiveFormsModule,
         LoaderModule,
-        ClipboardModule,
         MatFormFieldModule,
         MatSelectModule,
         UIModule,
@@ -154,7 +152,6 @@ import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTrading
     ],
     providers: [
         HistoryService,
-        ClipboardService,
         InstrumentService,
         BreakfreeTradingService,
         ChartTrackerService,
