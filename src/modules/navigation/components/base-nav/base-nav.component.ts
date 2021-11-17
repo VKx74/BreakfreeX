@@ -22,6 +22,7 @@ import { SaveStateAction } from '@app/store/actions/platform.actions';
 import { Store } from "@ngrx/store";
 import { AppState } from '@app/store/reducer';
 import { SocialReactionsService } from 'modules/BreakfreeTradingSocial/services/social.reactions.service';
+import { SportCountService } from 'modules/navigation/services/sport.count.service';
 
 @Component({
     selector: 'base-nav',
@@ -29,6 +30,8 @@ import { SocialReactionsService } from 'modules/BreakfreeTradingSocial/services/
     styleUrls: ['./base-nav.component.scss']
 })
 export class BaseNavComponent implements OnInit {
+    private _spotsCount: string;
+
     readonly avatarShape = UserAvatarShape.Rounded;
     @Input() showUserDashboard = false;
     @Input() showUserAvatar = false;
@@ -115,6 +118,10 @@ export class BaseNavComponent implements OnInit {
         return this._socialRealtimeNotificationsService.unreadExists;
     }
 
+    public get spotsCount(): string {
+        return this._spotsCount;
+    }
+
     constructor(private _identityService: IdentityService,
         private _usersProfileService: UsersProfileService,
         private _cdRef: ChangeDetectorRef,
@@ -128,8 +135,12 @@ export class BaseNavComponent implements OnInit {
         private _layoutStorageService: LayoutStorageService,
         private _store: Store<AppState>,
         private _socialRealtimeNotificationsService: SocialReactionsService,
+        private _sportCountService: SportCountService,
         private _inlineService: InlineService) {
         this.showStaticLogin = this._identityService.isGuestMode;
+        _sportCountService.getSpotsAvailable().subscribe((data) => {
+            this._spotsCount = data;
+        });
     }
 
     toggleSidebar() {
@@ -248,6 +259,10 @@ export class BaseNavComponent implements OnInit {
     onNotificationsMenuClosed() {
         this.reactionMenuOpened = false;
         this._socialRealtimeNotificationsService.setAsRead();
+    }
+
+    openBlackFridayDeal() {
+        window.open("https://stage.breakfreetrading.com/blackfriday/", '_blank').focus();
     }
 
     private _save() {

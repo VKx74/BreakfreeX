@@ -79,8 +79,8 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
     },
     {
-        "id": "BAC-A",
-        "symbol": "BAC-A",
+        "id": "BAC",
+        "symbol": "BAC",
         "exchange": EExchange.NYSE,
         "datafeed": EExchangeInstance.TwelvedataExchange,
         "type": EMarketType.Stocks,
@@ -621,20 +621,6 @@ export const EquitiesWatchlist: IWatchlistItem = {
         "baseInstrument": "",
         "dependInstrument": "",
         "company": "Norwegian Cruise Line Holdings Ltd",
-        "tradable": false,
-        "tickSizeCorrect": true
-    },
-    {
-        "id": "FIT",
-        "symbol": "FIT",
-        "exchange": EExchange.NYSE,
-        "datafeed": EExchangeInstance.TwelvedataExchange,
-        "type": EMarketType.Stocks,
-        "tickSize": 0.01,
-        "pricePrecision": 2,
-        "baseInstrument": "",
-        "dependInstrument": "",
-        "company": "Fitbit Inc",
         "tradable": false,
         "tickSizeCorrect": true
     },
