@@ -122,6 +122,10 @@ export class BaseNavComponent implements OnInit {
         return this._spotsCount;
     }
 
+    public get isBlackFridayDeal(): boolean {
+        return this._identityService.isBlackFridayDeal;
+    }
+
     constructor(private _identityService: IdentityService,
         private _usersProfileService: UsersProfileService,
         private _cdRef: ChangeDetectorRef,

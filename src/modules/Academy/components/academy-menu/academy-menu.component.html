@@ -19,7 +19,12 @@
             <div class="section-title flex">Content</div>
 
             <div class="section-container flex">
-                <div (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors" [ngClass]="{'is-active': selectedContentSector?.Id == contentSector.Id}" class="section flex">{{contentSector.Name}}</div>
+                <div (click)="sectorSelected(contentSector)" *ngFor="let contentSector of contentSectors" [ngClass]="{'is-active': selectedContentSector?.Id == contentSector.Id}" class="section flex">
+                    {{contentSector.Name}}
+                    <div *ngIf="contentSector.isPremium" class="premium-content">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

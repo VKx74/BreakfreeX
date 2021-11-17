@@ -259,19 +259,25 @@
     align-items: center;
     width: 100%;
     margin-left: 200px;
-    .black-friday-header-content, .black-friday-header-content-mobile {
+
+    .black-friday-header-content, .black-friday-header-content-tablet, .black-friday-header-content-mobile {
       background: #ecb22d;
       color: white;
-      padding: 0px 10px;
-      font-size: 13px;
       border-radius: 3px;
       border: 1px solid #8d6b1d;
       cursor: pointer;
       z-index: 2;
     }
 
-    .black-friday-header-content-mobile  {
+    .black-friday-header-content {
+      padding: 0px 10px;
+      font-size: 13px;
+    }
+
+    .black-friday-header-content-tablet, .black-friday-header-content-mobile {
       display: none;
+      padding: 0px 5px;
+      font-size: 12px;
     }
   }
 }
@@ -291,29 +297,42 @@
   nav-section {
     margin: 0px !important;
   }
-
   .black-friday-header {
     margin-left: 140px !important;
-    .black-friday-header-content {
+  }
+}
+
+@media (max-width: 460px) {
+  .black-friday-header {
+    display: none !important;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 860px) {
+  .black-friday-header {
+    .black-friday-header-content, .black-friday-header-content-mobile {
       display: none !important;
     }
-    .black-friday-header-content-mobile {
-      padding: 0px 5px !important;
-      font-size: 12px !important;
+    .black-friday-header-content-tablet {
       display: flex !important;
     }
   }
 }
 
-@media (max-width: 600px) {
-  .nav-section {
-    margin-right: 0px !important;
+@media (min-width: 541px) and (max-width: 700px) {
+  .black-friday-header {
+    .black-friday-header-content, .black-friday-header-content-tablet, .black-friday-header-content-mobile {
+      display: none !important;
+    }
   }
 }
 
-@include themify($themes, true) {
-  .settings-button {
-    border-left: none;
+@media (max-width: 540px) {
+  .black-friday-header-content, .black-friday-header-content-tablet {
+    display: none !important;
+  }
+  .black-friday-header-content-mobile {
+    display: flex !important;
   }
 }
 

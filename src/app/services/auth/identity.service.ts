@@ -149,6 +149,26 @@ export class IdentityService {
         return false;
     }
 
+    public get isBlackFridayDeal(): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("2021 Black Friday Deal") !== -1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private get _isPro(): boolean {
         if (!this.isAuthorizedCustomer) {
             return false;
@@ -161,6 +181,9 @@ export class IdentityService {
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Pro") !== -1) {
+                    return true;
+                }  
+                if (sub.indexOf("2021 Black Friday Deal") !== -1) {
                     return true;
                 }
             }
@@ -365,7 +388,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Starter"];
+        // this.subscriptions = ["Pro"];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {

@@ -19,9 +19,13 @@
             </div>
         </div>
 
-        <div class="flex black-friday-header" *ngIf="spotsCount">
-            <div (click)="openBlackFridayDeal()" class="black-friday-header-content">55% Black Friday Deal - {{spotsCount}} spots left</div>
-            <div (click)="openBlackFridayDeal()" class="black-friday-header-content-mobile">55% Black Friday</div>
+        <div class="flex full-width">
+            <div class="flex black-friday-header" *ngIf="spotsCount && !isBlackFridayDeal">
+                <div (click)="openBlackFridayDeal()" class="black-friday-header-content">55% Black Friday Deal -
+                    {{spotsCount}} spots left</div>
+                <div (click)="openBlackFridayDeal()" class="black-friday-header-content-tablet">55% Black Friday Deal</div>
+                <div (click)="openBlackFridayDeal()" class="black-friday-header-content-mobile">55% Black Friday</div>
+            </div>
         </div>
 
         <div class="static-login-popup" *ngIf="showStaticLogin; else menu" (click)="register()">
@@ -40,85 +44,85 @@
                         </div>
                     </nav-section>  -->
                 <nav-section class="notifications cursor-pointer" [leftBorder]="false" [paddingRight]="true"
-                    [paddingLeft]="true"  [matMenuTriggerFor]="notificationsMenu"
-                    (menuOpened)="onNotificationsMenuOpened()" (menuClosed)="onNotificationsMenuClosed()" >
+                    [paddingLeft]="true" [matMenuTriggerFor]="notificationsMenu"
+                    (menuOpened)="onNotificationsMenuOpened()" (menuClosed)="onNotificationsMenuClosed()">
                     <div class="insidecorrector">
-                    <div class="flex">
-                        <div class="bell-image">
-                            <div class="new-notifications" *ngIf="isUnreadMessages"></div>
-                            <i class="fa fa-bell" aria-hidden="true"></i>
+                        <div class="flex">
+                            <div class="bell-image">
+                                <div class="new-notifications" *ngIf="isUnreadMessages"></div>
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                            </div>
+                            <mat-menu #notificationsMenu="matMenu" xPosition="before">
+                                <social-notifications-menu *ngIf="reactionMenuOpened"></social-notifications-menu>
+                            </mat-menu>
                         </div>
-                        <mat-menu #notificationsMenu="matMenu" xPosition="before">
-                            <social-notifications-menu *ngIf="reactionMenuOpened"></social-notifications-menu>
-                        </mat-menu>
                     </div>
-                 </div>
                 </nav-section>
                 <nav-section class="autosave-nav-item sm-hidden" [leftBorder]="false" [class.no-highlight]="!saveNeeded"
                     [paddingRight]="true" [paddingLeft]="true" [matMenuTriggerFor]="saveLayoutMenu"
                     *ngIf="isAuthorizedCustomer && showUserDashboard">
                     <div class="insidecorrector">
-                    <div class="autosave-container">
-                        <span class="save-state save-needed" *ngIf="saveNeeded; else saved" tooltip
-                            [matTooltip]="'stateNotSaved' | translate">
-                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                        </span>
-                        <ng-template #saved>
-                            <span class="save-state saved" tooltip [matTooltip]="'stateSaved' | translate">
-                                <i class="fa fa-cloud" aria-hidden="true"></i>
+                        <div class="autosave-container">
+                            <span class="save-state save-needed" *ngIf="saveNeeded; else saved" tooltip
+                                [matTooltip]="'stateNotSaved' | translate">
+                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                             </span>
-                        </ng-template>
+                            <ng-template #saved>
+                                <span class="save-state saved" tooltip [matTooltip]="'stateSaved' | translate">
+                                    <i class="fa fa-cloud" aria-hidden="true"></i>
+                                </span>
+                            </ng-template>
 
-                        <mat-menu #saveLayoutMenu="matMenu" xPosition="before">
-                            <layout-management-menu></layout-management-menu>
-                        </mat-menu>
-                    </div>
+                            <mat-menu #saveLayoutMenu="matMenu" xPosition="before">
+                                <layout-management-menu></layout-management-menu>
+                            </mat-menu>
+                        </div>
                     </div>
                 </nav-section>
                 <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true"
                     *ngIf="isAuthorizedCustomer && showUserDashboard">
                     <div class="insidecorrector">
-                    <div class="xp-nav-container" (click)="openMissionDialog()">
-                        <span *ngIf="isLoaded; else loading">
-                            <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
-                            <!-- <span class="xp-title">LV</span> {{level}} -->
-                            <span class="dashb" [ngClass]="getOverviewClass()">
-                                <img src="assets/img/chart-user-solid.svg">
+                        <div class="xp-nav-container" (click)="openMissionDialog()">
+                            <span *ngIf="isLoaded; else loading">
+                                <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
+                                <!-- <span class="xp-title">LV</span> {{level}} -->
+                                <span class="dashb" [ngClass]="getOverviewClass()">
+                                    <img src="assets/img/chart-user-solid.svg">
+                                </span>
                             </span>
-                        </span>
-                        <ng-template #loading>
-                            <span>Loading...</span>
-                        </ng-template>
-                    </div>
-                </div>
-
-                </nav-section>
-                <nav-section [leftBorder]="true" [paddingRight]="true"
-                    *ngIf="isAuthorizedCustomer && showUserDashboard" class="lightswitch">
-                    <div class="insidecorrector">
-                    <div class="theme-nav-container" (click)="changeTheme()">
-                        <div class="theme-title">
-                            <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>
-                            <ng-template #lightThemeIcon>
-                                <i class="fa fa-moon-o" aria-hidden="true"></i>
+                            <ng-template #loading>
+                                <span>Loading...</span>
                             </ng-template>
                         </div>
                     </div>
+
+                </nav-section>
+                <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer && showUserDashboard"
+                    class="lightswitch">
+                    <div class="insidecorrector">
+                        <div class="theme-nav-container" (click)="changeTheme()">
+                            <div class="theme-title">
+                                <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>
+                                <ng-template #lightThemeIcon>
+                                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                                </ng-template>
+                            </div>
+                        </div>
                     </div>
                 </nav-section>
                 <nav-section class="avatarsec" *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
-                 <div class="insidecorrector avatarelement">
-                    <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex userprofilesec">
-                        <ng-container *ngTemplateOutlet="avatar"></ng-container>
-                        <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
-                            <my-badge></my-badge>
+                    <div class="insidecorrector avatarelement">
+                        <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex userprofilesec">
+                            <ng-container *ngTemplateOutlet="avatar"></ng-container>
+                            <div class="xp-bage-container cursor-pointer" *ngIf="isAuthorizedCustomer">
+                                <my-badge></my-badge>
+                            </div>
+                            <mat-menu #menu="matMenu" xPosition="before">
+                                <user-info-menu [avatarTemplate]="avatarUserInfo" (logOut)="logout()" [opened]="opened">
+                                </user-info-menu>
+                            </mat-menu>
                         </div>
-                        <mat-menu #menu="matMenu" xPosition="before">
-                            <user-info-menu [avatarTemplate]="avatarUserInfo" (logOut)="logout()" [opened]="opened">
-                            </user-info-menu>
-                        </mat-menu>
                     </div>
-                </div>
                 </nav-section>
                 <div class="settings-button" routerLink="/platform/settings" [class.disabled]="isGuest">
                     <i _ngcontent-rjn-c4="" class="crypto-icon crypto-icon-settings"></i>

@@ -5,6 +5,7 @@ export interface ContentSectors
     Id: string;
     Title: string;
     Name: string;
+    isPremium?: boolean;
 }
 
 export interface GroupedMedia

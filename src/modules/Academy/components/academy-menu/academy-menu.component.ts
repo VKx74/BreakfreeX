@@ -98,21 +98,33 @@ export class AcademyMenuComponent {
     contentSectors: ContentSectors[] = [{
         Id: "ufonh214hz",
         Name: "BFT Academy - Week 1 [2021]",
-        Title: "BFT Academy - Week 1 [2021]"
+        Title: "BFT Academy - Week 1 [2021]",
+        isPremium: false
     },
     {
         Id: "sj7ygoyhmy",
         Name: "BFT Academy - Week 2 [2021]",
-        Title: "BFT Academy - Week 2 [2021]"
+        Title: "BFT Academy - Week 2 [2021]",
+        isPremium: false
     },
     {
-        Id: "zctobnmsk9",
+        Id: "zctobnmsk9",   
         Name: "BFT Academy - Extended content",
-        Title: "BFT Academy - Extended content"
-    }];
+        Title: "BFT Academy - Extended content",
+        isPremium: false
+    }
+    ];
 
-    constructor(private _identityService: IdentityService, private _profileService: UsersProfileService, 
+    constructor(private _identityService: IdentityService, private _profileService: UsersProfileService,
         private _wistiaService: WistiaService) {
+        if (_identityService.isBlackFridayDeal) {
+            this.contentSectors.push({
+                Id: "someId",
+                Name: "BFT Academy - Black Friday",
+                Title: "BFT Academy - Black Friday",
+                isPremium: true
+            });
+        }
         this.sectorSelected(this.contentSectors[0]);
     }
 
@@ -216,7 +228,7 @@ export class AcademyMenuComponent {
                 return name1.localeCompare(name2);
 
             });
-            
+
 
             if (this._content) {
                 this.selectMedia(selLastVideo ? this._content[this._content.length - 1] : this._content[0]);
