@@ -266,7 +266,7 @@ export class BaseNavComponent implements OnInit {
     }
 
     openBlackFridayDeal() {
-        window.open("https://stage.breakfreetrading.com/blackfriday/", '_blank').focus();
+        window.open("https://breakfreetrading.com/blackfriday/", '_blank').focus();
     }
 
     private _save() {

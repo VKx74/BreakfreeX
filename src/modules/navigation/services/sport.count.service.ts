@@ -8,6 +8,6 @@ export class SportCountService {
     constructor(private _http: HttpClient) {}
 
     getSpotsAvailable(): Observable<string> {
-        return this._http.get<string>(`https://system-platform-stage.breakfreetrading.com/v1/sysnotification/api/PromoText`);
+        return this._http.get<string>(`https://system-platform-stage.breakfreetrading.com/v1/sysnotification/api/BlackFriday`);
     }
 }
