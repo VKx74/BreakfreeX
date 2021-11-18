@@ -1,5 +1,6 @@
 import { stringify } from "@angular/compiler/src/util";
 import { Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { UsersProfileService } from "@app/services/users-profile.service";
 import { Content } from "modules/Academy/models/dto";
@@ -108,7 +109,7 @@ export class AcademyMenuComponent {
         isPremium: false
     },
     {
-        Id: "zctobnmsk9",   
+        Id: "zctobnmsk9",
         Name: "BFT Academy - Extended content",
         Title: "BFT Academy - Extended content",
         isPremium: false
@@ -116,15 +117,15 @@ export class AcademyMenuComponent {
     ];
 
     constructor(private _identityService: IdentityService, private _profileService: UsersProfileService,
-        private _wistiaService: WistiaService) {
+        private _wistiaService: WistiaService, private route: ActivatedRoute) {
         if (_identityService.isBlackFridayDeal) {
             this.contentSectors.push({
                 Id: "qa3z1iua7r",
                 Name: "Mental Alchemy",
                 Title: "Mental Alchemy",
                 isPremium: true
-            }); 
-            
+            });
+
             this.contentSectors.push({
                 Id: "3jc17um90b",
                 Name: "The Purpose Process",
@@ -132,10 +133,20 @@ export class AcademyMenuComponent {
                 isPremium: true
             });
         }
-        this.sectorSelected(this.contentSectors[0]);
     }
 
     ngOnInit() {
+        let section = this.route.snapshot.params["id"];
+
+        if (section) {
+            let videoSection = this.contentSectors.find((e) => e.Id === section );
+            if (videoSection) {
+                this.contentSectors = [videoSection];
+            }
+        }
+
+        this.sectorSelected(this.contentSectors[0]);
+
         this._doNextSubscription = this.doNext.subscribe(() => {
             this.nextVideo();
         });

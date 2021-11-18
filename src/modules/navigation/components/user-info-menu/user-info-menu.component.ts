@@ -19,6 +19,10 @@ import { AppState } from "@app/store/reducer";
 import { ResetLayoutAction } from '@app/store/actions/platform.actions';
 import { MissionsComponent } from 'modules/BreakfreeTrading/components/missions/missions.component';
 import { ClearSessionAction } from '@app/store/actions/platform.actions';
+import { UserSettings, UserSettingsService } from '@app/services/user-settings/user-settings.service';
+import { LocalizationService } from 'modules/Localization/services';
+import { ThemeService } from '@app/services/theme.service';
+import { Theme } from '@app/enums/Theme';
 
 @Component({
     selector: 'user-info-menu',
@@ -73,10 +77,17 @@ export class UserInfoMenuComponent implements OnInit {
         return this._identity.isGuestMode;
     }
 
+    get isDarkTheme() {
+        return this._themeService.activeTheme === Theme.Dark;
+    }
+
     constructor(private _identity: IdentityService,
         private _dialog: MatDialog,
         private _store: Store<AppState>,
         private _tradingProfileService: TradingProfileService,
+        private _localizationService: LocalizationService,
+        private _themeService: ThemeService,
+        private _userSettingsService: UserSettingsService,
         private _brokerService: BrokerService) {
     }
 
@@ -132,7 +143,21 @@ export class UserInfoMenuComponent implements OnInit {
         }});
     } 
 
+    changeTheme() {
+        this._themeService.setActiveTheme(this.isDarkTheme ? Theme.Light : Theme.Dark);
+        this._save();
+    }
+
     private _resetLayout() {
         this._store.dispatch(new ResetLayoutAction());
+    }
+    
+    private _save() {
+        const settings: UserSettings = {
+            theme: this._themeService.activeTheme,
+            locale: this._localizationService.locale,
+        } as UserSettings;
+
+        this._userSettingsService.saveSettings(settings, true).subscribe();
     }
 }

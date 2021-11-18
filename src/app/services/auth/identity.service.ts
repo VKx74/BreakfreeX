@@ -182,9 +182,6 @@ export class IdentityService {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Pro") !== -1) {
                     return true;
-                }  
-                if (sub.indexOf("2021 Black Friday Deal") !== -1) {
-                    return true;
                 }
             }
         }

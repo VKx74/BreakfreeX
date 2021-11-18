@@ -54,6 +54,7 @@ import { DefaultCheckoutComponent } from './components/default-checkout/default-
 import { StorageModule } from 'modules/Storage/storage.module';
 import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
 import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTradingBacktesComponent/BreakfreeTradingBacktest.component';
+import { BlackFridayPremiumVideoComponent } from './components/blackFridayPremiumVideo/blackFridayPremiumVideo.component';
 
 @NgModule({
     // components here
@@ -70,6 +71,7 @@ import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTrading
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
+        BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
         DailyMissionsComponent,
@@ -123,6 +125,7 @@ import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTrading
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
+        BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
         MissionsInfoComponent,
@@ -142,6 +145,7 @@ import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTrading
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
+        BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsInfoComponent,
         MissionsComponent,

@@ -23,6 +23,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from '@app/store/reducer';
 import { SocialReactionsService } from 'modules/BreakfreeTradingSocial/services/social.reactions.service';
 import { SportCountService } from 'modules/navigation/services/sport.count.service';
+import { BlackFridayPremiumVideoComponent } from 'modules/BreakfreeTrading/components/blackFridayPremiumVideo/blackFridayPremiumVideo.component';
 
 @Component({
     selector: 'base-nav',
@@ -267,6 +268,10 @@ export class BaseNavComponent implements OnInit {
 
     openBlackFridayDeal() {
         window.open("https://breakfreetrading.com/blackfriday/", '_blank').focus();
+    }
+
+    showPremiumAcademyContent() {
+        this._dialog.open(BlackFridayPremiumVideoComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _save() {

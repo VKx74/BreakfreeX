@@ -43,6 +43,16 @@
                             </div>
                         </div>
                     </nav-section>  -->
+                <nav-section *ngIf="isBlackFridayDeal" class="premium-academy-content cursor-pointer" [leftBorder]="false" [paddingRight]="true"
+                    [paddingLeft]="true" (click)="showPremiumAcademyContent()">
+                    <div class="insidecorrector">
+                        <div class="flex">
+                            <div class="star-image">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </nav-section>
                 <nav-section class="notifications cursor-pointer" [leftBorder]="false" [paddingRight]="true"
                     [paddingLeft]="true" [matMenuTriggerFor]="notificationsMenu"
                     (menuOpened)="onNotificationsMenuOpened()" (menuClosed)="onNotificationsMenuClosed()">
@@ -97,7 +107,7 @@
                     </div>
 
                 </nav-section>
-                <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer && showUserDashboard"
+                <!-- <nav-section [leftBorder]="true" [paddingRight]="true" *ngIf="isAuthorizedCustomer && showUserDashboard"
                     class="lightswitch">
                     <div class="insidecorrector">
                         <div class="theme-nav-container" (click)="changeTheme()">
@@ -109,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                </nav-section>
+                </nav-section> -->
                 <nav-section class="avatarsec" *ngIf="showUserAvatar" [leftBorder]="true" [paddingRight]="false">
                     <div class="insidecorrector avatarelement">
                         <div [matMenuTriggerFor]="menu" (menuOpened)="onMenuOpen()" class="flex userprofilesec">
