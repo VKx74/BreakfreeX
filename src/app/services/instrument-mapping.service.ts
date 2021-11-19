@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, of, Subject, throwError } from "rxjs";
+import { map } from "rxjs/operators";
 import { IBrokerState } from "../interfaces/broker/broker";
 import { ISymbolMappingItem, PatchAction, PatchRequest, SymbolMappingStorageService } from "./instrument-mapping-storage.service";
 
@@ -47,7 +48,11 @@ export class InstrumentMappingService {
         if (this.allItems[key]) {
             let patchRequest = new PatchRequest(PatchAction.Add);
             patchRequest.AddMapping(feedSymbol, brokerSymbol);
-            res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest);            
+            res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest).pipe(map((ress: any) => {
+                this.allItems[key][feedSymbol] = brokerSymbol;
+                this.mappingChanged.next();
+                return ress;
+            }));  
         } else {
             this.allItems[key] = {};
             let payload = <ISymbolMappingItem> {
@@ -56,14 +61,12 @@ export class InstrumentMappingService {
                 mapping: {}
             };            
             payload.mapping[feedSymbol] = brokerSymbol;            
-            res = this._symbolMappingStorageService.postSymbolMapping(payload);            
+            res = this._symbolMappingStorageService.postSymbolMapping(payload).pipe(map((ress: any) => {
+                this.allItems[key][feedSymbol] = brokerSymbol;
+                this.mappingChanged.next();
+                return ress;
+            })); 
         }
-        res.subscribe((ress: any) => {
-            this.allItems[key][feedSymbol] = brokerSymbol;
-            this.mappingChanged.next();
-        }, (error: any) => {
-
-        });
         return res;
     }
 
@@ -72,11 +75,11 @@ export class InstrumentMappingService {
         if (this.allItems[key]) {            
             let patchRequest = new PatchRequest(PatchAction.Remove);
             patchRequest.AddMapping(feedSymbol, '');
-            let res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest);
-            res.subscribe((ress: any) => {
+            let res = this._symbolMappingStorageService.patchSymbolMapping(this._brokerState.server, parseInt(this._brokerState.account, 10), patchRequest).pipe(map((ress: any) => {
                 delete this.allItems[key][feedSymbol];
                 this.mappingChanged.next();
-            });
+                return ress;
+            }));
             return res;
         } else {
             throwError('Not found');
