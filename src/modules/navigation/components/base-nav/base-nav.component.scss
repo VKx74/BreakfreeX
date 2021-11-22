@@ -266,13 +266,23 @@
     margin-left: 200px;
 
     .black-friday-header-content, .black-friday-header-content-tablet, .black-friday-header-content-mobile {
-      background: #ecb22d;
-      color: white;
-      border-radius: 3px;
-      border: 1px solid #8d6b1d;
-      cursor: pointer;
-      z-index: 2;
+    color: #ecb22d;
+    border-radius: 3px;
+    cursor: pointer;
+    z-index: 2;
+    font-weight: 700;
+
+    &:hover {
+      background: #2cae76;
+      transition: all 0.3s;
+      color: #fff;
+      
     }
+
+    }
+
+
+    
 
     .black-friday-header-content {
       padding: 0px 10px;
