@@ -25,7 +25,6 @@
   .root {
     width: 100%;
     height: 100%;
-    background-image: url(/assets/img/academy/academy-bg.jpg);
     background-size:cover;
     background-position-y: top;
     background-color: #0e0e0e;
@@ -33,24 +32,16 @@
     align-items: center;
   }
 
-  .root .mental-alchemy {
-    width: 100%;
-    height: 100%;
-    background-image: url(/assets/img/academy/bg_max.jpg);
-    background-position-y: top;
-    background-color: #0e0e0e;
-    justify-content: center;
-    align-items: center;
+  .default-bg {
+    background-image: url(/assets/img/academy/academy-bg.jpg) !important;
   }
 
-  .root .the-blueprint{
-    width: 100%;
-    height: 100%;
-    background-image: url(/assets/img/academy/bg_tbpx.jpg);
-    background-position-y: top;
-    background-color: #0e0e0e;
-    justify-content: center;
-    align-items: center;
+  .mental-alchemy {
+    background-image: url(/assets/img/academy/bg_max.jpg) !important;
+  }
+
+  .the-blueprint{
+    background-image: url(/assets/img/academy/bg_tbpx.jpg) !important;
   }
 
   .content {
@@ -217,6 +208,7 @@
 
   .video-details {
     padding: 15px 30px 100px 30px;
+    user-select: text;
     .video-title {
       font-size: 42px;
       font-weight: 700;
