@@ -495,6 +495,17 @@ export abstract class MTBroker implements IMTBroker {
             this._onReconnectSubscription.unsubscribe();
         }
 
+        this._instrumentDecimals = {};
+        this._instrumentTickSize = {};
+        this._instrumentType = {};
+        this._instrumentProfitMode = {};
+        this._instrumentContractSizes = {};
+        this._instruments = [];
+        this._orders = [];
+        this._ordersHistory = [];
+        this._positions = [];
+        this._currencyRisks = [];
+
         this._onTickSubscription = this.ws.tickSubject.subscribe(this._handleQuotes.bind(this));
         this._onAccountUpdateSubscription = this.ws.accountUpdatedSubject.subscribe(this._handleAccountUpdate.bind(this));
         this._onOrdersUpdateSubscription = this.ws.ordersUpdatedSubject.subscribe(this._handleOrdersUpdate.bind(this));
@@ -691,13 +702,6 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     protected _initialize(instruments: IMTSymbolData[]) {
-        this._instrumentDecimals = {};
-        this._instrumentTickSize = {};
-        this._instrumentType = {};
-        this._instrumentProfitMode = {};
-        this._instrumentContractSizes = {};
-        this._instruments = [];
-
         for (const instrument of instruments) {
             let tickSize = 1 / Math.pow(10, instrument.Digits);
             if (instrument.Digits === 0) {
