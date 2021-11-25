@@ -102,6 +102,10 @@ export class TwelvedataInstrumentService extends InstrumentServiceBase {
         const tickSize = this._getTickSize(product.Symbol, type);
         const description = this._getDescription(product, type);
 
+        if (exchange === EExchange.Binance) {
+            return;
+        }
+
         const instrument: IInstrument = {
             id: product.Symbol,
             symbol: product.Symbol.replace("/", ""),
