@@ -143,9 +143,9 @@ export class BaseNavComponent implements OnInit {
         private _sportCountService: SportCountService,
         private _inlineService: InlineService) {
         this.showStaticLogin = this._identityService.isGuestMode;
-        _sportCountService.getSpotsAvailable().subscribe((data) => {
-            this._spotsCount = data;
-        });
+        // _sportCountService.getSpotsAvailable().subscribe((data) => {
+        //     this._spotsCount = data;
+        // });
     }
 
     toggleSidebar() {
@@ -266,9 +266,9 @@ export class BaseNavComponent implements OnInit {
         this._socialRealtimeNotificationsService.setAsRead();
     }
 
-    openBlackFridayDeal() {
-        window.open("https://breakfreetrading.com/blackfriday/", '_blank').focus();
-    }
+    // openBlackFridayDeal() {
+    //     window.open("https://breakfreetrading.com/blackfriday/", '_blank').focus();
+    // }
 
     showPremiumAcademyContent() {
         this._dialog.open(BlackFridayPremiumVideoComponent, { backdropClass: 'backdrop-background' });
