@@ -17,6 +17,10 @@ export class ManageSubscriptionsComponent implements OnInit {
     @Input() accounts: IPaymentAccount[] = null;
     public loading: boolean = false;
 
+    public get IsLifetime(): boolean {
+        return this._identityService.isLifetimeAccess;
+    }
+
     constructor(private _personalInfoService: PersonalInfoService, private _identityService: IdentityService, private _alertService: AlertService) {
     }
 

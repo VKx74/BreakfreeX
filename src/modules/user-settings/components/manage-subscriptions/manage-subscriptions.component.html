@@ -1,68 +1,76 @@
 <div class="section flex crypto-form-unit">
   <div class="form-unit__label tile-header">{{"profileInfo.accounts" | translate}}</div>
 
-  <div class="account-row flex" *ngFor="let account of accounts">
-    <div class="flex basic-row form-unit__label">
-      <div class="flex account-column header">
-        {{"profileInfo.accountCreated" | translate}}
-      </div>
-      <div class="flex account-column header form-unit__label optional">
-        {{"profileInfo.accountName" | translate}}
-      </div>
-      <div class="flex account-column header form-unit__label optional">
-        {{"profileInfo.accountDescription" | translate}}
-      </div>
-      <div class="flex account-column header">
-      </div>
+  <div *ngIf="IsLifetime; else subscriptions">
+    <div class="lifetime-access">
+      Breakfree Trading Lifetime Pro Access
     </div>
-
-    <div class="flex basic-row">
-      <div class="flex account-column">
-        {{account.created * 1000 | date}}
-      </div>
-      <div class="flex account-column optional">
-        {{account.name || "-"}}
-      </div>
-      <div class="flex account-column optional">
-        {{account.description || "-"}}
-      </div>
-      <div class="flex account-column">
-        <div class="flex btns">
-          <button class="crypto-button crypto-button_success w-100"
-            (click)="manageSubscription(account.id)">{{"profileInfo.manageSubscriptions" | translate}}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- <hr /> -->
-
-    <div class="form-unit__label subscriptions-area">{{"profileInfo.subscriptions" | translate}}</div>
-
-    <div>
-      <div class="subscription-row justify-space-between flex" *ngFor="let sub of getSubscriptions(account)">
-        <div class="flex status">
-          {{sub.status}}
-        </div>
-        <div class="flex name">
-          {{sub.name}}
-        </div>
-        <div class="flex price optional">
-          {{sub.price.toFixed(2)}}({{sub.currency}})
-        </div>
-        <div class="flex interval optional">
-          {{sub.intervalCount}} {{sub.interval}}(s)
-        </div>
-        <div class="flex date optional">
-          {{sub.created.toDateString()}}
-        </div>
-      </div>
-      <div *ngIf="subscriptions != null && getSubscriptions(account).length == 0" class="flex no-content">
-        No subscriptions
-      </div>
-    </div>
-
   </div>
+
+  <ng-template #subscriptions>
+    <div class="account-row flex" *ngFor="let account of accounts">
+      <div class="flex basic-row form-unit__label">
+        <div class="flex account-column header">
+          {{"profileInfo.accountCreated" | translate}}
+        </div>
+        <div class="flex account-column header form-unit__label optional">
+          {{"profileInfo.accountName" | translate}}
+        </div>
+        <div class="flex account-column header form-unit__label optional">
+          {{"profileInfo.accountDescription" | translate}}
+        </div>
+        <div class="flex account-column header">
+        </div>
+      </div>
+
+      <div class="flex basic-row">
+        <div class="flex account-column">
+          {{account.created * 1000 | date}}
+        </div>
+        <div class="flex account-column optional">
+          {{account.name || "-"}}
+        </div>
+        <div class="flex account-column optional">
+          {{account.description || "-"}}
+        </div>
+        <div class="flex account-column">
+          <div class="flex btns">
+            <button class="crypto-button crypto-button_success w-100"
+              (click)="manageSubscription(account.id)">{{"profileInfo.manageSubscriptions" | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <hr /> -->
+
+      <div class="form-unit__label subscriptions-area">{{"profileInfo.subscriptions" | translate}}</div>
+
+      <div>
+        <div class="subscription-row justify-space-between flex" *ngFor="let sub of getSubscriptions(account)">
+          <div class="flex status">
+            {{sub.status}}
+          </div>
+          <div class="flex name">
+            {{sub.name}}
+          </div>
+          <div class="flex price optional">
+            {{sub.price.toFixed(2)}}({{sub.currency}})
+          </div>
+          <div class="flex interval optional">
+            {{sub.intervalCount}} {{sub.interval}}(s)
+          </div>
+          <div class="flex date optional">
+            {{sub.created.toDateString()}}
+          </div>
+        </div>
+        <div *ngIf="subscriptions != null && getSubscriptions(account).length == 0" class="flex no-content">
+          No subscriptions
+        </div>
+      </div>
+
+    </div>
+  </ng-template>
 
   <ng-template *ngIf="!loading; else loader"></ng-template>
   <ng-template #loader>
