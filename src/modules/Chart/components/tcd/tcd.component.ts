@@ -44,6 +44,10 @@ import { IHistoryRequest } from "@app/models/common/historyRequest";
 import { IPeriodicity } from "@app/models/common/periodicity";
 import { IHistoryResponse } from "@app/models/common/historyResponse";
 import { IBarData } from "@app/models/common/barData";
+import { BinanceFuturesCoinBroker } from "@app/services/binance-futures/binance-futures-coin.broker";
+import { BinanceFuturesUsdBroker } from "@app/services/binance-futures/binance-futures-usd.broker";
+import { BinanceFuturesBroker } from "@app/services/binance-futures/binance-futures.broker";
+import { BinanceBroker } from "@app/services/binance/binance.broker";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -293,9 +297,6 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this._chartTrackerService.addChartComponent(this);
 
             this.brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
-                if (!(this._brokerService.activeBroker instanceof MTBroker)) {
-                    return;
-                }
                 this._handleBrokerConnected();
             });
 
@@ -327,16 +328,30 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     private _handleBrokerConnected() {
-        if (!(this._brokerService.activeBroker instanceof MTBroker)) {
+        if (this._brokerService.activeBroker instanceof MTBroker) {
+            const account = (this._brokerService.activeBroker as MTBroker).accountInfo;
+            if (account.Balance) {
+                this._refreshBFTIndicators();
+                return;
+            }
+        } else if (this._brokerService.activeBroker instanceof BinanceFuturesUsdBroker || this._brokerService.activeBroker instanceof BinanceFuturesCoinBroker) {
+            const broker = this._brokerService.activeBroker as BinanceFuturesBroker;
+            if (broker.assets && broker.assets.length) {
+                this._refreshBFTIndicators();
+                return;
+            }
+        } else if (this._brokerService.activeBroker instanceof BinanceBroker) {
+            const broker = this._brokerService.activeBroker as BinanceBroker;
+            if (broker.funds && broker.funds.length) {
+                this._refreshBFTIndicators();
+                return;
+            }
+        } else {
+            this._refreshBFTIndicators();
             return;
         }
 
-        const account = (this._brokerService.activeBroker as MTBroker).accountInfo;
-        if (!account.Balance) {
-            this.handleBrokerConnectTimeout = setTimeout(() => { this._handleBrokerConnected(); }, 500);
-        } else {
-            this._refreshBFTIndicators();
-        }
+        this.handleBrokerConnectTimeout = setTimeout(() => { this._handleBrokerConnected(); }, 1000);
     }
 
     private _refreshBFTIndicators() {

@@ -8,6 +8,10 @@ import { TradingHelper } from "@app/services/mt/mt.helper";
 import { IdentityService } from "@app/services/auth/identity.service";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
+import { BinanceFuturesUsdBroker } from "@app/services/binance-futures/binance-futures-usd.broker";
+import { BinanceBroker } from "@app/services/binance/binance.broker";
+import { BinanceFuturesCoinBroker } from "@app/services/binance-futures/binance-futures-coin.broker";
+import { BinanceFuturesBroker } from "@app/services/binance-futures/binance-futures.broker";
 
 @Injectable()
 export class IndicatorDataProviderService {
@@ -117,6 +121,36 @@ export class IndicatorDataProviderService {
             }
 
             console.log(">>> Contract size: " + bftParams.contract_size);
+        } else if (this._broker.activeBroker instanceof BinanceFuturesUsdBroker || this._broker.activeBroker instanceof BinanceFuturesCoinBroker) {
+            const broker = this._broker.activeBroker as BinanceFuturesBroker;
+            const brokerInstrument = broker.instrumentToBrokerFormat(bftParams.instrument.symbol);
+            const asset =  brokerInstrument ? broker.assets.find(_ => _.Asset === brokerInstrument.dependInstrument) : null;
+
+            if (asset) {
+                bftParams.account_currency = asset.Asset;
+                if (asset.AvailableBalance) {
+                    if (!bftParams.input_accountsize) {
+                        bftParams.input_accountsize = asset.AvailableBalance;
+                    }
+
+                    bftParams.contract_size = 1;
+                }
+            }
+        } else if (this._broker.activeBroker instanceof BinanceBroker) {
+            const broker = this._broker.activeBroker as BinanceBroker;
+            const brokerInstrument = broker.instrumentToBrokerFormat(bftParams.instrument.symbol);
+            const asset = brokerInstrument ? broker.funds.find(_ => _.Coin === brokerInstrument.dependInstrument) : null;
+
+            if (asset) {
+                bftParams.account_currency = asset.Coin;
+                if (asset.AvailableBalance) {
+                    if (!bftParams.input_accountsize) {
+                        bftParams.input_accountsize = asset.AvailableBalance;
+                    }
+
+                    bftParams.contract_size = 1;
+                }
+            }
         }
 
         return this._bftService.getBftIndicatorCalculationV2(bftParams);
