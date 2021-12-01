@@ -128,9 +128,9 @@ export class IndicatorDataProviderService {
 
             if (asset) {
                 bftParams.account_currency = asset.Asset;
-                if (asset.AvailableBalance) {
+                if (asset.WalletBalance) {
                     if (!bftParams.input_accountsize) {
-                        bftParams.input_accountsize = asset.AvailableBalance;
+                        bftParams.input_accountsize = asset.WalletBalance;
                     }
 
                     bftParams.contract_size = 1;
