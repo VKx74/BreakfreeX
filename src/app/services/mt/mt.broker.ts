@@ -1,6 +1,6 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTHistoricalOrder, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTHistoricalOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, EBrokerNotification, IBrokerNotification, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
@@ -17,6 +17,7 @@ import { MTTradeRatingService } from "./mt.trade-rating.service";
 import { map } from "rxjs/operators";
 import { RealtimeService } from "../realtime.service";
 import { Injector } from "@angular/core";
+import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
 
 export abstract class MTBroker implements IMTBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<ITradeTick>; } = {};
@@ -697,7 +698,7 @@ export abstract class MTBroker implements IMTBroker {
         });
     }
 
-    public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
+    public calculateOrderChecklist(parameters: OrderValidationChecklistInput): Observable<OrderValidationChecklist> {
         return this._tradeRatingService.calculateOrderChecklist(parameters);
     }
 
@@ -1497,12 +1498,12 @@ export abstract class MTBroker implements IMTBroker {
         return expiration as OrderExpirationType;
     }
 
-    private _validateOrderChecklist(order: MTOrderValidationChecklistInput, existingOrder: MTOrder): Observable<string> {
+    private _validateOrderChecklist(order: OrderValidationChecklistInput, existingOrder: MTOrder): Observable<string> {
         if (!this.maxRisk) {
             return of(null);
         }
 
-        return this.calculateOrderChecklist(order).pipe(map((validationResult: MTOrderValidationChecklist) => {
+        return this.calculateOrderChecklist(order).pipe(map((validationResult: OrderValidationChecklist) => {
             if (!validationResult) {
                 throw new Error("Failed to confirm the safety and exposure for this position");
             }

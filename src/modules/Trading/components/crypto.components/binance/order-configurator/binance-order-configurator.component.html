@@ -96,6 +96,64 @@
 </div>
 
 <div class="form-wrapper additional-trade-data">
+
+    <div class="flex-row">
+        <div class="crypto-form-unit margin-bottom tradescoreholder">
+            <div class="checklist-row">
+                <div class="section-header tradescore">
+                    <div class="flex">
+                        <!-- <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg"> -->
+                        <div class="tradescoretext-label">
+                            <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg"> <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
+                        </div>
+                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">: {{orderScore}}/10</div>
+                        <ng-template #calculating>
+                            <div class="tradescoretext-calculating">
+                                - calculating...
+                            </div>
+                        </ng-template>
+                    </div>
+
+                        
+                    <div class="score-container" *ngIf="config.instrument">
+                        <emoji [Calculating]="calculatingChecklist" [MaxScore]="10" [Score]="orderScore"></emoji>
+                    </div>
+                </div>
+                
+                <div class="tradescore-separator"></div>
+
+                <div class="loader">
+                    <bft-loader-block *ngIf="calculatingChecklist">
+                    </bft-loader-block>
+                    <div class="loade-text" *ngIf="calculatingChecklist">
+                        {{calculatingChecklistStatus}}
+                    </div>
+                </div>
+
+                <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
+                    <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" tooltip
+                        [matTooltip]="item.tooltip">
+                        <span class="icon">
+                            <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
+                                aria-hidden="true"></i>
+                        </span>
+                        <span class="name">
+                            {{item.name}}
+                        </span>
+                        <span class="value" *ngIf="item.value">
+                            {{item.value}}
+                        </span>
+                    </span>
+                </div>
+                <ng-template #noData>
+                    <span class="no-data">
+                        No data for calculations
+                    </span>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    
     <div class="buttons-wrapper flex justify-flex-end">
         <button class="full-width crypto-button submit-btn" [ngClass]="{'order-side-buy': isBuyMode(),
                         'order-side-sell': !isBuyMode(),

@@ -1,8 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { TradingTranslateService } from "../../../../localization/token";
-import { ITradeTick, ITick } from "@app/models/common/tick";
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass } from "../../../../models/models";
+import { ITradeTick } from "@app/models/common/tick";
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom } from "../../../../models/models";
 import { IInstrument } from "@app/models/common/instrument";
 import { EExchange } from "@app/models/common/exchange";
 import { Observable, Subject, Subscription } from "rxjs";
@@ -12,286 +12,28 @@ import { AlertService } from "@alert/services/alert.service";
 import { memoize } from "@decorators/memoize";
 import bind from "bind-decorator";
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTOrderValidationChecklist, MTPlaceOrder, RTDTrendStrength } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTPlaceOrder } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { MatDialog } from '@angular/material/dialog';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ConfirmModalComponent } from 'modules/UI/components/confirm-modal/confirm-modal.component';
 import { TradingHelper } from '@app/services/mt/mt.helper';
-import { TimeSpan } from '@app/helpers/timeFrame.helper';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { InfoNotificationComponent } from './notifications/info/info-notification.component';
 import { SpreadNotificationComponent } from './notifications/spread/spread-notification.component';
 import { LocalStorageService } from 'modules/Storage/services/local-storage.service';
+import { CalculatingChecklistStatuses, ChecklistItem, CorrelatedRiskValidator, GlobalTrendValidator, LevelsValidator, LeverageValidator, LocalTrendValidator, MTChecklistItemDescription, OrderValidationChecklist, PriceOffsetValidator, SpreadValidator, StoplossValidator } from 'modules/Trading/models/crypto/shared/order.validation';
 
-const CalculatingChecklistStatuses = [
-    "Checking entry...",
-    "Checking leverage...",
-    "Checking spread...",
-    "Checking price offset...",
-    "Checking local trend...",
-    "Checking global trend...",
-    "Checking correlated risk...",
-    "Checking stop loss...",
-    "Calculating rate..."
+const checklist: MTChecklistItemDescription[] = [
+    new LocalTrendValidator(),
+    new GlobalTrendValidator(),
+    new LevelsValidator(),
+    new LeverageValidator(),
+    new CorrelatedRiskValidator(),
+    new SpreadValidator(),
+    new StoplossValidator(),
+    new PriceOffsetValidator()
 ];
-
-enum ChecklistItemType {
-    LocalRTD,
-    GlobalRTD,
-    Levels,
-    Leverage,
-    CorrelatedRisk,
-    Spread,
-    Stoploss,
-    PriceOffset
-}
-
-interface ChecklistItem {
-    name: string;
-    valid: boolean;
-    value?: string;
-    tooltip: string;
-    minusScore: number;
-    type: ChecklistItemType;
-}
-
-interface ChecklistItemDescription {
-    calculate: (data: MTOrderValidationChecklist, config?: MTOrderConfig) => ChecklistItem;
-}
-
-const checklist: ChecklistItemDescription[] = [
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let acceptableTrend = data.LocalRTD;
-            let minusScore = 0;
-            let tooltip = acceptableTrend ? "You are trading with local trend in your favor." : "You are trading against local trend.";
-            let timeframe = config.timeframe;
-            let hour = TimeSpan.MILLISECONDS_IN_HOUR / 1000;
-
-            if (!acceptableTrend) {
-                if (timeframe) {
-                    if (timeframe <= hour) {
-                        if (data.LocalRTDTrendStrength === RTDTrendStrength.Weak) {
-                            acceptableTrend = true;
-                            tooltip = `You are trading against an acceptable ${data.LocalRTDTrendStrength} local trend.`;
-                        } else {
-                            tooltip = `You are trading against an unacceptable ${data.LocalRTDTrendStrength} local trend.`;
-                            minusScore = data.LocalRTDTrendStrength === RTDTrendStrength.Strong ? 3 : 2;
-                        }
-                    } else if (timeframe <= hour * 4) {
-                        if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
-                            tooltip = `You are trading against an unacceptable ${data.LocalRTDTrendStrength} local trend.`;
-                            minusScore = 2;
-                        } else {
-                            tooltip = `You are trading against an acceptable ${data.LocalRTDTrendStrength} local trend.`;
-                            acceptableTrend = true;
-                        }
-                    } else {
-                        tooltip = `You are trading against an acceptable ${data.LocalRTDTrendStrength} local trend.`;
-                        acceptableTrend = true;
-                    }
-                } else if (data.LocalRTDTrendStrength === RTDTrendStrength.Strong) {
-                    tooltip = `You are trading against an unacceptable ${data.LocalRTDTrendStrength} local trend.`;
-                    minusScore = 2;
-                }
-            }
-
-            return {
-                name: "Local Trend",
-                valid: acceptableTrend,
-                minusScore: acceptableTrend ? 0 : minusScore,
-                tooltip: tooltip,
-                type: ChecklistItemType.LocalRTD
-            };
-        }
-    },
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let minusScore = data.GlobalRTD ? 0 : 4;
-            let tooltip = data.GlobalRTD ? "You are trading with the global trend in your favor. Keep doing this." : "WARNING! You are entering a trade that goes against the global trend. It's very possible this trade could be a winning trade, however you will discover over time that trading against the trend is the sole reason you never become profitable.";
-            if (data.GlobalRTDTrendStrength) {
-                if (data.GlobalRTDTrendStrength === RTDTrendStrength.Strong) {
-                    minusScore = 5;
-                } else if (data.GlobalRTDTrendStrength === RTDTrendStrength.Average) {
-                    minusScore = 4;
-                } else if (data.GlobalRTDTrendStrength === RTDTrendStrength.Low) {
-                    minusScore = 3;
-                } else {
-                    minusScore = 2;
-                }
-            }
-            return {
-                name: "Global Trend",
-                valid: data.GlobalRTD,
-                minusScore: data.GlobalRTD ? 0 : minusScore,
-                tooltip: tooltip,
-                type: ChecklistItemType.GlobalRTD
-            };
-        }
-    },
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let tooltip = data.Levels ? "Good entry, you are buying into support." : "Warning! You are buying into resistance. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run.";
-            if (config.side === OrderSide.Sell) {
-                tooltip = data.Levels ? "Good entry, you are selling into resistance." : "Warning! You are selling into support. You are most likely chasing the market, and while this may be fun and profitable for a short time, you will lose all your money in the long run.";
-            }
-
-            return {
-                name: "Trade Entry",
-                valid: data.Levels,
-                minusScore: data.Levels ? 0 : 2,
-                tooltip: tooltip,
-                type: ChecklistItemType.Levels
-            };
-        }
-    },
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let value = "";
-            let valid = true;
-            let minusScore = 0;
-            let tooltip = "";
-            if (data.PositionRiskValue !== null && data.PositionRiskValue !== undefined) {
-                value = data.PositionRiskValue.toFixed(2) + "%";
-
-                const risk = TradingHelper.convertValueToOrderRiskClass(data.PositionRiskValue);
-                if (risk === RiskClass.Extreme) {
-                    minusScore = 5;
-                    valid = false;
-                } else if (risk === RiskClass.High) {
-                    minusScore = 3;
-                    valid = false;
-                }
-
-                tooltip = valid ? "You are using adequate leverage sized for this position. " : "WARNING! You are about to enter an overleveraged trade. This is the main reason simple humans continue to lose in trading because they love to gamble.";
-            }
-
-            return {
-                name: "Leverage",
-                valid: valid,
-                value: value,
-                minusScore: valid ? 0 : minusScore,
-                tooltip: tooltip,
-                type: ChecklistItemType.Leverage
-            };
-        }
-    },
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let value = "";
-            let valid = true;
-            let minusScore = 0;
-            let tooltip = "";
-            if (data.CorrelatedRiskValue !== null && data.CorrelatedRiskValue !== undefined) {
-                value = data.CorrelatedRiskValue.toFixed(2) + "%";
-
-                const risk = TradingHelper.convertValueToAssetRiskClass(data.CorrelatedRiskValue);
-                if (risk === RiskClass.Extreme) {
-                    minusScore = 5;
-                    valid = false;
-                } else if (risk === RiskClass.High) {
-                    minusScore = 3;
-                    valid = false;
-                }
-
-                tooltip = valid ? "You have no major correlated risk in your open/pending orders." : "WARNING! If you take this trade, you will be overexposing and taking a too much-correlated risk. This means you will lose or win a much higher amount than usual and likely lead to losing your account in the long run. Avoid this trade and look to other markets.";
-
-            }
-            return {
-                name: "Correlated Risk",
-                valid: valid,
-                value: value,
-                minusScore: valid ? 0 : minusScore,
-                tooltip: tooltip,
-                type: ChecklistItemType.CorrelatedRisk
-            };
-        }
-    },
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let value = "";
-            let valid = null;
-            let minusScore = 0;
-            if (data.SpreadRiskValue !== null && data.SpreadRiskValue !== undefined) {
-                value = data.SpreadRiskValue.toFixed(2) + "%";
-                valid = data.SpreadRiskValue < 0.1;
-            }
-            return {
-                name: "Spread",
-                valid: valid,
-                value: value,
-                minusScore: valid ? 0 : minusScore,
-                tooltip: valid ? "Your broker has acceptable spread on this market." : "Warning! Your broker is offering you a bad spread on this market. Be very careful as this can lead to a total loss of your trading account on the wrong markets.",
-                type: ChecklistItemType.Spread
-            };
-        }
-    },
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            const isValid = !!config.sl;
-
-            if (data.isSLReversed) {
-                return {
-                    name: "Stoploss",
-                    valid: false,
-                    minusScore: 10,
-                    tooltip: "Your stoploss is on the wrong side of this trade, please pay attention.",
-                    type: ChecklistItemType.Stoploss
-                };
-            }
-
-            if (data.isSLToClose) {
-                return {
-                    name: "Stoploss",
-                    valid: false,
-                    minusScore: 2,
-                    tooltip: "This stoploss has a high risk of being stopped out with the current volatility of this market. Please rethink this stoploss.",
-                    type: ChecklistItemType.Stoploss
-                };
-            }
-
-            if (data.isSLToFare) {
-                return {
-                    name: "Stoploss",
-                    valid: false,
-                    minusScore: 2,
-                    tooltip: "Stoploss unreasonable far from the entry price.",
-                    type: ChecklistItemType.Stoploss
-                };
-            }
-
-            return {
-                name: "Stoploss",
-                valid: isValid,
-                minusScore: isValid ? 0 : 3,
-                tooltip: isValid ? "You have set a reasonable stoploss for the trade. A basic but very important discipline for successful trading, when it comes to humans." : "Warning! You are missing stoploss for this trade. Trading without stoploss is risky business and a classic trait of the average losing human trader. ",
-                type: ChecklistItemType.Stoploss
-            };
-        }
-    },
-    {
-        calculate: (data: MTOrderValidationChecklist, config: MTOrderConfig): ChecklistItem => {
-            let value = "";
-            let valid = null;
-            let minusScore = 0;
-            if (data.FeedBrokerSpread !== null && data.FeedBrokerSpread !== undefined) {
-                value = (data.FeedBrokerSpread * 100).toFixed(0) + " BPS";
-                valid = data.FeedBrokerSpread < 0.03;
-            }
-            return {
-                name: "Price offset",
-                valid: valid,
-                value: value,
-                minusScore: valid ? 0 : minusScore,
-                tooltip: valid ? "The navigator datafeed and the connected broker feed for this market are aligned within an acceptable price range." : "Warning! The navigator datafeed and the connected broker feed for this market are not aligned within an acceptable price range. Price offset required.",
-                type: ChecklistItemType.PriceOffset
-            };
-        }
-    }
-];
-
-
 
 export class MTOrderConfig {
     instrument: IInstrument;
@@ -368,7 +110,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _canChangeInstrument: boolean = true;
     private _destroyed: boolean = false;
     private _wrongInstrumentShown: boolean = false;
-    private _orderValidationChecklist: MTOrderValidationChecklist;
+    private _orderValidationChecklist: OrderValidationChecklist;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
@@ -606,11 +348,11 @@ export class MTOrderConfiguratorComponent implements OnInit {
         }
     }
 
-    private _buildCalculateChecklistResults(data: MTOrderValidationChecklist) {
+    private _buildCalculateChecklistResults(data: OrderValidationChecklist) {
         if (this._destroyed) {
             return;
         }
-        
+
         this._orderValidationChecklist = data;
 
         this.checklistItems = [];

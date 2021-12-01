@@ -10,13 +10,15 @@ import { BinanceFutureLoginResponse } from "modules/Trading/models/crypto/binanc
 import { BinanceConnectionData, BinanceFund, BinanceHistoricalOrder, BinanceHistoricalTrade, BinanceOrder, BinanceSpotTradingAccount } from "modules/Trading/models/crypto/binance/binance.models";
 import { BinanceSpotBookPriceResponse, BinanceSpotLoginRequest, BinanceSpotOpenOrderResponse, BinanceSpotOrderHistoryResponse, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountBalance, IBinanceSpotAccountInfoData, IBinanceSpotHistoricalOrder, IBinanceSpotOrder, IBinanceSpotOrderUpdateData, IBinanceSpotTrade, IBinanceSpotWalletBalance, SpotOrderStatus } from "modules/Trading/models/crypto/binance/binance.models.communication";
 import { IBinancePrice, IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
-import { ActionResult, BrokerConnectivityStatus, IOrder, OrderSide, OrderTypes } from "modules/Trading/models/models";
+import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
+import { ActionResult, BrokerConnectivityStatus, IOrder, OrderSide, OrderTypes, RiskClass } from "modules/Trading/models/models";
 import { Subject, Observable, of, Subscription, Observer, combineLatest, throwError } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { TradingHelper } from "../mt/mt.helper";
 import { BinanceSpotSocketService } from "../socket/binance-spot.socket.service";
+import { BinanceTradeRatingService } from "./binance.trade-rating.service";
 
 export class BinanceBroker implements IBroker {
     protected _tickSubscribers: { [symbol: string]: Subject<ITradeTick>; } = {};
@@ -35,6 +37,7 @@ export class BinanceBroker implements IBroker {
     protected _onOrderUpdateSubject: Subscription;
     protected _onAccountUpdateSubject: Subscription;
     protected _onPositionsUpdateSubject: Subscription;
+    protected _tradeRatingService: BinanceTradeRatingService;
 
     protected get _accountName(): string {
         return "30000000000";
@@ -85,6 +88,7 @@ export class BinanceBroker implements IBroker {
     }
 
     constructor(@Inject(BinanceSpotSocketService) protected ws: BinanceSpotSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        this._tradeRatingService = new BinanceTradeRatingService(this, algoService, _instrumentMappingService);
     }
 
     placeOrder(order: any): Observable<ActionResult> {
@@ -315,7 +319,7 @@ export class BinanceBroker implements IBroker {
             this._onReconnectSubscription.unsubscribe();
         }
 
-        this._symbolToAsset = {};        
+        this._symbolToAsset = {};
 
         this.ws.setConnectivity(false);
         this.ws.dispose();
@@ -468,6 +472,10 @@ export class BinanceBroker implements IBroker {
         }));
     }
 
+    calculateOrderChecklist(parameters: OrderValidationChecklistInput): Observable<OrderValidationChecklist> {
+        return this._tradeRatingService.calculateOrderChecklist(parameters);
+    }
+
     protected _loadPendingOrders() {
         return this.ws.getOpenOrders().subscribe((response: BinanceSpotOpenOrderResponse) => {
             if (!response || !response.Data || !response.IsSuccess) {
@@ -479,6 +487,7 @@ export class BinanceBroker implements IBroker {
             }
 
             this.orders = this._parseOrders(response.Data.Orders);
+            this._buildRates();
             this.onOrdersUpdated.next(this.orders);
             this._trySubscribeToAll();
         });
@@ -699,6 +708,8 @@ export class BinanceBroker implements IBroker {
             }
         }
 
+        this._buildRates();
+
         this.onOrdersUpdated.next(this.orders);
     }
 
@@ -715,7 +726,7 @@ export class BinanceBroker implements IBroker {
     protected _subscribeOnLastPrice(symbol: string) {
         if (this._lastPriceSubscribers.indexOf(symbol) >= 0) {
             return;
-        } 
+        }
 
         this._lastPriceSubscribers.push(symbol);
         this.ws.subscribeOnOrderBook(symbol).subscribe();
@@ -749,5 +760,54 @@ export class BinanceBroker implements IBroker {
 
     private _updateOrderByQuote(order: BinanceOrder, quote: ITradeTick) {
         order.CurrentPrice = order.Side === OrderSide.Buy ? quote.bid : quote.ask;
+    }
+
+    protected _buildRates() {
+        for (const order of this.orders) {
+            let risk = 0;
+
+            order.RiskClass = RiskClass.Calculating;
+
+            let instrument = this._instruments.find(_ => _.id === order.Symbol);
+            if (!instrument) {
+                continue;
+            }
+
+            let asset = this.funds.find(_ => _.Coin === instrument.dependInstrument);
+            if (!asset) {
+                continue;
+            }
+
+            if (order.SL) {
+                risk = TradingHelper.buildRiskByPrice(1, 1, order.Size, order.Price, order.SL, asset.AvailableBalance);
+                if (order.Side === OrderSide.Buy) {
+                    if (order.Price <= order.SL) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                } else {
+                    if (order.Price >= order.SL) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                }
+            }
+            // else if (order.VAR) {
+            //     risk = order.VAR;
+            //     if (!risk) {
+            //         continue;
+            //     }
+            // }
+
+            order.Risk = Math.roundToDecimals(asset.AvailableBalance / 100 * risk, 2);
+            order.RiskPercentage = Math.roundToDecimals(risk, 2);
+            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(risk);
+        }
     }
 }

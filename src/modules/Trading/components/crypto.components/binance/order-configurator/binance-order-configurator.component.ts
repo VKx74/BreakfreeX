@@ -13,7 +13,9 @@ import { memoize } from "@decorators/memoize";
 import bind from "bind-decorator";
 import { MatDialog } from '@angular/material/dialog';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
-
+import { BinanceBroker } from '@app/services/binance/binance.broker';
+import { BinanceOrderConfigurationChecklist } from '../../common/binance-order-configuration-checklist';
+import { BinanceFuturesBroker } from '@app/services/binance-futures/binance-futures.broker';
 
 // stopPrice - Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders.
 // icebergQty - Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order.
@@ -27,6 +29,8 @@ export class BinanceOrderConfig {
     icebergQty?: number;
     tif?: TimeInForce;
     useIcebergQty?: boolean;
+    timeframe?: number;
+    lastPrice?: number;
 
     static createLimit(): BinanceOrderConfig {
         const order = this.create();
@@ -63,17 +67,16 @@ export class BinanceOrderConfig {
         },
     ]
 })
-export class BinanceOrderConfiguratorComponent implements OnInit {
+export class BinanceOrderConfiguratorComponent extends BinanceOrderConfigurationChecklist implements OnInit {
     private _config: BinanceOrderConfig = BinanceOrderConfig.createMarket();
     private marketSubscription: Subscription;
-    OrderTypes = OrderTypes;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
     @Output() onOrderPlaced = new EventEmitter<any>();
     @Output() onInstrumentSelected = new EventEmitter<string>();
+    
     @Input()
-
     set config(value: BinanceOrderConfig) {
         if (value) {
             this._config = value;
@@ -84,12 +87,18 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
         return this._config;
     }
 
+    get broker(): BinanceBroker | BinanceFuturesBroker {
+        return this._brokerService.activeBroker as any;
+    }
+    get dialog(): MatDialog {
+        return this._dialog;
+    }
+
     minAmountValue: number = 0.01;
     minPriceValue: number = 0.000001;
     priceStep: number = 0.00001;
     amountStep: number = 0.0001;
     decimals: number = 5;
-    lastTick: ITradeTick = null;
     allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.StopLoss, OrderTypes.StopLossLimit, OrderTypes.TakeProfit, OrderTypes.TakeProfitLimit, OrderTypes.LimitMaker];
     allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing, TimeInForce.GoodTillExpiredOrCanceled];
     processingSubmit: boolean;
@@ -104,6 +113,7 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
         private _alertService: AlertService,
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
+        super();
         this._config = BinanceOrderConfig.createMarket();
     }
 
@@ -176,6 +186,7 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
 
     handleTypeSelected(type: OrderTypes) {
         this.config.type = type;
+        this._raiseCalculateChecklist();
     }
 
     handleTIFSelected(type: TimeInForce) {
@@ -203,6 +214,11 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
                 this._config.price = 0;
             }
 
+            this.checklistItems = [];
+            this._setCalculatingChecklistStatus(true);
+            this._recalculatePossible = true;
+            this._wrongInstrumentShown = false;
+
             broker.getPrice(symbol).subscribe((tick: ITradeTick) => {
                 if (!tick || tick.symbol !== this.config.instrument.symbol) {
                     return;
@@ -228,15 +244,6 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
             this.onSubmitted.emit();
         } else {
             this._placeOrder();
-        }
-    }
-
-    private _setTick(tick: ITradeTick) {
-        this.lastTick = tick;
-        const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
-
-        if (tick && !this._config.price) {
-            this._config.price = price;
         }
     }
 
@@ -291,13 +298,16 @@ export class BinanceOrderConfiguratorComponent implements OnInit {
 
     setBuyMode() {
         this.config.side = OrderSide.Buy;
+        this._raiseCalculateChecklist();
     }
 
     setSellMode() {
         this.config.side = OrderSide.Sell;
+        this._raiseCalculateChecklist();
     }
 
     ngOnDestroy() {
+        super.ngOnDestroy();
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
         }

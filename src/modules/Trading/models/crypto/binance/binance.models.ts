@@ -1,4 +1,4 @@
-import { IConnectionData, IOrder, OrderSide, OrderTypes } from "../../models";
+import { IConnectionData, IOrder, IOrderRisk, OrderSide, OrderTypes } from "../../models";
 import { BinanceEnvironment } from "../shared/models.communication";
 
 export interface BinanceConnectionData extends IConnectionData {
@@ -19,7 +19,7 @@ export interface BinanceFund {
     LockedBalance: number;
 }
 
-export interface BinanceOrder extends IOrder {
+export interface BinanceOrder extends IOrder, IOrderRisk {
     Status: string;
     Time: number;
     ExecutedSize: number;

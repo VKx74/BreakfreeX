@@ -1,9 +1,10 @@
 import {Observable, Subject, Subscription} from "rxjs";
 import {IBroker} from "./broker";
-import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice as EditOrderPrice, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice as EditOrderPrice } from 'modules/Trading/models/forex/mt/mt.models';
 import { ActionResult, BrokerConnectivityStatus, CurrencyRisk, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { ITradeTick } from '@app/models/common/tick';
 import { IInstrument } from '@app/models/common/instrument';
+import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
 
 export interface IMT5Broker extends IBroker {
     onAccountInfoUpdated: Subject<MTTradingAccount>;
@@ -36,5 +37,5 @@ export interface IMT5Broker extends IBroker {
     getRelatedPositionsRisk(symbol: string, side: OrderSide): number;
     getSamePositionsRisk(symbol: string, side: OrderSide): number;
     canCalculateHighestVAR(orderType?: OrderTypes): boolean;
-    calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist>;
+    calculateOrderChecklist(parameters: OrderValidationChecklistInput): Observable<OrderValidationChecklist>;
 }

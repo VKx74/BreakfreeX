@@ -9,10 +9,12 @@ import { BinanceFutureBookPriceResponse, BinanceFutureLoginRequest, BinanceFutur
 import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesHistoricalTrade, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount, IBinanceFuturesPlaceOrderData } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData } from "modules/Trading/models/crypto/binance/binance.models";
 import { IBinancePrice, IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
-import { ActionResult, BrokerConnectivityStatus, IOrder, IPosition, OrderSide, OrderTypes } from "modules/Trading/models/models";
+import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
+import { ActionResult, BrokerConnectivityStatus, IOrder, IPosition, OrderSide, OrderTypes, RiskClass } from "modules/Trading/models/models";
 import { Subject, Observable, of, Subscription, Observer, throwError, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
+import { BinanceTradeRatingService } from "../binance/binance.trade-rating.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { TradingHelper } from "../mt/mt.helper";
 import { BinanceFuturesSocketService } from "../socket/binance-futures.socket.service";
@@ -36,6 +38,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
     protected _onOrderUpdateSubject: Subscription;
     protected _onAccountUpdateSubject: Subscription;
     protected _onPositionsUpdateSubject: Subscription;
+    protected _tradeRatingService: BinanceTradeRatingService;
 
     protected abstract get _accountName(): string;
     protected abstract get _server(): string;
@@ -98,6 +101,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
     }
 
     constructor(protected ws: BinanceFuturesSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        this._tradeRatingService = new BinanceTradeRatingService(this, algoService, _instrumentMappingService);
     }
 
     placeOrder(order: IBinanceFuturesPlaceOrderData): Observable<ActionResult> {
@@ -416,6 +420,10 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
         return null;
     }
+    
+    calculateOrderChecklist(parameters: OrderValidationChecklistInput): Observable<OrderValidationChecklist> {
+        return this._tradeRatingService.calculateOrderChecklist(parameters);
+    }
 
     protected _parseOrdersHistory(orders: IBinanceFutureHistoricalOrder[]): BinanceFuturesHistoricalOrder[] {
         const response: BinanceFuturesHistoricalOrder[] = [];
@@ -527,6 +535,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
             }
 
             this.orders = this._parseOrders(response.Data.Orders);
+            this._buildRates();
             this.onOrdersUpdated.next(this.orders);
             this._trySubscribeToAll();
         });
@@ -854,6 +863,7 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
             }
         }
 
+        this._buildRates();
         this.onOrdersUpdated.next(this.orders);
     }
 
@@ -1080,6 +1090,55 @@ export abstract class BinanceFuturesBroker implements IBroker, IPositionBasedBro
 
     private _updateOrderByQuote(order: BinanceFuturesOrder, quote: IBinancePrice) {
         order.CurrentPrice = quote.Price;
+    }
+    
+    protected _buildRates() {
+        for (const order of this.orders) {
+            let risk = 0;
+
+            order.RiskClass = RiskClass.Calculating;
+
+            let instrument = this._instruments.find(_ => _.id === order.Symbol);
+            if (!instrument) {
+                continue;
+            }
+
+            let asset = this.assets.find(_ => _.Asset === instrument.dependInstrument);
+            if (!asset) {
+                continue;
+            }
+
+            if (order.SL) {
+                risk = TradingHelper.buildRiskByPrice(1, 1, order.Size, order.Price, order.SL, asset.WalletBalance);
+                if (order.Side === OrderSide.Buy) {
+                    if (order.Price <= order.SL) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                } else {
+                    if (order.Price >= order.SL) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                }
+            }
+            // else if (order.VAR) {
+            //     risk = order.VAR;
+            //     if (!risk) {
+            //         continue;
+            //     }
+            // }
+
+            order.Risk = Math.roundToDecimals(asset.WalletBalance / 100 * risk, 2);
+            order.RiskPercentage = Math.roundToDecimals(risk, 2);
+            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(risk);
+        }
     }
 
 }

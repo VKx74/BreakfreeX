@@ -1,4 +1,4 @@
-import { IOrder, IPosition, OrderSide, OrderTypes, TimeInForce } from "../../models";
+import { IOrder, IOrderRisk, IPosition, OrderSide, OrderTypes, TimeInForce } from "../../models";
 import { BinanceEnvironment } from "../shared/models.communication";
 
 export interface BinanceFuturesAsset {
@@ -52,7 +52,7 @@ export interface BinanceFuturesHistoricalOrder extends IOrder {
     TIF: string;
 }
 
-export interface BinanceFuturesOrder extends IOrder {
+export interface BinanceFuturesOrder extends IOrder, IOrderRisk {
     Status: string;
     Time: number;
     ExecutedSize: number;

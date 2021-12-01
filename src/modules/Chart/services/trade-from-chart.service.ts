@@ -1099,6 +1099,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
         }
 
+
+        orderConfig.timeframe = params.timeframe;
+        orderConfig.lastPrice = this._getLastPrice();
         orderConfig.amount = params.size;
         orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
         return orderConfig;
@@ -1117,6 +1120,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
         }
 
+        orderConfig.timeframe = params.timeframe;
+        orderConfig.lastPrice = this._getLastPrice();
         orderConfig.amount = params.size;
         orderConfig.side = params.side.toLowerCase() === "buy" ? OrderSide.Buy : OrderSide.Sell;
         return orderConfig;

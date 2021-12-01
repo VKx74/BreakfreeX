@@ -1,10 +1,11 @@
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
+import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
 import { MTSymbolTradeInfoResponse } from "modules/Trading/models/forex/mt/mt.communication";
-import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTOrderValidationChecklist, MTOrderValidationChecklistInput, MTPendingOrderRecommendation, MTPosition, MTPositionRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
+import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTPendingOrderRecommendation, MTPosition, MTPositionRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
 import { OrderSide, OrderTypes, RiskClass, RiskType } from "modules/Trading/models/models";
-import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
+import { Observable, of, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import { AlgoService, IBFTAMarketInfo, IBFTAMarketInfoData, IBFTATrend } from "../algo.service";
+import { AlgoService, IBFTAMarketInfoData, IBFTATrend } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { RealtimeService } from "../realtime.service";
 import { MTBroker } from "./mt.broker";
@@ -65,7 +66,7 @@ export class MTTradeRatingService {
 
     }
 
-    public calculateOrderChecklist(parameters: MTOrderValidationChecklistInput): Observable<MTOrderValidationChecklist> {
+    public calculateOrderChecklist(parameters: OrderValidationChecklistInput): Observable<OrderValidationChecklist> {
         const symbol = parameters.Symbol;
         const timeframe = parameters.Timeframe;
         let marketInfo = this._tryGetMarketInfoFromCache(symbol, timeframe);
@@ -462,8 +463,8 @@ export class MTTradeRatingService {
         return this._marketInfoCache[key].Data;
     }
 
-    protected _calculateOrderChecklist(marketInfo: IBFTAMarketInfoData, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: MTOrderValidationChecklistInput): MTOrderValidationChecklist {
-        let result: MTOrderValidationChecklist = {};
+    protected _calculateOrderChecklist(marketInfo: IBFTAMarketInfoData, symbolTradeInfo: MTSymbolTradeInfoResponse, parameters: OrderValidationChecklistInput): OrderValidationChecklist {
+        let result: OrderValidationChecklist = {};
 
         if (parameters.SL && parameters.Price) {
             if (parameters.Side === OrderSide.Buy && parameters.SL >= parameters.Price) {

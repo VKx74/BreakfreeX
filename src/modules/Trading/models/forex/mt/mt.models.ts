@@ -94,40 +94,6 @@ export interface MTConnectionData extends IConnectionData {
     Password: string;
 }
 
-export interface MTOrderValidationChecklistInput {
-    Symbol: string;
-    Timeframe?: number;
-    LastPrice?: number;
-    Side: OrderSide;
-    Size: number;
-    Price?: number;
-    SL?: number;
-    ExistingOrderID?: number;
-}
-
-export interface MTOrderValidationChecklist {
-    GlobalRTD?: boolean;
-    LocalRTD?: boolean;
-    Levels?: boolean;
-
-    GlobalRTDValue?: IBFTATrend;
-    LocalRTDValue?: IBFTATrend;
-    LocalRTDSpread?: number;
-    GlobalRTDSpread?: number;
-    LocalRTDTrendStrength?: RTDTrendStrength;
-    GlobalRTDTrendStrength?: RTDTrendStrength;
-    OrderRiskValue?: number;
-    PositionRiskValue?: number;
-    SpreadRiskValue?: number;
-    FeedBrokerSpread?: number;
-    FeedBrokerSpreadValue?: number;
-    CorrelatedRiskValue?: number;
-    cVar?: number;
-    isSLReversed?: boolean;
-    isSLToClose?: boolean;
-    isSLToFare?: boolean;
-}
-
 export enum RTDTrendStrength {
     Strong = "Strong",
     Average = "Average",

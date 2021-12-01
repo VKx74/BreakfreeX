@@ -15,6 +15,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-manager/order-configurator-modal/order-configurator-modal.component';
 import { IBinanceFuturesPlaceOrderData } from 'modules/Trading/models/crypto/binance-futures/binance-futures.models';
 import { EBrokerInstance } from '@app/interfaces/broker/broker';
+import { BinanceOrderConfigurationChecklist } from '../../common/binance-order-configuration-checklist';
+import { BinanceBroker } from '@app/services/binance/binance.broker';
+import { BinanceFuturesBroker } from '@app/services/binance-futures/binance-futures.broker';
 
 
 export class BinanceFuturesOrderConfig {
@@ -25,6 +28,8 @@ export class BinanceFuturesOrderConfig {
     price?: number;
     stopPrice?: number;
     tif?: TimeInForce;
+    timeframe?: number;
+    lastPrice?: number;
 
     static createLimit(brokerType: EBrokerInstance): BinanceFuturesOrderConfig {
         const order = this.create(brokerType);
@@ -61,10 +66,9 @@ export class BinanceFuturesOrderConfig {
         },
     ]
 })
-export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
+export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfigurationChecklist implements OnInit {
     private _config: BinanceFuturesOrderConfig;
     private marketSubscription: Subscription;
-    OrderTypes = OrderTypes;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
     @Output() onSubmitted = new EventEmitter<any>();
@@ -82,12 +86,19 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
         return this._config;
     }
 
+    get broker(): BinanceBroker | BinanceFuturesBroker {
+        return this._brokerService.activeBroker as any;
+    }
+
+    get dialog(): MatDialog {
+        return this._dialog;
+    }
+
     minAmountValue: number = 0.01;
     minPriceValue: number = 0.000001;
     priceStep: number = 0.00001;
     amountStep: number = 0.01;
     decimals: number = 5;
-    lastTick: ITradeTick = null;
     allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.Stop, OrderTypes.TakeProfit, OrderTypes.StopMarket, OrderTypes.TakeProfitMarket];
     allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing, TimeInForce.GoodTillExpiredOrCanceled];
     processingSubmit: boolean;
@@ -102,6 +113,7 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
         private _alertService: AlertService,
         private _translateService: TranslateService,
         private _brokerService: BrokerService) {
+            super();
             this.amountStep = this._brokerService.activeBroker.instanceType === EBrokerInstance.BinanceFuturesCOIN ? 1 : 0.1;
             this._config = BinanceFuturesOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
     }
@@ -199,6 +211,11 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
             if (resetPrice) {
                 this._config.price = 0;
             }
+            
+            this.checklistItems = [];
+            this._setCalculatingChecklistStatus(true);
+            this._recalculatePossible = true;
+            this._wrongInstrumentShown = false;
 
             broker.getPrice(symbol).subscribe((tick: ITradeTick) => {
                 if (!tick || tick.symbol !== this.config.instrument.symbol) {
@@ -225,15 +242,6 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
             this.onSubmitted.emit();
         } else {
             this._placeOrder();
-        }
-    }
-
-    private _setTick(tick: ITradeTick) {
-        this.lastTick = tick;
-        const price = this._config.side === OrderSide.Buy ? tick.ask : tick.bid;
-
-        if (tick && !this._config.price) {
-            this._config.price = price;
         }
     }
 
@@ -284,13 +292,16 @@ export class BinanceFuturesOrderConfiguratorComponent implements OnInit {
 
     setBuyMode() {
         this.config.side = OrderSide.Buy;
+        this._raiseCalculateChecklist();
     }
 
     setSellMode() {
         this.config.side = OrderSide.Sell;
+        this._raiseCalculateChecklist();
     }
 
     ngOnDestroy() {
+        super.ngOnDestroy();
         if (this.marketSubscription) {
             this.marketSubscription.unsubscribe();
         }
