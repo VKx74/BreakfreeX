@@ -1,4 +1,4 @@
-import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType, IConnectionData, IOrder, IOrderRisk, IPlaceOrder } from 'modules/Trading/models/models';
+import { OrderSide, OrderTypes, OrderFillPolicy, OrderExpirationType, OrderTradeType, OrderPlacedFrom, RiskClass, RiskType, IConnectionData, IOrder, IOrderRisk, IPlaceOrder, CurrencyRiskType } from 'modules/Trading/models/models';
 import { IBFTATrend } from '@app/services/algo.service';
 
 export interface MTTradingAccount {
@@ -81,23 +81,6 @@ export interface MTPosition {
     Recommendations?: MTOrderRecommendation;
 }
 
-export enum MTCurrencyRiskType {
-    Actual = "Actual",
-    Pending = "Pending"
-}
-
-export interface MTCurrencyRisk {
-    Currency: string;
-    Type: MTCurrencyRiskType;
-    OrdersCount: number;
-    Risk?: number;
-    RiskPercentage?: number;
-    Side: OrderSide;
-    RiskClass: RiskClass;
-    // PendingOrdersCount: number;
-    // PendingRisk?: number;
-    // PendingRiskPercentage?: number;
-}
 
 export interface MTServer {
     Broker: string;
@@ -109,13 +92,6 @@ export interface MTConnectionData extends IConnectionData {
     ServerName: string;
     Login: number;
     Password: string;
-}
-
-export interface MTCurrencyVarRisk {
-    Currency: string;
-    Risk: number;
-    Type: MTCurrencyRiskType;
-    OrdersCount: number;
 }
 
 export interface MTOrderValidationChecklistInput {

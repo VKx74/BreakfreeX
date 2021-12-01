@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import { CurrencyRisk } from 'modules/Trading/models/models';
 import {Observable, Subscription, of} from "rxjs";
 import { MTItemsComponent } from '../mt-items.component';
-import { MTCurrencyRisk } from 'modules/Trading/models/forex/mt/mt.models';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { MTCurrencyRisk } from 'modules/Trading/models/forex/mt/mt.models';
     styleUrls: ['./mt-currency-risk.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
+export class MTCurrencyRiskComponent extends MTItemsComponent<CurrencyRisk> {
     protected get _defaultHiddenColumns(): string[] {
         return [];
     }
@@ -23,7 +23,7 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
     public groupingField: string = "Type";
     public maxRisk: number = 5;
 
-    protected loadItems(): Observable<MTCurrencyRisk[]> {
+    protected loadItems(): Observable<CurrencyRisk[]> {
        return of(this._mtBroker.currencyRisks);
     }
 
@@ -37,7 +37,7 @@ export class MTCurrencyRiskComponent extends MTItemsComponent<MTCurrencyRisk> {
         super.ngOnDestroy();
     }
 
-    riskClass(item: MTCurrencyRisk) {
+    riskClass(item: CurrencyRisk) {
         if (item.RiskPercentage < 3.5) {
             return "low-risk";
         }

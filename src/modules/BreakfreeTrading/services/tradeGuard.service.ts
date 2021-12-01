@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
-import { MTCurrencyRisk, MTMarketOrderRecommendation, MTOrder, MTPendingOrderRecommendation, MTPosition, MTPositionRecommendation } from 'modules/Trading/models/forex/mt/mt.models';
-import { RiskClass, RiskObject, RiskType } from 'modules/Trading/models/models';
+import { MTMarketOrderRecommendation, MTPendingOrderRecommendation, MTPositionRecommendation } from 'modules/Trading/models/forex/mt/mt.models';
+import { CurrencyRisk, RiskClass, RiskObject, RiskType } from 'modules/Trading/models/models';
 
 export interface ITradeGuardItem {
     Issue: string;
@@ -73,7 +73,7 @@ export class TradeGuardService {
         }
         
         const currencyRisks = broker.currencyRisks;
-        const relatedData: MTCurrencyRisk[] = [];
+        const relatedData: CurrencyRisk[] = [];
         let risks = 0;
 
         for (const currencyRisk of currencyRisks) {

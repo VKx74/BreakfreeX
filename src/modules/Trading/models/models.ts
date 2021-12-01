@@ -160,3 +160,25 @@ export interface IPlaceOrder {
     TradeType?: OrderTradeType;
     PlacedFrom?: OrderPlacedFrom;
 }
+
+export enum CurrencyRiskType {
+    Actual = "Actual",
+    Pending = "Pending"
+}
+
+export interface CurrencyRisk {
+    Currency: string;
+    Type: CurrencyRiskType;
+    OrdersCount: number;
+    Risk?: number;
+    RiskPercentage?: number;
+    Side: OrderSide;
+    RiskClass: RiskClass;
+}
+
+export interface CurrencyVarRisk {
+    Currency: string;
+    Risk: number;
+    Type: CurrencyRiskType;
+    OrdersCount: number;
+}

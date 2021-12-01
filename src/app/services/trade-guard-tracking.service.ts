@@ -1,12 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IdentityService } from "@app/services/auth/identity.service";
 import { NotificationsService, NotificationType } from "@alert/services/notifications.service";
-import { IBFTMission, TradingProfileService } from "modules/BreakfreeTrading/services/tradingProfile.service";
-import { Subject, Subscription } from "rxjs";
-import { BrokerService } from "./broker.service";
-import { MTBroker } from "./mt/mt.broker";
-import { OrderTypes } from "modules/Trading/models/models";
-import { MTCurrencyRiskType } from "modules/Trading/models/forex/mt/mt.models";
 import { TradeGuardService } from "modules/BreakfreeTrading/services/tradeGuard.service";
 
 @Injectable()

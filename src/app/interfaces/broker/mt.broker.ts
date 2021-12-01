@@ -1,7 +1,7 @@
 import {Observable, Subject, Subscription} from "rxjs";
 import {IBroker} from "./broker";
-import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice as EditOrderPrice, MTCurrencyRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
-import { ActionResult, BrokerConnectivityStatus, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
+import { MTTradingAccount, MTOrder, MTPosition, MTPlaceOrder, MTEditOrder, MTEditOrderPrice as EditOrderPrice, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
+import { ActionResult, BrokerConnectivityStatus, CurrencyRisk, OrderFillPolicy, OrderSide, OrderTypes } from 'modules/Trading/models/models';
 import { ITradeTick } from '@app/models/common/tick';
 import { IInstrument } from '@app/models/common/instrument';
 
@@ -16,7 +16,7 @@ export interface IMT5Broker extends IBroker {
     orders: MTOrder[];
     ordersHistory: MTOrder[];
     positions: MTPosition[];
-    currencyRisks: MTCurrencyRisk[];
+    currencyRisks: CurrencyRisk[];
     accountInfo: MTTradingAccount;
     account: string;
 

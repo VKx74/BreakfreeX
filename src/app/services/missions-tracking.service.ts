@@ -5,8 +5,7 @@ import { IBFTMission, TradingProfileService } from "modules/BreakfreeTrading/ser
 import { Subject, Subscription } from "rxjs";
 import { BrokerService } from "./broker.service";
 import { MTBroker } from "./mt/mt.broker";
-import { OrderTypes } from "modules/Trading/models/models";
-import { MTCurrencyRiskType } from "modules/Trading/models/forex/mt/mt.models";
+import { CurrencyRiskType, OrderTypes } from "modules/Trading/models/models";
 import { LocalStorageService } from "Storage";
 
 @Injectable()
@@ -123,7 +122,7 @@ export class MissionTrackingService {
             varRisk = this.broker.calculateHighestVAR(OrderTypes.Market);
             const risks = this.broker.currencyRisks;
             for (const risk of risks) {
-                if (risk.Type !== MTCurrencyRiskType.Actual) {
+                if (risk.Type !== CurrencyRiskType.Actual) {
                     continue;
                 }
 

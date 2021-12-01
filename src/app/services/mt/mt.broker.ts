@@ -1,10 +1,10 @@
 import { Observable, Subject, Observer, of, Subscription, throwError, forkJoin, combineLatest } from "rxjs";
 import { IMT5Broker as IMTBroker } from '@app/interfaces/broker/mt.broker';
-import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTCurrencyRisk, MTCurrencyRiskType, MTHistoricalOrder, MTCurrencyVarRisk, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
+import { MTTradingAccount, MTPlaceOrder, MTEditOrder, MTOrder, MTPosition, MTConnectionData, MTEditOrderPrice, MTHistoricalOrder, MTOrderValidationChecklist, MTOrderValidationChecklistInput } from 'modules/Trading/models/forex/mt/mt.models';
 import { EBrokerInstance, EBrokerNotification, IBrokerNotification, IBrokerState } from '@app/interfaces/broker/broker';
 import { EExchange } from '@app/models/common/exchange';
 import { IInstrument } from '@app/models/common/instrument';
-import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass, BrokerConnectivityStatus } from 'modules/Trading/models/models';
+import { OrderTypes, ActionResult, OrderSide, OrderExpirationType, OrderFillPolicy, RiskClass, BrokerConnectivityStatus, CurrencyRisk, CurrencyRiskType } from 'modules/Trading/models/models';
 import { MTLoginRequest, MTLoginResponse, MTPlaceOrderRequest, MTEditOrderRequest, MTCloseOrderRequest, IMTAccountUpdatedData, IMTOrderData, MTGetOrderHistoryRequest, IMTSymbolData, MTSymbolTradeInfoResponse } from 'modules/Trading/models/forex/mt/mt.communication';
 import { EMarketType } from '@app/models/common/marketType';
 import { ITradeTick } from '@app/models/common/tick';
@@ -44,7 +44,7 @@ export abstract class MTBroker implements IMTBroker {
     protected _orders: MTOrder[] = [];
     protected _ordersHistory: MTHistoricalOrder[] = [];
     protected _positions: MTPosition[] = [];
-    protected _currencyRisks: MTCurrencyRisk[] = [];
+    protected _currencyRisks: CurrencyRisk[] = [];
     protected _accountInfo: MTTradingAccount = {
         Account: "",
         Balance: 0,
@@ -137,7 +137,7 @@ export abstract class MTBroker implements IMTBroker {
         return this._positions;
     }
 
-    public get currencyRisks(): MTCurrencyRisk[] {
+    public get currencyRisks(): CurrencyRisk[] {
         return this._currencyRisks;
     }
 
@@ -1191,7 +1191,7 @@ export abstract class MTBroker implements IMTBroker {
         }
     }
 
-    protected _createEmptyRisk(currency: string, type: MTCurrencyRiskType): MTCurrencyRisk {
+    protected _createEmptyRisk(currency: string, type: CurrencyRiskType): CurrencyRisk {
         return {
             Currency: currency,
             OrdersCount: 0,
@@ -1204,8 +1204,8 @@ export abstract class MTBroker implements IMTBroker {
     }
 
     protected _buildCurrencyRisks() {
-        const actualRisks: { [symbol: string]: MTCurrencyRisk } = {};
-        const pendingRisks: { [symbol: string]: MTCurrencyRisk } = {};
+        const actualRisks: { [symbol: string]: CurrencyRisk } = {};
+        const pendingRisks: { [symbol: string]: CurrencyRisk } = {};
         for (const order of this._orders) {
             if (!order.Risk) {
                 continue;
@@ -1216,7 +1216,7 @@ export abstract class MTBroker implements IMTBroker {
             const s1Part2 = s1.substring(3, 6).toUpperCase();
 
             const riskRef = order.Type === OrderTypes.Market ? actualRisks : pendingRisks;
-            const type = order.Type === OrderTypes.Market ? MTCurrencyRiskType.Actual : MTCurrencyRiskType.Pending;
+            const type = order.Type === OrderTypes.Market ? CurrencyRiskType.Actual : CurrencyRiskType.Pending;
 
             if (this._instrumentType[order.Symbol] && this._instrumentType[order.Symbol].toLowerCase() === 'forex') {
                 if (!riskRef[s1Part1]) {
@@ -1247,7 +1247,7 @@ export abstract class MTBroker implements IMTBroker {
         for (let i = 0; i < this._currencyRisks.length; i++) {
             let currencyRisk = this._currencyRisks[i];
 
-            if (currencyRisk.Type === MTCurrencyRiskType.Actual) {
+            if (currencyRisk.Type === CurrencyRiskType.Actual) {
                 if (actualRisks[currencyRisk.Currency] && actualRisks[currencyRisk.Currency].Risk) {
                     const risk = actualRisks[currencyRisk.Currency];
                     delete actualRisks[currencyRisk.Currency];
