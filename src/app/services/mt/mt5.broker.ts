@@ -55,7 +55,7 @@ export class BFTFundingDemoBroker extends MT5Broker {
     public get accountInfo(): MTTradingAccount {
         return {
             ...this._accountInfo,
-            CompanyName: "Breakfree Funding - Demo"
+            CompanyName: "Breakfree Funding - Stage 1"
         };
     }
     
