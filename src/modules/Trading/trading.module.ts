@@ -74,6 +74,8 @@ import { BinanceFuturesOrderParametersSelectionComponent } from './components/cr
 import { DemoOrdersComponent } from './components/trade-manager/demo-broker/orders/demo-orders.component';
 import { InfoNotificationComponent } from './components/forex.components/mt/order-configurator/notifications/info/info-notification.component';
 import { SpreadNotificationComponent } from './components/forex.components/mt/order-configurator/notifications/spread/spread-notification.component';
+import { BinanceFuturesCurrencyRiskComponent } from './components/crypto.components/binance-futures/currency-risk/binance-futures-currency-risk.component';
+import { BinanceCurrencyRiskComponent } from './components/crypto.components/binance/currency-risk/binance-currency-risk.component';
 
 const components = [
     TradeManagerComponent,
@@ -105,6 +107,7 @@ const components = [
     BinanceHistoryOrdersComponent,
     BinanceHistoryTradeComponent,
     BinancePendingOrdersComponent,
+    BinanceCurrencyRiskComponent,
 
     BinanceFuturesOrderConfiguratorComponent,
     BinanceFuturesAccountInfoBarComponent,
@@ -116,6 +119,7 @@ const components = [
     BinanceFuturesPendingOrdersComponent,
     BinanceFuturesAccountInfoComponent,
     BinanceFuturesOrderParametersSelectionComponent,
+    BinanceFuturesCurrencyRiskComponent,
 
     DemoOrdersComponent,
 

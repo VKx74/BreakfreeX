@@ -4,7 +4,7 @@ import { TradingHelper } from "@app/services/mt/mt.helper";
 import { BinanceOrderConfig } from "modules/Trading/components/crypto.components/binance/order-configurator/binance-order-configurator.component";
 import { MTOrderConfig } from "modules/Trading/components/forex.components/mt/order-configurator/mt-order-configurator.component";
 import { RTDTrendStrength } from "../../forex/mt/mt.models";
-import { OrderSide, RiskClass } from "../../models";
+import { OrderSide, OrderTypes, RiskClass } from "../../models";
 
 export interface OrderValidationChecklistInput {
     Symbol: string;
@@ -369,17 +369,24 @@ export class BinanceLevelsValidator implements BinanceChecklistItemDescription {
     }
 }
 
-// export class BinanceLeverageValidator implements BinanceChecklistItemDescription {
-//     calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {
-//         return LeverageValidatorFunction(data);
-//     }
-// }
+export class BinanceLeverageValidator implements BinanceChecklistItemDescription {
+    calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {
+        if (config.type !== OrderTypes.Market && config.type !== OrderTypes.Limit && config.type !== OrderTypes.Stop) {
+            return null;
+        }
+        return LeverageValidatorFunction(data);
+    }
+}
 
-// export class BinanceCorrelatedRiskValidator implements BinanceChecklistItemDescription {
-//     calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {
-//         return CorrelatedRiskValidatorFunction(data);
-//     }
-// }
+export class BinanceCorrelatedRiskValidator implements BinanceChecklistItemDescription {
+    calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {
+        if (config.type !== OrderTypes.Market && config.type !== OrderTypes.Limit && config.type !== OrderTypes.Stop) {
+            return null;
+        }
+        
+        return CorrelatedRiskValidatorFunction(data);
+    }
+}
 
 export class BinanceSpreadValidator implements BinanceChecklistItemDescription {
     calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {
@@ -387,11 +394,14 @@ export class BinanceSpreadValidator implements BinanceChecklistItemDescription {
     }
 }
 
-// export class BinanceStoplossValidator implements BinanceChecklistItemDescription {
-//     calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {
-//         return StoplossValidatorFunction(data, config.sl);
-//     }
-// }
+export class BinanceStoplossValidator implements BinanceChecklistItemDescription {
+    calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {
+        if (config.type !== OrderTypes.Market && config.type !== OrderTypes.Limit && config.type !== OrderTypes.Stop) {
+            return null;
+        }
+        return StoplossValidatorFunction(data, config.sl);
+    }
+}
 
 export class BinancePriceOffsetValidator implements BinanceChecklistItemDescription {
     calculate(data: OrderValidationChecklist, config: BinanceOrderConfig): ChecklistItem {

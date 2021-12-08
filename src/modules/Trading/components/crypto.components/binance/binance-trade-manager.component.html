@@ -15,4 +15,8 @@
         <binance-history-trades [selectedTabIndex]="selectedTabIndex" [selectedTabIndex]="selectedTabIndex" [tabIndex]="3"
             (onOpenChart)="handleOpenChart($event)"></binance-history-trades>
     </mat-tab>
+    <mat-tab label="{{'tradeManager.currencyRisk' | translate}}">
+        <binance-currency-risk [selectedTabIndex]="selectedTabIndex" [selectedTabIndex]="selectedTabIndex"
+            [tabIndex]="4"></binance-currency-risk>
+    </mat-tab>
 </mat-tab-group>

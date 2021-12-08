@@ -1,4 +1,4 @@
-import { ActionResult, BrokerConnectivityStatus, IOrder, IPlaceOrder, IPosition } from "../../../modules/Trading/models/models";
+import { ActionResult, BrokerConnectivityStatus, IOrder, IPlaceOrder, IPosition, OrderSide } from "../../../modules/Trading/models/models";
 import { EExchange } from "../../models/common/exchange";
 import { Observable, Subject, Subscription } from "rxjs";
 import { IInstrument } from "../../models/common/instrument";
@@ -85,5 +85,12 @@ export interface IBroker {
     instrumentAmountStep(symbol: string): number;
     getOrderById(orderId: number): any;
     getPrice(symbol: string): Observable<ITradeTick>;
+    getSamePositionsRisk(symbol: string, side: OrderSide): number;
+    getRelatedPositionsRisk(symbol: string, side: OrderSide): number;
 }
 
+export interface ICryptoBroker extends IBroker {
+    onRisksUpdated: Subject<void>;
+    getCoinBalance(coin: string): number;
+    getPairBalance(symbol: string): number;
+}

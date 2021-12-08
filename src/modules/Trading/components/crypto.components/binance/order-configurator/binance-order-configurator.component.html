@@ -25,7 +25,7 @@
 
                         <span class="orderpanelprefix" matPrefix>{{'amount' | translate}}</span>
                         <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
-                            type="number" [step]="amountStep" [(ngModel)]="config.amount">
+                            type="number" [step]="amountStep" [(ngModel)]="config.amount" (ngModelChange)="valueChanged()">
                     </mat-form-field>
                 </div>
             </div>
@@ -93,12 +93,40 @@
             </div>
         </div>
     </div>
+    
+    <div class="flex-row" *ngIf="isSLAndTPAllowed()">
+        <div class="flex-column  padding-right">
+            <div class="crypto-form-unit margin-bottom">
+
+
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.stoploss' | translate}}</span>
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
+                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter SL" [(ngModel)]="config.sl"
+                        (ngModelChange)="valueChanged()">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex-column padding-left">
+            <div class="crypto-form-unit margin-bottom">
+
+
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.takeprofit' | translate}}</span>
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true"
+                        [range]="{min: minPriceValue}" [step]="priceStep" placeholder="Enter TP"
+                        [(ngModel)]="config.tp">
+                </mat-form-field>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <div class="form-wrapper additional-trade-data">
 
     <div class="flex-row">
-        <div class="crypto-form-unit margin-bottom tradescoreholder">
+        <div class="flex-row" *ngIf="canShowOrderValidation()">
             <div class="checklist-row">
                 <div class="section-header tradescore">
                     <div class="flex">

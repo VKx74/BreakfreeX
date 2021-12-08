@@ -16,7 +16,7 @@ export interface BinanceFuturesAsset {
     AvailableBalance: number;
 }
 
-export interface BinanceFuturesPosition extends IPosition {
+export interface BinanceFuturesPosition extends IPosition, IOrderRisk {
     CurrentPrice?: number;
     LiquidationPrice?: number;
     Leverage?: number;
@@ -67,6 +67,8 @@ export interface IBinanceFuturesPlaceOrderData {
     Symbol: string;
     Type: OrderTypes;
     Price?: number;
+    SL?: number;
+    TP?: number;
     StopPrice?: number;
     TimeInForce?: TimeInForce;
     ReduceOnly?: boolean;

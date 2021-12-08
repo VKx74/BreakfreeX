@@ -30,6 +30,8 @@ export class BinanceFuturesOrderConfig {
     tif?: TimeInForce;
     timeframe?: number;
     lastPrice?: number;
+    sl?: number;
+    tp?: number;
 
     static createLimit(brokerType: EBrokerInstance): BinanceFuturesOrderConfig {
         const order = this.create(brokerType);
@@ -174,6 +176,10 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
     isStopPriceRequired() {
         return this.config.type === OrderTypes.Stop || this.config.type === OrderTypes.TakeProfit || this.config.type === OrderTypes.StopMarket || this.config.type === OrderTypes.TakeProfitMarket;
     }
+    
+    isSLAndTPAllowed() {
+        return this.config.type === OrderTypes.Market || this.config.type === OrderTypes.Limit;
+    }
 
     isTimeInForceRequired() {
         return this.config.type === OrderTypes.Limit;
@@ -185,6 +191,16 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
 
     handleTypeSelected(type: OrderTypes) {
         this.config.type = type;
+
+        if (this.isStopPriceRequired()) {
+            if (this.config.price) {
+                this.config.stopPrice = this.config.price;
+            }
+        } else {
+            this.config.stopPrice = null;
+        }
+
+        this._raiseCalculateChecklist();
     }
 
     handleTIFSelected(type: TimeInForce) {
@@ -244,6 +260,10 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
             this._placeOrder();
         }
     }
+    
+    valueChanged() {
+        this._raiseCalculateChecklist();
+    }
 
     private _placeOrder() {
         if (!this.config.instrument) {
@@ -269,6 +289,11 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
 
         if (this.isTimeInForceRequired()) {
             placeOrderData["TimeInForce"] = this.config.tif;
+        }
+
+        if (this.isSLAndTPAllowed()) {
+            placeOrderData.SL = this.config.sl;
+            placeOrderData.TP = this.config.tp;
         }
 
         this.processingSubmit = true;

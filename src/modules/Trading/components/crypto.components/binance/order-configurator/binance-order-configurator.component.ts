@@ -31,6 +31,8 @@ export class BinanceOrderConfig {
     useIcebergQty?: boolean;
     timeframe?: number;
     lastPrice?: number;
+    sl?: number;
+    tp?: number;
 
     static createLimit(): BinanceOrderConfig {
         const order = this.create();
@@ -191,6 +193,14 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
 
     handleTIFSelected(type: TimeInForce) {
         this.config.tif = type;
+    }   
+    
+    isSLAndTPAllowed() {
+        return this.config.type === OrderTypes.Market || this.config.type === OrderTypes.Limit;
+    }
+
+    valueChanged() {
+        this._raiseCalculateChecklist();
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
@@ -275,6 +285,11 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
 
         if (this.isIcebergQtyAllowed() && this.config.useIcebergQty && this.config.icebergQty) {
             placeOrderData["IcebergQty"] = Number(this.config.icebergQty);
+        }
+
+        if (this.isSLAndTPAllowed()) {
+            placeOrderData["SL"] = this.config.sl;
+            placeOrderData["TP"] = this.config.tp;
         }
 
         this.processingSubmit = true;

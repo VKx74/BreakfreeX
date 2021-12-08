@@ -1094,11 +1094,19 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return orderConfig;
         }
 
+        const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
+        
         if (params.price) {
-            const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
         }
 
+        if (params.sl) {
+            orderConfig.sl = Math.roundToDecimals(params.sl, pricePrecision);
+        }
+
+        if (params.tp) {
+            orderConfig.tp = Math.roundToDecimals(params.tp, pricePrecision);
+        }
 
         orderConfig.timeframe = params.timeframe;
         orderConfig.lastPrice = this._getLastPrice();
@@ -1115,9 +1123,18 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return orderConfig;
         }
 
+        const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
+
         if (params.price) {
-            const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
+        }
+
+        if (params.sl) {
+            orderConfig.sl = Math.roundToDecimals(params.sl, pricePrecision);
+        }
+
+        if (params.tp) {
+            orderConfig.tp = Math.roundToDecimals(params.tp, pricePrecision);
         }
 
         orderConfig.timeframe = params.timeframe;

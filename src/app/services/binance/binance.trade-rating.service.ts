@@ -1,16 +1,12 @@
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
+import { IBroker, ICryptoBroker } from "@app/interfaces/broker/broker";
 import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
-import { MTSymbolTradeInfoResponse } from "modules/Trading/models/forex/mt/mt.communication";
-import { MTMarketOrderRecommendation, MTOrder, MTOrderRecommendation, MTOrderRecommendationType, MTPendingOrderRecommendation, MTPosition, MTPositionRecommendation, RTDTrendStrength } from "modules/Trading/models/forex/mt/mt.models";
-import { OrderSide, OrderTypes, RiskClass, RiskType } from "modules/Trading/models/models";
+import { OrderSide } from "modules/Trading/models/models";
 import { Observable, of, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AlgoService, IBFTAMarketInfoData, IBFTATrend } from "../algo.service";
-import { BinanceFuturesBroker } from "../binance-futures/binance-futures.broker";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { TradingHelper } from "../mt/mt.helper";
-import { RealtimeService } from "../realtime.service";
-import { BinanceBroker } from "./binance.broker";
 
 interface CacheItem<T> {
     Data: T;
@@ -28,7 +24,7 @@ export class BinanceTradeRatingService {
     protected _marketInfoLoading: { [symbol: string]: boolean; } = {};
     protected _timeInterval: any;
 
-    constructor(protected broker: BinanceBroker | BinanceFuturesBroker, protected algoService: AlgoService, protected mappingService: InstrumentMappingService) {
+    constructor(protected broker: ICryptoBroker, protected algoService: AlgoService, protected mappingService: InstrumentMappingService) {
         this._timeInterval = setInterval(() => {
             const dtNow = new Date().getTime();
 
@@ -98,137 +94,93 @@ export class BinanceTradeRatingService {
             }
         }
 
-        if (marketInfo) {
-            const marketInfoData = marketInfo.data;
-            let allowedDiff = Math.abs(marketInfoData.natural - marketInfoData.support) / 3;
-            let minGranularity = TimeSpan.MILLISECONDS_IN_MINUTE / 1000 * 15;
-            let price = parameters.Price ? parameters.Price : marketInfoData.last_price;
+        if (!marketInfo) {
+            return result;
+        }
+        const marketInfoData = marketInfo.data;
+        let allowedDiff = Math.abs(marketInfoData.natural - marketInfoData.support) / 3;
+        let minGranularity = TimeSpan.MILLISECONDS_IN_MINUTE / 1000 * 15;
+        let price = parameters.Price ? parameters.Price : marketInfoData.last_price;
 
-            if (parameters.Side === OrderSide.Buy) {
-                result.GlobalRTD = marketInfoData.global_trend === IBFTATrend.Up;
-                result.LocalRTD = marketInfoData.local_trend === IBFTATrend.Up;
+        if (parameters.Side === OrderSide.Buy) {
+            result.GlobalRTD = marketInfoData.global_trend === IBFTATrend.Up;
+            result.LocalRTD = marketInfoData.local_trend === IBFTATrend.Up;
 
-                let priceToTargetDiff = Math.abs(marketInfoData.resistance - price);
-                if (parameters.Timeframe >= minGranularity && (price >= marketInfoData.resistance || allowedDiff > priceToTargetDiff)) {
-                    result.Levels = false;
-                } else {
-                    result.Levels = true;
-                }
+            let priceToTargetDiff = Math.abs(marketInfoData.resistance - price);
+            if (parameters.Timeframe >= minGranularity && (price >= marketInfoData.resistance || allowedDiff > priceToTargetDiff)) {
+                result.Levels = false;
             } else {
-                result.GlobalRTD = marketInfoData.global_trend === IBFTATrend.Down;
-                result.LocalRTD = marketInfoData.local_trend === IBFTATrend.Down;
-
-                let priceToTargetDiff = Math.abs(marketInfoData.support - price);
-                if (parameters.Timeframe >= minGranularity && (price <= marketInfoData.support || allowedDiff > priceToTargetDiff)) {
-                    result.Levels = false;
-                } else {
-                    result.Levels = true;
-                }
+                result.Levels = true;
             }
+        } else {
+            result.GlobalRTD = marketInfoData.global_trend === IBFTATrend.Down;
+            result.LocalRTD = marketInfoData.local_trend === IBFTATrend.Down;
 
-            result.GlobalRTDValue = marketInfoData.global_trend;
-            result.LocalRTDValue = marketInfoData.local_trend;
-            result.LocalRTDSpread = marketInfoData.local_trend_spread;
-            result.GlobalRTDSpread = marketInfoData.global_trend_spread;
-
-            result.GlobalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.global_trend_spread);
-            result.LocalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.local_trend_spread);
+            let priceToTargetDiff = Math.abs(marketInfoData.support - price);
+            if (parameters.Timeframe >= minGranularity && (price <= marketInfoData.support || allowedDiff > priceToTargetDiff)) {
+                result.Levels = false;
+            } else {
+                result.Levels = true;
+            }
         }
 
-        // if (symbolTradeInfo && symbolTradeInfo.Data) {
-        //     let price = parameters.Price || (symbolTradeInfo.Data.Bid + symbolTradeInfo.Data.Ask) / 2;
-        //     let contractSize = symbolTradeInfo.Data.ContractSize;
-        //     let rate = symbolTradeInfo.Data.Rate;
-        //     let cvar = symbolTradeInfo.Data.CVaR;
-        //     let bid = symbolTradeInfo.Data.Bid;
-        //     let ask = symbolTradeInfo.Data.Ask;
-        //     if (price) {
-        //         if (parameters.SL) {
-        //             result.OrderRiskValue = TradingHelper.buildRiskByPrice(contractSize, rate, parameters.Size, price, parameters.SL, this.mtBroker.accountInfo.Balance);
-        //         } else if (cvar) {
-        //             result.OrderRiskValue = TradingHelper.buildRiskByVAR(contractSize, rate, parameters.Size, price, cvar, this.mtBroker.accountInfo.Balance);
-        //         }
-        //     }
+        result.GlobalRTDValue = marketInfoData.global_trend;
+        result.LocalRTDValue = marketInfoData.local_trend;
+        result.LocalRTDSpread = marketInfoData.local_trend_spread;
+        result.GlobalRTDSpread = marketInfoData.global_trend_spread;
 
-        //     if (bid && ask) {
-        //         result.SpreadRiskValue = Math.abs(bid - ask) / Math.min(bid, ask) * 100;
-        //         if (marketInfo.instrument) {
-        //             const key = `${marketInfo.instrument.id}${marketInfo.instrument.datafeed}`;
-        //             const priceSpreadCache = this._tryGetPriceSpreadFromCache(key);
+        result.GlobalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.global_trend_spread);
+        result.LocalRTDTrendStrength = TradingHelper.convertTrendSpread(marketInfoData.local_trend_spread);
 
-        //             if (priceSpreadCache) {
-        //                 result.FeedBrokerSpread = priceSpreadCache.spread;
-        //                 result.FeedBrokerSpreadValue = priceSpreadCache.spreadValue;
-        //             } else {
-        //                 let lastTick = this._realtimeService.getLastTick(marketInfo.instrument);
-        //                 let lastPrice = lastTick ? lastTick.price : null;
-        //                 if (!lastPrice) {
+        let cvar = marketInfoData.cvar;
+        let balance = this.broker.getPairBalance(parameters.Symbol);
+        result.cVar = cvar;
 
-        //                     if (parameters.LastPrice) {
-        //                         lastPrice = parameters.LastPrice;
-        //                     } else {
-        //                         lastPrice = marketInfo.data.last_price;
-        //                     }
-        //                 }
+        if (price && balance) {
+            if (parameters.SL) {
+                result.OrderRiskValue = TradingHelper.buildRiskByPrice(1, 1, parameters.Size, price, parameters.SL, balance);
+            } else if (cvar) {
+                result.OrderRiskValue = TradingHelper.buildRiskByVAR(1, 1, parameters.Size, price, cvar, balance);
+            }
+        }
 
-        //                 if (lastPrice) {
-        //                     let avg = (bid + ask) / 2;
-        //                     let spread = Math.abs(avg - lastPrice) / lastPrice * 100;
-        //                     let spreadValue = avg - lastPrice;
+        if (!result.isSLReversed && parameters.SL && parameters.Price && result.cVar) {
+            let allowedMinDiff = parameters.Price / 100 * result.cVar;
+            let allowedMaxDiff = parameters.Price / 100 * result.cVar;
+            let hour = TimeSpan.MILLISECONDS_IN_HOUR / 1000;
 
-        //                     result.FeedBrokerSpread = spread;
-        //                     result.FeedBrokerSpreadValue = spreadValue;
+            if (parameters.Timeframe && parameters.Timeframe <= hour) {
+                allowedMinDiff = allowedMinDiff / 12;
+                allowedMaxDiff = allowedMaxDiff * 2;
+            } else if (parameters.Timeframe && parameters.Timeframe <= hour * 4) {
+                allowedMinDiff = allowedMinDiff / 8;
+                allowedMaxDiff = allowedMaxDiff * 3;
+            } else if (parameters.Timeframe && parameters.Timeframe <= hour * 24) {
+                allowedMinDiff = allowedMinDiff / 4;
+                allowedMaxDiff = allowedMaxDiff * 6;
+            } else {
+                allowedMinDiff = allowedMinDiff / 2;
+                allowedMaxDiff = allowedMaxDiff * 12;
+            }
 
-        //                     this._tryAddPriceSpreadToCache(key, {
-        //                         spread: spread,
-        //                         spreadValue: spreadValue
-        //                     });
-        //                 }
-        //             }
-        //         }
+            let slToPriceDiff = Math.abs(parameters.SL - parameters.Price);
 
-        //     }
+            if (slToPriceDiff <= allowedMinDiff) {
+                result.isSLToClose = true;
+            }
 
-        //     result.cVar = symbolTradeInfo.Data.CVaR;
+            if (slToPriceDiff >= allowedMaxDiff) {
+                result.isSLToFare = true;
+            }
+        }
 
-        //     if (!result.isSLReversed && parameters.SL && parameters.Price && result.cVar) {
-        //         let allowedMinDiff = parameters.Price / 100 * result.cVar;
-        //         let allowedMaxDiff = parameters.Price / 100 * result.cVar;
-        //         let hour = TimeSpan.MILLISECONDS_IN_HOUR / 1000;
-
-        //         if (parameters.Timeframe && parameters.Timeframe <= hour) {
-        //             allowedMinDiff = allowedMinDiff / 12;
-        //             allowedMaxDiff = allowedMaxDiff * 2;
-        //         } else if (parameters.Timeframe && parameters.Timeframe <= hour * 4) {
-        //             allowedMinDiff = allowedMinDiff / 8;
-        //             allowedMaxDiff = allowedMaxDiff * 3;
-        //         } else if (parameters.Timeframe && parameters.Timeframe <= hour * 24) {
-        //             allowedMinDiff = allowedMinDiff / 4;
-        //             allowedMaxDiff = allowedMaxDiff * 6;
-        //         } else {
-        //             allowedMinDiff = allowedMinDiff / 2;
-        //             allowedMaxDiff = allowedMaxDiff * 12;
-        //         }
-
-        //         let slToPriceDiff = Math.abs(parameters.SL - parameters.Price);
-
-        //         if (slToPriceDiff <= allowedMinDiff) {
-        //             result.isSLToClose = true;
-        //         }
-
-        //         if (slToPriceDiff >= allowedMaxDiff) {
-        //             result.isSLToFare = true;
-        //         }
-        //     }
-        // }
-
-        // let positionRisk = this.mtBroker.getSamePositionsRisk(parameters.Symbol, parameters.Side);
-        // let correlatedRisk = this.mtBroker.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
-        // result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.mtBroker.accountInfo.Balance * 100) + result.OrderRiskValue);
-        // result.PositionRiskValue = Math.abs((positionRisk / this.mtBroker.accountInfo.Balance * 100) + result.OrderRiskValue);
-        // if (Number.isNaN(result.CorrelatedRiskValue)) {
-        //     result.CorrelatedRiskValue = 0;
-        // }
+        let positionRisk = this.broker.getSamePositionsRisk(parameters.Symbol, parameters.Side);
+        let correlatedRisk = this.broker.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
+        result.CorrelatedRiskValue = Math.abs((correlatedRisk / balance * 100) + result.OrderRiskValue);
+        result.PositionRiskValue = Math.abs((positionRisk / balance * 100) + result.OrderRiskValue);
+        if (Number.isNaN(result.CorrelatedRiskValue)) {
+            result.CorrelatedRiskValue = 0;
+        }
 
         return result;
     }

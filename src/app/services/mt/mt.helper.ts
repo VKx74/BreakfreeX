@@ -24,7 +24,7 @@ export class TradingHelper {
         }
 
         let diff = Math.abs(price1 - price2);
-        let riskNet = diff * size * contractSize;
+        let riskNet = diff * Math.abs(size) * contractSize;
         // if (profitRate === 0) {
         //     riskNet = riskNet / price;
         // } else 

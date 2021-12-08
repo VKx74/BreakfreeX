@@ -1,6 +1,6 @@
 <data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true"
     [expandOnClick]="false" [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)"
-    (onDoubleClick)="doubleClicked($event)" [hiddenColumns]="['Id', 'TIF']"
+    (onDoubleClick)="doubleClicked($event)" [hiddenColumns]="['Id', 'TIF', 'Net Risk']"
     (onContextMenuSelected)="handleContextMenuSelected($event)">
     <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false">
     </data-table-header-cell>
@@ -26,6 +26,10 @@
         {{'tradeManager.status' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="TIF" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
         {{'tradeManager.tif' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.risk' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        {{'tradeManager.riskP' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Date" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
         {{'tradeManager.date' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
@@ -75,6 +79,16 @@
     </data-table-cell>
     <data-table-cell columnName="TIF">
         <ng-template let-item>{{item.TIF}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Net Risk">
+        <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
+    </data-table-cell>
+    <data-table-cell columnName="Risk (%)">
+        <ng-template let-item>
+            <span class="{{item.RiskClass | currencyGuardRiskClassPipe}}">
+                {{item.RiskClass | currencyGuardRiskPipe}} {{item.RiskPercentage ? '(' + item.RiskPercentage.toFixed(2) + '%)' : ''}}
+            </span>
+        </ng-template>
     </data-table-cell>
     <data-table-cell columnName="Date">
         <ng-template let-item>{{item.Time | formatDate:'YYYY/MM/DD HH:mm'}}</ng-template>

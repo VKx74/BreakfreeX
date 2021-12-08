@@ -1,4 +1,4 @@
-import { IConnectionData, IOrder, IOrderRisk, OrderSide, OrderTypes } from "../../models";
+import { CurrencyRiskType, IConnectionData, IOrder, IOrderRisk, OrderSide, OrderTypes, RiskClass } from "../../models";
 import { BinanceEnvironment } from "../shared/models.communication";
 
 export interface BinanceConnectionData extends IConnectionData {
@@ -42,4 +42,15 @@ export interface BinanceHistoricalTrade {
     Size: number;
     QuoteSize: number;
     Side: OrderSide;
+}
+
+export interface CoinRisk {
+    Coin: string;
+    RelatedCoin: string;
+    Type: CurrencyRiskType;
+    OrdersCount: number;
+    Risk?: number;
+    RiskPercentage?: number;
+    Side: OrderSide;
+    RiskClass: RiskClass;
 }

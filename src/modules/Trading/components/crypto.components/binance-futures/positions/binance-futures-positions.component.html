@@ -1,7 +1,7 @@
 <div class="positions">
     <data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true" [expandOnClick]="false" 
         [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)" (onDoubleClick)="doubleClicked($event)"
-        [hiddenColumns]="[]"
+        [hiddenColumns]="['Net Risk']"
         (onContextMenuSelected)="handleContextMenuSelected($event)">
         <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false"></data-table-header-cell>
         <data-table-header-cell columnName="Symbol" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'symbol' | translate}}</data-table-header-cell>
@@ -14,6 +14,8 @@
         <!-- <data-table-header-cell columnName="Leverage" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.leverage' | translate}}</data-table-header-cell> -->
         <data-table-header-cell columnName="PNL" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.pnl' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="LiqPrice" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.liqPrice' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
     
 
@@ -55,6 +57,17 @@
 
         <data-table-cell columnName="LiqPrice">
             <ng-template let-item>{{item.LiquidationPrice ? item.LiquidationPrice.toFixed(getDecimals(item.Symbol)) : "-"}}</ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="Net Risk">
+            <ng-template let-item>{{item.Risk ? item.Risk.toFixed(2) : '-'}}</ng-template>
+        </data-table-cell>
+        <data-table-cell columnName="Risk (%)">
+            <ng-template let-item>
+                <span class="{{item.RiskClass | currencyGuardRiskClassPipe}}">
+                    {{item.RiskClass | currencyGuardRiskPipe}} {{item.RiskPercentage ? '(' + item.RiskPercentage.toFixed(2) + '%)' : ''}}
+                </span>
+            </ng-template>
         </data-table-cell>
 
         <data-table-cell columnName="Close">

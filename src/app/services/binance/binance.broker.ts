@@ -1,5 +1,5 @@
 import { Inject } from "@angular/core";
-import { EBrokerInstance, IBroker, IBrokerNotification, IBrokerState } from "@app/interfaces/broker/broker";
+import { EBrokerInstance, IBroker, IBrokerNotification, IBrokerState, ICryptoBroker } from "@app/interfaces/broker/broker";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { EExchange } from "@app/models/common/exchange";
@@ -7,20 +7,360 @@ import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
 import { BinanceFutureLoginResponse } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
-import { BinanceConnectionData, BinanceFund, BinanceHistoricalOrder, BinanceHistoricalTrade, BinanceOrder, BinanceSpotTradingAccount } from "modules/Trading/models/crypto/binance/binance.models";
+import { BinanceFuturesOrder, BinanceFuturesPosition } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { BinanceConnectionData, BinanceFund, BinanceHistoricalOrder, BinanceHistoricalTrade, BinanceOrder, BinanceSpotTradingAccount, CoinRisk } from "modules/Trading/models/crypto/binance/binance.models";
 import { BinanceSpotBookPriceResponse, BinanceSpotLoginRequest, BinanceSpotOpenOrderResponse, BinanceSpotOrderHistoryResponse, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountBalance, IBinanceSpotAccountInfoData, IBinanceSpotHistoricalOrder, IBinanceSpotOrder, IBinanceSpotOrderUpdateData, IBinanceSpotTrade, IBinanceSpotWalletBalance, SpotOrderStatus } from "modules/Trading/models/crypto/binance/binance.models.communication";
-import { IBinancePrice, IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
+import { IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
 import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
-import { ActionResult, BrokerConnectivityStatus, IOrder, OrderSide, OrderTypes, RiskClass } from "modules/Trading/models/models";
-import { Subject, Observable, of, Subscription, Observer, combineLatest, throwError } from "rxjs";
-import { map } from "rxjs/operators";
+import { ActionResult, BrokerConnectivityStatus, CurrencyRiskType, IOrder, OrderSide, OrderTypes, RiskClass, TimeInForce } from "modules/Trading/models/models";
+import { Subject, Observable, of, Subscription, Observer, combineLatest, throwError, forkJoin } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { TradingHelper } from "../mt/mt.helper";
 import { BinanceSpotSocketService } from "../socket/binance-spot.socket.service";
 import { BinanceTradeRatingService } from "./binance.trade-rating.service";
 
-export class BinanceBroker implements IBroker {
+interface CumulativeSL {
+    side: OrderSide;
+    symbol: string;
+    price: number;
+    size: number;
+}
+
+export abstract class BinanceBrokerBase {
+    protected _tradeRatingService: BinanceTradeRatingService;
+    protected _algoService: AlgoService;
+    protected _instruments: IInstrument[] = [];
+    protected _coinRisks: CoinRisk[] = [];
+
+    public get coinRisks(): CoinRisk[] {
+        return this._coinRisks;
+    }
+
+    abstract onRisksUpdated: Subject<void>;
+
+    constructor() {
+        
+    }
+
+    abstract getPairBalance(symbol: string): number;
+
+    abstract getCoinBalance(coin: string): number;
+
+    protected abstract _getOrdersForRates(): (BinanceOrder | BinanceFuturesPosition | BinanceFuturesOrder)[];
+
+    protected abstract _getOrdersForSL(): (BinanceOrder | BinanceFuturesOrder)[];
+
+    protected _buildRates() {
+        let symbolsToUpdateByCVAR: string[] = [];
+        
+        let stops = this._getStops();
+        let array = this._getOrdersForRates();
+
+        for (const order of array) {
+            let type = (order as any).Type;
+            if (type && !this._canOrderHaveRisk(type)) {
+                order.RiskClass = RiskClass.NoRisk;
+                continue;
+            }
+
+            let risk = 0;
+
+            order.RiskClass = RiskClass.Calculating;
+
+            let instrument = this._instruments.find(_ => _.id === order.Symbol);
+            if (!instrument) {
+                continue;
+            }
+
+            let balance = this.getPairBalance(instrument.symbol);
+            if (!balance) {
+                continue;
+            }
+
+            let slPriceOrder = this._getSLForOrders(order, stops);
+
+            if (slPriceOrder) {
+                let sl = slPriceOrder;
+                risk = TradingHelper.buildRiskByPrice(1, 1, order.Size, order.Price, sl, balance);
+                if (order.Side === OrderSide.Buy) {
+                    if (order.Price <= sl) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                } else {
+                    if (order.Price >= sl) {
+                        risk = 0;
+                    } else {
+                        if (!risk) {
+                            continue;
+                        }
+                    }
+                }
+                if (!risk) {
+                    continue;
+                }
+            } else {
+                if (symbolsToUpdateByCVAR.indexOf(order.Symbol) === -1) {
+                    symbolsToUpdateByCVAR.push(order.Symbol);
+                }
+                continue;
+            }
+
+            order.Risk = Math.roundToDecimals(balance / 100 * risk, 2);
+            order.RiskPercentage = Math.roundToDecimals(risk, 2);
+            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(risk);
+        }
+
+        for (const s of symbolsToUpdateByCVAR) {
+            this._updateOrderRiskByCVAR(s);
+        }
+
+        this._buildCurrencyRisks();
+    }
+
+    protected _getStops(): CumulativeSL[] {
+        let res: CumulativeSL[] = [];
+        let array = this._getOrdersForSL();
+
+        for (const o of array) {
+            // if (o.Type !== OrderTypes.StopMarket) {
+            //     continue;
+            // }
+
+            let size = Math.abs(o.Size);
+            res.push({
+                symbol: o.Symbol,
+                side: o.Side,
+                size: size,
+                price: o.StopPrice
+            });
+        }
+
+        let sortedBuys = res.filter(_ => _.side === OrderSide.Buy).sort((a, b) => a.price - b.price);
+        let sortedSells = res.filter(_ => _.side === OrderSide.Sell).sort((a, b) => b.price - a.price);
+        let sortedResult = [...sortedBuys, ...sortedSells];
+
+        return sortedResult;
+    }
+    
+    protected _getSLForOrders(order: BinanceFuturesPosition | BinanceFuturesOrder, stops: CumulativeSL[]): number {
+        let neededStops: CumulativeSL[] = [];
+        let size = Math.abs(order.Size);
+        let orderPrice = (order as BinanceFuturesOrder).StopPrice || order.Price;
+        if (order.Side === OrderSide.Buy) {
+            neededStops = stops.filter(_ => _.side !== order.Side && _.size > 0 && _.price < orderPrice && _.symbol === order.Symbol);
+        } else {
+            neededStops = stops.filter(_ => _.side !== order.Side && _.size > 0 && _.price > orderPrice && _.symbol === order.Symbol);
+        }
+
+        let stopsToDecrease: CumulativeSL[] = [];
+
+        for (const stop of neededStops) {
+            let sizeLeft = size - stop.size;
+            if (this._isNearZero(sizeLeft)) {
+                sizeLeft = 0;
+            }
+            let s = {...stop};
+            if (sizeLeft >= 0) {
+                stopsToDecrease.push(s);
+                stop.size = 0;
+            } else {
+                s.size = size;
+                stop.size -= size;
+                stopsToDecrease.push(s);
+            }
+
+            size = sizeLeft;
+            if (size <= 0) {
+                size = 0;
+                break;
+            }
+        }
+
+        if (!this._isNearZero(size) || !stopsToDecrease.length) {
+            return 0;
+        }
+
+        let cp = 0;
+        let cs = 0;
+        for (const stop of stopsToDecrease) {
+            cp += stop.size * stop.price;
+            cs += stop.size;
+        }
+
+        return cp / cs;
+
+    }
+
+    protected _isNearZero(n: number) {
+        return Math.abs(n) < Number.EPSILON * 1000;
+    }
+
+    protected _updateOrderRiskByCVAR(symbol: string) {
+        this._algoService.getMarketCVarInfo(symbol).subscribe((cvar) => {
+            this._calculateOrderRiskByCVAR(symbol, cvar);
+        });
+    }
+
+    protected _calculateOrderRiskByCVAR(symbol: string, cvar: number) {
+        let array = this._getOrdersForRates();
+        for (const order of array) {
+            if (order.RiskClass !== RiskClass.Calculating) {
+                continue;
+            } 
+            
+            if (order.Symbol !== symbol) {
+                continue;
+            }
+
+            let type = (order as any).Type;
+            if (type && !this._canOrderHaveRisk(type)) {
+                continue;
+            }
+
+            let instrument = this._instruments.find(_ => _.id === order.Symbol);
+            if (!instrument) {
+                continue;
+            }
+
+            let balance = this.getPairBalance(instrument.symbol);
+            if (!balance) {
+                continue;
+            }
+
+            let risk = order.Price / 100 * cvar * Math.abs(order.Size);
+
+            order.Risk = Math.roundToDecimals(risk, 2);
+            order.RiskPercentage = Math.roundToDecimals(risk / balance * 100, 2);
+            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(order.RiskPercentage);
+        }
+
+        this._buildCurrencyRisks();
+    }
+
+    protected _canOrderHaveRisk(type: OrderTypes): boolean {
+        return type === OrderTypes.Market || type === OrderTypes.Limit;
+    }
+    
+    protected _createEmptyRisk(coin: string, relatedCoin: string, type: CurrencyRiskType): CoinRisk {
+        return {
+            Coin: coin,
+            RelatedCoin: relatedCoin,
+            OrdersCount: 0,
+            Risk: 0,
+            RiskPercentage: 0,
+            Type: type,
+            Side: OrderSide.Buy,
+            RiskClass: RiskClass.NoRisk
+        };
+    }
+
+    protected _buildCurrencyRisks() {
+        const actualRisks: { [symbol: string]: CoinRisk } = {};
+        const pendingRisks: { [symbol: string]: CoinRisk } = {};
+        let array = this._getOrdersForRates();
+
+        for (const order of array) {
+            if (!order.Risk) {
+                continue;
+            }
+
+            let instrument = this._instruments.find(_ => _.id === order.Symbol);
+            if (!instrument) {
+                continue;
+            }
+
+            const s1Part1 = instrument.baseInstrument;
+            const s1Part2 = instrument.dependInstrument;
+
+            const riskRef = (order as any).Type ? pendingRisks : actualRisks;
+            const type = (order as any).Type ? CurrencyRiskType.Pending : CurrencyRiskType.Actual;
+
+            // if (!riskRef[s1Part1]) {
+            //     riskRef[s1Part1] = this._createEmptyRisk(s1Part1, s1Part2, type);
+            // }
+            if (!riskRef[s1Part2]) {
+                riskRef[s1Part2] = this._createEmptyRisk(s1Part2, s1Part1, type);
+            }
+
+            const r1 = order.Side === OrderSide.Buy ? order.Risk : order.Risk * -1;
+            const r2 = order.Side === OrderSide.Sell ? order.Risk : order.Risk * -1;
+            // riskRef[s1Part1].Risk += r1;
+            riskRef[s1Part2].Risk += r2;
+            // riskRef[s1Part1].OrdersCount++;
+            riskRef[s1Part2].OrdersCount++;
+        }
+
+        for (let i = 0; i < this._coinRisks.length; i++) {
+            let currencyRisk = this._coinRisks[i];
+
+            if (currencyRisk.Type === CurrencyRiskType.Actual) {
+                if (actualRisks[currencyRisk.Coin] && actualRisks[currencyRisk.Coin].Risk) {
+                    const risk = actualRisks[currencyRisk.Coin];
+                    delete actualRisks[currencyRisk.Coin];
+                    currencyRisk.OrdersCount = risk.OrdersCount;
+                    currencyRisk.Risk = risk.Risk;
+                } else {
+                    this._coinRisks.splice(i, 1);
+                    i--;
+                }
+            } else {
+                if (pendingRisks[currencyRisk.Coin] && pendingRisks[currencyRisk.Coin].Risk) {
+                    const risk = pendingRisks[currencyRisk.Coin];
+                    delete pendingRisks[currencyRisk.Coin];
+                    currencyRisk.OrdersCount = risk.OrdersCount;
+                    currencyRisk.Risk = risk.Risk;
+                } else {
+                    this._coinRisks.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        for (const i in actualRisks) {
+            if (actualRisks[i] && actualRisks[i].Risk) {
+                this._coinRisks.push(actualRisks[i]);
+            }
+        }
+
+        for (const i in pendingRisks) {
+            if (pendingRisks[i] && pendingRisks[i].Risk) {
+                this._coinRisks.push(pendingRisks[i]);
+            }
+        }
+
+        for (const risk of this._coinRisks) {
+            let balance = this.getCoinBalance(risk.Coin);
+            // if (!balance) {
+            //     balance = this.getCoinBalance(risk.RelatedCoin);
+            // }  
+            
+            if (!balance) {
+                continue;
+            }
+            
+            risk.Side = risk.Risk > 0 ? OrderSide.Buy : OrderSide.Sell;
+            risk.Risk = Math.abs(risk.Risk);
+            risk.Risk = Math.roundToDecimals(risk.Risk, 2);
+            const riskPercentage = risk.Risk / balance * 100;
+            risk.RiskPercentage = Math.roundToDecimals(riskPercentage, 2);
+            if (risk.RiskPercentage <= 0) {
+                risk.RiskPercentage = 0.01; // min risk
+            }
+            risk.RiskClass = TradingHelper.convertValueToAssetRiskClass(riskPercentage);
+        }
+
+        this.onRisksUpdated.next();
+    }
+}
+
+export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
+    protected _usedSL: number[] = [];
     protected _tickSubscribers: { [symbol: string]: Subject<ITradeTick>; } = {};
     protected _instrumentDecimals: { [symbol: string]: number; } = {};
     protected _instrumentTickSize: { [symbol: string]: number; } = {};
@@ -28,7 +368,6 @@ export class BinanceBroker implements IBroker {
     protected _symbolToAsset: { [key: string]: string; } = {};
     protected _accountInfo: BinanceSpotTradingAccount;
     protected _initData: BinanceConnectionData;
-    protected _instruments: IInstrument[] = [];
     protected _lastPriceSubscribers: string[] = [];
 
     protected _onAccountUpdateSubscription: Subscription;
@@ -37,7 +376,6 @@ export class BinanceBroker implements IBroker {
     protected _onOrderUpdateSubject: Subscription;
     protected _onAccountUpdateSubject: Subscription;
     protected _onPositionsUpdateSubject: Subscription;
-    protected _tradeRatingService: BinanceTradeRatingService;
 
     protected get _accountName(): string {
         return "30000000000";
@@ -57,6 +395,7 @@ export class BinanceBroker implements IBroker {
     onFundsUpdated: Subject<BinanceFund[]> = new Subject<BinanceFund[]>();
     onNotification: Subject<IBrokerNotification> = new Subject<IBrokerNotification>();
     onSaveStateRequired: Subject<void> = new Subject;
+    onRisksUpdated: Subject<void> = new Subject();
 
     funds: BinanceFund[] = [];
     orders: BinanceOrder[] = [];
@@ -88,24 +427,39 @@ export class BinanceBroker implements IBroker {
     }
 
     constructor(@Inject(BinanceSpotSocketService) protected ws: BinanceSpotSocketService, protected algoService: AlgoService, protected _instrumentMappingService: InstrumentMappingService) {
+        super();
+        this._algoService = algoService;
         this._tradeRatingService = new BinanceTradeRatingService(this, algoService, _instrumentMappingService);
     }
 
-    placeOrder(order: any): Observable<ActionResult> {
-        return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
-            this.ws.placeOrder(order).subscribe((response) => {
-                if (response.IsSuccess) {
-                    observer.next({ result: true });
-                } else {
-                    observer.error(response.ErrorMessage);
-                }
-                observer.complete();
-            }, (error) => {
-                observer.error(error);
-                observer.complete();
-            });
-        });
+    getCoinBalance(coin: string): number {
+        const asset = this.funds.find(_ => _.Coin === coin);
+        if (asset) {
+            return asset.AvailableBalance;
+        }
     }
+
+    getPairBalance(symbol: string): number {
+        const brokerInstrument = this.instrumentToBrokerFormat(symbol);
+        return brokerInstrument ? this.getCoinBalance(brokerInstrument.dependInstrument) : null;
+    }
+
+    placeOrder(order: any): Observable<ActionResult> {
+        return this._placeOrder(order).pipe(switchMap((response) => {
+            if (!response.result) {
+                return of(response);
+            }
+
+            let placeSL = this._placeSL(order);
+            let placeTP = this._placeTP(order);
+
+            return forkJoin([placeSL, placeTP]).pipe(map(() => {
+                return response;
+            }));
+
+        }));
+    }
+
     editOrder(order: any): Observable<ActionResult> {
         return of({
             result: false,
@@ -412,12 +766,38 @@ export class BinanceBroker implements IBroker {
                 Symbol: order.Symbol,
                 TIF: order.TimeInForce,
                 Time: order.time,
-                Type: order.Type as OrderTypes,
+                Type: this._parseType(order.Type),
                 IcebergSize: order.icebergQty
             });
         }
         response.sort((a, b) => b.Time - a.Time);
         return response;
+    }
+
+    private _parseType(type: string): OrderTypes {
+        switch (type.toUpperCase()) {
+            case "MARKET": return OrderTypes.Market;
+            case "LIMIT": return OrderTypes.Limit;
+            case "STOP": return OrderTypes.Stop;
+            case "STOP LOSS":
+            case "STOP_LOSS": return OrderTypes.StopLoss;
+            case "STOP MARKET":
+            case "STOP_MARKET": return OrderTypes.StopMarket;
+            case "LIMIT MARKET":
+            case "LIMIT_MARKET": return OrderTypes.LimitMaker;
+            case "STOP LIMIT":
+            case "STOP_LIMIT": return OrderTypes.StopLimit;
+            case "STOP LOSS LIMIT":
+            case "STOP_LOSS_LIMIT": return OrderTypes.StopLossLimit;
+            case "TAKE PROFIT":
+            case "TAKE_PROFIT": return OrderTypes.TakeProfit;
+            case "TAKE PROFIT LIMIT":
+            case "TAKE_PROFIT_LIMIT": return OrderTypes.TakeProfitLimit;
+            case "TAKE PROFIT MARKET":
+            case "TAKE_PROFIT_MARKET": return OrderTypes.TakeProfitMarket;
+        }
+
+        return type as OrderTypes;
     }
 
     protected _parseTradesHistory(trades: IBinanceSpotTrade[]): BinanceHistoricalTrade[] {
@@ -474,6 +854,63 @@ export class BinanceBroker implements IBroker {
 
     calculateOrderChecklist(parameters: OrderValidationChecklistInput): Observable<OrderValidationChecklist> {
         return this._tradeRatingService.calculateOrderChecklist(parameters);
+    }
+
+    getSamePositionsRisk(symbol: string, side: OrderSide): number {
+        let res = 0;
+        for (const order of this.orders) {
+            if (symbol === order.Symbol) {
+                if (side === order.Side) {
+                    res += order.Risk || 0;
+                } else {
+                    res -= order.Risk || 0;
+                }
+            }
+        }
+        return res;
+    }
+
+    getRelatedPositionsRisk(symbol: string, side: OrderSide): number {
+        let res = 0;
+        const s1 = this.instrumentToBrokerFormat(symbol);
+        const s1Part1 = s1.baseInstrument;
+        const s1Part2 = s1.dependInstrument;
+
+        for (const order of [...this.orders]) {
+            if (!order.Risk) {
+                continue;
+            }
+            
+            const s2 = this.instrumentToBrokerFormat(order.Symbol);
+            if (s2.id === s1.id) {
+                if (side === order.Side) {
+                    res += order.Risk || 0;
+                } else {
+                    res -= order.Risk || 0;
+                }
+                continue;
+            }
+
+            const s2Part1 = s2.baseInstrument;
+            const s2Part2 = s2.dependInstrument;
+            if (s2Part1 === s1Part1 || s2Part2 === s1Part2) {
+                if (side === order.Side) {
+                    res += order.Risk || 0;
+                } else {
+                    res -= order.Risk || 0;
+                }
+            }
+
+            if (s2Part1 === s1Part2 || s2Part2 === s1Part1) {
+                if (side === order.Side) {
+                    res -= order.Risk || 0;
+                } else {
+                    res += order.Risk || 0;
+                }
+            }
+        }
+
+        return res;
     }
 
     protected _loadPendingOrders() {
@@ -684,7 +1121,7 @@ export class BinanceBroker implements IBroker {
                 Symbol: update.Symbol,
                 TIF: update.TimeInForce,
                 Time: update.CreateTime,
-                Type: update.Type as OrderTypes,
+                Type: this._parseType(update.Type),
                 IcebergSize: update.IcebergQuantity
             });
 
@@ -762,52 +1199,78 @@ export class BinanceBroker implements IBroker {
         order.CurrentPrice = order.Side === OrderSide.Buy ? quote.bid : quote.ask;
     }
 
-    protected _buildRates() {
-        for (const order of this.orders) {
-            let risk = 0;
+    protected _getOrdersForRates(): (BinanceOrder | BinanceFuturesPosition | BinanceFuturesOrder)[] {
+        let ordersWithPos = [...this.orders];
+        let sortedBuys = ordersWithPos.filter(_ => _.Side === OrderSide.Buy).sort((a, b) => b.Price - a.Price);
+        let sortedSells = ordersWithPos.filter(_ => _.Side === OrderSide.Sell).sort((a, b) => a.Price - b.Price);
+        let array = [...sortedBuys, ...sortedSells];
+        return array;
+    }
 
-            order.RiskClass = RiskClass.Calculating;
-
-            let instrument = this._instruments.find(_ => _.id === order.Symbol);
-            if (!instrument) {
-                continue;
+    protected _getOrdersForSL(): (BinanceOrder | BinanceFuturesOrder)[] {
+        let res: BinanceOrder[] = [];
+        for (const o of this.orders) {
+            if (o.Type === OrderTypes.StopLossLimit) {
+                res.push(o);
             }
-
-            let asset = this.funds.find(_ => _.Coin === instrument.dependInstrument);
-            if (!asset) {
-                continue;
-            }
-
-            if (order.SL) {
-                risk = TradingHelper.buildRiskByPrice(1, 1, order.Size, order.Price, order.SL, asset.AvailableBalance);
-                if (order.Side === OrderSide.Buy) {
-                    if (order.Price <= order.SL) {
-                        risk = 0;
-                    } else {
-                        if (!risk) {
-                            continue;
-                        }
-                    }
-                } else {
-                    if (order.Price >= order.SL) {
-                        risk = 0;
-                    } else {
-                        if (!risk) {
-                            continue;
-                        }
-                    }
-                }
-            }
-            // else if (order.VAR) {
-            //     risk = order.VAR;
-            //     if (!risk) {
-            //         continue;
-            //     }
-            // }
-
-            order.Risk = Math.roundToDecimals(asset.AvailableBalance / 100 * risk, 2);
-            order.RiskPercentage = Math.roundToDecimals(risk, 2);
-            order.RiskClass = TradingHelper.convertValueToOrderRiskClass(risk);
         }
+        return res;
+    }
+
+    private _placeSL(order: any): Observable<ActionResult> {
+        if (!this._canOrderHaveRisk(order.Type)) {
+            return of(null);
+        }
+
+        if (!order.SL) {
+            return of(null);
+        }
+
+        return this._placeOrder({
+            Side: order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
+            Size: order.Size,
+            Symbol: order.Symbol,
+            Type: OrderTypes.StopLossLimit,
+            TimeInForce: TimeInForce.GoodTillCancel,
+            StopPrice: order.SL,
+            Price: order.SL,
+            ReduceOnly: true
+        });
+    }
+
+    private _placeTP(order: any): Observable<ActionResult> {
+        if (!this._canOrderHaveRisk(order.Type)) {
+            return of(null);
+        }
+
+        if (!order.TP) {
+            return of(null);
+        }
+
+        return this._placeOrder({
+            Side: order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
+            Size: order.Size,
+            Symbol: order.Symbol,
+            Type: OrderTypes.TakeProfit,
+            // TimeInForce: TimeInForce.GoodTillCancel,
+            StopPrice: order.TP,
+            ReduceOnly: true
+        });
+    }
+
+    private _placeOrder(order: any): Observable<ActionResult> {
+        return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+            this.ws.placeOrder(order).subscribe((response) => {
+                if (response.IsSuccess) {
+                    observer.next({ result: true });
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
     }
 }

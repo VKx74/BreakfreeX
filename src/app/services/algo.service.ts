@@ -9,8 +9,7 @@ import * as CryptoJS from 'crypto-js';
 import { InstrumentService } from "./instrument.service";
 
 
-export enum InstrumentTypeId 
-{
+export enum InstrumentTypeId {
     Bonds = "Bonds",
     Commodities = "Commodities",
     Crypto = "Crypto",
@@ -23,8 +22,7 @@ export enum InstrumentTypeId
     Other = "Other"
 }
 
-export enum InstrumentTypeName
-{
+export enum InstrumentTypeName {
     Bonds = "Bonds",
     Commodities = "Commodities",
     Crypto = "Crypto",
@@ -277,6 +275,7 @@ export interface IBFTAMarketInfo {
     is_overhit: boolean;
     global_trend_spread: number;
     local_trend_spread: number;
+    cvar: number;
 }
 
 
@@ -320,6 +319,10 @@ export interface IBFTAPriceRatio {
 
 export interface IBFTAEncryptedResponse {
     data: string;
+}
+
+export interface IBFTACVarInfo {
+    cvar?: number;
 }
 
 export interface IBFTASignal {
@@ -522,6 +525,8 @@ class AlgoServiceEncryptionHelper {
 
 @Injectable()
 export class AlgoService {
+    private _cvarCache: { [symbol: string]: number; } = {};
+
     private url: string;
 
     constructor(private _http: HttpClient, private _instrumentService: InstrumentService) {
@@ -599,6 +604,27 @@ export class AlgoService {
             const decryptedData = this._decrypt(encryptedData);
             return decryptedData;
         }));
+    }
+
+    getMarketCVarInfo(instrument: string): Observable<number> {
+        if (this._cvarCache[instrument]) {
+            return of(this._cvarCache[instrument]);
+        }
+
+        return new Observable<number>((observer: Observer<number>) => {
+            this._instrumentService.instrumentToDatafeedFormat(instrument).subscribe((mappedInstrument: IInstrument) => {
+                if (!mappedInstrument) {
+                    observer.next(null);
+                    return;
+                }
+                this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_cvar`, mappedInstrument).pipe(map(this._decrypt)).subscribe((res: IBFTACVarInfo) => {
+                    this._cvarCache[instrument] = res.cvar;
+                    observer.next(res.cvar);
+                });
+            }, (error) => {
+                observer.next(null);
+            });
+        });
     }
 
     scanInstruments(): Observable<IBFTScanInstrumentsResponse> {

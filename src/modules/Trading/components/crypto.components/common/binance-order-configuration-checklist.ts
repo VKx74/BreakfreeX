@@ -3,7 +3,7 @@ import { OrderSide, OrderTypes } from "../../../models/models";
 import { Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
 import { MatDialog } from '@angular/material/dialog';
-import { BinanceChecklistItemDescription, BinanceGlobalTrendValidator, BinanceLevelsValidator, BinanceLocalTrendValidator, BinanceSpreadValidator, CalculatingChecklistStatuses, ChecklistItem, OrderValidationChecklist } from 'modules/Trading/models/crypto/shared/order.validation';
+import { BinanceChecklistItemDescription, BinanceCorrelatedRiskValidator, BinanceGlobalTrendValidator, BinanceLevelsValidator, BinanceLeverageValidator, BinanceLocalTrendValidator, BinanceSpreadValidator, BinanceStoplossValidator, CalculatingChecklistStatuses, ChecklistItem, OrderValidationChecklist } from 'modules/Trading/models/crypto/shared/order.validation';
 import { componentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BinanceOrderConfig } from '../binance/order-configurator/binance-order-configurator.component';
 import { BinanceBroker } from '@app/services/binance/binance.broker';
@@ -16,7 +16,10 @@ export abstract class BinanceOrderConfigurationChecklist {
         new BinanceLocalTrendValidator(),
         new BinanceGlobalTrendValidator(),
         new BinanceLevelsValidator(),
-        new BinanceSpreadValidator()
+        new BinanceLeverageValidator(),
+        new BinanceCorrelatedRiskValidator(),
+        new BinanceStoplossValidator(),
+        new BinanceSpreadValidator(),
     ];
 
     protected _checklistSubject: Subject<void> = new Subject();
@@ -49,22 +52,28 @@ export abstract class BinanceOrderConfigurationChecklist {
     }
 
     protected _calculateChecklist() {
-        this._setCalculatingChecklistStatus(true);
-
-        if (!this.lastTick) {
+        if (!this.canShowOrderValidation()) {
+            this.orderScore = 10;
+            this.checklistItems = [];
             return;
         }
 
+        this._setCalculatingChecklistStatus(true);
+
         if (this._checklistTimeout) {
             clearTimeout(this._checklistTimeout);
+        }
+
+        if (!this.lastTick) {
+            return;
         }
 
         this.broker.calculateOrderChecklist({
             Side: this.config.side,
             Size: this.config.amount,
             Symbol: this.config.instrument.id,
-            Price: this.config.type !== OrderTypes.Market ? this.config.price : null,
-            // SL: this.config.sl ? this.config.sl : null,
+            Price: this.config.type !== OrderTypes.Market ? this.config.price : (this.lastTick.bid + this.lastTick.ask) / 2,
+            SL: this.config.sl ? this.config.sl : null,
             Timeframe: this.config.timeframe,
             LastPrice: this.config.lastPrice
         }).subscribe((res) => {
@@ -96,6 +105,9 @@ export abstract class BinanceOrderConfigurationChecklist {
 
         for (const i of this.checklist) {
             const res = i.calculate(data, this.config);
+            if (!res) {
+                continue;
+            }
             if (res.valid === undefined || res.valid === null) {
                 recalculateNeeded = true;
                 continue;
@@ -190,6 +202,10 @@ export abstract class BinanceOrderConfigurationChecklist {
         if (needLoad) {
             this._raiseCalculateChecklist();
         }
+    }
+
+    canShowOrderValidation() {
+        return this.config.type === OrderTypes.Market || this.config.type === OrderTypes.Limit;
     }
 
     ngOnDestroy() {

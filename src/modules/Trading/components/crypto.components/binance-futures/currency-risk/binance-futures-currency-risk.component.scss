@@ -1,0 +1,16 @@
+@import "../../../trade-manager/items-component/shared.scss";
+
+
+/deep/ .mat-cell {
+  @include themify($themes, true) {
+    color: themed('valueTextColor') !important;
+  }
+}
+
+:host {
+  height: 100%;
+
+  /deep/ mat-table {
+    min-width: 400px;
+  }
+}
