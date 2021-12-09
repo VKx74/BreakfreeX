@@ -72,6 +72,18 @@
                 </mat-form-field>
             </div>
         </div>
+    </div> 
+    <div class="flex-row">
+        <div class="flex-column  padding-right">
+            <div class="crypto-form-unit margin-bottom" *ngIf="isStopLimitPriceRequired()">
+                <mat-form-field class="crypto-input bft-form-input full-width  nborder ">
+                    <span class="orderpanelprefix" matPrefix>{{'tradeManager.stop' | translate}}</span>
+                    <input matInput class="bftinput" type="number" numericInput [floatOnly]="true" [step]="priceStep"
+                        [range]="{min: minPriceValue}" [(ngModel)]="config.stopLimitPrice" placeholder="Entre price">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex-column  padding-left"></div>
     </div>
 
     <div class="flex-row" *ngIf="isIcebergQtyAllowed()">

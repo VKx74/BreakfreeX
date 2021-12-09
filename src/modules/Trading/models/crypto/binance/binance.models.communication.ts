@@ -14,6 +14,7 @@ export enum BinanceSpotCoinMessageType {
     CloseSpotOrder = "CloseSpotOrder",
     SpotSymbolOrderInfo = "SpotSymbolOrderInfo",
     PlaceSpotOrder = "PlaceSpotOrder",
+    PlaceSpotOCOOrder = "PlaceSpotOCOOrder",
     SubscribeSpotMarkPrice = "SubscribeSpotMarkPrice"
 }
 
@@ -258,6 +259,14 @@ export class BinanceSpotPlaceOrderRequest extends BrokerRequestMessageBase {
 
     constructor() {
         super(BinanceSpotCoinMessageType.PlaceSpotOrder);
+    }
+}
+
+export class BinanceSpotPlaceOCOOrderRequest extends BrokerRequestMessageBase {
+    public Data: any;
+
+    constructor() {
+        super(BinanceSpotCoinMessageType.PlaceSpotOCOOrder);
     }
 }
 

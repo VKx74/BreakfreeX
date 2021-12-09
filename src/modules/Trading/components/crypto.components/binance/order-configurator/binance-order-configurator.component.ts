@@ -26,6 +26,7 @@ export class BinanceOrderConfig {
     type: OrderTypes;
     price?: number;
     stopPrice?: number;
+    stopLimitPrice?: number;
     icebergQty?: number;
     tif?: TimeInForce;
     useIcebergQty?: boolean;
@@ -101,7 +102,7 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
     priceStep: number = 0.00001;
     amountStep: number = 0.0001;
     decimals: number = 5;
-    allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.StopLoss, OrderTypes.StopLossLimit, OrderTypes.TakeProfit, OrderTypes.TakeProfitLimit, OrderTypes.LimitMaker];
+    allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.StopLoss, OrderTypes.StopLossLimit, OrderTypes.TakeProfit, OrderTypes.TakeProfitLimit, OrderTypes.LimitMaker, OrderTypes.OCO];
     allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing, TimeInForce.GoodTillExpiredOrCanceled];
     processingSubmit: boolean;
 
@@ -142,7 +143,8 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
             [OrderTypes.StopLossLimit]: 'tradeManager.orderType.stopLossLimit',
             [OrderTypes.StopMarket]: 'tradeManager.orderType.stopMarket',
             [OrderTypes.TakeProfit]: 'tradeManager.orderType.takeProfit',
-            [OrderTypes.TakeProfitLimit]: 'tradeManager.orderType.takeProfitLimit'
+            [OrderTypes.TakeProfitLimit]: 'tradeManager.orderType.takeProfitLimit',
+            [OrderTypes.OCO]: 'tradeManager.orderType.ocoOrder'
         };
 
         return this._translateService.stream(_map[type]);
@@ -167,11 +169,19 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
     }
 
     isPriceRequired() {
-        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit || this.config.type === OrderTypes.LimitMaker;
+        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.StopLossLimit || 
+            this.config.type === OrderTypes.TakeProfitLimit || this.config.type === OrderTypes.LimitMaker || 
+            this.config.type === OrderTypes.OCO;
     }
 
     isStopPriceRequired() {
-        return this.config.type === OrderTypes.StopLoss || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit || this.config.type === OrderTypes.TakeProfit;
+        return this.config.type === OrderTypes.StopLoss || this.config.type === OrderTypes.StopLossLimit || 
+            this.config.type === OrderTypes.TakeProfitLimit || this.config.type === OrderTypes.TakeProfit || 
+            this.config.type === OrderTypes.OCO;
+    } 
+    
+    isStopLimitPriceRequired() {
+        return this.config.type === OrderTypes.OCO;
     }
 
     isIcebergQtyAllowed() {
@@ -179,7 +189,7 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
     }
 
     isTimeInForceRequired() {
-        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit;
+        return this.config.type === OrderTypes.Limit || this.config.type === OrderTypes.StopLossLimit || this.config.type === OrderTypes.TakeProfitLimit || this.config.type === OrderTypes.OCO;
     }
 
     handleInstrumentChange(instrument: IInstrument) {
@@ -263,7 +273,7 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
             return;
         }
 
-        const broker = this._brokerService.activeBroker;
+        const broker = this._brokerService.activeBroker as BinanceBroker;
         const placeOrderData = {
             Side: this.config.side,
             Size: this.config.amount,
@@ -277,6 +287,10 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
 
         if (this.isStopPriceRequired()) {
             placeOrderData["StopPrice"] = Number(this.config.stopPrice);
+        }
+        
+        if (this.isStopLimitPriceRequired()) {
+            placeOrderData["StopLimitPrice"] = Number(this.config.stopLimitPrice);
         }
 
         if (this.isTimeInForceRequired()) {
@@ -293,7 +307,7 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
         }
 
         this.processingSubmit = true;
-        broker.placeOrder(placeOrderData)
+        (this.config.type === OrderTypes.OCO ? broker.placeOCOOrder(placeOrderData) : broker.placeOrder(placeOrderData))
             .pipe(finalize(() => {
             }))
             .subscribe(value => {

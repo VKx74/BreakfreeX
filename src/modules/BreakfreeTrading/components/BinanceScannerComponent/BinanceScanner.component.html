@@ -1,0 +1,126 @@
+<div class="flex scanner-container">
+   <div class="filters">
+      <div class="search-row">
+         <div class="search-input">
+            <input [(ngModel)]="searchText" class="filters-search" placeholder="Search"
+               (keyup)="searchTextInput($event)" />
+            <div class="filters-search-icon" (click)="searchIconClick()"><i class="fa fa-search"></i></div>
+         </div>
+         <div class="sorting">
+            <div class="sort-item" [ngClass]="{'selected': sortingType == SortingType.Gainers}" (click)="setSorting(SortingType.Gainers)">
+               Top Gainers
+            </div>
+            <div class="sort-item" [ngClass]="{'selected': sortingType == SortingType.Losers}" (click)="setSorting(SortingType.Losers)">
+               Top Losers
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="result-container">
+      <div class="result-header">
+         <div class="symbol-title">
+            <div class="header-title">
+               Symbol
+            </div>
+         </div>
+         <div class="result-header-group">
+            <div class="header-title">
+               1PC
+            </div>
+            <div class="header-title">
+               2PC
+            </div>
+            <div class="header-title">
+               3PC
+            </div>
+            <div class="header-title">
+               5PC
+            </div>
+         </div>
+
+         <div class="result-header-group">
+            <div class="header-title">
+               1VC
+            </div>
+            <div class="header-title">
+               2VC
+            </div>
+            <div class="header-title">
+               3VC
+            </div>
+            <div class="header-title">
+               5VC
+            </div>
+         </div>
+
+         <div class="result-header-group">
+            <div class="header-title">
+               1TC
+            </div>
+            <div class="header-title">
+               2TC
+            </div>
+            <div class="header-title">
+               3TC
+            </div>
+            <div class="header-title">
+               5TC
+            </div>
+         </div>
+
+      </div>
+      <div class="results">
+         <div class="result-row" *ngFor="let item of top100" (click)="showDetails(item)">
+            <div class="symbol-value">
+               <div class="result-value">
+                  {{item.Symbol}}
+               </div>
+            </div>
+            <div class="result-value-group">
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last1PC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last2PC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last3PC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last5PC}}
+               </div>
+            </div>
+            <div class="result-value-group">
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last1VC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last2VC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last3VC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last5VC}}
+               </div>
+            </div>
+            <div class="result-value-group">
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last1TC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last2TC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last3TC}}
+               </div>
+               <div class="result-value" PosNegativeNumberColorDirective>
+                  {{item.Last5TC}}
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+</div>

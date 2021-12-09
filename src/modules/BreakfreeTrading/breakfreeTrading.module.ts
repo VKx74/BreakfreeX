@@ -55,6 +55,11 @@ import { StorageModule } from 'modules/Storage/storage.module';
 import { BreakfreeTradingScannerWidgetComponent } from './components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
 import { BreakfreeTradingBacktestComponent } from './components/BreakfreeTradingBacktesComponent/BreakfreeTradingBacktest.component';
 import { BlackFridayPremiumVideoComponent } from './components/blackFridayPremiumVideo/blackFridayPremiumVideo.component';
+import { BinanceScannerComponent } from './components/BinanceScannerComponent/BinanceScanner.component';
+import { BinanceScannerWidgetComponent } from './components/BinanceScannerWidget/BinanceScannerWidget.component';
+import { BinanceScannerWsService } from './services/binance.scanner/binance.scanner.ws.service';
+import { BinanceScannerService } from './services/binance.scanner/binance.scanner.service';
+import { PosNegativeNumberColorDirective } from './components/BinanceScannerComponent/directive/color.directive';
 
 @NgModule({
     // components here
@@ -84,7 +89,10 @@ import { BlackFridayPremiumVideoComponent } from './components/blackFridayPremiu
         PlainChartComponent,
         TradeGuardRiskClassPipe,
         TradingPerformanceComponent,
-        LeaderDashboardComponent
+        LeaderDashboardComponent,
+        BinanceScannerComponent,
+        BinanceScannerWidgetComponent,
+        PosNegativeNumberColorDirective
     ],
     imports: [
         CommonModule,
@@ -129,7 +137,9 @@ import { BlackFridayPremiumVideoComponent } from './components/blackFridayPremiu
         PhoneNumberPopUpComponent,
         MissionsComponent,
         MissionsInfoComponent,
-        TradeGuardComponent
+        TradeGuardComponent,
+        BinanceScannerComponent,
+        BinanceScannerWidgetComponent
     ],
     // components here
     exports: [
@@ -152,7 +162,9 @@ import { BlackFridayPremiumVideoComponent } from './components/blackFridayPremiu
         TradeGuardComponent,
         SpeedometerComponent,
         // ChartWrapperComponent,
-        TradingPerformanceComponent
+        TradingPerformanceComponent,
+        BinanceScannerComponent,
+        BinanceScannerWidgetComponent
     ],
     providers: [
         HistoryService,
@@ -161,6 +173,8 @@ import { BlackFridayPremiumVideoComponent } from './components/blackFridayPremiu
         ChartTrackerService,
         TradeGuardService,
         BreakfreeTradingBacktestService,
+        BinanceScannerWsService,
+        BinanceScannerService,
         TradingPerformanceService,
         {
             provide: BreakfreeTradingTranslateService,

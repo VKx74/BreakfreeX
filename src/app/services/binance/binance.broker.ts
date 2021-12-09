@@ -68,6 +68,8 @@ export abstract class BinanceBrokerBase {
             let risk = 0;
 
             order.RiskClass = RiskClass.Calculating;
+            order.Risk = 0;
+            order.RiskPercentage = 0;
 
             let instrument = this._instruments.find(_ => _.id === order.Symbol);
             if (!instrument) {
@@ -458,6 +460,22 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             }));
 
         }));
+    } 
+    
+    placeOCOOrder(order: any): Observable<ActionResult> {
+        return new Observable<ActionResult>((observer: Observer<ActionResult>) => {
+            this.ws.placeOCOOrder(order).subscribe((response) => {
+                if (response.IsSuccess) {
+                    observer.next({ result: true });
+                } else {
+                    observer.error(response.ErrorMessage);
+                }
+                observer.complete();
+            }, (error) => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
     }
 
     editOrder(order: any): Observable<ActionResult> {
@@ -795,6 +813,8 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             case "TAKE_PROFIT_LIMIT": return OrderTypes.TakeProfitLimit;
             case "TAKE PROFIT MARKET":
             case "TAKE_PROFIT_MARKET": return OrderTypes.TakeProfitMarket;
+            case "LIMIT MAKER":
+            case "LIMIT_MAKER": return OrderTypes.LimitMaker;
         }
 
         return type as OrderTypes;
@@ -1251,9 +1271,10 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             Side: order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
             Size: order.Size,
             Symbol: order.Symbol,
-            Type: OrderTypes.TakeProfit,
-            // TimeInForce: TimeInForce.GoodTillCancel,
+            Type: OrderTypes.TakeProfitLimit,
+            TimeInForce: TimeInForce.GoodTillCancel,
             StopPrice: order.TP,
+            Price: order.TP,
             ReduceOnly: true
         });
     }

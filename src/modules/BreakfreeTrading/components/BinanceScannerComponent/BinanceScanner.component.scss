@@ -1,0 +1,221 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+
+:host {
+  width: 100%;
+  height: 100%;
+
+  .scanner-container {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .filters,
+  .search-input,
+  .search-button,
+  .result-container,
+  .result-header,
+  .header-title,
+  .results {
+    display: flex;
+  }
+
+  .header-title,
+  .result-header {
+    width: 100%;
+  }
+
+  .filters {
+    padding: 10px;
+  }
+
+  .result-container {
+    width: 100%;
+    height: 100%;
+    padding: 0px 10px;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  .result-header {
+    height: 28px !important;
+    min-height: 28px !important;
+    position: sticky;
+    top: 0px;
+  }
+
+  .result-header-group {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .header-title {
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+  }
+
+  .result-header-group {
+    background-color: #3d61cc;
+    width: 100%;
+    min-width: 180px;
+    display: flex;
+  }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+
+    .result-row {
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      height: 28px !important;
+      min-height: 28px !important;
+      font-size: 10px;
+    }
+
+    .result-value-group {
+      display: flex;
+      width: 100%;
+      min-width: 180px;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+
+  .symbol-title {
+    background-color: #3d61cc;
+    display: flex;
+    min-width: 80px !important;
+    max-width: 80px !important;
+  }
+
+  .symbol-value {
+    display: flex;
+    font-weight: bold;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    justify-content: left;
+    align-items: center;
+    padding-left: 10px;
+  }
+
+  .filters-search {
+    width: 100%;
+    display: flex;
+    font-size: 11px;
+    flex-direction: row;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 6px 4px 6px 30px;
+    font-family: "Open Sans";
+    font-weight: 700;
+    transition: all 0.22s;
+  }
+
+  .filters-search-icon {
+    position: absolute;
+    left: 0px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .search-row {
+    display: flex;
+    margin-right: 5px;
+    align-items: center;
+    position: relative;
+  }
+
+  .sorting {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    .sort-item {
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      height: 100%;
+      padding: 0px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &.selected {
+        background-color: #3d61cc;
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  // /deep/.crypto-button {
+  //   color: themed("valueTextColor");
+  // }
+
+  // /deep/.crypto-button {
+  //   background-color: themed("inputBackgroundColor");
+  // }
+
+  // /deep/.row {
+  //   border-color: themed("inputBackgroundColor");
+  // }
+
+  // .tradeoverview .leftbord {
+  //   background: themed("valueTextColor");
+  // }
+
+  .result-value-group,
+  .result-header-group,
+  .symbol-title {
+    border: 1px solid themed("inputBackgroundColor");
+  }
+
+  .result-row {
+    &:hover {
+      background-color: themed("inputBackgroundColor");
+    }
+  }
+
+  .results {
+    color: themed("valueTextColor");
+  }
+
+  .positive {
+    color: themed("buyColor");
+  }
+
+  .negative {
+    color: themed("sellColor");
+  }
+
+  .search-row {
+    color: themed("valueTextColor");
+  }
+
+  .filters-search, .sort-item {
+    background-color: themed("sonar-search-bg");
+    border-color: themed("sonar-search-border");
+
+    &:hover,
+    &:active {
+      background-color: themed("sonar-search-bg-active");
+      border-color: themed("sonar-search-border-active");
+    }
+  }
+}

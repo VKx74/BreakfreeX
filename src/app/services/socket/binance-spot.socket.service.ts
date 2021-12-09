@@ -4,7 +4,7 @@ import { IdentityService } from '../auth/identity.service';
 import { BrokerResponseMessageBase } from "modules/Trading/models/communication";
 import { BrokerSocketService } from "./broker.socket.service";
 import { BinanceEnvironment, IBinancePrice } from 'modules/Trading/models/crypto/shared/models.communication';
-import { BinanceSpotAccountInfoResponse, BinanceSpotAccountUpdateResponse, BinanceSpotBookPriceRequest, BinanceSpotBookPriceResponse, BinanceSpotCloseOrderRequest, BinanceSpotLoginRequest, BinanceSpotLoginResponse, BinanceSpotMarketPriceResponse, BinanceSpotMarketTradeResponse, BinanceSpotMarketTradesRequest, BinanceSpotOpenOrderResponse, BinanceSpotOpenOrdersRequest, BinanceSpotOrderBookItemResponse, BinanceSpotOrderHistoryRequest, BinanceSpotOrderHistoryResponse, BinanceSpotOrderInfoRequest, BinanceSpotOrderUpdateResponse, BinanceSpotPlaceOrderRequest, BinanceSpotSubscribeMarketPriceRequest, BinanceSpotSubscribeOrderBookRequest, BinanceSpotSubscribeOrderBookResponse, BinanceSpotTradeHistoryRequest, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountInfoData, IBinanceSpotAccountBalance, IBinanceSpotOrderUpdateData } from 'modules/Trading/models/crypto/binance/binance.models.communication';
+import { BinanceSpotAccountInfoResponse, BinanceSpotAccountUpdateResponse, BinanceSpotBookPriceRequest, BinanceSpotBookPriceResponse, BinanceSpotCloseOrderRequest, BinanceSpotLoginRequest, BinanceSpotLoginResponse, BinanceSpotMarketPriceResponse, BinanceSpotMarketTradeResponse, BinanceSpotMarketTradesRequest, BinanceSpotOpenOrderResponse, BinanceSpotOpenOrdersRequest, BinanceSpotOrderBookItemResponse, BinanceSpotOrderHistoryRequest, BinanceSpotOrderHistoryResponse, BinanceSpotOrderInfoRequest, BinanceSpotOrderUpdateResponse, BinanceSpotPlaceOrderRequest, BinanceSpotSubscribeMarketPriceRequest, BinanceSpotSubscribeOrderBookRequest, BinanceSpotSubscribeOrderBookResponse, BinanceSpotTradeHistoryRequest, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountInfoData, IBinanceSpotAccountBalance, IBinanceSpotOrderUpdateData, BinanceSpotPlaceOCOOrderRequest } from 'modules/Trading/models/crypto/binance/binance.models.communication';
 import { IWebSocketConfig } from '@app/interfaces/socket/WebSocketConfig';
 import { Injectable } from '@angular/core';
 import { AppConfigService } from '../app.config.service';
@@ -211,6 +211,14 @@ export class BinanceSpotSocketService extends BrokerSocketService {
   public placeOrder(orderData: any): Observable<BrokerResponseMessageBase> {
     return new Observable<BrokerResponseMessageBase>(subscriber => {
       const message = new BinanceSpotPlaceOrderRequest();
+      message.Data = orderData;
+      this._send(message, subscriber);
+    });
+  }
+
+  public placeOCOOrder(orderData: any): Observable<BrokerResponseMessageBase> {
+    return new Observable<BrokerResponseMessageBase>(subscriber => {
+      const message = new BinanceSpotPlaceOCOOrderRequest();
       message.Data = orderData;
       this._send(message, subscriber);
     });

@@ -174,6 +174,10 @@ export class BinanceTradeRatingService {
             }
         }
 
+        if (!result.OrderRiskValue) {
+            result.OrderRiskValue = 0;
+        }
+
         let positionRisk = this.broker.getSamePositionsRisk(parameters.Symbol, parameters.Side);
         let correlatedRisk = this.broker.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
         result.CorrelatedRiskValue = Math.abs((correlatedRisk / balance * 100) + result.OrderRiskValue);

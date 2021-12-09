@@ -21,7 +21,8 @@ export enum OrderTypes {
     TakeProfitLimit = 'TakeProfitLimit',
     LimitMaker = 'LimitMaker',
     TrailingStopMarket = 'TrailingStopMarket',
-    Liquidation = 'Liquidation'
+    Liquidation = 'Liquidation',
+    OCO = 'OCO',
 }
 
 export enum OrderSide {

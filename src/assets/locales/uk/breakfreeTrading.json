@@ -8,6 +8,7 @@
     "addYourPhoneNumber": "Add your phone number"
   },
   "breakfreeTradingBacktestComponentName": "BFT Backtest",
+  "binanceScannerWidgetComponentName": "Binance Scanner",
   "breakfreeTradingAcademyComponentName": "Academy",
   "BreakfreeTradingScannerWidgetName": "Sonar",
   "verificationCodeSent": "Verification code was sent on your phone number, enter it.",
