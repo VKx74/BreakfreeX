@@ -7,7 +7,7 @@ import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
 import { BinanceFutureLoginResponse } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
-import { BinanceFuturesOrder, BinanceFuturesPosition } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { BinanceFuturesOrder, BinanceFuturesPosition, IBinanceEditOrderPrice } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData, BinanceFund, BinanceHistoricalOrder, BinanceHistoricalTrade, BinanceOrder, BinanceSpotTradingAccount, CoinRisk } from "modules/Trading/models/crypto/binance/binance.models";
 import { BinanceSpotBookPriceResponse, BinanceSpotLoginRequest, BinanceSpotOpenOrderResponse, BinanceSpotOrderHistoryResponse, BinanceSpotTradeHistoryResponse, IBinanceSpotAccountBalance, IBinanceSpotAccountInfoData, IBinanceSpotHistoricalOrder, IBinanceSpotOrder, IBinanceSpotOrderUpdateData, IBinanceSpotTrade, IBinanceSpotWalletBalance, SpotOrderStatus } from "modules/Trading/models/crypto/binance/binance.models.communication";
 import { IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
@@ -417,7 +417,11 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
     }
 
     public get isOrderEditAvailable(): boolean {
-        return false;
+        return true;
+    }
+
+    public get isOrderSLTPEditAvailable(): boolean {
+        return true;
     }
 
     public get isPositionBased(): boolean {
@@ -484,12 +488,74 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             msg: "Edit not supported by broker"
         });
     }
-    editOrderPrice(order: any): Observable<ActionResult> {
-        return of({
-            result: false,
-            msg: "Edit not supported by broker"
-        });
+
+    editOrderPrice(order: IBinanceEditOrderPrice): Observable<ActionResult> {
+        let existingOrder = this.orders.find(_ => _.Id === order.Ticket);
+
+        if (!existingOrder) {
+            return of({
+                result: false,
+                msg: "Order not found"
+            });
+        }
+
+        const pricePrecision = this.instrumentDecimals(existingOrder.Symbol);
+        if (order.StopPrice) {
+            order.StopPrice = Math.roundToDecimals(order.StopPrice, pricePrecision);
+        }
+        if (order.Price) {
+            order.Price = Math.roundToDecimals(order.Price, pricePrecision);
+        } 
+        if (order.SL) {
+            order.SL = Math.roundToDecimals(order.SL, pricePrecision);
+        } 
+        if (order.TP) {
+            order.TP = Math.roundToDecimals(order.TP, pricePrecision);
+        }
+
+        if (order.SL) {
+            return this._placeSL({
+                Type: existingOrder.Type,
+                Side: existingOrder.Side,
+                Size: existingOrder.Size,
+                Symbol: existingOrder.Symbol,
+                SL: order.SL
+            });
+        } 
+
+        if (order.TP) {
+            return this._placeTP({
+                Type: existingOrder.Type,
+                Side: existingOrder.Side,
+                Size: existingOrder.Size,
+                Symbol: existingOrder.Symbol,
+                TP: order.TP
+            });
+        }
+
+        let stopPrice = order.StopPrice || existingOrder.StopPrice;
+        if (!stopPrice) {
+            stopPrice = undefined;
+        } 
+        
+        let price = order.Price || existingOrder.Price;
+        if (!price) {
+            price = undefined;
+        }
+
+        return this.cancelOrder(existingOrder.Id).pipe(switchMap((res) => {
+            return this._placeOrder({
+                Side: existingOrder.Side,
+                Size: existingOrder.Size,
+                Symbol: existingOrder.Symbol,
+                Type: existingOrder.Type,
+                Price: price,
+                StopPrice: stopPrice,
+                TimeInForce: this._getTIF(existingOrder.TIF)
+            });
+        }));
     }
+    
     cancelOrder(order: any): Observable<ActionResult> {
         let specificOrder: IOrder;
 
@@ -742,6 +808,17 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
         }
 
         return null;
+    }
+    
+    protected _getTIF(tif: string): TimeInForce {
+        switch (tif) {
+            case "GTC": return TimeInForce.GoodTillCancel;
+            case "FOK": return TimeInForce.FillOrKill;
+            case "IOC": return TimeInForce.ImmediateOrCancel;
+            case "GTX": return TimeInForce.GoodTillCrossing;
+        }
+
+        return tif as any;
     }
 
     protected _parseOrdersHistory(orders: IBinanceSpotHistoricalOrder[]): BinanceHistoricalOrder[] {

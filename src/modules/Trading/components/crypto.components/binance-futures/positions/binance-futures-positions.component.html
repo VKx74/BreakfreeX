@@ -50,7 +50,7 @@
         <data-table-cell columnName="PNL">
             <ng-template let-item>
                 <span [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}">
-                    {{item.NetPL?.toFixed(decimals)}}
+                    {{item.NetPL?.toFixed(getDecimals(item.Symbol))}}
                 </span>
             </ng-template>
         </data-table-cell>

@@ -22,9 +22,10 @@ import { BinanceFuturesOrder } from "modules/Trading/models/crypto/binance-futur
 
 export interface EditOrderPriceConfigBase {
     Ticket: any;
-    Price: number;
-    SL: number;
-    TP: number;
+    Price?: number;
+    StopPrice?: number;
+    SL?: number;
+    TP?: number;
 }
 
 interface IPositionSizeParameters {
@@ -271,7 +272,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        const orderId = Number(id.toString().replace("sl_", "").replace("tp_", ""));
+        const orderId = Number(id.toString().replace("sl_", "").replace("tp_", "").replace("trigger_", ""));
         const order = this._broker.getOrderById(orderId);
         if (!order) {
             callback();
@@ -284,7 +285,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             editRequest.SL = price;
         } else if (id.toString().startsWith("tp_")) {
             editRequest.TP = price;
+        } else if (id.toString().startsWith("trigger_")) {
+            editRequest.Price = null;
+            editRequest.StopPrice = price;
         } else {
+            editRequest.StopPrice = null;
             editRequest.Price = price;
         }
 
@@ -609,13 +614,13 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 stop_shape.lineId = `trigger_${order.Id.toString()}`;
                 stop_shape.lineText = `#${order.Id}`;
                 stop_shape.boxText = `TRIGGER`;
-                stop_shape.isEditable = false;
+                stop_shape.isEditable = this._canEditOrder();
                 stop_shape.showSLTP = false;
                 shapes.push(stop_shape);
 
                 if (entryPrice) {
                     stop_shape.showClose = false;
-                    stop_shape.lineType = "sl";
+                    stop_shape.lineType = "pending";
                 } else {
                     stop_shape.showClose = true;
                     stop_shape.lineType = this.getOrderLineType(order);
@@ -628,7 +633,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 if (shapeOrderBox) {
                     shapes.push(shapeOrderBox);
                 }
-                shape.showSLTP = this._canEditOrder();
+                shape.showSLTP = this._canEditSLTPOrder();
                 shape.lineId = order.Id.toString();
                 shape.lineText = `#${order.Id}`;
                 shape.lineType = this.getOrderLineType(order);
@@ -1162,6 +1167,18 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         return this._broker.isOrderEditAvailable;
+    }
+    
+    private _canEditSLTPOrder(): boolean {
+        if (!this._broker) {
+            return false;
+        }
+
+        if (this._preventModification) {
+            return false;
+        }
+
+        return this._broker.isOrderSLTPEditAvailable;
     }
 
     private _isPositionBased(): boolean {

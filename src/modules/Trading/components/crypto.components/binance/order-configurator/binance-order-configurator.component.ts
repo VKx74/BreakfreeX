@@ -103,7 +103,7 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
     amountStep: number = 0.0001;
     decimals: number = 5;
     allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.StopLoss, OrderTypes.StopLossLimit, OrderTypes.TakeProfit, OrderTypes.TakeProfitLimit, OrderTypes.LimitMaker, OrderTypes.OCO];
-    allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing, TimeInForce.GoodTillExpiredOrCanceled];
+    allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing];
     processingSubmit: boolean;
 
     get instrumentSearchCallback(): (e?: EExchange, s?: string) => Observable<IInstrument[]> {

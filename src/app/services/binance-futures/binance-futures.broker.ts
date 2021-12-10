@@ -5,8 +5,9 @@ import { EExchange } from "@app/models/common/exchange";
 import { IInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
+import { switchmap } from "@decorators/switchmap";
 import { BinanceFutureBookPriceResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureTradeHistoryResponse, FuturesOrderStatus, IBinanceFutureAccountInfoData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureTrade, IBinanceFuturesOrderUpdateData, IBinanceFuturesAccountUpdateData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
-import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesHistoricalTrade, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount, IBinanceFuturesPlaceOrderData } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesHistoricalTrade, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount, IBinanceEditOrderPrice, IBinanceFuturesPlaceOrderData } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData, BinanceOrder } from "modules/Trading/models/crypto/binance/binance.models";
 import { IBinancePrice, IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.communication";
 import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
@@ -91,7 +92,11 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
     }
 
     public get isOrderEditAvailable(): boolean {
-        return false;
+        return true;
+    }
+
+    public get isOrderSLTPEditAvailable(): boolean {
+        return true;
     }
 
     public get isPositionBased(): boolean {
@@ -141,12 +146,73 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             msg: "Edit not supported by broker"
         });
     }
-    editOrderPrice(order: any): Observable<ActionResult> {
-        return of({
-            result: false,
-            msg: "Edit not supported by broker"
-        });
+    editOrderPrice(order: IBinanceEditOrderPrice): Observable<ActionResult> {
+        let existingOrder = this.orders.find(_ => _.Id === order.Ticket);
+
+        if (!existingOrder) {
+            return of({
+                result: false,
+                msg: "Order not found"
+            });
+        }
+
+        const pricePrecision = this.instrumentDecimals(existingOrder.Symbol);
+        if (order.StopPrice) {
+            order.StopPrice = Math.roundToDecimals(order.StopPrice, pricePrecision);
+        }
+        if (order.Price) {
+            order.Price = Math.roundToDecimals(order.Price, pricePrecision);
+        } 
+        if (order.SL) {
+            order.SL = Math.roundToDecimals(order.SL, pricePrecision);
+        } 
+        if (order.TP) {
+            order.TP = Math.roundToDecimals(order.TP, pricePrecision);
+        }
+
+        if (order.SL) {
+            return this._placeSL({
+                Type: existingOrder.Type,
+                Side: existingOrder.Side,
+                Size: existingOrder.Size,
+                Symbol: existingOrder.Symbol,
+                SL: order.SL
+            });
+        } 
+
+        if (order.TP) {
+            return this._placeTP({
+                Type: existingOrder.Type,
+                Side: existingOrder.Side,
+                Size: existingOrder.Size,
+                Symbol: existingOrder.Symbol,
+                TP: order.TP
+            });
+        }
+
+        let stopPrice = order.StopPrice || existingOrder.StopPrice;
+        if (!stopPrice) {
+            stopPrice = undefined;
+        } 
+        
+        let price = order.Price || existingOrder.Price;
+        if (!price) {
+            price = undefined;
+        }
+
+        return this.cancelOrder(existingOrder.Id).pipe(switchMap((res) => {
+            return this._placeOrder({
+                Side: existingOrder.Side,
+                Size: existingOrder.Size,
+                Symbol: existingOrder.Symbol,
+                Type: existingOrder.Type,
+                Price: price,
+                StopPrice: stopPrice,
+                TimeInForce: this._getTIF(existingOrder.TIF)
+            });
+        }));
     }
+
     closePosition(symbol: string): Observable<ActionResult> {
         let position: IPosition;
 
@@ -439,6 +505,17 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
 
     calculateOrderChecklist(parameters: OrderValidationChecklistInput): Observable<OrderValidationChecklist> {
         return this._tradeRatingService.calculateOrderChecklist(parameters);
+    }
+
+    protected _getTIF(tif: string): TimeInForce {
+        switch (tif) {
+            case "GTC": return TimeInForce.GoodTillCancel;
+            case "FOK": return TimeInForce.FillOrKill;
+            case "IOC": return TimeInForce.ImmediateOrCancel;
+            case "GTX": return TimeInForce.GoodTillCrossing;
+        }
+
+        return tif as any;
     }
 
     protected _parseOrdersHistory(orders: IBinanceFutureHistoricalOrder[]): BinanceFuturesHistoricalOrder[] {
@@ -822,7 +899,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                 if (existingAsset.Asset === assetBroker.Asset) {
                     assetExist = true;
                     existingAsset.AvailableBalance = assetBroker.AvailableBalance;
-                    existingAsset.CrossUnPnl = assetBroker.CrossUnPnl;
+                    existingAsset.CrossUnPnl = assetBroker.CrossUnPnl || assetBroker.crossUnPnl;
                     existingAsset.CrossWalletBalance = assetBroker.CrossWalletBalance;
                     existingAsset.InitialMargin = assetBroker.InitialMargin;
                     existingAsset.MaintMargin = assetBroker.MaintMargin;
@@ -849,7 +926,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                     MaxWithdrawAmount: assetBroker.MaxWithdrawAmount,
                     OpenOrderInitialMargin: assetBroker.OpenOrderInitialMargin,
                     PositionInitialMargin: assetBroker.PositionInitialMargin,
-                    UnrealizedProfit: assetBroker.UnrealizedProfit,
+                    UnrealizedProfit: assetBroker.UnrealizedProfit || assetBroker.unrealizedProfit,
                     WalletBalance: assetBroker.WalletBalance,
                 });
             }

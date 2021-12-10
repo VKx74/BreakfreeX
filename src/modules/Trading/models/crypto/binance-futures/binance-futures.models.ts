@@ -73,3 +73,11 @@ export interface IBinanceFuturesPlaceOrderData {
     TimeInForce?: TimeInForce;
     ReduceOnly?: boolean;
 }
+
+export interface IBinanceEditOrderPrice {
+    Ticket: any;
+    Price?: number;
+    SL?: number;
+    TP?: number;
+    StopPrice?: number;
+}

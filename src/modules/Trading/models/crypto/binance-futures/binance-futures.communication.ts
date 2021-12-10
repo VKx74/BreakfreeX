@@ -56,10 +56,12 @@ export interface IBinanceFutureAsset {
     MaxWithdrawAmount: number;
     OpenOrderInitialMargin: number;
     PositionInitialMargin: number;
-    UnrealizedProfit: number;
+    UnrealizedProfit?: number;
+    unrealizedProfit?: number;
     WalletBalance: number;
     CrossWalletBalance: number;
-    CrossUnPnl: number;
+    CrossUnPnl?: number;
+    crossUnPnl?: number;
     AvailableBalance: number;
 }
 

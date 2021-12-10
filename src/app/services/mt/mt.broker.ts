@@ -150,6 +150,10 @@ export abstract class MTBroker implements IMTBroker {
         return true;
     }
 
+    public get isOrderSLTPEditAvailable(): boolean {
+        return true;
+    }
+
     public get isPositionBased(): boolean {
         return false;
     }

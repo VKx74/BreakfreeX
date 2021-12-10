@@ -48,6 +48,7 @@ export interface IBrokerNotification {
 
 export interface IBroker {
     isOrderEditAvailable: boolean;
+    isOrderSLTPEditAvailable: boolean;
     isPositionBased: boolean;
 
     instanceType: EBrokerInstance;
