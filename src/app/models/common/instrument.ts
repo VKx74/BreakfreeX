@@ -25,4 +25,5 @@ export interface IBinanceInstrument extends IInstrument {
     maxQuantity: number;
     minPrice: number;
     minQuantity: number;
+    quantityPrecision: number;
 }

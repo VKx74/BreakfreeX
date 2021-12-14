@@ -48,6 +48,7 @@ export interface IBinanceSymbolData {
     MinQuantity: number;
     StepSize: number;
     TickSize: number;
+    QuantityPrecision: number;
 }
 
 export interface IBinanceMarketPrice {

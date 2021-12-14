@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input} from '@angular/core';
+import { BinanceFuturesUsdBroker } from '@app/services/binance-futures/binance-futures-usd.broker';
 import { BinanceFuturesPosition } from 'modules/Trading/models/crypto/binance-futures/binance-futures.models';
 import {Observable, Subscription, of} from "rxjs";
 import { BinanceFuturesItemsComponent } from '../binance-futures-items.component';
@@ -42,6 +43,22 @@ export class BinanceFuturesPositionsComponent extends BinanceFuturesItemsCompone
         this._subscriptionOnPositionDataChanged = this._binanceBroker.onPositionsParametersUpdated.subscribe(() => {
             this.collectionUpdated();
         });
+    }
+
+    public getPNLDecimals(): number {
+        if (this._binanceBroker instanceof BinanceFuturesUsdBroker) {
+            return 0;
+        }
+        
+        return 2;
+    }
+
+    public isStablecoin(): boolean {
+        if (this._binanceBroker instanceof BinanceFuturesUsdBroker) {
+            return true;
+        }
+        
+        return false;
     }
 
     protected collectionUpdated() {

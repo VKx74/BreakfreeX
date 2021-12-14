@@ -14,7 +14,7 @@ export abstract class BinanceFuturesItemsComponent<T> extends ItemsComponent<T> 
     }
 
     public get decimals(): number {
-        return 8;
+        return 2;
     }
 
     constructor(protected _broker: BrokerService,

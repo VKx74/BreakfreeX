@@ -84,6 +84,7 @@ export interface IBroker {
     instrumentContractSize(symbol: string): number;
     instrumentMinAmount(symbol: string): number;
     instrumentAmountStep(symbol: string): number;
+    instrumentQuantityPrecision(symbol: string): number;
     getOrderById(orderId: number): any;
     getPrice(symbol: string): Observable<ITradeTick>;
     getSamePositionsRisk(symbol: string, side: OrderSide): number;

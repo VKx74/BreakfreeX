@@ -103,6 +103,7 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
     priceStep: number = 0.00001;
     amountStep: number = 0.0001;
     decimals: number = 5;
+    quantityPrecision: number = 2;
     allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.StopLoss, OrderTypes.StopLossLimit, OrderTypes.TakeProfit, OrderTypes.TakeProfitLimit, OrderTypes.LimitMaker, OrderTypes.OCO];
     allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing];
     processingSubmit: boolean;
@@ -233,10 +234,13 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
         this.priceStep = broker.instrumentTickSize(symbol);
         this.minPriceValue = broker.instrumentTickSize(symbol);
         this.decimals = broker.instrumentDecimals(symbol);
+        this.quantityPrecision = broker.instrumentQuantityPrecision(symbol);
 
         if (this.config.amount < this.minAmountValue) {
             this.config.amount = this.minAmountValue;
         }
+
+        this.config.amount = Math.roundToDecimals(this.config.amount, this.quantityPrecision);
 
         if (instrument) {
             if (resetPrice) {
@@ -314,7 +318,7 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
             placeOrderData["SL"] = this.config.sl;
             placeOrderData["TP"] = this.config.tp;
         }
-        
+
         if (this.isReduceOnlyAllowed() && this.config.reduceOnly) {
             placeOrderData["ReduceOnly"] = true;
         }

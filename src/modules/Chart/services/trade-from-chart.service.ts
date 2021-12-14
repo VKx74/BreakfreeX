@@ -19,6 +19,7 @@ import { EBrokerInstance, IBroker, IPositionBasedBroker } from "@app/interfaces/
 import { BinanceOrderConfig } from "modules/Trading/components/crypto.components/binance/order-configurator/binance-order-configurator.component";
 import { BinanceFuturesOrderConfig } from "modules/Trading/components/crypto.components/binance-futures/order-configurator/binance-futures-order-configurator.component";
 import { BinanceFuturesOrder } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
+import { BinanceBrokerBase } from "@app/services/binance/binance.broker";
 
 export interface EditOrderPriceConfigBase {
     Ticket: any;
@@ -238,6 +239,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     public OrderSLTPChange(id: any, price: number, callback: () => void): void {
         if (!this._broker) {
             callback();
+            return;
+        }
+
+        if (this._isPositionBased() && id.startsWith("position_")) {
+            let instrument = id.replace("position_", "");
+            this._editPosition(instrument, price, callback);
             return;
         }
 
@@ -559,6 +566,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             shape.lineType = this.getPositionLineType(position);
             shape.linePrice = position.Price;
             shape.lineId = this.getPositionOrderLineId(position);
+
+            if (this._broker.isOrderSLTPEditAvailable) {
+                shape.showSLTP = true;
+            }
+
             this.setLinePL(shape, position);
             shapes.push(shape);
         }
@@ -566,7 +578,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         // if (shapes.length) {
         //     this._chart.primaryPane.addShapes(shapes);
         // }
-        
+
         this.addShapes(shapes);
     }
 
@@ -1010,6 +1022,62 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         );
     }
 
+    private _editPosition(instrument: string, price: number, callback: () => void) {
+        const positionBasedBroker: IPositionBasedBroker = this._broker as any;
+
+        if (!positionBasedBroker.positions) {
+            callback();
+            return;
+        }
+
+        let pos = positionBasedBroker.positions.find(_ => _.Symbol === instrument);
+        if (!pos) {
+            callback();
+            return;
+        }
+
+        if (this._broker.instanceType === EBrokerInstance.Binance ||
+            this._broker.instanceType === EBrokerInstance.BinanceFuturesCOIN ||
+            this._broker.instanceType === EBrokerInstance.BinanceFuturesUSD) {
+            let binanceBroker = (this._broker as any) as BinanceBrokerBase;
+            let action;
+            let size = Math.abs(pos.Size);
+
+            if (pos.Side === OrderSide.Buy) {
+                if (price > pos.Price) {
+                    action = binanceBroker.placeTP(OrderSide.Sell, size, instrument, price);
+                } else {
+                    action = binanceBroker.placeSL(OrderSide.Sell, size, instrument, price);
+                }
+            } else {
+                if (price < pos.Price) {
+                    action = binanceBroker.placeTP(OrderSide.Buy, size, instrument, price);
+                } else {
+                    action = binanceBroker.placeSL(OrderSide.Buy, size, instrument, price);
+                }
+            }
+            action.subscribe(
+                (result) => {
+                    callback();
+                    if (result.result) {
+                        this._alertService.success("Position modified");
+                    } else {
+                        this._alertService.error("Failed to modify position SL/TP: " + result.msg);
+                        this.refresh();
+                    }
+                },
+                (error) => {
+                    callback();
+                    this._alertService.error("Failed to modify position SL/TP: " + error);
+                    this.refresh();
+                }
+            );
+        } else {
+            callback();
+            return;
+        }
+    }
+
     private showMappingConfirmation(): Observable<any> {
         return this._dialog.open(ConfirmModalComponent, {
             data: {
@@ -1100,7 +1168,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         const pricePrecision = this._broker.instrumentDecimals(orderConfig.instrument.symbol);
-        
+
         if (params.price) {
             orderConfig.price = Math.roundToDecimals(params.price, pricePrecision);
         }
@@ -1168,7 +1236,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
         return this._broker.isOrderEditAvailable;
     }
-    
+
     private _canEditSLTPOrder(): boolean {
         if (!this._broker) {
             return false;

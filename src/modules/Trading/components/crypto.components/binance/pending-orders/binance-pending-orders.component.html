@@ -1,6 +1,6 @@
 <data-table [rows]="items" [blinking]="blinking" [selectable]="true" [allowColumnsVisibilityChange]="true"
     [expandOnClick]="false" [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)"
-    (onDoubleClick)="doubleClicked($event)" [hiddenColumns]="['Id', 'Open Time', 'Net Risk']"
+    (onDoubleClick)="doubleClicked($event)" [hiddenColumns]="['Id', 'Open Time', 'Net Risk']" [trackByIndex]="false"
     (onContextMenuSelected)="handleContextMenuSelected($event)" [groups]="groups" [groupingField]="groupingField">
     <data-table-header-cell columnName="Side" [columnWidth]="1" [columnMinWidth]="1" [sortable]="false">
     </data-table-header-cell>

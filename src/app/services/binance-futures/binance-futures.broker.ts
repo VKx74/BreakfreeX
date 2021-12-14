@@ -5,7 +5,6 @@ import { EExchange } from "@app/models/common/exchange";
 import { IBinanceInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
-import { switchmap } from "@decorators/switchmap";
 import { BinanceFutureBookPriceResponse, BinanceFutureLoginRequest, BinanceFutureLoginResponse, BinanceFutureOpenOrderResponse, BinanceFutureOrderHistoryResponse, BinanceFutureTradeHistoryResponse, FuturesOrderStatus, IBinanceFutureAccountInfoData, IBinanceFutureAsset, IBinanceFutureHistoricalOrder, IBinanceFutureOrder, IBinanceFuturePosition, IBinanceFutureTrade, IBinanceFuturesOrderUpdateData, IBinanceFuturesAccountUpdateData } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
 import { BinanceFuturesAsset, BinanceFuturesHistoricalOrder, BinanceFuturesHistoricalTrade, BinanceFuturesOrder, BinanceFuturesPosition, BinanceFuturesTradingAccount, IBinanceEditOrderPrice, IBinanceFuturesPlaceOrderData } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
 import { BinanceConnectionData, BinanceOrder } from "modules/Trading/models/crypto/binance/binance.models";
@@ -304,6 +303,14 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             }
         }
         return 0.001;
+    } 
+    instrumentQuantityPrecision(symbol: string): number {
+        for (const i of this._instruments) {
+            if (i.id === symbol) {
+                return i.quantityPrecision;
+            }
+        }
+        return 2;
     }
     instrumentAmountStep(symbol: string): number {
         for (const i of this._instruments) {
@@ -793,6 +800,11 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                 }
             }
 
+            if (instrument.PricePrecision) {
+                let tickSize = 1 / Math.pow(10, instrument.PricePrecision);
+                precision = Math.max(precision, tickSize);
+            }
+
             this._instruments.push({
                 id: instrument.Name,
                 symbol: instrument.Name,
@@ -809,7 +821,8 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                 maxQuantity: instrument.MaxQuantity,
                 minPrice: instrument.MinPrice,
                 minQuantity: instrument.MinQuantity,
-                stepSize: instrument.StepSize
+                stepSize: instrument.StepSize,
+                quantityPrecision: instrument.QuantityPrecision
             });
 
             this._instrumentDecimals[instrument.Name] = precision;
@@ -1303,6 +1316,36 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         return res;
     }
 
+    public placeSL(side: OrderSide, size: number, symbol: string, price: number): Observable<ActionResult> {
+        const pricePrecision = this.instrumentDecimals(symbol);
+        price = Math.roundToDecimals(price, pricePrecision);
+        
+        return this._placeOrder({
+            Side: side,
+            Size: size,
+            Symbol: symbol,
+            Type: OrderTypes.StopMarket,
+            TimeInForce: TimeInForce.GoodTillCancel,
+            StopPrice: price,
+            ReduceOnly: true
+        });
+    }
+
+    public placeTP(side: OrderSide, size: number, symbol: string, price: number): Observable<ActionResult> {
+        const pricePrecision = this.instrumentDecimals(symbol);
+        price = Math.roundToDecimals(price, pricePrecision);
+
+        return this._placeOrder({
+            Side: side,
+            Size: size,
+            Symbol: symbol,
+            Type: OrderTypes.TakeProfitMarket,
+            TimeInForce: TimeInForce.GoodTillCancel,
+            StopPrice: price,
+            ReduceOnly: true
+        });
+    }
+
     private _placeSL(order: IBinanceFuturesPlaceOrderData): Observable<ActionResult> {
         if (!this._canOrderHaveRisk(order.Type)) {
             return of(null);
@@ -1312,15 +1355,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             return of(null);
         }
 
-        return this._placeOrder({
-            Side: order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
-            Size: order.Size,
-            Symbol: order.Symbol,
-            Type: OrderTypes.StopMarket,
-            TimeInForce: TimeInForce.GoodTillCancel,
-            StopPrice: order.SL,
-            ReduceOnly: true
-        });
+        return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.SL);
     }
 
     private _placeTP(order: IBinanceFuturesPlaceOrderData): Observable<ActionResult> {
@@ -1332,15 +1367,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             return of(null);
         }
 
-        return this._placeOrder({
-            Side: order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
-            Size: order.Size,
-            Symbol: order.Symbol,
-            Type: OrderTypes.TakeProfitMarket,
-            TimeInForce: TimeInForce.GoodTillCancel,
-            StopPrice: order.TP,
-            ReduceOnly: true
-        });
+        return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.TP);
     }
 
     private _placeOrder(order: IBinanceFuturesPlaceOrderData): Observable<ActionResult> {

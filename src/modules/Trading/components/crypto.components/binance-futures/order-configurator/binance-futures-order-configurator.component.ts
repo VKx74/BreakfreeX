@@ -98,10 +98,12 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
     }
 
     minAmountValue: number = 0.01;
+    pricePrecision: number = 0.01;
     minPriceValue: number = 0.000001;
     priceStep: number = 0.00001;
     amountStep: number = 0.01;
     decimals: number = 5;
+    quantityPrecision: number = 2;
     allowedOrderTypes: OrderTypes[] = [OrderTypes.Limit, OrderTypes.Market, OrderTypes.Stop, OrderTypes.TakeProfit, OrderTypes.StopMarket, OrderTypes.TakeProfitMarket];
     allowedTIFTypes: TimeInForce[] = [TimeInForce.GoodTillCancel, TimeInForce.FillOrKill, TimeInForce.ImmediateOrCancel, TimeInForce.GoodTillCrossing];
     processingSubmit: boolean;
@@ -227,10 +229,13 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
         this.priceStep = broker.instrumentTickSize(symbol);
         this.minPriceValue = broker.instrumentTickSize(symbol);
         this.decimals = broker.instrumentDecimals(symbol);
+        this.quantityPrecision = broker.instrumentQuantityPrecision(symbol);
 
         if (this.config.amount < this.minAmountValue) {
             this.config.amount = this.minAmountValue;
         }
+
+        this.config.amount = Math.roundToDecimals(this.config.amount, this.quantityPrecision);
 
         if (instrument) {
             if (resetPrice) {

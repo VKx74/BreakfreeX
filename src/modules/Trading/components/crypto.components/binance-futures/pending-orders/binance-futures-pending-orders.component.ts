@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import { BinanceFuturesUsdBroker } from '@app/services/binance-futures/binance-futures-usd.broker';
 import { BinanceFuturesOrder } from 'modules/Trading/models/crypto/binance-futures/binance-futures.models';
 import {Observable, Subscription, of} from "rxjs";
 import { BinanceFuturesItemsComponent } from '../binance-futures-items.component';

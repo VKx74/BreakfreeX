@@ -770,6 +770,10 @@ export abstract class MTBroker implements IMTBroker {
         return 0.01;
     }
 
+    public instrumentQuantityPrecision(symbol: string): number {
+        return 2;
+    }
+
     public instrumentAmountStep(symbol: string): number {
         return 0.01;
     }

@@ -359,6 +359,9 @@ export abstract class BinanceBrokerBase {
 
         this.onRisksUpdated.next();
     }
+
+    public abstract placeSL(side: OrderSide, size: number, symbol: string, price: number): Observable<ActionResult>;
+    public abstract placeTP(side: OrderSide, size: number, symbol: string, price: number): Observable<ActionResult>;
 }
 
 export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
@@ -619,6 +622,14 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             }
         }
         return 0.001;
+    }
+    instrumentQuantityPrecision(symbol: string): number {
+        for (const i of this._instruments) {
+            if (i.id === symbol) {
+                return i.quantityPrecision;
+            }
+        }
+        return 2;
     }
     instrumentAmountStep(symbol: string): number {
         for (const i of this._instruments) {
@@ -1101,6 +1112,11 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
                 }
             }
 
+            if (instrument.PricePrecision) {
+                let tickSize = 1 / Math.pow(10, instrument.PricePrecision - 1);
+                precision = Math.max(precision, tickSize);
+            }
+
             this._instruments.push({
                 id: instrument.Name,
                 symbol: instrument.Name,
@@ -1117,7 +1133,8 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
                 maxQuantity: instrument.MaxQuantity,
                 minPrice: instrument.MinPrice,
                 minQuantity: instrument.MinQuantity,
-                stepSize: instrument.StepSize
+                stepSize: instrument.StepSize,
+                quantityPrecision: instrument.QuantityPrecision
             });
 
             this._instrumentDecimals[instrument.Name] = precision;
@@ -1332,6 +1349,38 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
         return res;
     }
 
+    public placeSL(side: OrderSide, size: number, symbol: string, price: number): Observable<ActionResult> {
+        const pricePrecision = this.instrumentDecimals(symbol);
+        price = Math.roundToDecimals(price, pricePrecision);
+
+        return this._placeOrder({
+            Side: side,
+            Size: Math.abs(size),
+            Symbol: symbol,
+            Type: OrderTypes.StopLossLimit,
+            TimeInForce: TimeInForce.GoodTillCancel,
+            StopPrice: price,
+            Price: price,
+            ReduceOnly: true
+        });
+    }
+
+    public placeTP(side: OrderSide, size: number, symbol: string, price: number): Observable<ActionResult> {
+        const pricePrecision = this.instrumentDecimals(symbol);
+        price = Math.roundToDecimals(price, pricePrecision);
+
+        return this._placeOrder({
+            Side: side,
+            Size: Math.abs(size),
+            Symbol: symbol,
+            Type: OrderTypes.TakeProfitLimit,
+            TimeInForce: TimeInForce.GoodTillCancel,
+            Price: price,
+            StopPrice: price,
+            ReduceOnly: true
+        });
+    }
+
     private _placeSL(order: any): Observable<ActionResult> {
         if (!this._canOrderHaveRisk(order.Type)) {
             return of(null);
@@ -1341,16 +1390,7 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             return of(null);
         }
 
-        return this._placeOrder({
-            Side: order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
-            Size: order.Size,
-            Symbol: order.Symbol,
-            Type: OrderTypes.StopLossLimit,
-            TimeInForce: TimeInForce.GoodTillCancel,
-            StopPrice: order.SL,
-            Price: order.SL,
-            ReduceOnly: true
-        });
+        return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.SL);
     }
 
     private _placeTP(order: any): Observable<ActionResult> {
@@ -1362,16 +1402,7 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             return of(null);
         }
 
-        return this._placeOrder({
-            Side: order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy,
-            Size: order.Size,
-            Symbol: order.Symbol,
-            Type: OrderTypes.TakeProfitLimit,
-            TimeInForce: TimeInForce.GoodTillCancel,
-            StopPrice: order.TP,
-            Price: order.TP,
-            ReduceOnly: true
-        });
+        return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.TP);
     }
 
     private _placeOrder(order: any): Observable<ActionResult> {
