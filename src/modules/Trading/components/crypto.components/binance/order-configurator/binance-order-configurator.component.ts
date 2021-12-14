@@ -34,6 +34,7 @@ export class BinanceOrderConfig {
     lastPrice?: number;
     sl?: number;
     tp?: number;
+    reduceOnly?: boolean;
 
     static createLimit(): BinanceOrderConfig {
         const order = this.create();
@@ -209,6 +210,10 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
         return this.config.type === OrderTypes.Market || this.config.type === OrderTypes.Limit;
     }
 
+    isReduceOnlyAllowed() {
+        return this.config.type !== OrderTypes.Market && this.config.type !== OrderTypes.Limit;
+    }
+
     valueChanged() {
         this._raiseCalculateChecklist();
     }
@@ -228,6 +233,10 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
         this.priceStep = broker.instrumentTickSize(symbol);
         this.minPriceValue = broker.instrumentTickSize(symbol);
         this.decimals = broker.instrumentDecimals(symbol);
+
+        if (this.config.amount < this.minAmountValue) {
+            this.config.amount = this.minAmountValue;
+        }
 
         if (instrument) {
             if (resetPrice) {
@@ -304,6 +313,10 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
         if (this.isSLAndTPAllowed()) {
             placeOrderData["SL"] = this.config.sl;
             placeOrderData["TP"] = this.config.tp;
+        }
+        
+        if (this.isReduceOnlyAllowed() && this.config.reduceOnly) {
+            placeOrderData["ReduceOnly"] = true;
         }
 
         this.processingSubmit = true;

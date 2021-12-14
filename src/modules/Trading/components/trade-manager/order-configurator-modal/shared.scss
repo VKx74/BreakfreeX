@@ -375,6 +375,10 @@
     margin-bottom: 5px;
   }
 
+  .margin-top {
+    margin-top: 5px;
+  }
+
 }
 
 :host-context(.#{$classPrefix}-modal) {

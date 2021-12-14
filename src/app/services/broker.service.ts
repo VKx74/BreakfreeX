@@ -244,6 +244,7 @@ export class BrokerService {
             if (data) {
                 this._defaultAccounts = data;
             }
+            this._setMappingManagerAccounts();
         }));
     }
 
@@ -515,6 +516,7 @@ export class BrokerService {
             if (demo_account) {
                 this._defaultAccounts.push(demo_account);
             }
+            this._setMappingManagerAccounts();
             return true;
         }));
     }
@@ -529,5 +531,9 @@ export class BrokerService {
         return this._http.post<IBFTTradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/create_demo`, {}, {
             withCredentials: true
         });
+    }
+
+    private _setMappingManagerAccounts() {
+        this._instrumentMappingService.setDefaultAccounts(this._defaultAccounts);
     }
 }

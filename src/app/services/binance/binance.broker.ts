@@ -3,7 +3,7 @@ import { EBrokerInstance, IBroker, IBrokerNotification, IBrokerState, ICryptoBro
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { EExchange } from "@app/models/common/exchange";
-import { IInstrument } from "@app/models/common/instrument";
+import { IBinanceInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
 import { BinanceFutureLoginResponse } from "modules/Trading/models/crypto/binance-futures/binance-futures.communication";
@@ -31,7 +31,7 @@ interface CumulativeSL {
 export abstract class BinanceBrokerBase {
     protected _tradeRatingService: BinanceTradeRatingService;
     protected _algoService: AlgoService;
-    protected _instruments: IInstrument[] = [];
+    protected _instruments: IBinanceInstrument[] = [];
     protected _coinRisks: CoinRisk[] = [];
 
     public get coinRisks(): CoinRisk[] {
@@ -613,9 +613,19 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
         return 1;
     }
     instrumentMinAmount(symbol: string): number {
+        for (const i of this._instruments) {
+            if (i.id === symbol) {
+                return i.minQuantity;
+            }
+        }
         return 0.001;
     }
     instrumentAmountStep(symbol: string): number {
+        for (const i of this._instruments) {
+            if (i.id === symbol) {
+                return i.stepSize;
+            }
+        }
         return 0.001;
     }
     getOrderById(orderId: any): IOrder {
@@ -649,7 +659,7 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             });
         });
     }
-    getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
+    getInstruments(exchange?: EExchange, search?: string): Observable<IBinanceInstrument[]> {
         if (!search) {
             return of(this._instruments.slice());
         }
@@ -786,7 +796,7 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
         return this.init(state.state);
     }
 
-    instrumentToBrokerFormat(symbol: string): IInstrument {
+    instrumentToBrokerFormat(symbol: string): IBinanceInstrument {
         let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol/*, this._serverName, this._accountInfo.Account*/);
         let isMapped = !!(searchingString);
         if (!searchingString) {
@@ -1083,10 +1093,13 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
         this._lastPriceSubscribers = [];
 
         for (const instrument of instruments) {
-            let precision = instrument.PricePrecision || 2;
-            // let precision = 2;
-
-            let tickSize = 1 / Math.pow(10, precision);
+            let precision = 2;
+            if (instrument.TickSize) {
+                precision = instrument.TickSize.toString().length - 2;
+                if (precision <= 0) {
+                    precision = 1;
+                }
+            }
 
             this._instruments.push({
                 id: instrument.Name,
@@ -1095,16 +1108,21 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
                 exchange: EExchange.Binance,
                 datafeed: EExchangeInstance.BinanceExchange,
                 type: instrument.Type as EMarketType,
-                tickSize: tickSize,
+                tickSize: instrument.TickSize,
                 baseInstrument: instrument.BaseAsset,
                 dependInstrument: instrument.QuoteAsset,
                 pricePrecision: precision,
-                tradable: true
+                tradable: true,
+                maxPrice: instrument.MaxPrice,
+                maxQuantity: instrument.MaxQuantity,
+                minPrice: instrument.MinPrice,
+                minQuantity: instrument.MinQuantity,
+                stepSize: instrument.StepSize
             });
 
             this._instrumentDecimals[instrument.Name] = precision;
             this._instrumentContractSize[instrument.Name] = instrument.ContractSize || 1;
-            this._instrumentTickSize[instrument.Name] = tickSize;
+            this._instrumentTickSize[instrument.Name] = instrument.TickSize;
         }
 
         this.orders = [];

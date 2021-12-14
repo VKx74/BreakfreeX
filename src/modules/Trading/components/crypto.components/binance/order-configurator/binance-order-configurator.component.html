@@ -133,6 +133,19 @@
         </div>
 
     </div>
+    <div class="flex-row" *ngIf="isReduceOnlyAllowed()">
+        <div class="flex-column  padding-right">
+            <div class="crypto-form-unit margin-bottom">
+                <span class="form-unit__label margin-top">{{'tradeManager.reduceOnly' | translate}}</span>
+            </div>
+        </div>
+        <div class="flex-column padding-left">
+            <div class="crypto-form-unit margin-bottom">
+                <mat-slide-toggle [(ngModel)]="config.reduceOnly"></mat-slide-toggle>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <div class="form-wrapper additional-trade-data">

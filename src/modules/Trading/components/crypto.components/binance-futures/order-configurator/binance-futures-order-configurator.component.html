@@ -15,7 +15,8 @@
             <div class="flex-column padding-right">
                 <div class="crypto-form-unit  nborder margin-bottom">
                     <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
-                        [instrumentSearchCallback]="instrumentSearchCallback" [isBrokerSearch]="true"></instrument-search>
+                        [instrumentSearchCallback]="instrumentSearchCallback" [isBrokerSearch]="true">
+                    </instrument-search>
                 </div>
             </div>
             <div class="flex-column  padding-left">
@@ -25,7 +26,8 @@
 
                         <span class="orderpanelprefix" matPrefix>{{'amount' | translate}}</span>
                         <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: minAmountValue}"
-                            type="number" [step]="amountStep" [(ngModel)]="config.amount" (ngModelChange)="valueChanged()">
+                            type="number" [step]="amountStep" [(ngModel)]="config.amount"
+                            (ngModelChange)="valueChanged()">
                     </mat-form-field>
                 </div>
             </div>
@@ -101,10 +103,23 @@
         </div>
 
     </div>
+    <div class="flex-row" *ngIf="isReduceOnlyAllowed()">
+        <div class="flex-column  padding-right">
+            <div class="crypto-form-unit margin-bottom">
+                <span class="form-unit__label margin-top">{{'tradeManager.reduceOnly' | translate}}</span>
+            </div>
+        </div>
+        <div class="flex-column padding-left">
+            <div class="crypto-form-unit margin-bottom">
+                <mat-slide-toggle [(ngModel)]="config.reduceOnly"></mat-slide-toggle>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <div class="form-wrapper additional-trade-data">
-    
+
     <div class="flex-row" *ngIf="canShowOrderValidation()">
         <div class="crypto-form-unit margin-bottom tradescoreholder">
             <div class="checklist-row">
@@ -112,9 +127,11 @@
                     <div class="flex">
                         <!-- <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg"> -->
                         <div class="tradescoretext-label">
-                            <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg"> <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
+                            <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg">
+                            <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
                         </div>
-                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">: {{orderScore}}/10</div>
+                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">: {{orderScore}}/10
+                        </div>
                         <ng-template #calculating>
                             <div class="tradescoretext-calculating">
                                 - calculating...
@@ -122,12 +139,12 @@
                         </ng-template>
                     </div>
 
-                        
+
                     <div class="score-container" *ngIf="config.instrument">
                         <emoji [Calculating]="calculatingChecklist" [MaxScore]="10" [Score]="orderScore"></emoji>
                     </div>
                 </div>
-                
+
                 <div class="tradescore-separator"></div>
 
                 <div class="loader">

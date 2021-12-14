@@ -289,7 +289,7 @@ export class DashboardComponent {
 
     ngAfterViewInit() {
         this._loadLayoutState();
-        this._instrumentMappingService.getAllMapping();
+        // this._instrumentMappingService.getAllMapping();
 
         this._layoutManager.layout.$onAddComponent
             .pipe(takeUntil(componentDestroyed(this)))

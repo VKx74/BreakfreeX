@@ -401,7 +401,7 @@ export interface IBinanceFuturesBalanceUpdateData {
 
 export interface IBinanceFuturesPositionUpdateData {
     Symbol: string;
-    PositionAmount: number;
+    Quantity: number;
     EntryPrice: number;
     RealizedPnL: number;
     UnrealizedPnl: number;
@@ -409,7 +409,7 @@ export interface IBinanceFuturesPositionUpdateData {
     IsolatedWallet: number;
     PositionSide: string;
 }
-
+ 
 export interface IBinanceFuturesAccountUpdateData {
     Reason: string;
     Balances: IBinanceFuturesBalanceUpdateData[];

@@ -12,6 +12,22 @@ import { BinanceItemsComponent } from '../binance-items.component';
 })
 export class BinancePendingOrdersComponent extends BinanceItemsComponent<BinanceOrder> {
     protected _subscriptionOnOrdersDataChanged: Subscription;
+    
+    public get groupingField(): string {
+        return "Symbol";
+    } 
+    
+    public get groups(): string[] {
+        let groups: string[] = [];
+
+        for (const i of this.items) {
+            if (groups.indexOf(i.Symbol) === -1) {
+                groups.push(i.Symbol);
+            }
+        }
+
+        return groups;
+    }
 
     protected loadItems(): Observable<BinanceOrder[]> {
        return of(this._binanceBroker.orders);

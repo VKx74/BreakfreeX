@@ -218,7 +218,8 @@
     "assets": "Assets",
     "asset": "Asset",
     "APIKey": "APIKey",
-    "feeTier": "Fee Tier"
+    "feeTier": "Fee Tier",
+    "reduceOnly": "Reduce Only"
   },
   "periodicity": {
     "minute": "Хвилина",

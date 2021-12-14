@@ -2,7 +2,7 @@ import { EBrokerInstance, IBroker, IBrokerNotification, IBrokerState, ICryptoBro
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { ReadyStateConstants } from "@app/interfaces/socket/WebSocketConfig";
 import { EExchange } from "@app/models/common/exchange";
-import { IInstrument } from "@app/models/common/instrument";
+import { IBinanceInstrument } from "@app/models/common/instrument";
 import { EMarketType } from "@app/models/common/marketType";
 import { ITradeTick } from "@app/models/common/tick";
 import { switchmap } from "@decorators/switchmap";
@@ -32,7 +32,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
     protected _instrumentDecimals: { [symbol: string]: number; } = {};
     protected _instrumentTickSize: { [symbol: string]: number; } = {};
     protected _instrumentContractSize: { [symbol: string]: number; } = {};
-    protected _instruments: IInstrument[] = [];
+    protected _instruments: IBinanceInstrument[] = [];
     protected _onAccountUpdateSubscription: Subscription;
     protected _onReconnectSubscription: Subscription;
     protected _onTickSubscription: Subscription;
@@ -298,9 +298,19 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         return 1;
     }
     instrumentMinAmount(symbol: string): number {
+        for (const i of this._instruments) {
+            if (i.id === symbol) {
+                return i.minQuantity;
+            }
+        }
         return 0.001;
     }
     instrumentAmountStep(symbol: string): number {
+        for (const i of this._instruments) {
+            if (i.id === symbol) {
+                return i.stepSize;
+            }
+        }
         return 0.001;
     }
     getOrderById(orderId: any): IOrder {
@@ -334,7 +344,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             });
         });
     }
-    getInstruments(exchange?: EExchange, search?: string): Observable<IInstrument[]> {
+    getInstruments(exchange?: EExchange, search?: string): Observable<IBinanceInstrument[]> {
         if (!search) {
             return of(this._instruments.slice());
         }
@@ -479,7 +489,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         return this.init(state.state);
     }
 
-    instrumentToBrokerFormat(symbol: string): IInstrument {
+    instrumentToBrokerFormat(symbol: string): IBinanceInstrument {
         let searchingString = this._instrumentMappingService.tryMapInstrumentToBrokerFormat(symbol/*, this._serverName, this._accountInfo.Account*/);
         let isMapped = !!(searchingString);
         if (!searchingString) {
@@ -775,9 +785,13 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         this._lastPriceSubscribers = [];
 
         for (const instrument of instruments) {
-            let precision = instrument.PricePrecision || 2;
-
-            let tickSize = 1 / Math.pow(10, precision);
+            let precision = 2;
+            if (instrument.TickSize) {
+                precision = instrument.TickSize.toString().length - 2;
+                if (precision <= 0) {
+                    precision = 1;
+                }
+            }
 
             this._instruments.push({
                 id: instrument.Name,
@@ -786,16 +800,21 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                 exchange: EExchange.Binance,
                 datafeed: EExchangeInstance.BinanceExchange,
                 type: instrument.Type as EMarketType,
-                tickSize: tickSize,
+                tickSize: instrument.TickSize,
                 baseInstrument: instrument.BaseAsset,
                 dependInstrument: instrument.QuoteAsset,
                 pricePrecision: precision,
-                tradable: true
+                tradable: true,
+                maxPrice: instrument.MaxPrice,
+                maxQuantity: instrument.MaxQuantity,
+                minPrice: instrument.MinPrice,
+                minQuantity: instrument.MinQuantity,
+                stepSize: instrument.StepSize
             });
 
             this._instrumentDecimals[instrument.Name] = precision;
             this._instrumentContractSize[instrument.Name] = instrument.ContractSize || 1;
-            this._instrumentTickSize[instrument.Name] = tickSize;
+            this._instrumentTickSize[instrument.Name] = instrument.TickSize;
         }
 
         this.orders = [];
@@ -1109,8 +1128,8 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
 
             const position = this._getPosition(updatedPosition.Symbol);
             if (position) {
-                position.Size = updatedPosition.PositionAmount;
-                position.Side = updatedPosition.PositionAmount > 0 ? OrderSide.Buy : OrderSide.Sell;
+                position.Size = updatedPosition.Quantity;
+                position.Side = updatedPosition.Quantity > 0 ? OrderSide.Buy : OrderSide.Sell;
                 position.Price = updatedPosition.EntryPrice;
                 position.NetPL = updatedPosition.UnrealizedPnl;
 
@@ -1121,14 +1140,14 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                     positionsParametersUpdated = true;
                 }
             } else {
-                if (!updatedPosition.PositionAmount) {
+                if (!updatedPosition.Quantity) {
                     continue;
                 }
 
                 this.positions.push({
                     Symbol: updatedPosition.Symbol,
-                    Size: updatedPosition.PositionAmount,
-                    Side: updatedPosition.PositionAmount > 0 ? OrderSide.Buy : OrderSide.Sell,
+                    Size: updatedPosition.Quantity,
+                    Side: updatedPosition.Quantity > 0 ? OrderSide.Buy : OrderSide.Sell,
                     Price: updatedPosition.EntryPrice,
                     NetPL: updatedPosition.UnrealizedPnl,
                     CurrentPrice: updatedPosition.EntryPrice

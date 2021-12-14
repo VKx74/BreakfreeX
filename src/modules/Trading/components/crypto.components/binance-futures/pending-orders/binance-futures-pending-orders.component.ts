@@ -11,6 +11,21 @@ import { BinanceFuturesItemsComponent } from '../binance-futures-items.component
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BinanceFuturesPendingOrdersComponent extends BinanceFuturesItemsComponent<BinanceFuturesOrder> {
+    public get groupingField(): string {
+        return "Symbol";
+    } 
+    
+    public get groups(): string[] {
+        let groups: string[] = [];
+
+        for (const i of this.items) {
+            if (groups.indexOf(i.Symbol) === -1) {
+                groups.push(i.Symbol);
+            }
+        }
+
+        return groups;
+    }
 
     protected loadItems(): Observable<BinanceFuturesOrder[]> {
        return of(this._binanceBroker.orders);

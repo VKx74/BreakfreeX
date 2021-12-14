@@ -19,7 +19,10 @@ export interface IInstrument {
     tickSizeCorrect?: boolean;
 }
 
-export interface IZenithInstrument extends IInstrument {
-    tradingMarkets: string[];
-    underlyingType: string;
+export interface IBinanceInstrument extends IInstrument {
+    stepSize: number;
+    maxPrice: number;
+    maxQuantity: number;
+    minPrice: number;
+    minQuantity: number;
 }

@@ -42,6 +42,12 @@ export interface IBinanceSymbolData {
     ContractSize?: number;
     PricePrecision?: number;
     Pair: string;
+    MaxPrice: number;
+    MaxQuantity: number;
+    MinPrice: number;
+    MinQuantity: number;
+    StepSize: number;
+    TickSize: number;
 }
 
 export interface IBinanceMarketPrice {

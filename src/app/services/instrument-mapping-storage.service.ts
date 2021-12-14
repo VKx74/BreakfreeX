@@ -40,12 +40,33 @@ export class SymbolMappingStorageService {
 
     constructor(private http: HttpClient, private _identity: IdentityService) { }
 
-    public getAllMapping(): Observable<ISymbolMappingItem[]> {
+    public getAllMapping(demo: string[], stage1: string[], live: string[]): Observable<ISymbolMappingItem[]> {
         if (this._identity.isGuestMode) {
             return of([]);
         }
 
-        return this.http.get<ISymbolMappingItem[]>(this._templatesURL + '/GetAll');        
+        let demoFilter = [];
+        let stage1Filter = [];
+        let liveFilter = [];
+
+        for (const d of demo) {
+            demoFilter.push(`demo=${d}`);
+        }
+        for (const d of stage1) {
+            stage1Filter.push(`stage1=${d}`);
+        }
+        for (const d of live) {
+            liveFilter.push(`live=${d}`);
+        }
+
+        let allFilters = [...demoFilter, ...stage1Filter, ...liveFilter];
+        let allFiltersString = "";
+        
+        if (allFilters.length) {
+            allFiltersString = `?${allFilters.join("&")}`;
+        }
+
+        return this.http.get<ISymbolMappingItem[]>(this._templatesURL + '/GetAll' + allFiltersString);        
     }
 
     public getSymbolMapping(brokerName: string, login: number): Observable<ISymbolMappingItem> {  
