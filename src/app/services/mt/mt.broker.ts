@@ -505,6 +505,7 @@ export abstract class MTBroker implements IMTBroker {
         this._instrumentType = {};
         this._instrumentProfitMode = {};
         this._instrumentContractSizes = {};
+        this._tickSubscribers = {};
         this._instruments = [];
         this._orders = [];
         this._ordersHistory = [];
@@ -529,10 +530,10 @@ export abstract class MTBroker implements IMTBroker {
                 this.ws.login(request).subscribe((data: MTLoginResponse) => {
                     if (data.IsSuccess) {
                         this._initData = initData;
+                        this._initialize(data.Data);
                         observer.next({
                             result: true
                         });
-                        this._initialize(data.Data);
                         this.ws.setConnectivity(true);
                     } else {
                         observer.error(data.ErrorMessage);

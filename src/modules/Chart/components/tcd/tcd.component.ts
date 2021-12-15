@@ -48,6 +48,8 @@ import { BinanceFuturesCoinBroker } from "@app/services/binance-futures/binance-
 import { BinanceFuturesUsdBroker } from "@app/services/binance-futures/binance-futures-usd.broker";
 import { BinanceFuturesBroker } from "@app/services/binance-futures/binance-futures.broker";
 import { BinanceBroker } from "@app/services/binance/binance.broker";
+import { ITradeTick } from "@app/models/common/tick";
+import { R } from "@angular/cdk/keycodes";
 
 export interface ITcdComponentState {
     chartState?: any;
@@ -94,6 +96,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     private replayWaiter: ReplayWaiter;
     private brokerStateChangedSubscription: Subscription;
     private handleBrokerConnectTimeout: any;
+    private handleSetBALinesTimeout: any;
+    private marketSubscription: Subscription;
 
     private _priceTickerContainerClass = "price-ticker-container";
     private _priceDirectionClass = "price-direction";
@@ -109,6 +113,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     private _hourlyPriceCache: { [instrumentHash: string]: IBarData[] } = {};
     private _sizeChangeObserver: any;
     private _barsSet: boolean;
+    private _trySetBACounter: number = 0;
 
     blur: boolean = false;
     chart: TradingChartDesigner.Chart;
@@ -126,7 +131,6 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         private _themeService: ThemeService,
         private _localizationService: LocalizationService,
         private _educationalTipsService: EducationalTipsService,
-        private _translateService: TranslateService,
         private _timeZoneManager: TimeZoneManager,
         private _templateDataProviderService: TemplatesDataProviderService,
         private _instrumentService: InstrumentService,
@@ -313,6 +317,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                 this.chart.refresh();
             });
             this._sizeChangeObserver.observe(this.chartContainer.nativeElement);
+
+            this._setBALines();
         });
     }
 
@@ -327,7 +333,155 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         this.linker.setLinking(colors[neededColorId]);
     }
 
+    private _setBALines() {
+        if (this.marketSubscription) {
+            this.marketSubscription.unsubscribe();
+            this.marketSubscription = null;
+        }
+
+        if (this.chart.isDestroyed) {
+            return;
+        }
+
+        if (this.handleSetBALinesTimeout) {
+            clearTimeout(this.handleSetBALinesTimeout);
+            this.handleSetBALinesTimeout = null;
+        }
+
+        let tryAgain = false;
+        let instrument: IInstrument = null;
+        if (!this._brokerService.activeBroker || !this._brokerService.isMappingLoaded) {
+            tryAgain = true;
+        } else {
+            instrument = this._brokerService.activeBroker.instrumentToBrokerFormat(this.chart.instrument.id);
+            if (!instrument) {
+                tryAgain = true;
+            }
+        }
+
+        if (tryAgain) {
+            if (this._trySetBACounter > 10) {
+                this._trySetBACounter = 0;
+                return;
+            }
+            this.handleSetBALinesTimeout = setTimeout(() => {
+                this._trySetBACounter++;
+                this._setBALines();
+            }, 3000);
+            return;
+        }
+
+        this._trySetBACounter = 0;
+
+        this.marketSubscription = this._brokerService.activeBroker.subscribeToTicks(instrument.id, (tick: ITradeTick) => {
+            if (tick.symbol !== instrument.id) {
+                return;
+            }
+
+            this._setTick(tick);
+        });
+    }
+
+    private _setTick(tick: ITradeTick) {
+        if (this.chart.isDestroyed) {
+            return;
+        }
+
+        const drawings = this.chart.primaryPane.shapes;
+        let amountOfExistingShapes = 0;
+
+        for (const drawing of drawings) {
+            if (!(drawing instanceof TradingChartDesigner.ShapeRealtimePriceLine)) {
+                continue;
+            }
+            amountOfExistingShapes++;
+            const priceLine = drawing as TradingChartDesigner.ShapeRealtimePriceLine;
+            if (priceLine.isBelow) {
+                priceLine.visualDataPoints[0].value = tick.bid;
+            } else {
+                priceLine.visualDataPoints[0].value = tick.ask;
+            }
+        }
+
+        if (amountOfExistingShapes !== 2) {
+            this._removePriceLines();
+            this._addPriceLines(tick);
+        }
+    }
+
+    private _addPriceLines(tick: ITradeTick) {
+        const bidLine = new TradingChartDesigner.ShapeRealtimePriceLine();
+        bidLine.visualDataPoints[0].value = tick.bid;
+        // bidLine.text = tick.bid.toString();
+        bidLine.lineWidth = 0;
+        bidLine.isBelow = true;
+        bidLine.selectable = false;
+        bidLine.savable = false;
+        bidLine.removable = false;
+        bidLine.hoverable = false;
+        // bidLine.showScaleVerticalFloatingLabel = false;
+        bidLine.locked = true;
+        bidLine.theme = {
+            line: {
+                lineStyle: "dash",
+                strokeColor: "#ff000099"
+            },
+            text: {
+                strokeColor: "#ff000099"
+            }
+        };
+
+        const askLine = new TradingChartDesigner.ShapeRealtimePriceLine();
+        askLine.visualDataPoints[0].value = tick.ask;
+        // askLine.text = tick.ask.toString();
+        askLine.lineWidth = 0;
+        askLine.isBelow = false;
+        askLine.selectable = false;
+        askLine.savable = false;
+        askLine.removable = false;
+        askLine.hoverable = false;
+        // askLine.showScaleVerticalFloatingLabel = false;
+        askLine.locked = true;
+        askLine.theme = {
+            line: {
+                lineStyle: "dash",
+                strokeColor: "#00ff0099"
+            },
+            text: {
+                strokeColor: "#00ff0099"
+            }
+        };
+
+        this.chart.primaryPane.addShapes([bidLine, askLine]);
+    }
+
+    private _removePriceLines() {
+        const drawings = this.chart.primaryPane.shapes;
+        const shapesForRemoving = [];
+
+        for (const drawing of drawings) {
+            if (!(drawing instanceof TradingChartDesigner.ShapeRealtimePriceLine)) {
+                continue;
+            }
+
+            drawing.locked = false;
+            drawing.selectable = true;
+            drawing.removable = true;
+            shapesForRemoving.push(drawing);
+        }
+
+        if (shapesForRemoving && shapesForRemoving.length) {
+            this.chart.primaryPane.removeShapes(shapesForRemoving);
+        }
+    }
+
     private _handleBrokerConnected() {
+        if (!this._brokerService.activeBroker) {
+            this._removePriceLines();
+        }
+        
+        this._setBALines();
+
         if (this._brokerService.activeBroker instanceof MTBroker) {
             const account = (this._brokerService.activeBroker as MTBroker).accountInfo;
             if (account.Balance) {
@@ -484,6 +638,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     protected instrumentChanged(eventObject: TradingChartDesigner.IValueChangedEvent) {
+        this._removePriceLines();
+        this._setBALines();
         this._tradingFromChartHandler.refresh();
         this._alertingFromChartService.refresh();
     }
@@ -599,7 +755,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         }
 
         this._barsSet = true;
-        
+
         this.replayWaiter = null;
 
         this._tradingFromChartHandler.setChart(this.chart, false);
@@ -854,6 +1010,11 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     ngOnDestroy() {
         super.ngOnDestroy();
 
+        if (this.marketSubscription) {
+            this.marketSubscription.unsubscribe();
+            this.marketSubscription = null;
+        }
+
         if (this.brokerStateChangedSubscription) {
             this.brokerStateChangedSubscription.unsubscribe();
         }
@@ -864,6 +1025,10 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
         if (this.handleBrokerConnectTimeout) {
             clearTimeout(this.handleBrokerConnectTimeout);
+        }
+
+        if (this.handleSetBALinesTimeout) {
+            clearTimeout(this.handleSetBALinesTimeout);
         }
 
         if (this.replayModeTimers && this.replayModeTimers.length) {

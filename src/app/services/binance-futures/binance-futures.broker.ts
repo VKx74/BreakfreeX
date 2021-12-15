@@ -416,10 +416,10 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                 this.ws.login(request).subscribe((data: BinanceFutureLoginResponse) => {
                     if (data.IsSuccess) {
                         this._initData = initData;
+                        this._initialize(data.Data);
                         observer.next({
                             result: true
                         });
-                        this._initialize(data.Data);
                         this.ws.setConnectivity(true);
                     } else {
                         observer.error(data.ErrorMessage);
@@ -788,6 +788,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         this._instrumentDecimals = {};
         this._instrumentContractSize = {};
         this._instrumentTickSize = {};
+        this._tickSubscribers = {};
         this._instruments = [];
         this._lastPriceSubscribers = [];
 

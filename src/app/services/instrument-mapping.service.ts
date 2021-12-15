@@ -12,6 +12,8 @@ export class InstrumentMappingService {
     private _defaultAccounts: IBFTTradingAccount[];
 
     public mappingChanged: Subject<void> = new Subject();
+    public mappingLoaded: Subject<void> = new Subject();
+    public isMappingLoaded: boolean;
 
     constructor(private _symbolMappingStorageService: SymbolMappingStorageService) {
     }
@@ -38,6 +40,9 @@ export class InstrumentMappingService {
                         this.allItems[key] = mapping;
                     });
                 }
+
+                this.mappingLoaded.next();
+                this.isMappingLoaded = true;
             });
     }
 

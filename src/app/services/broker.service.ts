@@ -66,6 +66,10 @@ export class BrokerService {
         return true;
         return this._identityService.isAuthorizedCustomer;
     }
+    
+    public get isMappingLoaded(): boolean {
+        return this._instrumentMappingService.isMappingLoaded;
+    }
 
     private _activeBroker$ = new Subject();
     activeBroker$ = this._activeBroker$;
