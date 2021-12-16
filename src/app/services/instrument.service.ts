@@ -55,6 +55,8 @@ export class InstrumentService implements IHealthable {
             searchingString = TradingHelper.normalizeInstrument(instrument);
         }
 
+        let exchanges = ["oanda", "nasdaq", "nse", "binance"];
+
         const observables: Observable<IInstrument[]>[] = this.services.map(s => s.getInstruments(undefined, searchingString));
 
         return forkJoin(observables).pipe(
@@ -65,12 +67,13 @@ export class InstrumentService implements IHealthable {
                 }
 
                 let instruments = JsUtil.flattenArray<IInstrument>(responses);
+                let foundInstruments: IInstrument[] = [];
                 for (const i of instruments) {
                     if (!isMapped) {
                         let instrumentID = TradingHelper.normalizeInstrument(i.id);
                         let instrumentSymbol = TradingHelper.normalizeInstrument(i.symbol);
                         if (searchingString === instrumentID || searchingString === instrumentSymbol) {
-                            return i;
+                            foundInstruments.push(i);
                         }
                     } else {
                         if (searchingString === i.id || searchingString === i.symbol) {
@@ -79,19 +82,12 @@ export class InstrumentService implements IHealthable {
                     }
                 }
 
-                // if (isMapped) {
-                //     return null;
-                // }
+                if (!foundInstruments.length) {
+                    return null;
+                }
 
-                // for (const i of instruments) {
-                //     let instrumentID = this.MTHelper.normalizeInstrument(i.id);
-                //     let instrumentSymbol = this.MTHelper.normalizeInstrument(i.symbol);
-                //     if (searchingString.startsWith(instrumentID) || searchingString.startsWith(instrumentSymbol)) {
-                //         return i;
-                //     }
-                // }
-
-                return null;
+                let bestRes = foundInstruments.find(_ => exchanges.indexOf(_.exchange.toLowerCase()) !== -1);
+                return bestRes || foundInstruments[0];
             })
         );
     }
