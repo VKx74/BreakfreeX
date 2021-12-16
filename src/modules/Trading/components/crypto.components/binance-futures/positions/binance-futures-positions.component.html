@@ -49,9 +49,9 @@
         </data-table-cell> -->
         <data-table-cell columnName="PNL">
             <ng-template let-item>
-                <span [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}">
-                    <span *ngIf="isStablecoin() && item.NetPL">$</span>
+                <span [ngClass]="{'positive-value': item.NetPL > 0, 'negative-value': item.NetPL < 0}" class="bold-text">
                     {{item.NetPL?.toFixed(getPNLDecimals())}}
+                    <span *ngIf="isStablecoin() && item.NetPL">USD</span>
                 </span>
             </ng-template>
         </data-table-cell>

@@ -234,6 +234,14 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
         if (this.config.amount < this.minAmountValue) {
             this.config.amount = this.minAmountValue;
         }
+        
+        if (!this.quantityPrecision && this.amountStep) {
+            this.quantityPrecision = this.amountStep.toString().length - 2;
+        }
+
+        if (this.quantityPrecision <= 0) {
+            this.quantityPrecision = 2;
+        }
 
         this.config.amount = Math.roundToDecimals(this.config.amount, this.quantityPrecision);
 

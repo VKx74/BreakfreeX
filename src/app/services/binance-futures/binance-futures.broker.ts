@@ -12,7 +12,7 @@ import { IBinancePrice, IBinanceSymbolData } from "modules/Trading/models/crypto
 import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
 import { ActionResult, BrokerConnectivityStatus, IOrder, IPosition, OrderSide, OrderTypes, RiskClass, TimeInForce } from "modules/Trading/models/models";
 import { Subject, Observable, of, Subscription, Observer, throwError, combineLatest, forkJoin } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { catchError, map, switchMap } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
 import { BinanceBrokerBase } from "../binance/binance.broker";
 import { BinanceTradeRatingService } from "../binance/binance.trade-rating.service";
@@ -131,9 +131,9 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             }
 
             let placeSL = this._placeSL(order);
-            let placeTP = this._placeTP(order);
+            let placeTP = this._placeTP(order, true);
 
-            return forkJoin([placeSL, placeTP]).pipe(map(() => {
+            return forkJoin([placeSL, placeTP]).pipe(map((sltpResponse) => {
                 return response;
             }));
 
@@ -161,10 +161,10 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         }
         if (order.Price) {
             order.Price = Math.roundToDecimals(order.Price, pricePrecision);
-        } 
+        }
         if (order.SL) {
             order.SL = Math.roundToDecimals(order.SL, pricePrecision);
-        } 
+        }
         if (order.TP) {
             order.TP = Math.roundToDecimals(order.TP, pricePrecision);
         }
@@ -177,7 +177,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
                 Symbol: existingOrder.Symbol,
                 SL: order.SL
             });
-        } 
+        }
 
         if (order.TP) {
             return this._placeTP({
@@ -192,8 +192,8 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         let stopPrice = order.StopPrice || existingOrder.StopPrice;
         if (!stopPrice) {
             stopPrice = undefined;
-        } 
-        
+        }
+
         let price = order.Price || existingOrder.Price;
         if (!price) {
             price = undefined;
@@ -303,7 +303,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             }
         }
         return 0.001;
-    } 
+    }
     instrumentQuantityPrecision(symbol: string): number {
         for (const i of this._instruments) {
             if (i.id === symbol) {
@@ -1320,7 +1320,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
     public placeSL(side: OrderSide, size: number, symbol: string, price: number): Observable<ActionResult> {
         const pricePrecision = this.instrumentDecimals(symbol);
         price = Math.roundToDecimals(price, pricePrecision);
-        
+
         return this._placeOrder({
             Side: side,
             Size: size,
@@ -1359,7 +1359,7 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
         return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.SL);
     }
 
-    private _placeTP(order: IBinanceFuturesPlaceOrderData): Observable<ActionResult> {
+    private _placeTP(order: IBinanceFuturesPlaceOrderData, changeError?: boolean): Observable<ActionResult> {
         if (!this._canOrderHaveRisk(order.Type)) {
             return of(null);
         }
@@ -1368,7 +1368,15 @@ export abstract class BinanceFuturesBroker extends BinanceBrokerBase implements 
             return of(null);
         }
 
-        return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.TP);
+        return this.placeTP(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.TP).pipe(
+            catchError((error) => {
+                // https://app.asana.com/0/0/1201518330160495/f
+                if (error === "Order would immediately trigger." && changeError) {
+                    error = "The take-profit order cannot be set before the position has been filled. Therefore, make sure to manually set take-profit orders after the position has been filled.";
+                }
+                return throwError(error);
+            })
+        );
     }
 
     private _placeOrder(order: IBinanceFuturesPlaceOrderData): Observable<ActionResult> {

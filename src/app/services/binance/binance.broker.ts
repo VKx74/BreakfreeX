@@ -14,7 +14,7 @@ import { IBinanceSymbolData } from "modules/Trading/models/crypto/shared/models.
 import { OrderValidationChecklist, OrderValidationChecklistInput } from "modules/Trading/models/crypto/shared/order.validation";
 import { ActionResult, BrokerConnectivityStatus, CurrencyRiskType, IOrder, OrderSide, OrderTypes, RiskClass, TimeInForce } from "modules/Trading/models/models";
 import { Subject, Observable, of, Subscription, Observer, combineLatest, throwError, forkJoin } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { catchError, map, switchMap } from "rxjs/operators";
 import { AlgoService } from "../algo.service";
 import { InstrumentMappingService } from "../instrument-mapping.service";
 import { TradingHelper } from "../mt/mt.helper";
@@ -460,10 +460,16 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             }
 
             let placeSL = this._placeSL(order);
-            let placeTP = this._placeTP(order);
+            let placeTP = this._placeTP(order, true);
 
-            return forkJoin([placeSL, placeTP]).pipe(map(() => {
+            return forkJoin([placeSL, placeTP]).pipe(map((sltpResponse) => {
                 return response;
+            }), catchError((error) => {
+                // https://app.asana.com/0/0/1201518330160495/f
+                if (error === "Order would immediately trigger.") {
+                    error = "The take-profit order cannot be set before the position has been filled. Therefore, make sure to manually set take-profit orders after the position has been filled.";
+                }
+                return throwError(error);
             }));
 
         }));
@@ -1394,7 +1400,7 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
         return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.SL);
     }
 
-    private _placeTP(order: any): Observable<ActionResult> {
+    private _placeTP(order: any, changeError?: boolean): Observable<ActionResult> {
         if (!this._canOrderHaveRisk(order.Type)) {
             return of(null);
         }
@@ -1403,7 +1409,15 @@ export class BinanceBroker extends BinanceBrokerBase implements ICryptoBroker {
             return of(null);
         }
 
-        return this.placeSL(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.TP);
+        return this.placeTP(order.Side === OrderSide.Buy ? OrderSide.Sell : OrderSide.Buy, order.Size, order.Symbol, order.TP).pipe(
+            catchError((error) => {
+                // https://app.asana.com/0/0/1201518330160495/f
+                if (error === "Stop price would trigger immediately." && changeError) {
+                    error = "The take-profit order cannot be set before the position has been filled. Therefore, make sure to manually set take-profit orders after the position has been filled.";
+                }
+                return throwError(error);
+            })
+        );
     }
 
     private _placeOrder(order: any): Observable<ActionResult> {
