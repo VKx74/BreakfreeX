@@ -55,7 +55,7 @@ export class InstrumentService implements IHealthable {
             searchingString = TradingHelper.normalizeInstrument(instrument);
         }
 
-        let exchanges = ["oanda", "nasdaq", "nse", "binance"];
+        let exchanges = ["oanda", "nasdaq", "nyse", "nse", "binance"];
 
         const observables: Observable<IInstrument[]>[] = this.services.map(s => s.getInstruments(undefined, searchingString));
 
@@ -77,7 +77,7 @@ export class InstrumentService implements IHealthable {
                         }
                     } else {
                         if (searchingString === i.id || searchingString === i.symbol) {
-                            return i;
+                            foundInstruments.push(i);
                         }
                     }
                 }
