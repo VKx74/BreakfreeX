@@ -9,13 +9,13 @@ export const CryptoWatchlist: IWatchlistItem = {
     trackingId:  EMarketType.Crypto,
     isDefault: true,
     data: [ {
-        "id": "eth-btc",
+        "id": "ETHBTC",
         "symbol": "ETHBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 1e-8,
-        "pricePrecision": 8,
+        "tickSize": 1e-7,
+        "pricePrecision": 7,
         "baseInstrument": "ETH",
         "dependInstrument": "BTC",
         "company": "ETH vs BTC",
@@ -23,7 +23,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "xrp-btc",
+        "id": "XRPBTC",
         "symbol": "XRPBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -37,7 +37,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "xlm-btc",
+        "id": "XLMBTC",
         "symbol": "XLMBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -51,13 +51,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "ltc-btc",
+        "id": "LTCBTC",
         "symbol": "LTCBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 1e-8,
-        "pricePrecision": 8,
+        "tickSize": 1e-7,
+        "pricePrecision": 7,
         "baseInstrument": "LTC",
         "dependInstrument": "BTC",
         "company": "LTC vs BTC",
@@ -65,13 +65,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "link-btc",
+        "id": "LINKBTC",
         "symbol": "LINKBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 1e-8,
-        "pricePrecision": 8,
+        "tickSize": 1e-7,
+        "pricePrecision": 7,
         "baseInstrument": "LINK",
         "dependInstrument": "BTC",
         "company": "LINK vs BTC",
@@ -79,13 +79,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "yfi-btc",
+        "id": "YFIBTC",
         "symbol": "YFIBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 1e-8,
-        "pricePrecision": 8,
+        "tickSize": 0.0001,
+        "pricePrecision": 4,
         "baseInstrument": "YFI",
         "dependInstrument": "BTC",
         "company": "YFI vs BTC",
@@ -93,7 +93,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "ada-btc",
+        "id": "ADABTC",
         "symbol": "ADABTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -107,7 +107,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "xem-btc",
+        "id": "XEMBTC",
         "symbol": "XEMBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -121,13 +121,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "xmr-btc",
+        "id": "XMRBTC",
         "symbol": "XMRBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 1e-8,
-        "pricePrecision": 8,
+        "tickSize": 1e-5,
+        "pricePrecision": 5,
         "baseInstrument": "XMR",
         "dependInstrument": "BTC",
         "company": "XMR vs BTC",
@@ -135,13 +135,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "bch-btc",
+        "id": "BCHBTC",
         "symbol": "BCHBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 1e-8,
-        "pricePrecision": 8,
+        "tickSize": 1e-5,
+        "pricePrecision": 5,
         "baseInstrument": "BCH",
         "dependInstrument": "BTC",
         "company": "BCH vs BTC",
@@ -149,13 +149,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "eos-btc",
+        "id": "EOSBTC",
         "symbol": "EOSBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 1e-8,
-        "pricePrecision": 8,
+        "tickSize": 1e-7,
+        "pricePrecision": 7,
         "baseInstrument": "EOS",
         "dependInstrument": "BTC",
         "company": "EOS vs BTC",
@@ -163,7 +163,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "trx-btc",
+        "id": "TRXBTC",
         "symbol": "TRXBTC",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -177,13 +177,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "eth-usdt",
+        "id": "ETHUSDT",
         "symbol": "ETHUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 0.0001,
-        "pricePrecision": 4,
+        "tickSize": 0.01,
+        "pricePrecision": 2,
         "baseInstrument": "ETH",
         "dependInstrument": "USDT",
         "company": "ETH vs USDT",
@@ -191,13 +191,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "btc-usdt",
+        "id": "BTCUSDT",
         "symbol": "BTCUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 0.0001,
-        "pricePrecision": 4,
+        "tickSize": 0.01,
+        "pricePrecision": 2,
         "baseInstrument": "BTC",
         "dependInstrument": "USDT",
         "company": "BTC vs USDT",
@@ -205,13 +205,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "bch-usdt",
+        "id": "BCHUSDT",
         "symbol": "BCHUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 0.0001,
-        "pricePrecision": 4,
+        "tickSize": 0.01,
+        "pricePrecision": 2,
         "baseInstrument": "BCH",
         "dependInstrument": "USDT",
         "company": "BCH vs USDT",
@@ -219,7 +219,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "xrp-usdt",
+        "id": "XRPUSDT",
         "symbol": "XRPUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -233,13 +233,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "ltc-usdt",
+        "id": "LTCUSDT",
         "symbol": "LTCUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 0.0001,
-        "pricePrecision": 4,
+        "tickSize": 0.01,
+        "pricePrecision": 2,
         "baseInstrument": "LTC",
         "dependInstrument": "USDT",
         "company": "LTC vs USDT",
@@ -247,13 +247,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "link-usdt",
+        "id": "LINKUSDT",
         "symbol": "LINKUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 0.0001,
-        "pricePrecision": 4,
+        "tickSize": 0.01,
+        "pricePrecision": 2,
         "baseInstrument": "LINK",
         "dependInstrument": "USDT",
         "company": "LINK vs USDT",
@@ -261,7 +261,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "ada-usdt",
+        "id": "ADAUSDT",
         "symbol": "ADAUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -275,13 +275,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "yfi-usdt",
+        "id": "YFIUSDT",
         "symbol": "YFIUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 0.0001,
-        "pricePrecision": 4,
+        "tickSize": 0.01,
+        "pricePrecision": 2,
         "baseInstrument": "YFI",
         "dependInstrument": "USDT",
         "company": "YFI vs USDT",
@@ -289,13 +289,13 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "xmr-usdt",
+        "id": "XMRUSDT",
         "symbol": "XMRUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
         "type": EMarketType.Crypto,
-        "tickSize": 0.0001,
-        "pricePrecision": 4,
+        "tickSize": 0.01,
+        "pricePrecision": 2,
         "baseInstrument": "XMR",
         "dependInstrument": "USDT",
         "company": "XMR vs USDT",
@@ -303,7 +303,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "trx-usdt",
+        "id": "TRXUSDT",
         "symbol": "TRXUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,
@@ -317,7 +317,7 @@ export const CryptoWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
      },
      {
-        "id": "eos-usdt",
+        "id": "EOSUSDT",
         "symbol": "EOSUSDT",
         "exchange": EExchange.Binance,
         "datafeed": EExchangeInstance.BinanceExchange,

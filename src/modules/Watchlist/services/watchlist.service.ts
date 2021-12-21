@@ -14,6 +14,7 @@ import { BondsWatchlist } from './bonds';
 import { MetalsWatchlist } from './metals';
 import { SettingsStorageService } from '@app/services/settings-storage.servic';
 import { IFeaturedInstruments, IUserSettings } from '@app/models/settings/user-settings';
+import { CryptoWatchlist } from './crypto';
 
 export interface IWatchlistItem {
     id: string;
@@ -45,7 +46,7 @@ export class WatchlistService {
     }
 
     public getDefaultWatchlist(): IWatchlistItem[] {
-        return [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
+        return [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, CryptoWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
     }
 
     public getWatchlists(): Observable<IWatchlistItem[]> {
