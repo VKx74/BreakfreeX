@@ -289,13 +289,29 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         const editRequest = this._getEditOrder(order);
 
         if (id.toString().startsWith("sl_")) {
+            if (editRequest.SL === price) {
+                callback();
+                return;
+            }
             editRequest.SL = price;
         } else if (id.toString().startsWith("tp_")) {
+            if (editRequest.TP === price) {
+                callback();
+                return;
+            }
             editRequest.TP = price;
         } else if (id.toString().startsWith("trigger_")) {
+            if (order.StopPrice === price) {
+                callback();
+                return;
+            }
             editRequest.Price = null;
             editRequest.StopPrice = price;
         } else {
+            if (order.Price === price) {
+                callback();
+                return;
+            }
             editRequest.StopPrice = null;
             editRequest.Price = price;
         }
