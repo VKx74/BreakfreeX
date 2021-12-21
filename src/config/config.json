@@ -136,7 +136,6 @@
     "https://algo-stage.breakfreetrading.com",
     "https://mtapi-stage.breakfreetrading.com",
     "https://user-api-alerts-stage.breakfreetrading.com",
-    "https://socialfeed-social-stage.breakfreetrading.com",
-    "https://localhost"
+    "https://socialfeed-social-stage.breakfreetrading.com"
   ]
 }

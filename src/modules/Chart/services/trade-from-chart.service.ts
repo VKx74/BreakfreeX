@@ -15,11 +15,11 @@ import { IInstrument } from "../../../app/models/common/instrument";
 import { AlgoService } from "@app/services/algo.service";
 import { debounceTime } from "rxjs/operators";
 import { TradingHelper } from "@app/services/mt/mt.helper";
-import { EBrokerInstance, IBroker, IPositionBasedBroker } from "@app/interfaces/broker/broker";
+import { EBrokerInstance, IBroker, ICryptoBroker, IPositionBasedBroker } from "@app/interfaces/broker/broker";
 import { BinanceOrderConfig } from "modules/Trading/components/crypto.components/binance/order-configurator/binance-order-configurator.component";
 import { BinanceFuturesOrderConfig } from "modules/Trading/components/crypto.components/binance-futures/order-configurator/binance-futures-order-configurator.component";
 import { BinanceFuturesOrder } from "modules/Trading/models/crypto/binance-futures/binance-futures.models";
-import { BinanceBrokerBase } from "@app/services/binance/binance.broker";
+import { BinanceBroker, BinanceBrokerBase } from "@app/services/binance/binance.broker";
 
 export interface EditOrderPriceConfigBase {
     Ticket: any;
@@ -397,11 +397,82 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     }
 
     public GetOrderSize(priceDiff: number, risk: number, balance: number, callback: (size: any) => void, skipMapping: boolean = false): void {
-        if (!(this._broker instanceof MTBroker)) {
-            callback("Calculate manually");
+        if (this._broker instanceof MTBroker) {
+            this._getOrderSideForMTBroker(priceDiff, risk, balance, callback, skipMapping);
+            return;
+        }
+        if (this._broker instanceof BinanceBrokerBase) {
+            this._getOrderSideForBinanceBroker(priceDiff, risk, balance, callback, skipMapping);
+            return;
+        }
+        
+    }
+
+    public dispose() {
+        this._brokerStateChangedSubscription.unsubscribe();
+        if (this._ordersUpdatedSubscription) {
+            this._ordersUpdatedSubscription.unsubscribe();
+            this._ordersUpdatedSubscription = null;
+        }
+        if (this._positionsUpdatedSubscription) {
+            this._positionsUpdatedSubscription.unsubscribe();
+            this._positionsUpdatedSubscription = null;
+        }
+        if (this._positionsParametersUpdatedSubscription) {
+            this._positionsParametersUpdatedSubscription.unsubscribe();
+            this._positionsParametersUpdatedSubscription = null;
+        }
+        if (this._onOrdersParametersUpdated) {
+            this._onOrdersParametersUpdated.unsubscribe();
+            this._onOrdersParametersUpdated = null;
+        }
+
+        this._chart = null;
+    }
+
+    private _getOrderSideForBinanceBroker(priceDiff: number, risk: number, balance: number, callback: (size: any) => void, skipMapping: boolean = false): void {
+        const binanceBroker = this._broker as ICryptoBroker;
+        const brokerInstrument = binanceBroker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+
+        if (!brokerInstrument) {
+            if (skipMapping) {
+                callback("Calculate manually");
+                return;
+            }
+
+            this.showMappingConfirmation()
+                .subscribe((dialogResult: any) => {
+                    if (dialogResult) {
+                        this.showMappingModal(() => {
+                            this._getOrderSideForBinanceBroker(priceDiff, risk, balance, callback, true);
+                        });
+                    } else {
+                        this._alertService.warning("Can`t map instruments to your broker format");
+                        callback("Calculate manually");
+                    }
+                });
             return;
         }
 
+        const walletBalance = binanceBroker.getPairBalance(brokerInstrument.id);
+        const params: IPositionSizeParameters = {
+            input_risk: risk,
+            price_diff: priceDiff,
+            instrument: this._chart.instrument as any,
+            input_accountsize: balance || walletBalance,
+            account_currency: null,
+            contract_size: 1
+        };
+
+        const request = {
+            params: params,
+            callback: callback
+        };
+
+        this._calculatePositionSizeBasedOnRatio(request, 1);
+    }
+
+    private _getOrderSideForMTBroker(priceDiff: number, risk: number, balance: number, callback: (size: any) => void, skipMapping: boolean = false): void {
         const mtBroker = this._broker as MTBroker;
         const params: IPositionSizeParameters = {
             input_risk: risk,
@@ -428,7 +499,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 .subscribe((dialogResult: any) => {
                     if (dialogResult) {
                         this.showMappingModal(() => {
-                            this.GetOrderSize(priceDiff, risk, balance, callback, true);
+                            this._getOrderSideForMTBroker(priceDiff, risk, balance, callback, true);
                         });
                     } else {
                         this._alertService.warning("Can`t map instruments to your broker format");
@@ -456,28 +527,6 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         } else {
             this._posSizeSubject.next(request);
         }
-    }
-
-    public dispose() {
-        this._brokerStateChangedSubscription.unsubscribe();
-        if (this._ordersUpdatedSubscription) {
-            this._ordersUpdatedSubscription.unsubscribe();
-            this._ordersUpdatedSubscription = null;
-        }
-        if (this._positionsUpdatedSubscription) {
-            this._positionsUpdatedSubscription.unsubscribe();
-            this._positionsUpdatedSubscription = null;
-        }
-        if (this._positionsParametersUpdatedSubscription) {
-            this._positionsParametersUpdatedSubscription.unsubscribe();
-            this._positionsParametersUpdatedSubscription = null;
-        }
-        if (this._onOrdersParametersUpdated) {
-            this._onOrdersParametersUpdated.unsubscribe();
-            this._onOrdersParametersUpdated = null;
-        }
-
-        this._chart = null;
     }
 
     private _calculatePositionSize(request: IPositionSizeCalculationRequest) {
