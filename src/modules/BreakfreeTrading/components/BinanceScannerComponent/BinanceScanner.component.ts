@@ -192,7 +192,7 @@ export class BinanceScannerComponent extends BaseLayoutItem {
     }
 
     setColumnVisibility(column: Columns) {
-        var existing = this.VisibleColumns.indexOf(column);
+        let existing = this.VisibleColumns.indexOf(column);
         if (existing === -1) {
             this.VisibleColumns.push(column);
         } else {
@@ -205,7 +205,7 @@ export class BinanceScannerComponent extends BaseLayoutItem {
     }
 
     setSortingColumns(column: Columns) {
-        var existing = this.SortingColumns.indexOf(column);
+        let existing = this.SortingColumns.indexOf(column);
         if (existing === -1) {
             this.SortingColumns.push(column);
         } else {
