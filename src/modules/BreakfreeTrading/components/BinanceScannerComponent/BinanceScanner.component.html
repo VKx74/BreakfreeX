@@ -15,6 +15,52 @@
             </div>
          </div>
       </div>
+      <div class="visibility">
+         <div class="title">
+            Visible columns
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isColumnVisible(Columns.PriceChangeColumns)}" (click)="setColumnVisibility(Columns.PriceChangeColumns)">
+            Price Change
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isColumnVisible(Columns.PriceVolatilityColumns)}" (click)="setColumnVisibility(Columns.PriceVolatilityColumns)">
+            Price Volatility
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isColumnVisible(Columns.VolumeChangeColumns)}" (click)="setColumnVisibility(Columns.VolumeChangeColumns)">
+            Volume Change
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isColumnVisible(Columns.TradesChangeColumns)}" (click)="setColumnVisibility(Columns.TradesChangeColumns)">
+            Trade Count
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isColumnVisible(Columns.BuyVolumeColumns)}" (click)="setColumnVisibility(Columns.BuyVolumeColumns)">
+            Buy Volume
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isColumnVisible(Columns.SellVolumeColumns)}" (click)="setColumnVisibility(Columns.SellVolumeColumns)">
+            Sell Volume
+         </div>
+      </div>
+      <div class="visibility">
+         <div class="title">
+            Sorting columns
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isSortApplied(Columns.PriceChangeColumns)}" (click)="setSortingColumns(Columns.PriceChangeColumns)">
+            Price Change
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isSortApplied(Columns.PriceVolatilityColumns)}" (click)="setSortingColumns(Columns.PriceVolatilityColumns)">
+            Price Volatility
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isSortApplied(Columns.VolumeChangeColumns)}" (click)="setSortingColumns(Columns.VolumeChangeColumns)">
+            Volume Change
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isSortApplied(Columns.TradesChangeColumns)}" (click)="setSortingColumns(Columns.TradesChangeColumns)">
+            Trade Count
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isSortApplied(Columns.BuyVolumeColumns)}" (click)="setSortingColumns(Columns.BuyVolumeColumns)">
+            Buy Volume
+         </div>
+         <div class="sort-item" [ngClass]="{'selected': isSortApplied(Columns.SellVolumeColumns)}" (click)="setSortingColumns(Columns.SellVolumeColumns)">
+            Sell Volume
+         </div>
+      </div>
    </div>
 
    <div class="result-container">
@@ -24,7 +70,7 @@
                Symbol
             </div>
          </div>
-         <div class="result-header-group">
+         <div class="result-header-group" *ngIf="isColumnVisible(Columns.PriceChangeColumns)">
             <div class="header-title">
                1PC
             </div>
@@ -39,7 +85,22 @@
             </div>
          </div>
 
-         <div class="result-header-group">
+         <div class="result-header-group" *ngIf="isColumnVisible(Columns.PriceVolatilityColumns)">
+            <div class="header-title">
+               1PV
+            </div>
+            <div class="header-title">
+               2PV
+            </div>
+            <div class="header-title">
+               3PV
+            </div>
+            <div class="header-title">
+               5PV
+            </div>
+         </div>
+
+         <div class="result-header-group" *ngIf="isColumnVisible(Columns.VolumeChangeColumns)">
             <div class="header-title">
                1VC
             </div>
@@ -54,7 +115,7 @@
             </div>
          </div>
 
-         <div class="result-header-group">
+         <div class="result-header-group" *ngIf="isColumnVisible(Columns.TradesChangeColumns)">
             <div class="header-title">
                1TC
             </div>
@@ -69,54 +130,127 @@
             </div>
          </div>
 
+         <div class="result-header-group" *ngIf="isColumnVisible(Columns.BuyVolumeColumns)">
+            <div class="header-title">
+               1BV
+            </div>
+            <div class="header-title">
+               2BV
+            </div>
+            <div class="header-title">
+               3BV
+            </div>
+            <div class="header-title">
+               5BV
+            </div>
+         </div>
+
+         <div class="result-header-group" *ngIf="isColumnVisible(Columns.SellVolumeColumns)">
+            <div class="header-title">
+               1SV
+            </div>
+            <div class="header-title">
+               2SV
+            </div>
+            <div class="header-title">
+               3SV
+            </div>
+            <div class="header-title">
+               5SV
+            </div>
+         </div>
+
       </div>
       <div class="results">
-         <div class="result-row" *ngFor="let item of top100" (click)="showDetails(item)">
+         <div class="result-row" *ngFor="let item of top100" (click)="showDetails(item)"
+            (click)="openChart(item)">
             <div class="symbol-value">
                <div class="result-value">
                   {{item.Symbol}}
                </div>
             </div>
-            <div class="result-value-group">
-               <div class="result-value" PosNegativeNumberColorDirective>
+            <div class="result-value-group" *ngIf="isColumnVisible(Columns.PriceChangeColumns)">
+               <div class="result-value" [ngClass]="item.Last1PC > 0 ? 'positive' : 'negative'">
                   {{item.Last1PC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last2PC > 0 ? 'positive' : 'negative'">
                   {{item.Last2PC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last3PC > 0 ? 'positive' : 'negative'">
                   {{item.Last3PC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last5PC > 0 ? 'positive' : 'negative'">
                   {{item.Last5PC}}
                </div>
             </div>
-            <div class="result-value-group">
-               <div class="result-value" PosNegativeNumberColorDirective>
+            <div class="result-value-group" *ngIf="isColumnVisible(Columns.PriceVolatilityColumns)">
+               <div class="result-value" [ngClass]="item.Last1PV > 0 ? 'positive' : 'negative'">
+                  {{item.Last1PV}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last2PV > 0 ? 'positive' : 'negative'">
+                  {{item.Last2PV}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last3PV > 0 ? 'positive' : 'negative'">
+                  {{item.Last3PV}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last5PV > 0 ? 'positive' : 'negative'">
+                  {{item.Last5PV}}
+               </div>
+            </div>
+            <div class="result-value-group" *ngIf="isColumnVisible(Columns.VolumeChangeColumns)">
+               <div class="result-value" [ngClass]="item.Last1VC > 0 ? 'positive' : 'negative'">
                   {{item.Last1VC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last2VC > 0 ? 'positive' : 'negative'">
                   {{item.Last2VC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last3VC > 0 ? 'positive' : 'negative'">
                   {{item.Last3VC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last5VC > 0 ? 'positive' : 'negative'">
                   {{item.Last5VC}}
                </div>
             </div>
-            <div class="result-value-group">
-               <div class="result-value" PosNegativeNumberColorDirective>
+            <div class="result-value-group" *ngIf="isColumnVisible(Columns.TradesChangeColumns)">
+               <div class="result-value" [ngClass]="item.Last1TC > 0 ? 'positive' : 'negative'">
                   {{item.Last1TC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last2TC > 0 ? 'positive' : 'negative'">
                   {{item.Last2TC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last3TC > 0 ? 'positive' : 'negative'">
                   {{item.Last3TC}}
                </div>
-               <div class="result-value" PosNegativeNumberColorDirective>
+               <div class="result-value" [ngClass]="item.Last5TC > 0 ? 'positive' : 'negative'">
                   {{item.Last5TC}}
+               </div>
+            </div>
+            <div class="result-value-group" *ngIf="isColumnVisible(Columns.BuyVolumeColumns)">
+               <div class="result-value" [ngClass]="item.Last1BVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last1BVC}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last2BVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last2BVC}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last3BVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last3BVC}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last5BVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last5BVC}}
+               </div>
+            </div>
+            <div class="result-value-group" *ngIf="isColumnVisible(Columns.SellVolumeColumns)">
+               <div class="result-value" [ngClass]="item.Last1SVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last1SVC}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last2SVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last2SVC}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last3SVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last3SVC}}
+               </div>
+               <div class="result-value" [ngClass]="item.Last5SVC > 0 ? 'positive' : 'negative'">
+                  {{item.Last5SVC}}
                </div>
             </div>
          </div>

@@ -141,10 +141,24 @@
     position: relative;
   }
 
+  .filters {
+    flex-direction: column;
+  }
+
   .sorting {
     display: flex;
     align-items: center;
     height: 100%;
+  }
+
+  .visibility {
+    display: flex;
+    padding: 10px 0px;
+    font-size: 11px;
+    overflow: auto;
+  }
+
+  .sorting, .visibility {
     .sort-item {
       display: flex;
       align-items: center;
@@ -204,7 +218,7 @@
     color: themed("sellColor");
   }
 
-  .search-row {
+  .search-row, .visibility {
     color: themed("valueTextColor");
   }
 

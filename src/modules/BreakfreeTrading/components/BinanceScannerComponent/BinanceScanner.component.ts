@@ -3,6 +3,10 @@ import { Subscription } from 'rxjs';
 import { BaseLayoutItem } from '@layout/base-layout-item';
 import { BinanceScannerService } from 'modules/BreakfreeTrading/services/binance.scanner/binance.scanner.service';
 import { ITickerStatistic } from 'modules/BreakfreeTrading/models/binance.scanner/models';
+import { InstrumentService } from '@app/services/instrument.service';
+import { IInstrument } from '@app/models/common/instrument';
+import { AlertService } from '@alert/services/alert.service';
+import { Actions, LinkingAction } from '@linking/models';
 
 enum SortingType {
     Gainers,
@@ -62,6 +66,15 @@ interface TickerStatistic {
     Last5CumSV: number;
 }
 
+enum Columns {
+    PriceChangeColumns,
+    PriceVolatilityColumns,
+    VolumeChangeColumns,
+    TradesChangeColumns,
+    BuyVolumeColumns,
+    SellVolumeColumns
+}
+
 @Component({
     selector: 'binance-scanner',
     templateUrl: './BinanceScanner.component.html',
@@ -80,15 +93,21 @@ export class BinanceScannerComponent extends BaseLayoutItem {
 
     SortingType = SortingType;
 
+    Columns = Columns;
+
+    VisibleColumns: Columns[] = [Columns.PriceChangeColumns, Columns.PriceVolatilityColumns, Columns.TradesChangeColumns, Columns.VolumeChangeColumns];
+
+    SortingColumns: Columns[] = [Columns.PriceChangeColumns, Columns.PriceVolatilityColumns, Columns.TradesChangeColumns, Columns.VolumeChangeColumns];
+
     get componentId(): string {
         return BinanceScannerComponent.componentName;
-    }  
-    
+    }
+
     get top100(): TickerStatistic[] {
         return this.data.slice(0, 100);
     }
-    
-    constructor(protected _binanceScannerService: BinanceScannerService) {
+
+    constructor(protected _binanceScannerService: BinanceScannerService, protected _instrumentService: InstrumentService, protected _alertService: AlertService) {
         super();
         this._onUpdateSubscription = this._binanceScannerService.onUpdate.subscribe(() => {
             this.statisticUpdated();
@@ -140,6 +159,62 @@ export class BinanceScannerComponent extends BaseLayoutItem {
         this.sort();
     }
 
+    openChart(item: TickerStatistic) {
+        const searchSymbol = item.Symbol;
+        this._instrumentService.getInstruments(null, searchSymbol).subscribe((data: IInstrument[]) => {
+            if (!data || !data.length) {
+                this._alertService.warning("Failed to map instrument");
+                return;
+            }
+
+            let instrument = data[0];
+            for (const i of data) {
+                if (searchSymbol === i.id) {
+                    instrument = i;
+                }
+            }
+
+            let linkAction = {
+                type: Actions.ChangeInstrumentAndTimeframe,
+                data: {
+                    instrument: instrument,
+                    timeframe: 5 * 60
+                }
+            };
+            this.onOpenChart.next(linkAction);
+        }, (error) => {
+            this._alertService.warning("Failed to open chart");
+        });
+    }
+
+    isColumnVisible(column: Columns) {
+        return this.VisibleColumns.indexOf(column) !== -1;
+    }
+
+    setColumnVisibility(column: Columns) {
+        var existing = this.VisibleColumns.indexOf(column);
+        if (existing === -1) {
+            this.VisibleColumns.push(column);
+        } else {
+            this.VisibleColumns.splice(existing, 1);
+        }
+    }
+
+    isSortApplied(column: Columns) {
+        return this.SortingColumns.indexOf(column) !== -1;
+    }
+
+    setSortingColumns(column: Columns) {
+        var existing = this.SortingColumns.indexOf(column);
+        if (existing === -1) {
+            this.SortingColumns.push(column);
+        } else {
+            this.SortingColumns.splice(existing, 1);
+        }
+
+        this.sort();
+    }
+
     protected statisticUpdated() {
         if (!this.data || !this.data.length) {
             this.fillResults();
@@ -160,11 +235,11 @@ export class BinanceScannerComponent extends BaseLayoutItem {
 
     protected fillResults() {
         this.data = [];
-        
+
         let items = this._binanceScannerService.statistics;
 
         for (const key in items) {
-            if (this.searchText && key.includes(this.searchText.toUpperCase())) {
+            if (this.searchText && !key.includes(this.searchText.toUpperCase())) {
                 continue;
             }
 
@@ -221,7 +296,7 @@ export class BinanceScannerComponent extends BaseLayoutItem {
             Last5CumSV: Math.roundToDecimals((item.L5CumSV * 100), 1),
         };
     }
-    
+
     protected updateVM(item: TickerStatistic, statistic: ITickerStatistic) {
         item.Symbol = statistic.S;
         item.UpdateTime = statistic.UT;
@@ -277,29 +352,53 @@ export class BinanceScannerComponent extends BaseLayoutItem {
 
     protected getTickerStatisticIndex(item: TickerStatistic): number {
         let index = item.Last1PC;
-        index += item.Last2PC;
-        index += item.Last3PC;
-        index += item.Last5PC;
 
-        index += item.Last1VC;
-        index += item.Last2VC;
-        index += item.Last3VC;
-        index += item.Last5VC;
+        if (this.SortingColumns.indexOf(Columns.PriceChangeColumns) !== -1) {
+            index += item.Last1PC;
+            index += item.Last2PC;
+            index += item.Last3PC;
+            index += item.Last5PC;
+        }
 
-        index += item.Last1TC;
-        index += item.Last2TC;
-        index += item.Last3TC;
-        index += item.Last5TC;
+        if (this.SortingColumns.indexOf(Columns.VolumeChangeColumns) !== -1) {
+            index += item.Last1VC;
+            index += item.Last2VC;
+            index += item.Last3VC;
+            index += item.Last5VC;
+        }
 
-        index += item.Last1PV;
-        index += item.Last2PV;
-        index += item.Last3PV;
-        index += item.Last5PV;
+        if (this.SortingColumns.indexOf(Columns.TradesChangeColumns) !== -1) {
+            index += item.Last1TC;
+            index += item.Last2TC;
+            index += item.Last3TC;
+            index += item.Last5TC;
+        }
+
+        if (this.SortingColumns.indexOf(Columns.PriceVolatilityColumns) !== -1) {
+            index += item.Last1PV;
+            index += item.Last2PV;
+            index += item.Last3PV;
+            index += item.Last5PV;
+        }
+        
+        if (this.SortingColumns.indexOf(Columns.BuyVolumeColumns) !== -1) {
+            index += item.Last1BVC;
+            index += item.Last2BVC;
+            index += item.Last3BVC;
+            index += item.Last5BVC;
+        }
+
+        if (this.SortingColumns.indexOf(Columns.SellVolumeColumns) !== -1) {
+            index += item.Last1SVC;
+            index += item.Last2SVC;
+            index += item.Last3SVC;
+            index += item.Last5SVC;
+        }
 
         return index;
     }
 
-    protected useLinker(): boolean { 
+    protected useLinker(): boolean {
         return true;
     }
 }

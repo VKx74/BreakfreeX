@@ -24,7 +24,7 @@
                 </div>
             </div> 
             <div class="widget" *ngIf="SelectedComponent === Components.BinanceScanner">
-                <binance-scanner></binance-scanner>
+                <binance-scanner (onOpenChart)="handleOpenChart($event)" ></binance-scanner>
             </div>
             <div class="widget" *ngIf="SelectedComponent === Components.Backtest">
                 <breakfree-trading-backtest></breakfree-trading-backtest>
@@ -74,11 +74,11 @@
                     tooltip [matTooltip]="'backtestWidget' | translate">
                     <i class="fa fa-line-chart" aria-hidden="true"></i>
                 </div> 
-                <!-- <div class="backtest-widget widget-selector-icon" (click)="selectComponent(Components.BinanceScanner)"
+                <div class="backtest-widget widget-selector-icon" (click)="selectComponent(Components.BinanceScanner)"
                     [class.active]="SelectedComponent === Components.BinanceScanner && !collapsed" *ngIf="isStuff"
                     tooltip [matTooltip]="'Binnace scanner'">
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
-                </div> -->
+                </div>
                 <div class="support-widget widget-selector-icon" (click)="showSupport()" tooltip
                     [matTooltip]="'supportWidget' | translate">
                     <i class="fa fa-life-ring" aria-hidden="true"></i>

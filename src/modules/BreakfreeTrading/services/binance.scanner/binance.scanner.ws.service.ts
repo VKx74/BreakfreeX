@@ -13,7 +13,7 @@ export class BinanceScannerWsService extends WebsocketBase {
 
     get config(): IWebSocketConfig {
         return {
-            url: `wss://binance-stage.breakfreetrading.com/binance-trend-scanner`
+            url: `wss://binance-scanner-stage.breakfreetrading.com/binance-trend-scanner`
         };
     }
 }
