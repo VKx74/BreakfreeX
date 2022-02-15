@@ -361,10 +361,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
                 data: []
             };
 
-            item.data.push({
-                data: [],
-                marketType: this._featuredGroupName
-            });
+            // item.data.push({
+            //     data: [],
+            //     marketType: this._featuredGroupName
+            // });
 
             for (const marketType of this.types) {
                 item.data.push({
@@ -549,6 +549,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             trend: loaded.trend,
             origType: loaded.type
         });
+
+        this._raiseStateChanged();
     }
 
     private _removeFromFeatured(scannerVM: IScannerResults) {
@@ -559,6 +561,8 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
         const index = this._featured.indexOf(existing);
         this._featured.splice(index, 1);
+        
+        this._raiseStateChanged();
     }
 
     private _sendInstrumentChange(scannerVM: IScannerResults, isHistoricalRecord: boolean) {

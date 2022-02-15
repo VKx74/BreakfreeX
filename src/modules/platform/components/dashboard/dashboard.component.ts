@@ -54,6 +54,8 @@ import { InMemoryStorageService } from "modules/Storage/services/in-memory-stora
 import { LinkingAction } from "@linking/models";
 import { ChartTrackerService } from "modules/BreakfreeTrading/services/chartTracker.service";
 import { Console } from "console";
+import { ThemeService } from "@app/services/theme.service";
+import { ChartOptionsStorageService } from "@app/services/chart-options-storage.servic";
 
 
 @Component({
@@ -119,7 +121,7 @@ export class DashboardComponent {
 
     get rightPanelMaxSize() {
         return this._rightPanelMaxSize;
-    } 
+    }
 
     get rightPanelSize() {
         return this._rightPanelSize;
@@ -165,6 +167,8 @@ export class DashboardComponent {
         public bottomPanelSizeService: ToggleBottomPanelSizeService,
         public _rightSidePanelStateService: RightSidePanelStateService,
         private _overlay: Overlay,
+        private _themeService: ThemeService,
+        private _chartOptionsStorageService: ChartOptionsStorageService,
         private _instrumentMappingService: InstrumentMappingService
     ) {
         // this._setRightPanelRestrictions();
@@ -175,10 +179,10 @@ export class DashboardComponent {
         this._brokerService.activeBroker$.pipe(
             takeUntil(componentDestroyed(this))
         )
-        .subscribe(() => {
-            this._ref.detectChanges();
-            console.log(">>> Broker state changed");
-        });
+            .subscribe(() => {
+                this._ref.detectChanges();
+                console.log(">>> Broker state changed");
+            });
 
         this._actions
             .pipe(
@@ -259,6 +263,10 @@ export class DashboardComponent {
                     this._lastExceptionTime = currentTime;
                 }
             });
+
+        this._themeService.activeThemeChange$
+            .pipe(takeUntil(componentDestroyed(this)))
+            .subscribe(() => this._handleThemeChange());
 
         // this._actions
         //     .pipe(
@@ -341,6 +349,14 @@ export class DashboardComponent {
 
         // set min size for chart GL area
         this.horizontalSplit.displayedAreas[0].minSize = 200;
+
+        this._chartOptionsStorageService.getOptions().subscribe((chartOptions) => {
+            if (chartOptions) {
+                this._chartTrackerService.setGlobalChartOptions(chartOptions);
+            }
+
+            this._subscribeToChartOptionsStateChange();
+        });
     }
 
     clearSession() {
@@ -402,7 +418,8 @@ export class DashboardComponent {
             layoutId: id,
             savedTime: new Date().getTime(),
             description: this._getLayoutDescription(glState),
-            rightSidePanelState: this._rightSidePanelStateService.getState()
+            rightSidePanelState: this._rightSidePanelStateService.getState(),
+            globalChartOptions: this._chartTrackerService.chartOptions
         };
     }
 
@@ -530,6 +547,9 @@ export class DashboardComponent {
                 });
                 this._layoutStorageService.setCurrentDashboard(layout.name, layout.layoutId);
                 this._rightSidePanelStateService.initialize(rightSidePanelState);
+                if (layout.globalChartOptions) {
+                    this._chartTrackerService.setGlobalChartOptions(layout.globalChartOptions);
+                }
             } else {
                 const GLState = (state as IGoldenLayoutComponentState);
                 this.layout.loadState(GLState, false).then(() => {
@@ -814,7 +834,7 @@ export class DashboardComponent {
     //         this._ref.detectChanges();
     //         EventsHelper.triggerWindowResize();
     //     }
-      
+
     // }
 
     private _setRightPanelInitialSize() {
@@ -987,5 +1007,23 @@ export class DashboardComponent {
         } else {
             return count < 2;
         }
+    }
+
+    private _handleThemeChange() {
+        this._chartTrackerService.setGlobalChartOptions(null);
+    }
+
+    private _subscribeToChartOptionsStateChange() {
+        this._chartTrackerService.chartOptionsSubject.subscribe((options) => {
+            if (options) {
+                this._chartOptionsStorageService.saveSettings(options).subscribe(() => {
+                    console.log("Chart options saved");
+                });
+            } else {
+                this._chartOptionsStorageService.removeSettings().subscribe(() => {
+                    console.log("Chart options removed");
+                });
+            }
+        });
     }
 }

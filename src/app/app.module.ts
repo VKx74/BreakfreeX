@@ -119,6 +119,7 @@ import { BinanceInstrumentService } from './services/binance.exchange/binance.in
 import { BinanceHistoryService } from './services/binance.exchange/binance.history.service';
 import { BinanceRealtimeService } from './services/binance.exchange/binance.realtime.service';
 import { BreakfreeTradingSocialModule } from 'modules/BreakfreeTradingSocial';
+import { ChartOptionsStorageService } from './services/chart-options-storage.servic';
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -278,6 +279,7 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         },
 
         SettingsStorageService,
+        ChartOptionsStorageService,
         AuthGuard,
         GuestGuard,
         BlockIfPopupWindowGuard,

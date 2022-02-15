@@ -258,6 +258,11 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                     console.log("Set default type");
                     this.chart.chartTypeName = "candle";
                 }
+            } else {
+                let globalChartState = this._chartTrackerService.chartOptions;
+                if (globalChartState) {
+                    this.chart.setChartSettingsOptions(globalChartState);
+                }
             }
 
             (window as any).tcd = this.chart;
@@ -278,6 +283,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.SAVE_SESSION, this.saveSession.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.INSTRUMENT_CHANGED, this.instrumentChanged.bind(this));
             this.chart.on(TradingChartDesigner.ChartEvent.BARS_SETTED, this.barsLoaded.bind(this));
+            this.chart.on(TradingChartDesigner.ChartEvent.GLOBAL_THEME_CHANGED, this.themeChanged.bind(this));
 
             if (!state || !state.chartState) {
                 let isProAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
@@ -631,6 +637,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
         this.chart.theme = this._getTheme();
         this.chart.refreshAsync();
+        this.themeChanged();
     }
 
     protected saveSession(eventObject: TradingChartDesigner.IValueChangedEvent) {
@@ -741,7 +748,6 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     }
 
     protected barsLoaded(eventObject: TradingChartDesigner.IValueChangedEvent) {
-
         this._getHistory();
 
         if (this.replayWaiter) {
@@ -769,6 +775,10 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
 
             this.replayModeTimers.push(timerId);
         }
+    }
+
+    protected themeChanged() {
+        this._chartTrackerService.setGlobalChartOptions(this.chart.getChartSettingsOptions());
     }
 
     protected useDefaultLinker(): boolean {
@@ -1058,6 +1068,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                 this.chart.off(TradingChartDesigner.ChartEvent.SETS_DEFAULT_SETTINGS);
                 this.chart.off(TradingChartDesigner.ChartEvent.SAVE_SESSION);
                 this.chart.off(TradingChartDesigner.ChartEvent.BARS_SETTED);
+                this.chart.off(TradingChartDesigner.ChartEvent.GLOBAL_THEME_CHANGED);
                 this.chart.destroy();
             }
         } catch (e) {

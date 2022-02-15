@@ -5,4 +5,5 @@ export interface ILayoutState {
     savedTime: number;
     state: any;
     rightSidePanelState: any;
+    globalChartOptions?: any;
 }

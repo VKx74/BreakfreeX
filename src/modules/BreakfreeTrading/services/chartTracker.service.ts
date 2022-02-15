@@ -6,10 +6,19 @@ import { Subject } from 'rxjs';
 export class ChartTrackerService {
     private _availableCharts: TradingChartDesigner.Chart[] = [];
     private _availableChartComponents: TcdComponent[] = [];
-
+    private _chartOptions: any;
+    private _chartOptionsSubject: Subject<any> = new Subject();
 
     public get availableCharts(): TradingChartDesigner.Chart[] {
         return this._availableCharts;
+    }
+
+    public get chartOptions(): any {
+        return this._chartOptions;
+    }
+    
+    public get chartOptionsSubject(): Subject<any> {
+        return this._chartOptionsSubject;
     }
 
 
@@ -68,5 +77,10 @@ export class ChartTrackerService {
         for (const existingChart of this._availableChartComponents) {
             existingChart.attach();
         }
+    }
+
+    public setGlobalChartOptions(options: any) {
+        this._chartOptions = options;
+        this._chartOptionsSubject.next(this._chartOptions);
     }
 }
