@@ -1,0 +1,62 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()">&times;</button>
+            <h4 class="modal-title">Edit deposit</h4>
+        </div>
+        <div class="modal-body">
+            <div class="edit-container">
+                <div class="edit-row">
+                    <div class="title">
+                        Wallet address
+                    </div>
+                    <div class="value-text">
+                        {{deposit.userWalletAddress}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Deposit id
+                    </div>
+                    <div class="value-text">
+                        {{deposit.id}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Transaction ID
+                    </div>
+                    <div class="value-text">
+                        {{deposit.tx}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Is Processed
+                    </div>
+                    <div class="value">
+                        <selector [options]="processOptions" [selectedOption]="isProcessed"
+                            [optionCaption]="captionText" (onSelect)="itemSelected($event)"
+                            class="watchlist-selector bft-form-select"></selector>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <div class="flex justify-flex-end">
+                <button class="crypto-button crypto-button_action" (click)="close()">
+                    Close
+                </button>
+                <button class="crypto-button crypto-button_action" (click)="edit()">
+                    Edit
+                </button>
+            </div>
+
+        </div>
+
+        <bft-loader *ngIf="loading"></bft-loader>
+
+    </div>
+</div>

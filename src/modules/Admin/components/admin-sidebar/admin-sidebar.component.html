@@ -134,6 +134,13 @@
             </div>
         </ng-container>
         <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
+            <div class="section-item" [routerLink]="AdminRoutes.CompanionWallets"  *showByTag="ComponentIdentifier.companionWallets">
+                <div class="item-icon">
+                    <i class="crypto-icon crypto-icon-blockchains"></i></div>
+                <div class="item-text">Companion Finance</div>
+            </div>
+        </ng-container>
+        <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
             <div class="section-item" [routerLink]="AdminRoutes.registrationsDashboard"  *showByTag="ComponentIdentifier.registrationsDashboard">
                 <div class="item-icon">
                     <i class="crypto-icon crypto-icon-admin-dashboard"></i></div>

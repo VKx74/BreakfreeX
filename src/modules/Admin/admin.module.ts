@@ -137,6 +137,19 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AppMemberTradingAccountsComponent } from './components/app-member-trading-accounts/app-member-trading-accounts.component';
 import { AppMemberTradingAccountEditComponent } from './components/app-member-trading-account-edit/app-member-trading-account-edit.component';
+import { CompanionWalletsComponent } from './components/companion/wallets/companion-wallets.component';
+import { CompanionResolver } from './resolvers/companion.resolver';
+import { ScriptCloudRepositoryService } from '@scripting/services/script-cloud-repository.service';
+import { CompanionComponent } from './components/companion/companion.component';
+import { CompanionWalletDetailsComponent } from './components/companion/wallet-details/companion-wallet-details.component';
+import { CompanionWalletDetailsResolver } from './resolvers/companion-wallet-details.resolver';
+import { CompanionWalletDepositComponent } from './components/companion/wallet-deposit/companion-wallet-deposit.component';
+import { CompanionWalletWithdrawComponent } from './components/companion/wallet-withdraw/companion-wallet-withdraw.component';
+import { CompanionWalletBalanceComponent } from './components/companion/wallet-balance/companion-wallet-balance.component';
+import { CompanionWalletBalanceItemComponent } from './components/companion/wallet-balance-item/companion-wallet-balance-item.component';
+import { CompanionWalletReturnsComponent } from './components/companion/wallet-returns/companion-wallet-returns.component';
+import { CompanionEditWalletDepositComponent } from './components/companion/edit-wallet-deposit/companion-edit-wallet-deposit.component';
+import { CompanionEditWalletWithdrawComponent } from './components/companion/edit-wallet-withdraw/companion-edit-wallet-withdraw.component';
 
 @NgModule({
     imports: [
@@ -240,7 +253,18 @@ import { AppMemberTradingAccountEditComponent } from './components/app-member-tr
         AdminSidebarComponent,
         AdminNavComponent,
         ForumCategoriesComponent,
-        ForumCategoryConfiguratorComponent
+        ForumCategoryConfiguratorComponent,
+        
+        CompanionComponent,
+        CompanionWalletsComponent,
+        CompanionWalletDetailsComponent,
+        CompanionWalletDepositComponent,
+        CompanionWalletWithdrawComponent,
+        CompanionWalletBalanceComponent,
+        CompanionWalletBalanceItemComponent,
+        CompanionWalletReturnsComponent,
+        CompanionEditWalletDepositComponent,
+        CompanionEditWalletWithdrawComponent
     ],
     exports: [
         RouterModule,
@@ -262,7 +286,10 @@ import { AppMemberTradingAccountEditComponent } from './components/app-member-tr
         JSONViewDialogComponent,
         CreateThreadComponent,
         ForumCategoryConfiguratorComponent,
-        TPMonitoringTradeDetailsComponent
+        TPMonitoringTradeDetailsComponent,
+        CompanionWalletReturnsComponent,
+        CompanionEditWalletDepositComponent,
+        CompanionEditWalletWithdrawComponent
         // CreateNewsComponent,
     ],
     providers: [
@@ -341,7 +368,11 @@ import { AppMemberTradingAccountEditComponent } from './components/app-member-tr
         RunningScriptsResolver,
         IdentityLogsService,
         DiscussionForumApiService,
-        IdentityLogsService
+        IdentityLogsService,
+
+        CompanionResolver,
+        CompanionWalletDetailsResolver,
+        ScriptCloudRepositoryService
     ]
 })
 export class AdminModule {

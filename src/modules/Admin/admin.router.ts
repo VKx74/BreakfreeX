@@ -1,56 +1,61 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AppMembersComponent} from "./components/app-members/app-members.component";
-import {AppUsersResolver} from "./resolvers/app-users.resolver";
-import {AdminRoutes} from "./admin.routes";
-import {AuthGuard} from "@app/services/auth/auth.guard";
-import {RoleGuard} from "@app/services/role/role.guard";
-import {Roles} from "@app/models/auth/auth.models";
-import {EventConsolidatorComponent} from "./components/event-consolidator/event-consolidator.component";
-import {EventConsolidatorResolver} from "./resolvers/event-consolidator.resolver";
-import {ThreadManagerComponent} from "./components/chat/thread-manager/thread-manager.component";
-import {NotificationsComponent} from "./components/notifications/notifications.component";
-import {SystemNotificationsResolver} from "./resolvers/system-notifications.resolver";
-import {ThreadsResolver} from "./resolvers/threads.resolver";
-import {AppRoutes} from "AppRoutes";
-import {SystemMonitoringComponent} from "./components/system-monitoring/system-monitoring.component";
-import {ThreadDetailsResolver} from "./resolvers/thread-details.resolver";
-import {IframeContainerComponent} from "./components/system-monitoring/iframe-container/iframe-container.component";
-import {AppConfigService} from "@app/services/app.config.service";
-import {ServicesHealthCheckComponent} from "./components/system-monitoring/services-health-check/services-health-check.component";
-import {EventsLogComponent} from "./components/system-monitoring/events-log/events-log.component";
-import {MarkdownInputResolver} from "@app/resolvers/markdown-input.resolver";
-import {ThreadMessagesComponent} from "./components/chat/thread-messages/thread-messages.component";
-import {ThreadMembersComponent} from "./components/chat/thread-members/thread-members.component";
-import {ThreadBannedMembersResolver} from "./resolvers/thread-banned-members.resolver";
-import {ThreadMembersResolver} from "./resolvers/thread-members.resolver";
-import {ThreadMessagesResolver} from "./resolvers/thread-messages.resolver";
-import {ForumComponent} from "./components/forum/forum.component";
-import {QAComponent} from "./components/qa/qa.component";
-import {ForumResolver} from "./resolvers/forum.resolver";
-import {QAResolver} from "./resolvers/qa.resolver";
-import {UiComponentsPermissionManagerComponent} from "./components/ui-permissions-manager/ui-components-permission-manager.component";
-import {TagGuard} from "@app/services/role/tag.guard";
-import {ComponentIdentifier} from "@app/models/app-config";
-import {AdminPanelMainComponent} from "./components/admin-panel-main-page/admin-panel-main-component";
-import {UIPermissionsResolver} from "./resolvers/permissions-manager.resolver";
-import {NewsManagerComponent} from "./components/news-manager/news-manager.component";
-import {NewsManagerResolver} from "./resolvers/news-manager.resolver";
-import {CreateNewsComponent} from "./components/news-manager/create-news/create-news.component";
-import {NewsResolver} from "./resolvers/news.resolver";
-import {NewsListComponent} from "./components/news-manager/news-list/news-list.component";
-import {EventsLogResolver} from "./resolvers/events-log.resolver";
-import {RunningScriptsComponent} from "./components/running-scripts/running-scripts.component";
-import {RunningScriptsResolver} from "./resolvers/running-scripts.resolver";
-import {AdminComponent} from "./components/admin/admin.component";
-import {UserSettingsResolver} from "@app/services/user-settings.resolver";
-import {ForumCategoriesComponent} from "./components/forum-categories/forum-categories.component";
-import {ForumCategoriesResolver} from "./resolvers/forum-categories.resolver";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AppMembersComponent } from "./components/app-members/app-members.component";
+import { AppUsersResolver } from "./resolvers/app-users.resolver";
+import { AdminRoutes } from "./admin.routes";
+import { AuthGuard } from "@app/services/auth/auth.guard";
+import { RoleGuard } from "@app/services/role/role.guard";
+import { Roles } from "@app/models/auth/auth.models";
+import { EventConsolidatorComponent } from "./components/event-consolidator/event-consolidator.component";
+import { EventConsolidatorResolver } from "./resolvers/event-consolidator.resolver";
+import { ThreadManagerComponent } from "./components/chat/thread-manager/thread-manager.component";
+import { NotificationsComponent } from "./components/notifications/notifications.component";
+import { SystemNotificationsResolver } from "./resolvers/system-notifications.resolver";
+import { ThreadsResolver } from "./resolvers/threads.resolver";
+import { AppRoutes } from "AppRoutes";
+import { SystemMonitoringComponent } from "./components/system-monitoring/system-monitoring.component";
+import { ThreadDetailsResolver } from "./resolvers/thread-details.resolver";
+import { IframeContainerComponent } from "./components/system-monitoring/iframe-container/iframe-container.component";
+import { AppConfigService } from "@app/services/app.config.service";
+import { ServicesHealthCheckComponent } from "./components/system-monitoring/services-health-check/services-health-check.component";
+import { EventsLogComponent } from "./components/system-monitoring/events-log/events-log.component";
+import { MarkdownInputResolver } from "@app/resolvers/markdown-input.resolver";
+import { ThreadMessagesComponent } from "./components/chat/thread-messages/thread-messages.component";
+import { ThreadMembersComponent } from "./components/chat/thread-members/thread-members.component";
+import { ThreadBannedMembersResolver } from "./resolvers/thread-banned-members.resolver";
+import { ThreadMembersResolver } from "./resolvers/thread-members.resolver";
+import { ThreadMessagesResolver } from "./resolvers/thread-messages.resolver";
+import { ForumComponent } from "./components/forum/forum.component";
+import { QAComponent } from "./components/qa/qa.component";
+import { ForumResolver } from "./resolvers/forum.resolver";
+import { QAResolver } from "./resolvers/qa.resolver";
+import { UiComponentsPermissionManagerComponent } from "./components/ui-permissions-manager/ui-components-permission-manager.component";
+import { TagGuard } from "@app/services/role/tag.guard";
+import { ComponentIdentifier } from "@app/models/app-config";
+import { AdminPanelMainComponent } from "./components/admin-panel-main-page/admin-panel-main-component";
+import { UIPermissionsResolver } from "./resolvers/permissions-manager.resolver";
+import { NewsManagerComponent } from "./components/news-manager/news-manager.component";
+import { NewsManagerResolver } from "./resolvers/news-manager.resolver";
+import { CreateNewsComponent } from "./components/news-manager/create-news/create-news.component";
+import { NewsResolver } from "./resolvers/news.resolver";
+import { NewsListComponent } from "./components/news-manager/news-list/news-list.component";
+import { EventsLogResolver } from "./resolvers/events-log.resolver";
+import { RunningScriptsComponent } from "./components/running-scripts/running-scripts.component";
+import { RunningScriptsResolver } from "./resolvers/running-scripts.resolver";
+import { AdminComponent } from "./components/admin/admin.component";
+import { UserSettingsResolver } from "@app/services/user-settings.resolver";
+import { ForumCategoriesComponent } from "./components/forum-categories/forum-categories.component";
+import { ForumCategoriesResolver } from "./resolvers/forum-categories.resolver";
 import { XPDashboardComponent } from './components/xp-dashboard/xp-dashboard.component';
 import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
 import { RegistrationsDashboardComponent } from './components/registrations-dashboard/registrations-dashboard.component';
 import { TPMonitoringComponent } from './components/trading-performance-monitoring/tp-monitoring.component';
 import { TPMonitoringResolver } from './resolvers/tp-monitoring.resolver';
+import { CompanionWalletsComponent } from './components/companion/wallets/companion-wallets.component';
+import { CompanionResolver } from './resolvers/companion.resolver';
+import { CompanionComponent } from './components/companion/companion.component';
+import { CompanionWalletDetailsComponent } from './components/companion/wallet-details/companion-wallet-details.component';
+import { CompanionWalletDetailsResolver } from './resolvers/companion-wallet-details.resolver';
 export const redirectUrl = `/${AppRoutes.Admin}`;
 
 const SYSTEM_MONITORING_URLS = AppConfigService.config.systemMonitoringUrls;
@@ -422,6 +427,37 @@ export const routes: Routes = [
             {
                 path: '',
                 component: AdminPanelMainComponent,
+            },
+            {
+                path: `${AdminRoutes.Companion}`,
+                component: CompanionComponent,
+                canActivate: [RoleGuard],
+                data: {
+                    identifier: ComponentIdentifier.companionWallets,
+                    roleGuardConfig: {
+                        allowedRoles: [
+                            Roles.Admin,
+                        ],
+                        redirectUrl: redirectUrl
+                    }
+                },
+                runGuardsAndResolvers: "always",
+                children: [
+                    {
+                        path: '',
+                        component: CompanionWalletsComponent,
+                        resolve: {
+                            wallets: CompanionResolver,
+                        }
+                    },
+                    {
+                        path: 'wallet-details/:id',
+                        component: CompanionWalletDetailsComponent,
+                        resolve: {
+                            wallet: CompanionWalletDetailsResolver
+                        }
+                    }
+                ]
             },
             // {
             //     path: '',

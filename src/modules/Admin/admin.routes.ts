@@ -24,6 +24,9 @@ export const AdminRoutes = {
     Withdraws: 'withdraws',
     RunningScripts: 'running-scripts',
     XPDashboard: 'xp-dashboard',
+    CompanionWallets: 'companion',
     registrationsDashboard: 'registrations-dashboard',
-    TradingPerformanceMonitoring: 'trading-performance-monitoring'
+    TradingPerformanceMonitoring: 'trading-performance-monitoring',
+
+    Companion: 'companion'
 };

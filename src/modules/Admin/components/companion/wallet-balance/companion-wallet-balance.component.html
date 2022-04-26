@@ -1,0 +1,18 @@
+<div class="expandable-item" *ngFor="let item of data">
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{item.token}}
+            </mat-panel-title>
+            <mat-panel-description>
+                <div class="header">
+                    <div class="balance">
+                        {{item.balance}} (with return {{item.return}}) {{item.token}}
+                    </div>
+                    <div class="view-details" (click)="viewDetails(item, $event)">View details</div>
+                </div>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <companion-wallet-balance-item [symbol]="item.token" [data]="item.data"></companion-wallet-balance-item>
+    </mat-expansion-panel>
+</div>

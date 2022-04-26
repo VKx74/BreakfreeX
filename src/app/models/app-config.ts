@@ -63,6 +63,9 @@ export interface ApiUrls {
     bftAlertsREST: string;
     socialFeedREST: string;
     socialFeedWS: string;
+
+    companionUserTracker: string;
+    companionTransferTracker: string;
 }
 
 export interface AppConfig {
@@ -128,6 +131,7 @@ export enum ComponentIdentifier {
     eventsLog = "eventLog",
     adminOrders = "adminOrders",
     tradesReports = "tradesReports",
+    companionWallets = "companionWallets",
 
     // remaining
     forum = "forum",

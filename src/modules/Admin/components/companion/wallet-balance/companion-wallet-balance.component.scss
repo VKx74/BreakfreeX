@@ -1,0 +1,45 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+
+  .positive-value {
+    color: #5eaf80;
+  }
+
+  .negative-value {
+    color: #bd5b6a;
+  }
+
+  .expandable-item  {
+    margin: 10px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .view-details {
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        font-weight: 600;
+        color: lightblue;
+      }
+    }
+  }
+
+}
+
+@include themify($themes, true) {
+
+  /deep/ {
+    .mat-expansion-panel-header-description {
+      color: themed('valueTextColor');
+    }
+  }
+}

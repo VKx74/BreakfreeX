@@ -109,6 +109,19 @@
         </ng-container>
 
         <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
+            <div class="section" *showByTag="ComponentIdentifier.companionWallets">
+                <div class="top flex">
+                    <div class="icon">
+                        <i class="crypto-icon crypto-icon-blockchains"></i>
+                    </div>
+                    <h3 class="is-bold crypto-text">Companion Finance</h3>
+                </div>
+                <p>View Companion Finance.</p>
+                <button class="crypto-button" [routerLink]="AdminRoutes.CompanionWallets">Companion Finance</button>
+            </div>
+        </ng-container>
+
+        <ng-container *showIfRole="[Roles.Admin, Roles.SupportOfficer]">
             <div class="section" *showByTag="ComponentIdentifier.registrationsDashboard">
                 <div class="top flex">
                     <div class="icon">

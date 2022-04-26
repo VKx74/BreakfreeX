@@ -51,7 +51,10 @@
     "bftAlertsWS": "wss://notifications-alerts.breakfreetrading.com/websocket",
     "bftAlertsREST": "https://user-api-alerts.breakfreetrading.com/",
     "socialFeedREST": "https://social-sonarfeed.breakfreetrading.com/",
-    "socialFeedWS": "wss://social-sonarfeed.breakfreetrading.com/websocket"
+    "socialFeedWS": "wss://social-sonarfeed.breakfreetrading.com/websocket",
+
+    "companionUserTracker": "https://localhost:5001/usertracker/",
+    "companionTransferTracker": "https://localhost:5001/transfertracker/"
   },
   "systemMonitoringUrls": {
     "platform": {

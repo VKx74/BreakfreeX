@@ -54,5 +54,6 @@
   "breakfreeTradingAcademy": true,
   "breakfreeTradingScanner": true,
   "forexTradeManager": true,
-  "alertsManager": true
+  "alertsManager": true,
+  "companionWallets": true
 }

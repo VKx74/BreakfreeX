@@ -1,0 +1,18 @@
+<div class="wallet-container">
+    <div class="wallet-id">
+        Wallet {{wallet?.address}}
+    </div>
+    <div class="wallet-tabs">
+        <mat-tab-group>
+            <mat-tab label="Deposits">
+                <companion-wallet-deposit [wallet]="wallet"></companion-wallet-deposit>
+            </mat-tab>
+            <mat-tab label="Withdraws">
+                <companion-wallet-withdraw [wallet]="wallet"></companion-wallet-withdraw>
+            </mat-tab>
+            <mat-tab label="Balances">
+                <companion-wallet-balance [wallet]="wallet"></companion-wallet-balance>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

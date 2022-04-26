@@ -1,0 +1,75 @@
+<data-table [rows]="wallet?.withdrawRequest">
+    <data-table-header-cell columnName="id">
+        Id
+    </data-table-header-cell>
+    <data-table-header-cell columnName="token">
+        Token
+    </data-table-header-cell>
+    <data-table-header-cell columnName="creationTime">
+        Created At
+    </data-table-header-cell>
+    <data-table-header-cell columnName="amount">
+        Amount
+    </data-table-header-cell>
+    <data-table-header-cell columnName="processed">
+        Processed
+    </data-table-header-cell>
+    <data-table-header-cell columnName="transactionId">
+        Transaction Id
+    </data-table-header-cell>
+    <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+    <data-table-cell columnName="id">
+        <ng-template let-item>
+            {{item.id}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="token">
+        <ng-template let-item>
+            {{item.token}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="creationTime">
+        <ng-template let-item>
+            {{getDate(item.date) | date: 'short'}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="amount">
+        <ng-template let-item>
+            {{item.amount}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="processed">
+        <ng-template let-item>
+            <div [ngClass]="{'positive-value': item.processed === true, 'negative-value': item.processed === false}">
+                {{item.processed ? "Processed" : "Unprocessed"}}
+            </div>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="transactionId">
+        <ng-template let-item>
+            {{item.tx || "-" }}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="actions">
+        <ng-template let-item>
+            <span class="text-right">
+                <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="edit(item)">
+                        Edit
+                    </button>
+                    <button mat-menu-item (click)="remove(item)">
+                        Delete
+                    </button>
+                </mat-menu>
+            </span>
+        </ng-template>
+    </data-table-cell>
+</data-table>

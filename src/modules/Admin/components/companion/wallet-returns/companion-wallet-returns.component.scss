@@ -1,0 +1,13 @@
+:host {
+  width: 100%;
+
+  .positive-value {
+    color: #5eaf80;
+    font-weight: bold;
+  }
+
+  .negative-value {
+    color: #bd5b6a;
+    font-weight: bold;
+  }
+}

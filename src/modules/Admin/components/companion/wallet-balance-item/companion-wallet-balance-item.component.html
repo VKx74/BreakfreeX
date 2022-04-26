@@ -1,0 +1,26 @@
+<div class="item-container">
+    <div class="balance-change-item" *ngFor="let item of data; let i = index">
+        <div class="rows">
+            <div class="columns amount">
+                <div class="balance-amount"
+                    [ngClass]="{'positive-value': isDeposit(i) === true, 'negative-value':  isDeposit(i) === false}">
+                    {{item.amount}} {{symbol}}
+                </div>
+                <div class="operatio-date">
+                    {{getDate(item.time) | date: 'short'}}
+                </div>
+            </div>
+            <div class="rows transaction-details">
+                <div class="from" (click)="showFromDetails(item)">
+                    {{getFrom(item)}}
+                </div>
+                <div class="arrow">
+                    →
+                </div>
+                <div class="to" (click)="showToDetails(item)">
+                    {{getTo(item)}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -78,8 +78,6 @@ export class NewsListComponent extends PaginationComponent<INews> implements OnI
         if (news) {
             this.setPaginationHandler(news);
         }
-
-
     }
 
     getItems(): Observable<IPaginationResponse<INews>> {

@@ -1,0 +1,48 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+
+  .wallet-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .wallet-id {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .wallet-tabs {
+    display: flex;
+
+    .mat-tab-group {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .wallet-id {
+    color: themed('valueTextColor');
+  }
+}
+
+.small-column {
+  width: 60px;
+}
+
+.title {
+  cursor: pointer;
+}
+
+th.creation-time {
+  width: 140px;
+}
+
+.description {
+  padding-right: 20px;
+}

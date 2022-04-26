@@ -1,0 +1,91 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()">&times;</button>
+            <h4 class="modal-title">Details {{token}}</h4>
+        </div>
+        <div class="modal-body">
+
+            <pagination-table-container [paginationHandler]="paginationHandler" [noItems]="!list?.length">
+
+                <div class="filters flex justify-space-between w-100">
+                    <div class="filters-wrapper flex align-items-center">
+                        <mat-form-field class="crypto-date-input m-right-10">
+                            <input matInput readonly [matDatepicker]="start" [max]="endDate" [(ngModel)]="startDate"
+                                (dateChange)="resetPagination()" (click)="start.open()" class="cursor-pointer"
+                                placeholder="Start date">
+                            <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                            <mat-datepicker #start></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="crypto-date-input m-right-10">
+                            <input matInput readonly [matDatepicker]="end" [min]="startDate" [(ngModel)]="endDate"
+                                (dateChange)="resetPagination()" (click)="end.open()" class="cursor-pointer"
+                                placeholder="End date">
+                            <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                            <mat-datepicker #end></mat-datepicker>
+                        </mat-form-field>
+
+                        <button class="crypto-button crypto-button_primary" [disabled]="!startDate && !endDate"
+                            (click)="clearDatePickers()">
+                            <span>Clear</span>
+                        </button>
+                    </div>
+                    <!-- <div class="search-wrapper">
+            <debounced-input (valueChange)="onSearchValueChange($event)"></debounced-input>
+        </div> -->
+                </div>
+
+
+                <data-table [rows]="list">
+                    <data-table-header-cell columnName="time">
+                        Time
+                    </data-table-header-cell>
+                    <data-table-header-cell columnName="balance">
+                        Balance
+                    </data-table-header-cell>
+                    <data-table-header-cell columnName="total">
+                        Total
+                    </data-table-header-cell>
+                    <data-table-header-cell columnName="amount">
+                        Amount
+                    </data-table-header-cell>
+
+                    <data-table-cell columnName="time">
+                        <ng-template let-item>
+                            {{getDate(item.time) | date: 'short'}}
+                        </ng-template>
+                    </data-table-cell>
+
+                    <data-table-cell columnName="balance">
+                        <ng-template let-item>
+                            <span [ngClass]="{'positive-value': isDeposit(item) === true, 'negative-value':  isDeposit(item) === false}">
+                                {{item.balance}}
+                                <ng-container *ngIf="isDeposit(item) === true">
+                                    [Deposit]
+                                </ng-container>
+                                <ng-container *ngIf="isDeposit(item) === false">
+                                    [Withdraw]
+                                </ng-container>
+                            </span>
+                        </ng-template>
+                    </data-table-cell>
+
+                    <data-table-cell columnName="total">
+                        <ng-template let-item>
+                            {{item.total}}
+                        </ng-template>
+                    </data-table-cell>
+
+                    <data-table-cell columnName="amount">
+                        <ng-template let-item>
+                            +{{item.amount}}
+                        </ng-template>
+                    </data-table-cell>
+
+                </data-table>
+            </pagination-table-container>
+
+        </div>
+    </div>
+</div>
