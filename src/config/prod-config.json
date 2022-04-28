@@ -53,8 +53,8 @@
     "socialFeedREST": "https://social-sonarfeed.breakfreetrading.com/",
     "socialFeedWS": "wss://social-sonarfeed.breakfreetrading.com/websocket",
 
-    "companionUserTracker": "https://localhost:5001/usertracker/",
-    "companionTransferTracker": "https://localhost:5001/transfertracker/"
+    "companionUserTracker": "https://usertracker-trackerapi-stage.companion.to/usertracker/",
+    "companionTransferTracker": "https://transfertracker-trackerapi-stage.companion.to/transfertracker/"
   },
   "systemMonitoringUrls": {
     "platform": {

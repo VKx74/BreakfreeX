@@ -30,7 +30,7 @@ export class CompanionWalletBalanceComponent {
     }
 
     ngAfterViewInit() {
-        this._companionUserTrackerService.getBalances(this.wallet.address, "4UsAbA26A7VdrSyofh9GUdrddk2UD9wectFjynTo3ptQ").subscribe((response) => {
+        this._companionUserTrackerService.getBalances(this.wallet.address).subscribe((response) => {
             for (const key in response) {
                 if (!response[key]) {
                     continue;

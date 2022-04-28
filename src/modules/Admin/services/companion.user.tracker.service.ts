@@ -42,7 +42,7 @@ export class CompanionUserTrackerService {
         return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}withdraw?address=${wallet}&id=${id}`);
     }
 
-    getBalances(userAccount: string, rootAccount: string): Observable<{ [symbol: string]: IAccountInfoResponse; }> {
-        return this._http.get<{ [symbol: string]: IAccountInfoResponse; }>(`${this.TRANSFER_TRACKER_URL}balances?userAccount=${userAccount}&rootAccount=${rootAccount}`);
+    getBalances(userAccount: string): Observable<{ [symbol: string]: IAccountInfoResponse; }> {
+        return this._http.get<{ [symbol: string]: IAccountInfoResponse; }>(`${this.TRANSFER_TRACKER_URL}balances?userAccount=${userAccount}`);
     }
 }
