@@ -4,14 +4,13 @@ import {HttpClient} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
 import {PaginationParams, IPaginationResponse} from "@app/models/pagination.model";
 import {QueryParamsConstructor} from "../data/models";
-import { IAccountInfoResponse, IDepositResponse, IEditDepositRequest, IEditWithdrawRequest, IUserWalletResponse, IWalletBalanceChange, IWithdrawResponse } from 'modules/Companion/models/models';
+import { IAccountInfoResponse, IDepositResponse, IEditDepositRequest, IEditWithdrawRequest, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CompanionUserTrackerService {
     readonly USER_TRACKER_URL = `${AppConfigService.config.apiUrls.companionUserTracker}`;
-    readonly TRANSFER_TRACKER_URL = `${AppConfigService.config.apiUrls.companionTransferTracker}`;
 
     constructor(private _http: HttpClient) {
     }
@@ -42,7 +41,7 @@ export class CompanionUserTrackerService {
         return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}withdraw?address=${wallet}&id=${id}`);
     }
 
-    getBalances(userAccount: string): Observable<{ [symbol: string]: IAccountInfoResponse; }> {
-        return this._http.get<{ [symbol: string]: IAccountInfoResponse; }>(`${this.TRANSFER_TRACKER_URL}balances?userAccount=${userAccount}`);
+    getBalances(userAccount: string): Observable<IAccountInfoResponse> {
+        return this._http.get<IAccountInfoResponse>(`${this.USER_TRACKER_URL}balances?userAccount=${userAccount}`);
     }
 }

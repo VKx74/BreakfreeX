@@ -54,10 +54,16 @@
             Wallet
         </data-table-header-cell>
         <data-table-header-cell columnName="deposits">
-            Deposits
+            Flexible Deposits
         </data-table-header-cell>
         <data-table-header-cell columnName="withdraws">
             Withdraws
+        </data-table-header-cell>
+        <data-table-header-cell columnName="endDateDeposits">
+            End Date Deposits
+        </data-table-header-cell>
+        <data-table-header-cell columnName="closeDepositsRequests">
+            cClose Deposits Requests
         </data-table-header-cell>
         <data-table-header-cell columnName="creationTime">
             Created At
@@ -72,13 +78,25 @@
 
         <data-table-cell columnName="deposits">
             <ng-template let-item>
-                {{getCount(item.depositRequest)}}
+                {{getCount(item.flexibleDeposits)}}
             </ng-template>
         </data-table-cell>
 
         <data-table-cell columnName="withdraws">
             <ng-template let-item>
-                {{getCount(item.withdrawRequest)}}
+                {{getCount(item.withdraws)}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="endDateDeposits">
+            <ng-template let-item>
+                {{getCount(item.endDateDeposits)}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="closeDepositsRequests">
+            <ng-template let-item>
+                {{getCount(item.closeDepositsRequests)}}
             </ng-template>
         </data-table-cell>
 

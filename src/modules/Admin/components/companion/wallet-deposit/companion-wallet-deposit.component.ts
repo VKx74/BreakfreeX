@@ -51,9 +51,9 @@ export class CompanionWalletDepositComponent implements OnInit {
                         this.loading = false;
                         if (response) {
                             this._alertService.success("Deposit removed");
-                            let index = this.wallet.depositRequest.findIndex((_) => _.id = deposit.id);
-                            this.wallet.depositRequest.splice(index, 1);
-                            this.wallet.depositRequest = [...this.wallet.depositRequest];
+                            let index = this.wallet.flexibleDeposits.findIndex((_) => _.id = deposit.id);
+                            this.wallet.flexibleDeposits.splice(index, 1);
+                            this.wallet.flexibleDeposits = [...this.wallet.flexibleDeposits];
                             return;
                         }
                         this._alertService.error("Failed removed deposit");

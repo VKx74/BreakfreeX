@@ -59,13 +59,16 @@
 
                     <data-table-cell columnName="balance">
                         <ng-template let-item>
-                            <span [ngClass]="{'positive-value': isDeposit(item) === true, 'negative-value':  isDeposit(item) === false}">
+                            <span [ngClass]="{'positive-value': item.isDeposit === true, 'negative-value': item.isWithdraw === true}">
                                 {{item.balance}}
-                                <ng-container *ngIf="isDeposit(item) === true">
+                                <ng-container *ngIf="item.isDeposit === true">
                                     [Deposit]
                                 </ng-container>
-                                <ng-container *ngIf="isDeposit(item) === false">
+                                <ng-container *ngIf="item.isWithdraw === true">
                                     [Withdraw]
+                                </ng-container>
+                                <ng-container *ngIf="item.isEarning === true">
+                                    [Earning]
                                 </ng-container>
                             </span>
                         </ng-template>
@@ -79,7 +82,7 @@
 
                     <data-table-cell columnName="amount">
                         <ng-template let-item>
-                            +{{item.amount}}
+                            <span *ngIf="item.amount > 0">+</span>{{item.amount}}
                         </ng-template>
                     </data-table-cell>
 

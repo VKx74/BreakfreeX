@@ -2,15 +2,15 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
-import { IDepositResponse, IUserWalletResponse, IWalletBalanceChange, IWalletReturnResponse } from 'modules/Companion/models/models';
-import { CompanionWalletReturnsComponent, IReturnData } from '../wallet-returns/companion-wallet-returns.component';
+import { IDepositResponse, IUserWalletResponse, IBalancesChangeItem, IReturnChangeItem } from 'modules/Companion/models/models';
+import { CompanionWalletReturnsComponent, IReturnAndBalanceData } from '../wallet-returns/companion-wallet-returns.component';
 
 interface IWalletBalanceChangeViewModel {
     token: string;
     balance: number;
     return: number;
-    data: IWalletBalanceChange[];
-    returns: IWalletReturnResponse[];
+    balances: IBalancesChangeItem[];
+    returns: IReturnChangeItem[];
 }
 
 @Component({
@@ -31,20 +31,22 @@ export class CompanionWalletBalanceComponent {
 
     ngAfterViewInit() {
         this._companionUserTrackerService.getBalances(this.wallet.address).subscribe((response) => {
-            for (const key in response) {
-                if (!response[key]) {
+            for (const key in response.flexibleDeposit) {
+                if (!response.flexibleDeposit[key]) {
                     continue;
                 }
-                response[key].balances.reverse();
-                response[key].returns.reverse();
-                let balance = response[key].balances[0];
-                let returnItem = response[key].returns[0];
+                response.flexibleDeposit[key].balances.reverse();
+                response.flexibleDeposit[key].returns.reverse();
+                let balance = response.flexibleDeposit[key].amount;
+                let returnAmount = 0;
+
+                response.flexibleDeposit[key].returns.forEach((_) => returnAmount += _.amount);
                 this.data.push({
                     token: key,
-                    balance: balance ? balance.amount : 0,
-                    return: returnItem ? returnItem.total : 0,
-                    data: response[key].balances,
-                    returns: response[key].returns
+                    balance: balance,
+                    return: returnAmount,
+                    balances: response.flexibleDeposit[key].balances,
+                    returns: response.flexibleDeposit[key].returns
                 });
             }
         });
@@ -61,9 +63,10 @@ export class CompanionWalletBalanceComponent {
         event.preventDefault();
         event.stopPropagation();
 
-        this._matDialog.open<CompanionWalletReturnsComponent, IReturnData>(CompanionWalletReturnsComponent, {
+        this._matDialog.open<CompanionWalletReturnsComponent, IReturnAndBalanceData>(CompanionWalletReturnsComponent, {
             data: {
-                data: item.returns,
+                returns: item.returns,
+                balances: item.balances,
                 token: item.token
             }
         });

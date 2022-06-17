@@ -4,10 +4,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog
 import {PaginationComponent, IPaginationResponse} from "@app/models/pagination.model";
 import {Observable, of} from "rxjs";
 import {PageEvent} from "@angular/material/typings/paginator";
-import {FiltrationParams} from "@app/models/filtration-params";
-import {ComponentIdentifier} from "@app/models/app-config";
-import { IDepositResponse, IUserWalletResponse, IWalletReturnResponse, IWithdrawResponse } from 'modules/Companion/models/models';
-import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
+import { IBalancesChangeItem, IReturnChangeItem } from 'modules/Companion/models/models';
 
 class CompanionWalletReturnsParams {
     endDate: string;
@@ -19,8 +16,18 @@ class CompanionWalletReturnsParams {
     }
 }
 
-export interface IReturnData {
-    data: IWalletReturnResponse[];
+interface InfoViewModel {
+    amount: number;
+    total: number;
+    time: number;
+    isDeposit?: boolean;
+    isWithdraw?: boolean;
+    isEarning?: boolean;
+}
+
+export interface IReturnAndBalanceData {
+    returns: IReturnChangeItem[];
+    balances: IBalancesChangeItem[];
     token: string;
 }
 
@@ -29,7 +36,7 @@ export interface IReturnData {
     templateUrl: './companion-wallet-returns.component.html',
     styleUrls: ['./companion-wallet-returns.component.scss']
 })
-export class CompanionWalletReturnsComponent extends PaginationComponent<IWalletReturnResponse> {
+export class CompanionWalletReturnsComponent extends PaginationComponent<InfoViewModel> {
     filtrationParams = new CompanionWalletReturnsParams();
 
     get startDate() {
@@ -50,19 +57,50 @@ export class CompanionWalletReturnsComponent extends PaginationComponent<IWallet
 
     dialogRef: MatDialogRef<any>;
     token: string;
-    data: IReturnData;
-    list: IWalletReturnResponse[];
+    data: IReturnAndBalanceData;
+    allItems: InfoViewModel[] = [];
+    list: InfoViewModel[];
 
     constructor(injector: Injector) {
         super();
         this.dialogRef = injector.get(MatDialogRef);
         this.data = injector.get(MAT_DIALOG_DATA);
 
-        this.list = this.data.data.slice(this.paginationParams.skip, this.paginationParams.skip + this.paginationParams.pageSize);
+        for (let r of this.data.returns) {
+            this.allItems.push({
+                amount: r.amount,
+                time: r.time,
+                total: r.total,
+                isEarning: true
+            });
+        }
+        
+        for (let b of this.data.balances) {
+            this.allItems.push({
+                amount: b.changeAmount,
+                time: b.time,
+                total: 0,
+                isDeposit: b.changeAmount > 0,
+                isWithdraw: b.changeAmount < 0
+            });
+        }
+
+        this.allItems = this.allItems.sort((a, b) => b.time - a.time);
+
+        for (let i = this.allItems.length - 1; i >= 0; i--) {
+            let currentItem = this.allItems[i];
+            let prevItem = this.allItems[i + 1];
+
+            if (currentItem.total === 0) {
+                currentItem.total = prevItem ? prevItem.total + currentItem.amount : currentItem.amount;
+            }
+        }
+
+        this.list = this.allItems.slice(this.paginationParams.skip, this.paginationParams.skip + this.paginationParams.pageSize);
         this.token = this.data.token;
         this.setPaginationHandler({
             items: this.list,
-            total: this.data.data.length
+            total: this.allItems.length
            });
     }
 
@@ -70,7 +108,7 @@ export class CompanionWalletReturnsComponent extends PaginationComponent<IWallet
         this.dialogRef.close();
     }
     
-    getItems(): Observable<IPaginationResponse<IWalletReturnResponse>> {
+    getItems(): Observable<IPaginationResponse<InfoViewModel>> {
         let startDate = 0;
         let endDate = Infinity;
         if (this.filtrationParams.startDate) {
@@ -80,7 +118,7 @@ export class CompanionWalletReturnsComponent extends PaginationComponent<IWallet
             endDate = new Date(this.filtrationParams.endDate).getTime() / 1000;
         }
 
-        let filtered = this.data.data.filter((_) => _.time >= startDate && _.time <= endDate);
+        let filtered = this.allItems.filter((_) => _.time >= startDate && _.time <= endDate);
         let res = filtered.slice(this.paginationParams.skip, this.paginationParams.skip + this.paginationParams.pageSize);
         return of({
             items: res,
@@ -88,21 +126,7 @@ export class CompanionWalletReturnsComponent extends PaginationComponent<IWallet
         });
     }
 
-    isDeposit(item: IWalletReturnResponse): boolean {
-        let list = this.data.data;
-        let index = list.indexOf(item);
-        if (!list[index + 1]) {
-            return true;
-        }
-
-        if (list[index].balance === list[index + 1].balance) {
-            return null;
-        }
-
-        return list[index].balance > list[index + 1].balance;
-    }
-
-    responseHandler(response: [IPaginationResponse<IWalletReturnResponse>, PageEvent]): void {
+    responseHandler(response: [IPaginationResponse<InfoViewModel>, PageEvent]): void {
         this.list = response[0].items;
     }
 

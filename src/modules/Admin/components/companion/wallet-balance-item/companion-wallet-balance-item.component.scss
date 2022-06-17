@@ -14,8 +14,18 @@
 
   .amount {
     margin-right: 50px;
+    align-items: start;
+    justify-content: center;
 
     .balance-amount {
+      font-size: 22px;
+    }
+  }
+
+  .total {
+    margin-right: 20px;
+
+    .balance-total {
       font-size: 22px;
     }
 
@@ -51,7 +61,8 @@
 
   .transaction-details {
     align-items: center;
-    justify-content: center;
+    justify-content: end;
+    width: 100%;
   }
 
   .balance-change-item {

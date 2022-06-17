@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
-import { IDepositResponse, IUserWalletResponse, IWalletBalanceChange } from 'modules/Companion/models/models';
+import { IBalancesChangeItem, IUserWalletResponse } from 'modules/Companion/models/models';
 import { IJSONViewDialogData, JSONViewDialogComponent } from 'modules/Shared/components/json-view/json-view-dialog.component';
 
 @Component({
@@ -11,8 +11,8 @@ import { IJSONViewDialogData, JSONViewDialogComponent } from 'modules/Shared/com
     styleUrls: ['./companion-wallet-balance-item.component.scss']
 })
 export class CompanionWalletBalanceItemComponent {
-    @Input() symbol: IUserWalletResponse;
-    @Input() data: IWalletBalanceChange[] = [];
+    @Input() userWallet: IUserWalletResponse;
+    @Input() data: IBalancesChangeItem[] = [];
 
     loading = false;
 
@@ -36,62 +36,28 @@ export class CompanionWalletBalanceItemComponent {
         return new Date(date * 1000);
     }
 
-    getFrom(item: IWalletBalanceChange): string {
-        if (item.splDetails) {
-            return item.splDetails.from.owner;
-        }
-
-        if (item.solDetails) {
-            return item.solDetails.details.src;
-        }
-
-        return "Unknown";
+    getFrom(): string {
+        return this.userWallet.address;
     }
 
-    getTo(item: IWalletBalanceChange): string {
-        if (item.splDetails) {
-            return item.splDetails.to.owner;
-        }
-
-        if (item.solDetails) {
-            return item.solDetails.details.dst;
-        }
-
-        return "Unknown";
+    getTo(item: IBalancesChangeItem): string {
+        return "Root wallet";
     }
     
-    showFromDetails(item: IWalletBalanceChange) {
-        let object = null;
-        if (item.splDetails) {
-            object = item.splDetails.from;
-        }
-
-        if (item.solDetails) {
-            object = item.solDetails.details;
-        }
-
+    showFromDetails(item: IBalancesChangeItem) {
         this._dialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
             data: {
                 title: 'Transaction Details',
-                json: object,
+                json: item
             }
         });
     }
 
-    showToDetails(item: IWalletBalanceChange) {
-        let object = null;
-        if (item.splDetails) {
-            object = item.splDetails.to;
-        }
-
-        if (item.solDetails) {
-            object = item.solDetails.details;
-        }
-
+    showToDetails(item: IBalancesChangeItem) {
         this._dialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
             data: {
                 title: 'Transaction Details',
-                json: object,
+                json: item
             }
         });
     }

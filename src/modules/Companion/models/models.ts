@@ -31,8 +31,31 @@ export interface IEditWithdrawRequest {
 export interface IUserWalletResponse {
     address: string;
     date: string;
-    depositRequest: IDepositResponse[];
-    withdrawRequest: IWithdrawResponse[];
+    endDateDeposits: IEndDateDepositResponse[];
+    closeDepositsRequests: ICloseDepositResponse[];
+    flexibleDeposits: IDepositResponse[];
+    withdraws: IWithdrawResponse[];
+}
+
+export interface IEndDateDepositResponse {
+    id: number;
+    userWalletAddress: string;
+    date: string;
+    endDate: string;
+    tx: string;
+    processed: boolean;
+    completed: boolean;
+    amount: number;
+    returnPercentage: number;
+    token: string;
+    closeRequest?: ICloseDepositResponse;
+}
+
+export interface ICloseDepositResponse {
+    id: number;
+    userWalletAddress: string;
+    date: string;
+    processed: boolean;
 }
 
 export interface IDepositResponse {
@@ -97,25 +120,6 @@ export interface ISolTransactionDetails {
     details: ISolScannerItem;
 }
 
-export interface IWalletBalanceChange {
-    amount: number;
-    time: number;
-    splDetails: ITokenTransactionDetails;
-    solDetails?: ISolTransactionDetails;
-}
-
-export interface IWalletReturnResponse {
-    amount: number;
-    balance: number;
-    total: number;
-    time: number;
-}
-
-export interface IAccountInfoResponse {
-    balances: IWalletBalanceChange[];
-    returns: IWalletReturnResponse[];
-}
-
 export interface IEditDepositRequest {
     address: string;
     id: number;
@@ -127,4 +131,28 @@ export interface IEditWithdrawRequest {
     tx: string;
     id: number;
     processed: boolean;
+}
+
+export interface IAccountInfoResponse {
+    flexibleDeposit: { [id: string]: IUserTokenEarningBalance };
+    endDateDeposit: IEndDateDepositResponse[];
+}
+
+export interface IUserTokenEarningBalance {
+    balances: IBalancesChangeItem[];
+    returns: IReturnChangeItem[];
+    amount: number;
+}
+
+export interface IBalancesChangeItem {
+    amount: number;
+    changeAmount: number;
+    time: number;
+    tx: string;
+}
+
+export interface IReturnChangeItem {
+    amount: number;
+    total: number;
+    time: number;
 }

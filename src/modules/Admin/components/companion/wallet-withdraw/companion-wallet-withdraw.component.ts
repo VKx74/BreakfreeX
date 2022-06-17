@@ -53,9 +53,9 @@ export class CompanionWalletWithdrawComponent implements OnInit {
                         this.loading = false;
                         if (response) {
                             this._alertService.success("Withdraw removed");
-                            let index = this.wallet.withdrawRequest.findIndex((_) => _.id = withdraw.id);
-                            this.wallet.withdrawRequest.splice(index, 1);
-                            this.wallet.withdrawRequest = [...this.wallet.withdrawRequest];
+                            let index = this.wallet.withdraws.findIndex((_) => _.id = withdraw.id);
+                            this.wallet.withdraws.splice(index, 1);
+                            this.wallet.withdraws = [...this.wallet.withdraws];
                             return;
                         }
                         this._alertService.error("Failed removed withdraw");
