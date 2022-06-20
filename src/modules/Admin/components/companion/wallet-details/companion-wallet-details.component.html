@@ -4,11 +4,17 @@
     </div>
     <div class="wallet-tabs">
         <mat-tab-group>
-            <mat-tab label="Deposits">
+            <mat-tab label="Flexible Deposits">
                 <companion-wallet-deposit [wallet]="wallet"></companion-wallet-deposit>
             </mat-tab>
             <mat-tab label="Withdraws">
                 <companion-wallet-withdraw [wallet]="wallet"></companion-wallet-withdraw>
+            </mat-tab>
+            <mat-tab label="End Date Deposits">
+                <companion-wallet-end-date-deposit [wallet]="wallet"></companion-wallet-end-date-deposit>
+            </mat-tab>
+            <mat-tab label="Close Deposits Requests">
+                <!-- <companion-wallet-withdraw [wallet]="wallet"></companion-wallet-withdraw> -->
             </mat-tab>
             <mat-tab label="Balances">
                 <companion-wallet-balance [wallet]="wallet"></companion-wallet-balance>

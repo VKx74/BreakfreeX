@@ -26,19 +26,19 @@ export class CompanionUserTrackerService {
     }
 
     editDeposit(data: IEditDepositRequest): Observable<IDepositResponse> {
-        return this._http.patch<IDepositResponse>(`${this.USER_TRACKER_URL}deposit`, data);
+        return this._http.patch<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-deposit`, data);
     }
 
     editWithdraw(data: IEditWithdrawRequest): Observable<IWithdrawResponse> {
-        return this._http.patch<IDepositResponse>(`${this.USER_TRACKER_URL}withdraw`, data);
+        return this._http.patch<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-withdraw`, data);
     }
 
     deleteDeposit(wallet: string, id: number): Observable<IDepositResponse> {
-        return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}deposit?address=${wallet}&id=${id}`);
+        return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-deposit?address=${wallet}&id=${id}`);
     }
 
     deleteWithdraw(wallet: string, id: number): Observable<IWithdrawResponse> {
-        return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}withdraw?address=${wallet}&id=${id}`);
+        return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-withdraw?address=${wallet}&id=${id}`);
     }
 
     getBalances(userAccount: string): Observable<IAccountInfoResponse> {

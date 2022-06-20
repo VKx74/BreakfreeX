@@ -43,17 +43,8 @@ export class CompanionWalletBalanceItemComponent {
     getTo(item: IBalancesChangeItem): string {
         return "Root wallet";
     }
-    
-    showFromDetails(item: IBalancesChangeItem) {
-        this._dialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
-            data: {
-                title: 'Transaction Details',
-                json: item
-            }
-        });
-    }
 
-    showToDetails(item: IBalancesChangeItem) {
+    details(item: IBalancesChangeItem) {
         this._dialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
             data: {
                 title: 'Transaction Details',

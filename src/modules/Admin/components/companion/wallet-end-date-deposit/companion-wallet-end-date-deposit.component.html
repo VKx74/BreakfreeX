@@ -1,18 +1,27 @@
-<data-table [rows]="wallet?.withdraws">
+<data-table [rows]="endDateDeposits">
     <data-table-header-cell columnName="id">
         Id
     </data-table-header-cell>
     <data-table-header-cell columnName="token">
         Token
     </data-table-header-cell>
-    <data-table-header-cell columnName="creationTime">
-        Created At
-    </data-table-header-cell>
     <data-table-header-cell columnName="amount">
         Amount
     </data-table-header-cell>
+    <data-table-header-cell columnName="creationTime">
+        Created At
+    </data-table-header-cell>
+    <data-table-header-cell columnName="endDate">
+        End Date
+    </data-table-header-cell>
     <data-table-header-cell columnName="processed">
         Processed
+    </data-table-header-cell>
+    <data-table-header-cell columnName="returnPercentage">
+        Return %
+    </data-table-header-cell>
+    <data-table-header-cell columnName="closeRequest">
+        Close Request
     </data-table-header-cell>
     <data-table-header-cell columnName="transactionId">
         Transaction Id
@@ -31,15 +40,21 @@
         </ng-template>
     </data-table-cell>
 
+    <data-table-cell columnName="amount">
+        <ng-template let-item>
+            {{item.amount}}
+        </ng-template>
+    </data-table-cell>
+
     <data-table-cell columnName="creationTime">
         <ng-template let-item>
             {{getDate(item.date) | date: 'short'}}
         </ng-template>
     </data-table-cell>
 
-    <data-table-cell columnName="amount">
+    <data-table-cell columnName="endDate">
         <ng-template let-item>
-            {{item.amount}}
+            {{getDate(item.endDate) | date: 'short'}}
         </ng-template>
     </data-table-cell>
 
@@ -51,9 +66,23 @@
         </ng-template>
     </data-table-cell>
 
+    <data-table-cell columnName="returnPercentage">
+        <ng-template let-item>
+            {{item.returnPercentage}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="closeRequest">
+        <ng-template let-item>
+            <div [ngClass]="{'positive-value': !!(item.closeRequest), 'negative-value': !(item.closeRequest)}">
+                {{item.closeRequest ? "Request id #" + item.closeRequest.id : "-"}}
+            </div>
+        </ng-template>
+    </data-table-cell>
+
     <data-table-cell columnName="transactionId">
         <ng-template let-item>
-            {{item.tx || "-" }}
+            {{item.tx}}
         </ng-template>
     </data-table-cell>
 

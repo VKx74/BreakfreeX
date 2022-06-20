@@ -6,6 +6,7 @@ import { IDepositResponse, IUserWalletResponse, IWithdrawResponse } from 'module
 import { CompanionEditWalletWithdrawComponent } from '../edit-wallet-withdraw/companion-edit-wallet-withdraw.component';
 import { ConfirmModalComponent } from 'modules/UI/components';
 import { AlertService } from '@alert/services/alert.service';
+import { IJSONViewDialogData, JSONViewDialogComponent } from 'modules/Shared/components/json-view/json-view-dialog.component';
 
 @Component({
     selector: 'companion-wallet-withdraw',
@@ -38,6 +39,15 @@ export class CompanionWalletWithdrawComponent implements OnInit {
             if (_) {
                 withdraw.processed = _.processed;
                 withdraw.tx = _.tx;
+            }
+        });
+    }
+
+    details(deposit: IWithdrawResponse) {
+        this._matDialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
+            data: {
+                title: 'Withdraw Details',
+                json: deposit
             }
         });
     }

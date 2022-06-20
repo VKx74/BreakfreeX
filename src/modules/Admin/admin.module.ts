@@ -150,6 +150,7 @@ import { CompanionWalletBalanceItemComponent } from './components/companion/wall
 import { CompanionWalletReturnsComponent } from './components/companion/wallet-returns/companion-wallet-returns.component';
 import { CompanionEditWalletDepositComponent } from './components/companion/edit-wallet-deposit/companion-edit-wallet-deposit.component';
 import { CompanionEditWalletWithdrawComponent } from './components/companion/edit-wallet-withdraw/companion-edit-wallet-withdraw.component';
+import { CompanionWalletEndDateDepositComponent } from './components/companion/wallet-end-date-deposit/companion-wallet-end-date-deposit.component';
 
 @NgModule({
     imports: [
@@ -259,6 +260,7 @@ import { CompanionEditWalletWithdrawComponent } from './components/companion/edi
         CompanionWalletsComponent,
         CompanionWalletDetailsComponent,
         CompanionWalletDepositComponent,
+        CompanionWalletEndDateDepositComponent,
         CompanionWalletWithdrawComponent,
         CompanionWalletBalanceComponent,
         CompanionWalletBalanceItemComponent,

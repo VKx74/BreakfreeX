@@ -2,24 +2,24 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
-import { IDepositResponse, IUserWalletResponse } from 'modules/Companion/models/models';
+import { IEndDateDepositResponse, IUserWalletResponse } from 'modules/Companion/models/models';
 import { CompanionEditWalletDepositComponent } from '../edit-wallet-deposit/companion-edit-wallet-deposit.component';
 import { ConfirmModalComponent } from 'modules/UI/components';
 import { AlertService } from '@alert/services/alert.service';
 import { IJSONViewDialogData, JSONViewDialogComponent } from 'modules/Shared/components/json-view/json-view-dialog.component';
 
 @Component({
-    selector: 'companion-wallet-deposit',
-    templateUrl: './companion-wallet-deposit.component.html',
-    styleUrls: ['./companion-wallet-deposit.component.scss']
+    selector: 'companion-wallet-end-date-deposit',
+    templateUrl: './companion-wallet-end-date-deposit.component.html',
+    styleUrls: ['./companion-wallet-end-date-deposit.component.scss']
 })
-export class CompanionWalletDepositComponent implements OnInit {
+export class CompanionWalletEndDateDepositComponent implements OnInit {
     @Input() set wallet(value: IUserWalletResponse) {
-        this.flexibleDeposits = value.flexibleDeposits.slice();
-        this.flexibleDeposits = this.flexibleDeposits.sort((a, b) => this.getDate(b.date).getTime() - this.getDate(a.date).getTime());
+        this.endDateDeposits = value.endDateDeposits.slice();
+        this.endDateDeposits = this.endDateDeposits.sort((a, b) => this.getDate(b.date).getTime() - this.getDate(a.date).getTime());
     }
 
-    flexibleDeposits: IDepositResponse[] = [];
+    endDateDeposits: IEndDateDepositResponse[] = [];
 
     loading = false;
 
@@ -39,8 +39,8 @@ export class CompanionWalletDepositComponent implements OnInit {
         return new Date(date);
     }
 
-    edit(deposit: IDepositResponse) {
-        this._matDialog.open<CompanionEditWalletDepositComponent, IDepositResponse>(CompanionEditWalletDepositComponent, {
+    edit(deposit: IEndDateDepositResponse) {
+        this._matDialog.open<CompanionEditWalletDepositComponent, IEndDateDepositResponse>(CompanionEditWalletDepositComponent, {
             data: deposit
         }).afterClosed().subscribe((_) => {
             if (_) {
@@ -49,7 +49,7 @@ export class CompanionWalletDepositComponent implements OnInit {
         });
     }
 
-    details(deposit: IDepositResponse) {
+    details(deposit: IEndDateDepositResponse) {
         this._matDialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
             data: {
                 title: 'Deposit Details',
@@ -58,7 +58,7 @@ export class CompanionWalletDepositComponent implements OnInit {
         });
     }
 
-    remove(deposit: IDepositResponse) {
+    remove(deposit: IEndDateDepositResponse) {
         this._matDialog.open(ConfirmModalComponent, {
             data: {
                 title: 'Delete deposit',
@@ -69,9 +69,9 @@ export class CompanionWalletDepositComponent implements OnInit {
                         this.loading = false;
                         if (response) {
                             this._alertService.success("Deposit removed");
-                            let index = this.flexibleDeposits.findIndex((_) => _.id = deposit.id);
-                            this.flexibleDeposits.splice(index, 1);
-                            this.flexibleDeposits = [...this.flexibleDeposits];
+                            let index = this.endDateDeposits.findIndex((_) => _.id = deposit.id);
+                            this.endDateDeposits.splice(index, 1);
+                            this.endDateDeposits = [...this.endDateDeposits];
                             return;
                         }
                         this._alertService.error("Failed removed deposit");

@@ -17,13 +17,13 @@
                 </div>
             </div>
             <div class="rows transaction-details">
-                <div class="from" (click)="showFromDetails(item)">
+                <div class="from" (click)="details(item)">
                     {{getFrom(item)}}
                 </div>
                 <div class="arrow">
                     →
                 </div>
-                <div class="to" (click)="showToDetails(item)">
+                <div class="to" (click)="details(item)">
                     {{getTo(item)}}
                 </div>
             </div>
