@@ -18,18 +18,17 @@ export class WistiaService {
 
     getContentByProject(project: string): Observable<Content[]> {
         // this.key
-        var header = {
+        let header = {
             headers: new HttpHeaders()
-              .set('Authorization',  `Bearer 08c9bb06a2647ffe6af66de3fdca0440902b0dd089abf2e519a84bbc72cb9fed`)
-          }
-          
+                .set('Authorization', `Bearer 08c9bb06a2647ffe6af66de3fdca0440902b0dd089abf2e519a84bbc72cb9fed`)
+        };
+
         return this._http.get<Content[]>(`${this.apiUrl}medias.json?project_id=${project}&sort_by=name`, header);
     }
 
     getVideoDetails(id: string): Observable<MediaDetails> {
         return this._http.get<MediaData>(`${this.generalUrl}batch_media_data?basic=true&episode_data=true&media_hashed_ids=${id}`).pipe(map(_ => {
-            if (!_ || !_.medias)
-            {
+            if (!_ || !_.medias) {
                 return null;
             }
 
