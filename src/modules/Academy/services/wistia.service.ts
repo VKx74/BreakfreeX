@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
@@ -17,7 +17,13 @@ export class WistiaService {
     }
 
     getContentByProject(project: string): Observable<Content[]> {
-        return this._http.get<Content[]>(`${this.apiUrl}medias.json?access_token=${this.key}&project_id=${project}&sort_by=name`);
+        // this.key
+        var header = {
+            headers: new HttpHeaders()
+              .set('Authorization',  `Bearer 08c9bb06a2647ffe6af66de3fdca0440902b0dd089abf2e519a84bbc72cb9fed`)
+          }
+          
+        return this._http.get<Content[]>(`${this.apiUrl}medias.json?project_id=${project}&sort_by=name`, header);
     }
 
     getVideoDetails(id: string): Observable<MediaDetails> {
