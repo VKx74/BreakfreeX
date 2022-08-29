@@ -1,0 +1,59 @@
+<pagination-table-container [paginationHandler]="paginationHandler"
+                            [noItems]="!list?.length"
+                            [componentIdentifier]="ComponentIdentifier.companionWallets"
+                            [title]="'Companion Wallets'"
+                            [loading]="loading"
+>
+
+    <div class="filters flex justify-space-between w-100">
+        <div class="filters-wrapper flex align-items-center">
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [matDatepicker]="start"
+                       [max]="endDate"
+                       [(ngModel)]="startDate"
+                       (dateChange)="resetPagination()"
+                       (click)="start.open()"
+                       class="cursor-pointer"
+                       placeholder="Start date">
+                <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly
+                       [matDatepicker]="end"
+                       [min]="startDate"
+                       [(ngModel)]="endDate"
+                       (dateChange)="resetPagination()"
+                       (click)="end.open()"
+                       class="cursor-pointer"
+                       placeholder="End date">
+                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+
+            <button class="crypto-button crypto-button_primary" [disabled]="!startDate && !endDate"
+                    (click)="clearDatePickers()">
+                <span>Clear</span>
+            </button>
+        </div>
+        <div class="flex">
+            <div class="value">
+                <selector [options]="endedStateOptions" [selectedOption]="endedSelectedState" (onSelect)="endedStateChanged($event)"
+                    class="watchlist-selector"></selector>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="value">
+                <selector [options]="completedStateOptions" [selectedOption]="completedSelectedState" (onSelect)="completedStateChanged($event)"
+                    class="watchlist-selector"></selector>
+            </div>
+        </div>
+        <div class="search-wrapper">
+            <debounced-input (valueChange)="onSearchValueChange($event)"></debounced-input>
+        </div>
+    </div>
+    
+    <companion-wallet-end-date-deposit-table [endDateDeposits]="list"></companion-wallet-end-date-deposit-table>
+</pagination-table-container>

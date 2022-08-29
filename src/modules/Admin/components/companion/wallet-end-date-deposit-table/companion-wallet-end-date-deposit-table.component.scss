@@ -1,0 +1,14 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+
+  .positive-value {
+    color: #5eaf80;
+  }
+
+  .negative-value {
+    color: #bd5b6a;
+  }
+}

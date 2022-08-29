@@ -21,6 +21,15 @@ export interface IEditDepositRequest {
     processed: boolean;
 }
 
+export interface IEditEndDateDepositRequest {
+    address: string;
+    id: number;
+    processed: boolean;
+    completed: boolean;
+    tx: string;
+    withdrawTxId: string;
+}
+
 export interface IEditWithdrawRequest {
     address: string;
     tx: string;
@@ -31,8 +40,8 @@ export interface IEditWithdrawRequest {
 export interface IUserWalletResponse {
     address: string;
     date: string;
+    lastActivityDate: string;
     endDateDeposits: IEndDateDepositResponse[];
-    closeDepositsRequests: ICloseDepositResponse[];
     flexibleDeposits: IDepositResponse[];
     withdraws: IWithdrawResponse[];
 }
@@ -43,19 +52,13 @@ export interface IEndDateDepositResponse {
     date: string;
     endDate: string;
     tx: string;
+    withdrawTxId: string;
     processed: boolean;
     completed: boolean;
     amount: number;
+    depositTerm: number;
     returnPercentage: number;
     token: string;
-    closeRequest?: ICloseDepositResponse;
-}
-
-export interface ICloseDepositResponse {
-    id: number;
-    userWalletAddress: string;
-    date: string;
-    processed: boolean;
 }
 
 export interface IDepositResponse {

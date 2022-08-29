@@ -138,7 +138,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AppMemberTradingAccountsComponent } from './components/app-member-trading-accounts/app-member-trading-accounts.component';
 import { AppMemberTradingAccountEditComponent } from './components/app-member-trading-account-edit/app-member-trading-account-edit.component';
 import { CompanionWalletsComponent } from './components/companion/wallets/companion-wallets.component';
-import { CompanionResolver } from './resolvers/companion.resolver';
 import { ScriptCloudRepositoryService } from '@scripting/services/script-cloud-repository.service';
 import { CompanionComponent } from './components/companion/companion.component';
 import { CompanionWalletDetailsComponent } from './components/companion/wallet-details/companion-wallet-details.component';
@@ -151,6 +150,10 @@ import { CompanionWalletReturnsComponent } from './components/companion/wallet-r
 import { CompanionEditWalletDepositComponent } from './components/companion/edit-wallet-deposit/companion-edit-wallet-deposit.component';
 import { CompanionEditWalletWithdrawComponent } from './components/companion/edit-wallet-withdraw/companion-edit-wallet-withdraw.component';
 import { CompanionWalletEndDateDepositComponent } from './components/companion/wallet-end-date-deposit/companion-wallet-end-date-deposit.component';
+import { CompanionEditEndDateWalletDepositComponent } from './components/companion/edit-wallet-end-date-deposit/companion-edit-wallet-end-date-deposit.component';
+import { CompanionFinanceComponent } from './components/companion/companion-finance/companion-finance.component';
+import { CompanionEndedEndDateDepositsComponent } from './components/companion/ended-end-date-deposits/companion-ended-end-date-deposits.component';
+import { CompanionWalletEndDateDepositTableComponent } from './components/companion/wallet-end-date-deposit-table/companion-wallet-end-date-deposit-table.component';
 
 @NgModule({
     imports: [
@@ -258,6 +261,8 @@ import { CompanionWalletEndDateDepositComponent } from './components/companion/w
         
         CompanionComponent,
         CompanionWalletsComponent,
+        CompanionEndedEndDateDepositsComponent,
+        CompanionFinanceComponent,
         CompanionWalletDetailsComponent,
         CompanionWalletDepositComponent,
         CompanionWalletEndDateDepositComponent,
@@ -266,6 +271,8 @@ import { CompanionWalletEndDateDepositComponent } from './components/companion/w
         CompanionWalletBalanceItemComponent,
         CompanionWalletReturnsComponent,
         CompanionEditWalletDepositComponent,
+        CompanionEditEndDateWalletDepositComponent,
+        CompanionWalletEndDateDepositTableComponent,
         CompanionEditWalletWithdrawComponent
     ],
     exports: [
@@ -291,6 +298,8 @@ import { CompanionWalletEndDateDepositComponent } from './components/companion/w
         TPMonitoringTradeDetailsComponent,
         CompanionWalletReturnsComponent,
         CompanionEditWalletDepositComponent,
+        CompanionWalletEndDateDepositTableComponent,
+        CompanionEditEndDateWalletDepositComponent,
         CompanionEditWalletWithdrawComponent
         // CreateNewsComponent,
     ],
@@ -372,7 +381,6 @@ import { CompanionWalletEndDateDepositComponent } from './components/companion/w
         DiscussionForumApiService,
         IdentityLogsService,
 
-        CompanionResolver,
         CompanionWalletDetailsResolver,
         ScriptCloudRepositoryService
     ]

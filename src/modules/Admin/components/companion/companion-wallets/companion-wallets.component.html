@@ -68,9 +68,6 @@
         <data-table-header-cell columnName="creationTime">
             Created At
         </data-table-header-cell>
-        <data-table-header-cell columnName="lastActivityDate">
-            Last Activity Date
-        </data-table-header-cell>
         <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
 
         <data-table-cell columnName="wallet">
@@ -106,12 +103,6 @@
         <data-table-cell columnName="creationTime">
             <ng-template let-item>
                 {{getDate(item.date) | date: 'short'}}
-            </ng-template>
-        </data-table-cell>
-
-        <data-table-cell columnName="lastActivityDate">
-            <ng-template let-item>
-                {{getDate(item.lastActivityDate) | date: 'short'}}
             </ng-template>
         </data-table-cell>
 

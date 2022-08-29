@@ -1,14 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { NewsService } from "../../../services/news.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { PaginationComponent, IPaginationResponse } from "@app/models/pagination.model";
 import { Observable } from "rxjs";
 import { PageEvent } from "@angular/material/typings/paginator";
+import { ConfirmModalComponent, IConfirmModalConfig } from "UI";
 import { FiltrationParams } from "@app/models/filtration-params";
 import { ComponentIdentifier } from "@app/models/app-config";
+import { INews } from "../../../../News/models/models";
 import { IDepositResponse, IEndDateDepositResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
 import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
-import { catchError } from 'rxjs/operators';
+import { QaModuleBasePath } from 'modules/Qa/BasePath';
 
 interface INewsManagerFiltrationParams {
     search: string;
@@ -64,17 +67,17 @@ export class CompanionWalletsComponent extends PaginationComponent<IUserWalletRe
 
     constructor(private _route: ActivatedRoute,
         private _router: Router,
-        private _companionUserTrackerService: CompanionUserTrackerService) {
+        private _companionUserTrackerService: CompanionUserTrackerService,
+        private _matDialog: MatDialog) {
         super();
-        this.list = [];
     }
 
     ngOnInit() {
-        this.getItems().subscribe((wallets) => {
-            if (wallets) {
-                this.setPaginationHandler(wallets);
-            }
-        });
+        const wallets = this._route.snapshot.data['wallets'] as IPaginationResponse<IUserWalletResponse>;
+
+        if (wallets) {
+            this.setPaginationHandler(wallets);
+        }
     }
 
     getItems(): Observable<IPaginationResponse<IUserWalletResponse>> {

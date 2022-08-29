@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
 import {PaginationParams, IPaginationResponse} from "@app/models/pagination.model";
 import {QueryParamsConstructor} from "../data/models";
-import { IAccountInfoResponse, IDepositResponse, IEditDepositRequest, IEditWithdrawRequest, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
+import { IAccountInfoResponse, IDepositResponse, IEditDepositRequest, IEditEndDateDepositRequest, IEditWithdrawRequest, IEndDateDepositResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
 
 @Injectable({
     providedIn: 'root'
@@ -21,12 +21,22 @@ export class CompanionUserTrackerService {
         });
     }
 
+    getEndDateDepositsFilteredList(params = new PaginationParams(), filtrationParams?: object): Observable<IPaginationResponse<IEndDateDepositResponse>> {
+        return this._http.get<IPaginationResponse<IEndDateDepositResponse>>(`${this.USER_TRACKER_URL}end-date-deposits-filtered`, {
+            params: QueryParamsConstructor.fromObjects(params.toSkipTake(), filtrationParams)
+        });
+    }
+
     getWalletDetailsList(id: string): Observable<IUserWalletResponse> {
         return this._http.get<IUserWalletResponse>(`${this.USER_TRACKER_URL}wallet?address=${id}`);
     }
 
     editDeposit(data: IEditDepositRequest): Observable<IDepositResponse> {
         return this._http.patch<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-deposit`, data);
+    }
+
+    editEndDateDeposit(data: IEditEndDateDepositRequest): Observable<IEndDateDepositResponse> {
+        return this._http.patch<IEndDateDepositResponse>(`${this.USER_TRACKER_URL}end-date-deposit`, data);
     }
 
     editWithdraw(data: IEditWithdrawRequest): Observable<IWithdrawResponse> {

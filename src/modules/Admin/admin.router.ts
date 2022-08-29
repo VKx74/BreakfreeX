@@ -51,11 +51,10 @@ import { XPDashboardResolver } from './resolvers/xp-dashboard.resolver';
 import { RegistrationsDashboardComponent } from './components/registrations-dashboard/registrations-dashboard.component';
 import { TPMonitoringComponent } from './components/trading-performance-monitoring/tp-monitoring.component';
 import { TPMonitoringResolver } from './resolvers/tp-monitoring.resolver';
-import { CompanionWalletsComponent } from './components/companion/wallets/companion-wallets.component';
-import { CompanionResolver } from './resolvers/companion.resolver';
 import { CompanionComponent } from './components/companion/companion.component';
 import { CompanionWalletDetailsComponent } from './components/companion/wallet-details/companion-wallet-details.component';
 import { CompanionWalletDetailsResolver } from './resolvers/companion-wallet-details.resolver';
+import { CompanionFinanceComponent } from './components/companion/companion-finance/companion-finance.component';
 export const redirectUrl = `/${AppRoutes.Admin}`;
 
 const SYSTEM_MONITORING_URLS = AppConfigService.config.systemMonitoringUrls;
@@ -445,10 +444,7 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: CompanionWalletsComponent,
-                        resolve: {
-                            wallets: CompanionResolver,
-                        }
+                        component: CompanionFinanceComponent
                     },
                     {
                         path: 'wallet-details/:id',
