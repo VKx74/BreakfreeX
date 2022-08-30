@@ -300,7 +300,8 @@ import { CompanionWalletEndDateDepositTableComponent } from './components/compan
         CompanionEditWalletDepositComponent,
         CompanionWalletEndDateDepositTableComponent,
         CompanionEditEndDateWalletDepositComponent,
-        CompanionEditWalletWithdrawComponent
+        CompanionEditWalletWithdrawComponent,
+        CompanionWalletsComponent
         // CreateNewsComponent,
     ],
     providers: [
