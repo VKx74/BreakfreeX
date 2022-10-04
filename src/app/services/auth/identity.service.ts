@@ -160,7 +160,7 @@ export class IdentityService {
 
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
-                if (sub.indexOf("2021 Black Friday") !== -1) {
+                if (sub.indexOf("2021 Black Friday") !== -1 || sub.indexOf("Black October Offer") !== -1) {
                     return true;
                 }
             }
