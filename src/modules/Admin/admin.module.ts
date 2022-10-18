@@ -143,7 +143,7 @@ import { CompanionComponent } from './components/companion/companion.component';
 import { CompanionWalletDetailsComponent } from './components/companion/wallet-details/companion-wallet-details.component';
 import { CompanionWalletDetailsResolver } from './resolvers/companion-wallet-details.resolver';
 import { CompanionWalletDepositComponent } from './components/companion/wallet-deposit/companion-wallet-deposit.component';
-import { CompanionWalletWithdrawComponent } from './components/companion/wallet-withdraw/companion-wallet-withdraw.component';
+import { CompanionWalletWithdrawTableComponent } from './components/companion/wallet-withdraw-table/companion-wallet-withdraw-table.component';
 import { CompanionWalletBalanceComponent } from './components/companion/wallet-balance/companion-wallet-balance.component';
 import { CompanionWalletBalanceItemComponent } from './components/companion/wallet-balance-item/companion-wallet-balance-item.component';
 import { CompanionWalletReturnsComponent } from './components/companion/wallet-returns/companion-wallet-returns.component';
@@ -154,6 +154,10 @@ import { CompanionEditEndDateWalletDepositComponent } from './components/compani
 import { CompanionFinanceComponent } from './components/companion/companion-finance/companion-finance.component';
 import { CompanionEndedEndDateDepositsComponent } from './components/companion/ended-end-date-deposits/companion-ended-end-date-deposits.component';
 import { CompanionWalletEndDateDepositTableComponent } from './components/companion/wallet-end-date-deposit-table/companion-wallet-end-date-deposit-table.component';
+import { CompanionWalletWithdrawComponent } from './components/companion/wallet-withdraw/companion-wallet-withdraw.component';
+import { RequestedWithdrawsComponent } from './components/companion/requested-withdraws/requested-withdraws.component';
+import { RedeemsComponent } from './components/companion/redeems/redeems.component';
+import { RedeemsTableComponent } from './components/companion/redeems-table/redeems-table.component';
 
 @NgModule({
     imports: [
@@ -262,11 +266,15 @@ import { CompanionWalletEndDateDepositTableComponent } from './components/compan
         CompanionComponent,
         CompanionWalletsComponent,
         CompanionEndedEndDateDepositsComponent,
+        RequestedWithdrawsComponent,
+        RedeemsComponent,
+        RedeemsTableComponent,
         CompanionFinanceComponent,
         CompanionWalletDetailsComponent,
         CompanionWalletDepositComponent,
         CompanionWalletEndDateDepositComponent,
         CompanionWalletWithdrawComponent,
+        CompanionWalletWithdrawTableComponent,
         CompanionWalletBalanceComponent,
         CompanionWalletBalanceItemComponent,
         CompanionWalletReturnsComponent,

@@ -53,7 +53,7 @@
     "socialFeedREST": "https://socialfeed-social-stage.breakfreetrading.com/",
     "socialFeedWS": "wss://socialfeed-social-stage.breakfreetrading.com/websocket",
 
-    "companionUserTracker": "https://usertracker-trackerapi-stage.companion.to/usertracker/admin/"
+    "companionUserTracker": "https://usertracker-trackerapi.companion.to/usertracker/admin/"
   },
   "systemMonitoringUrls": {
     "platform": {
@@ -138,6 +138,7 @@
     "https://algo-stage.breakfreetrading.com",
     "https://mtapi-stage.breakfreetrading.com",
     "https://user-api-alerts-stage.breakfreetrading.com",
-    "https://socialfeed-social-stage.breakfreetrading.com"
+    "https://socialfeed-social-stage.breakfreetrading.com",
+    "https://usertracker-trackerapi.companion.to"
   ]
 }

@@ -41,6 +41,8 @@ export interface IUserWalletResponse {
     address: string;
     date: string;
     lastActivityDate: string;
+    rate: number;
+    ticket: string;
     endDateDeposits: IEndDateDepositResponse[];
     flexibleDeposits: IDepositResponse[];
     withdraws: IWithdrawResponse[];
@@ -79,6 +81,17 @@ export interface IWithdrawResponse {
     processed: boolean;
     amount: number;
     token: string;
+}
+
+export interface IRedeemResponse {
+    id: number;
+    email: string;
+    tx: string;
+    wallet: string;
+    tokens: number;
+    amount: number;
+    rate: number;
+    updateDate: string;
 }
 
 export interface ISplScannerBalance {

@@ -1,36 +1,21 @@
-<data-table [rows]="endDateDeposits">
+<data-table [rows]="withdraws">
     <data-table-header-cell columnName="id">
         Id
-    </data-table-header-cell>
-    <data-table-header-cell columnName="wallet">
-        Wallet
     </data-table-header-cell>
     <data-table-header-cell columnName="token">
         Token
     </data-table-header-cell>
-    <data-table-header-cell columnName="amount">
-        Amount
-    </data-table-header-cell>
-    <data-table-header-cell columnName="returnPercentage">
-        Return %
-    </data-table-header-cell>
-    <data-table-header-cell columnName="returnAmount">
-        Return Amount
+    <data-table-header-cell columnName="wallet">
+        Wallet
     </data-table-header-cell>
     <data-table-header-cell columnName="creationTime">
         Created At
     </data-table-header-cell>
-    <data-table-header-cell columnName="endDate">
-        End Date
+    <data-table-header-cell columnName="amount">
+        Amount
     </data-table-header-cell>
     <data-table-header-cell columnName="processed">
         Processed
-    </data-table-header-cell>
-    <data-table-header-cell columnName="isEnded">
-        Is Ended
-    </data-table-header-cell>
-    <data-table-header-cell columnName="isCompleted">
-        Is Completed
     </data-table-header-cell>
     <data-table-header-cell columnName="transactionId">
         Transaction Id
@@ -55,33 +40,15 @@
         </ng-template>
     </data-table-cell>
 
-    <data-table-cell columnName="amount">
-        <ng-template let-item>
-            {{item.amount}}
-        </ng-template>
-    </data-table-cell>
-
-    <data-table-cell columnName="returnPercentage">
-        <ng-template let-item>
-            {{item.returnPercentage + "%"}}
-        </ng-template>
-    </data-table-cell>
-
-    <data-table-cell columnName="returnAmount">
-        <ng-template let-item>
-            {{getReturnAmount(item).toFixed(8)}}
-        </ng-template>
-    </data-table-cell>
-
     <data-table-cell columnName="creationTime">
         <ng-template let-item>
             {{getDate(item.date) | date: 'short'}}
         </ng-template>
     </data-table-cell>
 
-    <data-table-cell columnName="endDate">
+    <data-table-cell columnName="amount">
         <ng-template let-item>
-            {{item.depositTerm + " days (" + (getDate(item.endDate) | date: 'short') + ")"}}
+            {{item.amount}}
         </ng-template>
     </data-table-cell>
 
@@ -93,25 +60,9 @@
         </ng-template>
     </data-table-cell>
 
-    <data-table-cell columnName="isEnded">
-        <ng-template let-item>
-            <div [ngClass]="{'positive-value': isEnded(item), 'negative-value': !isEnded(item)}">
-                {{isEnded(item)? "Ended": "-"}}
-            </div>
-        </ng-template>
-    </data-table-cell>
-
-    <data-table-cell columnName="isCompleted">
-        <ng-template let-item>
-            <div [ngClass]="{'positive-value': item.completed === true, 'negative-value': item.completed === false}">
-                {{item.completed ? "Completed" : "-"}}
-            </div>
-        </ng-template>
-    </data-table-cell>
-
     <data-table-cell columnName="transactionId">
         <ng-template let-item>
-            {{item.tx}}
+            {{item.tx || "-" }}
         </ng-template>
     </data-table-cell>
 

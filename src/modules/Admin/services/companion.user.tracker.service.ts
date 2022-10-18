@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
 import {PaginationParams, IPaginationResponse} from "@app/models/pagination.model";
 import {QueryParamsConstructor} from "../data/models";
-import { IAccountInfoResponse, IDepositResponse, IEditDepositRequest, IEditEndDateDepositRequest, IEditWithdrawRequest, IEndDateDepositResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
+import { IAccountInfoResponse, IDepositResponse, IEditDepositRequest, IEditEndDateDepositRequest, IEditWithdrawRequest, IEndDateDepositResponse, IRedeemResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +23,18 @@ export class CompanionUserTrackerService {
 
     getEndDateDepositsFilteredList(params = new PaginationParams(), filtrationParams?: object): Observable<IPaginationResponse<IEndDateDepositResponse>> {
         return this._http.get<IPaginationResponse<IEndDateDepositResponse>>(`${this.USER_TRACKER_URL}end-date-deposits-filtered`, {
+            params: QueryParamsConstructor.fromObjects(params.toSkipTake(), filtrationParams)
+        });
+    }
+
+    getWithdrawsFilteredList(params = new PaginationParams(), filtrationParams?: object): Observable<IPaginationResponse<IWithdrawResponse>> {
+        return this._http.get<IPaginationResponse<IWithdrawResponse>>(`${this.USER_TRACKER_URL}withdraws-filtered`, {
+            params: QueryParamsConstructor.fromObjects(params.toSkipTake(), filtrationParams)
+        });
+    }
+
+    getRedeemsFilteredList(params = new PaginationParams(), filtrationParams?: object): Observable<IPaginationResponse<IRedeemResponse>> {
+        return this._http.get<IPaginationResponse<IRedeemResponse>>(`${this.USER_TRACKER_URL}redeems`, {
             params: QueryParamsConstructor.fromObjects(params.toSkipTake(), filtrationParams)
         });
     }

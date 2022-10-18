@@ -53,6 +53,12 @@
         <data-table-header-cell columnName="wallet">
             Wallet
         </data-table-header-cell>
+        <data-table-header-cell columnName="ticket">
+            Ticket
+        </data-table-header-cell>
+        <data-table-header-cell columnName="rate">
+            Rate
+        </data-table-header-cell>
         <data-table-header-cell columnName="deposits">
             Flexible Deposits
         </data-table-header-cell>
@@ -76,6 +82,18 @@
         <data-table-cell columnName="wallet">
             <ng-template let-item>
                 {{item.address}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="ticket">
+            <ng-template let-item>
+                {{item.ticket}}
+            </ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="rate">
+            <ng-template let-item>
+                {{item.rate}}
             </ng-template>
         </data-table-cell>
 
