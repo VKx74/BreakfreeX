@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
 import {PaginationParams, IPaginationResponse} from "@app/models/pagination.model";
 import {QueryParamsConstructor} from "../data/models";
-import { IAccountInfoResponse, IDepositResponse, IEditDepositRequest, IEditEndDateDepositRequest, IEditWithdrawRequest, IEndDateDepositResponse, IRedeemResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
+import { IAccountInfoResponse, IAddRedeemRequest, IDepositResponse, IEditDepositRequest, IEditEndDateDepositRequest, IEditWithdrawRequest, IEndDateDepositResponse, IRedeemResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
 
 @Injectable({
     providedIn: 'root'
@@ -53,7 +53,7 @@ export class CompanionUserTrackerService {
 
     editWithdraw(data: IEditWithdrawRequest): Observable<IWithdrawResponse> {
         return this._http.patch<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-withdraw`, data);
-    }
+    }  
 
     deleteDeposit(wallet: string, id: number): Observable<IDepositResponse> {
         return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-deposit?address=${wallet}&id=${id}`);
@@ -65,5 +65,9 @@ export class CompanionUserTrackerService {
 
     getBalances(userAccount: string): Observable<IAccountInfoResponse> {
         return this._http.get<IAccountInfoResponse>(`${this.USER_TRACKER_URL}balances?userAccount=${userAccount}`);
+    }
+
+    addRedeem(data: IAddRedeemRequest): Observable<IRedeemResponse> {
+        return this._http.post<IRedeemResponse>(`${this.USER_TRACKER_URL}redeems`, data);
     }
 }

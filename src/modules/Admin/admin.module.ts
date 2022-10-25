@@ -158,6 +158,8 @@ import { CompanionWalletWithdrawComponent } from './components/companion/wallet-
 import { RequestedWithdrawsComponent } from './components/companion/requested-withdraws/requested-withdraws.component';
 import { RedeemsComponent } from './components/companion/redeems/redeems.component';
 import { RedeemsTableComponent } from './components/companion/redeems-table/redeems-table.component';
+import { AddRedeemComponent } from './components/companion/add-redeem/add-redeem.component';
+import { NumericInputModule } from '@numeric-input/numeric-input.module';
 
 @NgModule({
     imports: [
@@ -209,7 +211,8 @@ import { RedeemsTableComponent } from './components/companion/redeems-table/rede
         ChatModuleForAdmin,
         LoaderModule,
         MatPaginatorModule,
-        MatExpansionModule
+        MatExpansionModule,
+        NumericInputModule
     ],
     declarations: [
         AdminDashboardSidebarComponent,
@@ -281,7 +284,8 @@ import { RedeemsTableComponent } from './components/companion/redeems-table/rede
         CompanionEditWalletDepositComponent,
         CompanionEditEndDateWalletDepositComponent,
         CompanionWalletEndDateDepositTableComponent,
-        CompanionEditWalletWithdrawComponent
+        CompanionEditWalletWithdrawComponent,
+        AddRedeemComponent
     ],
     exports: [
         RouterModule,
@@ -309,6 +313,7 @@ import { RedeemsTableComponent } from './components/companion/redeems-table/rede
         CompanionWalletEndDateDepositTableComponent,
         CompanionEditEndDateWalletDepositComponent,
         CompanionEditWalletWithdrawComponent,
+        AddRedeemComponent,
         CompanionWalletsComponent
         // CreateNewsComponent,
     ],

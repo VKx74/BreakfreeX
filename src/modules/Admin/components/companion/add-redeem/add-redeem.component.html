@@ -1,0 +1,60 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()">&times;</button>
+            <h4 class="modal-title">Edit withdraw</h4>
+        </div>
+        <div class="modal-body">
+            <div class="edit-container">
+                <div class="edit-row">
+                    <div class="title">
+                        Email
+                    </div>
+                    <div class="value-text">
+                        <input [(ngModel)]="email">
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Redeem code
+                    </div>
+                    <div class="value-text">
+                        <input [(ngModel)]="tx">
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        CMPN Tokens amount
+                    </div>
+                    <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: 0}"
+                        type="number" [step]="1" [(ngModel)]="tokens"
+                        placeholder="CMPN Amount">
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        User Rate
+                    </div>
+                    <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: 0}"
+                        type="number" [step]="1" [(ngModel)]="rate"
+                        placeholder="User Rate">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <div class="flex justify-flex-end">
+                <button class="crypto-button crypto-button_action" (click)="close()">
+                    Close
+                </button>
+                <button class="crypto-button crypto-button_action" (click)="add()">
+                    Add
+                </button>
+            </div>
+
+        </div>
+
+        <bft-loader *ngIf="loading"></bft-loader>
+
+    </div>
+</div>

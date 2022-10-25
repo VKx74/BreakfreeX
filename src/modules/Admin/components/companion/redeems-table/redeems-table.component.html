@@ -61,7 +61,7 @@
     <data-table-cell columnName="processed">
         <ng-template let-item>
             <div [ngClass]="{'positive-value': item.wallet !== null, 'negative-value': item.wallet === null || item.wallet === ''}">
-                {{item.processed ? "Processed" : "Unprocessed"}}
+                {{item.wallet !== null ? "Processed" : "Unprocessed"}}
             </div>
         </ng-template>
     </data-table-cell>

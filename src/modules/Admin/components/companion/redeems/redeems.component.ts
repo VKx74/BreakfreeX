@@ -9,6 +9,7 @@ import { ComponentIdentifier } from "@app/models/app-config";
 import { IRedeemResponse } from 'modules/Companion/models/models';
 import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
 import { catchError } from 'rxjs/operators';
+import { AddRedeemComponent } from '../add-redeem/add-redeem.component';
 
 interface IRedeemsFiltrationParams {
     isCompleted?: boolean;
@@ -77,6 +78,7 @@ export class RedeemsComponent extends PaginationComponent<IRedeemResponse> imple
 
     constructor(private _route: ActivatedRoute,
         private _router: Router,
+        private _matDialog: MatDialog,
         private _companionUserTrackerService: CompanionUserTrackerService) {
         super();
         this.list = [];
@@ -126,5 +128,17 @@ export class RedeemsComponent extends PaginationComponent<IRedeemResponse> imple
             case "Not Completed": return false;
             default: return undefined;
         }
+    }
+
+    addRedeemCode() {
+        this._matDialog.open<AddRedeemComponent>(AddRedeemComponent).afterClosed().subscribe((_) => {
+            if (_) {
+                this.getItems().subscribe((items) => {
+                    if (items) {
+                        this.setPaginationHandler(items);
+                    }
+                });
+            }
+        });
     }
 }

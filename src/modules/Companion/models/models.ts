@@ -172,3 +172,10 @@ export interface IReturnChangeItem {
     total: number;
     time: number;
 }
+
+export interface IAddRedeemRequest {
+    email: string;
+    tx: string;
+    tokens: number;
+    rate: number;
+}

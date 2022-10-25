@@ -1,0 +1,40 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+
+  .edit-container {
+    display: flex;
+    flex-direction: column;
+
+    .edit-row {
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+    }
+
+    .title {
+      margin: 5px 0px;
+      font-size: 12px;
+    }
+
+    input {
+      width: 75%;
+    }
+
+    .value-text {
+    color: black; 
+    }
+  }
+
+  .crypto-button {
+    margin-left: 20px;
+  }
+}
+
+@include themify($themes, true) {
+  .edit-container, .title {
+    color: themed('valueTextColor');
+  }
+}
