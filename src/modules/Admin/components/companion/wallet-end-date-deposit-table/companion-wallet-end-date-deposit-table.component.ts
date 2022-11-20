@@ -97,4 +97,9 @@ export class CompanionWalletEndDateDepositTableComponent implements OnInit {
         let res = deposit.depositTerm / 365 * yearReturn;
         return res;
     }
+
+    getTotalReturnAmount(deposit: IEndDateDepositResponse) {
+        let returnAmount = this.getReturnAmount(deposit);
+        return returnAmount + deposit.amount;
+    }
 }

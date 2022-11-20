@@ -17,6 +17,9 @@
     <data-table-header-cell columnName="returnAmount">
         Return Amount
     </data-table-header-cell>
+    <data-table-header-cell columnName="totalReturn">
+        Total Return
+    </data-table-header-cell>
     <data-table-header-cell columnName="creationTime">
         Created At
     </data-table-header-cell>
@@ -70,6 +73,12 @@
     <data-table-cell columnName="returnAmount">
         <ng-template let-item>
             {{getReturnAmount(item).toFixed(8)}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="totalReturn">
+        <ng-template let-item>
+            {{getTotalReturnAmount(item).toFixed(8)}}
         </ng-template>
     </data-table-cell>
 
