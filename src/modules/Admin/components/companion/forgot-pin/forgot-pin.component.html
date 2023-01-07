@@ -1,5 +1,5 @@
 <pagination-table-container [paginationHandler]="paginationHandler" [noItems]="!list?.length"
-    [componentIdentifier]="ComponentIdentifier.companionWallets" [title]="'Redeems'" [loading]="loading">
+    [title]="'Forgot Pin'" [loading]="loading">
 
     <div class="filters flex justify-space-between w-100">
         <div class="filters-wrapper flex align-items-center">
@@ -23,22 +23,10 @@
                 <span>Clear</span>
             </button>
         </div>
-        <div class="flex">
-            <div class="value">
-                <selector [options]="completedStateOptions" [selectedOption]="completedSelectedState"
-                    (onSelect)="completedStateChanged($event)" class="watchlist-selector"></selector>
-            </div>
-        </div>
         <div class="search-wrapper">
             <debounced-input (valueChange)="onSearchValueChange($event)"></debounced-input>
         </div>
-        <div>
-            <button class="crypto-button crypto-button_primary"
-                (click)="addRedeemCode()">
-                <span>Add redeem code</span>
-            </button>
-        </div>
     </div>
 
-    <redeems-table [redeems]="list"></redeems-table>
+    <forgot-pin-table [items]="list"></forgot-pin-table>
 </pagination-table-container>

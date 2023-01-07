@@ -3,10 +3,7 @@ import {ActivatedRoute } from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
 import { IRedeemResponse } from 'modules/Companion/models/models';
-import { CompanionEditWalletWithdrawComponent } from '../edit-wallet-withdraw/companion-edit-wallet-withdraw.component';
-import { ConfirmModalComponent } from 'modules/UI/components';
 import { AlertService } from '@alert/services/alert.service';
-import { IJSONViewDialogData, JSONViewDialogComponent } from 'modules/Shared/components/json-view/json-view-dialog.component';
 
 @Component({
     selector: 'redeems-table',

@@ -1,0 +1,52 @@
+<data-table [rows]="items">
+    <data-table-header-cell columnName="id">
+        Id
+    </data-table-header-cell>
+    <data-table-header-cell columnName="wallet">
+        Address
+    </data-table-header-cell>
+    <data-table-header-cell columnName="pin">
+        Pin
+    </data-table-header-cell>
+    <data-table-header-cell columnName="date">
+        Date
+    </data-table-header-cell>
+    <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+    <data-table-cell columnName="id">
+        <ng-template let-item>
+            {{item.id}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="wallet">
+        <ng-template let-item>
+            {{item.wallet}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="pin">
+        <ng-template let-item>
+            {{item.pin}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="date">
+        <ng-template let-item>
+            {{getDate(item.date) | date: 'short'}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="actions">
+        <ng-template let-item>
+            <span class="text-right">
+                <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="remove(item)">
+                        Delete
+                    </button>
+                </mat-menu>
+            </span>
+        </ng-template>
+    </data-table-cell>
+</data-table>

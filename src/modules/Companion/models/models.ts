@@ -94,6 +94,23 @@ export interface IRedeemResponse {
     updateDate: string;
 }
 
+export interface IForgotPasswordResponse {
+    id: number;
+    wallet: string;
+    pin: string;
+    date: string;
+}
+
+export interface ITransferLogResponse {
+    id: number;
+    from: string;
+    to: string;
+    info: string;
+    mintAddress: string;
+    amount: number;
+    date: string;
+}
+
 export interface ISplScannerBalance {
     amount: string;
     decimals: number;
@@ -178,4 +195,19 @@ export interface IAddRedeemRequest {
     tx: string;
     tokens: number;
     rate: number;
+}
+
+export interface IAddFlexibleDepositAdminRequest {
+    publicKey: string;
+    tx: string;
+    token: string;
+    amount: number;
+}
+
+export interface IAddEndDateDepositAdminRequest {
+    publicKey: string;
+    tx: string;
+    token: string;
+    amount: number;
+    days: number;
 }

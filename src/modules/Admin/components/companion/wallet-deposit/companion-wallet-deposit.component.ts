@@ -7,6 +7,7 @@ import { CompanionEditWalletDepositComponent } from '../edit-wallet-deposit/comp
 import { ConfirmModalComponent } from 'modules/UI/components';
 import { AlertService } from '@alert/services/alert.service';
 import { IJSONViewDialogData, JSONViewDialogComponent } from 'modules/Shared/components/json-view/json-view-dialog.component';
+import { AddFlexibleDepositComponent } from '../add-flexible-deposit/add-flexible-deposit.component';
 
 @Component({
     selector: 'companion-wallet-deposit',
@@ -14,7 +15,10 @@ import { IJSONViewDialogData, JSONViewDialogComponent } from 'modules/Shared/com
     styleUrls: ['./companion-wallet-deposit.component.scss']
 })
 export class CompanionWalletDepositComponent implements OnInit {
+    private _wallet: IUserWalletResponse;
+
     @Input() set wallet(value: IUserWalletResponse) {
+        this._wallet = value;
         this.flexibleDeposits = value.flexibleDeposits.slice();
         this.flexibleDeposits = this.flexibleDeposits.sort((a, b) => this.getDate(b.date).getTime() - this.getDate(a.date).getTime());
     }
@@ -81,6 +85,20 @@ export class CompanionWalletDepositComponent implements OnInit {
                     });
                 }
             }
+        });
+    }
+
+    addFlexibleDeposit() {
+        this._matDialog.open<AddFlexibleDepositComponent>(AddFlexibleDepositComponent).afterClosed().subscribe((_) => {
+            if (_) {
+               this._reload();
+            }
+        });
+    }
+
+    private _reload() {
+        this._companionUserTrackerService.getWalletDetailsList(this._wallet.address).subscribe((data) => {
+            this.wallet = data;
         });
     }
 }

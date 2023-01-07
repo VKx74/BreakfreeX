@@ -9,6 +9,7 @@ import { ComponentIdentifier } from "@app/models/app-config";
 import { IDepositResponse, IEndDateDepositResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
 import { CompanionUserTrackerService } from 'modules/Admin/services/companion.user.tracker.service';
 import { catchError } from 'rxjs/operators';
+import { AddEndDateDepositComponent } from '../add-end-date-deposit/add-end-date-deposit.component';
 
 interface IEndDateDepositFiltrationParams {
     isEnded?: boolean;
@@ -90,6 +91,7 @@ export class CompanionEndedEndDateDepositsComponent extends PaginationComponent<
 
     constructor(private _route: ActivatedRoute,
         private _router: Router,
+        private _matDialog: MatDialog,
         private _companionUserTrackerService: CompanionUserTrackerService) {
         super();
         this.list = [];

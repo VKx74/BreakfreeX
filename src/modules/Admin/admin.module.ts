@@ -160,6 +160,12 @@ import { RedeemsComponent } from './components/companion/redeems/redeems.compone
 import { RedeemsTableComponent } from './components/companion/redeems-table/redeems-table.component';
 import { AddRedeemComponent } from './components/companion/add-redeem/add-redeem.component';
 import { NumericInputModule } from '@numeric-input/numeric-input.module';
+import { ForgotPinComponent } from './components/companion/forgot-pin/forgot-pin.component';
+import { ForgotPinTableComponent } from './components/companion/forgot-pin-table/forgot-pin-table.component';
+import { TransferLogsComponent } from './components/companion/transfer-logs/transfer-logs.component';
+import { TransferLogsTableComponent } from './components/companion/transfer-logs-table/transfer-logs-table.component';
+import { AddEndDateDepositComponent } from './components/companion/add-end-date-deposit/add-end-date-deposit.component';
+import { AddFlexibleDepositComponent } from './components/companion/add-flexible-deposit/add-flexible-deposit.component';
 
 @NgModule({
     imports: [
@@ -271,7 +277,13 @@ import { NumericInputModule } from '@numeric-input/numeric-input.module';
         CompanionEndedEndDateDepositsComponent,
         RequestedWithdrawsComponent,
         RedeemsComponent,
+        ForgotPinComponent,
+        AddEndDateDepositComponent,
+        AddFlexibleDepositComponent,
+        TransferLogsComponent,
         RedeemsTableComponent,
+        ForgotPinTableComponent,
+        TransferLogsTableComponent,
         CompanionFinanceComponent,
         CompanionWalletDetailsComponent,
         CompanionWalletDepositComponent,
@@ -314,7 +326,9 @@ import { NumericInputModule } from '@numeric-input/numeric-input.module';
         CompanionEditEndDateWalletDepositComponent,
         CompanionEditWalletWithdrawComponent,
         AddRedeemComponent,
-        CompanionWalletsComponent
+        CompanionWalletsComponent,
+        AddEndDateDepositComponent,
+        AddFlexibleDepositComponent
         // CreateNewsComponent,
     ],
     providers: [

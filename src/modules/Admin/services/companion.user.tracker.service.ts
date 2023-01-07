@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {AppConfigService} from "@app/services/app.config.service";
 import {PaginationParams, IPaginationResponse} from "@app/models/pagination.model";
 import {QueryParamsConstructor} from "../data/models";
-import { IAccountInfoResponse, IAddRedeemRequest, IDepositResponse, IEditDepositRequest, IEditEndDateDepositRequest, IEditWithdrawRequest, IEndDateDepositResponse, IRedeemResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
+import { IAccountInfoResponse, IAddEndDateDepositAdminRequest, IAddFlexibleDepositAdminRequest, IAddRedeemRequest, IDepositResponse, IEditDepositRequest, IEditEndDateDepositRequest, IEditWithdrawRequest, IEndDateDepositResponse, IForgotPasswordResponse, IRedeemResponse, ITransferLogResponse, IUserWalletResponse, IWithdrawResponse } from 'modules/Companion/models/models';
 
 @Injectable({
     providedIn: 'root'
@@ -70,4 +70,29 @@ export class CompanionUserTrackerService {
     addRedeem(data: IAddRedeemRequest): Observable<IRedeemResponse> {
         return this._http.post<IRedeemResponse>(`${this.USER_TRACKER_URL}redeems`, data);
     }
+
+    getForgotPasswordFilteredList(params = new PaginationParams(), filtrationParams?: object): Observable<IPaginationResponse<IForgotPasswordResponse>> {
+        return this._http.get<IPaginationResponse<IForgotPasswordResponse>>(`${this.USER_TRACKER_URL}forgot-pin`, {
+            params: QueryParamsConstructor.fromObjects(params.toSkipTake(), filtrationParams)
+        });
+    }
+
+    deleteForgotPassword(address: string, id: number): Observable<IForgotPasswordResponse> {
+        return this._http.delete<IForgotPasswordResponse>(`${this.USER_TRACKER_URL}forgot-pin?address=${address}&id=${id}`);
+    }
+
+    getTransferLogsFilteredList(params = new PaginationParams(), filtrationParams?: object): Observable<IPaginationResponse<ITransferLogResponse>> {
+        return this._http.get<IPaginationResponse<ITransferLogResponse>>(`${this.USER_TRACKER_URL}transfer-logs`, {
+            params: QueryParamsConstructor.fromObjects(params.toSkipTake(), filtrationParams)
+        });
+    }
+
+    addFlexibleDeposit(data: IAddFlexibleDepositAdminRequest): Observable<IDepositResponse> {
+        return this._http.post<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-deposit`, data);
+    }
+
+    addEndDateDeposit(data: IAddEndDateDepositAdminRequest): Observable<IEndDateDepositResponse> {
+        return this._http.post<IEndDateDepositResponse>(`${this.USER_TRACKER_URL}end-date-deposit`, data);
+    }
+
 }

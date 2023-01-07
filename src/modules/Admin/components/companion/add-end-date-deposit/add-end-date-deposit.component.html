@@ -2,21 +2,29 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" (click)="close()">&times;</button>
-            <h4 class="modal-title">Add Redeem</h4>
+            <h4 class="modal-title">Add End Date Deposit</h4>
         </div>
         <div class="modal-body">
             <div class="edit-container">
                 <div class="edit-row">
                     <div class="title">
-                        Email
+                        Wallet (User wallet address)
                     </div>
                     <div class="value-text">
-                        <input [(ngModel)]="email">
+                        <input [(ngModel)]="publicKey">
                     </div>
                 </div>
                 <div class="edit-row">
                     <div class="title">
-                        Redeem code
+                        Token (CMPN, USDC etc)
+                    </div>
+                    <div class="value-text">
+                        <input [(ngModel)]="token">
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Transaction ID
                     </div>
                     <div class="value-text">
                         <input [(ngModel)]="tx">
@@ -24,19 +32,23 @@
                 </div>
                 <div class="edit-row">
                     <div class="title">
-                        CMPN Tokens amount
+                        Amount (deposit amount)
                     </div>
+                    <div class="value-text">
                     <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: 0}"
-                        type="number" [step]="1" [(ngModel)]="tokens"
-                        placeholder="CMPN Amount">
+                        type="number" [step]="1" [(ngModel)]="amount"
+                        placeholder="Deposit Amount">
+                    </div>
                 </div>
                 <div class="edit-row">
                     <div class="title">
-                        User Rate
+                        Term (deposit term 30, 90, 180 etc days)
                     </div>
+                    <div class="value-text">
                     <input class="bftinput" matInput numericInput [floatOnly]="true" [range]="{min: 0}"
-                        type="number" [step]="1" [(ngModel)]="rate"
-                        placeholder="User Rate">
+                        type="number" [step]="1" [(ngModel)]="days"
+                        placeholder="Deposit Term">
+                    </div>
                 </div>
             </div>
         </div>

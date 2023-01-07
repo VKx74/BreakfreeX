@@ -11,10 +11,20 @@
   .negative-value {
     color: #bd5b6a;
   }
+}
 
-  .add-item-button {
-    max-width: 200px;
-    margin: 10px;
-    display: flex;
-  }
+.small-column {
+  width: 60px;
+}
+
+.title {
+  cursor: pointer;
+}
+
+th.creation-time {
+  width: 140px;
+}
+
+.description {
+  padding-right: 20px;
 }
