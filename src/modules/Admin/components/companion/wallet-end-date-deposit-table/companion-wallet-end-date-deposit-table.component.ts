@@ -68,7 +68,7 @@ export class CompanionWalletEndDateDepositTableComponent implements OnInit {
                 message: `Are you sure you want to delete deposit #${deposit.id}?`,
                 onConfirm: () => {
                     this.loading = true;
-                    this._companionUserTrackerService.deleteDeposit(deposit.userWalletAddress, deposit.id).subscribe((response) => {
+                    this._companionUserTrackerService.deleteEndDateDeposit(deposit.userWalletAddress, deposit.id).subscribe((response) => {
                         this.loading = false;
                         if (response) {
                             this._alertService.success("Deposit removed");

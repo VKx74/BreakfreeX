@@ -59,6 +59,10 @@ export class CompanionUserTrackerService {
         return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-deposit?address=${wallet}&id=${id}`);
     }
 
+    deleteEndDateDeposit(wallet: string, id: number): Observable<IDepositResponse> {
+        return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}end-date-deposit?address=${wallet}&id=${id}`);
+    }
+
     deleteWithdraw(wallet: string, id: number): Observable<IWithdrawResponse> {
         return this._http.delete<IDepositResponse>(`${this.USER_TRACKER_URL}flexible-withdraw?address=${wallet}&id=${id}`);
     }
