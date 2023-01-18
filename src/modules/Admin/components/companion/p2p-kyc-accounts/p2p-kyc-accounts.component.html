@@ -1,0 +1,11 @@
+<pagination-table-container [paginationHandler]="paginationHandler" [noItems]="!list?.length"
+    [title]="'P2P KYC Pending'" [loading]="loading">
+
+    <div class="filters flex justify-space-between w-100">
+        <div class="search-wrapper">
+            <debounced-input (valueChange)="onSearchValueChange($event)"></debounced-input>
+        </div>
+    </div>
+
+    <p2p-accounts-table [items]="list"></p2p-accounts-table>
+</pagination-table-container>

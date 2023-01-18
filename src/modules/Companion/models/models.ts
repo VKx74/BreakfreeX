@@ -211,3 +211,107 @@ export interface IAddEndDateDepositAdminRequest {
     amount: number;
     days: number;
 }
+
+// P2P Models
+
+export interface IP2PUserKYCResponse {
+    id: number;
+    date: string;
+    firstName: string;
+    lastName: string;
+    status: number;
+    comment: string;
+}
+
+export interface IP2PUserResponse {
+    id: number;
+    date: string;
+    lastOnlineDate: string;
+    wallet: string;
+    nickname: string;
+    contactMethod: string;
+    contactInfo: string;
+    completedOrders: number;
+    likes: number;
+    dislikes: number;
+    processed: boolean;
+    kyc: IP2PUserKYCResponse;
+}
+
+export interface IP2PPublicUserInfoResponse {
+    lastOnlineDate: string;
+    nickname: string;
+    contactMethod: string;
+    contactInfo: string;
+    completedOrders: number;
+    likes: number;
+    dislikes: number;
+    processed: boolean;
+}
+
+export interface IP2PPaymentDetails {
+    bank: string;
+    bankAccount: string;
+}
+
+export interface IP2PAdResponse {
+    id: number;
+    date: string;
+    updateDate: string;
+    user: IP2PPublicUserInfoResponse;
+    side: number;
+    coin: string;
+    mint: string;
+    currency: string;
+    price: number;
+    amount: number;
+    minAmount: number;
+    lockedAmount: number;
+    leftAmount: number;
+    fee: number;
+    paymentMethod: string;
+    paymentDetails: IP2PPaymentDetails;
+    comment: string;
+    lockTransactionId: string;
+    cancelTransactionId: string;
+    status: number;
+    isReviewed: boolean;
+    // orders: P2POrderResponse[];
+}
+
+export interface IP2POrderResponse {
+    id: number;
+    adId: number;
+    user: IP2PPublicUserInfoResponse;
+    adUser: IP2PPublicUserInfoResponse;
+    reviewedByUser: boolean;
+    reviewedByAdUser: boolean;
+    date: string;
+    updateDate: string;
+    price: number;
+    adFee: number;
+    amount: number;
+    coin: string;
+    mint: string;
+    currency: string;
+    paymentMethod: string;
+    paymentDetails: IP2PPaymentDetails;
+    changeLog: any;
+    chat: any;
+    status: number;
+    side: number;
+    comment: string;
+    transactionId: string;
+    lockTransactionId: string;
+    cancelTransactionId: string;
+}
+
+export interface P2PUserReviewResponse {
+    id: number;
+    orderId: number;
+    date: string;
+    user: IP2PPublicUserInfoResponse;
+    reviewLeftBy: IP2PPublicUserInfoResponse;
+    isPositive: boolean;
+    comment: string;
+}

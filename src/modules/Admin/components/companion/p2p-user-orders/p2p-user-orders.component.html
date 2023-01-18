@@ -1,0 +1,8 @@
+<pagination-table-container [paginationHandler]="paginationHandler" [noItems]="!list?.length" [title]="'P2P User Orders'"
+    [loading]="loading">
+
+    <div class="filters flex w-100">
+    </div>
+
+    <p2p-orders-table [items]="list"></p2p-orders-table>
+</pagination-table-container>

@@ -1,0 +1,73 @@
+<pagination-table-container [paginationHandler]="paginationHandler" [noItems]="!list?.length" [title]="'P2P Ads'"
+    [loading]="loading">
+
+    <div class="filters flex w-100">
+        <!-- <div class="filters-wrapper flex align-items-center">
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly [matDatepicker]="start" [max]="endDate" [(ngModel)]="startDate"
+                    (dateChange)="resetPagination()" (click)="start.open()" class="cursor-pointer"
+                    placeholder="Start date">
+                <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                <mat-datepicker #start></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="crypto-date-input m-right-10">
+                <input matInput readonly [matDatepicker]="end" [min]="startDate" [(ngModel)]="endDate"
+                    (dateChange)="resetPagination()" (click)="end.open()" class="cursor-pointer" placeholder="End date">
+                <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                <mat-datepicker #end></mat-datepicker>
+            </mat-form-field>
+
+            <button class="crypto-button crypto-button_primary" [disabled]="!startDate && !endDate"
+                (click)="clearDatePickers()">
+                <span>Clear</span>
+            </button>
+        </div> -->
+        <!-- <div class="search-wrapper">
+            <debounced-input (valueChange)="onSearchValueChange($event)"></debounced-input>
+        </div> -->
+
+        <!-- <selector [options]="booleanOptions" [selectedOption]="isProcessed" [optionCaption]="captionText"
+            (onSelect)="isProcessedSelected($event)" class="watchlist-selector bft-form-select"></selector> -->
+        <div class="filter-item">
+            <div class="filter-header">Side</div>
+            <div class="filter-value">
+                <selector [options]="sideOptions" [selectedOption]="filtrationParams.side" [optionCaption]="sideText"
+                    (onSelect)="sideChanged($event)" class="bft-form-select"></selector>
+            </div>
+        </div> 
+        <div class="filter-item">
+            <div class="filter-header">Sort</div>
+            <div class="filter-value">
+                <selector [options]="sortOptions" [selectedOption]="filtrationParams.sort" [optionCaption]="sortText"
+                    (onSelect)="sortChanged($event)" class="bft-form-select"></selector>
+            </div>
+        </div>
+        <div class="filter-item">
+            <div class="filter-header">Currency</div>
+            <div class="filter-value">
+                <div class="search-wrapper">
+                    <debounced-input (valueChange)="currencyChanged($event)"></debounced-input>
+                </div>
+            </div>
+        </div>
+        <div class="filter-item">
+            <div class="filter-header">Coin</div>
+            <div class="filter-value">
+                <div class="search-wrapper">
+                    <debounced-input (valueChange)="coinChanged($event)"></debounced-input>
+                </div>
+            </div>
+        </div> 
+        <div class="filter-item">
+            <div class="filter-header">Min Amount</div>
+            <div class="filter-value">
+                <div class="search-wrapper">
+                    <debounced-input (valueChange)="amountChanged($event)"></debounced-input>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p2p-ads-table [items]="list"></p2p-ads-table>
+</pagination-table-container>

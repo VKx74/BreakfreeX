@@ -65,6 +65,7 @@ export interface ApiUrls {
     socialFeedWS: string;
 
     companionUserTracker: string;
+    companionP2P: string;
 }
 
 export interface AppConfig {

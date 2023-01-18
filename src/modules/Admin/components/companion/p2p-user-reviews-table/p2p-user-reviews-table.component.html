@@ -1,0 +1,80 @@
+<data-table [rows]="items">
+    <data-table-header-cell columnName="id">
+        Id
+    </data-table-header-cell>  
+    <data-table-header-cell columnName="orderId">
+        Order Id
+    </data-table-header-cell>
+    <data-table-header-cell columnName="date">
+        Date
+    </data-table-header-cell>
+    <data-table-header-cell columnName="user">
+        User
+    </data-table-header-cell>
+    <data-table-header-cell columnName="reviewLeftBy">
+        Review Left By
+    </data-table-header-cell>
+    <data-table-header-cell columnName="isPositive">
+        Is Positive
+    </data-table-header-cell>
+    <data-table-header-cell columnName="comment">
+        Comment
+    </data-table-header-cell>
+
+    <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+    <data-table-cell columnName="id">
+        <ng-template let-item>
+            {{item.id}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="orderId">
+        <ng-template let-item>
+            {{item.orderId}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="date">
+        <ng-template let-item>
+            {{getDate(item.date) | date: 'short'}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="user">
+        <ng-template let-item>
+            {{item.user.nickname}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="reviewLeftBy">
+        <ng-template let-item>
+            {{item.reviewLeftBy.nickname}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="isPositive">
+        <ng-template let-item>
+            {{item.isPositive}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="comment">
+        <ng-template let-item>
+            {{item.comment}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="actions">
+        <ng-template let-item>
+            <span class="text-right">
+                <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="details(item)">
+                        Info
+                    </button>
+                </mat-menu>
+            </span>
+        </ng-template>
+    </data-table-cell>
+</data-table>

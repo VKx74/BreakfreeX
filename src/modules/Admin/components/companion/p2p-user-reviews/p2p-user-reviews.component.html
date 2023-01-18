@@ -1,0 +1,8 @@
+<pagination-table-container [paginationHandler]="paginationHandler" [noItems]="!list?.length" [title]="'P2P Reviews'"
+    [loading]="loading">
+
+    <div class="filters flex w-100">
+    </div>
+
+    <p2p-user-reviews-table [items]="list"></p2p-user-reviews-table>
+</pagination-table-container>

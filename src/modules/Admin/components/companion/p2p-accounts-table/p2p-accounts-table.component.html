@@ -1,0 +1,151 @@
+<data-table [rows]="items">
+    <data-table-header-cell columnName="id">
+        Id
+    </data-table-header-cell>
+    <data-table-header-cell columnName="date">
+        Date
+    </data-table-header-cell>
+    <data-table-header-cell columnName="lastOnlineDate">
+        Last Online
+    </data-table-header-cell>
+    <data-table-header-cell columnName="wallet">
+        Wallet
+    </data-table-header-cell>
+    <data-table-header-cell columnName="nickname">
+        Nickname
+    </data-table-header-cell>
+    <data-table-header-cell columnName="contactMethod">
+        Contact Method
+    </data-table-header-cell>
+    <data-table-header-cell columnName="contactInfo">
+        Contact Info
+    </data-table-header-cell>
+    <data-table-header-cell columnName="completedOrders">
+        Completed Orders
+    </data-table-header-cell>
+    <data-table-header-cell columnName="likes">
+        Likes
+    </data-table-header-cell>
+    <data-table-header-cell columnName="dislikes">
+        Dislikes
+    </data-table-header-cell>
+    <data-table-header-cell columnName="processed">
+        Processed
+    </data-table-header-cell>
+    <data-table-header-cell columnName="kycSent">
+        KYC Sent
+    </data-table-header-cell>
+    <data-table-header-cell columnName="kycApproved">
+        KYC Approved
+    </data-table-header-cell>
+    <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
+
+    <data-table-cell columnName="id">
+        <ng-template let-item>
+            {{item.id}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="date">
+        <ng-template let-item>
+            {{getDate(item.date) | date: 'short'}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="lastOnlineDate">
+        <ng-template let-item>
+            {{getDate(item.lastOnlineDate) | date: 'short'}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="wallet">
+        <ng-template let-item>
+            {{item.wallet}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="nickname">
+        <ng-template let-item>
+            {{item.nickname}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="contactMethod">
+        <ng-template let-item>
+            {{item.contactMethod}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="contactInfo">
+        <ng-template let-item>
+            {{item.contactInfo}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="completedOrders">
+        <ng-template let-item>
+            {{item.completedOrders}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="likes">
+        <ng-template let-item>
+            {{item.likes}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="dislikes">
+        <ng-template let-item>
+            {{item.dislikes}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="processed">
+        <ng-template let-item>
+            <div [ngClass]="{'positive-value': item.processed, 'negative-value': !item.processed}">
+                {{item.processed ? "Yes" : "No"}}
+            </div>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="kycSent">
+        <ng-template let-item>
+            <div [ngClass]="{'positive-value': !!item.kyc, 'negative-value': !item.kyc}">
+                {{!!item.kyc ? "Yes" : "No"}}
+            </div>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="kycApproved">
+        <ng-template let-item>
+            <div *ngIf="!!item.kyc && item.kyc.status == 1" class="positive-value">
+                Approved
+            </div>
+            <div *ngIf="!!item.kyc && item.kyc.status == 2" class="negative-value">
+                Rejected
+            </div>
+            <div *ngIf="!!item.kyc && item.kyc.status == 0" class="pending-value">
+                Pending
+            </div>
+            <div *ngIf="!item.kyc">
+                Not Sent
+            </div>
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="actions">
+        <ng-template let-item>
+            <span class="text-right">
+                <menu-toggle class="v-align-middle" [matMenuTriggerFor]="menu"></menu-toggle>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="details(item)">
+                        Info
+                    </button> 
+                    <button mat-menu-item (click)="viewDetails(item)">
+                        Details
+                    </button>
+                </mat-menu>
+            </span>
+        </ng-template>
+    </data-table-cell>
+</data-table>

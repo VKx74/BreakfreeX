@@ -1,0 +1,27 @@
+<div class="wallet-container">
+    <div class="wallet-id">
+        Account #{{accountId}}, {{accountWallet}}
+    </div>
+    <div class="wallet-tabs">
+        <mat-tab-group>
+            <mat-tab label="KYC">
+                <p2p-account-kyc [accountId]="accountId" [accountWallet]="accountWallet"></p2p-account-kyc>
+            </mat-tab>
+            <mat-tab label="Ads">
+                <p2p-user-ads [id]="accountId" [wallet]="accountWallet"></p2p-user-ads>
+            </mat-tab>
+            <mat-tab label="Historical Ads">
+                <p2p-user-historical-ads [id]="accountId" [wallet]="accountWallet"></p2p-user-historical-ads>
+            </mat-tab>
+            <mat-tab label="Orders">
+                <p2p-user-orders [id]="accountId" [wallet]="accountWallet"></p2p-user-orders>
+            </mat-tab>
+            <mat-tab label="Historical Orders">
+                <p2p-user-historical-orders [id]="accountId" [wallet]="accountWallet"></p2p-user-historical-orders>
+            </mat-tab>
+            <mat-tab label="Reviews">
+                <p2p-user-reviews [id]="accountId" [wallet]="accountWallet"></p2p-user-reviews>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

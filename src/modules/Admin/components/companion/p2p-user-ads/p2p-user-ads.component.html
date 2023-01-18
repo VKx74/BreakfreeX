@@ -1,0 +1,8 @@
+<pagination-table-container [paginationHandler]="paginationHandler" [noItems]="!list?.length" [title]="'P2P User Ads'"
+    [loading]="loading">
+
+    <div class="filters flex w-100">
+    </div>
+
+    <p2p-ads-table [items]="list"></p2p-ads-table>
+</pagination-table-container>

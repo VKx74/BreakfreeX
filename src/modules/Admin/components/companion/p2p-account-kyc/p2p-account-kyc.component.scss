@@ -1,0 +1,55 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+
+  .title {
+    margin-right: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .files {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .doc-image {
+    width: 70%;
+    max-width: 800px;
+    margin: 10px;
+  }
+
+  .user-info-item {
+    display: flex;
+  }
+
+  .user-info-title {
+    margin-right: 10px;
+  }
+
+  .user-info {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .action-button {
+    margin-top: 20px;
+    button {
+      margin-right: 10px;
+    }
+  }
+
+}
+
+@include themify($themes, true) {
+  .title {
+    color: themed('valueTextColor');
+  }
+  .user-info {
+    color: themed('valueTextColor');
+  }
+}

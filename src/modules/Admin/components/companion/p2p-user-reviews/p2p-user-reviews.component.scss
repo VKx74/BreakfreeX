@@ -1,0 +1,31 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+
+:host {
+  width: 100%;
+
+  .title {
+    margin-right: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .filter-item {
+    margin-right: 10px;
+  }
+
+  .filter-header {
+    font-size: 11px;
+  }
+
+}
+
+@include themify($themes, true) {
+  .title {
+    color: themed('valueTextColor');
+  } 
+  .filter-header {
+    color: themed('valueTextColor');
+  }
+}

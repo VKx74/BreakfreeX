@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="user-info">
+        <div class="user-info-item">
+            <div class="user-info-title">
+                Date:
+            </div>
+            <div class="user-info-value">
+                {{getDate(kyc?.date) | date: 'short'}}
+            </div>
+        </div>
+        <div class="user-info-item">
+            <div class="user-info-title">
+                First Name:
+            </div>
+            <div class="user-info-value">
+                {{kyc?.firstName}}
+            </div>
+        </div>
+        <div class="user-info-item">
+            <div class="user-info-title">
+                Last Name:
+            </div>
+            <div class="user-info-value">
+                {{kyc?.lastName}}
+            </div>
+        </div>
+        <div class="user-info-item">
+            <div class="user-info-title">
+                Status:
+            </div>
+            <div class="user-info-value">
+                {{getStatus()}}
+            </div>
+        </div>
+
+        <div class="action-button" *ngIf="kyc != null">
+            <button (click)="approve()" class="crypto-button crypto-button_primary" *ngIf="kyc != null && kyc.status != 1">Approve</button>
+            <button (click)="reject()" class="crypto-button crypto-button_primary" *ngIf="kyc != null && kyc.status != 2">Reject</button>
+        </div>
+
+    </div>
+    <div class="files" *ngFor="let file of files">
+        <img class="doc-image" [src]="getUrl(file)" frameborder="0" />
+    </div>
+</div>

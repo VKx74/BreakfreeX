@@ -55,6 +55,10 @@ import { CompanionComponent } from './components/companion/companion.component';
 import { CompanionWalletDetailsComponent } from './components/companion/wallet-details/companion-wallet-details.component';
 import { CompanionWalletDetailsResolver } from './resolvers/companion-wallet-details.resolver';
 import { CompanionFinanceComponent } from './components/companion/companion-finance/companion-finance.component';
+import { AdDetailsComponent } from './components/companion/ad-details/ad-details.component';
+import { AdDetailsResolver } from './resolvers/ad-details.resolver';
+import { P2PAccountDetailsComponent } from './components/companion/p2p-account-details/p2p-account-details.component';
+import { P2PAccountDetailsResolver } from './resolvers/p2p-account-details.resolver';
 export const redirectUrl = `/${AppRoutes.Admin}`;
 
 const SYSTEM_MONITORING_URLS = AppConfigService.config.systemMonitoringUrls;
@@ -451,6 +455,20 @@ export const routes: Routes = [
                         component: CompanionWalletDetailsComponent,
                         resolve: {
                             wallet: CompanionWalletDetailsResolver
+                        }
+                    },
+                    {
+                        path: 'ad-details/:id',
+                        component: AdDetailsComponent,
+                        resolve: {
+                            adId: AdDetailsResolver
+                        }
+                    },
+                    {
+                        path: 'p2p-account-details/:id/:wallet',
+                        component: P2PAccountDetailsComponent,
+                        resolve: {
+                            account: P2PAccountDetailsResolver
                         }
                     }
                 ]

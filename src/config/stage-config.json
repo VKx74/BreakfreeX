@@ -53,7 +53,8 @@
     "socialFeedREST": "https://socialfeed-social-stage.breakfreetrading.com/",
     "socialFeedWS": "wss://socialfeed-social-stage.breakfreetrading.com/websocket",
 
-    "companionUserTracker": "https://usertracker-trackerapi.companion.to/usertracker/admin/"
+    "companionUserTracker": "https://usertracker-trackerapi.companion.to/usertracker/admin/",
+    "companionP2P": "https://usertracker-trackerapi.companion.to/usertracker/admin-p2p/"
   },
   "systemMonitoringUrls": {
     "platform": {

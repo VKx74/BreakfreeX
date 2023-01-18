@@ -166,6 +166,26 @@ import { TransferLogsComponent } from './components/companion/transfer-logs/tran
 import { TransferLogsTableComponent } from './components/companion/transfer-logs-table/transfer-logs-table.component';
 import { AddEndDateDepositComponent } from './components/companion/add-end-date-deposit/add-end-date-deposit.component';
 import { AddFlexibleDepositComponent } from './components/companion/add-flexible-deposit/add-flexible-deposit.component';
+import { P2PAccountsComponent } from './components/companion/p2p-accounts/p2p-accounts.component';
+import { P2PAccountsTableComponent } from './components/companion/p2p-accounts-table/p2p-accounts-table.component';
+import { P2PKYCAccountsComponent } from './components/companion/p2p-kyc-accounts/p2p-kyc-accounts.component';
+import { P2PAdsComponent } from './components/companion/p2p-ads/p2p-ads.component';
+import { P2PAdsTableComponent } from './components/companion/p2p-ads-table/p2p-ads-table.component';
+import { AdDetailsComponent } from './components/companion/ad-details/ad-details.component';
+import { AdDetailsResolver } from './resolvers/ad-details.resolver';
+import { P2POrdersTableComponent } from './components/companion/p2p-orders-table/p2p-orders-table.component';
+import { P2PAdOrdersComponent } from './components/companion/p2p-ad-orders/p2p-ad-orders.component';
+import { P2PDisputeOrdersComponent } from './components/companion/p2p-dispute-orders/p2p-dispute-orders.component';
+import { P2PAccountDetailsComponent } from './components/companion/p2p-account-details/p2p-account-details.component';
+import { P2PAccountDetailsResolver } from './resolvers/p2p-account-details.resolver';
+import { P2PAccountKYCComponent } from './components/companion/p2p-account-kyc/p2p-account-kyc.component';
+import { KYCStatusChangeComponent } from './components/companion/p2p-kyc-status-change/p2p-kyc-status-change.component';
+import { P2PUserOrdersComponent } from './components/companion/p2p-user-orders/p2p-user-orders.component';
+import { P2PUserHistoricalOrdersComponent } from './components/companion/p2p-user-historical-orders/p2p-historical-user-orders.component';
+import { P2PUserAdsComponent } from './components/companion/p2p-user-ads/p2p-user-ads.component';
+import { P2PUserHistoricalAdsComponent } from './components/companion/p2p-user-historical-ads/p2p-user-historical-ads.component';
+import { P2PUserReviewsTableComponent } from './components/companion/p2p-user-reviews-table/p2p-user-reviews-table.component';
+import { P2PUserReviewsComponent } from './components/companion/p2p-user-reviews/p2p-user-reviews.component';
 
 @NgModule({
     imports: [
@@ -297,7 +317,29 @@ import { AddFlexibleDepositComponent } from './components/companion/add-flexible
         CompanionEditEndDateWalletDepositComponent,
         CompanionWalletEndDateDepositTableComponent,
         CompanionEditWalletWithdrawComponent,
-        AddRedeemComponent
+        AddRedeemComponent,
+        KYCStatusChangeComponent,
+
+        P2PAccountsComponent,
+        P2PKYCAccountsComponent,
+        P2PAccountsTableComponent,
+        P2PAdsComponent,
+        P2PAdsTableComponent,
+        P2PAdOrdersComponent,
+        P2POrdersTableComponent,
+        P2PDisputeOrdersComponent,
+        
+        AdDetailsComponent,
+        P2PAccountDetailsComponent,
+
+        P2PAccountKYCComponent,
+        P2PUserOrdersComponent,
+        P2PUserHistoricalOrdersComponent,
+        P2PUserAdsComponent,
+        P2PUserHistoricalAdsComponent,
+
+        P2PUserReviewsComponent,
+        P2PUserReviewsTableComponent
     ],
     exports: [
         RouterModule,
@@ -328,7 +370,8 @@ import { AddFlexibleDepositComponent } from './components/companion/add-flexible
         AddRedeemComponent,
         CompanionWalletsComponent,
         AddEndDateDepositComponent,
-        AddFlexibleDepositComponent
+        AddFlexibleDepositComponent,
+        KYCStatusChangeComponent
         // CreateNewsComponent,
     ],
     providers: [
@@ -410,7 +453,9 @@ import { AddFlexibleDepositComponent } from './components/companion/add-flexible
         IdentityLogsService,
 
         CompanionWalletDetailsResolver,
-        ScriptCloudRepositoryService
+        ScriptCloudRepositoryService,
+        AdDetailsResolver,
+        P2PAccountDetailsResolver
     ]
 })
 export class AdminModule {
