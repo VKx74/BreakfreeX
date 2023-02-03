@@ -1,0 +1,332 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()">&times;</button>
+            <h4 class="modal-title">Edit deposit</h4>
+        </div>
+        <div class="modal-body">
+            <div class="edit-container">
+                <div class="edit-row">
+                    <div class="title">
+                        Ad Id
+                    </div>
+                    <div class="value-text">
+                        {{ad.id}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Creation Date
+                    </div>
+                    <div class="value-text">
+                        {{ad.date}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Update Date
+                    </div>
+                    <div class="value-text">
+                        {{ad.updateDate}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad side
+                    </div>
+                    <div class="value-text">
+                        {{sideText(ad.side)}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad mint
+                    </div>
+                    <div class="value-text">
+                        {{ad.mint}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad coin
+                    </div>
+                    <div class="value-text">
+                        {{ad.coin}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad currency
+                    </div>
+                    <div class="value-text">
+                        {{ad.currency}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad fee
+                    </div>
+                    <div class="value-text">
+                        {{ad.fee}}
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad price
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.price}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="number" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.price">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad amount
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.amount}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="number" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.amount">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad Min amount
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.minAmount}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="number" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.minAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad Locked amount
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.lockedAmount}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="number" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.lockedAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad Left amount
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.leftAmount}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="number" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.leftAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad status
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{statusText(ad.status)}}
+                        </div>
+                        <div class="value">
+                            <selector class="watchlist-selector bft-form-select" [options]="statusList"
+                                [selectedOption]="changeData.status" [optionCaption]="statusTextCaption"
+                                (onSelect)="statusSelected($event)"></selector>
+                            <!-- <selector [options]="processOptions" [selectedOption]="isProcessed"
+                                [optionCaption]="captionText" (onSelect)="itemSelected($event)"
+                                class="watchlist-selector bft-form-select"></selector> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Ad comment
+                    </div>
+                    <div class="value-text col">
+                        <div class="field-title">
+                            {{ad.comment ? ad.comment : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.comment">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Lock Transaction Id
+                    </div>
+                    <div class="value-text col">
+                        <div class="field-title">
+                            {{ad.lockTransactionId ? ad.lockTransactionId : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.lockTxId">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Cancel Transaction Id
+                    </div>
+                    <div class="value-text col">
+                        <div class="field-title">
+                            {{ad.cancelTransactionId ? ad.cancelTransactionId : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.cancelTxId">
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="edit-row">
+                    <div class="title">
+                        Payment Method
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.paymentMethod}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.paymentMethod">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Bank (*optional)
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.paymentDetails && ad.paymentDetails.bank ? ad.paymentDetails.bank : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.paymentDetails.bank">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Bank Account (*optional)
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.paymentDetails && ad.paymentDetails.bankAccount ? ad.paymentDetails.bankAccount : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.paymentDetails.bankAccount">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Account Holder (*optional)
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.paymentDetails && ad.paymentDetails.accountHolder ? ad.paymentDetails.accountHolder : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.paymentDetails.accountHolder">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        SWIFT/BIC (*optional)
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.paymentDetails && ad.paymentDetails.bic ? ad.paymentDetails.bic : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.paymentDetails.bic">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Bank Address (*optional)
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.paymentDetails && ad.paymentDetails.bankAddress ? ad.paymentDetails.bankAddress : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.paymentDetails.bankAddress">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-row">
+                    <div class="title">
+                        Routing (*optional)
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ad.paymentDetails && ad.paymentDetails.routing ? ad.paymentDetails.routing : "not set"}}
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input"
+                                [(ngModel)]="changeData.paymentDetails.routing">
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <!-- <div class="edit-row">
+                    <div class="title">
+                        Is Processed
+                    </div>
+                    <div class="value">
+                        <selector [options]="processOptions" [selectedOption]="isProcessed"
+                            [optionCaption]="captionText" (onSelect)="itemSelected($event)"
+                            class="watchlist-selector bft-form-select"></selector>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <div class="flex justify-flex-end">
+                <button class="crypto-button crypto-button_action" (click)="close()">
+                    Close
+                </button>
+                <button class="crypto-button crypto-button_action" (click)="edit()">
+                    Edit
+                </button>
+            </div>
+
+        </div>
+
+        <bft-loader *ngIf="loading"></bft-loader>
+
+    </div>
+</div>

@@ -1,3 +1,5 @@
+import { NumberColorSetType } from "modules/Shared/directives/number-color.directive";
+
 export interface IAddUserWalletRequest {
     address: string;
 }
@@ -250,8 +252,12 @@ export interface IP2PPublicUserInfoResponse {
 }
 
 export interface IP2PPaymentDetails {
-    bank: string;
-    bankAccount: string;
+    bank?: string;
+    bankAccount?: string;
+    accountHolder?: string;
+    bic?: string;
+    bankAddress?: string;
+    routing?: string;
 }
 
 export interface IP2PAdResponse {
@@ -314,4 +320,34 @@ export interface P2PUserReviewResponse {
     reviewLeftBy: IP2PPublicUserInfoResponse;
     isPositive: boolean;
     comment: string;
+}
+
+export interface IP2PChangeOrderRequest {
+    id: number;
+    status?: number;
+    paymentDetails?: IP2PPaymentDetails;
+    comment?: string;
+    currency?: string;
+    paymentMethod?: string;
+    txId?: string;
+    lockTxId?: string;
+    cancelTxId?: string;
+    price?: number;
+    amount?: number;
+}
+
+export interface IP2PChangeAdRequest {
+    id: number;
+    status?: number;
+    paymentDetails?: IP2PPaymentDetails;
+    paymentMethod?: string;
+    currency?: string;
+    comment?: string;
+    lockTxId?: string;
+    cancelTxId?: string;
+    price?: number;
+    amount?: NumberColorSetType;
+    lockAmount?: number;
+    leftAmount?: number;
+    minAmount?: number;
 }

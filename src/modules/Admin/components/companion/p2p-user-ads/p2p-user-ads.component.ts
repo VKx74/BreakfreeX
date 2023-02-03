@@ -55,11 +55,7 @@ export class P2PUserAdsComponent extends PaginationComponent<IP2PAdResponse> {
     }
 
     ngAfterViewInit() {
-        this.getItems().subscribe((items) => {
-            if (items) {
-                this.setPaginationHandler(items);
-            }
-        });
+        this.reloadNeeded();
     }
 
     getItems(): Observable<IPaginationResponse<IP2PAdResponse>> {
@@ -70,5 +66,13 @@ export class P2PUserAdsComponent extends PaginationComponent<IP2PAdResponse> {
 
     responseHandler(response: [IPaginationResponse<IP2PAdResponse>, PageEvent]): void {
         this.list = response[0].items;
+    }
+
+    reloadNeeded() {
+        this.getItems().subscribe((items) => {
+            if (items) {
+                this.setPaginationHandler(items);
+            }
+        });
     }
 }

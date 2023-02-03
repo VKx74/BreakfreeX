@@ -55,11 +55,7 @@ export class P2PUserHistoricalOrdersComponent extends PaginationComponent<IP2POr
     }
 
     ngAfterViewInit() {
-        this.getItems().subscribe((items) => {
-            if (items) {
-                this.setPaginationHandler(items);
-            }
-        });
+        this.reloadNeeded();
     }
 
     getItems(): Observable<IPaginationResponse<IP2POrderResponse>> {
@@ -70,5 +66,13 @@ export class P2PUserHistoricalOrdersComponent extends PaginationComponent<IP2POr
 
     responseHandler(response: [IPaginationResponse<IP2POrderResponse>, PageEvent]): void {
         this.list = response[0].items;
+    }
+
+    reloadNeeded() {
+        this.getItems().subscribe((items) => {
+            if (items) {
+                this.setPaginationHandler(items);
+            }
+        });
     }
 }

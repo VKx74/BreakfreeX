@@ -4,5 +4,5 @@
     <div class="filters flex w-100">
     </div>
 
-    <p2p-orders-table [items]="list"></p2p-orders-table>
+    <p2p-orders-table [items]="list" (reloadNeeded)="reloadNeeded()"></p2p-orders-table>
 </pagination-table-container>

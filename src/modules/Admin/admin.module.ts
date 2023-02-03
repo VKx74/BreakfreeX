@@ -186,6 +186,8 @@ import { P2PUserAdsComponent } from './components/companion/p2p-user-ads/p2p-use
 import { P2PUserHistoricalAdsComponent } from './components/companion/p2p-user-historical-ads/p2p-user-historical-ads.component';
 import { P2PUserReviewsTableComponent } from './components/companion/p2p-user-reviews-table/p2p-user-reviews-table.component';
 import { P2PUserReviewsComponent } from './components/companion/p2p-user-reviews/p2p-user-reviews.component';
+import { P2PEditOrderComponent } from './components/companion/p2p-edit-order/p2p-edit-order.component';
+import { P2PEditAdComponent } from './components/companion/p2p-edit-ad/p2p-edit-ad.component';
 
 @NgModule({
     imports: [
@@ -339,7 +341,9 @@ import { P2PUserReviewsComponent } from './components/companion/p2p-user-reviews
         P2PUserHistoricalAdsComponent,
 
         P2PUserReviewsComponent,
-        P2PUserReviewsTableComponent
+        P2PUserReviewsTableComponent,
+        P2PEditOrderComponent,
+        P2PEditAdComponent
     ],
     exports: [
         RouterModule,
@@ -371,7 +375,9 @@ import { P2PUserReviewsComponent } from './components/companion/p2p-user-reviews
         CompanionWalletsComponent,
         AddEndDateDepositComponent,
         AddFlexibleDepositComponent,
-        KYCStatusChangeComponent
+        KYCStatusChangeComponent,
+        P2PEditOrderComponent,
+        P2PEditAdComponent
         // CreateNewsComponent,
     ],
     providers: [

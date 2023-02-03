@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { AppConfigService } from "@app/services/app.config.service";
 import { PaginationParams, IPaginationResponse } from "@app/models/pagination.model";
 import { QueryParamsConstructor } from "../data/models";
-import { IP2PAdResponse, IP2PUserKYCResponse, IP2PUserResponse, IP2POrderResponse, P2PUserReviewResponse } from 'modules/Companion/models/models';
+import { IP2PAdResponse, IP2PUserKYCResponse, IP2PUserResponse, IP2POrderResponse, P2PUserReviewResponse, IP2PChangeOrderRequest, IP2PChangeAdRequest } from 'modules/Companion/models/models';
 
 @Injectable({
     providedIn: 'root'
@@ -101,5 +101,21 @@ export class CompanionP2PService {
             id: id,
             comment: comment
         });
+    }
+    
+    changeOrder(data: IP2PChangeOrderRequest): Observable<IP2POrderResponse> {
+        return this._http.post<IP2POrderResponse>(`${this.USER_TRACKER_URL}p2p-change-order`, data);
+    }
+
+    changeAd(data: IP2PChangeAdRequest): Observable<IP2PAdResponse> {
+        return this._http.post<IP2PAdResponse>(`${this.USER_TRACKER_URL}p2p-change-ad`, data);
+    }
+
+    deleteOrder(id: number): Observable<IP2POrderResponse> {
+        return this._http.delete<IP2POrderResponse>(`${this.USER_TRACKER_URL}p2p-delete-order?id=${id}`);
+    }
+
+    deleteAd(id: number): Observable<IP2PAdResponse> {
+        return this._http.delete<IP2PAdResponse>(`${this.USER_TRACKER_URL}p2p-delete-ad?id=${id}`);
     }
 }
