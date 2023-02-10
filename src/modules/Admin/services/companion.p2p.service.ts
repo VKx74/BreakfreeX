@@ -115,6 +115,18 @@ export class CompanionP2PService {
         return this._http.delete<IP2POrderResponse>(`${this.USER_TRACKER_URL}p2p-delete-order?id=${id}`);
     }
 
+    cancelOrder(id: number): Observable<IP2POrderResponse> {
+        return this._http.post<IP2POrderResponse>(`${this.USER_TRACKER_URL}p2p-cancel-order`, {
+            id: id
+        });
+    }
+
+    releaseOrderCoins(id: number): Observable<IP2POrderResponse> {
+        return this._http.post<IP2POrderResponse>(`${this.USER_TRACKER_URL}p2p-release-coins-order`, {
+            id: id
+        });
+    }
+
     deleteAd(id: number): Observable<IP2PAdResponse> {
         return this._http.delete<IP2PAdResponse>(`${this.USER_TRACKER_URL}p2p-delete-ad?id=${id}`);
     }

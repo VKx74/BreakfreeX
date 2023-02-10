@@ -91,6 +91,44 @@ export class P2POrdersTableComponent implements OnInit {
             });
     }
 
+    cancelOrder(item: IP2POrderResponse) {
+        this._matDialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Cancel order',
+                message: `Are you sure you want to cancel order '${item.id}'? Founds will be unlocked and returned to users.`,
+                onConfirm: () => {
+                    this._companionP2PService.cancelOrder(item.id).subscribe((_) => {
+                        if (_) {
+                            this._alertService.success("Order canceled");
+                        } else {
+                            this._alertService.error("Failed to cancel order");
+                        }
+                        this.reloadNeeded.next();
+                    });
+                }
+            }
+        });
+    }
+
+    releaseCoins(item: IP2POrderResponse) {
+        this._matDialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Release order founds',
+                message: `Are you sure you want to release order '${item.id}' founds? Order will be completed.`,
+                onConfirm: () => {
+                    this._companionP2PService.cancelOrder(item.id).subscribe((_) => {
+                        if (_) {
+                            this._alertService.success("Order completed");
+                        } else {
+                            this._alertService.error("Failed to complete order");
+                        }
+                        this.reloadNeeded.next();
+                    });
+                }
+            }
+        });
+    }
+
     sideText(value: number) {
         if (value === 0) {
             return "Buy";

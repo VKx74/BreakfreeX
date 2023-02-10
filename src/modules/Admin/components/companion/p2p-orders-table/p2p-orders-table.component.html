@@ -47,6 +47,12 @@
     <data-table-header-cell columnName="transactionId">
         Tx Id
     </data-table-header-cell>
+    <data-table-header-cell columnName="lockTransactionId">
+        Lock Tx Id
+    </data-table-header-cell>
+    <data-table-header-cell columnName="cancelTransactionId">
+        Cancel Tx Id
+    </data-table-header-cell>
     <data-table-header-cell columnName="actions" [columnWidth]="70"></data-table-header-cell>
 
     <data-table-cell columnName="id">
@@ -145,6 +151,18 @@
         </ng-template>
     </data-table-cell>
 
+    <data-table-cell columnName="lockTransactionId">
+        <ng-template let-item>
+            {{item.lockTransactionId}}
+        </ng-template>
+    </data-table-cell>
+
+    <data-table-cell columnName="cancelTransactionId">
+        <ng-template let-item>
+            {{item.cancelTransactionId}}
+        </ng-template>
+    </data-table-cell>
+
     <data-table-cell columnName="actions">
         <ng-template let-item>
             <span class="text-right">
@@ -158,6 +176,12 @@
                     </button>
                     <button mat-menu-item (click)="deleteItem(item)">
                         Delete
+                    </button>
+                    <button mat-menu-item (click)="cancelOrder(item)" *ngIf="item.status == 9">
+                        Cancel order
+                    </button>
+                    <button mat-menu-item (click)="releaseCoins(item)" *ngIf="item.status == 9">
+                        Release coins
                     </button>
                 </mat-menu>
             </span>
