@@ -96,18 +96,18 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
         } 
         
         
-        if (demoAccounts && demoAccounts.length > 1) {
-            for (const liveAccount of demoAccounts) {
-                this.availableBrokers.unshift({
-                    broker: EBrokerInstance.BFTDemo,
-                    brokerId: liveAccount.id
-                });
-            }
-        } else {
-            this.availableBrokers.unshift({
-                broker: EBrokerInstance.BFTDemo
-            });
-        }
+        // if (demoAccounts && demoAccounts.length > 1) {
+        //     for (const liveAccount of demoAccounts) {
+        //         this.availableBrokers.unshift({
+        //             broker: EBrokerInstance.BFTDemo,
+        //             brokerId: liveAccount.id
+        //         });
+        //     }
+        // } else {
+        //     this.availableBrokers.unshift({
+        //         broker: EBrokerInstance.BFTDemo
+        //     });
+        // }
 
         // this.availableBrokers.unshift(EBrokerInstance.BFTFundingLive);
         // this.availableBrokers.unshift(EBrokerInstance.BFTFundingDemo);
