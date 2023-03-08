@@ -7,6 +7,7 @@ import { BrokerService } from "./broker.service";
 import { MTBroker } from "./mt/mt.broker";
 import { CurrencyRiskType, OrderTypes } from "modules/Trading/models/models";
 import { LocalStorageService } from "Storage";
+import { SettingsStorageService } from "./settings-storage.servic";
 
 @Injectable()
 export class MissionTrackingService {
@@ -37,31 +38,35 @@ export class MissionTrackingService {
         private _notificationService: NotificationsService,
         private _brokerService: BrokerService,
         private _localStorageService: LocalStorageService,
+        private _settingsStorageService: SettingsStorageService,
         private _tradingProfileService: TradingProfileService) {
-        
+
         this._tradingProfileService.MissionChanged.subscribe(() => {
             this._processMissions();
         });
-        this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
-            if (this.broker) {
-                this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
-                    this._recalculate();
-                }); 
-                
-                this._onOrdersParametersUpdated = this._brokerService.activeBroker.onOrdersParametersUpdated.subscribe(() => {
-                    this._recalculate();
-                });
-            } else {
-                this._recalculateRequired = true;
-                if (this._ordersUpdatedSubscription) {
-                    this._ordersUpdatedSubscription.unsubscribe();
-                    this._ordersUpdatedSubscription = null;
-                } 
-                if (this._onOrdersParametersUpdated) {
-                    this._onOrdersParametersUpdated.unsubscribe();
-                    this._onOrdersParametersUpdated = null;
+
+        _settingsStorageService.getSettings().subscribe((_) => {
+            this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
+                if (this.broker) {
+                    this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
+                        this._recalculate();
+                    });
+
+                    this._onOrdersParametersUpdated = this._brokerService.activeBroker.onOrdersParametersUpdated.subscribe(() => {
+                        this._recalculate();
+                    });
+                } else {
+                    this._recalculateRequired = true;
+                    if (this._ordersUpdatedSubscription) {
+                        this._ordersUpdatedSubscription.unsubscribe();
+                        this._ordersUpdatedSubscription = null;
+                    }
+                    if (this._onOrdersParametersUpdated) {
+                        this._onOrdersParametersUpdated.unsubscribe();
+                        this._onOrdersParametersUpdated = null;
+                    }
                 }
-            }
+            });
         });
     }
 
@@ -73,7 +78,7 @@ export class MissionTrackingService {
         if (!this._recalculateRequired) {
             return;
         }
-        
+
         let activeBroker = this.broker;
         if (activeBroker && activeBroker.canCalculateHighestVAR(OrderTypes.Market)) {
             this._recalculateRequired = false;
@@ -87,7 +92,7 @@ export class MissionTrackingService {
         }
 
         this._isInitialized = true;
-        
+
         this._tradingProfileService.initMissions();
 
         setTimeout(() => {
@@ -102,7 +107,7 @@ export class MissionTrackingService {
         setInterval(() => {
             try {
                 this._updateMissions();
-            } catch (error) {}
+            } catch (error) { }
 
             this._nextUpdateTime = new Date().getTime() + this._timeInterval;
 
@@ -114,8 +119,8 @@ export class MissionTrackingService {
     private _updateMissions() {
         if (!this._identity.isAuthorizedCustomer || !this.broker) {
             return;
-        }   
-        
+        }
+
         let varRisk = null;
         let currencyVarRisk = 0;
         if (this._brokerService.isConnected && this.broker) {

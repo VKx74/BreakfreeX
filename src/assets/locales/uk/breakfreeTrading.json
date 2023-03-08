@@ -5,7 +5,10 @@
     "phoneNumber": "Phone number",
     "verify": "Verify",
     "verificationCode": "Verification Code",
-    "addYourPhoneNumber": "Add your phone number"
+    "addYourPhoneNumber": "Add your phone number",
+    "subscriptionRestriction": "Out of access for subscription level",
+    "useTradeGuard": "Enable TradeGuard",
+    "activeTradingFeedback": "Enable active TradeGuard feedback"
   },
   "breakfreeTradingBacktestComponentName": "BFT Backtest",
   "binanceScannerWidgetComponentName": "Binance Scanner",

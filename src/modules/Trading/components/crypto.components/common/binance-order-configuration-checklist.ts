@@ -10,6 +10,7 @@ import { BinanceBroker } from '@app/services/binance/binance.broker';
 import { BinanceFuturesBroker } from '@app/services/binance-futures/binance-futures.broker';
 import { InfoNotificationComponent } from 'modules/Trading/components/forex.components/mt/order-configurator/notifications/info/info-notification.component';
 import { BinanceFuturesOrderConfig } from '../binance-futures/order-configurator/binance-futures-order-configurator.component';
+import { SettingsStorageService } from "@app/services/settings-storage.servic";
 
 export abstract class BinanceOrderConfigurationChecklist {
     protected checklist: BinanceChecklistItemDescription[] = [
@@ -30,6 +31,7 @@ export abstract class BinanceOrderConfigurationChecklist {
     protected _orderValidationChecklist: OrderValidationChecklist;
     protected _wrongInstrumentShown: boolean = false;
     protected _recalculatePossible = true;
+    protected _useTradeGuard: boolean = false;
 
     checklistItems: ChecklistItem[] = [];
     orderScore: number = 10;
@@ -38,11 +40,26 @@ export abstract class BinanceOrderConfigurationChecklist {
     calculatingChecklistStatus: string = CalculatingChecklistStatuses[0];
     lastTick: ITradeTick = null;
 
+    get canShowOrderValidation(): boolean {
+        return this.config.type === OrderTypes.Market || this.config.type === OrderTypes.Limit;
+    }
+
+    get useTradeGuard(): boolean {
+        return this._useTradeGuard;
+    }
+
     abstract get config(): BinanceOrderConfig | BinanceFuturesOrderConfig;
     abstract get broker(): BinanceBroker | BinanceFuturesBroker;
     abstract get dialog(): MatDialog;
 
-    constructor() {
+    constructor(protected _settingsStorageService: SettingsStorageService) {
+        _settingsStorageService.getSettings().subscribe((_) => {
+            this._useTradeGuard = _.UseTradeGuard;
+            this._loadChecklist();
+        });
+    }
+
+    protected _loadChecklist() {
         this._checklistSubject.pipe(
             debounceTime(500),
             takeUntil(componentDestroyed(this))
@@ -52,7 +69,7 @@ export abstract class BinanceOrderConfigurationChecklist {
     }
 
     protected _calculateChecklist() {
-        if (!this.canShowOrderValidation()) {
+        if (!this.canShowOrderValidation) {
             this.orderScore = 10;
             this.checklistItems = [];
             return;
@@ -198,14 +215,10 @@ export abstract class BinanceOrderConfigurationChecklist {
         if (tick && !this.config.price) {
             this.config.price = price;
         }
-        
+
         if (needLoad) {
             this._raiseCalculateChecklist();
         }
-    }
-
-    canShowOrderValidation() {
-        return this.config.type === OrderTypes.Market || this.config.type === OrderTypes.Limit;
     }
 
     ngOnDestroy() {
@@ -216,7 +229,7 @@ export abstract class BinanceOrderConfigurationChecklist {
         if (this._checklistTimeout) {
             clearTimeout(this._checklistTimeout);
         }
-        
+
         if (this._statusChangeInterval) {
             clearInterval(this._statusChangeInterval);
         }

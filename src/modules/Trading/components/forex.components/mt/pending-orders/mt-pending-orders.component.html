@@ -24,7 +24,7 @@
     <!-- <data-table-header-cell columnName="Trade Guard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.tradeGuard' | translate}}</data-table-header-cell> -->
     <data-table-header-cell columnName="Net Risk" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.risk' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.riskP' | translate}}</data-table-header-cell>
-    <data-table-header-cell columnName="TradeGuard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.recommendations' | translate}}</data-table-header-cell>
+    <data-table-header-cell columnName="TradeGuard" *ngIf="activeTradingFeedback" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">{{'tradeManager.recommendations' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Comment" [columnWidth]="140" [columnMinWidth]="10" [sortable]="false">{{'tradeManager.comment' | translate}}</data-table-header-cell>
     <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
 

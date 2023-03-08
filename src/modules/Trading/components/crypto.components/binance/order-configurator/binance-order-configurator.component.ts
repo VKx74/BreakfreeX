@@ -16,6 +16,7 @@ import { OrderComponentSubmitHandler } from 'modules/Trading/components/trade-ma
 import { BinanceBroker } from '@app/services/binance/binance.broker';
 import { BinanceOrderConfigurationChecklist } from '../../common/binance-order-configuration-checklist';
 import { BinanceFuturesBroker } from '@app/services/binance-futures/binance-futures.broker';
+import { SettingsStorageService } from '@app/services/settings-storage.servic';
 
 // stopPrice - Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders.
 // icebergQty - Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order.
@@ -117,8 +118,9 @@ export class BinanceOrderConfiguratorComponent extends BinanceOrderConfiguration
     constructor(private _dialog: MatDialog,
         private _alertService: AlertService,
         private _translateService: TranslateService,
+        protected _settingsStorageService: SettingsStorageService,
         private _brokerService: BrokerService) {
-        super();
+        super(_settingsStorageService);
         this._config = BinanceOrderConfig.createMarket();
     }
 

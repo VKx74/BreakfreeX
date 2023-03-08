@@ -23,6 +23,7 @@ import { InfoNotificationComponent } from './notifications/info/info-notificatio
 import { SpreadNotificationComponent } from './notifications/spread/spread-notification.component';
 import { LocalStorageService } from 'modules/Storage/services/local-storage.service';
 import { CalculatingChecklistStatuses, ChecklistItem, CorrelatedRiskValidator, GlobalTrendValidator, LevelsValidator, LeverageValidator, LocalTrendValidator, MTChecklistItemDescription, OrderValidationChecklist, PriceOffsetValidator, SpreadValidator, StoplossValidator } from 'modules/Trading/models/crypto/shared/order.validation';
+import { SettingsStorageService } from '@app/services/settings-storage.servic';
 
 const checklist: MTChecklistItemDescription[] = [
     new LocalTrendValidator(),
@@ -110,6 +111,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
     private _canChangeInstrument: boolean = true;
     private _destroyed: boolean = false;
     private _wrongInstrumentShown: boolean = false;
+    private _useTradeGuard: boolean = false;
     private _orderValidationChecklist: OrderValidationChecklist;
 
     @Input() submitHandler: OrderComponentSubmitHandler;
@@ -172,6 +174,10 @@ export class MTOrderConfiguratorComponent implements OnInit {
         return this._canChangeInstrument;
     }
 
+    get useTradeGuard(): boolean {
+        return this._useTradeGuard;
+    }
+
     minAmountValue: number = 0.01;
     minPriceValue: number = 0.000001;
     priceStep: number = 0.00001;
@@ -199,14 +205,13 @@ export class MTOrderConfiguratorComponent implements OnInit {
         private _alertService: AlertService,
         private _translateService: TranslateService,
         private _localStorageService: LocalStorageService,
+        private _settingsStorageService: SettingsStorageService,
         private _brokerService: BrokerService) {
         this._config = MTOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
 
-        this._checklistSubject.pipe(
-            debounceTime(500),
-            takeUntil(componentDestroyed(this))
-        ).subscribe(() => {
-            this._calculateChecklist();
+        _settingsStorageService.getSettings().subscribe((_) => {
+            this._useTradeGuard = _.UseTradeGuard;
+            this._loadChecklist();
         });
     }
 
@@ -276,6 +281,15 @@ export class MTOrderConfiguratorComponent implements OnInit {
 
     calculateOrderStarts() {
         return this.orderScore;
+    }
+
+    private _loadChecklist() {
+        this._checklistSubject.pipe(
+            debounceTime(500),
+            takeUntil(componentDestroyed(this))
+        ).subscribe(() => {
+            this._calculateChecklist();
+        });
     }
 
     private _selectInstrument(instrument: IInstrument, resetPrice = true) {
@@ -370,6 +384,7 @@ export class MTOrderConfiguratorComponent implements OnInit {
                 recalculateNeeded = true;
                 continue;
             }
+            
             this.orderScore -= res.minusScore;
             this.checklistItems.push(res);
         }
@@ -438,18 +453,23 @@ export class MTOrderConfiguratorComponent implements OnInit {
             this.submitHandler(this.config);
             this.onSubmitted.emit();
         } else {
-            if (this.orderScore < 7) {
-                this._dialog.open(ConfirmModalComponent, {
-                    data: {
-                        title: 'Overleverage detected',
-                        message: `Warning! You are about to enter a terrible trade. You might be lucky to win this trade, but you will never be successful in the long run like this. Place trade?`,
-                        onConfirm: () => {
-                            this._validateIsSymbolOffset();
-                        }
-                    }
-                });
+
+            if (!this._useTradeGuard) {
+                this._placeOrder();
             } else {
-                this._validateIsSymbolOffset();
+                if (this.orderScore < 7) {
+                    this._dialog.open(ConfirmModalComponent, {
+                        data: {
+                            title: 'Overleverage detected',
+                            message: `Warning! You are about to enter a terrible trade. You might be lucky to win this trade, but you will never be successful in the long run like this. Place trade?`,
+                            onConfirm: () => {
+                                this._validateIsSymbolOffset();
+                            }
+                        }
+                    });
+                } else {
+                    this._validateIsSymbolOffset();
+                }
             }
         }
     }

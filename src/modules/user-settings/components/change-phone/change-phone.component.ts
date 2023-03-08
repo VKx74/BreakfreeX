@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Injector, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Inject, Injector, Input, OnInit, Output } from '@angular/core';
 import {
     SendCodeViaSMSToAttachPhoneNumberModel,
     PersonalInfoService,
@@ -7,13 +7,14 @@ import {
     SendCodeViaSMSToChangePhoneNumberModel,
     RemovePhoneNumberModel, ChangePhoneNumberModel
 } from "@app/services/personal-info/personal-info.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "@alert/services/alert.service";
-import {TranslateService} from "@ngx-translate/core";
-import {digitValidator, phoneNumberValidator} from "Validators";
-import {AppTranslateService} from "@app/localization/token";
-import {OrderBookTranslateService} from "@order-book/localization/token";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AlertService } from "@alert/services/alert.service";
+import { TranslateService } from "@ngx-translate/core";
+import { digitValidator, phoneNumberValidator } from "Validators";
+import { AppTranslateService } from "@app/localization/token";
+import { OrderBookTranslateService } from "@order-book/localization/token";
 import { IdentityService, SubscriptionType } from '@app/services/auth/identity.service';
+import { SettingsStorageService } from '@app/services/settings-storage.servic';
 
 enum ChangePhoneNumberStage {
     None,
@@ -28,6 +29,8 @@ enum ChangePhoneNumberStage {
     styleUrls: ['./change-phone.component.scss'],
 })
 export class ChangePhoneComponent implements OnInit {
+    _useTradeGuard = false;
+    _activeTradingFeedback = false;
     loading = false;
     phoneNumberStep: ChangePhoneNumberStage = ChangePhoneNumberStage.None;
     isVerifyingCode = false;
@@ -47,11 +50,38 @@ export class ChangePhoneComponent implements OnInit {
         return ChangePhoneNumberStage;
     }
 
+    get subscriptionExists() {
+        return this._identity.isAuthorizedCustomer;
+    }
+
+    get useTradeGuard() {
+        return this._useTradeGuard;
+    }
+
+    set useTradeGuard(value: boolean) {
+        this._useTradeGuard = value;
+        this._setUseTradeGuard();
+    }
+
+    get activeTradingFeedback() {
+        return this._activeTradingFeedback;
+    }
+
+    set activeTradingFeedback(value: boolean) {
+        this._activeTradingFeedback = value;
+        this._setActiveTradingFeedback();
+    }
+
     constructor(private _personalInfoService: PersonalInfoService,
-                private _identity: IdentityService,
-                private _alertService: AlertService,
-                @Inject(AppTranslateService) private _appTranslateService
-                ) {
+        private _identity: IdentityService,
+        private _alertService: AlertService,
+        private _settingsStorageService: SettingsStorageService,
+        @Inject(AppTranslateService) private _appTranslateService
+    ) {
+        _settingsStorageService.getSettings().subscribe((_) => {
+            this._activeTradingFeedback = _.ActiveTradingFeedback;
+            this._useTradeGuard = _.UseTradeGuard;
+        });
     }
 
     ngOnInit() {
@@ -150,6 +180,14 @@ export class ChangePhoneComponent implements OnInit {
         }
     }
 
+    private _setActiveTradingFeedback() {
+        this._settingsStorageService.updateActiveTradingFeedback(this._activeTradingFeedback).subscribe();
+    }
+
+    private _setUseTradeGuard() {
+        this._settingsStorageService.updateUseTradeGuard(this._useTradeGuard).subscribe();
+    }
+
     private _removePhone() {
         this.loading = true;
         const removePhoneNumberModel: RemovePhoneNumberModel = {
@@ -214,8 +252,8 @@ export class ChangePhoneComponent implements OnInit {
 
     private _getFormGroup(): FormGroup {
         return new FormGroup({
-            phone: new FormControl({value: this.phone, disabled: true}, [Validators.required, phoneNumberValidator(),  Validators.minLength(10)]),
-            addPhone: new FormControl('', [Validators.required, phoneNumberValidator(),  Validators.minLength(10)]),
+            phone: new FormControl({ value: this.phone, disabled: true }, [Validators.required, phoneNumberValidator(), Validators.minLength(10)]),
+            addPhone: new FormControl('', [Validators.required, phoneNumberValidator(), Validators.minLength(10)]),
             code: new FormControl('', [Validators.required, Validators.minLength(6)]),
         });
     }

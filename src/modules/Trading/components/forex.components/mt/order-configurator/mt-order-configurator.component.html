@@ -18,7 +18,8 @@
             <div class="flex-column padding-right">
                 <div class="crypto-form-unit  nborder margin-bottom" [ngClass]="{'disabled': !canChangeInstrument}">
                     <instrument-search [instrument]="config.instrument" (onSelect)="handleInstrumentChange($event)"
-                        [instrumentSearchCallback]="instrumentSearchCallback" [isBrokerSearch]="true"></instrument-search>
+                        [instrumentSearchCallback]="instrumentSearchCallback"
+                        [isBrokerSearch]="true"></instrument-search>
                 </div>
             </div>
             <div class="flex-column  padding-left">
@@ -95,9 +96,12 @@
                     <div class="flex">
                         <!-- <img class="BFTimage" width="140px" src="assets/img/tradeguard.svg"> -->
                         <div class="tradescoretext-label">
-                            <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg"> <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
+                            <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg">
+                            <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
                         </div>
-                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">: {{orderScore}}/10</div>
+                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">
+                            <span *ngIf="useTradeGuard">: {{orderScore}}/10</span>
+                        </div>
                         <ng-template #calculating>
                             <div class="tradescoretext-calculating">
                                 - calculating...
@@ -105,12 +109,13 @@
                         </ng-template>
                     </div>
 
-                        
-                    <div class="score-container" *ngIf="config.instrument">
-                        <emoji [Calculating]="calculatingChecklist" [MaxScore]="10" [Score]="calculateOrderStarts()"></emoji>
+
+                    <div class="score-container" *ngIf="config.instrument && useTradeGuard">
+                        <emoji [Calculating]="calculatingChecklist" [MaxScore]="10" [Score]="calculateOrderStarts()">
+                        </emoji>
                     </div>
                 </div>
-                
+
                 <div class="tradescore-separator"></div>
 
                 <div class="loader">
@@ -124,7 +129,7 @@
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
                     <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" tooltip
                         [matTooltip]="item.tooltip">
-                        <span class="icon">
+                        <span class="icon" [ngClass]="{'no-trade-guard': !useTradeGuard}">
                             <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
                                 aria-hidden="true"></i>
                         </span>
@@ -145,75 +150,78 @@
         </div>
     </div>
 
+    <div class="additional-settings">
+        <mat-expansion-panel [expanded]="false">
+            <mat-expansion-panel-header [@.disabled]="true">
+                {{'tradeManager.advancedSettings' | translate}}
+            </mat-expansion-panel-header>
+
+            <ng-template matExpansionPanelContent>
 
 
-    <mat-expansion-panel [expanded]="false">
-        <mat-expansion-panel-header [@.disabled]="true">
-            {{'tradeManager.advancedSettings' | translate}}
-        </mat-expansion-panel-header>
-
-        <ng-template matExpansionPanelContent>
-
-
-            <div class="flex-row">
-                <div class="crypto-form-unit margin-bottom">
-                    <div class="form-unit__label">{{'tradeManager.comment' | translate}}
-                        ({{commentLengthUsed}}/{{maxCommentLength - technicalCommentLengthUsed}})</div>
-                    <div class="comment-area">
-                        <mat-form-field class="crypto-input bft-form-input full-width">
-                            <textarea matInput class="crypto-textarea nborder comment-textarea"
-                                [(ngModel)]="config.comment" [maxlength]="maxCommentLength-technicalCommentLengthUsed">
+                <div class="flex-row">
+                    <div class="crypto-form-unit margin-bottom">
+                        <div class="form-unit__label">{{'tradeManager.comment' | translate}}
+                            ({{commentLengthUsed}}/{{maxCommentLength - technicalCommentLengthUsed}})</div>
+                        <div class="comment-area">
+                            <mat-form-field class="crypto-input bft-form-input full-width">
+                                <textarea matInput class="crypto-textarea nborder comment-textarea"
+                                    [(ngModel)]="config.comment"
+                                    [maxlength]="maxCommentLength-technicalCommentLengthUsed">
                             </textarea>
-                        </mat-form-field>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-row">
-                <div class="flex-column padding-right">
-                    <div class="crypto-form-unit margin-bottom">
-                        <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
-                        <div class="nborder">
-                            <selector class="bft-form-select " [selectedOption]="config.expirationType"
-                                [options]="expirationTypes" (onSelect)="handleExpirationTypeSelected($event)"></selector>
+                            </mat-form-field>
                         </div>
                     </div>
                 </div>
-                <div class="flex-column padding-left">
-                    <div class="crypto-form-unit margin-bottom">
-                        <div class="form-unit__label">{{'tradeManager.fillPolicy' | translate}}</div>
-                        <div class="nborder">
-                            <selector class="bft-form-select" [selectedOption]="config.fillPolicy"
-                                [options]="orderFillPolicies" (onSelect)="handleFillPolicySelected($event)"></selector>
+
+                <div class="flex-row">
+                    <div class="flex-column padding-right">
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'tradeManager.expirationType' | translate}}</div>
+                            <div class="nborder">
+                                <selector class="bft-form-select " [selectedOption]="config.expirationType"
+                                    [options]="expirationTypes" (onSelect)="handleExpirationTypeSelected($event)">
+                                </selector>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-column padding-left">
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'tradeManager.fillPolicy' | translate}}</div>
+                            <div class="nborder">
+                                <selector class="bft-form-select" [selectedOption]="config.fillPolicy"
+                                    [options]="orderFillPolicies" (onSelect)="handleFillPolicySelected($event)">
+                                </selector>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex-row" [class.disabled]="!isExpirationVisible()">
-                <div class="flex-column padding-right">
-                    <div class="crypto-form-unit margin-bottom">
-                        <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
-                        <mat-form-field class="crypto-input  nborder  bft-form-input full-width">
-                            <input matInput placeholder="Time" (click)="time.open()" readonly [(ngModel)]="selectedTime"
-                                [ngxTimepicker]="time" [format]='24'>
-                            <ngx-material-timepicker #time></ngx-material-timepicker>
-                        </mat-form-field>
+                <div class="flex-row" [class.disabled]="!isExpirationVisible()">
+                    <div class="flex-column padding-right">
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'tradeManager.expirationTime' | translate}}</div>
+                            <mat-form-field class="crypto-input  nborder  bft-form-input full-width">
+                                <input matInput placeholder="Time" (click)="time.open()" readonly
+                                    [(ngModel)]="selectedTime" [ngxTimepicker]="time" [format]='24'>
+                                <ngx-material-timepicker #time></ngx-material-timepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="flex-column padding-left">
+                        <div class="crypto-form-unit margin-bottom">
+                            <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
+                            <mat-form-field class="crypto-input  nborder  bft-form-input full-width">
+                                <input matInput readonly [matDatepicker]="end" [(ngModel)]="selectedDate"
+                                    (click)="end.open()" placeholder="Date">
+                                <mat-datepicker #end></mat-datepicker>
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-column padding-left">
-                    <div class="crypto-form-unit margin-bottom">
-                        <div class="form-unit__label">{{'tradeManager.expirationDate' | translate}}</div>
-                        <mat-form-field class="crypto-input  nborder  bft-form-input full-width">
-                            <input matInput readonly [matDatepicker]="end" [(ngModel)]="selectedDate"
-                                (click)="end.open()" placeholder="Date">
-                            <mat-datepicker #end></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-    </mat-expansion-panel>
+            </ng-template>
+        </mat-expansion-panel>
+    </div>
 
     <div class="buttons-wrapper flex justify-flex-end">
         <button class="full-width crypto-button submit-btn" [ngClass]="{'order-side-buy': isBuyMode(),

@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {BrokerService} from "@app/services/broker.service";
 import {EBrokerInstance} from "@app/interfaces/broker/broker";
 import { MatDialog } from '@angular/material/dialog';
@@ -43,6 +43,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     constructor(protected _translateService: TranslateService,
                 protected _brokerService: BrokerService,
                 protected _alertService: AlertService,
+                protected _ref: ChangeDetectorRef,
                 protected _dialog: MatDialog) {
     }
 
@@ -157,6 +158,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
                     this._alertService.error(setBrokerResult.msg, "Error");
                 }
                 this.loading = false;
+                this._ref.detectChanges();
             });
             return;
         }

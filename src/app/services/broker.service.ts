@@ -261,9 +261,13 @@ export class BrokerService {
             return this._connectBFTAccount(accountType);
         }
 
-        return this._ensureDemoAccountExists().pipe(flatMap(() => {
-            return this._connectBFTAccount(accountType);
-        }));
+        return of({
+            result: false
+        });
+
+        // return this._ensureDemoAccountExists().pipe(flatMap(() => {
+        //     return this._connectBFTAccount(accountType);
+        // }));
     }
 
     getBFTAccount(accountType?: EBrokerInstance): IBFTTradingAccount[] {
@@ -487,7 +491,6 @@ export class BrokerService {
     }
 
     private _connectBFTAccount(accountType: EBrokerInstance, id?: any): Observable<ActionResult> {
-
         if (!id) {
             let account = this._getBFTAccount(accountType);
 

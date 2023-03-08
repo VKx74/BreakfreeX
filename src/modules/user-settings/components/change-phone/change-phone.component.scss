@@ -27,6 +27,17 @@
 
   }
 
+  .additional-settings {
+    margin: 10px 28px;
+  }
+
+  .restriction {
+    position: relative;
+    top: 10px;
+    font-size: 12px;
+    left: 23px;
+  }
+
   /deep/ .mat-form-field-subscript-wrapper {
     bottom: -15px !important;
   }
@@ -57,7 +68,7 @@
     box-shadow: themed('box-shadowPanel');
   }
 
-  .data, .crypto-button {
+  .data, .crypto-button, .restriction {
     color: themed('valueTextColor');
   }
 

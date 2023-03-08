@@ -9,10 +9,12 @@ import { DataHighlightService } from "modules/Trading/services/dataHighlight.ser
 import { IBFTATrend } from "@app/services/algo.service";
 import { ItemsComponent } from "../../trade-manager/items-component/items.component";
 import { LocalStorageService } from "modules/Storage/services/local-storage.service";
+import { SettingsStorageService } from "@app/services/settings-storage.servic";
 
 export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
     protected _hiddenColumns: string[] = this._getHiddenColumns();
     protected abstract get _defaultHiddenColumns(): string[];
+    protected _activeTradingFeedback: boolean = false;
 
     protected abstract get componentKey(): string;
 
@@ -24,13 +26,22 @@ export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
         return this._hiddenColumns;
     }
 
+    get activeTradingFeedback(): boolean {
+        return this._activeTradingFeedback;
+    }
+
     constructor(protected _broker: BrokerService,
         protected _dataHighlightService: DataHighlightService,
         protected _localStorageService: LocalStorageService,
         @Inject(AlertService) protected _alertService: AlertService,
         protected _dialog: MatDialog,
+        protected _settingsStorageService: SettingsStorageService,
         protected _cdr: ChangeDetectorRef) {
         super(_broker, _dataHighlightService, _alertService, _dialog, _cdr);
+
+        _settingsStorageService.getSettings().subscribe((_) => {
+            this._activeTradingFeedback = _.ActiveTradingFeedback;
+        });
     }
 
 

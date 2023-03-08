@@ -40,11 +40,36 @@ export class SettingsStorageService {
 
         this.http.get<IUserSettings>(this._url).pipe(
             map((data: any) => {
-                this._settings = JSON.parse(data);
-                if (!this._settings) {
-                    this._settings = {
-                        FeaturedInstruments: []
-                    };
+                this._settings = {};
+                try {
+                    let settings = JSON.parse(data);
+                    if (settings.FeaturedInstruments) {
+                        this._settings.FeaturedInstruments = settings.FeaturedInstruments;
+                    } else {
+                        this._settings.FeaturedInstruments = [];
+                    }
+
+                    if (settings.UseTradeGuard) {
+                        this._settings.UseTradeGuard = settings.UseTradeGuard;
+                    } else {
+                        this._settings.UseTradeGuard = false;
+                    }
+
+                    if (settings.ActiveTradingFeedback) {
+                        this._settings.ActiveTradingFeedback = settings.ActiveTradingFeedback;
+                    } else {
+                        this._settings.ActiveTradingFeedback = false;
+                    }
+                } catch (ex) {}
+
+                if (!this._settings.FeaturedInstruments) {
+                    this._settings.FeaturedInstruments = [];
+                }
+                if (!this._settings.UseTradeGuard) {
+                    this._settings.UseTradeGuard = false;
+                }
+                if (!this._settings.ActiveTradingFeedback) {
+                    this._settings.ActiveTradingFeedback = false;
                 }
                 return this._settings;
             })).subscribe((data: IUserSettings) => {
@@ -67,15 +92,34 @@ export class SettingsStorageService {
     public updateFeaturedInstruments(instruments: IFeaturedInstruments[]): Observable<void>  {
         return new Observable((observer: Observer<void>) => {
             this.getSettings().subscribe((data: IUserSettings) => {
-                let existingData = data;
-                if (!existingData) {
-                    existingData = {};
-                }
-                
                 if (instruments && instruments.length >= 0) {
-                    existingData.FeaturedInstruments = instruments;
-                    this.saveSettings(existingData).subscribe();
+                    this._settings.FeaturedInstruments = instruments;
+                    this.saveSettings(this._settings).subscribe();
                 }
+
+                observer.next();
+                observer.complete();
+            });
+        });
+    }
+
+    public updateUseTradeGuard(useTradeGuard: boolean): Observable<void>  {
+        return new Observable((observer: Observer<void>) => {
+            this.getSettings().subscribe((data: IUserSettings) => {
+                this._settings.UseTradeGuard = useTradeGuard;
+                this.saveSettings(this._settings).subscribe();
+
+                observer.next();
+                observer.complete();
+            });
+        });
+    }
+
+    public updateActiveTradingFeedback(activeTradingFeedback: boolean): Observable<void>  {
+        return new Observable((observer: Observer<void>) => {
+            this.getSettings().subscribe((data: IUserSettings) => {
+                this._settings.ActiveTradingFeedback = activeTradingFeedback;
+                this.saveSettings(this._settings).subscribe();
 
                 observer.next();
                 observer.complete();

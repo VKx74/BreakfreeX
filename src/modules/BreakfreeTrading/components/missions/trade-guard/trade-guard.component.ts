@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Inject, Injector, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
+import { SettingsStorageService } from '@app/services/settings-storage.servic';
 import { ITradeGuardItem, TradeGuardService } from 'modules/BreakfreeTrading/services/tradeGuard.service';
 import { RiskClass, RiskObject, TradeManagerTab } from 'modules/Trading/models/models';
 import { DataHighlightService } from 'modules/Trading/services/dataHighlight.service';
@@ -15,6 +16,7 @@ import { Subscription } from 'rxjs';
 })
 export class TradeGuardComponent {
     protected _onTradePanelDataHighlightSubscription: Subscription;
+    protected _activeTradingFeedback: boolean = false;
     
     @Output()
     public CloseRequested = new EventEmitter();
@@ -25,7 +27,14 @@ export class TradeGuardComponent {
         return !!this._getBrokerInstance();
     }
 
-    constructor(protected _tradeGuardService: TradeGuardService, protected _brokerService: BrokerService, protected _dataHighlightService: DataHighlightService) {
+    get activeTradingFeedback(): boolean {
+        return this._activeTradingFeedback;
+    }
+
+    constructor(protected _tradeGuardService: TradeGuardService, protected _brokerService: BrokerService, protected _dataHighlightService: DataHighlightService, protected _settingsStorageService: SettingsStorageService) {
+        _settingsStorageService.getSettings().subscribe((_) => {
+            this._activeTradingFeedback = _.ActiveTradingFeedback;
+        });
     }
 
     ngOnInit() {

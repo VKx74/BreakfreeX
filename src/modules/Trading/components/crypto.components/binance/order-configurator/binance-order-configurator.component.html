@@ -151,7 +151,7 @@
 <div class="form-wrapper additional-trade-data">
 
     <div class="flex-row">
-        <div class="flex-row" *ngIf="canShowOrderValidation()">
+        <div class="flex-row" *ngIf="canShowOrderValidation">
             <div class="checklist-row">
                 <div class="section-header tradescore">
                     <div class="flex">
@@ -159,7 +159,9 @@
                         <div class="tradescoretext-label">
                             <img class="BFTimage" width="140px" src="assets/img/tradeguard2.svg"> <!-- <span class="bold">TradeGuard</span>Pre-trade Score -->
                         </div>
-                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">: {{orderScore}}/10</div>
+                        <div class="tradescoretext" *ngIf="!calculatingChecklist; else calculating">
+                            <span *ngIf="useTradeGuard">: {{orderScore}}/10</span>
+                        </div>
                         <ng-template #calculating>
                             <div class="tradescoretext-calculating">
                                 - calculating...
@@ -168,7 +170,7 @@
                     </div>
 
                         
-                    <div class="score-container" *ngIf="config.instrument">
+                    <div class="score-container" *ngIf="config.instrument && useTradeGuard">
                         <emoji [Calculating]="calculatingChecklist" [MaxScore]="10" [Score]="orderScore"></emoji>
                     </div>
                 </div>
@@ -186,7 +188,7 @@
                 <div class="tiles-wrapper" *ngIf="checklistItems.length || calculatingChecklist; else noData">
                     <span class="checklist-tile-wrapper" *ngFor="let item of checklistItems" tooltip
                         [matTooltip]="item.tooltip">
-                        <span class="icon">
+                        <span class="icon" [ngClass]="{'no-trade-guard': !useTradeGuard}">
                             <i class="fa" [ngClass]="{'fa-check': item.valid, 'fa-exclamation': !item.valid}"
                                 aria-hidden="true"></i>
                         </span>

@@ -20,9 +20,9 @@
         title="{{'alertWidget.setAlert' | translate}}">
         <span class="crypto-icon crypto-icon-midle-add"></span>
       </div>
-      <!-- <div class="crypto-button-icon control" title="{{'app.settings' | translate}}" [matMenuTriggerFor]="alertsDropdown">
+      <div class="crypto-button-icon control" title="{{'app.settings' | translate}}" [matMenuTriggerFor]="alertsDropdown">
         <span class="crypto-icon crypto-icon-more"></span>
-      </div> -->
+      </div>
 
       <mat-menu #alertsDropdown="matMenu">
         <div class="mat-menu-wrapper">
@@ -32,9 +32,9 @@
           <div class="mat-menu-item" (click)="stopAll()">
             <span>{{'alertWidget.stopAll' | translate}}</span>
           </div>
-          <div class="mat-menu-item" (click)="deleteAllInactive()">
+          <!-- <div class="mat-menu-item" (click)="deleteAllInactive()">
             <span>{{'alertWidget.deleteAllInactive' | translate}}</span>
-          </div>
+          </div> -->
         </div>
       </mat-menu>
   </div>

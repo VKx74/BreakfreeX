@@ -42,7 +42,7 @@ export class AlertComponent extends BaseLayoutItem {
 
   constructor(@Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService,
     private _alertService: AlertService, protected _instrumentService: InstrumentService,
-    private _dialog: MatDialog) {
+    private _dialog: MatDialog, private _alertsService: AlertsService) {
     super();
   }
 
@@ -100,6 +100,9 @@ export class AlertComponent extends BaseLayoutItem {
   }
 
   private _restartAll() {
+    this._alertsService.startAllAlerts().subscribe(() => {
+        this._alertService.success(this._translateService.get('alertsRestarted'));
+    });
     // const alerts = this.alerts$.getValue();
     // const inactiveAlerts = alerts ? alerts.filter(a => !a.isStarted) : [];
 
@@ -122,6 +125,9 @@ export class AlertComponent extends BaseLayoutItem {
   }
 
   private _stopAll() {
+    this._alertsService.stopAllAlerts().subscribe(() => {
+      this._alertService.success(this._translateService.get('alertsStopped'));
+    });
     // const alerts = this.alerts$.getValue();
 
     // if (alerts && alerts.length) {
@@ -141,6 +147,7 @@ export class AlertComponent extends BaseLayoutItem {
   }
 
   private _deleteAllInactive() {
+    
     // const alerts = this.alerts$.getValue();
     // const inactiveAlerts = alerts ? alerts.filter(a => !a.isStarted) : [];
 

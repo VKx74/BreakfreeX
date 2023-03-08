@@ -27,10 +27,9 @@
             {{'tradeManager.risk' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Risk (%)" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
             {{'tradeManager.riskP' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="TradeGuard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
+        <data-table-header-cell *ngIf="activeTradingFeedback" columnName="TradeGuard" [columnWidth]="140" [columnMinWidth]="10" [sortable]="true">
             {{'tradeManager.recommendations' | translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [columnMinWidth]="36"></data-table-header-cell>
-
 
         <data-table-cell columnName="Side">
             <ng-template let-item>

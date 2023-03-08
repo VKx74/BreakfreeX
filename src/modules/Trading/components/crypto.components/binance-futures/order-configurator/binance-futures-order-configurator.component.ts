@@ -18,6 +18,7 @@ import { EBrokerInstance } from '@app/interfaces/broker/broker';
 import { BinanceOrderConfigurationChecklist } from '../../common/binance-order-configuration-checklist';
 import { BinanceBroker } from '@app/services/binance/binance.broker';
 import { BinanceFuturesBroker } from '@app/services/binance-futures/binance-futures.broker';
+import { SettingsStorageService } from '@app/services/settings-storage.servic';
 
 
 export class BinanceFuturesOrderConfig {
@@ -117,8 +118,9 @@ export class BinanceFuturesOrderConfiguratorComponent extends BinanceOrderConfig
     constructor(private _dialog: MatDialog,
         private _alertService: AlertService,
         private _translateService: TranslateService,
+        protected _settingsStorageService: SettingsStorageService,
         private _brokerService: BrokerService) {
-            super();
+            super(_settingsStorageService);
             this.amountStep = this._brokerService.activeBroker.instanceType === EBrokerInstance.BinanceFuturesCOIN ? 1 : 0.1;
             this._config = BinanceFuturesOrderConfig.createMarket(this._brokerService.activeBroker.instanceType);
     }
