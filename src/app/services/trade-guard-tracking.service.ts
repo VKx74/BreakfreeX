@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NotificationsService, NotificationType } from "@alert/services/notifications.service";
 import { TradeGuardService } from "modules/BreakfreeTrading/services/tradeGuard.service";
+import { SettingsStorageService } from "./settings-storage.servic";
 
 @Injectable()
 export class TradeGuardTrackingService {
@@ -8,9 +9,10 @@ export class TradeGuardTrackingService {
     private _count: number = 0;
     private _score: number = 10;
     private _initialized: boolean = false;
-    
+
     constructor(private _notificationsService: NotificationsService,
-                private _tradeGuardService: TradeGuardService) {
+        protected _settingsStorageService: SettingsStorageService,
+        private _tradeGuardService: TradeGuardService) {
     }
 
     initTimer() {
@@ -21,7 +23,11 @@ export class TradeGuardTrackingService {
         this._initialized = true;
 
         setInterval(() => {
-            this._checkTradeGuardItems();
+            this._settingsStorageService.getSettings().subscribe((_) => {
+                if (_.ActiveTradingFeedback) {
+                    this._checkTradeGuardItems();
+                }
+            });
         }, this._timeout);
     }
 
