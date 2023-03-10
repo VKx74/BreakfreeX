@@ -50,7 +50,7 @@
     "continueAlert": "Ви дійсно бажайте продовжити це сповіщення?",
     "removeAlert": "Ви дійсно бажайте видалити це сповіщення?",
     "restartAllInactiveQuestion": "Ви дійсно бажайте перезапустити всі неактивні?",
-    "deleteAllInactiveQuestion": "Ви дійсно бажайте видалити всі неактивні?",
+    "deleteAllInactiveQuestion": "Ви дійсно бажайте видалити всі?",
     "stopAllQuestion": "Ви дійсно бажайте зупинити всі активні?",
     "setAlert": "Добавити сповіщення",
     "forCurrentSymbol": "Тільки для поточного символу",

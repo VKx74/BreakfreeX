@@ -88,12 +88,16 @@ export class AlertComponent extends BaseLayoutItem {
     });
   }
 
-  deleteAllInactive() {
+  removeAllAlerts() {
     this._dialog.open(ConfirmModalComponent, {
       data: {
         message: this._translateService.get('alertWidget.deleteAllInactiveQuestion'),
         onConfirm: () => {
-          this._deleteAllInactive();
+          if (this.selectedTabIndex === AlertTabs.PriceAlerts) {
+            this._removeAllPriceAlerts();
+          } else if (this.selectedTabIndex === AlertTabs.SonarAlerts) {
+            this._removeAllSonarAlerts();
+          }
         }
       }
     });
@@ -101,7 +105,7 @@ export class AlertComponent extends BaseLayoutItem {
 
   private _restartAll() {
     this._alertsService.startAllAlerts().subscribe(() => {
-        this._alertService.success(this._translateService.get('alertsRestarted'));
+      this._alertService.success(this._translateService.get('alertsRestarted'));
     });
     // const alerts = this.alerts$.getValue();
     // const inactiveAlerts = alerts ? alerts.filter(a => !a.isStarted) : [];
@@ -146,25 +150,16 @@ export class AlertComponent extends BaseLayoutItem {
     // }
   }
 
-  private _deleteAllInactive() {
-    
-    // const alerts = this.alerts$.getValue();
-    // const inactiveAlerts = alerts ? alerts.filter(a => !a.isStarted) : [];
+  private _removeAllPriceAlerts() {
+    this._alertsService.deleteAllPriceAlert().subscribe(() => {
+      this._alertService.success(this._translateService.get('alertsRemoved'));
+    });
+  }
 
-    // if (inactiveAlerts.length) {
-    //   forkJoin(
-    //     inactiveAlerts
-    //       .map((a) => {
-    //         return this._processAlertAction(this._autoTradingAlertService.deleteAlert(a.externalId), a.externalId);
-    //       })
-    //   )
-    //     .subscribe(values => {
-    //       this._alertService.success(this._translateService.get('alertsRemoved'));
-    //     }, errors => {
-    //       this._alertService.error(this._translateService.get('failedToRemoveAlerts'));
-    //       console.log(errors);
-    //     });
-    // }
+  private _removeAllSonarAlerts() {
+    this._alertsService.deleteAllSonarAlert().subscribe(() => {
+      this._alertService.success(this._translateService.get('alertsRemoved'));
+    });
   }
 
   public handleOpenChart(alert: AlertBase) {
