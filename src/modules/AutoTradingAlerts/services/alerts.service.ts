@@ -115,6 +115,18 @@ export class AlertsService {
         }));
     }
 
+    deleteAllPriceAlert(): Observable<any> {
+        return this._alertRestClient.deleteAllPriceAlert().pipe(map(() => {
+            this.removePriceAlerts();
+        }));
+    }
+
+    deleteAllSonarAlert(): Observable<any> {
+        return this._alertRestClient.deleteAllSonarAlert().pipe(map(() => {
+            this.removeSonarAlerts();
+        }));
+    }
+
     loadAlerts(): Observable<AlertBase[]> {
         return this._alertRestClient.loadAlerts().pipe(map((result: AlertBaseDTO[]) => {
             let res: AlertBase[] = [];
@@ -319,6 +331,30 @@ export class AlertsService {
             this._alerts.splice(index, 1);
             this.onAlertsChanged.next();
         }
+    }
+
+    private removeSonarAlerts() {
+        for (let i = 0; i < this._alerts.length; i++) {
+            let alert = this._alerts[i];
+            if (alert.type === AlertType.SonarAlert) {
+                this._alerts.splice(i, 1);
+                i--;
+            }
+        }
+        
+        this.onAlertsChanged.next();
+    }
+
+    private removePriceAlerts() {
+        for (let i = 0; i < this._alerts.length; i++) {
+            let alert = this._alerts[i];
+            if (alert.type === AlertType.PriceAlert) {
+                this._alerts.splice(i, 1);
+                i--;
+            }
+        }
+        
+        this.onAlertsChanged.next();
     }
 
     private addAlert(alert: AlertBase) {

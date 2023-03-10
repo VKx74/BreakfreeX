@@ -34,6 +34,14 @@ export class AlertRestClient {
         return this._http.delete(`${this._url}RemoveAlert/${alertId}`);
     }
 
+    deleteAllPriceAlert(): Observable<any> {
+        return this._http.delete(`${this._url}RemovePriceAlerts`);
+    }
+
+    deleteAllSonarAlert(): Observable<any> {
+        return this._http.delete(`${this._url}RemoveSonarAlerts`);
+    }
+
     loadAlerts(): Observable<AlertBaseDTO[]> {
         return this._http.get<AlertBaseDTO[]>(`${this._url}Alerts`);
     }
