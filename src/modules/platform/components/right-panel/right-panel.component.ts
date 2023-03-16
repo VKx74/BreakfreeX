@@ -28,7 +28,7 @@ export class RightPanelComponent implements OnInit {
     protected _panelFullScreenSize: number = 768;
 
     public Components = Components;
-    public SelectedComponent: Components = Components.Academy;
+    public SelectedComponent: Components = Components.SonarFeed;
 
     @Input() isCollapsed: boolean = false;
     @Output() isCollapsedChange = new EventEmitter<boolean>();
@@ -103,9 +103,9 @@ export class RightPanelComponent implements OnInit {
                         break;
                     }
                 }
-                this.SelectedComponent = isExist ? savedComponent : Components.Academy;
+                this.SelectedComponent = isExist ? savedComponent : Components.SonarFeed;
             } else {
-                this.SelectedComponent = Components.Academy;
+                this.SelectedComponent = Components.SonarFeed;
             }
 
             if (this._isInitializedSubscription) {
