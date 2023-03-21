@@ -47,7 +47,10 @@ export class ScannerStrategyBacktestComponent {
     public availableRTDType: string[] = ["Daily", "Hourly", "Same"];
     public backtestInstruments: BacktestInstruments[] = [BacktestInstruments.ChartInstrument, BacktestInstruments.ForexMajor, BacktestInstruments.ForexMinors, BacktestInstruments.ForexExotics, BacktestInstruments.Indices, BacktestInstruments.Commodities, BacktestInstruments.Metals, BacktestInstruments.Bonds];
     public backtestTimeFrames: ITimeFrame[] = [
+        { periodicity: "", interval: 1 },
+        { periodicity: "", interval: 5 },
         { periodicity: "", interval: 15 },
+        { periodicity: "", interval: 30 },
         { periodicity: "h", interval: 1 },
         { periodicity: "h", interval: 4 },
         { periodicity: "d", interval: 1 },
