@@ -13,10 +13,26 @@
             </span>
          </div>
 
-         <div class="row">
+         <!-- <div class="row">
             <span class="value1">RTD timeframe:</span><span class="value2">
                <selector [options]="availableRTDType" [placeholder]="'Select RTD Timeframe'" [(ngModel)]="rtd_timeframe"
                   class="bft-form-select"></selector>
+            </span>
+         </div> -->
+
+         <div class="row">
+            <span class="value1">Backtest Instruments:</span><span class="value2">
+               <selector [optionCaption]="backtestInstrumentCaption" [options]="backtestInstruments"
+                  [placeholder]="'Backtest Instruments'" [(ngModel)]="backtestInstrument" class="bft-form-select">
+               </selector>
+            </span>
+         </div>
+
+         <div class="row" [ngClass]="{'disabled': backtestInstrument == BacktestInstruments.ChartInstrument}">
+            <span class="value1">Backtest Timeframe:</span><span class="value2">
+               <selector [optionCaption]="backtestTimeFrameCaption" [options]="backtestTimeFrames"
+                  [placeholder]="'Backtest TimeFrames'" [(ngModel)]="backtestTimeFrame" class="bft-form-select">
+               </selector>
             </span>
          </div>
 
@@ -53,21 +69,21 @@
                </span>
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
                <span class="value1">Min threshold:</span><span class="value2">
                   <mat-form-field class="crypto-input bft-form-input">
                      <input matInput type="number" [(ngModel)]="min_threshold" min="0" max="1" step="0.1">
                   </mat-form-field>
                </span>
-            </div>
+            </div> -->
 
-            <div class="row">
+            <!-- <div class="row">
                <span class="value1">Validation Url:</span><span class="value2">
                   <mat-form-field class="crypto-input bft-form-input">
                      <input matInput type="text" [(ngModel)]="validation_url">
                   </mat-form-field>
                </span>
-            </div>
+            </div> -->
 
             <div class="row">
                <span class="value1">Single Position:</span><span class="value2">
@@ -78,112 +94,142 @@
             </div>
 
 
-         <div>
-            <div class="row">
-               <span class="value1">MESA Global Fast:</span><span class="value2">
-                  <mat-form-field class="crypto-input bft-form-input">
-                     <input matInput type="number" [(ngModel)]="global_fast" min="0.0001" max="100" step="0.0001">
-                  </mat-form-field>
-               </span>
-            </div>
+            <div>
+               <div class="row">
+                  <span class="value1">MESA Global Fast:</span><span class="value2">
+                     <mat-form-field class="crypto-input bft-form-input">
+                        <input matInput type="number" [(ngModel)]="global_fast" min="0.0001" max="100" step="0.0001">
+                     </mat-form-field>
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">MESA Global Slow:</span><span class="value2">
-                  <mat-form-field class="crypto-input bft-form-input">
-                     <input matInput type="number" [(ngModel)]="global_slow" min="0.0001" max="100" step="0.0001">
-                  </mat-form-field>
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">MESA Global Slow:</span><span class="value2">
+                     <mat-form-field class="crypto-input bft-form-input">
+                        <input matInput type="number" [(ngModel)]="global_slow" min="0.0001" max="100" step="0.0001">
+                     </mat-form-field>
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">MESA Local Fast:</span><span class="value2">
-                  <mat-form-field class="crypto-input bft-form-input">
-                     <input matInput type="number" [(ngModel)]="local_fast" min="0.0001" max="100" step="0.0001">
-                  </mat-form-field>
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">MESA Local Fast:</span><span class="value2">
+                     <mat-form-field class="crypto-input bft-form-input">
+                        <input matInput type="number" [(ngModel)]="local_fast" min="0.0001" max="100" step="0.0001">
+                     </mat-form-field>
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">MESA Local Slow:</span><span class="value2">
-                  <mat-form-field class="crypto-input bft-form-input">
-                     <input matInput type="number" [(ngModel)]="local_slow" min="0.0001" max="100" step="0.0001">
-                  </mat-form-field>
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">MESA Local Slow:</span><span class="value2">
+                     <mat-form-field class="crypto-input bft-form-input">
+                        <input matInput type="number" [(ngModel)]="local_slow" min="0.0001" max="100" step="0.0001">
+                     </mat-form-field>
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Max objects on chart:</span><span class="value2">
-                  <mat-form-field class="crypto-input bft-form-input">
-                     <input matInput type="number" [(ngModel)]="maxCount" min="0" max="500" step="1">
-                  </mat-form-field>
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">Max objects on chart:</span><span class="value2">
+                     <mat-form-field class="crypto-input bft-form-input">
+                        <input matInput type="number" [(ngModel)]="maxCount" min="0" max="500" step="1">
+                     </mat-form-field>
+                  </span>
+               </div>
 
-            <div class="row entries">
-               <span class="value header"> <span class="leftbord"></span>Result</span>
-            </div>
+               <div class="row entries">
+                  <span class="value header"> <span class="leftbord"></span>Status</span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Instrument:</span><span class="value2">
-                  {{Instrument}}
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">{{Status}}</span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Start date:</span><span class="value2">
-                  {{StartDate}}
-               </span>
-            </div>
+               <div class="row entries">
+                  <span class="value header"> <span class="leftbord"></span>Total</span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Signals count:</span><span class="value2">
-                  {{SignalsCount}}
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">Signals count:</span><span class="value2">
+                     {{BacktestPerformance.SignalsCount}}
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Orders count:</span><span class="value2">
-                  {{OrdersCount}}
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">Orders count:</span><span class="value2">
+                     {{BacktestPerformance.OrdersCount}}
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Win trades count:</span><span class="value2">
-                  {{WinTradeCount}}
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">Win trades count:</span><span class="value2">
+                     {{BacktestPerformance.WinTradeCount}}
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Loss trades count:</span><span class="value2">
-                  {{LossTradeCount}}
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">Loss trades count:</span><span class="value2">
+                     {{BacktestPerformance.LossTradeCount}}
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Win/Loss ratio:</span><span class="value2">
-                  {{WinLossRatio}}
-               </span>
-            </div>
+               <div class="row">
+                  <span class="value1">Win/Loss ratio:</span><span class="value2">
+                     {{BacktestPerformance.WinLossRatio}}
+                  </span>
+               </div>
 
-            <div class="row">
-               <span class="value1">Total PL:</span><span class="value2">
-                  {{TotalPerformance}}
-               </span>
-            </div>
-
-            <div class="row entries">
-               <span class="value header"> <span class="leftbord"></span>Status</span>
-            </div>
-
-            <div class="row">
-               <span class="value1">{{Status}}</span>
-            </div>
-
-            <div class="row">
+               <!-- <div class="row">
                <span class="value2"><button class="crypto-button" (click)="export()">Export CSV</button></span>
+            </div> -->
+
+               <hr *ngIf="backtestResult && backtestResult.length" />
+
+               <div class="row entries" *ngIf="backtestResult && backtestResult.length">
+                  <span class="value header"> <span class="leftbord"></span>Results</span>
+               </div>
+
+               <div class="instrument-result" *ngFor="let backtest of backtestResult">
+                  <div class="row">
+                     <span class="value1">Instrument:</span><span class="value2">
+                        {{backtest.instrument.symbol}}
+                     </span>
+                  </div>  
+                  <div class="row">
+                     <span class="value1">Signals count:</span><span class="value2">
+                        {{backtest.performance.SignalsCount}}
+                     </span>
+                  </div>
+
+                  <div class="row">
+                     <span class="value1">Orders count:</span><span class="value2">
+                        {{backtest.performance.OrdersCount}}
+                     </span>
+                  </div>
+
+                  <div class="row">
+                     <span class="value1">Win trades count:</span><span class="value2">
+                        {{backtest.performance.WinTradeCount}}
+                     </span>
+                  </div>
+
+                  <div class="row">
+                     <span class="value1">Loss trades count:</span><span class="value2">
+                        {{backtest.performance.LossTradeCount}}
+                     </span>
+                  </div>
+
+                  <div class="row">
+                     <span class="value1">Win/Loss ratio:</span><span class="value2">
+                        {{backtest.performance.WinLossRatio}}
+                     </span>
+                  </div>
+                  <div class="row">
+                     <span class="value1"><button class="crypto-button" (click)="visualize(backtest)">Plot Signals</button></span>
+                     <!-- <span class="value2"><button class="crypto-button" (click)="backtest()">Backtest</button></span> -->
+                  </div>
+         
+               </div>
+
             </div>
+
 
          </div>
-
-
-      </div>

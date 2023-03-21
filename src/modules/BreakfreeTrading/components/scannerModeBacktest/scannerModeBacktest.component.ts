@@ -1,8 +1,30 @@
-import { Component, EventEmitter, Input, Output, Injector, Inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Injector, Inject, ChangeDetectorRef } from '@angular/core';
 import { BreakfreeTradingBacktestService } from 'modules/BreakfreeTrading/services/breakfreeTradingBacktest.service';
 import { IInstrument } from '@app/models/common/instrument';
-import { IBFTAOrder, IBFTScannerBacktestAlgoParameters, IBFTAScannerBacktestResponse, IBFTAScannerSignal, IBFTAValidationData } from '@app/services/algo.service';
+import { IBFTAOrder, IBFTScannerBacktestAlgoParameters, IBFTAScannerBacktestResponse, IBFTAScannerSignal, IBFTAValidationData, ITimeFrame } from '@app/services/algo.service';
 import { AlertService } from '@alert/services/alert.service';
+import { of } from 'rxjs';
+import { InstrumentService } from '@app/services/instrument.service';
+import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
+
+enum BacktestInstruments {
+    ChartInstrument, ForexMajor, ForexMinors, ForexExotics, Indices, Commodities, Metals, Bonds
+}
+
+interface BacktestPerformance {
+    SignalsCount: string;
+    OrdersCount: string;
+    WinTradeCount: string;
+    LossTradeCount: string;
+    WinLossRatio: string;
+}
+
+interface BacktestResult {
+    response: IBFTAScannerBacktestResponse;
+    instrument: IInstrument;
+    timeFrame: ITimeFrame;
+    performance: BacktestPerformance;
+}
 
 @Component({
     selector: 'ScannerStrategyBacktest',
@@ -10,6 +32,7 @@ import { AlertService } from '@alert/services/alert.service';
     styleUrls: ['./scannerModeBacktest.component.scss']
 })
 export class ScannerStrategyBacktestComponent {
+    BacktestInstruments = BacktestInstruments;
     private _csvResult: string;
 
     @Input()
@@ -19,101 +42,241 @@ export class ScannerStrategyBacktestComponent {
     @Output()
     public ClearData = new EventEmitter();
 
+    public backtestResult: BacktestResult[] = [];
     public availableType: string[] = ["EXT", "SwingN", "SwingExt", "BRC"];
     public availableRTDType: string[] = ["Daily", "Hourly", "Same"];
+    public backtestInstruments: BacktestInstruments[] = [BacktestInstruments.ChartInstrument, BacktestInstruments.ForexMajor, BacktestInstruments.ForexMinors, BacktestInstruments.ForexExotics, BacktestInstruments.Indices, BacktestInstruments.Commodities, BacktestInstruments.Metals, BacktestInstruments.Bonds];
+    public backtestTimeFrames: ITimeFrame[] = [
+        { periodicity: "", interval: 15 },
+        { periodicity: "h", interval: 1 },
+        { periodicity: "h", interval: 4 },
+        { periodicity: "d", interval: 1 },
+    ];
 
-    public barsCount: number = 100;
+    public barsCount: number = 3000;
     public slRatio: number = 1.7;
     public maxCount: number = 100;
-    public breakevenCandles: number = 10;
-    public cancellationCandles: number = 0;
+    public breakevenCandles: number = 0;
+    public cancellationCandles: number = 10;
     public global_fast: number = 0.25;
     public global_slow: number = 0.05;
     public local_fast: number = 1.2;
     public local_slow: number = 0.6;
     public min_threshold: number = 0.5;
     public validation_url: string = "";
-    public singlePosition: boolean = true;
+    public singlePosition: boolean = false;
     public type: string = this.availableType[0];
+    public backtestInstrument: BacktestInstruments = BacktestInstruments.ChartInstrument;
+    public backtestTimeFrame: ITimeFrame = this.backtestTimeFrames[0];
     public rtd_timeframe: string = this.availableRTDType[0];
 
     public Status: string = "-";
-    public Instrument: string = "";
-    public StartDate: string = "";
-    public SignalsCount: string = "";
-    public OrdersCount: string = "";
-    public WinTradeCount: string = "";
-    public LossTradeCount: string = "";
-    public WinLossRatio: string = "";
-    public TotalPerformance: string = "";
+    public BacktestPerformance: BacktestPerformance;
 
-    constructor(private _alertService: AlertService, protected _bftService: BreakfreeTradingBacktestService) {
+    constructor(private _alertService: AlertService, protected _bftService: BreakfreeTradingBacktestService, protected _instrumentService: InstrumentService, protected _cdr: ChangeDetectorRef) {
+        this.BacktestPerformance = {
+            SignalsCount: "",
+            OrdersCount: "",
+            WinTradeCount: "",
+            LossTradeCount: "",
+            WinLossRatio: ""
+        };
+        this.backtestResult = [];
     }
 
     clear() {
         this.Processing.emit(true);
         this.Status = "-";
-        this.Instrument = "";
-        this.StartDate = "";
-        this.SignalsCount = "";
-        this.OrdersCount = "";
-        this.WinTradeCount = "";
-        this.LossTradeCount = "";
-        this.WinLossRatio = "";
-        this.TotalPerformance = "";
+        this.BacktestPerformance = {
+            SignalsCount: "",
+            OrdersCount: "",
+            WinTradeCount: "",
+            LossTradeCount: "",
+            WinLossRatio: ""
+        };
+        this.backtestResult = [];
         this.ClearData.emit();
         this.Processing.emit(false);
     }
 
-    async backtest() {
+    backtestInstrumentCaption = (option: BacktestInstruments) => {
+        let specific = this.backtestInstrumentSpecific(option);
+        return of(specific);
+    }
 
+    backtestTimeFrameCaption = (option: ITimeFrame) => {
+        if (option.periodicity === "d") {
+            return of(`${option.interval} day(s)`);
+        }
+        if (option.periodicity === "h") {
+            return of(`${option.interval} hour(s)`);
+        }
+        return of(`${option.interval} minute(s)`);
+    }
+
+    backtestInstrumentSpecific(option: BacktestInstruments) {
+        switch (option) {
+            case BacktestInstruments.ChartInstrument: return "Selected Chart";
+            case BacktestInstruments.Bonds: return "Bonds";
+            case BacktestInstruments.Commodities: return "Commodities";
+            case BacktestInstruments.ForexExotics: return "Forex Exotics";
+            case BacktestInstruments.ForexMajor: return "Forex Major";
+            case BacktestInstruments.ForexMinors: return "Forex Minor";
+            case BacktestInstruments.Indices: return "Indices";
+            case BacktestInstruments.Metals: return "Metals";
+        }
+    }
+
+    async getInstruments(): Promise<IInstrument[]> {
+        if (this.backtestInstrument === BacktestInstruments.ChartInstrument) {
+            let chart = this.SelectedChart;
+            return [chart.instrument as IInstrument];
+        }
+
+        return new Promise<IInstrument[]>((resolve, reject) => {
+            this._instrumentService.getInstruments(EExchangeInstance.OandaExchange).subscribe((instruments) => {
+                let result = [];
+                let specific = this.backtestInstrumentSpecific(this.backtestInstrument);
+                for (let instrument of instruments) {
+                    if (instrument.specific === specific) {
+                        result.push(instrument);
+                    }
+                }
+                resolve(result);
+            });
+        });
+    }
+
+    getTimeframe(): ITimeFrame {
+        if (this.backtestInstrument === BacktestInstruments.ChartInstrument) {
+            let chart = this.SelectedChart;
+            return chart.timeFrame;
+        }
+
+        return this.backtestTimeFrame;
+    }
+
+    async backtest() {
         this.clear();
 
-        let chart = this.SelectedChart;
-
-        if (!chart) {
-            this._alertService.error("Chart not selected");
-            return;
-        }
-
-        let backtestParameters: IBFTScannerBacktestAlgoParameters = {
-            input_accountsize: 1000,
-            account_currency: "USD",
-            input_risk: 3.5,
-            input_splitpositions: 1,
-            replay_back: this.barsCount,
-            input_stoplossratio: this.slRatio,
-            instrument: chart.instrument as IInstrument,
-            timeframe: chart.timeFrame,
-            breakeven_candles: this.breakevenCandles,
-            time: new Date().getTime(),
-            timenow: new Date().getTime(),
-            cancellation_candles: this.cancellationCandles,
-            single_position: this.singlePosition,
-            type: this.type,
-            rtd_timeframe: this.rtd_timeframe,
-            global_fast: this.global_fast,
-            global_slow: this.global_slow,
-            local_fast: this.local_fast,
-            local_slow: this.local_slow,
-            min_threshold: this.min_threshold,
-            validation_url: this.validation_url
-        };
-
-        if (!this.validateInputParameters(backtestParameters)) {
-            return;
-        }
+        let instruments = await this.getInstruments();
+        let timeframe = this.getTimeframe();
 
         this.Status = "Calculating...";
         this.Processing.emit(true);
-        let backtestResults: IBFTAScannerBacktestResponse;
-        try {
-            backtestResults = await this._bftService.backtestScanner(backtestParameters);
-        } catch (error) {
-            this._alertService.error("Failed to calculate backtest");
-            this.Processing.emit(false);
+
+        let result: BacktestResult[] = [];
+        let signals: IBFTAScannerSignal[] = [];
+        let orders: IBFTAOrder[] = [];
+        let index = 0;
+        for (let instrument of instruments) {
+            this.Status = `Calculating ${instrument.symbol}, ${index}/${instruments.length}`;
+            index++;
+
+            this._cdr.detectChanges();
+
+            let backtestParameters: IBFTScannerBacktestAlgoParameters = {
+                input_accountsize: 1000,
+                account_currency: "USD",
+                input_risk: 3.5,
+                input_splitpositions: 1,
+                replay_back: this.barsCount,
+                input_stoplossratio: this.slRatio,
+                instrument: instrument,
+                timeframe: timeframe,
+                breakeven_candles: this.breakevenCandles,
+                time: new Date().getTime(),
+                timenow: new Date().getTime(),
+                cancellation_candles: this.cancellationCandles,
+                single_position: this.singlePosition,
+                type: this.type,
+                rtd_timeframe: this.rtd_timeframe,
+                global_fast: this.global_fast,
+                global_slow: this.global_slow,
+                local_fast: this.local_fast,
+                local_slow: this.local_slow,
+                min_threshold: this.min_threshold,
+                validation_url: this.validation_url
+            };
+
+            if (!this.validateInputParameters(backtestParameters)) {
+                continue;
+            }
+
+            let backtestResults: IBFTAScannerBacktestResponse;
+            try {
+                backtestResults = await this._bftService.backtestScanner(backtestParameters);
+                result.push({
+                    response: backtestResults,
+                    instrument: instrument,
+                    timeFrame: timeframe,
+                    performance: this.infoDateCalculation(backtestResults.signals, backtestResults.orders)
+                });
+                signals.push(...backtestResults.signals);
+                orders.push(...backtestResults.orders);
+            } catch (error) {
+                this._alertService.error("Failed to calculate backtest");
+                this.Processing.emit(false);
+            }
         }
-        let pricePrecision = (chart.instrument as IInstrument).pricePrecision;
+
+        this.BacktestPerformance = this.infoDateCalculation(signals, orders);
+        this.Status = "Done";
+        this.backtestResult = result;
+        this.Processing.emit(false);
+        this._alertService.success("Completed");
+    }
+
+    visualize(result: BacktestResult) {
+        setTimeout(() => {
+            this.ClearData.emit();
+        }, 1);
+
+        setTimeout(() => {
+            this.changeInstrument(result);
+        }, 100);
+    }
+
+    export() {
+        // this._csvResult = this.generateOrderDataCSV(backtestResults);
+        let pom = document.createElement('a');
+        let csvContent = this._csvResult;
+        let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        let url = URL.createObjectURL(blob);
+        pom.href = url;
+        pom.setAttribute('download', 'backtest_result.csv');
+        pom.click();
+        pom.remove();
+    }
+
+    private changeInstrument(result: BacktestResult) {
+        let chart = this.SelectedChart;
+        let selectedInterval = TradingChartDesigner.TimeFrame.timeFrameInterval(result.timeFrame);
+        if (chart.instrument.symbol === result.instrument.symbol && chart.timeInterval === selectedInterval) {
+            this.plotSignals(result);
+            return;
+        }
+
+        chart.switchOffReplayMode();
+        chart.refresh();
+        chart.refreshIndicators();
+
+        chart.instrument = Object.assign({}, result.instrument);
+        chart.timeFrame = TradingChartDesigner.TimeFrame.intervalTimeFrame(selectedInterval);
+        chart.sendBarsRequest();
+
+        let interval = setInterval(() => {
+            if (chart.instrument.symbol === result.instrument.symbol) {
+                clearInterval(interval);
+                this.plotSignals(result);
+            }
+        }, 1000);
+    }
+
+    private plotSignals(result: BacktestResult) {
+        let chart = this.SelectedChart;
+        let backtestResults = result.response;
+        let pricePrecision = result.instrument.pricePrecision;
         let lastCandleDate = chart.dataContext.dataRows[".date"].lastValue as Date;
 
         this.Status = "Grouping orders...";
@@ -202,22 +365,8 @@ export class ScannerStrategyBacktestComponent {
         chart.primaryPane.addShapes(shapes);
         chart.refreshAsync();
         chart.commandController.clearCommands();
-        this.Processing.emit(false);
-
-        this.infoDateCalculation(backtestResults, chart);
         this.Status = "Done";
-        this._csvResult = this.generateOrderDataCSV(backtestResults);
-    }
-
-    export() {
-        let pom = document.createElement('a');
-        let csvContent = this._csvResult;
-        let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        let url = URL.createObjectURL(blob);
-        pom.href = url;
-        pom.setAttribute('download', 'backtest_result.csv');
-        pom.click();
-        pom.remove();
+        this._alertService.success("Completed");
     }
 
     private validateInputParameters(params: IBFTScannerBacktestAlgoParameters): boolean {
@@ -257,30 +406,25 @@ export class ScannerStrategyBacktestComponent {
         return true;
     }
 
-    private infoDateCalculation(backtestResults: IBFTAScannerBacktestResponse, chart: TradingChartDesigner.Chart) {
-        if (backtestResults.signals.length) {
-            this.StartDate = new Date(backtestResults.signals[0].timestamp * 1000).toUTCString();
-        } else {
-            this.StartDate = "";
-        }
+    private infoDateCalculation(signals: IBFTAScannerSignal[], orders: IBFTAOrder[]): BacktestPerformance {
+        let winTradeCount = this.winTradeCount(orders);
+        let lossTradeCount = this.loosTradeCount(orders);
+        let winPerformance = this.winPerformance(orders);
+        let lossPerformance = this.lossPerformance(orders);
 
-        let pricePrecision = (chart.instrument as IInstrument).pricePrecision;
-        this.Instrument = this._captionText(chart);
-        this.SignalsCount = backtestResults.signals.length.toString();
-        this.OrdersCount = backtestResults.orders.length.toString();
-
-        let winTradeCount = this.winTradeCount(backtestResults.orders);
-        let lossTradeCount = this.loosTradeCount(backtestResults.orders);
-        let winPerformance = this.winPerformance(backtestResults.orders);
-        let lossPerformance = this.lossPerformance(backtestResults.orders);
-        this.WinTradeCount = winTradeCount.toString();
-        this.LossTradeCount = lossTradeCount.toString();
-        this.TotalPerformance = (winPerformance + lossPerformance).toFixed(pricePrecision);
 
         let total = (Math.abs(winPerformance) + Math.abs(lossPerformance));
         let winRatio = Math.abs(winPerformance) / total * 100;
         let loosRatio = Math.abs(lossPerformance) / total * 100;
-        this.WinLossRatio = `Win: ${winRatio.toFixed(1)}% - Loss: ${loosRatio.toFixed(1)}%`;
+        let winLossRatio = `Win: ${winRatio.toFixed(1)}% - Loss: ${loosRatio.toFixed(1)}%`;
+
+        return {
+            WinTradeCount: winTradeCount.toString(),
+            LossTradeCount: lossTradeCount.toString(),
+            OrdersCount: orders.length.toString(),
+            SignalsCount: signals.length.toString(),
+            WinLossRatio: winLossRatio
+        };
     }
 
     private winTradeCount(orders: IBFTAOrder[]): number {
@@ -307,7 +451,8 @@ export class ScannerStrategyBacktestComponent {
         let performance = 0;
         for (const order of orders) {
             if (order.pl && order.pl > 0) {
-                performance += order.pl;
+                // performance += order.pl;
+                performance++;
             }
         }
         return performance;
@@ -317,7 +462,8 @@ export class ScannerStrategyBacktestComponent {
         let performance = 0;
         for (const order of orders) {
             if (order.pl && order.pl < 0) {
-                performance += order.pl;
+                // performance += order.pl;
+                performance++;
             }
         }
         return performance;
@@ -440,7 +586,7 @@ export class ScannerStrategyBacktestComponent {
         res.push(["#", "Open Time", "Close/Cancel Time", "Chart", "Setup", "Side", "Entry Price", "SL", "TP",
             "SL Ratio", "Breakeven Candles", "Cancellation Candles",
             "Single Position", "Fast Local", "Slow Local", "Local Trend",
-            "Fast Global", "Slow Global", "Global Trend", "Order Status", "PNL", 
+            "Fast Global", "Slow Global", "Global Trend", "Order Status", "PNL",
             "RTD Glob Fast", "RTD Glob Slow", "RTD Loc Fast", "RTD Loc Slow", "RTD Glob Sp", "RTD Loc Sp", "RTD Glob Avg Sp(%)", "RTD Loc Avg Sp(%)",
             "EE", "EE1", "EE2", "EE3", "FE", "FE1", "FE2", "FE3", "ZE", "ZE1", "ZE2", "ZE3", "M18", "M28", "P18", "P28", "Good Trade Prob", "Bad Trade Prob"
         ]);
@@ -462,7 +608,6 @@ export class ScannerStrategyBacktestComponent {
             res.push([`${count}`,
             `${new Date(order.open_timestamp * 1000).toUTCString().replace(",", "")}`,
             `${closeTimeString}`,
-            `${this.Instrument}`,
             `${this.type}`,
             `${order.side}`,
             `${order.price}`,
