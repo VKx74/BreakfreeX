@@ -75,7 +75,10 @@ interface IScannerHistoryResults extends IScannerResults {
 }
 
 enum TimeFrames {
+    Min1 = "1 Min",
+    Min5 = "5 Min",
     Min15 = "15 Min",
+    Min30 = "30 Min",
     Hour1 = "1 Hour",
     Hour4 = "4 Hour",
     Day = "Daily",
@@ -105,13 +108,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _featuredGroupName: string = "Featured";
     private _otherGroupName: string = "Other";
     // private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
-    private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
+    private _supportedTimeframes: number[] = [60, 300, 900, 1800, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
     private _missionsChangedSubscription: Subscription;
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
-    public timeframes: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public timeframes: TimeFrames[] = [TimeFrames.Min1, TimeFrames.Min5, TimeFrames.Min15, TimeFrames.Min30, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
     public types: string[] = [this._featuredGroupName, InstrumentTypeName.MajorForex, InstrumentTypeName.ForexMinors, InstrumentTypeName.ForexExotics, InstrumentTypeName.Indices, InstrumentTypeName.Commodities, InstrumentTypeName.Metals, InstrumentTypeName.Bonds, InstrumentTypeName.Equities, InstrumentTypeName.Crypto, InstrumentTypeName.Other];
     public groupingField: string = "marketType";
     // public groups: string[] = [];
@@ -471,6 +474,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             case 1 * 60: return "1 Min";
             case 5 * 60: return "5 Min";
             case 15 * 60: return "15 Min";
+            case 30 * 60: return "30 Min";
             case 60 * 60: return "1 Hour";
             case 240 * 60: return "4 Hours";
             case 24 * 60 * 60: return "1 Day";
@@ -720,7 +724,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _getTfValue(activeTimeframe: string): number {
         const min = 60;
         switch (activeTimeframe) {
+            case TimeFrames.Min1: return min;
+            case TimeFrames.Min5: return min * 5;
             case TimeFrames.Min15: return min * 15;
+            case TimeFrames.Min30: return min * 30;
             case TimeFrames.Hour1: return min * 60;
             case TimeFrames.Hour4: return min * 60 * 4;
             case TimeFrames.Day: return min * 60 * 24;

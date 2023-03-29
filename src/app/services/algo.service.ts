@@ -150,6 +150,7 @@ export interface IBFTScannerBacktestAlgoParameters extends IBFTAlgoParameters {
     type: string;
     rtd_timeframe: string;
     validation_url: string;
+    rtd_tf: number;
 }
 
 export interface IBFTAHitTestAlgoParameters extends IBFTBacktestAlgoParameters {
