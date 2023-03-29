@@ -302,7 +302,49 @@ export class IdentityService {
         }
     }
 
+    is1MinAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial ||
+            this.subscriptionType === SubscriptionType.Discovery) {
+            return true;
+        }
+
+        return false;
+    }
+
+    is5MinAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial ||
+            this.subscriptionType === SubscriptionType.Discovery) {
+            return true;
+        }
+
+        return false;
+    }
+
     is15MinAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial ||
+            this.subscriptionType === SubscriptionType.Discovery) {
+            return true;
+        }
+
+        return false;
+    }
+
+    is30MinAllowed(): boolean {
         if (this.isAdmin) {
             return true;
         }
@@ -344,6 +386,38 @@ export class IdentityService {
         return false;
     }
 
+    is1MinAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.is1MinAllowed()) {
+            return false;
+        }
+
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
+
+        return true;
+    }
+
+    is5MinAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.is5MinAllowed()) {
+            return false;
+        }
+
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
+
+        return true;
+    }
+
     is15MinAllowedByLevel(level: number): boolean {
         if (this.isAdmin) {
             return true;
@@ -353,9 +427,25 @@ export class IdentityService {
             return false;
         }
 
-        if (level < this.basicLevel) {
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
+
+        return true;
+    }
+
+    is30MinAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.is30MinAllowed()) {
             return false;
         }
+
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
 
         return true;
     }
@@ -374,9 +464,9 @@ export class IdentityService {
             return true;
         }
 
-        if (level < this.basicLevel) {
-            return false;
-        }
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
 
         return true;
     }

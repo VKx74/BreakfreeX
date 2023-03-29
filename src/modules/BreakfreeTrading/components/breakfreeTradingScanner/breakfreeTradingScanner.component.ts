@@ -217,20 +217,22 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         this._initialized = true;
     }
 
-    is15MinSonarAccessRestriction(group: IGroupedResults): boolean {
-        const tfValue15Min = this.toTimeframe(60 * 15);
-        if (group.timeframe === tfValue15Min) {
-            return this.show15MinAccessRestriction();
+    isProAccessRestriction(group: IGroupedResults): boolean {
+        const tfValue1Min = this.toTimeframe(60 * 1);
+        const tfValue5Min = this.toTimeframe(60 * 5);
+        // const tfValue15Min = this.toTimeframe(60 * 15);
+        const tfValue30Min = this.toTimeframe(60 * 30);
+        if (group.timeframe === tfValue1Min) {
+            return this.show1MinAccessRestriction();
         }
-
-        return false;
-    }
-
-    isHourlySonarAccessRestriction(group: IGroupedResults): boolean {
-        const tfValue1H = this.toTimeframe(60 * 60);
-        const tfValue4H = this.toTimeframe(60 * 60 * 4);
-        if (group.timeframe === tfValue1H || group.timeframe === tfValue4H) {
-            return this.showHourlyAccessRestriction();
+        if (group.timeframe === tfValue5Min) {
+            return this.show5MinAccessRestriction();
+        }
+        // if (group.timeframe === tfValue15Min) {
+        //     return this.show15MinAccessRestriction();
+        // }
+        if (group.timeframe === tfValue30Min) {
+            return this.show30MinAccessRestriction();
         }
 
         return false;
@@ -248,6 +250,54 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         const _1HLevelRestriction = this.show1HLevelRestriction();
         const _1HAccessRestriction = this.showHourlyAccessRestriction();
         if (group.timeframe === tfValue1H && _1HLevelRestriction && !_1HAccessRestriction) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show1MinAccessRestriction(): boolean {
+        const is1MinAllowed = this._identityService.is1MinAllowed();
+        return !is1MinAllowed;
+    }
+
+    show1MinLevelRestriction() {
+        const level = this._tradingProfileService.level;
+        const is1MinAllowedByLevel = this._identityService.is1MinAllowedByLevel(level);
+        if (is1MinAllowedByLevel) {
+            return false;
+        }
+
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        const is1MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min1) !== -1;
+        if (is1MinSelected) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show5MinAccessRestriction(): boolean {
+        const is5MinAllowed = this._identityService.is5MinAllowed();
+        return !is5MinAllowed;
+    }
+
+    show5MinLevelRestriction() {
+        const level = this._tradingProfileService.level;
+        const is5MinAllowedByLevel = this._identityService.is5MinAllowedByLevel(level);
+        if (is5MinAllowedByLevel) {
+            return false;
+        }
+
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        const is5MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min5) !== -1;
+        if (is5MinSelected) {
             return true;
         }
 
@@ -272,6 +322,30 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
         const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
         if (is15MinSelected) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show30MinAccessRestriction(): boolean {
+        const is30MinAllowed = this._identityService.is30MinAllowed();
+        return !is30MinAllowed;
+    }
+
+    show30MinLevelRestriction() {
+        const level = this._tradingProfileService.level;
+        const is30MinAllowedByLevel = this._identityService.is30MinAllowedByLevel(level);
+        if (is30MinAllowedByLevel) {
+            return false;
+        }
+
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        const is30MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min30) !== -1;
+        if (is30MinSelected) {
             return true;
         }
 
@@ -324,10 +398,31 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             return false;
         }
 
+        const tfValue1Min = this.toTimeframe(60);
+        const _1MinLevelRestriction = this.show1MinLevelRestriction();
+        const _1MinAccessRestriction = this.show1MinAccessRestriction();
+        if (group.timeframe === tfValue1Min && (_1MinLevelRestriction || _1MinAccessRestriction)) {
+            return true;
+        }
+
+        const tfValue5Min = this.toTimeframe(60 * 5);
+        const _5MinLevelRestriction = this.show5MinLevelRestriction();
+        const _5MinAccessRestriction = this.show5MinAccessRestriction();
+        if (group.timeframe === tfValue5Min && (_5MinLevelRestriction || _5MinAccessRestriction)) {
+            return true;
+        }
+
         const tfValue15Min = this.toTimeframe(60 * 15);
         const _15MinLevelRestriction = this.show15MinLevelRestriction();
         const _15MinAccessRestriction = this.show15MinAccessRestriction();
         if (group.timeframe === tfValue15Min && (_15MinLevelRestriction || _15MinAccessRestriction)) {
+            return true;
+        }
+
+        const tfValue30Min = this.toTimeframe(60 * 30);
+        const _30MinLevelRestriction = this.show30MinLevelRestriction();
+        const _30MinAccessRestriction = this.show30MinAccessRestriction();
+        if (group.timeframe === tfValue30Min && (_30MinLevelRestriction || _30MinAccessRestriction)) {
             return true;
         }
 
