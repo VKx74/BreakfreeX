@@ -153,7 +153,11 @@ export class IndicatorDataProviderService {
             }
         }
 
-        return this._bftService.getBftIndicatorCalculationV2(bftParams);
+        if (indicator instanceof TradingChartDesigner.BreakfreeTradingML) {
+            return this._bftService.getBftIndicatorCalculationV3(bftParams);
+        } else {
+            return this._bftService.getBftIndicatorCalculationV2(bftParams);
+        }
     }
 }
 

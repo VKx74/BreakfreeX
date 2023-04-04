@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { WebsocketBase } from '@app/interfaces/socket/socketBase';
 import { BFTSocketService } from '@app/services/socket/bft.socket.service';
-import { AlgoService, IBFTAAlgoCacheItemResponse, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAlgoParameters, IBFTAMarketInfo, IBFTAPositionSize, IBFTAPositionSizeParameters, IBFTScannerCacheItem, IBFTScannerResponseHistoryItem, IRTDPayload } from '@app/services/algo.service';
+import { AlgoService, IBFTAAlgoCacheItemResponse, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAAlgoResponseV3, IBFTAlgoParameters, IBFTAMarketInfo, IBFTAPositionSize, IBFTAPositionSizeParameters, IBFTScannerCacheItem, IBFTScannerResponseHistoryItem, IRTDPayload } from '@app/services/algo.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { map } from 'rxjs/operators';
@@ -26,6 +26,10 @@ export class BreakfreeTradingService {
             return this.alogService.calculateV2Guest(params).toPromise();
         }
         return this.alogService.calculateV2(params).toPromise();
+    }
+
+    getBftIndicatorCalculationV3(params: IBFTAlgoParameters): Promise<IBFTAAlgoResponseV3> {
+        return this.alogService.calculateV3(params).toPromise();
     }
 
     getBftSonarHistoryCache(symbol: string, exchange: string, timeframe: number, time: number, id: any): Promise<IBFTAAlgoCacheItemResponse> {

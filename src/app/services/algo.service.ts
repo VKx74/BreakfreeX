@@ -292,6 +292,20 @@ export interface IBFTAAlgoResponseV2 {
     id: any;
 }
 
+export interface IBFTAAlgoResponseV3 {
+    levels: IBFTALevels;
+    trade: IBFTATradeV2;
+    lower_1_prob: string;
+    lower_2_prob: string;
+    upper_1_prob: string;
+    upper_2_prob: string;
+    support_prob: number;
+    resistance_prob: number;
+    support_ext_prob: number;
+    resistance_ext_prob: number;
+    id: any;
+}
+
 export interface IBFTAAlgoTrendResponse {
     globalTrend: IBFTATrend;
     localTrend: IBFTATrend;
@@ -540,6 +554,30 @@ export class AlgoService {
 
     calculateV2(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v2`, data).pipe(map(this._decrypt));
+    }
+
+    calculateV3(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV3> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v3`, data).pipe(map(this._decrypt)).pipe(map((_) => {
+            let support_prob = Number(_['support_prob']);
+            let resistance_prob = Number(_['resistance_prob']);
+            let support_ext_prob = Number(_['support_ext_prob']);
+            let resistance_ext_prob = Number(_['resistance_ext_prob']);
+
+            if (Number.isFinite(support_prob)) {
+                _['lower_1_prob'] = "" + (support_prob * 100).toFixed() + "%";
+            }
+            if (Number.isFinite(resistance_prob)) {
+                _['upper_1_prob'] = "" + (resistance_prob * 100).toFixed() + "%";
+            }
+            if (Number.isFinite(support_ext_prob)) {
+                _['lower_2_prob'] = "" + (support_ext_prob * 100).toFixed() + "%";
+            }
+            if (Number.isFinite(resistance_ext_prob)) {
+                _['upper_2_prob'] = "" + (resistance_ext_prob * 100).toFixed() + "%";
+            }
+
+            return _;
+        }));
     }
 
     calculateV2Guest(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {
