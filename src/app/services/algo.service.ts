@@ -296,8 +296,10 @@ export interface IBFTAAlgoResponseV3 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
     lower_1_prob: string;
+    lower_3_prob: string;
     lower_2_prob: string;
     upper_1_prob: string;
+    upper_3_prob: string;
     upper_2_prob: string;
     support_prob: number;
     resistance_prob: number;
@@ -564,16 +566,18 @@ export class AlgoService {
             let resistance_ext_prob = Number(_['resistance_ext_prob']);
 
             if (Number.isFinite(support_prob)) {
-                _['lower_1_prob'] = "" + (support_prob * 100).toFixed() + "%";
+                _['lower_1_prob'] = ".[AI.Neurone(" + (support_prob * 100).toFixed() + "%)]";
             }
             if (Number.isFinite(resistance_prob)) {
-                _['upper_1_prob'] = "" + (resistance_prob * 100).toFixed() + "%";
+                _['upper_1_prob'] = ".[AI.Neurone(" + (resistance_prob * 100).toFixed() + "%)]";
             }
             if (Number.isFinite(support_ext_prob)) {
-                _['lower_2_prob'] = "" + (support_ext_prob * 100).toFixed() + "%";
+                _['lower_2_prob'] = ".[AI.Neurone(Val)]";
+                _['lower_3_prob'] = ".[AI.Neurone(" + (support_ext_prob * 100).toFixed() + "%)]";
             }
             if (Number.isFinite(resistance_ext_prob)) {
-                _['upper_2_prob'] = "" + (resistance_ext_prob * 100).toFixed() + "%";
+                _['upper_2_prob'] = ".[AI.Neurone(Val)]";
+                _['upper_3_prob'] = ".[AI.Neurone(" + (resistance_ext_prob * 100).toFixed() + "%)]";
             }
 
             return _;
