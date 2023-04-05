@@ -566,18 +566,18 @@ export class AlgoService {
             let resistance_ext_prob = Number(_['resistance_ext_prob']);
 
             if (Number.isFinite(support_prob)) {
-                _['lower_1_prob'] = ".[AI.Neurone(" + (support_prob * 100).toFixed() + "%)]";
+                _['lower_1_prob'] = ".[AI.Neuron(" + (support_prob * 100).toFixed() + "%)]";
             }
             if (Number.isFinite(resistance_prob)) {
-                _['upper_1_prob'] = ".[AI.Neurone(" + (resistance_prob * 100).toFixed() + "%)]";
+                _['upper_1_prob'] = ".[AI.Neuron(" + (resistance_prob * 100).toFixed() + "%)]";
             }
             if (Number.isFinite(support_ext_prob)) {
-                _['lower_2_prob'] = ".[AI.Neurone(Val)]";
-                _['lower_3_prob'] = ".[AI.Neurone(" + (support_ext_prob * 100).toFixed() + "%)]";
+                _['lower_2_prob'] = ".[AI.Neuron(Val)]";
+                _['lower_3_prob'] = ".[AI.Neuron(" + (support_ext_prob * 100).toFixed() + "%)]";
             }
             if (Number.isFinite(resistance_ext_prob)) {
-                _['upper_2_prob'] = ".[AI.Neurone(Val)]";
-                _['upper_3_prob'] = ".[AI.Neurone(" + (resistance_ext_prob * 100).toFixed() + "%)]";
+                _['upper_2_prob'] = ".[AI.Neuron(Val)]";
+                _['upper_3_prob'] = ".[AI.Neuron(" + (resistance_ext_prob * 100).toFixed() + "%)]";
             }
 
             return _;
