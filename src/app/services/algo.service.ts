@@ -292,6 +292,17 @@ export interface IBFTAAlgoResponseV2 {
     id: any;
 }
 
+export interface SaRResponse {
+    r_p28: number;
+    r_p18: number;
+    r: number;
+    n: number;
+    s_m28: number;
+    s_m18: number;
+    s: number;
+    date: number;
+}
+
 export interface IBFTAAlgoResponseV3 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
@@ -306,6 +317,8 @@ export interface IBFTAAlgoResponseV3 {
     support_ext_prob: number;
     resistance_ext_prob: number;
     id: any;
+    sar: SaRResponse[];
+    sar_prediction: SaRResponse[];
 }
 
 export interface IBFTAAlgoTrendResponse {
@@ -560,10 +573,10 @@ export class AlgoService {
 
     calculateV3(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV3> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v3`, data).pipe(map(this._decrypt)).pipe(map((_) => {
-            let support_prob = Number(_['support_prob']);
-            let resistance_prob = Number(_['resistance_prob']);
-            let support_ext_prob = Number(_['support_ext_prob']);
-            let resistance_ext_prob = Number(_['resistance_ext_prob']);
+            let support_prob = _['support_prob'];
+            let resistance_prob = _['resistance_prob'];
+            let support_ext_prob = _['support_ext_prob'];
+            let resistance_ext_prob = _['resistance_ext_prob'];
 
             if (Number.isFinite(support_prob)) {
                 _['lower_1_prob'] = ".[AI.Neuron(" + (support_prob * 100).toFixed() + "%)]";

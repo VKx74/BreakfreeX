@@ -29,7 +29,33 @@ export class BreakfreeTradingService {
     }
 
     getBftIndicatorCalculationV3(params: IBFTAlgoParameters): Promise<IBFTAAlgoResponseV3> {
-        return this.alogService.calculateV3(params).toPromise();
+        return this.alogService.calculateV3(params).pipe(map((_) => {
+            // let test = _.sar.slice(-10);
+            // test = test.reverse();
+            // let last = _.sar[_.sar.length - 1];
+            // _.sar_prediction = [];
+            // let i = 1;
+            // let lastLevel = null;
+            // for (let s of test) {
+            //     let o = {...s};
+            //     o.date = last.date + (timeinterval * i);
+            //     i++;
+            //     _.sar_prediction.push(o);
+            //     lastLevel = o;
+            // }
+
+            if (_.sar_prediction && _.sar_prediction.length) {
+                let lastLevel = _.sar_prediction[_.sar_prediction.length - 1];
+                _.levels.p28 = lastLevel.r_p28;
+                _.levels.p18 = lastLevel.r_p18;
+                _.levels.ee = lastLevel.r;
+                _.levels.ze = lastLevel.s;
+                _.levels.m18 = lastLevel.s_m18;
+                _.levels.m28 = lastLevel.s_m28;
+                _.levels.fe = lastLevel.n;
+            }
+            return _;
+        })).toPromise();
     }
 
     getBftSonarHistoryCache(symbol: string, exchange: string, timeframe: number, time: number, id: any): Promise<IBFTAAlgoCacheItemResponse> {
