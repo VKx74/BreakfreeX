@@ -44,16 +44,16 @@ export class BreakfreeTradingService {
             //     lastLevel = o;
             // }
 
-            if (_.sar_prediction && _.sar_prediction.length) {
-                let lastLevel = _.sar_prediction[_.sar_prediction.length - 1];
-                _.levels.p28 = lastLevel.r_p28;
-                _.levels.p18 = lastLevel.r_p18;
-                _.levels.ee = lastLevel.r;
-                _.levels.ze = lastLevel.s;
-                _.levels.m18 = lastLevel.s_m18;
-                _.levels.m28 = lastLevel.s_m28;
-                _.levels.fe = lastLevel.n;
-            }
+            // if (_.sar_prediction && _.sar_prediction.length) {
+            //     let lastLevel = _.sar_prediction[_.sar_prediction.length - 1];
+            //     _.levels.p28 = lastLevel.r_p28;
+            //     _.levels.p18 = lastLevel.r_p18;
+            //     _.levels.ee = lastLevel.r;
+            //     _.levels.ze = lastLevel.s;
+            //     _.levels.m18 = lastLevel.s_m18;
+            //     _.levels.m28 = lastLevel.s_m28;
+            //     _.levels.fe = lastLevel.n;
+            // }
             return _;
         })).toPromise();
     }
