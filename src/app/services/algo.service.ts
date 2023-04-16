@@ -332,6 +332,8 @@ export interface IBFTAAlgoTrendResponse {
     globalSlowValue: number;
     localFastValue: number;
     localSlowValue: number;
+    globalAvg: number;
+    localAvg: number;
 }
 
 export interface IBFTAAlgoCacheItemResponse {
@@ -476,6 +478,8 @@ export interface IRTDPayload {
     global_trend_strength: string;
     local_trend_strength: string;
     general_trend: string[];
+    global_avg: number;
+    local_avg: number;
 }
 
 class AlgoServiceEncryptionHelper {
