@@ -34,6 +34,7 @@ export class BreakfreeTradingService {
             // test = test.reverse();
             // let last = _.sar[_.sar.length - 1];
             // _.sar_prediction = [];
+            
             // let i = 1;
             // let lastLevel = null;
             // for (let s of test) {
