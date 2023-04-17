@@ -319,6 +319,7 @@ export interface IBFTAAlgoResponseV3 {
     id: any;
     sar: SaRResponse[];
     sar_prediction: SaRResponse[];
+    rtd: IRTDPayload;
 }
 
 export interface IBFTAAlgoTrendResponse {
