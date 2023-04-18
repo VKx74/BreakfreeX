@@ -320,6 +320,8 @@ export interface IBFTAAlgoResponseV3 {
     sar: SaRResponse[];
     sar_prediction: SaRResponse[];
     rtd: IRTDPayload;
+    mema_prediction: number[];
+    fama_prediction: number[];
 }
 
 export interface IBFTAAlgoTrendResponse {
