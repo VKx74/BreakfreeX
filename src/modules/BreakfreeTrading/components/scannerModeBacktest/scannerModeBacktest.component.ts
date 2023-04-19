@@ -51,7 +51,6 @@ class TimeframeHelper {
 })
 export class ScannerStrategyBacktestComponent {
     BacktestInstruments = BacktestInstruments;
-    private _csvResult: string;
 
     @Input()
     public SelectedChart: TradingChartDesigner.Chart;
@@ -330,14 +329,13 @@ export class ScannerStrategyBacktestComponent {
         }, 100);
     }
 
-    export() {
-        // this._csvResult = this.generateOrderDataCSV(backtestResults);
+    export(result: BacktestResult) {
         let pom = document.createElement('a');
-        let csvContent = this._csvResult;
+        let csvContent = this.generateOrderDataCSV(result);
         let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         let url = URL.createObjectURL(blob);
         pom.href = url;
-        pom.setAttribute('download', 'backtest_result.csv');
+        pom.setAttribute('download', result.instrument.id + "_" + result.timeFrame.interval + result.timeFrame.periodicity + '.csv');
         pom.click();
         pom.remove();
     }
@@ -674,17 +672,15 @@ export class ScannerStrategyBacktestComponent {
         return `${instr.symbol} - ${instr.exchange} - ${tf.interval}${tf.periodicity || 'min'}`;
     }
 
-    protected generateOrderDataCSV(backtestResults: IBFTAScannerBacktestResponse): string {
-        let orders = backtestResults.orders;
+    protected generateOrderDataCSV(result: BacktestResult): string {
+        let backtestResult = result.response;
+        let orders = backtestResult.orders;
         let res = [];
         let count = 1;
 
-        res.push(["#", "Open Time", "Close/Cancel Time", "Chart", "Setup", "Side", "Entry Price", "SL", "TP",
+        res.push(["#", "Open Time", "Close/Cancel Time", "Setup", "Side", "Entry Price", "SL", "TP",
             "SL Ratio", "Breakeven Candles", "Cancellation Candles",
-            "Single Position", "Fast Local", "Slow Local", "Local Trend",
-            "Fast Global", "Slow Global", "Global Trend", "Order Status", "PNL",
-            "RTD Glob Fast", "RTD Glob Slow", "RTD Loc Fast", "RTD Loc Slow", "RTD Glob Sp", "RTD Loc Sp", "RTD Glob Avg Sp(%)", "RTD Loc Avg Sp(%)",
-            "EE", "EE1", "EE2", "EE3", "FE", "FE1", "FE2", "FE3", "ZE", "ZE1", "ZE2", "ZE3", "M18", "M28", "P18", "P28", "Good Trade Prob", "Bad Trade Prob"
+            "Local Trend", "Global Trend", "Order Status", "PNL", "EE", "FE", "ZE", "M18", "M28", "P18", "P28"
         ]);
 
         for (const order of orders) {
@@ -698,8 +694,7 @@ export class ScannerStrategyBacktestComponent {
                 closeTimeString = new Date(closeTime * 1000).toUTCString().replace(",", "");
             }
 
-            const signalData = this.getSignalByOrder(order.open_timestamp, backtestResults.signals);
-            const validationData = this.getValidationByTimestamp(order.open_timestamp, backtestResults.validation_data);
+            const signalData = this.getSignalByOrder(order.open_timestamp, backtestResult.signals);
 
             res.push([`${count}`,
             `${new Date(order.open_timestamp * 1000).toUTCString().replace(",", "")}`,
@@ -712,42 +707,17 @@ export class ScannerStrategyBacktestComponent {
             `${this.slRatio}`,
             `${this.breakevenCandles}`,
             `${this.cancellationCandles}`,
-            `${this.singlePosition}`,
-            `${this.local_fast}`,
-            `${this.local_slow}`,
-            `${this.getLocalTrend(backtestResults, order.open_timestamp)}`,
-            `${this.global_fast}`,
-            `${this.global_slow}`,
-            `${this.getGlobalTrend(backtestResults, order.open_timestamp)}`,
+            `${this.getLocalTrend(backtestResult, order.open_timestamp)}`,
+            `${this.getGlobalTrend(backtestResult, order.open_timestamp)}`,
             `${this.getOrderOutcome(order)}`,
             `${order.pl}`,
-
-            `${signalData.global_fast_value}`,
-            `${signalData.global_slow_value}`,
-            `${signalData.local_fast_value}`,
-            `${signalData.local_slow_value}`,
-            `${signalData.global_trend_spread_value}`,
-            `${signalData.local_trend_spread_value}`,
-            `${signalData.global_trend_spread * 100}`,
-            `${signalData.local_trend_spread * 100}`,
             `${signalData.data.levels.ee}`,
-            `${signalData.data.levels.ee1}`,
-            `${signalData.data.levels.ee2}`,
-            `${signalData.data.levels.ee3}`,
             `${signalData.data.levels.fe}`,
-            `${signalData.data.levels.fe1}`,
-            `${signalData.data.levels.fe2}`,
-            `${signalData.data.levels.fe3}`,
             `${signalData.data.levels.ze}`,
-            `${signalData.data.levels.ze1}`,
-            `${signalData.data.levels.ze2}`,
-            `${signalData.data.levels.ze3}`,
             `${signalData.data.levels.m18}`,
             `${signalData.data.levels.m28}`,
             `${signalData.data.levels.p18}`,
-            `${signalData.data.levels.p28}`,
-            `${validationData.good_trade}`,
-            `${validationData.bad_trade}`
+            `${signalData.data.levels.p28}`
             ]);
             count++;
         }

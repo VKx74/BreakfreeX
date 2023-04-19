@@ -122,7 +122,8 @@
                <div class="row" *ngIf="autoAdjustingMESA">
                   <span class="value1">MESA Global Fast End:</span><span class="value2">
                      <mat-form-field class="crypto-input bft-form-input">
-                        <input matInput type="number" [(ngModel)]="global_fast_max" min="0.0001" max="100" step="0.0001">
+                        <input matInput type="number" [(ngModel)]="global_fast_max" min="0.0001" max="100"
+                           step="0.0001">
                      </mat-form-field>
                   </span>
                </div>
@@ -137,7 +138,8 @@
                <div class="row" *ngIf="autoAdjustingMESA">
                   <span class="value1">MESA Global Slow End:</span><span class="value2">
                      <mat-form-field class="crypto-input bft-form-input">
-                        <input matInput type="number" [(ngModel)]="global_slow_max" min="0.0001" max="100" step="0.0001">
+                        <input matInput type="number" [(ngModel)]="global_slow_max" min="0.0001" max="100"
+                           step="0.0001">
                      </mat-form-field>
                   </span>
                </div>
@@ -190,50 +192,46 @@
 
                <div *ngFor="let backtestPerformance of BacktestPerformance">
 
-               <div class="row entries">
-                  <span class="value header"> <span class="leftbord"></span>Total</span>
-               </div>
+                  <div class="row entries">
+                     <span class="value header"> <span class="leftbord"></span>Total</span>
+                  </div>
 
-               <div class="row">
-                  <span class="value1">
-                  {{backtestPerformance.Parameters}}
-               </span>
-               </div>
+                  <div class="row">
+                     <span class="value1">
+                        {{backtestPerformance.Parameters}}
+                     </span>
+                  </div>
 
-               <div class="row">
-                  <span class="value1">Signals count:</span><span class="value2">
-                     {{backtestPerformance.SignalsCount}}
-                  </span>
-               </div>
+                  <div class="row">
+                     <span class="value1">Signals count:</span><span class="value2">
+                        {{backtestPerformance.SignalsCount}}
+                     </span>
+                  </div>
 
-               <div class="row">
-                  <span class="value1">Orders count:</span><span class="value2">
-                     {{backtestPerformance.OrdersCount}}
-                  </span>
-               </div>
+                  <div class="row">
+                     <span class="value1">Orders count:</span><span class="value2">
+                        {{backtestPerformance.OrdersCount}}
+                     </span>
+                  </div>
 
-               <div class="row">
-                  <span class="value1">Win trades count:</span><span class="value2">
-                     {{backtestPerformance.WinTradeCount}}
-                  </span>
-               </div>
+                  <div class="row">
+                     <span class="value1">Win trades count:</span><span class="value2">
+                        {{backtestPerformance.WinTradeCount}}
+                     </span>
+                  </div>
 
-               <div class="row">
-                  <span class="value1">Loss trades count:</span><span class="value2">
-                     {{backtestPerformance.LossTradeCount}}
-                  </span>
-               </div>
+                  <div class="row">
+                     <span class="value1">Loss trades count:</span><span class="value2">
+                        {{backtestPerformance.LossTradeCount}}
+                     </span>
+                  </div>
 
-               <div class="row">
-                  <span class="value1">Win/Loss ratio:</span><span class="value2">
-                     {{backtestPerformance.WinLossRatio}}
-                  </span>
+                  <div class="row">
+                     <span class="value1">Win/Loss ratio:</span><span class="value2">
+                        {{backtestPerformance.WinLossRatio}}
+                     </span>
+                  </div>
                </div>
-            </div>
-
-               <!-- <div class="row">
-               <span class="value2"><button class="crypto-button" (click)="export()">Export CSV</button></span>
-            </div> -->
 
                <hr *ngIf="backtestResult && backtestResult.length" />
 
@@ -247,7 +245,7 @@
                         <span class="value1">Instrument:</span><span class="value2">
                            {{backtest.instrument.symbol}}
                         </span>
-                     </div>  
+                     </div>
                      <div class="row">
                         <span class="value1">Signals count:</span><span class="value2">
                            {{backtest.performance.SignalsCount}}
@@ -278,10 +276,13 @@
                         </span>
                      </div>
                      <div class="row">
-                        <span class="value1"><button class="crypto-button" (click)="visualize(backtest)">Plot Signals</button></span>
+                        <span class="value1"><button class="crypto-button" (click)="visualize(backtest)">Plot
+                              Signals</button></span>
+                        <span class="value2"><button class="crypto-button" (click)="export(backtest)">Export
+                              CSV</button></span>
                         <!-- <span class="value2"><button class="crypto-button" (click)="backtest()">Backtest</button></span> -->
                      </div>
-            
+
                   </div>
                </ng-container>
             </div>
