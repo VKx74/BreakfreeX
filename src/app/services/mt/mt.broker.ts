@@ -573,6 +573,8 @@ export abstract class MTBroker implements IMTBroker {
         this.ws.setConnectivity(false);
         this.ws.dispose();
 
+        this._historyInitialized = false;
+
         return of({
             result: true
         });
@@ -815,7 +817,7 @@ export abstract class MTBroker implements IMTBroker {
         if (!this._initData) {
             return;
         }
-
+        
         const initData = this._initData;
         const request = new MTLoginRequest();
         request.Data = {

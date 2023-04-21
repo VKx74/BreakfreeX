@@ -86,7 +86,8 @@ export class DashboardComponent {
     readonly minRightPanelFullSize = 768;
 
     private get _isPro(): boolean {
-        return this._identityService.subscriptionType === SubscriptionType.Pro ||
+        return this._identityService.subscriptionType === SubscriptionType.AI ||
+            this._identityService.subscriptionType === SubscriptionType.Pro ||
             this._identityService.subscriptionType === SubscriptionType.Trial;
     }
 

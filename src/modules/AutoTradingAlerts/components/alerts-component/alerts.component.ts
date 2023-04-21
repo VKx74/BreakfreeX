@@ -17,6 +17,8 @@ import { IInstrument } from '@app/models/common/instrument';
 import { AlertService } from '@alert/services/alert.service';
 import { Actions, LinkingAction } from '@linking/models';
 import { BaseLayoutItem } from '@layout/base-layout-item';
+import { IdentityService } from '@app/services/auth/identity.service';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 export enum AlertTabs {
   PriceAlerts = 0,
@@ -42,7 +44,8 @@ export class AlertComponent extends BaseLayoutItem {
 
   constructor(@Inject(AutoTradingAlertsTranslateService) private _translateService: TranslateService,
     private _alertService: AlertService, protected _instrumentService: InstrumentService,
-    private _dialog: MatDialog, private _alertsService: AlertsService) {
+    private _dialog: MatDialog, private _alertsService: AlertsService,
+    protected _identityService: IdentityService) {
     super();
   }
 
@@ -230,4 +233,8 @@ export class AlertComponent extends BaseLayoutItem {
   protected getComponentState() {
     return null;
   }
+
+  private _processCheckout() {
+    this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+}
 }

@@ -63,7 +63,7 @@ export class BrokerService {
 
     public get isTradingAllowed(): boolean {
         // show MT Bridge for all users even without subscriptions
-        return true;
+        // return true;
         return this._identityService.isAuthorizedCustomer;
     }
     
@@ -118,7 +118,7 @@ export class BrokerService {
         if (!this.isTradingAllowed) {
             return of({
                 result: false,
-                msg: 'This broker has currently disabled trading on this account. Contact the broker directly.'
+                msg: 'Subscription required to use broker connections'
             });
         }
 
@@ -421,7 +421,7 @@ export class BrokerService {
         if (!this.isTradingAllowed) {
             return of({
                 result: false,
-                msg: 'This broker has currently disabled trading on this account. Contact the broker directly.'
+                msg: 'Subscription required to use broker connections'
             });
         }
         return new Observable<ActionResult>(subscriber => {

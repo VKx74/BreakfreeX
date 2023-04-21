@@ -8,6 +8,7 @@ import { AuthenticationService } from "@app/services/auth/auth.service";
 import { catchError, distinctUntilChanged, map, skip, tap } from "rxjs/operators";
 
 export enum SubscriptionType {
+    AI,
     Pro,
     Discovery,
     Starter,
@@ -60,7 +61,9 @@ export class IdentityService {
             return SubscriptionType.Free;
         }
         
-        if (this._isTrial) {
+        if (this._isAI) {
+            return SubscriptionType.AI;
+        } else if (this._isTrial) {
             return SubscriptionType.Trial;
         } else if (this._isPro) {
             return SubscriptionType.Pro;
@@ -203,6 +206,26 @@ export class IdentityService {
         }
 
         return false;
+    } 
+
+    private get _isAI(): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("AI") !== -1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }  
 
     private get _isDiscovery(): boolean {
@@ -308,8 +331,7 @@ export class IdentityService {
         }
 
         if (this.subscriptionType === SubscriptionType.Pro ||
-            this.subscriptionType === SubscriptionType.Trial ||
-            this.subscriptionType === SubscriptionType.Discovery) {
+            this.subscriptionType === SubscriptionType.AI) {
             return true;
         }
 
@@ -322,8 +344,7 @@ export class IdentityService {
         }
 
         if (this.subscriptionType === SubscriptionType.Pro ||
-            this.subscriptionType === SubscriptionType.Trial ||
-            this.subscriptionType === SubscriptionType.Discovery) {
+            this.subscriptionType === SubscriptionType.AI) {
             return true;
         }
 
@@ -335,7 +356,8 @@ export class IdentityService {
             return true;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
             this.subscriptionType === SubscriptionType.Trial ||
             this.subscriptionType === SubscriptionType.Discovery) {
             return true;
@@ -349,7 +371,8 @@ export class IdentityService {
             return true;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
             this.subscriptionType === SubscriptionType.Trial ||
             this.subscriptionType === SubscriptionType.Discovery) {
             return true;
@@ -363,7 +386,8 @@ export class IdentityService {
             return true;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
             this.subscriptionType === SubscriptionType.Trial ||
             this.subscriptionType === SubscriptionType.Discovery) {
             return true;
@@ -377,7 +401,8 @@ export class IdentityService {
             return true;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
             this.subscriptionType === SubscriptionType.Trial ||
             this.subscriptionType === SubscriptionType.Discovery) {
             return true;
@@ -459,11 +484,6 @@ export class IdentityService {
             return false;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
-            this.subscriptionType === SubscriptionType.Trial) {
-            return true;
-        }
-
         // if (level < this.basicLevel) {
         //     return false;
         // }
@@ -491,7 +511,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Breakfree Trading Lifetime Pro Plan"];
+        // this.subscriptions = ["Breakfree Trading AI"];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {

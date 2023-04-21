@@ -235,11 +235,6 @@ export class SonarFeedWallComponent implements OnInit {
         }, 300);
 
         this._scanFullMarket();
-        // if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
-        //     this._loadCount = 50;
-        // } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
-        //     this._loadCount = 50;
-        // }
     }
 
     ngOnInit() {
