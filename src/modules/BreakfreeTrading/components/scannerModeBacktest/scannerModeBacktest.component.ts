@@ -461,8 +461,8 @@ export class ScannerStrategyBacktestComponent {
     }
 
     private validateInputParameters(params: IBFTScannerBacktestAlgoParameters): boolean {
-        if (!params.replay_back || params.replay_back < 100 || params.replay_back > 10000) {
-            this._alertService.error("Bars count incorrect. Min 100 Max 10000.");
+        if (!params.replay_back || params.replay_back < 100 || params.replay_back > 100000) {
+            this._alertService.error("Bars count incorrect. Min 100 Max 100000.");
             return false;
         }
         if (!params.input_stoplossratio || params.input_stoplossratio < 0.1 || params.input_stoplossratio > 100) {
