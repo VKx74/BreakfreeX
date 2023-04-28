@@ -114,7 +114,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
-    public timeframes: TimeFrames[] = [TimeFrames.Min1, TimeFrames.Min5, TimeFrames.Min15, TimeFrames.Min30, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public timeframes: TimeFrames[] = [TimeFrames.Min1, TimeFrames.Min5, TimeFrames.Min15, TimeFrames.Min30, TimeFrames.Hour1, TimeFrames.Hour4];
     public types: string[] = [this._featuredGroupName, InstrumentTypeName.MajorForex, InstrumentTypeName.ForexMinors, InstrumentTypeName.ForexExotics, InstrumentTypeName.Indices, InstrumentTypeName.Commodities, InstrumentTypeName.Metals, InstrumentTypeName.Bonds, InstrumentTypeName.Equities, InstrumentTypeName.Crypto, InstrumentTypeName.Other];
     public groupingField: string = "marketType";
     // public groups: string[] = [];

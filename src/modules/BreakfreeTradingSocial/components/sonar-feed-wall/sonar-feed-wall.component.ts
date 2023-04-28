@@ -167,7 +167,7 @@ export class SonarFeedWallComponent implements OnInit {
     public initialized: boolean;
     public isSingleCardAllowed: boolean = true;
 
-    public allTimeFrames: TimeFrames[] = [TimeFrames.Min1, TimeFrames.Min5, TimeFrames.Min15, TimeFrames.Min30, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public allTimeFrames: TimeFrames[] = [TimeFrames.Min1, TimeFrames.Min5, TimeFrames.Min15, TimeFrames.Min30, TimeFrames.Hour1, TimeFrames.Hour4];
     public allowedTimeFrames: TimeFrames[] = [];
     public selectedTimeFrames: TimeFrames[];
     public prevSelectedTimeFrames: TimeFrames[];
@@ -1588,21 +1588,21 @@ export class SonarFeedWallComponent implements OnInit {
             this.prevSelectedTimeFrames = this.selectedTimeFrames;
         }
 
-        if (filteringParameters.setup && filteringParameters.setup.length) {
-            this.selectedTradeTypes = [];
-            for (const s of filteringParameters.setup) {
-                const i = this._mapTradeTypesToSetting(s);
-                if (this.allowedTradeTypes.indexOf(i) !== -1) {
-                    this.selectedTradeTypes.push(i);
-                }
-            }
+        // if (filteringParameters.setup && filteringParameters.setup.length) {
+        //     this.selectedTradeTypes = [];
+        //     for (const s of filteringParameters.setup) {
+        //         const i = this._mapTradeTypesToSetting(s);
+        //         if (this.allowedTradeTypes.indexOf(i) !== -1) {
+        //             this.selectedTradeTypes.push(i);
+        //         }
+        //     }
 
-            if (!this.selectedTradeTypes.length) {
-                this.selectedTradeTypes = this.allowedTradeTypes;
-            }
+        //     if (!this.selectedTradeTypes.length) {
+        //         this.selectedTradeTypes = this.allowedTradeTypes;
+        //     }
 
-            this.prevSelectedTradeTypes = this.selectedTradeTypes;
-        }
+        //     this.prevSelectedTradeTypes = this.selectedTradeTypes;
+        // }
 
         if (filteringParameters.type && filteringParameters.type.length) {
             this.selectedMarketTypes = [];
