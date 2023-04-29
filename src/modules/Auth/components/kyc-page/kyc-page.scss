@@ -10,9 +10,7 @@
   overflow: auto;
   font-family:  $primaryFontFamily;
 
-  .content {
-    max-width: 300px;
-  }
+
 
   /deep/.mat-horizontal-stepper-header-container {
     display: none;
@@ -26,4 +24,153 @@
   /deep/.form-wrapper {
     padding: 0px !important;
   }
+}
+
+.h1welcomeback{
+  font-size:24px;
+}
+
+span.continuewithx {
+  display: flex;
+  align-content: center;
+  padding-top: 24px;
+  padding-bottom: 12px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.content {
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+
+.orspan{
+
+
+  width: 270px;
+    text-align: center;
+    margin-top: -2px;
+  }
+
+  ::ng-deep .mat-input-element::placeholder{
+    color: #191919;
+    padding-left:0px !important;
+    margin-left: 0px !important;
+  }
+
+  .login-with-fb, .login-with-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:180px;
+}
+
+
+.continue{
+  font-size:12px;
+  line-height: 12px;
+}
+
+/deep/ .mat-form-field-infix{
+  display:flex !important;
+  align-items: flex-end !important;;
+
+}
+
+/deep/ .mat-form-field-flex {
+border-radius: 0px !important;
+border-top: none !important;
+border-left: none !important;
+border-right: none !important;
+padding:0px !important;
+height:50px !important;
+
+
+}
+/deep/ mat-form-field.crypto-input input, mat-form-field.mat-form-field-type-mat-input input {
+  border-radius: 0px !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding:0px !important;
+height:30px !important;
+font-size:13px !important;
+color:#000 !important;
+
+}
+/deep/ .mat-form-field-outline{
+  border-radius: 0px !important;
+  border-right-style: none;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding:0px !important;
+height:50px !important;
+}
+
+
+
+// span.splitter {
+//   width: 100%;
+//   margin-top: 10px;
+//   margin-bottom: 10px;
+//   display: block;
+//   height: 0.01rem;
+//   background: #19191963;
+// }
+
+.login_bg_container{
+  z-index: 0;
+  position:fixed;
+  width:100%;
+  height:100%;
+  opacity:0.3;
+}
+
+.form-wrapper {
+  padding: 0px !important;
+  width: 100% !important;
+}
+
+
+.beta {
+  margin-top: 24px;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  color: #1a1a1a;
+  text-align: center;
+  font-size: 12px;
+  border: 1px solid #000;
+  position: relative;
+  font-weight: 600;
+  transition-duration: 0.22s;
+  cursor: pointer;
+  display: flex;
+    justify-content: center;
+    
+}
+
+
+.overlay-wrapper{
+  margin:0px !important;
+}
+.crypto-full-width, .full-width {
+  width: 100% !important;
+}
+
+.crypto-form-unit{
+  width:100% !important;
+}
+
+.forgot-password-page{
+  width:100% !important;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
 }

@@ -16,14 +16,28 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    padding-left:4px;
   }
 
   .content {
-    max-width: 300px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
   }
 
   ::before {
     color: #000000b5;
+  }
+
+  .form-wrapper {
+    padding: 0px !important;
+    width: 100% !important;
+}
+
+  .welcomeback{
+    font-size:24px;
   }
 
   .remember-wrapper {
@@ -100,7 +114,7 @@
 }
 
 .beta {
-  margin-top: 10px;
+  margin-top: 24px;
   background: #ffffff;
   padding: 10px;
   border-radius: 5px;
@@ -112,6 +126,9 @@
   font-weight: 600;
   transition-duration: 0.22s;
   cursor: pointer;
+  display: flex;
+    justify-content: center;
+    
 }
 
 .beta:hover {
@@ -124,24 +141,68 @@
   font-size: 14px;
   position: relative;
   font-weight: 600;
+  
 }
+
+
 
 .beta svg {
   vertical-align: middle;
   float: left;
-  height: 20px;
-  width: 20px;
+  height: 25px;
+  width: 25px;
   overflow: visible;
+  margin-right:4px;
 }
 
 .beta:hover .beta.svg {
   height: 30px !important;
   width: 30px !important;
   fill:white;
+  margin-right:4px;
 }
 
 .beta span {
   vertical-align: middle;
+}
+
+.login-with-fb, .login-with-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:180px;
+}
+
+.orspan{
+
+
+  width: 70px;
+    text-align: center;
+    margin-top: -2px;
+  }
+
+  span.continuewithx {
+    display: flex;
+    align-content: center;
+    padding-top: 24px;
+    padding-bottom: 12px;
+    align-items: center;
+    font-size: 12px;
+}
+
+::ng-deep .mat-input-element::placeholder{
+  color: #191919;
+  padding-left:0px !important;
+  margin-left: 0px !important;
+}
+
+span.donthave {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  font-size: 12px;
+  margin-top: 16px;
 }
 
 input:-webkit-autofill,
@@ -156,9 +217,47 @@ select:-webkit-autofill:focus {
   font-weight:600;
 }
 
-// .mat-form-field-flex {
-//   background-color: #fff !important;
-// }
+.continue{
+  font-size:12px;
+  line-height: 12px;
+}
+
+/deep/ .mat-form-field-infix{
+  display:flex !important;
+  align-items: flex-end !important;;
+
+}
+
+/deep/ .mat-form-field-flex {
+border-radius: 0px !important;
+border-top: none !important;
+border-left: none !important;
+border-right: none !important;
+padding:0px !important;
+height:50px !important;
+
+
+}
+/deep/ mat-form-field.crypto-input input, mat-form-field.mat-form-field-type-mat-input input {
+  border-radius: 0px !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding:0px !important;
+height:30px !important;
+font-size:13px !important;
+color:#000 !important;
+
+}
+/deep/ .mat-form-field-outline{
+  border-radius: 0px !important;
+  border-right-style: none;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding:0px !important;
+height:50px !important;
+}
 
 .lds-ellipsis div {
   background:#000 !important;;

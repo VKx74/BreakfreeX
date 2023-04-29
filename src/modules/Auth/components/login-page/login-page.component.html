@@ -1,8 +1,6 @@
 <div class="content">
-    <div><h1>Log In</h1>
-    <span>Need a Breakfree Trading account? <a class="createuserbyemail" (click)="doRegistration()" > Create account with email</a></span>
-    <span class="splitter"></span>
-    <span class="continuewith">or</span>
+    <div><h1 class="welcomeback">Welcome back</h1>
+    <span class="continue">Continue with Google or enter your details.</span>
 
     <div class="beta google" >
         <div class="login-with-google" (click)="doLoginWithGoogle()">
@@ -11,7 +9,7 @@
         </div>  
     </div> 
 
-    <div class="beta facebook"  >
+    <div class="beta facebook hidden"  >
         <div class="login-with-fb" (click)="doLoginWithFB()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="28" height="28"><path fill="#1877F2" d="M14 4a10 10 0 011.56 19.88v-6.99h2.33l.45-2.89h-2.78v-1.88c0-.79.39-1.56 1.63-1.56h1.26V8.1s-1.14-.2-2.24-.2c-2.28 0-3.77 1.4-3.77 3.9V14H9.9v2.9h2.54v6.98A10.01 10.01 0 0114 4z"></path></svg>
             <span class="third-party-capture">Sign in with Facebook</span>
@@ -21,7 +19,8 @@
 
      </div>
 
-    <span class="splitter margintop20 marginbottom-5"></span>
+     
+     <span class="continuewithx"><span class="splitter"></span><span class="orspan">or</span> <span class="splitter"></span></span>
 
     <div class="form-wrapper" [ngClass]="{notificationVisible: notification}" [formGroup]="formGroup">
         <div class="form-header hidden">
@@ -31,26 +30,26 @@
         </div>
 
         <div class="crypto-form-unit emailfield">
-            <label class="labeln" for="Email">Email</label>
+
             <mat-form-field class="crypto-input full-width with-hint remove-bottom-padding">
-                <input matInput type="email" formControlName="email" placeholder="Username" onEnter (enterHandler)="doLogin()">
-                <i class="crypto-icon crypto-icon-email" matSuffix></i>
-                <mat-error>Invalid username</mat-error>
+                <input matInput type="email" formControlName="email" placeholder="Email" onEnter (enterHandler)="doLogin()">
+
+                <mat-error>Invalid email</mat-error>
             </mat-form-field>
         </div>
 
         <div class="crypto-form-unit passwordfield">
-            <label class="labeln"  for="password">Password</label>
+
             <mat-form-field class="crypto-input full-width with-hint">
                 <input matInput type="password" formControlName="password" placeholder="Password" onEnter (enterHandler)="doLogin()">
-                <i class="crypto-icon crypto-icon-pasword" matSuffix></i>
-                <mat-error>Password must contain from 6 to 25 signs</mat-error>
+
+                <mat-error>Password must contain 6 characters </mat-error>
             </mat-form-field>
         </div>
         <div class="remember-wrapper">
             <label>
                 <input class="remember-chk" type="checkbox" formControlName="rememberMe"/>
-                <span>Remember me?</span>
+                <span>Remember for 30 days</span>
             </label>
             <span class="forgotPassword" (click)="doPasswordRestoration()">Forgot your password?</span>
         </div>
@@ -74,5 +73,8 @@
             <span *ngIf="!processing">Sign in</span>
 
         </button>
+
+        <span class="donthave">Don't have an account? <a class="createuserbyemail" (click)="doRegistration()" >Signup for free</a></span>
+        
     </div>
 </div>
