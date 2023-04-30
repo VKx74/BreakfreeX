@@ -261,6 +261,38 @@
     }
     
   }
+
+  /deep/ {
+    span.continuewithx {
+      display: flex;
+      align-content: center;
+      padding-top: 24px;
+      padding-bottom: 12px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .no-borders-input {
+      margin: 10px 0px;
+      /deep/.mat-form-field-flex {
+        border-radius: 0px;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding:0px;
+      }
+      .mat-input-element::placeholder{
+        color: #191919;
+        padding-left: 0px !important;
+        margin-left: 0px !important;
+      }
+
+      .mat-input-element {
+        padding: 0px;
+        font-size: 13px;
+      }
+    }
+  }
 }
 
 span#actualquote {

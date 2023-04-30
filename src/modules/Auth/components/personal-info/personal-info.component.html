@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" novalidate class="form-wrapper" (ngSubmit)="sendInfo()">
     <div class="form-wrapper">
         <div class="crypto-form-unit">
-            <mat-form-field class="crypto-input full-width with-hint">
+            <mat-form-field class="crypto-input full-width with-hint no-borders-input">
                 <input matInput type="text" placeholder="First name" formControlName="firstName"
                        [errorStateMatcher]="errorMatcher"
                        [disabled]="isFullName">
@@ -14,7 +14,7 @@
 
 
         <div class="crypto-form-unit">
-            <mat-form-field class="crypto-input full-width with-hint">
+            <mat-form-field class="crypto-input full-width with-hint no-borders-input">
                 <input matInput type="text" placeholder="Last name" formControlName="lastName"
                        [errorStateMatcher]="errorMatcher"
                        [disabled]="isFullName">

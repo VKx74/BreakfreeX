@@ -31,7 +31,7 @@
 
         <div class="crypto-form-unit emailfield">
 
-            <mat-form-field class="crypto-input full-width with-hint remove-bottom-padding">
+            <mat-form-field class="crypto-input full-width with-hint remove-bottom-padding no-borders-input">
                 <input matInput type="email" formControlName="email" placeholder="Email" onEnter (enterHandler)="doLogin()">
 
                 <mat-error>Invalid email</mat-error>
@@ -40,7 +40,7 @@
 
         <div class="crypto-form-unit passwordfield">
 
-            <mat-form-field class="crypto-input full-width with-hint">
+            <mat-form-field class="crypto-input full-width with-hint no-borders-input">
                 <input matInput type="password" formControlName="password" placeholder="Password" onEnter (enterHandler)="doLogin()">
 
                 <mat-error>Password must contain 6 characters </mat-error>

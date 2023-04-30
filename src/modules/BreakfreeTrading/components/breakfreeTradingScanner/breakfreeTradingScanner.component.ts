@@ -707,6 +707,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     private _reloadData() {
+        if (!this.isAuthorizedCustomer) {
+            return;
+        }
+
         const res: IScannerResults[] = [];
         for (const i of this._featured) {
             const loaded = this._getLoaded(i);
