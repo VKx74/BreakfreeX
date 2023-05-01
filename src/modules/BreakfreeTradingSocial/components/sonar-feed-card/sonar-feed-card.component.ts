@@ -482,6 +482,14 @@ export class SonarFeedCardComponent implements OnInit {
         return "Other";
     }
 
+    getSetupType(type: string) {
+        if (type === "EXT") {
+            return "X-Mode 6";
+        }
+
+        return type;
+    }
+
     // is15Min() {
     //     return this.granularity <= 60 * 15;
     // } 

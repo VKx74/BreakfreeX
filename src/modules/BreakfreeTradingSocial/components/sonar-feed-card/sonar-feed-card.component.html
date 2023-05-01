@@ -49,7 +49,7 @@
         </sonar-chart>
         <div class="tags-holder">
             <div class="tag-active" *ngIf="isActive">Active</div>
-            <div class="tag-setup">{{setup}}</div>
+            <div class="tag-setup">{{getSetupType(setup)}}</div>
             <div class="tag-market">{{getMarketType()}}</div>
             <div *ngIf="this.trend" class="tag-RTD-trend" tooltip [matTooltip]="getTrendDescriptionTooltip()">
                 <span class="trend-arrow" [ngClass]="this.trend.globalTrend == IBFTATrend.Up ? 'uptrend' : 'downtrend'">

@@ -52,9 +52,9 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     public get allowedTriggerSetup(): TriggerSetup[] {
         return [
             TriggerSetup.AllSetups,
-            TriggerSetup.Swing,
-            TriggerSetup.BRC,
-            TriggerSetup.EXT
+            // TriggerSetup.Swing,
+            // TriggerSetup.BRC,
+            // TriggerSetup.EXT
         ];
     }
 
@@ -278,7 +278,8 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         forkJoin([task1, task2]).subscribe((data) => {
             let symbol = this.instrument ? this.instrument.symbol : "All instruments";
             let triggerType = this.selectedTriggerType === TriggerType.NewSetup ? "New trade(s)" : "Trade(s) Disappeared";
-            this.message = `${triggerType} for ${symbol} ${data[0]} ${data[1]}`;
+            // this.message = `${triggerType} for ${symbol} ${data[0]} ${data[1]}`;
+            this.message = `${triggerType} for ${symbol} ${data[0]}`;
         });
     }
 
@@ -287,13 +288,28 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             return;
         }
 
+        let is1MinAllowed = this._identityService.is1MinAllowed();
+        let is5MinAllowed = this._identityService.is5MinAllowed();
         let is15MinAllowed = this._identityService.is15MinAllowed();
+        let is30MinAllowed = this._identityService.is30MinAllowed();
         let isHourAllowed = this._identityService.isHourAllowed();
         let is4HourAllowed = this._identityService.is4HourAllowed();
 
-        if (is15MinAllowed) {
+        if (is1MinAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.AllTimeframes);
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Min1);
+        }
+
+        if (is5MinAllowed) {
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Min5);
+        }
+
+        if (is15MinAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Min15);
+        }
+
+        if (is30MinAllowed) {
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Min30);
         }
 
         if (isHourAllowed) {
@@ -304,7 +320,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
         }
 
-        this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
+        // this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
         this._selectedTriggerTimeframe = this._allowedTriggerTimeframe[0];
     }
 
