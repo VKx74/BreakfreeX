@@ -219,7 +219,7 @@ export class IdentityService {
 
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
-                if (sub.indexOf("AI") !== -1) {
+                if (sub.indexOf("Neural") !== -1) {
                     return true;
                 }
             }
@@ -511,7 +511,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Breakfree Trading AI"];
+        // this.subscriptions = ["Neural"];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {

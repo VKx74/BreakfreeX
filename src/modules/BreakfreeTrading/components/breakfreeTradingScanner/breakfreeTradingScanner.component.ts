@@ -221,7 +221,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         const tfValue1Min = this.toTimeframe(60 * 1);
         const tfValue5Min = this.toTimeframe(60 * 5);
         // const tfValue15Min = this.toTimeframe(60 * 15);
-        const tfValue30Min = this.toTimeframe(60 * 30);
+        // const tfValue30Min = this.toTimeframe(60 * 30);
         if (group.timeframe === tfValue1Min) {
             return this.show1MinAccessRestriction();
         }
@@ -231,9 +231,9 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         // if (group.timeframe === tfValue15Min) {
         //     return this.show15MinAccessRestriction();
         // }
-        if (group.timeframe === tfValue30Min) {
-            return this.show30MinAccessRestriction();
-        }
+        // if (group.timeframe === tfValue30Min) {
+        //     return this.show30MinAccessRestriction();
+        // }
 
         return false;
     }
