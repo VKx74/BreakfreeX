@@ -49,8 +49,8 @@ export class DefaultCheckoutComponent implements OnInit {
     }
 
     checkoutDiscovery1M() {
-        // this.checkout("subscription_plan_246666");
-        window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-disovery-1-month-access", '_blank').focus();
+        this.checkout("subscription_plan_246666");
+        // window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-disovery-1-month-access", '_blank').focus();
     }
 
     checkoutDiscovery3M() {
@@ -62,8 +62,8 @@ export class DefaultCheckoutComponent implements OnInit {
     }
 
     checkoutPro1M() {
-        window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-pro-1-month-access", '_blank').focus();
-        // this.checkout("price_1Jr22xBI1GhkUGQthrKBOAzq");
+        // window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-pro-1-month-access", '_blank').focus();
+        this.checkout("price_1Jr22xBI1GhkUGQthrKBOAzq");
         // this.checkout("subscription_plan_206914");
     }
 
