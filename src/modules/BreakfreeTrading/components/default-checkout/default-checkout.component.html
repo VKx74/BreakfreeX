@@ -1,563 +1,456 @@
 <div class="page-wrapper">
     <div class="pricingsection">
         <div class="wrapper-2">
-            <div data-duration-in="300" data-duration-out="100" data-w-id="5e61cf30-be0b-048e-50fd-1661c1367252"
-                class="pricing-tabs w-tabs">
-                <div class="pricing-tabs-menu-2 w-tab-menu">
-                    <a data-w-tab="Tab 1" class="monthly-tab-tab-1-2 w-inline-block w-tab-link" [ngClass]="{'w--current': SelectedTab == CheckoutTab.Monthly}" (click)="monthlyClicked()">
-                        <div class="text-block-42">Monthly</div>
-                    </a>
-                    <a data-w-tab="Tab 4" class="monthly-tab-tab-1-2 w-inline-block w-tab-link" [ngClass]="{'w--current': SelectedTab == CheckoutTab.Month3}" (click)="month3Clicked()">
-                        <div class="text-block-42">3-month access <span class="text-span-47">(save 33%)</span></div>
-                    </a>
-                    <a data-w-tab="Tab 5" class="monthly-tab-tab-1-2 w-inline-block w-tab-link" [ngClass]="{'w--current': SelectedTab == CheckoutTab.Month12}" (click)="month12Clicked()">
-                        <div class="text-block-42">12-month access <span class="text-span-49">(save 50%)</span>
-                        </div>
-                    </a>
+            <div data-duration-in="300" data-duration-out="100" data-current="Tab 4" data-easing="ease" class="w-tabs">
+                <div class="pricing-tabs-menu w-tab-menu">
+                  <a data-w-tab="Tab 4" class="tab-link w-inline-block w-tab-link w--current" [ngClass]="{'w--current': SelectedTab == CheckoutTab.Monthly}" (click)="monthlyClicked()">
+                    <div>Monthly </div>
+                  </a>
+                  <a data-w-tab="Tab 5" class="tab-link w-inline-block w-tab-link" [ngClass]="{'w--current': SelectedTab == CheckoutTab.Month3}" (click)="month3Clicked()">
+                    <div class="text-block-54">Quarterly <sup class="superscript">(Save up to 33%)</sup></div>
+                  </a>
+                  <a data-w-tab="Tab 6" class="tab-link w-inline-block w-tab-link" [ngClass]="{'w--current': SelectedTab == CheckoutTab.Month12}" (click)="month12Clicked()">
+                    <div class="text-block-54">Yearly<sup class="superscript">(Save up to 50%)</sup></div>
+                  </a>
                 </div>
-                <div class="tabs-content w-tab-content">
-                    <div #monthlyContent data-w-tab="Tab 1" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Monthly}" class="w-tab-pane">
-                        <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4 starter-plan">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
-                                        loading="lazy"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 free">$15<span class="text-span-48">/mo</span></div>
-                                <div class="plan-info-4">Explore our community & next-generation trading algorithm on <strong>limited</strong> markets and <strong>one timeframe</strong><br></div>
-                                <a class="button full-width w-inline-block" (click)="checkoutStarter1M()">
-                                    <div class="button-text">Start 7-day free trial</div>
-                                    <div class="button-bg-cta"></div>
-                                </a>
-                                <div class="start-now">or skip trial and <a (click)="checkoutStarter1MNonTrial()">pay now</a></div>
-                                <div class="text-block-26"><strong class="bold-text-13">Features:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-50">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-64">Forex </strong>markets on daily timeframe
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong class="bold-text-54">Sonar - </strong>Delivers high-probability trade feed in real-time (on 4h&nbsp;timeframe)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong class="bold-text-54">X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 4h timeframe)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 3.0 <strong> - always know which way market is going</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Customizable charts &amp; </strong>watchlists
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="pricing-table-4">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-15.png"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-15-p-500.png 500w, assets/img/checkout/Add-a-heading-15-p-800.png 800w, assets/img/checkout/Add-a-heading-15.png 935w"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 monthly">$69<span class="text-span-48">/mo</span></div>
-                                <div class="plan-info-4">
-                                    <strong>20x </strong><strong>your opportunities</strong>. Discover high-probability trades across even more markets and more timeframes
-                                </div>
-                                <a class="button full-width w-inline-block" (click)="checkoutDiscovery1M()">
-                                    <div class="button-bg-cta"></div>
-                                    <div class="button-text">Start 7-day free trial</div>
-                                </a>
-                                <div class="start-now">or skip trial and <a (click)="checkoutDiscovery1MNonTrial()">pay now</a></div>
-                                <div class="text-block-26"><strong class="bold-text-11">Features:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-27">
-                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver, Indices </strong>markets
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong>Sonar</strong> - high-probability trade feed (on 4h, 1h, 30min, 15min timeframes)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 4h, 1h, 30min, 15min timeframes)
-                                        </div>
-                                    </li>
-
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 3.0 <strong> - always know which way market is going</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-70">Email, push and SMS alerts</strong> - never miss a trade
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-63">24/7</strong> Support
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="pricing-table-4">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-12.png"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-12-p-500.png 500w, assets/img/checkout/Add-a-heading-12-p-800.png 800w, assets/img/checkout/Add-a-heading-12.png 935w"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 monthly">$129<span class="text-span-48">/mo</span></div>
-                                <div class="plan-info-4"><strong class="bold-text-68">100x your opportunities</strong>. Discover high-probability trades across all possible markets and all timeframes</div>
-                                <a class="button full-width w-inline-block" (click)="checkoutPro1M()">
-                                    <div class="button-text">Start 7-day free trial</div>
-                                    <div class="button-bg-cta"></div>
-                                </a>
-                                <div class="start-now">or skip trial and <a (click)="checkoutPro1MNonTrial()">pay now</a></div>
-                                <div class="text-block-26"><strong class="bold-text-12">All features from Discovery plus:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-55">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-71">Forex, Stocks, Cryptocurrencies, Futures, Indices, Bond </strong>markets<strong></strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-54">Sonar </strong> - on all timeframes
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-59">X-Mode </strong> - on all timeframes (down to 1-minute)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-70">Extended limits for email, push and SMS alerts</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-69">24/7 </strong><strong class="bold-text-60">Priority </strong>Support
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                <div class="w-tab-content">
+                  <div data-w-tab="Tab 1" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Monthly}" class="w-tab-pane">
+                    <div class="w-layout-grid pricing-grid">
+                      <div class="pricing-plan">
+                        <div class="text-center">
+                          <h4>Discovery</h4>
+                          <div class="price-wrapper">
+                            <div class="dollar-sign">$</div>
+                            <div class="display-heading-2 no-bottom-margin">69</div>
+                          </div>
+                          <div class="small-text-2">Monthly</div>
                         </div>
-                    </div>
-                    <div #month3Content data-w-tab="Tab 4" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month3}" class="w-tab-pane">
-                        <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4 starter-plan">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
-                                        loading="lazy"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 free">$40<span class="text-span-48">/3-mo</span></div>
-                                <div class="plan-info-4">Explore our community & next-generation trading algorithm on <strong>limited</strong> markets and <strong>one timeframe</strong><br></div>
-                                <a class="button full-width w-inline-block" (click)="checkoutStarter3M()">
-                                    <div class="button-text">Buy Now</div>
-                                    <div class="button-bg-cta"></div>
-                                </a>
-                                <div class="text-block-26"><strong class="bold-text-13">Features:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-50">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-64">Forex </strong>markets on daily timeframe
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong class="bold-text-54">Sonar - </strong>Delivers high-probability trade feed in real-time (on 4h&nbsp;timeframe)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong class="bold-text-54">X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 4h timeframe)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 3.0 <strong> - always know which way market is going</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Customizable charts &amp; </strong>watchlists
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="pricing-table-4">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-15.png"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-15-p-500.png 500w, assets/img/checkout/Add-a-heading-15-p-800.png 800w, assets/img/checkout/Add-a-heading-15.png 935w"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 monthly">$147<span class="text-span-48">/3-mo</span></div>
-                                <div class="plan-info-4">
-                                    <strong>20x </strong><strong>your opportunities</strong>. Discover high-probability trades across even more markets and more timeframes
-                                </div>
-                                <a class="button full-width w-inline-block" (click)="checkoutDiscovery3M()">
-                                    <div class="button-bg-cta"></div>
-                                    <div class="button-text">Buy now for 28% off</div>
-                                </a>
-                                <div class="text-block-26"><strong class="bold-text-17">Features:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-27">
-                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver, Indices </strong>markets
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong>Sonar</strong> - high-probability trade feed (4h, 1h, 30min, 15min timeframes)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(4h, 1h, 30min, 15min timeframes)
-                                        </div>
-                                    </li>
-
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 3.0 <strong> - always know which way market is going</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-70">Email, push and SMS alerts</strong> - never miss a trade
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-63">24/7</strong> Support
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="pricing-table-4">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-12.png"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-12-p-500.png 500w, assets/img/checkout/Add-a-heading-12-p-800.png 800w, assets/img/checkout/Add-a-heading-12.png 935w"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 monthly">$259<span class="text-span-48">/3-mo</span></div>
-                                <div class="plan-info-4"><strong class="bold-text-68">100x your opportunities</strong>. Discover high-probability trades across all possible markets and all timeframes</div>
-                                <a class="button full-width w-inline-block" (click)="checkoutPro3M()">
-                                    <div class="button-text">Buy now for 33% off</div>
-                                    <div class="button-bg-cta"></div>
-                                </a>
-                                <div class="text-block-26"><strong class="bold-text-12">All features from Discovery plus:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-55">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-71">Forex, Stocks, Cryptocurrencies, Futures, Indices, Bond </strong>markets<strong></strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-54">Sonar </strong> - on all timeframes
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-59">X-Mode </strong> - on all timeframes (down to 1-minute)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-70">Extended limits for email, push and SMS alerts</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-69">24/7 </strong><strong class="bold-text-60">Priority </strong>Support
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="button-row">
+                          <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutDiscovery1M()">
+                            <div>Start 7-day trial</div>
+                          </div>
                         </div>
-                    </div>
-                    <div #month12Content data-w-tab="Tab 5" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month12}" class="w-tab-pane">
-                        <div class="w-layout-grid grid-2">
-                            <div class="pricing-table-4 starter-plan">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/starter-header.jpg"
-                                        loading="lazy"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 free">$126<span class="text-span-48">/yr</span></div>
-                                <div class="plan-info-4">Explore our community & next-generation trading algorithm on <strong>limited</strong> markets and <strong>one timeframe</strong><br></div>
-                                <a class="button full-width w-inline-block" (click)="checkoutStarter12M()">
-                                    <div class="button-text">Buy Now</div>
-                                    <div class="button-bg-cta"></div>
-                                </a>
-                                <div class="text-block-26"><strong class="bold-text-13">Features:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-50">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-64">Forex </strong>markets on daily timeframe
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong class="bold-text-54">Sonar - </strong>Delivers high-probability trade feed in real-time (on 4h&nbsp;timeframe)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong class="bold-text-54">X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(on 4h timeframe)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 3.0 <strong> - always know which way market is going</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Customizable charts &amp; </strong>watchlists
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="pricing-table-4">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-15.png"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-15-p-500.png 500w, assets/img/checkout/Add-a-heading-15-p-800.png 800w, assets/img/checkout/Add-a-heading-15.png 935w"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 monthly">$555<span class="text-span-48">/yr</span></div>
-                                <div class="plan-info-4">
-                                    <strong>20x </strong><strong>your opportunities</strong>. Discover high-probability trades across even more markets and more timeframes
-                                </div>
-                                <a class="button full-width w-inline-block" (click)="checkoutDiscovery12M()">
-                                    <div class="button-bg-cta"></div>
-                                    <div class="button-text">Buy now for 33% off</div>
-                                </a>
-                                <div class="text-block-26"><strong class="bold-text-17">Features:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-27">
-                                            <strong>Breakfree Trading™ Algorithm</strong> access to<strong> Forex, Gold, Silver, Indices </strong>markets
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong>Sonar</strong> - high-probability trade feed (4h, 1h, 30min, 15min timeframes)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div>
-                                            <strong>X-Mode - </strong>see in real-time where price is likely to reverse &nbsp;(4h, 1h, 30min, 15min timeframes)
-                                        </div>
-                                    </li>
-
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-10">Bridge -</strong> Connect one of 600+ compatible brokers and manage trades directly from one app
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="text-span-50">TradeGuard™</strong> and <span class="text-span-50">automatic risk management - </span>&nbsp;actively prevents you from making bad trades
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-52">Real-Time Trend Detection</strong> 3.0 <strong> - always know which way market is going</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-70">Email, push and SMS alerts</strong> - never miss a trade
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-63">24/7</strong> Support
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="pricing-table-4">
-                                <div class="plan-name-3 highlighted"><img src="assets/img/checkout/Add-a-heading-12.png"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 87vw, (max-width: 767px) 96vw, (max-width: 991px) 97vw, 94vw"
-                                        srcset="assets/img/checkout/Add-a-heading-12-p-500.png 500w, assets/img/checkout/Add-a-heading-12-p-800.png 800w, assets/img/checkout/Add-a-heading-12.png 935w"
-                                        alt="">
-                                    <div class="pricing-plan-line highlighted"></div>
-                                </div>
-                                <div class="price-tag-4 monthly">$779<span class="text-span-48">/yr</span></div>
-                                <div class="plan-info-4"><strong class="bold-text-68">100x your opportunities</strong>. Discover high-probability trades across all possible markets and all timeframes</div>
-                                <a class="button full-width w-inline-block" (click)="checkoutPro12M()">
-                                    <div class="button-text">Buy now for 50% off</div>
-                                    <div class="button-bg-cta"></div>
-                                </a>
-                                <div class="text-block-26"><strong class="bold-text-12">All features from Discovery plus:</strong></div>
-                                <ul role="list" class="pricing-list-3">
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-55">Breakfree Trading™ Algorithm</strong> access to <strong class="bold-text-71">Forex, Stocks, Cryptocurrencies, Futures, Indices, Bond </strong>markets<strong></strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-54">Sonar </strong> - on all timeframes
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-59">X-Mode </strong> - on all timeframes (down to 1-minute)
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-70">Extended limits for email, push and SMS alerts</strong>
-                                        </div>
-                                    </li>
-                                    <li class="pricing-list-item-4">
-                                        <div class="check-circle-icon"></div>
-                                        <div class="text-block-41">
-                                            <strong class="bold-text-69">24/7 </strong><strong class="bold-text-60">Priority </strong>Support
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="skiptrial w-inline-block" (click)="checkoutDiscovery1MNonTrial()">
+                          <div>Or skip trial and buy now</div>
                         </div>
+                        <h6 class="checklist-heading">Features:</h6>
+                        <div class="w-layout-grid checklist pricing-checklist">
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">BFT Navigator</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Breakfree Trading Algorithm</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Trade Forex, Indexes and Metals</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">X-Mode &amp; Sonar 15m+</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Real-time Trend Detection 3.0</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">BFT Academy (24 videos)</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Risk Management Suite</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Strategy Mode</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Trade Guard</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Access to Inner Circle Community</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Connect to any Broker / Binance</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">10 sms alerts a day</div>
+                          </div>
+                        </div>
+                        <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                          <div class="fine-print-text">Talk to a Team Member</div>
+                        </div>
+                      </div>
+                      <div class="justify-content-left">
+                        <div class="plan-badge hidden">
+                          <div>Most Popular</div>
+                        </div>
+                        <div class="pricing-plan bordered">
+                          <div class="text-center">
+                            <h4>Pro</h4>
+                            <div class="price-wrapper">
+                              <div class="dollar-sign">$</div>
+                              <div class="display-heading-2 no-bottom-margin">129</div>
+                            </div>
+                            <div class="small-text-2">Monthly</div>
+                          </div>
+                          <div class="button-row">
+                            <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutPro1M()">
+                              <div>Start 7-day trial</div>
+                            </div>
+                          </div>
+                          <div class="skiptrial w-inline-block" (click)="checkoutPro1MNonTrial()">    
+                            <div>Or skip trial and buy now</div>
+                          </div>
+                          <h6 class="checklist-heading">All features from discovery plus:</h6>
+                          <div class="w-layout-grid checklist pricing-checklist">
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">X-Mode &amp; Sonar 1m+ </div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Trade Stocks, Crypto</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">X-Mode 1m, 5m</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">25 sms alerts a day</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Priority support</div>
+                            </div>
+                          </div>
+                          <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                            <div class="fine-print-text">Talk to a Team Member</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="justify-content-left">
+                        <div class="pricing-plan bordered exclusive">
+                          <div class="text-center">
+                            <h4>Neural <br><span class="early">(Limited Early Access)</span></h4>
+                            <div class="price-wrapper">
+                              <div class="dollar-sign">$</div>
+                              <div class="display-heading-2 no-bottom-margin">249</div>
+                            </div>
+                            <div class="small-text-2">Monthly</div>
+                          </div>
+                          <div class="button-row">
+                            <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutML1M()">
+                              <div>Buy early access now</div>
+                            </div>
+                          </div>
+                          <h6 class="checklist-heading">All features from pro plus:</h6>
+                          <div class="w-layout-grid checklist pricing-checklist">
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Neural Mode 1m+ </div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">20 Neural Enabled markets</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Realtime AI powered predictions</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">50 sms alerts a day</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Early access to new features</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Priority support</div>
+                            </div>
+                          </div>
+                          <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                            <div class="fine-print-text">Talk to a Team Member</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                  <div data-w-tab="Tab 2" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month3}" class="w-tab-pane">
+                    <div class="w-layout-grid pricing-grid">
+                      <div class="pricing-plan">
+                        <div class="text-center">
+                          <h4>Discovery</h4>
+                          <div class="price-wrapper">
+                            <div class="dollar-sign">$</div>
+                            <div class="display-heading-2 no-bottom-margin">147</div>
+                          </div>
+                          <div class="small-text-2">Quarterly</div>
+                        </div>
+                        <div class="button-row">
+                          <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutDiscovery3M()">
+                            <div>Buy now</div>
+                          </div>
+                        </div>
+                        <h6 class="checklist-heading">Features:</h6>
+                        <div class="w-layout-grid checklist pricing-checklist">
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">BFT Navigator</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Breakfree Trading Algorithm</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Trade Forex, Indexes and Metals</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">X-Mode &amp; Sonar (15m, 1h, 4h &amp; 1D) </div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Real-time Trend Detection 3.0</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">BFT Academy (24 videos)</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Risk Management Suite</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Strategy Mode</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Trade Guard</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Access to Inner Circle Community</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Connect to any Broker / Binance</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">10 sms alerts a day</div>
+                          </div>
+                        </div>
+                        <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                          <div class="fine-print-text">Talk to a Team Member</div>
+                        </div>
+                      </div>
+                      <div class="justify-content-left">
+                        <div class="plan-badge hidden">
+                          <div>Most Popular</div>
+                        </div>
+                        <div class="pricing-plan bordered">
+                          <div class="text-center">
+                            <h4>Pro</h4>
+                            <div class="price-wrapper">
+                              <div class="dollar-sign">$</div>
+                              <div class="display-heading-2 no-bottom-margin">259</div>
+                            </div>
+                            <div class="small-text-2">Quarterly</div>
+                          </div>
+                          <div class="button-row">
+                            <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutPro3M()">
+                              <div>Buy now</div>
+                            </div>
+                          </div>
+                          <h6 class="checklist-heading">All features from discovery plus:</h6>
+                          <div class="w-layout-grid checklist pricing-checklist">
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">X-Mode &amp; Sonar (1m &amp; 5m) </div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Trade Stocks, Crypto</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">X-Mode 1m, 5m</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">25 sms alerts a day</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Priority support</div>
+                            </div>
+                          </div>
+                          <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                            <div class="fine-print-text">Talk to a Team Member</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="justify-content-left">
+                        <div class="pricing-plan bordered exclusive">
+                          <div class="text-center">
+                            <h4>Neural <br><span class="early">(Limited Early Access)</span></h4>
+                            <div class="price-wrapper">
+                              <div class="dollar-sign">$</div>
+                              <div class="display-heading-2 no-bottom-margin">699</div>
+                            </div>
+                            <div class="small-text-2">Quarterly</div>
+                          </div>
+                          <div class="button-row">
+                            <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutML3M()">
+                              <div>Buy now</div>
+                            </div>
+                          </div>
+                          <h6 class="checklist-heading">All features from pro plus:</h6>
+                          <div class="w-layout-grid checklist pricing-checklist">
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Neural Mode (All timeframes) </div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">20 Neural Enabled markets</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Realtime AI powered predictions</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">50 sms alerts a day</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Early access to new features</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Priority support</div>
+                            </div>
+                          </div>
+                          <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                            <div class="fine-print-text">Talk to a Team Member</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-w-tab="Tab 3" [ngClass]="{'w--tab-active': SelectedTab == CheckoutTab.Month12}" class="w-tab-pane">
+                    <div class="w-layout-grid pricing-grid">
+                      <div class="pricing-plan">
+                        <div class="text-center">
+                          <h4>Discovery</h4>
+                          <div class="price-wrapper">
+                            <div class="dollar-sign">$</div>
+                            <div class="display-heading-2 no-bottom-margin">555</div>
+                          </div>
+                          <div class="small-text-2">Yearly</div>
+                        </div>
+                        <div class="button-row">
+                          <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutDiscovery12M()">
+                            <div>Buy now</div>
+                          </div>
+                        </div>
+                        <h6 class="checklist-heading">Features:</h6>
+                        <div class="w-layout-grid checklist pricing-checklist">
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">BFT Navigator</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Breakfree Trading Algorithm</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Trade Forex, Indexes and Metals</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">X-Mode &amp; Sonar (15m, 1h, 4h &amp; 1D) </div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Real-time Trend Detection 3.0</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">BFT Academy (24 videos)</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Risk Management Suite</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Strategy Mode</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Trade Guard</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Access to Inner Circle Community</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">Connect to any Broker / Binance</div>
+                          </div>
+                          <div class="checklist-item-small"><i class="fa fa-check"></i>
+                            <div class="small-text-2 text-white">10 sms alerts a day</div>
+                          </div>
+                        </div>
+                        <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                          <div class="fine-print-text">Talk to a Team Member</div>
+                        </div>
+                      </div>
+                      <div class="justify-content-left">
+                        <div class="plan-badge hidden">
+                          <div>Most Popular</div>
+                        </div>
+                        <div class="pricing-plan bordered">
+                          <div class="text-center">
+                            <h4>Pro</h4>
+                            <div class="price-wrapper">
+                              <div class="dollar-sign">$</div>
+                              <div class="display-heading-2 no-bottom-margin">779</div>
+                            </div>
+                            <div class="small-text-2">Yearly</div>
+                          </div>
+                          <div class="button-row">
+                            <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutPro12M()">
+                              <div>Buy now</div>
+                            </div>
+                          </div>
+                          <h6 class="checklist-heading">All features from discovery plus:</h6>
+                          <div class="w-layout-grid checklist pricing-checklist">
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">X-Mode &amp; Sonar (1m &amp; 5m) </div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Trade Stocks, Crypto</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">X-Mode 1m, 5m</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">25 sms alerts a day</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Priority support</div>
+                            </div>
+                          </div>
+                          <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                            <div class="fine-print-text">Talk to a Team Member</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="justify-content-left">
+                        <div class="pricing-plan bordered exclusive">
+                          <div class="text-center">
+                            <h4>Neural <br><span class="early">(Limited Early Access)</span></h4>
+                            <div class="price-wrapper">
+                              <div class="dollar-sign">$</div>
+                              <div class="display-heading-2 no-bottom-margin">2499</div>
+                            </div>
+                            <div class="small-text-2">Yearly</div>
+                          </div>
+                          <div class="button-row">
+                            <div class="button bordered checkout new pricingcta w-inline-block" (click)="checkoutML12M()">
+                              <div>Buy now</div>
+                            </div>
+                          </div>
+                          <h6 class="checklist-heading">All features from pro plus:</h6>
+                          <div class="w-layout-grid checklist pricing-checklist">
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Neural Mode (All timeframes) </div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">20 Neural Enabled markets</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Realtime AI powered predictions</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">50 sms alerts a day</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Early access to new features</div>
+                            </div>
+                            <div class="checklist-item-small"><i class="fa fa-check"></i>
+                              <div class="small-text-2 text-white">Priority support</div>
+                            </div>
+                          </div>
+                          <div class="icon-link support-button w-inline-block" (click)="showSupport()">
+                            <div class="fine-print-text">Talk to a Team Member</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </div>
         </div>
     </div>
 </div>
