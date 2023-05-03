@@ -1,10 +1,11 @@
 <div class="crypto-modal">
     <ng-container [ngSwitch]="selectedCheckoutType">
-        <ng-container *ngSwitchCase="CheckoutType.Default">
+        <default-checkout-component></default-checkout-component>
+        <!-- <ng-container *ngSwitchCase="CheckoutType.Default">
             <default-checkout-component></default-checkout-component>
         </ng-container>
         <ng-container *ngSwitchCase="CheckoutType.Guest">
             <guest-checkout-component></guest-checkout-component>
-        </ng-container>
+        </ng-container> -->
     </ng-container>
 </div>

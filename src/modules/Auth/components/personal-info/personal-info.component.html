@@ -1,26 +1,26 @@
 <form [formGroup]="formGroup" novalidate class="form-wrapper" (ngSubmit)="sendInfo()">
-    <div class="two-input-wrapper">
+    <div class="form-wrapper">
         <div class="crypto-form-unit">
-            <mat-form-field class="crypto-input full-width with-hint">
-                <input matInput type="text" placeholder="First Name" formControlName="firstName"
+            <mat-form-field class="crypto-input full-width with-hint no-borders-input">
+                <input matInput type="text" placeholder="First name" formControlName="firstName"
                        [errorStateMatcher]="errorMatcher"
                        [disabled]="isFullName">
-                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+           
                 <mat-error>
-                    <span>First Name is not valid</span>
+                    <span>First name is not valid</span>
                 </mat-error>
             </mat-form-field>
         </div>
 
 
         <div class="crypto-form-unit">
-            <mat-form-field class="crypto-input full-width with-hint">
-                <input matInput type="text" placeholder="Last Name" formControlName="lastName"
+            <mat-form-field class="crypto-input full-width with-hint no-borders-input">
+                <input matInput type="text" placeholder="Last name" formControlName="lastName"
                        [errorStateMatcher]="errorMatcher"
                        [disabled]="isFullName">
-                <i class="crypto-icon crypto-icon-user" matSuffix></i>
+             
                 <mat-error>
-                    <span>Last Name is not valid</span>
+                    <span>Last name is not valid</span>
                 </mat-error>
             </mat-form-field>
         </div>
@@ -106,6 +106,6 @@
             <div></div>
             <div></div>
         </div>
-        <span *ngIf="!processing">Sign Up</span>
+        <span *ngIf="!processing">Continue to Navigator</span>
     </button>
 </form>

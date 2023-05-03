@@ -1,7 +1,8 @@
 <ng-container [ngSwitch]="active_component">
-    <breakfree-trading-scanner *ngSwitchCase="ActiveSonarComponent.Legacy" (stateChanged)="handleLegacyStateChanged($event)" 
-        (initialized)="legacyScannerComponentInitialized($event)" (onOpenChart)="viewOnChart($event)" (changeView)="setNewView()" #scanner></breakfree-trading-scanner>
-
-    <sonar-feed-wall *ngSwitchDefault (onOpenChart)="viewOnChart($event)" [state]="state"
+    <sonar-feed-wall  *ngSwitchCase="ActiveSonarComponent.New" (onOpenChart)="viewOnChart($event)" [state]="state"
         (stateChanged)="handleWallStateChanged($event)" (changeView)="setLegacyView()"></sonar-feed-wall>
+
+    <breakfree-trading-scanner *ngSwitchDefault
+        (stateChanged)="handleLegacyStateChanged($event)" (initialized)="legacyScannerComponentInitialized($event)"
+        (onOpenChart)="viewOnChart($event)" (changeView)="setNewView()" #scanner></breakfree-trading-scanner>
 </ng-container>

@@ -83,7 +83,10 @@ export interface ISonarFeedCard {
 }
 
 enum TimeFrames {
+    Min1 = "1 Min",
+    Min5 = "5 Min",
     Min15 = "15 Min",
+    Min30 = "30 Min",
     Hour1 = "1 Hour",
     Hour4 = "4 Hour",
     Day = "Daily",
@@ -164,7 +167,7 @@ export class SonarFeedWallComponent implements OnInit {
     public initialized: boolean;
     public isSingleCardAllowed: boolean = true;
 
-    public allTimeFrames: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public allTimeFrames: TimeFrames[] = [TimeFrames.Min1, TimeFrames.Min5, TimeFrames.Min15, TimeFrames.Min30, TimeFrames.Hour1, TimeFrames.Hour4];
     public allowedTimeFrames: TimeFrames[] = [];
     public selectedTimeFrames: TimeFrames[];
     public prevSelectedTimeFrames: TimeFrames[];
@@ -232,11 +235,6 @@ export class SonarFeedWallComponent implements OnInit {
         }, 300);
 
         this._scanFullMarket();
-        // if (this._identityService.subscriptionType === SubscriptionType.Discovery) {
-        //     this._loadCount = 50;
-        // } else if (this._identityService.subscriptionType !== SubscriptionType.Pro && this._identityService.subscriptionType !== SubscriptionType.Trial) {
-        //     this._loadCount = 50;
-        // }
     }
 
     ngOnInit() {
@@ -731,17 +729,19 @@ export class SonarFeedWallComponent implements OnInit {
     }
 
     public isTimeFrameAllowed(granularity: number) {
+        const is1MinAllowedByLevel = this._identityService.is1MinAllowedByLevel(this._tradingProfileService.level);
+        const is5MinAllowedByLevel = this._identityService.is5MinAllowedByLevel(this._tradingProfileService.level);
         const is15MinAllowedByLevel = this._identityService.is15MinAllowedByLevel(this._tradingProfileService.level);
+        const is30MinAllowedByLevel = this._identityService.is30MinAllowedByLevel(this._tradingProfileService.level);
         const isHourAllowedByLevel = this._identityService.isHourAllowedByLevel(this._tradingProfileService.level);
         const is4HourAllowed = this._identityService.is4HourAllowed();
 
-        if (is15MinAllowedByLevel && isHourAllowedByLevel && is4HourAllowed) {
-            return true;
-        }
-
         const hour4G = this._timeframeToGranularity(TimeFrames.Hour4);
         const hour1G = this._timeframeToGranularity(TimeFrames.Hour1);
+        const min30G = this._timeframeToGranularity(TimeFrames.Min30);
         const min15G = this._timeframeToGranularity(TimeFrames.Min15);
+        const min5G = this._timeframeToGranularity(TimeFrames.Min5);
+        const min1G = this._timeframeToGranularity(TimeFrames.Min1);
 
         if (granularity === hour4G && !is4HourAllowed) {
             return false;
@@ -749,7 +749,16 @@ export class SonarFeedWallComponent implements OnInit {
         if (granularity === hour1G && !isHourAllowedByLevel) {
             return false;
         }
+        if (granularity === min30G && !is30MinAllowedByLevel) {
+            return false;
+        }
         if (granularity === min15G && !is15MinAllowedByLevel) {
+            return false;
+        }
+        if (granularity === min5G && !is5MinAllowedByLevel) {
+            return false;
+        }
+        if (granularity === min1G && !is1MinAllowedByLevel) {
             return false;
         }
 
@@ -923,7 +932,10 @@ export class SonarFeedWallComponent implements OnInit {
         const dailyG = this._timeframeToGranularity(TimeFrames.Day);
         const hour4G = this._timeframeToGranularity(TimeFrames.Hour4);
         const hour1G = this._timeframeToGranularity(TimeFrames.Hour1);
+        const min30G = this._timeframeToGranularity(TimeFrames.Min30);
         const min15G = this._timeframeToGranularity(TimeFrames.Min15);
+        const min5G = this._timeframeToGranularity(TimeFrames.Min5);
+        const min1G = this._timeframeToGranularity(TimeFrames.Min1);
 
         settings.granularity = [];
         settings.granularity.push(dailyG);
@@ -934,8 +946,17 @@ export class SonarFeedWallComponent implements OnInit {
         if (this.isTimeFrameAllowed(hour1G)) {
             settings.granularity.push(hour1G);
         }
+        if (this.isTimeFrameAllowed(min30G)) {
+            settings.granularity.push(min30G);
+        }
         if (this.isTimeFrameAllowed(min15G)) {
             settings.granularity.push(min15G);
+        }
+        if (this.isTimeFrameAllowed(min5G)) {
+            settings.granularity.push(min5G);
+        }
+        if (this.isTimeFrameAllowed(min1G)) {
+            settings.granularity.push(min1G);
         }
     }
 
@@ -961,11 +982,14 @@ export class SonarFeedWallComponent implements OnInit {
             }
         }
 
+        const is1MinAllowedByLevel = this._identityService.is1MinAllowedByLevel(this._tradingProfileService.level);
+        const is5MinAllowedByLevel = this._identityService.is5MinAllowedByLevel(this._tradingProfileService.level);
         const is15MinAllowedByLevel = this._identityService.is15MinAllowedByLevel(this._tradingProfileService.level);
+        const is30MinAllowedByLevel = this._identityService.is30MinAllowedByLevel(this._tradingProfileService.level);
         const isHourAllowedByLevel = this._identityService.isHourAllowedByLevel(this._tradingProfileService.level);
         const is4HourAllowed = this._identityService.is4HourAllowed();
 
-        if (!is15MinAllowedByLevel || !isHourAllowedByLevel || !is4HourAllowed) {
+        if (!is1MinAllowedByLevel || !is5MinAllowedByLevel || !is15MinAllowedByLevel || !is30MinAllowedByLevel || !isHourAllowedByLevel || !is4HourAllowed) {
 
             if (!settings.granularity || !settings.granularity.length) {
                 this._setDefaultTimeFrameLimitations(settings);
@@ -973,7 +997,10 @@ export class SonarFeedWallComponent implements OnInit {
 
                 const hour4G = this._timeframeToGranularity(TimeFrames.Hour4);
                 const hour1G = this._timeframeToGranularity(TimeFrames.Hour1);
+                const min30G = this._timeframeToGranularity(TimeFrames.Min30);
                 const min15G = this._timeframeToGranularity(TimeFrames.Min15);
+                const min5G = this._timeframeToGranularity(TimeFrames.Min5);
+                const min1G = this._timeframeToGranularity(TimeFrames.Min1);
 
                 if (!is4HourAllowed) {
                     const index = settings.granularity.indexOf(hour4G);
@@ -989,8 +1016,29 @@ export class SonarFeedWallComponent implements OnInit {
                     }
                 }
 
+                if (!is30MinAllowedByLevel) {
+                    const index = settings.granularity.indexOf(min30G);
+                    if (index !== -1) {
+                        settings.granularity.splice(index, 1);
+                    }
+                }
+
                 if (!is15MinAllowedByLevel) {
                     const index = settings.granularity.indexOf(min15G);
+                    if (index !== -1) {
+                        settings.granularity.splice(index, 1);
+                    }
+                }
+
+                if (!is5MinAllowedByLevel) {
+                    const index = settings.granularity.indexOf(min5G);
+                    if (index !== -1) {
+                        settings.granularity.splice(index, 1);
+                    }
+                }
+
+                if (!is1MinAllowedByLevel) {
+                    const index = settings.granularity.indexOf(min1G);
                     if (index !== -1) {
                         settings.granularity.splice(index, 1);
                     }
@@ -1540,21 +1588,21 @@ export class SonarFeedWallComponent implements OnInit {
             this.prevSelectedTimeFrames = this.selectedTimeFrames;
         }
 
-        if (filteringParameters.setup && filteringParameters.setup.length) {
-            this.selectedTradeTypes = [];
-            for (const s of filteringParameters.setup) {
-                const i = this._mapTradeTypesToSetting(s);
-                if (this.allowedTradeTypes.indexOf(i) !== -1) {
-                    this.selectedTradeTypes.push(i);
-                }
-            }
+        // if (filteringParameters.setup && filteringParameters.setup.length) {
+        //     this.selectedTradeTypes = [];
+        //     for (const s of filteringParameters.setup) {
+        //         const i = this._mapTradeTypesToSetting(s);
+        //         if (this.allowedTradeTypes.indexOf(i) !== -1) {
+        //             this.selectedTradeTypes.push(i);
+        //         }
+        //     }
 
-            if (!this.selectedTradeTypes.length) {
-                this.selectedTradeTypes = this.allowedTradeTypes;
-            }
+        //     if (!this.selectedTradeTypes.length) {
+        //         this.selectedTradeTypes = this.allowedTradeTypes;
+        //     }
 
-            this.prevSelectedTradeTypes = this.selectedTradeTypes;
-        }
+        //     this.prevSelectedTradeTypes = this.selectedTradeTypes;
+        // }
 
         if (filteringParameters.type && filteringParameters.type.length) {
             this.selectedMarketTypes = [];
@@ -1577,7 +1625,10 @@ export class SonarFeedWallComponent implements OnInit {
 
     private _timeframeToGranularity(tf: TimeFrames): number {
         switch (tf) {
+            case TimeFrames.Min1: return 60;
+            case TimeFrames.Min5: return 60 * 5;
             case TimeFrames.Min15: return 60 * 15;
+            case TimeFrames.Min30: return 60 * 30;
             case TimeFrames.Hour1: return 60 * 60;
             case TimeFrames.Hour4: return 60 * 60 * 4;
             case TimeFrames.Day: return 60 * 60 * 24;
@@ -1586,7 +1637,10 @@ export class SonarFeedWallComponent implements OnInit {
 
     private _granularityToTimeframe(granularity: number): TimeFrames {
         switch (granularity) {
+            case 60: return TimeFrames.Min1;
+            case 60 * 5: return TimeFrames.Min5;
             case 60 * 15: return TimeFrames.Min15;
+            case 60 * 30: return TimeFrames.Min30;
             case 60 * 60: return TimeFrames.Hour1;
             case 60 * 60 * 4: return TimeFrames.Hour4;
             case 60 * 60 * 24: return TimeFrames.Day;

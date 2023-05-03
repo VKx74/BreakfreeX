@@ -2,6 +2,7 @@ import {Component, ElementRef, Inject, Injector, OnInit, ViewChild} from '@angul
 import { IdentityService } from '@app/services/auth/identity.service';
 import { AppConfigService } from '@app/services/app.config.service';
 import { LocalStorageService } from 'modules/Storage/services/local-storage.service';
+import { Intercom } from 'ng-intercom';
 
 enum CheckoutTab {
     Monthly,
@@ -18,7 +19,7 @@ export class DefaultCheckoutComponent implements OnInit {
     public SelectedTab: CheckoutTab = CheckoutTab.Monthly;
     public CheckoutTab: any = CheckoutTab;
 
-    constructor(protected _identityService: IdentityService, protected _localStorageService: LocalStorageService) {
+    constructor(protected _identityService: IdentityService, protected _localStorageService: LocalStorageService, protected _intercom: Intercom) {
     }
 
     ngOnInit() {
@@ -49,8 +50,8 @@ export class DefaultCheckoutComponent implements OnInit {
     }
 
     checkoutDiscovery1M() {
-        // this.checkout("subscription_plan_246666");
-        window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-disovery-1-month-access", '_blank').focus();
+        this.checkout("subscription_plan_246666");
+        // window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-disovery-1-month-access", '_blank').focus();
     }
 
     checkoutDiscovery3M() {
@@ -62,8 +63,8 @@ export class DefaultCheckoutComponent implements OnInit {
     }
 
     checkoutPro1M() {
-        window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-pro-1-month-access", '_blank').focus();
-        // this.checkout("price_1Jr22xBI1GhkUGQthrKBOAzq");
+        // window.open("https://checkout.breakfreetrading.com/products/breakfree-trading-pro-1-month-access", '_blank').focus();
+        this.checkout("price_1Jr22xBI1GhkUGQthrKBOAzq");
         // this.checkout("subscription_plan_206914");
     }
 
@@ -75,6 +76,18 @@ export class DefaultCheckoutComponent implements OnInit {
     checkoutPro12M() {
         this.checkout("price_1Jr25GBI1GhkUGQtB1lKwVhy");
         // this.checkout("subscription_plan_251974");
+    }
+    
+    checkoutML1M() {
+        this.checkout("price_1N2Xq3BI1GhkUGQtQDnZBWIs");
+    }
+
+    checkoutML3M() {
+        this.checkout("price_1N2XtNBI1GhkUGQtGZhftPcU");
+    }
+
+    checkoutML12M() {
+        this.checkout("price_1N2XsKBI1GhkUGQtf2U6H5Hw");
     }
 
     checkoutStarter1MNonTrial() {
@@ -116,6 +129,10 @@ export class DefaultCheckoutComponent implements OnInit {
 
     month12Clicked() {
         this.SelectedTab = CheckoutTab.Month12;
+    }
+
+    showSupport() {
+        this._intercom.show();
     }
 
     private getClientReferenceId() {

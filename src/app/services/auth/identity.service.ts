@@ -8,6 +8,7 @@ import { AuthenticationService } from "@app/services/auth/auth.service";
 import { catchError, distinctUntilChanged, map, skip, tap } from "rxjs/operators";
 
 export enum SubscriptionType {
+    AI,
     Pro,
     Discovery,
     Starter,
@@ -60,7 +61,9 @@ export class IdentityService {
             return SubscriptionType.Free;
         }
         
-        if (this._isTrial) {
+        if (this._isAI) {
+            return SubscriptionType.AI;
+        } else if (this._isTrial) {
             return SubscriptionType.Trial;
         } else if (this._isPro) {
             return SubscriptionType.Pro;
@@ -203,6 +206,26 @@ export class IdentityService {
         }
 
         return false;
+    } 
+
+    private get _isAI(): boolean {
+        if (!this.isAuthorizedCustomer) {
+            return false;
+        }
+
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("Neural") !== -1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }  
 
     private get _isDiscovery(): boolean {
@@ -302,12 +325,54 @@ export class IdentityService {
         }
     }
 
-    is15MinAllowed(): boolean {
+    is1MinAllowed(): boolean {
         if (this.isAdmin) {
             return true;
         }
 
         if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.AI) {
+            return true;
+        }
+
+        return false;
+    }
+
+    is5MinAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.AI) {
+            return true;
+        }
+
+        return false;
+    }
+
+    is15MinAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
+            this.subscriptionType === SubscriptionType.Trial ||
+            this.subscriptionType === SubscriptionType.Discovery) {
+            return true;
+        }
+
+        return false;
+    }
+
+    is30MinAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
             this.subscriptionType === SubscriptionType.Trial ||
             this.subscriptionType === SubscriptionType.Discovery) {
             return true;
@@ -321,7 +386,8 @@ export class IdentityService {
             return true;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
             this.subscriptionType === SubscriptionType.Trial ||
             this.subscriptionType === SubscriptionType.Discovery) {
             return true;
@@ -335,13 +401,46 @@ export class IdentityService {
             return true;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
+        if (this.subscriptionType === SubscriptionType.AI ||
+            this.subscriptionType === SubscriptionType.Pro ||
             this.subscriptionType === SubscriptionType.Trial ||
             this.subscriptionType === SubscriptionType.Discovery) {
             return true;
         }
 
         return false;
+    }
+
+    is1MinAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.is1MinAllowed()) {
+            return false;
+        }
+
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
+
+        return true;
+    }
+
+    is5MinAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.is5MinAllowed()) {
+            return false;
+        }
+
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
+
+        return true;
     }
 
     is15MinAllowedByLevel(level: number): boolean {
@@ -353,9 +452,25 @@ export class IdentityService {
             return false;
         }
 
-        if (level < this.basicLevel) {
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
+
+        return true;
+    }
+
+    is30MinAllowedByLevel(level: number): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (!this.is30MinAllowed()) {
             return false;
         }
+
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
 
         return true;
     }
@@ -369,14 +484,9 @@ export class IdentityService {
             return false;
         }
 
-        if (this.subscriptionType === SubscriptionType.Pro ||
-            this.subscriptionType === SubscriptionType.Trial) {
-            return true;
-        }
-
-        if (level < this.basicLevel) {
-            return false;
-        }
+        // if (level < this.basicLevel) {
+        //     return false;
+        // }
 
         return true;
     }
@@ -401,7 +511,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Breakfree Trading Lifetime Pro Plan"];
+        // this.subscriptions = ["Neural"];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {

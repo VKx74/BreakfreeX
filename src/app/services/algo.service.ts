@@ -150,6 +150,7 @@ export interface IBFTScannerBacktestAlgoParameters extends IBFTAlgoParameters {
     type: string;
     rtd_timeframe: string;
     validation_url: string;
+    rtd_tf: number;
 }
 
 export interface IBFTAHitTestAlgoParameters extends IBFTBacktestAlgoParameters {
@@ -291,6 +292,38 @@ export interface IBFTAAlgoResponseV2 {
     id: any;
 }
 
+export interface SaRResponse {
+    r_p28: number;
+    r_p18: number;
+    r: number;
+    n: number;
+    s_m28: number;
+    s_m18: number;
+    s: number;
+    date: number;
+}
+
+export interface IBFTAAlgoResponseV3 {
+    levels: IBFTALevels;
+    trade: IBFTATradeV2;
+    lower_1_prob: string;
+    lower_3_prob: string;
+    lower_2_prob: string;
+    upper_1_prob: string;
+    upper_3_prob: string;
+    upper_2_prob: string;
+    support_prob: number;
+    resistance_prob: number;
+    support_ext_prob: number;
+    resistance_ext_prob: number;
+    id: any;
+    sar: SaRResponse[];
+    sar_prediction: SaRResponse[];
+    rtd: IRTDPayload;
+    mema_prediction: number[];
+    fama_prediction: number[];
+}
+
 export interface IBFTAAlgoTrendResponse {
     globalTrend: IBFTATrend;
     localTrend: IBFTATrend;
@@ -302,6 +335,8 @@ export interface IBFTAAlgoTrendResponse {
     globalSlowValue: number;
     localFastValue: number;
     localSlowValue: number;
+    globalAvg: number;
+    localAvg: number;
 }
 
 export interface IBFTAAlgoCacheItemResponse {
@@ -446,6 +481,8 @@ export interface IRTDPayload {
     global_trend_strength: string;
     local_trend_strength: string;
     general_trend: string[];
+    global_avg: number;
+    local_avg: number;
 }
 
 class AlgoServiceEncryptionHelper {
@@ -539,6 +576,32 @@ export class AlgoService {
 
     calculateV2(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v2`, data).pipe(map(this._decrypt));
+    }
+
+    calculateV3(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV3> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v3`, data).pipe(map(this._decrypt)).pipe(map((_) => {
+            let support_prob = _['support_prob'];
+            let resistance_prob = _['resistance_prob'];
+            let support_ext_prob = _['support_ext_prob'];
+            let resistance_ext_prob = _['resistance_ext_prob'];
+
+            if (Number.isFinite(support_prob)) {
+                _['lower_1_prob'] = ".[AI.Neuron(" + (support_prob * 100).toFixed() + "%)]";
+            }
+            if (Number.isFinite(resistance_prob)) {
+                _['upper_1_prob'] = ".[AI.Neuron(" + (resistance_prob * 100).toFixed() + "%)]";
+            }
+            if (Number.isFinite(support_ext_prob)) {
+                _['lower_2_prob'] = ".[AI.Neuron(Val)]";
+                _['lower_3_prob'] = ".[AI.Neuron(" + (support_ext_prob * 100).toFixed() + "%)]";
+            }
+            if (Number.isFinite(resistance_ext_prob)) {
+                _['upper_2_prob'] = ".[AI.Neuron(Val)]";
+                _['upper_3_prob'] = ".[AI.Neuron(" + (resistance_ext_prob * 100).toFixed() + "%)]";
+            }
+
+            return _;
+        }));
     }
 
     calculateV2Guest(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV2> {

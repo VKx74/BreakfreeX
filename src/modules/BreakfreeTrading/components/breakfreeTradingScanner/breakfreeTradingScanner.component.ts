@@ -75,7 +75,10 @@ interface IScannerHistoryResults extends IScannerResults {
 }
 
 enum TimeFrames {
+    Min1 = "1 Min",
+    Min5 = "5 Min",
     Min15 = "15 Min",
+    Min30 = "30 Min",
     Hour1 = "1 Hour",
     Hour4 = "4 Hour",
     Day = "Daily",
@@ -105,13 +108,13 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _featuredGroupName: string = "Featured";
     private _otherGroupName: string = "Other";
     // private _types: IWatchlistItem[] = [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist, CryptoWatchlist];
-    private _supportedTimeframes: number[] = [60, 300, 900, 3600, 14400, 86400];
+    private _supportedTimeframes: number[] = [60, 300, 900, 1800, 3600, 14400, 86400];
     private _loadingProfile: boolean = true;
     private _missionsChangedSubscription: Subscription;
 
     public SWING = 'SWING';
     public segments: TradeTypes[] = [TradeTypes.Ext, TradeTypes.BRC, TradeTypes.Swing];
-    public timeframes: TimeFrames[] = [TimeFrames.Min15, TimeFrames.Hour1, TimeFrames.Hour4, TimeFrames.Day];
+    public timeframes: TimeFrames[] = [TimeFrames.Min1, TimeFrames.Min5, TimeFrames.Min15, TimeFrames.Min30, TimeFrames.Hour1, TimeFrames.Hour4];
     public types: string[] = [this._featuredGroupName, InstrumentTypeName.MajorForex, InstrumentTypeName.ForexMinors, InstrumentTypeName.ForexExotics, InstrumentTypeName.Indices, InstrumentTypeName.Commodities, InstrumentTypeName.Metals, InstrumentTypeName.Bonds, InstrumentTypeName.Equities, InstrumentTypeName.Crypto, InstrumentTypeName.Other];
     public groupingField: string = "marketType";
     // public groups: string[] = [];
@@ -214,21 +217,23 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         this._initialized = true;
     }
 
-    is15MinSonarAccessRestriction(group: IGroupedResults): boolean {
-        const tfValue15Min = this.toTimeframe(60 * 15);
-        if (group.timeframe === tfValue15Min) {
-            return this.show15MinAccessRestriction();
+    isProAccessRestriction(group: IGroupedResults): boolean {
+        const tfValue1Min = this.toTimeframe(60 * 1);
+        const tfValue5Min = this.toTimeframe(60 * 5);
+        // const tfValue15Min = this.toTimeframe(60 * 15);
+        // const tfValue30Min = this.toTimeframe(60 * 30);
+        if (group.timeframe === tfValue1Min) {
+            return this.show1MinAccessRestriction();
         }
-
-        return false;
-    }
-
-    isHourlySonarAccessRestriction(group: IGroupedResults): boolean {
-        const tfValue1H = this.toTimeframe(60 * 60);
-        const tfValue4H = this.toTimeframe(60 * 60 * 4);
-        if (group.timeframe === tfValue1H || group.timeframe === tfValue4H) {
-            return this.showHourlyAccessRestriction();
+        if (group.timeframe === tfValue5Min) {
+            return this.show5MinAccessRestriction();
         }
+        // if (group.timeframe === tfValue15Min) {
+        //     return this.show15MinAccessRestriction();
+        // }
+        // if (group.timeframe === tfValue30Min) {
+        //     return this.show30MinAccessRestriction();
+        // }
 
         return false;
     }
@@ -245,6 +250,54 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
         const _1HLevelRestriction = this.show1HLevelRestriction();
         const _1HAccessRestriction = this.showHourlyAccessRestriction();
         if (group.timeframe === tfValue1H && _1HLevelRestriction && !_1HAccessRestriction) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show1MinAccessRestriction(): boolean {
+        const is1MinAllowed = this._identityService.is1MinAllowed();
+        return !is1MinAllowed;
+    }
+
+    show1MinLevelRestriction() {
+        const level = this._tradingProfileService.level;
+        const is1MinAllowedByLevel = this._identityService.is1MinAllowedByLevel(level);
+        if (is1MinAllowedByLevel) {
+            return false;
+        }
+
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        const is1MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min1) !== -1;
+        if (is1MinSelected) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show5MinAccessRestriction(): boolean {
+        const is5MinAllowed = this._identityService.is5MinAllowed();
+        return !is5MinAllowed;
+    }
+
+    show5MinLevelRestriction() {
+        const level = this._tradingProfileService.level;
+        const is5MinAllowedByLevel = this._identityService.is5MinAllowedByLevel(level);
+        if (is5MinAllowedByLevel) {
+            return false;
+        }
+
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        const is5MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min5) !== -1;
+        if (is5MinSelected) {
             return true;
         }
 
@@ -269,6 +322,30 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
 
         const is15MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min15) !== -1;
         if (is15MinSelected) {
+            return true;
+        }
+
+        return false;
+    }
+
+    show30MinAccessRestriction(): boolean {
+        const is30MinAllowed = this._identityService.is30MinAllowed();
+        return !is30MinAllowed;
+    }
+
+    show30MinLevelRestriction() {
+        const level = this._tradingProfileService.level;
+        const is30MinAllowedByLevel = this._identityService.is30MinAllowedByLevel(level);
+        if (is30MinAllowedByLevel) {
+            return false;
+        }
+
+        if (this._loadingProfile) {
+            return false;
+        }
+
+        const is30MinSelected = this.activeTimeframes.indexOf(TimeFrames.Min30) !== -1;
+        if (is30MinSelected) {
             return true;
         }
 
@@ -321,10 +398,31 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             return false;
         }
 
+        const tfValue1Min = this.toTimeframe(60);
+        const _1MinLevelRestriction = this.show1MinLevelRestriction();
+        const _1MinAccessRestriction = this.show1MinAccessRestriction();
+        if (group.timeframe === tfValue1Min && (_1MinLevelRestriction || _1MinAccessRestriction)) {
+            return true;
+        }
+
+        const tfValue5Min = this.toTimeframe(60 * 5);
+        const _5MinLevelRestriction = this.show5MinLevelRestriction();
+        const _5MinAccessRestriction = this.show5MinAccessRestriction();
+        if (group.timeframe === tfValue5Min && (_5MinLevelRestriction || _5MinAccessRestriction)) {
+            return true;
+        }
+
         const tfValue15Min = this.toTimeframe(60 * 15);
         const _15MinLevelRestriction = this.show15MinLevelRestriction();
         const _15MinAccessRestriction = this.show15MinAccessRestriction();
         if (group.timeframe === tfValue15Min && (_15MinLevelRestriction || _15MinAccessRestriction)) {
+            return true;
+        }
+
+        const tfValue30Min = this.toTimeframe(60 * 30);
+        const _30MinLevelRestriction = this.show30MinLevelRestriction();
+        const _30MinAccessRestriction = this.show30MinAccessRestriction();
+        if (group.timeframe === tfValue30Min && (_30MinLevelRestriction || _30MinAccessRestriction)) {
             return true;
         }
 
@@ -471,6 +569,7 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
             case 1 * 60: return "1 Min";
             case 5 * 60: return "5 Min";
             case 15 * 60: return "15 Min";
+            case 30 * 60: return "30 Min";
             case 60 * 60: return "1 Hour";
             case 240 * 60: return "4 Hours";
             case 24 * 60 * 60: return "1 Day";
@@ -608,6 +707,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     }
 
     private _reloadData() {
+        if (!this.isAuthorizedCustomer) {
+            return;
+        }
+
         const res: IScannerResults[] = [];
         for (const i of this._featured) {
             const loaded = this._getLoaded(i);
@@ -720,7 +823,10 @@ export class BreakfreeTradingScannerComponent extends BaseLayoutItem {
     private _getTfValue(activeTimeframe: string): number {
         const min = 60;
         switch (activeTimeframe) {
+            case TimeFrames.Min1: return min;
+            case TimeFrames.Min5: return min * 5;
             case TimeFrames.Min15: return min * 15;
+            case TimeFrames.Min30: return min * 30;
             case TimeFrames.Hour1: return min * 60;
             case TimeFrames.Hour4: return min * 60 * 4;
             case TimeFrames.Day: return min * 60 * 24;

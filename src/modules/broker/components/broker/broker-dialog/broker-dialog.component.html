@@ -11,7 +11,7 @@
      
 
         <div class="modal-body">
-            <div *ngIf="isTradingAllowed; else outOfAccess">
+            <div>
                 <ng-container [ngSwitch]="brokerType">
                     <mt-broker-login [brokerInstance]="EBrokerInstance.MT5" [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.MT5">
                     </mt-broker-login>

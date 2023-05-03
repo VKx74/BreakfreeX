@@ -6,7 +6,7 @@
     "identityUrl": "https://auth-platform-stage.breakfreetrading.com/",
     "webSocketUrl": "wss://ws-platform-stage.breakfreetrading.com/wsnotification",
     "bitmexREST": "https://feed-stage.breakfreetrading.com/bitmex/",
-    "bitmexWS": "wss://feed-stage.breakfreetrading.com/bitmex/subscribe/realtime/", 
+    "bitmexWS": "wss://feed-stage.breakfreetrading.com/bitmex/subscribe/realtime/",
     "polygonREST": "https://feed-stage.breakfreetrading.com/polygon/",
     "polygonWS": "wss://feed-stage.breakfreetrading.com/polygon/subscribe/realtime/",
     "twelvedataREST": "https://feed-stage.breakfreetrading.com/twelvedata/",
@@ -52,7 +52,6 @@
     "bftAlertsREST": "https://user-api-alerts-stage.breakfreetrading.com/",
     "socialFeedREST": "https://socialfeed-social-stage.breakfreetrading.com/",
     "socialFeedWS": "wss://socialfeed-social-stage.breakfreetrading.com/websocket",
-
     "companionUserTracker": "https://usertracker-trackerapi-stage.companion.to/usertracker/admin/",
     "companionP2P": "https://usertracker-trackerapi-stage.companion.to/usertracker/admin-p2p/"
   },
@@ -76,7 +75,7 @@
     "polygonREST": {
       "name": "Polygon",
       "url": "https://feed-stage.breakfreetrading.com/polygon/"
-    }, 
+    },
     "twelvedataREST": {
       "name": "Twelvedata",
       "url": "https://feed-stage.breakfreetrading.com/twelvedata/"
@@ -140,6 +139,7 @@
     "https://mtapi-stage.breakfreetrading.com",
     "https://user-api-alerts-stage.breakfreetrading.com",
     "https://socialfeed-social-stage.breakfreetrading.com",
-    "https://usertracker-trackerapi-stage.companion.to"
+    "https://usertracker-trackerapi-stage.companion.to",
+    "https://localhost"
   ]
 }

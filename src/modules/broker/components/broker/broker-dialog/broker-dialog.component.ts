@@ -6,6 +6,7 @@ import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {TranslateService} from "@ngx-translate/core";
 import {SettingsTranslateService} from "../../../localization/token";
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
 export interface BrokerDialogData {
     brokerType: EBrokerInstance;
@@ -41,6 +42,12 @@ export class BrokerDialogComponent extends Modal implements OnInit {
                 protected _dialog: MatDialog,
                 private _brokerService: BrokerService) {
         super(_injector);
+
+        if (!this.isTradingAllowed) {
+            this._processCheckout();
+            this.close();
+            return;
+        }
     }
 
     privacyPolicy() {
@@ -70,5 +77,9 @@ export class BrokerDialogComponent extends Modal implements OnInit {
             case EBrokerInstance.BinanceFuturesCOIN: return "Binance (COIN Futures)";
         }
     } 
+
+    private _processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+    }
 
 }

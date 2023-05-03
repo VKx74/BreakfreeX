@@ -11,20 +11,28 @@ export class IndicatorRestrictionService {
         }
 
         this._restrictedIndicators.push(TradingChartDesigner.MESA.instanceTypeName);
+        this._restrictedIndicators.push(TradingChartDesigner.TradingZone.instanceTypeName);
 
         if (!this._identity.isAuthorizedCustomer) {
             this._restrictedIndicators.push(TradingChartDesigner.RTD.instanceTypeName);
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
+            this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
             this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
         } else {
-            if (this._identity.subscriptionType === SubscriptionType.Pro || this._identity.subscriptionType === SubscriptionType.Trial) {
+            if (this._identity.subscriptionType === SubscriptionType.AI) {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
+            } else if (this._identity.subscriptionType === SubscriptionType.Pro || this._identity.subscriptionType === SubscriptionType.Trial) {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
             } else if (this._identity.subscriptionType === SubscriptionType.Discovery) {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
             } else if (this._identity.subscriptionType === SubscriptionType.Starter) {
+                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
             }

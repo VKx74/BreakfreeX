@@ -8,4 +8,19 @@
     height: 100%;
     overflow: auto;
   }
+
+  .value2 {
+    max-width: 160px;
+  }
+
+  .instrument-result {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid gray;
+
+    .row {
+      margin-right: 0px !important;
+      margin-left: 0px !important;
+    }
+  }
 }

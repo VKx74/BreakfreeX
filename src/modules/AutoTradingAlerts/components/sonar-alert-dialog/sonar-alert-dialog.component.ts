@@ -41,25 +41,20 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     private _selectedTriggerTimeframe: TriggerTimeframe;
     private _selectedTriggerSetup: TriggerSetup = TriggerSetup.AllSetups;
 
-    private get _isPro(): boolean {
-        return this._identityService.subscriptionType === SubscriptionType.Pro ||
-        this._identityService.subscriptionType === SubscriptionType.Trial;
-    }
-
     TriggerType = TriggerType;
     AlertExecutionStrategy = AlertExecutionStrategy;
     TriggerTimeframe = TriggerTimeframe;
 
     public get allowedTriggerTimeframe(): TriggerTimeframe[] {
-       return this._allowedTriggerTimeframe;
+        return this._allowedTriggerTimeframe;
     }
 
     public get allowedTriggerSetup(): TriggerSetup[] {
         return [
             TriggerSetup.AllSetups,
-            TriggerSetup.Swing,
-            TriggerSetup.BRC,
-            TriggerSetup.EXT
+            // TriggerSetup.Swing,
+            // TriggerSetup.BRC,
+            // TriggerSetup.EXT
         ];
     }
 
@@ -139,6 +134,12 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         @Inject(MAT_DIALOG_DATA) public data: ISonarDialogConfig) {
         super(_injector);
 
+        if (this._identityService.isGuestMode || !this._identityService.isAuthorizedCustomer) {
+            this._processCheckout();
+            this.close();
+            return;
+        }
+
         this._formAllowedTimeframes();
         this.canRunAlert = this._alertsService.canRunMoreAlerts(AlertType.SonarAlert);
         this.saveAndStart = this.canRunAlert;
@@ -161,9 +162,9 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
                 this._instrumentService.getInstruments(null, data.alert.instrument).subscribe((instruments) => {
                     for (const i of instruments) {
                         if (i.id.toLowerCase() === data.alert.instrument.toLowerCase()) {
-                                this.instrument = i;
-                                this.message = data.alert.notificationMessage;
-                            }
+                            this.instrument = i;
+                            this.message = data.alert.notificationMessage;
+                        }
                     }
                 });
             } else {
@@ -196,14 +197,14 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         if (this.data && this.data.alert) {
             this._edit();
         } else {
-             this._create();
+            this._create();
         }
     }
 
     private _create() {
         let option = this._getData();
         this.processingSubmit = true;
-        
+
         this._alertsService.createSonarAlert(option).subscribe((alert) => {
             this.processingSubmit = false;
             this.close(true);
@@ -213,11 +214,11 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             console.error(error);
         });
     }
-    
+
     private _edit() {
         let option = this._getData();
         this.processingSubmit = true;
-        
+
         this._alertsService.updateSonarAlert(option, this.data.alert.id).subscribe((alert) => {
             this.processingSubmit = false;
             this.close(true);
@@ -277,7 +278,8 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
         forkJoin([task1, task2]).subscribe((data) => {
             let symbol = this.instrument ? this.instrument.symbol : "All instruments";
             let triggerType = this.selectedTriggerType === TriggerType.NewSetup ? "New trade(s)" : "Trade(s) Disappeared";
-            this.message = `${triggerType} for ${symbol} ${data[0]} ${data[1]}`;
+            // this.message = `${triggerType} for ${symbol} ${data[0]} ${data[1]}`;
+            this.message = `${triggerType} for ${symbol} ${data[0]}`;
         });
     }
 
@@ -286,24 +288,39 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
             return;
         }
 
+        let is1MinAllowed = this._identityService.is1MinAllowed();
+        let is5MinAllowed = this._identityService.is5MinAllowed();
         let is15MinAllowed = this._identityService.is15MinAllowed();
+        let is30MinAllowed = this._identityService.is30MinAllowed();
         let isHourAllowed = this._identityService.isHourAllowed();
         let is4HourAllowed = this._identityService.is4HourAllowed();
 
-        if (is15MinAllowed) {
+        if (is1MinAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.AllTimeframes);
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Min1);
+        }
+
+        if (is5MinAllowed) {
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Min5);
+        }
+
+        if (is15MinAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Min15);
+        }
+
+        if (is30MinAllowed) {
+            this._allowedTriggerTimeframe.push(TriggerTimeframe.Min30);
         }
 
         if (isHourAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour1);
         }
-        
+
         if (is4HourAllowed) {
             this._allowedTriggerTimeframe.push(TriggerTimeframe.Hour4);
         }
 
-        this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
+        // this._allowedTriggerTimeframe.push(TriggerTimeframe.Day1);
         this._selectedTriggerTimeframe = this._allowedTriggerTimeframe[0];
     }
 

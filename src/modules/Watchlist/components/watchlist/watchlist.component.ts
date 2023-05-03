@@ -111,7 +111,7 @@ export class WatchlistComponent extends BaseLayoutItem {
     private _state: IWatchlistComponentState;
 
     get isAuthorizedCustomer(): boolean {
-        return true;
+        return this._identityService.isAuthorizedCustomer;
     }
 
     get ViewMode() {
@@ -145,10 +145,6 @@ export class WatchlistComponent extends BaseLayoutItem {
     }
 
     ngOnInit() {
-        if (!this.isAuthorizedCustomer) {
-            return;
-        }
-
         this.initialized.next(this);
 
         this.loading = true;
@@ -457,7 +453,7 @@ export class WatchlistComponent extends BaseLayoutItem {
     }
 
     createWatchlist() {
-        if (this._identityService.isGuestMode) {
+        if (this._identityService.isGuestMode || !this.isAuthorizedCustomer) {
             this.processCheckout();
             return;
         }

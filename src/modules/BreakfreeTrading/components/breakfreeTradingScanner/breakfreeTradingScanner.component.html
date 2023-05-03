@@ -51,13 +51,13 @@
                         <div class="timeframe-name">{{groupedResult.timeframe}}</div>
                         <div *ngIf="showRestrictions(groupedResult); else dataContainer">
                            <div class="access-restrictions" (click)="manageSubscriptions()"
-                              *ngIf="is15MinSonarAccessRestriction(groupedResult)">
-                              Upgrade to Pro for access to 15m Sonar setups.
+                              *ngIf="isProAccessRestriction(groupedResult)">
+                              Upgrade to Pro for access to this Sonar setups.
                            </div>
-                           <div class="access-restrictions" (click)="manageSubscriptions()"
-                              *ngIf="isHourlySonarAccessRestriction(groupedResult)">
-                              Upgrade to Discovery for access to Hourly Sonar setups.
-                           </div>
+                           <!-- <div class="access-restrictions" (click)="manageSubscriptions()"
+                              *ngIf="isDiscoveryAccessRestriction(groupedResult)">
+                              Upgrade to Discovery for access to this Sonar setups.
+                           </div> -->
                            <div class="timeframe-restrictions" *ngIf="isLevelRestriction(groupedResult)">
                               Before Sonar enables this timeframe, you need to achieve level 4. <br> Don't worry,
                               trades are still available if you dig through this timeframe manually.
@@ -145,7 +145,7 @@
                               <ng-container [ngSwitch]="scannerVM.origType">
                                  <ng-container *ngSwitchCase="origType.EXT">
                                     <!-- <img class="svgfiller"  src="assets/img/EXT2.svg"/> -->
-                                    <span>EXT</span>
+                                    <span>X-Mode 6</span>
                                  </ng-container>
                                  <ng-container *ngSwitchCase="origType.BRC">
                                     <!-- <img class="svgfiller"  src="assets/img/BRC2.svg"/> -->
