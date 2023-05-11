@@ -93,7 +93,7 @@ build-latest:
         - echo $CONTAINER_IMAGE
         - echo $CI_REGISTRY
         - echo $CI_BUILD_TOKEN
-        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
         - docker build --tag $CONTAINER_IMAGE:latest .
         - docker push $CONTAINER_IMAGE:latest
     # tags:
@@ -116,7 +116,7 @@ build-stable:
         - echo $CONTAINER_IMAGE
         - echo $CI_REGISTRY
         - echo $CI_BUILD_TOKEN
-        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
         - docker build --tag $CONTAINER_IMAGE:stable .
         - docker push $CONTAINER_IMAGE:stable
     # tags:
@@ -137,7 +137,7 @@ build-maintenance-stable:
         - echo $CONTAINER_IMAGE
         - echo $CI_REGISTRY
         - echo $CI_BUILD_TOKEN
-        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
         - docker build --tag $CONTAINER_IMAGE:stable -f maintenance.dockerfile .
         - docker push $CONTAINER_IMAGE:stable
     only:
@@ -156,7 +156,7 @@ build-maintenance-latest:
         - echo $CONTAINER_IMAGE
         - echo $CI_REGISTRY
         - echo $CI_BUILD_TOKEN
-        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+        - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
         - docker build --tag $CONTAINER_IMAGE:latest -f maintenance.dockerfile .
         - docker push $CONTAINER_IMAGE:latest
     only:
