@@ -100,6 +100,7 @@ export class SonarAlertDialogComponent extends Modal<ISonarDialogConfig> impleme
     public get selectedTriggerSetup(): TriggerSetup {
         return this._selectedTriggerSetup;
     }
+    
     public set selectedTriggerSetup(value: TriggerSetup) {
         if (this._selectedTriggerSetup = value) {
             this._selectedTriggerSetup = value;

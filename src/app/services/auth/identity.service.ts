@@ -57,10 +57,6 @@ export class IdentityService {
     // }
 
     get subscriptionType(): SubscriptionType {
-        if (!this.isAuthorizedCustomer) {
-            return SubscriptionType.Free;
-        }
-        
         if (this._isAI) {
             return SubscriptionType.AI;
         } else if (this._isTrial) {
@@ -137,15 +133,39 @@ export class IdentityService {
             return true;
         }
 
-        if (this.isTrialNumberRequired()) {
+        // if (this.isTrialNumberRequired()) {
+        //     return false;
+        // }
+
+        // if (this._isTrial && this._isTrialExpired) {
+        //     return false;
+        // }
+
+        if (!this.subscriptions || !this.subscriptions.length) {
             return false;
         }
 
-        if (this._isTrial && this._isTrialExpired) {
-            return false;
+        if (this.isBlackFridayDeal) {
+            return true;
         }
 
-        if (this.subscriptions && this.subscriptions.length) {
+        if (this.isLifetimeAccess) {
+            return true;
+        }
+
+        if (this._isPro) {
+            return true;
+        }
+
+        if (this._isAI) {
+            return true;
+        }
+
+        if (this._isDiscovery) {
+            return true;
+        }
+
+        if (this._isStarter) {
             return true;
         }
 
@@ -153,10 +173,6 @@ export class IdentityService {
     }
 
     public get isBlackFridayDeal(): boolean {
-        if (!this.isAuthorizedCustomer) {
-            return false;
-        }
-
         if (this.isAdmin) {
             return true;
         }
@@ -173,10 +189,6 @@ export class IdentityService {
     } 
     
     public get isLifetimeAccess(): boolean {
-        if (!this.isAuthorizedCustomer) {
-            return false;
-        }
-
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Lifetime") !== -1) {
@@ -189,10 +201,6 @@ export class IdentityService {
     }
 
     private get _isPro(): boolean {
-        if (!this.isAuthorizedCustomer) {
-            return false;
-        }
-
         if (this.isAdmin) {
             return true;
         }
@@ -209,10 +217,6 @@ export class IdentityService {
     } 
 
     private get _isAI(): boolean {
-        if (!this.isAuthorizedCustomer) {
-            return false;
-        }
-
         if (this.isAdmin) {
             return true;
         }
@@ -229,10 +233,6 @@ export class IdentityService {
     }  
 
     private get _isDiscovery(): boolean {
-        if (!this.isAuthorizedCustomer) {
-            return false;
-        }
-
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Discovery") !== -1) {
@@ -245,10 +245,6 @@ export class IdentityService {
     }  
     
     private get _isStarter(): boolean {
-        if (!this.isAuthorizedCustomer) {
-            return false;
-        }
-
         if (this.isAdmin) {
             return false;
         }
@@ -511,7 +507,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Neural"];
+        // this.subscriptions = [""];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
