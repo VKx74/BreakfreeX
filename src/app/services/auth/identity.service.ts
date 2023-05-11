@@ -59,14 +59,14 @@ export class IdentityService {
     get subscriptionType(): SubscriptionType {
         if (this._isAI) {
             return SubscriptionType.AI;
-        } else if (this._isTrial) {
-            return SubscriptionType.Trial;
         } else if (this._isPro) {
             return SubscriptionType.Pro;
         } else if (this._isDiscovery) {
             return SubscriptionType.Discovery;
-        }  else if (this._isStarter) {
+        } else if (this._isStarter) {
             return SubscriptionType.Starter;
+        } else if (this._isTrial) {
+            return SubscriptionType.Trial;
         } else {
             return SubscriptionType.Free;
         }
@@ -119,7 +119,7 @@ export class IdentityService {
 
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
-                if (sub.indexOf("Trial") !== -1 && this.subscriptions.length === 1) {
+                if (sub.indexOf("Trial") !== -1 && sub.indexOf("No Trial") === -1 && this.subscriptions.length === 1) {
                     return true;    
                 }
             }
@@ -132,14 +132,6 @@ export class IdentityService {
         if (this.isAdmin) {
             return true;
         }
-
-        // if (this.isTrialNumberRequired()) {
-        //     return false;
-        // }
-
-        // if (this._isTrial && this._isTrialExpired) {
-        //     return false;
-        // }
 
         if (!this.subscriptions || !this.subscriptions.length) {
             return false;
@@ -166,6 +158,14 @@ export class IdentityService {
         }
 
         if (this._isStarter) {
+            return true;
+        }
+
+        if (this.isTrialNumberRequired()) {
+            return false;
+        }
+
+        if (this._isTrial && !this._isTrialExpired) {
             return true;
         }
 
@@ -507,7 +507,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = [""];
+        // this.subscriptions = [];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
