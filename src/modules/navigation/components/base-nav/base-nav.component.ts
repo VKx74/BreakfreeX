@@ -114,6 +114,10 @@ export class BaseNavComponent implements OnInit {
     public get academyRoute(): string {
         return AppRoutes.Academy;
     }
+
+    public get rtdRoute(): string {
+        return AppRoutes.RTD;
+    }
     
     public get isUnreadMessages(): boolean {
         return this._socialRealtimeNotificationsService.unreadExists;

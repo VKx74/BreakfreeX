@@ -47,6 +47,10 @@ const routes: Routes = [
                 path: AppRoutes.SocialFeed,
                 loadChildren: () => import('../SocialFeed/social-feed.module').then(m => m.SocialFeedModule)
             },
+            {
+                path: AppRoutes.RTD,
+                loadChildren: () => import('../RTDPage/rtd-page.module').then(m => m.RTDPageModule)
+            },
         ]
     },
     {
