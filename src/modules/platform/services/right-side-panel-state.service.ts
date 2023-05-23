@@ -13,7 +13,8 @@ export enum Components {
     Alerts = "Alerts",
     Academy = "Academy",
     Backtest = "Backtest",
-    BinanceScanner = "BinanceScanner"
+    BinanceScanner = "BinanceScanner",
+    TrendIndex = "TrendIndex"
 }
 
 @Injectable()

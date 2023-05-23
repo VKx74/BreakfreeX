@@ -1,0 +1,31 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+:host {
+  width: 100%;
+  height: 100%;
+
+  .trend-column {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .up {
+    background-color: rgba(94, 175, 128, 0.3);
+  }
+  .strong-up {
+    background-color: rgba(94, 175, 128, 1);
+  }
+  .down {
+    background-color: rgba(189, 91, 106, 0.3);
+  }
+  .strong-down {
+    background-color: rgba(189, 91, 106, 1);
+  }
+  .sideways {
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+}

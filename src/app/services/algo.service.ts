@@ -485,6 +485,39 @@ export interface IRTDPayload {
     local_avg: number;
 }
 
+export interface IMesaTrendStrength {
+    f: number;
+    s: number;
+}
+
+export interface IBarData {
+    o: number;
+    h: number;
+    l: number;
+    c: number;
+    v: number;
+    t: number;
+}
+
+export interface IMesaTrendIndex {
+    symbol: string;
+    datafeed: string;
+    strength: { [id: string]: IMesaTrendStrength; };
+    avg_strength: { [id: string]: number; };
+    last_price: number;
+    price60: number;
+    price300: number;
+    price900: number;
+    price3600: number;
+    price14400: number;
+    price86400: number;
+}
+
+export interface IMesaTrendDetails {
+    bars: IBarData[];
+    mesa: { [id: string]: IMesaTrendStrength[]; };
+}
+
 class AlgoServiceEncryptionHelper {
     private static keySize = 256;
     private static ivSize = 128;
@@ -702,6 +735,14 @@ export class AlgoService {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}sonar_history_cache`, {
             symbol, exchange, timeframe, time
         }).pipe(map(this._decrypt));
+    }
+
+    getMesaTrendIndexes(): Observable<IMesaTrendIndex[]> {
+        return this._http.get<IBFTAEncryptedResponse>(`${this.url}trends-summary`).pipe(map(this._decrypt));
+    }
+
+    getMesaTrendDetails(symbol: string, datafeed: string): Observable<IMesaTrendDetails> {
+        return this._http.get<IBFTAEncryptedResponse>(`${this.url}trends?symbol=${symbol}&datafeed=${datafeed}`).pipe(map(this._decrypt));
     }
 
     private _decrypt(encrypted: IBFTAEncryptedResponse): any {
