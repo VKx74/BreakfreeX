@@ -5,37 +5,37 @@
 
         <!--Columns-->
 
-        <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="80">
+        <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="80" [columnWidth]="90"  >
             {{'instrument' | translate}} 
         </data-table-header-cell>
-        <data-table-header-cell columnName="price" [sortable]="false"
+       <!-- <data-table-header-cell columnName="price" [sortable]="false"
             [columnMinWidth]="80">
             {{'price' | translate}}
         </data-table-header-cell>
         <data-table-header-cell columnName="priceChange" [sortable]="false" [columnMinWidth]="65">
             {{'change' | translate}}
-        </data-table-header-cell>
-        <data-table-header-cell columnName="min_1" [sortable]="false" [columnMinWidth]="35" [columnWidth]="35">
+        </data-table-header-cell> -->
+        <data-table-header-cell columnName="min_1" [sortable]="true" [columnMinWidth]="45" [columnWidth]="45">
             {{'min_1' | translate}}
         </data-table-header-cell>
-        <data-table-header-cell columnName="min_5" [sortable]="false" [columnMinWidth]="35" [columnWidth]="35">
+        <data-table-header-cell columnName="min_5" [sortable]="true" [columnMinWidth]="45" [columnWidth]="45">
             {{'min_5' | translate}}
         </data-table-header-cell>
-        <data-table-header-cell columnName="min_15" [sortable]="false" [columnMinWidth]="35" [columnWidth]="35">
+        <data-table-header-cell columnName="min_15" [sortable]="true" [columnMinWidth]="45" [columnWidth]="45">
             {{'min_15' | translate}}
         </data-table-header-cell>
-        <data-table-header-cell columnName="h_1" [sortable]="false" [columnMinWidth]="35" [columnWidth]="35">
+        <data-table-header-cell columnName="h_1" [sortable]="true" [columnMinWidth]="45" [columnWidth]="45">
             {{'h_1' | translate}}
         </data-table-header-cell>
-        <data-table-header-cell columnName="h_4" [sortable]="false" [columnMinWidth]="35" [columnWidth]="35">
+        <data-table-header-cell columnName="h_4" [sortable]="true" [columnMinWidth]="45" [columnWidth]="45">
             {{'h_4' | translate}}
         </data-table-header-cell>
-        <data-table-header-cell columnName="d_1" [sortable]="false" [columnMinWidth]="35" [columnWidth]="35">
+        <data-table-header-cell columnName="d_1" [sortable]="true" [columnMinWidth]="45" [columnWidth]="45">
             {{'d_1' | translate}}
         </data-table-header-cell>
-        <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="65">
+      <!--  <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="65">
             {{'total' | translate}}
-        </data-table-header-cell>
+        </data-table-header-cell> -->
         <data-table-header-cell columnName="empty" [sortable]="false" [columnMinWidth]="0" [columnWidth]="0">
         </data-table-header-cell>
 
@@ -53,17 +53,17 @@
             </ng-template>
         </data-table-cell>
 
-        <data-table-cell columnName="price">
+      <!--  <data-table-cell columnName="price">
             <ng-template let-vmItem>{{vmItem.last_price}}</ng-template>
         </data-table-cell>
-        <data-table-cell columnName="priceChange"x>
+         <data-table-cell columnName="priceChange"x>
             <ng-template let-vmItem>
                 <span class="price-change" [class.up-trend]="vmItem.price86400Change > 0" [class.down-trend]="vmItem.price86400Change < 0">
                     {{vmItem.price86400Change > 0 ? "+" : ""}}
                     {{vmItem.price86400Change.toFixed(2)}}%
                 </span>
             </ng-template>
-        </data-table-cell>
+        </data-table-cell> -->
         <data-table-cell columnName="min_1">
             <ng-template let-vmItem>
                 <div class="strength-cell">
@@ -106,14 +106,14 @@
                 </div>
             </ng-template>
         </data-table-cell>
-        <data-table-cell columnName="total">
+     <!--   <data-table-cell columnName="total">
             <ng-template let-vmItem>
                 <div class="strength-total" [class.up-trend]="vmItem.totalStrength > 0" [class.down-trend]="vmItem.totalStrength < 0">
                     {{vmItem.totalStrength > 0 ? "+" : ""}}
                     {{(vmItem.totalStrength * 100).toFixed(2)}}%
                 </div>
             </ng-template>
-        </data-table-cell>
+        </data-table-cell> -->
 
     </data-table>
 </div>

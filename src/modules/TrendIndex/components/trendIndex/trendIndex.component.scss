@@ -15,6 +15,7 @@
     max-height: 25px !important;
     display: flex !important;
     align-items: center !important;
+    font-weight: 600;
   }
 
   /deep/ mat-cell.mat-cell.cdk-column-min_15, /deep/ mat-cell.mat-cell.cdk-column-min_1, /deep/ mat-cell.mat-cell.cdk-column-min_5, /deep/  mat-cell.mat-cell.cdk-column-h_1, /deep/  mat-cell.mat-cell.cdk-column-h_4, /deep/  mat-cell.mat-cell.cdk-column-d_1 {
@@ -22,6 +23,10 @@
   }
   /deep/ mat-cell.mat-cell.cdk-column-symbol {
     padding-left: 0px !important;
+  }
+  
+  /deep/ mat-header-cell {
+    font-weight: bold !important;
   }
 
   .out-of-access {
