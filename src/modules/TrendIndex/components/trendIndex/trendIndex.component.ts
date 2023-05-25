@@ -119,12 +119,15 @@ class TrendIndexVM {
             "3600": 0.2,
             "14400": 0.25,
             "86400": 0.25
-        }
+        };
 
-
-
-        this.totalStrength = s_60*this.weights["60"] + s_300*this.weights["300"] + s_900*this.weights["900"] + s_3600*this.weights["3600"] + s_14400*this.weights["14400"] + s_86400*this.weights["86400"];
-
+        this.totalStrength = 
+        s_60 * this.weights["60"] +
+        s_300 * this.weights["300"] +
+        s_900 * this.weights["900"] +
+        s_3600 * this.weights["3600"] +
+        s_14400 * this.weights["14400"] +
+        s_86400 * this.weights["86400"];
 
         this.price60StrengthValue = s_60;
         this.price300StrengthValue = s_300;
@@ -239,18 +242,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
     protected loadData() {
         this._algoService.getMesaTrendIndexes().subscribe((data) => {
             let list: TrendIndexVM[] = [];
+            const excludeInstruments = ["EURSEK", "USDSEK", "USDNOK", "USDHUF", "CADSGD", "EURNOK", "USDMXN", "SGDCHF", "NZDSGD"];
             for (let item of data) {
-                let model = new TrendIndexVM();
-                model.init(item);
-                list.push(model);
+                if (!excludeInstruments.includes(item.symbol.replace("_", ""))) { // add this condition
+                    let model = new TrendIndexVM();
+                    model.init(item);
+                    list.push(model);
+                }                
             }
-
+    
             list.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
             this.vm = list;
             this.loading = false;
             this._changesDetected = true;
         });
     }
+    
 
     protected useDefaultLinker(): boolean {
         return true;
