@@ -73,15 +73,12 @@ class TrendIndexVM {
     price86400Change: number;
     price86400StrengthValue: number;
     price86400Strength: ETrendIndexStrength;
-    weights: { [key: string]: number };
 
+    totalStrength: ETrendIndexStrength;
 
+    weights: { [id: string]: number; };
 
-
-    totalStrength: number;
-
-
-    public init(data: IMesaTrendIndex, weights: { [key: string]: number }) {
+    public init(data: IMesaTrendIndex) {
         this.symbol = data.symbol.replace("_", "");
         this.datafeed = data.datafeed;
         this.last_price = data.last_price;
@@ -108,18 +105,26 @@ class TrendIndexVM {
             this.strength[key] = data.strength[key].f - data.strength[key].s;
         }
 
-        this.weights = weights;
-
         let s_60 = this.strength["60"] / this.avg_strength["60"];
         let s_300 = this.strength["300"] / this.avg_strength["300"];
         let s_900 = this.strength["900"] / this.avg_strength["900"];
         let s_3600 = this.strength["3600"] / this.avg_strength["3600"];
         let s_14400 = this.strength["14400"] / this.avg_strength["14400"];
         let s_86400 = this.strength["86400"] / this.avg_strength["86400"];
-    
-        this.totalStrength = (s_60 * this.weights["60"] + s_300 * this.weights["300"] + s_900 * this.weights["900"] +
-            s_3600 * this.weights["3600"] + s_14400 * this.weights["14400"] + s_86400 * this.weights["86400"]);
-    
+        
+        this.weights = {
+            "60": 0.05,
+            "300": 0.1,
+            "900": 0.15,
+            "3600": 0.2,
+            "14400": 0.25,
+            "86400": 0.25
+        }
+
+
+
+        this.totalStrength = s_60*this.weights["60"] + s_300*this.weights["300"] + s_900*this.weights["900"] + s_3600*this.weights["3600"] + s_14400*this.weights["14400"] + s_86400*this.weights["86400"];
+
 
         this.price60StrengthValue = s_60;
         this.price300StrengthValue = s_300;
@@ -231,22 +236,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     }
 
-    // Define the weights outside of the loadData function.
-    protected weights: { [key: string]: number } = {
-        "60": 0.1, 
-        "300": 0.2, 
-        "900": 0.4, 
-        "3600": 0.5, 
-        "14400": 0.6, 
-        "86400": 0.7
-    };
-
     protected loadData() {
         this._algoService.getMesaTrendIndexes().subscribe((data) => {
             let list: TrendIndexVM[] = [];
             for (let item of data) {
                 let model = new TrendIndexVM();
-                model.init(item, this.weights);  // pass the weights object to the init function
+                model.init(item);
                 list.push(model);
             }
 
