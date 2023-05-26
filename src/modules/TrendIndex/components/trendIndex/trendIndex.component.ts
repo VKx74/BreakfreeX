@@ -30,6 +30,8 @@ import { BaseLayoutItem } from "@layout/base-layout-item";
 import { AlgoService, IMesaTrendIndex } from "@app/services/algo.service";
 import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { InstrumentService } from "@app/services/instrument.service";
+import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
+import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
 
 export interface ITrendIndexComponentState {
 }
@@ -42,10 +44,26 @@ export enum ETrendIndexStrength {
     StrongDown
 }
 
+interface ITrendIndexChartDataVM {
+    data: ITrendIndexChartData;
+    strength: number;
+    timeframe: string;
+    granularity: number;
+}
+
+interface ITrendIndexBarChartDataVM {
+    data: ITrendIndexBarChartData;
+    timeframe: string;
+    symbol: string;
+    startDate: string;
+    endDate: string;
+}
+
 class TrendIndexVM {
     strength: { [id: string]: number; };
     avg_strength: { [id: string]: number; };
 
+    id: string;
     symbol: string;
     datafeed: string;
     last_price: number;
@@ -74,9 +92,10 @@ class TrendIndexVM {
     price86400StrengthValue: number;
     price86400Strength: ETrendIndexStrength;
 
-    totalStrength: ETrendIndexStrength;
+    totalStrength: number;
 
-    public init(data: IMesaTrendIndex) {
+    public setData(data: IMesaTrendIndex) {
+        this.id = data.symbol;
         this.symbol = data.symbol.replace("_", "");
         this.datafeed = data.datafeed;
         this.last_price = data.last_price;
@@ -174,6 +193,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _updateInterval: any;
     private _reloadInterval: any;
     private _state: ITrendIndexComponentState;
+    private _chartDataBars: ITrendIndexBarChartDataVM;
+    private _chartDataTrends: ITrendIndexChartDataVM[] = [];
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
@@ -185,6 +206,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     get ComponentIdentifier() {
         return ComponentIdentifier;
+    }
+
+    get chartDataBars(): ITrendIndexBarChartDataVM {
+        return this._chartDataBars;
+    }
+
+    get chartDataTrends(): ITrendIndexChartDataVM[] {
+        return this._chartDataTrends;
     }
 
     vm: TrendIndexVM[] = [];
@@ -224,15 +253,25 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     protected loadData() {
         this._algoService.getMesaTrendIndexes().subscribe((data) => {
-            let list: TrendIndexVM[] = [];
             for (let item of data) {
-                let model = new TrendIndexVM();
-                model.init(item);
-                list.push(model);
+                let exists = false;
+                for (let existingItem of this.vm) {
+                    if (item.symbol === existingItem.id) {
+                        existingItem.setData(item);
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    let model = new TrendIndexVM();
+                    model.setData(item);
+                    this.vm.push(model);
+                }
             }
 
-            list.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
-            this.vm = list;
+            this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
+            this.vm = this.vm.slice();
             this.loading = false;
             this._changesDetected = true;
         });
@@ -274,6 +313,115 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.loading = true;
         this._changesDetected = true;
 
+        this._algoService.getMesaTrendDetails(instrumentVM.id, instrumentVM.datafeed).subscribe((data) => {
+            if (data) {
+                let dates: string[] = [];
+                let values: number[] = [];
+                let indexesUsed: number[] = [];
+
+                let i = 0;
+                while (i < data.bars.length) {
+                    let j = 0;
+                    let min = data.bars[i].c;
+                    let max = data.bars[i].c;
+                    let minIndex = i;
+                    let maxIndex = i;
+                    while (i < data.bars.length && j < 20) {
+                        if (data.bars[i].c > max) {
+                            max = data.bars[i].c;
+                            maxIndex = i;
+                        }
+                        if (data.bars[i].c < min) {
+                            min = data.bars[i].c;
+                            minIndex = i;
+                        }
+                        i++;
+                        j++;
+                    }
+                    if (minIndex === maxIndex) {
+                        indexesUsed.push(minIndex);
+                        values.push(min);
+                        dates.push(new Date(data.bars[minIndex].t * 1000).toLocaleString());
+                    } else {
+                        if (minIndex < maxIndex) {
+                            indexesUsed.push(minIndex);
+                            values.push(min);
+                            dates.push(new Date(data.bars[minIndex].t * 1000).toLocaleString());
+
+                            indexesUsed.push(maxIndex);
+                            values.push(max);
+                            dates.push(new Date(data.bars[maxIndex].t * 1000).toLocaleString());
+                        } else {
+                            indexesUsed.push(maxIndex);
+                            values.push(max);
+                            dates.push(new Date(data.bars[maxIndex].t * 1000).toLocaleString());
+
+                            indexesUsed.push(minIndex);
+                            values.push(min);
+                            dates.push(new Date(data.bars[minIndex].t * 1000).toLocaleString());
+                        }
+                    }
+                }
+
+                if (indexesUsed.length && indexesUsed[indexesUsed.length - 1] !== data.bars.length - 1) {
+                    let lastIndex = data.bars.length - 1;
+                    indexesUsed.push(lastIndex);
+                    values.push(data.bars[lastIndex].c);
+                    dates.push(new Date(data.bars[lastIndex].t * 1000).toLocaleString());
+
+                }
+
+                this._chartDataBars = {
+                    data: {
+                        dates: dates,
+                        values: values,
+                        isUpTrending: instrumentVM.totalStrength > 0
+                    },
+                    timeframe: this._tfToString(60),
+                    symbol: instrumentVM.symbol,
+                    startDate: new Date(data.bars[0].t * 1000).toLocaleString(),
+                    endDate: new Date(data.bars[data.bars.length - 1].t * 1000).toLocaleString()
+                };
+
+                this._chartDataTrends = [];
+
+                for (let tf in data.mesa) {
+                    let mesaValues: number[] = [];
+                    let avg = instrumentVM.avg_strength[tf];
+                    if (!avg) {
+                        continue;
+                    }
+                    for (let index of indexesUsed) {
+                        let mesaTf = data.mesa[tf][index];
+                        if (!mesaTf) {
+                            continue;
+                        }
+                        mesaValues.push((mesaTf.f - mesaTf.s) / avg * 100);
+                    }
+
+                    if (dates && mesaValues && mesaValues.length === dates.length) {
+                        this._chartDataTrends.push({
+                            timeframe: this._tfToString(Number(tf)),
+                            granularity: Number(tf),
+                            strength: mesaValues[mesaValues.length - 1],
+                            data: {
+                                dates: dates,
+                                values: mesaValues
+                            }
+                        });
+                    }
+                }
+            }
+            console.log(">>> Calculation finished");
+            this.loading = false;
+            this._changesDetected = true;
+        }, (error: any) => {
+            console.log('error:');
+            console.log(error);
+            this.loading = false;
+            this._changesDetected = true;
+        });
+
         this._instrumentService.getInstrumentsBySymbolOrId(instrumentVM.symbol)
             .subscribe((instruments: IInstrument[]) => {
                 if (instruments) {
@@ -287,14 +435,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                     this._sendInstrumentChange(instrument);
                 }
-                this.loading = false;
-                this._changesDetected = true;
             }, (error: any) => {
                 console.log('error:');
                 console.log(error);
-                this.loading = false;
-                this._changesDetected = true;
             });
+    }
+
+    private _tfToString(tf: number): string {
+        switch (tf) {
+            case 60: return "1 Min";
+            case 300: return "5 Mins";
+            case 900: return "15 Mins";
+            case 3600: return "1 Hour";
+            case 14400: return "4 Hours";
+            case 86400: return "1 Day";
+        }
+        return tf + " Mins";
     }
 
     setState(state: ITrendIndexComponentState) {
@@ -305,41 +461,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this._initialized = true;
     }
 
-    // private _subscribeOnInstrumentTick(instrumentVM: WatchlistInstrumentVM) {
-    //     const lastTick = this._realtimeService.getLastTick(instrumentVM.instrument);
-
-    //     if (lastTick) {
-    //         instrumentVM.handleTick(lastTick);
-    //     }
-
-    //     const subscription = this._realtimeService.subscribeToTicks(instrumentVM.instrument, (tick: ITick) => {
-    //         this._updateWatchlistChartHistory(instrumentVM.instrument, tick.price);
-    //         instrumentVM.handleTick(tick);
-    //         this._changesDetected = true;
-    //         // this.instrumentsVM = [...this.instrumentsVM];
-    //     });
-
-    //     const hash = JsUtil.getInstrumentHash(instrumentVM.instrument);
-    //     this._realtimeSubscriptions[hash] = subscription;
-    //     this._changesDetected = true;
-    // }
-
-    // private _unsubscribeFromInstrumentTick(instrumentVM: WatchlistInstrumentVM) {
-    //     const hash = JsUtil.getInstrumentHash(instrumentVM.instrument);
-    //     const subscription = this._realtimeSubscriptions[hash];
-    //     const key = this.getKeyForInstrumentsPriceHistory(instrumentVM.instrument);
-
-    //     if (subscription) {
-    //         subscription.unsubscribe();
-    //         delete this._realtimeSubscriptions[hash];
-    //     }
-
-    //     if (this.instrumentsPriceHistory[key]) {
-    //         delete this.instrumentsPriceHistory[key];
-    //     }
-
-    //     this._changesDetected = true;
-    // }
+    closeCharts() {
+        this._chartDataBars = null;
+        this._chartDataTrends = [];
+    }
 
     ngOnDestroy() {
         this.beforeDestroy.next(this);

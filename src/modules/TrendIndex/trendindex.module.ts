@@ -20,12 +20,16 @@ import { TrendIndexWidgetComponent } from './components/widget/trendIndexWidget.
 import { TrendIndexTranslateService } from './localization/token';
 import { SharedTranslateService } from '@app/localization/shared.token';
 import { TrendColumnComponent } from './components/trendColumn/trendColumn.component';
+import { TrendIndexBarChartComponent } from './components/trendIndexBarChart/trendIndexBarChart.component';
+import { TrendIndexChartComponent } from './components/trendIndexChart/trendIndexChart.component';
 
 @NgModule({
     declarations: [
         TrendIndexComponent,
         TrendIndexWidgetComponent,
-        TrendColumnComponent
+        TrendColumnComponent,
+        TrendIndexBarChartComponent,
+        TrendIndexChartComponent
     ],
     imports: [
         CommonModule,

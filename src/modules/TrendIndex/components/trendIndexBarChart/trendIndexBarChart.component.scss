@@ -1,0 +1,7 @@
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "global-styles/variables";
+:host {
+  width: 100%;
+  height: 100%;
+}

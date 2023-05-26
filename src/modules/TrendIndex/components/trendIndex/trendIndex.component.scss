@@ -36,6 +36,7 @@
   .root {
     height: 100%;
     display: flex;
+    flex-direction: column;
     width: 100%;
   }
 
@@ -45,7 +46,8 @@
     display: flex;
   }
 
-  .price-change, .strength-total {
+  .price-change,
+  .strength-total {
     text-align: right;
     float: right;
   }
@@ -56,5 +58,66 @@
 
   .down-trend {
     color: $redColor;
+  }
+
+  .chart-view {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+  }
+
+  .chart-container {
+    display: flex;
+    flex-direction: column;
+
+    .chart-container-title {
+      display: flex;
+      font-size: 11px;
+      margin: 0px 10px 0px 10px;
+      justify-content: space-between;
+    }
+
+    .margin-top {
+      margin-top: 10px;
+    }
+
+    .chart-container-canvas {
+      display: flex;
+    }
+
+    .close-icon {
+      margin-right: 10px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+  }
+
+  .data-table {
+    display: flex;
+  }
+
+  .strength-positive {
+    color: rgba(184, 233, 163, 0.8);
+  }
+
+  .strength-negative {
+    color: rgba(255, 182, 182, 0.8);
+  }
+}
+
+@include themify($themes, true) {
+  .chart-view {
+    background: themed("appPanelColor");
+    .chart-container-title {
+      color: themed("valueTextColor");
+      .close-icon {
+        background: themed("inputBackgroundColor");
+        &:hover {
+          background: themed("activeBackgroundColor");
+        }
+      }
+    }
   }
 }
