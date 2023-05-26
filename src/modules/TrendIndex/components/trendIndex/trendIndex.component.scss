@@ -3,6 +3,57 @@
 @import "global-styles/themes/themes";
 
 :host {
+  /deep/ mat-cell.mat-cell {
+    height: 100% !important;
+    max-height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /deep/ mat-cell.mat-cell span,
+  mat-cell.mat-cell div {
+    height: 100% !important;
+    max-height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-weight: 600;
+  }
+
+  /deep/ mat-cell.mat-cell.cdk-column-min_15,
+  /deep/ mat-cell.mat-cell.cdk-column-min_1,
+  /deep/ mat-cell.mat-cell.cdk-column-min_5,
+  /deep/ mat-cell.mat-cell.cdk-column-h_1,
+  /deep/ mat-cell.mat-cell.cdk-column-h_4,
+  /deep/ mat-cell.mat-cell.cdk-column-d_1 {
+    padding-left: 0px !important;
+  }
+  /deep/ mat-cell.mat-cell.cdk-column-symbol {
+    padding-left: 0px !important;
+  }
+
+  /deep/ mat-header-cell.cdk-column-symbol .header-cell-content-wrapper {
+    text-align: left !important;
+    padding-left: 10px;
+  }
+
+  /deep/ mat-header-cell {
+    font-weight: bold !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+
+    &:last-of-type {
+      padding-right: 0px !important;
+    }
+  }
+
+  /deep/ mat-cell:last-of-type {
+    padding-right: 0px !important;
+  }
+
+  /deep/ .header-cell-content-wrapper {
+    text-align: center !important;
+  }
+
   .out-of-access {
     display: flex;
     align-items: center;
@@ -40,6 +91,24 @@
     width: 100%;
   }
 
+  .symbolx {
+    font-weight: bold !important;
+    padding-left: 8px;
+  }
+
+  .data-table-cell {
+    height: 100% !important;
+    display: flex;
+  }
+
+  .positive-border {
+    border-left: 4px solid #5eaf80;
+  }
+
+  .negative-border {
+    border-left: 4px solid #bd5b6a;
+  }
+
   .strength-cell {
     width: 100%;
     height: 100%;
@@ -50,6 +119,9 @@
   .strength-total {
     text-align: right;
     float: right;
+  }
+  mat-row mat-cell {
+    height: 100% !important;
   }
 
   .up-trend {

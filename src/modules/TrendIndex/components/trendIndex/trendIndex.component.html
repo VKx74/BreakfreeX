@@ -2,7 +2,9 @@
     <div class="chart-view" *ngIf="!!chartDataBars">
         <div class="chart-container">
             <div class="chart-container-title margin-top">
-                <div><span class="close-icon" (click)="closeCharts()"><i class="fa fa-close iconsize"></i></span>{{chartDataBars.symbol}}, {{chartDataBars.timeframe}}</div>
+                <div><span class="close-icon" (click)="closeCharts()"><i
+                            class="fa fa-close iconsize"></i></span>{{chartDataBars.symbol}},
+                    {{chartDataBars.timeframe}}</div>
                 <div>{{chartDataBars.startDate}} - {{chartDataBars.endDate}}</div>
             </div>
             <div class="chart-container-canvas">
@@ -30,56 +32,60 @@
 
             <!--Columns-->
 
-            <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="80">
+            <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="80" [columnWidth]="90">
                 {{'instrument' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="price" [sortable]="false" [columnMinWidth]="80">
-                {{'price' | translate}}
-            </data-table-header-cell>
-            <data-table-header-cell columnName="priceChange" [sortable]="false" [columnMinWidth]="65">
-                {{'change' | translate}}
-            </data-table-header-cell>
-            <data-table-header-cell columnName="min_1" [sortable]="false" [columnMinWidth]="50" [columnWidth]="50">
+            <!-- <data-table-header-cell columnName="price" [sortable]="false"
+            [columnMinWidth]="80">
+            {{'price' | translate}}
+        </data-table-header-cell>
+        <data-table-header-cell columnName="priceChange" [sortable]="false" [columnMinWidth]="65">
+            {{'change' | translate}}
+        </data-table-header-cell> -->
+            <data-table-header-cell columnName="min_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                 {{'min_1' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="min_5" [sortable]="false" [columnMinWidth]="50" [columnWidth]="50">
+            <data-table-header-cell columnName="min_5" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                 {{'min_5' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="min_15" [sortable]="false" [columnMinWidth]="50" [columnWidth]="50">
+            <data-table-header-cell columnName="min_15" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                 {{'min_15' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="h_1" [sortable]="false" [columnMinWidth]="50" [columnWidth]="50">
+            <data-table-header-cell columnName="h_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                 {{'h_1' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="h_4" [sortable]="false" [columnMinWidth]="50" [columnWidth]="50">
+            <data-table-header-cell columnName="h_4" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                 {{'h_4' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="d_1" [sortable]="false" [columnMinWidth]="50" [columnWidth]="50">
+            <data-table-header-cell columnName="d_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                 {{'d_1' | translate}}
             </data-table-header-cell>
-            <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="65">
-                {{'total' | translate}}
-            </data-table-header-cell>
-            <data-table-header-cell columnName="empty" [sortable]="false" [columnMinWidth]="0" [columnWidth]="0">
-            </data-table-header-cell>
+            <!--  <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="65">
+            {{'total' | translate}}
+        </data-table-header-cell> -->
 
-            <!--Cells-->
 
+            <!-- Cells -->
             <data-table-cell columnName="symbol">
-                <ng-template let-vmItem>{{vmItem.symbol}}</ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="price">
-                <ng-template let-vmItem>{{vmItem.last_price}}</ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="priceChange" x>
                 <ng-template let-vmItem>
-                    <span class="price-change" [class.up-trend]="vmItem.price86400Change > 0"
-                        [class.down-trend]="vmItem.price86400Change < 0">
-                        {{vmItem.price86400Change > 0 ? "+" : ""}}
-                        {{vmItem.price86400Change.toFixed(2)}}%
+                    <span class="symbolx"
+                        [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
+                        {{vmItem.symbol}}
                     </span>
                 </ng-template>
             </data-table-cell>
+
+            <!--  <data-table-cell columnName="price">
+            <ng-template let-vmItem>{{vmItem.last_price}}</ng-template>
+        </data-table-cell>
+         <data-table-cell columnName="priceChange"x>
+            <ng-template let-vmItem>
+                <span class="price-change" [class.up-trend]="vmItem.price86400Change > 0" [class.down-trend]="vmItem.price86400Change < 0">
+                    {{vmItem.price86400Change > 0 ? "+" : ""}}
+                    {{vmItem.price86400Change.toFixed(2)}}%
+                </span>
+            </ng-template>
+        </data-table-cell> -->
             <data-table-cell columnName="min_1">
                 <ng-template let-vmItem>
                     <div class="strength-cell">
@@ -128,15 +134,14 @@
                     </div>
                 </ng-template>
             </data-table-cell>
-            <data-table-cell columnName="total">
-                <ng-template let-vmItem>
-                    <div class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
-                        [class.down-trend]="vmItem.totalStrength < 0">
-                        {{vmItem.totalStrength > 0 ? "+" : ""}}
-                        {{(vmItem.totalStrength * 100).toFixed(2)}}%
-                    </div>
-                </ng-template>
-            </data-table-cell>
+            <!--   <data-table-cell columnName="total">
+            <ng-template let-vmItem>
+                <div class="strength-total" [class.up-trend]="vmItem.totalStrength > 0" [class.down-trend]="vmItem.totalStrength < 0">
+                    {{vmItem.totalStrength > 0 ? "+" : ""}}
+                    {{(vmItem.totalStrength * 100).toFixed(2)}}%
+                </div>
+            </ng-template>
+        </data-table-cell> -->
 
         </data-table>
     </div>

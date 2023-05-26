@@ -91,8 +91,15 @@ class TrendIndexVM {
     price86400Change: number;
     price86400StrengthValue: number;
     price86400Strength: ETrendIndexStrength;
-
     totalStrength: number;
+    weights: { [id: string]: number; } = {
+        "60": 0.05,
+        "300": 0.1,
+        "900": 0.15,
+        "3600": 0.2,
+        "14400": 0.25,
+        "86400": 0.25
+    };
 
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
@@ -129,7 +136,13 @@ class TrendIndexVM {
         let s_14400 = this.strength["14400"] / this.avg_strength["14400"];
         let s_86400 = this.strength["86400"] / this.avg_strength["86400"];
 
-        this.totalStrength = (s_60 + s_300 + s_900 + s_3600 + s_14400 + s_86400) / 6;
+        this.totalStrength =
+            s_60 * this.weights["60"] +
+            s_300 * this.weights["300"] +
+            s_900 * this.weights["900"] +
+            s_3600 * this.weights["3600"] +
+            s_14400 * this.weights["14400"] +
+            s_86400 * this.weights["86400"];
 
         this.price60StrengthValue = s_60;
         this.price300StrengthValue = s_300;
@@ -272,10 +285,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
             this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
             this.vm = this.vm.slice();
+            
             this.loading = false;
             this._changesDetected = true;
         });
     }
+
 
     protected useDefaultLinker(): boolean {
         return true;
