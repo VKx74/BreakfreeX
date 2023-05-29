@@ -286,20 +286,25 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart.on(TradingChartDesigner.ChartEvent.GLOBAL_THEME_CHANGED, this.themeChanged.bind(this));
 
             if (!state || !state.chartState) {
+                let isMLAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
                 let isProAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 let isDiscoveryAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
                 let isStarterAllowed = this._indicatorRestrictionService.validate(this.chart, TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
 
-                if (isProAllowed) {
-                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingPro());
-                } else if (isDiscoveryAllowed) {
-                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
-                } else if (isStarterAllowed) {
-                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingStarter());
-                }
-
-                if ((isProAllowed || isDiscoveryAllowed || isStarterAllowed) && this.chart.RTDMode) {
-                    this.chart.addIndicators(new TradingChartDesigner.RTD());
+                if (isMLAllowed) {
+                    this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingML());
+                } else {
+                    if (isProAllowed) {
+                        this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingPro());
+                    } else if (isDiscoveryAllowed) {
+                        this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingDiscovery());
+                    } else if (isStarterAllowed) {
+                        this.chart.addIndicators(new TradingChartDesigner.BreakfreeTradingStarter());
+                    }
+                    
+                    if ((isProAllowed || isDiscoveryAllowed || isStarterAllowed) && this.chart.RTDMode) {
+                        this.chart.addIndicators(new TradingChartDesigner.RTD());
+                    }
                 }
             }
 
@@ -485,7 +490,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         if (!this._brokerService.activeBroker) {
             this._removePriceLines();
         }
-        
+
         this._setBALines();
 
         if (this._brokerService.activeBroker instanceof MTBroker) {
