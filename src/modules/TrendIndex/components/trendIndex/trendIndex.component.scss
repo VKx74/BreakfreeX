@@ -1,0 +1,221 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+:host {
+  /deep/ mat-cell.mat-cell {
+    height: 100% !important;
+    max-height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /deep/ mat-cell.mat-cell span,
+  mat-cell.mat-cell div {
+    height: 100% !important;
+    max-height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-weight: 600;
+  }
+
+  /deep/ mat-cell.mat-cell.cdk-column-min_15,
+  /deep/ mat-cell.mat-cell.cdk-column-min_1,
+  /deep/ mat-cell.mat-cell.cdk-column-min_5,
+  /deep/ mat-cell.mat-cell.cdk-column-h_1,
+  /deep/ mat-cell.mat-cell.cdk-column-h_4,
+  /deep/ mat-cell.mat-cell.cdk-column-d_1 {
+    padding-left: 0px !important;
+  }
+  /deep/ mat-cell.mat-cell.cdk-column-symbol {
+    padding-left: 0px !important;
+  }
+
+  /deep/ mat-header-cell.cdk-column-symbol .header-cell-content-wrapper {
+    text-align: left !important;
+    padding-left: 10px;
+  }
+
+  /deep/ mat-header-cell {
+    font-weight: bold !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+
+    &:last-of-type {
+      padding-right: 0px !important;
+    }
+  }
+
+  /deep/ mat-cell:last-of-type {
+    padding-right: 0px !important;
+  }
+
+  /deep/ .header-cell-content-wrapper {
+    text-align: center !important;
+  }
+  
+  height: 100%;
+  display: flex;
+  width: 100%;
+  overflow: auto;
+
+  .root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .symbolx {
+    font-weight: bold !important;
+    padding-left: 8px;
+  }
+
+  .data-table-cell {
+    height: 100% !important;
+    display: flex;
+  }
+
+  .positive-border {
+    border-left: 4px solid #5eaf80;
+  }
+
+  .negative-border {
+    border-left: 4px solid #bd5b6a;
+  }
+
+  .strength-cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+
+  .price-change,
+  .strength-total {
+    text-align: right;
+    float: right;
+  }
+  mat-row mat-cell {
+    height: 100% !important;
+  }
+
+  .up-trend {
+    color: $greenColor;
+  }
+
+  .down-trend {
+    color: $redColor;
+  }
+
+  .chart-view {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+  }
+
+  .chart-container {
+    display: flex;
+    flex-direction: column;
+
+    .chart-container-title {
+      display: flex;
+      font-size: 11px;
+      margin: 0px 10px 0px 10px;
+      justify-content: space-between;
+    }
+
+    .margin-top {
+      margin-top: 10px;
+    }
+
+    .margin-bottom {
+      margin-bottom: 10px;
+    }
+
+    .chart-container-canvas {
+      display: flex;
+    }
+
+    .close-icon {
+      margin-right: 10px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+  }
+
+  .data-table {
+    display: flex;
+    max-height: 100%;
+    overflow: scroll;
+  }
+
+  .strength-positive {
+    color: rgba(94, 175, 128, 0.8);
+  }
+
+  .strength-negative {
+    color: rgba(189, 91, 106, 0.8);
+  }
+
+  .out-of-access {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    width: 100%;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    z-index: 2;
+
+    .out-of-access-box {
+      display: flex;
+      flex-flow: column;
+      padding: 30px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
+      .text {
+        margin: 10px 7px;
+        display: flex;
+        text-align: center;
+        font-weight: 700;
+        font-size: 12px;
+        max-width: 180px;
+
+        padding-top: 5px;
+      }
+
+      .image {
+        display: flex;
+        justify-content: center;
+      }
+      img {
+        width: 200px;
+      }
+    }
+  }
+}
+
+@include themify($themes, true) {
+  .chart-view {
+    background: themed("appPanelColor");
+    .chart-container-title {
+      color: themed("valueTextColor");
+      .close-icon {
+        background: themed("inputBackgroundColor");
+        &:hover {
+          background: themed("activeBackgroundColor");
+        }
+      }
+    }
+  }
+  .out-of-access-box {
+    background-color: themed("appPanelColor");
+    .text { 
+      color: themed("valueTextColor");
+    }
+  }
+}

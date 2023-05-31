@@ -36,7 +36,7 @@ export class WatchlistChartComponent implements OnInit {
 
   private _getGradientColor(trendDirection: TrendDirection): CanvasGradient {
     let gradient = this.canvas.getContext('2d').createLinearGradient(0, 100, 0, 0);
-    gradient.addColorStop(1, (trendDirection === TrendDirection.Down) ? 'rgba(255, 182, 182, 0.2)' : 'rgba(184, 233, 163, 0.2)');
+    gradient.addColorStop(1, (trendDirection === TrendDirection.Down) ? 'rgba(189, 91, 106, 0.2)' : 'rgba(94, 175, 128, 0.2)');
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
     return gradient;
   }
@@ -49,7 +49,7 @@ export class WatchlistChartComponent implements OnInit {
       data: {
         datasets: [{
           label: 'Total',
-          borderColor: 'rgba(184, 233, 163, 0.8)',
+          borderColor: 'rgba(94, 175, 128, 0.8)',
           backgroundColor: this._getGradientColor(TrendDirection.Up),
           lineTension: 0,
           borderWidth: 1,
@@ -111,7 +111,7 @@ export class WatchlistChartComponent implements OnInit {
 
   private _setCanvasTrendColor(trendDirection: TrendDirection) {
     if (this.historyDataChart) {
-      this.historyDataChart.data.datasets[0].borderColor = (trendDirection === TrendDirection.Down) ? 'rgba(255, 182, 182, 0.8)' : 'rgba(184, 233, 163, 0.8)';
+      this.historyDataChart.data.datasets[0].borderColor = (trendDirection === TrendDirection.Down) ? 'rgba(189, 91, 106, 0.8)' : 'rgba(94, 175, 128, 0.8)';
       this.historyDataChart.data.datasets[0].backgroundColor = this._getGradientColor(trendDirection);
       this.historyDataChart.update();
     }

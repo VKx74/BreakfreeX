@@ -7,5 +7,6 @@ export const AppRoutes = {
     Pages: 'pages',
     Landing: 'landing',
     Academy: 'academy',
-    SocialFeed: 'sonar'
+    SocialFeed: 'sonar',
+    RTD: 'rtd',
 };

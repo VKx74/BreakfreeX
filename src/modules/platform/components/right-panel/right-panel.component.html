@@ -15,6 +15,11 @@
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
                     (onOpenChart)="handleOpenChart($event)"></watchlist>
             </div>
+            <div class="widget" *ngIf="SelectedComponent === Components.TrendIndex">
+                <trend-index (stateChanged)="componentStateChanged($event)"
+                    (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
+                    (onOpenChart)="handleOpenChart($event)"></trend-index>
+            </div>
             <div class="widget" *ngIf="SelectedComponent === Components.Alerts">
                 <alerts (onOpenChart)="handleOpenChart($event)" #alerts></alerts>
             </div>
@@ -53,6 +58,11 @@
                     [class.active]="SelectedComponent === Components.SonarFeed && !collapsed" tooltip
                     [matTooltip]="'sonarFeed' | translate">
                     <i class="fa fa-rss" aria-hidden="true"></i>
+                </div>
+                <div class="trend-index-widget widget-selector-icon" (click)="selectComponent(Components.TrendIndex)"
+                    [class.active]="SelectedComponent === Components.TrendIndex && !collapsed" tooltip
+                    [matTooltip]="'trendIndex' | translate">
+                    <i class="fa fa-indent" aria-hidden="true"></i>
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
                     [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip

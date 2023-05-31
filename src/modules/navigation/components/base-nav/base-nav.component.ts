@@ -22,7 +22,6 @@ import { SaveStateAction } from '@app/store/actions/platform.actions';
 import { Store } from "@ngrx/store";
 import { AppState } from '@app/store/reducer';
 import { SocialReactionsService } from 'modules/BreakfreeTradingSocial/services/social.reactions.service';
-import { SportCountService } from 'modules/navigation/services/sport.count.service';
 import { BlackFridayPremiumVideoComponent } from 'modules/BreakfreeTrading/components/blackFridayPremiumVideo/blackFridayPremiumVideo.component';
 
 @Component({
@@ -114,6 +113,10 @@ export class BaseNavComponent implements OnInit {
     public get academyRoute(): string {
         return AppRoutes.Academy;
     }
+
+    public get rtdRoute(): string {
+        return AppRoutes.RTD;
+    }
     
     public get isUnreadMessages(): boolean {
         return this._socialRealtimeNotificationsService.unreadExists;
@@ -140,7 +143,6 @@ export class BaseNavComponent implements OnInit {
         private _layoutStorageService: LayoutStorageService,
         private _store: Store<AppState>,
         private _socialRealtimeNotificationsService: SocialReactionsService,
-        private _sportCountService: SportCountService,
         private _inlineService: InlineService) {
         this.showStaticLogin = this._identityService.isGuestMode;
         // _sportCountService.getSpotsAvailable().subscribe((data) => {

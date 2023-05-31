@@ -125,6 +125,8 @@ import { LoaderModule } from 'modules/loader/loader.module';
 import { RightSidePanelStateService } from './services/right-side-panel-state.service';
 import { BreakfreeTradingSocialModule } from 'modules/BreakfreeTradingSocial';
 import { SocialFeedModule } from 'modules/SocialFeed/social-feed.module';
+import { RTDPageModule } from 'modules/RTDPage/rtd-page.module';
+import { TrendIndexModule } from 'modules/TrendIndex/trendindex.module';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -180,6 +182,7 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         UIModule,
         TradingModule,
         WatchlistModule,
+        TrendIndexModule,
         BreakfreeTradingModule.forRoot(),
         BreakfreeTradingSocialModule,
         MarketTradesModule,
@@ -219,7 +222,8 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         DatatableModule,
         DragDropModule,
         LoaderModule,
-        SocialFeedModule
+        SocialFeedModule,
+        RTDPageModule
     ],
     entryComponents: [
         ComponentSelectorComponent,

@@ -64,6 +64,7 @@ import { BreakfreeTradingAcademyComponent, BreakfreeTradingBacktestWidgetCompone
 import { AlertWidgetComponent } from 'modules/AutoTradingAlerts/components/alert-widget/alert-widget.component';
 import { BreakfreeTradingScannerWidgetComponent } from 'modules/BreakfreeTrading/components/breakfreeTradingScanner/widget/breakfreeTradingScannerWidget.component';
 import { WatchlistWidgetComponent } from 'modules/Watchlist/components/widget/watchlistWidget.component';
+import { TrendIndexModule } from 'modules/TrendIndex/trendindex.module';
 
 
 export function sharedThemeService() {
@@ -87,6 +88,7 @@ export function sharedEducationalTipsService() {
         AlertModule.forRoot(),
 
         WatchlistModule,
+        TrendIndexModule,
         ChartModule.forPopupRoot(),
         NewsModule.forPopupRoot(),
         OrderBookChartModule,

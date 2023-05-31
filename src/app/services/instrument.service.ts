@@ -126,6 +126,16 @@ export class InstrumentService implements IHealthable {
             );
     }
 
+    getInstrumentsBySymbolOrId(symbol: string): Observable<IInstrument[]> {
+        return forkJoin(this.services.map(s => s.getInstruments(undefined, symbol)))
+            .pipe(
+                catchError(() => of([])),
+                map((responses: IInstrument[][]) => {
+                    return JsUtil.flattenArray<IInstrument>(responses).filter(i => i.symbol === symbol || i.id === symbol);
+                })
+            );
+    }
+
     private _getServiceByDatafeed(datafeed: EExchangeInstance): InstrumentServiceBase {
         if (datafeed === EExchangeInstance.KaikoExchange) {
             datafeed = EExchangeInstance.BinanceExchange;

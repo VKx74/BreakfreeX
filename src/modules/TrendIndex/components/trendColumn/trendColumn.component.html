@@ -1,0 +1,6 @@
+<div class="trend-column" [class.sideways]="Strength === ETrendIndexStrength.Sideways"
+   [class.up]="Strength === ETrendIndexStrength.Up" [class.down]="Strength === ETrendIndexStrength.Down"
+   [class.strong-up]="Strength === ETrendIndexStrength.StrongUp"
+   [class.strong-down]="Strength === ETrendIndexStrength.StrongDown">
+   <span class="trend-strength-value">{{StrengthValue.toFixed(0)}}%</span>
+</div>

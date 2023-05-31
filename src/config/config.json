@@ -46,6 +46,7 @@
     "MT4WS": "wss://mtapi-stage.breakfreetrading.com/mt4/websocket",
     "BinanceTestnetBrokerWS": "wss://cryptoapi-stage.breakfreetrading.com/binance-testnet/websocket",
     "BinanceBrokerWS": "wss://cryptoapi-stage.breakfreetrading.com/binance/websocket",
+    "bftAlgoREST": "https://localhost:5001/algoserver/",
     "bftAlgoREST": "https://algo-stage.breakfreetrading.com/algoserver/",
     "bftTradingProfilesREST": "https://mtapi-stage.breakfreetrading.com/portfolio/",
     "bftAlertsWS": "wss://notifications-alerts-stage.breakfreetrading.com/websocket",
