@@ -210,6 +210,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _chartDataBars: ITrendIndexBarChartDataVM;
     private _chartDataTrends: ITrendIndexChartDataVM[] = [];
 
+    public get hasAccess(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }
+
     get componentId(): string {
         return TrendIndexComponent.componentName;
     }
@@ -247,6 +251,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     ngOnInit() {
         this.initialized.next(this);
+
+        if (!this.hasAccess) {
+            return;
+        }
 
         this.loading = true;
 

@@ -53,32 +53,7 @@
   /deep/ .header-cell-content-wrapper {
     text-align: center !important;
   }
-
-  .out-of-access {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: column;
-    height: 100%;
-    width: 100%;
-    cursor: pointer;
-
-    .text {
-      margin: 20px 10px;
-      display: flex;
-      text-align: center;
-      text-decoration: underline;
-    }
-
-    .image {
-      display: flex;
-      justify-content: center;
-    }
-    img {
-      width: 200px;
-    }
-  }
-
+  
   height: 100%;
   display: flex;
   width: 100%;
@@ -183,6 +158,45 @@
   .strength-negative {
     color: rgba(189, 91, 106, 0.8);
   }
+
+  .out-of-access {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    width: 100%;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    z-index: 2;
+
+    .out-of-access-box {
+      display: flex;
+      flex-flow: column;
+      padding: 30px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px -2px rgba(75, 72, 72, 0.44);
+      .text {
+        margin: 10px 7px;
+        display: flex;
+        text-align: center;
+        font-weight: 700;
+        font-size: 12px;
+        max-width: 180px;
+
+        padding-top: 5px;
+      }
+
+      .image {
+        display: flex;
+        justify-content: center;
+      }
+      img {
+        width: 200px;
+      }
+    }
+  }
 }
 
 @include themify($themes, true) {
@@ -196,6 +210,12 @@
           background: themed("activeBackgroundColor");
         }
       }
+    }
+  }
+  .out-of-access-box {
+    background-color: themed("appPanelColor");
+    .text { 
+      color: themed("valueTextColor");
     }
   }
 }
