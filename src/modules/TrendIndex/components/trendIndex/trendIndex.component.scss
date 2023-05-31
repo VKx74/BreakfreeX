@@ -153,6 +153,10 @@
       margin-top: 10px;
     }
 
+    .margin-bottom {
+      margin-bottom: 10px;
+    }
+
     .chart-container-canvas {
       display: flex;
     }
@@ -171,11 +175,11 @@
   }
 
   .strength-positive {
-    color: rgba(184, 233, 163, 0.8);
+    color: rgba(94, 175, 128, 0.8);
   }
 
   .strength-negative {
-    color: rgba(255, 182, 182, 0.8);
+    color: rgba(189, 91, 106, 0.8);
   }
 }
 

@@ -32,6 +32,7 @@ import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
+import { TimeSpan } from "@app/helpers/timeFrame.helper";
 
 export interface ITrendIndexComponentState {
 }
@@ -312,8 +313,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     private _sendInstrumentChange(instrument: IInstrument) {
         const linkAction: LinkingAction = {
-            type: Actions.ChangeInstrument,
-            data: instrument
+            type: Actions.ChangeInstrumentAndTimeframe,
+            data: {
+                instrument: instrument,
+                timeframe: TimeSpan.MILLISECONDS_IN_MINUTE / 1000
+            }
         };
         this.onOpenChart.next(linkAction);
     }
@@ -458,12 +462,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     private _tfToString(tf: number): string {
         switch (tf) {
-            case 60: return "1 Min";
-            case 300: return "5 Mins";
-            case 900: return "15 Mins";
-            case 3600: return "1 Hour";
-            case 14400: return "4 Hours";
-            case 86400: return "1 Day";
+            case 60: return "Driver";
+            case 300: return "1 Min";
+            case 900: return "5 Mins";
+            case 3600: return "15 Mins";
+            case 14400: return "1 Hour";
+            case 86400: return "4 Hours";
         }
         return tf + " Mins";
     }

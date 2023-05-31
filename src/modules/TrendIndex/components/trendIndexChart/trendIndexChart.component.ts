@@ -46,8 +46,8 @@ export class TrendIndexChartComponent {
                 labels: this._data.dates,
                 datasets: [{
                     label: 'Positive',
-                    borderColor: 'rgba(184, 233, 163, 0.8)',
-                    backgroundColor: 'rgba(184, 233, 163, 0.5)',
+                    borderColor: 'rgba(94, 175, 128, 1)',
+                    backgroundColor: 'rgba(94, 175, 128, 0.3)',
                     lineTension: 0,
                     borderWidth: 1,
                     pointRadius: 0,
@@ -57,8 +57,8 @@ export class TrendIndexChartComponent {
                     })
                 }, {
                     label: 'Negative',
-                    borderColor: 'rgba(255, 182, 182, 0.8)',
-                    backgroundColor: 'rgba(255, 182, 182, 0.5)',
+                    borderColor: 'rgba(189, 91, 106, 1)',
+                    backgroundColor: 'rgba(189, 91, 106, 0.3)',
                     lineTension: 0,
                     borderWidth: 1,
                     pointRadius: 0,
@@ -128,14 +128,14 @@ export class TrendIndexChartComponent {
             this.historyDataChart.data.datasets[0].data = this._data.values.map((_) => {
                 return _ > 0 ? _ : null;
             });
-            this.historyDataChart.data.datasets[0].borderColor = 'rgba(184, 233, 163, 0.8)';
-            this.historyDataChart.data.datasets[0].backgroundColor = 'rgba(184, 233, 163, 0.5)';
+            this.historyDataChart.data.datasets[0].borderColor = 'rgba(94, 175, 128, 1)';
+            this.historyDataChart.data.datasets[0].backgroundColor = 'rgba(94, 175, 128, 0.3)';
 
             this.historyDataChart.data.datasets[1].data = this._data.values.map((_) => {
                 return _ < 0 ? Math.abs(_) : null;
             });
-            this.historyDataChart.data.datasets[1].borderColor = 'rgba(255, 182, 182, 0.8)';
-            this.historyDataChart.data.datasets[1].backgroundColor = 'rgba(255, 182, 182, 0.5)';
+            this.historyDataChart.data.datasets[1].borderColor = 'rgba(189, 91, 106, 1)';
+            this.historyDataChart.data.datasets[1].backgroundColor = 'rgba(189, 91, 106, 0.3)';
 
             this.historyDataChart.update();
         }

@@ -1,6 +1,7 @@
 {
   "trend-index": {
   },
+  "driver": "Driver",
   "min_1": "1M",
   "min_5": "5M",
   "min_15": "15M",

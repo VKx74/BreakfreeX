@@ -47,7 +47,7 @@ export class TrendIndexBarChartComponent {
                 labels: this._data.dates,
                 datasets: [{
                     label: 'Price',
-                    borderColor: !this._data.isUpTrending ? 'rgba(255, 182, 182, 0.8)' : 'rgba(184, 233, 163, 0.8)',
+                    borderColor: !this._data.isUpTrending ? 'rgba(189, 91, 106, 0.8)' : 'rgba(94, 175, 128, 0.8)',
                     backgroundColor: this._getGradientColor(),
                     lineTension: 0,
                     borderWidth: 1,
@@ -107,7 +107,7 @@ export class TrendIndexBarChartComponent {
 
     private _getGradientColor(): CanvasGradient {
         let gradient = this.canvas.getContext('2d').createLinearGradient(0, 100, 0, 0);
-        gradient.addColorStop(1, !this._data.isUpTrending ? 'rgba(255, 182, 182, 0.5)' : 'rgba(184, 233, 163, 0.5)');
+        gradient.addColorStop(1, !this._data.isUpTrending ? 'rgba(189, 91, 106, 0.5)' : 'rgba(94, 175, 128, 0.5)');
         gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
         return gradient;
     }
@@ -120,7 +120,7 @@ export class TrendIndexBarChartComponent {
         if (this.historyDataChart && this._data) {
             this.historyDataChart.data.labels = this._data.dates;
             this.historyDataChart.data.datasets[0].data = this._data.values;
-            this.historyDataChart.data.datasets[0].borderColor = !this._data.isUpTrending ? 'rgba(255, 182, 182, 0.8)' : 'rgba(184, 233, 163, 0.8)';
+            this.historyDataChart.data.datasets[0].borderColor = !this._data.isUpTrending ? 'rgba(189, 91, 106, 0.8)' : 'rgba(94, 175, 128, 0.8)';
             this.historyDataChart.data.datasets[0].backgroundColor = this._getGradientColor();
 
             this.historyDataChart.update();
