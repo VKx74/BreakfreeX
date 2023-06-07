@@ -61,6 +61,9 @@
                 <data-table-header-cell columnName="h_4" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                     {{'h_4' | translate}}
                 </data-table-header-cell>
+                <data-table-header-cell columnName="d_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                    {{'d_1' | translate}}
+                </data-table-header-cell>
                 <!--  <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="65">
             {{'total' | translate}}
         </data-table-header-cell> -->
@@ -90,12 +93,20 @@
                 <data-table-cell columnName="driver">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
+                            <trend-column [Strength]="vmItem.price1Strength"
+                                [StrengthValue]="vmItem.price1StrengthValue"></trend-column>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="min_1">
+                    <ng-template let-vmItem>
+                        <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price60Strength"
                                 [StrengthValue]="vmItem.price60StrengthValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="min_1">
+                <data-table-cell columnName="min_5">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price300Strength"
@@ -103,7 +114,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="min_5">
+                <data-table-cell columnName="min_15">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price900Strength"
@@ -111,7 +122,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="min_15">
+                <data-table-cell columnName="h_1">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price3600Strength"
@@ -119,7 +130,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="h_1">
+                <data-table-cell columnName="h_4">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price14400Strength"
@@ -127,7 +138,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="h_4">
+                <data-table-cell columnName="d_1">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price86400Strength"
