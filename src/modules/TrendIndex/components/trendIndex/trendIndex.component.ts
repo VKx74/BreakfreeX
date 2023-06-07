@@ -68,6 +68,8 @@ class TrendIndexVM {
     symbol: string;
     datafeed: string;
     last_price: number;
+    price1StrengthValue: number;
+    price1Strength: ETrendIndexStrength;
     price60: number;
     price60Change: number;
     price60StrengthValue: number;
@@ -94,12 +96,13 @@ class TrendIndexVM {
     price86400Strength: ETrendIndexStrength;
     totalStrength: number;
     weights: { [id: string]: number; } = {
-        "60": 0.05,
-        "300": 0.1,
-        "900": 0.15,
-        "3600": 0.2,
+        "1": 0.05,
+        "60": 0.1,
+        "300": 0.15,
+        "900": 0.2,
+        "3600": 0.25,
         "14400": 0.25,
-        "86400": 0.25
+        "86400": 0.1
     };
 
     public setData(data: IMesaTrendIndex) {
@@ -130,6 +133,7 @@ class TrendIndexVM {
             this.strength[key] = data.strength[key].f - data.strength[key].s;
         }
 
+        let s_1 = this.strength["1"] / this.avg_strength["1"];
         let s_60 = this.strength["60"] / this.avg_strength["60"];
         let s_300 = this.strength["300"] / this.avg_strength["300"];
         let s_900 = this.strength["900"] / this.avg_strength["900"];
@@ -138,6 +142,7 @@ class TrendIndexVM {
         let s_86400 = this.strength["86400"] / this.avg_strength["86400"];
 
         this.totalStrength =
+            s_1 * this.weights["1"] +
             s_60 * this.weights["60"] +
             s_300 * this.weights["300"] +
             s_900 * this.weights["900"] +
@@ -145,6 +150,7 @@ class TrendIndexVM {
             s_14400 * this.weights["14400"] +
             s_86400 * this.weights["86400"];
 
+        this.price1StrengthValue = s_1;
         this.price60StrengthValue = s_60;
         this.price300StrengthValue = s_300;
         this.price900StrengthValue = s_900;
@@ -152,6 +158,7 @@ class TrendIndexVM {
         this.price14400StrengthValue = s_14400;
         this.price86400StrengthValue = s_86400;
 
+        this.price1Strength = this._getStrength(s_1);
         this.price60Strength = this._getStrength(s_60);
         this.price300Strength = this._getStrength(s_300);
         this.price900Strength = this._getStrength(s_900);
@@ -294,7 +301,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
             this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
             this.vm = this.vm.slice();
-            
+
             this.loading = false;
             this._changesDetected = true;
         });
@@ -342,60 +349,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._algoService.getMesaTrendDetails(instrumentVM.id, instrumentVM.datafeed).subscribe((data) => {
             if (data) {
-                let dates: string[] = [];
                 let values: number[] = [];
-                let indexesUsed: number[] = [];
+                let dates: string[] = [];
 
-                let i = 0;
-                while (i < data.bars.length) {
-                    let j = 0;
-                    let min = data.bars[i].c;
-                    let max = data.bars[i].c;
-                    let minIndex = i;
-                    let maxIndex = i;
-                    while (i < data.bars.length && j < 20) {
-                        if (data.bars[i].c > max) {
-                            max = data.bars[i].c;
-                            maxIndex = i;
-                        }
-                        if (data.bars[i].c < min) {
-                            min = data.bars[i].c;
-                            minIndex = i;
-                        }
-                        i++;
-                        j++;
-                    }
-                    if (minIndex === maxIndex) {
-                        indexesUsed.push(minIndex);
-                        values.push(min);
-                        dates.push(new Date(data.bars[minIndex].t * 1000).toLocaleString());
-                    } else {
-                        if (minIndex < maxIndex) {
-                            indexesUsed.push(minIndex);
-                            values.push(min);
-                            dates.push(new Date(data.bars[minIndex].t * 1000).toLocaleString());
-
-                            indexesUsed.push(maxIndex);
-                            values.push(max);
-                            dates.push(new Date(data.bars[maxIndex].t * 1000).toLocaleString());
-                        } else {
-                            indexesUsed.push(maxIndex);
-                            values.push(max);
-                            dates.push(new Date(data.bars[maxIndex].t * 1000).toLocaleString());
-
-                            indexesUsed.push(minIndex);
-                            values.push(min);
-                            dates.push(new Date(data.bars[minIndex].t * 1000).toLocaleString());
-                        }
-                    }
-                }
-
-                if (indexesUsed.length && indexesUsed[indexesUsed.length - 1] !== data.bars.length - 1) {
-                    let lastIndex = data.bars.length - 1;
-                    indexesUsed.push(lastIndex);
-                    values.push(data.bars[lastIndex].c);
-                    dates.push(new Date(data.bars[lastIndex].t * 1000).toLocaleString());
-
+                for (let bar of data.bars) {
+                    values.push(bar.c);
+                    dates.push(new Date(bar.t * 1000).toLocaleString());
                 }
 
                 this._chartDataBars = {
@@ -412,31 +371,41 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                 this._chartDataTrends = [];
 
+                let maxDate = 0;
+                for (let tf in data.mesa) {
+                    let mesaDataList = data.mesa[tf];
+                    let firstTime = mesaDataList[0].t;
+
+                    if (firstTime > maxDate) {
+                        maxDate = firstTime;
+                    }
+                }
+
                 for (let tf in data.mesa) {
                     let mesaValues: number[] = [];
+                    let mesaDates: string[] = [];
                     let avg = instrumentVM.avg_strength[tf];
                     if (!avg) {
                         continue;
                     }
-                    for (let index of indexesUsed) {
-                        let mesaTf = data.mesa[tf][index];
-                        if (!mesaTf) {
-                            continue;
+
+                    let mesaDataList = data.mesa[tf];
+                    for (let mesaItem of mesaDataList) {
+                        if (mesaItem.t > maxDate) {
+                            mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
+                            mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());
                         }
-                        mesaValues.push((mesaTf.f - mesaTf.s) / avg * 100);
                     }
 
-                    if (dates && mesaValues && mesaValues.length === dates.length) {
-                        this._chartDataTrends.push({
-                            timeframe: this._tfToString(Number(tf)),
-                            granularity: Number(tf),
-                            strength: mesaValues[mesaValues.length - 1],
-                            data: {
-                                dates: dates,
-                                values: mesaValues
-                            }
-                        });
-                    }
+                    this._chartDataTrends.push({
+                        timeframe: this._tfToString(Number(tf)),
+                        granularity: Number(tf),
+                        strength: mesaValues[mesaValues.length - 1],
+                        data: {
+                            dates: mesaDates,
+                            values: mesaValues
+                        }
+                    });
                 }
             }
             console.log(">>> Calculation finished");
@@ -470,12 +439,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     private _tfToString(tf: number): string {
         switch (tf) {
-            case 60: return "Driver";
-            case 300: return "1 Min";
-            case 900: return "5 Mins";
-            case 3600: return "15 Mins";
-            case 14400: return "1 Hour";
-            case 86400: return "4 Hours";
+            case 1: return "Driver";
+            case 60: return "1 Min";
+            case 300: return "5 Mins";
+            case 900: return "15 Mins";
+            case 3600: return "1 Hour";
+            case 14400: return "4 Hours";
+            case 86400: return "1 Day";
         }
         return tf + " Mins";
     }
