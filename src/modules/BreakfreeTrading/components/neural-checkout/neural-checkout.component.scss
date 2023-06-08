@@ -1,0 +1,330 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  font-size: 13px;
+
+  .w-tab-link {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    text-decoration: none;
+    padding: 9px 30px;
+    text-align: left;
+    cursor: pointer;
+    color: #222222;
+    background-color: #dddddd;
+  }
+
+  .w-tab-link.w--current {
+    background-color: #c8c8c8;
+  }
+
+  .w-tab-link:focus {
+    outline: 0;
+  }
+
+  .w-inline-block {
+    max-width: 100%;
+    display: inline-block;
+  }
+
+  .superscript,
+  .superscript-2,
+  .text-block-53 {
+    color: #51da4c;
+  }
+
+  .text-block-54 {
+    grid-column-gap: 5px;
+    grid-row-gap: 8px;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+  }
+
+  .pricing-tabs-menu {
+    justify-content: center;
+    margin-bottom: 30px;
+    padding-top: 20px;
+    display: flex;
+  }
+
+  .tab-link {
+    opacity: 0.5;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 3px;
+    margin-left: 3.5px;
+    margin-right: 3.5px;
+    padding: 7px 14px;
+    font-size: 14px;
+    line-height: 22px;
+    transition: opacity 0.2s, background-color 0.2s;
+  }
+
+  .tab-link:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .tab-link.w--current {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+    align-self: center;
+  }
+
+  .tab-link.pricing-tab {
+    transition: color 0.2s, opacity 0.2s, background-color 0.2s;
+  }
+
+  .tab-link.pricing-tab.w--current {
+    color: #000;
+    background-color: #fff;
+  }
+
+  .tab-link.w--current {
+    align-self: center;
+  }
+
+  .tab-link.pricing-tab {
+    text-align: center;
+    align-self: center;
+  }
+
+  .page-wrapper {
+    position: relative;
+    width: 100%;
+    max-height: 95vh;
+  }
+
+  .pricingsection {
+    position: relative;
+    z-index: 3;
+    margin-top: 0px;
+    padding: 15px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: #151515;
+  }
+
+  .wrapper-2 {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 900px;
+    margin: auto auto 0px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: transparent;
+  }
+
+  .w-tab-content {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    display: flex;
+  }
+  .w-tab-pane {
+    display: none;
+    &.w--tab-active {
+      display: flex;
+    }
+  }
+
+  .pricing-grid {
+    display: flex;
+    width: 100%;
+  }
+
+  .pricing-plan {
+    background-color: rgba(163, 163, 163, 0);
+    border: 1px solid rgba(255, 255, 255, 0.17);
+    border-radius: 0;
+    padding: 20px;
+    margin: 10px;
+    color: white;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .small-text-2 {
+    font-size: 14px;
+  }
+
+  .button.bordered.checkout.new {
+    height: auto;
+    color: #51da4c;
+    background-color: rgba(0, 0, 0, 0);
+    border-style: solid;
+    border-color: #51da4c;
+    border-radius: 0;
+    border-width: 1px;
+    padding: 9px 32px;
+    transition: all 0.2s;
+    max-width: none;
+    cursor: pointer;
+    flex: none;
+    align-self: flex-start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      color: #000;
+      background-color: #fff;
+      border-color: #fff;
+      border-radius: 5px;
+    }
+  }
+
+  .price-wrapper {
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 14px;
+    display: flex;
+  }
+
+  .price-wrapper.strikethrough-2 {
+    color: #51da4c;
+    font-style: italic;
+  }
+
+  .dollar-sign {
+    margin-left: 4px;
+    margin-right: 4px;
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .dollar-sign.earlyb {
+    font-size: 24px;
+  }
+
+  .display-heading-2 {
+    color: #fff;
+    text-align: left;
+    letter-spacing: -0.02em;
+    margin-bottom: 21px;
+    font-size: 64px;
+    font-weight: 500;
+    line-height: 1em;
+  }
+
+  .display-heading-2.no-bottom-margin {
+    margin-bottom: 0;
+    font-size: 52px;
+  }
+
+  .display-heading-2.no-bottom-margin.earlyb {
+    font-size: 32px;
+  }
+
+  .button-row {
+    justify-content: center;
+    margin-top: 16px;
+    display: flex;
+  }
+
+  .skiptrial {
+    justify-content: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    display: flex;
+    cursor: pointer;
+  }
+
+  .early {
+    color: #51da4c;
+    flex: 1;
+    font-size: 12px;
+  }
+
+  .checklist-heading {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-family: monospace;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+
+    .checklist-item-small {
+      display: flex;
+      margin-top: 5px;
+    }
+  }
+
+  .fa-check {
+    margin-top: 3px;
+    margin-right: 10px;
+  }
+
+  .support-button {
+    margin-top: 20px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .coming-soon {
+    font-size: 10px;
+    vertical-align: super;
+  }
+
+  .net-profit-fee {
+    margin-top: 8px;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 887px) {
+    .pricing-grid {
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .wrapper-2 {
+      max-width: 800px;
+    }
+  }
+
+  @media screen and (max-width: 887px) {
+    .w-tab-content {
+      flex-direction: column;
+    }
+  }
+}
+
+@include themify($themes, true) {
+  // .description {
+  //   color: themed('valueTextColor');
+  // }
+}
