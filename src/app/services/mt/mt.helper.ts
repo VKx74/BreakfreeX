@@ -162,15 +162,15 @@ export class TradingHelper {
             return RiskClass.NoRisk;
         }
         
-        if (value < 5) {
+        if (value < 10) {
             return RiskClass.Low;
         }
     
-        if (value < 15) {
+        if (value < 30) {
             return RiskClass.Medium;
         }
     
-        if (value < 25) {
+        if (value < 50) {
             return RiskClass.High;
         }
     
@@ -186,15 +186,15 @@ export class TradingHelper {
             return RiskClass.NoRisk;
         }
         
-        if (value < 5) {
+        if (value < 10) {
             return RiskClass.Low;
         }
     
-        if (value < 15) {
+        if (value < 30) {
             return RiskClass.Medium;
         }
     
-        if (value < 25) {
+        if (value < 50) {
             return RiskClass.High;
         }
     

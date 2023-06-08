@@ -26,9 +26,9 @@ import { CalculatingChecklistStatuses, ChecklistItem, CorrelatedRiskValidator, G
 import { SettingsStorageService } from '@app/services/settings-storage.servic';
 
 const checklist: MTChecklistItemDescription[] = [
-    new LocalTrendValidator(),
-    new GlobalTrendValidator(),
-    new LevelsValidator(),
+    // new LocalTrendValidator(),
+    // new GlobalTrendValidator(),
+    // new LevelsValidator(),
     new LeverageValidator(),
     new CorrelatedRiskValidator(),
     new SpreadValidator(),

@@ -599,7 +599,8 @@ export class MTTradeRatingService {
             }
         }
 
-        let positionRisk = this.mtBroker.getSamePositionsRisk(parameters.Symbol, parameters.Side);
+        // let positionRisk = this.mtBroker.getSamePositionsRisk(parameters.Symbol, parameters.Side);
+        let positionRisk = 0;
         let correlatedRisk = this.mtBroker.getRelatedPositionsRisk(parameters.Symbol, parameters.Side);
         result.CorrelatedRiskValue = Math.abs((correlatedRisk / this.mtBroker.accountInfo.Balance * 100) + result.OrderRiskValue);
         result.PositionRiskValue = Math.abs((positionRisk / this.mtBroker.accountInfo.Balance * 100) + result.OrderRiskValue);

@@ -182,7 +182,7 @@ export const LeverageValidatorFunction = (data: OrderValidationChecklist): Check
     }
 
     return {
-        name: "Leverage",
+        name: "Risk",
         valid: valid,
         value: value,
         minusScore: valid ? 0 : minusScore,

@@ -60,6 +60,7 @@ import { BinanceScannerWidgetComponent } from './components/BinanceScannerWidget
 import { BinanceScannerWsService } from './services/binance.scanner/binance.scanner.ws.service';
 import { BinanceScannerService } from './services/binance.scanner/binance.scanner.service';
 import { PosNegativeNumberColorDirective } from './components/BinanceScannerComponent/directive/color.directive';
+import { NeuralCheckoutComponent } from './components/neural-checkout/neural-checkout.component';
 
 @NgModule({
     // components here
@@ -76,6 +77,7 @@ import { PosNegativeNumberColorDirective } from './components/BinanceScannerComp
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
+        NeuralCheckoutComponent,
         BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
@@ -133,6 +135,7 @@ import { PosNegativeNumberColorDirective } from './components/BinanceScannerComp
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
+        NeuralCheckoutComponent,
         BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
@@ -155,6 +158,7 @@ import { PosNegativeNumberColorDirective } from './components/BinanceScannerComp
         CheckoutComponent,
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
+        NeuralCheckoutComponent,
         BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsInfoComponent,
