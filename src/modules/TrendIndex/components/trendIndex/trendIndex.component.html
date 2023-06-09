@@ -29,6 +29,7 @@
         <div class="data-table">
             <data-table #dataTableComponent [rows]="vm" [selectable]="true" [selectedRow]="selectedVM"
                 [columnCaption]="columnCaption" [allowColumnsVisibilityChange]="false"
+                [trackByIndex]="false" [groups]="groups" [groupingField]="groupingField"
                 (onRowSelect)="handleInstrumentClick($event)">
 
                 <!--Columns-->

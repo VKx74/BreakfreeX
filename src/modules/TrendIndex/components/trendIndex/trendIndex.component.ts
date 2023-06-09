@@ -34,6 +34,10 @@ import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChar
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
 
+const TopUpTrending = "Top Uptrending";
+const TopDownTrending = "Top Downtrending"; 
+const AllInstruments = "Markets";
+
 export interface ITrendIndexComponentState {
 }
 
@@ -61,6 +65,7 @@ interface ITrendIndexBarChartDataVM {
 }
 
 class TrendIndexVM {
+    type: string = AllInstruments;
     strength: { [id: string]: number; };
     avg_strength: { [id: string]: number; };
 
@@ -217,6 +222,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _chartDataBars: ITrendIndexBarChartDataVM;
     private _chartDataTrends: ITrendIndexChartDataVM[] = [];
 
+    public groups: string[] = [TopUpTrending, TopDownTrending, AllInstruments];
+    public groupingField: string = "type";
+
     public get hasAccess(): boolean {
         return this._identityService.isAuthorizedCustomer;
     }
@@ -301,6 +309,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
             this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
             this.vm = this.vm.slice();
+            if (this.vm.length > 10) {
+                this.vm.slice(0, 5).forEach((_) => {
+                    _.type = TopUpTrending;
+                });
+                this.vm.slice(-5).forEach((_) => {
+                    _.type = TopDownTrending;
+                });
+            }
 
             this.loading = false;
             this._changesDetected = true;
