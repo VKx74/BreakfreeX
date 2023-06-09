@@ -96,13 +96,13 @@ class TrendIndexVM {
     price86400Strength: ETrendIndexStrength;
     totalStrength: number;
     weights: { [id: string]: number; } = {
-        "1": 0.05,
-        "60": 0.1,
-        "300": 0.15,
-        "900": 0.2,
-        "3600": 0.25,
+        "1": 0.033,
+        "60": 0.066,
+        "300": 0.1,
+        "900": 0.15,
+        "3600": 0.2,
         "14400": 0.25,
-        "86400": 0.1
+        "86400": 0.3
     };
 
     public setData(data: IMesaTrendIndex) {
