@@ -19,6 +19,14 @@
     font-weight: 600;
   }
 
+  /deep/ mat-table {
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-y: scroll !important;
+    min-width: fit-content !important;
+    min-width: auto ;
+  }
+
   /deep/ mat-cell.mat-cell.cdk-column-min_15,
   /deep/ mat-cell.mat-cell.cdk-column-min_1,
   /deep/ mat-cell.mat-cell.cdk-column-min_5,
