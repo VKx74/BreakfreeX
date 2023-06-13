@@ -23,23 +23,9 @@
     max-width: 100% !important;
     width: 100% !important;
     overflow-y: scroll !important;
+    min-width: none !important;
   }
-  /deep/ mat-header-row.mat-header-row {
-    width: 100% !important;
-    max-width: 100% !important;
 
-  }
-  /deep/ mat-header-row {
-    width: 100% !important;
-    max-width: 100% !important;
-    
-  }
-  /deep/ mat-row {
-    width: 100% !important;
-    max-width: 100% !important;
-    
-  }
-  
 
   /deep/ mat-cell.mat-cell.cdk-column-min_15,
   /deep/ mat-cell.mat-cell.cdk-column-min_1,
