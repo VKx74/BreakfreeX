@@ -148,7 +148,8 @@
   .data-table {
     display: flex;
     max-height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
+    max-width: 100%;
   }
 
   .strength-positive {
