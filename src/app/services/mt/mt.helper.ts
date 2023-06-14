@@ -44,6 +44,7 @@ export class TradingHelper {
     }
 
     public static buildTechnicalComment(tradeType: OrderTradeType, timeframe: number): string {
+        return "";
         let comment = "";
         switch (tradeType) {
             case OrderTradeType.BRC: comment += "B"; break;
