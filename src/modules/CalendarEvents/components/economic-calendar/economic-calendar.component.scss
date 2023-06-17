@@ -3,272 +3,313 @@
 @import "global-styles/variables";
 
 :host {
-  /deep/ .mat-cell {
-    white-space: pre-wrap !important;
-  }
-  /deep/ .mat-row {
-    max-width: 1000px;
-  }
-  /deep/ .mat-table {
-    cursor: pointer;
-  }
-}
+  height: 100%;
+  width: 100%;
 
-.calendar-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 18px 12px 18px;
-  height: 50px;
-  border-radius: 5px;
-
-  .date-input {
-    width: 0;
-    height: 0;
+  .root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
   }
 
-  &__title {
-    line-height: 0;
+  .event-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 5px 0px;
+    padding: 10px;
+    border-radius: 3px;
+  }
+
+  .group-container {
+    height: 100%;
+    display: flex;
+    width: 100%;
+    padding: 10px;
     font-size: 14px;
   }
 
-  &__buttons {
+  .event-header {
+    font-size: 13px;
+    height: 100%;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid;
+    padding-bottom: 10px;
 
-    .button, .educational-tips-wrapper {
-      width: 32px;
-      height: 32px;
-      font-size: 1.6em;
+    .header-section-name {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border-radius: 4px;
+      align-items: start;
+    }
+
+    .header-section-time {
+      display: flex;
+    }
+
+    .event-name {
+      margin-left: 10px;
+    }
+
+    .country {
+      display: flex;
+
+      .country-name {
+        margin-left: 10px;
+      }
+    }
+
+    .country-flag-container {
+      display: flex;
+      height: 100%;
+      align-items: start;
+    }
+
+    .country-flag {
+      background: url(/assets/img/country-flags.png) no-repeat;
+      background-size: 860px 20px;
+      display: block;
+      height: 20px;
+      margin: 0 auto;
+      width: 20px;
+      min-width: 20px;
+    }
+
+    .country-flag_ar {
+      background-position: 0 0;
+    }
+
+    .country-flag_at {
+      background-position: -20px 0;
+    }
+
+    .country-flag_au {
+      background-position: -40px 0;
+    }
+
+    .country-flag_be {
+      background-position: -60px 0;
+    }
+
+    .country-flag_br {
+      background-position: -80px 0;
+    }
+
+    .country-flag_ca {
+      background-position: -100px 0;
+    }
+
+    .country-flag_ch {
+      background-position: -120px 0;
+    }
+
+    .country-flag_cl {
+      background-position: -140px 0;
+    }
+
+    .country-flag_cn {
+      background-position: -160px 0;
+    }
+
+    .country-flag_co {
+      background-position: -180px 0;
+    }
+
+    .country-flag_cz {
+      background-position: -200px 0;
+    }
+
+    .country-flag_de {
+      background-position: -220px 0;
+    }
+
+    .country-flag_dk {
+      background-position: -240px 0;
+    }
+
+    .country-flag_es {
+      background-position: -260px 0;
+    }
+
+    .country-flag_emu {
+      background-position: -280px 0;
+    }
+
+    .country-flag_fi {
+      background-position: -300px 0;
+    }
+
+    .country-flag_fr {
+      background-position: -320px 0;
+    }
+
+    .country-flag_gr {
+      background-position: -340px 0;
+    }
+
+    .country-flag_hk {
+      background-position: -360px 0;
+    }
+
+    .country-flag_hu {
+      background-position: -380px 0;
+    }
+
+    .country-flag_id {
+      background-position: -400px 0;
+    }
+
+    .country-flag_ie {
+      background-position: -420px 0;
+    }
+
+    .country-flag_in {
+      background-position: -440px 0;
+    }
+
+    .country-flag_is {
+      background-position: -460px 0;
+    }
+
+    .country-flag_it {
+      background-position: -480px 0;
+    }
+
+    .country-flag_jp {
+      background-position: -500px 0;
+    }
+
+    .country-flag_kr {
+      background-position: -520px 0;
+    }
+
+    .country-flag_mx {
+      background-position: -540px 0;
+    }
+
+    .country-flag_nl {
+      background-position: -560px 0;
+    }
+
+    .country-flag_no {
+      background-position: -580px 0;
+    }
+
+    .country-flag_nz {
+      background-position: -600px 0;
+    }
+
+    .country-flag_pe {
+      background-position: -620px 0;
+    }
+
+    .country-flag_pl {
+      background-position: -640px 0;
+    }
+
+    .country-flag_pt {
+      background-position: -660px 0;
+    }
+
+    .country-flag_ro {
+      background-position: -680px 0;
+    }
+
+    .country-flag_ru {
+      background-position: -700px 0;
+    }
+
+    .country-flag_se {
+      background-position: -720px 0;
+    }
+
+    .country-flag_sg {
+      background-position: -740px 0;
+    }
+
+    .country-flag_sk {
+      background-position: -760px 0;
+    }
+
+    .country-flag_tr {
+      background-position: -780px 0;
+    }
+
+    .country-flag_uk {
+      background-position: -800px 0;
+    }
+
+    .country-flag_us {
+      background-position: -820px 0;
+    }
+
+    .country-flag_za {
+      background-position: -840px 0;
     }
   }
-}
-
-.calendar-content {
-  //height: calc(100% - 40px); // height of header
-  overflow: auto;
-  padding-top: 9px;
 
   .event-description {
-    margin-left: 10px;
-    width: 100%;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    max-width: calc(100% - 24px + 10px);
-  }
-
-  .event {
-    .event-upper-block {
-      padding: 13px 15px 0;
-      cursor: pointer;
-    }
-
-    .event-lower-block {
-      padding: 10px 15px;
-      display: flex;
-      justify-content: space-between;
-
-      .actual {
-        padding-right: 5px;
-      }
-
-      .consensus {
-        padding: 0 5px;
-      }
-
-      .previous {
-        padding-left: 5px;
-      }
-
-      .actual, .consensus, .previous {
-        width: calc(100% / 3);
-
-        .value {
-          font-size: 12px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-      }
-
-      .consensus {
-        text-align: center;
-      }
-
-      .previous {
-        text-align: right;
-      }
-
-      .title {
-        font-size: 12px;
-        padding-bottom: 5px;
-        text-transform: uppercase;
-      }
-    }
-
-    .description {
-      padding: 5px 13px 15px;
-      font-size: 13px;
-      user-select: text;
-      overflow-wrap: break-word;
-    }
-  }
-
-  .no-events {
-    text-align: center;
-    margin-top: 20px;
-  }
-}
-
-.event-general-info {
-  font-size: 0.8em;
-  display: flex;
-  justify-content: space-between;
-
-  .event-block {
+    font-size: 12px;
+    height: 100%;
     display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 10px;
+  }
 
-    .indicator {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      align-self: center;
+  .event-info {
+    height: 100%;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .event-info-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-right: 10px;
+      margin-top: 10px;
+      padding: 5px;
+      border-radius: 3px;
+
+      .event-info-title {
+        font-size: 11px;
+      }
+
+      .event-info-value {
+        font-size: 13px;
+      }
     }
   }
-}
 
-.event-title {
-  font-size: 14px;
-  padding: 13px 0 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  overflow-wrap: break-word;
-
-  .more {
-    width: 0;
-    height: 0;
-    border-top: 5px dashed;
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    color: #6b6b6b;
-    opacity: 0.5;
-
-    &.active {
-      border-bottom: 5px dashed;
-      border-top: 0;
-      opacity: 1;
-    }
+  .passed {
+    opacity: 0.5 !important;
   }
 }
 
 @include themify($themes, true) {
-  .calendar-header {
-    background-color: themed('appPanelColor');
-    border-bottom: 1px solid themed('appBackgroundColor');
-
-    .button {
-      &:hover {
-        background-color: themed('appBackgroundColor');
-        color: themed('accentColor');
-      }
-    }
+  .event-header,
+  .event-description,
+  .group-container,
+  .event-info {
+    color: themed("valueTextColor");
   }
-
-  .event {
-    color: themed('calendarTextColor');
-
-    &:nth-child(odd) {
-      background-color: themed('appModalsPanelColor');
-    }
-
-    &:nth-child(even) {
-      background-color: themed('appModalsPanelColor');
-    }
-
-    .event-lower-block {
-      &.active {
-        background-color: themed('appPanelColor');
-      }
-
-      .title {
-        color: themed('calendarMutedTextColor');
-      }
-    }
+  .event-header {
+    border-color: themed("tableBorders");
   }
-
-  .event-title {
-    border-bottom: 1px solid themed('appBackgroundColor');
+  .country,
+  .event-info-title {
+    color: themed("card-title");
   }
-
-  .source {
-    color: themed('calendarMutedTextColor');
+  .event-container {
+    background: themed("card-background-color");
   }
-
-  .description {
-    color: themed('calendarDescriptionTextColor');
-    background-color: themed('appPanelColor');
-  }
-
-  .indicator {
-    //&.very-high-volatility {
-    //  background-color: $very-high-volatility-indicator-color;
-    //}
-    //
-    //&.high-volatility {
-    //  background-color: $high-volatility-indicator-color;
-    //}
-    //
-    //&.medium-volatility {
-    //  background-color: $medium-volatility-indicator-color;
-    //}
-    //
-    //&.low-volatility {
-    //  background-color: $low-volatility-indicator-color;
-    //}
-    //
-    //&.very-low-volatility {
-    //  background-color: $very-low-volatility-indicator-color;
-    //}
-  }
-
-  &.very-high-volatility {
-    background-color: $very-high-volatility-indicator-color;
-  }
-
-  &.high-volatility {
-    background-color: $high-volatility-indicator-color;
-  }
-
-  &.medium-volatility {
-    background-color: $medium-volatility-indicator-color;
-  }
-
-  &.low-volatility {
-    background-color: $low-volatility-indicator-color;
-  }
-
-  &.very-low-volatility {
-    background-color: $very-low-volatility-indicator-color;
-  }
-
-  .positive-text {
-    color: themed('buyColor');
-  }
-
-  .negative-text {
-    color: themed('sellColor');
-  }
-
-}
-
-:host /deep/ {
-  input.crypto-input {
-    font-size: 13px;
+  .event-info-item {
+    background: themed("actual-tags-bg");
   }
 }

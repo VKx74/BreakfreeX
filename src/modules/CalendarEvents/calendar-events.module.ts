@@ -1,4 +1,4 @@
-import {NgModule} from "@angular/core";
+import {Injector, NgModule} from "@angular/core";
 import {EconomicCalendarComponent} from "./components/economic-calendar/economic-calendar.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
@@ -13,8 +13,10 @@ import { CurrencyIconComponent } from './components/currency-icon/currency-icon.
 import {UIModule} from "UI";
 import {LoaderModule} from "../loader/loader.module";
 import {LoadingModule} from "ngx-loading";
-
-
+import {LocalizationModule, TranslateServiceFactory} from "Localization";
+import { SharedTranslateService } from "@app/localization/shared.token";
+import { EconomicCalendarService } from "./localization/token";
+import { EconomicCalendarWidgetComponent } from "./components/widget/economic-calendar-widget.component";
 
 @NgModule({
     imports: [
@@ -27,7 +29,6 @@ import {LoadingModule} from "ngx-loading";
         MatFormFieldModule,
         MatInputModule,
 
-
         TranslateModule,
         DatatableModule,
         SharedModule,
@@ -36,14 +37,22 @@ import {LoadingModule} from "ngx-loading";
         LoadingModule,
     ],
     declarations: [
+        EconomicCalendarWidgetComponent,
         EconomicCalendarComponent,
         CurrencyIconComponent
     ],
     exports: [
+        EconomicCalendarWidgetComponent,
         EconomicCalendarComponent,
         CurrencyIconComponent
     ],
-    providers: []
+    providers: [
+        {
+            provide: EconomicCalendarService,
+            useFactory: TranslateServiceFactory('calendar-events'),
+            deps: [Injector, SharedTranslateService]
+        }
+    ]
 })
 export class CalendarEventsModule {
 }
