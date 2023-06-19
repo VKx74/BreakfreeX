@@ -23,9 +23,9 @@ class EconomicCalendarVM {
     EventTypeDescription: string;
     Volatility?: number;
     DateUtc: Date;
-    Actual?: number;
-    Consensus?: number;
-    Previous?: number;
+    Actual?: string;
+    Consensus?: string;
+    Previous?: string;
     Symbol?: string;
     RiseType: string;
     IsSpeech: boolean;
@@ -48,9 +48,39 @@ class EconomicCalendarVM {
         this.Volatility = event.Volatility;
         this.CurrencyId = event.Event.CurrencyId;
         this.DateUtc = new Date(event.DateUtc);
-        this.Actual = event.Actual;
-        this.Consensus = event.Consensus;
-        this.Previous = event.Previous;
+
+        let actual = "";
+        let previous = "";
+        let consensus = "";
+
+        if (event.Actual) {
+            actual = event.Actual.toString();
+            if (event.Event.Symbol === '%') {
+                actual = actual + "%";
+            } else {
+                actual = event.Event.Symbol + actual + event.Event.PotencySymbol;
+            }
+        }  
+        if (event.Previous) {
+            previous = event.Previous.toString();
+            if (event.Event.Symbol === '%') {
+                previous = previous + "%";
+            } else {
+                previous = event.Event.Symbol + previous + event.Event.PotencySymbol;
+            }
+        }
+        if (event.Consensus) {
+            consensus = event.Consensus.toString();
+            if (event.Event.Symbol === '%') {
+                consensus = consensus + "%";
+            } else {
+                consensus = event.Event.Symbol + consensus + event.Event.PotencySymbol;
+            }
+        }
+
+        this.Actual = actual;
+        this.Consensus = consensus;
+        this.Previous = previous;
 
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } as any;
         this.DateString = this.DateUtc.toLocaleDateString(undefined, options);

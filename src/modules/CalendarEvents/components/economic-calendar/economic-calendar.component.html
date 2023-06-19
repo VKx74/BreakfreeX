@@ -39,39 +39,39 @@
                                 {{item.Volatility}}
                             </div>
                         </div>
-                        <div class="event-info-item">
+                        <div class="event-info-item" *ngIf="!item.IsSpeech && !item.IsReport">
                             <div class="event-info-title">
                                 Actual
                             </div>
                             <div class="event-info-value">
                                 <span *ngIf="!!item.Actual; else no_actual">
-                                    {{item.Actual}}{{item.Symbol}}
+                                    {{item.Actual}}
                                 </span>
                                 <ng-template #no_actual>
                                     -
                                 </ng-template>
                             </div>
                         </div>
-                        <div class="event-info-item">
+                        <div class="event-info-item" *ngIf="!item.IsSpeech && !item.IsReport">
                             <div class="event-info-title">
                                 Consensus
                             </div>
                             <div class="event-info-value">
                                 <span *ngIf="!!item.Consensus; else no_consensus">
-                                    {{item.Consensus}}{{item.Symbol}}
+                                    {{item.Consensus}}
                                 </span>
                                 <ng-template #no_consensus>
                                     -
                                 </ng-template>
                             </div>
                         </div>
-                        <div class="event-info-item">
+                        <div class="event-info-item" *ngIf="!item.IsSpeech && !item.IsReport">
                             <div class="event-info-title">
                                 Previous
                             </div>
                             <div class="event-info-value">
                                 <span *ngIf="!!item.Previous; else no_previous">
-                                    {{item.Previous}}{{item.Symbol}}
+                                    {{item.Previous}}
                                 </span>
                                 <ng-template #no_previous>
                                     -

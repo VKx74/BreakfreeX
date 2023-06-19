@@ -538,6 +538,7 @@ export interface IEvent {
 
 export interface IEconomicEvent {
     Event: IEvent;
+    Id: string;
     DateUtc: string;
     ForPeriod?: string;
     Volatility?: number;

@@ -9,11 +9,10 @@ import {CommonModule} from "@angular/common";
 import {EducationalTipsModule} from "../educational-tips/educational-tips.module";
 import {DatatableModule} from "../datatable/datatable.module";
 import {SharedModule} from "Shared";
-import { CurrencyIconComponent } from './components/currency-icon/currency-icon.component';
 import {UIModule} from "UI";
 import {LoaderModule} from "../loader/loader.module";
 import {LoadingModule} from "ngx-loading";
-import {LocalizationModule, TranslateServiceFactory} from "Localization";
+import { TranslateServiceFactory } from "Localization";
 import { SharedTranslateService } from "@app/localization/shared.token";
 import { EconomicCalendarService } from "./localization/token";
 import { EconomicCalendarWidgetComponent } from "./components/widget/economic-calendar-widget.component";
@@ -38,13 +37,11 @@ import { EconomicCalendarWidgetComponent } from "./components/widget/economic-ca
     ],
     declarations: [
         EconomicCalendarWidgetComponent,
-        EconomicCalendarComponent,
-        CurrencyIconComponent
+        EconomicCalendarComponent
     ],
     exports: [
         EconomicCalendarWidgetComponent,
-        EconomicCalendarComponent,
-        CurrencyIconComponent
+        EconomicCalendarComponent
     ],
     providers: [
         {
