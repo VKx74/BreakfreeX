@@ -1,23 +1,28 @@
 import { Injectable } from "@angular/core";
 import { filter, map, takeUntil } from "rxjs/operators";
 import CalendarEventVolatility = TradingChartDesigner.CalendarEventVolatility;
-import { Subject } from "rxjs";
+import { Subject, of } from "rxjs";
 import IMarketEvent = TradingChartDesigner.IMarketEvent;
 import IEconomicalMarketEvent = TradingChartDesigner.IEconomicalMarketEvent;
 import IGetMarketEventsParams = TradingChartDesigner.IGetMarketEventsParams;
 import MarketEventType = TradingChartDesigner.MarketEventType;
 import { AlgoService, IEconomicEvent } from "@app/services/algo.service";
 import { CountryCode } from "@calendarEvents/CountryCodes";
+import { IdentityService } from "@app/services/auth/identity.service";
 
 @Injectable()
 export class CalendarEventsDatafeed extends TradingChartDesigner.MarketEventsDatafeed {
     private _destroy$ = new Subject<any>();
 
-    constructor(protected _algoService: AlgoService) {
+    constructor(protected _algoService: AlgoService, protected _identity: IdentityService) {
         super();
     }
 
     protected _loadEvents(params: IGetMarketEventsParams): Promise<IMarketEvent[]> {
+        if (!this._identity.isAuthorizedCustomer || params.instrument.type !== "Forex") {
+            return of([]).toPromise();
+        }
+
         return this._algoService.getEconomicalEvents()
             .pipe(
                 map((resp: IEconomicEvent[]) => {

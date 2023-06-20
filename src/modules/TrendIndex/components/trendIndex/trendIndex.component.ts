@@ -313,9 +313,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this.vm.slice(0, 5).forEach((_) => {
                     _.type = TopUpTrending;
                 });
-                this.vm.slice(-5).forEach((_) => {
+
+                let downtrending = this.vm.slice(-5);
+                downtrending.forEach((_) => {
                     _.type = TopDownTrending;
                 });
+                downtrending.reverse();
+                this.vm.splice(-5);
+                this.vm.push(...downtrending);
             }
 
             this.loading = false;
