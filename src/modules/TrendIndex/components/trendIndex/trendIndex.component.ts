@@ -528,22 +528,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (Math.abs(value) >= 60) {
             return "Strong Strength";
         }
-        if (Math.abs(value) >= 50) {
+        if (Math.abs(value) >= 40) {
             return "Good Strength";
         }
-        if (Math.abs(value) >= 40) {
+        if (Math.abs(value) >= 35) {
             return "Building Strength";
         }
         if (Math.abs(value) >= 30) {
             return "Building Strength";
         }
-        if (Math.abs(value) >= 20) {
-            return "Low Strength";
+        if (Math.abs(value) >= 15) {
+            return "Weak Strength";
         }
         if (Math.abs(value) >= 10) {
             return "No Strength";
         }
-        return "Sideways";
+        return "No Strength";
     }
 
     private _raiseStateChanged() {
