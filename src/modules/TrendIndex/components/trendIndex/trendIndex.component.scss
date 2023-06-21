@@ -77,8 +77,12 @@
 
   .symbolx {
     font-weight: bold !important;
-    padding-left: 4px;
-    color: #121219 !important;
+    padding-left: 2px;
+    color: #fff !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    max-width: 60%;
   }
 
   .symbolx-border {
@@ -87,31 +91,31 @@
   }
 
   .color-s {
-    background-color: rgba(255, 117, 116, 0.7);
+    background-color: rgba(255, 102, 101, 0.4);
   }
 
   .color-a {
-    background-color: rgba(255, 183, 116, 0.7);
+    background-color: rgba(255, 123, 0, 0.35);
   }
 
   .color-b {
-    background-color: rgba(255, 255, 116, 0.7);
+    background-color: rgba(255, 255, 27, 0.2);
   }
 
   .color-c {
-    background-color: rgba(116, 255, 116, 0.7);
+    background-color: rgba(55, 255, 55, 0.15);
   }
 
   .color-d {
-    background-color: rgba(116, 183, 255, 0.7);
+    background-color: rgba(202, 220, 239, 0.15);
   }
 
   .color-e {
-    background-color: rgba(116, 116, 244, 0.7);
+    background-color: rgba(224, 224, 240, 0.15);
   }
 
   .color-f {
-    background-color: rgba(214, 100, 214, 0.7);
+    background-color: rgba(217, 217, 217, 0.15);
   }
 
   .symbol-container {
@@ -121,11 +125,14 @@
   }
 
   .symbol-color-container {
-    width: 100%;
     height: 100%;
     display: flex;
     justify-content: space-between;
-    padding-right: 4px;
+    padding-right: 2px;
+    width: 100%;
+    max-width: 100%;
+
+   
   }
 
   .data-table-cell {
@@ -157,11 +164,19 @@
   }
 
   .up-trend {
-    color: $greenColor;
+    color: #acacac;
+    width: 20px;
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .down-trend {
-    color: $redColor;
+    color: #acacac;
+    width: 20px;
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .chart-view {

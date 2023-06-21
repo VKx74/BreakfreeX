@@ -526,22 +526,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
     getRelativeStrengthTooltip(value: number) {
         value = value * 100;
         if (Math.abs(value) >= 60) {
-            return "Top Strength";
+            return "Strong Strength";
         }
         if (Math.abs(value) >= 50) {
-            return "High Strength";
+            return "Good Strength";
         }
         if (Math.abs(value) >= 40) {
-            return "Medium Strength";
+            return "Building Strength";
         }
         if (Math.abs(value) >= 30) {
-            return "Medium Strength";
+            return "Building Strength";
         }
         if (Math.abs(value) >= 20) {
             return "Low Strength";
         }
         if (Math.abs(value) >= 10) {
-            return "Week Strength";
+            return "No Strength";
         }
         return "Sideways";
     }
