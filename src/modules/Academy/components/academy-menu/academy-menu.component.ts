@@ -98,20 +98,8 @@ export class AcademyMenuComponent {
 
     contentSectors: ContentSectors[] = [{
         Id: "ufonh214hz",
-        Name: "BFT Academy - Week 1 [2021]",
-        Title: "BFT Academy - Week 1 [2021]",
-        isPremium: false
-    },
-    {
-        Id: "sj7ygoyhmy",
-        Name: "BFT Academy - Week 2 [2021]",
-        Title: "BFT Academy - Week 2 [2021]",
-        isPremium: false
-    },
-    {
-        Id: "zctobnmsk9",
-        Name: "BFT Academy - Extended content",
-        Title: "BFT Academy - Extended content",
+        Name: "Neural Academy 2023",
+        Title: "Neural Academy 2023",
         isPremium: false
     }
     ];
@@ -119,19 +107,6 @@ export class AcademyMenuComponent {
     constructor(private _identityService: IdentityService, private _profileService: UsersProfileService,
         private _wistiaService: WistiaService, private route: ActivatedRoute) {
         if (_identityService.isBlackFridayDeal) {
-            this.contentSectors.push({
-                Id: "qa3z1iua7r",
-                Name: "Mental Alchemy",
-                Title: "Mental Alchemy",
-                isPremium: true
-            });
-
-            this.contentSectors.push({
-                Id: "3jc17um90b",
-                Name: "The Purpose Process",
-                Title: "The Purpose Process",
-                isPremium: true
-            });
         }
     }
 
