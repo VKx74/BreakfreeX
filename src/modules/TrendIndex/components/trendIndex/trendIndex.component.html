@@ -28,13 +28,13 @@
         </div>
         <div class="data-table">
             <data-table #dataTableComponent [rows]="vm" [selectable]="true" [selectedRow]="selectedVM"
-                [columnCaption]="columnCaption" [allowColumnsVisibilityChange]="false"
-                [trackByIndex]="false" [groups]="groups" [groupingField]="groupingField"
-                (onRowSelect)="handleInstrumentClick($event)">
+                [columnCaption]="columnCaption" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
+                [groups]="groups" [groupingField]="groupingField" (onRowSelect)="handleInstrumentClick($event)">
 
                 <!--Columns-->
 
-                <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="80" [columnWidth]="90">
+                <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="100"
+                    [columnWidth]="100">
                     {{'instrument' | translate}}
                 </data-table-header-cell>
                 <!-- <data-table-header-cell columnName="price" [sortable]="false"
@@ -44,6 +44,9 @@
         <data-table-header-cell columnName="priceChange" [sortable]="false" [columnMinWidth]="65">
             {{'change' | translate}}
         </data-table-header-cell> -->
+                <!-- <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="40" [columnWidth]="60">
+                    {{'total' | translate}}
+                </data-table-header-cell> -->
                 <data-table-header-cell columnName="driver" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                     {{'driver' | translate}}
                 </data-table-header-cell>
@@ -65,18 +68,25 @@
                 <data-table-header-cell columnName="d_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                     {{'d_1' | translate}}
                 </data-table-header-cell>
-                <!--  <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="65">
-            {{'total' | translate}}
-        </data-table-header-cell> -->
 
 
                 <!-- Cells -->
                 <data-table-cell columnName="symbol">
                     <ng-template let-vmItem>
-                        <span class="symbolx"
-                            [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
-                            {{vmItem.symbol}}
-                        </span>
+                        <div class="symbol-container">
+                            <span class="symbolx-border"
+                                [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
+                            </span>
+                            <div class="symbol-color-container" [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+                                <span class="symbolx">
+                                    {{vmItem.symbol}}
+                                </span>
+                                <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
+                                    [class.down-trend]="vmItem.totalStrength < 0">
+                                    [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
+                                </span>
+                            </div>
+                        </div>
                     </ng-template>
                 </data-table-cell>
 
@@ -91,6 +101,14 @@
                 </span>
             </ng-template>
         </data-table-cell> -->
+                <!-- <data-table-cell columnName="total">
+                    <ng-template let-vmItem>
+                        <div class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
+                            [class.down-trend]="vmItem.totalStrength < 0">
+                            {{(vmItem.totalStrength * 100).toFixed(0)}}%
+                        </div>
+                    </ng-template>
+                </data-table-cell> -->
                 <data-table-cell columnName="driver">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
@@ -147,14 +165,6 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <!--   <data-table-cell columnName="total">
-            <ng-template let-vmItem>
-                <div class="strength-total" [class.up-trend]="vmItem.totalStrength > 0" [class.down-trend]="vmItem.totalStrength < 0">
-                    {{vmItem.totalStrength > 0 ? "+" : ""}}
-                    {{(vmItem.totalStrength * 100).toFixed(2)}}%
-                </div>
-            </ng-template>
-        </data-table-cell> -->
 
             </data-table>
         </div>

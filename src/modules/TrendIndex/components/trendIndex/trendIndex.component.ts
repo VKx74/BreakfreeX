@@ -35,7 +35,7 @@ import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.compone
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
 
 const TopUpTrending = "Top Uptrending";
-const TopDownTrending = "Top Downtrending"; 
+const TopDownTrending = "Top Downtrending";
 const AllInstruments = "Markets";
 
 export interface ITrendIndexComponentState {
@@ -106,8 +106,8 @@ class TrendIndexVM {
         "300": 0.1,
         "900": 0.15,
         "3600": 0.2,
-        "14400": 0.25,
-        "86400": 0.3
+        "14400": 0.2,
+        "86400": 0.25
     };
 
     public setData(data: IMesaTrendIndex) {
@@ -498,6 +498,29 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this._reloadInterval) {
             clearInterval(this._reloadInterval);
         }
+    }
+
+    getRelativeStrengthClass(value: number) {
+        value = value * 100;
+        if (Math.abs(value) >= 60) {
+            return "color-s";
+        }
+        if (Math.abs(value) >= 50) {
+            return "color-a";
+        }
+        if (Math.abs(value) >= 40) {
+            return "color-b";
+        }
+        if (Math.abs(value) >= 30) {
+            return "color-c";
+        }
+        if (Math.abs(value) >= 20) {
+            return "color-d";
+        }
+        if (Math.abs(value) >= 10) {
+            return "color-e";
+        }
+        return "color-f";
     }
 
     private _raiseStateChanged() {
