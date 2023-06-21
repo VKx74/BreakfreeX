@@ -394,7 +394,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                 let maxDate = 0;
                 for (let tf in data.mesa) {
-                    let mesaDataList = data.mesa[tf];
+                    let mesaDataList = data.mesa[tf].slice(-2000);
                     let firstTime = mesaDataList[0].t;
 
                     if (firstTime > maxDate) {
@@ -413,7 +413,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                     let mesaDataList = data.mesa[tf];
                     let tfNumber = Number(tf);
                     if (tfNumber < 10 * 60) {
-                        tfNumber = 10 * 60;
+                        tfNumber = 15 * 60;
                     } else if (tfNumber > 60 * 60) {
                         tfNumber = 60 * 60;
                     }
