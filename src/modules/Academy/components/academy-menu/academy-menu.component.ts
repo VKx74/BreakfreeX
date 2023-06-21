@@ -107,19 +107,6 @@ export class AcademyMenuComponent {
     constructor(private _identityService: IdentityService, private _profileService: UsersProfileService,
         private _wistiaService: WistiaService, private route: ActivatedRoute) {
         if (_identityService.isBlackFridayDeal) {
-            this.contentSectors.push({
-                Id: "qa3z1iua7r",
-                Name: "Mental Alchemy",
-                Title: "Mental Alchemy",
-                isPremium: true
-            });
-
-            this.contentSectors.push({
-                Id: "3jc17um90b",
-                Name: "The Purpose Process",
-                Title: "The Purpose Process",
-                isPremium: true
-            });
         }
     }
 
