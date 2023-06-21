@@ -532,7 +532,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return "Good Strength";
         }
         if (Math.abs(value) >= 35) {
-            return "Building Strength";
+            return "New Strength";
         }
         if (Math.abs(value) >= 30) {
             return "Building Strength";
