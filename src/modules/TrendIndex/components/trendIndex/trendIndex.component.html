@@ -13,7 +13,8 @@
             </div>-->
             </div>
             <ng-container *ngFor="let chartDataTrend of chartDataTrends">
-                <div class="chart-container">
+                <div class="chart-container" 
+                [ngClass]="{'height-60': chartDataTrend.granularity > 300, 'height-90': chartDataTrend.granularity <= 300}">
                     <div class="chart-container-title">
                         <div>{{chartDataTrend.timeframe}}</div>
                         <div [class.strength-positive]="chartDataTrend.strength > 0"
@@ -22,7 +23,7 @@
                             {{chartDataTrend.strength.toFixed(0)}}%</div>
                     </div>
                     <trend-index-chart [data]="chartDataTrend.data"
-                        [height]="chartDataTrend. granularity > 300 ? 60 : 90"></trend-index-chart>
+                        [height]="chartDataTrend.granularity > 300 ? 60 : 90"></trend-index-chart>
                 </div>
             </ng-container>
         </div>
