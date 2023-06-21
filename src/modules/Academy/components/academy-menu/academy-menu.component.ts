@@ -98,20 +98,8 @@ export class AcademyMenuComponent {
 
     contentSectors: ContentSectors[] = [{
         Id: "ufonh214hz",
-        Name: "BFT Academy - Week 1 [2021]",
-        Title: "BFT Academy - Week 1 [2021]",
-        isPremium: false
-    },
-    {
-        Id: "sj7ygoyhmy",
-        Name: "BFT Academy - Week 2 [2021]",
-        Title: "BFT Academy - Week 2 [2021]",
-        isPremium: false
-    },
-    {
-        Id: "zctobnmsk9",
-        Name: "BFT Academy - Extended content",
-        Title: "BFT Academy - Extended content",
+        Name: "Neural Academy 2023",
+        Title: "Neural Academy 2023",
         isPremium: false
     }
     ];
