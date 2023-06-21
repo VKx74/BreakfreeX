@@ -19,6 +19,11 @@
                 <trend-index (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
                     (onOpenChart)="handleOpenChart($event)"></trend-index>
+            </div> 
+            <div class="widget" *ngIf="SelectedComponent === Components.EconomicCalendar">
+                <economic-calendar (stateChanged)="componentStateChanged($event)"
+                    (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
+                    (onOpenChart)="handleOpenChart($event)"></economic-calendar>
             </div>
             <div class="widget" *ngIf="SelectedComponent === Components.Alerts">
                 <alerts (onOpenChart)="handleOpenChart($event)" #alerts></alerts>
@@ -63,6 +68,11 @@
                     [class.active]="SelectedComponent === Components.TrendIndex && !collapsed" tooltip
                     [matTooltip]="'trendIndex' | translate">
                     <i class="fa fa-indent" aria-hidden="true"></i>
+                </div> 
+                <div class="economic-calendar-widget widget-selector-icon" (click)="selectComponent(Components.EconomicCalendar)"
+                    [class.active]="SelectedComponent === Components.EconomicCalendar && !collapsed" tooltip
+                    [matTooltip]="'economicCalendar' | translate">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
                     [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip

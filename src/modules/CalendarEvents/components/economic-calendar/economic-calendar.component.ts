@@ -1,152 +1,224 @@
-import {Component, OnInit} from '@angular/core';
-import {
-    EconomicEvent, EconomicEventCreateNotification,
-    EconomicEventDeleteNotification,
-    EconomicEventNotification,
-    EconomicEventUpdateNotification, GetEventsParams
-} from "../../models/models";
-import {EEconomicCalendarNotificationType, EEventVolatility} from "../../models/enums";
-import {EventUserService} from "../../services/event-user.service";
-import {takeUntil} from "rxjs/operators";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {TranslateService} from "@ngx-translate/core";
-import {AppTranslateService} from "@app/localization/token";
-import {TzUtils} from "TimeZones";
-import {ComponentIdentifier} from "@app/models/app-config";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { TranslateService } from "@ngx-translate/core";
+import { ComponentIdentifier } from "@app/models/app-config";
+import { BaseLayoutItem } from '@layout/base-layout-item';
+import { IdentityService } from '@app/services/auth/identity.service';
+import { InstrumentService } from '@app/services/instrument.service';
+import { EconomicCalendarService } from '@calendarEvents/localization/token';
+import { AlgoService, IEconomicEvent } from '@app/services/algo.service';
+import { MatDialog } from "@angular/material/dialog";
+import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
+
+class EconomicCalendarGroupVM {
+    Date: string;
+    Items: EconomicCalendarVM[];
+}
+
+class EconomicCalendarVM {
+    Name: string;
+    Description: any;
+    HTMLDescription: string;
+    InternationalCountryCode: string;
+    CountryName: string;
+    EventTypeDescription: string;
+    Volatility?: number;
+    DateUtc: Date;
+    Actual?: string;
+    Consensus?: string;
+    Previous?: string;
+    Symbol?: string;
+    RiseType: string;
+    IsSpeech: boolean;
+    IsReport: boolean;
+    DateString: string;
+    CurrencyId: string;
+    IsPassed: boolean;
+
+    public init(event: IEconomicEvent) {
+        this.Name = event.Event.Name;
+        this.Description = event.Event.Description;
+        this.HTMLDescription = event.Event.HTMLDescription;
+        this.InternationalCountryCode = event.Event.InternationalCountryCode;
+        this.CountryName = event.Event.CountryName;
+        this.EventTypeDescription = event.Event.EventTypeDescription;
+        this.RiseType = event.Event.RiseType;
+        this.Symbol = event.Event.Symbol;
+        this.IsSpeech = event.Event.IsSpeech;
+        this.IsReport = event.Event.IsReport;
+        this.Volatility = event.Volatility;
+        this.CurrencyId = event.Event.CurrencyId;
+        this.DateUtc = new Date(event.DateUtc);
+
+        let actual = "";
+        let previous = "";
+        let consensus = "";
+
+        if (event.Actual) {
+            actual = event.Actual.toString();
+            if (event.Event.Symbol === '%') {
+                actual = actual + "%";
+            } else {
+                actual = event.Event.Symbol + actual + event.Event.PotencySymbol;
+            }
+        }  
+        if (event.Previous) {
+            previous = event.Previous.toString();
+            if (event.Event.Symbol === '%') {
+                previous = previous + "%";
+            } else {
+                previous = event.Event.Symbol + previous + event.Event.PotencySymbol;
+            }
+        }
+        if (event.Consensus) {
+            consensus = event.Consensus.toString();
+            if (event.Event.Symbol === '%') {
+                consensus = consensus + "%";
+            } else {
+                consensus = event.Event.Symbol + consensus + event.Event.PotencySymbol;
+            }
+        }
+
+        this.Actual = actual;
+        this.Consensus = consensus;
+        this.Previous = previous;
+
+        let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } as any;
+        this.DateString = this.DateUtc.toLocaleDateString(undefined, options);
+
+        this.IsPassed = this.DateUtc.getTime() < new Date().getTime();
+    }
+}
 
 @Component({
     selector: 'economic-calendar',
     templateUrl: './economic-calendar.component.html',
     styleUrls: ['./economic-calendar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         {
             provide: TranslateService,
-            useExisting: AppTranslateService
+            useExisting: EconomicCalendarService
         }
     ]
 })
-export class EconomicCalendarComponent implements OnInit {
-    readonly DayInMS = 86400000; // Equal 1 day in milliseconds
-    readonly MaxNearestEventInterval = 14400000; // Equal 4 hour in milliseconds
-    private readonly _interval: any;
-    events: EconomicEvent[] = [];
-    activeEvents: string[] = [];
-    eventDate: Date;
-    dateNow = new Date().getTime();
-    volatilityClassMap = {
-        [EEventVolatility.Lowest]: 'very-low-volatility',
-        [EEventVolatility.Low]: 'low-volatility',
-        [EEventVolatility.Medium]: 'medium-volatility',
-        [EEventVolatility.High]: 'high-volatility',
-        [EEventVolatility.Highest]: 'very-high-volatility'
-    };
+export class EconomicCalendarComponent extends BaseLayoutItem {
+    static componentName = 'EconomicCalendar';
+    static previewImgClass = 'crypto-icon-watchlist';
+
+    private _updateInterval: any;
+    private _reloadInterval: any;
+    private _changesDetected: boolean;
+
+    loading: boolean;
+    items: EconomicCalendarGroupVM[] = [];
+
+    get componentId(): string {
+        return EconomicCalendarComponent.componentName;
+    }
+
+    get hasAccess(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }
 
     get ComponentIdentifier() {
         return ComponentIdentifier;
     }
 
-    constructor(private _eventUserService: EventUserService) {
-        this._interval = setInterval(() => {
-            this.dateNow += 1000;
-        }, 1000);
+    constructor(protected _dialog: MatDialog, protected _translateService: TranslateService, protected _algoService: AlgoService, protected _instrumentService: InstrumentService, protected _cdr: ChangeDetectorRef, protected _identityService: IdentityService) {
+        super();
+    }
 
-        this.eventDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        this.getEvents(this.eventDate.getTime(), this.eventDate.getTime() + this.DayInMS - 1000);
+    getState() {
+        return null;
+    }
+
+    setState(state: any) {
     }
 
     ngOnInit() {
-        this._eventUserService.subscribeOnNotification()
-            .pipe(takeUntil(componentDestroyed(this)))
-            .subscribe((notification: EconomicEventNotification) => {
-                if (notification && notification.type === EEconomicCalendarNotificationType.Update) {
-                    this._updateEvent((notification as EconomicEventUpdateNotification).event);
-                }
-                if (notification && notification.type === EEconomicCalendarNotificationType.Delete) {
-                    this._deleteEvent((notification as EconomicEventDeleteNotification).eventid);
-                }
-                if (notification && notification.type === EEconomicCalendarNotificationType.Create) {
-                    this._addEvent((notification as EconomicEventCreateNotification).event);
-                }
-            });
-    }
+        this.initialized.next(this);
 
-    isNearTimeToEvent(eventTime: number): boolean {
-        return this.dateNow < eventTime && this.dateNow > eventTime - this.MaxNearestEventInterval;
-    }
+        if (!this.hasAccess) {
+            return;
+        }
 
-    nextDay() {
-        this.eventDate = new Date(this.eventDate.getTime() + this.DayInMS);
-        this.getEvents(this.eventDate.getTime(), this.eventDate.getTime() + this.DayInMS - 1000);
-    }
+        this.loading = true;
 
-    previousDay() {
-        this.eventDate = new Date(this.eventDate.getTime() - this.DayInMS);
-        this.getEvents(this.eventDate.getTime(), this.eventDate.getTime() + this.DayInMS - 1000);
-    }
-
-    showDescription(eventId: string) {
-        const indexOfEvent = this.activeEvents.indexOf(eventId);
-        if (indexOfEvent !== -1) {
-            this.activeEvents.splice(indexOfEvent, 1);
-        } else {
-            if (this.activeEvents.length === 3) {
-                this.activeEvents.shift();
+        this._updateInterval = setInterval(() => {
+            if (this._changesDetected) {
+                this._cdr.markForCheck();
             }
-            this.activeEvents.push(eventId);
-        }
-    }
+            this._changesDetected = false;
+        }, 500);
 
-    utcTimeToLocal(time: number) {
-        return TzUtils.utcToLocalTz(new Date(time)).getTime();
-    }
+        this._reloadInterval = setInterval(() => {
+            // this.loadData();
+        }, 60 * 1000);
 
-    localTimeToUtc(time: number) {
-        return TzUtils.localToUTCTz(new Date(time)).getTime();
-    }
-
-    getEvents(start?: number, end?: number, volatility?: number, search?: string, skip?: number, limit?: number) {
-        const params: GetEventsParams = {
-            startDate: this.localTimeToUtc(start),
-            endDate: this.localTimeToUtc(end),
-            volatility: volatility,
-            search: search,
-            skip: skip,
-            limit: limit
-        };
-        this._eventUserService.getEvents(params)
-            .subscribe((data) => {
-                this.activeEvents = [];
-                this.events = data.tradingEvents;
-            });
-    }
-
-    private _deleteEvent(eventId: string) {
-        for (let event of this.events) {
-            if (event.id === eventId) {
-                this.events.splice(this.events.indexOf(event), 1);
-                break;
-            }
-        }
-    }
-
-    private _addEvent(event: EconomicEvent) {
-        const eventLocalTimeAsUTC = this.localTimeToUtc(this.eventDate.getTime());
-        if (event.time >= eventLocalTimeAsUTC && event.time < eventLocalTimeAsUTC + this.DayInMS) {
-            this.events = [event, ...this.events];
-            console.log(this.events);
-            this.events.sort((a, b) => {
-                return a.time - b.time;
-            });
-        }
-    }
-
-    private _updateEvent(event: EconomicEvent) {
-        this._deleteEvent(event.id);
-        this._addEvent(event);
+        this.loadData();
     }
 
     ngOnDestroy() {
-        clearInterval(this._interval);
+        this.beforeDestroy.next(this);
+
+        if (this._updateInterval) {
+            clearInterval(this._updateInterval);
+        }
+
+        if (this._reloadInterval) {
+            clearInterval(this._reloadInterval);
+        }
+    }
+
+    processCheckout() {
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+    }
+
+    getCountryFlag(event: EconomicCalendarVM) {
+        if (!event.InternationalCountryCode) {
+            return "";
+        }
+
+        return `country-flag_${event.InternationalCountryCode.toLowerCase()}`;
+    }
+
+    protected loadData() {
+        this._algoService.getEconomicalEvents().subscribe((data) => {
+            let loadedItems: EconomicCalendarVM[] = [];
+            for (let item of data) {
+                let i = new EconomicCalendarVM();
+                i.init(item);
+                loadedItems.push(i);
+            }
+
+            this.items = [];
+
+            for (let loadedItem of loadedItems) {
+                let existingItem: EconomicCalendarGroupVM = null;
+                for (let item of this.items) { 
+                    if (item.Date === loadedItem.DateString) {
+                        existingItem = item;
+                        break;
+                    }
+                }
+
+                if (!existingItem) {
+                    existingItem = new EconomicCalendarGroupVM();
+                    existingItem.Date = loadedItem.DateString;
+                    existingItem.Items = [];
+                    this.items.push(existingItem);
+                }
+
+                existingItem.Items.push(loadedItem);
+            }
+
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
+    private _raiseStateChanged() {
+        this.stateChanged.next(this);
     }
 
 }

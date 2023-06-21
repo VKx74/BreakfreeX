@@ -1,99 +1,94 @@
-import {Injectable} from "@angular/core";
-import {EventUserService} from "@calendarEvents/services/event-user.service";
-import {map, takeUntil} from "rxjs/operators";
-import {
-    EconomicEvent,
-    EconomicEventCreateNotification, EconomicEventDeleteNotification,
-    EconomicEventNotification,
-    EconomicEventResponseModel, EconomicEventUpdateNotification
-} from "@calendarEvents/models/models";
-import {EEconomicCalendarNotificationType} from "@calendarEvents/models/enums";
+import { Injectable } from "@angular/core";
+import { filter, map, takeUntil } from "rxjs/operators";
 import CalendarEventVolatility = TradingChartDesigner.CalendarEventVolatility;
-import {Subject} from "rxjs";
-import MarketEventsManager = TradingChartDesigner.MarketEventsManager;
+import { Subject, of } from "rxjs";
 import IMarketEvent = TradingChartDesigner.IMarketEvent;
+import IEconomicalMarketEvent = TradingChartDesigner.IEconomicalMarketEvent;
 import IGetMarketEventsParams = TradingChartDesigner.IGetMarketEventsParams;
 import MarketEventType = TradingChartDesigner.MarketEventType;
+import { AlgoService, IEconomicEvent } from "@app/services/algo.service";
+import { CountryCode } from "@calendarEvents/CountryCodes";
+import { IdentityService } from "@app/services/auth/identity.service";
 
 @Injectable()
 export class CalendarEventsDatafeed extends TradingChartDesigner.MarketEventsDatafeed {
     private _destroy$ = new Subject<any>();
 
-    constructor(private _calendarEventsService: EventUserService) {
+    constructor(protected _algoService: AlgoService, protected _identity: IdentityService) {
         super();
     }
 
-    init(calendarEventsManager: MarketEventsManager) {
-        super.init(calendarEventsManager);
-
-        this._calendarEventsService.subscribeOnNotification()
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(this._handleEventNotification.bind(this));
-    }
-
     protected _loadEvents(params: IGetMarketEventsParams): Promise<IMarketEvent[]> {
-        return this._calendarEventsService.getEvents({
-            symbols: [
-                params.instrument.symbol
-            ]
-        })
+        if (!this._identity.isAuthorizedCustomer || params.instrument.type !== "Forex") {
+            return of([]).toPromise();
+        }
+
+        return this._algoService.getEconomicalEvents()
             .pipe(
-                map((resp: EconomicEventResponseModel) => {
-                    return resp.tradingEvents.map((event: EconomicEvent) => this._normalizeEvent(event));
+                map((resp: IEconomicEvent[]) => {
+                    let filtered = resp.filter((_) => params.instrument.symbol.indexOf(_.Event.CurrencyId) !== -1);
+                    let result = filtered.map((event: IEconomicEvent) => this._normalizeEvent(event));
+                    return result;
                 })
             ).toPromise();
     }
 
-    private _handleEventNotification(notification: EconomicEventNotification) {
-        if (notification.type === EEconomicCalendarNotificationType.Create) {
-            const event: EconomicEvent = (notification as EconomicEventCreateNotification).event;
+    private _normalizeEvent(event: IEconomicEvent): IEconomicalMarketEvent {
+        let actual = "";
+        let previous = "";
+        let consensus = "";
 
-            if (this._needShowEvent(event)) {
-                this.addEvents([this._normalizeEvent(event)]);
-            }
-        }
-
-        if (notification.type === EEconomicCalendarNotificationType.Update) {
-            const event: EconomicEvent = (notification as EconomicEventUpdateNotification).event;
-
-            if (this._needShowEvent(event)) {
-                const normalizedEvent: IMarketEvent = this._normalizeEvent(event);
-
-                if (this._isEventExist(normalizedEvent)) {
-                    this.updateEvents([normalizedEvent]);
-                } else {
-                    this.addEvents([normalizedEvent]);
-                }
-
+        if (event.Actual) {
+            actual = event.Actual.toString();
+            if (event.Event.Symbol === '%') {
+                actual = actual + "%";
             } else {
-                this.removeEvents([event.id]);
+                actual = event.Event.Symbol + actual + event.Event.PotencySymbol;
+            }
+        }
+        if (event.Previous) {
+            previous = event.Previous.toString();
+            if (event.Event.Symbol === '%') {
+                previous = previous + "%";
+            } else {
+                previous = event.Event.Symbol + previous + event.Event.PotencySymbol;
+            }
+        }
+        if (event.Consensus) {
+            consensus = event.Consensus.toString();
+            if (event.Event.Symbol === '%') {
+                consensus = consensus + "%";
+            } else {
+                consensus = event.Event.Symbol + consensus + event.Event.PotencySymbol;
             }
         }
 
-        if (notification.type === EEconomicCalendarNotificationType.Delete) {
-            this.removeEvents([(notification as EconomicEventDeleteNotification).eventid]);
-        }
-    }
+        let country = CountryCode.find((_) => _.alpha2Code.toLowerCase() === event.Event.InternationalCountryCode.toLowerCase());
 
-    private _normalizeEvent(event: EconomicEvent): IMarketEvent {
         return {
-            ...event,
-            volatility: (event.volatility as any) as CalendarEventVolatility,
-            iconUrl: './assets/img/usa.png',
-            groupingId: '1',
-            type: MarketEventType.Economical
-        } as IMarketEvent;
+            id: event.Event.Name,
+            iconUrl: country ? './assets/img/flags/' + country.alpha3Code.toLowerCase() + '.png' : "./assets/img/flags/eur.png",
+            time: new Date(event.DateUtc).getTime(),
+            title: event.Event.Name,
+            type: MarketEventType.Economical,
+            volatility: this._getVolatility(event.Volatility),
+            actual: actual,
+            previous: previous,
+            consensus: consensus,
+            groupingId: event.Event.InternationalCountryCode.toLowerCase()
+
+        } as IEconomicalMarketEvent;
     }
 
-    private _needShowEvent(event: EconomicEvent): boolean {
-        const instrument = this._eventsManager.chart.instrument;
-        const chartSymbol = instrument.symbol.toLowerCase();
-
-        return event.symbols.some((s) => chartSymbol.indexOf(s.toLowerCase()) !== -1);
-    }
-
-    private _isEventExist(event: IMarketEvent): boolean {
-        return this._eventsManager.events.some(e => e.id === event.id);
+    private _getVolatility(vol: number): CalendarEventVolatility {
+        switch (vol) {
+            case 0: return CalendarEventVolatility.VeryLow;
+            case 1: return CalendarEventVolatility.Low;
+            case 2: return CalendarEventVolatility.Medium;
+            case 3: return CalendarEventVolatility.High;
+            case 4: return CalendarEventVolatility.VeryHigh;
+        }
+        return CalendarEventVolatility.Low;
     }
 
     ngOnDestroy() {

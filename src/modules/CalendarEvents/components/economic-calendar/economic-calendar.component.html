@@ -1,149 +1,144 @@
-<ngx-loading [show]="!events"></ngx-loading>
-
-<div class="crypto-full-width crypto-text h-100">
-    <div class="calendar-header user-settings-header flex align-items-center">
-        <div class="calendar-header__title flex align-items-center">
-            <button type="button" class="close" (click)="datePicker.open()">
-                <i class="crypto-icon crypto-icon-calendar"></i>
-            </button>
-            <div class="m-left-10">
-                {{eventDate | date : 'shortDate'}}
+<ng-container *ngIf="hasAccess; else outOfAccess">
+    <div class="root economical-calendar-root">
+        <ng-container *ngFor="let itemGroup of items">
+            <div class="group-container">
+                {{itemGroup.Date}}
             </div>
-            <mat-form-field class="crypto-date-input date-input">
-                <input matInput readonly
-                       style="display: none"
-                       class="cursor-pointer"
-                       placeholder="Event date"
-                       [matDatepicker]="datePicker"
-                       [(ngModel)]="eventDate"
-                       (focus)="datePicker.open()"
-                       (click)="datePicker.open()"
-                       (dateChange)="getEvents(eventDate.getTime(), eventDate.getTime() + DayInMS)">
-                <mat-datepicker #datePicker></mat-datepicker>
-            </mat-form-field>
-        </div>
-
-        <div class="calendar-header__buttons">
-            <div class="button" title="{{'economicCalendar.previous' | translate}}" (click)="previousDay()">
-                <i class="crypto-icon crypto-icon-scroll-left" aria-hidden="true"></i>
-            </div>
-            <div class="button" title="{{'economicCalendar.next' | translate}}" (click)="nextDay()">
-                <i class="crypto-icon crypto-icon-scroll-right" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="calendar-content">
-        <data-table [rows]="events"
-                    [expandDetailsTemplate]="eventDescription"
-                    class="h-auto">
-            <data-table-header-cell columnName="gmt" [columnWidth]="100">
-                GMT
-            </data-table-header-cell>
-            <data-table-header-cell columnName="event">
-                {{'economicCalendar.event' | translate}}
-            </data-table-header-cell>
-            <data-table-header-cell columnName="vol" class="text-center">
-                <div class="text-center t-overflow-ellipsis">Vol.</div>
-            </data-table-header-cell>
-            <data-table-header-cell columnName="actual">
-                <div class="title text-center t-overflow-ellipsis">{{'economicCalendar.actual' | translate}}</div>
-            </data-table-header-cell>
-            <data-table-header-cell columnName="consensus" [columnWidth]="100">
-                <div class="title text-center t-overflow-ellipsis">{{'economicCalendar.consensus' | translate}}</div>
-            </data-table-header-cell>
-            <data-table-header-cell columnName="previous">
-                <div class="title text-center t-overflow-ellipsis">{{'economicCalendar.previous' | translate}}</div>
-            </data-table-header-cell>
-
-            <data-table-cell columnName="gmt">
-                <ng-template let-item>
-                    <div class="time"
-                         [ngClass]="{'negative-text': isNearTimeToEvent(utcTimeToLocal(item.time))}">
-                        {{utcTimeToLocal(item.time) | date: 'HH:mm'}}
-                    </div>
-                </ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="event">
-                <ng-template let-item>
-                    <div class="flex align-items-center">
-                        <div class="symbol-flag">
-                            <currency-icon [name]="item?.symbols[0] || 'xaf'"></currency-icon>
+            <ng-container *ngFor="let item of itemGroup.Items">
+                <div class="event-container" [ngClass]="{'passed': item.IsPassed}">
+                    <div class="event-header">
+                        <div class="header-section-name">
+                            <div class="country">
+                                <div class="country-flag-container">
+                                    <div class="country-flag" [ngClass]="getCountryFlag(item)"></div>
+                                </div>
+                                <div class="country-name">{{item.CountryName}}</div>
+                            </div>
+                            <div class="event-name">
+                                {{item.Name}}
+                            </div>
                         </div>
-                        <div class="event-description">{{item.title}}</div>
-                    </div>
-                </ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="vol">
-                <ng-template let-item>
-                    <div class="flex justify-content-center">
-                        <indicator style="width: 20px" [colorClass]="volatilityClassMap[item.volatility]"></indicator>
-                    </div>
-                </ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="actual">
-                <ng-template let-item>
-                    <div class="text-center t-overflow-ellipsis" numberRangeColor>{{item.actual}}</div>
-                </ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="consensus">
-                <ng-template let-item>
-                    <div class="text-center t-overflow-ellipsis">{{item.consensus}}</div>
-                </ng-template>
-            </data-table-cell>
-            <data-table-cell columnName="previous">
-                <ng-template let-item>
-                    <div class="text-center t-overflow-ellipsis">{{item.previous}}</div>
-                </ng-template>
-            </data-table-cell>
-        </data-table>
 
-        <ng-template #eventDescription let-item>
-            <span>
-                <p>{{ item.description }}</p>
-            </span>
-        </ng-template>
+                        <div class="header-section-time">
+                            <div class="time">
+                                {{item.DateUtc.toLocaleTimeString()}}
+                                <span *ngIf="item.IsPassed">(Passed)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-description" *ngIf="!!item.HTMLDescription">
+                        <div [innerHTML]="item.HTMLDescription"></div>
+                    </div>
 
-<!--        <div class="event" *ngFor="let event of events">-->
-<!--            <div class="short-info">-->
-<!--                <div class="event-upper-block" (click)="showDescription(event.id)">-->
-<!--                    <div class="event-general-info">-->
-<!--                        <div class="event-block">-->
-<!--                            <div class="time"-->
-<!--                                 [ngClass]="{'negative-text': isNearTimeToEvent(utcTimeToLocal(event.time))}">-->
-<!--                                {{utcTimeToLocal(event.time) | date: 'HH:mm'}}-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="event-block">-->
-<!--                            <div class="indicator"-->
-<!--                                 [ngClass]="volatilityListAsObject[event.volatility]"></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="event-row event-title">-->
-<!--                        {{event.title}}-->
-<!--                        <div class="more" [ngClass]="{'active' : activeEvents.includes(event.id)}"></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="event-lower-block"-->
-<!--                     [ngClass]="{'active' : activeEvents.includes(event.id)}">-->
-<!--                    <div class="actual">-->
-<!--                        <div class="title">{{'economicCalendar.actual' | translate}}</div>-->
-<!--                        <div class="value">{{event.actual}}</div>-->
-<!--                    </div>-->
-<!--                    <div class="consensus">-->
-<!--                        <div class="title">{{'economicCalendar.consensus' | translate}}</div>-->
-<!--                        <div class="value">{{event.consensus}}</div>-->
-<!--                    </div>-->
-<!--                    <div class="previous">-->
-<!--                        <div class="title">{{'economicCalendar.previous' | translate}}</div>-->
-<!--                        <div class="value">{{event.previous}}</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="description"-->
-<!--                 *ngIf="activeEvents.includes(event.id)">{{event.description}}</div>-->
-<!--        </div>-->
-        <placeholder [message]="'economicCalendar.noEvents' | translate" *ngIf="events.length === 0"></placeholder>
+                    <div class="event-info">
+                        <div class="event-info-item">
+                            <div class="event-info-title">
+                                Volatility
+                            </div>
+                            <div class="event-info-value">
+                                {{item.Volatility}}
+                            </div>
+                        </div>
+                        <div class="event-info-item" *ngIf="!item.IsSpeech && !item.IsReport">
+                            <div class="event-info-title">
+                                Actual
+                            </div>
+                            <div class="event-info-value">
+                                <span *ngIf="!!item.Actual; else no_actual">
+                                    {{item.Actual}}
+                                </span>
+                                <ng-template #no_actual>
+                                    -
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="event-info-item" *ngIf="!item.IsSpeech && !item.IsReport">
+                            <div class="event-info-title">
+                                Consensus
+                            </div>
+                            <div class="event-info-value">
+                                <span *ngIf="!!item.Consensus; else no_consensus">
+                                    {{item.Consensus}}
+                                </span>
+                                <ng-template #no_consensus>
+                                    -
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="event-info-item" *ngIf="!item.IsSpeech && !item.IsReport">
+                            <div class="event-info-title">
+                                Previous
+                            </div>
+                            <div class="event-info-value">
+                                <span *ngIf="!!item.Previous; else no_previous">
+                                    {{item.Previous}}
+                                </span>
+                                <ng-template #no_previous>
+                                    -
+                                </ng-template>
+                            </div>
+                        </div>
+
+                        <div class="event-info-item">
+                            <div class="event-info-title">
+                                Event
+                            </div>
+                            <div class="event-info-value">
+                                {{item.EventTypeDescription}}
+                            </div>
+                        </div>
+                        <div class="event-info-item" *ngIf="!!item.IsSpeech">
+                            <div class="event-info-title">
+                                Event Type
+                            </div>
+                            <div class="event-info-value">
+                                <span>Speech</span>
+                            </div>
+                        </div>
+                        <div class="event-info-item" *ngIf="!!item.IsReport">
+                            <div class="event-info-title">
+                                Event Type
+                            </div>
+                            <div class="event-info-value">
+                                <span>Report</span>
+                            </div>
+                        </div>
+
+                        <div class="event-info-item" *ngIf="!!item.RiseType">
+                            <div class="event-info-title">
+                                Raise Type
+                            </div>
+                            <div class="event-info-value">
+                                {{item.RiseType}}
+                            </div>
+                        </div>
+                        <div class="event-info-item" *ngIf="!!item.CurrencyId">
+                            <div class="event-info-title">
+                                Currency
+                            </div>
+                            <div class="event-info-value">
+                                {{item.CurrencyId}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
     </div>
-</div>
+
+    <bft-loader *ngIf="loading"></bft-loader>
+</ng-container>
+
+
+<ng-template #outOfAccess>
+    <div class="out-of-access" (click)="processCheckout()">
+        <div class="out-of-access-box">
+            <div class="image">
+                <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
+            </div>
+            <div class="text">
+                Upgrade your subscription to get access to Trend Index.
+            </div>
+        </div>
+    </div>
+</ng-template>

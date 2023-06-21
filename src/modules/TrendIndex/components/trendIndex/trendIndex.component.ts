@@ -34,6 +34,10 @@ import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChar
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
 
+const TopUpTrending = "Top Uptrending";
+const TopDownTrending = "Top Downtrending";
+const AllInstruments = "Markets";
+
 export interface ITrendIndexComponentState {
 }
 
@@ -61,6 +65,7 @@ interface ITrendIndexBarChartDataVM {
 }
 
 class TrendIndexVM {
+    type: string = AllInstruments;
     strength: { [id: string]: number; };
     avg_strength: { [id: string]: number; };
 
@@ -101,8 +106,8 @@ class TrendIndexVM {
         "300": 0.1,
         "900": 0.15,
         "3600": 0.2,
-        "14400": 0.25,
-        "86400": 0.3
+        "14400": 0.2,
+        "86400": 0.25
     };
 
     public setData(data: IMesaTrendIndex) {
@@ -217,6 +222,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _chartDataBars: ITrendIndexBarChartDataVM;
     private _chartDataTrends: ITrendIndexChartDataVM[] = [];
 
+    public groups: string[] = [TopUpTrending, TopDownTrending, AllInstruments];
+    public groupingField: string = "type";
+
     public get hasAccess(): boolean {
         return this._identityService.isAuthorizedCustomer;
     }
@@ -301,6 +309,19 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
             this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
             this.vm = this.vm.slice();
+            if (this.vm.length > 10) {
+                this.vm.slice(0, 5).forEach((_) => {
+                    _.type = TopUpTrending;
+                });
+
+                let downtrending = this.vm.slice(-5);
+                downtrending.forEach((_) => {
+                    _.type = TopDownTrending;
+                });
+                downtrending.reverse();
+                this.vm.splice(-5);
+                this.vm.push(...downtrending);
+            }
 
             this.loading = false;
             this._changesDetected = true;
@@ -477,6 +498,52 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this._reloadInterval) {
             clearInterval(this._reloadInterval);
         }
+    }
+
+    getRelativeStrengthClass(value: number) {
+        value = value * 100;
+        if (Math.abs(value) >= 60) {
+            return "color-s";
+        }
+        if (Math.abs(value) >= 50) {
+            return "color-a";
+        }
+        if (Math.abs(value) >= 40) {
+            return "color-b";
+        }
+        if (Math.abs(value) >= 30) {
+            return "color-c";
+        }
+        if (Math.abs(value) >= 20) {
+            return "color-d";
+        }
+        if (Math.abs(value) >= 10) {
+            return "color-e";
+        }
+        return "color-f";
+    }
+
+    getRelativeStrengthTooltip(value: number) {
+        value = value * 100;
+        if (Math.abs(value) >= 60) {
+            return "Strong Strength";
+        }
+        if (Math.abs(value) >= 50) {
+            return "Good Strength";
+        }
+        if (Math.abs(value) >= 40) {
+            return "Building Strength";
+        }
+        if (Math.abs(value) >= 30) {
+            return "Building Strength";
+        }
+        if (Math.abs(value) >= 20) {
+            return "Low Strength";
+        }
+        if (Math.abs(value) >= 10) {
+            return "No Strength";
+        }
+        return "Sideways";
     }
 
     private _raiseStateChanged() {

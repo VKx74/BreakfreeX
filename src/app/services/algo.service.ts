@@ -519,6 +519,36 @@ export interface IMesaTrendDetails {
     mesa: { [id: string]: IMesaTrendStrength[]; };
 }
 
+
+export interface IEvent {
+    Name: string;
+    Description: any;
+    HTMLDescription: string;
+    InternationalCountryCode: string;
+    CountryName: string;
+    EventTypeDescription: string;
+    Potency?: number;
+    PotencySymbol?: string;
+    CurrencyId: string;
+    Symbol: string;
+    IsSpeech?: boolean;
+    IsReport?: boolean;
+    RiseType: string;
+}
+
+export interface IEconomicEvent {
+    Event: IEvent;
+    Id: string;
+    DateUtc: string;
+    ForPeriod?: string;
+    Volatility?: number;
+    Actual?: number;
+    Consensus?: number;
+    Previous?: number;
+    Revised?: number;
+    IsBetterThanExpected?: boolean;
+}
+
 class AlgoServiceEncryptionHelper {
     private static keySize = 256;
     private static ivSize = 128;
@@ -745,6 +775,10 @@ export class AlgoService {
 
     getMesaTrendDetails(symbol: string, datafeed: string): Observable<IMesaTrendDetails> {
         return this._http.get<IBFTAEncryptedResponse>(`${this.url}trends?symbol=${symbol}&datafeed=${datafeed}`).pipe(map(this._decrypt));
+    }
+
+    getEconomicalEvents(): Observable<IEconomicEvent[]> {
+        return this._http.get<IBFTAEncryptedResponse>(`${this.url}economic-calendar`).pipe(map(this._decrypt));
     }
 
     private _decrypt(encrypted: IBFTAEncryptedResponse): any {
