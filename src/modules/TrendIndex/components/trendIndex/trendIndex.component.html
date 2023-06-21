@@ -73,7 +73,7 @@
                 <!-- Cells -->
                 <data-table-cell columnName="symbol">
                     <ng-template let-vmItem>
-                        <div class="symbol-container">
+                        <div class="symbol-container" tooltip [matTooltip]="getRelativeStrengthTooltip(vmItem.totalStrength)">
                             <span class="symbolx-border"
                                 [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
                             </span>

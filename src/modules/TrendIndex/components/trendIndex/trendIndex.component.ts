@@ -523,6 +523,29 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return "color-f";
     }
 
+    getRelativeStrengthTooltip(value: number) {
+        value = value * 100;
+        if (Math.abs(value) >= 60) {
+            return "Top Strength";
+        }
+        if (Math.abs(value) >= 50) {
+            return "High Strength";
+        }
+        if (Math.abs(value) >= 40) {
+            return "Medium Strength";
+        }
+        if (Math.abs(value) >= 30) {
+            return "Medium Strength";
+        }
+        if (Math.abs(value) >= 20) {
+            return "Low Strength";
+        }
+        if (Math.abs(value) >= 10) {
+            return "Week Strength";
+        }
+        return "Sideways";
+    }
+
     private _raiseStateChanged() {
         if (!this._initialized) {
             return;
