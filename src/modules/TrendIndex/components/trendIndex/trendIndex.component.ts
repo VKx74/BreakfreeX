@@ -373,15 +373,15 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 let values: number[] = [];
                 let dates: string[] = [];
 
-                for (let bar of data.bars) {
-                    values.push(bar.c);
-                    dates.push(new Date(bar.t * 1000).toLocaleString());
-                }
+                // for (let bar of data.bars) {
+                //     values.push(bar.c);
+                //     dates.push(new Date(bar.t * 1000).toLocaleString());
+                // }
 
                 this._chartDataBars = {
                     data: {
-                        dates: dates,
-                        values: values,
+                        dates: [],
+                        values: [],
                         isUpTrending: instrumentVM.totalStrength > 0
                     },
                     timeframe: this._tfToString(60),
@@ -411,10 +411,20 @@ export class TrendIndexComponent extends BaseLayoutItem {
                     }
 
                     let mesaDataList = data.mesa[tf];
-                    for (let mesaItem of mesaDataList) {
+                    let tfNumber = Number(tf);
+                    if (tfNumber < 10 * 60) {
+                        tfNumber = 10 * 60;
+                    } else if (tfNumber > 60 * 60) {
+                        tfNumber = 60 * 60;
+                    }
+
+                    for (let i = 0; i < mesaDataList.length; i++) {
+                        let mesaItem = mesaDataList[i];
                         if (mesaItem.t > maxDate) {
-                            mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
-                            mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());
+                            if (mesaItem.t % tfNumber === 0 || i === mesaDataList.length - 1) {
+                                mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
+                                mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());
+                            }
                         }
                     }
 
