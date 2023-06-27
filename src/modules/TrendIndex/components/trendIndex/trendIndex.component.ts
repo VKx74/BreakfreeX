@@ -378,6 +378,27 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 //     dates.push(new Date(bar.t * 1000).toLocaleString());
                 // }
 
+                this._chartDataTrends = [];
+
+                let minDate = 0;
+                let maxDate = 0;
+                for (let tf in data.mesa) {
+                    let mesaDataList = data.mesa[tf].slice(-2500);
+                    if (!mesaDataList.length) {
+                        continue;
+                    }
+
+                    let firstTime = mesaDataList[0].t;
+                    let lastTime = mesaDataList[mesaDataList.length - 1].t;
+
+                    if (firstTime > minDate) {
+                        minDate = firstTime;
+                    }
+                    if (lastTime > maxDate) {
+                        maxDate = lastTime;
+                    }
+                }
+
                 this._chartDataBars = {
                     data: {
                         dates: [],
@@ -386,21 +407,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
                     },
                     timeframe: this._tfToString(60),
                     symbol: instrumentVM.symbol,
-                    startDate: new Date(data.bars[0].t * 1000).toLocaleString(),
-                    endDate: new Date(data.bars[data.bars.length - 1].t * 1000).toLocaleString()
+                    startDate: new Date(minDate * 1000).toLocaleString(),
+                    endDate: new Date(maxDate * 1000).toLocaleString()
                 };
-
-                this._chartDataTrends = [];
-
-                let maxDate = 0;
-                for (let tf in data.mesa) {
-                    let mesaDataList = data.mesa[tf].slice(-2500);
-                    let firstTime = mesaDataList[0].t;
-
-                    if (firstTime > maxDate) {
-                        maxDate = firstTime;
-                    }
-                }
 
                 for (let tf in data.mesa) {
                     let mesaValues: number[] = [];
@@ -420,7 +429,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                     for (let i = 0; i < mesaDataList.length; i++) {
                         let mesaItem = mesaDataList[i];
-                        if (mesaItem.t > maxDate) {
+                        if (mesaItem.t > minDate) {
                             if (mesaItem.t % tfNumber === 0 || i === mesaDataList.length - 1) {
                                 mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
                                 mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());

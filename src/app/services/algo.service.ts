@@ -515,7 +515,7 @@ export interface IMesaTrendIndex {
 }
 
 export interface IMesaTrendDetails {
-    bars: IBarData[];
+    // bars: IBarData[];
     mesa: { [id: string]: IMesaTrendStrength[]; };
 }
 
