@@ -131,13 +131,22 @@ class TrendIndexVM {
 
         this.avg_strength = data.avg_strength;
 
-        let s_1 = data.timeframe_strengths["1"];
-        let s_60 = data.timeframe_strengths["60"];
-        let s_300 = data.timeframe_strengths["300"];
-        let s_900 = data.timeframe_strengths["900"];
-        let s_3600 = data.timeframe_strengths["3600"];
-        let s_14400 = data.timeframe_strengths["14400"];
-        let s_86400 = data.timeframe_strengths["86400"];
+        let s_1 = 0;
+        let s_60 = 0;
+        let s_300 = 0;
+        let s_900 = 0;
+        let s_3600 = 0;
+        let s_14400 = 0;
+        let s_86400 = 0;
+        if (data.timeframe_strengths) {
+            s_1 = data.timeframe_strengths["1"] || 0;
+            s_60 = data.timeframe_strengths["60"] || 0;
+            s_300 = data.timeframe_strengths["300"] || 0;
+            s_900 = data.timeframe_strengths["900"] || 0;
+            s_3600 = data.timeframe_strengths["3600"] || 0;
+            s_14400 = data.timeframe_strengths["14400"] || 0;
+            s_86400 = data.timeframe_strengths["86400"] || 0;
+        }
 
         this.totalStrength = data.total_strength;
 
@@ -277,20 +286,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
     protected loadData() {
         this._algoService.getMesaTrendIndexes().subscribe((data) => {
             for (let item of data) {
-                let exists = false;
-                for (let existingItem of this.vm) {
-                    if (item.symbol === existingItem.id) {
-                        existingItem.setData(item);
-                        exists = true;
-                        break;
+                try {
+                    let exists = false;
+                    for (let existingItem of this.vm) {
+                        if (item.symbol === existingItem.id) {
+                            existingItem.setData(item);
+                            exists = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!exists) {
-                    let model = new TrendIndexVM();
-                    model.setData(item);
-                    this.vm.push(model);
-                }
+                    if (!exists) {
+                        let model = new TrendIndexVM();
+                        model.setData(item);
+                        this.vm.push(model);
+                    }
+                } catch (ex) { }
             }
 
             this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
