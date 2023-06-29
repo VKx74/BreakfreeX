@@ -66,7 +66,6 @@ interface ITrendIndexBarChartDataVM {
 
 class TrendIndexVM {
     type: string = AllInstruments;
-    strength: { [id: string]: number; };
     avg_strength: { [id: string]: number; };
 
     id: string;
@@ -132,28 +131,15 @@ class TrendIndexVM {
 
         this.avg_strength = data.avg_strength;
 
-        this.strength = {};
+        let s_1 = data.timeframe_strengths["1"];
+        let s_60 = data.timeframe_strengths["60"];
+        let s_300 = data.timeframe_strengths["300"];
+        let s_900 = data.timeframe_strengths["900"];
+        let s_3600 = data.timeframe_strengths["3600"];
+        let s_14400 = data.timeframe_strengths["14400"];
+        let s_86400 = data.timeframe_strengths["86400"];
 
-        for (let key in data.strength) {
-            this.strength[key] = data.strength[key].f - data.strength[key].s;
-        }
-
-        let s_1 = this.strength["1"] / this.avg_strength["1"];
-        let s_60 = this.strength["60"] / this.avg_strength["60"];
-        let s_300 = this.strength["300"] / this.avg_strength["300"];
-        let s_900 = this.strength["900"] / this.avg_strength["900"];
-        let s_3600 = this.strength["3600"] / this.avg_strength["3600"];
-        let s_14400 = this.strength["14400"] / this.avg_strength["14400"];
-        let s_86400 = this.strength["86400"] / this.avg_strength["86400"];
-
-        this.totalStrength =
-            s_1 * this.weights["1"] +
-            s_60 * this.weights["60"] +
-            s_300 * this.weights["300"] +
-            s_900 * this.weights["900"] +
-            s_3600 * this.weights["3600"] +
-            s_14400 * this.weights["14400"] +
-            s_86400 * this.weights["86400"];
+        this.totalStrength = data.total_strength;
 
         this.price1StrengthValue = s_1;
         this.price60StrengthValue = s_60;

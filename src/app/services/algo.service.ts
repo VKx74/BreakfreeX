@@ -505,6 +505,8 @@ export interface IMesaTrendIndex {
     datafeed: string;
     strength: { [id: string]: IMesaTrendStrength; };
     avg_strength: { [id: string]: number; };
+    timeframe_strengths: { [key: number]: number };
+    total_strength: number;
     last_price: number;
     price60: number;
     price300: number;
