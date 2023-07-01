@@ -306,6 +306,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
             this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
             this.vm = this.vm.slice();
+
+            this.vm.forEach((_) => {
+                _.type = AllInstruments;
+            });
             if (this.vm.length > 10) {
                 this.vm.slice(0, 5).forEach((_) => {
                     _.type = TopUpTrending;
