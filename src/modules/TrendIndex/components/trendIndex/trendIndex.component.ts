@@ -66,7 +66,6 @@ interface ITrendIndexBarChartDataVM {
 
 class TrendIndexVM {
     type: string = AllInstruments;
-    strength: { [id: string]: number; };
     avg_strength: { [id: string]: number; };
 
     id: string;
@@ -132,28 +131,24 @@ class TrendIndexVM {
 
         this.avg_strength = data.avg_strength;
 
-        this.strength = {};
-
-        for (let key in data.strength) {
-            this.strength[key] = data.strength[key].f - data.strength[key].s;
+        let s_1 = 0;
+        let s_60 = 0;
+        let s_300 = 0;
+        let s_900 = 0;
+        let s_3600 = 0;
+        let s_14400 = 0;
+        let s_86400 = 0;
+        if (data.timeframe_strengths) {
+            s_1 = data.timeframe_strengths["1"] || 0;
+            s_60 = data.timeframe_strengths["60"] || 0;
+            s_300 = data.timeframe_strengths["300"] || 0;
+            s_900 = data.timeframe_strengths["900"] || 0;
+            s_3600 = data.timeframe_strengths["3600"] || 0;
+            s_14400 = data.timeframe_strengths["14400"] || 0;
+            s_86400 = data.timeframe_strengths["86400"] || 0;
         }
 
-        let s_1 = this.strength["1"] / this.avg_strength["1"];
-        let s_60 = this.strength["60"] / this.avg_strength["60"];
-        let s_300 = this.strength["300"] / this.avg_strength["300"];
-        let s_900 = this.strength["900"] / this.avg_strength["900"];
-        let s_3600 = this.strength["3600"] / this.avg_strength["3600"];
-        let s_14400 = this.strength["14400"] / this.avg_strength["14400"];
-        let s_86400 = this.strength["86400"] / this.avg_strength["86400"];
-
-        this.totalStrength =
-            s_1 * this.weights["1"] +
-            s_60 * this.weights["60"] +
-            s_300 * this.weights["300"] +
-            s_900 * this.weights["900"] +
-            s_3600 * this.weights["3600"] +
-            s_14400 * this.weights["14400"] +
-            s_86400 * this.weights["86400"];
+        this.totalStrength = data.total_strength;
 
         this.price1StrengthValue = s_1;
         this.price60StrengthValue = s_60;
@@ -291,24 +286,30 @@ export class TrendIndexComponent extends BaseLayoutItem {
     protected loadData() {
         this._algoService.getMesaTrendIndexes().subscribe((data) => {
             for (let item of data) {
-                let exists = false;
-                for (let existingItem of this.vm) {
-                    if (item.symbol === existingItem.id) {
-                        existingItem.setData(item);
-                        exists = true;
-                        break;
+                try {
+                    let exists = false;
+                    for (let existingItem of this.vm) {
+                        if (item.symbol === existingItem.id) {
+                            existingItem.setData(item);
+                            exists = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!exists) {
-                    let model = new TrendIndexVM();
-                    model.setData(item);
-                    this.vm.push(model);
-                }
+                    if (!exists) {
+                        let model = new TrendIndexVM();
+                        model.setData(item);
+                        this.vm.push(model);
+                    }
+                } catch (ex) { }
             }
 
             this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
             this.vm = this.vm.slice();
+
+            this.vm.forEach((_) => {
+                _.type = AllInstruments;
+            });
             if (this.vm.length > 10) {
                 this.vm.slice(0, 5).forEach((_) => {
                     _.type = TopUpTrending;

@@ -13,7 +13,7 @@ import { MTOrderEditModalComponent } from 'modules/Trading/components/forex.comp
 import { SymbolMappingComponent } from 'modules/Trading/components/forex.components/mt/symbol-mapping/symbol-mapping.component';
 import { IInstrument } from "../../../app/models/common/instrument";
 import { AlgoService } from "@app/services/algo.service";
-import { debounceTime } from "rxjs/operators";
+import { auditTime, debounceTime, throttleTime } from "rxjs/operators";
 import { TradingHelper } from "@app/services/mt/mt.helper";
 import { EBrokerInstance, IBroker, ICryptoBroker, IPositionBasedBroker } from "@app/interfaces/broker/broker";
 import { BinanceOrderConfig } from "modules/Trading/components/crypto.components/binance/order-configurator/binance-order-configurator.component";
@@ -43,6 +43,60 @@ interface IPositionSizeCalculationRequest {
     callback: (size: any) => void;
 }
 
+class OrderStateDescription {
+    private order: IOrder;
+    constructor(o: IOrder) {
+        this.order = { ...o };
+    }
+
+    public compare(o: IOrder): boolean {
+        if (o.Id !== this.order.Id) {
+            return false;
+        }
+
+        if (o.Side !== this.order.Side) {
+            return false;
+        }
+
+        if (o.Symbol !== this.order.Symbol) {
+            return false;
+        }
+
+        if (o.Type !== this.order.Type) {
+            return false;
+        }
+
+        if ((o.SL && !this.order.SL) || !o.SL && this.order.SL) {
+            return false;
+        }
+
+        if ((o.TP && !this.order.TP) || !o.TP && this.order.TP) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+class PositionStateDescription {
+    private position: IPosition;
+    constructor(p: IPosition) {
+        this.position = { ...p };
+    }
+
+    public compare(p: IPosition): boolean {
+        if (p.Side !== this.position.Side) {
+            return false;
+        }
+
+        if (p.Symbol !== this.position.Symbol) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
 @Injectable()
 export class TradeFromChartService implements TradingChartDesigner.ITradingFromChartHandler {
     private _chart: TradingChartDesigner.Chart;
@@ -58,6 +112,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _pendingEdit: { [id: string]: EditOrderPriceConfigBase; } = {};
     private _ratioCache: { [id: string]: number; } = {};
     private _posSizeSubject: Subject<IPositionSizeCalculationRequest> = new Subject();
+    private _orderStateDescription: OrderStateDescription[] = [];
+    private _positionStateDescription: PositionStateDescription[] = [];
 
     private get _broker(): IBroker {
         return this._brokerService.activeBroker;
@@ -79,14 +135,73 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         });
     }
 
+    private checkOrdersSame() {
+        const orders = this.getOrders();
+        const positions = this.getActualPositions();
+
+        if (orders.length !== this._orderStateDescription.length) {
+            return false;
+        }
+
+        if (positions.length !== this._positionStateDescription.length) {
+            return false;
+        }
+
+        for (let i = 0; i < orders.length; i++) {
+            if (!this._orderStateDescription[i].compare(orders[i])) {
+                return false;
+            }
+        }
+
+        for (let i = 0; i < positions.length; i++) {
+            if (!this._positionStateDescription[i].compare(positions[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private getOrders(): IOrder[] {
+        const symbol = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
+        if (!symbol) {
+            return [];
+        }
+
+        let orders = this._broker.orders.slice().filter((order) => {
+            if (order.Symbol !== symbol.symbol) {
+                return false;
+            }
+
+            if (order.Price) {
+                return true;
+            }
+
+            if ((order as BinanceFuturesOrder).StopPrice) {
+                return true;
+            }
+
+            return false;
+        }).sort((order1, order2) => {
+            return order1.Price - order2.Price;
+        });
+
+        return orders;
+    }
+
     private _refreshBrokerSubscriptions() {
         this._prevSymbol = null;
         this.refresh();
         if (this._broker) {
             if (!this._ordersUpdatedSubscription) {
-                this._ordersUpdatedSubscription = this._broker.onOrdersUpdated.subscribe(() => {
-                    this._pendingEdit = {};
-                    this.refresh();
+                this._ordersUpdatedSubscription = this._broker.onOrdersUpdated.pipe(throttleTime(5000, undefined, { leading: true, trailing: true })).subscribe(() => {
+                    if (this.checkOrdersSame()) {
+                        const orders = this.getOrders();
+                        this.handleOrdersParametersChanged(orders);
+                    } else {
+                        this._pendingEdit = {};
+                        this.refresh();
+                    }
                 });
             }
 
@@ -404,8 +519,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 this._decimals = this._broker.instrumentDecimals(this._chart.instrument.symbol);
             }
         }
+        this._chart.primaryPane.freezed = true;
         this.fillOrderLines();
         this.fillPositionsLines();
+        this._chart.primaryPane.freezed = false;
+
+        this._positionStateDescription = [];
 
         if (this._chart.isRestrictedMode) {
             this._chart.refreshAsync();
@@ -421,7 +540,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             this._getOrderSideForBinanceBroker(priceDiff, risk, balance, callback, skipMapping);
             return;
         }
-        
+
     }
 
     public dispose() {
@@ -615,6 +734,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private fillPositionsLines() {
         const shapes = [];
         const positions = this.getActualPositions();
+        this._positionStateDescription = [];
 
         if (!positions) {
             return;
@@ -625,6 +745,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         for (const position of positions) {
+            this._positionStateDescription.push(new PositionStateDescription(position));
             const shape = this.createBaseShape(position);
             shape.showSLTP = false;
             shape.lineText = `#${position.Symbol}`;
@@ -640,10 +761,6 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             shapes.push(shape);
         }
 
-        // if (shapes.length) {
-        //     this._chart.primaryPane.addShapes(shapes);
-        // }
-
         this.addShapes(shapes);
     }
 
@@ -656,31 +773,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             return;
         }
 
-        const symbol = this._broker.instrumentToBrokerFormat(this._chart.instrument.symbol);
-        if (!symbol) {
-            return;
-        }
-
+        let orders = this.getOrders();
+        this._orderStateDescription = [];
         const shapes = [];
-        let orders = this._broker.orders.slice().filter((order) => {
-            if (order.Symbol !== symbol.symbol) {
-                return false;
-            }
-
-            if (order.Price) {
-                return true;
-            }
-
-            if ((order as BinanceFuturesOrder).StopPrice) {
-                return true;
-            }
-
-            return false;
-        }).sort((order1, order2) => {
-            return this.getOrderPriceDiff(order1) - this.getOrderPriceDiff(order2);
-        });
 
         for (const order of orders) {
+            this._orderStateDescription.push(new OrderStateDescription(order));
             // show trigger line
             const stopPrice = (order as BinanceFuturesOrder).StopPrice;
             const entryPrice = order.Price;
@@ -819,6 +917,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         shape.showClose = true;
         shape.isEditable = this._canEditOrder();
         shape.boxSize = order.Size.toString();
+        shape.instrument = this._chart.instrument;
 
         if (this._preventModification) {
             shape.showClose = false;
@@ -869,9 +968,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
             }
         }
         if (shapes.length) {
+            this._chart.primaryPane.freezed = true;
             this._chart.primaryPane.removeShapes(shapes);
             // this._chart.refreshAsync();
             this._chart.commandController.clearCommands();
+            this._chart.primaryPane.freezed = false;
         }
     }
 
@@ -1010,6 +1111,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
 
         let updateNeeded = false;
+        this._chart.primaryPane.freezed = true;
 
         for (const shape of this._chart.primaryPane.shapes) {
             if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
@@ -1044,10 +1146,11 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 }
             }
         }
+        this._chart.primaryPane.freezed = false;
 
-        if (updateNeeded && this._chart.isRestrictedMode) {
-            this._chart.refreshAsync();
-        }
+        // if (updateNeeded && this._chart.isRestrictedMode) {
+        //     this._chart.refreshAsync();
+        // }
     }
 
     private _getEditOrder(order: IOrder): EditOrderPriceConfigBase {
