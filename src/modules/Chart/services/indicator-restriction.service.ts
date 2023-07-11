@@ -24,11 +24,11 @@ export class IndicatorRestrictionService {
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
             } else if (this._identity.subscriptionType === SubscriptionType.Pro) {
-                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
+                // this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingDiscovery.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
             } else if (this._identity.subscriptionType === SubscriptionType.Discovery || this._identity.subscriptionType === SubscriptionType.Trial) {
-                this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
+                // this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingML.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingPro.instanceTypeName);
                 this._restrictedIndicators.push(TradingChartDesigner.BreakfreeTradingStarter.instanceTypeName);
             } else if (this._identity.subscriptionType === SubscriptionType.Starter) {
