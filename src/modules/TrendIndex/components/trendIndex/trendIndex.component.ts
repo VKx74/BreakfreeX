@@ -1,34 +1,21 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewChild } from "@angular/core";
-import { ConfirmModalComponent } from "UI";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
 import { IInstrument } from "@app/models/common/instrument";
-import { Subscription, of } from "rxjs";
+import { Subscription } from "rxjs";
 import { RealtimeService } from "@app/services/realtime.service";
-import { ILevel2, ITick } from "@app/models/common/tick";
-import { JsUtil } from "../../../../utils/jsUtil";
-import { map } from "rxjs/operators";
 import { TrendIndexTranslateService } from "../../localization/token";
 import { TranslateService } from "@ngx-translate/core";
-import { InstrumentSearchComponent } from "@instrument-search/components/instrument-search/instrument-search.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Actions, LinkingAction } from "../../../Linking/models";
 import { DataFeedBase } from "@chart/datafeed/DataFeedBase";
 import { DataFeed } from "@chart/datafeed/DataFeed";
 import { ComponentIdentifier } from "@app/models/app-config";
-import {
-    ColumnSortDataAccessor,
-    DataTableComponent
-} from "../../../datatable/components/data-table/data-table.component";
 import bind from "bind-decorator";
 import { LayoutManagerService } from "angular-golden-layout";
-import { ITcdComponentState } from "Chart";
-import { PriceAlertDialogComponent } from "../../../AutoTradingAlerts/components/price-alert-dialog/price-alert-dialog.component";
 import { AlertService } from '@alert/services/alert.service';
-import { HostListener } from '@angular/core';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { BaseLayoutItem } from "@layout/base-layout-item";
 import { AlgoService, IMesaTrendIndex } from "@app/services/algo.service";
-import { EExchangeInstance } from "@app/interfaces/exchange/exchange";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
