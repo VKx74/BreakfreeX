@@ -17,5 +17,10 @@
   "verificationCodeSent": "Verification code has been sent to your phone number, please enter the received code.",
   "verificationCodeNotSent": "Failed to send verification code.",
   "phoneAdded": "Phone number was successfully verified and added to account.",
-  "failedAddPhone": "Failed to add phone number."
+  "failedAddPhone": "Failed to add phone number.",
+  "save": "Save",
+  "accountId": "Account Id",
+  "brokerAccountIdTips": "Allowed broker account for auto trading execution",
+  "Add": "Add",
+  "Remove": "Remove"
 }

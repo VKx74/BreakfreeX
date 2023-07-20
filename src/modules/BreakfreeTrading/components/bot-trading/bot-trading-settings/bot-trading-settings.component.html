@@ -1,0 +1,55 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+            <h4 class="modal-title">Trading Bot Settings</h4>
+        </div>
+        <div class="modal-body" *ngIf="!loading; else loader">
+            <div class="remove-broker" *ngIf="!!existingAccount; else add_account">
+                <div class="value-tips">
+                    {{ 'brokerAccountIdTips' | translate }}
+                </div>
+                <div class="value-account">
+                    <div class="value-account-id">
+                        {{ existingAccount.accountId }}
+                    </div>
+                    <div class="value-account-state">
+                        {{ existingAccount.isActive ? "Active" : "Disabled" }}
+                    </div>
+                </div>
+                <div class="btn-wrapper">
+                    <button class="crypto-button crypto-button_danger" [disabled]="false" (click)="remove()">
+                        {{ 'remove' | translate }}
+                    </button>
+                </div>
+            </div>
+
+            <ng-template #add_account>
+                <div class="add-broker">
+                    <div class="value-tips">
+                        {{ 'brokerAccountIdTips' | translate }}
+                    </div>
+                    <div class="value-text">
+                        <div class="field-title">
+                            {{ 'accountId' | translate }}:
+                        </div>
+                        <div class="value">
+                            <input matInput type="text" class="crypto-input bft-form-input full-width"
+                                [(ngModel)]="accountId">
+                        </div>
+                    </div>
+                    <div class="btn-wrapper">
+                        <button class="crypto-button crypto-button_primary" [disabled]="!canSave()" (click)="submit()">
+                            {{ 'save' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <ng-template #loader>
+            <div class="loader-container">
+                <bft-loader></bft-loader>
+            </div>
+        </ng-template>
+    </div>
+</div>

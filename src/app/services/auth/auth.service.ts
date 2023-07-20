@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, map, switchMap} from 'rxjs/operators';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {
     SignInRequestModel,
     ChangePasswordModel,
@@ -17,9 +17,10 @@ import {
     UserModel,
     SignInWithThirdPartyRequestModel
 } from '../../models/auth/auth.models';
-import {AppConfigService} from "../app.config.service";
-import {GrantTokenResponse} from "@app/models/auth/auth.models";
-import {AuthInterceptorSkipHeader} from "@app/services/auth/constants";
+import { AppConfigService } from "../app.config.service";
+import { GrantTokenResponse } from "@app/models/auth/auth.models";
+import { AuthInterceptorSkipHeader } from "@app/services/auth/constants";
+import { UserAutoTradingAccountResponse } from '@app/models/auto-trading-bot/models';
 
 @Injectable()
 export class AuthenticationService {
@@ -51,12 +52,12 @@ export class AuthenticationService {
     }
 
     public signIn(model: SignInRequestModel): Observable<GrantTokenResponse> {
-        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/signin`, model, this._httpOptions) .pipe(
-                switchMap((data: any) => { 
-                    const isUserCreated = data ? data.isUserCreated : false;
-                    return this._getTokens(isUserCreated);
-                })
-            );
+        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/signin`, model, this._httpOptions).pipe(
+            switchMap((data: any) => {
+                const isUserCreated = data ? data.isUserCreated : false;
+                return this._getTokens(isUserCreated);
+            })
+        );
     }
 
     public signInWithThirdPartyProvider(model: SignInWithThirdPartyRequestModel): Observable<GrantTokenResponse> {
@@ -168,9 +169,35 @@ export class AuthenticationService {
         return this._http.post<boolean>(`${AppConfigService.config.apiUrls.identityUrl}2fa/disable`, model, this._httpOptions);
     }
 
-
     public restore2FactorAuth(model: Restore2FactorAuthRequest): Observable<boolean> {
         return this._http.post<boolean>(`${AppConfigService.config.apiUrls.identityUrl}2fa/restore`, model, this._httpOptions);
+    }
+
+    public getMyAutoTradingAccount(): Observable<UserAutoTradingAccountResponse[]> {
+        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/get_my_trading_accounts`, this._httpOptions)
+            .pipe(
+                catchError(error => {
+                    return of(error);
+                })
+            );
+    }
+
+    public addMyAutoTradingAccount(accountId: string): Observable<UserAutoTradingAccountResponse> {
+        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/add_my_trading_account`, { accountId }, this._httpOptions)
+            .pipe(
+                catchError(error => {
+                    return of(error);
+                })
+            );
+    }
+
+    public removeMyAutoTradingAccount(id: string): Observable<UserAutoTradingAccountResponse> {
+        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/remove_my_trading_account`, { id }, this._httpOptions)
+            .pipe(
+                catchError(error => {
+                    return of(error);
+                })
+            );
     }
 
     private _getGrant(): Observable<object> {
@@ -228,7 +255,7 @@ export class AuthenticationService {
     private _getTokenByGrant(grantData: any): Observable<GrantTokenResponse> {
         const httpOptions = {
             withCredentials: true,
-            headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
+            headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
         };
 
         let body = new URLSearchParams();

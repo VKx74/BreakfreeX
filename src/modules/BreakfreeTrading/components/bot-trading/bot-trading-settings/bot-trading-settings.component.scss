@@ -1,0 +1,77 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .crypto-modal {
+    max-width: 350px;
+    width: 350px;
+    min-width: auto;
+  }
+
+  .modal-content {
+    min-height: 160px;
+  }
+
+  .btn-wrapper {
+    margin-top: 5px;
+    display: flex;
+    justify-content: end;
+  }
+
+  .value-tips,
+  .field-title {
+    font-size: 12px;
+  }
+
+  .field-title {
+    margin-bottom: 6px;
+  }
+
+  .value-text {
+    margin: 12px 0px;
+  }
+
+  /deep/ {
+    .loader-container {
+      .spinner {
+        height: 80px !important;
+      }
+    }
+  }
+
+  .value-account {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 16px 0px;
+  }
+
+  .value-account-id {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .value-account-state {
+    font-size: 12px;
+  }
+}
+
+@include themify($themes, true) {
+  // .content {
+  //   color: themed("missionTextColor");
+  //   background-color: themed("missionDialogBackground");
+  // }
+  // .mission-content {
+  //   background-color: themed("missionContent");
+  // }
+  // .header {
+  //   background-color: themed("missionContentHeader");
+  // }
+  .value-text, .value-account-id {
+    color: themed("card-title");
+  }
+  .value-tips, .value-account-state {
+    color: themed("valueTextColor");
+  }
+}

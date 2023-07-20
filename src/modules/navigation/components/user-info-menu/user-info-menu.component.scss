@@ -49,6 +49,13 @@
     margin-top: 15px;
   }
 
+  .bot-settings-container {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+
   .right-side {
     display: flex;
     flex-direction: column;
@@ -61,7 +68,7 @@
   }
 
   .margin-top-negative {
-    margin-top: -45px;
+    margin-top: -75px;
   }
 
   /deep/ {
@@ -192,6 +199,7 @@
 @include themify($themes, true) {
   .level-container,
   .theme-container,
+  .bot-settings-container,
   .experiance-container,
   .functiona-menu {
     color: themed("titleTextColor");
