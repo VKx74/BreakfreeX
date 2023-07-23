@@ -62,6 +62,9 @@
         <data-table-header-cell columnName="liveExist" [columnWidth]="50">
             LTA
         </data-table-header-cell>
+        <data-table-header-cell columnName="autoTradingAccounts" [columnWidth]="50">
+            ATA
+        </data-table-header-cell>
         <data-table-header-cell columnName="active" [columnWidth]="100">
             Active
         </data-table-header-cell>
@@ -126,6 +129,13 @@
                         {{getAccountCount(item.user, true)}}
                     </span>
             </ng-template>
+        </data-table-cell>   
+        <data-table-cell columnName="autoTradingAccounts">
+            <ng-template let-item>
+                    <span>
+                        {{getAutoTradingAccountCount(item.user)}}
+                    </span>
+            </ng-template>
         </data-table-cell>
         <data-table-cell columnName="active">
             <ng-template let-item>
@@ -162,6 +172,9 @@
                         </button>
                         <button mat-menu-item
                                 (click)="showTradingAccounts(item)">Trading Accounts
+                        </button>
+                        <button mat-menu-item
+                                (click)="showAutoTradingAccounts(item)">Auto Trading Accounts
                         </button>
                         <ng-container *showIfRole="[Roles.Admin, Roles.KYCOfficer, Roles.SupportOfficer]">
                             <button mat-menu-item

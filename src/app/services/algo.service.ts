@@ -646,7 +646,7 @@ export class AlgoService {
 
     calculateV3(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV3> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v3`, data).pipe(map(this._decrypt)).pipe(map((_) => {
-            console.log(_);
+            // console.log(_);
             let support_prob = _['support_prob'];
             let resistance_prob = _['resistance_prob'];
             let support_ext_prob = _['support_ext_prob'];

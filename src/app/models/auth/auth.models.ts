@@ -79,6 +79,15 @@ export class TradingAccount {
     riskLevel: number;
 }
 
+export class AutoTradingAccount {
+    id: string;
+    accountId: string;
+    userId: string;
+    isActive: boolean;
+    name: string;
+    time: Date | string;
+}
+
 export class UserModel {
 
     public email: string;
@@ -110,6 +119,8 @@ export class UserModel {
     public subscriptions: Subscription[] = [];
 
     public tradingAccounts: TradingAccount[] = [];
+
+    public autoTradingAccounts: AutoTradingAccount[] = [];
 }
 
 export class UserProfileModel {

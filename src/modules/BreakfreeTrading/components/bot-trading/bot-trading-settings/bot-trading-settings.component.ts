@@ -6,6 +6,8 @@ import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/local
 import { AuthenticationService } from '@app/services/auth/auth.service';
 import { UserAutoTradingAccountResponse } from '@app/models/auto-trading-bot/models';
 import { AlertService } from '@alert/services/alert.service';
+import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 
 @Component({
     selector: 'bot-trading-settings',
@@ -24,6 +26,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public existingAccount: UserAutoTradingAccountResponse;
     public accountId: string;
     public loading: boolean = true;
+    public policyAccepted: boolean = false;
 
     public get isAllowed(): boolean {
         return this._identityService.subscriptionType === SubscriptionType.AI;
@@ -33,6 +36,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
         private _identityService: IdentityService,
         private _authService: AuthenticationService,
         private _alertService: AlertService,
+        protected _dialog: MatDialog,
         @Inject(BreakfreeTradingTranslateService) private _translateService) {
         super(_injector);
     }
@@ -76,12 +80,22 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     }
 
     canSave() {
+        if (!this.policyAccepted) {
+            return false;
+        } 
+        
         if (!this.accountId) {
             return false;
         }
 
         let trimmed = this.accountId.trim();
         return trimmed.length >= 4 && trimmed.length <= 16;
+    }
+
+    privacyPolicy() {
+        this._dialog.open(PrivacyPolicyTradingModalComponent, {
+            backdropClass: 'backdrop-background'
+        });
     }
 
     private _reload() {

@@ -55,6 +55,34 @@
   .value-account-state {
     font-size: 12px;
   }
+
+  .policy-agreement-wrapper {
+    margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+
+    input[type="checkbox"] {
+      margin: 0 10px 0 0;
+    }
+
+    label,
+    a {
+      font-size: 0.85em;
+    }
+    a {
+      text-decoration: none;
+      color: #3d61cc;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .policy-agreement-wrapper {
+      display: inline-block;
+      font-size: 14px;
+    }
+  }
 }
 
 @include themify($themes, true) {
@@ -68,10 +96,13 @@
   // .header {
   //   background-color: themed("missionContentHeader");
   // }
-  .value-text, .value-account-id {
+  .value-text,
+  .value-account-id {
     color: themed("card-title");
   }
-  .value-tips, .value-account-state {
+  .value-tips,
+  .accept-broker-policy-text,
+  .value-account-state {
     color: themed("valueTextColor");
   }
 }

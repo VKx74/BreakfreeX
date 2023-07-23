@@ -2,6 +2,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {
+    AutoTradingAccount,
     ResetPasswordBySupportModel,
     TradingAccount,
     UpdateUserModel,
@@ -120,6 +121,28 @@ export class UsersService {
     public createTradingAccount(userId: string, isLive: boolean): Observable<TradingAccount> {
         return this._http.post<TradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}TradingAccount/create`, {
             isLive, userId
+        }, this._httpOptions);
+    }
+
+    public getAutoTradingAccounts(userId: string): Observable<AutoTradingAccount[]> {
+        return this._http.get<AutoTradingAccount[]>(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/get_trading_accounts/${userId}`, this._httpOptions);
+    }
+    
+    public attachAutoTradingAccount(accountId: string, name: string, userId: string): Observable<AutoTradingAccount> {
+        return this._http.post<AutoTradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/add_user_trading_account`, {
+            accountId, name, userId
+        }, this._httpOptions);
+    }
+
+    public updateAutoTradingAccount(id: string, userId: string, name?: string, isActive?: boolean): Observable<AutoTradingAccount> {
+        return this._http.post<AutoTradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/update_user_trading_account`, {
+            id, userId, name, isActive
+        }, this._httpOptions);
+    }
+
+    public detachAutoTradingAccount(id: string, userId: string): Observable<AutoTradingAccount> {
+        return this._http.post<AutoTradingAccount>(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/remove_user_trading_account`, {
+            id, userId
         }, this._httpOptions);
     }
 }

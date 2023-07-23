@@ -33,6 +33,7 @@ import {ComponentIdentifier} from "@app/models/app-config";
 import {SystemNotification} from "../../../Notifications/models/models";
 import { LayoutStorageService } from '@app/services/layout-storage.service';
 import { AppMemberTradingAccountsComponent, AppMemberTradingAccountsConfig } from '../app-member-trading-accounts/app-member-trading-accounts.component';
+import { AppMemberAutoTradingAccountsComponent, AppMemberAutoTradingAccountsConfig } from '../app-member-auto-trading-accounts/app-member-auto-trading-accounts.component';
 
 
 @Component({
@@ -167,6 +168,14 @@ export class AppMembersComponent {
         }
         
         return count;
+    }
+
+    getAutoTradingAccountCount(model: UserModel): number {
+        if (!model.autoTradingAccounts) {
+            return 0;
+        }
+        
+        return model.autoTradingAccounts.length;
     }
 
     registerMember() {
@@ -305,6 +314,14 @@ export class AppMembersComponent {
 
     showTradingAccounts(member: AppMemberModel) {
         this._dialog.open<any, AppMemberTradingAccountsConfig>(AppMemberTradingAccountsComponent, {
+            data: {
+                user: member.user
+            }
+        });
+    }
+
+    showAutoTradingAccounts(member: AppMemberModel) {
+        this._dialog.open<any, AppMemberAutoTradingAccountsConfig>(AppMemberAutoTradingAccountsComponent, {
             data: {
                 user: member.user
             }

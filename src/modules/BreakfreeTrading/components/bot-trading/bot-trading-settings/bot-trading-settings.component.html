@@ -38,6 +38,15 @@
                                 [(ngModel)]="accountId">
                         </div>
                     </div>
+                    <div class="policy-agreement-wrapper">
+                        <span>
+                            <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
+                            <label for="accept-broker-policy"><span class="accept-broker-policy-text">I accept the</span></label>
+                        </span>
+                        <span>
+                            <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
+                        </span>
+                    </div>
                     <div class="btn-wrapper">
                         <button class="crypto-button crypto-button_primary" [disabled]="!canSave()" (click)="submit()">
                             {{ 'save' | translate }}

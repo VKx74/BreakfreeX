@@ -1,0 +1,65 @@
+@import "../global-styles/variables";
+
+:host {
+  .user-id {
+    display: flex;
+    align-items: center;
+    margin: 20px 20px 0px 20px;
+    .crypto-text {
+      font-size: 13px;
+      margin-right: 20px;
+      width: 80px;
+    }
+    .crypto-input {
+      width: 100%;
+    }
+  }
+  .new-account {
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    .section {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .crypto-input {
+      max-width: 150px;
+      margin-left: 15px;
+    }
+    .crypto-button {
+      margin-left: 20px;
+      height: 32px;
+      padding: 0px 20px;
+      margin-left: 20px;
+    }
+  }
+
+  .detach-button,
+  .edit-button {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .modal-footer {
+    .crypto-button {
+      margin-left: 20px;
+    }
+  }
+}
+
+.modal-body {
+  max-height: 500px;
+  overflow: auto;
+}
+
+@media #{$medium-up} {
+  .crypto-modal {
+    width: 800px;
+  }
+}
+
+@media #{$small-only} {
+  .crypto-modal {
+    width: 100%;
+  }
+}
