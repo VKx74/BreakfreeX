@@ -61,61 +61,28 @@ class TrendIndexVM {
     last_price: number;
     price1StrengthValue: number;
     price1Strength: ETrendIndexStrength;
-    price60: number;
-    price60Change: number;
     price60StrengthValue: number;
     price60Strength: ETrendIndexStrength;
-    price300: number;
-    price300Change: number;
     price300StrengthValue: number;
     price300Strength: ETrendIndexStrength;
-    price900: number;
-    price900Change: number;
     price900StrengthValue: number;
     price900Strength: ETrendIndexStrength;
-    price3600: number;
-    price3600Change: number;
     price3600StrengthValue: number;
     price3600Strength: ETrendIndexStrength;
-    price14400: number;
-    price14400Change: number;
     price14400StrengthValue: number;
     price14400Strength: ETrendIndexStrength;
-    price86400: number;
-    price86400Change: number;
     price86400StrengthValue: number;
     price86400Strength: ETrendIndexStrength;
+    price2592000StrengthValue: number;
+    price2592000Strength: ETrendIndexStrength;
     totalStrength: number;
-    weights: { [id: string]: number; } = {
-        "1": 0.033,
-        "60": 0.066,
-        "300": 0.1,
-        "900": 0.15,
-        "3600": 0.2,
-        "14400": 0.2,
-        "86400": 0.25
-    };
 
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
         this.symbol = data.symbol.replace("_", "");
         this.datafeed = data.datafeed;
         this.last_price = data.last_price;
-
-        this.price60 = data.price60;
-        this.price300 = data.price300;
-        this.price900 = data.price900;
-        this.price3600 = data.price3600;
-        this.price14400 = data.price14400;
-        this.price86400 = data.price86400;
-
-        this.price60Change = (this.last_price - this.price60) / this.last_price * 100;
-        this.price300Change = (this.last_price - this.price300) / this.last_price * 100;
-        this.price900Change = (this.last_price - this.price900) / this.last_price * 100;
-        this.price3600Change = (this.last_price - this.price3600) / this.last_price * 100;
-        this.price14400Change = (this.last_price - this.price14400) / this.last_price * 100;
-        this.price86400Change = (this.last_price - this.price86400) / this.last_price * 100;
-
+        
         this.avg_strength = data.avg_strength;
 
         let s_1 = 0;
@@ -125,6 +92,7 @@ class TrendIndexVM {
         let s_3600 = 0;
         let s_14400 = 0;
         let s_86400 = 0;
+        let s_2592000 = 0;
         if (data.timeframe_strengths) {
             s_1 = data.timeframe_strengths["1"] || 0;
             s_60 = data.timeframe_strengths["60"] || 0;
@@ -133,6 +101,7 @@ class TrendIndexVM {
             s_3600 = data.timeframe_strengths["3600"] || 0;
             s_14400 = data.timeframe_strengths["14400"] || 0;
             s_86400 = data.timeframe_strengths["86400"] || 0;
+            s_2592000 = data.timeframe_strengths["2592000"] || 0;
         }
 
         this.totalStrength = data.total_strength;
@@ -144,6 +113,7 @@ class TrendIndexVM {
         this.price3600StrengthValue = s_3600;
         this.price14400StrengthValue = s_14400;
         this.price86400StrengthValue = s_86400;
+        this.price2592000StrengthValue = s_2592000;
 
         this.price1Strength = this._getStrength(s_1);
         this.price60Strength = this._getStrength(s_60);
@@ -152,6 +122,7 @@ class TrendIndexVM {
         this.price3600Strength = this._getStrength(s_3600);
         this.price14400Strength = this._getStrength(s_14400);
         this.price86400Strength = this._getStrength(s_86400);
+        this.price2592000Strength = this._getStrength(s_2592000);
     }
 
     private _getStrength(value: number): ETrendIndexStrength {
@@ -474,6 +445,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             case 3600: return "1 Hour";
             case 14400: return "4 Hours";
             case 86400: return "1 Day";
+            case 2592000: return "1 Month";
         }
         return tf + " Mins";
     }
