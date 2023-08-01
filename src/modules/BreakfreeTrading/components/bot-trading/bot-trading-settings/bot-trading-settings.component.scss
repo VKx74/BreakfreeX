@@ -3,8 +3,8 @@
 
 :host {
   .crypto-modal {
-    max-width: 350px;
-    width: 350px;
+    max-width: 750px;
+    width: 100%;
     min-width: auto;
   }
 
@@ -56,7 +56,7 @@
     font-size: 12px;
   }
 
-  .policy-agreement-wrapper {
+  .policy-agreement-wrapper, .poilicy-profit-agreement, .liability-waiver-agreement {
     margin-bottom: 12px;
     display: inline-flex;
     align-items: center;
@@ -101,8 +101,11 @@
     color: themed("card-title");
   }
   .value-tips,
-  .accept-broker-policy-text,
+  .accept-policy-text,
   .value-account-state {
+    color: themed("valueTextColor");
+  }
+  .accept-profit-policy-text, .accept-broker-policy-text, .accept-liability-waiver-text  {
     color: themed("valueTextColor");
   }
 }

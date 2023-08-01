@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
-            <h4 class="modal-title">Trading Bot Settings</h4>
+            <h4 class="modal-title">Neural Agent Sync Settings</h4>
         </div>
         <div class="modal-body" *ngIf="!loading; else loader">
             <div class="remove-broker" *ngIf="!!existingAccount; else add_account">
@@ -47,6 +47,29 @@
                             <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
                         </span>
                     </div>
+                    <div class="poilicy-profit-agreement" >
+                        <span>
+                            <input type="checkbox" id="accept-profit-policy" [(ngModel)]="profitPolicyAccepted">
+                            <label for="accept-profit-policy"><span class="accept-profit-policy-text">I agree to pay 10% net profits according to the</span></label>
+                        </span>
+                        <span>
+                            <a (click)="profitPolicy()">Profit Sharing Policy</a>
+                        </span>
+                    </div>
+
+                    <div class="liability-waiver-agreement">
+                        <span>
+                            <input type="checkbox" id="accept-liability-waiver" [(ngModel)]="liabilityWaiverAccepted">
+                            <label for="accept-liability-waiver"><span class="accept-liability-waiver-text">By proceeding with the synchronization of your account with our Neural Agent, you're acknowledging and accepting that Breakfree Trading can't be held liable for any potential issues or setbacks that may arise as a result of using neural agent.  </span></label>
+                        </span>
+                        <span>
+                            <a (click)="liabilityWaiver()">Release of Liability</a>
+                        </span>
+
+                    </div>
+
+
+                    
                     <div class="btn-wrapper">
                         <button class="crypto-button crypto-button_primary" [disabled]="!canSave()" (click)="submit()">
                             {{ 'save' | translate }}
