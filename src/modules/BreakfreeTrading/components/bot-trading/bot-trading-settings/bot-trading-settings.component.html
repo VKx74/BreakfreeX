@@ -17,6 +17,15 @@
                         {{ existingAccount.isActive ? "Active" : "Disabled" }}
                     </div>
                 </div>
+
+                <div class="download-agent">
+                    <span>
+                        <a href="{{downloadLink}}">
+                            <i class="fa fa-cloud-download" aria-hidden="true"></i>Download agent
+                        </a>
+                    </span>
+                </div>
+
                 <div class="btn-wrapper">
                     <button class="crypto-button crypto-button_danger" [disabled]="false" (click)="remove()">
                         {{ 'remove' | translate }}
@@ -41,34 +50,30 @@
                     <div class="policy-agreement-wrapper">
                         <span>
                             <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
-                            <label for="accept-broker-policy"><span class="accept-broker-policy-text">I accept the</span></label>
-                        </span>
-                        <span>
-                            <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
+                            <label for="accept-broker-policy"><span class="accept-broker-policy-text">I accept the <a
+                                        (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a></span></label>
                         </span>
                     </div>
-                    <div class="poilicy-profit-agreement" >
+                    <div class="poilicy-profit-agreement">
                         <span>
                             <input type="checkbox" id="accept-profit-policy" [(ngModel)]="profitPolicyAccepted">
-                            <label for="accept-profit-policy"><span class="accept-profit-policy-text">I agree to pay 10% net profits according to the</span></label>
-                        </span>
-                        <span>
-                            <a (click)="profitPolicy()">Profit Sharing Policy</a>
+                            <label for="accept-profit-policy"><span class="accept-profit-policy-text">I agree to pay 10%
+                                    net profits according to the <a (click)="profitPolicy()">Profit Sharing
+                                        Policy</a></span></label>
                         </span>
                     </div>
 
                     <div class="liability-waiver-agreement">
                         <span>
                             <input type="checkbox" id="accept-liability-waiver" [(ngModel)]="liabilityWaiverAccepted">
-                            <label for="accept-liability-waiver"><span class="accept-liability-waiver-text">By proceeding with the synchronization of your account with our Neural Agent, you're acknowledging and accepting that Breakfree Trading can't be held liable for any potential issues or setbacks that may arise as a result of using neural agent.  </span></label>
-                        </span>
-                        <span>
-                            <a href="{{downloadLink}}">Release of Liability</a>
+                            <label for="accept-liability-waiver"><span class="accept-liability-waiver-text">By
+                                    proceeding with the synchronization of your account with our Neural Agent, you're
+                                    acknowledging and accepting that Breakfree Trading can't be held liable for any
+                                    potential issues or setbacks that may arise as a result of using neural agent. <a
+                                        (click)="liabilityWaiver()">Release of Liability</a> </span></label>
                         </span>
                     </div>
 
-
-                    
                     <div class="btn-wrapper">
                         <button class="crypto-button crypto-button_primary" [disabled]="!canSave()" (click)="submit()">
                             {{ 'save' | translate }}

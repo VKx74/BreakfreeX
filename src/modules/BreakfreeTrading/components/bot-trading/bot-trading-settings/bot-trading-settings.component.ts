@@ -27,6 +27,8 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public accountId: string;
     public loading: boolean = true;
     public policyAccepted: boolean = false;
+    public profitPolicyAccepted: boolean = false;
+    public liabilityWaiverAccepted: boolean = false;
 
     public downloadLink: string = '/assets/NeuralAgent_1.0.0.ex5';
 
@@ -82,7 +84,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     }
 
     canSave() {
-        if (!this.policyAccepted) {
+        if (!this.policyAccepted || !this.profitPolicyAccepted || !this.liabilityWaiverAccepted) {
             return false;
         } 
         
@@ -100,9 +102,16 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
         });
     }
 
-    liabilityWaiver()
-    {
+    profitPolicy() {
+        this._dialog.open(PrivacyPolicyTradingModalComponent, {
+            backdropClass: 'backdrop-background'
+        });
+    }
 
+    liabilityWaiver() {
+        this._dialog.open(PrivacyPolicyTradingModalComponent, {
+            backdropClass: 'backdrop-background'
+        });
     }
 
     private _reload() {
