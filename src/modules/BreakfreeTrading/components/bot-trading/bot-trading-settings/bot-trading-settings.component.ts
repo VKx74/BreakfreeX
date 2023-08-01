@@ -28,6 +28,8 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public loading: boolean = true;
     public policyAccepted: boolean = false;
 
+    public downloadLink: string = '/assets/NeuralAgent_1.0.0.ex5';
+
     public get isAllowed(): boolean {
         return this._identityService.subscriptionType === SubscriptionType.AI;
     }
@@ -96,6 +98,11 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
         this._dialog.open(PrivacyPolicyTradingModalComponent, {
             backdropClass: 'backdrop-background'
         });
+    }
+
+    liabilityWaiver()
+    {
+
     }
 
     private _reload() {
