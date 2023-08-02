@@ -8,6 +8,8 @@ import { UserAutoTradingAccountResponse } from '@app/models/auto-trading-bot/mod
 import { AlertService } from '@alert/services/alert.service';
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
+import { LiabilityPolicyTradingModalComponent } from 'modules/Shared/components/liability-policy-trading/liability-policy-trading.component';
+import { ProfitPolicyTradingModalComponent } from 'modules/Shared/components/profit-policy-trading/profit-policy-trading.component';
 
 @Component({
     selector: 'bot-trading-settings',
@@ -103,13 +105,13 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     }
 
     profitPolicy() {
-        this._dialog.open(PrivacyPolicyTradingModalComponent, {
+        this._dialog.open(ProfitPolicyTradingModalComponent, {
             backdropClass: 'backdrop-background'
         });
     }
 
     liabilityWaiver() {
-        this._dialog.open(PrivacyPolicyTradingModalComponent, {
+        this._dialog.open(LiabilityPolicyTradingModalComponent, {
             backdropClass: 'backdrop-background'
         });
     }

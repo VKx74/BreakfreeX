@@ -38,6 +38,8 @@ import {LoaderModule} from "../loader/loader.module";
 import { PrivacyPolicyTradingModalComponent } from './components/privacy-policy-trading/privacy-policy-trading.component';
 import { UTCSecondsToDTPipe } from './pipes/utc-seconds-to-dt.pipe';
 import { SecondsToTFPipe } from './pipes/seconds-to-tf.pipe';
+import { ProfitPolicyTradingModalComponent } from './components/profit-policy-trading/profit-policy-trading.component';
+import { LiabilityPolicyTradingModalComponent } from './components/liability-policy-trading/liability-policy-trading.component';
 
 const PIPES = [
     DateFormatPipe,
@@ -77,7 +79,9 @@ const COMPONENTS = [
     ComponentPreloaderComponent,
     NoItemsPlaceholderComponent,
     SvgEmptyComponent,
-    PrivacyPolicyTradingModalComponent
+    PrivacyPolicyTradingModalComponent,
+    ProfitPolicyTradingModalComponent,
+    LiabilityPolicyTradingModalComponent
 ];
 
 @NgModule({
