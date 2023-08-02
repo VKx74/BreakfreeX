@@ -18,23 +18,26 @@
                     </div>
                 </div>
 
-                <div class="download-agent">
-                    <span>
-                        <a href="{{downloadLink}}">
-                            <i class="fa fa-cloud-download" aria-hidden="true"></i>Download agent
-                        </a>
-                    </span>
-                </div>
+            
 
                 <div class="btn-wrapper">
+                    <div class="download-agent">
+                        <span>
+                            <a href="{{downloadLink}}">
+                                Download Neural Agent<i class="fa fa-cloud-download" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                    </div>
+
                     <button class="crypto-button crypto-button_danger" [disabled]="false" (click)="remove()">
-                        {{ 'remove' | translate }}
+                        Detach Neural Agent
                     </button>
                 </div>
             </div>
 
             <ng-template #add_account>
                 <div class="add-broker">
+                    <div>
                     <div class="value-tips">
                         {{ 'brokerAccountIdTips' | translate }}
                     </div>
@@ -47,6 +50,8 @@
                                 [(ngModel)]="accountId">
                         </div>
                     </div>
+                    </div>
+                    <div>
                     <div class="policy-agreement-wrapper">
                         <span>
                             <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
@@ -57,9 +62,8 @@
                     <div class="poilicy-profit-agreement">
                         <span>
                             <input type="checkbox" id="accept-profit-policy" [(ngModel)]="profitPolicyAccepted">
-                            <label for="accept-profit-policy"><span class="accept-profit-policy-text">I agree to pay 10%
-                                    net profits according to the <a (click)="profitPolicy()">Profit Sharing
-                                        Policy</a></span></label>
+                            <label for="accept-profit-policy"><span class="accept-profit-policy-text">I consent to contribute 10% of all net earnings as per the 
+                                <a (click)="profitPolicy()">Profit Sharing Program</a></span></label>
                         </span>
                     </div>
 
@@ -67,11 +71,12 @@
                         <span>
                             <input type="checkbox" id="accept-liability-waiver" [(ngModel)]="liabilityWaiverAccepted">
                             <label for="accept-liability-waiver"><span class="accept-liability-waiver-text">By
-                                    proceeding with the synchronization of your account with our Neural Agent, you're
+                                    proceeding with the synchronization of your trading account with your Neural Agent, you're
                                     acknowledging and accepting that Breakfree Trading can't be held liable for any
-                                    potential issues or setbacks that may arise as a result of using neural agent. <a
-                                        (click)="liabilityWaiver()">Release of Liability</a> </span></label>
+                                    potential issues or setbacks that may arise as a result of using neural agent. All wins and losses are your own and full responsbility. I release Breakfree Trading of any and all liability and accept the <a
+                                        (click)="liabilityWaiver()"> Release Of Liability Agreement.</a> </span></label>
                         </span>
+                    </div>
                     </div>
 
                     <div class="btn-wrapper">
