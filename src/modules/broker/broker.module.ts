@@ -28,6 +28,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MTBrokerLoginComponent } from './components/broker/forex/mt/mt.broker.login.component';
 import { BinanceBrokerLoginComponent } from './components/broker/crypto/binance/binance.broker.login.component';
 import { BinanceConnectedAccountInfoComponent } from './components/broker/crypto/binance/connected-account-info/binance-connected-account-info.component';
+import { LiabilityPolicyTradingModalComponent } from 'modules/Shared/components/liability-policy-trading/liability-policy-trading.component';
+import { ProfitPolicyTradingModalComponent } from 'modules/Shared/components/profit-policy-trading/profit-policy-trading.component';
 
 
 @NgModule({
@@ -68,7 +70,9 @@ import { BinanceConnectedAccountInfoComponent } from './components/broker/crypto
     ],
     entryComponents: [
         BrokerDialogComponent,
-        PrivacyPolicyTradingModalComponent
+        PrivacyPolicyTradingModalComponent,
+        ProfitPolicyTradingModalComponent,
+        LiabilityPolicyTradingModalComponent
     ],
     exports: [
         BrokerDialogComponent,

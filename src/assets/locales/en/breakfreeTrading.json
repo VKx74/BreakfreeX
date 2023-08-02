@@ -1,21 +1,26 @@
 {
   "breakfreeTrading": {
     "continueFree": "Continue Free",
-    "addPhone": "Verify ",
+    "addPhone": "Add phone",
     "phoneNumber": "Phone number",
-    "verify": "Complete",
-    "verificationCode": "Enter Verification Code",
-    "addYourPhoneNumber": "Enter your phone number",
-    "subscriptionRestriction": "Out of access for subscription level",
-    "useTradeGuard": "Enable TradeGuard",
-    "activeTradingFeedback": "Enable active TradeGuard feedback"
+    "verify": "Verify",
+    "verificationCode": "Verification Code",
+    "addYourPhoneNumber": "Add your phone number",
+    "subscriptionRestriction": "No access due to current subscription level",
+    "useTradeGuard": "Activate TradeGuard",
+    "activeTradingFeedback": "Activate continuous TradeGuard feedback"
   },
-  "BreakfreeTradingBacktestComponentName": "BFT Backtest",
+  "breakfreeTradingBacktestComponentName": "BFT Backtest",
   "binanceScannerWidgetComponentName": "Binance Scanner",
   "breakfreeTradingAcademyComponentName": "Academy",
   "BreakfreeTradingScannerWidgetName": "Sonar",
-  "verificationCodeSent": "Verification code has been sent to your phone number, please enter the received code.",
-  "verificationCodeNotSent": "Failed to send verification code.",
-  "phoneAdded": "Phone number was successfully verified and added to account.",
-  "failedAddPhone": "Failed to add phone number."
+  "verificationCodeSent": "A confirmation code has been sent to your phone, please input it.",
+  "verificationCodeNotSent": "Sending of confirmation code failed.",
+  "phoneAdded": "Phone number was successfully added.",
+  "failedAddPhone": "Failed to add phone number.",
+  "save": "Save",
+  "accountId": "Metatrader 5 Account",
+  "brokerAccountIdTips": "Input the Metatrader 5 account that you want your Neural Agent to manage.",
+  "Add": "Add",
+  "Remove": "Remove"
 }

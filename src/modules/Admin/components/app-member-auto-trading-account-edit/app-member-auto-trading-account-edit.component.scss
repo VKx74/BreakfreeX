@@ -1,0 +1,46 @@
+@import "../global-styles/variables";
+
+:host {
+  .edit-account {
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+
+    .section {
+      display: flex;
+      flex-direction: column;
+    }
+    .crypto-input {
+      width: 150px;
+      margin: 10px;
+    }
+    .crypto-text {
+      font-size: 13px;
+      margin-left: 10px;
+    }
+    .crypto-button {
+      margin-left: 20px;
+      height: 32px;
+      padding: 0px 20px;
+      margin-left: 20px;
+    }
+  }
+
+  .bottom-section {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+  }
+
+  .modal-footer {
+    .crypto-button {
+      margin-left: 20px;
+    }
+  }
+}
+
+.modal-body {
+  max-height: 500px;
+  overflow: auto;
+}

@@ -61,6 +61,7 @@ import { BinanceScannerWsService } from './services/binance.scanner/binance.scan
 import { BinanceScannerService } from './services/binance.scanner/binance.scanner.service';
 import { PosNegativeNumberColorDirective } from './components/BinanceScannerComponent/directive/color.directive';
 import { NeuralCheckoutComponent } from './components/neural-checkout/neural-checkout.component';
+import { BotTradingSettingsComponent } from './components/bot-trading/bot-trading-settings/bot-trading-settings.component';
 
 @NgModule({
     // components here
@@ -94,7 +95,8 @@ import { NeuralCheckoutComponent } from './components/neural-checkout/neural-che
         LeaderDashboardComponent,
         BinanceScannerComponent,
         BinanceScannerWidgetComponent,
-        PosNegativeNumberColorDirective
+        PosNegativeNumberColorDirective,
+        BotTradingSettingsComponent
     ],
     imports: [
         CommonModule,
@@ -142,7 +144,8 @@ import { NeuralCheckoutComponent } from './components/neural-checkout/neural-che
         MissionsInfoComponent,
         TradeGuardComponent,
         BinanceScannerComponent,
-        BinanceScannerWidgetComponent
+        BinanceScannerWidgetComponent,
+        BotTradingSettingsComponent
     ],
     // components here
     exports: [
@@ -168,7 +171,8 @@ import { NeuralCheckoutComponent } from './components/neural-checkout/neural-che
         // ChartWrapperComponent,
         TradingPerformanceComponent,
         BinanceScannerComponent,
-        BinanceScannerWidgetComponent
+        BinanceScannerWidgetComponent,
+        BotTradingSettingsComponent
     ],
     providers: [
         HistoryService,

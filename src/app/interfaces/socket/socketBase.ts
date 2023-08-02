@@ -169,9 +169,9 @@ export abstract class WebsocketBase {
     }
 
     private _log(...args: any[]) {
-        if (!environment.production) {
-            console.log(args);
-        }
+        // if (!environment.production) {
+        //     console.log(args);
+        // }
     }
 
     private _sendPings() {

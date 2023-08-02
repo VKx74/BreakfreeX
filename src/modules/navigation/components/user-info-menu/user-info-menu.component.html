@@ -1,43 +1,30 @@
 <div class="user-info-menu">
     <div class="menu-top flex flex-direction-column">
         <div class="top-line flex justify-space-between" *ngIf="isAuthorizedCustomer">
-            <div class="level-container">
+            <div class="level-container hidden">
 
                 <div class="badge-container">
                     <my-badge></my-badge>
                 </div>
             </div>
-            <div class="right-side">
-                <div class="experiance-container" (click)="openMissionDialog()">
-                    See Quests
-                </div>
-                <div class="theme-container" (click)="changeTheme()">
-                    <div class="flex">Theme</div>
-                    <div class="flex align-items-center">
-                        <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>
-                        <ng-template #lightThemeIcon>
-                            <i class="fa fa-moon-o" aria-hidden="true"></i>
-                        </ng-template>
-                    </div>
-                </div>
-            </div>
+           
         </div>
-        <div class="avatar-line flex" [ngClass]="{'margin-top-negative': isAuthorizedCustomer}">
+        <div class="avatar-line flex hidden" [ngClass]="{'margin-top-negative': isAuthorizedCustomer}">
             <div class="avatar">
                 <ng-container *ngTemplateOutlet="avatarTemplate || avatar"></ng-container>
             </div>
         </div>
-        <div class="username-line flex justify-space-around">
+        <div class="username-line flex justify-space-around hidden">
             <div class="user-name">
                 {{userName}}
             </div>
         </div>
-        <div class="user-rank-line flex justify-space-around" *ngIf="isAuthorizedCustomer">
+        <div class="user-rank-line flex justify-space-around hidden" *ngIf="isAuthorizedCustomer">
             <div class="user-rank">
                 {{levelName}}
             </div>
         </div>
-        <div class="user-level-slider-line flex" *ngIf="isAuthorizedCustomer">
+        <div class="user-level-slider-line flex hidden" *ngIf="isAuthorizedCustomer">
             <div class="progress-bar-area flex">
                 <mat-progress-bar mode="determinate" value="{{score/scoreForLevel * 100}}"></mat-progress-bar>
             </div>
@@ -51,24 +38,50 @@
                 </div>
             </div>
         </div>
-        <div class="functiona-menu flex justify-content-center crypto-text is-large">
-            <!-- <div class="user-settings" routerLink="/platform/settings" [class.disabled]="isGuest">
+
+        <div class="username-row" >
+            <span title="{{userName}}">{{userName}}</span>
+      
+        </div>
+
+        <div class="functiona-menu flex flex-direction-column justify-content-center crypto-text is-large">
+
+          
+
+ 
+           
+
+             <div class="user-row" routerLink="/platform/settings" [class.disabled]="isGuest">
                 <span title="{{'app.settings' | translate}}">{{'app.settings' | translate}}</span>
-            </div>  -->
-            <div class="clear-session" [class.disabled]="isGuest" (click)="clearSession()">
+            </div>  
+            <div class="divider" > </div>
+
+            
+            <div class="user-row" (click)="botSettings()">
+                <span title="Neural Agent Sync">Neural Agent Sync</span>
+          
+            </div>
+
+            <div class="divider" > </div>
+
+            <div class="user-row" [class.disabled]="isGuest" (click)="clearSession()">
                 <span title="{{'app.clearSession' | translate}}">{{'app.clearSession' | translate}}</span>
             </div>
-            <div class="reset-layout" (click)="resetLayout()">
+            <div class="divider" > </div>
+            <div class="user-row" (click)="resetLayout()">
                 <span title="{{'app.resetLayout' | translate}}">{{'app.resetLayout' | translate}}</span>
             </div>
-            <div class="log-out" (click)="onLoginClick()" *ngIf="isGuest; else logout">
+            <div class="divider" > </div>
+            <div class="user-row" (click)="onLoginClick()" *ngIf="isGuest; else logout">
                 <span title="{{'app.login' | translate}}">{{'app.login' | translate}}</span>
             </div>
+         
             <ng-template #logout>
-                <div class="log-out" (click)="onLogoutClick()">
+                <div class="user-row" (click)="onLogoutClick()">
                     <span title="{{'app.logout' | translate}}">{{'app.logout' | translate}}</span>
                 </div>
             </ng-template>
+            
         </div>
         <!-- <div class="menu-top-inner w-100">
            <div class="avatar">

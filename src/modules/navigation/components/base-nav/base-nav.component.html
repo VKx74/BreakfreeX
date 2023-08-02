@@ -13,9 +13,9 @@
                 </div>
             </a>
             <div class="platform-pages-nav">
-                <div class="platform-pages-item" routerLink="">Chart</div>
-                <div class="platform-pages-item" routerLink="{{socialFeedRoute}}">Sonar</div>
-                <div class="platform-pages-item sm-hidden" routerLink="{{academyRoute}}">Academy</div>
+                <div class="platform-pages-item hidden" routerLink="">Chart</div>
+                <div class="platform-pages-item hidden" routerLink="{{socialFeedRoute}}">Sonar</div>
+                <div class="platform-pages-item hidden sm-hidden" routerLink="{{academyRoute}}">Academy</div>
             </div>
         </div>
 
@@ -43,16 +43,20 @@
                             </div>
                         </div>
                     </nav-section>  -->
-                <nav-section *ngIf="isBlackFridayDeal" class="premium-academy-content cursor-pointer" [leftBorder]="false" [paddingRight]="true"
-                    [paddingLeft]="true" (click)="showPremiumAcademyContent()">
-                    <div class="insidecorrector">
-                        <div class="flex">
-                            <div class="star-image">
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                            </div>
-                        </div>
+
+                <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" >
+                <div class="theme-container" (click)="changeTheme()">
+                   
+                    <div class="flex align-items-center">
+                        <i class="fa fa-sun-o" aria-hidden="true" *ngIf="isDarkTheme; else lightThemeIcon"></i>
+                        <ng-template #lightThemeIcon>
+                            <i class="fa fa-moon-o" aria-hidden="true"></i>
+                        </ng-template>
                     </div>
-                </nav-section>
+                </div>
+
+            </nav-section>
+               
                 <nav-section class="notifications cursor-pointer" [leftBorder]="false" [paddingRight]="true"
                     [paddingLeft]="true" [matMenuTriggerFor]="notificationsMenu"
                     (menuOpened)="onNotificationsMenuOpened()" (menuClosed)="onNotificationsMenuClosed()">
@@ -134,7 +138,8 @@
                         </div>
                     </div>
                 </nav-section>
-                <div class="settings-button" routerLink="/platform/settings" [class.disabled]="isGuest">
+
+                <div class="settings-button hidden" routerLink="/platform/settings" [class.disabled]="isGuest">
                     <i _ngcontent-rjn-c4="" class="crypto-icon crypto-icon-settings"></i>
                 </div>
             </div>

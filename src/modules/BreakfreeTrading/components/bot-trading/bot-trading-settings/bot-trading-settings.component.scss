@@ -1,0 +1,185 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .crypto-modal {
+    max-width: 750px;
+    width: 100%;
+    min-width: auto;
+  }
+
+  .modal-content {
+    min-height: 180px;
+    min-width: 285px;
+    width: 100%;
+
+    max-height: 500px;
+    height: 100%;
+  }
+  .remove-broker {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+    min-height: 35vh;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.add-broker {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    flex-wrap: wrap;
+    row-gap: 20px;
+    padding: 15px;
+}
+  .btn-wrapper {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .value-tips,
+  .field-title {
+    font-size: 12px;
+  }
+
+  .field-title {
+    margin-bottom: 6px;
+  }
+
+  .value-text {
+    margin: 12px 0px;
+  }
+
+  /deep/ {
+    .loader-container {
+      .spinner {
+        height: 80px !important;
+      }
+    }
+  }
+
+  .value-account {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 8px;
+    align-items: center;
+  }
+
+  .value-account-id {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .value-account-state {
+    font-size: 12px;
+  }
+
+  .download-agent {
+  }
+
+  .policy-agreement-wrapper,
+  .poilicy-profit-agreement,
+  .liability-waiver-agreement {
+    margin-bottom: 12px;
+    // display: inline-flex;
+    align-items: center;
+
+     input[type="checkbox"] {
+       margin: 0 10px 0 0;
+     }
+    label {
+      display: block;
+    }
+
+    label,
+    a {
+      font-size: 14px;
+    }
+    a {
+      text-decoration: none;
+      color: #3d61cc;
+      cursor: pointer;
+    }
+  }
+
+  .download-agent a {
+    color: #fff;
+}
+
+  .download-agent a {
+    padding: 11px 18px;
+    border-radius: 3px;
+    background: #6c9242;
+    color: #fff;
+
+    font-family: "Open Sans";
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    i {
+      margin-left: 8px;
+    }
+
+    &:hover {
+      background: #5a7a35;
+      text-decoration: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .policy-agreement-wrapper {
+      display: inline-block;
+      font-size: 14px;
+    }
+      .btn-wrapper {
+       margin-top: 5px;
+    display: flex;
+    row-gap: 12px;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  }
+}
+
+@include themify($themes, true) {
+  // .content {
+  //   color: themed("missionTextColor");
+  //   background-color: themed("missionDialogBackground");
+  // }
+  // .mission-content {
+  //   background-color: themed("missionContent");
+  // }
+  // .header {
+  //   background-color: themed("missionContentHeader");
+  // }
+  .value-text,
+  .value-account-id {
+    color: themed("card-title");
+  }
+  .value-tips,
+  .accept-policy-text,
+  .value-account-state {
+    color: themed("valueTextColor");
+  }
+  .accept-profit-policy-text,
+  .accept-broker-policy-text,
+  .accept-liability-waiver-text {
+    color: themed("valueTextColor");
+  }
+
+  [type=checkbox]:not(:checked)~label:before, .value {
+    border-color:  themed("provider-text-color");
+    border: 1px solid  themed("provider-text-color");
+  }
+}

@@ -38,16 +38,6 @@
                     [columnWidth]="100">
                     {{'instrument' | translate}}
                 </data-table-header-cell>
-                <!-- <data-table-header-cell columnName="price" [sortable]="false"
-            [columnMinWidth]="80">
-            {{'price' | translate}}
-        </data-table-header-cell>
-        <data-table-header-cell columnName="priceChange" [sortable]="false" [columnMinWidth]="65">
-            {{'change' | translate}}
-        </data-table-header-cell> -->
-                <!-- <data-table-header-cell columnName="total" [sortable]="false" [columnMinWidth]="40" [columnWidth]="60">
-                    {{'total' | translate}}
-                </data-table-header-cell> -->
                 <data-table-header-cell columnName="driver" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                     {{'driver' | translate}}
                 </data-table-header-cell>
@@ -68,6 +58,9 @@
                 </data-table-header-cell>
                 <data-table-header-cell columnName="d_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                     {{'d_1' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="month_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                    {{'month_1' | translate}}
                 </data-table-header-cell>
 
 
@@ -90,26 +83,6 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-
-                <!--  <data-table-cell columnName="price">
-            <ng-template let-vmItem>{{vmItem.last_price}}</ng-template>
-        </data-table-cell>
-         <data-table-cell columnName="priceChange"x>
-            <ng-template let-vmItem>
-                <span class="price-change" [class.up-trend]="vmItem.price86400Change > 0" [class.down-trend]="vmItem.price86400Change < 0">
-                    {{vmItem.price86400Change > 0 ? "+" : ""}}
-                    {{vmItem.price86400Change.toFixed(2)}}%
-                </span>
-            </ng-template>
-        </data-table-cell> -->
-                <!-- <data-table-cell columnName="total">
-                    <ng-template let-vmItem>
-                        <div class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
-                            [class.down-trend]="vmItem.totalStrength < 0">
-                            {{(vmItem.totalStrength * 100).toFixed(0)}}%
-                        </div>
-                    </ng-template>
-                </data-table-cell> -->
                 <data-table-cell columnName="driver">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
@@ -163,6 +136,14 @@
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price86400Strength"
                                 [StrengthValue]="vmItem.price86400StrengthValue"></trend-column>
+                        </div>
+                    </ng-template>
+                </data-table-cell> 
+                <data-table-cell columnName="month_1">
+                    <ng-template let-vmItem>
+                        <div class="strength-cell">
+                            <trend-column [Strength]="vmItem.price2592000Strength"
+                                [StrengthValue]="vmItem.price2592000StrengthValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>

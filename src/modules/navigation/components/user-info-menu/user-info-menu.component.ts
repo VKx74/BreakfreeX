@@ -23,6 +23,7 @@ import { UserSettings, UserSettingsService } from '@app/services/user-settings/u
 import { LocalizationService } from 'modules/Localization/services';
 import { ThemeService } from '@app/services/theme.service';
 import { Theme } from '@app/enums/Theme';
+import { BotTradingSettingsComponent } from 'modules/BreakfreeTrading/components/bot-trading/bot-trading-settings/bot-trading-settings.component';
 
 @Component({
     selector: 'user-info-menu',
@@ -146,6 +147,13 @@ export class UserInfoMenuComponent implements OnInit {
     changeTheme() {
         this._themeService.setActiveTheme(this.isDarkTheme ? Theme.Light : Theme.Dark);
         this._save();
+    }
+
+    botSettings() {
+        let scrHeight = window.innerHeight;
+        this._dialog.open(BotTradingSettingsComponent, { backdropClass: 'backdrop-background', position: {
+            top: scrHeight > 667 ? "100px" : null
+        }});
     }
 
     private _resetLayout() {

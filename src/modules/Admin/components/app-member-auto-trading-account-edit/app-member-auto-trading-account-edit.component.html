@@ -1,0 +1,27 @@
+<div class="crypto-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
+      <h4 class="modal-title">Edit Trading account</h4>
+    </div>
+    <div class="edit-account">
+      <div class="section">
+        <div class="crypto-text">Name (optional):</div>
+        <input matInput type="text" [(ngModel)]="name" placeholder="Name" class="crypto-input bft-form-input">
+        <div class="crypto-text">Is Active:</div>
+        <selector [options]="activityTypes" [(ngModel)]="isActive"
+          class="crypto-input bft-form-input"></selector>
+      </div>
+    </div>
+
+    <div class="bottom-section">    
+      <button class="crypto-button crypto-button_action" (click)="edit()">
+        Edit
+      </button>
+    </div>
+
+  </div>
+
+  <bft-loader *ngIf="loading"></bft-loader>
+
+</div>

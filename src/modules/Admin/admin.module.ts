@@ -188,6 +188,8 @@ import { P2PUserReviewsTableComponent } from './components/companion/p2p-user-re
 import { P2PUserReviewsComponent } from './components/companion/p2p-user-reviews/p2p-user-reviews.component';
 import { P2PEditOrderComponent } from './components/companion/p2p-edit-order/p2p-edit-order.component';
 import { P2PEditAdComponent } from './components/companion/p2p-edit-ad/p2p-edit-ad.component';
+import { AppMemberAutoTradingAccountsComponent } from './components/app-member-auto-trading-accounts/app-member-auto-trading-accounts.component';
+import { AppMemberAutoTradingAccountEditComponent } from './components/app-member-auto-trading-account-edit/app-member-auto-trading-account-edit.component';
 
 @NgModule({
     imports: [
@@ -247,7 +249,9 @@ import { P2PEditAdComponent } from './components/companion/p2p-edit-ad/p2p-edit-
         AppMembersComponent,
         AppMemberInfoComponent,
         AppMemberTradingAccountsComponent,
+        AppMemberAutoTradingAccountsComponent,
         AppMemberTradingAccountEditComponent,
+        AppMemberAutoTradingAccountEditComponent,
         AppMemberConfiguratorComponent,
         NotificationsComponent,
         NotificationEditorComponent,
@@ -356,7 +360,9 @@ import { P2PEditAdComponent } from './components/companion/p2p-edit-ad/p2p-edit-
         EventEditorComponent,
         AppMemberInfoComponent,
         AppMemberTradingAccountsComponent,
+        AppMemberAutoTradingAccountsComponent,
         AppMemberTradingAccountEditComponent,
+        AppMemberAutoTradingAccountEditComponent,
         TagsManagerComponent,
         AppMemberKycHistoryComponent,
         NotificationEditorComponent,
