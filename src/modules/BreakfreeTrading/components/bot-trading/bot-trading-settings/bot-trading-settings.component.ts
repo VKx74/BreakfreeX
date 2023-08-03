@@ -32,7 +32,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public profitPolicyAccepted: boolean = false;
     public liabilityWaiverAccepted: boolean = false;
 
-    public downloadLink: string = '/assets/NeuralAgent_1.0.0.ex5';
+    public downloadLink: string = '/assets/NeuralAgent_1.0.1.ex5';
 
     public get isAllowed(): boolean {
         return this._identityService.subscriptionType === SubscriptionType.AI;
