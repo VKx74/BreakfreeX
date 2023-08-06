@@ -3,6 +3,10 @@
 @import "global-styles/mixins/themify";
 
 :host {
+    .modal-body {
+        max-width: 600px;
+    }
+    
     @include themify($themes, false) {
         .modal-body {
             color: themed("valueTextColor") !important;
