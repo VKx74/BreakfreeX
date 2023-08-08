@@ -253,6 +253,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._reloadInterval = setInterval(() => {
             this.loadData();
+
+            if (this.myAutoTradingAccount && !this._userAutoTradingInfoData) {
+                this.loadUserAutoTradingInfoForAccount();
+            } else {
+                this.loadAutoTradingInstruments();
+            }
         }, 60 * 1000);
 
         this.loadData();
@@ -266,9 +272,15 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this.myAutoTradingAccount) {
             this._algoService.getUserAutoTradingInfoForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
+                this.loadAutoTradingInstruments();
+                this._changesDetected = true;
+            }, () => {
+                this._tradableInstruments = [];
+                this._userAutoTradingInfoData = null;
                 this._changesDetected = true;
             });
         } else {
+            this._tradableInstruments = [];
             this._userAutoTradingInfoData = null;
             this._changesDetected = true;
         }
@@ -318,10 +330,16 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.loading = false;
             this._changesDetected = true;
         });
+    }
 
-        if (this.myAutoTradingAccount) {
+    protected loadAutoTradingInstruments() {
+        if (this.myAutoTradingAccount && this._userAutoTradingInfoData) {
             this._algoService.getTrendIndexTradableInstrumentForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._tradableInstruments = data;
+                this._changesDetected = true;
+            }, () => {
+                this._tradableInstruments = [];
+                this._changesDetected = true;
             });
         } else {
             this._tradableInstruments = [];
@@ -616,10 +634,16 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._userAutoTradingInfoData = data;
                 this.loading = false;
                 this._changesDetected = true;
+            }, () => {
+                this.loading = false;
+                this._changesDetected = true;
             });
         } else {
             this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
+                this.loading = false;
+                this._changesDetected = true;
+            }, () => {
                 this.loading = false;
                 this._changesDetected = true;
             });
@@ -630,6 +654,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.loading = true;
         this._algoService.changeUseManualTradingForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.useManualTrading).subscribe((data) => {
             this._userAutoTradingInfoData = data;
+            this.loading = false;
+            this._changesDetected = true;
+        }, () => {
             this.loading = false;
             this._changesDetected = true;
         });
