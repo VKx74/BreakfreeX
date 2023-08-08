@@ -230,6 +230,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         super();
 
         this._identityService.myTradingAccount$.subscribe(() => {
+            this.editMode = false;
             this._changesDetected = true;
         });
     }
