@@ -610,22 +610,27 @@ export class TrendIndexComponent extends BaseLayoutItem {
     instrumentSelectionChanged(item: TrendIndexVM) {
         let isSelected = this.isInstrumentSelected(item);
         let symbol = item.symbol.replace("_", "").toUpperCase();
+        this.loading = true;
         if (!isSelected) {
             this._algoService.addTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
+                this.loading = false;
                 this._changesDetected = true;
             });
         } else {
             this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
+                this.loading = false;
                 this._changesDetected = true;
             });
         }
     }
 
     changeUseManualTradingForAccount() {
+        this.loading = true;
         this._algoService.changeUseManualTradingForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.useManualTrading).subscribe((data) => {
             this._userAutoTradingInfoData = data;
+            this.loading = false;
             this._changesDetected = true;
         });
     }
