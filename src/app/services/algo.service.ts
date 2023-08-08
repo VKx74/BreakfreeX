@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { IInstrument } from "../models/common/instrument";
 import { Observable, Observer, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppConfigService } from './app.config.service';
 
 import * as CryptoJS from 'crypto-js';
@@ -551,6 +551,19 @@ export interface IEconomicEvent {
     IsBetterThanExpected?: boolean;
 }
 
+export interface IUserAutoTradingDefinedMarketData {
+    symbol: string;
+    minStrength: number;
+    minStrength1H: number;
+    minStrength4H: number;
+    minStrength1D: number;
+}
+
+export interface IUserAutoTradingInfoData {
+    markets: IUserAutoTradingDefinedMarketData[];
+    useManualTrading: boolean;
+}
+
 class AlgoServiceEncryptionHelper {
     private static keySize = 256;
     private static ivSize = 128;
@@ -781,6 +794,54 @@ export class AlgoService {
 
     getEconomicalEvents(): Observable<IEconomicEvent[]> {
         return this._http.get<IBFTAEncryptedResponse>(`${this.url}economic-calendar`).pipe(map(this._decrypt));
+    }
+
+    getTrendIndexTradableInstrumentForAccount(account: string): Observable<string[]> {
+        return this._http.post<string>(`${this.url}apex/markets`, {
+            account: account, version: "1.0"
+        }, { responseType: 'text' as any }).pipe(map((data: string) => {
+            let result: string[] = [];
+            let symbolArray = data.split("\n");
+            for (let item of symbolArray) {
+                if (!item) {
+                    continue;
+                }
+                let symbol = item.split("=")[0];
+                if (!symbol) {
+                    continue;
+                }
+                result.push(symbol.replace("_", ""));
+            }
+            return result;
+        }));
+    }
+    
+    addTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+        let markets = [];
+        for (let s of symbols) {
+            markets.push({
+                symbol: s
+            });
+        }
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-markets`, {
+            account: account, userId: userId, version: "1.0", markets: markets
+        });
+    } 
+    
+    removeTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/remove-markets`, {
+            account: account, userId: userId, version: "1.0", markets: symbols
+        });
+    }
+    
+    changeUseManualTradingForAccount(account: string, userId: string, useManualTrading: boolean): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-use-manual-trading`, {
+            account: account, userId: userId, version: "1.0", useManualTrading: useManualTrading
+        });
+    }
+    
+    getUserAutoTradingInfoForAccount(account: string): Observable<IUserAutoTradingInfoData> {
+        return this._http.get<IUserAutoTradingInfoData>(`${this.url}apex/config/${account}`);
     }
 
     private _decrypt(encrypted: IBFTAEncryptedResponse): any {

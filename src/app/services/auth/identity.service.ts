@@ -50,7 +50,9 @@ export class IdentityService {
     private _refreshToken$: ReplaySubject<any>;
 
     private _isAuthorized$ = new BehaviorSubject<boolean>(false);
+    private _myTradingAccount$ = new BehaviorSubject<string>("");
     isAuthorizedChange$: Observable<boolean>;
+    myTradingAccount$: Observable<string>;
 
     // get isGuestMode(): SubscriptionType {
     //     return this._isGuestMode;
@@ -102,15 +104,19 @@ export class IdentityService {
 
     get isAdmin(): boolean {
         return this.role.toLowerCase() === Roles.Admin.toLowerCase();
-    }  
+    }
 
     get isSupportOfficer(): boolean {
         return this.role.toLowerCase() === Roles.SupportOfficer.toLowerCase();
-    }  
+    }
 
     get isStuff(): boolean {
         return this.role.toLowerCase() !== Roles.User.toLowerCase() && this.role.toLowerCase() !== Roles.Guest.toLowerCase();
-    }  
+    }
+
+    get myTradingAccount(): string {
+        return this._myTradingAccount$.value;
+    }
 
     private get _isTrial(): boolean {
         if (this.isAdmin) {
@@ -120,7 +126,7 @@ export class IdentityService {
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
                 if (sub.indexOf("Trial") !== -1 && sub.indexOf("No Trial") === -1 && this.subscriptions.length === 1) {
-                    return true;    
+                    return true;
                 }
             }
         }
@@ -186,8 +192,8 @@ export class IdentityService {
         }
 
         return false;
-    } 
-    
+    }
+
     public get isLifetimeAccess(): boolean {
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
@@ -214,7 +220,7 @@ export class IdentityService {
         }
 
         return false;
-    } 
+    }
 
     private get _isAI(): boolean {
         if (this.isAdmin) {
@@ -230,7 +236,7 @@ export class IdentityService {
         }
 
         return false;
-    }  
+    }
 
     private get _isDiscovery(): boolean {
         if (this.subscriptions && this.subscriptions.length) {
@@ -242,8 +248,8 @@ export class IdentityService {
         }
 
         return false;
-    }  
-    
+    }
+
     private get _isStarter(): boolean {
         if (this.isAdmin) {
             return false;
@@ -258,7 +264,7 @@ export class IdentityService {
         }
 
         return false;
-    } 
+    }
 
     get basicLevel(): number {
         return 0;
@@ -271,6 +277,8 @@ export class IdentityService {
             skip(1),
             distinctUntilChanged()
         );
+
+        this.myTradingAccount$ = this._myTradingAccount$;
     }
 
     signInWithThirdPartyProvider(model: SignInWithThirdPartyRequestModel): Observable<any> {
@@ -391,7 +399,7 @@ export class IdentityService {
 
         return false;
     }
-    
+
     is4HourAllowed(): boolean {
         if (this.isAdmin) {
             return true;
@@ -470,7 +478,7 @@ export class IdentityService {
 
         return true;
     }
-    
+
     isHourAllowedByLevel(level: number): boolean {
         if (this.isAdmin) {
             return true;
@@ -485,6 +493,18 @@ export class IdentityService {
         // }
 
         return true;
+    }
+
+    public updateMyAutoTradingAccount() {
+        this._authService.getMyAutoTradingAccount().subscribe((accts) => {
+            if (accts && accts[0] && accts[0].accountId && accts[0].isActive) {
+                this._myTradingAccount$.next(accts[0].accountId);
+            } else if (this.myTradingAccount) {
+                this._myTradingAccount$.next("");
+            }
+        }, (error) => {
+            console.error("Failed to load trading accounts info");
+        });
     }
 
     public insert(token: string, refreshToken: string): boolean {
@@ -516,6 +536,8 @@ export class IdentityService {
             this.updateTrialExpiration();
         }
 
+        this.updateMyAutoTradingAccount();
+
         return true;
     }
 
@@ -529,8 +551,8 @@ export class IdentityService {
 
     public setGuestMode() {
         // this.signOut().subscribe(() => {
-            this._clearCookies();
-            this._isGuestMode = true;
+        this._clearCookies();
+        this._isGuestMode = true;
         // });
     }
 

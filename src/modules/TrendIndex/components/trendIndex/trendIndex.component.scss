@@ -75,6 +75,45 @@
     width: 100%;
   }
 
+  .header-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    margin: 8px 20px 4px 10px;
+
+    .left-side {
+      display: flex;
+
+      .trading-enabled {
+        margin-left: 12px;
+      }
+
+      .change-trading-mode {
+        text-decoration: underline;
+        cursor: pointer;
+        margin-left: 4px;
+      }
+    }
+
+    .right-side {
+      display: flex;
+
+      .edit {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+
+    .positive-color {
+      color: #5eaf80 !important;
+    }
+
+    .negative-color {
+      color: #bd5b6a !important;
+    }
+  }
+
   .symbolx {
     font-weight: bold !important;
     padding-left: 2px;
@@ -123,6 +162,19 @@
     display: flex;
   }
 
+  .symbol-cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    .symbol-cell-checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0px 4px;
+    }
+  }
+
   .symbol-color-container {
     height: 100%;
     display: flex;
@@ -143,6 +195,10 @@
 
   .negative-border {
     border-left: 4px solid #bd5b6a;
+  }
+
+  .symbolx-tradable {
+    border-right: 4px solid gold;
   }
 
   .strength-cell {
@@ -290,6 +346,9 @@
     }
   }
   .symbolx {
+    color: themed("valueTextColor");
+  }
+  .header-line {
     color: themed("valueTextColor");
   }
   .out-of-access-box {

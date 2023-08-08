@@ -1,5 +1,22 @@
 <ng-container *ngIf="hasAccess; else outOfAccess">
     <div class="root">
+        <div class="header-line" *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
+            <div class="left-side">
+                <div class="account-id">Neural Agent: #{{myAutoTradingAccount}}</div>
+                <div class="trading-enabled">HITL trading:
+                    <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color">Enabled</span>
+                    <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color">Disabled</span>
+                </div>
+                <div *ngIf="editMode">
+                    <span (click)="changeUseManualTradingForAccount()" *ngIf="!userAutoTradingInfoData.useManualTrading" class="change-trading-mode">/ Enable</span>
+                    <span (click)="changeUseManualTradingForAccount()" *ngIf="userAutoTradingInfoData.useManualTrading" class="change-trading-mode">/ Disable</span>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="edit" *ngIf="!editMode" (click)="setEditMode()">Edit</div>
+                <div class="edit" *ngIf="editMode" (click)="unsetEditMode()">Hide Edit</div>
+            </div>
+        </div>
         <div class="chart-view" *ngIf="!!chartDataBars">
             <div class="chart-container">
                 <div class="chart-container-title margin-top margin-bottom">
@@ -13,8 +30,8 @@
             </div>-->
             </div>
             <ng-container *ngFor="let chartDataTrend of chartDataTrends">
-                <div class="chart-container" 
-                [ngClass]="{'height-60': chartDataTrend.granularity > 300, 'height-90': chartDataTrend.granularity <= 300}">
+                <div class="chart-container"
+                    [ngClass]="{'height-60': chartDataTrend.granularity > 300, 'height-90': chartDataTrend.granularity <= 300}">
                     <div class="chart-container-title">
                         <div>{{chartDataTrend.timeframe}}</div>
                         <div [class.strength-positive]="chartDataTrend.strength > 0"
@@ -28,14 +45,14 @@
             </ng-container>
         </div>
         <div class="data-table">
-            <data-table #dataTableComponent [rows]="vm" [selectable]="true" [selectedRow]="selectedVM"
+            <data-table #dataTableComponent [rows]="vm" [selectable]="!editMode" [selectedRow]="selectedVM"
                 [columnCaption]="columnCaption" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
                 [groups]="groups" [groupingField]="groupingField" (onRowSelect)="handleInstrumentClick($event)">
 
                 <!--Columns-->
 
-                <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="100"
-                    [columnWidth]="100">
+                <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="editMode ? 128 : 100"
+                    [columnWidth]="editMode ? 128 : 100">
                     {{'instrument' | translate}}
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
@@ -67,18 +84,28 @@
                 <!-- Cells -->
                 <data-table-cell columnName="symbol">
                     <ng-template let-vmItem>
-                        <div class="symbol-container" tooltip [matTooltip]="getRelativeStrengthTooltip(vmItem.totalStrength)">
-                            <span class="symbolx-border"
-                                [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
-                            </span>
-                            <div class="symbol-color-container" [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-                                <span class="symbolx">
-                                    {{vmItem.symbol}}
+                        <div class="symbol-cell">
+                            <div class="symbol-cell-checkbox" *ngIf="editMode">
+                                <input type="checkbox"  (change)="instrumentSelectionChanged(vmItem)" [checked]="isInstrumentSelected(vmItem)" id="symbol_{{vmItem.symbol}}" />
+                                <label for="symbol_{{vmItem.symbol}}"></label>
+                            </div>
+                            <div class="symbol-container" tooltip
+                                [matTooltip]="getRelativeStrengthTooltip(vmItem.totalStrength)">
+                                <span class="symbolx-border"
+                                    [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
                                 </span>
-                                <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
-                                    [class.down-trend]="vmItem.totalStrength < 0">
-                                    [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
+                                <span class="symbolx-tradable" *ngIf="isTradable(vmItem)">
                                 </span>
+                                <div class="symbol-color-container"
+                                    [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+                                    <span class="symbolx">
+                                        {{vmItem.symbol}}
+                                    </span>
+                                    <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
+                                        [class.down-trend]="vmItem.totalStrength < 0">
+                                        [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </ng-template>
@@ -138,7 +165,7 @@
                                 [StrengthValue]="vmItem.price86400StrengthValue"></trend-column>
                         </div>
                     </ng-template>
-                </data-table-cell> 
+                </data-table-cell>
                 <data-table-cell columnName="month_1">
                     <ng-template let-vmItem>
                         <div class="strength-cell">

@@ -67,6 +67,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
         this.loading = true;
         this._authService.addMyAutoTradingAccount(trimmed).subscribe((accts) => {
             this._reload();
+            this._identityService.updateMyAutoTradingAccount();
         }, (error) => {
             this._alertService.error("Failed to save trading accounts info");
         });
@@ -76,6 +77,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
         this.loading = true;
         this._authService.removeMyAutoTradingAccount(this.existingAccount.id).subscribe((accts) => {
             this._reload();
+            this._identityService.updateMyAutoTradingAccount();
         }, (error) => {
             this._alertService.error("Failed to remove trading accounts info");
         });

@@ -13,17 +13,17 @@ import {
     TemplateRef,
     ViewChild
 } from '@angular/core';
-import {MatTable, MatTableDataSource} from "@angular/material/table";
-import {MatSort} from '@angular/material/sort';
-import {DataTableCellComponent} from "../data-table-cell/data-table-cell.component";
-import {DataTableHeaderCellComponent} from "../data-table-header-cell/data-table-header-cell.component";
-import {map, takeUntil} from "rxjs/operators";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {Sort} from "@angular/material/typings/sort";
-import {animate, state, style, transition, trigger} from "@angular/animations";
-import {BehaviorSubject, combineLatest, Observable} from "rxjs";
-import {DataTableViewMode} from "../../viewmode";
-import {DataTableViewModeToken} from "../../data-table-view-mode.token";
+import { MatTable, MatTableDataSource } from "@angular/material/table";
+import { MatSort } from '@angular/material/sort';
+import { DataTableCellComponent } from "../data-table-cell/data-table-cell.component";
+import { DataTableHeaderCellComponent } from "../data-table-header-cell/data-table-header-cell.component";
+import { map, takeUntil } from "rxjs/operators";
+import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
+import { Sort } from "@angular/material/typings/sort";
+import { animate, state, style, transition, trigger } from "@angular/animations";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
+import { DataTableViewMode } from "../../viewmode";
+import { DataTableViewModeToken } from "../../data-table-view-mode.token";
 import { DataTableMenuItemComponent } from '../data-table-menu-item/data-table-menu-item.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -49,8 +49,8 @@ const ResizeHandleClass = 'resize-handle';
     styleUrls: ['./data-table.component.scss'],
     animations: [
         trigger('detailExpand', [
-            state('collapsed', style({height: '0px', minHeight: '0'})),
-            state('expanded', style({height: '*'})),
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
         ]),
     ],
@@ -91,9 +91,9 @@ export class DataTableComponent {
     visibleColumns$ = new BehaviorSubject<string[]>([]);
     sortableColumnsObj: { [columnName: string]: boolean } = {};
 
-    @ViewChild("trigger", {static: false}) contextMenu: MatMenuTrigger;
-    @ViewChild(MatSort, {static: true}) sort: MatSort;
-    @ViewChild(MatTable, {read: ElementRef, static: false}) table: ElementRef;
+    @ViewChild("trigger", { static: false }) contextMenu: MatMenuTrigger;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild(MatTable, { read: ElementRef, static: false }) table: ElementRef;
 
     @ContentChildren(DataTableHeaderCellComponent) headerCells: QueryList<DataTableHeaderCellComponent>;
     @ContentChildren(DataTableCellComponent) cells: QueryList<DataTableCellComponent>;
@@ -126,9 +126,9 @@ export class DataTableComponent {
     }
 
     constructor(private elRef: ElementRef,
-                private renderer: Renderer2,
-                private _cdr: ChangeDetectorRef,
-                @Inject(DataTableViewModeToken) @Optional() viewMode: DataTableViewMode) {
+        private renderer: Renderer2,
+        private _cdr: ChangeDetectorRef,
+        @Inject(DataTableViewModeToken) @Optional() viewMode: DataTableViewMode) {
 
         if (viewMode != null) {
             this.viewMode = viewMode;
@@ -140,8 +140,8 @@ export class DataTableComponent {
     trackBy(index: number, item: any) {
         if (this.trackByName && item[this.trackByName]) {
             return item[this.trackByName];
-        }  
-        
+        }
+
         if (this.trackByIndex) {
             return index;
         }
@@ -173,7 +173,7 @@ export class DataTableComponent {
             acc[cell.columnName] = cell.template;
             return acc;
         }, {});
-        
+
         this.menuItemsComponents = [];
         this.menuItems.forEach((item: DataTableMenuItemComponent) => {
             this.menuItemsComponents.push(item);
@@ -203,7 +203,7 @@ export class DataTableComponent {
                 //         i--;
                 //     }
                 // }
-                
+
                 const newArray = this.rows.sort((a, b) => {
                     let aVal, bVal;
                     const accessor = this._getColumnSortDataAccessor(sort.active);
@@ -346,6 +346,13 @@ export class DataTableComponent {
         }
     }
 
+    updateDimensions() {
+        if (this._columnsDimensions) {
+            this.setColumnsDimensions(this._columnsDimensions);
+            this._needSetDimensions = false;
+        }
+    }
+
     onResizeColumn(event: any, columnName: string) {
         this.currentResizeColumn = columnName;
         this.pressed = true;
@@ -415,7 +422,7 @@ export class DataTableComponent {
                 this.headerCellsObj[columnName].columnWidth += widthDiff;
             } else {
                 this._columnsDimensions[columnName].flexGrow = newFlexGrow;
-            } 
+            }
 
             this.setColumnsDimensions(this._columnsDimensions);
         }
@@ -438,7 +445,7 @@ export class DataTableComponent {
 
         this.visibleColumns$.getValue().reduce((acc, columnName) => {
             const elements = this.elRef.nativeElement.getElementsByClassName(`header-cell ${this._getColumnCellClass(columnName)}`);
-            
+
             acc[columnName] = elements[0].clientWidth;
 
             return acc;

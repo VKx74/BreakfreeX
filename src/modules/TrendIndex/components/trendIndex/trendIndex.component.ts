@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from "@angular/core";
 import { IInstrument } from "@app/models/common/instrument";
 import { Subscription } from "rxjs";
 import { RealtimeService } from "@app/services/realtime.service";
@@ -15,11 +15,12 @@ import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { BaseLayoutItem } from "@layout/base-layout-item";
-import { AlgoService, IMesaTrendIndex } from "@app/services/algo.service";
+import { AlgoService, IMesaTrendIndex, IUserAutoTradingInfoData } from "@app/services/algo.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
+import { DataTableComponent } from "modules/datatable/components/data-table/data-table.component";
 
 const TopUpTrending = "Top Uptrending";
 const TopDownTrending = "Top Downtrending";
@@ -82,7 +83,7 @@ class TrendIndexVM {
         this.symbol = data.symbol.replace("_", "");
         this.datafeed = data.datafeed;
         this.last_price = data.last_price;
-        
+
         this.avg_strength = data.avg_strength;
 
         let s_1 = 0;
@@ -161,7 +162,7 @@ class TrendIndexVM {
 export class TrendIndexComponent extends BaseLayoutItem {
     static componentName = 'TrendIndex';
     static previewImgClass = 'crypto-icon-watchlist';
-    // @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
+    @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
 
     loading: boolean;
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
@@ -174,6 +175,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _state: ITrendIndexComponentState;
     private _chartDataBars: ITrendIndexBarChartDataVM;
     private _chartDataTrends: ITrendIndexChartDataVM[] = [];
+    private _tradableInstruments: string[] = [];
+    private _userAutoTradingInfoData: IUserAutoTradingInfoData;
 
     public groups: string[] = [TopUpTrending, TopDownTrending, AllInstruments];
     public groupingField: string = "type";
@@ -202,8 +205,18 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this._chartDataTrends;
     }
 
+    get myAutoTradingAccount(): string {
+        return this._identityService.myTradingAccount;
+    }
+
+    get userAutoTradingInfoData(): IUserAutoTradingInfoData {
+        return this._userAutoTradingInfoData;
+    }
+
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
+
+    editMode = false;
 
     constructor(protected _dialog: MatDialog,
         protected _realtimeService: RealtimeService,
@@ -215,6 +228,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _cdr: ChangeDetectorRef,
         protected _identityService: IdentityService) {
         super();
+
+        this._identityService.myTradingAccount$.subscribe(() => {
+            this._changesDetected = true;
+        });
     }
 
     ngOnInit() {
@@ -239,6 +256,21 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this.loadData();
 
+        this._identityService.myTradingAccount$.subscribe(() => {
+            this.loadUserAutoTradingInfoForAccount();
+        });
+    }
+
+    protected loadUserAutoTradingInfoForAccount() {
+        if (this.myAutoTradingAccount) {
+            this._algoService.getUserAutoTradingInfoForAccount(this.myAutoTradingAccount).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this._changesDetected = true;
+            });
+        } else {
+            this._userAutoTradingInfoData = null;
+            this._changesDetected = true;
+        }
     }
 
     protected loadData() {
@@ -285,6 +317,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.loading = false;
             this._changesDetected = true;
         });
+
+        if (this.myAutoTradingAccount) {
+            this._algoService.getTrendIndexTradableInstrumentForAccount(this.myAutoTradingAccount).subscribe((data) => {
+                this._tradableInstruments = data;
+            });
+        } else {
+            this._tradableInstruments = [];
+        }
     }
 
 
@@ -318,6 +358,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     handleInstrumentClick(instrumentVM: TrendIndexVM) {
+        if (this.editMode) {
+            return;
+        }
         this.selectVMItem(instrumentVM);
     }
 
@@ -329,14 +372,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._algoService.getMesaTrendDetails(instrumentVM.id, instrumentVM.datafeed).subscribe((data) => {
             if (data) {
-                let values: number[] = [];
-                let dates: string[] = [];
-
-                // for (let bar of data.bars) {
-                //     values.push(bar.c);
-                //     dates.push(new Date(bar.t * 1000).toLocaleString());
-                // }
-
                 this._chartDataTrends = [];
 
                 let minDate = 0;
@@ -523,6 +558,75 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return "No Strength";
         }
         return "No Strength";
+    }
+
+    isTradable(item: TrendIndexVM) {
+        if (!this.myAutoTradingAccount) {
+            return false;
+        }
+
+        for (let symbol of this._tradableInstruments) {
+            if (symbol.toUpperCase() === item.symbol.toUpperCase()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    setEditMode() {
+        this.editMode = true;
+        this._cdr.markForCheck();
+        setTimeout(() => {
+            this.dataTableComponent.updateDimensions();
+            this._cdr.markForCheck();
+        }, 1);
+    }
+
+    unsetEditMode() {
+        this.editMode = false;
+        this._cdr.markForCheck();
+        setTimeout(() => {
+            this.dataTableComponent.updateDimensions();
+            this._cdr.markForCheck();
+        }, 1);
+    }
+
+    isInstrumentSelected(item: TrendIndexVM) {
+        if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.markets || !this._userAutoTradingInfoData.markets.length) {
+            return false;
+        }
+
+        for (let m of this._userAutoTradingInfoData.markets) {
+            if (m.symbol && m.symbol.replace("_", "").toLowerCase() === item.symbol.replace("_", "").toLowerCase()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    instrumentSelectionChanged(item: TrendIndexVM) {
+        let isSelected = this.isInstrumentSelected(item);
+        let symbol = item.symbol.replace("_", "").toUpperCase();
+        if (!isSelected) {
+            this._algoService.addTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this._changesDetected = true;
+            });
+        } else {
+            this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this._changesDetected = true;
+            });
+        }
+    }
+
+    changeUseManualTradingForAccount() {
+        this._algoService.changeUseManualTradingForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.useManualTrading).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this._changesDetected = true;
+        });
     }
 
     private _raiseStateChanged() {
