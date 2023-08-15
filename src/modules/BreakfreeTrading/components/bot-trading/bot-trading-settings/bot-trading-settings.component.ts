@@ -35,7 +35,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public downloadLink: string = '/assets/NeuralAgent_1.1.2.ex5';
 
     public get isAllowed(): boolean {
-        return this._identityService.subscriptionType === SubscriptionType.AI;
+        return this._identityService.isAuthorizedCustomer;
     }
 
     constructor(private _injector: Injector,
@@ -59,7 +59,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
 
     submit() {
         if (!this.isAllowed) {
-            this._alertService.info("Neural subscription required to use auto trading bot");
+            this._alertService.info("Subscription required to use auto trading bot");
             return;
         }
 
