@@ -28,4 +28,22 @@
   .sideways {
     background-color: rgba(128, 128, 128, 0.1);
   }
+
+  .trend-state-up,
+  .trend-state-down,
+  .trend-state-sideways {
+    font-size: 10px;
+    margin-left: 2px;
+    color: rgba(128, 128, 128, 0.3);
+    &.drive {
+      color: rgba(94, 175, 128, 0.7) !important;
+    }
+    &.capitulation {
+      color: rgba(189, 91, 106, 0.7) !important;
+    }
+  }
+
+  .trend-state-sideways {
+    color: transparent;
+  }
 }

@@ -3,4 +3,7 @@
    [class.strong-up]="Strength === ETrendIndexStrength.StrongUp"
    [class.strong-down]="Strength === ETrendIndexStrength.StrongDown">
    <span class="trend-strength-value">{{StrengthValue.toFixed(0)}}%</span>
+   <span class="trend-state-up" [class.drive]="StrengthValue > 0" [class.capitulation]="StrengthValue < 0" *ngIf="TrendState == 2">↑</span>
+   <span class="trend-state-down" [class.drive]="StrengthValue > 0" [class.capitulation]="StrengthValue < 0" *ngIf="TrendState == 0">↓</span>
+   <span class="trend-state-sideways" *ngIf="TrendState == 1">|</span>
 </div>

@@ -9,6 +9,7 @@ import { ETrendIndexStrength } from '../trendIndex/trendIndex.component';
 export class TrendColumnComponent {
     private _strength: ETrendIndexStrength;
     private _strengthValue: number;
+    private _trendState: number;
 
     @Input() public set Strength(value: ETrendIndexStrength) {
         this._strength = value;
@@ -18,12 +19,20 @@ export class TrendColumnComponent {
         this._strengthValue = value * 100;
     }
 
+    @Input() public set TrendState(value: number) {
+        this._trendState = value;
+    }
+
     public get Strength(): ETrendIndexStrength {
         return this._strength;
     }
 
     public get StrengthValue(): number {
         return this._strengthValue;
+    }
+
+    public get TrendState(): number {
+        return this._trendState;
     }
 
     ETrendIndexStrength = ETrendIndexStrength;

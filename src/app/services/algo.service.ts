@@ -514,6 +514,10 @@ export interface IMesaTrendIndex {
     price3600: number;
     price14400: number;
     price86400: number;
+    hour1State: number;
+    hour4State: number;
+    dailyState: number;
+    monthlyState: number;
 }
 
 export interface IMesaTrendDetails {

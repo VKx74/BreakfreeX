@@ -78,6 +78,11 @@ class TrendIndexVM {
     price2592000Strength: ETrendIndexStrength;
     totalStrength: number;
 
+    hour1State: number;
+    hour4State: number;
+    dailyState: number;
+    monthlyState: number;
+
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
         this.symbol = data.symbol.replace("_", "");
@@ -124,6 +129,11 @@ class TrendIndexVM {
         this.price14400Strength = this._getStrength(s_14400);
         this.price86400Strength = this._getStrength(s_86400);
         this.price2592000Strength = this._getStrength(s_2592000);
+
+        this.hour1State = data.hour1State;
+        this.hour4State = data.hour4State;
+        this.dailyState = data.dailyState;
+        this.monthlyState = data.monthlyState;
     }
 
     private _getStrength(value: number): ETrendIndexStrength {

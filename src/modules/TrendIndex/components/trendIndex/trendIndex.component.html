@@ -146,7 +146,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price3600Strength"
-                                [StrengthValue]="vmItem.price3600StrengthValue"></trend-column>
+                                [StrengthValue]="vmItem.price3600StrengthValue" [TrendState]="vmItem.hour1State"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -154,7 +154,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price14400Strength"
-                                [StrengthValue]="vmItem.price14400StrengthValue"></trend-column>
+                                [StrengthValue]="vmItem.price14400StrengthValue" [TrendState]="vmItem.hour4State"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -162,7 +162,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price86400Strength"
-                                [StrengthValue]="vmItem.price86400StrengthValue"></trend-column>
+                                [StrengthValue]="vmItem.price86400StrengthValue" [TrendState]="vmItem.dailyState"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -170,7 +170,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price2592000Strength"
-                                [StrengthValue]="vmItem.price2592000StrengthValue"></trend-column>
+                                [StrengthValue]="vmItem.price2592000StrengthValue" [TrendState]="vmItem.monthlyState"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
