@@ -3,27 +3,33 @@
         <div class="header-line" *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
             <div class="left-side">
                 <div class="account-id">Neural Agent: #{{myAutoTradingAccount}}</div>
-                <div class="trading-enabled">HITL trading:
-                    <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color">Enabled</span>
-                    <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color">Disabled</span>
-                </div>
-                <div *ngIf="editMode">
-                    <span (click)="changeUseManualTradingForAccount()" *ngIf="!userAutoTradingInfoData.useManualTrading" class="change-trading-mode">/ Enable</span>
-                    <span (click)="changeUseManualTradingForAccount()" *ngIf="userAutoTradingInfoData.useManualTrading" class="change-trading-mode">/ Disable</span>
-                </div>
+
             </div>
             <div class="right-side">
-                <div class="edit" *ngIf="!editMode" (click)="setEditMode()">Edit</div>
-                <div class="edit" *ngIf="editMode" (click)="unsetEditMode()">Hide Edit</div>
+        
+                <div >
+                    <span (click)="changeUseManualTradingForAccount()" *ngIf="!userAutoTradingInfoData.useManualTrading" class="change-trading-mode">        <div class="trading-enabled">
+                        <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color">HITL Enabled</span>
+                        <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color">HITL Disabled</span>
+                    </div></span>
+                    <span (click)="changeUseManualTradingForAccount()" *ngIf="userAutoTradingInfoData.useManualTrading" class="change-trading-mode">        <div class="trading-enabled">
+                        <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color">HITL Enabled</span>
+                        <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color">HITL Disabled</span>
+                    </div></span>
+                </div>
+                <div class="lock">
+                <div class="edit" *ngIf="!editMode" (click)="setEditMode()">Select Markets</div>
+                <div class="edit" *ngIf="editMode" (click)="unsetEditMode()">Lock Markets</div>
+                 </div>
             </div>
         </div>
         <div class="chart-view" *ngIf="!!chartDataBars">
             <div class="chart-container">
-                <div class="chart-container-title margin-top margin-bottom">
-                    <div><span class="close-icon" (click)="closeCharts()"><i
-                                class="fa fa-close iconsize"></i></span>{{chartDataBars.symbol}},
-                        {{chartDataBars.timeframe}}</div>
+                <div class="chart-container-titlex margin-top margin-bottom">
+                    <div>{{chartDataBars.symbol}} State</div>
                     <div>{{chartDataBars.startDate}} - {{chartDataBars.endDate}}</div>
+                    <div><span class="close-icon" (click)="closeCharts()"><i
+                        class="fa fa-close iconsize"></i></span></div>
                 </div>
                 <!--  <div class="chart-container-canvas">
                 <trend-index-bar-chart [data]="chartDataBars.data" [height]="90"></trend-index-bar-chart>
@@ -31,16 +37,17 @@
             </div>
             <ng-container *ngFor="let chartDataTrend of chartDataTrends">
                 <div class="chart-container"
-                    [ngClass]="{'height-60': chartDataTrend.granularity > 300, 'height-90': chartDataTrend.granularity <= 300}">
+                    [ngClass]="height-60">
+                    
                     <div class="chart-container-title">
-                        <div>{{chartDataTrend.timeframe}}</div>
+                        <div class="datatrend">{{chartDataTrend.timeframe}}</div>
                         <div [class.strength-positive]="chartDataTrend.strength > 0"
                             [class.strength-negative]="chartDataTrend.strength < 0">
-                            {{chartDataTrend.strength > 0 ? "+" : ""}}
-                            {{chartDataTrend.strength.toFixed(0)}}%</div>
+                            {{chartDataTrend.strength > 0 ? "+" :""}}{{chartDataTrend.strength.toFixed(0)}}%</div>
                     </div>
                     <trend-index-chart [data]="chartDataTrend.data"
-                        [height]="chartDataTrend.granularity > 300 ? 60 : 90"></trend-index-chart>
+                        [height]="60"></trend-index-chart>
+                        
                 </div>
             </ng-container>
         </div>

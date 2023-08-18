@@ -324,16 +324,16 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 _.type = AllInstruments;
             });
             if (this.vm.length > 10) {
-                this.vm.slice(0, 5).forEach((_) => {
+                this.vm.slice(0, 9).forEach((_) => {
                     _.type = TopUpTrending;
                 });
 
-                let downtrending = this.vm.slice(-5);
+                let downtrending = this.vm.slice(-9);
                 downtrending.forEach((_) => {
                     _.type = TopDownTrending;
                 });
                 downtrending.reverse();
-                this.vm.splice(-5);
+                this.vm.splice(-9);
                 this.vm.push(...downtrending);
             }
 
@@ -502,14 +502,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     private _tfToString(tf: number): string {
         switch (tf) {
-            case 1: return "Driver";
-            case 60: return "1 Min";
-            case 300: return "5 Mins";
-            case 900: return "15 Mins";
-            case 3600: return "1 Hour";
-            case 14400: return "4 Hours";
-            case 86400: return "1 Day";
-            case 2592000: return "1 Month";
+            case 1: return "D";
+            case 60: return "1m";
+            case 300: return "5m";
+            case 900: return "15m";
+            case 3600: return "1h";
+            case 14400: return "4h";
+            case 86400: return "1d";
+            case 2592000: return "1M";
         }
         return tf + " Mins";
     }
