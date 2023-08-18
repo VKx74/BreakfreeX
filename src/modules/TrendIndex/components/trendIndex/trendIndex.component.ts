@@ -323,7 +323,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.vm.forEach((_) => {
                 _.type = AllInstruments;
             });
-            if (this.vm.length > 10) {
+            if (this.vm.length > 18) {
                 this.vm.slice(0, 9).forEach((_) => {
                     _.type = TopUpTrending;
                 });
