@@ -1,6 +1,6 @@
 :host{
     .root{
-        padding: 16px;
+        padding: 6px 9px;
         max-height:350px;
         height: 100%;
         border-radius: 6px;
@@ -9,7 +9,9 @@
     }
 
     .header{
-        margin-bottom: 15px;        
+        padding-left: 12px;
+    padding-top: 6px;
+       
     }
     .header-name{
         font-size: 11px;

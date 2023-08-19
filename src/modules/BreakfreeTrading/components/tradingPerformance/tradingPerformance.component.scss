@@ -1,7 +1,8 @@
 :host {
 
     .performance-container {
-        padding: 15px;
+        padding: 8px;
+        width: 100%;
     }
     .pnlcharts {
         display: flex;
@@ -94,7 +95,7 @@
         margin-bottom: 8px;
         justify-content: center;
         border-radius: 6px;
-        background: #fefffe;
+
         padding: 8px 4px;
     }
 
@@ -104,6 +105,8 @@
     .selector-button {
         padding: 3px 8px;
         background-color: #3e3e3e;
+        transition: all 0.2s ease-in-out;
+        color: #e2e2e2;
     }
     @media screen and (min-width: 420px) {
         .selector-button {
