@@ -15,15 +15,15 @@
 
         <div class="acc-info mobilefix">
             <div class="acc-info-param column1">
-               
+                <div class="acc-info-param-header">Balance</div>
                 <div class="acc-info-param-body">
                     <div class="acc-info-param-value">${{EstBalance}}</div>
                     <div class="acc-info-param-value-add hidden">{{EstBalanceUSD}}</div>
                 </div>
-                <div class="acc-info-param-header">Balance</div>
+                
             </div>
             <div class="acc-info-param column2">
-                
+                <div class="acc-info-param-header">24H PNL</div>
                 <div class="acc-info-param-body">
                     <div class="acc-info-param-value-add" [ngClass]="{'green':DailyPnLsign > 0, 'red': DailyPnLsign < 0}">
                         {{DailyPnLValPercent}}
@@ -31,11 +31,11 @@
                     <div class="acc-info-param-value">{{DailyPnLVal}}</div>
                     
                 </div>
-                <div class="acc-info-param-header">24H PNL</div>
+               
 
             </div>
             <div class="acc-info-param column3">
-                
+                <div class="acc-info-param-header">30-Days PNL</div>
                 <div class="acc-info-param-body">
                 
                     
@@ -45,7 +45,7 @@
                     <div class="acc-info-param-value">{{MonthlyPnLVal}}</div>
                   
                 </div>
-                <div class="acc-info-param-header">30-Days PNL</div>
+                
             </div>
         </div>
     </div>

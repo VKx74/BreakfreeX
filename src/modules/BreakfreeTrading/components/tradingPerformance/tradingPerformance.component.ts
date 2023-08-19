@@ -130,7 +130,7 @@ export class TradingPerformanceComponent implements OnInit {
             this.DailyPnLsign = -1;     
         }
         this.DailyPnLVal = `${dailyPnLsign}${this.AccCurrencySign}${Math.round(Math.abs(tradingPerformanceData.dailyPnLVal))}`;
-        this.DailyPnLValPercent = `${dailyPnLsign}${Math.round(Math.abs(tradingPerformanceData.dailyPnLValPercent))}%`;
+        this.DailyPnLValPercent = `${dailyPnLsign}${Math.round(Math.abs(tradingPerformanceData.dailyPnLValPercent) * 10) / 10}%`;
 
         let monthlyPnLsign = '';
         if (tradingPerformanceData.monthlyPnLVal > 0) {
@@ -141,6 +141,6 @@ export class TradingPerformanceComponent implements OnInit {
             this.MonthlyPnLsign = -1;
         }
         this.MonthlyPnLVal = `${monthlyPnLsign}${this.AccCurrencySign}${Math.round(Math.abs(tradingPerformanceData.monthlyPnLVal))}`;
-        this.MonthlyPnLValPercent = `${monthlyPnLsign}${Math.round(Math.abs(tradingPerformanceData.monthlyPnLValPercent))}%`;
+        this.MonthlyPnLValPercent = `${monthlyPnLsign}${Math.round(Math.abs(tradingPerformanceData.monthlyPnLValPercent) * 10) / 10}%`;
     }
 }
