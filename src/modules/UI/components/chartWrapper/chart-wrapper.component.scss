@@ -1,10 +1,10 @@
 :host{
     .root{
-        padding: 15px;
-        margin: 15px;
-        box-shadow: rgba(11, 14, 17, 0.08) 0px 2px 4px;
-        border-radius: 4px;
-        background: rgb(255, 255, 255);
+        padding: 16px;
+        max-height:350px;
+        height: 100%;
+        border-radius: 6px;
+        background: #fefffe;
         border-bottom:0px solid transparent;
     }
 
@@ -13,8 +13,26 @@
     }
     .header-name{
         font-size: 11px;
-        color: rgb(71, 77, 87);
+        color: #474d57;
         font-weight: 700;
-        margin-left:5px;
     }
+
+    .chart-wrapx{
+        height: 250px;
+        overflow: hidden;
+      
+    }
+
+
+
+    @media screen and (max-width: 500px) {
+
+        .chart-wrapx{
+            height: 150px;
+            overflow: hidden;
+          
+       
+    }
+}
+    
 }

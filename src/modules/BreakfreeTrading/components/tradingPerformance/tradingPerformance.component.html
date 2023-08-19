@@ -1,6 +1,18 @@
 <div [ngClass]="{'doBlur':showSpinner}"  *ngIf="isBrokerConnected; else brokerNotConnected" class="performance-container"> 
     <bft-loader *ngIf="showSpinner"></bft-loader>
     <div>
+            <div class="period-selectors">
+                <div class="period-wrp">
+        <div *ngFor="let pselector of periodSelectors">
+        <div class="selector-wrapper">
+            <button class="selector-button crypto-button crypto-button_primary" [ngClass]="{'btn-selected': pselector.isSelected}" (click)="selectPeriod(pselector)">
+                {{pselector.name}}
+            </button>            
+        </div>
+    </div>
+    </div>
+    </div>
+
         <div class="acc-info mobilefix">
             <div class="acc-info-param column1">
                 <div class="acc-info-param-header">Estimated Balance</div>
@@ -29,21 +41,14 @@
             </div>
         </div>
     </div>
-    <div class="period-selectors">
-        <div *ngFor="let pselector of periodSelectors">
-        <div class="selector-wrapper">
-            <button class="selector-button crypto-button crypto-button_primary" [ngClass]="{'btn-selected': pselector.isSelected}" (click)="selectPeriod(pselector)">
-                {{pselector.name}}
-            </button>            
-        </div>
-    </div>
-    </div>
 
-    <div *ngFor="let chartSett of ChartsSettingsSet">
-        <chart-wrapper [ChartSettings]='chartSett' [ChartData]='ChartDataSet[chartSett.index]'>
-        </chart-wrapper>
-    </div> 
+    <div class="pnlcharts">
+        <div *ngFor="let chartSett of ChartsSettingsSet">
+            <chart-wrapper [ChartSettings]='chartSett' [ChartData]='ChartDataSet[chartSett.index]'>
+            </chart-wrapper>
+        </div> 
+    </div>
 </div>
 <ng-template #brokerNotConnected>
-    <div class="broker-not-connected">Waiting for MT4/MT5 account connection...</div>
+    <div class="broker-not-connected"><span><img class="connected" src="/assets/img/wifi-slash-solid.svg" alt=""></span>No Trading Account Connected</div>
   </ng-template>

@@ -18,9 +18,9 @@ enum Ranks {
 enum Sections {
     Daily = "Daily Quests",
     Weekly = "Weekly Quests",
-    Info = "Ranks & Rewards",
+    Info = "Ranks",
     TradeGuard = "TradeGuard",
-    Analysis = "Profit & Loss Analysis",
+    Analysis = "Trading Analysis",
     LeaderDashboard = "Leaderboard"
 }
 
@@ -36,7 +36,7 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
 
     public Sections = Sections;
     public Ranks: any = Ranks;
-    public selectedSection = Sections.TradeGuard;
+    public selectedSection = Sections.Analysis;
 
     public get missions(): IBFTMissions {
         return this._tradingProfileService.missions;
@@ -110,7 +110,7 @@ export class MissionsComponent extends Modal<MissionsComponent> implements OnIni
 
     selectedSectionTitle(): string {
         switch (this.selectedSection) {
-            case Sections.LeaderDashboard: return "TOP 50 Leaderboard (Hourly refresh)";
+            case Sections.LeaderDashboard: return "TOP 50 XP Leaderboard";
             default: return this.selectedSection;
         }
     }

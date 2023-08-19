@@ -47,9 +47,9 @@ export class TradingPerformanceComponent implements OnInit {
             this.ChartsSettingsSet.push(new ChartWrapperSettings(1, 'Daily PnL', 'bar', 'UAH'));
             this.ChartsSettingsSet.push(new ChartWrapperSettings(2, 'Balance', 'line', 'UAH'));            
             
-            this.periodSelectors.push(new PeriodDescriptor(Period.Last7Days, "Last 7 days"));
-            this.periodSelectors.push(new PeriodDescriptor(Period.Last30Days, "Last 30 days"));
-            this.periodSelectors.push(new PeriodDescriptor(Period.Last90Days, "Last 90 days"));
+            this.periodSelectors.push(new PeriodDescriptor(Period.Last7Days, "7 days"));
+            this.periodSelectors.push(new PeriodDescriptor(Period.Last30Days, "30 days"));
+            this.periodSelectors.push(new PeriodDescriptor(Period.Last90Days, "90 days"));
         }
     
     public selectPeriod(periodDescriptor: PeriodDescriptor) {
@@ -61,9 +61,14 @@ export class TradingPerformanceComponent implements OnInit {
         this.loadData(this.selectedPeriod.id);
     }
 
-    ngOnInit(): void {        
-        this.selectPeriod(this.periodSelectors[0]);        
-    }    
+    ngOnInit(): void {
+        const defaultPeriod = this.periodSelectors.find(period => period.id === Period.Last30Days);
+        if (defaultPeriod) {
+            this.selectPeriod(defaultPeriod);
+        } else {
+            // Optional: Handle a case where Last7Days isn't in the array.
+        }        
+    }  
 
     public get broker(): MTBroker {
         if (this._brokerService.activeBroker instanceof MTBroker) {

@@ -27,9 +27,11 @@ export class ChartWrapperComponent implements OnInit {
         this.updateChartData();
     }
     
-    ngOnInit(): void {        
-        this.updateChartData();
-    }
+ngOnInit(): void {
+
+    this.updateChartData();
+}
+
 
     private updateChartData(): void {
         if (this.Chart && this._chartSettings) {
@@ -91,6 +93,9 @@ export class ChartWrapperComponent implements OnInit {
             },
             options: {                
                 aspectRatio: 3,
+                responsive: true,
+                maintainAspectRatio: false,
+
                 tooltips: {
                     position: 'nearest',
                     backgroundColor: 'rgba(125,125,125,0.8)',                    
@@ -106,23 +111,29 @@ export class ChartWrapperComponent implements OnInit {
                 },
                 scales: {
                     yAxes: [{
+                        position: 'right',
                         gridLines: {
                             color: "rgba(50,50,50,0.1)",
                             drawBorder: false                            
                         },
                         ticks: {
-                            padding: 2,
-                            fontColor: "rgba(0,0,0,0.5)",                            
-                            fontStyle: "bold",
-                            fontSize: 10,
-                            maxTicksLimit: 4                            
+
+                            padding: 6,
+                
+                            fontSize: 12,
+                            maxTicksLimit: 12                            
                         }
                     }],
                     xAxes: [{
+                        barPercentage: 0.5,       // You can adjust this for your preference
+                        categoryPercentage: 0.7,  // You can adjust this for your preference
+                        maxBarThickness: 50,       // Set your desired max width for bars here
+            
                         // display: true,
                         gridLines: {
-                            display: false,                            
-                        },                       
+                            color: "rgba(50,50,50,0.1)",                         
+                        },
+                                               
                     }]
                 }
             }
