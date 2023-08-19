@@ -117,9 +117,7 @@ ngOnInit(): void {
                             drawBorder: false                            
                         },
                         ticks: {
-
                             padding: 6,
-                
                             fontSize: 12,
                             maxTicksLimit: 12                            
                         }

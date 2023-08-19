@@ -26,7 +26,7 @@
         <div class="chart-view" *ngIf="!!chartDataBars">
             <div class="chart-container">
                 <div class="chart-container-titlex margin-top margin-bottom">
-                    <div>{{chartDataBars.symbol}} State</div>
+                    <div><div class="bold-symbol">{{chartDataBars.symbol}}</div>State</div>
                     <div>{{chartDataBars.startDate}} - {{chartDataBars.endDate}}</div>
                     <div><span class="close-icon" (click)="closeCharts()"><i
                         class="fa fa-close iconsize"></i></span></div>
@@ -60,7 +60,7 @@
 
                 <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="editMode ? 128 : 100"
                     [columnWidth]="editMode ? 128 : 100">
-                    {{'instrument' | translate}}
+                    Market
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
                     {{'driver' | translate}}

@@ -116,7 +116,7 @@ export class TradingPerformanceComponent implements OnInit {
     }
 
     private updateParameters(tradingPerformanceData: UserTradingPerformAdditionalData): void {
-        this.EstBalance = tradingPerformanceData.estBalance;
+        this.EstBalance = Math.round(tradingPerformanceData.estBalance);
         this.AccCurency = tradingPerformanceData.accCurency; 
         this.AccCurrencySign = tradingPerformanceData.accCurencySign;       
         this.EstBalanceUSD = `${this.AccCurency}`;
@@ -129,8 +129,8 @@ export class TradingPerformanceComponent implements OnInit {
             dailyPnLsign = '-';   
             this.DailyPnLsign = -1;     
         }
-        this.DailyPnLVal = `${dailyPnLsign}${this.AccCurrencySign}${Math.abs(tradingPerformanceData.dailyPnLVal)}`;
-        this.DailyPnLValPercent = `${dailyPnLsign}${Math.abs(tradingPerformanceData.dailyPnLValPercent)}%`;
+        this.DailyPnLVal = `${dailyPnLsign}${this.AccCurrencySign}${Math.round(Math.abs(tradingPerformanceData.dailyPnLVal))}`;
+        this.DailyPnLValPercent = `${dailyPnLsign}${Math.round(Math.abs(tradingPerformanceData.dailyPnLValPercent))}%`;
 
         let monthlyPnLsign = '';
         if (tradingPerformanceData.monthlyPnLVal > 0) {
@@ -140,7 +140,7 @@ export class TradingPerformanceComponent implements OnInit {
             monthlyPnLsign = '-';        
             this.MonthlyPnLsign = -1;
         }
-        this.MonthlyPnLVal = `${monthlyPnLsign}${this.AccCurrencySign}${Math.abs(tradingPerformanceData.monthlyPnLVal)}`;
-        this.MonthlyPnLValPercent = `${monthlyPnLsign}${Math.abs(tradingPerformanceData.monthlyPnLValPercent)}%`;
+        this.MonthlyPnLVal = `${monthlyPnLsign}${this.AccCurrencySign}${Math.round(Math.abs(tradingPerformanceData.monthlyPnLVal))}`;
+        this.MonthlyPnLValPercent = `${monthlyPnLsign}${Math.round(Math.abs(tradingPerformanceData.monthlyPnLValPercent))}%`;
     }
 }
