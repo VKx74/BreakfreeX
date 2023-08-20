@@ -2,7 +2,7 @@
     <div class="root">
         <div class="header-line" *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
             <div class="left-side">
-                <div class="account-id">Neural Agent: #{{myAutoTradingAccount}}</div>
+                <div class="account-id">Agent: <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
 
             </div>
             <div class="right-side">
@@ -25,9 +25,10 @@
         </div>
         <div class="chart-view" *ngIf="!!chartDataBars">
             <div class="chart-container">
-                <div class="chart-container-titlex margin-top margin-bottom">
-                    <div>{{chartDataBars.symbol}} State</div>
-                    <div>{{chartDataBars.startDate}} - {{chartDataBars.endDate}}</div>
+                <div class="chart-container-titlex ">
+                    <div><div class="bold-symbol">{{chartDataBars.symbol}} State</div></div>
+                    <div class="hidden">{{ formatDateToShortForm(chartDataBars.startDate) }}
+                        - {{ formatDateToShortForm(chartDataBars.endDate) }} </div>
                     <div><span class="close-icon" (click)="closeCharts()"><i
                         class="fa fa-close iconsize"></i></span></div>
                 </div>
@@ -60,30 +61,30 @@
 
                 <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="editMode ? 128 : 100"
                     [columnWidth]="editMode ? 128 : 100">
-                    {{'instrument' | translate}}
+                    Market
                 </data-table-header-cell>
-                <data-table-header-cell columnName="driver" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="driver" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'driver' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="min_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="min_1" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'min_1' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="min_5" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="min_5" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'min_5' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="min_15" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="min_15" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'min_15' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="h_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="h_1" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'h_1' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="h_4" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="h_4" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'h_4' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="d_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="d_1" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'d_1' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="month_1" [sortable]="true" [columnMinWidth]="40" [columnWidth]="75">
+                <data-table-header-cell columnName="month_1" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
                     {{'month_1' | translate}}
                 </data-table-header-cell>
 
@@ -101,13 +102,18 @@
                                 <span class="symbolx-border"
                                     [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
                                 </span>
-                                <span class="symbolx-tradable" *ngIf="isTradable(vmItem)">
-                                </span>
+                             
                                 <div class="symbol-color-container"
                                     [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+                                    <div class="symbolholdx">
+                                    <span class="symbolx-tradable" *ngIf="isTradable(vmItem)">
+                                    </span>
+                                    <span class="symbolx-untradeable" *ngIf="!isTradable(vmItem)">
+                                    </span>
                                     <span class="symbolx">
                                         {{vmItem.symbol}}
                                     </span>
+                                 </div>
                                     <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
                                         [class.down-trend]="vmItem.totalStrength < 0">
                                         [{{(vmItem.totalStrength * 100).toFixed(0)}}%]

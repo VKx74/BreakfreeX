@@ -1,8 +1,8 @@
 $LightTheme: (
         tableBorders: #edeff2,
-        appBackgroundColor: #edeff2,
+        appBackgroundColor: #ffffff,
         appPanelColor: #ffffff,
-        appPanelColorx: #ffffff,
+        appPanelColorx: #e0e3eb,
         appModalsPanelColor: #ffffff,
         gutterColor: #e0e3eb,
         topToolbarSeparator: #4e4e50,
@@ -15,14 +15,15 @@ $LightTheme: (
         tradescorelabels: #3b3c40,
         niceborder: #ddd,
         orderpanelprefixcolor: #000,
+        
 
         buyColor: #21a28b,
         sellColor: #e24c4f,
         accentColor: #397dc4,
         accentLightColor: #e2ecf7,
-        missionDialogBackground: rgba(28, 32, 36, 1),
-        missionTextMenuColor: #f0f1f6,
-        missionContent: rgb(250, 250, 250),
+        missionDialogBackground: #27282B,
+        missionTextMenuColor: #ffffffd1,
+        missionContent: #f1f1f7,
         missionCard: #FFF,
         missionCardXPColor: #368857b3,
         missionCardXPBackground: #38ab7126,
@@ -97,6 +98,11 @@ $LightTheme: (
         select-market: #2d6398e3,
         select-market-hover: #4f95dae3,
         select-market-color: #ffffff,
+
+        symcS: #000000f0,
+        symcA: #000000e8,
+        symcB: #000000e5,
+        symcC: #000000cf,
 
        
 )

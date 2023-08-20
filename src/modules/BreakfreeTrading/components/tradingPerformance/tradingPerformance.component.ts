@@ -47,9 +47,9 @@ export class TradingPerformanceComponent implements OnInit {
             this.ChartsSettingsSet.push(new ChartWrapperSettings(1, 'Daily PnL', 'bar', 'UAH'));
             this.ChartsSettingsSet.push(new ChartWrapperSettings(2, 'Balance', 'line', 'UAH'));            
             
-            this.periodSelectors.push(new PeriodDescriptor(Period.Last7Days, "Last 7 days"));
-            this.periodSelectors.push(new PeriodDescriptor(Period.Last30Days, "Last 30 days"));
-            this.periodSelectors.push(new PeriodDescriptor(Period.Last90Days, "Last 90 days"));
+            this.periodSelectors.push(new PeriodDescriptor(Period.Last7Days, "7 days"));
+            this.periodSelectors.push(new PeriodDescriptor(Period.Last30Days, "30 days"));
+            this.periodSelectors.push(new PeriodDescriptor(Period.Last90Days, "90 days"));
         }
     
     public selectPeriod(periodDescriptor: PeriodDescriptor) {
@@ -61,9 +61,14 @@ export class TradingPerformanceComponent implements OnInit {
         this.loadData(this.selectedPeriod.id);
     }
 
-    ngOnInit(): void {        
-        this.selectPeriod(this.periodSelectors[0]);        
-    }    
+    ngOnInit(): void {
+        const defaultPeriod = this.periodSelectors.find(period => period.id === Period.Last30Days);
+        if (defaultPeriod) {
+            this.selectPeriod(defaultPeriod);
+        } else {
+            // Optional: Handle a case where Last7Days isn't in the array.
+        }        
+    }  
 
     public get broker(): MTBroker {
         if (this._brokerService.activeBroker instanceof MTBroker) {
@@ -111,7 +116,7 @@ export class TradingPerformanceComponent implements OnInit {
     }
 
     private updateParameters(tradingPerformanceData: UserTradingPerformAdditionalData): void {
-        this.EstBalance = tradingPerformanceData.estBalance;
+        this.EstBalance = Math.round(tradingPerformanceData.estBalance);
         this.AccCurency = tradingPerformanceData.accCurency; 
         this.AccCurrencySign = tradingPerformanceData.accCurencySign;       
         this.EstBalanceUSD = `${this.AccCurency}`;
@@ -124,8 +129,8 @@ export class TradingPerformanceComponent implements OnInit {
             dailyPnLsign = '-';   
             this.DailyPnLsign = -1;     
         }
-        this.DailyPnLVal = `${dailyPnLsign}${this.AccCurrencySign}${Math.abs(tradingPerformanceData.dailyPnLVal)}`;
-        this.DailyPnLValPercent = `${dailyPnLsign}${Math.abs(tradingPerformanceData.dailyPnLValPercent)}%`;
+        this.DailyPnLVal = `${dailyPnLsign}${this.AccCurrencySign}${Math.round(Math.abs(tradingPerformanceData.dailyPnLVal))}`;
+        this.DailyPnLValPercent = `${dailyPnLsign}${Math.round(Math.abs(tradingPerformanceData.dailyPnLValPercent) * 10) / 10}%`;
 
         let monthlyPnLsign = '';
         if (tradingPerformanceData.monthlyPnLVal > 0) {
@@ -135,7 +140,7 @@ export class TradingPerformanceComponent implements OnInit {
             monthlyPnLsign = '-';        
             this.MonthlyPnLsign = -1;
         }
-        this.MonthlyPnLVal = `${monthlyPnLsign}${this.AccCurrencySign}${Math.abs(tradingPerformanceData.monthlyPnLVal)}`;
-        this.MonthlyPnLValPercent = `${monthlyPnLsign}${Math.abs(tradingPerformanceData.monthlyPnLValPercent)}%`;
+        this.MonthlyPnLVal = `${monthlyPnLsign}${this.AccCurrencySign}${Math.round(Math.abs(tradingPerformanceData.monthlyPnLVal))}`;
+        this.MonthlyPnLValPercent = `${monthlyPnLsign}${Math.round(Math.abs(tradingPerformanceData.monthlyPnLValPercent) * 10) / 10}%`;
     }
 }

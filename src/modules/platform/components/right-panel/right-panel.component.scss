@@ -17,7 +17,7 @@
     .widget-container {
       display: flex;
       height: 100%;
-      width: calc(100% - 45px);
+      width: calc(100% - 36px);
       position: relative;
       .widget {
         display: flex;
@@ -31,7 +31,7 @@
 
     .widget-selector {
       display: flex;
-      width: 45px;
+      width: 36px;
       flex-direction: column;
       justify-content: space-between;
 
@@ -61,10 +61,10 @@
       .widget-selector-toolbar {
         justify-content: space-around;
         display: flex;
-        max-width: 600px;
+        row-gap: 9px;
         width: 100%;
         flex-direction: column;
-        padding:5px;
+        padding: 3px;
       }
 
       .widget-selector-icon {
@@ -75,7 +75,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        margin-bottom: 10px;
+      
         border-radius:5px;
         transition: all 0.22s;
       }
