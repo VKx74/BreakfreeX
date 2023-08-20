@@ -82,7 +82,7 @@ export class DashboardComponent {
     private _minRightSidePanelSize = 370;
     readonly openBottomPanel = 150;
     readonly minimizeBottomPanel = 30;
-    readonly minRightSidePanelCollapsedSize = 45;
+    readonly minRightSidePanelCollapsedSize = 36;
     readonly minRightPanelFullSize = 768;
 
     private get _isPro(): boolean {

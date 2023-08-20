@@ -3,23 +3,19 @@
 @import "mixins/themify";
 
 :host {
-  ///deep/ {
-  //  .mat-menu-panel {
-  //    max-width: 350px !important;
-  //  }
-  //}
+
   nav-section:hover {
     background: #5655554d;
     border-radius: 5px;
   }
   nav-section {
-    margin: 0px 5px;
+    height: 100%;
     transition: all 0.22s;
   }
   .insidecorrector {
     display: flex;
     width: 33px;
-    height: 33px;
+    height: 100%;
     justify-content: center;
     align-items: center;
   }
@@ -27,10 +23,11 @@
     color: #fff;
     padding: 8px;
     cursor: pointer;
+    font-size: 14px;
 }
 
   .insidecorrector.avatarelement {
-    padding: 0px 5px;
+    padding: 0px 6px;
     display: flex;
     justify-content: center;
     // max-width: 150px;
@@ -43,11 +40,11 @@
   span.dashb {
     font-size: 11px;
     font-weight: 700;
-    padding: 10px 0px;
+
   }
 
   .xp-nav-container span img {
-    height: 14px;
+    height: 12px;
     -webkit-filter: invert(1);
     filter: invert(1);
   }
@@ -57,15 +54,15 @@
   }
 
   .flex.BFTN {
-    padding: 10px;
-    margin-left: 5px;
+    padding: 9px;
+
   }
 
   .flex.BFTN:hover {
     background: #5655554d;
     border-radius: 5px;
-    padding: 10px;
-    margin-left: 5px;
+    padding: 9px;
+   
   }
 
   .settings-button {
@@ -252,7 +249,7 @@
 
     .bell-image {
       position: relative;
-      font-size: 14px;
+      font-size: 12px;
       .new-notifications {
         position: absolute;
         background-color: #cc3d3d;
@@ -465,7 +462,7 @@
 
 .nav-top-row {
   padding: 0;
-  height: 44px;
+  height: 36px;
 }
 
 .z-index-2 {
@@ -473,14 +470,9 @@
 }
 
 .navigation-right-side {
-  //z-index: 2;
-
-  //.navigation-delimiter {
-  //  width: 1px;
-  //  margin: 5px 0;
-  //  align-self: stretch;
-  //  height: auto;
-  //}
+  display: flex;
+  column-gap: 9px;
+  padding: 3px;
 }
 
 .logo {
