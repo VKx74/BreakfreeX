@@ -78,6 +78,7 @@
 
   /deep/ mat-header-row {
     overflow: hidden !important;
+    margin-bottom:12px;
   }
   /deep/ mat-cell.mat-cell {
     height: 100% !important;
@@ -103,7 +104,6 @@
 
   }
   /deep/ mat-header-row.mat-header-row{
-    margin-bottom: -12px;
 
    
   }
@@ -254,10 +254,11 @@
 
   .symbolx {
     font-weight: bold !important;
-
+    text-align: left;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: left;
+    max-width: 52px;
    
   }
 
@@ -476,7 +477,7 @@
   .data-table {
     display: flex;
     max-height: 100%;
-
+    overflow-y: scroll;
     max-width: 100%;
 
     margin-bottom: 12px;
@@ -564,7 +565,7 @@
     }
   }
   .chart-container-titlex {
-    background: themed("tradescoreholderbg");
+    background: themed("appBackgroundColor");
   }
 
   .edit {
@@ -575,7 +576,7 @@
     }
   }
   .chart-container-title, mat-row.row-group-header {
-    background: themed("tradescoreholderbg");
+    background: themed("appBackgroundColor");
   } 
 
 
@@ -584,7 +585,7 @@
   }
   .header-line {
     color: themed("valueTextColor");
-    background: themed("tradescoreholderbg");
+    background: themed("appBackgroundColor");
   }
 
   .data-table {
