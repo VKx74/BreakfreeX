@@ -59,8 +59,8 @@
 
                 <!--Columns-->
 
-                <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="editMode ? 128 : 90"
-                    [columnWidth]="editMode ? 128 : 90">
+                <data-table-header-cell columnName="symbol" [sortable]="true" [columnMinWidth]="editMode ? 128 : 100"
+                    [columnWidth]="editMode ? 128 : 100">
                     Market
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="true" [columnMinWidth]="15" [columnWidth]="75">
@@ -102,16 +102,21 @@
                                 <span class="symbolx-border"
                                     [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
                                 </span>
-                                <span class="symbolx-tradable" *ngIf="isTradable(vmItem)">
-                                </span>
+                             
                                 <div class="symbol-color-container"
                                     [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+                                    <div class="symbolholdx">
+                                    <span class="symbolx-tradable" *ngIf="isTradable(vmItem)">
+                                    </span>
+                                    <span class="symbolx-untradeable" *ngIf="!isTradable(vmItem)">
+                                    </span>
                                     <span class="symbolx">
                                         {{vmItem.symbol}}
                                     </span>
+                                 </div>
                                     <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
                                         [class.down-trend]="vmItem.totalStrength < 0">
-                                        {{(vmItem.totalStrength * 100).toFixed(0)}}%
+                                        [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
                                     </span>
                                 </div>
                             </div>

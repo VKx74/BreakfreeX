@@ -83,6 +83,7 @@
     height: 100% !important;
     max-height: 25px !important;
     display: flex ;
+    font-size:11px;
     align-items: center ;
   }
 
@@ -253,11 +254,11 @@
 
   .symbolx {
     font-weight: bold !important;
-    padding-left: 2px;
+
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
-    max-width: 60%;
+   
   }
 
   .symbolx-border {
@@ -293,6 +294,24 @@
     background-color: rgba(217, 217, 217, 0.15);
   }
 
+  .symbol-color-container.color-s .strength-total {
+    color: #fff !important;
+  }
+
+  .symbol-color-container.color-a .strength-total {
+      color: #ffffffde !important;
+  }
+
+  .symbol-color-container.color-b .strength-total {
+      color: #ffffffc9 !important;
+  }
+
+  .symbol-color-container.color-c .strength-total {
+      color: #ffffffb8 !important;
+  }
+
+
+
   .symbol-container {
     width: 100%;
     height: 100%;
@@ -317,6 +336,7 @@
     display: flex;
     justify-content: space-between;
     padding-right: 3px;
+
     width: 100%;
     max-width: 100%;
   }
@@ -326,16 +346,27 @@
     display: flex;
   }
 
+
+  .symbolholdx {
+    display: flex;
+    justify-content: flex-start;
+    column-gap: 3px;
+  }
+
   .positive-border {
-    border-left: 4px solid #5eaf80;
+    border-left: 0px solid #5eaf80;
   }
 
   .negative-border {
-    border-left: 4px solid #bd5b6a;
+    border-left: 0px solid #bd5b6a;
   }
 
   .symbolx-tradable {
-    border-right: 4px solid gold;
+    border-right: 3px solid gold;
+  }
+
+  .symbolx-untradeable {
+    border-right: 3px solid transparent;
   }
 
   .strength-cell {
@@ -356,16 +387,16 @@
 
 
   .up-trend {
-    color: #acacac;
-    width: 20px;
+    width: 35px;
+    padding-right: 3px;
     max-width: 100%;
     display: flex;
     justify-content: flex-end;
   }
 
   .down-trend {
-    color: #acacac;
-    width: 20px;
+    width: 35px;
+    padding-right: 3px;
     max-width: 100%;
     display: flex;
     justify-content: flex-end;

@@ -32,8 +32,7 @@
   .trend-state-up,
   .trend-state-down,
   .trend-state-sideways {
-    position: absolute;
-    right: 5px;
+    margin-left: 3px;
     font-size: 9px;
     color: rgba(128, 128, 128, 0.3);
     &.drive {
@@ -56,4 +55,21 @@
   .trend-state-sideways {
     display: none !important;
 }
+}
+
+@media (max-width: 549px) {
+  .trend-state-up,
+  .trend-state-down,
+  .trend-state-sideways {
+    position: absolute;
+    right: 1px;
+    font-size: 9px;
+    color: rgba(128, 128, 128, 0.3);
+    &.drive {
+      color: rgba(95, 226, 150, 0.7) !important;
+    }
+    &.capitulation {
+      color: rgba(225, 119, 140, 0.7) !important;
+    }
+  }
 }
