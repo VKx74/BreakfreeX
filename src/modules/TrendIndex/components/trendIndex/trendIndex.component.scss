@@ -79,6 +79,7 @@
   /deep/ mat-header-row {
     overflow: hidden !important;
     margin-bottom:12px;
+    height: 33px !important;
   }
   /deep/ mat-cell.mat-cell {
     height: 100% !important;
@@ -108,10 +109,11 @@
    
   }
  /deep/ mat-row.row-group-header {
-      border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    padding-top: 3px;
-    margin-top: 12px !important;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding-top: 8px;
+  margin-top: 12px !important;
+  height: 33px !important;
   }
 
 
@@ -182,7 +184,7 @@
     align-items: center;
     font-size: 12px;
     margin-bottom: 9px;
-    padding: 9px 12px;
+    padding: 6px 12px;
     border-radius: 6px;
     .left-side {
       display: flex;
@@ -284,15 +286,15 @@
   }
 
   .color-d {
-    background-color: rgba(202, 220, 239, 0.15);
+    background-color: rgba(128, 128, 128, 0.15);
   }
 
   .color-e {
-    background-color: rgba(224, 224, 240, 0.15);
+    background-color: rgba(128, 128, 128, 0.1);
   }
 
   .color-f {
-    background-color: rgba(217, 217, 217, 0.15);
+    background-color: rgba(128, 128, 128, 0.05);
   }
 
   .symbol-color-container.color-s .strength-total {
