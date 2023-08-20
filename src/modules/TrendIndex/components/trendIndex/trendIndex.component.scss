@@ -3,6 +3,65 @@
 @import "global-styles/themes/themes";
 
 :host {
+  
+
+  /deep/ mat-cell:not(:first-of-type) {
+    padding-left: 0px !important;
+}
+
+/deep/ mat-cell.mat-cell span.trend-strength-value {
+  font-size: 11px;
+}
+
+@media (max-width: 767px) {
+  /deep/ mat-cell.mat-cell span.trend-strength-value {
+    font-size: 11px !important;
+}
+}
+
+@media (max-width: 450px) {
+  /deep/ mat-cell.mat-cell span.trend-strength-value {
+    font-size: 11px !important;
+   
+}
+
+}
+
+@media (max-width: 400px) {
+  /deep/ mat-cell.mat-cell span.trend-strength-value {
+    font-size: 10px !important;
+}
+
+}
+@media (max-width: 390px) {
+  /deep/ mat-cell.mat-cell span.trend-strength-value {
+    font-size: 9px !important;
+}
+.mobilehiddenacc {
+  font-size:9px;
+}
+
+.edit,.trading-enabled {
+  font-size: 11px !important;
+}
+
+
+}
+
+@media (max-width: 320px) {
+  /deep/ mat-cell.mat-cell span.trend-strength-value {
+    font-size: 8px !important;
+}
+.mobilehiddenacc {
+  display: none;
+}
+
+.edit, .trading-enabled {
+  font-size: 11px !important;
+}
+
+
+}
 
   trend-index-chart {
     min-height: 60px;
@@ -13,45 +72,51 @@
   }
   transition: all 0.22s ease-in-out;
 
+  /deep/ mat-row {
+    overflow: hidden !important;
+  }
+
+  /deep/ mat-header-row {
+    overflow: hidden !important;
+  }
   /deep/ mat-cell.mat-cell {
     height: 100% !important;
     max-height: 25px !important;
-    display: flex !important;
-    align-items: center !important;
+    display: flex ;
+    align-items: center ;
   }
 
   /deep/ mat-cell.mat-cell span,
   mat-cell.mat-cell div {
     height: 100% !important;
     max-height: 25px !important;
-    display: flex !important;
-    align-items: center !important;
+    display: flex ;
+    align-items: center ;
     font-weight: 600;
   }
 
   /deep/ mat-table {
     max-width: 100% !important;
     width: 100% !important;
-    min-width: fit-content !important;
-    min-width: auto;
+
   }
   /deep/ mat-header-row.mat-header-row{
-    position: relative !important;
-    border-top-left-radius: 6px !important;
-    border-top-right-radius: 6px !important;
+    margin-bottom: -12px;
+
+   
   }
- /deep/ mat-row.row-group-header.mat-row {
-    margin-top: 12px;
-    border-top-left-radius: 6px;
+ /deep/ mat-row.row-group-header {
+      border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-}
+    padding-top: 3px;
+    margin-top: 12px !important;
+  }
+
 
 /deep/ mat-header-row.mat-header-row {
   position: relative;
-  border-top-left-radius: 6px !important;
-  border-top-right-radius: 6px !important;
-  border-bottom-left-radius: 6px !important;
-  border-bottom-right-radius: 6px !important;
+
+
 }
 
   /deep/ mat-cell.mat-cell.cdk-column-min_15,
@@ -100,7 +165,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 9px;
+    padding: 6px 6px 6px 6px;
   }
   .account-id {
     font-weight: bold;
@@ -114,7 +179,7 @@
     column-gap: 8px;
     align-items: center;
     font-size: 12px;
-    margin-bottom: 15px;
+    margin-bottom: 9px;
     padding: 9px 12px;
     border-radius: 6px;
     .left-side {
@@ -250,7 +315,7 @@
     height: 100%;
     display: flex;
     justify-content: space-between;
-    padding-right: 2px;
+    padding-right: 3px;
     width: 100%;
     max-width: 100%;
   }
@@ -286,6 +351,8 @@
   mat-row mat-cell {
     height: 100% !important;
   }
+  
+
 
   .up-trend {
     color: #acacac;
@@ -348,8 +415,9 @@
       display: flex;
       font-size: 12px;
       column-gap: 34px;
-      margin: 0px 10px 0px 10px;
+      padding: 6px 6px 6px 12px;
       justify-content: space-between;
+      margin-bottom: 6px;
     }
 
     .margin-top {
@@ -376,11 +444,11 @@
   .data-table {
     display: flex;
     max-height: 100%;
-    overflow-y: scroll;
+
     max-width: 100%;
-    border-radius: 6px;
+
     margin-bottom: 12px;
-    padding: 8px 6px 0px 8px;
+
 
 
   }
@@ -440,14 +508,19 @@
   }
 }
 
-@media (max-width: 767px) {
 
-
-}
 
 @include themify($themes, true) {
+
+:host {
+  /deep/ mat-row.row-group-header {
+    background: themed("tradescoreholderbg");
+  } 
+} 
+
+
   .chart-view {
-    background: themed("appPanelColorx");
+    background: themed("appBackgroundColor");
     .chart-container-title,.chart-container-titlex {
       color: themed("valueTextColor");
       .close-icon {
@@ -458,6 +531,9 @@
       }
     }
   }
+  .chart-container-titlex {
+    background: themed("tradescoreholderbg");
+  }
 
   .edit {
     background: themed("select-market");
@@ -466,15 +542,17 @@
       background: themed("select-market-hover");
     }
   }
-  .chart-container-title {
+  .chart-container-title, mat-row.row-group-header {
     background: themed("tradescoreholderbg");
   } 
+
+
   .symbolx {
     color: themed("valueTextColor");
   }
   .header-line {
     color: themed("valueTextColor");
-    background: themed("appPanelColorx");
+    background: themed("tradescoreholderbg");
   }
 
   .data-table {
