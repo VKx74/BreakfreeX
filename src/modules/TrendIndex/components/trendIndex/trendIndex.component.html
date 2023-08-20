@@ -25,9 +25,10 @@
         </div>
         <div class="chart-view" *ngIf="!!chartDataBars">
             <div class="chart-container">
-                <div class="chart-container-titlex margin-top margin-bottom">
-                    <div><div class="bold-symbol">{{chartDataBars.symbol}}</div>State</div>
-                    <div>{{chartDataBars.startDate}} - {{chartDataBars.endDate}}</div>
+                <div class="chart-container-titlex ">
+                    <div><div class="bold-symbol">{{chartDataBars.symbol}}</div></div>
+                    <div>{{ formatDateToShortForm(chartDataBars.startDate) }}
+                        - {{ formatDateToShortForm(chartDataBars.endDate) }} </div>
                     <div><span class="close-icon" (click)="closeCharts()"><i
                         class="fa fa-close iconsize"></i></span></div>
                 </div>

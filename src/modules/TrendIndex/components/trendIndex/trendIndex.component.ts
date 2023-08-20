@@ -222,6 +222,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     get userAutoTradingInfoData(): IUserAutoTradingInfoData {
         return this._userAutoTradingInfoData;
     }
+    
 
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
@@ -512,6 +513,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
             case 2592000: return "1M";
         }
         return tf + " Mins";
+    }
+
+    formatDateToShortForm(dateString: string): string {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        return `${day}/${month}`;
     }
 
     setState(state: ITrendIndexComponentState) {
