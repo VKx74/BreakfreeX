@@ -297,21 +297,7 @@
     background-color: rgba(128, 128, 128, 0.05);
   }
 
-  .symbol-color-container.color-s .strength-total {
-    color: #fff !important;
-  }
 
-  .symbol-color-container.color-a .strength-total {
-      color: #ffffffde !important;
-  }
-
-  .symbol-color-container.color-b .strength-total {
-      color: #ffffffc9 !important;
-  }
-
-  .symbol-color-container.color-c .strength-total {
-      color: #ffffffb8 !important;
-  }
 
 
 
@@ -581,6 +567,22 @@
     background: themed("appBackgroundColor");
   } 
 
+
+  .symbol-color-container.color-s .strength-total {
+    color: themed("symcS"); ;
+  }
+
+  .symbol-color-container.color-a .strength-total {
+    color: themed("symcA"); ;
+  }
+
+  .symbol-color-container.color-b .strength-total {
+    color: themed("symcB"); ;
+  }
+
+  .symbol-color-container.color-c .strength-total {
+    color: themed("symcC"); ;
+  }
 
   .symbolx {
     color: themed("valueTextColor");
