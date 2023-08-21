@@ -3,11 +3,9 @@
         <div class="header-line" *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
             <div class="left-side">
                 <div class="account-id">Agent: <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
-
             </div>
             <div class="right-side">
-        
-                <div >
+                <div>
                     <span (click)="changeUseManualTradingForAccount()" *ngIf="!userAutoTradingInfoData.useManualTrading" class="change-trading-mode">        <div class="trading-enabled">
                         <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color">HITL Enabled</span>
                         <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color">HITL Disabled</span>

@@ -239,11 +239,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _cdr: ChangeDetectorRef,
         protected _identityService: IdentityService) {
         super();
-
-        this._identityService.myTradingAccount$.subscribe(() => {
-            this.editMode = false;
-            this._changesDetected = true;
-        });
     }
 
     ngOnInit() {
@@ -275,6 +270,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.loadData();
 
         this._identityService.myTradingAccount$.subscribe(() => {
+            this.editMode = false;
+            this._changesDetected = true;
             this.loadUserAutoTradingInfoForAccount();
         });
     }
