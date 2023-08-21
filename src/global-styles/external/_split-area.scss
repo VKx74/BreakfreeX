@@ -14,9 +14,11 @@
     &::before {
       content: '';
       left: calc(50% - 40px);
+      border-radius: 9px; 
       height: 80px;
-      margin: 2px;
-      width: 2px;
+      margin-left: 2px;
+      margin-right: 2px;
+      width: 1.66px;
     }
 
     .as-split-gutter-icon {
@@ -30,9 +32,11 @@
     z-index: 99;
     &::before {
       content: '';
+      border-radius: 9px;
       left: calc(50% - 40px);
-      height: 2px;
-      margin: 2px;
+      height: 1.66px;
+      margin-top: 2px;
+      margin-bottom: 2px;
       width: 80px;
     }
 
@@ -48,7 +52,7 @@
     background-color: themed('gutterColor') !important;
 
     &::before {
-      background-color: themed('appPanelColor') !important;
+      background-color: themed('gutterinsidecolor') !important;
     }
   }
 }

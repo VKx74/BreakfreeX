@@ -4,9 +4,9 @@
 
 :host {
     .status-img {
-        width: 12px;
-        height: 12px;
-        margin-right: 12px;
+        width: 9px;
+        height: 9px;
+
     }
 
     .connected {
@@ -26,6 +26,7 @@
     }
 
     .accountInfoRow {
+        column-gap:3px;
         font-size: 11px;
         height: 100%;
         align-items: center;
@@ -34,7 +35,7 @@
 
     @media (max-width: 768px) {
         .additional-info {
-            display: none;
+          
         }
     }
 

@@ -28,12 +28,20 @@
                 style="margin:10px"
                 [disabled]="!brokerConnected"
                 *ngIf="showCancelAll"
-                class="crypto-button crypto-button_success no-wrap cancel-all-button">Cancel all Pending
+                class="crypto-button crypto-button_success no-wrap cancel-all-button showdesktop">Cancel Pending
         </button> 
+        <button (click)="cancelAllPending()"
+        style="margin:10px"
+        [disabled]="!brokerConnected"
+        *ngIf="showCancelAll"
+        class="crypto-button crypto-button_success no-wrap cancel-all-button showmobile">Cancel
+</button> 
+        
+        
         <button (click)="placeOrder()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_success no-wrap">Place Order
+                class="crypto-button crypto-button_success no-wrap">Order
         </button> 
         <button (click)="reconnect()"
                 style="margin:10px"
@@ -43,12 +51,12 @@
         <button (click)="disconnect()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger no-wrap">Disconnect
+                class="crypto-button crypto-button_danger no-wrap tablet-hidden">Disconnect
         </button>
         <button (click)="showSymbolMapping()"
                 style="margin:10px"
                 [disabled]="!brokerConnected"
-                class="crypto-button crypto-button_danger no-wrap">Mapping
+                class="crypto-button crypto-button_danger no-wrap">Map
         </button>
     </div>
 </div>

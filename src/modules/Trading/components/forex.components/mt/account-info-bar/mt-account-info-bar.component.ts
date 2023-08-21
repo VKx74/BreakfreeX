@@ -11,7 +11,7 @@ import { BrokerConnectivityStatus } from 'modules/Trading/models/models';
 })
 export class MTAccountInfoBarComponent {
     BrokerConnectivityStatus = BrokerConnectivityStatus;
-    decimals = 2;
+    decimals = 0;
     get activeAccount(): MTTradingAccount {
         const mtBroker = this._broker.activeBroker as MTBroker;
         if (!mtBroker) {
