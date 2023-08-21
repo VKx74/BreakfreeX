@@ -5,6 +5,7 @@
 :host {
     .status-img {
         width: 9px;
+        border-radius: 50%;
         height: 9px;
 
     }
@@ -26,11 +27,12 @@
     }
 
     .accountInfoRow {
-        column-gap:3px;
+        column-gap: 3px;
         font-size: 11px;
         height: 100%;
         align-items: center;
         display: flex;
+        flex-wrap: wrap;
     }
 
     @media (max-width: 768px) {

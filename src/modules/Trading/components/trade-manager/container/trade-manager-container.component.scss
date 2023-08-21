@@ -12,6 +12,8 @@
 
   .buttons-control {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .color-selector {
@@ -31,11 +33,11 @@
   }
 
   .controls {
-    padding-left: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 30px;
+    height: auto;
+    padding: 3px 12px;
     .no-wrap {
       // flex: 1 0 auto;
       overflow: hidden;
