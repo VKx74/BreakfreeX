@@ -1,15 +1,15 @@
 <div class="root">
-    <div class="widget-container" [class.hidden]="collapsed">
+    <div class="widget-container" [class.hidden]="collapsed" #widgets>
         <ng-container *ngIf="initialized; else loader">
             <!-- <div class="widget" *ngIf="SelectedComponent === Components.Sonar">
                 <breakfree-trading-scanner (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
                     (onOpenChart)="handleOpenChart($event)"></breakfree-trading-scanner>
             </div> -->
-            <div class="widget" *ngIf="SelectedComponent === Components.SonarFeed">
+            <!-- <div class="widget" *ngIf="SelectedComponent === Components.SonarFeed">
                 <sonar-feed (onOpenChart)="handleOpenChart($event)" (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"></sonar-feed>
-            </div>
+            </div> -->
             <div class="widget" *ngIf="SelectedComponent === Components.Watchlist">
                 <watchlist (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
@@ -19,7 +19,7 @@
                 <trend-index (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
                     (onOpenChart)="handleOpenChart($event)"></trend-index>
-            </div> 
+            </div>
             <div class="widget" *ngIf="SelectedComponent === Components.EconomicCalendar">
                 <economic-calendar (stateChanged)="componentStateChanged($event)"
                     (beforeDestroy)="componentBeforeDestroy($event)" (initialized)="componentInitialized($event)"
@@ -32,7 +32,10 @@
                 <div class="widget-scroller">
                     <academy-component [isSidebarOpenByDefault]="false"></academy-component>
                 </div>
-            </div> 
+            </div>
+            <div class="widget" *ngIf="SelectedComponent === Components.Chat">
+                <div class="chat-container"><chat-bro></chat-bro></div>
+            </div>
             <!-- <div class="widget" *ngIf="SelectedComponent === Components.BinanceScanner">
                 <binance-scanner (onOpenChart)="handleOpenChart($event)" ></binance-scanner>
             </div> -->
@@ -59,17 +62,18 @@
                     [matTooltip]="'sonarWidget' | translate">
                     <img class="widget-icon" src="/assets/img/right-panel/radar-solid.svg" />
                 </div> -->
-                <div class="sonar-feed-widget widget-selector-icon" (click)="selectComponent(Components.SonarFeed)"
+                <!-- <div class="sonar-feed-widget widget-selector-icon" (click)="selectComponent(Components.SonarFeed)"
                     [class.active]="SelectedComponent === Components.SonarFeed && !collapsed" tooltip
                     [matTooltip]="'sonarFeed' | translate">
                     <i class="fa fa-rss" aria-hidden="true"></i>
-                </div>
+                </div> -->
                 <div class="trend-index-widget widget-selector-icon" (click)="selectComponent(Components.TrendIndex)"
                     [class.active]="SelectedComponent === Components.TrendIndex && !collapsed" tooltip
                     [matTooltip]="'trendIndex' | translate">
                     <i class="fa fa-indent" aria-hidden="true"></i>
-                </div> 
-                <div class="economic-calendar-widget widget-selector-icon" (click)="selectComponent(Components.EconomicCalendar)"
+                </div>
+                <div class="economic-calendar-widget widget-selector-icon"
+                    (click)="selectComponent(Components.EconomicCalendar)"
                     [class.active]="SelectedComponent === Components.EconomicCalendar && !collapsed" tooltip
                     [matTooltip]="'economicCalendar' | translate">
                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -93,7 +97,7 @@
                     [class.active]="SelectedComponent === Components.Backtest && !collapsed" *ngIf="isBacktestAllowed"
                     tooltip [matTooltip]="'backtestWidget' | translate">
                     <i class="fa fa-line-chart" aria-hidden="true"></i>
-                </div> 
+                </div>
                 <!-- <div class="backtest-widget widget-selector-icon" (click)="selectComponent(Components.BinanceScanner)"
                     [class.active]="SelectedComponent === Components.BinanceScanner && !collapsed" *ngIf="isStuff"
                     tooltip [matTooltip]="'Binnace scanner'">
@@ -102,6 +106,11 @@
                 <div class="support-widget widget-selector-icon" (click)="showSupport()" tooltip
                     [matTooltip]="'supportWidget' | translate">
                     <i class="fa fa-life-ring" aria-hidden="true"></i>
+                </div>
+                <div class="chat-widget widget-selector-icon" (click)="selectComponent(Components.Chat)" tooltip
+                    [class.active]="SelectedComponent === Components.Chat && !collapsed"
+                    [matTooltip]="'chatWidget' | translate">
+                    <i class="fa fa-wechat" aria-hidden="true"></i>
                 </div>
                 <div class="admin-widget widget-selector-icon" *ngIf="isStuff" routerLink="/admin" tooltip
                     [matTooltip]="'adminPanel' | translate">

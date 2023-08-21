@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "@app/store/reducer";
@@ -23,21 +23,23 @@ import { Subscription } from 'rxjs';
     ]
 })
 export class RightPanelComponent implements OnInit {
+    private _isInitializedSubscription: Subscription;
+
     protected linker: Linker;
     protected _downloadLink: string;
     protected _panelFullScreenSize: number = 768;
 
     public Components = Components;
-    public SelectedComponent: Components = Components.SonarFeed;
+    public SelectedComponent: Components = Components.TrendIndex;
 
     @Input() isCollapsed: boolean = false;
     @Output() isCollapsedChange = new EventEmitter<boolean>();
-    private _isInitializedSubscription: Subscription;
+    @ViewChild('widgets', { static: false }) widgetsContent: ElementRef;
 
     get LinkerColor(): string {
         return this.linker.getLinkingId();
-    } 
-    
+    }
+
     get initialized(): boolean {
         return this._rightSidePanelStateService.isInitialized;
     }
@@ -103,9 +105,9 @@ export class RightPanelComponent implements OnInit {
                         break;
                     }
                 }
-                this.SelectedComponent = isExist ? savedComponent : Components.SonarFeed;
+                this.SelectedComponent = isExist ? savedComponent : Components.TrendIndex;
             } else {
-                this.SelectedComponent = Components.SonarFeed;
+                this.SelectedComponent = Components.TrendIndex;
             }
 
             if (this._isInitializedSubscription) {
@@ -136,6 +138,12 @@ export class RightPanelComponent implements OnInit {
         }
 
         this._rightSidePanelStateService.setActiveComponent(this.SelectedComponent);
+
+        if (this.widgetsContent && this.widgetsContent.nativeElement && this.SelectedComponent === Components.Chat) {
+            setTimeout(() => {
+                (window as any).dispatchEvent(new Event("resize"));
+            }, 1);
+        }
     }
 
     handleColorSelected(color: string) {
@@ -171,7 +179,7 @@ export class RightPanelComponent implements OnInit {
     }
 
     componentBeforeDestroy(widget: BaseLayoutItem) {
-        
+
     }
 
 }

@@ -106,7 +106,7 @@
                                 <div class="symbol-color-container"
                                     [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
                                     <div class="symbolholdx">
-                                    <span class="symbolx-tradable" *ngIf="isTradable(vmItem)">
+                                    <span class="symbolx-tradable" *ngIf="isTradable(vmItem)" [class.is-auto-selected]="isAutoSelected(vmItem)">
                                     </span>
                                     <span class="symbolx-untradeable" *ngIf="!isTradable(vmItem)">
                                     </span>

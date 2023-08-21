@@ -611,6 +611,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return false;
     }
 
+    isAutoSelected(item: TrendIndexVM) {
+        let isUserSelected = this.isInstrumentSelected(item);
+        return !isUserSelected;
+    }
+
     setEditMode() {
         this.editMode = true;
         this._cdr.markForCheck();

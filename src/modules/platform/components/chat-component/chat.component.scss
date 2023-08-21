@@ -1,0 +1,18 @@
+@import "global-styles/variables";
+@import "global-styles/themes/themes";
+@import "global-styles/mixins/themify";
+@import "modules/Layout/styles/themes/themes";
+
+:host {
+  #chat-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  /deep/ {
+    .chatbro_chat {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+}

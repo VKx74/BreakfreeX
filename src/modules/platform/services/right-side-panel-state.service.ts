@@ -15,7 +15,8 @@ export enum Components {
     Backtest = "Backtest",
     BinanceScanner = "BinanceScanner",
     TrendIndex = "TrendIndex",
-    EconomicCalendar = "EconomicCalendar"
+    EconomicCalendar = "EconomicCalendar",
+    Chat = "Chat"
 }
 
 @Injectable()
@@ -40,7 +41,7 @@ export class RightSidePanelStateService {
     static GetDefaultState(component?: Components): RightSidePanelState {
         return {
             widgetState: {},
-            component: component || Components.SonarFeed
+            component: component || Components.TrendIndex
         };
     }
 
@@ -79,7 +80,11 @@ export class RightSidePanelStateService {
         }
 
         if (this._rightSidePanelState.component === Components.Backtest) {
-            return Components.SonarFeed;
+            return Components.TrendIndex;
+        } 
+        
+        if (this._rightSidePanelState.component === Components.SonarFeed) {
+            return Components.TrendIndex;
         }
 
         return this._rightSidePanelState.component;

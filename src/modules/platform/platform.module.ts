@@ -127,6 +127,7 @@ import { BreakfreeTradingSocialModule } from 'modules/BreakfreeTradingSocial';
 import { SocialFeedModule } from 'modules/SocialFeed/social-feed.module';
 import { RTDPageModule } from 'modules/RTDPage/rtd-page.module';
 import { TrendIndexModule } from 'modules/TrendIndex/trendindex.module';
+import { ChatBroComponent } from './components/chat-component/chat.component';
 
 export const REDUCER_TOKEN = new InjectionToken('Reducer token');
 
@@ -145,7 +146,8 @@ export const REDUCER_TOKEN = new InjectionToken('Reducer token');
         PlatformSidebarComponent,
         WorkspacesComponent,
         LayoutNameModalComponent,
-        OpenLayoutModalComponent
+        OpenLayoutModalComponent,
+        ChatBroComponent
     ],
     imports: [
         CommonModule,

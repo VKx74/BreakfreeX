@@ -1,9 +1,5 @@
 import { Component, ElementRef, Input } from "@angular/core";
-import { ChatbroService } from "@app/services/traking/ChatbroService";
-import { GTMTrackingService } from "@app/services/traking/gtm.tracking.service";
 import { Content } from "modules/Academy/models/dto";
-import { ContentSectors } from "modules/Academy/models/models";
-import { Intercom } from "ng-intercom";
 import { Subject } from "rxjs/internal/Subject";
 
 @Component({
