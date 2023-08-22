@@ -57,6 +57,11 @@
                 </color-selector>
             </div> -->
             <div class="widget-selector-toolbar">
+                <div class="chat-widget widget-selector-icon" (click)="selectComponent(Components.Chat)" tooltip
+                [class.active]="SelectedComponent === Components.Chat && !collapsed"
+                [matTooltip]="'chatWidget' | translate">
+                <i class="fa fa-wechat" aria-hidden="true"></i>
+                </div>
                 <!-- <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
                     [class.active]="SelectedComponent === Components.Sonar && !collapsed" tooltip
                     [matTooltip]="'sonarWidget' | translate">
@@ -107,11 +112,7 @@
                     [matTooltip]="'supportWidget' | translate">
                     <i class="fa fa-life-ring" aria-hidden="true"></i>
                 </div>
-                <div class="chat-widget widget-selector-icon" (click)="selectComponent(Components.Chat)" tooltip
-                    [class.active]="SelectedComponent === Components.Chat && !collapsed"
-                    [matTooltip]="'chatWidget' | translate">
-                    <i class="fa fa-wechat" aria-hidden="true"></i>
-                </div>
+
                 <div class="admin-widget widget-selector-icon" *ngIf="isStuff" routerLink="/admin" tooltip
                     [matTooltip]="'adminPanel' | translate">
                     <i class="fa fa-user-circle-o" aria-hidden="true"></i>
