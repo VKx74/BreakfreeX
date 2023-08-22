@@ -3,6 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { PlatformTranslateService } from "@platform/localization/token";
 import { ChatbroService } from '@app/services/traking/ChatbroService';
 import { ThemeService } from '@app/services/theme.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'chat-bro',
@@ -16,9 +17,11 @@ import { ThemeService } from '@app/services/theme.service';
     ]
 })
 export class ChatBroComponent {
+    private _themeSubscription: Subscription;
+
     constructor(private _chatbroService: ChatbroService, private _themeService: ThemeService) {
         let currentTheme = this._themeService.activeTheme;
-        this._themeService.activeTheme$.subscribe((theme) => {
+        this._themeSubscription = this._themeService.activeTheme$.subscribe((theme) => {
             if (currentTheme !== theme) {
                 this._chatbroService.loadOnDashboard();
                 currentTheme = theme;
@@ -32,6 +35,10 @@ export class ChatBroComponent {
 
     ngOnDestroy() {
         this._chatbroService.cancelLoadingLoadOnDashboard();
+
+        if (this._themeSubscription) {
+            this._themeSubscription.unsubscribe();
+        }
     }
 
     showChat() {

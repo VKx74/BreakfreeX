@@ -22,9 +22,23 @@ import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.compone
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
 import { DataTableComponent } from "modules/datatable/components/data-table/data-table.component";
 
+const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
+const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
+const Bounds = ["DE10YB_EUR", "UK100_GBP", "USB02Y_USD", "USB30Y_USD"];
+const Commodities = ["BCO_USD", "CORN_USD", "NATGAS_USD", "SOYBN_USD", "WHEAT_USD", "WTICO_USD", "XCU_USD"];
+const Crypto = ["BTCUSDT", "ETHUSDT"];
+const OtherMarkets = "Markets";
+const UpTrending = "Uptrending";
+const DownTrending = "Downtrending";
 const TopUpTrending = "Top Uptrending";
 const TopDownTrending = "Top Downtrending";
-const AllInstruments = "Markets";
+
+interface ISymbolGroup {
+    group: string;
+    strength: number;
+    count: number;
+    avgStrength: number;
+}
 
 export interface ITrendIndexComponentState {
 }
@@ -53,7 +67,7 @@ interface ITrendIndexBarChartDataVM {
 }
 
 class TrendIndexVM {
-    type: string = AllInstruments;
+    type: string;
     avg_strength: { [id: string]: number; };
 
     id: string;
@@ -188,7 +202,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _tradableInstruments: string[] = [];
     private _userAutoTradingInfoData: IUserAutoTradingInfoData;
 
-    public groups: string[] = [TopUpTrending, TopDownTrending, AllInstruments];
+    public groups: string[] = [];
     public groupingField: string = "type";
 
     public get hasAccess(): boolean {
@@ -222,7 +236,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     get userAutoTradingInfoData(): IUserAutoTradingInfoData {
         return this._userAutoTradingInfoData;
     }
-    
+
 
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
@@ -315,29 +329,100 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 } catch (ex) { }
             }
 
-            this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
-            this.vm = this.vm.slice();
-
-            this.vm.forEach((_) => {
-                _.type = AllInstruments;
-            });
-            if (this.vm.length > 18) {
-                this.vm.slice(0, 9).forEach((_) => {
-                    _.type = TopUpTrending;
-                });
-
-                let downtrending = this.vm.slice(-9);
-                downtrending.forEach((_) => {
-                    _.type = TopDownTrending;
-                });
-                downtrending.reverse();
-                this.vm.splice(-9);
-                this.vm.push(...downtrending);
-            }
+            this.rankByGroups();
+            // this.rankByTrending();
 
             this.loading = false;
             this._changesDetected = true;
         });
+    }
+
+    private rankByTrending() {
+        this.vm.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
+
+        this.vm.forEach((_) => {
+            _.type = OtherMarkets;
+        });
+        
+        if (this.vm.length > 18) {
+            this.vm.slice(0, 9).forEach((_) => {
+                _.type = TopUpTrending;
+            });
+
+            let downtrending = this.vm.slice(-9);
+            downtrending.forEach((_) => {
+                _.type = TopDownTrending;
+            });
+            downtrending.reverse();
+            this.vm.splice(-9);
+            this.vm.push(...downtrending);
+        }
+
+        this.groups = [TopUpTrending, TopDownTrending, OtherMarkets];
+
+        this.vm = this.vm.slice();
+    }
+
+    private rankByGroups() {
+        for (let item of this.vm) {
+            if (Math.abs(item.totalStrength) * 100 > 21) {
+                if (Metals.indexOf(item.id) >= 0) {
+                    item.type = `Metals`;
+                } else if (Indices.indexOf(item.id) >= 0) {
+                    item.type = `Indices`;
+                } else if (Bounds.indexOf(item.id) >= 0) {
+                    item.type = `Bounds`;
+                } else if (Commodities.indexOf(item.id) >= 0) {
+                    item.type = `Commodities`;
+                } else if (Crypto.indexOf(item.id) >= 0) {
+                    item.type = `Crypto`;
+                } else {
+                    let currencies = item.id.split("_");
+                    item.type = `${currencies[1]}`;
+                }
+            }
+
+            if (!item.type) {
+                item.type = OtherMarkets;
+            }
+        }
+
+        let groupsData: ISymbolGroup[] = [];
+        for (let item of this.vm) {
+            let g = groupsData.find((_) => _.group === item.type);
+            if (!g) {
+                g = {
+                    group: item.type,
+                    count: 1,
+                    strength: Math.abs(item.totalStrength),
+                    avgStrength: 0
+                };
+                groupsData.push(g);
+            } else {
+                g.count += 1;
+                g.strength += Math.abs(item.totalStrength);
+            }
+        }
+
+        for (let gd of groupsData) {
+            if (gd.group === OtherMarkets) {
+                continue;
+            }
+
+            gd.avgStrength = gd.strength / gd.count;
+        }
+
+        groupsData.sort((a1, a2) => Math.abs(a1.avgStrength) > Math.abs(a2.avgStrength) ? -1 : 1);
+
+        this.groups = groupsData.map((_) => _.group);
+
+        let usedInGroups = this.vm.filter((_) => _.type !== OtherMarkets);
+        let notUsedInGroups = this.vm.filter((_) => _.type === OtherMarkets);
+
+        usedInGroups.sort((a1, a2) => Math.abs(a1.totalStrength) > Math.abs(a2.totalStrength) ? -1 : 1);
+        notUsedInGroups.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
+
+        this.vm = [...usedInGroups, ...notUsedInGroups];
     }
 
     protected loadAutoTradingInstruments() {
