@@ -685,7 +685,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
 
         for (let symbol of this._tradableInstruments) {
-            if (symbol.toUpperCase() === item.symbol.toUpperCase()) {
+            let s1 = symbol.replace("_", "").toUpperCase();
+            let s2 = item.symbol.replace("_", "").toUpperCase();
+            if (s1 === s2) {
                 return true;
             }
         }
