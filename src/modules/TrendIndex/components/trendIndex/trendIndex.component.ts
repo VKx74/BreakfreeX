@@ -409,7 +409,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 continue;
             }
 
-            gd.avgStrength = gd.strength / gd.count;
+            // gd.avgStrength = gd.strength / gd.count;
+            gd.avgStrength = gd.strength;
         }
 
         groupsData.sort((a1, a2) => Math.abs(a1.avgStrength) > Math.abs(a2.avgStrength) ? -1 : 1);
