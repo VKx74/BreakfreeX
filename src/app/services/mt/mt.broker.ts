@@ -62,7 +62,7 @@ export abstract class MTBroker implements IMTBroker {
     protected _lastUpdate: number;
 
     protected _endHistory: number = Math.round((new Date().getTime() / 1000) + (60 * 60 * 24));
-    protected _startHistory: number = this._endHistory - (60 * 60 * 24 * 30);
+    protected _startHistory: number = this._endHistory - (60 * 60 * 24 * 7);
 
     protected _historyInitialized: boolean = false;
     protected _ordersInitialized: boolean = false;
