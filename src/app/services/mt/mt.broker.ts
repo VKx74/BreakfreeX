@@ -1133,27 +1133,27 @@ export abstract class MTBroker implements IMTBroker {
             if (!data.Data) {
                 return;
             }
-
-            const oldHistory = this._ordersHistory.slice();
+        
+            const oldHistoryMap = this._ordersHistory.reduce((accumulator, order) => {
+                accumulator[order.Id] = order;
+                return accumulator;
+            }, {});
+        
             this._ordersHistory = [];
-
-            for (const order of data.Data) {
-                const ord = this._createHistoricalOrder(order);
-
-                // if (ord.Type !== OrderTypes.Market) {
-                //     continue;
-                // }
-
-                this._ordersHistory.push(ord);
-
-                const existingOrder = oldHistory.find(_ => _.Id === ord.Id);
+        
+            const newOrders = data.Data.map(order => this._createHistoricalOrder(order));
+            this._ordersHistory = this._ordersHistory.concat(newOrders);
+        
+            newOrders.forEach(ord => {
+                const existingOrder = oldHistoryMap[ord.Id];
                 if (!existingOrder) {
                     this._checkHistoricalOrderChanges(ord);
                 }
-            }
+            });
+        
             this._ordersHistory.sort((a, b) => b.CloseTime - a.CloseTime);
             this._onHistoricalOrdersUpdated.next(this._ordersHistory);
-
+        
             if (this._ordersHistory.length) {
                 this._historyInitialized = true;
             }
