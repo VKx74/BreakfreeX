@@ -206,15 +206,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public groupingField: string = "type";
 
     public get hasAccess(): boolean {
-        return this._identityService.isAuthorizedCustomer;
+        return true;
+        // return this._identityService.isAuthorizedCustomer;
     }
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
-    }
-
-    get isAuthorizedCustomer(): boolean {
-        return this._identityService.isAuthorizedCustomer;
     }
 
     get ComponentIdentifier() {
