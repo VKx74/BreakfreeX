@@ -1,24 +1,24 @@
 <div class="broker-select-container" >
 
-    <div class="account-connect-prompt" *ngIf="!connectExistingAccount && !createNewAccount">
+    <div class="account-connect-prompt groupx" *ngIf="!connectExistingAccount && !createNewAccount">
         <div class="connecttitle">Connect your trading account.</div>
         <button class="crypto-button crypto-button_action cursor-pointer"
                 (click)="connectExistingAccount = true; createNewAccount = false">
-           Connect Existing Trading Account
+           Connect Trading Account
         </button>
         <button class="crypto-button crypto-button_action cursor-pointer"
                 (click)="createNewAccount = true; connectExistingAccount = false">
-            Proceed to create Trading Account
+            Create Trading Account
         </button>
     </div>
 
     <div class="selected-option" *ngIf="connectExistingAccount || createNewAccount" (click)="connectExistingAccount = false; createNewAccount = false">
-        {{ connectExistingAccount ? 'Connect Existing Trading Account' : 'Proceed to create Trading Account' }}
+        {{ connectExistingAccount ? '> Connect Trading Account' : '> Create Trading Account' }}
     </div>
     <div class="groupholders">
 
-        <div class="icmarket-group" *ngIf="createNewAccount || (connectExistingAccount && !showBinanceGroupOptions && !showMtGroupOptions)">
-            <div class="icmarketgroupdiv" (click)="showICMarketGroupOptions = !showICMarketGroupOptions; showBinanceGroupOptions = false; showMtGroupOptions = false" >
+        <div class="groupx" *ngIf="createNewAccount || (connectExistingAccount && !showBinanceGroupOptions && !showMtGroupOptions)">
+            <div class="groupix" (click)="showICMarketGroupOptions = !showICMarketGroupOptions; showBinanceGroupOptions = false; showMtGroupOptions = false" >
                 <img src="assets/img/icm.webp" alt="IC Market Group Icon" > <div class="groupname">IC Market</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
             </div>
             <ng-container *ngIf="showICMarketGroupOptions">
@@ -52,9 +52,9 @@
             </ng-container>
         </div>
 
-        <div class="binance-group" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showMtGroupOptions">
-            <div class="binancegroupdiv" (click)="showBinanceGroupOptions = !showBinanceGroupOptions; showICMarketGroupOptions = false; showMtGroupOptions = false" >
-                <img src="assets/img/b.svg" alt="Binance Group Icon" ><div class="groupname">Binance </div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
+        <div class="groupx" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showMtGroupOptions">
+            <div class="groupix" (click)="showBinanceGroupOptions = !showBinanceGroupOptions; showICMarketGroupOptions = false; showMtGroupOptions = false" >
+                <img src="assets/img/b.svg" alt="Binance Group Icon" ><div class="groupname">Binance </div> <div class="stars"></div>
             </div>
 
             <ng-container *ngIf="showBinanceGroupOptions">
@@ -74,9 +74,9 @@
 
 
         
-        <div class="mt-group" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showBinanceGroupOptions">
-            <div class="mtgroupdiv" (click)="showMtGroupOptions = !showMtGroupOptions; showICMarketGroupOptions = false; showBinanceGroupOptions = false" >
-                <img src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname"> Metatrader</div><div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
+        <div class="groupx" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showBinanceGroupOptions">
+            <div class="groupix" (click)="showMtGroupOptions = !showMtGroupOptions; showICMarketGroupOptions = false; showBinanceGroupOptions = false" >
+                <img src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname"> Metatrader</div><div class="stars"></div>
             </div>
             <ng-container *ngIf="showMtGroupOptions">
                 <div class="optioncontainer">
