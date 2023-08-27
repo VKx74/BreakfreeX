@@ -1,15 +1,21 @@
 <div class="broker-select-container m-top-10">
-    <selector *ngIf="!isBrokerConnected"
-              class="bordered"
-              [options]="availableBrokers"
-              [selectedOption]="selectedBroker"
-              [placeholder]="'addAccount' | translate"
-              [optionCaption]="captionText"
-              (optionClick)="onBrokerSelect($event)"></selector>
-
-    <div class="disconnect-broker" *ngIf="!isBrokerConnected" [class.disabled]="!selectedBroker">
-        <button class="crypto-button crypto-button_action cursor-pointer"
-                (click)="connectCurrentBroker()">{{'tradeManager.connect' | translate}}</button>
+    <div class="mt-group">
+        <div *ngFor="let broker of availableBrokers; let i = index">
+            <ng-container *ngIf="broker.broker === 'MT4' || broker.broker === 'MT5'">
+                <button class="crypto-button crypto-button_action cursor-pointer"
+                        [class.selected]="selectedBroker === broker"
+                        (click)="onBrokerSelect(broker); connectCurrentBroker()">{{captionText(broker) | async}}</button>
+            </ng-container>
+        </div>
+    </div>
+    <div class="binance-group">
+        <div *ngFor="let broker of availableBrokers; let i = index">
+            <ng-container *ngIf="broker.broker === 'Binance' || broker.broker === 'BinanceFuturesUSD' || broker.broker === 'BinanceFuturesCOIN'">
+                <button class="crypto-button crypto-button_action cursor-pointer"
+                        [class.selected]="selectedBroker === broker"
+                        (click)="onBrokerSelect(broker); connectCurrentBroker()">{{captionText(broker) | async}}</button>
+            </ng-container>
+        </div>
     </div>
     <div class="disconnect-broker" *ngIf="isBrokerConnected">
         <button class="crypto-button crypto-button_danger cursor-pointer"

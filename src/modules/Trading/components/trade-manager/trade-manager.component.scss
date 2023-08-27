@@ -64,7 +64,11 @@ object {
 
 .shiftup{
   padding-bottom: 25px;
-  width: 250px;
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @include themify($themes, true) {

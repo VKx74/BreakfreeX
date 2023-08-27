@@ -68,7 +68,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
         const fundingLiveAccounts = this._brokerService.getBFTAccount(EBrokerInstance.BFTFundingLive);
         const fundingDemoAccounts = this._brokerService.getBFTAccount(EBrokerInstance.BFTFundingDemo);
         const demoAccounts = this._brokerService.getBFTAccount(EBrokerInstance.BFTDemo);
-
+/* 
         if (fundingLiveAccounts && fundingLiveAccounts.length > 1) {
             for (const liveAccount of fundingLiveAccounts) {
                 this.availableBrokers.unshift({
@@ -94,7 +94,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
                 broker: EBrokerInstance.BFTFundingDemo
             });
         } 
-        
+         */
         
         // if (demoAccounts && demoAccounts.length > 1) {
         //     for (const liveAccount of demoAccounts) {
@@ -140,9 +140,9 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
             case EBrokerInstance.Binance: return of(`Binance (Spot)${id}`);
             case EBrokerInstance.BinanceFuturesUSD: return of(`Binance (USDT Futures)${id}`);
             case EBrokerInstance.BinanceFuturesCOIN: return of(`Binance (COIN Futures)${id}`);
-            case EBrokerInstance.BFTDemo: return of(`Breakfree Trading - Demo${id}`);
-            case EBrokerInstance.BFTFundingDemo: return of(`Breakfree Funding - Stage 1${id}`);
-            case EBrokerInstance.BFTFundingLive: return of(`Breakfree Funding - Live${id}`);
+          //  case EBrokerInstance.BFTDemo: return of(`Breakfree Trading - Demo${id}`);
+          //  case EBrokerInstance.BFTFundingDemo: return of(`Breakfree Funding - Stage 1${id}`);
+          //  case EBrokerInstance.BFTFundingLive: return of(`Breakfree Funding - Live${id}`);
         }
 
         return of("Undefined");

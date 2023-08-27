@@ -1,5 +1,26 @@
-@import "mixins/themify";
-@import "themes/themes";
+.mt-group, .binance-group {
+  display: flex;
+  column-gap: 9px;
+  row-gap: 9px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+
+}
+
+.mt-group div, .binance-group div {
+  display: flex;
+  -moz-column-gap: 9px;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.broker-select-container .crypto-button {
+  width: 100%;
+}
 
 .disconnect-broker {
   margin-top: 20px;
@@ -8,6 +29,14 @@
   }
 }
 
+
+.broker-select-container{
+  column-gap: 9px;
+  display: flex;
+  row-gap: 9px;
+  flex-direction: row;
+  
+}
 
 .section-title { 
   margin-top: 10px;
@@ -19,10 +48,7 @@
   text-transform: uppercase;
 }
 
-
-@include themify($themes, true) {
-
-  .section-title {
-    color: themed('valueTextColor');
-  }
+.section-title {
+  color: #000; /* Replace with your desired color */
 }
+
