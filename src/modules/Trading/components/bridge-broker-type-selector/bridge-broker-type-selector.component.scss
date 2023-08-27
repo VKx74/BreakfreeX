@@ -1,41 +1,232 @@
-.mt-group, .binance-group {
-  display: flex;
-  column-gap: 9px;
-  row-gap: 9px;
-  flex-direction: column;
-  flex-wrap: wrap;
+:host {
   width: 100%;
+
+
+
+/deep/ bridge-broker-connector div {
+  width: 100%;
+  display: flex;
 
 }
 
-.mt-group div, .binance-group div {
+
+
+.mt-group, .binance-group, .icmarket-group {
+  display: flex;
+  -moz-column-gap: 9px;
+  column-gap: 9px;
+  row-gap: 9px;
+  flex-direction: row;
+
+  align-content: center;
+  justify-content: center;
+  align-items: flex-start;
+  transition: all 0.5s ease-in-out;
+
+}
+.selected-option, .connecttitle{
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.connecttitle, .selected-option {
+  width: 100%;
+  background: #eee;
+  padding: 6px 9px;
+  border-radius: 3px;
+  font-weight: 600 !important;
+}
+
+.stars {
+  display: flex;
+  column-gap: 3px;
+  font-size: 14px;
+}
+
+.mt-group button, .binance-group button, .icmarket-group button {
   display: flex;
   -moz-column-gap: 9px;
   column-gap: 9px;
   row-gap: 9px;
   width: 100%;
-  flex-wrap: wrap;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  min-width: 150px !important;
+  font-weight: 500;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #eee;
+  border-radius: 9px;
+  transition: all 0.5s ease-in-out;
+}
+
+.mtgroup button, .binance-group button, .icmarket-group button {
+  display: flex;
+  width: auto !important;
+  -moz-column-gap: 9px;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-direction: row;
+  font-weight: 500;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  height: 30px;
+  
+  width: 100% !important;
+  transition: all 0.5s ease-in-out;
+
+  &:hover {
+    background-color: #eee;
+    transform: scale(1.05);
+  }
+}
+
+.icmarket-account-question {
+  row-gap: 9px;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 500;
+  width: 100%;
+  height: 100%;
+  min-width: 220px;
+  justify-content: center;
+  transition: all 0.5s ease-in-out;
+
+  width: 260px;
+
+}
+.binancegroupdiv {
+  display: flex;
+  -moz-column-gap: 9px;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  min-width: 150px !important;
+  max-width: 150px;
+  font-weight: 500;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #eee;
+  border-radius: 9px;
+  font-size: 12px;
+
+  width: 260px;
+
+  transition: all 0.5s ease-in-out;
+}
+
+.mtgroupdiv {
+  display: flex;
+  -moz-column-gap: 9px;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  max-width: 150px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  min-width: 150px !important;
+  font-weight: 500;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #eee;
+  border-radius: 9px;
+  font-size: 12px;
+  transition: all 0.5s ease-in-out;
+
+  width: 260px;
+
+}
+
+.icmarketgroupdiv {
+  display: flex;
+  max-width: 150px;
+  -moz-column-gap: 9px;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  min-width: 150px !important;
+  font-weight: 500;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #eee;
+  border-radius: 9px;
+  font-size: 12px;
+
+  width: 260px;
+
+  transition: all 0.5s ease-in-out;
+}
+
+img {
+  width: 42px;
+  display: flex;
+  margin-bottom: 9px;
+  transition: all 0.5s ease-in-out;
+}
+
+.groupholders {
+  display: flex;
+  column-gap: 8px;
+  flex-direction: row;
+  transition: all 0.5s ease-in-out;
+}
+
+.account-connect-prompt {
+  width: 100%;
+  min-height: 220px;
+  display: flex;
+  row-gap: 9px;
+
+  justify-content: flex-start;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
 }
 
 .broker-select-container .crypto-button {
   width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.5s ease-in-out;
+  height: auto;
+}
+.optioncontainer {
+  display: flex;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-direction: column;
 }
 
 .disconnect-broker {
   margin-top: 20px;
   button {
     width: 100%;
+    transition: all 0.5s ease-in-out;
   }
 }
-
 
 .broker-select-container{
   column-gap: 9px;
   display: flex;
   row-gap: 9px;
-  flex-direction: row;
-  
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
 }
 
 .section-title { 
@@ -46,9 +237,11 @@
   letter-spacing: normal;
   text-align: left;
   text-transform: uppercase;
+  transition: all 0.5s ease-in-out;
 }
 
 .section-title {
   color: #000; /* Replace with your desired color */
+  transition: all 0.5s ease-in-out;
 }
-
+}

@@ -6,6 +6,13 @@
   .over-head {
     z-index: 2;
   }
+  bridge-broker-connector {
+    width: 100%;
+    display: flex;
+  }
+  bridge-broker-connector div {
+    width: 100%;
+  }
 
   .demo-broker-container {
     width: 100%;
@@ -67,8 +74,12 @@ object {
   width: 100%;
   max-width: 960px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow: scroll;
+  height: 100%;
+  padding: 15px;
+  
 }
 
 @include themify($themes, true) {

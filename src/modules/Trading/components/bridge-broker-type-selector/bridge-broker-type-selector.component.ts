@@ -9,11 +9,16 @@ import bind from "bind-decorator";
 import { of } from 'rxjs';
 import { AlertService } from '@alert/services/alert.service';
 import { TranslateService } from '@ngx-translate/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 interface BrokerInstanceDescription {
     broker: EBrokerInstance;
     brokerId?: any;
 }
+
+
 
 @Component({
     selector: 'bridge-broker-type-selector',
@@ -23,7 +28,8 @@ interface BrokerInstanceDescription {
 export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     public availableBrokers: BrokerInstanceDescription[] = [];
     public selectedBroker: BrokerInstanceDescription;
-
+    public showMtGroupOptions: boolean = false;
+    public showBinanceGroupOptions: boolean = false;
     public loading: boolean = false;
 
     get currentBrokerInstance(): EBrokerInstance {
@@ -135,11 +141,11 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
             id = ` ${value.brokerId}`;
         }
         switch (value.broker) {
-            case EBrokerInstance.MT4: return of(`Metatrader 4 (MT4)${id}`);
-            case EBrokerInstance.MT5: return of(`Metatrader 5 (MT5)${id}`);
-            case EBrokerInstance.Binance: return of(`Binance (Spot)${id}`);
-            case EBrokerInstance.BinanceFuturesUSD: return of(`Binance (USDT Futures)${id}`);
-            case EBrokerInstance.BinanceFuturesCOIN: return of(`Binance (COIN Futures)${id}`);
+            case EBrokerInstance.MT4: return of(`Metatrader 4${id}`);
+            case EBrokerInstance.MT5: return of(`Metatrader 5${id}`);
+            case EBrokerInstance.Binance: return of(`Spot${id}`);
+            case EBrokerInstance.BinanceFuturesUSD: return of(`USDT Futures${id}`);
+            case EBrokerInstance.BinanceFuturesCOIN: return of(`COIN Futures${id}`);
           //  case EBrokerInstance.BFTDemo: return of(`Breakfree Trading - Demo${id}`);
           //  case EBrokerInstance.BFTFundingDemo: return of(`Breakfree Funding - Stage 1${id}`);
           //  case EBrokerInstance.BFTFundingLive: return of(`Breakfree Funding - Live${id}`);

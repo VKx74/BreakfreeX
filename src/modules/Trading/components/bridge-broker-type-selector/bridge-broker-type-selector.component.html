@@ -1,22 +1,100 @@
-<div class="broker-select-container m-top-10">
-    <div class="mt-group">
-        <div *ngFor="let broker of availableBrokers; let i = index">
-            <ng-container *ngIf="broker.broker === 'MT4' || broker.broker === 'MT5'">
-                <button class="crypto-button crypto-button_action cursor-pointer"
-                        [class.selected]="selectedBroker === broker"
-                        (click)="onBrokerSelect(broker); connectCurrentBroker()">{{captionText(broker) | async}}</button>
+<div class="broker-select-container" >
+
+    <div class="account-connect-prompt" *ngIf="!connectExistingAccount && !createNewAccount">
+        <div class="connecttitle">Connect your trading account.</div>
+        <button class="crypto-button crypto-button_action cursor-pointer"
+                (click)="connectExistingAccount = true; createNewAccount = false">
+           Connect Existing Trading Account
+        </button>
+        <button class="crypto-button crypto-button_action cursor-pointer"
+                (click)="createNewAccount = true; connectExistingAccount = false">
+            Proceed to create Trading Account
+        </button>
+    </div>
+
+    <div class="selected-option" *ngIf="connectExistingAccount || createNewAccount" (click)="connectExistingAccount = false; createNewAccount = false">
+        {{ connectExistingAccount ? 'Connect Existing Trading Account' : 'Proceed to create Trading Account' }}
+    </div>
+    <div class="groupholders">
+
+        <div class="icmarket-group" *ngIf="createNewAccount || (connectExistingAccount && !showBinanceGroupOptions && !showMtGroupOptions)">
+            <div class="icmarketgroupdiv" (click)="showICMarketGroupOptions = !showICMarketGroupOptions; showBinanceGroupOptions = false; showMtGroupOptions = false" >
+                <img src="assets/img/icm.webp" alt="IC Market Group Icon" > <div class="groupname">IC Market</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
+            </div>
+            <ng-container *ngIf="showICMarketGroupOptions">
+                <div class="icmarket-account-question" (click)="showICMarketAccountOptions = !showICMarketAccountOptions">
+                    Do you have an ICMarket account already?
+                    <button class="crypto-button crypto-button_action cursor-pointer"
+                            (click)="hasICMarketAccount = true">
+                        Yes, I already have an ICMarket account
+                    </button>
+                    <button class="crypto-button crypto-button_action cursor-pointer"
+                            (click)="hasICMarketAccount = false">
+                        No, I do not have an ICMarket account
+                    </button>
+                </div>
+                <ng-container *ngIf="showICMarketAccountOptions && hasICMarketAccount">
+                    <ng-container *ngFor="let broker of availableBrokers; let i = index">
+                        <button *ngIf="broker.broker === 'MT4' || broker.broker === 'MT5'"
+                                class="crypto-button crypto-button_action cursor-pointer"
+                                [class.selected]="selectedBroker === broker"
+                                (click)="onBrokerSelect(broker); connectCurrentBroker()">
+                            {{captionText(broker) | async}}
+                        </button>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="showICMarketAccountOptions && !hasICMarketAccount">
+                    <button class="crypto-button crypto-button_action cursor-pointer"
+                            (click)="navigateToICMarketSignup()">
+                        Sign up on ICMarket
+                    </button>
+                </ng-container>
             </ng-container>
         </div>
-    </div>
-    <div class="binance-group">
-        <div *ngFor="let broker of availableBrokers; let i = index">
-            <ng-container *ngIf="broker.broker === 'Binance' || broker.broker === 'BinanceFuturesUSD' || broker.broker === 'BinanceFuturesCOIN'">
-                <button class="crypto-button crypto-button_action cursor-pointer"
-                        [class.selected]="selectedBroker === broker"
-                        (click)="onBrokerSelect(broker); connectCurrentBroker()">{{captionText(broker) | async}}</button>
+
+        <div class="binance-group" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showMtGroupOptions">
+            <div class="binancegroupdiv" (click)="showBinanceGroupOptions = !showBinanceGroupOptions; showICMarketGroupOptions = false; showMtGroupOptions = false" >
+                <img src="assets/img/b.svg" alt="Binance Group Icon" ><div class="groupname">Binance </div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
+            </div>
+
+            <ng-container *ngIf="showBinanceGroupOptions">
+                <div class="optioncontainer">
+                <ng-container *ngFor="let broker of availableBrokers; let i = index">
+                    <button *ngIf="broker.broker === 'Binance' || broker.broker === 'BinanceFuturesUSD' || broker.broker === 'BinanceFuturesCOIN'"
+                            class="crypto-button crypto-button_action cursor-pointer"
+                            [class.selected]="selectedBroker === broker"
+                            (click)="onBrokerSelect(broker); connectCurrentBroker()">
+                        {{captionText(broker) | async}}
+                    </button>
+                </ng-container>
+            </div>
             </ng-container>
         </div>
+
+
+
+        
+        <div class="mt-group" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showBinanceGroupOptions">
+            <div class="mtgroupdiv" (click)="showMtGroupOptions = !showMtGroupOptions; showICMarketGroupOptions = false; showBinanceGroupOptions = false" >
+                <img src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname"> Metatrader</div><div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
+            </div>
+            <ng-container *ngIf="showMtGroupOptions">
+                <div class="optioncontainer">
+                <ng-container *ngFor="let broker of availableBrokers; let i = index">
+                    <button *ngIf="broker.broker === 'MT4' || broker.broker === 'MT5'"
+                            class="crypto-button crypto-button_action cursor-pointer"
+                            [class.selected]="selectedBroker === broker"
+                            (click)="onBrokerSelect(broker); connectCurrentBroker()">
+                        {{captionText(broker) | async}}
+                    </button>
+                </ng-container>
+            </div>
+            </ng-container>
+        </div>
+    
     </div>
+
+
     <div class="disconnect-broker" *ngIf="isBrokerConnected">
         <button class="crypto-button crypto-button_danger cursor-pointer"
                 (click)="disconnectCurrentBroker()">{{'tradeManager.disconnect' | translate}}</button>
