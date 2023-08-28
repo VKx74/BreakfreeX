@@ -63,7 +63,8 @@
 
         <div class="groupx options" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showMtGroupOptions">
             <div class="groupix" (click)="showBinanceGroupOptions = !showBinanceGroupOptions; showICMarketGroupOptions = false; showMtGroupOptions = false" >
-                <img class="imgx" src="assets/img/b.svg" alt="Binance Group Icon" ><div class="groupname">Binance </div> <div class="stars"></div>
+                <img class="imgx" src="assets/img/b.svg" alt="Binance Group Icon" ><div class="groupname">Binance </div> 
+                <!-- <div class="stars"></div> -->
             </div>
 
             <ng-container *ngIf="showBinanceGroupOptions">
@@ -85,7 +86,8 @@
         
         <div class="groupx options" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showBinanceGroupOptions">
             <div class="groupix" (click)="showMtGroupOptions = !showMtGroupOptions; showICMarketGroupOptions = false; showBinanceGroupOptions = false" >
-                <img class="imgx" src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname"> Metatrader</div><div class="stars"></div>
+                <img class="imgx" src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname"> Metatrader</div>
+                <!-- <div class="stars"></div> -->
             </div>
             <ng-container *ngIf="showMtGroupOptions">
                 <div class="optioncontainer">
