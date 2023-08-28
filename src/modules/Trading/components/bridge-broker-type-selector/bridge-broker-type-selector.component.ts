@@ -30,6 +30,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     public selectedBroker: BrokerInstanceDescription;
     public showMtGroupOptions: boolean = false;
     public showBinanceGroupOptions: boolean = false;
+    public showICMarketGroupOptions: boolean = false; // Add this line
     public loading: boolean = false;
     public connectExistingAccount: boolean = false; // Add this line
     public createNewAccount: boolean = false; // Add this line
