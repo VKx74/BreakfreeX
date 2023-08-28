@@ -27,6 +27,18 @@
   align-items: flex-start;
 }
 
+
+.imgx {
+  width: 46px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  overflow: hidden;
+  margin-bottom: 9px;
+}
+
 .groupx.options {
   display: flex;
   column-gap: 9px;
