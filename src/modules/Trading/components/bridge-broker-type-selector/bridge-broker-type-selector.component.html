@@ -17,7 +17,7 @@
     </div>
     <div class="groupholders">
 
-        <div class="groupx" *ngIf="createNewAccount || (connectExistingAccount && !showBinanceGroupOptions && !showMtGroupOptions)">
+        <div class="groupx options" *ngIf="createNewAccount || (connectExistingAccount && !showBinanceGroupOptions && !showMtGroupOptions)">
             <div class="groupix" (click)="showICMarketGroupOptions = !showICMarketGroupOptions; showBinanceGroupOptions = false; showMtGroupOptions = false" >
                 <img src="assets/img/icm.webp" alt="IC Market Group Icon" > <div class="groupname">IC Market</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
             </div>

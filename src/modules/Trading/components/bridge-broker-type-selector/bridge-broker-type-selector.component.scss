@@ -1,19 +1,23 @@
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
 :host {
   width: 100%;
-
-
+  height: 100%;
+  display: flex;
+  overflow: auto;
+}
 
 /deep/ bridge-broker-connector div {
   width: 100%;
   display: flex;
-
+  align-items: center;
+  justify-content: center;
 }
-
-
 
 .groupx {
   display: flex;
-  -moz-column-gap: 9px;
   column-gap: 9px;
   row-gap: 9px;
   width: 100%;
@@ -21,18 +25,32 @@
   align-content: center;
   justify-content: space-between;
   align-items: flex-start;
-  transition: all 0.22 ease-in-out;
-
-
 }
-.selected-option, .connecttitle{
+
+.groupx.options {
+  display: flex;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: unset !important;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.connecttitle{
   font-size: 12px;
   font-weight: 500;
 }
 
+.selected-option {
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
 .connecttitle, .selected-option {
   width: 100%;
-  background: #eee;
   padding: 6px 9px;
   border-radius: 3px;
   font-weight: 600 !important;
@@ -42,12 +60,16 @@
   display: flex;
   column-gap: 3px;
   height: 20px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
- .groupx button {
+.groupname {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.groupx button {
   display: flex;
-  -moz-column-gap: 9px;
   column-gap: 9px;
   row-gap: 9px;
   width: 100%;
@@ -58,17 +80,6 @@
   min-width: 150px !important;
   font-weight: 600 !important;
   max-width: 300px;
-  background-color: transparent;
-  color: #000;
-  border: 1px solid #eee;
-  border-radius: 9px;
-  transition: all 0.22 ease-in-out;
-
-
-  &:hover {
-    background-color: #eee;
-   
-  }
 }
 
 .icmarket-account-question {
@@ -81,14 +92,12 @@
   height: 100%;
   min-width: 220px;
   justify-content: center;
-  transition: all 0.22 ease-in-out;
   width: 100%;
   align-items: center;
-
 }
+
 .groupix {
   display: flex;
-  -moz-column-gap: 9px;
   column-gap: 9px;
   row-gap: 9px;
   width: 100%;
@@ -99,37 +108,23 @@
   min-width: 150px !important;
   max-width: 150px;
   font-weight: 500;
-  background-color: transparent;
-  color: #000;
-  border: 1px solid #eee;
-  border-radius: 9px;
   font-size: 12px;
   cursor: pointer;
-
   width: 260px;
-
-  transition: all 0.22 ease-in-out;
-
-  &:hover {
-    background-color: #fafafa;
-   
-  }
+  border: 1px solid;
+    border-radius: 6px;
 }
-
-
 
 img {
   width: 42px;
   display: flex;
   margin-bottom: 9px;
-  transition: all 0.22 ease-in-out;
 }
 
 .groupholders {
   display: flex;
   column-gap: 8px;
   flex-direction: row;
-  transition: all 0.22 ease-in-out;
 }
 
 .account-connect-prompt {
@@ -138,19 +133,19 @@ img {
   display: flex;
   row-gap: 9px;  
   align-items: center;
-
   justify-content: flex-start;
   flex-direction: column;
-  transition: all 0.22 ease-in-out;
 }
 
 .broker-select-container .crypto-button {
   width: 100%;
   font-size: 12px;
   font-weight: 500;
-  transition: all 0.22 ease-in-out;
   height: auto;
+  border: 1px solid;
+    border-radius: 6px;
 }
+
 .optioncontainer {
   display: flex;
   column-gap: 9px;
@@ -164,7 +159,6 @@ img {
   margin-top: 20px;
   button {
     width: 100%;
-    transition: all 0.22 ease-in-out;
   }
 }
 
@@ -173,7 +167,6 @@ img {
   display: flex;
   row-gap: 9px;
   flex-direction: column;
-  transition: all 0.22 ease-in-out;
 }
 
 .section-title { 
@@ -184,11 +177,53 @@ img {
   letter-spacing: normal;
   text-align: left;
   text-transform: uppercase;
-  transition: all 0.22 ease-in-out;
+  transition: all 0.22s ease-in-out;
 }
 
 .section-title {
   color: #000; /* Replace with your desired color */
-  transition: all 0.22 ease-in-out;
+  transition: all 0.22s ease-in-out;
 }
+
+@include themify($themes, true) {
+  :host {
+    background: themed("appBackgroundColor");
+  }
+
+  /deep/ bridge-broker-connector div {
+    color: themed("valueTextColor");
+  }
+
+  .groupx, .groupx.options, .connecttitle, .selected-option, .groupx button, .icmarket-account-question, .groupix, img, .groupholders, .account-connect-prompt, .broker-select-container .crypto-button, .optioncontainer, .disconnect-broker button, .broker-select-container, .section-title {
+    color: themed("valueTextColor");
+    background: themed("appBackgroundColor");
+    border-color: themed("borderColor");
+  }
+
+
+ .selected-option{
+    color: themed("valueTextColor");
+    background: themed("appPanelColorx");
+    border-color: themed("borderColor");
+
+    &:hover {
+      background: themed("hoverBackground");
+    }
+  }
+
+ .connecttitle {
+    color: themed("valueTextColor");
+    background: themed("appPanelColorx");
+    border-color: themed("borderColor");
+  }
+
+.stars, .groupname  {
+    color: themed("valueTextColor");
+
+    border-color: themed("borderColor");
+  }
+
+  .groupx button:hover, .groupix:hover {
+    background: themed("hoverBackground");
+  }
 }
