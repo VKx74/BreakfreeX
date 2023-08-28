@@ -133,7 +133,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price60Strength"
-                                [StrengthValue]="vmItem.price60StrengthValue"></trend-column>
+                                [StrengthValue]="vmItem.price60StrengthValue" [VolatilityValue]="vmItem.price60VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -141,7 +141,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price300Strength"
-                                [StrengthValue]="vmItem.price300StrengthValue"></trend-column>
+                                [StrengthValue]="vmItem.price300StrengthValue" [VolatilityValue]="vmItem.price300VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -149,7 +149,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price900Strength"
-                                [StrengthValue]="vmItem.price900StrengthValue"></trend-column>
+                                [StrengthValue]="vmItem.price900StrengthValue" [VolatilityValue]="vmItem.price900VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -157,7 +157,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price3600Strength"
-                                [StrengthValue]="vmItem.price3600StrengthValue" [TrendState]="vmItem.hour1State"></trend-column>
+                                [StrengthValue]="vmItem.price3600StrengthValue" [TrendState]="vmItem.hour1State" [VolatilityValue]="vmItem.price3600VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -165,7 +165,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price14400Strength"
-                                [StrengthValue]="vmItem.price14400StrengthValue" [TrendState]="vmItem.hour4State"></trend-column>
+                                [StrengthValue]="vmItem.price14400StrengthValue" [TrendState]="vmItem.hour4State" [VolatilityValue]="vmItem.price14400VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
@@ -173,7 +173,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price86400Strength"
-                                [StrengthValue]="vmItem.price86400StrengthValue" [TrendState]="vmItem.dailyState"></trend-column>
+                                [StrengthValue]="vmItem.price86400StrengthValue" [TrendState]="vmItem.dailyState" [VolatilityValue]="vmItem.price86400VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>

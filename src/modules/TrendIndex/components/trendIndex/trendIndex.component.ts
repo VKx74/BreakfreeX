@@ -77,16 +77,22 @@ class TrendIndexVM {
     price1StrengthValue: number;
     price1Strength: ETrendIndexStrength;
     price60StrengthValue: number;
+    price60VolatilityValue: number;
     price60Strength: ETrendIndexStrength;
     price300StrengthValue: number;
+    price300VolatilityValue: number;
     price300Strength: ETrendIndexStrength;
     price900StrengthValue: number;
+    price900VolatilityValue: number;
     price900Strength: ETrendIndexStrength;
     price3600StrengthValue: number;
+    price3600VolatilityValue: number;
     price3600Strength: ETrendIndexStrength;
     price14400StrengthValue: number;
+    price14400VolatilityValue: number;
     price14400Strength: ETrendIndexStrength;
     price86400StrengthValue: number;
+    price86400VolatilityValue: number;
     price86400Strength: ETrendIndexStrength;
     price2592000StrengthValue: number;
     price2592000Strength: ETrendIndexStrength;
@@ -122,6 +128,14 @@ class TrendIndexVM {
             s_14400 = data.timeframe_strengths["14400"] || 0;
             s_86400 = data.timeframe_strengths["86400"] || 0;
             s_2592000 = data.timeframe_strengths["2592000"] || 0;
+        }
+        if (data.volatility) {
+            this.price60VolatilityValue = data.volatility["60"] || 0;
+            this.price300VolatilityValue = data.volatility["300"] || 0;
+            this.price900VolatilityValue = data.volatility["900"] || 0;
+            this.price3600VolatilityValue = data.volatility["3600"] || 0;
+            this.price14400VolatilityValue = data.volatility["14400"] || 0;
+            this.price86400VolatilityValue = data.volatility["86400"] || 0;
         }
 
         this.totalStrength = data.total_strength;
