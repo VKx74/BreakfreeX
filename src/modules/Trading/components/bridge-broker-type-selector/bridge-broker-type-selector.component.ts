@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, Inject} from '@angular/core'; // Add Inject
 import {BrokerService} from "@app/services/broker.service";
 import {EBrokerInstance} from "@app/interfaces/broker/broker";
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { of } from 'rxjs';
 import { AlertService } from '@alert/services/alert.service';
 import { TranslateService } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DOCUMENT } from '@angular/common'; // Already imported
 
 
 
@@ -53,7 +54,8 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
                 protected _brokerService: BrokerService,
                 protected _alertService: AlertService,
                 protected _ref: ChangeDetectorRef,
-                protected _dialog: MatDialog) {
+                protected _dialog: MatDialog,
+                @Inject(DOCUMENT) private document: Document) { // Add this line
     }
 
     ngOnInit() {
@@ -189,5 +191,9 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     }
 
     clearSelectedBroker() {       
+       
     }
+    openICMarketLink() {
+        this.document.defaultView.open('https://icmarkets.com/?camp=38378', '_blank');
+      }
 }

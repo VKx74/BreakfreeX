@@ -2,6 +2,7 @@
 
     <div class="account-connect-prompt groupx" *ngIf="!connectExistingAccount && !createNewAccount">
         <div class="connecttitle">Connect your trading account.</div>
+        <div class="initialmenu">
         <button class="crypto-button crypto-button_action cursor-pointer"
                 (click)="connectExistingAccount = true; createNewAccount = false">
            Connect Trading Account
@@ -11,8 +12,9 @@
             Create Trading Account
         </button>
     </div>
+    </div>
 
-    <div class="selected-option" *ngIf="connectExistingAccount || createNewAccount" (click)="connectExistingAccount = false; createNewAccount = false">
+    <div class="selected-option" *ngIf="connectExistingAccount || createNewAccount" (click)="connectExistingAccount = false; createNewAccount = false; showICMarketGroupOptions = false; showBinanceGroupOptions = false; showMtGroupOptions = false; showICMarketAccountOptions = false;">
         {{ connectExistingAccount ? '> Connect Trading Account' : '> Create Trading Account' }}
     </div>
     <div class="groupholders">
@@ -22,18 +24,23 @@
                 <img class="imgx" src="assets/img/icm.webp" alt="IC Market Group Icon" > <div class="groupname">IC Market</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
             </div>
             <ng-container *ngIf="showICMarketGroupOptions">
-                <div class="icmarket-account-question" (click)="showICMarketAccountOptions = !showICMarketAccountOptions">
+                <div class="icmarket-account-question" *ngIf="!showICMarketAccountOptions">
                     Do you have an ICMarket account already?
                     <button class="crypto-button crypto-button_action cursor-pointer"
-                            (click)="hasICMarketAccount = true">
+                            (click)="hasICMarketAccount = true; showICMarketAccountOptions = true">
                         Yes, I already have an ICMarket account
                     </button>
                     <button class="crypto-button crypto-button_action cursor-pointer"
-                            (click)="hasICMarketAccount = false">
+                            (click)="hasICMarketAccount = false; showICMarketAccountOptions = true">
                         No, I do not have an ICMarket account
                     </button>
                 </div>
-                <ng-container *ngIf="showICMarketAccountOptions && hasICMarketAccount">
+                <div class="icmarket-options back" *ngIf="showICMarketAccountOptions">
+                    <button class="crypto-button crypto-button_action cursor-pointer backbutton"
+                            (click)="showICMarketAccountOptions = false">
+                        Back
+                    </button>
+                <ng-container *ngIf="hasICMarketAccount">
                     <ng-container *ngFor="let broker of availableBrokers; let i = index">
                         <button *ngIf="broker.broker === 'MT4' || broker.broker === 'MT5'"
                                 class="crypto-button crypto-button_action cursor-pointer"
@@ -43,12 +50,14 @@
                         </button>
                     </ng-container>
                 </ng-container>
-                <ng-container *ngIf="showICMarketAccountOptions && !hasICMarketAccount">
+                <ng-container *ngIf="!hasICMarketAccount">
                     <button class="crypto-button crypto-button_action cursor-pointer"
-                            (click)="navigateToICMarketSignup()">
+                     (click)="openICMarketLink()">
                         Sign up on ICMarket
                     </button>
                 </ng-container>
+            </div>
+
             </ng-container>
         </div>
 

@@ -24,7 +24,7 @@
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 
@@ -43,11 +43,11 @@
   display: flex;
   column-gap: 9px;
   row-gap: 9px;
-  width: unset !important;
+  width: 100% ;
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .connecttitle{
@@ -94,6 +94,21 @@
   max-width: 300px;
 }
 
+.icmarket-options {
+  display: flex;
+column-gap: 9px;
+row-gap: 9px;
+width: 100%;
+flex-direction: column;
+flex-direction: column-reverse;
+align-items: center;
+}
+
+.backbutton {
+  padding: 6px;
+  display: flex;
+}
+
 .icmarket-account-question {
   row-gap: 9px;
   display: flex;
@@ -110,21 +125,21 @@
 
 .groupix {
   display: flex;
+  -moz-column-gap: 9px;
   column-gap: 9px;
   row-gap: 9px;
-  width: 100%;
+  width: calc(80vw / 3);
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 150px;
-  min-width: 150px !important;
-  max-width: 150px;
+
+  max-width: 150px !important;
   font-weight: 500;
   font-size: 12px;
   cursor: pointer;
-  width: 260px;
   border: 1px solid;
-    border-radius: 6px;
+  border-radius: 6px;
 }
 
 img {
@@ -137,6 +152,17 @@ img {
   display: flex;
   column-gap: 8px;
   flex-direction: row;
+  justify-content: flex-start;
+}
+.initialmenu
+{
+  display: flex;
+  column-gap: 8px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+
 }
 
 .account-connect-prompt {
