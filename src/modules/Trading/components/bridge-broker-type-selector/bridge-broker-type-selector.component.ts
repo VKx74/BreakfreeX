@@ -31,6 +31,8 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     public showMtGroupOptions: boolean = false;
     public showBinanceGroupOptions: boolean = false;
     public loading: boolean = false;
+    public connectExistingAccount: boolean = false; // Add this line
+    public createNewAccount: boolean = false; // Add this line
 
     get currentBrokerInstance(): EBrokerInstance {
         if (this._brokerService.activeBroker) {

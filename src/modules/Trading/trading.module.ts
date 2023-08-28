@@ -77,13 +77,6 @@ import { SpreadNotificationComponent } from './components/forex.components/mt/or
 import { BinanceFuturesCurrencyRiskComponent } from './components/crypto.components/binance-futures/currency-risk/binance-futures-currency-risk.component';
 import { BinanceCurrencyRiskComponent } from './components/crypto.components/binance/currency-risk/binance-currency-risk.component';
 
-export class BridgeBrokerTypeSelectorComponent implements OnInit {
-  connectExistingAccount: boolean;
-  createNewAccount: boolean;
-  showICMarketGroupOptions: boolean;
- 
-}
-
 const components = [
     TradeManagerComponent,
     IntervalSelectorComponent,
@@ -193,4 +186,3 @@ const components = [
 })
 export class TradingModule {
 }
-
