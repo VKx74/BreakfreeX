@@ -21,7 +21,7 @@
 
         <div class="groupx options" *ngIf="createNewAccount || (connectExistingAccount && !showBinanceGroupOptions && !showMtGroupOptions)">
             <div class="groupix" (click)="showICMarketGroupOptions = !showICMarketGroupOptions; showBinanceGroupOptions = false; showMtGroupOptions = false" >
-                <img class="imgx" src="assets/img/icm.webp" alt="IC Market Group Icon" > <div class="groupname">IC Markets</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
+                <img class="imgx" src="assets/img/icm.png" alt="IC Market Group Icon" > <div class="groupname">IC Markets</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
             </div>
             <ng-container *ngIf="showICMarketGroupOptions">
                 <div class="icmarket-account-question" *ngIf="!showICMarketAccountOptions">
@@ -86,7 +86,7 @@
         
         <div class="groupx options" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showBinanceGroupOptions">
             <div class="groupix" (click)="showMtGroupOptions = !showMtGroupOptions; showICMarketGroupOptions = false; showBinanceGroupOptions = false" >
-                <img class="imgx" src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname">Metatrader</div> <div class="stars"></div>
+                <img class="imgx" src="assets/img/tm.png" alt="MT Group Icon"><div class="groupname">Metatrader</div> <div class="stars"></div>
                 <!-- <div class="stars"></div> -->
             </div>
             <ng-container *ngIf="showMtGroupOptions">
