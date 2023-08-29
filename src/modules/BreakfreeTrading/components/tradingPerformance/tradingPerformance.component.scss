@@ -85,13 +85,13 @@
             padding-left: 5px;
         }
         .acc-info-param-value {
-            font-size: 12px !important;
+            font-size: 14px !important;
         }
     }
 
     .acc-info-param-value-add {
      
-        font-size: 12px ;
+        font-size: 14px ;
     }
 
     .acc-info-param {
@@ -99,7 +99,7 @@
         flex-direction: column;
     }
     .acc-info-param-header {
-        font-size: 12px;
+        font-size: 14px;
         color: #474d57;
         font-weight: bold;
     
@@ -115,7 +115,7 @@
         align-items: center;
         text-align: left;
         background: #efefef6e;
-        padding: 3px 8px;
+        padding: 6px 9px;
         border-radius: 3px;
     }
 
@@ -129,7 +129,7 @@
     align-items: center;
     text-align: left;
     background: #efefef6e;
-    padding: 3px 8px;
+    padding: 6px 9px;
     border-radius: 3px;
     }
 
@@ -143,21 +143,21 @@
         align-items: center;
         text-align: left;
         background: #efefef6e;
-        padding: 3px 8px;
+        padding: 6px 9px;
         border-radius: 3px;
     }
     .acc-info-param-body {
         .acc-info-param-value {
-            font-size: 12px;
+            font-size: 14px;
         }
         @media screen and (min-width: 420px) {
             .acc-info-param-value {
-                font-size: 12px;
+                font-size: 14px;
             }
         }
 
         .acc-info-param-value-add {
-            font-size: 12px;
+            font-size: 14px;
         }
         .green {
             color: green;
