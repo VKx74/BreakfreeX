@@ -170,6 +170,7 @@ $baseIconPath: '../icons/';
 
   // Icon to PopOut Pane, so move it to a different Browser Window
   .lm_popout {
+    display: none;
     //background-image: url($baseIconPath + 'lm_popout_white.png')
   }
 
