@@ -75,6 +75,7 @@ class TrendIndexVM {
     datafeed: string;
     last_price: number;
     price1StrengthValue: number;
+    price1VolatilityValue: number;
     price1Strength: ETrendIndexStrength;
     price60StrengthValue: number;
     price60VolatilityValue: number;
@@ -95,6 +96,7 @@ class TrendIndexVM {
     price86400VolatilityValue: number;
     price86400Strength: ETrendIndexStrength;
     price2592000StrengthValue: number;
+    price2592000VolatilityValue: number;
     price2592000Strength: ETrendIndexStrength;
     totalStrength: number;
 
@@ -130,12 +132,14 @@ class TrendIndexVM {
             s_2592000 = data.timeframe_strengths["2592000"] || 0;
         }
         if (data.volatility) {
+            this.price1VolatilityValue = data.volatility["1"] || 0;
             this.price60VolatilityValue = data.volatility["60"] || 0;
             this.price300VolatilityValue = data.volatility["300"] || 0;
             this.price900VolatilityValue = data.volatility["900"] || 0;
             this.price3600VolatilityValue = data.volatility["3600"] || 0;
             this.price14400VolatilityValue = data.volatility["14400"] || 0;
             this.price86400VolatilityValue = data.volatility["86400"] || 0;
+            this.price2592000VolatilityValue = data.volatility["2592000"] || 0;
         }
 
         this.totalStrength = data.total_strength;
