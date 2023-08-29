@@ -54,18 +54,29 @@
 .connecttitle{
   font-size: 12px;
   font-weight: 500;
+  margin-top: -28px;
+  position: absolute;
+  background: transparent !important;
 }
 
 .selected-option {
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
+  width: auto;
+  padding: 5px 9px;
+  border-radius: 0px;
+  font-weight: 500;
+  margin-top: -28px;
+  z-index: 9;
+  position: absolute;
+  top: 0;
 
 }
 
 .connecttitle, .selected-option {
-  width: 100%;
-  padding: 6px 9px;
+  width: auto;
+  padding: 5px 9px;
   border-radius: 0px;
   font-weight: 500 ;
 }
@@ -263,7 +274,7 @@ img {
 
  .connecttitle {
     color: themed("valueTextColor");
-    background: themed("appPanelColorx");
+    //background: themed("noactiveTabs");
     border-color: themed("borderColor");
   }
 
