@@ -1,38 +1,38 @@
 <div class="broker-select-container" >
 
     <div class="account-connect-prompt groupx" *ngIf="!connectExistingAccount && !createNewAccount">
-        <div class="connecttitle">Connect your trading account.</div>
+        <div class="connecttitle">Connect Trading Account</div>
         <div class="initialmenu">
         <button class="crypto-button crypto-button_action cursor-pointer"
                 (click)="connectExistingAccount = true; createNewAccount = false">
-           Connect Trading Account
+           Connect Existing Trading Account
         </button>
         <button class="crypto-button crypto-button_action cursor-pointer"
                 (click)="createNewAccount = true; connectExistingAccount = false">
-            Create Trading Account
+            Create New Trading Account
         </button>
     </div>
     </div>
 
     <div class="selected-option" *ngIf="connectExistingAccount || createNewAccount" (click)="connectExistingAccount = false; createNewAccount = false; showICMarketGroupOptions = false; showBinanceGroupOptions = false; showMtGroupOptions = false; showICMarketAccountOptions = false;">
-        {{ connectExistingAccount ? '> Connect Trading Account' : '> Create Trading Account' }}
+        {{ connectExistingAccount ? 'Connect Existing Account > Connect Trading Account' : 'Creating Account > Create New Trading Account' }}
     </div>
     <div class="groupholders">
 
         <div class="groupx options" *ngIf="createNewAccount || (connectExistingAccount && !showBinanceGroupOptions && !showMtGroupOptions)">
             <div class="groupix" (click)="showICMarketGroupOptions = !showICMarketGroupOptions; showBinanceGroupOptions = false; showMtGroupOptions = false" >
-                <img class="imgx" src="assets/img/icm.webp" alt="IC Market Group Icon" > <div class="groupname">IC Market</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
+                <img class="imgx" src="assets/img/icm.webp" alt="IC Market Group Icon" > <div class="groupname">IC Markets</div> <div class="stars"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div>
             </div>
             <ng-container *ngIf="showICMarketGroupOptions">
                 <div class="icmarket-account-question" *ngIf="!showICMarketAccountOptions">
-                    Do you have an ICMarket account already?
+                    Do you have an IC Markets account?
                     <button class="crypto-button crypto-button_action cursor-pointer"
                             (click)="hasICMarketAccount = true; showICMarketAccountOptions = true">
-                        Yes, I already have an ICMarket account
+                        Yes, I already have an IC Markets account
                     </button>
                     <button class="crypto-button crypto-button_action cursor-pointer"
                             (click)="hasICMarketAccount = false; showICMarketAccountOptions = true">
-                        No, I do not have an ICMarket account
+                        No, I do not have an IC Markets account
                     </button>
                 </div>
                 <div class="icmarket-options back" *ngIf="showICMarketAccountOptions">
@@ -53,7 +53,7 @@
                 <ng-container *ngIf="!hasICMarketAccount">
                     <button class="crypto-button crypto-button_action cursor-pointer"
                      (click)="openICMarketLink()">
-                        Sign up on ICMarket
+                        Sign up on IC Markets
                     </button>
                 </ng-container>
             </div>
@@ -63,7 +63,7 @@
 
         <div class="groupx options" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showMtGroupOptions">
             <div class="groupix" (click)="showBinanceGroupOptions = !showBinanceGroupOptions; showICMarketGroupOptions = false; showMtGroupOptions = false" >
-                <img class="imgx" src="assets/img/b.svg" alt="Binance Group Icon" ><div class="groupname">Binance </div> 
+                <img class="imgx" src="assets/img/b.svg" alt="Binance Group Icon" ><div class="groupname">Binance </div> <div class="stars"></div>
                 <!-- <div class="stars"></div> -->
             </div>
 
@@ -86,7 +86,7 @@
         
         <div class="groupx options" *ngIf="connectExistingAccount && !showICMarketGroupOptions && !showBinanceGroupOptions">
             <div class="groupix" (click)="showMtGroupOptions = !showMtGroupOptions; showICMarketGroupOptions = false; showBinanceGroupOptions = false" >
-                <img class="imgx" src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname"> Metatrader</div>
+                <img class="imgx" src="assets/img/tm.jpg" alt="MT Group Icon"><div class="groupname">Metatrader</div> <div class="stars"></div>
                 <!-- <div class="stars"></div> -->
             </div>
             <ng-container *ngIf="showMtGroupOptions">

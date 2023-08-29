@@ -25,6 +25,7 @@
   align-content: center;
   justify-content: space-between;
   align-items: center;
+  
 }
 
 
@@ -43,10 +44,10 @@
   display: flex;
   column-gap: 9px;
   row-gap: 9px;
-  width: 100% ;
+
   flex-direction: row;
   align-content: center;
-  justify-content: center;
+
   align-items: center;
 }
 
@@ -59,13 +60,14 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
+
 }
 
 .connecttitle, .selected-option {
   width: 100%;
   padding: 6px 9px;
-  border-radius: 3px;
-  font-weight: 600 !important;
+  border-radius: 0px;
+  font-weight: 500 ;
 }
 
 .stars {
@@ -128,11 +130,12 @@ align-items: center;
   -moz-column-gap: 9px;
   column-gap: 9px;
   row-gap: 9px;
-  width: calc(80vw / 3);
+ // width: calc(80vw / 3);
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 150px;
+  padding: 9px;
 
   max-width: 150px !important;
   font-weight: 500;
@@ -153,6 +156,8 @@ img {
   column-gap: 8px;
   flex-direction: row;
   justify-content: flex-start;
+  max-width: 510px;
+  padding:15px
 }
 .initialmenu
 {
@@ -162,6 +167,7 @@ img {
   justify-content: center;
   align-items: center;
   height: 70%;
+  padding: 15px;
 
 }
 
