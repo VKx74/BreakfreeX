@@ -27,7 +27,7 @@
         font-size: 12px;
     font-weight: bold;
 
-    padding: 3px 8px;
+
     border-radius: 3px;
     margin-bottom: 6px;
     display: flex;
@@ -36,14 +36,14 @@
     }
     .acc-info {
         display: flex;
-        justify-content: flex-start;
-
-
+        row-gap: 8px;
+        justify-content: center;
+        border-radius: 6px;
         -moz-column-gap: 16px;
-        column-gap: 16px;
+        column-gap: 3px;
         overflow: hidden;
-   
-        align-items: flex-end;
+        align-items: flex-start;
+        flex-wrap: wrap;
     
     }
     .acc-info-param-body {
@@ -55,18 +55,15 @@
 
     @media screen and (max-width: 730px) {
         .acc-info {
-            flex-direction: column !important;
             display: flex;
             row-gap: 8px;
             justify-content: center;
-    
             border-radius: 6px;
-    
             -moz-column-gap: 16px;
-            column-gap: 16px;
+            column-gap: 3px;
             overflow: hidden;
-           
             align-items: flex-start;
+            flex-wrap: wrap;
         }
 
         .acc-infox {
@@ -115,7 +112,7 @@
         align-items: center;
         text-align: left;
         background: #efefef6e;
-        padding: 6px 9px;
+        padding: 3px 9px;
         border-radius: 3px;
     }
 
@@ -129,7 +126,7 @@
     align-items: center;
     text-align: left;
     background: #efefef6e;
-    padding: 6px 9px;
+    padding: 3px 9px;
     border-radius: 3px;
     }
 
@@ -143,7 +140,7 @@
         align-items: center;
         text-align: left;
         background: #efefef6e;
-        padding: 6px 9px;
+        padding: 3px 9px;
         border-radius: 3px;
     }
     .acc-info-param-body {
