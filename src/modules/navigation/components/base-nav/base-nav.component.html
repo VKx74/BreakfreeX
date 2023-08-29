@@ -79,11 +79,11 @@
                         <div class="autosave-container">
                             <span class="save-state save-needed" *ngIf="saveNeeded; else saved" tooltip
                                 [matTooltip]="'stateNotSaved' | translate">
-                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                <i class="fa-solid fa-table-pivot" aria-hidden="true"></i>
                             </span>
                             <ng-template #saved>
                                 <span class="save-state saved" tooltip [matTooltip]="'stateSaved' | translate">
-                                    <i class="fa fa-cloud" aria-hidden="true"></i>
+                                    <i class="fa-solid fa-table-layout" aria-hidden="true"></i>
                                 </span>
                             </ng-template>
 
@@ -101,7 +101,7 @@
                                 <!-- <span class="xp-title">XP</span> {{score}}/{{scoreForLevel}} -->
                                 <!-- <span class="xp-title">LV</span> {{level}} -->
                                 <span class="dashb" [ngClass]="getOverviewClass()">
-                                    <img src="assets/img/chart-user-solid.svg">
+                                    <i class="fa-solid fa-square-poll-vertical"></i>
                                 </span>
                             </span>
                             <ng-template #loading>

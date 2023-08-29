@@ -81,12 +81,14 @@
                     (click)="selectComponent(Components.EconomicCalendar)"
                     [class.active]="SelectedComponent === Components.EconomicCalendar && !collapsed" tooltip
                     [matTooltip]="'economicCalendar' | translate">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
+         
+                    <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
                     [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip
                     [matTooltip]="'watchlistWidget' | translate">
-                    <img class="widget-icon" src="/assets/img/right-panel/list-dropdown-solid.svg" />
+
+                    <i class="fa-solid fa-square-list" aria-hidden="true"></i>
                 </div>
                 <div class="alerts-widget widget-selector-icon" (click)="selectComponent(Components.Alerts)"
                     [class.active]="SelectedComponent === Components.Alerts && !collapsed" tooltip
