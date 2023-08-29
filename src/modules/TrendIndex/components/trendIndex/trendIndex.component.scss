@@ -462,6 +462,15 @@
   .height-90 {
     min-height: 90px;
   }
+
+  .charts-container {
+    display: flex;
+    flex-direction: column;
+
+    .chart-item {
+      display: flex;
+    }
+  }
 }
 
 @include themify($themes, true) {

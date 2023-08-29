@@ -488,6 +488,7 @@ export interface IRTDPayload {
 export interface IMesaTrendStrength {
     f: number;
     s: number;
+    v: number;
     t: number;
 }
 
