@@ -3,10 +3,6 @@
 @import "global-styles/themes/themes";
 
 :host {
-  /deep/ mat-cell:not(:first-of-type) {
-    padding-left: 0px !important;
-  }
-
   @media (max-width: 390px) {
     .mobilehiddenacc {
       font-size: 9px;
@@ -32,88 +28,67 @@
   trend-index-chart {
     min-height: 60px;
   }
+
   .chart-root {
     min-height: 60px;
   }
+
   transition: all 0.22s ease-in-out;
 
-  /deep/ mat-row {
-    overflow: hidden !important;
-    height: 33px !important;
-  }
-
-  /deep/ mat-header-row {
-    overflow: hidden !important;
-    margin-bottom: 12px;
-    height: 33px !important;
-  }
-  /deep/ mat-cell.mat-cell {
-    height: 100% !important;
-    font-size: 11px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /deep/ mat-cell.mat-cell span,
-  mat-cell.mat-cell div {
-    height: 100% !important;
-    display: flex;
-    align-items: center;
-  }
-
-  /deep/ mat-table {
-    max-width: 100% !important;
-    width: 100% !important;
-    min-width: unset !important;
-  }
-  /deep/ mat-header-row.mat-header-row {
-  }
-  /deep/ mat-row.row-group-header {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    padding-top: 4px;
-    margin-top: 12px !important;
-    height: 26px !important;
-  }
-
-  /deep/ mat-header-row.mat-header-row {
-    position: relative;
-  }
-
-  /deep/ mat-cell.mat-cell.cdk-column-min_15,
-  /deep/ mat-cell.mat-cell.cdk-column-min_1,
-  /deep/ mat-cell.mat-cell.cdk-column-min_5,
-  /deep/ mat-cell.mat-cell.cdk-column-h_1,
-  /deep/ mat-cell.mat-cell.cdk-column-h_4,
-  /deep/ mat-cell.mat-cell.cdk-column-d_1,
-  /deep/ mat-cell.mat-cell.cdk-column-month_1 {
-    padding-left: 0px !important;
-  }
-  /deep/ mat-cell.mat-cell.cdk-column-symbol {
-    padding-left: 0px !important;
-  }
-
-  /deep/ mat-header-cell.cdk-column-symbol .header-cell-content-wrapper {
-    text-align: left !important;
-    padding-left: 10px;
-  }
-
-  /deep/ mat-header-cell {
-    font-weight: bold !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-
-    &:last-of-type {
-      padding-right: 0px !important;
+  /deep/ {
+    mat-table {
+      max-width: 100% !important;
+      width: 100% !important;
+      min-width: unset !important;
     }
-  }
 
-  /deep/ mat-cell:last-of-type {
-    padding-right: 0px !important;
-  }
+    mat-row {
+      overflow: hidden !important;
+      height: 33px !important;
 
-  /deep/ .header-cell-content-wrapper {
-    text-align: center !important;
+      &.row-group-header {
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        padding-top: 4px;
+        margin-top: 12px !important;
+        padding-left: 10px !important;
+        height: 26px !important;
+      }
+    }
+
+    mat-cell {
+      height: 100% !important;
+      padding-left: 0px !important;
+
+      &:last-of-type {
+        padding-right: 0px !important;
+      }
+    }
+
+    mat-header-row {
+      overflow: hidden !important;
+      margin-bottom: 12px;
+      height: 33px !important;
+    }
+
+    mat-header-cell {
+      font-weight: bold !important;
+      padding: 0px !important;
+  
+      &:last-of-type {
+        padding-right: 0px !important;
+      }
+      
+      &:first-of-type {
+        padding-left: 10px !important;
+      }
+      
+      &:not(:first-of-type) {
+        .header-cell-content-wrapper {
+          text-align: center !important;
+        }
+      }
+    }
   }
 
   height: 100%;
@@ -266,8 +241,8 @@
     height: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding-right: 3px;
-
     width: 100%;
     max-width: 100%;
   }
@@ -357,7 +332,6 @@
     display: flex;
     flex-direction: column;
 
-
     .chart-container-title {
       display: flex;
       font-size: 12px;
@@ -381,7 +355,8 @@
       margin-bottom: 6px;
     }
 
-    .chart-container-title.strength, .chart-container-title.vol {
+    .chart-container-title.strength,
+    .chart-container-title.vol {
       display: flex;
       font-size: 12px;
       position: static;
@@ -397,7 +372,6 @@
       text-align: left;
       align-items: center;
     }
-
 
     .margin-top {
       margin-top: 10px;
@@ -555,7 +529,7 @@
   }
 
   .data-table {
-  //  background: themed("appPanelColorxx");
+    //  background: themed("appPanelColorxx");
   }
   .out-of-access-box {
     background-color: themed("appPanelColor");
