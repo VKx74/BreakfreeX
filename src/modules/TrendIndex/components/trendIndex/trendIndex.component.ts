@@ -27,7 +27,7 @@ const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "H
 const Bounds = ["DE10YB_EUR", "UK100_GBP", "USB02Y_USD", "USB30Y_USD"];
 const Commodities = ["BCO_USD", "CORN_USD", "NATGAS_USD", "SOYBN_USD", "WHEAT_USD", "WTICO_USD", "XCU_USD"];
 const Crypto = ["BTCUSDT", "ETHUSDT"];
-const OtherMarkets = "Markets";
+const OtherMarkets = "Unaligned Markets";
 const UpTrending = "Uptrending";
 const DownTrending = "Downtrending";
 const TopUpTrending = "Top Uptrending";
@@ -52,8 +52,10 @@ export enum ETrendIndexStrength {
 }
 
 interface ITrendIndexChartDataVM {
-    data: ITrendIndexChartData;
+    strengthChart: ITrendIndexChartData;
+    volatilityChart: ITrendIndexChartData;
     strength: number;
+    volatility: number;
     timeframe: string;
     granularity: number;
 }
@@ -75,20 +77,28 @@ class TrendIndexVM {
     datafeed: string;
     last_price: number;
     price1StrengthValue: number;
+    price1VolatilityValue: number;
     price1Strength: ETrendIndexStrength;
     price60StrengthValue: number;
+    price60VolatilityValue: number;
     price60Strength: ETrendIndexStrength;
     price300StrengthValue: number;
+    price300VolatilityValue: number;
     price300Strength: ETrendIndexStrength;
     price900StrengthValue: number;
+    price900VolatilityValue: number;
     price900Strength: ETrendIndexStrength;
     price3600StrengthValue: number;
+    price3600VolatilityValue: number;
     price3600Strength: ETrendIndexStrength;
     price14400StrengthValue: number;
+    price14400VolatilityValue: number;
     price14400Strength: ETrendIndexStrength;
     price86400StrengthValue: number;
+    price86400VolatilityValue: number;
     price86400Strength: ETrendIndexStrength;
     price2592000StrengthValue: number;
+    price2592000VolatilityValue: number;
     price2592000Strength: ETrendIndexStrength;
     totalStrength: number;
 
@@ -123,6 +133,16 @@ class TrendIndexVM {
             s_86400 = data.timeframe_strengths["86400"] || 0;
             s_2592000 = data.timeframe_strengths["2592000"] || 0;
         }
+        // if (data.volatility) {
+        //     this.price1VolatilityValue = data.volatility["1"] - 100 || 0;
+        //     this.price60VolatilityValue = data.volatility["60"] - 100 || 0;
+        //     this.price300VolatilityValue = data.volatility["300"] - 100 || 0;
+        //     this.price900VolatilityValue = data.volatility["900"] - 100 || 0;
+        //     this.price3600VolatilityValue = data.volatility["3600"] - 100 || 0;
+        //     this.price14400VolatilityValue = data.volatility["14400"] - 100 || 0;
+        //     this.price86400VolatilityValue = data.volatility["86400"] - 100 || 0;
+        //     this.price2592000VolatilityValue = data.volatility["2592000"] - 100 || 0;
+        // }
 
         this.totalStrength = data.total_strength;
 
@@ -206,15 +226,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public groupingField: string = "type";
 
     public get hasAccess(): boolean {
-        return this._identityService.isAuthorizedCustomer;
+        return true;
+        // return this._identityService.isAuthorizedCustomer;
     }
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
-    }
-
-    get isAuthorizedCustomer(): boolean {
-        return this._identityService.isAuthorizedCustomer;
     }
 
     get ComponentIdentifier() {
@@ -520,6 +537,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                 for (let tf in data.mesa) {
                     let mesaValues: number[] = [];
+                    let volatilityValues: number[] = [];
                     let mesaDates: string[] = [];
                     let avg = instrumentVM.avg_strength[tf];
                     if (!avg) {
@@ -539,6 +557,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         if (mesaItem.t > minDate) {
                             if (mesaItem.t % tfNumber === 0 || i === mesaDataList.length - 1) {
                                 mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
+                                volatilityValues.push(mesaItem.v - 100);
                                 mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());
                             }
                         }
@@ -548,9 +567,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         timeframe: this._tfToString(Number(tf)),
                         granularity: Number(tf),
                         strength: mesaValues[mesaValues.length - 1],
-                        data: {
+                        volatility: volatilityValues[volatilityValues.length - 1],
+                        strengthChart: {
                             dates: mesaDates,
-                            values: mesaValues
+                            values: mesaValues,
+                        },
+                        volatilityChart: {
+                            dates: mesaDates,
+                            values: volatilityValues
                         }
                     });
                 }

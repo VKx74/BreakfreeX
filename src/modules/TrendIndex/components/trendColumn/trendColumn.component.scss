@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
   }
 
   .up {
@@ -32,7 +33,6 @@
   .trend-state-up,
   .trend-state-down,
   .trend-state-sideways {
-
     font-size: 9px;
     color: rgba(128, 128, 128, 0.3);
     &.drive {
@@ -46,15 +46,54 @@
   .trend-state-sideways {
     color: transparent;
   }
-}
 
+  .trend-cell-container {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+  }
+
+  .volatility-cell-container {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    font-size: 10px;
+    opacity: 0.5;
+  }
+
+  .trend-strength-value {
+    font-size: 11px;
+  }
+
+  @media (max-width: 400px) {
+    .trend-strength-value {
+      font-size: 10px !important;
+    }
+
+    .volatility-cell-container {
+      font-size: 9px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .trend-strength-value {
+      font-size: 9px !important;
+    }
+    
+    .volatility-cell-container {
+      font-size: 8px;
+    }
+  }
+}
 
 @media (max-width: 360px) {
   .trend-state-up,
   .trend-state-down,
   .trend-state-sideways {
     display: none !important;
-}
+  }
 }
 
 @media (max-width: 549px) {

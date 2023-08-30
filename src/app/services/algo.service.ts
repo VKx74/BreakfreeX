@@ -488,6 +488,7 @@ export interface IRTDPayload {
 export interface IMesaTrendStrength {
     f: number;
     s: number;
+    v: number;
     t: number;
 }
 
@@ -506,6 +507,7 @@ export interface IMesaTrendIndex {
     strength: { [id: string]: IMesaTrendStrength; };
     avg_strength: { [id: string]: number; };
     timeframe_strengths: { [key: number]: number };
+    volatility: { [key: number]: number };
     total_strength: number;
     last_price: number;
     price60: number;

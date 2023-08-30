@@ -26,6 +26,11 @@
     font-size: 14px;
 }
 
+.bell-image  {
+  height: 11px;
+  display: flex;
+}
+
   .insidecorrector.avatarelement {
     padding: 0px 6px;
     display: flex;
@@ -38,7 +43,7 @@
   }
 
   span.dashb {
-    font-size: 11px;
+    font-size: 15px;
     font-weight: 700;
 
   }
@@ -126,7 +131,7 @@
   .xp-nav-container {
     font-size: 13px;
     cursor: pointer;
-    color: #ffffffd1;
+    color: #ffffff;
     .xp-title {
       background-color: #27282b;
       padding: 4px;

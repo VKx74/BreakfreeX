@@ -1,5 +1,216 @@
-@import "mixins/themify";
-@import "themes/themes";
+@import "global-styles/variables";
+@import "global-styles/mixins/themify";
+@import "global-styles/themes/themes";
+
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: auto;
+}
+
+/deep/ bridge-broker-connector div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.initialmenu button i {
+  font-size: 15px;
+}
+.groupx {
+  display: flex;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+
+.imgx {
+  width: 46px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  overflow: hidden;
+  margin-bottom: 9px;
+}
+
+.groupx.options {
+  display: flex;
+  column-gap: 9px;
+  row-gap: 9px;
+
+  flex-direction: row;
+  align-content: center;
+
+  align-items: center;
+}
+
+.connecttitle{
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: -28px;
+  position: absolute;
+  background: transparent !important;
+}
+
+.selected-option {
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  width: auto;
+  padding: 5px 9px;
+  border-radius: 0px;
+  font-weight: 500;
+  margin-top: -28px;
+  z-index: 9;
+  position: absolute;
+  top: 0;
+
+}
+
+.connecttitle, .selected-option {
+  width: auto;
+  padding: 5px 9px;
+  border-radius: 0px;
+  font-weight: 500 ;
+}
+
+.stars {
+  display: flex;
+  column-gap: 3px;
+  height: 20px;
+  font-size: 15px;
+}
+
+.groupname {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.groupx button {
+  display: flex;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  min-width: 150px !important;
+  font-weight: 600 !important;
+  max-width: 300px;
+}
+
+.icmarket-options {
+  display: flex;
+column-gap: 9px;
+row-gap: 9px;
+width: 100%;
+flex-direction: column;
+flex-direction: column-reverse;
+align-items: center;
+}
+
+.backbutton {
+  padding: 6px;
+  display: flex;
+}
+
+.icmarket-account-question {
+  row-gap: 9px;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 500;
+  width: 100%;
+  height: 100%;
+  min-width: 220px;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+}
+
+.groupix {
+  display: flex;
+  -moz-column-gap: 9px;
+  column-gap: 9px;
+  row-gap: 9px;
+ // width: calc(80vw / 3);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  padding: 9px;
+
+  max-width: 150px !important;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 6px;
+}
+
+img {
+  width: 42px;
+  display: flex;
+  margin-bottom: 9px;
+}
+
+.groupholders {
+  display: flex;
+  column-gap: 8px;
+  flex-direction: row;
+  justify-content: flex-start;
+  max-width: 510px;
+  padding:15px
+}
+.initialmenu
+{
+  display: flex;
+  column-gap: 8px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  padding: 15px;
+
+}
+
+.account-connect-prompt {
+  width: 100%;
+  min-height: 220px;
+  display: flex;
+  row-gap: 9px;  
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.broker-select-container .crypto-button {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  height: auto;
+  border: 1px solid;
+    border-radius: 6px;
+}
+
+.optioncontainer {
+  display: flex;
+  column-gap: 9px;
+  row-gap: 9px;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
 
 .disconnect-broker {
   margin-top: 20px;
@@ -8,6 +219,12 @@
   }
 }
 
+.broker-select-container{
+  column-gap: 9px;
+  display: flex;
+  row-gap: 9px;
+  flex-direction: column;
+}
 
 .section-title { 
   margin-top: 10px;
@@ -17,12 +234,59 @@
   letter-spacing: normal;
   text-align: left;
   text-transform: uppercase;
+  transition: all 0.22s ease-in-out;
 }
 
+.section-title {
+  color: #000; /* Replace with your desired color */
+  transition: all 0.22s ease-in-out;
+}
 
 @include themify($themes, true) {
+  :host {
+    background: themed("appBackgroundColor");
+  }
 
-  .section-title {
-    color: themed('valueTextColor');
+  /deep/ bridge-broker-connector div {
+    color: themed("valueTextColor");
+  }
+
+  .groupx, .groupx.options, .connecttitle, .selected-option, .groupx button, .icmarket-account-question, .groupix, img, .groupholders, .account-connect-prompt, .broker-select-container .crypto-button, .optioncontainer, .disconnect-broker button, .broker-select-container, .section-title {
+    color: themed("valueTextColor");
+    background: themed("appBackgroundColor");
+    border-color: themed("borderColor");
+  }
+  .groupix{
+  
+  color: themed("valueTextColor");
+    background: themed("appPanelColorxx");
+    border-color: themed("borderColor");
+  }
+
+
+ .selected-option{
+    color: themed("valueTextColor");
+    background: themed("appPanelColorx");
+    border-color: themed("borderColor");
+
+    &:hover {
+      background: themed("hoverBackground");
+    }
+  }
+
+ .connecttitle {
+    color: themed("valueTextColor");
+    //background: themed("noactiveTabs");
+    border-color: themed("borderColor");
+  }
+
+.stars, .groupname  {
+    color: themed("valueTextColor");
+
+    border-color: themed("borderColor");
+  }
+
+  .groupx button:hover, .groupix:hover {
+    background: themed("hoverBackground");
   }
 }

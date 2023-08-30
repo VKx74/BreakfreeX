@@ -71,11 +71,11 @@ export class SonarFeedService {
 
     constructor(private _http: HttpClient, private _socketService: SonarFeedSocketService) {
         this._url = AppConfigService.config.apiUrls.socialFeedREST;        
-        this._socketService.open().subscribe(() => {
-            console.log("Sonar Feed Socket opened");
-        }, () => {
-            console.error("Sonar Feed Socket failed to open");
-        });
+        // this._socketService.open().subscribe(() => {
+        //     console.log("Sonar Feed Socket opened");
+        // }, () => {
+        //     console.error("Sonar Feed Socket failed to open");
+        // });
 
         this._commentReactionSubscription = this._socketService.commentReaction.subscribe((data) => this._processCommentReaction(data));
         this._commentAddedSubscription = this._socketService.commentAdded.subscribe((data) => this._processCommentAdded(data));

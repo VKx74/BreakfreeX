@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, Inject} from '@angular/core'; // Add Inject
 import {BrokerService} from "@app/services/broker.service";
 import {EBrokerInstance} from "@app/interfaces/broker/broker";
 import { MatDialog } from '@angular/material/dialog';
@@ -9,11 +9,17 @@ import bind from "bind-decorator";
 import { of } from 'rxjs';
 import { AlertService } from '@alert/services/alert.service';
 import { TranslateService } from '@ngx-translate/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DOCUMENT } from '@angular/common'; // Already imported
+
+
 
 interface BrokerInstanceDescription {
     broker: EBrokerInstance;
     brokerId?: any;
 }
+
+
 
 @Component({
     selector: 'bridge-broker-type-selector',
@@ -23,8 +29,12 @@ interface BrokerInstanceDescription {
 export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     public availableBrokers: BrokerInstanceDescription[] = [];
     public selectedBroker: BrokerInstanceDescription;
-
+    public showMtGroupOptions: boolean = false;
+    public showBinanceGroupOptions: boolean = false;
+    public showICMarketGroupOptions: boolean = false; // Add this line
     public loading: boolean = false;
+    public connectExistingAccount: boolean = false; // Add this line
+    public createNewAccount: boolean = false; // Add this line
 
     get currentBrokerInstance(): EBrokerInstance {
         if (this._brokerService.activeBroker) {
@@ -44,7 +54,8 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
                 protected _brokerService: BrokerService,
                 protected _alertService: AlertService,
                 protected _ref: ChangeDetectorRef,
-                protected _dialog: MatDialog) {
+                protected _dialog: MatDialog,
+                @Inject(DOCUMENT) private document: Document) { // Add this line
     }
 
     ngOnInit() {
@@ -68,7 +79,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
         const fundingLiveAccounts = this._brokerService.getBFTAccount(EBrokerInstance.BFTFundingLive);
         const fundingDemoAccounts = this._brokerService.getBFTAccount(EBrokerInstance.BFTFundingDemo);
         const demoAccounts = this._brokerService.getBFTAccount(EBrokerInstance.BFTDemo);
-
+/* 
         if (fundingLiveAccounts && fundingLiveAccounts.length > 1) {
             for (const liveAccount of fundingLiveAccounts) {
                 this.availableBrokers.unshift({
@@ -94,7 +105,7 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
                 broker: EBrokerInstance.BFTFundingDemo
             });
         } 
-        
+         */
         
         // if (demoAccounts && demoAccounts.length > 1) {
         //     for (const liveAccount of demoAccounts) {
@@ -135,14 +146,14 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
             id = ` ${value.brokerId}`;
         }
         switch (value.broker) {
-            case EBrokerInstance.MT4: return of(`Metatrader 4 (MT4)${id}`);
-            case EBrokerInstance.MT5: return of(`Metatrader 5 (MT5)${id}`);
-            case EBrokerInstance.Binance: return of(`Binance (Spot)${id}`);
-            case EBrokerInstance.BinanceFuturesUSD: return of(`Binance (USDT Futures)${id}`);
-            case EBrokerInstance.BinanceFuturesCOIN: return of(`Binance (COIN Futures)${id}`);
-            case EBrokerInstance.BFTDemo: return of(`Breakfree Trading - Demo${id}`);
-            case EBrokerInstance.BFTFundingDemo: return of(`Breakfree Funding - Stage 1${id}`);
-            case EBrokerInstance.BFTFundingLive: return of(`Breakfree Funding - Live${id}`);
+            case EBrokerInstance.MT4: return of(`Metatrader 4${id}`);
+            case EBrokerInstance.MT5: return of(`Metatrader 5${id}`);
+            case EBrokerInstance.Binance: return of(`Spot${id}`);
+            case EBrokerInstance.BinanceFuturesUSD: return of(`USDT Futures${id}`);
+            case EBrokerInstance.BinanceFuturesCOIN: return of(`COIN Futures${id}`);
+          //  case EBrokerInstance.BFTDemo: return of(`Breakfree Trading - Demo${id}`);
+          //  case EBrokerInstance.BFTFundingDemo: return of(`Breakfree Funding - Stage 1${id}`);
+          //  case EBrokerInstance.BFTFundingLive: return of(`Breakfree Funding - Live${id}`);
         }
 
         return of("Undefined");
@@ -180,5 +191,9 @@ export class BridgeBrokerTypeSelectorComponent implements OnInit, OnChanges {
     }
 
     clearSelectedBroker() {       
+       
     }
+    openICMarketLink() {
+        this.document.defaultView.open('https://icmarkets.com/?camp=38378', '_blank');
+      }
 }

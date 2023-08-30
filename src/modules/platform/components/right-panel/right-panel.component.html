@@ -60,7 +60,7 @@
                 <div class="chat-widget widget-selector-icon" (click)="selectComponent(Components.Chat)" tooltip
                 [class.active]="SelectedComponent === Components.Chat && !collapsed"
                 [matTooltip]="'chatWidget' | translate">
-                <i class="fa fa-wechat" aria-hidden="true"></i>
+                <i class="fa fa-messages" aria-hidden="true"></i>
                 </div>
                 <!-- <div class="sonar-widget widget-selector-icon" (click)="selectComponent(Components.Sonar)"
                     [class.active]="SelectedComponent === Components.Sonar && !collapsed" tooltip
@@ -75,18 +75,20 @@
                 <div class="trend-index-widget widget-selector-icon" (click)="selectComponent(Components.TrendIndex)"
                     [class.active]="SelectedComponent === Components.TrendIndex && !collapsed" tooltip
                     [matTooltip]="'trendIndex' | translate">
-                    <i class="fa fa-indent" aria-hidden="true"></i>
+                    <i class="fa-light fa-solar-system"></i>
                 </div>
                 <div class="economic-calendar-widget widget-selector-icon"
                     (click)="selectComponent(Components.EconomicCalendar)"
                     [class.active]="SelectedComponent === Components.EconomicCalendar && !collapsed" tooltip
                     [matTooltip]="'economicCalendar' | translate">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
+         
+                    <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
                 </div>
                 <div class="watchlist-widget widget-selector-icon" (click)="selectComponent(Components.Watchlist)"
                     [class.active]="SelectedComponent === Components.Watchlist && !collapsed" tooltip
                     [matTooltip]="'watchlistWidget' | translate">
-                    <img class="widget-icon" src="/assets/img/right-panel/list-dropdown-solid.svg" />
+
+                    <i class="fa-solid fa-square-list" aria-hidden="true"></i>
                 </div>
                 <div class="alerts-widget widget-selector-icon" (click)="selectComponent(Components.Alerts)"
                     [class.active]="SelectedComponent === Components.Alerts && !collapsed" tooltip
@@ -115,7 +117,7 @@
 
                 <div class="admin-widget widget-selector-icon" *ngIf="isStuff" routerLink="/admin" tooltip
                     [matTooltip]="'adminPanel' | translate">
-                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                    <i class="fa fa-user-circle" aria-hidden="true"></i>
                 </div>
             </div>
         </div>

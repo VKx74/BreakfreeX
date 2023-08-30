@@ -39,7 +39,7 @@ export class SocialReactionsService {
     }
 
     constructor(private _sonarFeedService: SonarFeedService, private _identity: IdentityService) {
-
+        return;
         this._commentReactionSubscription = this._sonarFeedService.onCommentReaction.subscribe((data: SocialFeedCommentReactionNotification) => {
             this._processCommentReaction(data);
         });

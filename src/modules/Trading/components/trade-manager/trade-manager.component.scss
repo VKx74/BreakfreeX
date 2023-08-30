@@ -6,6 +6,13 @@
   .over-head {
     z-index: 2;
   }
+  bridge-broker-connector {
+    width: 100%;
+    display: flex;
+  }
+  bridge-broker-connector div {
+    width: 100%;
+  }
 
   .demo-broker-container {
     width: 100%;
@@ -63,12 +70,21 @@ object {
 }
 
 .shiftup{
-  padding-bottom: 25px;
-  width: 250px;
+
+  width: 100%;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  height: 100%;
+
+  
 }
 
 @include themify($themes, true) {
   .broker-not-connected {
+    border-top: 1px solid themed('borderColor');
     background-color: themed('appPanelColor');
   }
 
