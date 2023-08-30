@@ -6,6 +6,21 @@ export interface ITrendIndexChartData {
     values: number[];
 }
 
+
+/* @ts-ignore */
+Chart.Tooltip.positioners.myCustomPositioner = function(elements, eventPosition) {
+    // A reference to the tooltip model
+    const tooltip = this;
+
+    /* ... */
+
+    return {
+        x: 10,
+        y: 0
+        // You may also include xAlign and yAlign to override those tooltip options.
+    };
+};
+
 @Component({
     selector: 'trend-index-chart',
     templateUrl: './trendIndexChart.component.html',
@@ -109,6 +124,11 @@ export class TrendIndexChartComponent {
                 legend: {
                     display: false
                 },
+                tooltips: {
+                    titleFontSize: 9,
+                    bodyFontSize: 9,
+                    position: 'myCustomPositioner'
+                }
                 // tooltips: {
                 //     enabled: true,
                 //     // displayColors: false,

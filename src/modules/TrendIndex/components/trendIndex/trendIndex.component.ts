@@ -555,7 +555,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                     for (let i = 0; i < mesaDataList.length; i++) {
                         let mesaItem = mesaDataList[i];
-                        if (mesaItem.t > minDate) {
+                        if (mesaItem.t > minDate || true) {
                             if (mesaItem.t % tfNumber === 0 || i === mesaDataList.length - 1) {
                                 mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
                                 volatilityValues.push(mesaItem.v - 100);
