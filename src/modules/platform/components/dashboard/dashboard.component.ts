@@ -67,7 +67,7 @@ import { ChartOptionsStorageService } from "@app/services/chart-options-storage.
 export class DashboardComponent {
     private _updateInterval = 1000 * 10;
     private _freeUserPopup = 1000 * 60 * 5;
-    private _rightPanelMaxSize = 600;
+    private _rightPanelMaxSize = 800;
     private _rightPanelSize = 600;
     private _isRightPanelCollapsed: boolean = false;
     private _intervalLink: any;
@@ -79,7 +79,7 @@ export class DashboardComponent {
     private _hardRefreshNeeded: boolean = false;
     private _rightSideResizing: boolean = false;
     private _lastRightPanelSize: number = 0;
-    private _minRightSidePanelSize = 370;
+    private _minRightSidePanelSize = 500;
     readonly openBottomPanel = 250;
     readonly minimizeBottomPanel = 30;
     readonly minRightSidePanelCollapsedSize = 36;
