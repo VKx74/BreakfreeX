@@ -133,16 +133,17 @@ class TrendIndexVM {
             s_86400 = data.timeframe_strengths["86400"] || 0;
             s_2592000 = data.timeframe_strengths["2592000"] || 0;
         }
-        // if (data.volatility) {
-        //     this.price1VolatilityValue = data.volatility["1"] - 100 || 0;
-        //     this.price60VolatilityValue = data.volatility["60"] - 100 || 0;
-        //     this.price300VolatilityValue = data.volatility["300"] - 100 || 0;
-        //     this.price900VolatilityValue = data.volatility["900"] - 100 || 0;
-        //     this.price3600VolatilityValue = data.volatility["3600"] - 100 || 0;
-        //     this.price14400VolatilityValue = data.volatility["14400"] - 100 || 0;
-        //     this.price86400VolatilityValue = data.volatility["86400"] - 100 || 0;
-        //     this.price2592000VolatilityValue = data.volatility["2592000"] - 100 || 0;
-        // }
+        
+        if (data.volatility) {
+            this.price1VolatilityValue = data.volatility["1"] - 100 || 0;
+            this.price60VolatilityValue = data.volatility["60"] - 100 || 0;
+            this.price300VolatilityValue = data.volatility["300"] - 100 || 0;
+            this.price900VolatilityValue = data.volatility["900"] - 100 || 0;
+            this.price3600VolatilityValue = data.volatility["3600"] - 100 || 0;
+            this.price14400VolatilityValue = data.volatility["14400"] - 100 || 0;
+            this.price86400VolatilityValue = data.volatility["86400"] - 100 || 0;
+            this.price2592000VolatilityValue = data.volatility["2592000"] - 100 || 0;
+        }
 
         this.totalStrength = data.total_strength;
 
