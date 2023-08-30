@@ -48,36 +48,26 @@
             </div>
             <ng-container *ngFor="let chartDataTrend of chartDataTrends">
                 <div class="chart-container" [ngClass]="height-60">
-
-                    
                     <div class="charts-container">
-
                         <div class="chart-container-title">
                             <div class="datatrend">{{chartDataTrend.timeframe}}</div>
-                           
                         </div>
-                  
-
                         <div class="chart-item">
                             <div class="chart-container-title strength">
-                         
                                 <div [class.strength-positive]="chartDataTrend.strength > 0"
                                     [class.strength-negative]="chartDataTrend.strength < 0">
-                                    Strength {{chartDataTrend.strength > 0 ? "+" :""}}{{chartDataTrend.strength.toFixed(0)}}%</div>
+                                    Strength {{chartDataTrend.strength > 0 ? "+"
+                                    :""}}{{chartDataTrend.strength.toFixed(0)}}%</div>
                             </div>
-
-
                             <trend-index-chart [data]="chartDataTrend.strengthChart" [height]="60"></trend-index-chart>
                         </div>
-                        <div class="chart-item">
+                        <!-- <div class="chart-item">
                             <div class="chart-container-title vol">
-                            
                                 <div> Volatility </div>
                             </div>
-
                             <trend-index-chart [data]="chartDataTrend.volatilityChart"
                                 [height]="60"></trend-index-chart>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
@@ -115,7 +105,8 @@
                 <data-table-header-cell columnName="d_1" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
                     {{'d_1' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="month_1" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
+                <data-table-header-cell columnName="month_1" [sortable]="false" [columnMinWidth]="15"
+                    [columnWidth]="75">
                     {{'month_1' | translate}}
                 </data-table-header-cell>
 
