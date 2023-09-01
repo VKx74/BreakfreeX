@@ -520,6 +520,7 @@ export interface IMesaTrendIndex {
     hour4State: number;
     dailyState: number;
     monthlyState: number;
+    yearlyState: number;
 }
 
 export interface IMesaTrendDetails {

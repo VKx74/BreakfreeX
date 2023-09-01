@@ -100,12 +100,16 @@ class TrendIndexVM {
     price2592000StrengthValue: number;
     price2592000VolatilityValue: number;
     price2592000Strength: ETrendIndexStrength;
+    price31104000StrengthValue: number;
+    price31104000VolatilityValue: number;
+    price31104000Strength: ETrendIndexStrength;
     totalStrength: number;
 
     hour1State: number;
     hour4State: number;
     dailyState: number;
     monthlyState: number;
+    yearlyState: number;
 
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
@@ -123,6 +127,7 @@ class TrendIndexVM {
         let s_14400 = 0;
         let s_86400 = 0;
         let s_2592000 = 0;
+        let s_31104000 = 0;
         if (data.timeframe_strengths) {
             s_1 = data.timeframe_strengths["1"] || 0;
             s_60 = data.timeframe_strengths["60"] || 0;
@@ -132,6 +137,7 @@ class TrendIndexVM {
             s_14400 = data.timeframe_strengths["14400"] || 0;
             s_86400 = data.timeframe_strengths["86400"] || 0;
             s_2592000 = data.timeframe_strengths["2592000"] || 0;
+            s_31104000 = data.timeframe_strengths["31104000"] || 0;
         }
         
         if (data.volatility) {
@@ -143,6 +149,7 @@ class TrendIndexVM {
             this.price14400VolatilityValue = data.volatility["14400"] - 100 || 0;
             this.price86400VolatilityValue = data.volatility["86400"] - 100 || 0;
             this.price2592000VolatilityValue = data.volatility["2592000"] - 100 || 0;
+            this.price31104000VolatilityValue = data.volatility["31104000"] - 100 || 0;
         }
 
         this.totalStrength = data.total_strength;
@@ -155,6 +162,7 @@ class TrendIndexVM {
         this.price14400StrengthValue = s_14400;
         this.price86400StrengthValue = s_86400;
         this.price2592000StrengthValue = s_2592000;
+        this.price31104000StrengthValue = s_31104000;
 
         this.price1Strength = this._getStrength(s_1);
         this.price60Strength = this._getStrength(s_60);
@@ -164,11 +172,13 @@ class TrendIndexVM {
         this.price14400Strength = this._getStrength(s_14400);
         this.price86400Strength = this._getStrength(s_86400);
         this.price2592000Strength = this._getStrength(s_2592000);
+        this.price31104000Strength = this._getStrength(s_31104000);
 
         this.hour1State = data.hour1State;
         this.hour4State = data.hour4State;
         this.dailyState = data.dailyState;
         this.monthlyState = data.monthlyState;
+        this.yearlyState = data.yearlyState;
     }
 
     private _getStrength(value: number): ETrendIndexStrength {
@@ -619,6 +629,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             case 14400: return "4h";
             case 86400: return "1d";
             case 2592000: return "1M";
+            case 31104000: return "1Y";
         }
         return tf + " Mins";
     }

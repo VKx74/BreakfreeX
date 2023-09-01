@@ -109,6 +109,10 @@
                     [columnWidth]="75">
                     {{'month_1' | translate}}
                 </data-table-header-cell>
+                <data-table-header-cell columnName="year_1" [sortable]="false" [columnMinWidth]="15"
+                    [columnWidth]="75">
+                    {{'year_1' | translate}}
+                </data-table-header-cell>
 
 
                 <!-- Cells -->
@@ -216,6 +220,15 @@
                             <trend-column [Strength]="vmItem.price2592000Strength"
                                 [StrengthValue]="vmItem.price2592000StrengthValue" [TrendState]="vmItem.monthlyState"
                                 [VolatilityValue]="vmItem.price2592000VolatilityValue"></trend-column>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="year_1">
+                    <ng-template let-vmItem>
+                        <div class="strength-cell">
+                            <trend-column [Strength]="vmItem.price31104000Strength"
+                                [StrengthValue]="vmItem.price31104000StrengthValue" [TrendState]="vmItem.yearlyState"
+                                [VolatilityValue]="vmItem.price31104000VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>
