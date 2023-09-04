@@ -521,6 +521,7 @@ export interface IMesaTrendIndex {
     dailyState: number;
     monthlyState: number;
     yearlyState: number;
+    year10State: number;
 }
 
 export interface IMesaTrendDetails {

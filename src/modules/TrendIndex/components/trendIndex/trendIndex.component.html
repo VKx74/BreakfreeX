@@ -61,7 +61,7 @@
                             </div>
                             <trend-index-chart [data]="chartDataTrend.strengthChart" [height]="60"></trend-index-chart>
                         </div>
-                        <div class="chart-item">
+                        <div class="chart-item" *ngIf="chartDataTrend.volatilityChart.values.length > 0 ">
                             <div class="chart-container-title vol">
                                 <div> Volatility </div>
                             </div>
@@ -112,6 +112,10 @@
                 <data-table-header-cell columnName="year_1" [sortable]="false" [columnMinWidth]="15"
                     [columnWidth]="75">
                     {{'year_1' | translate}}
+                </data-table-header-cell>
+                <data-table-header-cell columnName="year_10" [sortable]="false" [columnMinWidth]="15"
+                    [columnWidth]="75">
+                    {{'year_10' | translate}}
                 </data-table-header-cell>
 
 
@@ -229,6 +233,15 @@
                             <trend-column [Strength]="vmItem.price31104000Strength"
                                 [StrengthValue]="vmItem.price31104000StrengthValue" [TrendState]="vmItem.yearlyState"
                                 [VolatilityValue]="vmItem.price31104000VolatilityValue"></trend-column>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="year_10">
+                    <ng-template let-vmItem>
+                        <div class="strength-cell">
+                            <trend-column [Strength]="vmItem.price311040000Strength"
+                                [StrengthValue]="vmItem.price311040000StrengthValue" [TrendState]="vmItem.year10State"
+                                [VolatilityValue]="vmItem.price311040000VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
                 </data-table-cell>

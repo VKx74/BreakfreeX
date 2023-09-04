@@ -103,6 +103,9 @@ class TrendIndexVM {
     price31104000StrengthValue: number;
     price31104000VolatilityValue: number;
     price31104000Strength: ETrendIndexStrength;
+    price311040000StrengthValue: number;
+    price311040000VolatilityValue: number;
+    price311040000Strength: ETrendIndexStrength;
     totalStrength: number;
 
     hour1State: number;
@@ -110,6 +113,7 @@ class TrendIndexVM {
     dailyState: number;
     monthlyState: number;
     yearlyState: number;
+    year10State: number;
 
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
@@ -128,6 +132,7 @@ class TrendIndexVM {
         let s_86400 = 0;
         let s_2592000 = 0;
         let s_31104000 = 0;
+        let s_311040000 = 0;
         if (data.timeframe_strengths) {
             s_1 = data.timeframe_strengths["1"] || 0;
             s_60 = data.timeframe_strengths["60"] || 0;
@@ -138,8 +143,9 @@ class TrendIndexVM {
             s_86400 = data.timeframe_strengths["86400"] || 0;
             s_2592000 = data.timeframe_strengths["2592000"] || 0;
             s_31104000 = data.timeframe_strengths["31104000"] || 0;
+            s_311040000 = data.timeframe_strengths["311040000"] || 0;
         }
-        
+
         if (data.volatility) {
             this.price1VolatilityValue = data.volatility["1"] - 100 || 0;
             this.price60VolatilityValue = data.volatility["60"] - 100 || 0;
@@ -150,6 +156,7 @@ class TrendIndexVM {
             this.price86400VolatilityValue = data.volatility["86400"] - 100 || 0;
             this.price2592000VolatilityValue = data.volatility["2592000"] - 100 || 0;
             this.price31104000VolatilityValue = data.volatility["31104000"] - 100 || 0;
+            this.price311040000VolatilityValue = data.volatility["311040000"] - 100 || 0;
         }
 
         this.totalStrength = data.total_strength;
@@ -163,6 +170,7 @@ class TrendIndexVM {
         this.price86400StrengthValue = s_86400;
         this.price2592000StrengthValue = s_2592000;
         this.price31104000StrengthValue = s_31104000;
+        this.price311040000StrengthValue = s_311040000;
 
         this.price1Strength = this._getStrength(s_1);
         this.price60Strength = this._getStrength(s_60);
@@ -173,12 +181,14 @@ class TrendIndexVM {
         this.price86400Strength = this._getStrength(s_86400);
         this.price2592000Strength = this._getStrength(s_2592000);
         this.price31104000Strength = this._getStrength(s_31104000);
+        this.price311040000Strength = this._getStrength(s_311040000);
 
         this.hour1State = data.hour1State;
         this.hour4State = data.hour4State;
         this.dailyState = data.dailyState;
         this.monthlyState = data.monthlyState;
         this.yearlyState = data.yearlyState;
+        this.year10State = data.year10State;
     }
 
     private _getStrength(value: number): ETrendIndexStrength {
@@ -371,7 +381,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.vm.forEach((_) => {
             _.type = OtherMarkets;
         });
-        
+
         if (this.vm.length > 18) {
             this.vm.slice(0, 9).forEach((_) => {
                 _.type = TopUpTrending;
@@ -568,7 +578,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         if (mesaItem.t > minDate || true) {
                             if (mesaItem.t % tfNumber === 0 || i === mesaDataList.length - 1) {
                                 mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
-                                volatilityValues.push(mesaItem.v - 100);
+                                if (mesaItem.v) {
+                                    volatilityValues.push(mesaItem.v - 100);
+                                }
                                 mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());
                             }
                         }
@@ -630,6 +642,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             case 86400: return "1d";
             case 2592000: return "1M";
             case 31104000: return "1Y";
+            case 311040000: return "10Y";
         }
         return tf + " Mins";
     }
