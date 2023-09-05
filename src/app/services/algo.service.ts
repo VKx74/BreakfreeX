@@ -508,6 +508,8 @@ export interface IMesaTrendIndex {
     avg_strength: { [id: string]: number; };
     timeframe_strengths: { [key: number]: number };
     volatility: { [key: number]: number };
+    durations: { [key: number]: number };
+    timeframe_state: { [key: number]: number };
     total_strength: number;
     last_price: number;
     price60: number;
@@ -516,12 +518,6 @@ export interface IMesaTrendIndex {
     price3600: number;
     price14400: number;
     price86400: number;
-    hour1State: number;
-    hour4State: number;
-    dailyState: number;
-    monthlyState: number;
-    yearlyState: number;
-    year10State: number;
 }
 
 export interface IMesaTrendDetails {

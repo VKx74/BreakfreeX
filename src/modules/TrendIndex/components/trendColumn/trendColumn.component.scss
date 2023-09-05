@@ -55,7 +55,7 @@
     font-weight: 600;
   }
 
-  .volatility-cell-container {
+  .volatility-cell-container, .duration-cell-container {
     display: flex;
     height: 100%;
     justify-content: center;
@@ -72,7 +72,7 @@
       font-size: 10px !important;
     }
 
-    .volatility-cell-container {
+    .volatility-cell-container, .duration-cell-container {
       font-size: 9px;
     }
   }
@@ -82,7 +82,7 @@
       font-size: 9px !important;
     }
     
-    .volatility-cell-container {
+    .volatility-cell-container, .duration-cell-container {
       font-size: 8px;
     }
   }

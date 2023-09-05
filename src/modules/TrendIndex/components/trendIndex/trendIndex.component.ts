@@ -108,12 +108,24 @@ class TrendIndexVM {
     price311040000Strength: ETrendIndexStrength;
     totalStrength: number;
 
+    minute1State: number;
+    minute5State: number;
+    minute15State: number;
     hour1State: number;
     hour4State: number;
     dailyState: number;
     monthlyState: number;
     yearlyState: number;
     year10State: number;
+
+    driveDuration: string;
+    minute1Duration: string;
+    minute5Duration: string;
+    minute15Duration: string;
+    hour1Duration: string;
+    hour4Duration: string;
+    dailyDuration: string;
+    monthlyDuration: string;
 
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
@@ -159,6 +171,29 @@ class TrendIndexVM {
             this.price311040000VolatilityValue = data.volatility["311040000"] - 100 || 0;
         }
 
+        if (data.durations) {
+            this.driveDuration = this._getDurationString(data.durations["1"]);
+            this.minute1Duration = this._getDurationString(data.durations["60"]);
+            this.minute5Duration = this._getDurationString(data.durations["300"]);
+            this.minute15Duration = this._getDurationString(data.durations["900"]);
+            this.hour1Duration = this._getDurationString(data.durations["3600"]);
+            this.hour4Duration = this._getDurationString(data.durations["14400"]);
+            this.dailyDuration = this._getDurationString(data.durations["86400"]);
+            this.monthlyDuration = this._getDurationString(data.durations["2592000"]);
+        }
+
+        if (data.timeframe_state) {
+            this.minute1State = data.timeframe_state["60"];
+            this.minute5State = data.timeframe_state["300"];
+            this.minute15State = data.timeframe_state["900"];
+            this.hour1State = data.timeframe_state["3600"];
+            this.hour4State = data.timeframe_state["14400"];
+            this.dailyState = data.timeframe_state["86400"];
+            this.monthlyState = data.timeframe_state["2592000"];
+            this.yearlyState = data.timeframe_state["31104000"];
+            this.year10State = data.timeframe_state["311040000"];
+        }
+
         this.totalStrength = data.total_strength;
 
         this.price1StrengthValue = s_1;
@@ -182,13 +217,6 @@ class TrendIndexVM {
         this.price2592000Strength = this._getStrength(s_2592000);
         this.price31104000Strength = this._getStrength(s_31104000);
         this.price311040000Strength = this._getStrength(s_311040000);
-
-        this.hour1State = data.hour1State;
-        this.hour4State = data.hour4State;
-        this.dailyState = data.dailyState;
-        this.monthlyState = data.monthlyState;
-        this.yearlyState = data.yearlyState;
-        this.year10State = data.year10State;
     }
 
     private _getStrength(value: number): ETrendIndexStrength {
@@ -205,6 +233,33 @@ class TrendIndexVM {
             return ETrendIndexStrength.Down;
         }
         return ETrendIndexStrength.Sideways;
+    }
+
+    private _getDurationString(t: number) {
+        if (!t) {
+            return "";
+        }
+        if (t < 0) {
+            return "Passed";
+        }
+
+        let minutes = t / 60;
+        let hours = minutes / 60;
+        let days = hours / 24;
+        let weeks = days / 7;
+
+        if (hours < 1) {
+            return minutes.toFixed(0) + " m";
+        }
+
+        if (days < 1) {
+            return hours.toFixed(0) + " h";
+        }
+
+        if (weeks < 1) {
+            return days.toFixed(0) + " d";
+        }
+        return weeks.toFixed(0) + " w";
     }
 }
 

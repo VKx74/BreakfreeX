@@ -13,4 +13,7 @@
    <div class="volatility-cell-container" *ngIf="!!VolatilityValue">
       <span class="trend-volatility-value">{{VolatilityValue.toFixed(0)}}%</span>
    </div>
+   <div class="duration-cell-container" *ngIf="!!Duration">
+      <span class="duration-volatility-value">{{Duration}}</span>
+   </div>
 </div>
