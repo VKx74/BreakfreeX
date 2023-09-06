@@ -118,6 +118,14 @@ class TrendIndexVM {
     yearlyState: number;
     year10State: number;
 
+    minute1Phase: number;
+    minute5Phase: number;
+    minute15Phase: number;
+    hour1Phase: number;
+    hour4Phase: number;
+    dailyPhase: number;
+    monthlyPhase: number;
+
     driveDuration: string;
     minute1Duration: string;
     minute5Duration: string;
@@ -192,6 +200,16 @@ class TrendIndexVM {
             this.monthlyState = data.timeframe_state["2592000"];
             this.yearlyState = data.timeframe_state["31104000"];
             this.year10State = data.timeframe_state["311040000"];
+        }
+
+        if (data.timeframe_phase) {
+            this.minute1Phase = data.timeframe_phase["60"];
+            this.minute5Phase = data.timeframe_phase["300"];
+            this.minute15Phase = data.timeframe_phase["900"];
+            this.hour1Phase = data.timeframe_phase["3600"];
+            this.hour4Phase = data.timeframe_phase["14400"];
+            this.dailyPhase = data.timeframe_phase["86400"];
+            this.monthlyPhase = data.timeframe_phase["2592000"];
         }
 
         this.totalStrength = data.total_strength;

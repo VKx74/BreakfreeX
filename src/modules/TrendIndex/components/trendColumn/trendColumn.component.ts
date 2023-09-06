@@ -11,6 +11,7 @@ export class TrendColumnComponent {
     private _strengthValue: number;
     private _volatilityValue: number;
     private _trendState: number;
+    private _trendPhase: number;
     private _duration: string;
 
     @Input() public set Strength(value: ETrendIndexStrength) {
@@ -27,6 +28,10 @@ export class TrendColumnComponent {
 
     @Input() public set TrendState(value: number) {
         this._trendState = value;
+    }
+
+    @Input() public set TrendPhase(value: number) {
+        this._trendPhase = value;
     }
 
     @Input() public set Duration(value: string) {
@@ -48,6 +53,10 @@ export class TrendColumnComponent {
     public get TrendState(): number {
         return this._trendState;
     }
+
+    public get TrendPhase(): number {
+        return this._trendPhase;
+    }
     
     public get Duration(): string {
         return this._duration;
@@ -56,6 +65,16 @@ export class TrendColumnComponent {
     ETrendIndexStrength = ETrendIndexStrength;
     
     constructor() {
+    }
+
+    TrendPhaseString(phase: number): string {
+        switch (phase) {
+            case 1: return "Cap"; 
+            case 2: return "Tail"; 
+            case 3: return "Drv"; 
+        }
+
+        return "";
     }
 }
 

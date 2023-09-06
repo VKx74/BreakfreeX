@@ -510,6 +510,7 @@ export interface IMesaTrendIndex {
     volatility: { [key: number]: number };
     durations: { [key: number]: number };
     timeframe_state: { [key: number]: number };
+    timeframe_phase: { [key: number]: number };
     total_strength: number;
     last_price: number;
     price60: number;

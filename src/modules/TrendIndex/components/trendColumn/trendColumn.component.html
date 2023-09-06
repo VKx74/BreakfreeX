@@ -11,9 +11,12 @@
       <!-- <span class="trend-state-sideways" *ngIf="TrendState == 1">|</span> -->
    </div>
    <div class="volatility-cell-container" *ngIf="!!VolatilityValue">
-      <span class="trend-volatility-value">{{VolatilityValue.toFixed(0)}}%</span>
+      <span class="volatility-value">{{VolatilityValue.toFixed(0)}}%</span>
    </div>
    <div class="duration-cell-container" *ngIf="!!Duration">
-      <span class="duration-volatility-value">{{Duration}}</span>
+      <span class="duration-value">{{Duration}}</span>
+   </div>
+   <div class="phase-cell-container" *ngIf="!!TrendPhase">
+      <span class="phase-value">{{TrendPhaseString(TrendPhase)}}</span>
    </div>
 </div>
