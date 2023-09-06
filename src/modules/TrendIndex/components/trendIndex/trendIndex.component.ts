@@ -243,10 +243,10 @@ class TrendIndexVM {
             return "Passed";
         }
 
-        let minutes = t / 60;
-        let hours = minutes / 60;
-        let days = hours / 24;
-        let weeks = days / 7;
+        let minutes = Math.floor(t / 60);
+        let hours = Math.floor(minutes / 60);
+        let days = Math.floor(hours / 24);
+        let weeks = Math.floor(days / 7);
 
         if (hours < 1) {
             return minutes.toFixed(0) + " m";
