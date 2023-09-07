@@ -44,7 +44,9 @@
 
     mat-row {
       overflow: hidden !important;
-      height: 60px !important;
+      height: 100% !important;
+     
+      max-height: 90px;
 
       &.row-group-header {
         border-top-left-radius: 6px;
@@ -231,20 +233,36 @@
 
     .symbol-cell-checkbox {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      margin: 0px 4px;
+      margin: 10px 3px;
     }
   }
+  .sphere ::before {     
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 0px !important;
+    left: 6px;
+  }
+  .sphere ::after {    width: 12px !important;
+    height: 12px !important;
+    border-radius: 0px !important;
+    left: 5px;
+  }
+
+.sphere input {
+    width: 15px;
+}
 
   .symbol-color-container {
     height: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 3px;
+    align-items: flex-start;
+    padding: 6px 6px;
     width: 100%;
     max-width: 100%;
+    justify-content: flex-start;
+
   }
 
   .data-table-cell {
@@ -256,6 +274,7 @@
     display: flex;
     justify-content: flex-start;
     column-gap: 3px;
+    height: 100%;
   }
 
   .positive-border {
@@ -267,16 +286,134 @@
   }
 
   .symbolx-tradable {
-    border-right: 3px solid gold;
+    background-color: gold;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+
   }
 
+  .symbolxholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 3px;
+}
+
   .is-auto-selected {
-    border-right-color: #005eff !important;
+    background-color: #005eff !important;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
   }
 
   .symbolx-untradeable {
-    border-right: 3px solid transparent;
+    background-color:  transparent;
+    border: 1px solid #bd5b6a;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
   }
+
+  .middlesymbol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    row-gap: 3px;
+}  
+
+  
+  .containerx {
+    width: 16px;
+    height: 16px;
+    position: relative;
+  }
+  
+  .sphere {
+    width: 100%;
+    display: flex;
+    height: 100%;
+    position: relative;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cube {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    top: 50%;
+    left: 50%;
+    border: 1px solid #000;
+    /* background-color: #000; */
+    -webkit-animation: rotateCube 1s infinite linear;
+    animation: rotateCube 6s infinite linear;
+    transform-origin: center center;
+    transform: translate(-50%, -50%);
+
+  }
+
+  .half-cube {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 50%;
+    left: 50%;
+    border: 1px solid #000;
+    animation: rotateCube 1s infinite linear;
+    transform-origin: center center;
+    transform: translate(-50%, -50%);
+  }
+  
+  .top-half {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
+  }
+  
+  .bottom-half {
+    clip-path: polygon(0% 50%, 100% 50%, 100% 100%, 0% 100%);
+  }
+
+  .cube.tradeable {
+
+     background-color: gold; 
+ 
+
+  }
+
+  .cube.is-auto-selectedx {
+
+    background-color: #005eff;
+  }
+
+  .cube.untradeable {
+
+    background-color: #fff; 
+    display: none !important;
+
+
+ }
+  
+  @keyframes rotateCube {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  
+
+  
+  
+  //
+
+  //
+
+  
 
   .strength-cell {
     width: 100%;
@@ -298,7 +435,7 @@
     padding-right: 3px;
     max-width: 100%;
     display: flex;
-    justify-content: flex-end;
+   // justify-content: flex-end;
   }
 
   .down-trend {
@@ -306,7 +443,7 @@
     padding-right: 3px;
     max-width: 100%;
     display: flex;
-    justify-content: flex-end;
+   // justify-content: flex-end;
   }
   .bold-symbol {
     font-weight: bold;
@@ -370,7 +507,7 @@
       padding: 3px 6px 3px 10px;
 
       text-align: left;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .margin-top {

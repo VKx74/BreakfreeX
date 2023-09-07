@@ -258,7 +258,7 @@ class TrendIndexVM {
             return "";
         }
         if (t < 0) {
-            return "Passed";
+            return "Exceeded";
         }
 
         let minutes = Math.floor(t / 60);

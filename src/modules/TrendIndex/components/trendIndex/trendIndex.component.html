@@ -80,8 +80,8 @@
 
                 <!--Columns-->
 
-                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 128 : 100"
-                    [columnWidth]="editMode ? 128 : 100">
+                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 100 : 100"
+                    [columnWidth]="editMode ? 100 : 100">
                     Market
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
@@ -123,11 +123,7 @@
                 <data-table-cell columnName="symbol">
                     <ng-template let-vmItem>
                         <div class="symbol-cell">
-                            <div class="symbol-cell-checkbox" *ngIf="editMode">
-                                <input type="checkbox" (change)="instrumentSelectionChanged(vmItem)"
-                                    [checked]="isInstrumentSelected(vmItem)" id="symbol_{{vmItem.symbol}}" />
-                                <label for="symbol_{{vmItem.symbol}}"></label>
-                            </div>
+                           
                             <div class="symbol-container" tooltip
                                 [matTooltip]="getRelativeStrengthTooltip(vmItem.totalStrength)">
                                 <span class="symbolx-border"
@@ -136,20 +132,61 @@
 
                                 <div class="symbol-color-container"
                                     [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+
+                           
+
+
+                                
+
                                     <div class="symbolholdx">
-                                        <span class="symbolx-tradable" *ngIf="isTradable(vmItem)"
-                                            [class.is-auto-selected]="isAutoSelected(vmItem)">
+                                    
+                                        <div class="middlesymbol">
+                                        <div class="symbolxholder">
+
+                                            <div class="containerx">
+                                                <div class="sphere">
+                                                    
+                                                    <div class="symbol-cell-checkbox" *ngIf="editMode">
+                                                        <input type="checkbox" (change)="instrumentSelectionChanged(vmItem)"
+                                                            [checked]="isInstrumentSelected(vmItem)" id="symbol_{{vmItem.symbol}}" />
+                                                        <label for="symbol_{{vmItem.symbol}}"></label>
+                                                    </div>
+
+                                                  <div class="cube untradeable" *ngIf="!isTradable(vmItem) && !editMode"></div>
+                                                  <div class="cube tradeable"  *ngIf="isTradable(vmItem) && !editMode"
+                                                  [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
+                                                  <div class="cube selected" *ngIf="isInstrumentSelected(vmItem) && !editMode && !isTradable(vmItem)"></div>
+                                                </div>
+
+                                 
+                                                <div class="half-cube top-half"  *ngIf="isTradable(vmItem) && !editMode"
+                                                [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
+                                                <div class="half-cube bottom-half"  *ngIf="isTradable(vmItem) && !editMode"
+                                                [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
+                                              </div>
+
+                                            <span class="symbolx">
+                                                {{vmItem.symbol}}
+                                            </span>
+
+                                        
+                                           
+                                          </div>
+                                          <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
+                                            [class.down-trend]="vmItem.totalStrength < 0">
+                                           Strength: [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
                                         </span>
-                                        <span class="symbolx-untradeable" *ngIf="!isTradable(vmItem)">
+                                        <span >
+                                           State: 
                                         </span>
-                                        <span class="symbolx">
-                                            {{vmItem.symbol}}
-                                        </span>
+                                     </div>
+
+
                                     </div>
-                                    <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
-                                        [class.down-trend]="vmItem.totalStrength < 0">
-                                        [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
-                                    </span>
+
+                              
+                                
+                                 
                                 </div>
                             </div>
                         </div>

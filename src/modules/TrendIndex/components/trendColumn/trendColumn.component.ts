@@ -71,7 +71,7 @@ export class TrendColumnComponent {
         switch (phase) {
             case 1: return "Cap"; 
             case 2: return "Tail"; 
-            case 3: return "Drv"; 
+            case 3: return "Drive"; 
         }
 
         return "";
