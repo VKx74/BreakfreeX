@@ -22,6 +22,7 @@ import { SharedTranslateService } from '@app/localization/shared.token';
 import { TrendColumnComponent } from './components/trendColumn/trendColumn.component';
 import { TrendIndexBarChartComponent } from './components/trendIndexBarChart/trendIndexBarChart.component';
 import { TrendIndexChartComponent } from './components/trendIndexChart/trendIndexChart.component';
+import { JSONViewDialogComponent } from 'modules/Shared/components/json-view/json-view-dialog.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { TrendIndexChartComponent } from './components/trendIndexChart/trendInde
     ],
     entryComponents: [
         TrendIndexComponent,
-        TrendIndexWidgetComponent
+        TrendIndexWidgetComponent,
+        JSONViewDialogComponent
     ],
     exports: [
         TrendIndexComponent,

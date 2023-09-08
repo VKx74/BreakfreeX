@@ -1,6 +1,6 @@
-<div class="crypto-modal">
+<div class="crypto-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
     <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" cdkDragHandle>
             <button type="button" class="close" (click)="close()">&times;</button>
             <h4 class="modal-title">{{data.title ? data.title : 'Details'}}</h4>
         </div>

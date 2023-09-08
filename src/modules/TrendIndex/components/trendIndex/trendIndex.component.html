@@ -109,8 +109,7 @@
                     [columnWidth]="75">
                     {{'month_1' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="year_1" [sortable]="false" [columnMinWidth]="15"
-                    [columnWidth]="75">
+                <data-table-header-cell columnName="year_1" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
                     {{'year_1' | translate}}
                 </data-table-header-cell>
                 <data-table-header-cell columnName="year_10" [sortable]="false" [columnMinWidth]="15"
@@ -123,70 +122,54 @@
                 <data-table-cell columnName="symbol">
                     <ng-template let-vmItem>
                         <div class="symbol-cell">
-                           
                             <div class="symbol-container" tooltip
                                 [matTooltip]="getRelativeStrengthTooltip(vmItem.totalStrength)">
                                 <span class="symbolx-border"
                                     [ngClass]="{'positive-border': vmItem.totalStrength > 0, 'negative-border': vmItem.totalStrength < 0}">
                                 </span>
-
                                 <div class="symbol-color-container"
                                     [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-
-                           
-
-
-                                
-
                                     <div class="symbolholdx">
-                                    
                                         <div class="middlesymbol">
-                                        <div class="symbolxholder">
-
-                                            <div class="containerx">
-                                                <div class="sphere">
-                                                    
-                                                    <div class="symbol-cell-checkbox" *ngIf="editMode">
-                                                        <input type="checkbox" (change)="instrumentSelectionChanged(vmItem)"
-                                                            [checked]="isInstrumentSelected(vmItem)" id="symbol_{{vmItem.symbol}}" />
-                                                        <label for="symbol_{{vmItem.symbol}}"></label>
+                                            <div class="symbolxholder">
+                                                <div class="containerx">
+                                                    <div class="sphere">
+                                                        <div class="symbol-cell-checkbox" *ngIf="editMode">
+                                                            <input type="checkbox"
+                                                                (change)="instrumentSelectionChanged(vmItem)"
+                                                                [checked]="isInstrumentSelected(vmItem)"
+                                                                id="symbol_{{vmItem.symbol}}" />
+                                                            <label for="symbol_{{vmItem.symbol}}"></label>
+                                                        </div>
+                                                        <div class="cube untradeable"
+                                                            *ngIf="!isTradable(vmItem) && !editMode"></div>
+                                                        <div class="cube tradeable"
+                                                            *ngIf="isTradable(vmItem) && !editMode"
+                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
+                                                        <div class="cube selected"
+                                                            *ngIf="isInstrumentSelected(vmItem) && !editMode && !isTradable(vmItem)">
+                                                        </div>
                                                     </div>
-
-                                                  <div class="cube untradeable" *ngIf="!isTradable(vmItem) && !editMode"></div>
-                                                  <div class="cube tradeable"  *ngIf="isTradable(vmItem) && !editMode"
-                                                  [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
-                                                  <div class="cube selected" *ngIf="isInstrumentSelected(vmItem) && !editMode && !isTradable(vmItem)"></div>
+                                                    <div class="half-cube top-half"
+                                                        *ngIf="isTradable(vmItem) && !editMode"
+                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
+                                                    <div class="half-cube bottom-half"
+                                                        *ngIf="isTradable(vmItem) && !editMode"
+                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
                                                 </div>
-
-                                 
-                                                <div class="half-cube top-half"  *ngIf="isTradable(vmItem) && !editMode"
-                                                [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
-                                                <div class="half-cube bottom-half"  *ngIf="isTradable(vmItem) && !editMode"
-                                                [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
-                                              </div>
-
-                                            <span class="symbolx">
-                                                {{vmItem.symbol}}
+                                                <span class="symbolx">
+                                                    {{vmItem.symbol}}
+                                                </span>
+                                            </div>
+                                            <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
+                                                [class.down-trend]="vmItem.totalStrength < 0">
+                                                Strength: [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
                                             </span>
-
-                                        
-                                           
-                                          </div>
-                                          <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
-                                            [class.down-trend]="vmItem.totalStrength < 0">
-                                           Strength: [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
-                                        </span>
-                                        <span >
-                                           State: 
-                                        </span>
-                                     </div>
-
-
+                                            <span class="details-btn" (click)="showDetails(vmItem, $event)">
+                                                Details
+                                            </span>
+                                        </div>
                                     </div>
-
-                              
-                                
-                                 
                                 </div>
                             </div>
                         </div>
@@ -206,10 +189,8 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price60Strength"
-                                [StrengthValue]="vmItem.price60StrengthValue"
-                                [TrendState]="vmItem.minute1State"
-                                [TrendPhase]="vmItem.minute1Phase"
-                                [VolatilityValue]="vmItem.price60VolatilityValue"
+                                [StrengthValue]="vmItem.price60StrengthValue" [TrendState]="vmItem.minute1State"
+                                [TrendPhase]="vmItem.minute1Phase" [VolatilityValue]="vmItem.price60VolatilityValue"
                                 [Duration]="vmItem.minute1Duration"></trend-column>
                         </div>
                     </ng-template>
@@ -218,10 +199,8 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price300Strength"
-                                [StrengthValue]="vmItem.price300StrengthValue"
-                                [TrendState]="vmItem.minute5State"
-                                [TrendPhase]="vmItem.minute5Phase"
-                                [VolatilityValue]="vmItem.price300VolatilityValue"
+                                [StrengthValue]="vmItem.price300StrengthValue" [TrendState]="vmItem.minute5State"
+                                [TrendPhase]="vmItem.minute5Phase" [VolatilityValue]="vmItem.price300VolatilityValue"
                                 [Duration]="vmItem.minute5Duration"></trend-column>
                         </div>
                     </ng-template>
@@ -230,10 +209,8 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price900Strength"
-                                [StrengthValue]="vmItem.price900StrengthValue"
-                                [TrendState]="vmItem.minute15State"
-                                [TrendPhase]="vmItem.minute15Phase"
-                                [VolatilityValue]="vmItem.price900VolatilityValue"
+                                [StrengthValue]="vmItem.price900StrengthValue" [TrendState]="vmItem.minute15State"
+                                [TrendPhase]="vmItem.minute15Phase" [VolatilityValue]="vmItem.price900VolatilityValue"
                                 [Duration]="vmItem.minute15Duration"></trend-column>
                         </div>
                     </ng-template>
@@ -242,10 +219,8 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price3600Strength"
-                                [StrengthValue]="vmItem.price3600StrengthValue" 
-                                [TrendState]="vmItem.hour1State"
-                                [TrendPhase]="vmItem.hour1Phase"
-                                [VolatilityValue]="vmItem.price3600VolatilityValue"
+                                [StrengthValue]="vmItem.price3600StrengthValue" [TrendState]="vmItem.hour1State"
+                                [TrendPhase]="vmItem.hour1Phase" [VolatilityValue]="vmItem.price3600VolatilityValue"
                                 [Duration]="vmItem.hour1Duration"></trend-column>
                         </div>
                     </ng-template>
@@ -254,10 +229,8 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price14400Strength"
-                                [StrengthValue]="vmItem.price14400StrengthValue" 
-                                [TrendState]="vmItem.hour4State"
-                                [TrendPhase]="vmItem.hour4Phase"
-                                [VolatilityValue]="vmItem.price14400VolatilityValue"
+                                [StrengthValue]="vmItem.price14400StrengthValue" [TrendState]="vmItem.hour4State"
+                                [TrendPhase]="vmItem.hour4Phase" [VolatilityValue]="vmItem.price14400VolatilityValue"
                                 [Duration]="vmItem.hour4Duration"></trend-column>
                         </div>
                     </ng-template>
@@ -266,10 +239,8 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price86400Strength"
-                                [StrengthValue]="vmItem.price86400StrengthValue" 
-                                [TrendState]="vmItem.dailyState"
-                                [TrendPhase]="vmItem.dailyPhase"
-                                [VolatilityValue]="vmItem.price86400VolatilityValue"
+                                [StrengthValue]="vmItem.price86400StrengthValue" [TrendState]="vmItem.dailyState"
+                                [TrendPhase]="vmItem.dailyPhase" [VolatilityValue]="vmItem.price86400VolatilityValue"
                                 [Duration]="vmItem.dailyDuration"></trend-column>
                         </div>
                     </ng-template>
@@ -278,8 +249,7 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price2592000Strength"
-                                [StrengthValue]="vmItem.price2592000StrengthValue" 
-                                [TrendState]="vmItem.monthlyState"
+                                [StrengthValue]="vmItem.price2592000StrengthValue" [TrendState]="vmItem.monthlyState"
                                 [TrendPhase]="vmItem.monthlyPhase"
                                 [VolatilityValue]="vmItem.price2592000VolatilityValue"
                                 [Duration]="vmItem.monthlyDuration"></trend-column>

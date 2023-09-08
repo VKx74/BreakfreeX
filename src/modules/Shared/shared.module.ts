@@ -40,6 +40,7 @@ import { UTCSecondsToDTPipe } from './pipes/utc-seconds-to-dt.pipe';
 import { SecondsToTFPipe } from './pipes/seconds-to-tf.pipe';
 import { ProfitPolicyTradingModalComponent } from './components/profit-policy-trading/profit-policy-trading.component';
 import { LiabilityPolicyTradingModalComponent } from './components/liability-policy-trading/liability-policy-trading.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const PIPES = [
     DateFormatPipe,
@@ -101,6 +102,7 @@ const COMPONENTS = [
         RouterModule,
         LoadingModule,
         LoaderModule,
+        DragDropModule
     ],
     exports: [
         ...PIPES,

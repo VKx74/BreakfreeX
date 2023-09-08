@@ -45,8 +45,7 @@
     mat-row {
       overflow: hidden !important;
       height: 100% !important;
-     
-      max-height: 90px;
+      max-height: 75px;
 
       &.row-group-header {
         border-top-left-radius: 6px;
@@ -76,15 +75,15 @@
     mat-header-cell {
       font-weight: bold !important;
       padding: 0px !important;
-  
+
       &:last-of-type {
         padding-right: 0px !important;
       }
-      
+
       &:first-of-type {
         padding-left: 10px !important;
       }
-      
+
       &:not(:first-of-type) {
         .header-cell-content-wrapper {
           text-align: center !important;
@@ -238,21 +237,22 @@
       margin: 10px 3px;
     }
   }
-  .sphere ::before {     
+  .sphere ::before {
     width: 10px !important;
     height: 10px !important;
     border-radius: 0px !important;
     left: 6px;
   }
-  .sphere ::after {    width: 12px !important;
+  .sphere ::after {
+    width: 12px !important;
     height: 12px !important;
     border-radius: 0px !important;
     left: 5px;
   }
 
-.sphere input {
+  .sphere input {
     width: 15px;
-}
+  }
 
   .symbol-color-container {
     height: 100%;
@@ -262,7 +262,6 @@
     width: 100%;
     max-width: 100%;
     justify-content: flex-start;
-
   }
 
   .data-table-cell {
@@ -290,7 +289,6 @@
     width: 9px;
     height: 9px;
     border-radius: 50%;
-
   }
 
   .symbolxholder {
@@ -298,7 +296,7 @@
     align-items: center;
     justify-content: center;
     column-gap: 3px;
-}
+  }
 
   .is-auto-selected {
     background-color: #005eff !important;
@@ -308,7 +306,7 @@
   }
 
   .symbolx-untradeable {
-    background-color:  transparent;
+    background-color: transparent;
     border: 1px solid #bd5b6a;
     width: 9px;
     height: 9px;
@@ -321,15 +319,14 @@
     align-items: flex-start;
     justify-content: flex-start;
     row-gap: 3px;
-}  
+  }
 
-  
   .containerx {
     width: 16px;
     height: 16px;
     position: relative;
   }
-  
+
   .sphere {
     width: 100%;
     display: flex;
@@ -341,7 +338,7 @@
     justify-content: center;
     align-items: center;
   }
-  
+
   .cube {
     position: absolute;
     width: 9px;
@@ -354,7 +351,6 @@
     animation: rotateCube 6s infinite linear;
     transform-origin: center center;
     transform: translate(-50%, -50%);
-
   }
 
   .half-cube {
@@ -368,35 +364,28 @@
     transform-origin: center center;
     transform: translate(-50%, -50%);
   }
-  
+
   .top-half {
     clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
   }
-  
+
   .bottom-half {
     clip-path: polygon(0% 50%, 100% 50%, 100% 100%, 0% 100%);
   }
 
   .cube.tradeable {
-
-     background-color: gold; 
- 
-
+    background-color: gold;
   }
 
   .cube.is-auto-selectedx {
-
     background-color: #005eff;
   }
 
   .cube.untradeable {
-
-    background-color: #fff; 
+    background-color: #fff;
     display: none !important;
+  }
 
-
- }
-  
   @keyframes rotateCube {
     0% {
       transform: translate(-50%, -50%) rotate(0deg);
@@ -405,15 +394,10 @@
       transform: translate(-50%, -50%) rotate(360deg);
     }
   }
-  
-
-  
-  
-  //
 
   //
 
-  
+  //
 
   .strength-cell {
     width: 100%;
@@ -435,7 +419,7 @@
     padding-right: 3px;
     max-width: 100%;
     display: flex;
-   // justify-content: flex-end;
+    // justify-content: flex-end;
   }
 
   .down-trend {
@@ -443,7 +427,7 @@
     padding-right: 3px;
     max-width: 100%;
     display: flex;
-   // justify-content: flex-end;
+    // justify-content: flex-end;
   }
   .bold-symbol {
     font-weight: bold;
@@ -530,15 +514,6 @@
     }
   }
 
-  .data-table {
-    display: flex;
-    max-height: 100%;
-    overflow-y: scroll;
-    max-width: 100%;
-
-    margin-bottom: 12px;
-  }
-
   .strength-positive {
     color: rgba(94, 175, 128, 0.8);
   }
@@ -602,6 +577,11 @@
       display: flex;
       flex-direction: column;
     }
+  }
+
+  .details-btn {
+    cursor: pointer;
+    text-decoration: underline;
   }
 }
 

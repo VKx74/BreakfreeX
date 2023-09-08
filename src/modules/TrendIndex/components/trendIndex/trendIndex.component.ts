@@ -15,12 +15,13 @@ import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { BaseLayoutItem } from "@layout/base-layout-item";
-import { AlgoService, IMesaTrendIndex, IUserAutoTradingInfoData } from "@app/services/algo.service";
+import { AlgoService, IMesaTrendIndex, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData } from "@app/services/algo.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
 import { DataTableComponent } from "modules/datatable/components/data-table/data-table.component";
+import { IJSONViewDialogData, JSONViewDialogComponent } from "modules/Shared/components/json-view/json-view-dialog.component";
 
 const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -71,6 +72,7 @@ interface ITrendIndexBarChartDataVM {
 class TrendIndexVM {
     type: string;
     avg_strength: { [id: string]: number; };
+    trend_period_descriptions: { [key: number]: ITrendPeriodDescriptionResponse };
 
     id: string;
     symbol: string;
@@ -135,6 +137,33 @@ class TrendIndexVM {
     dailyDuration: string;
     monthlyDuration: string;
 
+    public static getDurationString(t: number) {
+        if (!t) {
+            return "";
+        }
+        if (t < 0) {
+            return "Exceeded";
+        }
+
+        let minutes = Math.floor(t / 60);
+        let hours = Math.floor(minutes / 60);
+        let days = Math.floor(hours / 24);
+        let weeks = Math.floor(days / 7);
+
+        if (hours < 1) {
+            return minutes.toFixed(0) + " m";
+        }
+
+        if (days < 1) {
+            return hours.toFixed(0) + " h";
+        }
+
+        if (weeks < 1) {
+            return days.toFixed(0) + " d";
+        }
+        return weeks.toFixed(0) + " w";
+    }
+
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
         this.symbol = data.symbol.replace("_", "");
@@ -180,14 +209,14 @@ class TrendIndexVM {
         }
 
         if (data.durations) {
-            this.driveDuration = this._getDurationString(data.durations["1"]);
-            this.minute1Duration = this._getDurationString(data.durations["60"]);
-            this.minute5Duration = this._getDurationString(data.durations["300"]);
-            this.minute15Duration = this._getDurationString(data.durations["900"]);
-            this.hour1Duration = this._getDurationString(data.durations["3600"]);
-            this.hour4Duration = this._getDurationString(data.durations["14400"]);
-            this.dailyDuration = this._getDurationString(data.durations["86400"]);
-            this.monthlyDuration = this._getDurationString(data.durations["2592000"]);
+            this.driveDuration = TrendIndexVM.getDurationString(data.durations["1"]);
+            this.minute1Duration = TrendIndexVM.getDurationString(data.durations["60"]);
+            this.minute5Duration = TrendIndexVM.getDurationString(data.durations["300"]);
+            this.minute15Duration = TrendIndexVM.getDurationString(data.durations["900"]);
+            this.hour1Duration = TrendIndexVM.getDurationString(data.durations["3600"]);
+            this.hour4Duration = TrendIndexVM.getDurationString(data.durations["14400"]);
+            this.dailyDuration = TrendIndexVM.getDurationString(data.durations["86400"]);
+            this.monthlyDuration = TrendIndexVM.getDurationString(data.durations["2592000"]);
         }
 
         if (data.timeframe_state) {
@@ -211,6 +240,8 @@ class TrendIndexVM {
             this.dailyPhase = data.timeframe_phase["86400"];
             this.monthlyPhase = data.timeframe_phase["2592000"];
         }
+
+        this.trend_period_descriptions = data.trend_period_descriptions;
 
         this.totalStrength = data.total_strength;
 
@@ -251,33 +282,6 @@ class TrendIndexVM {
             return ETrendIndexStrength.Down;
         }
         return ETrendIndexStrength.Sideways;
-    }
-
-    private _getDurationString(t: number) {
-        if (!t) {
-            return "";
-        }
-        if (t < 0) {
-            return "Exceeded";
-        }
-
-        let minutes = Math.floor(t / 60);
-        let hours = Math.floor(minutes / 60);
-        let days = Math.floor(hours / 24);
-        let weeks = Math.floor(days / 7);
-
-        if (hours < 1) {
-            return minutes.toFixed(0) + " m";
-        }
-
-        if (days < 1) {
-            return hours.toFixed(0) + " h";
-        }
-
-        if (weeks < 1) {
-            return days.toFixed(0) + " d";
-        }
-        return weeks.toFixed(0) + " w";
     }
 }
 
@@ -362,7 +366,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _algoService: AlgoService,
         protected _instrumentService: InstrumentService,
         protected _cdr: ChangeDetectorRef,
-        protected _identityService: IdentityService) {
+        protected _identityService: IdentityService,
+        protected _matDialog: MatDialog) {
         super();
     }
 
@@ -586,6 +591,49 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return;
         }
         this.selectVMItem(instrumentVM);
+    }
+
+    showDetails(instrumentVM: TrendIndexVM, e: PointerEvent) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        let d: { [key: string]: any } = {};
+
+        for (let key in instrumentVM.trend_period_descriptions) {
+            let phaseKey;
+            if (key === "0") {
+                phaseKey = "Short";
+            } else if (key === "1") {
+                phaseKey = "Mid";
+            } else if (key === "2") {
+                phaseKey = "Long";
+            }
+
+            let item = instrumentVM.trend_period_descriptions[key];
+
+            let phase = "None";
+            if (item.phase === 1) {
+                phase = "Capitulation";
+            } else if (item.phase === 2) {
+                phase = "Tail";
+            } else if (item.phase === 3) {
+                phase = "Drive";
+            }
+
+            d[phaseKey] = {
+                strength: (item.strength * 100).toFixed(0) + "%",
+                volatility: item.volatility ? (item.volatility - 100).toFixed(0) + "%" : "None",
+                duration: TrendIndexVM.getDurationString(item.duration),
+                phase: phase
+            };
+        }
+
+        this._matDialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
+            data: {
+                title: 'Details',
+                json: d
+            }
+        });
     }
 
     selectVMItem(instrumentVM: TrendIndexVM) {

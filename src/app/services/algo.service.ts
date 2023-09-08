@@ -501,11 +501,19 @@ export interface IBarData {
     t: number;
 }
 
+export interface ITrendPeriodDescriptionResponse {
+    strength: number;
+    volatility: number;
+    duration: number;
+    phase: number;
+}
+
 export interface IMesaTrendIndex {
     symbol: string;
     datafeed: string;
     strength: { [id: string]: IMesaTrendStrength; };
     avg_strength: { [id: string]: number; };
+    trend_period_descriptions: { [key: number]: ITrendPeriodDescriptionResponse };
     timeframe_strengths: { [key: number]: number };
     volatility: { [key: number]: number };
     durations: { [key: number]: number };
@@ -820,7 +828,7 @@ export class AlgoService {
             return result;
         }));
     }
-    
+
     addTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
         let markets = [];
         for (let s of symbols) {
@@ -831,20 +839,20 @@ export class AlgoService {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-markets`, {
             account: account, userId: userId, version: "1.0", markets: markets
         });
-    } 
-    
+    }
+
     removeTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/remove-markets`, {
             account: account, userId: userId, version: "1.0", markets: symbols
         });
     }
-    
+
     changeUseManualTradingForAccount(account: string, userId: string, useManualTrading: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-use-manual-trading`, {
             account: account, userId: userId, version: "1.0", useManualTrading: useManualTrading
         });
     }
-    
+
     getUserAutoTradingInfoForAccount(account: string): Observable<IUserAutoTradingInfoData> {
         return this._http.get<IUserAutoTradingInfoData>(`${this.url}apex/config/${account}`);
     }
