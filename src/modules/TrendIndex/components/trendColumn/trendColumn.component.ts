@@ -72,6 +72,7 @@ export class TrendColumnComponent {
             case 1: return "Cap"; 
             case 2: return "Tail"; 
             case 3: return "Drive"; 
+            case 4: return "C-D"; 
         }
 
         return "";

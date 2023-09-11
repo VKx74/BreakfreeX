@@ -260,7 +260,9 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price31104000Strength"
-                                [StrengthValue]="vmItem.price31104000StrengthValue" [TrendState]="vmItem.yearlyState"
+                                [StrengthValue]="vmItem.price31104000StrengthValue" 
+                                [TrendPhase]="vmItem.yearlyPhase"
+                                [TrendState]="vmItem.yearlyState"
                                 [VolatilityValue]="vmItem.price31104000VolatilityValue"></trend-column>
                         </div>
                     </ng-template>
@@ -269,7 +271,9 @@
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [Strength]="vmItem.price311040000Strength"
-                                [StrengthValue]="vmItem.price311040000StrengthValue" [TrendState]="vmItem.year10State"
+                                [StrengthValue]="vmItem.price311040000StrengthValue" 
+                                [TrendPhase]="vmItem.year10Phase"
+                                [TrendState]="vmItem.year10State"
                                 [VolatilityValue]="vmItem.price311040000VolatilityValue"></trend-column>
                         </div>
                     </ng-template>

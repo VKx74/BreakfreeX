@@ -127,6 +127,8 @@ class TrendIndexVM {
     hour4Phase: number;
     dailyPhase: number;
     monthlyPhase: number;
+    yearlyPhase: number;
+    year10Phase: number;
 
     driveDuration: string;
     minute1Duration: string;
@@ -239,6 +241,8 @@ class TrendIndexVM {
             this.hour4Phase = data.timeframe_phase["14400"];
             this.dailyPhase = data.timeframe_phase["86400"];
             this.monthlyPhase = data.timeframe_phase["2592000"];
+            this.yearlyPhase = data.timeframe_phase["31104000"];
+            this.year10Phase = data.timeframe_phase["311040000"];
         }
 
         this.trend_period_descriptions = data.trend_period_descriptions;
