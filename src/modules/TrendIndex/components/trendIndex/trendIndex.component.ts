@@ -622,6 +622,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 phase = "Tail";
             } else if (item.phase === 3) {
                 phase = "Drive";
+            } else if (item.phase === 3) {
+                phase = "Counter Drive";
             }
 
             d[phaseKey] = {
