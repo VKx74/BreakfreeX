@@ -61,6 +61,18 @@
                             </div>
                             <trend-index-chart [data]="chartDataTrend.strengthChart" [height]="60"></trend-index-chart>
                         </div>
+                       
+                    </div>
+
+                </div>
+            </ng-container>
+            <ng-container *ngFor="let chartDataTrend of chartDataTrends">
+                <div class="chart-container" [ngClass]="height-60">
+                    <div class="charts-container">
+                        <div class="chart-container-title">
+                            <div class="datatrend">{{chartDataTrend.timeframe}}</div>
+                        </div>
+                 
                         <div class="chart-item" *ngIf="chartDataTrend.volatilityChart.values.length > 0 ">
                             <div class="chart-container-title vol">
                                 <div> Volatility </div>
