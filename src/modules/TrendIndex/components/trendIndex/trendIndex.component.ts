@@ -622,7 +622,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 phase = "Tail";
             } else if (item.phase === 3) {
                 phase = "Drive";
-            } else if (item.phase === 3) {
+            } else if (item.phase === 4) {
                 phase = "Counter Drive";
             }
 
@@ -944,6 +944,45 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.loading = false;
             this._changesDetected = true;
         });
+    }
+
+    getGlobalMarketState(instrumentVM: TrendIndexVM): string {
+        let resultState = "Sideways";
+        let shortState = instrumentVM.trend_period_descriptions["0"];
+        let midState = instrumentVM.trend_period_descriptions["1"];
+        let longState = instrumentVM.trend_period_descriptions["2"];
+
+        let shortPhase = shortState.phase;
+        let midPhase = midState.phase;
+        let longPhase = longState.phase;
+
+        // 1 - Capitulation
+        // 2 - Tail
+        // 3 - Drive
+        // 4 - Counter Drive
+
+        if (longPhase === 3) {
+            if (midPhase === 3) {
+                return "Drive";
+            }
+            return "Drive Transition";
+        }
+
+        if (longPhase === 1) {
+            if (midPhase === 1 || midPhase === 2) {
+                return "Capitulation";
+            }
+            return "Cap Transition";
+        } 
+        
+        if (longPhase === 2) {
+            if (midPhase === 1 || midPhase === 2) {
+                return "Tail";
+            }
+            return "Tail Transition";
+        }
+
+        return resultState;
     }
 
     private _raiseStateChanged() {

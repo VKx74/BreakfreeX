@@ -178,7 +178,7 @@
                                                 Strength: [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
                                             </span>
                                             <span class="details-btn" (click)="showDetails(vmItem, $event)">
-                                                Details
+                                                {{getGlobalMarketState(vmItem)}}
                                             </span>
                                         </div>
                                     </div>
