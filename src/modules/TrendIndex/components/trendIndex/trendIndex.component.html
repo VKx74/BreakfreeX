@@ -92,8 +92,8 @@
 
                 <!--Columns-->
 
-                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 100 : 100"
-                    [columnWidth]="editMode ? 100 : 100">
+                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 125 : 125"
+                    [columnWidth]="editMode ? 125 : 125">
                     Market
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
@@ -178,10 +178,10 @@
                                                 Strength: [{{(vmItem.totalStrength * 100).toFixed(0)}}%]
                                             </span>
                                             <span class="details-btn" (click)="showDetails(vmItem, $event)">
-                                                {{vmItem.currentMarketState}}
+                                              State:  {{vmItem.currentMarketState}}
                                             </span>
                                             <span class="expected-market-state">
-                                                {{vmItem.expectedMarketState}}
+                                               Next > {{vmItem.expectedMarketState}}
                                             </span>
                                         </div>
                                     </div>
