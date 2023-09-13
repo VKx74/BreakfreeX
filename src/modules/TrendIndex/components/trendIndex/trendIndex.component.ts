@@ -52,6 +52,13 @@ export enum ETrendIndexStrength {
     StrongDown
 }
 
+enum PhaseState {
+    Capitulation = 1,
+    Tail = 2,
+    Drive = 3,
+    CD = 4
+}
+
 interface ITrendIndexChartDataVM {
     strengthChart: ITrendIndexChartData;
     volatilityChart: ITrendIndexChartData;
@@ -314,20 +321,20 @@ class TrendIndexVM {
         let currentState = "";
         let expectedState = "";
 
-        if (longPhase === 3) {
-            if (midPhase === 3) {
+        if (longPhase === PhaseState.Drive) {
+            if (midPhase === PhaseState.Drive) {
                 currentState = "Drive";
-                if (shortPhase === 3) {
+                if (shortPhase === PhaseState.Drive) {
                     expectedState = "Drive";
                 } else {
                     expectedState = "Capitulation";
                 }
             } else {
                 currentState = "Drive Transition";
-                if (midPhase === 4 || shortPhase === 4) {
+                if (midPhase === PhaseState.CD || shortPhase === PhaseState.CD) {
                     expectedState = "Capitulation";
                 } else {
-                    if (shortPhase === 3 && midPhase === 1) {
+                    if (shortPhase === PhaseState.Drive && midPhase === PhaseState.Capitulation) {
                         expectedState = "Drive";
                     } else {
                         expectedState = "Capitulation";
@@ -336,13 +343,13 @@ class TrendIndexVM {
             }
         }
 
-        if (longPhase === 1) {
-            if (midPhase === 1 || midPhase === 2) {
+        if (longPhase === PhaseState.Capitulation) {
+            if (midPhase === PhaseState.Capitulation || midPhase === PhaseState.Tail) {
                 currentState = "Capitulation";
                 expectedState = "Tail";
             } else {
                 currentState = "Cap Transition";
-                if (midPhase === 4 || shortPhase === 4) {
+                if (midPhase === PhaseState.CD || shortPhase === PhaseState.CD) {
                     expectedState = "Tail";
                 } else {
                     expectedState = "Drive";
@@ -350,19 +357,19 @@ class TrendIndexVM {
             }
         }
 
-        if (longPhase === 2) {
-            if (midPhase === 1 || midPhase === 2) {
+        if (longPhase === PhaseState.Tail) {
+            if (midPhase === PhaseState.Capitulation || midPhase === PhaseState.Tail) {
                 currentState = "Tail";
-                if (midPhase === 1 && shortPhase === 3) {
+                if (midPhase === PhaseState.Capitulation && shortPhase === PhaseState.Drive) {
                     expectedState = "Drive";
-                } else if (midPhase === 2 && shortPhase === 4) {
+                } else if (midPhase === PhaseState.Tail && shortPhase === PhaseState.CD) {
                     expectedState = "Drive";
                 } else {
                     expectedState = "Tail";
                 }
             } else {
                 currentState = "Tail Transition";
-                if (midPhase === 3 && shortPhase === 3) {
+                if (midPhase === PhaseState.Drive && shortPhase === PhaseState.Drive) {
                     expectedState = "Drive";
                 } else {
                     expectedState = "Tail";
@@ -701,13 +708,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
             let item = instrumentVM.trend_period_descriptions[key];
 
             let phase = "None";
-            if (item.phase === 1) {
+            if (item.phase === PhaseState.Capitulation) {
                 phase = "Capitulation";
-            } else if (item.phase === 2) {
+            } else if (item.phase === PhaseState.Tail) {
                 phase = "Tail";
-            } else if (item.phase === 3) {
+            } else if (item.phase === PhaseState.Drive) {
                 phase = "Drive";
-            } else if (item.phase === 4) {
+            } else if (item.phase === PhaseState.CD) {
                 phase = "Counter Drive";
             }
 
