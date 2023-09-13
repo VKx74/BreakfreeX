@@ -139,6 +139,9 @@ class TrendIndexVM {
     dailyDuration: string;
     monthlyDuration: string;
 
+    currentMarketState: string;
+    expectedMarketState: string;
+
     public static getDurationString(t: number) {
         if (!t) {
             return "";
@@ -270,6 +273,11 @@ class TrendIndexVM {
         this.price2592000Strength = this._getStrength(s_2592000);
         this.price31104000Strength = this._getStrength(s_31104000);
         this.price311040000Strength = this._getStrength(s_311040000);
+
+        let states = this.getGlobalMarketState();
+
+        this.currentMarketState = states[0];
+        this.expectedMarketState = states[1];
     }
 
     private _getStrength(value: number): ETrendIndexStrength {
@@ -286,6 +294,83 @@ class TrendIndexVM {
             return ETrendIndexStrength.Down;
         }
         return ETrendIndexStrength.Sideways;
+    }
+
+
+    getGlobalMarketState(): string[] {
+        let shortState = this.trend_period_descriptions["0"];
+        let midState = this.trend_period_descriptions["1"];
+        let longState = this.trend_period_descriptions["2"];
+
+        let shortPhase = shortState.phase;
+        let midPhase = midState.phase;
+        let longPhase = longState.phase;
+
+        // 1 - Capitulation
+        // 2 - Tail
+        // 3 - Drive
+        // 4 - Counter Drive
+
+        let currentState = "";
+        let expectedState = "";
+
+        if (longPhase === 3) {
+            if (midPhase === 3) {
+                currentState = "Drive";
+                if (shortPhase === 3) {
+                    expectedState = "Drive";
+                } else {
+                    expectedState = "Capitulation";
+                }
+            } else {
+                currentState = "Drive Transition";
+                if (midPhase === 4 || shortPhase === 4) {
+                    expectedState = "Capitulation";
+                } else {
+                    if (shortPhase === 3 && midPhase === 1) {
+                        expectedState = "Drive";
+                    } else {
+                        expectedState = "Capitulation";
+                    }
+                }
+            }
+        }
+
+        if (longPhase === 1) {
+            if (midPhase === 1 || midPhase === 2) {
+                currentState = "Capitulation";
+                expectedState = "Tail";
+            } else {
+                currentState = "Cap Transition";
+                if (midPhase === 4 || shortPhase === 4) {
+                    expectedState = "Tail";
+                } else {
+                    expectedState = "Drive";
+                }
+            }
+        }
+
+        if (longPhase === 2) {
+            if (midPhase === 1 || midPhase === 2) {
+                currentState = "Tail";
+                if (midPhase === 1 && shortPhase === 3) {
+                    expectedState = "Drive";
+                } else if (midPhase === 2 && shortPhase === 4) {
+                    expectedState = "Drive";
+                } else {
+                    expectedState = "Tail";
+                }
+            } else {
+                currentState = "Tail Transition";
+                if (midPhase === 3 && shortPhase === 3) {
+                    expectedState = "Drive";
+                } else {
+                    expectedState = "Tail";
+                }
+            }
+        }
+
+        return [currentState, expectedState];
     }
 }
 
@@ -944,45 +1029,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.loading = false;
             this._changesDetected = true;
         });
-    }
-
-    getGlobalMarketState(instrumentVM: TrendIndexVM): string {
-        let resultState = "Sideways";
-        let shortState = instrumentVM.trend_period_descriptions["0"];
-        let midState = instrumentVM.trend_period_descriptions["1"];
-        let longState = instrumentVM.trend_period_descriptions["2"];
-
-        let shortPhase = shortState.phase;
-        let midPhase = midState.phase;
-        let longPhase = longState.phase;
-
-        // 1 - Capitulation
-        // 2 - Tail
-        // 3 - Drive
-        // 4 - Counter Drive
-
-        if (longPhase === 3) {
-            if (midPhase === 3) {
-                return "Drive";
-            }
-            return "Drive Transition";
-        }
-
-        if (longPhase === 1) {
-            if (midPhase === 1 || midPhase === 2) {
-                return "Capitulation";
-            }
-            return "Cap Transition";
-        } 
-        
-        if (longPhase === 2) {
-            if (midPhase === 1 || midPhase === 2) {
-                return "Tail";
-            }
-            return "Tail Transition";
-        }
-
-        return resultState;
     }
 
     private _raiseStateChanged() {

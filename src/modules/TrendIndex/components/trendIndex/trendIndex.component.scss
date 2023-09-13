@@ -318,12 +318,12 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    row-gap: 3px;
+    row-gap: 1px;
   }
 
   .containerx {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     position: relative;
   }
 
@@ -594,6 +594,10 @@
   .details-btn {
     cursor: pointer;
     text-decoration: underline;
+  }
+  .expected-market-state {
+    opacity: 0.6;
+    font-size: 0.9em;
   }
 }
 
