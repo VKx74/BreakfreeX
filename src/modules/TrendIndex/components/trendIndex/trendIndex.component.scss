@@ -8,7 +8,7 @@
       font-size: 9px;
     }
 
-    .edit,
+    .extended-mode,
     .trading-enabled {
       font-size: 11px !important;
     }
@@ -19,7 +19,7 @@
       display: none;
     }
 
-    .edit,
+    .extended-mode,
     .trading-enabled {
       font-size: 11px !important;
     }
@@ -129,7 +129,7 @@
       align-items: center;
       column-gap: 6px;
 
-      .edit {
+      .extended-mode {
         padding: 3px 9px;
         border-radius: 6px;
         font-size: 12px;
@@ -143,6 +143,11 @@
       }
 
       .change-trading-mode {
+        cursor: pointer;
+        transition: all 0.22s ease-in-out;
+      }
+
+      .extended-mode {
         cursor: pointer;
         transition: all 0.22s ease-in-out;
       }
@@ -296,6 +301,15 @@
     align-items: center;
     justify-content: center;
     column-gap: 3px;
+
+    &:hover {
+      .sphere {
+        border: 2px solid;
+      }
+      .symbolx {
+        text-decoration: underline;
+      }
+    }
   }
 
   .is-auto-selected {
@@ -384,6 +398,10 @@
   .cube.untradeable {
     background-color: #fff;
     display: none !important;
+  }
+
+  .cube.selected {
+    background-color: whitesmoke;
   }
 
   @keyframes rotateCube {
@@ -625,13 +643,14 @@
     background: themed("appBackgroundColor");
   }
 
-  .edit {
+  .extended-mode {
     background: themed("select-market");
     color: themed("select-market-color");
     &:hover {
       background: themed("select-market-hover");
     }
   }
+
   .chart-container-title,
   mat-row.row-group-header {
     background: themed("appBackgroundColor");

@@ -56,7 +56,10 @@ enum PhaseState {
     Capitulation = 1,
     Tail = 2,
     Drive = 3,
-    CD = 4
+    CD = 4,
+    CapitulationTransition = 5,
+    TailTransition = 6,
+    DriveTransition = 7
 }
 
 interface ITrendIndexChartDataVM {
@@ -74,6 +77,26 @@ interface ITrendIndexBarChartDataVM {
     symbol: string;
     startDate: string;
     endDate: string;
+}
+
+function GetPhaseName(p: number): string {
+    let phase = "None";
+    if (p === PhaseState.Capitulation) {
+        phase = "Capitulation";
+    } else if (p === PhaseState.Tail) {
+        phase = "Tail";
+    } else if (p === PhaseState.Drive) {
+        phase = "Drive";
+    } else if (p === PhaseState.CD) {
+        phase = "Counter Drive";
+    } else if (p === PhaseState.CapitulationTransition) {
+        phase = "Cap Transition";
+    } else if (p === PhaseState.TailTransition) {
+        phase = "Tail Transition";
+    } else if (p === PhaseState.DriveTransition) {
+        phase = "Drive Transition";
+    }
+    return phase;
 }
 
 class TrendIndexVM {
@@ -148,6 +171,24 @@ class TrendIndexVM {
 
     currentMarketState: string;
     expectedMarketState: string;
+
+    shortGroupStrengthValue: number;
+    shortGroupVolatilityValue: number;
+    shortGroupStrength: ETrendIndexStrength;
+    shortGroupDuration: string;
+    shortGroupPhase: number;
+
+    midGroupStrengthValue: number;
+    midGroupVolatilityValue: number;
+    midGroupStrength: ETrendIndexStrength;
+    midGroupDuration: string;
+    midGroupPhase: number;
+
+    longGroupStrengthValue: number;
+    longGroupVolatilityValue: number;
+    longGroupStrength: ETrendIndexStrength;
+    longGroupDuration: string;
+    longGroupPhase: number;
 
     public static getDurationString(t: number) {
         if (!t) {
@@ -281,10 +322,40 @@ class TrendIndexVM {
         this.price31104000Strength = this._getStrength(s_31104000);
         this.price311040000Strength = this._getStrength(s_311040000);
 
-        let states = this.getGlobalMarketState();
+        this.currentMarketState = GetPhaseName(data.current_phase);
+        this.expectedMarketState = GetPhaseName(data.next_phase);
 
-        this.currentMarketState = states[0];
-        this.expectedMarketState = states[1];
+        for (let key in this.trend_period_descriptions) {
+            let item = this.trend_period_descriptions[key];
+            if (key === "0") {
+                this.shortGroupStrengthValue = item.strength;
+                this.shortGroupStrength = this._getStrength(item.strength);
+                this.shortGroupPhase = item.phase;
+                this.shortGroupVolatilityValue = item.volatility;
+                this.shortGroupDuration = TrendIndexVM.getDurationString(item.duration);
+            } else if (key === "1") {
+                this.midGroupStrengthValue = item.strength;
+                this.midGroupStrength = this._getStrength(item.strength);
+                this.midGroupPhase = item.phase;
+                this.midGroupVolatilityValue = item.volatility;
+                this.midGroupDuration = TrendIndexVM.getDurationString(item.duration);
+            } else if (key === "2") {
+                this.longGroupStrengthValue = item.strength;
+                this.longGroupStrength = this._getStrength(item.strength);
+                this.longGroupPhase = item.phase;
+                this.longGroupVolatilityValue = item.volatility;
+                this.longGroupDuration = TrendIndexVM.getDurationString(item.duration);
+            }
+
+            // let item = instrumentVM.trend_period_descriptions[key];
+
+            // d[phaseKey] = {
+            //     strength: (item.strength * 100).toFixed(0) + "%",
+            //     volatility: item.volatility ? (item.volatility - 100).toFixed(0) + "%" : "None",
+            //     duration: TrendIndexVM.getDurationString(item.duration),
+            //     phase: GetPhaseName(item.phase)
+            // };
+        }
     }
 
     private _getStrength(value: number): ETrendIndexStrength {
@@ -301,83 +372,6 @@ class TrendIndexVM {
             return ETrendIndexStrength.Down;
         }
         return ETrendIndexStrength.Sideways;
-    }
-
-
-    getGlobalMarketState(): string[] {
-        let shortState = this.trend_period_descriptions["0"];
-        let midState = this.trend_period_descriptions["1"];
-        let longState = this.trend_period_descriptions["2"];
-
-        let shortPhase = shortState.phase;
-        let midPhase = midState.phase;
-        let longPhase = longState.phase;
-
-        // 1 - Capitulation
-        // 2 - Tail
-        // 3 - Drive
-        // 4 - Counter Drive
-
-        let currentState = "";
-        let expectedState = "";
-
-        if (longPhase === PhaseState.Drive) {
-            if (midPhase === PhaseState.Drive) {
-                currentState = "Drive";
-                if (shortPhase === PhaseState.Drive) {
-                    expectedState = "Drive";
-                } else {
-                    expectedState = "Capitulation";
-                }
-            } else {
-                currentState = "Drive Transition";
-                if (midPhase === PhaseState.CD || shortPhase === PhaseState.CD) {
-                    expectedState = "Capitulation";
-                } else {
-                    if (shortPhase === PhaseState.Drive && midPhase === PhaseState.Capitulation) {
-                        expectedState = "Drive";
-                    } else {
-                        expectedState = "Capitulation";
-                    }
-                }
-            }
-        }
-
-        if (longPhase === PhaseState.Capitulation) {
-            if (midPhase === PhaseState.Capitulation || midPhase === PhaseState.Tail) {
-                currentState = "Capitulation";
-                expectedState = "Tail";
-            } else {
-                currentState = "Cap Transition";
-                if (midPhase === PhaseState.CD || shortPhase === PhaseState.CD) {
-                    expectedState = "Tail";
-                } else {
-                    expectedState = "Drive";
-                }
-            }
-        }
-
-        if (longPhase === PhaseState.Tail) {
-            if (midPhase === PhaseState.Capitulation || midPhase === PhaseState.Tail) {
-                currentState = "Tail";
-                if (midPhase === PhaseState.Capitulation && shortPhase === PhaseState.Drive) {
-                    expectedState = "Drive";
-                } else if (midPhase === PhaseState.Tail && shortPhase === PhaseState.CD) {
-                    expectedState = "Drive";
-                } else {
-                    expectedState = "Tail";
-                }
-            } else {
-                currentState = "Tail Transition";
-                if (midPhase === PhaseState.Drive && shortPhase === PhaseState.Drive) {
-                    expectedState = "Drive";
-                } else {
-                    expectedState = "Tail";
-                }
-            }
-        }
-
-        return [currentState, expectedState];
     }
 }
 
@@ -452,7 +446,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
 
-    editMode = false;
+    extendedMode = false;
 
     constructor(protected _dialog: MatDialog,
         protected _realtimeService: RealtimeService,
@@ -496,7 +490,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.loadData();
 
         this._identityService.myTradingAccount$.subscribe(() => {
-            this.editMode = false;
             this._changesDetected = true;
             this.loadUserAutoTradingInfoForAccount();
         });
@@ -682,11 +675,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.onOpenChart.next(linkAction);
     }
 
-    handleInstrumentClick(instrumentVM: TrendIndexVM) {
-        if (this.editMode) {
-            return;
-        }
-        this.selectVMItem(instrumentVM);
+    instrumentSelect(instrumentVM: TrendIndexVM) {
+        this.selectedVM = instrumentVM;
     }
 
     showDetails(instrumentVM: TrendIndexVM, e: PointerEvent) {
@@ -707,22 +697,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
             let item = instrumentVM.trend_period_descriptions[key];
 
-            let phase = "None";
-            if (item.phase === PhaseState.Capitulation) {
-                phase = "Capitulation";
-            } else if (item.phase === PhaseState.Tail) {
-                phase = "Tail";
-            } else if (item.phase === PhaseState.Drive) {
-                phase = "Drive";
-            } else if (item.phase === PhaseState.CD) {
-                phase = "Counter Drive";
-            }
-
             d[phaseKey] = {
                 strength: (item.strength * 100).toFixed(0) + "%",
                 volatility: item.volatility ? (item.volatility - 100).toFixed(0) + "%" : "None",
                 duration: TrendIndexVM.getDurationString(item.duration),
-                phase: phase
+                phase: GetPhaseName(item.phase)
             };
         }
 
@@ -734,103 +713,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         });
     }
 
-    selectVMItem(instrumentVM: TrendIndexVM) {
-        this.selectedVM = instrumentVM;
-
-        this.loading = true;
-        this._changesDetected = true;
-
-        this._algoService.getMesaTrendDetails(instrumentVM.id, instrumentVM.datafeed).subscribe((data) => {
-            if (data) {
-                this._chartDataTrends = [];
-
-                let minDate = 0;
-                let maxDate = 0;
-                for (let tf in data.mesa) {
-                    let mesaDataList = data.mesa[tf].slice(-2500);
-                    if (!mesaDataList.length) {
-                        continue;
-                    }
-
-                    let firstTime = mesaDataList[0].t;
-                    let lastTime = mesaDataList[mesaDataList.length - 1].t;
-
-                    if (firstTime > minDate) {
-                        minDate = firstTime;
-                    }
-                    if (lastTime > maxDate) {
-                        maxDate = lastTime;
-                    }
-                }
-
-                this._chartDataBars = {
-                    data: {
-                        dates: [],
-                        values: [],
-                        isUpTrending: instrumentVM.totalStrength > 0
-                    },
-                    timeframe: this._tfToString(60),
-                    symbol: instrumentVM.symbol,
-                    startDate: new Date(minDate * 1000).toLocaleString(),
-                    endDate: new Date(maxDate * 1000).toLocaleString()
-                };
-
-                for (let tf in data.mesa) {
-                    let mesaValues: number[] = [];
-                    let volatilityValues: number[] = [];
-                    let mesaDates: string[] = [];
-                    let avg = instrumentVM.avg_strength[tf];
-                    if (!avg) {
-                        continue;
-                    }
-
-                    let mesaDataList = data.mesa[tf];
-                    let tfNumber = Number(tf);
-                    if (tfNumber < 10 * 60) {
-                        tfNumber = 15 * 60;
-                    } else if (tfNumber > 60 * 60) {
-                        tfNumber = 60 * 60;
-                    }
-
-                    for (let i = 0; i < mesaDataList.length; i++) {
-                        let mesaItem = mesaDataList[i];
-                        if (mesaItem.t > minDate || true) {
-                            if (mesaItem.t % tfNumber === 0 || i === mesaDataList.length - 1) {
-                                mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
-                                if (mesaItem.v) {
-                                    volatilityValues.push(mesaItem.v - 100);
-                                }
-                                mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());
-                            }
-                        }
-                    }
-
-                    this._chartDataTrends.push({
-                        timeframe: this._tfToString(Number(tf)),
-                        granularity: Number(tf),
-                        strength: mesaValues[mesaValues.length - 1],
-                        volatility: volatilityValues[volatilityValues.length - 1],
-                        strengthChart: {
-                            dates: mesaDates,
-                            values: mesaValues,
-                        },
-                        volatilityChart: {
-                            dates: mesaDates,
-                            values: volatilityValues
-                        }
-                    });
-                }
-            }
-            console.log(">>> Calculation finished");
-            this.loading = false;
-            this._changesDetected = true;
-        }, (error: any) => {
-            console.log('error:');
-            console.log(error);
-            this.loading = false;
-            this._changesDetected = true;
-        });
-
+    viewOnChart(instrumentVM: TrendIndexVM) {
         this._instrumentService.getInstrumentsBySymbolOrId(instrumentVM.symbol)
             .subscribe((instruments: IInstrument[]) => {
                 if (instruments) {
@@ -969,24 +852,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return !isUserSelected;
     }
 
-    setEditMode() {
-        this.editMode = true;
-        this._cdr.markForCheck();
-        setTimeout(() => {
-            this.dataTableComponent.updateDimensions();
-            this._cdr.markForCheck();
-        }, 1);
-    }
-
-    unsetEditMode() {
-        this.editMode = false;
-        this._cdr.markForCheck();
-        setTimeout(() => {
-            this.dataTableComponent.updateDimensions();
-            this._cdr.markForCheck();
-        }, 1);
-    }
-
     isInstrumentSelected(item: TrendIndexVM) {
         if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.markets || !this._userAutoTradingInfoData.markets.length) {
             return false;
@@ -1001,7 +866,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return false;
     }
 
-    instrumentSelectionChanged(item: TrendIndexVM) {
+    instrumentSelectionChanged(item: TrendIndexVM, e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        this.enableDisableTrading(item);
+    }
+
+    enableDisableTrading(item: TrendIndexVM) {
         let isSelected = this.isInstrumentSelected(item);
         let symbol = item.symbol.replace("_", "").toUpperCase();
         this.loading = true;
@@ -1036,6 +907,150 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.loading = false;
             this._changesDetected = true;
         });
+    }
+
+    setExtendedMode() {
+        this.extendedMode = !this.extendedMode;
+        let extendedColumns = ['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10'];
+        let groupedColumns = ['short_g', 'mid_g', 'long_g'];
+
+        for (let c of extendedColumns) {
+            if (this.extendedMode && !this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            } 
+            if (!this.extendedMode && this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            }
+        }  
+        
+        for (let c of groupedColumns) {
+            if (!this.extendedMode && !this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            } 
+            if (this.extendedMode && this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            }
+        }
+
+        this._changesDetected = true;
+    }
+
+    showCharts(instrumentVM: TrendIndexVM) {
+        this.loading = true;
+        this._changesDetected = true;
+
+        this._algoService.getMesaTrendDetails(instrumentVM.id, instrumentVM.datafeed).subscribe((data) => {
+            if (data) {
+                this._chartDataTrends = [];
+
+                let minDate = 0;
+                let maxDate = 0;
+                for (let tf in data.mesa) {
+                    let mesaDataList = data.mesa[tf].slice(-2500);
+                    if (!mesaDataList.length) {
+                        continue;
+                    }
+
+                    let firstTime = mesaDataList[0].t;
+                    let lastTime = mesaDataList[mesaDataList.length - 1].t;
+
+                    if (firstTime > minDate) {
+                        minDate = firstTime;
+                    }
+                    if (lastTime > maxDate) {
+                        maxDate = lastTime;
+                    }
+                }
+
+                this._chartDataBars = {
+                    data: {
+                        dates: [],
+                        values: [],
+                        isUpTrending: instrumentVM.totalStrength > 0
+                    },
+                    timeframe: this._tfToString(60),
+                    symbol: instrumentVM.symbol,
+                    startDate: new Date(minDate * 1000).toLocaleString(),
+                    endDate: new Date(maxDate * 1000).toLocaleString()
+                };
+
+                for (let tf in data.mesa) {
+                    let mesaValues: number[] = [];
+                    let volatilityValues: number[] = [];
+                    let mesaDates: string[] = [];
+                    let avg = instrumentVM.avg_strength[tf];
+                    if (!avg) {
+                        continue;
+                    }
+
+                    let mesaDataList = data.mesa[tf];
+                    let tfNumber = Number(tf);
+                    if (tfNumber < 10 * 60) {
+                        tfNumber = 15 * 60;
+                    } else if (tfNumber > 60 * 60) {
+                        tfNumber = 60 * 60;
+                    }
+
+                    for (let i = 0; i < mesaDataList.length; i++) {
+                        let mesaItem = mesaDataList[i];
+                        if (mesaItem.t > minDate || true) {
+                            if (mesaItem.t % tfNumber === 0 || i === mesaDataList.length - 1) {
+                                mesaValues.push((mesaItem.f - mesaItem.s) / avg * 100);
+                                if (mesaItem.v) {
+                                    volatilityValues.push(mesaItem.v - 100);
+                                }
+                                mesaDates.push(new Date(mesaItem.t * 1000).toLocaleString());
+                            }
+                        }
+                    }
+
+                    this._chartDataTrends.push({
+                        timeframe: this._tfToString(Number(tf)),
+                        granularity: Number(tf),
+                        strength: mesaValues[mesaValues.length - 1],
+                        volatility: volatilityValues[volatilityValues.length - 1],
+                        strengthChart: {
+                            dates: mesaDates,
+                            values: mesaValues,
+                        },
+                        volatilityChart: {
+                            dates: mesaDates,
+                            values: volatilityValues
+                        }
+                    });
+                }
+            }
+            console.log(">>> Calculation finished");
+            this.loading = false;
+            this._changesDetected = true;
+        }, (error: any) => {
+            console.log('error:');
+            console.log(error);
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
+    rowClicked(instrumentVM: TrendIndexVM) {
+        this.selectedVM = instrumentVM;
+        this.viewOnChart(this.selectedVM);
+    }
+
+    doubleClicked(instrumentVM: TrendIndexVM) {
+        this.selectedVM = instrumentVM;
+        this.showCharts(this.selectedVM);
+    }
+
+    handleContextMenuSelected(menu_id: string) {
+        switch (menu_id) {
+            case "openCharts": this.showCharts(this.selectedVM); break;
+            case "viewOnChart": this.viewOnChart(this.selectedVM); break;
+            case "trade": this.enableDisableTrading(this.selectedVM); break;
+        }
+    }
+
+    isSelectedInstrumentTradable() {
+        return this.isInstrumentSelected(this.selectedVM);
     }
 
     private _raiseStateChanged() {

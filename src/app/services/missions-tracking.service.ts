@@ -41,36 +41,66 @@ export class MissionTrackingService {
         private _settingsStorageService: SettingsStorageService,
         private _tradingProfileService: TradingProfileService) {
 
-        this._tradingProfileService.MissionChanged.subscribe(() => {
-            this._processMissions();
-        });
+        // this._tradingProfileService.MissionChanged.subscribe(() => {
+        //     this._processMissions();
+        // });
 
-        _settingsStorageService.getSettings().subscribe((_) => {
-            this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
-                if (this.broker) {
-                    this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
-                        this._recalculate();
-                    });
+        // _settingsStorageService.getSettings().subscribe((_) => {
+        //     this._brokerStateChangedSubscription = this._brokerService.activeBroker$.subscribe((data) => {
+        //         if (this.broker) {
+        //             this._ordersUpdatedSubscription = this._brokerService.activeBroker.onOrdersUpdated.subscribe(() => {
+        //                 this._recalculate();
+        //             });
 
-                    this._onOrdersParametersUpdated = this._brokerService.activeBroker.onOrdersParametersUpdated.subscribe(() => {
-                        this._recalculate();
-                    });
-                } else {
-                    this._recalculateRequired = true;
-                    if (this._ordersUpdatedSubscription) {
-                        this._ordersUpdatedSubscription.unsubscribe();
-                        this._ordersUpdatedSubscription = null;
-                    }
-                    if (this._onOrdersParametersUpdated) {
-                        this._onOrdersParametersUpdated.unsubscribe();
-                        this._onOrdersParametersUpdated = null;
-                    }
-                }
-            });
-        });
+        //             this._onOrdersParametersUpdated = this._brokerService.activeBroker.onOrdersParametersUpdated.subscribe(() => {
+        //                 this._recalculate();
+        //             });
+        //         } else {
+        //             this._recalculateRequired = true;
+        //             if (this._ordersUpdatedSubscription) {
+        //                 this._ordersUpdatedSubscription.unsubscribe();
+        //                 this._ordersUpdatedSubscription = null;
+        //             }
+        //             if (this._onOrdersParametersUpdated) {
+        //                 this._onOrdersParametersUpdated.unsubscribe();
+        //                 this._onOrdersParametersUpdated = null;
+        //             }
+        //         }
+        //     });
+        // });
     }
 
-    public _recalculate() {
+    public initMissions() {
+        // if (this._isInitialized) {
+        //     return;
+        // }
+
+        // this._isInitialized = true;
+
+        // this._tradingProfileService.initMissions();
+
+        // setTimeout(() => {
+        //     if (!this._recalculateRequired) {
+        //         return;
+        //     }
+        //     this._updateMissions();
+        // }, this._timeout);
+    }
+
+    public watchMissions() {
+        // setInterval(() => {
+        //     try {
+        //         this._updateMissions();
+        //     } catch (error) { }
+
+        //     this._nextUpdateTime = new Date().getTime() + this._timeInterval;
+
+        // }, this._timeInterval);
+
+        // this._nextUpdateTime = new Date().getTime() + this._timeInterval;
+    }
+
+    private _recalculate() {
         if (!this.broker) {
             return;
         }
@@ -84,36 +114,6 @@ export class MissionTrackingService {
             this._recalculateRequired = false;
             this._updateMissions();
         }
-    }
-
-    public initMissions() {
-        if (this._isInitialized) {
-            return;
-        }
-
-        this._isInitialized = true;
-
-        this._tradingProfileService.initMissions();
-
-        setTimeout(() => {
-            if (!this._recalculateRequired) {
-                return;
-            }
-            this._updateMissions();
-        }, this._timeout);
-    }
-
-    public watchMissions() {
-        setInterval(() => {
-            try {
-                this._updateMissions();
-            } catch (error) { }
-
-            this._nextUpdateTime = new Date().getTime() + this._timeInterval;
-
-        }, this._timeInterval);
-
-        this._nextUpdateTime = new Date().getTime() + this._timeInterval;
     }
 
     private _updateMissions() {

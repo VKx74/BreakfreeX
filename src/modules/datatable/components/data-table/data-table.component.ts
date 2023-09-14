@@ -80,6 +80,7 @@ export class DataTableComponent {
     @Input() columnCaption: ColumnCaption;
 
     @Output() onRowSelect = new EventEmitter();
+    @Output() onRowClick = new EventEmitter();
     @Output() onDoubleClick = new EventEmitter();
     @Output() onContextMenuSelected = new EventEmitter<any>();
     @Output() onHiddenColumnsChanged = new EventEmitter<string[]>();
@@ -529,6 +530,11 @@ export class DataTableComponent {
         }, 600);
     }
 
+    handleRowClick(row: any, event: any) {
+       this.handleRowSelected(row, event);
+       this.onRowClick.emit(row);
+    }
+
     handleRowDoubleClick(row: any, event: any) {
         const target = event.target;
         // this._prevRowClicked = null;
@@ -568,6 +574,7 @@ export class DataTableComponent {
         this.hiddenColumns$.next(hiddenColumns);
         this.onHiddenColumnsChanged.next(hiddenColumns);
     }
+  
 
     expandRow(rowIndex: number) {
         const row = this.rows[rowIndex];
