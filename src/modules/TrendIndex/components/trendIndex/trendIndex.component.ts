@@ -346,15 +346,6 @@ class TrendIndexVM {
                 this.longGroupVolatilityValue = item.volatility;
                 this.longGroupDuration = TrendIndexVM.getDurationString(item.duration);
             }
-
-            // let item = instrumentVM.trend_period_descriptions[key];
-
-            // d[phaseKey] = {
-            //     strength: (item.strength * 100).toFixed(0) + "%",
-            //     volatility: item.volatility ? (item.volatility - 100).toFixed(0) + "%" : "None",
-            //     duration: TrendIndexVM.getDurationString(item.duration),
-            //     phase: GetPhaseName(item.phase)
-            // };
         }
     }
 
@@ -409,6 +400,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _chartDataTrends: ITrendIndexChartDataVM[] = [];
     private _tradableInstruments: string[] = [];
     private _userAutoTradingInfoData: IUserAutoTradingInfoData;
+    private _singleRowClickTimer;
 
     public groups: string[] = [];
     public groupingField: string = "type";
@@ -714,8 +706,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     viewOnChart(instrumentVM: TrendIndexVM) {
+        this.loading = true;
+        this._changesDetected = true;
         this._instrumentService.getInstrumentsBySymbolOrId(instrumentVM.symbol)
             .subscribe((instruments: IInstrument[]) => {
+                this.loading = false;
+                this._changesDetected = true;
                 if (instruments) {
                     let instrument = instruments[0];
                     for (let i of instruments) {
@@ -730,6 +726,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
             }, (error: any) => {
                 console.log('error:');
                 console.log(error);
+                this.loading = false;
+                this._changesDetected = true;
             });
     }
 
@@ -917,16 +915,16 @@ export class TrendIndexComponent extends BaseLayoutItem {
         for (let c of extendedColumns) {
             if (this.extendedMode && !this.dataTableComponent.isColumnVisible(c)) {
                 this.dataTableComponent.toggleColumn(c);
-            } 
+            }
             if (!this.extendedMode && this.dataTableComponent.isColumnVisible(c)) {
                 this.dataTableComponent.toggleColumn(c);
             }
-        }  
-        
+        }
+
         for (let c of groupedColumns) {
             if (!this.extendedMode && !this.dataTableComponent.isColumnVisible(c)) {
                 this.dataTableComponent.toggleColumn(c);
-            } 
+            }
             if (this.extendedMode && this.dataTableComponent.isColumnVisible(c)) {
                 this.dataTableComponent.toggleColumn(c);
             }
@@ -1032,13 +1030,24 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     rowClicked(instrumentVM: TrendIndexVM) {
+        console.log("rowClicked");
         this.selectedVM = instrumentVM;
-        this.viewOnChart(this.selectedVM);
+        if (this._singleRowClickTimer) {
+            clearTimeout(this._singleRowClickTimer);
+        }
+        this._singleRowClickTimer = setTimeout(() => {
+            this.viewOnChart(this.selectedVM);
+            this._singleRowClickTimer = null;
+        }, 600);
     }
 
     doubleClicked(instrumentVM: TrendIndexVM) {
+        console.log("doubleClicked");
         this.selectedVM = instrumentVM;
         this.showCharts(this.selectedVM);
+        if (this._singleRowClickTimer) {
+            clearTimeout(this._singleRowClickTimer);
+        }
     }
 
     handleContextMenuSelected(menu_id: string) {

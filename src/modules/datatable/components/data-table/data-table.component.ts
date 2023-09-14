@@ -531,8 +531,8 @@ export class DataTableComponent {
     }
 
     handleRowClick(row: any, event: any) {
-       this.handleRowSelected(row, event);
-       this.onRowClick.emit(row);
+        this.onRowClick.emit(row);
+        this.handleRowSelected(row, event);
     }
 
     handleRowDoubleClick(row: any, event: any) {
@@ -574,7 +574,7 @@ export class DataTableComponent {
         this.hiddenColumns$.next(hiddenColumns);
         this.onHiddenColumnsChanged.next(hiddenColumns);
     }
-  
+
 
     expandRow(rowIndex: number) {
         const row = this.rows[rowIndex];
