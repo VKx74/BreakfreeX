@@ -57,6 +57,7 @@
                                     [class.strength-negative]="chartDataTrend.strength < 0">
                                     Strength {{chartDataTrend.strength > 0 ? "+"
                                     :""}}{{chartDataTrend.strength.toFixed(0)}}%</div>
+                                <div class="phase-title">{{chartDataTrend.phase}}</div>
                             </div>
                             <trend-index-chart [data]="chartDataTrend.strengthChart" [height]="60"></trend-index-chart>
                         </div>
@@ -87,12 +88,10 @@
         <div class="data-table">
             <data-table #dataTableComponent [rows]="vm" [selectable]="true" [selectedRow]="selectedVM"
                 [columnCaption]="columnCaption" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
-                [groups]="groups" [groupingField]="groupingField" 
+                [groups]="groups" [groupingField]="groupingField"
                 [hiddenColumns]="['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10']"
-                (onRowSelect)="instrumentSelect($event)"
-                (onRowClick)="rowClicked($event)"
-                (onDoubleClick)="doubleClicked($event)"
-                (onContextMenuSelected)="handleContextMenuSelected($event)">
+                (onRowSelect)="instrumentSelect($event)" (onRowClick)="rowClicked($event)"
+                (onDoubleClick)="doubleClicked($event)" (onContextMenuSelected)="handleContextMenuSelected($event)">
 
                 <!--Columns-->
 

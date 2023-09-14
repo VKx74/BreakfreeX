@@ -489,11 +489,7 @@
       position: static;
       margin-bottom: -20px;
       column-gap: 8px;
-      //width: 80px;
-      justify-content: space-between;
-
-      padding: 3px 6px 3px 10px;
-
+      padding: 2px 6px 2px 10px;
       text-align: left;
       align-items: center;
     }
@@ -509,19 +505,14 @@
     .chart-container-title.strength,
     .chart-container-title.vol {
       display: flex;
-      font-size: 12px;
-      position: static;
+      font-size: 11px;
       margin-left: 35px;
-      margin-bottom: -20px;
-      column-gap: 8px;
-      position: static;
-      //width: 80px;
-      justify-content: space-between;
+      margin-bottom: -25px;
+    }
 
-      padding: 3px 6px 3px 10px;
-
-      text-align: left;
-      align-items: flex-start;
+    .phase-title {
+      display: flex;
+      font-size: 11px;
     }
 
     .margin-top {

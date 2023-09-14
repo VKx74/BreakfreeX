@@ -68,6 +68,7 @@ interface ITrendIndexChartDataVM {
     strength: number;
     volatility: number;
     timeframe: string;
+    phase: string;
     granularity: number;
 }
 
@@ -99,9 +100,30 @@ function GetPhaseName(p: number): string {
     return phase;
 }
 
+function GetPhaseShortName(p: number): string {
+    let phase = "None";
+    if (p === PhaseState.Capitulation) {
+        phase = "Cap";
+    } else if (p === PhaseState.Tail) {
+        phase = "Tail";
+    } else if (p === PhaseState.Drive) {
+        phase = "Drive";
+    } else if (p === PhaseState.CD) {
+        phase = "C-D";
+    } else if (p === PhaseState.CapitulationTransition) {
+        phase = "Cap Trans";
+    } else if (p === PhaseState.TailTransition) {
+        phase = "Tail Trans";
+    } else if (p === PhaseState.DriveTransition) {
+        phase = "Drive Trans";
+    }
+    return phase;
+}
+
 class TrendIndexVM {
     type: string;
     avg_strength: { [id: string]: number; };
+    trend_phases: { [id: string]: string; };
     trend_period_descriptions: { [key: number]: ITrendPeriodDescriptionResponse };
 
     id: string;
@@ -150,15 +172,15 @@ class TrendIndexVM {
     yearlyState: number;
     year10State: number;
 
-    minute1Phase: number;
-    minute5Phase: number;
-    minute15Phase: number;
-    hour1Phase: number;
-    hour4Phase: number;
-    dailyPhase: number;
-    monthlyPhase: number;
-    yearlyPhase: number;
-    year10Phase: number;
+    minute1Phase: string;
+    minute5Phase: string;
+    minute15Phase: string;
+    hour1Phase: string;
+    hour4Phase: string;
+    dailyPhase: string;
+    monthlyPhase: string;
+    yearlyPhase: string;
+    year10Phase: string;
 
     driveDuration: string;
     minute1Duration: string;
@@ -176,19 +198,19 @@ class TrendIndexVM {
     shortGroupVolatilityValue: number;
     shortGroupStrength: ETrendIndexStrength;
     shortGroupDuration: string;
-    shortGroupPhase: number;
+    shortGroupPhase: string;
 
     midGroupStrengthValue: number;
     midGroupVolatilityValue: number;
     midGroupStrength: ETrendIndexStrength;
     midGroupDuration: string;
-    midGroupPhase: number;
+    midGroupPhase: string;
 
     longGroupStrengthValue: number;
     longGroupVolatilityValue: number;
     longGroupStrength: ETrendIndexStrength;
     longGroupDuration: string;
-    longGroupPhase: number;
+    longGroupPhase: string;
 
     public static getDurationString(t: number) {
         if (!t) {
@@ -284,16 +306,26 @@ class TrendIndexVM {
             this.year10State = data.timeframe_state["311040000"];
         }
 
+        this.trend_phases = {};
         if (data.timeframe_phase) {
-            this.minute1Phase = data.timeframe_phase["60"];
-            this.minute5Phase = data.timeframe_phase["300"];
-            this.minute15Phase = data.timeframe_phase["900"];
-            this.hour1Phase = data.timeframe_phase["3600"];
-            this.hour4Phase = data.timeframe_phase["14400"];
-            this.dailyPhase = data.timeframe_phase["86400"];
-            this.monthlyPhase = data.timeframe_phase["2592000"];
-            this.yearlyPhase = data.timeframe_phase["31104000"];
-            this.year10Phase = data.timeframe_phase["311040000"];
+            this.minute1Phase = GetPhaseShortName(data.timeframe_phase["60"]);
+            this.trend_phases["60"] = this.minute1Phase;
+            this.minute5Phase = GetPhaseShortName(data.timeframe_phase["300"]);
+            this.trend_phases["300"] = this.minute5Phase;
+            this.minute15Phase = GetPhaseShortName(data.timeframe_phase["900"]);
+            this.trend_phases["900"] = this.minute15Phase;
+            this.hour1Phase = GetPhaseShortName(data.timeframe_phase["3600"]);
+            this.trend_phases["3600"] = this.hour1Phase;
+            this.hour4Phase = GetPhaseShortName(data.timeframe_phase["14400"]);
+            this.trend_phases["14400"] = this.hour4Phase;
+            this.dailyPhase = GetPhaseShortName(data.timeframe_phase["86400"]);
+            this.trend_phases["86400"] = this.dailyPhase;
+            this.monthlyPhase = GetPhaseShortName(data.timeframe_phase["2592000"]);
+            this.trend_phases["2592000"] = this.monthlyPhase;
+            this.yearlyPhase = GetPhaseShortName(data.timeframe_phase["31104000"]);
+            this.trend_phases["31104000"] = this.yearlyPhase;
+            this.year10Phase = GetPhaseShortName(data.timeframe_phase["311040000"]);
+            this.trend_phases["311040000"] = this.year10Phase;
         }
 
         this.trend_period_descriptions = data.trend_period_descriptions;
@@ -330,19 +362,19 @@ class TrendIndexVM {
             if (key === "0") {
                 this.shortGroupStrengthValue = item.strength;
                 this.shortGroupStrength = this._getStrength(item.strength);
-                this.shortGroupPhase = item.phase;
+                this.shortGroupPhase = GetPhaseShortName(item.phase);
                 this.shortGroupVolatilityValue = item.volatility;
                 this.shortGroupDuration = TrendIndexVM.getDurationString(item.duration);
             } else if (key === "1") {
                 this.midGroupStrengthValue = item.strength;
                 this.midGroupStrength = this._getStrength(item.strength);
-                this.midGroupPhase = item.phase;
+                this.midGroupPhase = GetPhaseShortName(item.phase);
                 this.midGroupVolatilityValue = item.volatility;
                 this.midGroupDuration = TrendIndexVM.getDurationString(item.duration);
             } else if (key === "2") {
                 this.longGroupStrengthValue = item.strength;
                 this.longGroupStrength = this._getStrength(item.strength);
-                this.longGroupPhase = item.phase;
+                this.longGroupPhase = GetPhaseShortName(item.phase);
                 this.longGroupVolatilityValue = item.volatility;
                 this.longGroupDuration = TrendIndexVM.getDurationString(item.duration);
             }
@@ -1002,6 +1034,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         }
                     }
 
+                    let phase = instrumentVM.trend_phases[tf];
+
                     this._chartDataTrends.push({
                         timeframe: this._tfToString(Number(tf)),
                         granularity: Number(tf),
@@ -1014,7 +1048,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         volatilityChart: {
                             dates: mesaDates,
                             values: volatilityValues
-                        }
+                        },
+                        phase: phase
                     });
                 }
             }
