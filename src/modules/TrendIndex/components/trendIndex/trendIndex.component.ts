@@ -911,7 +911,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._userAutoTradingInfoData = data;
                 this.loading = false;
                 this._changesDetected = true;
-            }, () => {
+            }, (_) => {
+                if (_ && _.status === 403 && _.error) {
+                    this._alertManager.info(_.error);
+                } else {
+                    this._alertManager.info("Failed to enable trading instrument");
+                }
                 this.loading = false;
                 this._changesDetected = true;
             });
@@ -920,7 +925,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._userAutoTradingInfoData = data;
                 this.loading = false;
                 this._changesDetected = true;
-            }, () => {
+            }, (_) => {
+                if (_ && _.status === 403 && _.error) {
+                    this._alertManager.info(_.error);
+                } else {
+                    this._alertManager.info("Failed to disable trading instrument");
+                }
                 this.loading = false;
                 this._changesDetected = true;
             });
