@@ -232,6 +232,15 @@ export class IdentityService {
                 if (sub.indexOf("Neural") !== -1) {
                     return true;
                 }
+                if (sub.indexOf("Wings") !== -1) {
+                    return true;
+                }
+                if (sub.indexOf("Ascension") !== -1) {
+                    return true;
+                }
+                if (sub.indexOf("God") !== -1) {
+                    return true;
+                }
             }
         }
 
