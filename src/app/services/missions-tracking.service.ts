@@ -71,13 +71,13 @@ export class MissionTrackingService {
     }
 
     public initMissions() {
-        // if (this._isInitialized) {
-        //     return;
-        // }
+        if (this._isInitialized) {
+            return;
+        }
 
-        // this._isInitialized = true;
+        this._isInitialized = true;
 
-        // this._tradingProfileService.initMissions();
+        this._tradingProfileService.initMissions();
 
         // setTimeout(() => {
         //     if (!this._recalculateRequired) {
