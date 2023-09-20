@@ -371,9 +371,9 @@
     position: absolute;
     width: 15px;
     height: 15px;
+    border: 1px solid;
     top: 50%;
     left: 50%;
-    border: 1px solid #000;
     animation: rotateCube 1s infinite linear;
     transform-origin: center center;
     transform: translate(-50%, -50%);
@@ -637,9 +637,15 @@
   .extended-mode {
     background: themed("select-market");
     color: themed("select-market-color");
+    border: 1px solid themed("select-market-border");
+    transition: all 0.22ms;
     &:hover {
-      background: themed("select-market-hover");
+      opacity: 0.8;
     }
+  }
+
+  .half-cube {
+    border-color: themed("half-cube");
   }
 
   .chart-container-title,

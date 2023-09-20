@@ -11,8 +11,8 @@
   "month_1": "1M",
   "year_1": "1Y",
   "year_10": "10Y",
-  "short_g": "Short",
-  "mid_g": "Mid",
-  "long_g": "Long",
+  "short_g": "Local",
+  "mid_g": "Micro",
+  "long_g": "Macro",
   "trendIndexWidgetName": "Trend Index"
 }

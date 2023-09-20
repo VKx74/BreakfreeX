@@ -102,9 +102,12 @@ $DarkTheme: (
 
         user-row-bg: #ffffff0f,
         change-trading-mode: #ff7272d1,
-        select-market: #2d6398e3,
-        select-market-hover: #4183c4e3,
-        select-market-color: #ffffff,
+        select-market: rgba(9, 9, 228, 0.10),
+        select-market-hover: #4f95dae3,
+        select-market-color: #48b3e8,
+        select-market-border: rgb(94, 133, 175),
+        
+        half-cube: #414141,
 
         symcS: #fff,
         symcA: #ffffffde,

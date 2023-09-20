@@ -26,7 +26,7 @@
                     </span>
                 </div>
                 <div class="extended-mode" (click)="setExtendedMode()">
-                    <div>{{extendedMode ? "Group Mode" : "Extended Mode"}}</div>
+                    <div>{{extendedMode ? "Group States " : "Frequency States"}}</div>
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@
 
                 <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 125 : 125"
                     [columnWidth]="editMode ? 125 : 125">
-                    Market
+                    Market State
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
                     {{'driver' | translate}}
@@ -328,21 +328,23 @@
                     </ng-template>
                 </data-table-cell>
 
+                <data-table-menu-item [id]="'trade'">
+                    <ng-template>
+                        {{isSelectedInstrumentTradable() ? "Disable HITL" : "Enable HITL"}}
+                    </ng-template>
+                </data-table-menu-item>
+
                 <data-table-menu-item [id]="'openCharts'">
                     <ng-template>
-                        View Details
+                        View Analysis
                     </ng-template>
                 </data-table-menu-item>
                 <data-table-menu-item [id]="'viewOnChart'">
                     <ng-template>
-                        View On Chart
+                        View Chart
                     </ng-template>
                 </data-table-menu-item>
-                <data-table-menu-item [id]="'trade'">
-                    <ng-template>
-                        {{isSelectedInstrumentTradable() ? "Disable Trading" : "Enable Trading"}}
-                    </ng-template>
-                </data-table-menu-item>
+                
 
             </data-table>
         </div>

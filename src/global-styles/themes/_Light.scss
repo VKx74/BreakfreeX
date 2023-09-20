@@ -99,9 +99,13 @@ $LightTheme: (
 
         user-row-bg: #00000012,
         change-trading-mode: #ff7272d1,
-        select-market: #2d6398e3,
+        select-market: rgba(0,85, 255,  0.10),
         select-market-hover: #4f95dae3,
-        select-market-color: #ffffff,
+        select-market-color: #0178b3,
+        select-market-border: rgb(94, 133, 175),
+
+        half-cube: #9b9b9b6b,
+
 
         symcS: #000000f0,
         symcA: #000000e8,
