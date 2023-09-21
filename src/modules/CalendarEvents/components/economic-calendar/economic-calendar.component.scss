@@ -43,7 +43,7 @@
 
     .header-section-name {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
     }
 
     .header-section-time {
@@ -65,7 +65,7 @@
     .country-flag-container {
       display: flex;
       height: 100%;
-      align-items: start;
+      align-items: flex-start;
     }
 
     .country-flag {
