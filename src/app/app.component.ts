@@ -107,7 +107,7 @@ export class AppComponent {
 
 
         if (this._authService.isAuthorized && this.deviceService.isFirstTimeLogin()) {
-        console.log('Conditions not met, opening dialog');
+
         this.dialog.open(FirstTimeLoginPopupComponent, {
             backdropClass: 'cdk-overlay-backdrop-initial',
             hasBackdrop: true
@@ -115,7 +115,8 @@ export class AppComponent {
           });
         
         } else {
-        console.log('Welcome back');
+      
+            return;
         
         }
         let currModule;
