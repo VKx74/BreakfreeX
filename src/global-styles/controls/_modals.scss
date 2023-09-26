@@ -15,6 +15,10 @@ mat-dialog-container.mat-dialog-container {
 
  }
 
+ .cdk-overlay-backdrop-transparent {
+  background: transparent !important;
+ }
+
 .cdk-overlay-backdrop, .cdk-overlay-dark-backdrop {
   background: transparent ;
 }

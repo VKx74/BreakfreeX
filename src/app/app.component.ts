@@ -16,6 +16,10 @@ import { filter } from "rxjs/operators";
 import { AppRoutes } from './app.routes';
 import { Angulartics2Segment } from 'angulartics2/segment';
 import { Angulartics2GoSquared } from 'angulartics2/gosquared';
+import { DeviceService } from 'modules/deviceService/device-service';
+import { MatDialog } from '@angular/material/dialog';
+import { FirstTimeLoginPopupComponent } from '@app/first-time-login-popup/first-time-login-popup.component';
+
 
 
 @Component({
@@ -48,6 +52,9 @@ export class AppComponent {
         private _ss: SidebarService,
         private _loaderService: LoaderService,
         private _angulartics2Segment: Angulartics2Segment,
+        private DeviceService: DeviceService,
+        private dialog: MatDialog,
+
         private _angulartics2GoSquared: Angulartics2GoSquared,
         @Inject(AppTranslateService) private _translateService: TranslateService
     ) {
@@ -83,6 +90,7 @@ export class AppComponent {
     }
 
     ngOnInit() {
+        
         document.addEventListener('detach-ng-zone', () => {
             this._ref.detach();
         }, false);
@@ -96,6 +104,20 @@ export class AppComponent {
             this._authService.signOut().subscribe();
         }
 
+
+
+        if (this._authService.isAuthorized && this.DeviceService.isFirstTimeLogin()) {
+        console.log('Conditions not met, opening dialog');
+        this.dialog.open(FirstTimeLoginPopupComponent, {
+            backdropClass: 'cdk-overlay-backdrop-initial',
+            hasBackdrop: true
+            
+          });
+        
+        } else {
+        console.log('Welcome back');
+        
+        }
         let currModule;
         let prevModule;
 
