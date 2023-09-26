@@ -52,7 +52,7 @@ export class AppComponent {
         private _ss: SidebarService,
         private _loaderService: LoaderService,
         private _angulartics2Segment: Angulartics2Segment,
-        private DeviceService: DeviceService,
+        private deviceService: DeviceService, 
         private dialog: MatDialog,
 
         private _angulartics2GoSquared: Angulartics2GoSquared,
@@ -106,7 +106,7 @@ export class AppComponent {
 
 
 
-        if (this._authService.isAuthorized && this.DeviceService.isFirstTimeLogin()) {
+        if (this._authService.isAuthorized && this.deviceService.isFirstTimeLogin()) {
         console.log('Conditions not met, opening dialog');
         this.dialog.open(FirstTimeLoginPopupComponent, {
             backdropClass: 'cdk-overlay-backdrop-initial',
