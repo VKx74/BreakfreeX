@@ -48,6 +48,7 @@ import {InstrumentService} from "@app/services/instrument.service";
 import {HistoryService} from "@app/services/history.service";
 import {UssSocketService} from "@app/services/socket/uss.socket.service";
 import {StoreModule} from "@ngrx/store";
+import {FirstTimeLoginPopupComponent} from '@app/first-time-login-popup/first-time-login-popup.component';
 
 
 import * as fromPlatform from './store/reducers/platform.reducer';
@@ -147,7 +148,8 @@ const FILE_INPUT_CONFIG_PROVIDER = {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        FirstTimeLoginPopupComponent
     ],
     imports: [
         IntercomModule.forRoot({
@@ -402,8 +404,12 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         ChatbroService,
         HighlightService
     ],
-    entryComponents: [],
+    entryComponents: [
+        FirstTimeLoginPopupComponent
+    ],
     bootstrap: [AppComponent]
+    
+
 })
 export class AppModule {
     constructor(private _router: Router, private _gtmTrackingService: GTMTrackingService) {

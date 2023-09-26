@@ -44,6 +44,21 @@
                         </div>
                     </nav-section>  -->
 
+
+                    <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" >
+                        <div class="help-container" (click)="helpModal()">
+                           
+                            <div class="flex align-items-center">
+                                <i class="fa-solid fa-hand-holding-medical" aria-hidden="true"></i>
+                                <ng-template #lightThemeIcon>
+                                    <i class="fa-solid fa-hand-holding-medical" aria-hidden="true"></i>
+                                </ng-template>
+                            </div>
+                        </div>
+        
+                    </nav-section>
+
+
                 <nav-section [leftBorder]="true" [paddingRight]="true" [paddingLeft]="true" >
                 <div class="theme-container" (click)="changeTheme()">
                    

@@ -1270,6 +1270,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
     private showOrderModal(orderConfig: BaseOrderConfig, callback: () => void, doGetOrder: boolean): void {
         this._dialog.open(OrderConfiguratorModalComponent, {
+            backdropClass: "cdk-overlay-backdrop-transparent",
             data: {
                 orderConfig: orderConfig,
                 orderPlacedHandler: (order: any) => {

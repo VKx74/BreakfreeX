@@ -23,6 +23,8 @@ import { Store } from "@ngrx/store";
 import { AppState } from '@app/store/reducer';
 import { SocialReactionsService } from 'modules/BreakfreeTradingSocial/services/social.reactions.service';
 import { BlackFridayPremiumVideoComponent } from 'modules/BreakfreeTrading/components/blackFridayPremiumVideo/blackFridayPremiumVideo.component';
+import { FirstTimeLoginPopupComponent } from '@app/first-time-login-popup/first-time-login-popup.component';
+
 
 @Component({
     selector: 'base-nav',
@@ -149,6 +151,10 @@ export class BaseNavComponent implements OnInit {
         //     this._spotsCount = data;
         // });
     }
+
+    helpModal() {
+        this._dialog.open(FirstTimeLoginPopupComponent);
+      }
 
     toggleSidebar() {
         this._sidebarService.toggle();        
