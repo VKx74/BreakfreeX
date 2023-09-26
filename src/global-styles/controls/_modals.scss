@@ -9,8 +9,14 @@ mat-dialog-container.mat-dialog-container {
   border-radius: 3px;
 }
 
+.cdk-overlay-backdrop-initial {
+  // background: transparent !important;
+  background: rgba(100, 100, 100, 0.6) !important;
+
+ }
+
 .cdk-overlay-backdrop, .cdk-overlay-dark-backdrop {
-  background: transparent !important;
+  background: transparent ;
 }
 
 .cdk-overlay-backdrop.backdrop-background {
