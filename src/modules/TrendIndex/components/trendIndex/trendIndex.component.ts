@@ -887,6 +887,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return false;
         }
 
+        if (!this._userAutoTradingInfoData.useManualTrading)
+        {
+            return false;
+        }
+
         for (let m of this._userAutoTradingInfoData.markets) {
             if (m.symbol && m.symbol.replace("_", "").toLowerCase() === item.symbol.replace("_", "").toLowerCase()) {
                 return true;
@@ -910,7 +915,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._algoService.addTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
                 this.loading = false;
-                this._changesDetected = true;
+                this.loadAutoTradingInstruments();
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
                     this._alertManager.info(_.error);
@@ -924,7 +929,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
                 this.loading = false;
-                this._changesDetected = true;
+                this.loadAutoTradingInstruments();
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
                     this._alertManager.info(_.error);
@@ -942,7 +947,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this._algoService.changeUseManualTradingForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.useManualTrading).subscribe((data) => {
             this._userAutoTradingInfoData = data;
             this.loading = false;
-            this._changesDetected = true;
+            this._tradableInstruments = [];
+            this.loadAutoTradingInstruments();
         }, () => {
             this.loading = false;
             this._changesDetected = true;
