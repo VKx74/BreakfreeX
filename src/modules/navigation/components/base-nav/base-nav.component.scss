@@ -11,6 +11,7 @@
   nav-section {
     height: 100%;
     transition: all 0.22s;
+   
   }
   .insidecorrector {
     display: flex;
@@ -24,6 +25,13 @@
     padding: 8px;
     cursor: pointer;
     font-size: 14px;
+
+}
+.help-container {
+  color: #fff;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .bell-image  {
