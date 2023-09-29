@@ -279,6 +279,7 @@
     justify-content: flex-start;
     column-gap: 3px;
     height: 100%;
+    width: 100%;
   }
 
   .positive-border {
@@ -296,12 +297,35 @@
     border-radius: 50%;
   }
 
+  .symbol-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .fa-hexagon-exclamation {
+      color: rgba(189, 91, 106, 0.8);
+    }
+    
+    .fa-star {
+      color: gold;
+    }
+  }
+
+  .symbol-trade-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .symbolxholder {
     display: flex;
     align-items: center;
     justify-content: center;
     column-gap: 3px;
+  }
 
+  .symbolxholder-hover {
     &:hover {
       .sphere {
         border: 2px solid;
@@ -333,6 +357,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     row-gap: 1px;
+    width: 100%;
   }
 
   .containerx {

@@ -529,6 +529,7 @@ export interface IMesaTrendIndex {
     price86400: number;
     current_phase: number;
     next_phase: number;
+    trading_state: number;
 }
 
 export interface IMesaTrendDetails {

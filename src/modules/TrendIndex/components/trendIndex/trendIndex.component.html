@@ -2,7 +2,8 @@
     <div class="root">
         <div class="header-line">
             <div class="left-side">
-                <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Agent: <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
+                <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Agent: <span
+                        class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
             </div>
             <div class="right-side">
                 <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
@@ -155,27 +156,36 @@
                                     [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
                                     <div class="symbolholdx">
                                         <div class="middlesymbol">
-                                            <div class="symbolxholder"
-                                                (click)="instrumentSelectionChanged(vmItem, $event)">
-                                                <div class="containerx">
-                                                    <div class="sphere">
-                                                        <div class="cube untradeable" *ngIf="!isTradable(vmItem)"></div>
-                                                        <div class="cube tradeable" *ngIf="isTradable(vmItem)"
-                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
-                                                        <div class="cube selected"
-                                                            *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
+                                            <div class="symbol-title-container">
+                                                <div class="symbolxholder"
+                                                    [class.symbolxholder-hover]="canSelectMarket()"
+                                                    (click)="instrumentSelectionChanged(vmItem, $event)">
+                                                    <div class="containerx">
+                                                        <div class="sphere">
+                                                            <div class="cube untradeable" *ngIf="!isTradable(vmItem)">
+                                                            </div>
+                                                            <div class="cube tradeable" *ngIf="isTradable(vmItem)"
+                                                                [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                            </div>
+                                                            <div class="cube selected"
+                                                                *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
+                                                            </div>
                                                         </div>
+                                                        <div class="half-cube top-half"
+                                                            *ngIf="isTradable(vmItem) && !editMode"
+                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
+                                                        <div class="half-cube bottom-half"
+                                                            *ngIf="isTradable(vmItem) && !editMode"
+                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
                                                     </div>
-                                                    <div class="half-cube top-half"
-                                                        *ngIf="isTradable(vmItem) && !editMode"
-                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
-                                                    <div class="half-cube bottom-half"
-                                                        *ngIf="isTradable(vmItem) && !editMode"
-                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
+                                                    <span class="symbolx">
+                                                        {{vmItem.symbol}}
+                                                    </span>
                                                 </div>
-                                                <span class="symbolx">
-                                                    {{vmItem.symbol}}
-                                                </span>
+                                                <div class="symbol-trade-state">
+                                                    <i class="fa fa-star" *ngIf="vmItem.tradingState == 2"></i>
+                                                    <i class="fa fa-hexagon-exclamation" *ngIf="vmItem.tradingState == 0"></i>
+                                                </div>
                                             </div>
                                             <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
                                                 [class.down-trend]="vmItem.totalStrength < 0">
@@ -344,7 +354,7 @@
                         View Chart
                     </ng-template>
                 </data-table-menu-item>
-                
+
 
             </data-table>
         </div>

@@ -161,6 +161,7 @@ class TrendIndexVM {
     price311040000VolatilityValue: number;
     price311040000Strength: ETrendIndexStrength;
     totalStrength: number;
+    tradingState: number;
 
     minute1State: number;
     minute5State: number;
@@ -356,6 +357,7 @@ class TrendIndexVM {
 
         this.currentMarketState = GetPhaseName(data.current_phase);
         this.expectedMarketState = GetPhaseName(data.next_phase);
+        this.tradingState = data.trading_state;
 
         for (let key in this.trend_period_descriptions) {
             let item = this.trend_period_descriptions[key];
@@ -887,7 +889,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return false;
         }
 
-        if (!this._userAutoTradingInfoData.useManualTrading)
+        if (!this.useManualTrading())
         {
             return false;
         }
@@ -902,6 +904,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     instrumentSelectionChanged(item: TrendIndexVM, e: PointerEvent) {
+        if (!this.useManualTrading()) {
+            return;
+        }    
         e.preventDefault();
         e.stopImmediatePropagation();
         this.enableDisableTrading(item);
@@ -1113,11 +1118,24 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this.isInstrumentSelected(this.selectedVM);
     }
 
+    canSelectMarket() : boolean {
+        return this.useManualTrading();
+    }
+
     private _raiseStateChanged() {
         if (!this._initialized) {
             return;
         }
 
         this.stateChanged.next(this);
+    }
+
+    private useManualTrading(): boolean {
+        if (this._userAutoTradingInfoData)
+        {
+            return this._userAutoTradingInfoData.useManualTrading;
+        }
+
+        return false;
     }
 }
