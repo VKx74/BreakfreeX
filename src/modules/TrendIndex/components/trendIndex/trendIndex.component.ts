@@ -1118,7 +1118,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this.isInstrumentSelected(this.selectedVM);
     }
 
-    canSelectMarket() : boolean {
+    canSelectMarket(): boolean {
         return this.useManualTrading();
     }
 
