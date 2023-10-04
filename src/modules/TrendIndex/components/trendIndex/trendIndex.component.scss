@@ -421,8 +421,13 @@
   }
 
   .cube.untradeable {
-    background-color: #fff;
-    display: none !important;
+    background-color: #ffffffba;
+    
+  }
+
+  .cube.untradeable-all {
+    background-color: #ffffffba;
+  
   }
 
   .cube.selected {

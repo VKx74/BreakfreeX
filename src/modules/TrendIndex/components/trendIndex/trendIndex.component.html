@@ -164,6 +164,8 @@
                                                         <div class="sphere">
                                                             <div class="cube untradeable" *ngIf="!isTradable(vmItem)">
                                                             </div>
+                                                            <div class="cube untradeable-all"  *ngIf="vmItem.tradingState == 0">
+                                                            </div>
                                                             <div class="cube tradeable" *ngIf="isTradable(vmItem)"
                                                                 [class.is-auto-selectedx]="isAutoSelected(vmItem)">
                                                             </div>
@@ -182,7 +184,7 @@
                                                         {{vmItem.symbol}}
                                                     </span>
                                                 </div>
-                                                <div class="symbol-trade-state">
+                                                <div class="symbol-trade-state hidden">
                                                     <i class="fa fa-star" *ngIf="vmItem.tradingState == 2"></i>
                                                     <i class="fa fa-hexagon-exclamation" *ngIf="vmItem.tradingState == 0"></i>
                                                 </div>
