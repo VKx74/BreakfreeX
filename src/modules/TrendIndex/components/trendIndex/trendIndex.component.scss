@@ -44,8 +44,9 @@
 
     mat-row {
       overflow: hidden !important;
-      height: 100% !important;
-      max-height: 75px;
+      height: auto !important;
+
+
 
       &.row-group-header {
         border-top-left-radius: 6px;
@@ -60,7 +61,7 @@
     mat-cell {
       height: 100% !important;
       padding-left: 0px !important;
-
+  
       &:last-of-type {
         padding-right: 0px !important;
       }
@@ -226,13 +227,13 @@
 
   .symbol-container {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
   }
 
   .symbol-cell {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
 
     .symbol-cell-checkbox {
@@ -278,7 +279,7 @@
     display: flex;
     justify-content: flex-start;
     column-gap: 3px;
-    height: 100%;
+    height: auto;
     width: 100%;
   }
 
@@ -302,6 +303,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    height: auto;
 
     .fa-hexagon-exclamation {
       color: rgba(189, 91, 106, 0.8);
@@ -449,7 +451,7 @@
 
   .strength-cell {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
   }
 

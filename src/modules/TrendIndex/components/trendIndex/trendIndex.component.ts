@@ -419,6 +419,7 @@ class TrendIndexVM {
 export class TrendIndexComponent extends BaseLayoutItem {
     static componentName = 'TrendIndex';
     static previewImgClass = 'crypto-icon-watchlist';
+    advancedView = false;
     @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
 
     loading: boolean;
