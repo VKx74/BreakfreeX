@@ -45,7 +45,23 @@
     mat-row {
       overflow: hidden !important;
       height: 100% !important;
-      max-height: 75px;
+      max-height: 30px;
+      transition: all 0.22s ease-in-out;
+    }
+
+    .god-view mat-row {
+      overflow: hidden !important;
+      height: 100% !important;
+      max-height: 100px;
+      transition: all 0.22s ease-in-out;
+    }
+
+      mat-row {
+        overflow: hidden !important;
+        height: 100% !important;
+        max-height: 36px;
+        transition: all 0.22s ease-in-out;
+    
 
       &.row-group-header {
         border-top-left-radius: 6px;
@@ -60,6 +76,7 @@
     mat-cell {
       height: 100% !important;
       padding-left: 0px !important;
+      transition: all 0.22s ease-in-out;
 
       &:last-of-type {
         padding-right: 0px !important;
@@ -187,7 +204,7 @@
     text-align: left;
     justify-content: left !important;
     white-space: nowrap;
-    overflow: hidden;
+
     text-overflow: ellipsis;
     max-width: 52px;
   }
@@ -301,7 +318,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+
 
     .fa-hexagon-exclamation {
       color: rgba(189, 91, 106, 0.8);
@@ -330,6 +347,7 @@
     align-items: center;
     justify-content: center;
     column-gap: 3px;
+    transition: all 0.22s ease-in-out;
   }
 
   .symbolxholder-hover {
@@ -347,6 +365,7 @@
     background-color: #005eff !important;
     width: 9px;
     height: 9px;
+    
     border-radius: 50%;
   }
 
@@ -428,8 +447,13 @@
   }
 
   .cube.untradeable {
-    background-color: #fff;
-    display: none !important;
+    background-color: #ffffffba;
+    
+  }
+
+  .cube.untradeable-all {
+    background-color: #ffffffba;
+  
   }
 
   .cube.selected {
@@ -507,6 +531,26 @@
   
   }
 
+  .status-holder
+  {
+   font-weight: 500;
+  }
+  .status-runner {
+    padding: 3px 9px;
+    background: #3e454c;
+    border-radius: 13px;
+    margin-right: 6px;
+    transition:all 0.22s ease-in-out;
+
+}
+
+.active-auto-mode {
+  background: #327c41 !important;
+}
+.status-runner:hover {
+  background: #32567c;
+
+}
   .datatrend {
     font-weight: bold;
   }
@@ -662,6 +706,29 @@
       }
     }
   }
+
+  .status-runner {
+   color: themed("statusRunnerTextColor") !important;
+  
+    background: themed("statusRunner") !important;
+   
+
+}
+
+.active-auto-mode {
+
+  background: themed("statusRunnerAutoMode") !important;
+}
+.status-runner:hover {
+
+  background: themed("statusRunnerHover") !important;
+
+
+
+}
+
+
+
   .chart-container-titlex {
     background: themed("appBackgroundColor");
   }

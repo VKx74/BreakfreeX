@@ -7,12 +7,15 @@ import { ETrendIndexStrength } from '../trendIndex/trendIndex.component';
     styleUrls: ['./trendColumn.component.scss']
 })
 export class TrendColumnComponent {
+    
     private _strength: ETrendIndexStrength;
     private _strengthValue: number;
     private _volatilityValue: number;
     private _trendState: number;
     private _trendPhase: string;
     private _duration: string;
+
+    @Input() advancedView: boolean;
 
     @Input() public set Strength(value: ETrendIndexStrength) {
         this._strength = value;
