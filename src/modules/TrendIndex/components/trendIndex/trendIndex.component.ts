@@ -663,7 +663,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._tradableInstruments = data;
                 this._changesDetected = true;
             }, () => {
-                this._tradableInstruments = [];
+                // this._tradableInstruments = [];
                 this._changesDetected = true;
             });
         } else {
@@ -889,11 +889,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return false;
         }
 
-        if (!this.useManualTrading())
-        {
-            return false;
-        }
-
         for (let m of this._userAutoTradingInfoData.markets) {
             if (m.symbol && m.symbol.replace("_", "").toLowerCase() === item.symbol.replace("_", "").toLowerCase()) {
                 return true;
@@ -904,9 +899,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     instrumentSelectionChanged(item: TrendIndexVM, e: PointerEvent) {
-        if (!this.useManualTrading()) {
-            return;
-        }    
         e.preventDefault();
         e.stopImmediatePropagation();
         this.enableDisableTrading(item);
@@ -1118,24 +1110,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this.isInstrumentSelected(this.selectedVM);
     }
 
-    canSelectMarket(): boolean {
-        return this.useManualTrading();
-    }
-
     private _raiseStateChanged() {
         if (!this._initialized) {
             return;
         }
 
         this.stateChanged.next(this);
-    }
-
-    private useManualTrading(): boolean {
-        if (this._userAutoTradingInfoData)
-        {
-            return this._userAutoTradingInfoData.useManualTrading;
-        }
-
-        return false;
     }
 }
