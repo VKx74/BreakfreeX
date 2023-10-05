@@ -419,10 +419,8 @@ class TrendIndexVM {
 export class TrendIndexComponent extends BaseLayoutItem {
     static componentName = 'TrendIndex';
     static previewImgClass = 'crypto-icon-watchlist';
-    advancedView = false;
-    currentItem: any;
     @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
-    
+
     loading: boolean;
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
 
@@ -598,21 +596,19 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     private rankByGroups() {
         for (let item of this.vm) {
-            if (Math.abs(item.totalStrength) * 100 > 21) {
-                if (Metals.indexOf(item.id) >= 0) {
-                    item.type = `Metals`;
-                } else if (Indices.indexOf(item.id) >= 0) {
-                    item.type = `Indices`;
-                } else if (Bounds.indexOf(item.id) >= 0) {
-                    item.type = `Bounds`;
-                } else if (Commodities.indexOf(item.id) >= 0) {
-                    item.type = `Commodities`;
-                } else if (Crypto.indexOf(item.id) >= 0) {
-                    item.type = `Crypto`;
-                } else {
-                    let currencies = item.id.split("_");
-                    item.type = `${currencies[1]}`;
-                }
+            if (Metals.indexOf(item.id) >= 0) {
+                item.type = `Metals`;
+            } else if (Indices.indexOf(item.id) >= 0) {
+                item.type = `Indices`;
+            } else if (Bounds.indexOf(item.id) >= 0) {
+                item.type = `Bounds`;
+            } else if (Commodities.indexOf(item.id) >= 0) {
+                item.type = `Commodities`;
+            } else if (Crypto.indexOf(item.id) >= 0) {
+                item.type = `Crypto`;
+            } else {
+                let currencies = item.id.split("_");
+                item.type = `${currencies[1]}`;
             }
 
             if (!item.type) {
@@ -623,17 +619,18 @@ export class TrendIndexComponent extends BaseLayoutItem {
         let groupsData: ISymbolGroup[] = [];
         for (let item of this.vm) {
             let g = groupsData.find((_) => _.group === item.type);
+            let isAutoSelectedInstrument = this.isTradable(item) && this.isAutoSelected(item);
             if (!g) {
                 g = {
                     group: item.type,
                     count: 1,
-                    strength: Math.abs(item.totalStrength),
+                    strength: isAutoSelectedInstrument ? 1000 : Math.abs(item.totalStrength),
                     avgStrength: 0
                 };
                 groupsData.push(g);
             } else {
                 g.count += 1;
-                g.strength += Math.abs(item.totalStrength);
+                g.strength += isAutoSelectedInstrument ? 1000 : Math.abs(item.totalStrength);
             }
         }
 
@@ -663,6 +660,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this.myAutoTradingAccount && this._userAutoTradingInfoData) {
             this._algoService.getTrendIndexTradableInstrumentForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._tradableInstruments = data;
+                this.rankByGroups();
                 this._changesDetected = true;
             }, () => {
                 // this._tradableInstruments = [];
@@ -1094,9 +1092,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     doubleClicked(instrumentVM: TrendIndexVM) {
         console.log("doubleClicked");
         this.selectedVM = instrumentVM;
-        
         this.showCharts(this.selectedVM);
-        this.currentItem = instrumentVM;
         if (this._singleRowClickTimer) {
             clearTimeout(this._singleRowClickTimer);
         }
