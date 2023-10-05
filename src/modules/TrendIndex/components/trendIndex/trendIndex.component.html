@@ -158,12 +158,7 @@
                                     <div class="symbolholdx">
                                         <div class="middlesymbol">
                                             <div class="symbol-holder-real-OG">
-                                            <div class="symbolx" *ngIf="!advancedView"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-                                                {{vmItem.symbol}} <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
-                                            </div>
-                                            <div class="symbolx" *ngIf="advancedView"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-                                                {{vmItem.symbol}} <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
-                                            </div>
+     
                                         </div>
                                             <div class="symbol-title-container">
 
@@ -211,6 +206,12 @@
                                                   </div>
 
                                                   
+                                            <div class="symbolx" *ngIf="!advancedView"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+                                                {{vmItem.symbol}} <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                            </div>
+                                            <div class="symbolx" *ngIf="advancedView"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+                                                {{vmItem.symbol}} <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                            </div>
 
                                                 <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)">HITL Active</div>
 
