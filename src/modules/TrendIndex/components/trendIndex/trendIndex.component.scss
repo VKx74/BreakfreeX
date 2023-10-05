@@ -52,14 +52,14 @@
     .god-view mat-row {
       overflow: hidden !important;
       height: 100% !important;
-      max-height: 75px;
+      max-height: 100px;
       transition: all 0.22s ease-in-out;
     }
 
       mat-row {
         overflow: hidden !important;
         height: 100% !important;
-        max-height: 30px;
+        max-height: 36px;
         transition: all 0.22s ease-in-out;
     
 
@@ -204,7 +204,7 @@
     text-align: left;
     justify-content: left !important;
     white-space: nowrap;
-    overflow: hidden;
+
     text-overflow: ellipsis;
     max-width: 52px;
   }
@@ -318,7 +318,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+
 
     .fa-hexagon-exclamation {
       color: rgba(189, 91, 106, 0.8);
@@ -524,6 +524,20 @@
   
   }
 
+  .status-holder
+  {
+   font-weight: 500;
+  }
+  .status-runner {
+    padding: 3px 9px;
+    background: #007bff63;
+    border-radius: 13px;
+    margin-right: 6px;
+    transition:all 0.22s ease-in-out;
+}
+.status-runner:hover {
+  opacity: 0.9;
+}
   .datatrend {
     font-weight: bold;
   }

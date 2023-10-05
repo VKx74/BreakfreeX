@@ -100,8 +100,8 @@
 
                 <!--Columns-->
 
-                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 125 : 125"
-                    [columnWidth]="editMode ? 125 : 125">
+                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 175 : 175"
+                    [columnWidth]="editMode ? 175 : 175">
                     Market State
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
@@ -161,9 +161,11 @@
                                     <div class="symbolholdx">
                                         <div class="middlesymbol">
                                             <div class="symbol-title-container">
+                                                <div class="status-runner">
                                                 <div class="symbolxholder"
                                                     [class.symbolxholder-hover]="canSelectMarket()"
                                                     (click)="instrumentSelectionChanged(vmItem, $event)">
+                                                  
                                                     <div class="containerx">
                                                         <div class="sphere">
                                                             <div class="cube untradeable" *ngIf="!isTradable(vmItem)">
@@ -184,15 +186,43 @@
                                                             *ngIf="isTradable(vmItem) && !editMode"
                                                             [class.is-auto-selectedx]="isAutoSelected(vmItem)"></div>
                                                     </div>
-                                                    <span class="symbolx">
-                                                        {{vmItem.symbol}} 
-                                                    </span>
-                                                    <span  *ngIf="!advancedView"> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                               
+
+                               
+                                                    <div class="containerx-status">
+                                                        <div class="status-holder">
+                                                            <div *ngIf="!isTradable(vmItem)">
+                                                                Waiting
+                                                            </div>
+                                                   
+                                                            <div  *ngIf="isTradable(vmItem)"
+                                                                [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                                Active
+                                                            </div>
+                                                            <div
+                                                                *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
+                                                                Active
+                                                            </div>
+                                                        </div>
+                                                   
+                                                    </div>
+                                                 
                                                 </div>
+                                            </div>
+                                                <div class="symbolx"  *ngIf="!advancedView" >
+                                                    {{vmItem.symbol}}     <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                                </div>
+
+
+                                                
+                                                
                                                 <div class="symbol-trade-state hidden">
                                                     <i class="fa fa-star" *ngIf="vmItem.tradingState == 2"></i>
                                                     <i class="fa fa-hexagon-exclamation" *ngIf="vmItem.tradingState == 0"></i>
                                                 </div>
+                                            </div>
+                                            <div class="symbolx"  *ngIf="advancedView">
+                                                {{vmItem.symbol}}     <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
                                             </div>
                                             <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"
                                                 [class.down-trend]="vmItem.totalStrength < 0"    *ngIf="advancedView">
