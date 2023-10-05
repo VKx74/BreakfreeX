@@ -530,13 +530,19 @@
   }
   .status-runner {
     padding: 3px 9px;
-    background: #007bff63;
+    background: #3e454c;
     border-radius: 13px;
     margin-right: 6px;
     transition:all 0.22s ease-in-out;
+
+}
+
+.active-auto-mode {
+  background: #327c41 !important;
 }
 .status-runner:hover {
-  opacity: 0.9;
+  background: #32567c;
+
 }
   .datatrend {
     font-weight: bold;
@@ -693,6 +699,29 @@
       }
     }
   }
+
+  .status-runner {
+   color: themed("statusRunnerTextColor") !important;
+  
+    background: themed("statusRunner") !important;
+   
+
+}
+
+.active-auto-mode {
+
+  background: themed("statusRunnerAutoMode") !important;
+}
+.status-runner:hover {
+
+  background: themed("statusRunnerHover") !important;
+
+
+
+}
+
+
+
   .chart-container-titlex {
     background: themed("appBackgroundColor");
   }

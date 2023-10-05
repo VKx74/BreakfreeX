@@ -161,7 +161,7 @@
                                     <div class="symbolholdx">
                                         <div class="middlesymbol">
                                             <div class="symbol-title-container">
-                                                <div class="status-runner">
+                                                <div class="status-runner" [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
                                                 <div class="symbolxholder"
                                                     [class.symbolxholder-hover]="canSelectMarket()"
                                                     (click)="instrumentSelectionChanged(vmItem, $event)">
@@ -208,14 +208,14 @@
                                                     </div>
                                                  
                                                 </div>
-                                            </div>
-                                                <div class="symbolx"  *ngIf="!advancedView" >
+                                                  </div>
+                                                <div class="symbolx" *ngIf="!advancedView">
                                                     {{vmItem.symbol}}     <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
-                                                </div>
-
+                                                  </div>
+    
 
                                                 
-                                                
+                                              
                                                 <div class="symbol-trade-state hidden">
                                                     <i class="fa fa-star" *ngIf="vmItem.tradingState == 2"></i>
                                                     <i class="fa fa-hexagon-exclamation" *ngIf="vmItem.tradingState == 0"></i>
