@@ -38,7 +38,8 @@
             <div class="chart-container">
                 <div class="chart-container-titlex ">
                     <div>
-                        <div class="bold-symbol">{{chartDataBars.symbol}} State</div>
+                        <div class="bold-symbol">{{chartDataBars.symbol}} State: {{currentItem.currentMarketState}}</div>
+                      
                     </div>
                     <div class="hidden">{{ formatDateToShortForm(chartDataBars.startDate) }}
                         - {{ formatDateToShortForm(chartDataBars.endDate) }} </div>
@@ -95,7 +96,7 @@
                 [groups]="groups" [groupingField]="groupingField"
                 [hiddenColumns]="['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10']"
                 (onRowSelect)="instrumentSelect($event)" (onRowClick)="rowClicked($event)"
-                (onDoubleClick)="doubleClicked($event)" (onContextMenuSelected)="handleContextMenuSelected($event)">
+                (onDoubleClick)="doubleClicked($event)" (onContextMenuSelected)="handleContextMenuSelected($event)" [ngClass]="{'god-view': advancedView}">
 
                 <!--Columns-->
 

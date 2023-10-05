@@ -420,8 +420,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
     static componentName = 'TrendIndex';
     static previewImgClass = 'crypto-icon-watchlist';
     advancedView = false;
+    currentItem: any;
     @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
-
+    
     loading: boolean;
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
 
@@ -1101,7 +1102,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
     doubleClicked(instrumentVM: TrendIndexVM) {
         console.log("doubleClicked");
         this.selectedVM = instrumentVM;
+        
         this.showCharts(this.selectedVM);
+        this.currentItem = instrumentVM;
         if (this._singleRowClickTimer) {
             clearTimeout(this._singleRowClickTimer);
         }

@@ -44,9 +44,24 @@
 
     mat-row {
       overflow: hidden !important;
-      height: auto !important;
+      height: 100% !important;
+      max-height: 30px;
+      transition: all 0.22s ease-in-out;
+    }
 
+    .god-view mat-row {
+      overflow: hidden !important;
+      height: 100% !important;
+      max-height: 75px;
+      transition: all 0.22s ease-in-out;
+    }
 
+      mat-row {
+        overflow: hidden !important;
+        height: 100% !important;
+        max-height: 30px;
+        transition: all 0.22s ease-in-out;
+    
 
       &.row-group-header {
         border-top-left-radius: 6px;
@@ -61,7 +76,8 @@
     mat-cell {
       height: 100% !important;
       padding-left: 0px !important;
-  
+      transition: all 0.22s ease-in-out;
+
       &:last-of-type {
         padding-right: 0px !important;
       }
@@ -227,13 +243,13 @@
 
   .symbol-container {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
   }
 
   .symbol-cell {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
 
     .symbol-cell-checkbox {
@@ -279,7 +295,7 @@
     display: flex;
     justify-content: flex-start;
     column-gap: 3px;
-    height: auto;
+    height: 100%;
     width: 100%;
   }
 
@@ -303,7 +319,6 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: auto;
 
     .fa-hexagon-exclamation {
       color: rgba(189, 91, 106, 0.8);
@@ -325,6 +340,7 @@
     align-items: center;
     justify-content: center;
     column-gap: 3px;
+    transition: all 0.22s ease-in-out;
   }
 
   .symbolxholder-hover {
@@ -342,6 +358,7 @@
     background-color: #005eff !important;
     width: 9px;
     height: 9px;
+    
     border-radius: 50%;
   }
 
@@ -451,7 +468,7 @@
 
   .strength-cell {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
   }
 
