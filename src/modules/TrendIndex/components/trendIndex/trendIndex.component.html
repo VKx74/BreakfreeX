@@ -1,35 +1,63 @@
 <ng-container *ngIf="hasAccess; else outOfAccess">
     <div class="root">
         <div class="header-line">
-           
-            <div class="left-side">
-                <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Agent: <span
-                        class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
-            </div>
-            <div class="right-side">
-                <mat-slide-toggle [(ngModel)]="advancedView">God View</mat-slide-toggle>
+            <div class="neuralagent header">
 
-                <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
-                    <span (click)="changeUseManualTradingForAccount()" *ngIf="!userAutoTradingInfoData.useManualTrading"
-                        class="change-trading-mode">
-                        <div class="trading-enabled">
-                            <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color">HITL
-                                Enabled</span>
-                            <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color">HITL
-                                Disabled</span>
-                        </div>
-                    </span>
-                    <span (click)="changeUseManualTradingForAccount()" *ngIf="userAutoTradingInfoData.useManualTrading"
-                        class="change-trading-mode">
-                        <div class="trading-enabled">
-                            <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color">HITL
-                                Enabled</span>
-                            <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color">HITL
-                                Disabled</span>
-                        </div>
-                    </span>
+                <div class="left-side">
+                    <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Neural Agent: <span
+                            class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
+                           
                 </div>
-                <div class="extended-mode" (click)="setExtendedMode()">
+                <div class="right-side">
+               
+                    <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
+                        <span (click)="changeUseManualTradingForAccount()" *ngIf="!userAutoTradingInfoData.useManualTrading"
+                            class="change-trading-mode">
+                            <div class="trading-enabled">
+                                <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color"><i class="fa-solid fa-shield-halved"></i> Enabled</span>
+                                <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color"><i class="fa-solid fa-power-off"></i>  Disabled</span>
+                            </div>
+                        </span>
+                        <span (click)="changeUseManualTradingForAccount()" *ngIf="userAutoTradingInfoData.useManualTrading"
+                            class="change-trading-mode">
+                            <div class="trading-enabled">
+                                <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color"> <i class="fa-solid fa-shield-halved"></i>Enabled</span>
+                                <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color"><i class="fa-solid fa-power-off"></i> Disabled</span>
+                            </div>
+                        </span>
+                    </div>
+                
+                </div>
+                
+            
+            </div>
+           
+            <div class="neuralagent riskmanagement">
+      
+            <div class="right-side">
+                <mat-slide-toggle [(ngModel)]="advancedView" class="hidden">God View</mat-slide-toggle>
+
+               
+
+                <div class="risk-management">
+                    <div class="risk-management-label"> Risk Management</div>
+
+                    <div class="riskholder maxriskpermarket">
+                     <span class="itemholderx"> <i class="fa-solid fa-dice-d20"></i>   </span>   Max risk per market
+                          <input type="text" placeholder="5%">
+                        
+                      </div>
+
+                <div class="riskholder riskallocation">
+                  <span  class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span> Risk allocation
+                    <input type="text" placeholder="30%">
+                  
+            
+            </div> </div>
+
+            </div>
+
+                <div class="extended-mode hidden" (click)="setExtendedMode()">
                     <div>{{extendedMode ? "Group States " : "Frequency States"}}</div>
                 </div>
             </div>
@@ -99,8 +127,8 @@
 
                 <!--Columns-->
 
-                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 255 : 255"
-                [columnWidth]="editMode ? 255 : 255">
+                <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="extendedMode ? 255 : 255"
+                >
                     Market State
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
@@ -136,13 +164,13 @@
                     {{'year_10' | translate}}
                 </data-table-header-cell>
 
-                <data-table-header-cell columnName="short_g" [sortable]="false" [columnMinWidth]="15">
+                <data-table-header-cell columnName="short_g" [sortable]="false" [columnMinWidth]="15"  [columnWidth]="45">
                     {{'short_g' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="mid_g" [sortable]="false" [columnMinWidth]="15">
+                <data-table-header-cell columnName="mid_g" [sortable]="false" [columnMinWidth]="15"   [columnWidth]="45">
                     {{'mid_g' | translate}}
                 </data-table-header-cell>
-                <data-table-header-cell columnName="long_g" [sortable]="false" [columnMinWidth]="15">
+                <data-table-header-cell columnName="long_g" [sortable]="false" [columnMinWidth]="15"   [columnWidth]="45">
                     {{'long_g' | translate}}
                 </data-table-header-cell>
 
@@ -205,17 +233,23 @@
 
                                                   </div>
 
+                                                  <div class="symbolx"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
+                                                    <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                                   </div>
+
                                                   
-                                            <div class="symbolx" *ngIf="!advancedView"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-                                                {{vmItem.symbol}} <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                            <div class="symbolx" *ngIf="!advancedView"  >
+                                                {{vmItem.symbol}}
                                             </div>
-                                            <div class="symbolx" *ngIf="advancedView"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-                                                {{vmItem.symbol}} <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                            <div class="symbolx" *ngIf="advancedView"   >
+                                                {{vmItem.symbol}} 
                                             </div>
+
+                                           
 
                                                 <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)">HITL Active</div>
 
-                                                  <div class="HITL available" *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)">HITL</div>
+                                                  <div class="HITL available" *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)">H</div>
 
                        
                                               

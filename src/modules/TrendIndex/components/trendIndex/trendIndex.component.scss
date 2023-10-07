@@ -11,6 +11,7 @@
     .extended-mode,
     .trading-enabled {
       font-size: 11px !important;
+  
     }
   }
 
@@ -125,26 +126,102 @@
     font-weight: bold;
   }
 
+  .risk-management {
+    display: flex;
+    row-gap: 6px;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.riskholder {
+  column-gap: 6px;
+}
+.riskholder.maxriskpermarket {
+  padding: 3px 6px;
+  background: #1a1a1a;
+  border-radius: 3px;
+  font-size:11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+
+}
+
+span.itemholderx {
+  background: #363535;
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size:12px;
+}
+
+.riskholder.riskallocation {
+  padding: 3px 6px;
+  background: #1a1a1a;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+}
+
+.risk-management input[type="text"] {
+  height: 20px;
+  border-radius: 3px;
+  width: 30px;
+  background: transparent;
+  border: 1px solid #dddddd52;
+  text-align: center;
+}
+
+.header-line .trading-enabled span {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  column-gap: 3px;
+}
+
   .header-line {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    row-gap: 8px;
+    row-gap: 3fpx;
     column-gap: 8px;
-    align-items: center;
+    align-items: flex-start;
     font-size: 12px;
     margin-bottom: 9px;
-    padding: 6px 12px;
+
     border-radius: 6px;
+
+
+    
     .left-side {
       display: flex;
       align-items: center;
+      column-gap: 12px;
+
+
+      .trading-enabled {
+        font-size: 12px;
+        transition: all 0.22s ease-in-out;
+        cursor: pointer;
+        
+      }
+
+      
     }
+    
 
     .right-side {
       display: flex;
-      align-items: center;
-      column-gap: 6px;
+    align-items: flex-end;
+    -moz-column-gap: 6px;
+    column-gap: 6px;
+    row-gap: 6px;
+    flex-direction: column;
 
       .extended-mode {
         padding: 3px 9px;
@@ -154,10 +231,7 @@
         font-weight: bold;
         transition: all 0.22s ease-in-out;
       }
-      .trading-enabled {
-        font-size: 12px;
-        transition: all 0.22s ease-in-out;
-      }
+
 
       .change-trading-mode {
         cursor: pointer;
@@ -170,12 +244,24 @@
       }
     }
 
+    .neuralagent  {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      padding: 12px 12px;
+
+      
+  }
+  .neuralagent.riskmanagement {
+    border-top: 1px solid #454545;
+}
+
     .positive-color {
       color: #5eaf80 !important;
       background-color: rgba(94, 175, 128, 0.1);
       border: 1px solid;
       padding: 3px 9px;
-      border-radius: 6px;
+      border-radius: 3px;
       font-weight: bold;
       transition: all 0.22s ease-in-out;
 
@@ -189,7 +275,7 @@
       background-color: rgba(189, 91, 106, 0.1);
       border: 1px solid;
       padding: 3px 9px;
-      border-radius: 6px;
+      border-radius: 3px;
       font-weight: bold;
       transition: all 0.22s ease-in-out;
 
@@ -201,7 +287,7 @@
 
   .symbolx {
     padding: 3px 9px;
-    background: #0e0e0e;
+
     border-radius: 3px;
     font-weight: 600;
    
@@ -214,23 +300,23 @@
   }
 
   .color-s {
-    background-color: rgba(196, 75, 255, 0.32);
+    background-color: rgba(196, 75, 255, 0.32) !important;
   }
 
   .color-a {
-    background-color: rgba(255, 123, 0, 0.35);
+    background-color: rgba(255, 123, 0, 0.35) !important;
   }
 
   .color-b {
-    background-color: rgba(255, 255, 27, 0.2);
+    background-color: rgba(255, 255, 27, 0.2) !important;
   }
 
   .color-c {
-    background-color: rgba(55, 255, 55, 0.15);
+    background-color: rgba(55, 255, 55, 0.15) !important;
   }
 
   .color-d {
-    background-color: rgba(128, 128, 128, 0.15);
+    background-color: rgba(128, 128, 128, 0.15) !important;
   }
 
   .color-e {
@@ -348,8 +434,8 @@
   .symbolxholder {
     display: flex;
     align-items: center;
-    justify-content: center;
-    column-gap: 3px;
+
+    column-gap: 6px;
     transition: all 0.22s ease-in-out;
   }
 
@@ -809,6 +895,7 @@
 
   .symbolx {
     color: themed("valueTextColor");
+    background-color: themed('trendindexdefaulttabcolor');
   }
   .header-line {
     color: themed("valueTextColor");
