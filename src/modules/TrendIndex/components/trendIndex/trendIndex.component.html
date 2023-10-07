@@ -247,9 +247,9 @@
 
                                            
 
-                                                <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)">HITL Active</div>
+                                                <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)"><span><i class="fa-solid fa-shield-slash"></i> </span> HITL</div>
 
-                                                  <div class="HITL available" *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)">H</div>
+                                                  <div class="HITL available" *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)"><span><i class="fa-regular fa-user-shield"></i> </span> HITL </div>
 
                        
                                               

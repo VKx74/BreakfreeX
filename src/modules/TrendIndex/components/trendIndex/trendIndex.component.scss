@@ -828,13 +828,49 @@ span.itemholderx {
    
 
 }
+
+.HITL.active {
+  background: #a13a00 !important;
+  display: flex;
+  column-gap: 6px;
+  align-items: center;
+  padding: 3px;
+  padding-right: 6px;
+  font-weight: 600;
+}
+.HITL.active span {
+  background: #e05b10;
+  padding: 0px 3px;
+  border-radius: 3px;
+  
+
+}
+
+.HITL.available {
+  background: #304a2f !important;
+  display: flex;
+  column-gap: 6px;
+  align-items: center;
+  padding: 3px;
+  padding-right: 6px;
+  font-weight: 600;
+}
+
+.HITL.available span {
+  background: #213420;
+  padding: 0px 4px;
+  border-radius: 3px;
+  
+
+}
+
 .HITL {
 
   
 
 
   color: themed("statusRunnerTextColor") !important;
-  background: themed("statusRunner") !important;
+  background: themed("statusRunner") ;
   //border: 1px solid themed("statusRunnerHITLBorder") !important;
 
 }
