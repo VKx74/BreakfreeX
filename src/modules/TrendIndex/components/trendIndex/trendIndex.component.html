@@ -9,7 +9,12 @@
                            
                 </div>
                 <div class="right-side">
-               
+
+                    <mat-slide-toggle [(ngModel)]="advancedView">God View</mat-slide-toggle>
+                    <div class="extended-mode " (click)="setExtendedMode()">
+                        <div>{{extendedMode ? "Group States " : "Frequency States"}}</div>
+                    </div>
+
                     <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
                         <span (click)="changeUseManualTradingForAccount()" *ngIf="!userAutoTradingInfoData.useManualTrading"
                             class="change-trading-mode">
@@ -35,7 +40,7 @@
             <div class="neuralagent riskmanagement">
       
             <div class="right-side">
-                <mat-slide-toggle [(ngModel)]="advancedView" class="hidden">God View</mat-slide-toggle>
+              
 
                
 
@@ -57,9 +62,7 @@
 
             </div>
 
-                <div class="extended-mode hidden" (click)="setExtendedMode()">
-                    <div>{{extendedMode ? "Group States " : "Frequency States"}}</div>
-                </div>
+            
             </div>
         </div>
         <div class="chart-view" *ngIf="!!chartDataBars">
@@ -247,9 +250,9 @@
 
                                            
 
-                                                <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)"><span><i class="fa-solid fa-shield-slash"></i> </span> HITL</div>
+                                                <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)"><span><i class="fa-solid fa-shield-slash"></i> </span> HITL On</div>
 
-                                                  <div class="HITL available" *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)"><span><i class="fa-regular fa-user-shield"></i> </span> HITL </div>
+                                                  <div class="HITL available" *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)"><span><i class="fa-regular fa-user-shield"></i> </span> HITL Off </div>
 
                        
                                               

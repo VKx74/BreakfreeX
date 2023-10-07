@@ -138,6 +138,7 @@
 }
 .riskholder.maxriskpermarket {
   padding: 3px 6px;
+  padding-left: 3px;
   background: #1a1a1a;
   border-radius: 3px;
   font-size:11px;
@@ -158,6 +159,7 @@ span.itemholderx {
 
 .riskholder.riskallocation {
   padding: 3px 6px;
+  padding-left: 3px;
   background: #1a1a1a;
   border-radius: 3px;
   font-size: 11px;
@@ -221,7 +223,7 @@ span.itemholderx {
     -moz-column-gap: 6px;
     column-gap: 6px;
     row-gap: 6px;
-    flex-direction: column;
+  
 
       .extended-mode {
         padding: 3px 9px;
