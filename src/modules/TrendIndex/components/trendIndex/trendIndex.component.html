@@ -195,7 +195,7 @@
 
                                                 <div class="status-runner" [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
                                                 <div class="symbolxholder symbolxholder-hover" (click)="instrumentSelectionChanged(vmItem, $event)">
-                                                    <div class="containerx">
+                                                    <div class="containerx" [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
                                                         <div class="sphere">
                                                             <div class="cube untradeable" *ngIf="!isTradable(vmItem)">
                                                             </div>
@@ -244,7 +244,7 @@
                                       
                                                 <div class="status-holder" [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
                                                     <div class="symbolx neuralagent " *ngIf="!isTradable(vmItem)" [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
-                                                        <span class="iconx"><i class="fa-solid fa-robot"></i>    </span>  Waiting
+                                                        <span class="iconx"><i class="fa-solid fa-robot"></i>    </span>  Working
                                                     </div>
                                                     <div   class="symbolx neuralagent "  *ngIf="isTradable(vmItem)"
                                                         [class.is-auto-selectedx]="isAutoSelected(vmItem)">
