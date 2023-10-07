@@ -139,7 +139,7 @@
 .riskholder.maxriskpermarket {
   padding: 3px 6px;
   padding-left: 3px;
-  background: #1a1a1a;
+
   border-radius: 3px;
   font-size:11px;
   font-weight: 600;
@@ -151,7 +151,7 @@
 }
 
 span.itemholderx {
-  background: #363535;
+
   padding: 3px 6px;
   border-radius: 3px;
   font-size:12px;
@@ -160,7 +160,7 @@ span.itemholderx {
 .riskholder.riskallocation {
   padding: 3px 6px;
   padding-left: 3px;
-  background: #1a1a1a;
+
   border-radius: 3px;
   font-size: 11px;
   font-weight: 600;
@@ -227,7 +227,7 @@ span.itemholderx {
 
       .extended-mode {
         padding: 3px 9px;
-        border-radius: 6px;
+        border-radius: 3px;
         font-size: 12px;
         cursor: pointer;
         font-weight: bold;
@@ -288,12 +288,26 @@ span.itemholderx {
   }
 
   .symbolx {
-    padding: 3px 9px;
-
+    padding: 3px 6px;
+    padding-left: 3px;
     border-radius: 3px;
     font-weight: 600;
-   
     transition: all 0.22s ease-in-out;
+
+    .aimbot{
+      padding: 0px 3px;
+    
+      border-radius: 3px;
+    }
+
+    .iconx {
+      padding: 0px 3px;
+
+      border-radius: 3px;
+      i {
+
+      }
+    }
   
   }
 
@@ -651,7 +665,8 @@ span.itemholderx {
     padding: 3px 9px;
     background: #3e454c;
     border-radius: 3px;
-    width: 77px;
+    min-width: 80px;
+    border: 1px solid #514f4f;
     
     transition:all 0.22s ease-in-out;
 
@@ -659,6 +674,7 @@ span.itemholderx {
 
 .active-auto-mode {
   background: #327c41 !important;
+  border: 1px solid #61a26f;
 }
 .status-runner:hover {
   background: #32567c;
@@ -930,6 +946,40 @@ span.itemholderx {
   .symbol-color-container.color-c .strength-total {
     color: themed("symcC");
   }
+
+  .riskholder.riskallocation {
+
+    background:     themed("trendindexdefaulttabcolor");
+
+  
+  
+  }
+  .riskholder.maxriskpermarket {
+
+    background:     themed("trendindexdefaulttabcolor");
+
+  
+  
+  }
+  
+  span.itemholderx {
+   
+    background:  themed("itemholderx");
+
+  }
+
+  .aimbot{
+    padding: 0px 3px;
+    background: themed("trendindextabbg");
+    border-radius: 3px;
+  }
+
+  .iconx {
+    padding: 0px 3px;
+    background: themed("trendindextabbg");
+    border-radius: 3px;
+  }
+
 
   .symbolx {
     color: themed("valueTextColor");

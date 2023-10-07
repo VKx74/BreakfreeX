@@ -237,15 +237,15 @@
                                                   </div>
 
                                                   <div class="symbolx"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-                                                    <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                                   <span class="iconx"><i class="fa-solid fa-triangle"></i></span> <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
                                                    </div>
 
                                                   
                                             <div class="symbolx" *ngIf="!advancedView"  >
-                                                {{vmItem.symbol}}
+                                              <span class="aimbot"><i class="fa-light fa-crosshairs"></i></span>  {{vmItem.symbol}}
                                             </div>
                                             <div class="symbolx" *ngIf="advancedView"   >
-                                                {{vmItem.symbol}} 
+                                              <span class="aimbot"><i class="fa-light fa-crosshairs"></i></span>  {{vmItem.symbol}} 
                                             </div>
 
                                            
