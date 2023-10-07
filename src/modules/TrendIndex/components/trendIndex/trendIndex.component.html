@@ -219,11 +219,11 @@
                                                     <div class="containerx-status">
                                                         <div class="status-holder">
                                                             <div *ngIf="!isTradable(vmItem)">
-                                                                Waiting
+                                                                {{vmItem.symbol}}  
                                                             </div>
                                                             <div  *ngIf="isTradable(vmItem)"
                                                                 [class.is-auto-selectedx]="isAutoSelected(vmItem)">
-                                                                Active
+                                                                {{vmItem.symbol}} 
                                                             </div>
                                                             <!-- <div
                                                                 *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
@@ -232,22 +232,39 @@
                                                           
                                                         </div>
                                                     </div>
+                                           
                                                 </div>
+
+                                                
 
                                                   </div>
 
+
+
+                                      
+                                                <div class="status-holder" [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                    <div class="symbolx neuralagent " *ngIf="!isTradable(vmItem)" [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                        <span class="iconx"><i class="fa-solid fa-robot"></i>    </span>  Waiting
+                                                    </div>
+                                                    <div   class="symbolx neuralagent "  *ngIf="isTradable(vmItem)"
+                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                       <span  class="iconx">  <i class="fa-solid fa-robot"></i> </span>   Active
+                                                    </div>
+                                                    <!-- <div
+                                                        *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
+                                                       HITL Active
+                                                    </div> -->
+                                                  
+                                                </div>
+
+                                                  
                                                   <div class="symbolx"   [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
                                                    <span class="iconx"><i class="fa-solid fa-triangle"></i></span> <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
                                                    </div>
 
                                                   
-                                            <div class="symbolx" *ngIf="!advancedView"  >
-                                              <span class="aimbot"><i class="fa-light fa-crosshairs"></i></span>  {{vmItem.symbol}}
-                                            </div>
-                                            <div class="symbolx" *ngIf="advancedView"   >
-                                              <span class="aimbot"><i class="fa-light fa-crosshairs"></i></span>  {{vmItem.symbol}} 
-                                            </div>
-
+                                   
+                                     
                                            
 
                                                 <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)"><span><i class="fa-solid fa-shield-slash"></i> </span> HITL On</div>
@@ -264,7 +281,9 @@
                                                     <i class="fa fa-star" *ngIf="vmItem.tradingState == 2"></i>
                                                     <i class="fa fa-hexagon-exclamation" *ngIf="vmItem.tradingState == 0"></i>
                                                 </div>
+                                            
                                             </div>
+                                            
                                       
                                     
                                             <span class="strength-total" [class.up-trend]="vmItem.totalStrength > 0"

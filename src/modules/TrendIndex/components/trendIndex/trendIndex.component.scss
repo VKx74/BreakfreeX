@@ -293,6 +293,9 @@ span.itemholderx {
     border-radius: 3px;
     font-weight: 600;
     transition: all 0.22s ease-in-out;
+    display: flex;
+    -moz-column-gap: 6px;
+    column-gap: 6px;
 
     .aimbot{
       padding: 0px 3px;
@@ -649,7 +652,10 @@ span.itemholderx {
 
   .status-holder
   {
-   font-weight: 500;
+    font-weight: 500;
+    border-radius: 3px;
+  
+
   }
 
   .HITL {
@@ -660,13 +666,18 @@ span.itemholderx {
     border-radius: 3px;
     
 }
+.containerx-status {
+  max-width: 50px;
+  min-width: 50px;
+  overflow: hidden;
+}
 
   .status-runner {
-    padding: 3px 9px;
+    padding: 3px 6px;
     background: #3e454c;
     border-radius: 3px;
-    min-width: 80px;
-    border: 1px solid #514f4f;
+
+    border: 1px solid #2a4867;
     
     transition:all 0.22s ease-in-out;
 
@@ -864,6 +875,8 @@ span.itemholderx {
 
 }
 
+
+
 .HITL.available {
   background: #304a2f !important;
   display: flex;
@@ -872,6 +885,8 @@ span.itemholderx {
   padding: 3px;
   padding-right: 6px;
   font-weight: 600;
+  border-radius: 3px;
+  border: 1px solid #536a52;
 }
 
 .HITL.available span {
