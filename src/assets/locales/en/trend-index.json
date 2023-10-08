@@ -14,5 +14,6 @@
   "short_g": "Local",
   "mid_g": "Micro",
   "long_g": "Macro",
+  "risk": "Risk",
   "trendIndexWidgetName": "Trend Index"
 }

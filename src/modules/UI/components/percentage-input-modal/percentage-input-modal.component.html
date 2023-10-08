@@ -1,0 +1,38 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="reject()"><i
+                    class="crypto-icon crypto-icon-close cursor-pointer"></i>
+            </button>
+            <h4 class="modal-title">
+                <span>{{title || "Set value"}}</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <div class="crypto-form-unit">
+                <div class="form-unit__label">{{inputCaption || "Value %"}}</div>
+                <mat-form-field class="crypto-input with-hint full-width">
+                    <input matInput numericInput [range]="{min: 0, max: 100}" type="number" [step]="1"
+                        [(ngModel)]="value">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <div class="left-part">
+                    <button class="crypto-button crypto-button_action" (click)="reject()">
+                        <span>Cancel</span>
+                    </button>
+                </div>
+                <div class="right-part">
+                    <button class="crypto-button crypto-button_primary" (click)="resetAuto()">
+                        <span>Reset to Auto</span>
+                    </button>
+                    <button class="crypto-button crypto-button_primary" (click)="enterValue()">
+                        <span>Save</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

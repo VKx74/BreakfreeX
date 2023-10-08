@@ -56,12 +56,11 @@
       transition: all 0.22s ease-in-out;
     }
 
-      mat-row {
-        overflow: hidden !important;
-        height: 100% !important;
-        max-height: 30px;
-        transition: all 0.22s ease-in-out;
-    
+    mat-row {
+      overflow: hidden !important;
+      height: 100% !important;
+      max-height: 30px;
+      transition: all 0.22s ease-in-out;
 
       &.row-group-header {
         border-top-left-radius: 6px;
@@ -123,6 +122,18 @@
   }
   .account-id {
     font-weight: bold;
+
+    .separator {
+      margin: 0px 5px;
+    }
+
+    .risk-settings {
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .header-line {
@@ -204,9 +215,8 @@
     background: #0e0e0e;
     border-radius: 3px;
     font-weight: 600;
-   
+
     transition: all 0.22s ease-in-out;
-  
   }
 
   .symbolx-border {
@@ -245,6 +255,18 @@
     width: 100%;
     height: 100%;
     display: flex;
+  }
+
+  .risk-cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .symbol-cell {
@@ -322,11 +344,10 @@
     justify-content: space-between;
     column-gap: 6px;
 
-
     .fa-hexagon-exclamation {
       color: rgba(189, 91, 106, 0.8);
     }
-    
+
     .fa-star {
       color: gold;
     }
@@ -368,7 +389,7 @@
     background-color: #005eff !important;
     width: 9px;
     height: 9px;
-    
+
     border-radius: 50%;
   }
 
@@ -462,12 +483,10 @@
 
   .cube.untradeable {
     background-color: #ffffffba;
-    
   }
 
   .cube.untradeable-all {
     background-color: #ffffffba;
-  
   }
 
   .cube.selected {
@@ -542,39 +561,33 @@
     flex-direction: column;
     display: flex;
     border-radius: 6px;
-  
   }
 
-  .status-holder
-  {
-   font-weight: 500;
+  .status-holder {
+    font-weight: 500;
   }
 
   .HITL {
-
     font-weight: 600;
     padding: 3px 9px;
- 
+
     border-radius: 3px;
-    
-}
+  }
 
   .status-runner {
     padding: 3px 9px;
     background: #3e454c;
     border-radius: 3px;
-    
-    transition:all 0.22s ease-in-out;
 
-}
+    transition: all 0.22s ease-in-out;
+  }
 
-.active-auto-mode {
-  background: #327c41 !important;
-}
-.status-runner:hover {
-  background: #32567c;
-
-}
+  .active-auto-mode {
+    background: #327c41 !important;
+  }
+  .status-runner:hover {
+    background: #32567c;
+  }
   .datatrend {
     font-weight: bold;
   }
@@ -702,7 +715,6 @@
 
   .details-btn {
     cursor: pointer;
-
   }
   .expected-market-state {
     opacity: 0.6;
@@ -716,7 +728,7 @@
       background: themed("tradescoreholderbg");
     }
     /deep/ mat-row {
-     border-color:themed("trendindexMatRowBorder") !important;
+      border-color: themed("trendindexMatRowBorder") !important;
     }
   }
 
@@ -735,37 +747,22 @@
   }
 
   .status-runner {
-   color: themed("statusRunnerTextColor") !important;
-  
+    color: themed("statusRunnerTextColor") !important;
+
     background: themed("statusRunner") !important;
-   
+  }
+  .HITL {
+    color: themed("statusRunnerTextColor") !important;
+    background: themed("statusRunner") !important;
+    //border: 1px solid themed("statusRunnerHITLBorder") !important;
+  }
 
-}
-.HITL {
-
-  
-
-
-  color: themed("statusRunnerTextColor") !important;
-  background: themed("statusRunner") !important;
-  //border: 1px solid themed("statusRunnerHITLBorder") !important;
-
-}
-
-
-.active-auto-mode {
-
-  background: themed("statusRunnerAutoMode") !important;
-}
-.status-runner:hover {
-
-  background: themed("statusRunnerHover") !important;
-
-
-
-}
-
-
+  .active-auto-mode {
+    background: themed("statusRunnerAutoMode") !important;
+  }
+  .status-runner:hover {
+    background: themed("statusRunnerHover") !important;
+  }
 
   .chart-container-titlex {
     background: themed("appBackgroundColor");

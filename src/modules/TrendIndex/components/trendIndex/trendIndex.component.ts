@@ -22,6 +22,7 @@ import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.compone
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
 import { DataTableComponent } from "modules/datatable/components/data-table/data-table.component";
 import { IJSONViewDialogData, JSONViewDialogComponent } from "modules/Shared/components/json-view/json-view-dialog.component";
+import { IPercentageInputModalConfig, PercentageInputModalComponent } from "modules/UI/components/percentage-input-modal/percentage-input-modal.component";
 
 const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -212,6 +213,8 @@ class TrendIndexVM {
     longGroupStrength: ETrendIndexStrength;
     longGroupDuration: string;
     longGroupPhase: string;
+
+    risk: number;
 
     public static getDurationString(t: number) {
         if (!t) {
@@ -468,6 +471,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this._userAutoTradingInfoData;
     }
 
+    get accountRisk(): number {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.accountRisk : null;
+    }
 
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
@@ -521,11 +527,28 @@ export class TrendIndexComponent extends BaseLayoutItem {
         });
     }
 
+    protected setRisksForInstruments()
+    {
+        if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.risksPerMarket || !this.vm) {
+            return;
+        }
+
+        for (let i of this.vm)
+        {
+            if (this._userAutoTradingInfoData.risksPerMarket[i.symbol]) {
+                i.risk = this._userAutoTradingInfoData.risksPerMarket[i.symbol];
+            } else {
+                i.risk = this._userAutoTradingInfoData.defaultMarketRisk;
+            }
+        }
+    }
+
     protected loadUserAutoTradingInfoForAccount() {
         if (this.myAutoTradingAccount) {
             this._algoService.getUserAutoTradingInfoForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
                 this.loadAutoTradingInstruments();
+                this.setRisksForInstruments();
                 this._changesDetected = true;
             }, () => {
                 this._tradableInstruments = [];
@@ -592,6 +615,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.groups = [TopUpTrending, TopDownTrending, OtherMarkets];
 
         this.vm = this.vm.slice();
+        this.setRisksForInstruments();
     }
 
     private rankByGroups() {
@@ -654,6 +678,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         notUsedInGroups.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
 
         this.vm = [...usedInGroups, ...notUsedInGroups];
+        this.setRisksForInstruments();
     }
 
     protected loadAutoTradingInstruments() {
@@ -912,6 +937,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._algoService.addTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
                 this.loading = false;
+                this.setRisksForInstruments();
                 this.loadAutoTradingInstruments();
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
@@ -926,6 +952,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
                 this.loading = false;
+                this.setRisksForInstruments();
                 this.loadAutoTradingInstruments();
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
@@ -939,10 +966,45 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
     }
 
+    changeRiskForInstrument(symbol: string, risk: number) {
+        this._algoService.changeMarketRiskForAccount(this.myAutoTradingAccount, this._identityService.id, symbol, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.setRisksForInstruments();
+            this.loading = false;
+            this._changesDetected = true;
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change instrument risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
+    changeRiskForAccount(risk: number) {
+        this._algoService.changeRiskForAccount(this.myAutoTradingAccount, this._identityService.id, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.setRisksForInstruments();
+            this.loading = false;
+            this._changesDetected = true;
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change instrument risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
     changeUseManualTradingForAccount() {
         this.loading = true;
         this._algoService.changeUseManualTradingForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.useManualTrading).subscribe((data) => {
             this._userAutoTradingInfoData = data;
+            this.setRisksForInstruments();
             this.loading = false;
             this._tradableInstruments = [];
             this.loadAutoTradingInstruments();
@@ -1087,6 +1149,32 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.viewOnChart(this.selectedVM);
             this._singleRowClickTimer = null;
         }, 600);
+    }
+
+    setInstrumentRisk(instrumentVM: TrendIndexVM, e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: instrumentVM.risk > 0 ? instrumentVM.risk : 30
+            }
+        }).afterClosed().subscribe((value) => {
+            this.changeRiskForInstrument(instrumentVM.symbol, value);
+        });
+    }
+
+    setAccountRisk(e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: this.accountRisk ? this.accountRisk : 30
+            }
+        }).afterClosed().subscribe((value) => {
+            this.changeRiskForAccount(value > 0 ? value : 30);
+        });
     }
 
     doubleClicked(instrumentVM: TrendIndexVM) {

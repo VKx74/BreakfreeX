@@ -1,0 +1,24 @@
+.modal-content {
+  max-width: 350px;
+  // min-width: auto;
+}
+
+.modal-body {
+  max-height: 75vh;
+}
+
+:host {
+  .btns-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+  .left-part {
+    display: flex;
+  }
+  .right-part {
+    display: flex;
+    .crypto-button {
+      margin-left: 10px;
+    }
+  }
+}

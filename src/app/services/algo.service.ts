@@ -578,6 +578,9 @@ export interface IUserAutoTradingDefinedMarketData {
 export interface IUserAutoTradingInfoData {
     markets: IUserAutoTradingDefinedMarketData[];
     useManualTrading: boolean;
+    accountRisk: number;
+    defaultMarketRisk: number;
+    risksPerMarket: { [key: string]: number };
 }
 
 class AlgoServiceEncryptionHelper {
@@ -814,7 +817,7 @@ export class AlgoService {
 
     getTrendIndexTradableInstrumentForAccount(account: string): Observable<string[]> {
         return this._http.post<string>(`${this.url}apex/markets`, {
-            account: account, version: "1.0"
+            account: account, version: "2.0"
         }, { responseType: 'text' as any }).pipe(map((data: string) => {
             let result: string[] = [];
             let symbolArray = data.split("\n");
@@ -840,19 +843,31 @@ export class AlgoService {
             });
         }
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-markets`, {
-            account: account, userId: userId, version: "1.0", markets: markets
+            account: account, userId: userId, version: "2.0", markets: markets
         });
     }
 
     removeTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/remove-markets`, {
-            account: account, userId: userId, version: "1.0", markets: symbols
+            account: account, userId: userId, version: "2.0", markets: symbols
+        });
+    }
+    
+    changeMarketRiskForAccount(account: string, userId: string, symbol: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-market-risk`, {
+            account: account, userId: userId, version: "2.0", market: symbol, risk: risk
+        });
+    }
+
+    changeRiskForAccount(account: string, userId: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-account-risk`, {
+            account: account, userId: userId, version: "2.0", risk: risk
         });
     }
 
     changeUseManualTradingForAccount(account: string, userId: string, useManualTrading: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-use-manual-trading`, {
-            account: account, userId: userId, version: "1.0", useManualTrading: useManualTrading
+            account: account, userId: userId, version: "2.0", useManualTrading: useManualTrading
         });
     }
 

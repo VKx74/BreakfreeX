@@ -3,8 +3,11 @@
         <div class="header-line">
            
             <div class="left-side">
-                <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Agent: <span
-                        class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
+                <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">
+                    <span>Agent: </span><span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span>
+                    <span class="mobilehiddenacc separator">|</span>
+                    <span class="risk-settings" (click)="setAccountRisk($event)">Risk: {{accountRisk ? accountRisk + "%" : "..."}}</span>
+                </div>
             </div>
             <div class="right-side">
                 <mat-slide-toggle [(ngModel)]="advancedView">God View</mat-slide-toggle>
@@ -102,6 +105,9 @@
                 <data-table-header-cell columnName="symbol" [sortable]="false" [columnMinWidth]="editMode ? 255 : 255"
                 [columnWidth]="editMode ? 255 : 255">
                     Market State
+                </data-table-header-cell>
+                <data-table-header-cell columnName="risk" [sortable]="false" [columnMinWidth]="40" [columnWidth]="40">
+                    {{'risk' | translate}}
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
                     {{'driver' | translate}}
@@ -243,6 +249,14 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </ng-template>
+                </data-table-cell>
+                <data-table-cell columnName="risk">
+                    <ng-template let-vmItem>
+                        <div class="risk-cell" (click)="setInstrumentRisk(vmItem, $event)">
+                            <span *ngIf="vmItem.risk == -1">All</span>
+                            <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}%</span>
                         </div>
                     </ng-template>
                 </data-table-cell>
