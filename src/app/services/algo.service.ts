@@ -826,10 +826,21 @@ export class AlgoService {
                     continue;
                 }
                 let symbol = item.split("=")[0];
-                if (!symbol) {
+                let dataInfo = item.split("=")[1];
+                if (!symbol || !dataInfo) {
                     continue;
                 }
-                result.push(symbol.replace("_", ""));
+                let dataArray = dataInfo.split(";");
+                if (dataArray.length !== 2) {
+                    continue;
+                }
+                let percentage = Number(dataArray[0]);
+                let maxAllocation = dataArray[1];
+
+                if (percentage && percentage > 0)
+                {
+                    result.push(symbol.replace("_", ""));
+                }
             }
             return result;
         }));
@@ -861,6 +872,12 @@ export class AlgoService {
 
     changeRiskForAccount(account: string, userId: string, risk: number): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-account-risk`, {
+            account: account, userId: userId, version: "2.0", risk: risk
+        });
+    }
+
+    changeDefaultMarketRisk(account: string, userId: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-default-market-risk`, {
             account: account, userId: userId, version: "2.0", risk: risk
         });
     }

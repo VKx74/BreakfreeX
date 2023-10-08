@@ -122,51 +122,101 @@
   }
   .account-id {
     font-weight: bold;
+  }
 
-    .separator {
-      margin: 0px 5px;
-    }
+  .risk-management {
+    display: flex;
+    row-gap: 6px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
 
-    .risk-settings {
-      cursor: pointer;
+  .riskholder {
+    column-gap: 6px;
+  }
+  .riskholder.maxriskpermarket {
+    padding: 3px 6px;
+    padding-left: 3px;
 
-      &:hover {
-        text-decoration: underline;
-      }
-    }
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  span.itemholderx {
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+
+  .riskholder.riskallocation {
+    padding: 3px 6px;
+    padding-left: 3px;
+
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .risk-management input[type="text"] {
+    height: 20px;
+    border-radius: 3px;
+    width: 30px;
+    background: transparent;
+    border: 1px solid #dddddd52;
+    text-align: center;
+  }
+
+  .header-line .trading-enabled span {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    column-gap: 3px;
   }
 
   .header-line {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    row-gap: 8px;
+    row-gap: 3fpx;
     column-gap: 8px;
-    align-items: center;
+    align-items: flex-start;
     font-size: 12px;
     margin-bottom: 9px;
-    padding: 6px 12px;
+
     border-radius: 6px;
+
     .left-side {
       display: flex;
       align-items: center;
+      column-gap: 12px;
+
+      .trading-enabled {
+        font-size: 12px;
+        transition: all 0.22s ease-in-out;
+        cursor: pointer;
+      }
     }
 
     .right-side {
       display: flex;
-      align-items: center;
+      align-items: flex-end;
+      -moz-column-gap: 6px;
       column-gap: 6px;
+      row-gap: 6px;
 
       .extended-mode {
         padding: 3px 9px;
-        border-radius: 6px;
+        border-radius: 3px;
         font-size: 12px;
         cursor: pointer;
         font-weight: bold;
-        transition: all 0.22s ease-in-out;
-      }
-      .trading-enabled {
-        font-size: 12px;
         transition: all 0.22s ease-in-out;
       }
 
@@ -181,12 +231,22 @@
       }
     }
 
+    .neuralagent {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      padding: 12px 12px;
+    }
+    .neuralagent.riskmanagement {
+      border-top: 1px solid #454545;
+    }
+
     .positive-color {
       color: #5eaf80 !important;
       background-color: rgba(94, 175, 128, 0.1);
       border: 1px solid;
       padding: 3px 9px;
-      border-radius: 6px;
+      border-radius: 3px;
       font-weight: bold;
       transition: all 0.22s ease-in-out;
 
@@ -200,7 +260,7 @@
       background-color: rgba(189, 91, 106, 0.1);
       border: 1px solid;
       padding: 3px 9px;
-      border-radius: 6px;
+      border-radius: 3px;
       font-weight: bold;
       transition: all 0.22s ease-in-out;
 
@@ -211,12 +271,24 @@
   }
 
   .symbolx {
-    padding: 3px 9px;
-    background: #0e0e0e;
+    padding: 3px 6px;
+    padding-left: 3px;
     border-radius: 3px;
     font-weight: 600;
-
     transition: all 0.22s ease-in-out;
+    display: flex;
+    -moz-column-gap: 6px;
+    column-gap: 6px;
+
+    .aimbot {
+      padding: 0px 3px;
+      border-radius: 3px;
+    }
+
+    .iconx {
+      padding: 0px 3px;
+      border-radius: 3px;
+    }
   }
 
   .symbolx-border {
@@ -224,23 +296,23 @@
   }
 
   .color-s {
-    background-color: rgba(196, 75, 255, 0.32);
+    background-color: rgba(196, 75, 255, 0.32) !important;
   }
 
   .color-a {
-    background-color: rgba(255, 123, 0, 0.35);
+    background-color: rgba(255, 123, 0, 0.35) !important;
   }
 
   .color-b {
-    background-color: rgba(255, 255, 27, 0.2);
+    background-color: rgba(255, 255, 27, 0.2) !important;
   }
 
   .color-c {
-    background-color: rgba(55, 255, 55, 0.15);
+    background-color: rgba(55, 255, 55, 0.15) !important;
   }
 
   .color-d {
-    background-color: rgba(128, 128, 128, 0.15);
+    background-color: rgba(128, 128, 128, 0.15) !important;
   }
 
   .color-e {
@@ -255,18 +327,6 @@
     width: 100%;
     height: 100%;
     display: flex;
-  }
-
-  .risk-cell {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 
   .symbol-cell {
@@ -369,8 +429,8 @@
   .symbolxholder {
     display: flex;
     align-items: center;
-    justify-content: center;
-    column-gap: 3px;
+
+    column-gap: 6px;
     transition: all 0.22s ease-in-out;
   }
 
@@ -422,15 +482,28 @@
   }
 
   .containerx {
-    width: 14px;
-    height: 14px;
     position: relative;
+    padding: 3px;
+    background: #142232;
+    border-radius: 3px;
+    border: 1px solid #2d4c70;
+  }
+  .active-auto-mode .symbolx {
+    background-color: transparent !important;
+  }
+
+  .containerx.active-auto-mode {
+    position: relative;
+    padding: 3px;
+    background: #136c26 !important;
+    border: 1px solid #61a26f;
+    border-radius: 3px;
   }
 
   .sphere {
-    width: 100%;
+    width: 9px;
     display: flex;
-    height: 100%;
+    height: 9px;
     position: relative;
     border-radius: 50%;
     background-color: transparent;
@@ -441,8 +514,8 @@
 
   .cube {
     position: absolute;
-    width: 9px;
-    height: 9px;
+    width: 6px;
+    height: 6px;
     top: 50%;
     left: 50%;
     border: 1px solid #000;
@@ -455,8 +528,8 @@
 
   .half-cube {
     position: absolute;
-    width: 15px;
-    height: 15px;
+    width: 9px;
+    height: 9px;
     border: 1px solid;
     top: 50%;
     left: 50%;
@@ -565,6 +638,7 @@
 
   .status-holder {
     font-weight: 500;
+    border-radius: 3px;
   }
 
   .HITL {
@@ -573,17 +647,25 @@
 
     border-radius: 3px;
   }
+  .containerx-status {
+    max-width: 50px;
+    min-width: 50px;
+    overflow: hidden;
+  }
 
   .status-runner {
-    padding: 3px 9px;
+    padding: 2px 6px;
     background: #3e454c;
     border-radius: 3px;
+
+    border: 1px solid #2a4867;
 
     transition: all 0.22s ease-in-out;
   }
 
   .active-auto-mode {
-    background: #327c41 !important;
+    background: #327c41;
+    border: 1px solid #61a26f;
   }
   .status-runner:hover {
     background: #32567c;
@@ -749,16 +831,50 @@
   .status-runner {
     color: themed("statusRunnerTextColor") !important;
 
-    background: themed("statusRunner") !important;
+    background: themed("statusRunner");
   }
+
+  .HITL.active {
+    background: #a13a00 !important;
+    display: flex;
+    column-gap: 6px;
+    align-items: center;
+    padding: 3px;
+    padding-right: 6px;
+    font-weight: 600;
+  }
+  .HITL.active span {
+    background: #e05b10;
+    padding: 0px 3px;
+    border-radius: 3px;
+  }
+
+  .HITL.available {
+    background: #304a2f !important;
+    display: flex;
+    column-gap: 6px;
+    align-items: center;
+    padding: 3px;
+    padding-right: 6px;
+    font-weight: 600;
+    border-radius: 3px;
+    border: 1px solid #536a52;
+  }
+
+  .HITL.available span {
+    background: #213420;
+    padding: 0px 4px;
+    border-radius: 3px;
+  }
+
   .HITL {
     color: themed("statusRunnerTextColor") !important;
-    background: themed("statusRunner") !important;
+    background: themed("statusRunner");
     //border: 1px solid themed("statusRunnerHITLBorder") !important;
   }
 
   .active-auto-mode {
-    background: themed("statusRunnerAutoMode") !important;
+    background: themed("statusRunnerAutoMode");
   }
   .status-runner:hover {
     background: themed("statusRunnerHover") !important;
@@ -803,8 +919,32 @@
     color: themed("symcC");
   }
 
+  .riskholder.riskallocation {
+    background: themed("trendindexdefaulttabcolor");
+  }
+  .riskholder.maxriskpermarket {
+    background: themed("trendindexdefaulttabcolor");
+  }
+
+  span.itemholderx {
+    background: themed("itemholderx");
+  }
+
+  .aimbot {
+    padding: 0px 3px;
+    background: themed("trendindextabbg");
+    border-radius: 3px;
+  }
+
+  .iconx {
+    padding: 0px 3px;
+    background: themed("trendindextabbg");
+    border-radius: 3px;
+  }
+
   .symbolx {
     color: themed("valueTextColor");
+    background-color: themed("trendindexdefaulttabcolor");
   }
   .header-line {
     color: themed("valueTextColor");
@@ -818,6 +958,18 @@
     background-color: themed("appPanelColor");
     .text {
       color: themed("valueTextColor");
+    }
+  }
+
+  .risk-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 }

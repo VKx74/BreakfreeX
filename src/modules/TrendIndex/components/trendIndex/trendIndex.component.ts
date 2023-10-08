@@ -475,6 +475,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.accountRisk : null;
     }
 
+    get defaultMarketRisk(): number {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.defaultMarketRisk : null;
+    }
+
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
 
@@ -535,9 +539,20 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         for (let i of this.vm)
         {
-            if (this._userAutoTradingInfoData.risksPerMarket[i.symbol]) {
-                i.risk = this._userAutoTradingInfoData.risksPerMarket[i.symbol];
-            } else {
+            let dataSet = false;
+            for (let s in this._userAutoTradingInfoData.risksPerMarket)
+            {
+                let nS1 = s.replace("_", "").toUpperCase();
+                let nS2 = i.symbol.replace("_", "").toUpperCase();
+
+                if (nS1 === nS2) {
+                    i.risk = this._userAutoTradingInfoData.risksPerMarket[s];
+                    dataSet = true;
+                    break;
+                }
+            }
+
+            if (!dataSet) {
                 i.risk = this._userAutoTradingInfoData.defaultMarketRisk;
             }
         }
@@ -1000,6 +1015,23 @@ export class TrendIndexComponent extends BaseLayoutItem {
         });
     }
 
+    changeDefaultMarketRisk(risk: number) {
+        this._algoService.changeDefaultMarketRisk(this.myAutoTradingAccount, this._identityService.id, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.setRisksForInstruments();
+            this.loading = false;
+            this._changesDetected = true;
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change instrument risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
     changeUseManualTradingForAccount() {
         this.loading = true;
         this._algoService.changeUseManualTradingForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.useManualTrading).subscribe((data) => {
@@ -1157,7 +1189,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
-                value: instrumentVM.risk > 0 ? instrumentVM.risk : 30
+                value: instrumentVM.risk > 0 ? instrumentVM.risk : 30,
+                title: instrumentVM.symbol + " risk allocation"
             }
         }).afterClosed().subscribe((value) => {
             this.changeRiskForInstrument(instrumentVM.symbol, value);
@@ -1170,10 +1203,25 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
-                value: this.accountRisk ? this.accountRisk : 30
+                value: this.accountRisk ? this.accountRisk : 30,
+                title: "Risk allocation"
             }
         }).afterClosed().subscribe((value) => {
             this.changeRiskForAccount(value > 0 ? value : 30);
+        });
+    }
+
+    setDefaultMarketRisk(e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: this.defaultMarketRisk ? this.defaultMarketRisk : 25,
+                title: "Default risk per market"
+            }
+        }).afterClosed().subscribe((value) => {
+            this.changeDefaultMarketRisk(value > 0 ? value : 25);
         });
     }
 
