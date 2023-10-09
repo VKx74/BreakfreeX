@@ -15,7 +15,7 @@ export class TrendColumnComponent {
     private _trendPhase: string;
     private _duration: string;
 
-    @Input() advancedView: boolean;
+    @Input() extendedMode: boolean;
 
     @Input() public set Strength(value: ETrendIndexStrength) {
         this._strength = value;

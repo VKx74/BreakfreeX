@@ -456,9 +456,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
       
-    advancedView: boolean = false; 
+    extendedMode: boolean = false; 
     riskManagementVisible: boolean = false;
-    advancedUserView: boolean = false; // Set this to true
+
 
 
 
@@ -498,7 +498,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
 
-    extendedMode = false;
+ 
 
     constructor(protected _dialog: MatDialog,
         protected _realtimeService: RealtimeService,
@@ -514,14 +514,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
 
-    toggleAdvancedUserView() {
-        this.advancedUserView = this.advancedUserView;
-    }
 
 
-    toggleAdvancedView() {
-        this.advancedView = !this.advancedView;
-    }
 
         toggleRiskManagement() {
             this.riskManagementVisible = !this.riskManagementVisible;
@@ -1078,8 +1072,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     setExtendedMode() {
         this.extendedMode = !this.extendedMode;
-        let extendedColumns = ['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10'];
-        let groupedColumns = ['short_g', 'mid_g', 'long_g'];
+        let extendedColumns = ['short_g', 'mid_g', 'long_g', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10'];
+        let groupedColumns = [];
 
         for (let c of extendedColumns) {
             if (this.extendedMode && !this.dataTableComponent.isColumnVisible(c)) {
@@ -1102,31 +1096,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this._changesDetected = true;
     }
 
-    toggleadvancedUserView() {
-        this.advancedUserView = !this.advancedUserView;
-        let extendedColumns = [ 'short_g', 'mid_g', 'long_g'];
-        let groupedColumns = [ 'Risk'];
-
-        for (let c of extendedColumns) {
-            if (this.advancedUserView && !this.dataTableComponent.isColumnVisible(c)) {
-                this.dataTableComponent.toggleColumn(c);
-            }
-            if (!this.advancedUserView && this.dataTableComponent.isColumnVisible(c)) {
-                this.dataTableComponent.toggleColumn(c);
-            }
-        }
-
-        for (let c of groupedColumns) {
-            if (!this.advancedUserView && !this.dataTableComponent.isColumnVisible(c)) {
-                this.dataTableComponent.toggleColumn(c);
-            }
-            if (this.advancedUserView && this.dataTableComponent.isColumnVisible(c)) {
-                this.dataTableComponent.toggleColumn(c);
-            }
-        }
-
-        this._changesDetected = true;
-    }
 
     showCharts(instrumentVM: TrendIndexVM) {
         this.loading = true;
