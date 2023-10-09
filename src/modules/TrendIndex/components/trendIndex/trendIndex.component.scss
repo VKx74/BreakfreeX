@@ -45,7 +45,7 @@
     mat-row {
       overflow: hidden !important;
       height: 100% !important;
-      max-height: 36px;
+      max-height: 88px;
       transition: all 0.22s ease-in-out;
     }
 
@@ -59,7 +59,7 @@
     mat-row {
       overflow: hidden !important;
       height: 100% !important;
-      max-height: 30px;
+     // max-height: 30px;
       transition: all 0.22s ease-in-out;
 
       &.row-group-header {
@@ -425,6 +425,7 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 6px;
+    width: 100%;
 
     .fa-hexagon-exclamation {
       color: rgba(189, 91, 106, 0.8);
@@ -491,7 +492,7 @@
     border-radius: 50%;
   }
   .symbolx.neuralagent {
-    min-width: 77px;
+    
     font-weight: 600;
     
   }
@@ -508,11 +509,14 @@
 
   .middlesymbol {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    row-gap: 6px;
-
+    row-gap: 8px;
+    background: #181818;
+    padding: 9px 9px;
+    border: 1px solid #4f4f4f;
+    border-radius: 3px;
     width: 100%;
   }
 
@@ -521,10 +525,9 @@
     display: flex;
     align-items: center;
     min-width: 66px;
-   
-    background: #2f314a !important;
+    background: #393939 !important;
     border-radius: 3px;
-    border: 1px solid #5d6196;
+    border: 1px solid #505052;
     padding: 2px 6px;
 
 }
@@ -699,8 +702,11 @@
 
   .status-holder {
     font-weight: 700;
-    border-radius: 3px;
-    max-height: 22px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 24px;
   }
 
   .status-holder.neuralagentholder {
@@ -713,17 +719,39 @@
 
     border-radius: 3px;
   }
+
+  .HITL.unavailable.status-holder {
+    background: #4b4b4b !important;
+}
   .containerx-status {
-    max-width: 50px;
-    min-width: 50px;
-    overflow: hidden;
+
   }
+  .symbol-holder-real-OG {
+
+      padding: 3px 6px;
+      background: #2b2b2b;
+      border-radius: 3px;
+  
+}
+
+.cells-holder {
+  display: flex;
+}
+.execution-side {
+  display: flex;
+  column-gap: 3px;
+}
+
+.trend-side {
+  display: flex;
+  column-gap: 3px;
+}
 
   .status-runner {
     padding: 2px 6px;
     background: #3e454c;
     border-radius: 3px;
-    padding-left: 3px;
+
     border: 1px solid #2a4867;
 
     transition: all 0.22s ease-in-out;
