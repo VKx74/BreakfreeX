@@ -195,7 +195,7 @@
                                 </span>
                                 <div class="symbol-color-container">
                                     <div class="symbolholdx">
-                                        <div class="middlesymbol">
+                                        <div class="middlesymbol"  [ngClass]="{'active-auto-modex': isTradable(vmItem)}">
                                             <div class="symbol-holder-real-OG" [ngClass]="{'active-auto-mode': isTradable(vmItem)}" >
 
                                                 <div class=" status-holder marketsymbol"
