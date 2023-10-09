@@ -461,18 +461,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
     advancedUserView: boolean = false; // Set this to true
 
 
-    toggleAdvancedUserView() {
-        this.advancedUserView = this.advancedUserView;
-    }
-
-
-    toggleAdvancedView() {
-        this.advancedView = !this.advancedView;
-    }
-
-        toggleRiskManagement() {
-            this.riskManagementVisible = !this.riskManagementVisible;
-        }
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
@@ -505,6 +493,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     get defaultMarketRisk(): number {
         return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.defaultMarketRisk : null;
     }
+    
 
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
@@ -523,6 +512,20 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _matDialog: MatDialog) {
         super();
     }
+
+
+    toggleAdvancedUserView() {
+        this.advancedUserView = this.advancedUserView;
+    }
+
+
+    toggleAdvancedView() {
+        this.advancedView = !this.advancedView;
+    }
+
+        toggleRiskManagement() {
+            this.riskManagementVisible = !this.riskManagementVisible;
+        }
 
     ngOnInit() {
         this.initialized.next(this);
