@@ -314,7 +314,7 @@
                                                 </div>
 
                                                 <div class="HITL unavailable  status-holder"
-                                                    *ngIf="vmItem.tradingState == 0">
+                                                    *ngIf="vmItem.tradingState == 0 && isInstrumentSelected(vmItem) ">
                                                     <span></span> HITL
                                                     N/A
                                                 </div>

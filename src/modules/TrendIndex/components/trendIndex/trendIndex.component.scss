@@ -132,7 +132,7 @@
   }
 
   .riskholder {
-    column-gap: 6px;
+    column-gap: 3px;
   }
   .riskholder.maxriskpermarket {
     padding: 3px 6px;
@@ -207,8 +207,8 @@
     .right-side {
       display: flex;
       align-items: flex-end;
-      -moz-column-gap: 6px;
-      column-gap: 6px;
+      -moz-column-gap: 3px;
+      column-gap: 3px;
       row-gap: 6px;
 
       .advanced-view {
@@ -273,7 +273,7 @@
       transition: all 0.22s ease-in-out;
 
       &:hover {
-        opacity: 0.8;
+        filter: brightness(1.2);
       }
     }
 
@@ -287,7 +287,7 @@
       transition: all 0.22s ease-in-out;
 
       &:hover {
-        opacity: 0.8;
+        filter: brightness(1.2);
       }
     }
   }
@@ -299,8 +299,8 @@
     font-weight: 700;
     transition: all 0.22s ease-in-out;
     display: flex;
-    -moz-column-gap: 6px;
-    column-gap: 6px;
+    -moz-column-gap: 3px;
+    column-gap: 3px;
 
     .aimbot {
       padding: 0px 3px;
@@ -423,8 +423,8 @@
   .symbol-title-container {
     display: flex;
     align-items: center;
-    -moz-column-gap: 6px;
-    column-gap: 6px;
+    -moz-column-gap: 3px;
+    column-gap: 3px;
     width: 100%;
 
 
@@ -462,7 +462,7 @@
     display: flex;
     align-items: center;
 
-    column-gap: 6px;
+    column-gap: 3px;
     transition: all 0.22s ease-in-out;
   }
 
@@ -504,7 +504,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     row-gap: 6px;
-    column-gap: 6px;
+    column-gap: 3px;
     width: 100%;
   }
 
@@ -541,6 +541,7 @@
     background: #393939 !important;
     border-radius: 3px;
     border: 1px solid #505052;
+    padding-right: 0px;
    
 
 }
@@ -568,14 +569,21 @@
   }
 
   button.risk-management-toggle {
-    background: #000;
-    border: 1px solid #eee;
+    border: 1px solid #7f7c7c;
+    background: #464646;
     padding: 3px 6px;
     border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    -moz-column-gap: 3px;
     column-gap: 3px;
+    transition: all 0.22s ease-in-out;
+
+    &:hover {
+      filter: brightness(1.2);
+    }
+
 }
 
   .sphere {
@@ -730,7 +738,7 @@
 
   .HITL {
     font-weight: 600;
-    padding: 3px 9px;
+    padding: 3px 3px;
 
     border-radius: 3px;
   }
@@ -743,7 +751,7 @@
 
   }
   .symbol-holder-real-OG {
-
+    height: 100%;
       padding: 3px 6px;
       background: #2b2b2b;
       border: 1px solid #665f5f;
@@ -768,7 +776,7 @@
 }
 
   .status-runner {
-    padding: 2px 6px;
+    padding: 3px 3px;
     background: #3e454c;
     border-radius: 3px;
 
@@ -950,7 +958,7 @@
     background: #a13a00 !important;
     border: 1px solid #c65516;
     display: flex;
-    column-gap: 6px;
+    column-gap: 3px;
     align-items: center;
     padding: 3px;
     padding-right: 6px;
@@ -965,7 +973,7 @@
   .HITL.available {
     background: #304a2f !important;
     display: flex;
-    column-gap: 6px;
+    column-gap: 3px;
     align-items: center;
     padding: 3px;
     padding-right: 6px;
@@ -976,7 +984,7 @@
 
   .HITL.available span {
     background: #213420;
-    padding: 0px 4px;
+    padding: 1px 4px;
     border-radius: 3px;
   }
 
@@ -1007,7 +1015,7 @@
     border: 1px solid themed("select-market-border");
     transition: all 0.22ms;
     &:hover {
-      opacity: 0.8;
+      filter: brightness(1.2);
     }
   }
 
@@ -1081,8 +1089,8 @@
   .risk-cell {
     background: #304a2f !important;
     display: flex;
-    -moz-column-gap: 6px;
-    column-gap: 6px;
+    -moz-column-gap: 3px;
+    column-gap: 3px;
     align-items: center;
     padding: 3px;
     padding-right: 6px;
