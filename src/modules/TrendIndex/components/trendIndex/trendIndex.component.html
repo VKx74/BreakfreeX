@@ -13,37 +13,37 @@
             <div class="neuralagent header">
                 <div class="left-side">
                     <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Neural Agent:
-                        <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
+                        <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span>
+                    </div>
                 </div>
                 <div class="right-side">
-            
-                    
                     <div class="extended-mode " (click)="setExtendedMode()">
                         <div>{{extendedMode ? "NA View " : "God View"}}</div>
                     </div>
 
-                    <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
-                        <span (click)="changeUseManualTradingForAccount()"
-                            *ngIf="!userAutoTradingInfoData.useManualTrading" class="change-trading-mode">
+                    <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="bot-settings-container">
+                        <span (click)="changeUseManualTradingForAccount()" class="change-trading-mode">
                             <div class="trading-enabled">
                                 <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color"><i
-                                        class="fa-solid fa-shield-halved"></i> Enabled</span>
+                                        class="fa-solid fa-shield-halved"></i>HITL Enabled</span>
                                 <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color"><i
-                                        class="fa-solid fa-power-off"></i> Disabled</span>
-                            </div>
-                        </span>
-                        <span (click)="changeUseManualTradingForAccount()"
-                            *ngIf="userAutoTradingInfoData.useManualTrading" class="change-trading-mode">
-                            <div class="trading-enabled">
-                                <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color"> <i
-                                        class="fa-solid fa-shield-halved"></i>Enabled</span>
-                                <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color"><i
-                                        class="fa-solid fa-power-off"></i> Disabled</span>
+                                        class="fa-solid fa-power-off"></i>HITL Disabled</span>
                             </div>
                         </span>
                     </div>
+
+                    <span *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData"
+                        (click)="changeBotEnabledForAccount()" class="change-trading-mode">
+                        <div class="trading-enabled">
+                            <span *ngIf="!userAutoTradingInfoData.botShutDown" class="positive-color"><i
+                                    class="fa-solid fa-user-robot"></i>Bot Enabled</span>
+                            <span *ngIf="userAutoTradingInfoData.botShutDown" class="negative-color"><i
+                                    class="fa-solid fa-power-off"></i>Bot Disabled</span>
+                        </div>
+                    </span>
+
                     <button (click)="toggleRiskManagement()" class="risk-management-toggle">
-                        <i class="fa-solid fa-square-sliders-vertical"></i>   {{'Settings'}}
+                        <i class="fa-solid fa-square-sliders-vertical"></i> {{'Settings'}}
                     </button>
                 </div>
             </div>
@@ -54,11 +54,14 @@
                         <div class="risk-management-label"> Risk Management</div>
                         <div class="riskholder maxriskpermarket">
                             <span class="itemholderx"> <i class="fa-solid fa-dice-d20"></i> </span> Max risk per market
-                            <input type="text" readonly placeholder='{{defaultMarketRisk ? defaultMarketRisk + "%" : "..."}}' (click)="setDefaultMarketRisk($event)">
+                            <input type="text" readonly
+                                placeholder='{{defaultMarketRisk ? defaultMarketRisk + "%" : "..."}}'
+                                (click)="setDefaultMarketRisk($event)">
                         </div>
                         <div class="riskholder riskallocation">
                             <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span> Risk allocation
-                            <input readonly type="text" placeholder='{{accountRisk ? accountRisk + "%" : "..."}}' (click)="setAccountRisk($event)">
+                            <input readonly type="text" placeholder='{{accountRisk ? accountRisk + "%" : "..."}}'
+                                (click)="setAccountRisk($event)">
                         </div>
                     </div>
                 </div>
@@ -95,9 +98,7 @@
                             </div>
                             <trend-index-chart [data]="chartDataTrend.strengthChart" [height]="60"></trend-index-chart>
                         </div>
-
                     </div>
-
                 </div>
             </ng-container>
             <ng-container *ngFor="let chartDataTrend of chartDataTrends">
@@ -131,7 +132,7 @@
                 <!--Columns-->
 
                 <data-table-header-cell columnName="symbol" [sortable]="false"
-                    [columnMinWidth]="extendedMode ? 90 : 255" >
+                    [columnMinWidth]="extendedMode ? 90 : 255">
                     Market State
                 </data-table-header-cell>
                 <data-table-header-cell columnName="risk" [sortable]="false" [columnMinWidth]="70" [columnWidth]="70">
@@ -191,189 +192,168 @@
                                 </span>
                                 <div class="symbol-color-container">
                                     <div class="symbolholdx">
-                                        <div class="middlesymbol"  [ngClass]="{'active-auto-modex': isTradable(vmItem)}">
-                                        
-
-                                           
-                                         
-    
-                                     
-                                                <div class="execution-side">
-                                      
-                                                    <div class="symbol-title-container">
-                                                        <div class="symbol-holder-real-OG" [ngClass]="{'active-auto-mode': isTradable(vmItem)}" >
-        
-                                                            <div class=" status-holder marketsymbol" >
-                                                             <div class="symbolxholder symbolxholder-hover"
-                                                                (click)="instrumentSelectionChanged(vmItem, $event)">
-                                                                
-            
-                                                                <div class="containerx-status">
-                                                                    <div class="status-holder">
-                                                                        <div *ngIf="!isTradable(vmItem)">
-                                                                            {{vmItem.symbol}}
-                                                                        </div>
-                                                                        <div *ngIf="isTradable(vmItem)"
-                                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)">
-                                                                            {{vmItem.symbol}}
-                                                                        </div>
-                                                                       
+                                        <div class="middlesymbol" [ngClass]="{'active-auto-modex': isTradable(vmItem)}">
+                                            <div class="execution-side">
+                                                <div class="symbol-title-container">
+                                                    <div class="symbol-holder-real-OG simple-hover" (click)="viewOnChart(vmItem)"
+                                                        [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                        <div class="status-holder">
+                                                            <div class="symbolxholder symbolxholder-hover">
+                                                                <div class="status-holder">
+                                                                    <div *ngIf="!isTradable(vmItem)">
+                                                                        {{vmItem.symbol}}
+                                                                    </div>
+                                                                    <div *ngIf="isTradable(vmItem)"
+                                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                                        {{vmItem.symbol}}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                            
-                                                     
-            
-                                                 
 
+                                                    <ng-container *ngIf="!userAutoTradingInfoData.botShutDown; else botSwitchedOff">
+                                                        <div class="status-runner status-holder"
+                                                            (click)="enableDisableTrading(vmItem)"
+                                                            [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
+                                                            [matTooltip]="isTradable(vmItem) ? 'Neural Agent is Active' : 'Neural Agent is Waiting'">
+                                                            <div class="symbolxholder">
+                                                                <div class="containerx"
+                                                                    *ngIf="!isInstrumentDisabled(vmItem)"
+                                                                    [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                                    <div class="sphere">
+                                                                        <div class="cube untradeable"
+                                                                            *ngIf="!isTradable(vmItem)">
+                                                                        </div>
+                                                                        <div class="cube untradeable-all"
+                                                                            *ngIf="vmItem.tradingState == 0">
+                                                                        </div>
+                                                                        <div class="cube tradeable"
+                                                                            *ngIf="isTradable(vmItem)"
+                                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                                        </div>
+                                                                        <div class="cube selected"
+                                                                            *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="half-cube top-half"
+                                                                        *ngIf="isTradable(vmItem) && !editMode"
+                                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                                    </div>
+                                                                    <div class="half-cube bottom-half"
+                                                                        *ngIf="isTradable(vmItem) && !editMode"
+                                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                                    </div>
+                                                                </div>
+                                                                <span
+                                                                    *ngIf="isInstrumentDisabled(vmItem); else activeStatus">
+                                                                    <div class="NA-state locked">
+                                                                        <i class="fa-solid fa-lock-alt locked-icon"></i>
+                                                                        <span>
+                                                                            Disabled
+                                                                        </span>
+                                                                    </div>
+                                                                </span>
+                                                                <ng-template #activeStatus>
+                                                                    <div class="NA-state" *ngIf="!isTradable(vmItem)"
+                                                                        [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                                        <div class="symbol-trade-state">
+                                                                            <i class="fa fa-heart-pulse"
+                                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
+                                                                            <i class="fa fa-star hidden"
+                                                                                *ngIf="vmItem.tradingState == 2"></i>
+                                                                            <i class="hidden fa fa-hexagon-exclamation"
+                                                                                *ngIf="vmItem.tradingState == 0"></i>
+                                                                        </div>
+                                                                        Working
+                                                                    </div>
+                                                                    <div class="NA-state" *ngIf="isTradable(vmItem)"
+                                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                                        <div class="symbol-trade-state">
+                                                                            <i class="fa fa-heart-pulse"
+                                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
+                                                                            <i class="fa fa-star hidden"
+                                                                                *ngIf="vmItem.tradingState == 2"></i>
+                                                                            <i class="hidden fa fa-hexagon-exclamation"
+                                                                                *ngIf="vmItem.tradingState == 0"></i>
+                                                                        </div>
+                                                                        Active
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                    <ng-template #botSwitchedOff>
+                                                        <div class="status-holder status-switched-off">
+                                                            <span>
+                                                                Switched Off
+                                                            </span>
+                                                        </div>
+                                                    </ng-template>
 
-
-
-                                                <div class="status-runner status-holder"
-                                                [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
-                                               
-                                                [matTooltip]="isTradable(vmItem) ? 'Neural Agent is Active' : 'Neural Agent is Waiting'">
-                                                <div class="symbolxholder symbolxholder-hover"
-                                                    (click)="instrumentSelectionChanged(vmItem, $event)">
-                                                    
-                                                           
-                                                    <div class="containerx"
-                                                    [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
-                                                    <div class="sphere">
-                                                        <div class="cube untradeable"
-                                                            *ngIf="!isTradable(vmItem)">
-                                                        </div>
-                                                        <div class="cube untradeable-all"
-                                                            *ngIf="vmItem.tradingState == 0">
-                                                        </div>
-                                                        <div class="cube tradeable" *ngIf="isTradable(vmItem)"
-                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)">
-                                                        </div>
-                                                        <div class="cube selected"
-                                                            *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
-                                                        </div>
+                                                    <div class="HITL active status-holder simple-hover"
+                                                        (click)="instrumentSelectionChanged(vmItem, $event)"
+                                                        *ngIf="isInstrumentSelected(vmItem)  && !vmItem.tradingState == 0">
+                                                        <span><i class="fa-solid fa-shield-slash"></i> </span> HITL On
                                                     </div>
-                                                    <div class="half-cube top-half"
-                                                        *ngIf="isTradable(vmItem) && !editMode"
-                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                    <div class="HITL available status-holder simple-hover"
+                                                        (click)="instrumentSelectionChanged(vmItem, $event)"
+                                                        *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)">
+                                                        <span><i class="fa-solid fa-shield-check"></i></span> HITL Off
                                                     </div>
-                                                    <div class="half-cube bottom-half"
-                                                        *ngIf="isTradable(vmItem) && !editMode"
-                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                    <div class="HITL unavailable status-holder simple-hover"
+                                                        (click)="instrumentSelectionChanged(vmItem, $event)"
+                                                        *ngIf="vmItem.tradingState == 0 && isInstrumentSelected(vmItem) ">
+                                                        <span></span> HITL
+                                                        N/A
                                                     </div>
                                                 </div>
-                            
-                                                    <div class="NA-state " *ngIf="!isTradable(vmItem)"
-                                                        [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
-                                                        <div class="symbol-trade-state">
-                                                            <i class="fa fa-heart-pulse"
-                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
-                                                            <i class="fa fa-star hidden" *ngIf="vmItem.tradingState == 2"></i>
-                                                            <i class="hidden fa fa-hexagon-exclamation"
-                                                                *ngIf="vmItem.tradingState == 0"></i>
-                                                        </div>
-                                                        Working
+
+                                                <div class="trend-side">
+                                                    <div class="symbolx risk-cell status-holder"
+                                                        (click)="setInstrumentRisk(vmItem, $event)" tooltip
+                                                        matTooltip="{{vmItem.risk > 0 ? vmItem.risk + '% Risk Allowed ' : 'All'}}">
+                                                        <span class="iconx"><i class="fa-solid fa-dice-d20"></i></span>
+                                                        <span *ngIf="vmItem.risk == -1">All</span>
+                                                        <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
                                                     </div>
-                                                    <div class="NA-state " *ngIf="isTradable(vmItem)"
-                                                        [class.is-auto-selectedx]="isAutoSelected(vmItem)">
-                                                        <div class="symbol-trade-state">
-                                                            <i class="fa fa-heart-pulse"
-                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
-                                                            <i class="fa fa-star hidden" *ngIf="vmItem.tradingState == 2"></i>
-                                                            <i class="hidden fa fa-hexagon-exclamation"
-                                                                *ngIf="vmItem.tradingState == 0"></i>
+                                                    <div class="symbolx statex status-holder"
+                                                        [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)"
+                                                        tooltip
+                                                        [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'">
+                                                        <span
+                                                            class="iconx marketstateshort">{{vmItem.abbreviatedCurrentMarketState}}
+                                                            {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+
+                                                        <div class="cells-holder">
+                                                            <div class=" strength-cell">
+                                                                <trend-column [extendedMode]="extendedMode"
+                                                                    [Strength]="vmItem.shortGroupStrength"
+                                                                    [StrengthValue]="vmItem.shortGroupStrengthValue"
+                                                                    [TrendPhase]="vmItem.shortGroupPhase"
+                                                                    [VolatilityValue]="vmItem.shortGroupVolatilityValue"
+                                                                    [Duration]="vmItem.shortGroupDuration"></trend-column>
+                                                            </div>
+                                                            <div class="strength-cell">
+                                                                <trend-column [extendedMode]="extendedMode"
+                                                                    [Strength]="vmItem.midGroupStrength"
+                                                                    [StrengthValue]="vmItem.midGroupStrengthValue"
+                                                                    [TrendPhase]="vmItem.midGroupPhase"
+                                                                    [VolatilityValue]="vmItem.midGroupVolatilityValue"
+                                                                    [Duration]="vmItem.midGroupDuration"></trend-column>
+                                                            </div>
+                                                            <div class="  strength-cell">
+                                                                <trend-column [extendedMode]="extendedMode"
+                                                                    [Strength]="vmItem.longGroupStrength"
+                                                                    [StrengthValue]="vmItem.longGroupStrengthValue"
+                                                                    [TrendPhase]="vmItem.longGroupPhase"
+                                                                    [VolatilityValue]="vmItem.longGroupVolatilityValue"
+                                                                    [Duration]="vmItem.longGroupDuration"></trend-column>
+                                                            </div>
                                                         </div>
-                                                        Active
                                                     </div>
-                                                    <!-- <div
-                                                        *ngIf="isInstrumentSelected(vmItem) && !isTradable(vmItem)">
-                                                       HITL Active
-                                                    </div> -->
-
-                                                </div></div>
-
-
-                                                
-           
-
-
-
-
-
-
-
-
-                                                <div class="HITL active status-holder" *ngIf="isInstrumentSelected(vmItem)  && !vmItem.tradingState == 0"><span><i
-                                                            class="fa-solid fa-shield-slash"></i> </span> HITL On</div>
-
-                                                <div class="HITL available status-holder"
-                                                    *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)">
-                                                    <span><i class="fa-solid fa-shield-check"></i></span> HITL Off
                                                 </div>
-
-                                                <div class="HITL unavailable  status-holder"
-                                                    *ngIf="vmItem.tradingState == 0 && isInstrumentSelected(vmItem) ">
-                                                    <span></span> HITL
-                                                    N/A
-                                                </div>
-
-
-                                       
-                                        </div>
-                                        
-                                        <div class="trend-side">
-                                                                                                                             
-                                            <div class="symbolx risk-cell status-holder" (click)="setInstrumentRisk(vmItem, $event)" tooltip matTooltip="{{vmItem.risk > 0 ? vmItem.risk + '% Risk Allowed ' : 'All'}}">
-                                                <span class="iconx"><i class="fa-solid fa-dice-d20"></i></span>
-                                                <span *ngIf="vmItem.risk == -1">All</span>
-                                                <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
                                             </div>
-                                            
-                                                          
-                                                <div class="symbolx statex status-holder"
-                                                [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)" tooltip
-                                                [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'">
-                                                <span class="iconx marketstateshort">{{vmItem.abbreviatedCurrentMarketState}}  {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
-                                 
-
-                                             <div class="cells-holder"> 
-                                                
-                                                <div class=" strength-cell">
-                                                    <trend-column [extendedMode]="extendedMode" [Strength]="vmItem.shortGroupStrength"
-                                                        [StrengthValue]="vmItem.shortGroupStrengthValue" [TrendPhase]="vmItem.shortGroupPhase"
-                                                        [VolatilityValue]="vmItem.shortGroupVolatilityValue"
-                                                        [Duration]="vmItem.shortGroupDuration"></trend-column>
-                                                </div>
-                                         
-                                       
-                                                <div class="strength-cell">
-                                                    <trend-column [extendedMode]="extendedMode" [Strength]="vmItem.midGroupStrength"
-                                                        [StrengthValue]="vmItem.midGroupStrengthValue" [TrendPhase]="vmItem.midGroupPhase"
-                                                        [VolatilityValue]="vmItem.midGroupVolatilityValue"
-                                                        [Duration]="vmItem.midGroupDuration"></trend-column>
-                                                </div>
-                                        
-                                       
-                                                <div class="  strength-cell">
-                                                    <trend-column [extendedMode]="extendedMode" [Strength]="vmItem.longGroupStrength"
-                                                        [StrengthValue]="vmItem.longGroupStrengthValue" [TrendPhase]="vmItem.longGroupPhase"
-                                                        [VolatilityValue]="vmItem.longGroupVolatilityValue"
-                                                        [Duration]="vmItem.longGroupDuration"></trend-column>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </div>
-
-
-
-
-                                            </div>
-
-
-
-                                         
                                         </div>
                                     </div>
                                 </div>
@@ -494,7 +474,7 @@
                 </data-table-cell>
 
 
-                <data-table-cell columnName="short_g"  >
+                <data-table-cell columnName="short_g">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [extendedMode]="extendedMode" [Strength]="vmItem.shortGroupStrength"
@@ -504,7 +484,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="mid_g" >
+                <data-table-cell columnName="mid_g">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [extendedMode]="extendedMode" [Strength]="vmItem.midGroupStrength"
@@ -514,7 +494,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="long_g" >
+                <data-table-cell columnName="long_g">
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [extendedMode]="extendedMode" [Strength]="vmItem.longGroupStrength"
@@ -530,7 +510,6 @@
                         {{isSelectedInstrumentTradable() ? "Disable HITL" : "Enable HITL"}}
                     </ng-template>
                 </data-table-menu-item>
-
                 <data-table-menu-item [id]="'openCharts'">
                     <ng-template>
                         View Analysis
@@ -541,8 +520,11 @@
                         View Chart
                     </ng-template>
                 </data-table-menu-item>
-
-
+                <data-table-menu-item [id]="'disableMarket'">
+                    <ng-template>
+                        {{isMarketDisabled() ? "Enable Market" : "Disable Market"}}
+                    </ng-template>
+                </data-table-menu-item>
             </data-table>
         </div>
     </div>

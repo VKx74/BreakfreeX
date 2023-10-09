@@ -578,9 +578,20 @@ export interface IUserAutoTradingDefinedMarketData {
 export interface IUserAutoTradingInfoData {
     markets: IUserAutoTradingDefinedMarketData[];
     useManualTrading: boolean;
+    botShutDown: boolean;
     accountRisk: number;
     defaultMarketRisk: number;
+    disabledMarkets: string[];
     risksPerMarket: { [key: string]: number };
+}
+
+
+export interface IUserMarketConfigData {
+    isDisabled: boolean;
+    isTradable: boolean;
+    maxRisks: number;
+    risks: number;
+    symbol: string;
 }
 
 class AlgoServiceEncryptionHelper {
@@ -837,13 +848,18 @@ export class AlgoService {
                 let percentage = Number(dataArray[0]);
                 let maxAllocation = dataArray[1];
 
-                if (percentage && percentage > 0)
-                {
+                if (percentage && percentage > 0) {
                     result.push(symbol.replace("_", ""));
                 }
             }
             return result;
         }));
+    }
+
+    getTrendIndexMarketsConfigForAccount(account: string): Observable<IUserMarketConfigData[]> {
+        return this._http.post<IUserMarketConfigData[]>(`${this.url}apex/markets-config`, {
+            account: account, version: "2.0"
+        });
     }
 
     addTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
@@ -863,7 +879,19 @@ export class AlgoService {
             account: account, userId: userId, version: "2.0", markets: symbols
         });
     }
+
+    enableTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/remove-disabled-markets`, {
+            account: account, userId: userId, version: "2.0", markets: symbols
+        });
+    }
     
+    disableTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-disabled-markets`, {
+            account: account, userId: userId, version: "2.0", markets: symbols
+        });
+    }
+
     changeMarketRiskForAccount(account: string, userId: string, symbol: string, risk: number): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-market-risk`, {
             account: account, userId: userId, version: "2.0", market: symbol, risk: risk
@@ -885,6 +913,12 @@ export class AlgoService {
     changeUseManualTradingForAccount(account: string, userId: string, useManualTrading: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-use-manual-trading`, {
             account: account, userId: userId, version: "2.0", useManualTrading: useManualTrading
+        });
+    }
+
+    changeBotEnabledForAccount(account: string, userId: string, switchedOff: boolean): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-state`, {
+            account: account, userId: userId, version: "2.0", switchedOff: switchedOff
         });
     }
 
