@@ -525,6 +525,13 @@
     border: 1px solid #327c41 !important;
     background: #25693329 !important;
 }
+.NA-state {
+  display: flex;
+}
+
+.NA-state i {
+  margin-right:  3px;
+}
 
   .statex {
     column-gap: 3px !important;
@@ -534,11 +541,12 @@
     background: #393939 !important;
     border-radius: 3px;
     border: 1px solid #505052;
-    padding: 2px 6px;
+   
 
 }
 .statex .marketstateshort {
-  border: 1px solid #080808;
+  border: 1px solid #504e4e;
+  background: #312b2b;
 }
   .containerx {
     position: relative;
@@ -713,6 +721,7 @@
     align-items: center;
     justify-content: center;
     max-height: 24px;
+    color: #fff;
   }
 
   .status-holder.neuralagentholder {
@@ -728,6 +737,7 @@
 
   .HITL.unavailable.status-holder {
     background: #4b4b4b !important;
+    border: 1px solid #665f5f;
 }
   .containerx-status {
 
@@ -736,6 +746,7 @@
 
       padding: 3px 6px;
       background: #2b2b2b;
+      border: 1px solid #665f5f;
       border-radius: 3px;
   
 }
