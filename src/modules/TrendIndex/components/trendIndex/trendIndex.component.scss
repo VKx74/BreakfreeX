@@ -45,7 +45,7 @@
     mat-row {
       overflow: hidden !important;
       height: 100% !important;
-      max-height: 88px;
+      max-height: 36px;
       transition: all 0.22s ease-in-out;
     }
 
@@ -423,9 +423,10 @@
   .symbol-title-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    -moz-column-gap: 6px;
     column-gap: 6px;
     width: 100%;
+
 
     .fa-hexagon-exclamation {
       color: rgba(189, 91, 106, 0.8);
@@ -514,9 +515,9 @@
     justify-content: flex-start;
     row-gap: 8px;
     background: #181818;
-    padding: 9px 9px;
+    padding: 3px 3px;
     border: 1px solid #4f4f4f;
-    border-radius: 3px;
+    border-radius: 6px;
     width: 100%;
   }
 
@@ -744,7 +745,10 @@
 }
 .execution-side {
   display: flex;
+  -moz-column-gap: 3px;
   column-gap: 3px;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .trend-side {

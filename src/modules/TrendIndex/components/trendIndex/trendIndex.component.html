@@ -196,40 +196,45 @@
                                 <div class="symbol-color-container">
                                     <div class="symbolholdx">
                                         <div class="middlesymbol"  [ngClass]="{'active-auto-modex': isTradable(vmItem)}">
-                                            <div class="symbol-holder-real-OG" [ngClass]="{'active-auto-mode': isTradable(vmItem)}" >
+                                        
 
-                                                <div class=" status-holder marketsymbol"
-                                                >
-                                                <div class="symbolxholder symbolxholder-hover"
-                                                    (click)="instrumentSelectionChanged(vmItem, $event)">
-                                                    
-
-                                                    <div class="containerx-status">
-                                                        <div class="status-holder">
-                                                            <div *ngIf="!isTradable(vmItem)">
-                                                                {{vmItem.symbol}}
-                                                            </div>
-                                                            <div *ngIf="isTradable(vmItem)"
-                                                                [class.is-auto-selectedx]="isAutoSelected(vmItem)">
-                                                                {{vmItem.symbol}}
-                                                            </div>
-                                                           
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                
-
-
-                                            </div>
-
-
-                                            </div>
-                                            <div class="symbol-title-container">
-
+                                           
+                                         
+    
                                      
                                                 <div class="execution-side">
                                       
+                                                    <div class="symbol-title-container">
+                                                        <div class="symbol-holder-real-OG" [ngClass]="{'active-auto-mode': isTradable(vmItem)}" >
+        
+                                                            <div class=" status-holder marketsymbol" >
+                                                             <div class="symbolxholder symbolxholder-hover"
+                                                                (click)="instrumentSelectionChanged(vmItem, $event)">
+                                                                
+            
+                                                                <div class="containerx-status">
+                                                                    <div class="status-holder">
+                                                                        <div *ngIf="!isTradable(vmItem)">
+                                                                            {{vmItem.symbol}}
+                                                                        </div>
+                                                                        <div *ngIf="isTradable(vmItem)"
+                                                                            [class.is-auto-selectedx]="isAutoSelected(vmItem)">
+                                                                            {{vmItem.symbol}}
+                                                                        </div>
+                                                                       
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                            
+                                                     
+            
+                                                 
+
+
+
+
                                                 <div class="status-runner status-holder"
                                                 [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
                                                
