@@ -52,7 +52,7 @@
     .god-view mat-row {
       overflow: hidden !important;
       height: 100% !important;
-      max-height: 130px;
+      max-height: 100px;
       transition: all 0.22s ease-in-out;
     }
 
@@ -211,6 +211,23 @@
       column-gap: 6px;
       row-gap: 6px;
 
+      .advanced-view {
+        padding: 3px 9px;
+        border-radius: 3px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.22s ease-in-out;
+      }
+      .advanced-user-view {
+        padding: 3px 9px;
+        border-radius: 3px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.22s ease-in-out;
+      }
+
       .extended-mode {
         padding: 3px 9px;
         border-radius: 3px;
@@ -229,6 +246,10 @@
         cursor: pointer;
         transition: all 0.22s ease-in-out;
       }
+      .advanced-view {
+        cursor: pointer;
+        transition: all 0.22s ease-in-out;
+      }
     }
 
     .neuralagent {
@@ -236,6 +257,7 @@
       width: 100%;
       justify-content: space-between;
       padding: 12px 12px;
+      
     }
     .neuralagent.riskmanagement {
       border-top: 1px solid #454545;
@@ -274,7 +296,7 @@
     padding: 3px 6px;
     padding-left: 3px;
     border-radius: 3px;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.22s ease-in-out;
     display: flex;
     -moz-column-gap: 6px;
@@ -420,6 +442,14 @@
     }
   }
 
+  span.iconx.marketstateshort {
+    min-width: 20px;
+    min-height: 15px;
+    padding: 0px 3px !important;
+    text-align: center;
+   
+}
+
   .symbol-trade-state {
     display: flex;
     justify-content: center;
@@ -460,6 +490,11 @@
     height: 9px;
     border-radius: 50%;
   }
+  .symbolx.neuralagent {
+    min-width: 77px;
+    font-weight: 600;
+    
+  }
 
   .god-view .middlesymbol {
     display: flex;
@@ -477,13 +512,28 @@
     align-items: flex-start;
     justify-content: flex-start;
     row-gap: 6px;
-    column-gap: 6px;
+
     width: 100%;
   }
 
+  .statex {
+    column-gap: 3px !important;
+    display: flex;
+    align-items: center;
+    min-width: 66px;
+   
+    background: #2f314a !important;
+    border-radius: 3px;
+    border: 1px solid #5d6196;
+    padding: 2px 6px;
+
+}
+.statex .marketstateshort {
+  border: 1px solid #080808;
+}
   .containerx {
     position: relative;
-    padding: 3px;
+    padding: 1px;
     background: #142232;
     border-radius: 3px;
     border: 1px solid #2d4c70;
@@ -494,16 +544,27 @@
 
   .containerx.active-auto-mode {
     position: relative;
-    padding: 3px;
+    padding: 1px;
     background: #136c26 !important;
     border: 1px solid #61a26f;
     border-radius: 3px;
   }
 
-  .sphere {
-    width: 9px;
+  button.risk-management-toggle {
+    background: #000;
+    border: 1px solid #eee;
+    padding: 3px 6px;
+    border-radius: 3px;
     display: flex;
-    height: 9px;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 3px;
+}
+
+  .sphere {
+    width: 12px;
+    display: flex;
+    height: 12px;
     position: relative;
     border-radius: 50%;
     background-color: transparent;
@@ -637,8 +698,13 @@
   }
 
   .status-holder {
-    font-weight: 500;
+    font-weight: 700;
     border-radius: 3px;
+    max-height: 22px;
+  }
+
+  .status-holder.neuralagentholder {
+    border: 1px solid #464d4f;
   }
 
   .HITL {
@@ -657,19 +723,17 @@
     padding: 2px 6px;
     background: #3e454c;
     border-radius: 3px;
-
+    padding-left: 3px;
     border: 1px solid #2a4867;
 
     transition: all 0.22s ease-in-out;
   }
 
   .active-auto-mode {
-    background: #327c41;
-    border: 1px solid #61a26f;
+    background: #327c41  !important;
+    border: 1px solid #61a26f  !important;
   }
-  .status-runner:hover {
-    background: #32567c;
-  }
+
   .datatrend {
     font-weight: bold;
   }
@@ -836,6 +900,7 @@
 
   .HITL.active {
     background: #a13a00 !important;
+    border: 1px solid #c65516;
     display: flex;
     column-gap: 6px;
     align-items: center;
@@ -879,12 +944,16 @@
   .status-runner:hover {
     background: themed("statusRunnerHover") !important;
   }
+  .status-runner.active-auto-mode:hover {
+    background: themed("statusRunnerAutoMode") !important;
+    filter: brightness(1.2);
+  }
 
   .chart-container-titlex {
     background: themed("appBackgroundColor");
   }
 
-  .extended-mode {
+  .extended-mode, .advanced-view, .advanced-user-view {
     background: themed("select-market");
     color: themed("select-market-color");
     border: 1px solid themed("select-market-border");
@@ -943,7 +1012,7 @@
   }
 
   .symbolx {
-    color: themed("valueTextColor");
+    color: themed("statusRunnerTextColor");
     background-color: themed("trendindexdefaulttabcolor");
   }
   .header-line {
@@ -962,14 +1031,26 @@
   }
 
   .risk-cell {
+    background: #304a2f !important;
     display: flex;
+    -moz-column-gap: 6px;
+    column-gap: 6px;
     align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
+    padding: 3px;
+    padding-right: 6px;
+    font-weight: 600;
+    border-radius: 3px;
+    border: 1px solid #536a52;
+    transition: all 0.22s ease-in-out;
 
+    .iconx {
+      background: #213420;
+      padding: 0px 4px;
+      border-radius: 3px;
+    }
+  
     &:hover {
-      text-decoration: underline;
+      filter: brightness(1.2);
     }
   }
 }

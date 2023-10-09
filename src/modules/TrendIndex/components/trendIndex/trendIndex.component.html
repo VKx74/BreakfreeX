@@ -16,10 +16,14 @@
                         <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span></div>
                 </div>
                 <div class="right-side">
-
-                    <mat-slide-toggle [(ngModel)]="advancedView">God View</mat-slide-toggle>
+                    <div class="advanced-user-view" (click)="toggleadvancedUserView()">
+                        <div>{{advancedUserView ? "Simple" : "Advanced"}}</div>
+                    </div>
+                    <div class="advanced-view" (click)="toggleAdvancedView()">
+                        <div>{{advancedView ? "GV" : "SV"}}</div>
+                    </div>
                     <div class="extended-mode " (click)="setExtendedMode()">
-                        <div>{{extendedMode ? "Group States " : "Frequency States"}}</div>
+                        <div>{{extendedMode ? "GS " : "FS"}}</div>
                     </div>
 
                     <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
@@ -42,10 +46,13 @@
                             </div>
                         </span>
                     </div>
+                    <button (click)="toggleRiskManagement()" class="risk-management-toggle">
+                        <i class="fa-solid fa-square-sliders-vertical"></i>   {{'Settings'}}
+                    </button>
                 </div>
             </div>
 
-            <div class="neuralagent riskmanagement">
+            <div class="neuralagent riskmanagement" *ngIf="riskManagementVisible">
                 <div class="right-side">
                     <div class="risk-management">
                         <div class="risk-management-label"> Risk Management</div>
@@ -120,7 +127,7 @@
             <data-table #dataTableComponent [rows]="vm" [selectable]="true" [selectedRow]="selectedVM"
                 [columnCaption]="columnCaption" [allowColumnsVisibilityChange]="false" [trackByIndex]="false"
                 [groups]="groups" [groupingField]="groupingField"
-                [hiddenColumns]="['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10']"
+                [hiddenColumns]="['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10', 'short_g', 'mid_g', 'long_g', 'risk']"
                 (onRowSelect)="instrumentSelect($event)" (onRowClick)="rowClicked($event)"
                 (onDoubleClick)="doubleClicked($event)" (onContextMenuSelected)="handleContextMenuSelected($event)"
                 [ngClass]="{'god-view': advancedView}">
@@ -128,11 +135,11 @@
                 <!--Columns-->
 
                 <data-table-header-cell columnName="symbol" [sortable]="false"
-                    [columnMinWidth]="extendedMode ? 255 : 255">
+                    [columnMinWidth]="extendedMode ? 90 : 255" >
                     Market State
                 </data-table-header-cell>
-                <data-table-header-cell columnName="risk" [sortable]="false" [columnMinWidth]="40" [columnWidth]="40">
-                    {{'risk' | translate}}
+                <data-table-header-cell columnName="risk" [sortable]="false" [columnMinWidth]="70" [columnWidth]="70">
+                    {{'State' | translate}}
                 </data-table-header-cell>
                 <data-table-header-cell columnName="driver" [sortable]="false" [columnMinWidth]="15" [columnWidth]="75">
                     {{'driver' | translate}}
@@ -194,8 +201,9 @@
                                             </div>
                                             <div class="symbol-title-container">
 
-                                                <div class="status-runner"
-                                                    [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                <div class="status-runner status-holder"
+                                                    [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
+                                                    [matTooltip]="isTradable(vmItem) ? 'Neural Agent is Active' : 'Neural Agent is Waiting'">
                                                     <div class="symbolxholder symbolxholder-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)">
                                                         <div class="containerx"
@@ -248,9 +256,8 @@
                                                 </div>
 
 
-
-
-                                                <div class="status-holder"
+                                      
+                                                <div class="status-holder neuralagentholder"
                                                     [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
                                                     <div class="symbolx neuralagent " *ngIf="!isTradable(vmItem)"
                                                         [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
@@ -270,10 +277,19 @@
                                                 </div>
 
 
-                                                <div class="symbolx"
-                                                    [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)">
-                                                    <span class="iconx"><i class="fa-solid fa-triangle"></i></span>
-                                                    <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                                          
+                                                <div class="symbolx statex status-holder"
+                                                [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)" tooltip
+                                                [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'">
+                                                <span class="iconx marketstateshort">{{vmItem.abbreviatedCurrentMarketState}} </span>
+                                                <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                                            </div>
+
+                                                
+                                                <div class="symbolx risk-cell status-holder" (click)="setInstrumentRisk(vmItem, $event)" tooltip matTooltip="{{vmItem.risk > 0 ? vmItem.risk + '% Risk Allowed ' : 'All'}}">
+                                                    <span class="iconx"><i class="fa-solid fa-dice-d20"></i></span>
+                                                    <span *ngIf="vmItem.risk == -1">All</span>
+                                                    <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
                                                 </div>
 
 
@@ -281,17 +297,22 @@
 
 
 
-                                                <div class="HITL active" *ngIf="isInstrumentSelected(vmItem)"><span><i
+
+
+                                                <div class="HITL active status-holder" *ngIf="isInstrumentSelected(vmItem)"><span><i
                                                             class="fa-solid fa-shield-slash"></i> </span> HITL On</div>
 
-                                                <div class="HITL available"
+                                                <div class="HITL available status-holder"
                                                     *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)">
                                                     <span><i class="fa-solid fa-shield-check"></i></span> HITL Off
                                                 </div>
 
-
-
-
+                                                <div class="HITL unavailable hidden status-holder"
+                                                    *ngIf="vmItem.tradingState == 0 && !isInstrumentSelected(vmItem)">
+                                                    <span><i class="fa-solid fa-shield-slash"></i></span> HITL
+                                                    Unavailable
+                                                </div>
+                                        
 
 
                                                 <div class="symbol-trade-state" [class.hidden]="!advancedView">
@@ -325,10 +346,12 @@
                 </data-table-cell>
                 <data-table-cell columnName="risk">
                     <ng-template let-vmItem>
-                        <div class="risk-cell" (click)="setInstrumentRisk(vmItem, $event)">
-                            <span *ngIf="vmItem.risk == -1">All</span>
-                            <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}%</span>
-                        </div>
+                        <!-- <div class="symbolx statex"
+                        [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)" tooltip
+                        [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'">
+                        <span class="iconx marketstateshort">{{vmItem.abbreviatedCurrentMarketState}} </span>
+                        <span> {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+                    </div> -->
                     </ng-template>
                 </data-table-cell>
                 <data-table-cell columnName="driver">
@@ -434,7 +457,7 @@
                 </data-table-cell>
 
 
-                <data-table-cell columnName="short_g">
+                <data-table-cell columnName="short_g"  >
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [advancedView]="advancedView" [Strength]="vmItem.shortGroupStrength"
@@ -444,7 +467,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="mid_g">
+                <data-table-cell columnName="mid_g" >
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [advancedView]="advancedView" [Strength]="vmItem.midGroupStrength"
@@ -454,7 +477,7 @@
                         </div>
                     </ng-template>
                 </data-table-cell>
-                <data-table-cell columnName="long_g">
+                <data-table-cell columnName="long_g" >
                     <ng-template let-vmItem>
                         <div class="strength-cell">
                             <trend-column [advancedView]="advancedView" [Strength]="vmItem.longGroupStrength"

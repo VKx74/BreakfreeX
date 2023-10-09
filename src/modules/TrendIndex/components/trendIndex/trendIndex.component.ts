@@ -194,6 +194,12 @@ class TrendIndexVM {
     monthlyDuration: string;
 
     currentMarketState: string;
+    get abbreviatedCurrentMarketState(): string {
+        return this.currentMarketState
+            .split(' ')
+            .map(word => word[0])
+            .join('');
+    }
     expectedMarketState: string;
 
     shortGroupStrengthValue: number;
@@ -358,6 +364,8 @@ class TrendIndexVM {
         this.price31104000Strength = this._getStrength(s_31104000);
         this.price311040000Strength = this._getStrength(s_311040000);
 
+        
+
         this.currentMarketState = GetPhaseName(data.current_phase);
         this.expectedMarketState = GetPhaseName(data.next_phase);
         this.tradingState = data.trading_state;
@@ -446,6 +454,25 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return true;
         // return this._identityService.isAuthorizedCustomer;
     }
+
+      
+    advancedView: boolean = false; 
+    riskManagementVisible: boolean = false;
+    advancedUserView: boolean = false; // Set this to true
+
+
+    toggleAdvancedUserView() {
+        this.advancedUserView = this.advancedUserView;
+    }
+
+
+    toggleAdvancedView() {
+        this.advancedView = !this.advancedView;
+    }
+
+        toggleRiskManagement() {
+            this.riskManagementVisible = !this.riskManagementVisible;
+        }
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
@@ -1065,6 +1092,32 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this.dataTableComponent.toggleColumn(c);
             }
             if (this.extendedMode && this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            }
+        }
+
+        this._changesDetected = true;
+    }
+
+    toggleadvancedUserView() {
+        this.advancedUserView = !this.advancedUserView;
+        let extendedColumns = [ 'short_g', 'mid_g', 'long_g'];
+        let groupedColumns = [ 'Risk'];
+
+        for (let c of extendedColumns) {
+            if (this.advancedUserView && !this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            }
+            if (!this.advancedUserView && this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            }
+        }
+
+        for (let c of groupedColumns) {
+            if (!this.advancedUserView && !this.dataTableComponent.isColumnVisible(c)) {
+                this.dataTableComponent.toggleColumn(c);
+            }
+            if (this.advancedUserView && this.dataTableComponent.isColumnVisible(c)) {
                 this.dataTableComponent.toggleColumn(c);
             }
         }
