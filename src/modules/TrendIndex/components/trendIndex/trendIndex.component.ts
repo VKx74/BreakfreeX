@@ -496,6 +496,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.botShutDown : false;
     }
 
+    get isBotConnected(): boolean {
+        return !!this.myAutoTradingAccount && !!this.userAutoTradingInfoData;
+    }
+
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
 
@@ -988,6 +992,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     enableDisableHITLTrading(item: TrendIndexVM) {
+        if (!this.isBotConnected) {
+            return;
+        }
+        
         let isSelected = this.isInstrumentSelected(item);
         let symbol = item.symbol.replace("_", "").toUpperCase();
         this.loading = true;
@@ -1021,6 +1029,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     enableDisableTrading(item: TrendIndexVM) {
+        if (!this.isBotConnected) {
+            return;
+        }
+
         let isDisabled = this.isInstrumentDisabled(item);
         let symbol = item.symbol.replace("_", "").toUpperCase();
         this.loading = true;
@@ -1263,6 +1275,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         e.preventDefault();
         e.stopImmediatePropagation();
 
+        if (!this.isBotConnected) {
+            return;
+        }
+
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
                 value: instrumentVM.risk > 0 ? instrumentVM.risk : 30,
@@ -1277,6 +1293,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         e.preventDefault();
         e.stopImmediatePropagation();
 
+        if (!this.isBotConnected) {
+            return;
+        }
+
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
                 value: this.accountRisk ? this.accountRisk : 30,
@@ -1290,6 +1310,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
     setDefaultMarketRisk(e: PointerEvent) {
         e.preventDefault();
         e.stopImmediatePropagation();
+
+        if (!this.isBotConnected) {
+            return;
+        }
 
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
