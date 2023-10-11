@@ -23,6 +23,7 @@ import { TimeSpan } from "@app/helpers/timeFrame.helper";
 import { DataTableComponent } from "modules/datatable/components/data-table/data-table.component";
 import { IJSONViewDialogData, JSONViewDialogComponent } from "modules/Shared/components/json-view/json-view-dialog.component";
 import { IPercentageInputModalConfig, PercentageInputModalComponent } from "modules/UI/components/percentage-input-modal/percentage-input-modal.component";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -455,6 +456,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public get hasAccess(): boolean {
         return true;
         // return this._identityService.isAuthorizedCustomer;
+    }
+
+    toggleUseManualTradingForAccount() {
+        this.userAutoTradingInfoData.useManualTrading = !this.userAutoTradingInfoData.useManualTrading;
+        this._cdr.detectChanges(); // trigger change detection
     }
 
     get componentId(): string {
@@ -1268,7 +1274,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
                 value: this.accountRisk ? this.accountRisk : 30,
-                title: "Risk allocation"
+                title: "Risk Allocation"
             }
         }).afterClosed().subscribe((value) => {
             this.changeRiskForAccount(value > 0 ? value : 30);
@@ -1281,11 +1287,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
-                value: this.defaultMarketRisk ? this.defaultMarketRisk : 25,
-                title: "Default risk per market"
+                value: this.defaultMarketRisk ? this.defaultMarketRisk : 5,
+                title: "Default Risk Per Market"
             }
         }).afterClosed().subscribe((value) => {
-            this.changeDefaultMarketRisk(value > 0 ? value : 25);
+            this.changeDefaultMarketRisk(value > 0 ? value : 5);
         });
     }
 

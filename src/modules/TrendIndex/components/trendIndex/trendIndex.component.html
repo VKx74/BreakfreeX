@@ -11,36 +11,30 @@
             </div> -->
 
             <div class="neuralagent header">
-                <div class="left-side">
-                    <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Neural Agent:
+                <div class="header-left-side">
+                    <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Neural Agent
                         <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span>
                     </div>
+
+
+                <span *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData"
+                (click)="changeBotEnabledForAccount()" class="change-trading-mode">
+                <div class="trading-enabled">
+                    <span *ngIf="!userAutoTradingInfoData.botShutDown" class="positive-color"><i class="fa-solid fa-shield-check"></i> Enabled</span>
+                    <span *ngIf="userAutoTradingInfoData.botShutDown" class="negative-color"><i class=" fa-solid fa-shield-minus"></i> Disabled</span>
                 </div>
+            </span>
+                </div>
+
+
                 <div class="right-side">
                     <div class="extended-mode " (click)="setExtendedMode()">
-                        <div>{{extendedMode ? "NA View " : "God View"}}</div>
+                        <div>{{extendedMode ? "Agent States " : "FS"}}</div>
                     </div>
 
-                    <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="bot-settings-container">
-                        <span (click)="changeUseManualTradingForAccount()" class="change-trading-mode">
-                            <div class="trading-enabled">
-                                <span *ngIf="userAutoTradingInfoData.useManualTrading" class="positive-color"><i
-                                        class="fa-solid fa-shield-halved"></i>HITL Enabled</span>
-                                <span *ngIf="!userAutoTradingInfoData.useManualTrading" class="negative-color"><i
-                                        class="fa-solid fa-power-off"></i>HITL Disabled</span>
-                            </div>
-                        </span>
-                    </div>
+                 
 
-                    <span *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData"
-                        (click)="changeBotEnabledForAccount()" class="change-trading-mode">
-                        <div class="trading-enabled">
-                            <span *ngIf="!userAutoTradingInfoData.botShutDown" class="positive-color"><i
-                                    class="fa-solid fa-user-robot"></i>Bot Enabled</span>
-                            <span *ngIf="userAutoTradingInfoData.botShutDown" class="negative-color"><i
-                                    class="fa-solid fa-power-off"></i>Bot Disabled</span>
-                        </div>
-                    </span>
+                   
 
                     <button (click)="toggleRiskManagement()" class="risk-management-toggle">
                         <i class="fa-solid fa-square-sliders-vertical"></i> {{'Settings'}}
@@ -49,17 +43,35 @@
             </div>
 
             <div class="neuralagent riskmanagement" *ngIf="riskManagementVisible">
+
+                <div class="left-side">
+
+
+                    <div class="risk-management">
+                        <div class="risk-management-label">Human-In-The-Loop Settings</div>
+                     
+                        <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="bot-settings-container">
+                            <mat-slide-toggle (change)="changeUseManualTradingForAccount()" [checked]="userAutoTradingInfoData.useManualTrading">
+                                <span *ngIf="userAutoTradingInfoData.useManualTrading" >HITL Enabled</span>
+                                <span *ngIf="!userAutoTradingInfoData.useManualTrading">HITL Disabled</span>
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+
+                    
+
+                </div>
                 <div class="right-side">
                     <div class="risk-management">
                         <div class="risk-management-label"> Risk Management</div>
                         <div class="riskholder maxriskpermarket">
-                            <span class="itemholderx"> <i class="fa-solid fa-dice-d20"></i> </span> Max risk per market
+                            <span class="itemholderx"> <i class="fa-solid fa-dice-d20"></i> </span> Default Risk Each Market
                             <input type="text" readonly
                                 placeholder='{{defaultMarketRisk ? defaultMarketRisk + "%" : "..."}}'
                                 (click)="setDefaultMarketRisk($event)">
                         </div>
                         <div class="riskholder riskallocation">
-                            <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span> Risk allocation
+                            <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span> Total Risk Allocation Of Account
                             <input readonly type="text" placeholder='{{accountRisk ? accountRisk + "%" : "..."}}'
                                 (click)="setAccountRisk($event)">
                         </div>
@@ -258,7 +270,7 @@
                                                                     <div class="NA-state" *ngIf="!isTradable(vmItem)"
                                                                         [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
                                                                         <div class="symbol-trade-state">
-                                                                            <i class="fa fa-heart-pulse"
+                                                                            <i class=" hidden fa fa-heart-pulse"
                                                                                 *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
                                                                             <i class="fa fa-star hidden"
                                                                                 *ngIf="vmItem.tradingState == 2"></i>
@@ -294,7 +306,7 @@
                                                     <div class="HITL active status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
                                                         *ngIf="isInstrumentSelected(vmItem)  && !vmItem.tradingState == 0">
-                                                        <span><i class="fa-solid fa-shield-slash"></i> </span> HITL On
+                                                        <span><i class="fa-solid fa-shield-slash"></i></span> HITL On
                                                     </div>
                                                     <div class="HITL available status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
@@ -304,7 +316,7 @@
                                                     <div class="HITL unavailable status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
                                                         *ngIf="vmItem.tradingState == 0 && isInstrumentSelected(vmItem) ">
-                                                        <span></span> HITL
+                                                        <span><i class="fa-sharp fa-solid fa-shield"></i></span> HITL
                                                         N/A
                                                     </div>
                                                 </div>
@@ -313,7 +325,7 @@
                                                     <div class="symbolx risk-cell status-holder"
                                                         (click)="setInstrumentRisk(vmItem, $event)" tooltip
                                                         matTooltip="{{vmItem.risk > 0 ? vmItem.risk + '% Risk Allowed ' : 'All'}}">
-                                                        <span class="iconx"><i class="fa-solid fa-dice-d20"></i></span>
+                                                        <span class="iconx"><i class="fa-solid fa-shield-check"></i></span>
                                                         <span *ngIf="vmItem.risk == -1">All</span>
                                                         <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
                                                     </div>

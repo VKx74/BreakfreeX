@@ -169,9 +169,12 @@
     border-radius: 3px;
     width: 30px;
     background: transparent;
-    border: 1px solid #dddddd52;
+
     text-align: center;
+    font-size: 11px;
   }
+
+
 
   .header-line .trading-enabled span {
     display: flex;
@@ -193,9 +196,12 @@
     border-radius: 6px;
 
     .left-side {
+   
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      -moz-column-gap: 12px;
       column-gap: 12px;
+  
 
       .trading-enabled {
         font-size: 12px;
@@ -216,7 +222,7 @@
         border-radius: 3px;
         font-size: 12px;
         cursor: pointer;
-        font-weight: bold;
+        font-weight: 500;
         transition: all 0.22s ease-in-out;
       }
       .advanced-user-view {
@@ -224,7 +230,7 @@
         border-radius: 3px;
         font-size: 12px;
         cursor: pointer;
-        font-weight: bold;
+        font-weight: 500;
         transition: all 0.22s ease-in-out;
       }
 
@@ -233,7 +239,7 @@
         border-radius: 3px;
         font-size: 12px;
         cursor: pointer;
-        font-weight: bold;
+        font-weight: 500;
         transition: all 0.22s ease-in-out;
       }
 
@@ -263,12 +269,12 @@
     }
 
     .positive-color {
-      color: #5eaf80 !important;
-      background-color: rgba(94, 175, 128, 0.1);
-      border: 1px solid;
+      color: #fff;
+      background-color: rgb(50, 124, 65);
+      border: 1px solid #61a26f !important;
       padding: 3px 9px;
       border-radius: 3px;
-      font-weight: bold;
+      font-weight: 500;
       transition: all 0.22s ease-in-out;
 
       &:hover {
@@ -277,12 +283,12 @@
     }
 
     .negative-color {
-      color: #bd5b6a !important;
-      background-color: rgba(189, 91, 106, 0.1);
-      border: 1px solid;
+      color: #ffffff !important;
+      background-color: rgb(43, 43, 43);
+      border: 1px solid #6d6869;
       padding: 3px 9px;
       border-radius: 3px;
-      font-weight: bold;
+      font-weight: 500;
       transition: all 0.22s ease-in-out;
 
       &:hover {
@@ -290,6 +296,13 @@
       }
     }
   }
+
+  .header-left-side {
+    display: flex;
+    column-gap: 6px;
+    align-items: center;
+ 
+}
 
   .symbolx {
     padding: 3px 6px;
@@ -442,6 +455,9 @@
     }
   }
 
+  .trading-enabled  {
+    cursor: pointer;
+  }
   span.iconx.marketstateshort {
     min-width: 20px;
     min-height: 15px;
@@ -503,18 +519,7 @@
     width: 100%;
   }
 
-  .middlesymbol {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    row-gap: 8px;
-    background: #181818;
-    padding: 3px 3px;
-    border: 1px solid #4f4f4f;
-    border-radius: 6px;
-    width: 100%;
-  }
+
 
   .active-auto-modex {
     border: 1px solid #327c41 !important;
@@ -562,8 +567,9 @@
   }
 
   button.risk-management-toggle {
-    border: 1px solid #7f7c7c;
-    background: #464646;
+    border: 1px solid #616176;
+    background: #383845;
+    color: #fff;
     padding: 3px 6px;
     border-radius: 3px;
     display: flex;
@@ -950,6 +956,35 @@
       }
     }
   }
+  .middlesymbol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    row-gap: 8px;
+    background: themed("middlesymbol-bg") ;
+
+    padding: 3px 3px;
+    border: 1px solid themed("middlesymbol-border");
+
+    border-radius: 6px;
+    width: 100%;
+  }
+
+  .header-left-side {
+  
+    color: themed("valueTextColor");
+  }
+
+  input[type="text"] {
+
+    border:1px solid themed("valueTextColor");
+   }
+
+input[type="text"]::placeholder {
+    color: themed("valueTextColor");
+    opacity: 0.8 ;
+       }
 
   .status-runner {
     color: themed("statusRunnerTextColor") !important;

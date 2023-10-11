@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body">
             <div class="crypto-form-unit">
-                <div class="form-unit__label">{{inputCaption || "Value %"}}</div>
+                <div class="form-unit__label">{{inputCaption || "Enter max allowed risk allocation in percentage."}}</div>
                 <mat-form-field class="crypto-input with-hint full-width">
                     <input matInput numericInput [range]="{min: 0, max: 100}" type="number" [step]="1"
                         [(ngModel)]="value">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="right-part">
                     <button class="crypto-button crypto-button_primary" (click)="resetAuto()">
-                        <span>Reset to Auto</span>
+                        <span>Restore default risk </span>
                     </button>
                     <button class="crypto-button crypto-button_primary" (click)="enterValue()">
                         <span>Save</span>
