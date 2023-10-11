@@ -174,8 +174,6 @@
     font-size: 11px;
   }
 
-
-
   .header-line .trading-enabled span {
     display: flex;
     align-content: center;
@@ -196,12 +194,10 @@
     border-radius: 6px;
 
     .left-side {
-   
       display: flex;
       align-items: flex-start;
       -moz-column-gap: 12px;
       column-gap: 12px;
-  
 
       .trading-enabled {
         font-size: 12px;
@@ -303,8 +299,7 @@
     display: flex;
     column-gap: 6px;
     align-items: center;
- 
-}
+  }
 
   .symbolx {
     padding: 3px 6px;
@@ -457,7 +452,7 @@
     }
   }
 
-  .trading-enabled  {
+  .trading-enabled {
     cursor: pointer;
   }
   span.iconx.marketstateshort {
@@ -519,10 +514,7 @@
     row-gap: 6px;
     column-gap: 3px;
     width: 100%;
- 
   }
-
-
 
   .active-auto-modex {
     border: 1px solid #327c41 !important;
@@ -965,30 +957,38 @@
     align-items: flex-start;
     justify-content: flex-start;
     row-gap: 8px;
-    background: themed("middlesymbol-bg") ;
-    overflow: scroll;
+    background: themed("middlesymbol-bg");
+    overflow-x: auto;
     padding: 3px 3px;
     border: 1px solid themed("middlesymbol-border");
 
     border-radius: 6px;
     width: 100%;
+
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+
+  .middlesymbol::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
   }
 
   .header-left-side {
-  
     color: themed("valueTextColor");
   }
 
   input[type="text"] {
     opacity: 0.8;
 
-    border:1px solid themed("valueTextColor");
-   }
+    border: 1px solid themed("valueTextColor");
+  }
 
-input[type="text"]::placeholder {
+  input[type="text"]::placeholder {
     color: themed("valueTextColor");
-    opacity: 0.8 ;
-       }
+    opacity: 0.8;
+  }
 
   .status-runner {
     color: themed("statusRunnerTextColor") !important;
@@ -1114,11 +1114,11 @@ input[type="text"]::placeholder {
   span.iconx.enabledx {
     background: #156c27 !important;
     height: 17px;
-}
- span.iconx.disabledx {
+  }
+  span.iconx.disabledx {
     background: #585250 !important;
     height: 17px;
-}
+  }
 
   .symbolx {
     color: themed("statusRunnerTextColor");
