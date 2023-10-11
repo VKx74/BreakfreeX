@@ -264,32 +264,24 @@
                                                                         </span>
                                                                     </div>
                                                                 </span>
+
+
                                                                 <ng-template #activeStatus>
                                                                     <div class="NA-state" *ngIf="!isTradable(vmItem)"
                                                                         [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
-                                                                        <div class="symbol-trade-state">
-                                                                            <i class=" hidden fa fa-heart-pulse"
-                                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
-                                                                            <i class="fa fa-star hidden"
-                                                                                *ngIf="vmItem.tradingState == 2"></i>
-                                                                            <i class="hidden fa fa-hexagon-exclamation"
-                                                                                *ngIf="vmItem.tradingState == 0"></i>
-                                                                        </div>
+                                                                       
+                                                                   
                                                                         Working
                                                                     </div>
                                                                     <div class="NA-state" *ngIf="isTradable(vmItem)"
                                                                         [class.is-auto-selectedx]="isAutoSelected(vmItem)">
-                                                                        <div class="symbol-trade-state">
-                                                                            <i class="fa fa-heart-pulse"
-                                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
-                                                                            <i class="fa fa-star hidden"
-                                                                                *ngIf="vmItem.tradingState == 2"></i>
-                                                                            <i class="hidden fa fa-hexagon-exclamation"
-                                                                                *ngIf="vmItem.tradingState == 0"></i>
-                                                                        </div>
+                                                                       
                                                                         Active
                                                                     </div>
                                                                 </ng-template>
+
+                                                         
+
                                                             </div>
                                                         </div>
                                                     </ng-container>
@@ -300,6 +292,19 @@
                                                             </span>
                                                         </div>
                                                     </ng-template>
+
+                                                    <div class="status-holder status-runner state"  *ngIf="vmItem.tradingState == 3" >
+                                                        <div class="symbolxholder">
+                                                        <div class="symbol-trade-state">
+                                                            <i class=" fa fa-heart-pulse"
+                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
+                                                            <i class="fa fa-star hidden"
+                                                                *ngIf="vmItem.tradingState == 2"></i>
+                                                            <i class="hidden fa fa-hexagon-exclamation"
+                                                                *ngIf="vmItem.tradingState == 0"></i>
+                                                        </div>
+                                                    </div>
+                                                    </div>
 
                                                     <div class="HITL active status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
