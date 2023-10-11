@@ -212,7 +212,7 @@
 
     .right-side {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       -moz-column-gap: 3px;
       column-gap: 3px;
       row-gap: 6px;
@@ -517,6 +517,7 @@
     row-gap: 6px;
     column-gap: 3px;
     width: 100%;
+ 
   }
 
 
@@ -963,7 +964,7 @@
     justify-content: flex-start;
     row-gap: 8px;
     background: themed("middlesymbol-bg") ;
-
+    overflow: scroll;
     padding: 3px 3px;
     border: 1px solid themed("middlesymbol-border");
 
