@@ -272,7 +272,8 @@
       color: #fff;
       background-color: rgb(50, 124, 65);
       border: 1px solid #61a26f !important;
-      padding: 3px 9px;
+      padding: 3px 6px;
+      padding-left: 3px;
       border-radius: 3px;
       font-weight: 500;
       transition: all 0.22s ease-in-out;
@@ -286,7 +287,8 @@
       color: #ffffff !important;
       background-color: rgb(43, 43, 43);
       border: 1px solid #6d6869;
-      padding: 3px 9px;
+      padding: 3px 6px;
+      padding-left: 3px;
       border-radius: 3px;
       font-weight: 500;
       transition: all 0.22s ease-in-out;
@@ -1109,6 +1111,14 @@ input[type="text"]::placeholder {
     background: themed("trendindextabbg");
     border-radius: 3px;
   }
+  span.iconx.enabledx {
+    background: #156c27 !important;
+    height: 17px;
+}
+ span.iconx.disabledx {
+    background: #585250 !important;
+    height: 17px;
+}
 
   .symbolx {
     color: themed("statusRunnerTextColor");

@@ -20,8 +20,10 @@
                 <span *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData"
                 (click)="changeBotEnabledForAccount()" class="change-trading-mode">
                 <div class="trading-enabled">
-                    <span *ngIf="!botShutDown" class="positive-color"><i class="fa-solid fa-shield-check"></i> Enabled</span>
-                    <span *ngIf="botShutDown" class="negative-color"><i class=" fa-solid fa-shield-minus"></i> Disabled</span>
+                    <span *ngIf="!botShutDown" class="positive-color">
+                        <span class="iconx enabledx"> <i class="fa-solid fa-shield-check"></i> </span> Enabled</span>
+                    <span *ngIf="botShutDown" class="negative-color">
+                        <span class="iconx disabledx"><i class=" fa-solid fa-shield-minus"></i> </span> Disabled</span>
                 </div>
             </span>
                 </div>
@@ -224,7 +226,7 @@
                                                         <div class="status-runner status-holder"
                                                             (click)="enableDisableTrading(vmItem)"
                                                             [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
-                                                            [matTooltip]="isTradable(vmItem) ? 'Neural Agent is Active' : 'Neural Agent is Waiting'">
+                                                            [matTooltip]="isTradable(vmItem) ? 'Neural Agent is Active' : 'Neural Agent is Working'">
                                                             <div class="symbolxholder">
                                                                 <div class="containerx"
                                                                     *ngIf="!isInstrumentDisabled(vmItem)"

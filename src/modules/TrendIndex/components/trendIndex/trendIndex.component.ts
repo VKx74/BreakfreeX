@@ -1293,11 +1293,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
             data: {
-                value: this.defaultMarketRisk ? this.defaultMarketRisk : 5,
+                value: this.defaultMarketRisk ? this.defaultMarketRisk : 12,
                 title: "Default Risk Per Market"
             }
         }).afterClosed().subscribe((value) => {
-            this.changeDefaultMarketRisk(value > 0 ? value : 5);
+            this.changeDefaultMarketRisk(value > 0 ? value : 12);
         });
     }
 
