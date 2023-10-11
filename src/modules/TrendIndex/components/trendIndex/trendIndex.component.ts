@@ -492,6 +492,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.defaultMarketRisk : null;
     }
 
+    get botShutDown(): boolean {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.botShutDown : false;
+    }
+
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
 

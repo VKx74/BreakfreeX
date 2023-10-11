@@ -10,7 +10,7 @@
                 </div>
             </div> -->
 
-            <div class="neuralagent header">
+            <div class="neuralagent header" *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData">
                 <div class="header-left-side">
                     <div *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData" class="account-id">Neural Agent
                         <span class="mobilehiddenacc">#{{myAutoTradingAccount}}</span>
@@ -20,8 +20,8 @@
                 <span *ngIf="!!myAutoTradingAccount && !!userAutoTradingInfoData"
                 (click)="changeBotEnabledForAccount()" class="change-trading-mode">
                 <div class="trading-enabled">
-                    <span *ngIf="!userAutoTradingInfoData.botShutDown" class="positive-color"><i class="fa-solid fa-shield-check"></i> Enabled</span>
-                    <span *ngIf="userAutoTradingInfoData.botShutDown" class="negative-color"><i class=" fa-solid fa-shield-minus"></i> Disabled</span>
+                    <span *ngIf="!botShutDown" class="positive-color"><i class="fa-solid fa-shield-check"></i> Enabled</span>
+                    <span *ngIf="botShutDown" class="negative-color"><i class=" fa-solid fa-shield-minus"></i> Disabled</span>
                 </div>
             </span>
                 </div>
@@ -31,10 +31,6 @@
                     <div class="extended-mode " (click)="setExtendedMode()">
                         <div>{{extendedMode ? "Agent States " : "FS"}}</div>
                     </div>
-
-                 
-
-                   
 
                     <button (click)="toggleRiskManagement()" class="risk-management-toggle">
                         <i class="fa-solid fa-square-sliders-vertical"></i> {{'Settings'}}
@@ -224,7 +220,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <ng-container *ngIf="!userAutoTradingInfoData.botShutDown; else botSwitchedOff">
+                                                    <ng-container *ngIf="!botShutDown; else botSwitchedOff">
                                                         <div class="status-runner status-holder"
                                                             (click)="enableDisableTrading(vmItem)"
                                                             [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
