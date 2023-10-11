@@ -46,6 +46,8 @@ import { EmojiComponent } from './components/emoji/emoji.component';
 import { ChartWrapperComponent } from './components/chartWrapper/chart-wrapper.component';
 import { BadgeComponent, MyBadgeComponent } from './components/badge/badge.component';
 import { StaticBadgeComponent } from './components/static-badge/static-badge.component';
+import { PercentageInputModalComponent } from './components/percentage-input-modal/percentage-input-modal.component';
+import { NumericInputModule } from '@numeric-input/numeric-input.module';
 
 @NgModule({
     declarations: [
@@ -65,6 +67,7 @@ import { StaticBadgeComponent } from './components/static-badge/static-badge.com
         NameAvatarComponent,
         ScrollableDirective,
         InputModalComponent,
+        PercentageInputModalComponent,
         DebouncedInputComponent,
         SearchInputComponent,
         AutocompleteSearchComponent,
@@ -97,6 +100,8 @@ import { StaticBadgeComponent } from './components/static-badge/static-badge.com
         MatAutocompleteModule,
         MatSlideToggleModule,
         SharedModule,
+
+        NumericInputModule
     ],
     exports: [
         ResizeSensorDirective,
@@ -130,6 +135,7 @@ import { StaticBadgeComponent } from './components/static-badge/static-badge.com
     entryComponents: [
         ConfirmModalComponent,
         InputModalComponent,
+        PercentageInputModalComponent,
         PinInputModalComponent
     ],
     providers: [

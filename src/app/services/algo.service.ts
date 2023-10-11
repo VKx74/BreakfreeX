@@ -529,6 +529,7 @@ export interface IMesaTrendIndex {
     price86400: number;
     current_phase: number;
     next_phase: number;
+    trading_state: number;
 }
 
 export interface IMesaTrendDetails {
@@ -577,6 +578,20 @@ export interface IUserAutoTradingDefinedMarketData {
 export interface IUserAutoTradingInfoData {
     markets: IUserAutoTradingDefinedMarketData[];
     useManualTrading: boolean;
+    botShutDown: boolean;
+    accountRisk: number;
+    defaultMarketRisk: number;
+    disabledMarkets: string[];
+    risksPerMarket: { [key: string]: number };
+}
+
+
+export interface IUserMarketConfigData {
+    isDisabled: boolean;
+    isTradable: boolean;
+    maxRisks: number;
+    risks: number;
+    symbol: string;
 }
 
 class AlgoServiceEncryptionHelper {
@@ -813,7 +828,7 @@ export class AlgoService {
 
     getTrendIndexTradableInstrumentForAccount(account: string): Observable<string[]> {
         return this._http.post<string>(`${this.url}apex/markets`, {
-            account: account, version: "1.0"
+            account: account, version: "2.0"
         }, { responseType: 'text' as any }).pipe(map((data: string) => {
             let result: string[] = [];
             let symbolArray = data.split("\n");
@@ -822,13 +837,29 @@ export class AlgoService {
                     continue;
                 }
                 let symbol = item.split("=")[0];
-                if (!symbol) {
+                let dataInfo = item.split("=")[1];
+                if (!symbol || !dataInfo) {
                     continue;
                 }
-                result.push(symbol.replace("_", ""));
+                let dataArray = dataInfo.split(";");
+                if (dataArray.length !== 2) {
+                    continue;
+                }
+                let percentage = Number(dataArray[0]);
+                let maxAllocation = dataArray[1];
+
+                if (percentage && percentage > 0) {
+                    result.push(symbol.replace("_", ""));
+                }
             }
             return result;
         }));
+    }
+
+    getTrendIndexMarketsConfigForAccount(account: string): Observable<IUserMarketConfigData[]> {
+        return this._http.post<IUserMarketConfigData[]>(`${this.url}apex/markets-config`, {
+            account: account, version: "2.0"
+        });
     }
 
     addTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
@@ -839,19 +870,55 @@ export class AlgoService {
             });
         }
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-markets`, {
-            account: account, userId: userId, version: "1.0", markets: markets
+            account: account, userId: userId, version: "2.0", markets: markets
         });
     }
 
     removeTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/remove-markets`, {
-            account: account, userId: userId, version: "1.0", markets: symbols
+            account: account, userId: userId, version: "2.0", markets: symbols
+        });
+    }
+
+    enableTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/remove-disabled-markets`, {
+            account: account, userId: userId, version: "2.0", markets: symbols
+        });
+    }
+    
+    disableTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-disabled-markets`, {
+            account: account, userId: userId, version: "2.0", markets: symbols
+        });
+    }
+
+    changeMarketRiskForAccount(account: string, userId: string, symbol: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-market-risk`, {
+            account: account, userId: userId, version: "2.0", market: symbol, risk: risk
+        });
+    }
+
+    changeRiskForAccount(account: string, userId: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-account-risk`, {
+            account: account, userId: userId, version: "2.0", risk: risk
+        });
+    }
+
+    changeDefaultMarketRisk(account: string, userId: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-default-market-risk`, {
+            account: account, userId: userId, version: "2.0", risk: risk
         });
     }
 
     changeUseManualTradingForAccount(account: string, userId: string, useManualTrading: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-use-manual-trading`, {
-            account: account, userId: userId, version: "1.0", useManualTrading: useManualTrading
+            account: account, userId: userId, version: "2.0", useManualTrading: useManualTrading
+        });
+    }
+
+    changeBotEnabledForAccount(account: string, userId: string, switchedOff: boolean): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-state`, {
+            account: account, userId: userId, version: "2.0", switchedOff: switchedOff
         });
     }
 

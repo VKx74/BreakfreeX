@@ -23,6 +23,7 @@ import { TrendColumnComponent } from './components/trendColumn/trendColumn.compo
 import { TrendIndexBarChartComponent } from './components/trendIndexBarChart/trendIndexBarChart.component';
 import { TrendIndexChartComponent } from './components/trendIndexChart/trendIndexChart.component';
 import { JSONViewDialogComponent } from 'modules/Shared/components/json-view/json-view-dialog.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -50,7 +51,8 @@ import { JSONViewDialogComponent } from 'modules/Shared/components/json-view/jso
         MatInputModule,
         MatSelectModule,
         MatMenuModule,
-        LoaderModule
+        LoaderModule,
+        MatSlideToggleModule
     ],
     entryComponents: [
         TrendIndexComponent,

@@ -15,13 +15,15 @@ import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { BaseLayoutItem } from "@layout/base-layout-item";
-import { AlgoService, IMesaTrendIndex, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData } from "@app/services/algo.service";
+import { AlgoService, IMesaTrendIndex, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData, IUserMarketConfigData } from "@app/services/algo.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
 import { TimeSpan } from "@app/helpers/timeFrame.helper";
 import { DataTableComponent } from "modules/datatable/components/data-table/data-table.component";
 import { IJSONViewDialogData, JSONViewDialogComponent } from "modules/Shared/components/json-view/json-view-dialog.component";
+import { IPercentageInputModalConfig, PercentageInputModalComponent } from "modules/UI/components/percentage-input-modal/percentage-input-modal.component";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -161,6 +163,7 @@ class TrendIndexVM {
     price311040000VolatilityValue: number;
     price311040000Strength: ETrendIndexStrength;
     totalStrength: number;
+    tradingState: number;
 
     minute1State: number;
     minute5State: number;
@@ -192,6 +195,12 @@ class TrendIndexVM {
     monthlyDuration: string;
 
     currentMarketState: string;
+    get abbreviatedCurrentMarketState(): string {
+        return this.currentMarketState
+            .split(' ')
+            .map(word => word[0])
+            .join('');
+    }
     expectedMarketState: string;
 
     shortGroupStrengthValue: number;
@@ -211,6 +220,8 @@ class TrendIndexVM {
     longGroupStrength: ETrendIndexStrength;
     longGroupDuration: string;
     longGroupPhase: string;
+
+    risk: number;
 
     public static getDurationString(t: number) {
         if (!t) {
@@ -354,8 +365,11 @@ class TrendIndexVM {
         this.price31104000Strength = this._getStrength(s_31104000);
         this.price311040000Strength = this._getStrength(s_311040000);
 
+
+
         this.currentMarketState = GetPhaseName(data.current_phase);
         this.expectedMarketState = GetPhaseName(data.next_phase);
+        this.tradingState = data.trading_state;
 
         for (let key in this.trend_period_descriptions) {
             let item = this.trend_period_descriptions[key];
@@ -430,17 +444,21 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _state: ITrendIndexComponentState;
     private _chartDataBars: ITrendIndexBarChartDataVM;
     private _chartDataTrends: ITrendIndexChartDataVM[] = [];
-    private _tradableInstruments: string[] = [];
+    private _tradableInstruments: IUserMarketConfigData[] = [];
     private _userAutoTradingInfoData: IUserAutoTradingInfoData;
     private _singleRowClickTimer;
 
     public groups: string[] = [];
     public groupingField: string = "type";
+    public extendedMode: boolean = false;
+    public riskManagementVisible: boolean = false;
 
     public get hasAccess(): boolean {
         return true;
         // return this._identityService.isAuthorizedCustomer;
     }
+
+
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
@@ -466,11 +484,24 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this._userAutoTradingInfoData;
     }
 
+    get accountRisk(): number {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.accountRisk : null;
+    }
+
+    get defaultMarketRisk(): number {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.defaultMarketRisk : null;
+    }
+
+    get botShutDown(): boolean {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.botShutDown : false;
+    }
+
+    get isBotConnected(): boolean {
+        return !!this.myAutoTradingAccount && !!this.userAutoTradingInfoData;
+    }
 
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
-
-    extendedMode = false;
 
     constructor(protected _dialog: MatDialog,
         protected _realtimeService: RealtimeService,
@@ -483,6 +514,15 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _identityService: IdentityService,
         protected _matDialog: MatDialog) {
         super();
+    }
+
+    toggleUseManualTradingForAccount() {
+        this.userAutoTradingInfoData.useManualTrading = !this.userAutoTradingInfoData.useManualTrading;
+        this._cdr.detectChanges(); // trigger change detection
+    }
+
+    toggleRiskManagement() {
+        this.riskManagementVisible = !this.riskManagementVisible;
     }
 
     ngOnInit() {
@@ -519,12 +559,35 @@ export class TrendIndexComponent extends BaseLayoutItem {
         });
     }
 
+    protected setRisksForInstruments() {
+        if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.risksPerMarket || !this.vm) {
+            return;
+        }
+
+        for (let i of this.vm) {
+            let dataSet = false;
+            for (let s in this._userAutoTradingInfoData.risksPerMarket) {
+                let nS1 = s.replace("_", "").toUpperCase();
+                let nS2 = i.symbol.replace("_", "").toUpperCase();
+
+                if (nS1 === nS2) {
+                    i.risk = this._userAutoTradingInfoData.risksPerMarket[s];
+                    dataSet = true;
+                    break;
+                }
+            }
+
+            if (!dataSet) {
+                i.risk = this._userAutoTradingInfoData.defaultMarketRisk;
+            }
+        }
+    }
+
     protected loadUserAutoTradingInfoForAccount() {
         if (this.myAutoTradingAccount) {
             this._algoService.getUserAutoTradingInfoForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
-                this.loadAutoTradingInstruments();
-                this._changesDetected = true;
+                this.loadUpdatedData();
             }, () => {
                 this._tradableInstruments = [];
                 this._userAutoTradingInfoData = null;
@@ -590,25 +653,24 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.groups = [TopUpTrending, TopDownTrending, OtherMarkets];
 
         this.vm = this.vm.slice();
+        this.setRisksForInstruments();
     }
 
     private rankByGroups() {
         for (let item of this.vm) {
-            if (Math.abs(item.totalStrength) * 100 > 21) {
-                if (Metals.indexOf(item.id) >= 0) {
-                    item.type = `Metals`;
-                } else if (Indices.indexOf(item.id) >= 0) {
-                    item.type = `Indices`;
-                } else if (Bounds.indexOf(item.id) >= 0) {
-                    item.type = `Bounds`;
-                } else if (Commodities.indexOf(item.id) >= 0) {
-                    item.type = `Commodities`;
-                } else if (Crypto.indexOf(item.id) >= 0) {
-                    item.type = `Crypto`;
-                } else {
-                    let currencies = item.id.split("_");
-                    item.type = `${currencies[1]}`;
-                }
+            if (Metals.indexOf(item.id) >= 0) {
+                item.type = `Metals`;
+            } else if (Indices.indexOf(item.id) >= 0) {
+                item.type = `Indices`;
+            } else if (Bounds.indexOf(item.id) >= 0) {
+                item.type = `Bounds`;
+            } else if (Commodities.indexOf(item.id) >= 0) {
+                item.type = `Commodities`;
+            } else if (Crypto.indexOf(item.id) >= 0) {
+                item.type = `Crypto`;
+            } else {
+                let currencies = item.id.split("_");
+                item.type = `${currencies[1]}`;
             }
 
             if (!item.type) {
@@ -619,17 +681,28 @@ export class TrendIndexComponent extends BaseLayoutItem {
         let groupsData: ISymbolGroup[] = [];
         for (let item of this.vm) {
             let g = groupsData.find((_) => _.group === item.type);
+            let isTradableInstrument = this.isTradable(item);
+            let isAutoSelectedInstrument = this.isAutoSelected(item);
+            let points = Math.abs(item.totalStrength);
+
+            if (isTradableInstrument) {
+                points += 1000;
+                if (isAutoSelectedInstrument) {
+                    points += 10000;
+                }
+            }
+
             if (!g) {
                 g = {
                     group: item.type,
                     count: 1,
-                    strength: Math.abs(item.totalStrength),
+                    strength: points,
                     avgStrength: 0
                 };
                 groupsData.push(g);
             } else {
                 g.count += 1;
-                g.strength += Math.abs(item.totalStrength);
+                g.strength += points;
             }
         }
 
@@ -653,15 +726,17 @@ export class TrendIndexComponent extends BaseLayoutItem {
         notUsedInGroups.sort((a1, a2) => a1.totalStrength > a2.totalStrength ? -1 : 1);
 
         this.vm = [...usedInGroups, ...notUsedInGroups];
+        this.setRisksForInstruments();
     }
 
     protected loadAutoTradingInstruments() {
         if (this.myAutoTradingAccount && this._userAutoTradingInfoData) {
-            this._algoService.getTrendIndexTradableInstrumentForAccount(this.myAutoTradingAccount).subscribe((data) => {
+            this._algoService.getTrendIndexMarketsConfigForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._tradableInstruments = data;
+                this.rankByGroups();
                 this._changesDetected = true;
             }, () => {
-                this._tradableInstruments = [];
+                // this._tradableInstruments = [];
                 this._changesDetected = true;
             });
         } else {
@@ -693,7 +768,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             type: Actions.ChangeInstrumentAndTimeframe,
             data: {
                 instrument: instrument,
-                timeframe: TimeSpan.MILLISECONDS_IN_MINUTE / 1000
+                timeframe: TimeSpan.MILLISECONDS_IN_HOUR / 1000
             }
         };
         this.onOpenChart.next(linkAction);
@@ -867,10 +942,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
 
         for (let symbol of this._tradableInstruments) {
-            let s1 = symbol.replace("_", "").toUpperCase();
+            let s1 = symbol.symbol.replace("_", "").toUpperCase();
             let s2 = item.symbol.replace("_", "").toUpperCase();
             if (s1 === s2) {
-                return true;
+                return symbol.isTradable;
             }
         }
 
@@ -896,21 +971,38 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return false;
     }
 
+    isInstrumentDisabled(item: TrendIndexVM) {
+        if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.disabledMarkets || !this._userAutoTradingInfoData.disabledMarkets.length) {
+            return false;
+        }
+
+        for (let symbol of this._userAutoTradingInfoData.disabledMarkets) {
+            if (symbol && symbol.replace("_", "").toLowerCase() === item.symbol.replace("_", "").toLowerCase()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     instrumentSelectionChanged(item: TrendIndexVM, e: PointerEvent) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        this.enableDisableTrading(item);
+        this.enableDisableHITLTrading(item);
     }
 
-    enableDisableTrading(item: TrendIndexVM) {
+    enableDisableHITLTrading(item: TrendIndexVM) {
+        if (!this.isBotConnected) {
+            return;
+        }
+        
         let isSelected = this.isInstrumentSelected(item);
         let symbol = item.symbol.replace("_", "").toUpperCase();
         this.loading = true;
         if (!isSelected) {
             this._algoService.addTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
-                this.loading = false;
-                this._changesDetected = true;
+                this.loadUpdatedData();
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
                     this._alertManager.info(_.error);
@@ -923,8 +1015,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         } else {
             this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
-                this.loading = false;
-                this._changesDetected = true;
+                this.loadUpdatedData();
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
                     this._alertManager.info(_.error);
@@ -937,12 +1028,105 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
     }
 
+    enableDisableTrading(item: TrendIndexVM) {
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        let isDisabled = this.isInstrumentDisabled(item);
+        let symbol = item.symbol.replace("_", "").toUpperCase();
+        this.loading = true;
+        if (isDisabled) {
+            this._algoService.enableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this.loadUpdatedData();
+            }, (_) => {
+                if (_ && _.status === 403 && _.error) {
+                    this._alertManager.info(_.error);
+                } else {
+                    this._alertManager.info("Failed to enable trading instrument");
+                }
+                this.loading = false;
+                this._changesDetected = true;
+            });
+        } else {
+            this._algoService.disableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this.loadUpdatedData();
+            }, (_) => {
+                if (_ && _.status === 403 && _.error) {
+                    this._alertManager.info(_.error);
+                } else {
+                    this._alertManager.info("Failed to disable trading instrument");
+                }
+                this.loading = false;
+                this._changesDetected = true;
+            });
+        }
+    }
+
+    changeRiskForInstrument(symbol: string, risk: number) {
+        this._algoService.changeMarketRiskForAccount(this.myAutoTradingAccount, this._identityService.id, symbol, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change instrument risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
+    changeRiskForAccount(risk: number) {
+        this._algoService.changeRiskForAccount(this.myAutoTradingAccount, this._identityService.id, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change instrument risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
+    changeDefaultMarketRisk(risk: number) {
+        this._algoService.changeDefaultMarketRisk(this.myAutoTradingAccount, this._identityService.id, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change instrument risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
     changeUseManualTradingForAccount() {
         this.loading = true;
         this._algoService.changeUseManualTradingForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.useManualTrading).subscribe((data) => {
             this._userAutoTradingInfoData = data;
+            this._tradableInstruments = [];
+            this.loadUpdatedData();
+        }, () => {
             this.loading = false;
             this._changesDetected = true;
+        });
+    }
+
+    changeBotEnabledForAccount() {
+        this.loading = true;
+        this._algoService.changeBotEnabledForAccount(this.myAutoTradingAccount, this._identityService.id, !this._userAutoTradingInfoData.botShutDown).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
         }, () => {
             this.loading = false;
             this._changesDetected = true;
@@ -951,8 +1135,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     setExtendedMode() {
         this.extendedMode = !this.extendedMode;
-        let extendedColumns = ['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10'];
-        let groupedColumns = ['short_g', 'mid_g', 'long_g'];
+        let extendedColumns = ['short_g', 'mid_g', 'long_g', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10'];
+        let groupedColumns = [];
 
         for (let c of extendedColumns) {
             if (this.extendedMode && !this.dataTableComponent.isColumnVisible(c)) {
@@ -974,6 +1158,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._changesDetected = true;
     }
+
 
     showCharts(instrumentVM: TrendIndexVM) {
         this.loading = true;
@@ -1081,9 +1266,63 @@ export class TrendIndexComponent extends BaseLayoutItem {
             clearTimeout(this._singleRowClickTimer);
         }
         this._singleRowClickTimer = setTimeout(() => {
-            this.viewOnChart(this.selectedVM);
+            // this.viewOnChart(this.selectedVM);
             this._singleRowClickTimer = null;
         }, 600);
+    }
+
+    setInstrumentRisk(instrumentVM: TrendIndexVM, e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: instrumentVM.risk > 0 ? instrumentVM.risk : 30,
+                title: instrumentVM.symbol + " risk allocation"
+            }
+        }).afterClosed().subscribe((value) => {
+            this.changeRiskForInstrument(instrumentVM.symbol, value);
+        });
+    }
+
+    setAccountRisk(e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: this.accountRisk ? this.accountRisk : 30,
+                title: "Risk Allocation"
+            }
+        }).afterClosed().subscribe((value) => {
+            this.changeRiskForAccount(value > 0 ? value : 30);
+        });
+    }
+
+    setDefaultMarketRisk(e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: this.defaultMarketRisk ? this.defaultMarketRisk : 12,
+                title: "Default Risk Per Market"
+            }
+        }).afterClosed().subscribe((value) => {
+            this.changeDefaultMarketRisk(value > 0 ? value : 12);
+        });
     }
 
     doubleClicked(instrumentVM: TrendIndexVM) {
@@ -1099,7 +1338,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
         switch (menu_id) {
             case "openCharts": this.showCharts(this.selectedVM); break;
             case "viewOnChart": this.viewOnChart(this.selectedVM); break;
-            case "trade": this.enableDisableTrading(this.selectedVM); break;
+            case "trade": this.enableDisableHITLTrading(this.selectedVM); break;
+            case "disableMarket": this.enableDisableTrading(this.selectedVM); break;
         }
     }
 
@@ -1107,11 +1347,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this.isInstrumentSelected(this.selectedVM);
     }
 
-    private _raiseStateChanged() {
-        if (!this._initialized) {
-            return;
-        }
+    isMarketDisabled() {
+        return this.isInstrumentDisabled(this.selectedVM);
+    }
 
-        this.stateChanged.next(this);
+    private loadUpdatedData() {
+        this.loading = false;
+        this.setRisksForInstruments();
+        this.loadAutoTradingInstruments();
     }
 }
