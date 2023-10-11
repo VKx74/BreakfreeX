@@ -458,10 +458,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         // return this._identityService.isAuthorizedCustomer;
     }
 
-    toggleUseManualTradingForAccount() {
-        this.userAutoTradingInfoData.useManualTrading = !this.userAutoTradingInfoData.useManualTrading;
-        this._cdr.detectChanges(); // trigger change detection
-    }
+
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
@@ -509,6 +506,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _identityService: IdentityService,
         protected _matDialog: MatDialog) {
         super();
+    }
+
+    toggleUseManualTradingForAccount() {
+        this.userAutoTradingInfoData.useManualTrading = !this.userAutoTradingInfoData.useManualTrading;
+        this._cdr.detectChanges(); // trigger change detection
     }
 
     toggleRiskManagement() {
