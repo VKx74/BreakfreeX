@@ -10,104 +10,76 @@
                 </div>
             </div> -->
 
-            <div class="neuralagent header" >
+            <div class="neuralagent header">
                 <div class="header-left-side">
-                    <div  class="account-id">Neural Agent
+                    <div class="account-id">Neural Agent
                         <span *ngIf="isBotConnected" class="mobilehiddenacc">#{{myAutoTradingAccount}}</span>
                     </div>
-
-
-                <span (click)="changeBotEnabledForAccount()" class="change-trading-mode" *ngIf="isBotConnected" >
-                <div class="trading-enabled" >         
-
-                    <span *ngIf="!botShutDown && isBotConnected "  class="positive-color" >
-                        <span class="iconx enabledx" > <i class="fa-solid fa-shield-check"></i> </span> Enabled</span>
-                    <span *ngIf="botShutDown && isBotConnected " class="negative-color">
-                        <span class="iconx disabledx"><i class=" fa-solid fa-shield-minus"></i> </span> Disabled</span>
-                        <span  *ngIf="!isBotConnected" class="negative-color">
-                            <span class="iconx disabledx"          ><i class=" fa-solid fa-shield-plus"></i> </span> Connect Neural Agent</span>
-
-               
-                </div>
-            </span>
-
-
-
-            
-                </div>
-
-
-                <div class="right-side"  >
-                    
-                    <span (click)="botSettings()"  *ngIf="!isBotConnected"  class="change-trading-mode">
-                        <div class="trading-enabled" >         
-        
-                           
-                                <span *ngIf="!isBotConnected" class="positive-color">
-                                    <span class="iconx enabledx"          ><i class=" fa-solid fa-shield-plus"></i> </span> Connect Neural Agent</span>
-        
-                       
+                    <span (click)="changeBotEnabledForAccount()" class="change-trading-mode" *ngIf="isBotConnected">
+                        <div class="trading-enabled">
+                            <span *ngIf="!botShutDown && isBotConnected" class="positive-color">
+                                <span class="iconx enabledx"> <i class="fa-solid fa-shield-check"></i>
+                                </span>Enabled</span>
+                            <span *ngIf="botShutDown && isBotConnected" class="negative-color">
+                                <span class="iconx disabledx"><i class="fa-solid fa-shield-minus"></i>
+                                </span>Disabled</span>
                         </div>
                     </span>
-
-                    <div class="extended-mode " (click)="setExtendedMode()" *ngIf="isBotConnected" >
-                        <div>{{extendedMode ? "Agent States " : "FS"}}</div>
+                </div>
+                <div class="right-side">
+                    <span (click)="botSettings()" *ngIf="!isBotConnected" class="change-trading-mode">
+                        <div class="trading-enabled">
+                            <span *ngIf="!isBotConnected" class="positive-color">
+                                <span class="iconx enabledx"><i class="fa-solid fa-shield-plus"></i>
+                                </span>{{isSync ? "Synchronizing..." : "Connect Neural Agent"}}</span>
+                        </div>
+                    </span>
+                    <div class="extended-mode" (click)="setExtendedMode()" *ngIf="isBotConnected">
+                        <div>{{extendedMode ? "Agent States" : "FS"}}</div>
                     </div>
-
-                    <button (click)="toggleRiskManagement()" class="risk-management-toggle" *ngIf="isBotConnected" >
+                    <button (click)="toggleRiskManagement()" class="risk-management-toggle" *ngIf="isBotConnected">
                         <i class="fa-solid fa-square-sliders-vertical"></i> {{'Settings'}}
                     </button>
                 </div>
             </div>
 
             <div class="neuralagent riskmanagement" *ngIf="riskManagementVisible && isBotConnected">
-
                 <div class="left-side">
-
                     <div class="risk-management">
                         <div class="risk-management-label">Neural Agent Account</div>
-                     
-                        <span (click)="botSettings()"  *ngIf="isBotConnected"  class="change-trading-mode">
-                            <div class="trading-enabled" >         
-            
-                               
-                                    <span *ngIf="isBotConnected" class="positive-color">
-                                        <span class="iconx enabledx"          ><i class=" fa-solid fa-shield-plus"></i> </span> Neural Agent Connected</span>
-            
-                           
+                        <span (click)="botSettings()" *ngIf="isBotConnected" class="change-trading-mode">
+                            <div class="trading-enabled">
+                                <span *ngIf="isBotConnected" class="positive-color">
+                                    <span class="iconx enabledx"><i class="fa-solid fa-shield-plus"></i>
+                                    </span>Neural Agent Connected</span>
                             </div>
                         </span>
-                     
                     </div>
-                    
-                
-
-
                     <div class="risk-management">
                         <div class="risk-management-label">Human-In-The-Loop Settings</div>
-                     
                         <div *ngIf="isBotConnected" class="bot-settings-container">
-                            <mat-slide-toggle (change)="changeUseManualTradingForAccount()" [checked]="userAutoTradingInfoData.useManualTrading">
-                                <span *ngIf="userAutoTradingInfoData.useManualTrading" >HITL Enabled</span>
+                            <mat-slide-toggle (change)="changeUseManualTradingForAccount()"
+                                [checked]="userAutoTradingInfoData.useManualTrading">
+                                <span *ngIf="userAutoTradingInfoData.useManualTrading">HITL Enabled</span>
                                 <span *ngIf="!userAutoTradingInfoData.useManualTrading">HITL Disabled</span>
                             </mat-slide-toggle>
                         </div>
                     </div>
-
-                    
-
                 </div>
                 <div class="right-side">
                     <div class="risk-management">
                         <div class="risk-management-label"> Risk Management</div>
                         <div class="riskholder maxriskpermarket">
-                            <span class="itemholderx"> <i class="fa-solid fa-dice-d20"></i> </span> Default Risk Each Market
+                            <span class="itemholderx"> 
+                                <i class="fa-solid fa-dice-d20"></i> 
+                            </span> Default Risk Each Market
                             <input type="text" readonly
                                 placeholder='{{defaultMarketRisk ? defaultMarketRisk + "%" : "..."}}'
                                 (click)="setDefaultMarketRisk($event)">
                         </div>
                         <div class="riskholder riskallocation">
-                            <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span> Total Risk Allocation Of Account
+                            <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span> 
+                            Total Risk Allocation Of Account
                             <input readonly type="text" placeholder='{{accountRisk ? accountRisk + "%" : "..."}}'
                                 (click)="setAccountRisk($event)">
                         </div>
@@ -243,7 +215,8 @@
                                         <div class="middlesymbol" [ngClass]="{'active-auto-modex': isTradable(vmItem)}">
                                             <div class="execution-side">
                                                 <div class="symbol-title-container">
-                                                    <div class="symbol-holder-real-OG simple-hover" (click)="viewOnChart(vmItem)"
+                                                    <div class="symbol-holder-real-OG simple-hover"
+                                                        (click)="viewOnChart(vmItem)"
                                                         [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
                                                         <div class="status-holder">
                                                             <div class="symbolxholder symbolxholder-hover">
@@ -307,18 +280,18 @@
                                                                 <ng-template #activeStatus>
                                                                     <div class="NA-state" *ngIf="!isTradable(vmItem)"
                                                                         [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
-                                                                       
-                                                                   
+
+
                                                                         Working
                                                                     </div>
                                                                     <div class="NA-state" *ngIf="isTradable(vmItem)"
                                                                         [class.is-auto-selectedx]="isAutoSelected(vmItem)">
-                                                                       
+
                                                                         Active
                                                                     </div>
                                                                 </ng-template>
 
-                                                         
+
 
                                                             </div>
                                                         </div>
@@ -331,17 +304,18 @@
                                                         </div>
                                                     </ng-template>
 
-                                                    <div class="status-holder status-runner state"  *ngIf="vmItem.tradingState == 3" >
+                                                    <div class="status-holder status-runner state"
+                                                        *ngIf="vmItem.tradingState == 3">
                                                         <div class="symbolxholder">
-                                                        <div class="symbol-trade-state">
-                                                            <i class=" fa fa-heart-pulse"
-                                                                *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
-                                                            <i class="fa fa-star hidden"
-                                                                *ngIf="vmItem.tradingState == 2"></i>
-                                                            <i class="hidden fa fa-hexagon-exclamation"
-                                                                *ngIf="vmItem.tradingState == 0"></i>
+                                                            <div class="symbol-trade-state">
+                                                                <i class=" fa fa-heart-pulse"
+                                                                    *ngIf="vmItem.tradingState == 3 || vmItem.tradingState == 4"></i>
+                                                                <i class="fa fa-star hidden"
+                                                                    *ngIf="vmItem.tradingState == 2"></i>
+                                                                <i class="hidden fa fa-hexagon-exclamation"
+                                                                    *ngIf="vmItem.tradingState == 0"></i>
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
 
                                                     <div class="HITL active status-holder simple-hover"
@@ -363,11 +337,11 @@
                                                 </div>
 
                                                 <div class="trend-side">
-                                                    <div *ngIf="isBotConnected" 
-                                                        class="symbolx risk-cell status-holder"
+                                                    <div *ngIf="isBotConnected" class="symbolx risk-cell status-holder"
                                                         (click)="setInstrumentRisk(vmItem, $event)" tooltip
                                                         matTooltip="{{vmItem.risk > 0 ? vmItem.risk + '% Risk Allowed ' : 'All'}}">
-                                                        <span class="iconx"><i class="fa-solid fa-shield-check"></i></span>
+                                                        <span class="iconx"><i
+                                                                class="fa-solid fa-shield-check"></i></span>
                                                         <span *ngIf="vmItem.risk == -1">All</span>
                                                         <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
                                                     </div>

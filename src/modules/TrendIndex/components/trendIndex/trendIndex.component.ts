@@ -453,13 +453,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public groupingField: string = "type";
     public extendedMode: boolean = false;
     public riskManagementVisible: boolean = false;
+    public isSync: boolean = false;
 
     public get hasAccess(): boolean {
         return true;
         // return this._identityService.isAuthorizedCustomer;
     }
-
-
 
     get componentId(): string {
         return TrendIndexComponent.componentName;
@@ -591,8 +590,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this.myAutoTradingAccount) {
             this._algoService.getUserAutoTradingInfoForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
+                this.isSync = false;
                 this.loadUpdatedData();
-            }, () => {
+            }, (_) => {
+                if (_ && _.status === 401 && !this._userAutoTradingInfoData) {
+                    this.isSync = true;
+                }
                 this._tradableInstruments = [];
                 this._userAutoTradingInfoData = null;
                 this._changesDetected = true;
