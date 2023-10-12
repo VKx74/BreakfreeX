@@ -60,9 +60,27 @@
                 </div>
             </div>
 
-            <div class="neuralagent riskmanagement" *ngIf="riskManagementVisible">
+            <div class="neuralagent riskmanagement" *ngIf="riskManagementVisible && isBotConnected">
 
                 <div class="left-side">
+
+                    <div class="risk-management">
+                        <div class="risk-management-label">Neural Agent Account</div>
+                     
+                        <span (click)="botSettings()"  *ngIf="isBotConnected"  class="change-trading-mode">
+                            <div class="trading-enabled" >         
+            
+                               
+                                    <span *ngIf="isBotConnected" class="positive-color">
+                                        <span class="iconx enabledx"          ><i class=" fa-solid fa-shield-plus"></i> </span> Neural Agent Connected</span>
+            
+                           
+                            </div>
+                        </span>
+                     
+                    </div>
+                    
+                
 
 
                     <div class="risk-management">

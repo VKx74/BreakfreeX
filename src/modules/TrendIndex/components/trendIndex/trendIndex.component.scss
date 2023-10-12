@@ -196,8 +196,11 @@
     .left-side {
       display: flex;
       align-items: flex-start;
-      -moz-column-gap: 12px;
-      column-gap: 12px;
+      flex-direction: column;
+    -moz-column-gap: 12px;
+    column-gap: 12px;
+    row-gap: 12px;
+    
 
       .trading-enabled {
         font-size: 12px;
