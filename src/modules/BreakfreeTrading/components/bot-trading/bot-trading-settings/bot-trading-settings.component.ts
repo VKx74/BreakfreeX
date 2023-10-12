@@ -35,6 +35,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public downloadLink: string = '/assets/NeuralAgent_1.2.0.ex5';
 
     public get isAllowed(): boolean {
+        return true;
         return this._identityService.isAuthorizedCustomer;
     }
 
