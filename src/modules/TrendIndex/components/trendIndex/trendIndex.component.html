@@ -24,7 +24,7 @@
                         <span class="iconx enabledx" > <i class="fa-solid fa-shield-check"></i> </span> Enabled</span>
                     <span *ngIf="botShutDown && isBotConnected " class="negative-color">
                         <span class="iconx disabledx"><i class=" fa-solid fa-shield-minus"></i> </span> Disabled</span>
-                        <span *ngIf="!isBotConnected" class="negative-color">
+                        <span  *ngIf="!isBotConnected" class="negative-color">
                             <span class="iconx disabledx"          ><i class=" fa-solid fa-shield-plus"></i> </span> Connect Neural Agent</span>
 
                
@@ -39,7 +39,7 @@
 
                 <div class="right-side"  >
                     
-                    <span *ngIf="!isBotConnected"  class="change-trading-mode">
+                    <span (click)="botSettings()"  *ngIf="!isBotConnected"  class="change-trading-mode">
                         <div class="trading-enabled" >         
         
                            

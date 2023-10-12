@@ -24,6 +24,7 @@ import { DataTableComponent } from "modules/datatable/components/data-table/data
 import { IJSONViewDialogData, JSONViewDialogComponent } from "modules/Shared/components/json-view/json-view-dialog.component";
 import { IPercentageInputModalConfig, PercentageInputModalComponent } from "modules/UI/components/percentage-input-modal/percentage-input-modal.component";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { BotTradingSettingsComponent } from 'modules/BreakfreeTrading/components/bot-trading/bot-trading-settings/bot-trading-settings.component';
 
 const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -531,6 +532,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (!this.hasAccess) {
             return;
         }
+        
 
         this.loading = true;
 
@@ -558,6 +560,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.loadUserAutoTradingInfoForAccount();
         });
     }
+
+ 
 
     protected setRisksForInstruments() {
         if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.risksPerMarket || !this.vm) {
@@ -1351,9 +1355,20 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this.isInstrumentDisabled(this.selectedVM);
     }
 
+
     private loadUpdatedData() {
         this.loading = false;
         this.setRisksForInstruments();
         this.loadAutoTradingInstruments();
     }
+
+    botSettings(): void {
+        const screenHeight = window.innerHeight;
+        this._dialog.open(BotTradingSettingsComponent, { 
+            backdropClass: 'backdrop-background', 
+            position: {
+                top: screenHeight > 667 ? "100px" : null
+            }
+        });
+}
 }
