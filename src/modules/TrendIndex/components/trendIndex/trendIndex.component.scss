@@ -786,19 +786,7 @@
     column-gap: 3px;
   }
 
-  .status-runner {
-    padding: 3px 3px;
-    background: #3e454c;
-    border-radius: 3px;
-    padding-right: 6px;
-    border: 1px solid #2a4867;
-    transition: all 0.22s ease-in-out;
-  }
 
-  .active-auto-mode {
-    background: #327c41 !important;
-    border: 1px solid #61a26f !important;
-  }
 
   .datatrend {
     font-weight: bold;
@@ -1002,8 +990,8 @@
   }
 
   .HITL.active {
-    background: #a13a00 !important;
-    border: 1px solid #c65516;
+    background: themed("HITLActive")  !important;
+    border: 1px solid themed("HITLActiveBorder");
     display: flex;
     column-gap: 3px;
     align-items: center;
@@ -1012,13 +1000,13 @@
     font-weight: 600;
   }
   .HITL.active span {
-    background: #e05b10;
+    background: themed("HITLActiveSpan");
     padding: 0px 3px;
     border-radius: 3px;
   }
 
   .HITL.available {
-    background: #304a2f !important;
+    background: themed("HITLavailable") !important;
     display: flex;
     column-gap: 3px;
     align-items: center;
@@ -1026,11 +1014,11 @@
     padding-right: 6px;
     font-weight: 600;
     border-radius: 3px;
-    border: 1px solid #536a52;
+    border: 1px solid themed("HITLavailableBorder");
   }
 
   .HITL.available span {
-    background: #213420;
+    background: themed("HITLavailablespan");
     padding: 1px 4px;
     border-radius: 3px;
   }
@@ -1039,6 +1027,20 @@
     color: themed("statusRunnerTextColor") !important;
     background: themed("statusRunner");
     //border: 1px solid themed("statusRunnerHITLBorder") !important;
+  }
+
+  .status-runner {
+    padding: 3px 3px;
+
+    border-radius: 3px;
+    padding-right: 6px;
+    border: 1px solid themed("statusRunnerHITLBorder");
+    transition: all 0.22s ease-in-out;
+  }
+
+  .active-auto-mode {
+    background: #327c41 !important;
+    border: 1px solid #61a26f !important;
   }
 
   .active-auto-mode {
