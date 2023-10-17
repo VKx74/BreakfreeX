@@ -16,7 +16,7 @@ export class FirstTimeLoginPopupComponent implements OnInit {
 
   }
   openNeuralTradingAcademy() {
-    window.open('https://breakfreetrading.com/neural-trading-academy', '_blank');
+    window.open('https://breakfreetrading.com/neural-setup', '_blank');
   }
 
   openNeural() {
