@@ -15,7 +15,7 @@ import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { BaseLayoutItem } from "@layout/base-layout-item";
-import { AlgoService, IMesaTrendIndex, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData, IUserMarketConfigData } from "@app/services/algo.service";
+import { AlgoService, IMesaTrendIndex, INALog, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData, IUserMarketConfigData } from "@app/services/algo.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
@@ -442,22 +442,36 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _changesDetected: boolean;
     private _updateInterval: any;
     private _reloadInterval: any;
+    private _logRefreshInterval: any;
     private _state: ITrendIndexComponentState;
     private _chartDataBars: ITrendIndexBarChartDataVM;
     private _chartDataTrends: ITrendIndexChartDataVM[] = [];
     private _tradableInstruments: IUserMarketConfigData[] = [];
     private _userAutoTradingInfoData: IUserAutoTradingInfoData;
     private _singleRowClickTimer;
+    private _lastLogRefreshTime: number;
+
+    public logs: INALog[] = [];
+    public isBotOnline: boolean;
+    public updateTime: number;
 
     public groups: string[] = [];
     public groupingField: string = "type";
     public extendedMode: boolean = false;
     public riskManagementVisible: boolean = false;
+    public logsVisible: boolean = false;
     public isSync: boolean = false;
 
     public get hasAccess(): boolean {
         return true;
         // return this._identityService.isAuthorizedCustomer;
+    }
+
+    get lastLogRefreshTime(): Date {
+        if (!this._lastLogRefreshTime) {
+            return null;
+        }
+        return new Date(this._lastLogRefreshTime);
     }
 
     get componentId(): string {
@@ -531,7 +545,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (!this.hasAccess) {
             return;
         }
-        
+
 
         this.loading = true;
 
@@ -552,15 +566,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
             }
         }, 60 * 1000);
 
+        this._logRefreshInterval = setInterval(() => {
+            if (!this.logsVisible)
+            {
+                return;
+            }
+            this.getUserAutoTradingRuntimeLogs();
+        }, 3 * 60 * 1000);
+
         this.loadData();
 
         this._identityService.myTradingAccount$.subscribe(() => {
             this._changesDetected = true;
             this.loadUserAutoTradingInfoForAccount();
+            this.getUserAutoTradingRuntimeLogs();
         });
     }
-
- 
 
     protected setRisksForInstruments() {
         if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.risksPerMarket || !this.vm) {
@@ -603,6 +624,33 @@ export class TrendIndexComponent extends BaseLayoutItem {
         } else {
             this._tradableInstruments = [];
             this._userAutoTradingInfoData = null;
+            this._changesDetected = true;
+        }
+    }
+
+    protected getUserAutoTradingRuntimeLogs() {
+        if (this.myAutoTradingAccount) {
+            this._algoService.getUserAutoTradingRuntimeLogs(this.myAutoTradingAccount).subscribe((data) => {
+                this._lastLogRefreshTime = new Date().getTime();
+                if (data) {
+                    this.logs = data.logs;
+                    if (data.lastOnlineDate) {
+                        this.updateTime = data.lastOnlineDate * 1000;
+                        let utcNow = new Date().getTime() / 1000;
+                        let minPassed = Math.floor((utcNow - data.lastOnlineDate) / 60);
+                        this.isBotOnline = minPassed < 3;
+                    }
+                }
+                this._changesDetected = true;
+            }, (_) => {
+                this._lastLogRefreshTime = new Date().getTime();
+                this._changesDetected = true;
+            });
+        } else {
+            this.logs = [];
+            this.isBotOnline = false;
+            this.updateTime = null;
+            this._lastLogRefreshTime = new Date().getTime();
             this._changesDetected = true;
         }
     }
@@ -895,6 +943,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this._reloadInterval) {
             clearInterval(this._reloadInterval);
         }
+
+        if (this._logRefreshInterval) {
+            clearInterval(this._logRefreshInterval);
+        }
     }
 
     getRelativeStrengthClass(value: number) {
@@ -1002,7 +1054,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (!this.isBotConnected) {
             return;
         }
-        
+
         let isSelected = this.isInstrumentSelected(item);
         let symbol = item.symbol.replace("_", "").toUpperCase();
         this.loading = true;
@@ -1334,6 +1386,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     doubleClicked(instrumentVM: TrendIndexVM) {
         console.log("doubleClicked");
+        this.logsVisible = false;
+        this.riskManagementVisible = false;
         this.selectedVM = instrumentVM;
         this.showCharts(this.selectedVM);
         if (this._singleRowClickTimer) {
@@ -1358,6 +1412,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this.isInstrumentDisabled(this.selectedVM);
     }
 
+    public refreshLogs() {
+        this._lastLogRefreshTime = null;
+        this.getUserAutoTradingRuntimeLogs();
+    }
 
     private loadUpdatedData() {
         this.loading = false;
@@ -1367,11 +1425,27 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     botSettings(): void {
         const screenHeight = window.innerHeight;
-        this._dialog.open(BotTradingSettingsComponent, { 
-            backdropClass: 'backdrop-background', 
+        this._dialog.open(BotTradingSettingsComponent, {
+            backdropClass: 'backdrop-background',
             position: {
                 top: screenHeight > 667 ? "100px" : null
             }
         });
-}
+    }
+
+    botLogs(): void {
+        this.logsVisible = !this.logsVisible;
+        this._cdr.markForCheck();
+
+        if (!this.logsVisible) {
+            return;
+        }
+        
+        let time = this._lastLogRefreshTime ? this._lastLogRefreshTime : 0;
+        let diff = (new Date().getTime() - time) / 1000 / 60;
+        if (diff > 1) {
+            this._lastLogRefreshTime = null;
+            this.getUserAutoTradingRuntimeLogs();
+        }
+    }
 }

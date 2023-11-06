@@ -594,6 +594,17 @@ export interface IUserMarketConfigData {
     symbol: string;
 }
 
+export interface INALog {
+    data: string;
+    type: number;
+    date: number;
+}
+
+export interface INALogResponse {
+    logs: INALog[];
+    lastOnlineDate: number;
+}
+
 class AlgoServiceEncryptionHelper {
     private static keySize = 256;
     private static ivSize = 128;
@@ -885,7 +896,7 @@ export class AlgoService {
             account: account, userId: userId, version: "2.0", markets: symbols
         });
     }
-    
+
     disableTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-disabled-markets`, {
             account: account, userId: userId, version: "2.0", markets: symbols
@@ -924,6 +935,10 @@ export class AlgoService {
 
     getUserAutoTradingInfoForAccount(account: string): Observable<IUserAutoTradingInfoData> {
         return this._http.get<IUserAutoTradingInfoData>(`${this.url}apex/config/${account}`);
+    }
+
+    getUserAutoTradingRuntimeLogs(account: string): Observable<INALogResponse> {
+        return this._http.get<INALogResponse>(`${this.url}apex/runtime/logs?account=${account}`);
     }
 
     private _decrypt(encrypted: IBFTAEncryptedResponse): any {
