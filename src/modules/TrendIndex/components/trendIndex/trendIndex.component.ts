@@ -634,6 +634,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._lastLogRefreshTime = new Date().getTime();
                 if (data) {
                     this.logs = data.logs;
+
+                    if (this.logs)
+                    {
+                        for (let l of this.logs)
+                        {
+                            l.date = l.date * 1000;
+                        }
+                    }
                     if (data.lastOnlineDate) {
                         this.updateTime = data.lastOnlineDate * 1000;
                         let utcNow = new Date().getTime() / 1000;
