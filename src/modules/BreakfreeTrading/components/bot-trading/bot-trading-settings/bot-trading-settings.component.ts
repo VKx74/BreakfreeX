@@ -29,7 +29,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public accountId: string;
     public loading: boolean = true;
     public policyAccepted: boolean = false;
-    //public profitPolicyAccepted: boolean = false;
+    // public profitPolicyAccepted: boolean = false;
     public liabilityWaiverAccepted: boolean = false;
 
     public downloadLink: string = '/assets/NeuralAgent_1.2.0.ex5';
