@@ -40,6 +40,9 @@
                     <button (click)="toggleRiskManagement()" class="risk-management-toggle" *ngIf="isBotConnected">
                         <i class="fa-solid fa-square-sliders-vertical"></i> {{'Settings'}}
                     </button>
+                    <button (click)="botLogs()" class="risk-management-toggle" *ngIf="isBotConnected">
+                        <i class="fa-solid fa-list-dots"></i> {{'Logs'}}
+                    </button>
                 </div>
             </div>
 
@@ -70,19 +73,54 @@
                     <div class="risk-management">
                         <div class="risk-management-label"> Risk Management</div>
                         <div class="riskholder maxriskpermarket">
-                            <span class="itemholderx"> 
-                                <i class="fa-solid fa-dice-d20"></i> 
+                            <span class="itemholderx">
+                                <i class="fa-solid fa-dice-d20"></i>
                             </span> Default Risk Each Market
                             <input type="text" readonly
                                 placeholder='{{defaultMarketRisk ? defaultMarketRisk + "%" : "..."}}'
                                 (click)="setDefaultMarketRisk($event)">
                         </div>
                         <div class="riskholder riskallocation">
-                            <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span> 
+                            <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span>
                             Total Risk Allocation Of Account
                             <input readonly type="text" placeholder='{{accountRisk ? accountRisk + "%" : "..."}}'
                                 (click)="setAccountRisk($event)">
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="neuralagent logs-container" *ngIf="logsVisible && isBotConnected">
+                <div class="log-item bot-status">
+                    <span class="log-left-side" [ngClass]="{'positive': isBotOnline, 'negative': !isBotOnline}">
+                        <span>
+                            <i class="icon fa-solid fa-circle"></i>
+                            <span>{{isBotOnline ? "Agent Running" : "Agent Stopped "}}</span>
+                            <span *ngIf="!!updateTime && !isBotOnline">{{updateTime | timeAgo}}</span>
+                        </span>
+                    </span>
+                    <span class="log-right-side">
+                        <span class="refresh-log" (click)="refreshLogs()" *ngIf="!!lastLogRefreshTime; else refreshing">
+                            <i class="icon fa-solid fa-refresh"></i>
+                            <span>{{lastLogRefreshTime | timeAgo}}</span>
+                        </span>
+                        <ng-template #refreshing>
+                            <span>Refreshing...</span>
+                        </ng-template>
+                    </span>
+                </div>
+                <div class="log-items-container">
+                    <div class="log-item bot-log" *ngFor="let log of logs">
+                        <span class="log-left-side" [ngClass]="{'natural': log.type != 1, 'negative': log.type == 1}">
+                            <span>
+                                >>> {{log.data}}
+                            </span>
+                        </span>
+                        <span class="log-right-side">
+                            <span>
+                                {{log.date | date:'HH:mm MMM,dd'}}
+                            </span>
+                        </span>
                     </div>
                 </div>
             </div>

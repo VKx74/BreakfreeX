@@ -29,10 +29,10 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public accountId: string;
     public loading: boolean = true;
     public policyAccepted: boolean = false;
-    public profitPolicyAccepted: boolean = false;
+    // public profitPolicyAccepted: boolean = false;
     public liabilityWaiverAccepted: boolean = false;
 
-    public downloadLink: string = '/assets/NeuralAgent_1.2.0.ex5';
+    public downloadLink: string = '/assets/NeuralAgent_1.3.3.ex5';
 
     public get isAllowed(): boolean {
         return true;
@@ -89,7 +89,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     }
 
     canSave() {
-        if (!this.policyAccepted || !this.profitPolicyAccepted || !this.liabilityWaiverAccepted) {
+        if (!this.policyAccepted || !this.liabilityWaiverAccepted) {
             return false;
         } 
         

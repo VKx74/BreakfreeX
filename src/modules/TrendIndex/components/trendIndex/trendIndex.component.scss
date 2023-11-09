@@ -197,10 +197,9 @@
       display: flex;
       align-items: flex-start;
       flex-direction: column;
-    -moz-column-gap: 12px;
-    column-gap: 12px;
-    row-gap: 12px;
-    
+      -moz-column-gap: 12px;
+      column-gap: 12px;
+      row-gap: 12px;
 
       .trading-enabled {
         font-size: 12px;
@@ -265,6 +264,61 @@
     }
     .neuralagent.riskmanagement {
       border-top: 1px solid #454545;
+    }
+
+    .neuralagent.logs-container {
+      border-top: 1px solid #454545;
+      height: 25vh;
+      flex-direction: column;
+
+      .log-items-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .refresh-log {
+        cursor: pointer;
+      }
+
+      .log-item {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 2px;
+        padding-bottom: 2px;
+        border-bottom: 1px solid;
+      }
+
+      .bot-status {
+        margin-bottom: 10px;
+        border-bottom: none !important;
+      }
+
+      .log-left-side {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        width: 100%;
+      }
+
+      .log-right-side {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        width: 100%;
+      }
+
+      .icon {
+        margin-right: 5px;
+      }
+
+      .bot-log {
+        font-family: monospace;
+        font-size: 11px;
+      }
     }
 
     .positive-color {
@@ -522,8 +576,7 @@
     padding: 3px 6px;
     height: 100%;
     cursor: default;
-}
-
+  }
 
   .active-auto-modex {
     border: 1px solid #327c41 !important;
@@ -789,8 +842,6 @@
     column-gap: 3px;
   }
 
-
-
   .datatrend {
     font-weight: bold;
   }
@@ -857,6 +908,18 @@
 
   .strength-negative {
     color: rgba(189, 91, 106, 0.8);
+  }
+
+  .positive {
+    color: rgba(94, 175, 128, 0.8);
+  }
+
+  .negative {
+    color: rgba(189, 91, 106, 0.8);
+  }
+
+  .natural {
+    color: rgba(18, 177, 39, 0.8);
   }
 
   .out-of-access {
@@ -935,6 +998,10 @@
     }
   }
 
+  .log-item {
+    border-bottom-color: themed("borderColor") !important;
+  }
+
   .chart-view {
     background: themed("appBackgroundColor");
     .chart-container-title,
@@ -993,7 +1060,7 @@
   }
 
   .HITL.active {
-    background: themed("HITLActive")  !important;
+    background: themed("HITLActive") !important;
     border: 1px solid themed("HITLActiveBorder");
     display: flex;
     column-gap: 3px;
