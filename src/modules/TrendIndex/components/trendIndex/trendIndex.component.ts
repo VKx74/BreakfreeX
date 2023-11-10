@@ -366,8 +366,6 @@ class TrendIndexVM {
         this.price31104000Strength = this._getStrength(s_31104000);
         this.price311040000Strength = this._getStrength(s_311040000);
 
-
-
         this.currentMarketState = GetPhaseName(data.current_phase);
         this.expectedMarketState = GetPhaseName(data.next_phase);
         this.tradingState = data.trading_state;
