@@ -581,6 +581,7 @@ export interface IUserAutoTradingInfoData {
     botShutDown: boolean;
     accountRisk: number;
     defaultMarketRisk: number;
+    maxInstrumentCount: number;
     disabledMarkets: string[];
     risksPerMarket: { [key: string]: number };
 }

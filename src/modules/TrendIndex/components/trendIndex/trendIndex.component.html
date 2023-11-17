@@ -191,7 +191,24 @@
 
                 <data-table-header-cell columnName="symbol" [sortable]="false"
                     [columnMinWidth]="extendedMode ? 90 : 255">
-                    Market State
+                    <div class="market-state-container">
+                        <div class="market-state-text">Markets</div>
+                        <div class="market-state-info" *ngIf="isBotConnected">
+                            <div class="market-state-auto">
+                                Auto: {{autoSelected}}/{{autoAvailable}}
+                                <span (click)="disableAllAutoTrading()" class="disable-all" *ngIf="canDisableAllAutoTrading()">Disable All</span><span (click)="enableAllAutoTrading()" *ngIf="canEnableAllAutoTrading()" class="enable-all">Enable All</span>
+                            </div>
+                            <div class="market-state-auto">
+                                HITL: {{hitlSelected}}/{{hitlAvailable}}
+                                <span *ngIf="hitlSelected">
+                                    <span (click)="disableAllHITLTrading()" class="disable-all">Deselect All</span>
+                                </span>
+                            </div> 
+                            <div class="market-state-auto" *ngIf="maxInstrumentCount != null && maxInstrumentCount < 100">
+                                Limit {{maxInstrumentCount}} market(s)
+                            </div>
+                        </div>
+                    </div>
                 </data-table-header-cell>
                 <data-table-header-cell columnName="risk" [sortable]="false" [columnMinWidth]="70" [columnWidth]="70">
                     {{'State' | translate}}

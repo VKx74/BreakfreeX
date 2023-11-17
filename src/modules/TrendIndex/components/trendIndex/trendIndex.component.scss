@@ -642,9 +642,9 @@
   }
 
   .sphere {
-    width: 12px;
+    width: 14px;
     display: flex;
-    height: 12px;
+    height: 14px;
     position: relative;
     border-radius: 50%;
     background-color: transparent;
@@ -655,8 +655,8 @@
 
   .cube {
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     top: 50%;
     left: 50%;
 
@@ -692,7 +692,7 @@
   }
 
   .cube.is-auto-selectedx {
-    background-color: #7abcff;
+    background-color: #00dbff;
   }
 
   .cube.untradeable {
@@ -982,9 +982,35 @@
   .details-btn {
     cursor: pointer;
   }
+
   .expected-market-state {
     opacity: 0.6;
     font-size: 0.9em;
+  }
+
+  .market-state-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .market-state-text, .market-state-info, .market-state-auto, .market-state-auto {
+      display: flex;
+      align-items: center;
+    } 
+
+    .market-state-auto {
+      margin-right: 10px;
+      font-size: 11px;
+    }
+
+    .disable-all, .enable-all {
+      cursor: pointer;
+      margin-left: 5px;
+      border-radius: 5px;
+      background: #2a4867;
+      padding: 1px 4px;
+      font-weight: normal;
+    }
   }
 }
 
@@ -1057,6 +1083,14 @@
   .status-runner {
     color: themed("statusRunnerTextColor") !important;
     background: themed("statusRunner");
+  }
+  
+  .disable-all, .enable-all {
+    color: themed("statusRunnerTextColor") !important;
+    background: themed("statusRunner");
+    &:hover {
+      background: themed("statusRunnerHover");
+    }
   }
 
   .HITL.active {

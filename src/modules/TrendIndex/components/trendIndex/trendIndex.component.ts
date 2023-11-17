@@ -459,6 +459,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public riskManagementVisible: boolean = false;
     public logsVisible: boolean = false;
     public isSync: boolean = false;
+    public autoAvailable: number = null;
+    public autoSelected: number = null;
+    public hitlAvailable: number = null;
+    public hitlSelected: number = null;
 
     public get hasAccess(): boolean {
         return true;
@@ -502,6 +506,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     get defaultMarketRisk(): number {
         return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.defaultMarketRisk : null;
+    }
+
+    get maxInstrumentCount(): number {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.maxInstrumentCount : null;
     }
 
     get botShutDown(): boolean {
@@ -565,8 +573,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }, 60 * 1000);
 
         this._logRefreshInterval = setInterval(() => {
-            if (!this.logsVisible)
-            {
+            if (!this.logsVisible) {
                 return;
             }
             this.getUserAutoTradingRuntimeLogs();
@@ -603,6 +610,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 i.risk = this._userAutoTradingInfoData.defaultMarketRisk;
             }
         }
+
+        this.countInfo();
     }
 
     protected loadUserAutoTradingInfoForAccount() {
@@ -633,10 +642,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 if (data) {
                     this.logs = data.logs;
 
-                    if (this.logs)
-                    {
-                        for (let l of this.logs)
-                        {
+                    if (this.logs) {
+                        for (let l of this.logs) {
                             l.date = l.date * 1000;
                         }
                     }
@@ -788,6 +795,28 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this.vm = [...usedInGroups, ...notUsedInGroups];
         this.setRisksForInstruments();
+    }
+
+    protected countInfo() {
+        this.autoSelected = 0;
+        this.autoAvailable = 0;
+        this.hitlSelected = 0;
+        this.hitlAvailable = 0;
+
+        for (let v of this.vm) {
+            if (v.tradingState === 1) {
+                this.hitlAvailable++;
+                if (this.isInstrumentSelected(v)) {
+                    this.hitlSelected++;
+                }
+            } else if (v.tradingState === 2) {
+                this.autoAvailable++;
+                this.autoSelected++;
+                if (!this.isTradable(v) || this.isInstrumentDisabled(v)) {
+                    this.autoSelected--;
+                }
+            }
+        }
     }
 
     protected loadAutoTradingInstruments() {
@@ -1056,6 +1085,130 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.enableDisableHITLTrading(item);
     }
 
+    disableAllAutoTrading() {
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        let forDeselect = [];
+        for (let v of this.vm) {
+            let isDisabled = this.isInstrumentDisabled(v);
+            if (!isDisabled && v.tradingState === 2) {
+                let symbol = v.symbol.replace("_", "").toUpperCase();
+                forDeselect.push(symbol);
+            }
+        }
+
+        if (forDeselect.length) {
+            this._algoService.disableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, forDeselect).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this.loadUpdatedData();
+            }, (_) => {
+                if (_ && _.status === 403 && _.error) {
+                    this._alertManager.info(_.error);
+                } else {
+                    this._alertManager.info("Failed to disable trading instrument");
+                }
+                this.loading = false;
+                this._changesDetected = true;
+            });
+        }
+    }
+
+    canEnableAllAutoTrading() {
+        if (!this.isBotConnected) {
+            return false;
+        }
+
+        let forSelect = [];
+        for (let v of this.vm) {
+            let isDisabled = this.isInstrumentDisabled(v);
+            if (isDisabled && v.tradingState === 2) {
+                let symbol = v.symbol.replace("_", "").toUpperCase();
+                forSelect.push(symbol);
+            }
+        }
+
+        return forSelect.length > 0;
+    }
+
+    canDisableAllAutoTrading() {
+        if (!this.isBotConnected) {
+            return false;
+        }
+
+        let forDeselect = [];
+        for (let v of this.vm) {
+            let isDisabled = this.isInstrumentDisabled(v);
+            if (!isDisabled && v.tradingState === 2) {
+                let symbol = v.symbol.replace("_", "").toUpperCase();
+                forDeselect.push(symbol);
+            }
+        }
+
+        return forDeselect.length > 0;
+    }
+
+    enableAllAutoTrading() {
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        let forSelect = [];
+        for (let v of this.vm) {
+            let isDisabled = this.isInstrumentDisabled(v);
+            if (isDisabled && v.tradingState === 2) {
+                let symbol = v.symbol.replace("_", "").toUpperCase();
+                forSelect.push(symbol);
+            }
+        }
+
+        if (forSelect.length) {
+            this._algoService.enableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, forSelect).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this.loadUpdatedData();
+            }, (_) => {
+                if (_ && _.status === 403 && _.error) {
+                    this._alertManager.info(_.error);
+                } else {
+                    this._alertManager.info("Failed to enable trading instrument");
+                }
+                this.loading = false;
+                this._changesDetected = true;
+            });
+        }
+    }
+
+    disableAllHITLTrading() {
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        let forDeselect = [];
+        for (let v of this.vm) {
+            let isSelected = this.isInstrumentSelected(v);
+            if (isSelected) {
+
+                let symbol = v.symbol.replace("_", "").toUpperCase();
+                forDeselect.push(symbol);
+            }
+        }
+
+        if (forDeselect.length) {
+            this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, forDeselect).subscribe((data) => {
+                this._userAutoTradingInfoData = data;
+                this.loadUpdatedData();
+            }, (_) => {
+                if (_ && _.status === 403 && _.error) {
+                    this._alertManager.info(_.error);
+                } else {
+                    this._alertManager.info("Failed to disable trading instrument");
+                }
+                this.loading = false;
+                this._changesDetected = true;
+            });
+        }
+    }
     enableDisableHITLTrading(item: TrendIndexVM) {
         if (!this.isBotConnected) {
             return;
@@ -1446,7 +1599,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (!this.logsVisible) {
             return;
         }
-        
+
         let time = this._lastLogRefreshTime ? this._lastLogRefreshTime : 0;
         let diff = (new Date().getTime() - time) / 1000 / 60;
         if (diff > 1) {
