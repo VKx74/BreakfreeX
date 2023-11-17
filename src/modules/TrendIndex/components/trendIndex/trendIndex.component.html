@@ -204,7 +204,7 @@
                                     <span (click)="disableAllHITLTrading()" class="disable-all">Deselect All</span>
                                 </span>
                             </div> 
-                            <div class="market-state-auto" *ngIf="maxInstrumentCount != null && maxInstrumentCount < 100">
+                            <div class="market-state-auto" *ngIf="!!maxInstrumentCount && maxInstrumentCount < 100">
                                 Limit {{maxInstrumentCount}} market(s)
                             </div>
                         </div>
@@ -356,9 +356,7 @@
                                                     </div>
                                                     <div class="HITL unavailable status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                        *ngIf="isInstrumentSelected(vmItem) && vmItem.tradingState != 1">
-                                                        <span><i class="fa-sharp fa-solid fa-shield"></i></span> HITL
-                                                        N/A
+                                                        *ngIf="isInstrumentSelected(vmItem) && vmItem.tradingState != 1"> HITL N/A
                                                     </div>
                                                 </div>
 

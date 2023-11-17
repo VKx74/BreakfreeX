@@ -448,6 +448,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _userAutoTradingInfoData: IUserAutoTradingInfoData;
     private _singleRowClickTimer;
     private _lastLogRefreshTime: number;
+    private _maxInstrumentCount: number = null;
 
     public logs: INALog[] = [];
     public isBotOnline: boolean;
@@ -509,7 +510,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     get maxInstrumentCount(): number {
-        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.maxInstrumentCount : null;
+        return this._maxInstrumentCount;
     }
 
     get botShutDown(): boolean {
@@ -618,6 +619,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this.myAutoTradingAccount) {
             this._algoService.getUserAutoTradingInfoForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
+                this._maxInstrumentCount = this._userAutoTradingInfoData ? this._userAutoTradingInfoData.maxInstrumentCount : null;
                 this.isSync = false;
                 this.loadUpdatedData();
             }, (_) => {
@@ -627,10 +629,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._tradableInstruments = [];
                 this._userAutoTradingInfoData = null;
                 this._changesDetected = true;
+                this._maxInstrumentCount = null;
             });
         } else {
             this._tradableInstruments = [];
             this._userAutoTradingInfoData = null;
+            this._maxInstrumentCount = null;
             this._changesDetected = true;
         }
     }
@@ -806,15 +810,15 @@ export class TrendIndexComponent extends BaseLayoutItem {
         for (let v of this.vm) {
             if (v.tradingState === 1) {
                 this.hitlAvailable++;
-                if (this.isInstrumentSelected(v)) {
-                    this.hitlSelected++;
-                }
             } else if (v.tradingState === 2) {
                 this.autoAvailable++;
                 this.autoSelected++;
                 if (!this.isTradable(v) || this.isInstrumentDisabled(v)) {
                     this.autoSelected--;
                 }
+            }
+            if (this.isInstrumentSelected(v)) {
+                this.hitlSelected++;
             }
         }
     }
