@@ -1507,6 +1507,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 title: instrumentVM.symbol + " risk allocation"
             }
         }).afterClosed().subscribe((value) => {
+            if (!Number.isFinite(value))
+            {
+                return;
+            }
             this.changeRiskForInstrument(instrumentVM.symbol, value);
         });
     }
@@ -1525,6 +1529,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 title: "Risk Allocation"
             }
         }).afterClosed().subscribe((value) => {
+            if (!Number.isFinite(value))
+            {
+                return;
+            }
             this.changeRiskForAccount(value > 0 ? value : 30);
         });
     }
@@ -1543,6 +1551,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 title: "Default Risk Per Market"
             }
         }).afterClosed().subscribe((value) => {
+            if (!Number.isFinite(value))
+            {
+                return;
+            }
             this.changeDefaultMarketRisk(value > 0 ? value : 12);
         });
     }
