@@ -453,6 +453,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public logs: INALog[] = [];
     public isBotOnline: boolean;
     public updateTime: number;
+    public naVersion: string;
 
     public groups: string[] = [];
     public groupingField: string = "type";
@@ -645,6 +646,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._lastLogRefreshTime = new Date().getTime();
                 if (data) {
                     this.logs = data.logs;
+                    this.naVersion = data.naVersion;
 
                     if (this.logs) {
                         for (let l of this.logs) {

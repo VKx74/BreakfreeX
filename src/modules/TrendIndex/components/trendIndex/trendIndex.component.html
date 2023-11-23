@@ -97,6 +97,7 @@
                             <i class="icon fa-solid fa-circle"></i>
                             <span>{{isBotOnline ? "Agent Running" : "Agent Stopped "}}</span>
                             <span *ngIf="!!updateTime && !isBotOnline">{{updateTime | timeAgo}}</span>
+                            <span class="na-version">{{naVersion ? naVersion : ""}}</span>
                         </span>
                     </span>
                     <span class="log-right-side">

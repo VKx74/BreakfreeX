@@ -281,6 +281,8 @@
 
       .refresh-log {
         cursor: pointer;
+        display: flex;
+        align-items: center;
       }
 
       .log-item {
@@ -993,17 +995,21 @@
     justify-content: space-between;
     align-items: center;
 
-    .market-state-text, .market-state-info, .market-state-auto, .market-state-auto {
+    .market-state-text,
+    .market-state-info,
+    .market-state-auto,
+    .market-state-auto {
       display: flex;
       align-items: center;
-    } 
+    }
 
     .market-state-auto {
       margin-right: 10px;
       font-size: 11px;
     }
 
-    .disable-all, .enable-all {
+    .disable-all,
+    .enable-all {
       cursor: pointer;
       margin-left: 5px;
       border-radius: 5px;
@@ -1011,6 +1017,12 @@
       padding: 1px 4px;
       font-weight: normal;
     }
+  }
+
+  .na-version {
+    margin-left: 3px;
+    font-size: 10px;
+    vertical-align: super;
   }
 }
 
@@ -1084,8 +1096,9 @@
     color: themed("statusRunnerTextColor") !important;
     background: themed("statusRunner");
   }
-  
-  .disable-all, .enable-all {
+
+  .disable-all,
+  .enable-all {
     color: themed("statusRunnerTextColor") !important;
     background: themed("statusRunner");
     &:hover {
@@ -1288,7 +1301,7 @@
     justify-content: center;
 
     .locked-icon {
-      margin-left: 3px;  
+      margin-left: 3px;
       margin-right: 5px;
       font-size: 10px;
     }

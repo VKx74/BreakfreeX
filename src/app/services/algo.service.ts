@@ -604,6 +604,7 @@ export interface INALog {
 export interface INALogResponse {
     logs: INALog[];
     lastOnlineDate: number;
+    naVersion: string;
 }
 
 class AlgoServiceEncryptionHelper {
