@@ -1,0 +1,156 @@
+@import "themes/themes";
+@import "mixins/themify";
+
+:host {
+  .crypto-modal {
+    max-height: 85vh;
+    min-width: 320px;
+    height: 800px;
+    width: 95vw;
+    max-width: 800px;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .img_1 {
+    background-image: url("assets/img/na_gift1.jpg");
+  }
+  .img_2 {
+    background-image: url("assets/img/na_gift2.jpg");
+  }
+  .img_3 {
+    background-image: url("assets/img/na_gift3.jpg");
+  }
+  .img_4 {
+    background-image: url("assets/img/na_gift4.jpg");
+  }
+
+  .offer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: saturate(0.4);
+  }
+
+  .header {
+    font-size: 52px;
+    font-weight: bold;
+    color: whitesmoke;
+  }
+
+  .header2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: whitesmoke;
+    background-color: #af3c3d;
+    opacity: 0.9;
+    padding: 5px 20px;
+  }
+
+  .cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 75%;
+    margin-top: 3%;
+    max-height: 360px;
+  }
+  .card1,
+  .card2 {
+    width: 50%;
+    max-width: 300px;
+    height: 100%;
+    background-color: black;
+    opacity: 0.85;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      opacity: 0.95;
+      transition: all 0.3s;
+    }
+  }
+
+  .line1,
+  .line2,
+  .line3,
+  .line4,
+  .line5 {
+    display: flex;
+    color: whitesmoke;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .line1 {
+    font-size: 52px;
+  }
+
+  .line2 {
+    font-size: 32px;
+  }
+
+  .line3 {
+    font-size: 24px;
+    text-decoration: line-through;
+    font-style: italic;
+  }
+
+  .line4 {
+    font-size: 28px;
+  }
+
+  .button {
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 25px;
+    background-color: #af3c3d;
+    padding: 5px 20px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #cf2527;
+      transition: all 0.3s;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .header {
+      font-size: 48px;
+    }
+
+    .header2 {
+      font-size: 22px;
+    }
+
+    .line1 {
+      font-size: 48px;
+    }
+
+    .line2 {
+      font-size: 26px;
+    }
+
+    .line3 {
+      font-size: 22px;
+    }
+
+    .line4 {
+      font-size: 26px;
+    }
+
+    .cards {
+      max-height: 340px;
+    }
+
+    .crypto-modal {
+      max-height: 75vh;
+    }
+  }
+}

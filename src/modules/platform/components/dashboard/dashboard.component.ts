@@ -56,6 +56,7 @@ import { ChartTrackerService } from "modules/BreakfreeTrading/services/chartTrac
 import { Console } from "console";
 import { ThemeService } from "@app/services/theme.service";
 import { ChartOptionsStorageService } from "@app/services/chart-options-storage.servic";
+import { SpecialOfferComponent } from "modules/BreakfreeTrading/components/special-offer/special-offer.component";
 
 
 @Component({
@@ -774,7 +775,7 @@ export class DashboardComponent {
 
     private addChartComponent(parent: any) {
         if (!this._canAddComponent()) {
-            this._shoCheckoutPopup();
+            this._showCheckoutPopup();
             return;
         }
 
@@ -868,12 +869,22 @@ export class DashboardComponent {
         }
 
         if (!this._identityService.isAuthorizedCustomer) {
-            this._shoCheckoutPopup();
+            let day = new Date().getUTCDate();
+            if (this._localStorageService.get("showSpecialOffer") !== day) {
+                this._showSpecialOffer();
+                this._localStorageService.set("showSpecialOffer", day);
+            } else {
+                this._showCheckoutPopup();
+            }
         }
     }
 
-    private _shoCheckoutPopup() {
+    private _showCheckoutPopup() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+    }
+
+    private _showSpecialOffer() {
+        this._dialog.open(SpecialOfferComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _showPhoneNumberPopup() {
@@ -896,7 +907,7 @@ export class DashboardComponent {
 
     private _loadLayout() {
         if (!this._canUseLayout()) {
-            this._shoCheckoutPopup();
+            this._showCheckoutPopup();
             return;
         }
 
@@ -915,7 +926,7 @@ export class DashboardComponent {
 
     private _openNewLayout() {
         if (!this._canUseLayout()) {
-            this._shoCheckoutPopup();
+            this._showCheckoutPopup();
             return;
         }
 
@@ -940,7 +951,7 @@ export class DashboardComponent {
     }
     private _saveLayoutAsNew() {
         if (!this._canUseLayout()) {
-            this._shoCheckoutPopup();
+            this._showCheckoutPopup();
             return;
         }
 

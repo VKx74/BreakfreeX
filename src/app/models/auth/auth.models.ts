@@ -270,6 +270,7 @@ export interface IBaseUserModel {
 export interface IIdentityToken {
     sub: string;
     exp: number;
+    create_date: number;
     artifsub_exp: number;
     role: string;
     email: string;

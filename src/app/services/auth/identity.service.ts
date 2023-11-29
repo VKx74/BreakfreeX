@@ -47,6 +47,7 @@ export class IdentityService {
     public token: string;
     public refreshToken: string;
     public expirationTime: number;
+    public createDate: number;
     private _refreshToken$: ReplaySubject<any>;
 
     private _isAuthorized$ = new BehaviorSubject<boolean>(false);
@@ -529,6 +530,7 @@ export class IdentityService {
         this.lastName = parsedToken.last_name;
         this.preferredUsername = parsedToken.preferred_username;
         this.phoneNumber = parsedToken.phone_number;
+        this.createDate = parsedToken.create_date ? parsedToken.create_date * 1000 : 0;
         this.isTwoFactorAuthEnable = parsedToken.is_two_factor_auth_enable === true;
         this.tags = parsedToken.user_tag ? parsedToken.user_tag.split(',') : [];
         this.subscriptions = parsedToken.user_subs ? parsedToken.user_subs.split(';') : [];

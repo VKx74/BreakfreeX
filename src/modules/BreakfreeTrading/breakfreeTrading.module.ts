@@ -62,6 +62,7 @@ import { BinanceScannerService } from './services/binance.scanner/binance.scanne
 import { PosNegativeNumberColorDirective } from './components/BinanceScannerComponent/directive/color.directive';
 import { NeuralCheckoutComponent } from './components/neural-checkout/neural-checkout.component';
 import { BotTradingSettingsComponent } from './components/bot-trading/bot-trading-settings/bot-trading-settings.component';
+import { SpecialOfferComponent } from './components/special-offer/special-offer.component';
 
 @NgModule({
     // components here
@@ -79,6 +80,7 @@ import { BotTradingSettingsComponent } from './components/bot-trading/bot-tradin
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
         NeuralCheckoutComponent,
+        SpecialOfferComponent,
         BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
@@ -138,6 +140,7 @@ import { BotTradingSettingsComponent } from './components/bot-trading/bot-tradin
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
         NeuralCheckoutComponent,
+        SpecialOfferComponent,
         BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsComponent,
@@ -162,6 +165,7 @@ import { BotTradingSettingsComponent } from './components/bot-trading/bot-tradin
         GuestCheckoutComponent,
         DefaultCheckoutComponent,
         NeuralCheckoutComponent,
+        SpecialOfferComponent,
         BlackFridayPremiumVideoComponent,
         PhoneNumberPopUpComponent,
         MissionsInfoComponent,

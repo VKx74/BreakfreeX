@@ -8,6 +8,7 @@ import { EconomicCalendarService } from '@calendarEvents/localization/token';
 import { AlgoService, IEconomicEvent } from '@app/services/algo.service';
 import { MatDialog } from "@angular/material/dialog";
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
+import { SpecialOfferComponent } from 'modules/BreakfreeTrading/components/special-offer/special-offer.component';
 
 class EconomicCalendarGroupVM {
     Date: string;
@@ -171,7 +172,8 @@ export class EconomicCalendarComponent extends BaseLayoutItem {
     }
 
     processCheckout() {
-        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+        // this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+        this._dialog.open(SpecialOfferComponent, { backdropClass: 'backdrop-background' });
     }
 
     getCountryFlag(event: EconomicCalendarVM) {
