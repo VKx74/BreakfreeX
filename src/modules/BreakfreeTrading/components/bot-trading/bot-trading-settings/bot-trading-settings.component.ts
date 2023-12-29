@@ -10,6 +10,7 @@ import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 import { LiabilityPolicyTradingModalComponent } from 'modules/Shared/components/liability-policy-trading/liability-policy-trading.component';
 import { ProfitPolicyTradingModalComponent } from 'modules/Shared/components/profit-policy-trading/profit-policy-trading.component';
+import { LinkModalComponent } from '@app/link-modal/link-modal.component';
 
 @Component({
     selector: 'bot-trading-settings',
@@ -39,7 +40,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
 
     public downloadLink: string = '/assets/NeuralAgent_1.3.7.ex5';
     public downloadLink2: string = '/assets/NA2_2.0_beta.ex5';
-    public downloadLink3: string = 'https://typeform.com/';
+    public downloadLink3: string = 'https://forms.gle/wSJNCdN1ahYkosmq9';
 
     public get isAllowed(): boolean {
         return true;
@@ -80,6 +81,14 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
             this._alertService.error("Failed to save trading accounts info");
         });
     }
+
+    openModal(link: string) {
+        this._dialog.open(LinkModalComponent, {
+          data: { link: link },
+          width: '80%',
+          height: '80%',
+        });
+      }
 
     remove() {
         this.loading = true;
