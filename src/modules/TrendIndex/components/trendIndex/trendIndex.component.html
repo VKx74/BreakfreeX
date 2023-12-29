@@ -34,7 +34,7 @@
                                 </span>{{isSync ? "Synchronizing..." : "Connect Neural Agent"}}</span>
                         </div>
                     </span>
-                    <div class="extended-mode" (click)="setExtendedMode()" *ngIf="isBotConnected">
+                    <div class="extended-mode hidden" (click)="setExtendedMode()" *ngIf="isBotConnected">
                         <div>{{extendedMode ? "Agent States" : "FS"}}</div>
                     </div>
                     <button (click)="toggleRiskManagement()" class="risk-management-toggle" *ngIf="isBotConnected">
@@ -347,17 +347,17 @@
 
                                                     <div class="HITL active status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                        *ngIf="isInstrumentSelected(vmItem) && vmItem.tradingState == 1">
+                                                        *ngIf="((isInstrumentSelected(vmItem) && vmItem.tradingState == 1) && userAutoTradingInfoData?.useManualTrading)">
                                                         <span><i class="fa-solid fa-shield-slash"></i></span> HITL On
                                                     </div>
                                                     <div class="HITL available status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                        *ngIf="vmItem.tradingState == 1 && !isInstrumentSelected(vmItem)">
+                                                        *ngIf="(vmItem.tradingState == 1 && !isInstrumentSelected(vmItem) && userAutoTradingInfoData?.useManualTrading)">
                                                         <span><i class="fa-solid fa-shield-check"></i></span> HITL Off
                                                     </div>
                                                     <div class="HITL unavailable status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                        *ngIf="isInstrumentSelected(vmItem) && vmItem.tradingState != 1"> HITL N/A
+                                                        *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  "> HITL N/A
                                                     </div>
                                                 </div>
 

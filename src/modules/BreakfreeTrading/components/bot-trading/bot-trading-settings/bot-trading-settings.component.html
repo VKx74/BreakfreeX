@@ -19,20 +19,32 @@
                 </div>
                 
                 <div class="btn-wrapper">
+                    <div class="agents">
+                 
                     <div class="download-agent">
-                       <span>
+                        <span>
                             <a href="{{downloadLink}}">
-                                Download Neural Agent 1.3.7<i class="fa fa-cloud-download" aria-hidden="true"></i>
+                                Download NA 1.3.7
                             </a>
                         </span>
-                    </div>
 
-                    <button class="crypto-button crypto-button_danger" [disabled]="false" (click)="remove()">
-                        Detach Neural Agent
+                    </div>
+                    <div class="download-agent ">
+                        <span>
+                             <a class="na2beta" href="{{downloadLink2}}">
+                                 Download NA2 BETA <i class="fa fa-download" aria-hidden="true"></i>
+                             </a>
+                         </span>
+                     </div>
+
+                    </div>
+                    <button class="crypto-button crypto-button_danger detach" [disabled]="false" (click)="remove()">
+                        Detach Neural Agent <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
                 <!-- <span class="warningx">Warning: Neural Agent 1.2 MIGHT close old positions in negative, if not aligned with the new auto strategy.</span> -->
-                       
+
+                   
             </div>
 
             <ng-template #add_account>

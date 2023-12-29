@@ -22,6 +22,8 @@ import { ProfitPolicyTradingModalComponent } from 'modules/Shared/components/pro
         }
     ]
 })
+
+
 export class BotTradingSettingsComponent extends Modal<BotTradingSettingsComponent> implements OnInit {
 
     public existingAccounts: UserAutoTradingAccountResponse[];
@@ -31,8 +33,12 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     public policyAccepted: boolean = false;
     // public profitPolicyAccepted: boolean = false;
     public liabilityWaiverAccepted: boolean = false;
+    public subscriptionType: SubscriptionType;
+    
+
 
     public downloadLink: string = '/assets/NeuralAgent_1.3.7.ex5';
+    public downloadLink2: string = '/assets/NA2_2.0_beta.ex5';
 
     public get isAllowed(): boolean {
         return true;

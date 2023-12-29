@@ -24,6 +24,18 @@
     justify-content: space-between;
 }
 
+.agents {
+  display: flex;
+  row-gap: 3px;
+  column-gap: 13px;
+  flex-direction: column;
+}
+
+a.NA2BETA {
+  background:purple;
+}
+
+
 .add-broker {
     height: 100%;
     display: flex;
@@ -35,9 +47,11 @@
     padding: 15px;
 }
   .btn-wrapper {
-    margin-top: 5px;
+    margin-top: 32px;
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
+    row-gap: 16px
   }
 
   .value-tips,
@@ -135,17 +149,52 @@
     }
   }
 
+  .download-agent .na2beta  {
+    padding: 11px 18px;
+    border-radius: 3px;
+    background: #8a4292;
+    color: #fff;
+    font-weight: 600;
+
+    font-family: "Open Sans";
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    i {
+      margin-left: 8px;
+    }
+
+    &:hover {
+      background: #b95dc3;
+      text-decoration: none;
+    }
+  }
+.detach
+{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  row-gap: 6px;
+  column-gap: 6px;
+}
+
   @media (max-width: 768px) {
     .policy-agreement-wrapper {
       display: inline-block;
       font-size: 14px;
     }
       .btn-wrapper {
-       margin-top: 5px;
-    display: flex;
-    row-gap: 12px;
-    justify-content: space-between;
-    flex-direction: column;
+        margin-top: 32px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        row-gap: 16px
   }
   }
 }
