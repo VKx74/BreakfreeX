@@ -6,15 +6,28 @@
         </div>
         <div class="modal-body" *ngIf="!loading; else loader">
             <div class="remove-broker" *ngIf="!!existingAccount; else add_account">
-                <div class="value-tips">
-                    {{ 'brokerAccountIdTips' | translate }}
-                </div>
+               
                 <div class="value-account">
+                    <div class="value-tips">
+                        {{ 'brokerAccountIdTipsx' | translate }}
+                    </div>
                     <div class="value-account-id">
                         {{ existingAccount.accountId }}
                     </div>
                     <div class="value-account-state">
                         {{ existingAccount.isActive ? "Active" : "Disabled" }}
+                    </div>
+                </div>
+
+                <div class="announcementOfNeuralAgent2">
+                    <div class="announcementOfNeuralAgent2-title">
+                        <span class="announcementOfNeuralAgent2-title-text">Announcement</span>
+                    </div>
+                    <div class="announcementOfNeuralAgent2-content">
+                        <span class="announcementOfNeuralAgent2-content-text">
+                            <p>Neural Agent 2 is now available for beta testing. It is a completely new version of Neural Agent, with a new strategy and a new neural network. It is currently in beta testing, and we are looking for beta testers.</p>
+                            
+                        </span>
                     </div>
                 </div>
                 
@@ -24,22 +37,29 @@
                     <div class="download-agent">
                         <span>
                             <a href="{{downloadLink}}">
-                                Download NA 1.3.7
+                                Download Neural Agent 1.3.7 <i class="fa fa-download" aria-hidden="true"></i>
                             </a>
                         </span>
 
                     </div>
-                    <div class="download-agent ">
+                    <div class="download-agent hidden" >
                         <span>
                              <a class="na2beta" href="{{downloadLink2}}">
                                  Download NA2 BETA <i class="fa fa-download" aria-hidden="true"></i>
                              </a>
                          </span>
                      </div>
+                     <div class="download-agent ">
+                        <span>
+                             <a class="na2beta" href="{{downloadLink3}}">
+                            <span class="privatebetalabel">Private Beta</span>  Request Beta Access to NA2 <i class="fa fa-download" aria-hidden="true"></i>
+                             </a>
+                         </span>
+                     </div>
 
                     </div>
                     <button class="crypto-button crypto-button_danger detach" [disabled]="false" (click)="remove()">
-                        Detach Neural Agent <i class="fa-solid fa-xmark"></i>
+                        Detach Neural Agent <i class="fa-solid fa-signal-slash"></i>
                     </button>
                 </div>
                 <!-- <span class="warningx">Warning: Neural Agent 1.2 MIGHT close old positions in negative, if not aligned with the new auto strategy.</span> -->

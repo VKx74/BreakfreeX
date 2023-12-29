@@ -78,18 +78,19 @@ a.NA2BETA {
   .value-account {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    column-gap: 8px;
+    row-gap: 6px;
     align-items: center;
+    column-gap: 6px;
   }
 
   .value-account-id {
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
   }
 
   .value-account-state {
     font-size: 12px;
+    font-weight: 400;
   }
 
   .download-agent {
@@ -149,11 +150,18 @@ a.NA2BETA {
     }
   }
 
+  span.privatebetalabel {
+    background: #000;
+    border-radius: 6px;
+    padding: 3px 6px;
+}
+
   .download-agent .na2beta  {
     padding: 11px 18px;
     border-radius: 3px;
     background: #8a4292;
     color: #fff;
+    column-gap: 6px;
     font-weight: 600;
 
     font-family: "Open Sans";
@@ -184,6 +192,39 @@ a.NA2BETA {
   column-gap: 6px;
 }
 
+.announcementOfNeuralAgent2 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+.announcementOfNeuralAgent2-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.announcementOfNeuralAgent2-title-text {
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+.announcementOfNeuralAgent2-content {
+  display: flex;
+
+  .announcementOfNeuralAgent2-content-text {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+}
+
+
+
+
+
   @media (max-width: 768px) {
     .policy-agreement-wrapper {
       display: inline-block;
@@ -200,6 +241,26 @@ a.NA2BETA {
 }
 
 @include themify($themes, true) {
+
+.announcementOfNeuralAgent2-title {
+  color: themed("card-title");
+}
+.announcementOfNeuralAgent2-content-text {
+  color: themed("card-title");
+}
+
+.announcementOfNeuralAgent2-title-text {
+  color: themed("card-title");
+}
+.announcementOfNeuralAgent2 {
+  background-color: themed("card-background");
+  border: 1px solid themed("card-border");
+  border-radius: 6px;
+  padding: 12px;
+}
+
+
+
   // .content {
   //   color: themed("missionTextColor");
   //   background-color: themed("missionDialogBackground");
@@ -214,6 +275,22 @@ a.NA2BETA {
   .value-account-id {
     color: themed("card-title");
   }
+
+  .value-account {
+    padding: 6px 12px;
+    color: themed("card-title");
+    background-color: themed("card-background");
+    margin-top: 6px;
+  }
+
+  .value-account-state {
+    color: #5a7a35 !important;
+    background-color: #a5bc8e;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-weight: 600  ;
+  } 
+
   .value-tips,
   .accept-policy-text,
   .value-account-state {
