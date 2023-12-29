@@ -67,7 +67,7 @@ import { SpecialOfferComponent } from "modules/BreakfreeTrading/components/speci
 })
 export class DashboardComponent {
     private _updateInterval = 1000 * 10;
-    private _freeUserPopup = 1000 * 60 * 5;
+    private _freeUserPopup = 1000 * 15;
     private _rightPanelMaxSize = 800;
     private _rightPanelSize = 600;
     private _isRightPanelCollapsed: boolean = false;
@@ -870,7 +870,10 @@ export class DashboardComponent {
 
         if (!this._identityService.isAuthorizedCustomer) {
             let day = new Date().getUTCDate();
-            if (this._localStorageService.get("showSpecialOffer") !== day) {
+            let showSpecialOfferEnd = new Date("Jan 05 2024").getTime();
+            let dateNow = new Date().getTime();
+            
+            if (this._localStorageService.get("showSpecialOffer") !== day && showSpecialOfferEnd > dateNow) {
                 this._showSpecialOffer();
                 this._localStorageService.set("showSpecialOffer", day);
             } else {
