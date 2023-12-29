@@ -172,8 +172,8 @@ export class EconomicCalendarComponent extends BaseLayoutItem {
     }
 
     processCheckout() {
-        // this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
-        this._dialog.open(SpecialOfferComponent, { backdropClass: 'backdrop-background' });
+        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+        // this._dialog.open(SpecialOfferComponent, { backdropClass: 'backdrop-background' });
     }
 
     getCountryFlag(event: EconomicCalendarVM) {

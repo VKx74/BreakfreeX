@@ -121,6 +121,9 @@ import { BinanceHistoryService } from './services/binance.exchange/binance.histo
 import { BinanceRealtimeService } from './services/binance.exchange/binance.realtime.service';
 import { BreakfreeTradingSocialModule } from 'modules/BreakfreeTradingSocial';
 import { ChartOptionsStorageService } from './services/chart-options-storage.servic';
+import { SafeUrlPipe } from '@app/link-modal/safe-url.pipe';
+import { LinkModalComponent } from './link-modal/link-modal.component';
+
 
 export const REDUCER_TOKEN = new InjectionToken('App Reducer token');
 
@@ -149,7 +152,10 @@ const FILE_INPUT_CONFIG_PROVIDER = {
 @NgModule({
     declarations: [
         AppComponent,
-        FirstTimeLoginPopupComponent
+        FirstTimeLoginPopupComponent,
+        LinkModalComponent,
+        SafeUrlPipe,
+        LinkModalComponent
     ],
     imports: [
         IntercomModule.forRoot({
@@ -405,7 +411,8 @@ const FILE_INPUT_CONFIG_PROVIDER = {
         HighlightService
     ],
     entryComponents: [
-        FirstTimeLoginPopupComponent
+        FirstTimeLoginPopupComponent,
+        LinkModalComponent
     ],
     bootstrap: [AppComponent]
     
