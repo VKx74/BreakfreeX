@@ -1438,7 +1438,7 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         position.Price = avgPrice;
-        if (order.Side == position.Side)
+        if (order.Side === position.Side)
         {
             position.Size += order.Size;
         } else {
