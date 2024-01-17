@@ -1366,7 +1366,7 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         for (const i in positions) {
-            if (positions[i] && positions[i].Size) {
+            if (positions[i]) {
                 updateRequired = true;
                 this._positions.push(positions[i]);
             }
@@ -1438,7 +1438,18 @@ export abstract class MTBroker implements IMTBroker {
         }
 
         position.Price = avgPrice;
-        position.Size += order.Size;
+        if (order.Side == position.Side)
+        {
+            position.Size += order.Size;
+        } else {
+            position.Size -= order.Size;
+
+            if (position.Size < 0)
+            {
+                position.Size = Math.abs(position.Size);
+                position.Side = order.Side;
+            }
+        }
     }
 
     protected _createPositionByOrder(order: MTOrder): MTPosition {
