@@ -869,16 +869,17 @@ export class DashboardComponent {
         }
 
         if (!this._identityService.isAuthorizedCustomer) {
-            let day = new Date().getUTCDate();
-            let showSpecialOfferEnd = new Date("Jan 05 2024").getTime();
-            let dateNow = new Date().getTime();
+            // let day = new Date().getUTCDate();
+            // let showSpecialOfferEnd = new Date("Jan 05 2024").getTime();
+            // let dateNow = new Date().getTime();
             
-            if (this._localStorageService.get("showSpecialOffer") !== day && showSpecialOfferEnd > dateNow) {
-                this._showSpecialOffer();
-                this._localStorageService.set("showSpecialOffer", day);
-            } else {
-                this._showCheckoutPopup();
-            }
+            // if (this._localStorageService.get("showSpecialOffer") !== day && showSpecialOfferEnd > dateNow) {
+            //     this._showSpecialOffer();
+            //     this._localStorageService.set("showSpecialOffer", day);
+            // } else {
+            //     this._showCheckoutPopup();
+            // }
+            this._showCheckoutPopup();
         }
     }
 
