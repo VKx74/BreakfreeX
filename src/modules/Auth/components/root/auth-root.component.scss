@@ -14,6 +14,9 @@
   .login_container {
     display: flex;
     height: 100%;
+    justify-content: center;
+    align-items: center;
+
   }
 
   .left_part {
@@ -22,9 +25,12 @@
     justify-content: center;
     align-items: center;
     padding: 30px 30px;
-    max-width: 600px;
-    height: 100%;
-    background: #fff;
+    max-width: 460px;
+    max-height: 800px;
+
+    height: auto;
+    background: #000;
+    color: #fff;
     z-index: 2;
   }
   .welcomeback{
@@ -108,7 +114,7 @@
 
       .beta {
         margin-top: 10px;
-        background: #ffffff;
+        background: #efefef;
         padding: 10px;
         border-radius: 5px;
         color: #1a1a1a;
@@ -185,14 +191,14 @@
         width: 100px;
         height: 100px;
         background: #191919;
-        position: absolute;
+
         left: 0px;
         top: 0px;
         z-index:3;
       }
 
       .navimgholder img {
-        padding: 20px;
+ 
       }
 
       .continuewith {
@@ -320,9 +326,10 @@ span#actualquote {
 
 .page {
   display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  align-content: flex-start;
 
 }
 
@@ -349,4 +356,22 @@ span#actualquote {
   width:100%;
   height:100%;
   opacity:0.3;
+}
+
+.login_bg_container {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+#myVideo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
 }
