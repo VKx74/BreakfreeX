@@ -1,12 +1,24 @@
 
-<div class="navimgholder"><img width="100px" height="100" src="/assets/img/bft_bird_w.svg" alt="">
-</div>
     <div class="login_container" >
-        <div class="login_bg_container" id="particle-container"></div>
+        
+       <!--  <div class="login_bg_container" id="particle-container"></div>-->
+       <div class="login_bg_container">
+        
+        <video autoplay muted loop id="myVideo" onerror="alert('Error: ' + this.error.code);">
+            <source src="/assets/loop1.mp4" type="video/mp4">
+          </video>
+      </div>
         <div class="left_part">
+            
             <div class="page">
+
+<div class="navimgholder">
+    <img width="100px" height="100" src="/assets/img/xxxnewlogo.png" alt="">
+</div>
+                
              
                 <div class="left">
+                    
                     <router-outlet></router-outlet>
                 </div>
             </div>
