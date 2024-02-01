@@ -13,7 +13,7 @@ declare var p5: any;
 })
 export class AuthRootComponent implements AfterViewInit, OnDestroy {
     showVideo = false;
-    private p5Instance: any;
+   // private p5Instance: any;
 
     constructor(private _themeService: ThemeService, private router: Router) {
         router.events.subscribe((val) => {
@@ -29,10 +29,10 @@ export class AuthRootComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.p5Instance = new p5(sketch);
+      //  this.p5Instance = new p5(sketch);
     }
 
     ngOnDestroy() {
-        this.p5Instance.remove();
+     //   this.p5Instance.remove();
     }
 }
