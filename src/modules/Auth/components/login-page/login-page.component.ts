@@ -112,6 +112,11 @@ export class LoginPageComponent {
         window.location.href = this._authService.signInWithGoogleEndpoint;
     }
 
+    doLoginWithCompanion() {
+        this._clearNotifications();
+        window.location.href = this._authService.signInWithCompanionEndpoint;
+    }
+
     doLoginWithFB() {
         this._clearNotifications();
         window.location.href = this._authService.signInWithFBEndpoint;

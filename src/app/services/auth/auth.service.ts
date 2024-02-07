@@ -35,6 +35,10 @@ export class AuthenticationService {
         return `${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-google`;
     }
 
+    public get signInWithCompanionEndpoint(): string {
+        return `${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-companion`;
+    }
+
     public get signInWithFBEndpoint(): string {
         return `${AppConfigService.config.apiUrls.identityUrl}Account/signin-with-facebook`;
     }
