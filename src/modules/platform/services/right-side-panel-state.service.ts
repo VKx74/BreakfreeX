@@ -87,6 +87,10 @@ export class RightSidePanelStateService {
             return Components.TrendIndex;
         }
 
+        if (this._rightSidePanelState.component === Components.Chat) {
+            return Components.TrendIndex;
+        }
+
         return this._rightSidePanelState.component;
     }
 
