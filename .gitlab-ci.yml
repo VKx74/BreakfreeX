@@ -80,6 +80,33 @@ build-app-prod:
 #   tags:
 #     - web
 
+build-breakfree-sh-prod:
+  image: node:12.8.0-alpine
+  stage: build
+  <<: *npmrc-settings-job
+  variables:
+    # we override the max_old_space_size to prevent OOM errors
+    NODE_OPTIONS: --max_old_space_size=8192
+  script:
+    - chmod 777 -R ./
+    - echo "NPM Cleanup"
+    - rm -rf node_modules
+    - npm cache clean --force
+    - echo "NPM Install Chart"
+    - npm i trading-chart-designer 
+    - echo "NPM Install"
+    - npm i
+    - echo "Build"
+    - npm run build-stage
+  artifacts:
+        expire_in: 1 day
+        paths:
+            - dist/
+  only:
+    - breakfree-sh/master
+#   tags:
+#     - web
+
 
 build-latest:
     image: docker:stable
@@ -123,6 +150,28 @@ build-stable:
     #     - docker
     only:
         - master
+
+
+build-breakfree-sh-stable:
+    image: docker:stable
+    services:
+        - docker:dind
+    stage: build-image
+    when: manual
+    script:
+        - echo Build Docker Image
+        - echo $CI_PROJECT_PATH
+        - CONTAINER_IMAGE=$(echo "$CI_REGISTRY/$CI_PROJECT_PATH" | tr '[A-Z]' '[a-z]')
+        - echo $CONTAINER_IMAGE
+        - echo $CI_REGISTRY
+        - echo $CI_BUILD_TOKEN
+        - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+        - docker build --tag $CONTAINER_IMAGE:breakfree-sh-stable .
+        - docker push $CONTAINER_IMAGE:breakfree-sh-stable
+    # tags:
+    #     - docker
+    only:
+        - breakfree-sh/master
 
 build-maintenance-stable:
     image: docker:stable
