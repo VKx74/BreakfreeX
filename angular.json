@@ -110,7 +110,7 @@
                 }
               ]
             },
-            "prod": {
+            "breakfree-sh": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
