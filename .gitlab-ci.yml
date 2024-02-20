@@ -97,7 +97,7 @@ build-breakfree-sh-prod:
     - echo "NPM Install"
     - npm i
     - echo "Build"
-    - npm run build-stage
+    - npm run build-breakfree-sh
   artifacts:
         expire_in: 1 day
         paths:
