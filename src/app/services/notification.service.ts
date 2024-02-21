@@ -29,7 +29,7 @@ export class NotificationService {
     constructor(@Inject(NotificationWebSocketService) private _socket: WebsocketBase,
                 private _identityService: IdentityService,
                 private _http: HttpClient) {
-        this._openConnection();
+        // this._openConnection();
     }
 
     public ensureConnectionEstablished(): Observable<boolean> {
