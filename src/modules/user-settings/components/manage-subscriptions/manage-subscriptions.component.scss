@@ -84,9 +84,11 @@
     .date,
     .interval {
       min-width: 140px;
+      align-items: center;
     }
     .price {
       min-width: 120px;
+      align-items: center;
     }
 
     .status {
@@ -96,10 +98,12 @@
       margin-right: 12px;
       width: 140px;
       border-radius: 10px;
+      align-items: center;
     }
 
     .name {
       width: 100%;
+      align-items: center;
     }
   }
 
