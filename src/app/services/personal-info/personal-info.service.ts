@@ -230,6 +230,7 @@ export interface IPaymentAccount {
     description: string;
     name: string;
     created: number;
+    isNowPayment: boolean;
     subscriptions: string[];
 }
 
@@ -423,6 +424,12 @@ export class PersonalInfoService {
     
     getUserBillingDashboard(id: string): Observable<IBillingDashboard> {
         return this._http.get<IBillingDashboard>(`${AppConfigService.config.apiUrls.identityUrl}striple/user_billing_dashboard/${id}`, this._httpOptions);
+    }
+
+    cancelNowPaymentsSubscription(id: string): Observable<any> {
+        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}Account/unsubscribe-from-now-payments`, {
+            subscriptionId: id
+        }, this._httpOptions);
     }
 
     getHealthStatus(): Observable<any> {
