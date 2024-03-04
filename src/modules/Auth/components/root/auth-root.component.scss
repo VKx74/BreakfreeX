@@ -23,13 +23,16 @@
     justify-content: center;
     align-items: center;
     padding: 30px 30px;
-    max-width: 460px;
-    max-height: 800px;
+    max-width: 450px;
+    min-height: 450px;
 
+    max-height: 800px;
     height: auto;
-    background: #000;
-    color: #fff;
+    background: #fff;
+    color: #000;
     z-index: 2;
+    border-radius: 9px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.09);
   }
   .welcomeback {
     font-size: 24px !important;
@@ -188,8 +191,7 @@
     }
 
     .navimgholder {
-      width: 100px;
-      height: 100px;
+
       background: #191919;
 
       left: 0px;
@@ -198,13 +200,42 @@
     }
 
     .navimgholder img {
+      width: 45px;
+      height: 45px;
     }
+
+    .logoxxx {
+     
+      height: 25px;
+    }
+
+    .fishingbottom {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      -moz-column-gap: 8px;
+      column-gap: 5px;
+      z-index: 9999;
+      position: absolute;
+      bottom: 0;
+      color: #ffffffe0;
+      font-weight: bold;
+      bottom: 0px;
+      width: 100%;
+      background: #000;
+      padding: 8px 0px;
+      font-size: 11px;
+  
+    }
+
+
 
     .continuewith {
       text-align: center;
       width: 100%;
       display: block;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     .margintop20 {
@@ -273,7 +304,7 @@
       padding-top: 24px;
       padding-bottom: 12px;
       align-items: center;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     .no-borders-input {
