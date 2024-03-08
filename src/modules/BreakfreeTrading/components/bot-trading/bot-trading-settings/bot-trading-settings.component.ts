@@ -44,7 +44,7 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     // public downloadLink3: string = 'https://forms.gle/wSJNCdN1ahYkosmq9';
 
     public get isAllowed(): boolean {
-        return true;
+        // return true;
         return this._identityService.isAuthorizedCustomer;
     }
 
