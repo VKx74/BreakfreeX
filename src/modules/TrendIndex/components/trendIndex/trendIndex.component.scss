@@ -1004,17 +1004,17 @@
     }
 
     .market-state-auto {
-      margin-right: 10px;
+      margin-right: 3px;
       font-size: 11px;
     }
 
     .disable-all,
     .enable-all {
       cursor: pointer;
-      margin-left: 5px;
+      margin-left: 3px;
       border-radius: 5px;
       background: #2a4867;
-      padding: 1px 4px;
+      padding: 1px 3px;
       font-weight: normal;
     }
   }
@@ -1265,24 +1265,15 @@
   }
 
   .risk-cell {
-    background: #304a2f !important;
+    background: #312b2b !important;
     display: flex;
-    -moz-column-gap: 3px;
-    column-gap: 3px;
     align-items: center;
-    padding: 3px;
-    padding-right: 6px;
+    padding: 3px 6px;
     font-weight: 600;
     border-radius: 3px;
-    border: 1px solid #536a52;
+    border: 1px solid #504e4e;
     transition: all 0.22s ease-in-out;
-
-    .iconx {
-      background: #213420;
-      padding: 0px 4px;
-      border-radius: 3px;
-    }
-
+    
     &:hover {
       filter: brightness(1.2);
     }

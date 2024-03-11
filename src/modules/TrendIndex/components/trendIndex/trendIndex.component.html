@@ -197,14 +197,18 @@
                         <div class="market-state-info" *ngIf="isBotConnected">
                             <div class="market-state-auto">
                                 Auto: {{autoSelected}}/{{autoAvailable}}
-                                <span (click)="disableAllAutoTrading()" class="disable-all" *ngIf="canDisableAllAutoTrading()">Disable All</span><span (click)="enableAllAutoTrading()" *ngIf="canEnableAllAutoTrading()" class="enable-all">Enable All</span>
+                                <span (click)="disableAllAutoTrading()" class="disable-all"
+                                    *ngIf="canDisableAllAutoTrading()">Disable All</span><span
+                                    (click)="enableAllAutoTrading()" *ngIf="canEnableAllAutoTrading()"
+                                    class="enable-all">Enable All</span>
                             </div>
+                            <div class="market-state-auto">|</div>
                             <div class="market-state-auto">
-                                HITL: {{hitlSelected}}/{{hitlAvailable}}
+                                HITL: {{hitlSelected}}
                                 <span *ngIf="hitlSelected">
                                     <span (click)="disableAllHITLTrading()" class="disable-all">Deselect All</span>
                                 </span>
-                            </div> 
+                            </div>
                             <div class="market-state-auto" *ngIf="!!maxInstrumentCount && maxInstrumentCount < 100">
                                 Limit {{maxInstrumentCount}} market(s)
                             </div>
@@ -267,12 +271,12 @@
                                 </span>
                                 <div class="symbol-color-container">
                                     <div class="symbolholdx">
-                                        <div class="middlesymbol" [ngClass]="{'active-auto-modex': isTradable(vmItem)}">
+                                        <div class="middlesymbol" [ngClass]="{'active-auto-modex': isTradable(vmItem) && !isInstrumentDisabled(vmItem)}">
                                             <div class="execution-side">
                                                 <div class="symbol-title-container">
                                                     <div class="symbol-holder-real-OG simple-hover"
                                                         (click)="viewOnChart(vmItem)"
-                                                        [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                        [ngClass]="{'active-auto-mode': isTradable(vmItem) && !isInstrumentDisabled(vmItem)}">
                                                         <div class="status-holder">
                                                             <div class="symbolxholder symbolxholder-hover">
                                                                 <div class="status-holder">
@@ -291,17 +295,17 @@
                                                     <ng-container *ngIf="!botShutDown; else botSwitchedOff">
                                                         <div class="status-runner status-holder"
                                                             (click)="enableDisableTrading(vmItem)"
-                                                            [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
+                                                            [ngClass]="{'active-auto-mode': isTradable(vmItem) && !isInstrumentDisabled(vmItem)}" tooltip
                                                             [matTooltip]="isTradable(vmItem) ? 'Neural Agent is Active' : 'Neural Agent is Working'">
                                                             <div class="symbolxholder">
-                                                                <div class="containerx" 
-                                                                    [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
+                                                                <div class="containerx"
+                                                                    [ngClass]="{'active-auto-mode': isTradable(vmItem) && !isInstrumentDisabled(vmItem)}">
                                                                     <div class="sphere">
                                                                         <div class="cube untradeable"
                                                                             *ngIf="vmItem.tradingState == 0 || vmItem.tradingState == 3">
                                                                         </div>
                                                                         <div class="cube tradeable"
-                                                                            *ngIf="vmItem.tradingState == 1">
+                                                                            *ngIf="isInstrumentSelected(vmItem)">
                                                                         </div>
                                                                         <div class="cube tradeable is-auto-selectedx"
                                                                             *ngIf="vmItem.tradingState == 2">
@@ -345,28 +349,32 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="HITL active status-holder simple-hover"
-                                                        (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                        *ngIf="((isInstrumentSelected(vmItem) && vmItem.tradingState == 1) && userAutoTradingInfoData?.useManualTrading)">
-                                                        <span><i class="fa-solid fa-shield-slash"></i></span> HITL On
-                                                    </div>
-                                                    <div class="HITL available status-holder simple-hover"
-                                                        (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                        *ngIf="(vmItem.tradingState == 1 && !isInstrumentSelected(vmItem) && userAutoTradingInfoData?.useManualTrading)">
-                                                        <span><i class="fa-solid fa-shield-check"></i></span> HITL Off
-                                                    </div>
-                                                    <div class="HITL unavailable status-holder simple-hover"
+                                                    <ng-container *ngIf="userAutoTradingInfoData?.useManualTrading">
+                                                        <div class="HITL active status-holder simple-hover"
+                                                            (click)="instrumentSelectionChanged(vmItem, $event)"
+                                                            *ngIf="isInstrumentSelected(vmItem)">
+                                                            <span><i class="fa-solid fa-shield-slash"></i></span> HITL
+                                                            On
+                                                        </div>
+                                                        <div class="HITL available status-holder simple-hover"
+                                                            (click)="instrumentSelectionChanged(vmItem, $event)"
+                                                            *ngIf="(!isInstrumentSelected(vmItem) && vmItem.tradingState != 2 && !isInstrumentDisabled(vmItem))">
+                                                            <span><i class="fa-solid fa-shield-check"></i></span> HITL
+                                                            Off
+                                                        </div>
+                                                        <!-- <div class="HITL unavailable status-holder simple-hover"
                                                         (click)="instrumentSelectionChanged(vmItem, $event)"
                                                         *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  "> HITL N/A
-                                                    </div>
+                                                    </div> -->
+                                                    </ng-container>
                                                 </div>
 
                                                 <div class="trend-side">
                                                     <div *ngIf="isBotConnected" class="symbolx risk-cell status-holder"
                                                         (click)="setInstrumentRisk(vmItem, $event)" tooltip
                                                         matTooltip="{{vmItem.risk > 0 ? vmItem.risk + '% Risk Allowed ' : 'All'}}">
-                                                        <span class="iconx"><i
-                                                                class="fa-solid fa-shield-check"></i></span>
+                                                        <!-- <span class="iconx"><i
+                                                                class="fa-solid fa-shield-check"></i></span> -->
                                                         <span *ngIf="vmItem.risk == -1">All</span>
                                                         <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
                                                     </div>
