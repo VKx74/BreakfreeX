@@ -1272,7 +1272,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
         } else {
             this._algoService.disableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
-                this.loadUpdatedData();
+                if (this.isInstrumentSelected(item))
+                {
+                    this.enableDisableHITLTrading(item);
+                } else {
+                    this.loadUpdatedData();
+                }
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
                     this._alertManager.info(_.error);
