@@ -99,6 +99,8 @@ export class UserModel {
     public phoneConfirmed: string;
 
     public emailConfirmed: boolean;
+    
+    public createdAt: Date;
 
     public id: string;
 
