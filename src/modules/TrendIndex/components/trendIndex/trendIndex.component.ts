@@ -433,6 +433,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
 
     loading: boolean;
+    emptyResponse: boolean;
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
 
     private _realtimeSubscriptions: { [instrumentHash: string]: Subscription } = {};
@@ -676,28 +677,35 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     protected loadData() {
         this._algoService.getMesaTrendIndexes().subscribe((data) => {
-            for (let item of data) {
-                try {
-                    let exists = false;
-                    for (let existingItem of this.vm) {
-                        if (item.symbol === existingItem.id) {
-                            existingItem.setData(item);
-                            exists = true;
-                            break;
+            if (data) {
+                for (let item of data) {
+                    try {
+                        let exists = false;
+                        for (let existingItem of this.vm) {
+                            if (item.symbol === existingItem.id) {
+                                existingItem.setData(item);
+                                exists = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (!exists) {
-                        let model = new TrendIndexVM();
-                        model.setData(item);
-                        this.vm.push(model);
-                    }
-                } catch (ex) { }
+                        if (!exists) {
+                            let model = new TrendIndexVM();
+                            model.setData(item);
+                            this.vm.push(model);
+                        }
+                    } catch (ex) { }
+                }
+
+                this.rankByGroups();
+                // this.rankByTrending();
             }
 
-            this.rankByGroups();
-            // this.rankByTrending();
-
+            this.emptyResponse = !(this.vm.length);
+            this.loading = false;
+            this._changesDetected = true;
+        }, () => {
+            this.emptyResponse = true;
             this.loading = false;
             this._changesDetected = true;
         });
@@ -1272,8 +1280,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         } else {
             this._algoService.disableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
-                if (this.isInstrumentSelected(item))
-                {
+                if (this.isInstrumentSelected(item)) {
                     this.enableDisableHITLTrading(item);
                 } else {
                     this.loadUpdatedData();

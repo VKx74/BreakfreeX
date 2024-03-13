@@ -1024,6 +1024,18 @@
     font-size: 10px;
     vertical-align: super;
   }
+
+  .maintenance {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 20%;
+    font-size: 12px;
+    flex-direction: column;
+    text-align: center;
+  }
 }
 
 @include themify($themes, true) {
@@ -1262,6 +1274,10 @@
     .text {
       color: themed("valueTextColor");
     }
+  }
+
+  .maintenance {
+    color: themed("valueTextColor");
   }
 
   .risk-cell {
