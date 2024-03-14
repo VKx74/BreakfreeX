@@ -152,11 +152,10 @@ body.Dark-theme.thmFintatechDarkTheme {
     height: 30px;
     display: none;
   }
-    
 }
 
 .navigation {
-  background-color: #121219  !important;
+  background-color: #121219 !important;
   visibility: visible;
   position: absolute;
   width: 100%;
@@ -169,7 +168,6 @@ body.Dark-theme.thmFintatechDarkTheme {
   border: 0px !important;
 }
 
-
 .sidebar-toggle-wrapper {
   position: absolute;
   z-index: 2;
@@ -180,7 +178,6 @@ body.Dark-theme.thmFintatechDarkTheme {
 .navigation .avatar {
   width: 18px !important;
   height: 18px !important;
-
 }
 
 .navigation .avatar-wrapper img.rounded {
@@ -305,7 +302,6 @@ span.bftsvg {
 
 .flex.BFTN img {
   width: 190px;
-
 }
 
 .Dark-theme {
@@ -326,7 +322,6 @@ span.bftsvg {
   width: 170px;
   margin-left: 10px;
 }
-
 
 .bftsvg svg#Layer_1 {
   height: 13px;
@@ -381,7 +376,6 @@ lm_tab.bftn {
 .Light-theme .tcdToolbar-top {
   border-top: 1px solid #f2f2f2;
 }
-
 
 .Dark-theme input.symbolSearch.toolbar-title.tcdInstrumentSearchInputField {
   border-left: 1px solid #06060d;
@@ -573,8 +567,6 @@ lm_tab.bftn {
   line-height: 1.38;
   color: #ffffffd1;
 }
-
-
 
 .Dark-theme .thread-list-item {
   border-bottom: 1px solid #2d2b2b;
@@ -886,27 +878,27 @@ input.timepicker-dial__control.timepicker-dial__item {
   text-align: center;
 }
 
-
 .highlight-backdrop-arrow {
-	// position: relative;
-	background: whitesmoke;
+  // position: relative;
+  background: whitesmoke;
 }
-.highlight-backdrop-arrow:after, .highlight-backdrop-arrow:before {
-	top: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: "";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
+.highlight-backdrop-arrow:after,
+.highlight-backdrop-arrow:before {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
 }
 
 .highlight-backdrop-arrow:before {
-	border-color: rgba(194, 225, 245, 0);
-	border-top-color: whitesmoke;
-	border-width: 10px;
-	margin-left: -10px;
+  border-color: rgba(194, 225, 245, 0);
+  border-top-color: whitesmoke;
+  border-width: 10px;
+  margin-left: -10px;
 }
 
 .price-ticker-container {
@@ -919,8 +911,9 @@ input.timepicker-dial__control.timepicker-dial__item {
   align-items: center;
   margin-top: -4px;
 
-
-  .price-direction, .current-price, .price-change {
+  .price-direction,
+  .current-price,
+  .price-change {
     align-content: center;
     margin-left: 3px;
     display: block;
@@ -939,7 +932,9 @@ input.timepicker-dial__control.timepicker-dial__item {
 }
 
 .Dark-theme {
-  .price-direction, .current-price, .price-change {
+  .price-direction,
+  .current-price,
+  .price-change {
     color: #d5d5dc;
     &.upTrend {
       color: lightgreen;
@@ -951,7 +946,9 @@ input.timepicker-dial__control.timepicker-dial__item {
 }
 
 .Light-theme {
-  .price-direction, .current-price, .price-change {
+  .price-direction,
+  .current-price,
+  .price-change {
     color: #323232;
     &.upTrend {
       color: green;
@@ -962,14 +959,120 @@ input.timepicker-dial__control.timepicker-dial__item {
   }
 }
 
+.sys-notification-popup-container {
+  position: absolute;
+  top: 16px;
+  right: 8px;
+  max-width: 420px;
+  min-width: 200px;
+  min-height: 60px;
+  max-height: 50%;
+  z-index: 10;
+  border-radius: 5px;
+  transition: all 0.22s ease-in-out;
+  background: #27282b;
+
+  cursor: pointer;
+  display: flex;
+
+  .sys-notification-popup-icon {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    font-size: 30px;
+    color: #3d3d3d;
+  }
+  .sys-notification-popup-content {
+    display: flex;
+    flex-direction: column;
+    color: whitesmoke;
+    padding: 10px 10px 10px 0px;
+  }
+  .sys-notification-popup-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+}
+
+.sys-notification-popup-text {
+  * {
+    // color: themed("titleTextColor");
+    // font-family: $primaryFontFamily;
+    font-size: 13px;
+    word-break: break-all;
+  }
+
+  h1 {
+    font-size: 21px;
+  }
+
+  h2 {
+    font-size: 19px;
+  }
+
+  h3 {
+    font-size: 17px;
+  }
+
+  p {
+    font-size: 13px;
+  }
+
+  pre,
+  code {
+    // background: themed("appBackgroundColor");
+    // border: solid 1px themed("appBackgroundColor");
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: monospace;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    margin: 0 0 1em;
+  }
+
+  hr {
+    // border-color: themed("appBackgroundColor");
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding-bottom: 10px;
+  }
+}
+
+// .Dark-theme {
+//   .sys-notification-popup-container {
+//     background: #27282b;
+//   }
+// }
+
+// .Light-theme {
+//   .sys-notification-popup-container {
+//     background: #e0e3eb;
+//   }
+// }
+
 @media (max-width: 768px) {
   .price-ticker-container {
     display: none !important;
   }
 }
 
-
-@-webkit-keyframes fadein-bft_05 {  
+@-webkit-keyframes fadein-bft_05 {
   0% {
     opacity: 0;
   }
