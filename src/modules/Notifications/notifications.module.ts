@@ -1,4 +1,4 @@
-import {Injector, NgModule} from "@angular/core";
+import {Injector, ModuleWithProviders, NgModule} from "@angular/core";
 import {NotificationWidgetComponent} from "./components/notification-widget/notification-widget.component";
 import {TranslateModule} from "@ngx-translate/core";
 import {TranslateServiceFactory} from "Localization";
@@ -11,6 +11,7 @@ import {MarkdownModule} from "../Markdown/markdown.module";
 import {CommonModule} from "@angular/common";
 import {EducationalTipsModule} from "../educational-tips/educational-tips.module";
 import {SharedTranslateService} from "@app/localization/shared.token";
+import { SystemPopUpNotificationsService } from "./services/system-popup-notifications.service";
 
 @NgModule({
     imports: [
@@ -30,6 +31,7 @@ import {SharedTranslateService} from "@app/localization/shared.token";
         NotificationWidgetComponent
     ],
     providers: [
+        SystemPopUpNotificationsService,
         {
             provide: NotificationsTranslateService,
             useFactory: TranslateServiceFactory('notifications'),
@@ -38,4 +40,21 @@ import {SharedTranslateService} from "@app/localization/shared.token";
     ]
 })
 export class NotificationsModule {
+    static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: NotificationsModule,
+            providers: [
+                SystemPopUpNotificationsService
+            ]
+        };
+    }
+
+    static forPopupRoot(): ModuleWithProviders {
+        return {
+            ngModule: NotificationsModule,
+            providers: [
+                SystemPopUpNotificationsService
+            ]
+        };
+    }
 }
