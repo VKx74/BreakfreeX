@@ -53,7 +53,7 @@ export class SystemPopUpNotificationsService {
 
         this._interval = setInterval(() => {
             this.loadData();
-        }, 1000 * 60);
+        }, 1000 * 60 * 5);
     }
 
     stopListening()
