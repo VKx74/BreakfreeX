@@ -57,6 +57,7 @@ import { Console } from "console";
 import { ThemeService } from "@app/services/theme.service";
 import { ChartOptionsStorageService } from "@app/services/chart-options-storage.servic";
 import { SpecialOfferComponent } from "modules/BreakfreeTrading/components/special-offer/special-offer.component";
+import { SystemPopUpNotificationsService } from "modules/Notifications/services/system-popup-notifications.service";
 
 
 @Component({
@@ -171,6 +172,7 @@ export class DashboardComponent {
         private _overlay: Overlay,
         private _themeService: ThemeService,
         private _chartOptionsStorageService: ChartOptionsStorageService,
+        private _systemPopUpNotificationsService: SystemPopUpNotificationsService,
         private _instrumentMappingService: InstrumentMappingService
     ) {
         // this._setRightPanelRestrictions();
@@ -359,6 +361,10 @@ export class DashboardComponent {
 
             this._subscribeToChartOptionsStateChange();
         });
+
+        setTimeout(() => {
+            this._systemPopUpNotificationsService.startListening();
+        }, 1000 * 15);
     }
 
     clearSession() {
@@ -872,7 +878,7 @@ export class DashboardComponent {
             // let day = new Date().getUTCDate();
             // let showSpecialOfferEnd = new Date("Jan 05 2024").getTime();
             // let dateNow = new Date().getTime();
-            
+
             // if (this._localStorageService.get("showSpecialOffer") !== day && showSpecialOfferEnd > dateNow) {
             //     this._showSpecialOffer();
             //     this._localStorageService.set("showSpecialOffer", day);
