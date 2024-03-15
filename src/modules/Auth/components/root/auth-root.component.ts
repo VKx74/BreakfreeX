@@ -38,7 +38,7 @@ export class AuthRootComponent implements AfterViewInit, OnDestroy {
     }
    
     private autoplayVideoMuted(): void {
-        var myVideo = document.getElementById('myVideo') as HTMLVideoElement;
+        const myVideo = document.getElementById('myVideo') as HTMLVideoElement;
         if (myVideo) {
             myVideo.muted = true; // Ensure it's muted
             myVideo.play()
