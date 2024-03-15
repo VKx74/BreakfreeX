@@ -181,9 +181,9 @@
         </div>
         <ng-container *ngIf="emptyResponse; else data_table">
             <div class="maintenance">
-                <div>Service on scheduled maintenance. </div>
-                <div>Trend index will be operational soon. </div>
-                <div>Maintenance will not affect your open positions. </div>
+                <div>Loading Neural Agent Overview...</div>
+                <div>It is good to know that Neural Agent is always running and protecting your positions, even if the neural overview is not available. </div>
+                <div>If you continue to see this issue after 15 minutes, contact support@breakfreetrading.com </div>
             </div>
         </ng-container>
         <ng-template #data_table>
@@ -300,7 +300,7 @@
                                                             <div class="status-runner status-holder"
                                                                 (click)="enableDisableTrading(vmItem)"
                                                                 [ngClass]="{'active-auto-mode': isTradable(vmItem)}" tooltip
-                                                                [matTooltip]="isTradable(vmItem) ? 'Neural Agent is Active' : 'Neural Agent is Working'">
+                                                                [matTooltip]="isTradable(vmItem) ? 'Neural Agent is active' : 'Neural Agent is observing'">
                                                                 <div class="symbolxholder">
                                                                     <div class="containerx" 
                                                                         [ngClass]="{'active-auto-mode': isTradable(vmItem)}">
@@ -327,11 +327,50 @@
                                                                     </span>
                                                                     <ng-template #activeStatus>
                                                                         <div class="NA-state" *ngIf="!isTradable(vmItem)">
-                                                                            Working
+                                                                            Observing
                                                                         </div>
                                                                         <div class="NA-state" *ngIf="isTradable(vmItem)">
                                                                             Active
                                                                         </div>
+
+                                                                        <span class=" marketstateshort"  tooltip
+                                                                        [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'"  >{{vmItem.abbreviatedCurrentMarketState}}
+                                                                        {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
+
+
+                                                        <div class="symbolx statex status-holder hidden"
+                                                        [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)"
+                                                        tooltip
+                                                        [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'">
+                                                      
+
+                                                        <div class="cells-holder">
+                                                            <div class=" strength-cell">
+                                                                <trend-column [extendedMode]="extendedMode"
+                                                                    [Strength]="vmItem.shortGroupStrength"
+                                                                    [StrengthValue]="vmItem.shortGroupStrengthValue"
+                                                                    [TrendPhase]="vmItem.shortGroupPhase"
+                                                                    [VolatilityValue]="vmItem.shortGroupVolatilityValue"
+                                                                    [Duration]="vmItem.shortGroupDuration"></trend-column>
+                                                            </div>
+                                                            <div class="strength-cell">
+                                                                <trend-column [extendedMode]="extendedMode"
+                                                                    [Strength]="vmItem.midGroupStrength"
+                                                                    [StrengthValue]="vmItem.midGroupStrengthValue"
+                                                                    [TrendPhase]="vmItem.midGroupPhase"
+                                                                    [VolatilityValue]="vmItem.midGroupVolatilityValue"
+                                                                    [Duration]="vmItem.midGroupDuration"></trend-column>
+                                                            </div>
+                                                            <div class="  strength-cell">
+                                                                <trend-column [extendedMode]="extendedMode"
+                                                                    [Strength]="vmItem.longGroupStrength"
+                                                                    [StrengthValue]="vmItem.longGroupStrengthValue"
+                                                                    [TrendPhase]="vmItem.longGroupPhase"
+                                                                    [VolatilityValue]="vmItem.longGroupVolatilityValue"
+                                                                    [Duration]="vmItem.longGroupDuration"></trend-column>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                                     </ng-template>
                                                                 </div>
                                                             </div>
@@ -343,6 +382,11 @@
                                                                 </span>
                                                             </div>
                                                         </ng-template>
+
+                                                    </div>
+
+                                                    <div class="trend-side">
+
 
                                                         <div class="status-holder status-runner state"
                                                             *ngIf="vmItem.tradingState == 3">
@@ -356,20 +400,20 @@
                                                         <div class="HITL active status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
                                                             *ngIf="((isInstrumentSelected(vmItem) && vmItem.tradingState == 1) && userAutoTradingInfoData?.useManualTrading)">
-                                                            <span><i class="fa-solid fa-shield-slash"></i></span> HITL On
+                                                            <span><i class="fa-solid fa-stop"></i> Stop</span>
                                                         </div>
                                                         <div class="HITL available status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
                                                             *ngIf="(vmItem.tradingState == 1 && !isInstrumentSelected(vmItem) && userAutoTradingInfoData?.useManualTrading)">
-                                                            <span><i class="fa-solid fa-shield-check"></i></span> HITL Off
+                                                       
+                                                            <span> <i class="fa-solid fa-play"></i> Force Start</span> 
                                                         </div>
                                                         <div class="HITL unavailable status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                            *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  "> HITL N/A
+                                                            *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  "> N/A
                                                         </div>
-                                                    </div>
 
-                                                    <div class="trend-side">
+                                                        
                                                         <div *ngIf="isBotConnected" class="symbolx risk-cell status-holder"
                                                             (click)="setInstrumentRisk(vmItem, $event)" tooltip
                                                             matTooltip="{{vmItem.risk > 0 ? vmItem.risk + '% Risk Allowed ' : 'All'}}">
@@ -377,41 +421,6 @@
                                                                     class="fa-solid fa-shield-check"></i></span>
                                                             <span *ngIf="vmItem.risk == -1">All</span>
                                                             <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
-                                                        </div>
-                                                        <div class="symbolx statex status-holder"
-                                                            [ngClass]="getRelativeStrengthClass(vmItem.totalStrength)"
-                                                            tooltip
-                                                            [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'">
-                                                            <span
-                                                                class="iconx marketstateshort">{{vmItem.abbreviatedCurrentMarketState}}
-                                                                {{(vmItem.totalStrength * 100).toFixed(0)}}%</span>
-
-                                                            <div class="cells-holder">
-                                                                <div class=" strength-cell">
-                                                                    <trend-column [extendedMode]="extendedMode"
-                                                                        [Strength]="vmItem.shortGroupStrength"
-                                                                        [StrengthValue]="vmItem.shortGroupStrengthValue"
-                                                                        [TrendPhase]="vmItem.shortGroupPhase"
-                                                                        [VolatilityValue]="vmItem.shortGroupVolatilityValue"
-                                                                        [Duration]="vmItem.shortGroupDuration"></trend-column>
-                                                                </div>
-                                                                <div class="strength-cell">
-                                                                    <trend-column [extendedMode]="extendedMode"
-                                                                        [Strength]="vmItem.midGroupStrength"
-                                                                        [StrengthValue]="vmItem.midGroupStrengthValue"
-                                                                        [TrendPhase]="vmItem.midGroupPhase"
-                                                                        [VolatilityValue]="vmItem.midGroupVolatilityValue"
-                                                                        [Duration]="vmItem.midGroupDuration"></trend-column>
-                                                                </div>
-                                                                <div class="  strength-cell">
-                                                                    <trend-column [extendedMode]="extendedMode"
-                                                                        [Strength]="vmItem.longGroupStrength"
-                                                                        [StrengthValue]="vmItem.longGroupStrengthValue"
-                                                                        [TrendPhase]="vmItem.longGroupPhase"
-                                                                        [VolatilityValue]="vmItem.longGroupVolatilityValue"
-                                                                        [Duration]="vmItem.longGroupDuration"></trend-column>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

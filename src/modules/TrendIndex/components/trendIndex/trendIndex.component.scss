@@ -521,6 +521,8 @@
     text-align: center;
   }
 
+ 
+
   .symbol-trade-state {
     display: flex;
     justify-content: center;
@@ -586,6 +588,7 @@
   }
   .NA-state {
     display: flex;
+    padding-right:3px;
   }
 
   .NA-state i {
@@ -603,8 +606,8 @@
     padding-right: 0px;
   }
   .statex .marketstateshort {
-    border: 1px solid #504e4e;
-    background: #312b2b;
+    //border: 1px solid #504e4e;
+    //background: #312b2b;
   }
   .containerx {
     position: relative;
@@ -690,11 +693,11 @@
   }
 
   .cube.tradeable {
-    background-color: gold;
+    background-color: #ffffff;
   }
 
   .cube.is-auto-selectedx {
-    background-color: #00dbff;
+    background-color: #ff963b;
   }
 
   .cube.untradeable {
@@ -781,9 +784,9 @@
 
   .status-holder {
     font-weight: 700;
-    text-align: center;
+    text-align: left;
     display: flex;
-    align-items: center;
+    align-items: left;
     justify-content: center;
     max-height: 24px;
     color: #fff;
@@ -830,6 +833,7 @@
 
   .cells-holder {
     display: flex;
+    display: none;
   }
   .execution-side {
     display: flex;
@@ -1014,7 +1018,7 @@
       margin-left: 5px;
       border-radius: 5px;
       background: #2a4867;
-      padding: 1px 4px;
+      padding: 1px 3px;
       font-weight: normal;
     }
   }
@@ -1122,6 +1126,13 @@
     }
   }
 
+  .marketstateshort {
+    border-left: 1px solid #ffffff30 !important;
+    padding-left: 3px;
+    font-size: 9px;
+    display: flex;
+  }
+
   .HITL.active {
     background: themed("HITLActive") !important;
     border: 1px solid themed("HITLActiveBorder");
@@ -1129,11 +1140,11 @@
     column-gap: 3px;
     align-items: center;
     padding: 3px;
-    padding-right: 6px;
+    //padding-right: 6px;
     font-weight: 600;
   }
   .HITL.active span {
-    background: themed("HITLActiveSpan");
+   //background: themed("HITLActiveSpan");
     padding: 0px 3px;
     border-radius: 3px;
   }
@@ -1144,15 +1155,15 @@
     column-gap: 3px;
     align-items: center;
     padding: 3px;
-    padding-right: 6px;
+    //padding-right: 6px;
     font-weight: 600;
     border-radius: 3px;
     border: 1px solid themed("HITLavailableBorder");
   }
 
   .HITL.available span {
-    background: themed("HITLavailablespan");
-    padding: 1px 4px;
+   // background: themed("HITLavailablespan");
+    padding: 1px 3px;
     border-radius: 3px;
   }
 
@@ -1166,7 +1177,7 @@
     padding: 3px 3px;
 
     border-radius: 3px;
-    padding-right: 6px;
+    //padding-right: 6px;
     border: 1px solid themed("statusRunnerHITLBorder");
     transition: all 0.22s ease-in-out;
   }
@@ -1249,7 +1260,7 @@
 
   .iconx {
     padding: 0px 3px;
-    background: themed("trendindextabbg");
+    //background: themed("trendindextabbg");
     border-radius: 3px;
   }
   span.iconx.enabledx {
@@ -1287,7 +1298,7 @@
     column-gap: 3px;
     align-items: center;
     padding: 3px;
-    padding-right: 6px;
+    //padding-right: 6px;
     font-weight: 600;
     border-radius: 3px;
     border: 1px solid #536a52;
