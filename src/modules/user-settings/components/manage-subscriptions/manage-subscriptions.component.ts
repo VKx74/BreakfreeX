@@ -1,11 +1,9 @@
 import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
-import bind from "bind-decorator";
-import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute} from "@angular/router";
-import {IActivityResolverData} from "../../models/models";
 import { ISubscription, PersonalInfoService, IBillingDashboard, IPaymentAccount } from '@app/services/personal-info/personal-info.service';
 import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmModalComponent} from "UI";
 
 @Component({
     selector: 'manage-subscriptions',
@@ -21,10 +19,28 @@ export class ManageSubscriptionsComponent implements OnInit {
         return this._identityService.isLifetimeAccess;
     }
 
-    constructor(private _personalInfoService: PersonalInfoService, private _identityService: IdentityService, private _alertService: AlertService) {
+    constructor(private _personalInfoService: PersonalInfoService, private _dialog: MatDialog, private _identityService: IdentityService, private _alertService: AlertService) {
     }
 
     ngOnInit() {
+    }
+
+    cancelSubscription(sub: ISubscription) {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+              message: `Cancel subscription "${sub.name}"?`,
+              onConfirm: () => {
+                this.loading = true;
+                this._personalInfoService.cancelNowPaymentsSubscription(sub.id).subscribe(() => {
+                    this._alertService.info("Subscription canceled");    
+                    this.loading = false;
+                }, (error) => {
+                    this._alertService.error("Failed to cancel subscription");
+                    this.loading = false;
+                });
+              }
+            }
+          });
     }
 
     manageSubscription(id: string) {

@@ -35,7 +35,7 @@
         </div>
         <div class="flex account-column">
           <div class="flex btns">
-            <button class="crypto-button crypto-button_success w-100"
+            <button class="crypto-button crypto-button_success w-100" *ngIf="!(account.isNowPayment)"
               (click)="manageSubscription(account.id)">{{"profileInfo.manageSubscriptions" | translate}}
             </button>
           </div>
@@ -55,13 +55,23 @@
             {{sub.name}}
           </div>
           <div class="flex price optional">
-            {{sub.price.toFixed(2)}}({{sub.currency}})
+            <ng-container *ngIf="account.isNowPayment; else stripe_price">
+              {{(sub.price * 100).toFixed(2)}}({{sub.currency}})
+            </ng-container>
+            <ng-template #stripe_price>
+              {{sub.price.toFixed(2)}}({{sub.currency}})
+            </ng-template>
           </div>
           <div class="flex interval optional">
             {{sub.intervalCount}} {{sub.interval}}(s)
           </div>
           <div class="flex date optional">
             {{sub.created.toDateString()}}
+          </div>
+          <div class="flex cancel-иет optional" *ngIf="account.isNowPayment">
+            <button class="crypto-button crypto-button_success"
+              (click)="cancelSubscription(sub)">{{"profileInfo.cancel" | translate}}
+            </button>
           </div>
         </div>
         <div *ngIf="subscriptions != null && getSubscriptions(account).length == 0" class="flex no-content">

@@ -48,6 +48,8 @@
     "activeTradingFeedback": "Enable active TradeGuard feedback",
     "changeUsername": "Change username",
     "manageSubscriptions": "Manage Subscriptions",
+    "cancelSubscription": "Cancel Subscription",
+    "cancel": "Cancel",
     "accountCreated": "Creation Time",
     "accountName": "Name",
     "accountDescription": "Description",

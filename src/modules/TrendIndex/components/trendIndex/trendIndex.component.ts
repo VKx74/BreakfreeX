@@ -827,9 +827,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
                     this.autoSelected--;
                 }
             }
-            if (this.isInstrumentSelected(v)) {
-                this.hitlSelected++;
-            }
+            // if (this.isInstrumentSelected(v)) {
+            //     this.hitlSelected++;
+            // }
+        }
+
+        if (this._userAutoTradingInfoData && this._userAutoTradingInfoData.markets) {
+            this.hitlSelected = this._userAutoTradingInfoData.markets.length;
         }
     }
 
@@ -1198,30 +1202,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return;
         }
 
-        let forDeselect = [];
-        for (let v of this.vm) {
-            let isSelected = this.isInstrumentSelected(v);
-            if (isSelected) {
+        if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.markets || !this._userAutoTradingInfoData.markets.length) {
+            return;
+        }
 
-                let symbol = v.symbol.replace("_", "").toUpperCase();
-                forDeselect.push(symbol);
+        this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, this._userAutoTradingInfoData.markets.map((_) => _.symbol)).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to disable trading instrument");
             }
-        }
-
-        if (forDeselect.length) {
-            this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, forDeselect).subscribe((data) => {
-                this._userAutoTradingInfoData = data;
-                this.loadUpdatedData();
-            }, (_) => {
-                if (_ && _.status === 403 && _.error) {
-                    this._alertManager.info(_.error);
-                } else {
-                    this._alertManager.info("Failed to disable trading instrument");
-                }
-                this.loading = false;
-                this._changesDetected = true;
-            });
-        }
+            this.loading = false;
+            this._changesDetected = true;
+        });
     }
     enableDisableHITLTrading(item: TrendIndexVM) {
         if (!this.isBotConnected) {
@@ -1284,7 +1280,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
         } else {
             this._algoService.disableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
-                this.loadUpdatedData();
+                if (this.isInstrumentSelected(item)) {
+                    this.enableDisableHITLTrading(item);
+                } else {
+                    this.loadUpdatedData();
+                }
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
                     this._alertManager.info(_.error);

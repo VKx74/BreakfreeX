@@ -49,6 +49,8 @@
     "phoneNumber": "Номер телефону",
     "changeUsername": "Змінити юзернейм",
     "manageSubscriptions": "Керування підписками",
+    "cancelSubscription": "Вмдалити підписку",
+    "cancel": "Вмдалити",
     "accountCreated": "Час створення",
     "accountName": "Назва",
     "accountDescription": "Опис",

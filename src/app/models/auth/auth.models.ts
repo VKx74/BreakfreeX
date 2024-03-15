@@ -92,6 +92,8 @@ export class UserModel {
 
     public email: string;
 
+    public createdAt: Date;
+
     public stripeId: string;
 
     public phone: string;
@@ -99,8 +101,6 @@ export class UserModel {
     public phoneConfirmed: string;
 
     public emailConfirmed: boolean;
-    
-    public createdAt: Date;
 
     public id: string;
 
