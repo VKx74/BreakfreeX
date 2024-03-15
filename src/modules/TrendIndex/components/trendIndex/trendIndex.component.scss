@@ -1260,7 +1260,7 @@
 
   .iconx {
     padding: 0px 3px;
-    //background: themed("trendindextabbg");
+    background: themed("trendindextabbg");
     border-radius: 3px;
   }
   span.iconx.enabledx {
@@ -1296,14 +1296,14 @@
   }
 
   .risk-cell {
-    background: #312b2b !important;
+    background: #304a2f !important;
     display: flex;
     align-items: center;
     padding: 3px;
     //padding-right: 6px;
     font-weight: 600;
     border-radius: 3px;
-    border: 1px solid #504e4e;
+    border: 1px solid #536a52;
     transition: all 0.22s ease-in-out;
     
     &:hover {
