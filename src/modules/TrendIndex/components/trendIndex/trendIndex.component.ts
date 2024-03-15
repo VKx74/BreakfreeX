@@ -696,10 +696,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         }
                     } catch (ex) { }
                 }
-
-                this.rankByGroups();
-                // this.rankByTrending();
             }
+
+            this.rankByGroups();
+            // this.rankByTrending();
 
             this.emptyResponse = !(this.vm.length);
             this.loading = false;
