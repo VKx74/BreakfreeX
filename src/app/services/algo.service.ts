@@ -316,6 +316,7 @@ export interface IBFTAAlgoResponseV3 {
     resistance_prob: number;
     support_ext_prob: number;
     resistance_ext_prob: number;
+    sl_price: number;
     id: any;
     sar: SaRResponse[];
     sar_prediction: SaRResponse[];
@@ -702,7 +703,6 @@ export class AlgoService {
 
     calculateV3(data: IBFTAlgoParameters): Observable<IBFTAAlgoResponseV3> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}calculate_v3`, data).pipe(map(this._decrypt)).pipe(map((_) => {
-            // console.log(_);
             let support_prob = _['support_prob'];
             let resistance_prob = _['resistance_prob'];
             let support_ext_prob = _['support_ext_prob'];
@@ -722,6 +722,9 @@ export class AlgoService {
                 _['upper_2_prob'] = ".[AI.Neuron(Val)]";
                 _['upper_3_prob'] = ".[AI.Neuron(" + (resistance_ext_prob * 100).toFixed() + "%)]";
             }
+
+            // hide general SL printing on chart
+            _.sl_price = undefined;
 
             return _;
         }));
