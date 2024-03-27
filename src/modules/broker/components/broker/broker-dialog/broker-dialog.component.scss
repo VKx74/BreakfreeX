@@ -15,20 +15,15 @@
       margin-top:0px !important;
     }
   }
-  .policy-agreement-wrapper {
-    margin-top: 20px;
-    display: inline-flex;
-    align-items: center;
-
-    input[type=checkbox] {
-      margin: 0 10px 0 0;
-    }
+  .broker-connection-footer {
+    display: flex;
+    font-size: 14px;
+    flex-direction: column;
 
     label, a {
-      font-size: 0.85em;
       font-family: $primaryFontFamily;
-
     }
+    
     a {
       text-decoration: none;
       color: #3d61cc;
@@ -37,10 +32,26 @@
     }
   }
 
+  .add-broker-form {
+    margin-top: 5px;
+    display: flex;
+    font-size: 0.9em;
+  }
+
+  .policy-agreement-wrapper {
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+
+    input[type=checkbox] {
+      margin: 0 10px 0 0;
+    }
+  }
+
   @media (max-width: 768px) { 
-    .policy-agreement-wrapper {
+    .broker-connection-footer {
       display: inline-block;
-      font-size: 14px;
+      font-size: 12px;
     }
   }
 
@@ -56,7 +67,7 @@
     color: themed('valueTextColor');
   }
 
-  .policy-agreement-wrapper {
+  .broker-connection-footer {
     label {
       color: themed('valueTextColor');
     }
