@@ -22,18 +22,17 @@ export class TradeGuardTrackingService {
 
         this._initialized = true;
 
-        setInterval(() => {
-            this._settingsStorageService.getSettings().subscribe((_) => {
-                if (_.ActiveTradingFeedback) {
-                    this._checkTradeGuardItems();
-                }
-            });
-        }, this._timeout);
+        // setInterval(() => {
+        //     this._settingsStorageService.getSettings().subscribe((_) => {
+        //         if (_.ActiveTradingFeedback) {
+        //             this._checkTradeGuardItems();
+        //         }
+        //     });
+        // }, this._timeout);
     }
 
     private _checkTradeGuardItems() {
         const tradeGuardItems = this._tradeGuardService.GetRiskOverview();
-
 
         if (tradeGuardItems) {
             if (tradeGuardItems.Items.length > this._count || tradeGuardItems.Score < this._score) {

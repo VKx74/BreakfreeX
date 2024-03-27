@@ -92,6 +92,8 @@ export class UserModel {
 
     public email: string;
 
+    public createdAt: Date;
+
     public stripeId: string;
 
     public phone: string;

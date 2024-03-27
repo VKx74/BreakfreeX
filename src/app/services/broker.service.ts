@@ -63,8 +63,8 @@ export class BrokerService {
 
     public get isTradingAllowed(): boolean {
         // show MT Bridge for all users even without subscriptions
-        return true;
-        // return this._identityService.isAuthorizedCustomer;
+        // return true;
+        return this._identityService.isAuthorizedCustomer;
     }
     
     public get isMappingLoaded(): boolean {

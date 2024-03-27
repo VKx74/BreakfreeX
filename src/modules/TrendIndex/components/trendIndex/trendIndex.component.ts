@@ -433,6 +433,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     @ViewChild(DataTableComponent, { static: false }) dataTableComponent: DataTableComponent;
 
     loading: boolean;
+    emptyResponse: boolean;
     instrumentsPriceHistory: { [symbolName: string]: number[] } = {};
 
     private _realtimeSubscriptions: { [instrumentHash: string]: Subscription } = {};
@@ -676,28 +677,35 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     protected loadData() {
         this._algoService.getMesaTrendIndexes().subscribe((data) => {
-            for (let item of data) {
-                try {
-                    let exists = false;
-                    for (let existingItem of this.vm) {
-                        if (item.symbol === existingItem.id) {
-                            existingItem.setData(item);
-                            exists = true;
-                            break;
+            if (data) {
+                for (let item of data) {
+                    try {
+                        let exists = false;
+                        for (let existingItem of this.vm) {
+                            if (item.symbol === existingItem.id) {
+                                existingItem.setData(item);
+                                exists = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (!exists) {
-                        let model = new TrendIndexVM();
-                        model.setData(item);
-                        this.vm.push(model);
-                    }
-                } catch (ex) { }
+                        if (!exists) {
+                            let model = new TrendIndexVM();
+                            model.setData(item);
+                            this.vm.push(model);
+                        }
+                    } catch (ex) { }
+                }
             }
 
             this.rankByGroups();
             // this.rankByTrending();
 
+            this.emptyResponse = !(this.vm.length);
+            this.loading = false;
+            this._changesDetected = true;
+        }, () => {
+            this.emptyResponse = true;
             this.loading = false;
             this._changesDetected = true;
         });
@@ -819,9 +827,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
                     this.autoSelected--;
                 }
             }
-            if (this.isInstrumentSelected(v)) {
-                this.hitlSelected++;
-            }
+            // if (this.isInstrumentSelected(v)) {
+            //     this.hitlSelected++;
+            // }
+        }
+
+        if (this._userAutoTradingInfoData && this._userAutoTradingInfoData.markets) {
+            this.hitlSelected = this._userAutoTradingInfoData.markets.length;
         }
     }
 
@@ -1190,30 +1202,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return;
         }
 
-        let forDeselect = [];
-        for (let v of this.vm) {
-            let isSelected = this.isInstrumentSelected(v);
-            if (isSelected) {
+        if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.markets || !this._userAutoTradingInfoData.markets.length) {
+            return;
+        }
 
-                let symbol = v.symbol.replace("_", "").toUpperCase();
-                forDeselect.push(symbol);
+        this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, this._userAutoTradingInfoData.markets.map((_) => _.symbol)).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to disable trading instrument");
             }
-        }
-
-        if (forDeselect.length) {
-            this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, forDeselect).subscribe((data) => {
-                this._userAutoTradingInfoData = data;
-                this.loadUpdatedData();
-            }, (_) => {
-                if (_ && _.status === 403 && _.error) {
-                    this._alertManager.info(_.error);
-                } else {
-                    this._alertManager.info("Failed to disable trading instrument");
-                }
-                this.loading = false;
-                this._changesDetected = true;
-            });
-        }
+            this.loading = false;
+            this._changesDetected = true;
+        });
     }
     enableDisableHITLTrading(item: TrendIndexVM) {
         if (!this.isBotConnected) {
@@ -1276,7 +1280,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
         } else {
             this._algoService.disableTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
-                this.loadUpdatedData();
+                if (this.isInstrumentSelected(item)) {
+                    this.enableDisableHITLTrading(item);
+                } else {
+                    this.loadUpdatedData();
+                }
             }, (_) => {
                 if (_ && _.status === 403 && _.error) {
                     this._alertManager.info(_.error);
@@ -1509,8 +1517,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 title: instrumentVM.symbol + " risk allocation"
             }
         }).afterClosed().subscribe((value) => {
-            if (!Number.isFinite(value))
-            {
+            if (!Number.isFinite(value)) {
                 return;
             }
             this.changeRiskForInstrument(instrumentVM.symbol, value);
@@ -1531,8 +1538,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 title: "Risk Allocation"
             }
         }).afterClosed().subscribe((value) => {
-            if (!Number.isFinite(value))
-            {
+            if (!Number.isFinite(value)) {
                 return;
             }
             this.changeRiskForAccount(value > 0 ? value : 30);
@@ -1553,8 +1559,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 title: "Default Risk Per Market"
             }
         }).afterClosed().subscribe((value) => {
-            if (!Number.isFinite(value))
-            {
+            if (!Number.isFinite(value)) {
                 return;
             }
             this.changeDefaultMarketRisk(value > 0 ? value : 12);

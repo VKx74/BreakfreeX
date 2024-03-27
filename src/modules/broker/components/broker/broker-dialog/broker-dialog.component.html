@@ -24,14 +24,24 @@
                     <binance-broker-login [policyAccepted]="policyAccepted" *ngSwitchCase="EBrokerInstance.BinanceFuturesCOIN" [brokerInstance]="EBrokerInstance.BinanceFuturesCOIN">
                     </binance-broker-login>
                 </ng-container>
-                <div class="policy-agreement-wrapper">
-                    <span>
-                        <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
-                        <label for="accept-broker-policy">I accept the</label>
-                    </span>
-                    <span>
-                        <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
-                    </span>
+                <div class="broker-connection-footer">
+                    <div class="add-broker-form" *ngIf="brokerType == EBrokerInstance.MT5 || brokerType == EBrokerInstance.MT4">
+                        <span>
+                            <label>Can`t find broker?</label>
+                        </span>
+                        <span>
+                            <a href="https://feedback.breakfreetrading.com/metabridge-beta" target="_blank">Fill form with broker details and we will add it</a>
+                        </span>
+                    </div>
+                    <div class="policy-agreement-wrapper">
+                        <span>
+                            <input type="checkbox" id="accept-broker-policy" [(ngModel)]="policyAccepted">
+                            <label for="accept-broker-policy">I accept the</label>
+                        </span>
+                        <span>
+                            <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
+                        </span>
+                    </div>
                 </div>
             </div>
             <ng-template #outOfAccess>

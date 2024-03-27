@@ -35,6 +35,9 @@
         <data-table-header-cell columnName="id" [columnWidth]="250">
             Id
         </data-table-header-cell>
+        <data-table-header-cell columnName="createdAt">
+            Created At
+        </data-table-header-cell>
         <data-table-header-cell columnName="email">
             Email
         </data-table-header-cell>
@@ -75,6 +78,10 @@
 
         <data-table-cell columnName="id">
             <ng-template let-item>{{item.user.id}}</ng-template>
+        </data-table-cell>
+
+        <data-table-cell columnName="createdAt">
+            <ng-template let-item>{{item.user.createdAt | date: 'short'}}</ng-template>
         </data-table-cell>
 
         <data-table-cell columnName="email">

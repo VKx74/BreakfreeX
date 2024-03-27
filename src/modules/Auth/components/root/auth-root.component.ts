@@ -29,10 +29,20 @@ export class AuthRootComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-      //  this.p5Instance = new p5(sketch);
+        // Attempt to autoplay the video muted as a backup solution
+        this.autoplayVideoMuted();
     }
 
     ngOnDestroy() {
      //   this.p5Instance.remove();
+    }
+   
+    private autoplayVideoMuted(): void {
+        const myVideo = document.getElementById('myVideo') as HTMLVideoElement;
+        if (myVideo) {
+            myVideo.muted = true; // Ensure it's muted
+            myVideo.play()
+                .catch(error => console.error("Video play failed:", error));
+        }
     }
 }
