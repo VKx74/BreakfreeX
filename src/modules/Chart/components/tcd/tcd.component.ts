@@ -247,6 +247,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart = $(config.chartContainer).TradingChartDesigner(config);
             this.chart.showInstrumentWatermark = false;
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
+            this.chart.isAuthorizedCustomer = this._identity.isAuthorizedCustomer;
 
             if (state && state.chartState) {
                 // locale from app
