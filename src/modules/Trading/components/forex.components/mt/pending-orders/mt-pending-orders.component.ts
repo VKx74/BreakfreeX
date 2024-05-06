@@ -43,6 +43,11 @@ export class MTPendingOrdersComponent extends MTItemsComponent<MTOrder> {
         return item.Id;
     }
 
+    selectItem(item: MTOrder) {
+        super.selectItem(item);
+        this._broker.setActiveOrder(item.Id);
+    }
+
     protected collectionUpdated() {
         this.refresh();
     }
