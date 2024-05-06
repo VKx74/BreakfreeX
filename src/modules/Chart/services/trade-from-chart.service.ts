@@ -106,6 +106,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
     private _positionsUpdatedSubscription: Subscription;
     private _positionsParametersUpdatedSubscription: Subscription;
     private _onOrdersParametersUpdated: Subscription;
+    private _onActiveOrderIdUpdated: Subscription;
     private _orderConfig: IPlaceOrder;
     private _decimals: number = 5;
     private _prevSymbol: string;
@@ -243,6 +244,12 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
                 this._onOrdersParametersUpdated.unsubscribe();
                 this._onOrdersParametersUpdated = null;
             }
+        }
+
+        if (!this._onActiveOrderIdUpdated) {
+            this._onActiveOrderIdUpdated = this._brokerService.activeOrderIdState$.subscribe(() => {
+                this.handleActiveOrderChanged();
+            });
         }
 
         if (this._isChartInitialized()) {
@@ -526,9 +533,9 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
 
         this._positionStateDescription = [];
 
-        if (this._chart.isRestrictedMode) {
-            this._chart.refreshAsync();
-        }
+        // if (!this._chart.isRestrictedMode) {
+        //     this._chart.refreshAsync();
+        // }
     }
 
     public GetOrderSize(priceDiff: number, risk: number, balance: number, callback: (size: any) => void, skipMapping: boolean = false): void {
@@ -560,6 +567,10 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (this._onOrdersParametersUpdated) {
             this._onOrdersParametersUpdated.unsubscribe();
             this._onOrdersParametersUpdated = null;
+        }
+        if (this._onActiveOrderIdUpdated) {
+            this._onActiveOrderIdUpdated.unsubscribe();
+            this._onActiveOrderIdUpdated = null;
         }
 
         this._chart = null;
@@ -864,6 +875,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         } else {
             sl_shape.boxText = `SL`;
         }
+
+        sl_shape.highlight = order.Id === this._brokerService.activeOrderId;
     }
 
     private setShapeTP(tp_shape: TradingChartDesigner.ShapeOrderLine, order: IOrder) {
@@ -873,6 +886,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         } else {
             tp_shape.boxText = `TP`;
         }
+
+        tp_shape.highlight = order.Id === this._brokerService.activeOrderId;
     }
 
     private setShapePriceAndBox(shape: TradingChartDesigner.ShapeOrderLine, order: IOrder) {
@@ -891,6 +906,8 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (order.Type === OrderTypes.Stop) {
             shape.boxText = `Stop sell: ${p}`;
         }
+
+        shape.highlight = order.Id === this._brokerService.activeOrderId;
     }
 
     private updatePositionShape(shape: TradingChartDesigner.ShapeSimpleTrade, order: IOrder & IOrderRisk) {
@@ -1105,6 +1122,35 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
     }
 
+    private handleActiveOrderChanged() {
+        if (!this._isChartInitialized()) {
+            return;
+        }
+
+        for (const shape of this._chart.primaryPane.shapes) {
+            if (shape instanceof TradingChartDesigner.ShapeOrderLine) {
+                const orderLine = shape as TradingChartDesigner.ShapeOrderLine;
+
+                if (!this._brokerService.activeOrderId) {
+                    orderLine.highlight = false;
+                    continue;    
+                }
+
+                const orderId =  Number(orderLine.lineId);
+                orderLine.highlight = orderId === this._brokerService.activeOrderId;
+                if (orderLine.highlight) {
+                    continue;
+                }
+
+                const slId = `sl_${this._brokerService.activeOrderId.toString()}`;
+                const tpId = `tp_${this._brokerService.activeOrderId.toString()}`;
+                orderLine.highlight = slId === orderLine.lineId || tpId === orderLine.lineId;
+            }
+        }
+
+        this._chart.refreshAsync();
+    }
+
     private handleOrdersParametersChanged(orders: IOrder[]) {
         if (!this._isChartInitialized()) {
             return;
@@ -1148,7 +1194,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         }
         this._chart.primaryPane.freezed = false;
 
-        // if (updateNeeded && this._chart.isRestrictedMode) {
+        // if (updateNeeded) {
         //     this._chart.refreshAsync();
         // }
     }

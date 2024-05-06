@@ -42,4 +42,9 @@ export class MTOpenOrdersComponent extends MTItemsComponent<MTOrder> {
     protected collectionUpdated() {
         this.refresh();
     }
+    
+    selectItem(item: MTOrder) {
+        super.selectItem(item);
+        this._broker.setActiveOrder(item.Id);
+    }
 }

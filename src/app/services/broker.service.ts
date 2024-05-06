@@ -32,7 +32,14 @@ export class BrokerService {
     private _activeState: IBrokerServiceState = {};
     private _brokerInitializationState$ = new BehaviorSubject<boolean>(null);
     public brokerInitializationState$ = this._brokerInitializationState$.asObservable();
+    
+    private _activeOrderIdState$ = new BehaviorSubject<number>(null);
+    public activeOrderIdState$ = this._activeOrderIdState$.asObservable();
 
+    get activeOrderId(): number {
+        return this._activeOrderIdState$.value;
+    } 
+    
     get isInitialized(): boolean {
         return this._brokerInitializationState$.value;
     }
@@ -299,6 +306,15 @@ export class BrokerService {
 
     public setBrokerInitializationState(state = true) {
         this._brokerInitializationState$.next(state);
+    }
+    
+    public setActiveOrder(id: number): void {
+        if (this.activeOrderId === id) {
+            this._activeOrderIdState$.next(null);
+        } else {
+            this._activeOrderIdState$.next(id);
+        }
+        console.log(this.activeOrderId);
     }
 
     private _connectDefaultAccount(broker: EBrokerInstance, initData: any): Observable<ActionResult> {
