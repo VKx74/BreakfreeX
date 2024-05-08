@@ -10,11 +10,14 @@
   <ng-template #subscriptions>
     <div class="account-row flex" *ngFor="let account of accounts">
       <div class="flex basic-row form-unit__label">
-        <div class="flex account-column header">
+        <div class="flex account-column header optional">
           {{"profileInfo.accountCreated" | translate}}
         </div>
         <div class="flex account-column header form-unit__label optional">
           {{"profileInfo.accountName" | translate}}
+        </div>
+        <div class="flex account-column header form-unit__label">
+          {{"profileInfo.email" | translate}}
         </div>
         <div class="flex account-column header form-unit__label optional">
           {{"profileInfo.accountDescription" | translate}}
@@ -24,11 +27,14 @@
       </div>
 
       <div class="flex basic-row">
-        <div class="flex account-column">
+        <div class="flex account-column optional">
           {{account.created * 1000 | date}}
         </div>
         <div class="flex account-column optional">
           {{account.name || "-"}}
+        </div>
+        <div class="flex account-column">
+          {{account.email || "-"}}
         </div>
         <div class="flex account-column optional">
           {{account.description || "-"}}
