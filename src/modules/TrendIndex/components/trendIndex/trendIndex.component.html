@@ -373,7 +373,8 @@
 
 
                                                         <div class="status-holder status-runner state"
-                                                            *ngIf="vmItem.tradingState == 3">
+                                                            *ngIf="vmItem.tradingState == 3" tooltip
+                                                            matTooltip="Capitulation">
                                                             <div class="symbolxholder">
                                                                 <div class="symbol-trade-state">
                                                                     <i class=" fa fa-heart-pulse"></i>
@@ -394,7 +395,8 @@
                                                         </div>
                                                         <div class="HITL unavailable status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
-                                                            *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  "> N/A
+                                                            *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  "> 
+                                                            <span><i class="fa-solid fa-stop"></i> Stop</span>
                                                         </div>
 
                                                         
