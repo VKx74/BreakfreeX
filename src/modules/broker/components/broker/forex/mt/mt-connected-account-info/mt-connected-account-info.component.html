@@ -1,9 +1,11 @@
 <div class="accountInfo">
-    <data-table [rows]="filteredAccounts" [selectable]="true" [allowColumnsVisibilityChange]="false" [expandOnClick]="false"
-        [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)">
+    <data-table [rows]="filteredAccounts" [selectable]="true" [allowColumnsVisibilityChange]="false"
+        [expandOnClick]="false" [selectedRow]="selectedItem" (onRowSelect)="selectItem($event)">
         <data-table-header-cell columnName="State" [columnWidth]="1" [sortable]="false"></data-table-header-cell>
-        <data-table-header-cell columnName="Account" [sortable]="true">{{'broker.account' | translate}}</data-table-header-cell>
-        <data-table-header-cell columnName="Server" [sortable]="false">{{'broker.server' | translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Account" [sortable]="true">{{'broker.account' |
+            translate}}</data-table-header-cell>
+        <data-table-header-cell columnName="Server" [sortable]="false">{{'broker.server' |
+            translate}}</data-table-header-cell>
         <data-table-header-cell columnName="Close" [sortable]="false" [columnWidth]="32"></data-table-header-cell>
 
         <data-table-cell columnName="State">
@@ -11,8 +13,12 @@
                 <div class="color-column" [ngClass]="{'active': isActiveAccount(item)}"></div>
             </ng-template>
         </data-table-cell>
-        <data-table-cell columnName="Account"><ng-template let-item>{{item.account}}</ng-template></data-table-cell>
-        <data-table-cell columnName="Server"><ng-template let-item>{{item.server}}</ng-template></data-table-cell>
+        <data-table-cell columnName="Account"><ng-template let-item>
+                <span [ngClass]="{'active-broker': isActiveAccount(item)}">{{item.account}}</span>
+            </ng-template></data-table-cell>
+        <data-table-cell columnName="Server"><ng-template let-item>
+                <span [ngClass]="{'active-broker': isActiveAccount(item)}">{{item.server}}</span>
+            </ng-template></data-table-cell>
 
         <data-table-cell columnName="Close">
             <ng-template let-item>
@@ -23,6 +29,6 @@
                 </div>
             </ng-template>
         </data-table-cell>
-       
+
     </data-table>
 </div>

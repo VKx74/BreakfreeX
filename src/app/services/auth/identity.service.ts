@@ -22,6 +22,7 @@ export class IdentityService {
     private readonly _tokenKey = 'QsYnIwf';
     private readonly _guestTokenKey = 'GsYnIwf';
     private readonly _isRemember = 'QsYnRem';
+    private readonly _defaultAutoTradingAccountKey = 'DefTrAcct';
     private readonly _defaultExpirationCookieTime = 12 * 60; // 12hours
     private readonly _defaultMaxExpirationCookieTime = 24 * 60 * 365; // 1 year
 
@@ -52,8 +53,10 @@ export class IdentityService {
 
     private _isAuthorized$ = new BehaviorSubject<boolean>(false);
     private _myTradingAccount$ = new BehaviorSubject<string>("");
+    private _myTradingAccounts$ = new BehaviorSubject<string[]>([]);
     isAuthorizedChange$: Observable<boolean>;
     myTradingAccount$: Observable<string>;
+    myTradingAccounts$: Observable<string[]>;
 
     // get isGuestMode(): SubscriptionType {
     //     return this._isGuestMode;
@@ -117,6 +120,10 @@ export class IdentityService {
 
     get myTradingAccount(): string {
         return this._myTradingAccount$.value;
+    }
+
+    get myTradingAccounts(): string[] {
+        return this._myTradingAccounts$.value;
     }
 
     private get _isTrial(): boolean {
@@ -289,6 +296,7 @@ export class IdentityService {
         );
 
         this.myTradingAccount$ = this._myTradingAccount$;
+        this.myTradingAccounts$ = this._myTradingAccounts$;
     }
 
     signInWithThirdPartyProvider(model: SignInWithThirdPartyRequestModel): Observable<any> {
@@ -506,15 +514,31 @@ export class IdentityService {
     }
 
     public updateMyAutoTradingAccount() {
+        let defaultAutoTradingAccount = this._coockieService.getCookie(this._defaultAutoTradingAccountKey);
+
         this._authService.getMyAutoTradingAccount().subscribe((accts) => {
-            if (accts && accts[0] && accts[0].accountId && accts[0].isActive) {
-                this._myTradingAccount$.next(accts[0].accountId);
-            } else if (this.myTradingAccount) {
-                this._myTradingAccount$.next("");
+            this._myTradingAccounts$.next(accts.map((_) => _.accountId));
+            if (this.myTradingAccounts && this.myTradingAccounts.length) {
+                if (!this.myTradingAccount || this.myTradingAccounts.indexOf(this.myTradingAccount) === -1) {
+                    if (!defaultAutoTradingAccount || this.myTradingAccounts.indexOf(defaultAutoTradingAccount) === -1) {
+                        this.setMyAutoTradingAccount(this.myTradingAccounts[0]);
+                    } else {
+                        this.setMyAutoTradingAccount(defaultAutoTradingAccount);
+                    }
+                }
+            } else {
+                this.setMyAutoTradingAccount("");
             }
         }, (error) => {
             console.error("Failed to load trading accounts info");
         });
+    }
+
+    public setMyAutoTradingAccount(accountId: string) {
+        if (this.myTradingAccount !== accountId) {
+            this._coockieService.setCookie(this._defaultAutoTradingAccountKey, accountId, this._defaultMaxExpirationCookieTime);
+            this._myTradingAccount$.next(accountId);
+        }
     }
 
     public insert(token: string, refreshToken: string): boolean {
@@ -591,6 +615,7 @@ export class IdentityService {
         this._coockieService.deleteCookie(this._refreshTokenKey);
         this._coockieService.deleteCookie(this._guestTokenKey);
         this._coockieService.deleteCookie(this._tokenKey);
+        this._coockieService.deleteCookie(this._defaultAutoTradingAccountKey);
     }
 
     private _setCookies(token: string, refreshToken: string, rememberUser?: boolean) {

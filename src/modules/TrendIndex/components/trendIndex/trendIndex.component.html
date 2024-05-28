@@ -12,8 +12,23 @@
 
             <div class="neuralagent header">
                 <div class="header-left-side">
-                    <div class="account-id">Neural Agent
-                        <span *ngIf="isBotConnected" class="mobilehiddenacc">#{{myAutoTradingAccount}}</span>
+                    <div class="account-id">
+                        <mat-form-field floatLabel="never" class="crypto-select bft-form-select">
+                            <mat-select (selectionChange)="accountChanged($event)" [value]="myAutoTradingAccount" placeholder="Select Account">
+                                <mat-option *ngFor="let option of myAutoTradingAccounts" [value]="option">
+                                    <div>
+                                        Neural Agent <span class="mobilehiddenacc">#{{option}}</span>
+                                    </div>
+                                </mat-option>
+                                <!-- <hr *ngIf="myAutoTradingAccounts?.length > 0" class="trend-index-dd-separator" /> -->
+                                <mat-option (click)="manageAccounts($event)">
+                                    <div>
+                                        <span><i class="fa-solid fa-edit"></i></span>
+                                        <span class="manage-auto-trading-account-text">Manage Accounts</span>
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                     <span (click)="changeBotEnabledForAccount()" class="change-trading-mode" *ngIf="isBotConnected">
                         <div class="trading-enabled">

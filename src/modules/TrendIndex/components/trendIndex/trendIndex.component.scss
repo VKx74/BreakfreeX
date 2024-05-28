@@ -1040,6 +1040,11 @@
     flex-direction: column;
     text-align: center;
   }
+
+}
+
+.manage-auto-trading-account-text {
+  margin-left: 10px;
 }
 
 @include themify($themes, true) {

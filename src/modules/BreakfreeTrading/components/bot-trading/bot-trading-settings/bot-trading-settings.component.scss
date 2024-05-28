@@ -28,7 +28,9 @@
     display: flex;
     row-gap: 3px;
     column-gap: 13px;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 
   a.NA2BETA {
@@ -42,11 +44,9 @@
     justify-content: space-around;
     align-items: stretch;
     flex-wrap: wrap;
-    row-gap: 20px;
-    padding: 15px;
+    row-gap: 5px;
   }
   .btn-wrapper {
-    margin-top: 32px;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -63,7 +63,7 @@
   }
 
   .value-text {
-    margin: 12px 0px;
+    margin-bottom: 12px;
   }
 
   /deep/ {
@@ -74,20 +74,12 @@
     }
   }
 
-  .value-account {
-    display: flex;
-    flex-direction: row;
-    row-gap: 6px;
-    align-items: center;
-    column-gap: 6px;
-  }
-
   .value-account-id {
     font-size: 14px;
     font-weight: 600;
   }
 
-  .value-account-state {
+  .value-account-state, .value-account-selection {
     font-size: 12px;
     font-weight: 400;
   }
@@ -99,7 +91,6 @@
   .poilicy-profit-agreement,
   .liability-waiver-agreement {
     margin-bottom: 12px;
-    // display: inline-flex;
     align-items: center;
 
     input[type="checkbox"] {
@@ -111,7 +102,7 @@
 
     label,
     a {
-      font-size: 14px;
+      font-size: 12px;
     }
     a {
       text-decoration: none;
@@ -179,20 +170,11 @@
       text-decoration: none;
     }
   }
-  .detach {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    row-gap: 6px;
-    column-gap: 6px;
-  }
 
   .announcementOfNeuralAgent2 {
     display: flex;
     flex-direction: column;
     row-gap: 12px;
-    margin-bottom: 12px;
     margin-top: 12px;
   }
 
@@ -216,16 +198,19 @@
   }
 
   @media (max-width: 768px) {
-    .policy-agreement-wrapper {
-      display: inline-block;
-      font-size: 14px;
-    }
-    .btn-wrapper {
-      margin-top: 32px;
-      display: flex;
-      justify-content: space-between;
-      flex-direction: column;
-      row-gap: 16px;
+    // .policy-agreement-wrapper {
+    //   display: inline-block;
+    //   font-size: 14px;
+    // }
+    // .btn-wrapper {
+    //   margin-top: 32px;
+    //   display: flex;
+    //   justify-content: space-between;
+    //   flex-direction: column;
+    //   row-gap: 16px;
+    // }
+    .hidden-mobile {
+      display: none;
     }
   }
 
@@ -275,7 +260,18 @@
     padding: 6px 12px;
     color: themed("card-title");
     background-color: themed("card-background");
-    margin-top: 6px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    .value-account-text {
+      display: flex;
+      flex-direction: row;
+      row-gap: 6px;
+      align-items: center;
+      column-gap: 6px;
+    }
   }
 
   .value-account-state {
@@ -286,9 +282,22 @@
     font-weight: 600;
   }
 
+  .value-account-selection {
+    color: #555353;
+    background-color: #adadad;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &.active {
+      color: #fff;
+      background-color: #6785de;
+    }
+  }
+
   .value-tips,
-  .accept-policy-text,
-  .value-account-state {
+  .accept-policy-text {
     color: themed("valueTextColor");
   }
   .accept-profit-policy-text,
@@ -297,10 +306,27 @@
     color: themed("valueTextColor");
   }
 
-  [type="checkbox"]:not(:checked) ~ label:before,
-  .value {
+  [type="checkbox"]:not(:checked) ~ label:before {
     border-color: themed("provider-text-color");
     border: 1px solid themed("provider-text-color");
+  }
+
+  .crypto-button-small {
+    padding: 6px 12px !important;
+  }
+  
+  .value {
+    border: none;
+  }
+
+  .account-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn-wrapper {
+      margin-left: 10px;
+    }
   }
 
   .warningx {

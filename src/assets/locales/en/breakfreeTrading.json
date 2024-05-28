@@ -21,6 +21,7 @@
   "save": "Save",
   "accountId": "Metatrader 5 Account",
   "brokerAccountIdTips": "Input the Metatrader 5 account that you want your Neural Agent to manage.",
+  "brokerAccountMaxLimits": "Amount of trading accounts allowed depend to your subscription.",
   "brokerAccountIdTipsx": "Active Metatrader 5 account",
   "Add": "Add",
   "Remove": "Remove"

@@ -178,30 +178,15 @@ export class AuthenticationService {
     }
 
     public getMyAutoTradingAccount(): Observable<UserAutoTradingAccountResponse[]> {
-        return this._http.get(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/get_my_trading_accounts`, this._httpOptions)
-            .pipe(
-                catchError(error => {
-                    return of(error);
-                })
-            );
+        return this._http.get<UserAutoTradingAccountResponse[]>(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/get_my_trading_accounts`, this._httpOptions);
     }
 
     public addMyAutoTradingAccount(accountId: string): Observable<UserAutoTradingAccountResponse> {
-        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/add_my_trading_account`, { accountId }, this._httpOptions)
-            .pipe(
-                catchError(error => {
-                    return of(error);
-                })
-            );
+        return this._http.post<UserAutoTradingAccountResponse>(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/add_my_trading_account`, { accountId }, this._httpOptions);
     }
 
     public removeMyAutoTradingAccount(id: string): Observable<UserAutoTradingAccountResponse> {
-        return this._http.post(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/remove_my_trading_account`, { id }, this._httpOptions)
-            .pipe(
-                catchError(error => {
-                    return of(error);
-                })
-            );
+        return this._http.post<UserAutoTradingAccountResponse>(`${AppConfigService.config.apiUrls.identityUrl}AutoTradingAccount/remove_my_trading_account`, { id }, this._httpOptions);
     }
 
     private _getGrant(): Observable<object> {
