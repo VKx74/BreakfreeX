@@ -50,6 +50,7 @@ build-app-stage:
   only:
     - develop
     - feature/restriction-level-4-removing
+    - feature/multiple_accounts
 #   tags:
 #     - web
 
@@ -102,6 +103,7 @@ build-latest:
         - develop
         - feature/restriction-level-4-removing
         - ci-improvements
+        - feature/multiple_accounts
 
 build-stable:
     image: docker:stable
