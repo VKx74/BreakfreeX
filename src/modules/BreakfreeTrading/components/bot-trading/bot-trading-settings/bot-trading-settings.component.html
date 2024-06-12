@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" (click)="close()"><i class="crypto-icon crypto-icon-close"></i></button>
-            <h4 class="modal-title">Neural Agent Sync Settings</h4>
+            <h4 class="modal-title">Neural Agent Overview</h4>
         </div>
         <div class="modal-body" *ngIf="!loading; else loader">
 
@@ -24,11 +24,14 @@
 
 
             <div class="remove-broker">
+                <div class="value-holder">
+
+                <div class="value-tips ">
+                    {{ 'brokerAccountIdTipsx' | translate }}
+                </div>
 
                 <ng-container *ngFor="let existingAccount of existingAccounts">
-                    <div class="value-tips hidden-mobile">
-                        {{ 'brokerAccountIdTipsx' | translate }}
-                    </div>
+                  
                     <div class="value-account">
                         <div class="value-account-text">
                      
@@ -44,13 +47,14 @@
                         </div>
                         <div>
                             <div class="btn-wrapper">
-                                <button class="crypto-button crypto-button_danger crypto-button-small" (click)="remove(existingAccount)">
-                                    {{ 'Remove' | translate }}
+                                <button class="crypto-button crypto-button_danger crypto-button-small removebutton" (click)="remove(existingAccount)">
+                                    {{ 'Disconnect' | translate }}
                                 </button>
                             </div>
                         </div>
                     </div>
                 </ng-container>
+            </div>
 
                 
                 <div class="add-broker">
@@ -64,12 +68,12 @@
                             <div>{{ 'brokerAccountMaxLimits' | translate }}</div>
                         </div>
                         <div class="value account-input">
-                            <input matInput type="text" class="crypto-input bft-form-input full-width"
+                            <input matInput type="text" class="crypto-input bft-form-input full-width specialxxx"
                                 [(ngModel)]="accountId">
 
                             <div class="btn-wrapper">
-                                <button class="crypto-button crypto-button_primary crypto-button-small" [disabled]="!canSave()" (click)="submit()">
-                                    {{ 'Add' | translate }}
+                                <button class="crypto-button crypto-button_primary crypto-button-small addbutton" [disabled]="!canSave()" (click)="submit()">
+                                    {{ 'Connect' | translate }}
                                 </button>
                             </div>
                         </div>
@@ -101,47 +105,51 @@
                     </div>
                 </div>
                 
-                <div class="btn-wrapper">
-                    <div class="agents">
-                 
-                    <div class="download-agent">
-                        <span>
-                            <a href="{{downloadLink}}">
-                                Download Neural Agent 3.19 <i class="fa fa-download" aria-hidden="true"></i>
-                            </a>
-                        </span>
-                    </div>
-                    <div class="download-agent">
-                        <span>
-                            <a href="{{downloadUserDocLink}}" target="_blank">
-                                Download User Documentation <i class="fa fa-download" aria-hidden="true"></i>
-                            </a>
-                        </span>
-                    </div>
-                    <!-- <div class="download-agent hidden" >
-                        <span>
-                             <a class="na2beta" href="{{downloadLink2}}">
-                                 Download NA2 BETA <i class="fa fa-download" aria-hidden="true"></i>
-                             </a>
-                         </span>
-                     </div>
-                     <div class="download-agent ">
-                        <span>
-                            <a class="na2beta" href="javascript:void(0)" (click)="openModal(downloadLink3)">
-                            <span class="privatebetalabel">Private Beta</span>  Request Beta Access to NA2 <i class="fa fa-download" aria-hidden="true"></i>
-                             </a>
-                         </span>
-                     </div> -->
-
-                    </div>
-                    <!-- <button class="crypto-button crypto-button_danger detach" [disabled]="false" (click)="remove()">
-                        Detach Neural Agent <i class="fa-solid fa-signal-slash"></i>
-                    </button> -->
-                </div>
+           
 
   
             </div>
+ 
+
+        <div class="download-agentx">
+
+        <div class="btn-wrapper">
+            <div class="agents">
+         
+            <div class="download-agent">
+                <span>
+                    <a href="{{downloadLink}}">
+                        Download Neural Agent 3.19 <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+                </span>
+            </div>
+            <div class="download-agent">
+                <span>
+                    <a href="{{downloadUserDocLink}}" target="_blank">
+                        Download Documentation <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+                </span>
+            </div>
+            <!-- <div class="download-agent hidden" >
+                <span>
+                     <a class="na2beta" href="{{downloadLink2}}">
+                         Download NA2 BETA <i class="fa fa-download" aria-hidden="true"></i>
+                     </a>
+                 </span>
+             </div>
+             <div class="download-agent ">
+                <span>
+                    <a class="na2beta" href="javascript:void(0)" (click)="openModal(downloadLink3)">
+                    <span class="privatebetalabel">Private Beta</span>  Request Beta Access to NA2 <i class="fa fa-download" aria-hidden="true"></i>
+                     </a>
+                 </span>
+             </div> -->
+
+            </div>
+         
         </div>
+    </div>
+       </div>
         <ng-template #loader>
             <div class="loader-container">
                 <bft-loader></bft-loader>

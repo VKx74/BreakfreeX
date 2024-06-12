@@ -14,15 +14,7 @@
     width: 100%;
     height: 100%;
   }
-  .remove-broker {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 15px;
-    min-height: 20vh;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+
 
   .agents {
     display: flex;
@@ -57,6 +49,14 @@
   .field-title {
     font-size: 12px;
   }
+
+  .value-tips {
+    padding: 3px;
+    font-size: 12px !important;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
 
   .field-title {
     margin-bottom: 6px;
@@ -116,13 +116,12 @@
   }
 
   .download-agent a {
-    padding: 11px 18px;
+    padding: 9px 9px;
+    font-weight: bold;
     border-radius: 3px;
     background: #6c9242;
     color: #fff;
-
-    font-family: "Open Sans";
-    font-size: 13px;
+    font-size: 12px;
     text-decoration: none;
     cursor: pointer;
     display: flex;
@@ -175,7 +174,7 @@
     display: flex;
     flex-direction: column;
     row-gap: 12px;
-    margin-top: 12px;
+
   }
 
   .announcementOfNeuralAgent2-title {
@@ -237,7 +236,8 @@
   .announcementOfNeuralAgent2 {
     background-color: themed("card-background");
     border: 1px solid themed("card-border");
-    border-radius: 6px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
     padding: 12px;
   }
 
@@ -263,7 +263,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
+    border: 1px solid #2e2e2e;
+    border-radius: 6px;
+    align-content: center;
+    align-items: center;
 
     .value-account-text {
       display: flex;
@@ -274,9 +278,66 @@
     }
   }
 
+  .removebutton {
+    background: transparent;
+    color: themed("removebtn");
+    border: 1px solid #4e2c2c;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px !important;
+    display: flex;
+    padding: 3px 12px !important;
+    transition: all 0.2s;
+  }
+
+  .removebutton:hover {
+    background: #cf7070;
+    color: themed("removebtn");
+    border: 1px solid #4e2c2c;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px !important;
+    display: flex;
+    padding: 3px 12px !important;
+  }
+
+  .addbutton {
+    background: #6c9242;
+    color: #fff;
+   // border: 1px solid #4e2c2c;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px !important;
+    display: flex;
+    padding: 6px 12px;
+    transition: all 0.2s;
+    border: none;
+    border-radius: 3px;
+  }
+
+  .addbutton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .addbutton:hover {
+    background: #5a7a35;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px !important;
+    padding: 6px 12px;
+    display: flex;
+    border: none;
+    border-radius: 3px;
+
+  }
+
+
   .value-account-state {
-    color: #5a7a35 !important;
-    background-color: #a5bc8e;
+    color: #fff !important;
+    background-color: #6c9242;
+    border: 1px solid #434a44;
     padding: 3px 6px;
     border-radius: 6px;
     font-weight: 600;
@@ -310,9 +371,44 @@
     border-color: themed("provider-text-color");
     border: 1px solid themed("provider-text-color");
   }
+  .value-holder {
+    padding: 9px;
+    border-radius: 5px;
+    background: themed("valueholderbg");
+    margin-bottom: 15px;
+}
+  .remove-broker {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+    min-height: 20vh;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: themed("removebrokerbg");
+    border: 1px solid themed("removebrokerborder");
+
+  }
+
+  .specialxxx {
+    border: 1px solid #123 !important;
+}
+
+  .download-agentx {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: themed("card-background");
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
 
   .crypto-button-small {
-    padding: 6px 12px !important;
+    padding: 6px 12px ;
   }
   
   .value {
