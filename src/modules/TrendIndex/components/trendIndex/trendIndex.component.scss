@@ -122,6 +122,13 @@
   }
   .account-id {
     font-weight: bold;
+    display: flex;
+    height: 24px;
+
+    .bft-form-select{
+    max-width:120px;
+  }
+    
   }
 
   .risk-management {
