@@ -224,16 +224,7 @@
                                     Auto: {{autoSelected}}/{{autoAvailable}}
                                     <span (click)="disableAllAutoTrading()" class="disable-all" *ngIf="canDisableAllAutoTrading()">Disable All</span><span (click)="enableAllAutoTrading()" *ngIf="canEnableAllAutoTrading()" class="enable-all">Enable All</span>
                                   
-                                    <span (click)="changeBotEnabledForAccount()" class="change-trading-mode" *ngIf="isBotConnected">
-                                        <div class="trading-enabled">
-                                            <span *ngIf="!botShutDown && isBotConnected" class="positive-color">
-                                                <span class="iconx enabledx"> <i class="fa-solid fa-shield-check"></i>
-                                                </span>Enabled</span>
-                                            <span *ngIf="botShutDown && isBotConnected" class="negative-color">
-                                                <span class="iconx disabledx"><i class="fa-solid fa-shield-minus"></i>
-                                                </span>Disabled</span>
-                                        </div>
-                                    </span>
+                                    
                                 </div>
                                 <div class="market-state-auto">
                                     Force: {{hitlSelected}}/{{hitlAvailable}}
