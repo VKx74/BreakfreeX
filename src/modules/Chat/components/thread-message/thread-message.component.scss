@@ -169,8 +169,8 @@ file-info-simple {
 .message-body {
   border-radius: 8px;
   padding: 0 9px 7px 11px;
-  max-width: 80%;
-  width: auto;
+  // max-width: 80%;
+  width: 100%;
 
   .top-line {
     padding-bottom: 4px;
@@ -189,6 +189,7 @@ file-info-simple {
     text-transform: capitalize;
     font-weight: bold;
     min-width: 100px;
+    opacity: 0.8;
   }
 
   .message-time {
@@ -226,6 +227,9 @@ file-info-simple {
 
 .root.current-user-message {
   justify-content: flex-start;
+  width: 80%;
+  margin-left: 20%;
+  // border-radius: 10px;
 
   &.message-item {
     justify-content: flex-end;
