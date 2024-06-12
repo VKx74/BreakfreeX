@@ -20,8 +20,8 @@
   "failedAddPhone": "Failed to add phone number.",
   "save": "Save",
   "accountId": "Metatrader 5 Account",
-  "brokerAccountIdTips": "Please provide the Metatrader 5 account you want your Neural Agent to manage.",
-  "brokerAccountMaxLimits": "The number of trading accounts you can link depends on your subscription level.",
+  "brokerAccountIdTips": "Please enter the Metatrader 5 account you would like your Neural Agent to manage.",
+  "brokerAccountMaxLimits": "The number of trading accounts you can connect is determined by your subscription plan.",
   "brokerAccountIdTipsx": "Active Metatrader 5 account",
   "Add": "Add",
   "Remove": "Remove"
