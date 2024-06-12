@@ -5,14 +5,33 @@
             <h4 class="modal-title">Neural Agent Sync Settings</h4>
         </div>
         <div class="modal-body" *ngIf="!loading; else loader">
+
+            <div class="announcementOfNeuralAgent2">
+                <!-- <div class="announcementOfNeuralAgent2-title">
+                    <span class="announcementOfNeuralAgent2-title-text">Announcement</span>
+                </div> -->
+                <div class="announcementOfNeuralAgent2-content">
+                    <span class="announcementOfNeuralAgent2-content-text">
+                        <p><span class="bold">Introducing Neural Agent 3.19</span></p>
+
+                        <p>Experience the future of autonomous trading with Neural Agent 3.19. Enhanced with three specialized modes—Classic, Scalper, and Hedging—each tailored for optimal trading efficiency and precision. Embrace a new standard of automated trading.</p>
+
+                        <p><span class="bold underline">Important Note:</span> Neural Agent 3.19 should not be used on existing accounts with open positions from former versions. We advise creating a fresh separate trading account for this version to avoid mixing versions.</p>
+                    </span>
+                </div>
+            </div>
+               
+
+
             <div class="remove-broker">
 
                 <ng-container *ngFor="let existingAccount of existingAccounts">
+                    <div class="value-tips hidden-mobile">
+                        {{ 'brokerAccountIdTipsx' | translate }}
+                    </div>
                     <div class="value-account">
                         <div class="value-account-text">
-                        <div class="value-tips hidden-mobile">
-                            {{ 'brokerAccountIdTipsx' | translate }}
-                        </div>
+                     
                         <div class="value-account-id">
                             {{ existingAccount.accountId }}
                         </div>
@@ -120,21 +139,7 @@
                     </button> -->
                 </div>
 
-                <div class="announcementOfNeuralAgent2">
-                    <!-- <div class="announcementOfNeuralAgent2-title">
-                        <span class="announcementOfNeuralAgent2-title-text">Announcement</span>
-                    </div> -->
-                    <div class="announcementOfNeuralAgent2-content">
-                        <span class="announcementOfNeuralAgent2-content-text">
-                            <p><span class="bold">Introducing Neural Agent 3.19</span></p>
-
-                            <p>Experience the future of autonomous trading with Neural Agent 3.19. Enhanced with three specialized modes—Classic, Scalper, and Hedging—each tailored for optimal trading efficiency and precision. Embrace a new standard of automated trading.</p>
-
-                            <p><span class="bold underline">Important Note:</span> Neural Agent 3.19 should not be used on existing accounts with open positions from former versions. We advise creating a fresh separate trading account for this version to avoid mixing versions.</p>
-                        </span>
-                    </div>
-                </div>
-                   
+  
             </div>
         </div>
         <ng-template #loader>
