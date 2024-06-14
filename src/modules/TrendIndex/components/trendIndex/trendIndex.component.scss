@@ -8,11 +8,21 @@
       font-size: 9px;
     }
 
+
     .extended-mode,
     .trading-enabled {
       font-size: 11px !important;
     }
   }
+  @media (max-width: 477px) {
+  
+    .mobilehiddenx  {
+      display: none !important;
+    }
+
+
+  }
+
 
   @media (max-width: 320px) {
     .mobilehiddenacc {
