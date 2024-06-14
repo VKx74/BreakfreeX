@@ -117,10 +117,10 @@
 
   &.old-browser {
     flex-direction: column;
-    transform: scaleY(-1);
+    //transform: scaleY(-1);
 
     thread-message {
-      transform: scaleY(-1);
+      //transform: scaleY(-1);
     }
   }
 }
