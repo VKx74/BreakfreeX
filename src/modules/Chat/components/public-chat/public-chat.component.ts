@@ -23,6 +23,10 @@ export class PublicChatComponent {
     get hasAccess(): boolean {
         return this._identityService.isAuthorizedCustomer;
     }
+    
+    get hasEarlyAccess(): boolean {
+        return this._identityService.isChatAllowed;
+    }
 
     constructor(protected _dialog: MatDialog, protected _identityService: IdentityService) {
     }

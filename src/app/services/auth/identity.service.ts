@@ -186,6 +186,22 @@ export class IdentityService {
         return false;
     }
 
+    public get isChatAllowed(): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub === "Breakfree Ascension Offer 1 Year Plan - 51% discount" || sub === "Breakfree God Offer 1 Year Plan - 60% discount") {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public get isBlackFridayDeal(): boolean {
         if (this.isAdmin) {
             return true;
@@ -562,8 +578,8 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = [];
-        // this.role = Roles.User;
+        this.subscriptions = ["Breakfree Ascension"];
+        this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
             this.artifSubExp = Number(parsedToken.artifsub_exp);
