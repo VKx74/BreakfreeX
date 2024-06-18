@@ -578,7 +578,7 @@ export class IdentityService {
         this.token = token;
         this.refreshToken = refreshToken;
 
-        // this.subscriptions = ["Breakfree Ascension"];
+        // this.subscriptions = [];
         // this.role = Roles.User;
 
         if (parsedToken.artifsub_exp) {
