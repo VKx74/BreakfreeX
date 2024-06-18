@@ -83,12 +83,12 @@ export class UsersProfileService {
         }));
     }
 
-    public searchUsersProfileByUserName(userName: string, params = new PaginationParams(0, 15)): Observable<IPaginationResponse<UserProfileModel>> {
-        if (!userName || !userName.length || !userName.trim().length) {
-            return of({items: [], total: 0});
-        }
+    public searchUsersProfileByUserName(userName: string, params = new PaginationParams(0, 25)): Observable<IPaginationResponse<UserProfileModel>> {
+        // if (!userName || !userName.length || !userName.trim().length) {
+        //     return of({items: [], total: 0});
+        // }
 
-        const paginationParams = QueryParamsConstructor.fromObjects({userNameFilter: userName}, params.toOffsetLimit());
+        const paginationParams = QueryParamsConstructor.fromObjects({userNameFilter: userName.trim()}, params.toOffsetLimit());
 
         return this._http.get<IItemsTotalResponse<UserProfileModel>>(`${AppConfigService.config.apiUrls.userDataStoreREST}Profile/userNames/filter`, {params: paginationParams});
     }

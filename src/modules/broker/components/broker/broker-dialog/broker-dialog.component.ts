@@ -1,10 +1,10 @@
-import {Component, Inject, Injector, Input, OnInit} from '@angular/core';
-import {Modal} from "Shared";
-import {EBrokerInstance} from "@app/interfaces/broker/broker";
-import {BrokerService} from "@app/services/broker.service";
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
-import {TranslateService} from "@ngx-translate/core";
-import {SettingsTranslateService} from "../../../localization/token";
+import { Component, Inject, Injector, Input, OnInit } from '@angular/core';
+import { Modal } from "Shared";
+import { EBrokerInstance } from "@app/interfaces/broker/broker";
+import { BrokerService } from "@app/services/broker.service";
+import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
+import { TranslateService } from "@ngx-translate/core";
+import { SettingsTranslateService } from "../../../localization/token";
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 
@@ -35,12 +35,12 @@ export class BrokerDialogComponent extends Modal implements OnInit {
 
     get isTradingAllowed(): boolean {
         return this._brokerService.isTradingAllowed;
-    } 
+    }
 
-    constructor(private _injector: Injector,                
-                @Inject(MAT_DIALOG_DATA) public data: BrokerDialogData,
-                protected _dialog: MatDialog,
-                private _brokerService: BrokerService) {
+    constructor(private _injector: Injector,
+        @Inject(MAT_DIALOG_DATA) public data: BrokerDialogData,
+        protected _dialog: MatDialog,
+        private _brokerService: BrokerService) {
         super(_injector);
 
         if (!this.isTradingAllowed) {
@@ -58,14 +58,18 @@ export class BrokerDialogComponent extends Modal implements OnInit {
 
     ngOnInit() {
         this._brokerService.activeBroker$
-            .subscribe((broker) => {       
+            .subscribe((broker) => {
                 console.log("BROKER:");
-                console.log(broker);                
-                if (this._initialized) {
-                    this.close();                
+                console.log(broker);
+                if (this._initialized && !!broker) {
+                    this.close();
                 }
             });
-            this._initialized = true;
+        this._initialized = true;
+
+        if (!!this._brokerService.activeBroker) {
+            this.policyAccepted = true;
+        }
     }
 
     captionText() {
@@ -76,7 +80,7 @@ export class BrokerDialogComponent extends Modal implements OnInit {
             case EBrokerInstance.BinanceFuturesUSD: return "Binance (USDT Futures)";
             case EBrokerInstance.BinanceFuturesCOIN: return "Binance (COIN Futures)";
         }
-    } 
+    }
 
     private _processCheckout() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });

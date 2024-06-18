@@ -108,8 +108,8 @@
                              [handler]="infinityLoaderHandler"
                              [showLoadingIndicator]="false"
                              [infiniteScrollContainer]="messagesWrapper" class="full-width">
-                <div #messagesWrapper class="messages-wrapper flex"
-                     [class.old-browser]="!isChromeBrowser()">
+                <div #messagesWrapper class="messages-wrapper flex">
+                     <!-- [class.old-browser]="!isChromeBrowser()"> -->
                     <ng-container *ngFor="let message of (messages$ | async); trackBy: trackByFn">
                         <thread-message
                                 [message]="message"

@@ -55,6 +55,10 @@ export class RightPanelComponent implements OnInit {
 
     get isBacktestAllowed(): boolean {
         return this._identityService.isAdmin || this._identityService.isSupportOfficer;
+    } 
+    
+    get isChatAllowed(): boolean {
+        return this._identityService.isAdmin || this._identityService.isChatAllowed;
     }
 
     get isStuff(): boolean {

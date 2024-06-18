@@ -32,7 +32,9 @@
     <!--                [class.blocked]="thread.isBlocked || thread.isBanned"-->
     <!--                (click)="activeThread = thread"-->
     <div class="user-avatar m-right-10">
+        <div class="name-avatar-container">
         <name-avatar [src]="threadHasAvatar ? thread.pictureId : null" [name]="thread.name"></name-avatar>
+    </div>
 <!--        <name-avatar class="" [src]="thread?.lastMessage?.fromId" [name]="thread?.name"></name-avatar>-->
     </div>
     <div class="flex flex-direction-column m-right-15 main-content overflow-hidden justify-content-center">

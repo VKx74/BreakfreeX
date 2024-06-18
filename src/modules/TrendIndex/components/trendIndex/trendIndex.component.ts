@@ -25,6 +25,7 @@ import { IJSONViewDialogData, JSONViewDialogComponent } from "modules/Shared/com
 import { IPercentageInputModalConfig, PercentageInputModalComponent } from "modules/UI/components/percentage-input-modal/percentage-input-modal.component";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BotTradingSettingsComponent } from 'modules/BreakfreeTrading/components/bot-trading/bot-trading-settings/bot-trading-settings.component';
+import { MatSelectChange } from "@angular/material/select";
 
 const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -450,6 +451,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _singleRowClickTimer;
     private _lastLogRefreshTime: number;
     private _maxInstrumentCount: number = null;
+    private _myAutoTradingAccount: string;
 
     public logs: INALog[] = [];
     public isBotOnline: boolean;
@@ -496,7 +498,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     get myAutoTradingAccount(): string {
-        return this._identityService.myTradingAccount;
+        return this._myAutoTradingAccount;
+    }
+
+    get myAutoTradingAccounts(): string[] {
+        return this._identityService.myTradingAccounts;
     }
 
     get userAutoTradingInfoData(): IUserAutoTradingInfoData {
@@ -555,8 +561,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return;
         }
 
-
         this.loading = true;
+
+        this._myAutoTradingAccount = this._identityService.myTradingAccount;
 
         this._updateInterval = setInterval(() => {
             if (this._changesDetected) {
@@ -567,9 +574,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._reloadInterval = setInterval(() => {
             this.loadData();
-
             if (this.myAutoTradingAccount && !this._userAutoTradingInfoData) {
-                this.loadUserAutoTradingInfoForAccount();
+                this.loadUserAutoTradingInfoForAccount(false);
             } else {
                 this.loadAutoTradingInstruments();
             }
@@ -586,9 +592,26 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._identityService.myTradingAccount$.subscribe(() => {
             this._changesDetected = true;
-            this.loadUserAutoTradingInfoForAccount();
+            this._myAutoTradingAccount = this._identityService.myTradingAccount;
+            this.loadUserAutoTradingInfoForAccount(true);
             this.getUserAutoTradingRuntimeLogs();
         });
+    }
+
+    accountChanged(accountChange: MatSelectChange) {
+        if (accountChange.value) {
+            this._identityService.setMyAutoTradingAccount(accountChange.value);
+        } else {
+            this._changesDetected = true;
+            accountChange.source.value = this._identityService.myTradingAccount;
+            // this._myAutoTradingAccount = accountChange.source.value;
+        }
+    }
+
+    manageAccounts(event: MouseEvent) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        this.botSettings();
     }
 
     protected setRisksForInstruments() {
@@ -617,21 +640,32 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.countInfo();
     }
 
-    protected loadUserAutoTradingInfoForAccount() {
+    protected loadUserAutoTradingInfoForAccount(showSpinner: boolean) {
         if (this.myAutoTradingAccount) {
+            if (showSpinner) {
+                this.loading = true;
+            }
             this._algoService.getUserAutoTradingInfoForAccount(this.myAutoTradingAccount).subscribe((data) => {
                 this._userAutoTradingInfoData = data;
                 this._maxInstrumentCount = this._userAutoTradingInfoData ? this._userAutoTradingInfoData.maxInstrumentCount : null;
                 this.isSync = false;
                 this.loadUpdatedData();
+
+                if (showSpinner) {
+                    this.loading = false;
+                }
             }, (_) => {
-                if (_ && _.status === 401 && !this._userAutoTradingInfoData) {
+                if (_ && _.status === 401 && showSpinner) {
                     this.isSync = true;
                 }
                 this._tradableInstruments = [];
                 this._userAutoTradingInfoData = null;
                 this._changesDetected = true;
                 this._maxInstrumentCount = null;
+
+                if (showSpinner) {
+                    this.loading = false;
+                }
             });
         } else {
             this._tradableInstruments = [];

@@ -18,4 +18,8 @@
     /deep/ .color-column.active {
         background-color: $lightGreenColor !important;
     }
+    /deep/ .active-broker {
+        font-weight: bolder;
+        text-decoration: underline;
+    }
 }

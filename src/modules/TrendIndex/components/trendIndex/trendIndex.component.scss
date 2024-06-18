@@ -8,11 +8,21 @@
       font-size: 9px;
     }
 
+
     .extended-mode,
     .trading-enabled {
       font-size: 11px !important;
     }
   }
+  @media (max-width: 477px) {
+  
+    .mobilehiddenx  {
+      display: none !important;
+    }
+
+
+  }
+
 
   @media (max-width: 320px) {
     .mobilehiddenacc {
@@ -122,6 +132,13 @@
   }
   .account-id {
     font-weight: bold;
+    display: flex;
+    height: 24px;
+
+    .bft-form-select{
+    max-width:120px;
+  }
+    
   }
 
   .risk-management {
@@ -1040,6 +1057,11 @@
     flex-direction: column;
     text-align: center;
   }
+
+}
+
+.manage-auto-trading-account-text {
+  margin-left: 10px;
 }
 
 @include themify($themes, true) {

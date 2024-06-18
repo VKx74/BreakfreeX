@@ -34,7 +34,9 @@
                 </div>
             </div> -->
             <div class="widget" *ngIf="SelectedComponent === Components.Chat">
-                <div class="chat-container"><chat-bro></chat-bro></div>
+                <div class="chat-container">
+                    <public-chat></public-chat>
+                </div>
             </div>
             <!-- <div class="widget" *ngIf="SelectedComponent === Components.BinanceScanner">
                 <binance-scanner (onOpenChart)="handleOpenChart($event)" ></binance-scanner>
@@ -57,7 +59,7 @@
                 </color-selector>
             </div> -->
             <div class="widget-selector-toolbar">
-                <div class="chat-widget widget-selector-icon hidden" (click)="selectComponent(Components.Chat)" tooltip
+                <div class="chat-widget widget-selector-icon" (click)="selectComponent(Components.Chat)" tooltip
                 [class.active]="SelectedComponent === Components.Chat && !collapsed"
                 [matTooltip]="'chatWidget' | translate">
                 <i class="fa fa-messages" aria-hidden="true"></i>

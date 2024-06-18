@@ -6,7 +6,7 @@ import { BreakfreeTradingTranslateService } from 'modules/BreakfreeTrading/local
 import { AuthenticationService } from '@app/services/auth/auth.service';
 import { UserAutoTradingAccountResponse } from '@app/models/auto-trading-bot/models';
 import { AlertService } from '@alert/services/alert.service';
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { PrivacyPolicyTradingModalComponent } from 'modules/Shared/components/privacy-policy-trading/privacy-policy-trading.component';
 import { LiabilityPolicyTradingModalComponent } from 'modules/Shared/components/liability-policy-trading/liability-policy-trading.component';
 import { ProfitPolicyTradingModalComponent } from 'modules/Shared/components/profit-policy-trading/profit-policy-trading.component';
@@ -28,18 +28,17 @@ import { LinkModalComponent } from '@app/link-modal/link-modal.component';
 export class BotTradingSettingsComponent extends Modal<BotTradingSettingsComponent> implements OnInit {
 
     public existingAccounts: UserAutoTradingAccountResponse[];
-    public existingAccount: UserAutoTradingAccountResponse;
     public accountId: string;
     public loading: boolean = true;
     public policyAccepted: boolean = false;
     // public profitPolicyAccepted: boolean = false;
     public liabilityWaiverAccepted: boolean = false;
     public subscriptionType: SubscriptionType;
-    
 
 
-    public downloadLink: string = '/assets/NeuralAgent_3.19.ex5?+2';
-    public downloadUserDocLink: string = '/assets/NA 3.19 user doc.pdf?+2';
+
+    public downloadLink: string = '/assets/NeuralAgent_3.19.3.ex5?+1';
+    public downloadUserDocLink: string = '/assets/NA 3.19.3 user doc.pdf?+1';
     // public downloadLink2: string = '/assets/NA2_2.0_beta.ex5';
     // public downloadLink3: string = 'https://forms.gle/wSJNCdN1ahYkosmq9';
 
@@ -79,26 +78,40 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
             this._reload();
             this._identityService.updateMyAutoTradingAccount();
         }, (error) => {
-            this._alertService.error("Failed to save trading accounts info");
+            this.loading = false;
+            if (error.status === 403 && error.error) {
+                this._alertService.error(error.error);
+            } else {
+                this._alertService.error("Failed to save trading accounts info");
+            }
         });
     }
 
     openModal(link: string) {
         this._dialog.open(LinkModalComponent, {
-          data: { link: link },
-          width: '80%',
-          height: '80%',
+            data: { link: link },
+            width: '80%',
+            height: '80%',
         });
-      }
+    }
 
-    remove() {
+    remove(acct: UserAutoTradingAccountResponse) {
         this.loading = true;
-        this._authService.removeMyAutoTradingAccount(this.existingAccount.id).subscribe((accts) => {
+        this._authService.removeMyAutoTradingAccount(acct.id).subscribe((accts) => {
             this._reload();
             this._identityService.updateMyAutoTradingAccount();
         }, (error) => {
+            this.loading = false;
             this._alertService.error("Failed to remove trading accounts info");
         });
+    }
+
+    selectDefault(acct: UserAutoTradingAccountResponse) {
+        this._identityService.setMyAutoTradingAccount(acct.accountId);
+    }
+
+    isActive(acct: UserAutoTradingAccountResponse) {
+        return this._identityService.myTradingAccount && this._identityService.myTradingAccount === acct.accountId;
     }
 
     onClose() {
@@ -108,8 +121,8 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
     canSave() {
         if (!this.policyAccepted || !this.liabilityWaiverAccepted) {
             return false;
-        } 
-        
+        }
+
         if (!this.accountId) {
             return false;
         }
@@ -140,15 +153,6 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
         this.loading = true;
         this._authService.getMyAutoTradingAccount().subscribe((accts) => {
             this.existingAccounts = accts;
-            if (this.existingAccounts && this.existingAccounts.length) {
-                this.existingAccount = this.existingAccounts[0];
-
-                if (!this.isAllowed && this.existingAccount) {
-                    this.existingAccount.isActive = false;
-                }
-            } else {
-                this.existingAccount = null;
-            }
             this.loading = false;
         }, (error) => {
             this._alertService.error("Failed to load trading accounts info");

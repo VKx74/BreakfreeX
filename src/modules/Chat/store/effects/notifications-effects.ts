@@ -45,29 +45,30 @@ import {IMessage} from "../../models/models";
 export class ChatNotificationsEffects {
     constructor(private _chatApiService: ChatApiService,
                 private _identityService: IdentityService,
+                private _notificationService: NotificationService,
                 private actions$: Actions,
                 private _store: Store<AppState>,
                 private _helper: ChatHelperService) {
 
-        // this._notificationService.ensureConnectionEstablished()
-        //     .subscribe((hasConnection: boolean) => {
-        //         if (hasConnection) {
-        //             this._notificationService.subscribeToPublicRoomsUpdates()
-        //                 .subscribe({
-        //                     error: (e) => {
-        //                         console.error(e);
-        //                     }
-        //                 });
+        this._notificationService.ensureConnectionEstablished()
+            .subscribe((hasConnection: boolean) => {
+                if (hasConnection) {
+                    this._notificationService.subscribeToPublicRoomsUpdates()
+                        .subscribe({
+                            error: (e) => {
+                                console.error(e);
+                            }
+                        });
 
 
-        //             this._notificationService.subscribeForUpdates(NotificationTopics.MessageCount)
-        //                 .subscribe({
-        //                     error: (e) => {
-        //                         console.error(e);
-        //                     }
-        //                 });
-        //         }
-        //     });
+                    this._notificationService.subscribeForUpdates(NotificationTopics.MessageCount)
+                        .subscribe({
+                            error: (e) => {
+                                console.error(e);
+                            }
+                        });
+                }
+            });
 
 
         this._subscribeToNotifications();
@@ -78,117 +79,117 @@ export class ChatNotificationsEffects {
         ofType(SelectThread),
         distinctUntilChanged((prev, curr) => prev.threadId === curr.threadId),
         tap(({threadId, prevThreadId}) => {
-            // if (threadId != null) {
-            //     this._notificationService.subscribeForUpdates(NotificationTopics.Chat, threadId)
-            //         .subscribe({
-            //             error: (e) => {
-            //                 console.error('Failed to subscribe on thread updates', e);
-            //             }
-            //         });
-            // }
+            if (threadId != null) {
+                this._notificationService.subscribeForUpdates(NotificationTopics.Chat, threadId)
+                    .subscribe({
+                        error: (e) => {
+                            console.error('Failed to subscribe on thread updates', e);
+                        }
+                    });
+            }
 
-            // if (prevThreadId != null) {
-            //     this._notificationService.unSubscribeForUpdates(NotificationTopics.Chat, prevThreadId)
-            //         .subscribe({
-            //             error: (e) => {
-            //                 console.error('Failed to unsubscribe from thread updates', e);
-            //             }
-            //         });
-            // }
+            if (prevThreadId != null) {
+                this._notificationService.unSubscribeForUpdates(NotificationTopics.Chat, prevThreadId)
+                    .subscribe({
+                        error: (e) => {
+                            console.error('Failed to unsubscribe from thread updates', e);
+                        }
+                    });
+            }
         })
     );
 
     private _subscribeToNotifications() {
-        // this._notificationService.onMessage$
-        //     .subscribe(notification => {
-        //         if (notification.notificationTopicName === NotificationTopics.Chat) {
-        //             try {
-        //                 const parsedPayload = JSON.parse(notification.payload);
+        this._notificationService.onMessage$
+            .subscribe(notification => {
+                if (notification.notificationTopicName === NotificationTopics.Chat) {
+                    try {
+                        const parsedPayload = JSON.parse(notification.payload);
 
-        //                 switch (notification.action) {
-        //                     case NotificationAction.Thread_MessagePublishedEvent:
-        //                         this._handleMessagePublish(JSON.parse(notification.payload));
-        //                         break;
+                        switch (notification.action) {
+                            case NotificationAction.Thread_MessagePublishedEvent:
+                                this._handleMessagePublish(JSON.parse(notification.payload));
+                                break;
 
-        //                     case NotificationAction.Thread_MessageEditEvent:
-        //                         this._handleMessageEdited(JSON.parse(notification.payload));
-        //                         break;
-        //                     //
-        //                     case NotificationAction.Thread_MessageDeletedEvent:
-        //                         this._handleMessageDelete(JSON.parse(notification.payload));
-        //                         break;
+                            case NotificationAction.Thread_MessageEditEvent:
+                                this._handleMessageEdited(JSON.parse(notification.payload));
+                                break;
+                            //
+                            case NotificationAction.Thread_MessageDeletedEvent:
+                                this._handleMessageDelete(JSON.parse(notification.payload));
+                                break;
 
-        //                     case NotificationAction.Thread_ParticipantsDeleteEvent:
-        //                         this._handleUseRemovedFromThread(parsedPayload);
-        //                         break;
-        //                     //
-        //                     // case NotificationAction.Thread_ParticipantsLeftEvent:
-        //                     //     this._handleSubjectRemoved(JSON.parse(notification.payload));
-        //                     //     break;
+                            case NotificationAction.Thread_ParticipantsDeleteEvent:
+                                this._handleUseRemovedFromThread(parsedPayload);
+                                break;
+                            //
+                            // case NotificationAction.Thread_ParticipantsLeftEvent:
+                            //     this._handleSubjectRemoved(JSON.parse(notification.payload));
+                            //     break;
 
-        //                     default:
-        //                         break;
-        //                 }
-        //             } catch (e) {
-        //                 console.log('Notification error');
-        //                 console.log(e);
-        //             }
-        //         }
+                            default:
+                                break;
+                        }
+                    } catch (e) {
+                        console.log('Notification error');
+                        console.log(e);
+                    }
+                }
 
-        //         if (notification.notificationTopicName === NotificationTopics.MessageCount) {
-        //             if (notification.action === NotificationAction.Thread_MessagesCountEvent) {
-        //                 this._handleMessagesCountChangeEvent(JSON.parse(notification.payload));
-        //             }
-        //         }
+                if (notification.notificationTopicName === NotificationTopics.MessageCount) {
+                    if (notification.action === NotificationAction.Thread_MessagesCountEvent) {
+                        this._handleMessagesCountChangeEvent(JSON.parse(notification.payload));
+                    }
+                }
 
-        //         if (notification.notificationTopicName === NotificationTopics.Invites) {
-        //             const parsedPayload = JSON.parse(notification.payload);
+                if (notification.notificationTopicName === NotificationTopics.Invites) {
+                    const parsedPayload = JSON.parse(notification.payload);
 
-        //             switch (notification.action) {
-        //                 case NotificationAction.Thread_InviteAcceptedEvent: {
-        //                     this._handleThreadInviteAccepted(parsedPayload);
-        //                     break;
-        //                 }
-        //                 default:
-        //                     break;
-        //             }
-        //         }
+                    switch (notification.action) {
+                        case NotificationAction.Thread_InviteAcceptedEvent: {
+                            this._handleThreadInviteAccepted(parsedPayload);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
 
 
-        //         if (notification.notificationTopicName === NotificationTopics.PublicRooms) {
-        //             const parsedPayload = JSON.parse(notification.payload);
+                if (notification.notificationTopicName === NotificationTopics.PublicRooms) {
+                    const parsedPayload = JSON.parse(notification.payload);
 
-        //             switch (notification.action) {
-        //                 case NotificationAction.Thread_CreatedEvent:
-        //                     this._handlePublicThreadCreated(parsedPayload);
-        //                     break;
-        //                 case NotificationAction.Thread_RemovedEvent:
-        //                     this._handleThreadRemoved(parsedPayload);
-        //                     break;
-        //                 case NotificationAction.Thread_UpdatedEvent:
-        //                     this._handleThreadUpdated(parsedPayload);
-        //                     break;
-        //                 case NotificationAction.Thread_RestoreEvent:
-        //                     this._handleThreadRestored(parsedPayload);
-        //                     break;
-        //             }
-        //         }
+                    switch (notification.action) {
+                        case NotificationAction.Thread_CreatedEvent:
+                            this._handlePublicThreadCreated(parsedPayload);
+                            break;
+                        case NotificationAction.Thread_RemovedEvent:
+                            this._handleThreadRemoved(parsedPayload);
+                            break;
+                        case NotificationAction.Thread_UpdatedEvent:
+                            this._handleThreadUpdated(parsedPayload);
+                            break;
+                        case NotificationAction.Thread_RestoreEvent:
+                            this._handleThreadRestored(parsedPayload);
+                            break;
+                    }
+                }
 
-        //         if (notification.notificationTopicName === NotificationTopics.UserBans) {
-        //             const parsedPayload = JSON.parse(notification.payload);
+                if (notification.notificationTopicName === NotificationTopics.UserBans) {
+                    const parsedPayload = JSON.parse(notification.payload);
 
-        //             switch (notification.action) {
-        //                 case NotificationAction.Thread_BanCreatedEvent:
-        //                     this._handleThreadBanCreated(parsedPayload);
-        //                     break;
-        //                 case NotificationAction.Thread_BanDeletedEvent:
-        //                     this._handleThreadBanDeleted(parsedPayload);
-        //                     break;
-        //                 default:
-        //                     break;
-        //             }
-        //         }
-        //     });
+                    switch (notification.action) {
+                        case NotificationAction.Thread_BanCreatedEvent:
+                            this._handleThreadBanCreated(parsedPayload);
+                            break;
+                        case NotificationAction.Thread_BanDeletedEvent:
+                            this._handleThreadBanDeleted(parsedPayload);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
     }
 
     private _handleMessagePublish(newMessagePayload: PublishMessagePayload) {

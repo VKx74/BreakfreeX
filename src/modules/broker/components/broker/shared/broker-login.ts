@@ -28,6 +28,19 @@ export class BrokerLogin {
 
     protected _connect(broker: EBrokerInstance, initData: any) {
         this.showSpinner = true;
+
+        if (!!this._brokerService.activeBroker)
+        {
+            this._brokerService.disposeActiveBroker().subscribe((_) => {
+                this._connectInternal(broker, initData);
+            });
+        } else {
+            this._connectInternal(broker, initData);
+        }
+    }
+
+    protected _connectInternal(broker: EBrokerInstance, initData: any)
+    {
         this._brokerFactory.tryCreateInstance(broker, initData)
             .subscribe((value: CreateBrokerActionResult) => {
                 this.showSpinner = false;
@@ -81,6 +94,10 @@ export class BrokerLogin {
 
     protected _disconnect(): void {
         this.showSpinner = true;
+        this._brokerService.disposeActiveBroker()
+        .subscribe(() => {
+            this.showSpinner = false;
+        });   
     }
 
     protected _notifySucess(message) {
