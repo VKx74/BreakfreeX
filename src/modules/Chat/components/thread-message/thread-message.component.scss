@@ -130,6 +130,19 @@
 
 :host {
   flex-shrink: 0;
+
+  .banned {
+    opacity: 0.6;
+  }
+
+  .ban-label {
+    padding: 0px 6px;
+    font-weight: normal;
+    background-color: red;
+    margin-left: 5px;
+    border-radius: 3px;
+    color: white;
+  }
 }
 
 file-info-simple {

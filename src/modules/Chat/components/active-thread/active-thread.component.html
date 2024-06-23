@@ -111,9 +111,10 @@
                 <div #messagesWrapper class="messages-wrapper flex">
                      <!-- [class.old-browser]="!isChromeBrowser()"> -->
                     <ng-container *ngFor="let message of (messages$ | async); trackBy: trackByFn">
-                        <ng-container *ngIf="isNotBanned(message)">
+                        <ng-container *ngIf="isNotBanned(message) || isAdmin">
                             <thread-message
                                     [message]="message"
+                                    [isBanned]="!isNotBanned(message)"
                                     (onMessageRemove)="handleRemoveMessage($event)"
                                     (onMessageEdit)="handleEditMessage(message)"
                                     (onMessageResend)="handleResendMessage(message)"

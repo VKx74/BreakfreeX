@@ -117,6 +117,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             || this.canRemoveThread);
     }
 
+    get isAdmin(): boolean {
+        return this._identityService.isAdmin;
+    }
+
     get isGroupThread(): boolean {
         return this.activeThread.type === EThreadType.Group;
     }

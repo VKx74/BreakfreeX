@@ -18,6 +18,7 @@ import {IMessageDTO} from "../../models/api.models";
 })
 export class ThreadMessageComponent {
     @Input() message: IMessage = null;
+    @Input() isBanned: boolean = false;
     @Output() onMessageRemove: EventEmitter<string> = new EventEmitter();
     @Output() onMessageEdit: EventEmitter<IMessage> = new EventEmitter();
     @Output() onMessageResend: EventEmitter<IMessage> = new EventEmitter();

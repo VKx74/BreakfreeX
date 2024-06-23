@@ -1,6 +1,4 @@
-<div class="root flex" *ngIf="message" [class.current-user-message]="isUserMessage">
-   
-   
+<div class="root flex" *ngIf="message" [class.current-user-message]="isUserMessage" [class.banned]="isBanned">
    
     <ng-container >
         <div class="creator-avatar">
@@ -11,7 +9,10 @@
 
     <div class="message-body flex flex-direction-column">
         <div class="top-line flex align-items-center justify-flex-end">
-            <span class="creator-name t-overflow-ellipsis">{{message.creator?.userName}}</span>
+            <span class="creator-name t-overflow-ellipsis">{{message.creator?.userName}}
+
+                <span *ngIf="isBanned" class="ban-label">Ban</span>
+            </span>
 
             <span *ngIf="isUserMessage">
                 <span class="message-sending-status">
