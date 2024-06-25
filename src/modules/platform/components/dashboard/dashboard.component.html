@@ -8,12 +8,11 @@
                     <as-split #verticalSplit class="platform-split-vertical" [direction]="'vertical'" [gutterSize]="3"
                         [unit]="'pixel'" (dragEnd)="handleVerticalSplitDragEnd($event)">
                         <as-split-area [order]="0" [size]="bottomPanelSizeService.sizePanel()" class="flex">
-                            <golden-layout>
-                                <div class="empty-icon flex justify-content-center align-items-center">
-                                    <img alt="Empty" class="emptysvg" src="assets/img/bftnavigatorlogo.svg"
-                                        style="width: 75%">
-                                </div>
+                            <golden-layout [ngClass]="{'hidden' : !layoutLoaded}">
                             </golden-layout>
+                            <div [ngClass]="{'hidden' : layoutLoaded}" class="loading-icon flex justify-content-center align-items-center">
+                                <bft-loader></bft-loader>
+                            </div>
                         </as-split-area>
                         <as-split-area [order]="1" [size]="bottomPanelSizeService.sizeBottomPanel()"
                             [minSize]="bottomPanelMinSize" [maxSize]="600">

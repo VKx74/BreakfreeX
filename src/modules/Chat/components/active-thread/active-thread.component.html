@@ -111,12 +111,15 @@
                 <div #messagesWrapper class="messages-wrapper flex">
                      <!-- [class.old-browser]="!isChromeBrowser()"> -->
                     <ng-container *ngFor="let message of (messages$ | async); trackBy: trackByFn">
-                        <thread-message
-                                [message]="message"
-                                (onMessageRemove)="handleRemoveMessage($event)"
-                                (onMessageEdit)="handleEditMessage(message)"
-                                (onMessageResend)="handleResendMessage(message)"
-                        ></thread-message>
+                        <ng-container *ngIf="isNotBanned(message) || isAdmin">
+                            <thread-message
+                                    [message]="message"
+                                    [isBanned]="!isNotBanned(message)"
+                                    (onMessageRemove)="handleRemoveMessage($event)"
+                                    (onMessageEdit)="handleEditMessage(message)"
+                                    (onMessageResend)="handleResendMessage(message)"
+                            ></thread-message>
+                        </ng-container>
                     </ng-container>
                 </div>
             </infinity-loader>

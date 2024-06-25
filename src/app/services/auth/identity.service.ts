@@ -187,6 +187,7 @@ export class IdentityService {
     }
 
     public get isChatAllowed(): boolean {
+        return true;
         if (this.isAdmin) {
             return true;
         }

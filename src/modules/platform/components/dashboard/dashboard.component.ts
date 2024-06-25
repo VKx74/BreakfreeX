@@ -101,6 +101,7 @@ export class DashboardComponent {
     destroy$ = new Subject();
     showExceptionPopup = false;
     showStaticLogin = false;
+    layoutLoaded = false;
 
     get isBrokerConnected(): boolean {
         return this._brokerService.isConnected;
@@ -533,6 +534,7 @@ export class DashboardComponent {
     }
 
     private _initializeLayout(state: IGoldenLayoutComponentState | ILayoutState) {
+        this.layoutLoaded = true;
         this._applyLayout(state);
         setTimeout(() => {
             this._initAutoSave();

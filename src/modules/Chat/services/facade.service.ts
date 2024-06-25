@@ -4,7 +4,7 @@ import {Action, Store} from "@ngrx/store";
 import {Actions, ofType} from "@ngrx/effects";
 import {merge, Observable, Subject, throwError} from "rxjs";
 import {filter, first, flatMap, map, switchMap, takeUntil, tap} from "rxjs/operators";
-import {EThreadType, IFileInfo} from "../models/thread";
+import {EThreadType, IFileInfo, IThreadBan} from "../models/thread";
 import {
     CancelThreadsSearch,
     CreateChatInstance,
@@ -128,6 +128,15 @@ export class FacadeService {
             )
                 .subscribe(observer);
         });
+    }
+
+    loadBans(threadId: string): Observable<IThreadBan[]> {
+        return this._chatApiService.getThreadBansByThreadId(threadId)
+            .pipe(
+                map((_) => {
+                    return _.items;
+                })
+            );
     }
 
     sendMessage(content: string, files: IFileInfo[] = [], threadId: string): Observable<any> {
