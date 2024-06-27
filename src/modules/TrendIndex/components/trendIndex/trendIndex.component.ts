@@ -26,6 +26,7 @@ import { IPercentageInputModalConfig, PercentageInputModalComponent } from "modu
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BotTradingSettingsComponent } from 'modules/BreakfreeTrading/components/bot-trading/bot-trading-settings/bot-trading-settings.component';
 import { MatSelectChange } from "@angular/material/select";
+import { ConfirmModalComponent } from "UI";
 
 const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -638,6 +639,33 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
 
         this.countInfo();
+    }
+
+    resetToDefaultSettings() {
+        this._dialog.open(ConfirmModalComponent, {
+            data: {
+                message: `Do you really want to reset you NA settings to default for account #${this.myAutoTradingAccount}?`,
+                onConfirm: () => {
+                    this._resetToDefaultSettings();
+                }
+            }
+        });
+    }
+
+    protected _resetToDefaultSettings() {
+        this.loading = true;
+        this._algoService.resetBotSettingsToDefault(this.myAutoTradingAccount, this._identityService.id).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to reset settings");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
     }
 
     protected loadUserAutoTradingInfoForAccount(showSpinner: boolean) {

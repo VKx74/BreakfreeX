@@ -59,7 +59,7 @@
                         <div>{{extendedMode ? "Agent States" : "FS"}}</div>
                     </div>
                     <button (click)="toggleRiskManagement()" class="risk-management-toggle" *ngIf="isBotConnected">
-                        <i class="fa-solid fa-square-sliders-vertical"></i> {{'Risk'}}
+                        <i class="fa-solid fa-square-sliders-vertical"></i> {{'Settings'}}
                     </button>
                     <button (click)="botLogs()" class="risk-management-toggle" *ngIf="isBotConnected">
                         <i class="fa-solid fa-list-dots"></i> {{'Logs'}}
@@ -68,7 +68,7 @@
             </div>
 
             <div class="neuralagent riskmanagement" *ngIf="riskManagementVisible && isBotConnected">
-                <div class="left-side hidden">
+                <!-- <div class="left-side hidden">
                     <div class="risk-management">
                         <div class="risk-management-label">Neural Agent Account</div>
          
@@ -83,8 +83,8 @@
                             </mat-slide-toggle>
                         </div>
                     </div>
-                </div>
-                <div class="right-side">
+                </div> -->
+                <div class="left-side">
                     <div class="risk-management">
                         <div class="risk-management-label"> Risk Management</div>
                         <div class="riskholder maxriskpermarket">
@@ -102,6 +102,17 @@
                                 (click)="setAccountRisk($event)">
                         </div>
                     </div>
+                    </div>
+                    <div class="right-side">
+                    <div class="general-management">
+                        <div class="risk-management-label"> General</div>
+                        <div class="rest-to-default">
+                            <button (click)="resetToDefaultSettings()" class="rest-to-default-button">
+                                <i class="fa-solid fa-file-edit"></i> {{'Reset To Default'}}
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
