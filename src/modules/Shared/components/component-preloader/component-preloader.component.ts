@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/core';
 import {Observable, of} from "rxjs";
 import {ProcessState, ProcessStateType} from "@app/helpers/ProcessState";
 import {ComponentPreloaderConfigToken} from "./config.token";
@@ -34,7 +34,7 @@ export class ComponentPreloaderComponent implements OnInit {
     @Input() errorCaption: string;
     @Input() template: TemplateRef<any>;
 
-    constructor(@Inject(ComponentPreloaderConfigToken) @Optional() config: IComponentPreloaderConfig) {
+    constructor(@Inject(ComponentPreloaderConfigToken) @Optional() config: IComponentPreloaderConfig, private ref: ChangeDetectorRef) {
         if (config) {
             this._config = Object.assign({}, this._config, config);
         }
@@ -57,9 +57,11 @@ export class ComponentPreloaderComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.processState.setSucceeded();
+                    this.ref.detectChanges();
                 },
                 error: () => {
                     this.processState.setFailed();
+                    this.ref.detectChanges();
                 }
             });
     }
