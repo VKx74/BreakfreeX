@@ -907,6 +907,12 @@ export class AlgoService {
             account: account, userId: userId, version: "2.0", markets: symbols
         });
     }
+    
+    resetBotSettingsToDefault(account: string, userId: string): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/reset-bot-settings`, {
+            account: account, userId: userId, version: "2.0"
+        });
+    }
 
     changeMarketRiskForAccount(account: string, userId: string, symbol: string, risk: number): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-market-risk`, {

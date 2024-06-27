@@ -232,6 +232,14 @@
       column-gap: 3px;
       row-gap: 6px;
 
+      .general-management {
+        height: 100%;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 6px;
+      }
+
       .advanced-view {
         padding: 3px 9px;
         border-radius: 3px;
@@ -281,6 +289,7 @@
     }
     .neuralagent.riskmanagement {
       border-top: 1px solid #454545;
+      justify-content: flex-start;
     }
 
     .neuralagent.logs-container {
@@ -646,6 +655,24 @@
   }
 
   button.risk-management-toggle {
+    border: 1px solid #616176;
+    background: #383845;
+    color: #fff;
+    padding: 3px 6px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    -moz-column-gap: 3px;
+    column-gap: 3px;
+    transition: all 0.22s ease-in-out;
+
+    &:hover {
+      filter: brightness(1.2);
+    }
+  }
+  
+  button.rest-to-default-button {
     border: 1px solid #616176;
     background: #383845;
     color: #fff;
