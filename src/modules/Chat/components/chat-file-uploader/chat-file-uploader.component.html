@@ -16,7 +16,7 @@
                         </div>
                         <file-info-simple [File]='File' [FileInfo]='FileInfo' *ngIf='!isImage'>
                         </file-info-simple>
-                        <div class="manage-buttons flex" [ngClass]="(isImage)?'end':'center'">
+                        <div class="manage-buttons flex hidden" [ngClass]="(isImage)?'end':'center'">
                             <div class="manage-buttons-container pointer">
                                 <i title="{{'download' | translate}}" class="fa fa-download" (click)="download()"
                                    *ngIf='isReadOnly' title="{{'file.download' | translate}}"></i>
@@ -57,7 +57,7 @@
                         {{ 'file.cancel' | translate }}
                     </button>
 
-                    <button class="crypto-button crypto-button_primary" [disabled]="!uploadBtnEnabled"
+                    <button class="crypto-button crypto-button_primary hidden" [disabled]="!uploadBtnEnabled"
                             (click)="upload()">
                         {{ 'file.ok' | translate }}
                     </button>

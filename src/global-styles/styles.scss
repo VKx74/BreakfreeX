@@ -961,8 +961,9 @@ input.timepicker-dial__control.timepicker-dial__item {
 
 .sys-notification-popup-container {
   position: absolute;
-  top: 16px;
-  right: 8px;
+  top: 9px;
+  right: 9px;
+  margin-left:9px;
   max-width: 460px;
   min-width: 200px;
   min-height: 60px;
@@ -987,20 +988,38 @@ input.timepicker-dial__control.timepicker-dial__item {
     display: flex;
     flex-direction: column;
     color: whitesmoke;
-    padding: 9px;
+    padding: 0px;
   }
   .sys-notification-popup-title {
-    font-size: 14px;
     font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 13px;
+    color: #fafbfb;
+    height: 25px;
+    background: #2E2E38;
+    padding-left: 9px;
+    display: flex;
+    align-items: center;
+
+
   }
 }
 
 .sys-notification-popup-text {
+  padding: 9px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 3px;
+  color: #e8e8e8;
   * {
+    margin: 0px !important;
+    display: flex;
+    flex-direction: column;
+ 
+    row-gap: 3px;
     // color: themed("titleTextColor");
     // font-family: $primaryFontFamily;
     font-size: 13px;
+  
     //word-break: break-all;
   }
 
