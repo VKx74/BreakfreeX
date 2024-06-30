@@ -116,11 +116,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             || this.canRemoveThread);
     }
 
-    onUsernameCopied(username: string) {
-        this.userMessage += ` ${username}`;
-        this.messageInput.nativeElement.value = this.userMessage;
-        this.messageInput.nativeElement.focus();
-    }
+
 
     get isAdmin(): boolean {
         return this._identityService.isAdmin;
@@ -192,6 +188,12 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         private _facadeService: FacadeService,
         private _fileStorage: FileStorageService,
         @Inject(ChatModeToken) public chatMode: ChatMode) {
+    }
+
+    onUsernameCopied(username: string) {
+        this.userMessage += ` ${username}`;
+        this.messageInput.nativeElement.value = this.userMessage;
+        this.messageInput.nativeElement.focus();
     }
 
     public ngOnInit() {
