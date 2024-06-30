@@ -91,7 +91,9 @@ import { ChatTranslateService } from "../../localization/token";
 })
 export class ActiveThreadComponent implements OnInit, OnDestroy {
     @Output() public onMaximise = new EventEmitter();
-    @ViewChild('messageInput', { static: false }) public input: ElementRef;
+    @ViewChild('messageInput', { static: true }) messageInput: ElementRef;
+    userMessage: string = '';
+
     @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
     @ViewChild('messagesWrapper', { static: false }) messagesPanel: ElementRef;
     @ViewChild(InfinityLoaderComponent, { static: false }) infinityLoader: InfinityLoaderComponent;
@@ -102,9 +104,6 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     uploadFileInputConfig: IUploadFileInputConfig = {
         allowMultipleFiles: false
     };
-
-
-    userMessage: string = '';
     messageForEdit: IMessage = null;
     loadThreadMessagesStatus = new ProcessState(ProcessStateType.None);
     private _needsScrollingToBottom: boolean = false;
@@ -115,6 +114,12 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             || this.canManageMembers
             || this.canLeaveThread
             || this.canRemoveThread);
+    }
+
+    onUsernameCopied(username: string) {
+        this.userMessage += ` ${username}`;
+        this.messageInput.nativeElement.value = this.userMessage;
+        this.messageInput.nativeElement.focus();
     }
 
     get isAdmin(): boolean {
@@ -478,7 +483,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         } else {
             this.messageForEdit = message;
             this.userMessage = message.content;
-            this.input.nativeElement.focus();
+            this.messageInput.nativeElement.focus();
         }
     }
 
@@ -519,7 +524,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const element = this.input.nativeElement;
+        const element = this.messageInput.nativeElement;
         element.focus();
         this.userMessage =
             this.userMessage.substring(0, element.selectionStart) +
