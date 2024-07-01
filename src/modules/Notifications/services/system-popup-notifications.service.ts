@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import { SystemNotificationsService } from "./system-notifications.service";
 import { SystemNotification } from "../models/models";
 import { MarkdownHelperService } from "modules/Markdown/services/markdown-helper.service";
+import { LocalStorageService } from "Storage";
 
 @Injectable()
 export class SystemPopUpNotificationsService {
@@ -9,7 +10,7 @@ export class SystemPopUpNotificationsService {
     private _notifications: SystemNotification[] = [];
     private _notificationsProcessed: string[] = [];
 
-    constructor(private _systemNotificationsService: SystemNotificationsService, private _mdHelper: MarkdownHelperService) {
+    constructor(private _systemNotificationsService: SystemNotificationsService, private _mdHelper: MarkdownHelperService, private _localStorage: LocalStorageService) {
     }
 
     private showNotification(notification: SystemNotification)
@@ -78,13 +79,28 @@ export class SystemPopUpNotificationsService {
             return;
         }
 
+        let presavedIds = this._localStorage.get(LocalStorageService.SysNotificationKey) as string[];
+        if (!presavedIds)
+            {
+                presavedIds = [];
+            }
+
         for (let n of this._notifications) {
             if (!n.id) {
                 continue;
             }
+
             if (this._notificationsProcessed.indexOf(n.id) >= 0) {
                 continue;
+            } 
+            
+            if (presavedIds.indexOf(n.id) >= 0) {
+                continue;
             }
+
+            presavedIds.push(n.id);
+
+            this._localStorage.set(LocalStorageService.SysNotificationKey, presavedIds);
 
             this._notificationsProcessed.push(n.id);
             this.showNotification(n);
