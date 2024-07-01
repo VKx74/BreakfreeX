@@ -33,10 +33,9 @@
     <!--        </div>-->
     <!--    </div>-->
 
-
-    <div class="header flex justify-space-between align-items-center">
+    <div class="header flex justify-space-between align-items-center hidden">
         <div class="flex active-thread-top">
-            <div class="user-image m-right-10">
+            <div class="user-image m-right-10 hidden">
                 <!--                    TODO: Implement thread image !Important!-->
                 <!--                    [src]="activeThread?.pictureId"-->
                 <name-avatar [src]="activeThread?.pictureId" [name]="activeThread?.name"></name-avatar>
@@ -76,29 +75,17 @@
     <div class="content-wrapper flex flex-grow-1 h-0 full-width flex-direction-column">
         <ng-container *ngIf="(activeThread$ | async) as activeThread">
             <div class="overlay" *ngIf="activeThread.isBanned || activeThread.isBlocked">
-
                 <div class="overlay-content-wrapper">
                     <div class="overlay-header text-center">
                         <span class="header-caption">Oh no!</span>
                     </div>
-
                     <div class="banner-img-wrapper text-center">
                         <i class="icon crypto-icon crypto-icon-banned-chat"></i>
                     </div>
-
                     <div class="text-center">
                         <span *ngIf="activeThread.isBanned">{{'userBannedCaption' | translate}}</span>
                         <span *ngIf="activeThread.isBlocked && !activeThread.isBanned">{{'threadBlocked' | translate}}</span>
                     </div>
-
-                    <!--                    <ng-container *ngIf="activeThread.isBanned">-->
-                    <!--                        <div class="text-center">-->
-                    <!--                            <span class="reason-caption">{{'banReason' | translate}}:</span>-->
-                    <!--                        </div>-->
-                    <!--                        <div class="text-center">-->
-                    <!--                            <span>{{activeThread.}}</span>-->
-                    <!--                        </div>-->
-                    <!--                    </ng-container>-->
                 </div>
             </div>
         </ng-container>
@@ -109,12 +96,12 @@
                              [showLoadingIndicator]="false"
                              [infiniteScrollContainer]="messagesWrapper" class="full-width">
                 <div #messagesWrapper class="messages-wrapper flex">
-                     <!-- [class.old-browser]="!isChromeBrowser()"> -->
                     <ng-container *ngFor="let message of (messages$ | async); trackBy: trackByFn">
                         <ng-container *ngIf="isNotBanned(message) || isAdmin">
                             <thread-message
                                     [message]="message"
                                     [isBanned]="!isNotBanned(message)"
+                                    (onUsernameCopied)="onUsernameCopied($event)"
                                     (onMessageRemove)="handleRemoveMessage($event)"
                                     (onMessageEdit)="handleEditMessage(message)"
                                     (onMessageResend)="handleResendMessage(message)"
@@ -146,7 +133,6 @@
                         <span class="crypto-icon crypto-icon-add-document control add-file-control"></span>
                     </upload-file-input>
                 </div>
-
 
                 <input class="crypto-input flex-grow-1"
                        #messageInput

@@ -134,6 +134,7 @@ $avatar-size: 25px;
   //}
 
   .user-avatar {
+    display: none;
     .name-avatar-container {
       min-width: $avatar-size;
       min-height: $avatar-size;
