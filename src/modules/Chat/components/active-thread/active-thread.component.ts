@@ -91,9 +91,7 @@ import { ChatTranslateService } from "../../localization/token";
 })
 export class ActiveThreadComponent implements OnInit, OnDestroy {
     @Output() public onMaximise = new EventEmitter();
-    @ViewChild('messageInput', { static: true }) messageInput: ElementRef;
-    userMessage: string = '';
-
+    @ViewChild('messageInput', { static: false }) public input: ElementRef;
     @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
     @ViewChild('messagesWrapper', { static: false }) messagesPanel: ElementRef;
     @ViewChild(InfinityLoaderComponent, { static: false }) infinityLoader: InfinityLoaderComponent;
@@ -104,6 +102,9 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     uploadFileInputConfig: IUploadFileInputConfig = {
         allowMultipleFiles: false
     };
+
+
+    userMessage: string = '';
     messageForEdit: IMessage = null;
     loadThreadMessagesStatus = new ProcessState(ProcessStateType.None);
     private _needsScrollingToBottom: boolean = false;
@@ -115,8 +116,6 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             || this.canLeaveThread
             || this.canRemoveThread);
     }
-
-
 
     get isAdmin(): boolean {
         return this._identityService.isAdmin;
@@ -188,12 +187,6 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         private _facadeService: FacadeService,
         private _fileStorage: FileStorageService,
         @Inject(ChatModeToken) public chatMode: ChatMode) {
-    }
-
-    onUsernameCopied(username: string) {
-        this.userMessage += ` ${username}`;
-        this.messageInput.nativeElement.value = this.userMessage;
-        this.messageInput.nativeElement.focus();
     }
 
     public ngOnInit() {
@@ -485,7 +478,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         } else {
             this.messageForEdit = message;
             this.userMessage = message.content;
-            this.messageInput.nativeElement.focus();
+            this.input.nativeElement.focus();
         }
     }
 
@@ -526,7 +519,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const element = this.messageInput.nativeElement;
+        const element = this.input.nativeElement;
         element.focus();
         this.userMessage =
             this.userMessage.substring(0, element.selectionStart) +
@@ -572,6 +565,11 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             default:
                 break;
         }
+    }
+
+    onUsernameCopied(username: string) {
+        this.userMessage += ` ${username}`;
+        this.input.nativeElement.focus();
     }
 
     public onInputClick(event) {
