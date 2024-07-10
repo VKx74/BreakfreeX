@@ -225,7 +225,9 @@
                 <div class="group-header-row-title">{{name}}</div>
                 <div  class="group-header-row-risk">
                     <div *ngIf="isBotConnected" class="symbolx risk-cell group-risk status-holder"
-                        (click)="setGroupRisk(name, $event)">
+                        (click)="setGroupRisk(name, $event)"
+                        tooltip
+                        matTooltip="{{getRiskPerGroupText(name) + ' Risk Allowed for \'' + name + '\' related instruments'}}">
                         <span class="iconx"><i class="fa-solid fa-shield-check"></i></span>
                         <!-- <span *ngIf="vmItem.risk == -1">All</span>
                         <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span> -->
