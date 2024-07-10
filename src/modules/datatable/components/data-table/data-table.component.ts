@@ -68,7 +68,7 @@ export class DataTableComponent {
     @Input() expandOnClick = true;
     @Input() maxExpandedRows: number = 1;
     @Input() expandDetailsTemplate: TemplateRef<any>;
-
+    @Input() groupRowTemplate: TemplateRef<any>;
 
     @Input() minColumnWidth: number = 50;
     @Input() preferredInitColumnsWidth: number;

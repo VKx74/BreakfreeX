@@ -117,6 +117,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             || this.canRemoveThread);
     }
 
+    get hasAccess(): boolean {
+        return this._identityService.isAuthorizedCustomer;
+    }
+
     get isAdmin(): boolean {
         return this._identityService.isAdmin;
     }
@@ -411,12 +415,20 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     }
 
     private _sendMessage(message: string, files: IFileInfo[] = []) {
+        if (!this.hasAccess) {
+            return;
+        }
+
         const thread = ObservableUtils.instant(this.activeThread$);
         this._facadeService.sendMessage(message, files, thread.id)
             .subscribe();
     }
 
     private _editMessage(message: string, files: IFileInfo[] = [], messageId: string): Observable<any> {
+        if (!this.hasAccess) {
+            return of();
+        }
+
         const thread = ObservableUtils.instant(this.activeThread$);
         return this._facadeService.updateMessage(message, files, messageId, thread.id);
     }
@@ -452,6 +464,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             this._alertService.error(this._translateService.get('activeThread.disabledError'));
             return;
         }
+        
+        if (!this.hasAccess) {
+            return;
+        }
 
         const thread = ObservableUtils.instant(this.activeThread$);
 
@@ -483,6 +499,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     }
 
     handleResendMessage(message: IMessage) {
+        if (!this.hasAccess) {
+            return;
+        }
+
         this._facadeService.resendMessage(message)
             .subscribe({
                 error: (e) => {

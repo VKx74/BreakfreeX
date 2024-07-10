@@ -54,7 +54,15 @@
         <!-- Group header -->
         <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" class="row-group-header"> </mat-row>
         <ng-container matColumnDef="groupHeader">
-            <mat-cell *matCellDef="let group" class="mat-table-group">{{group.group}}</mat-cell>
+                <mat-cell *matCellDef="let group" class="mat-table-group">
+                    <ng-container *ngIf="!!groupRowTemplate; else defaultGroupRow">
+                        <ng-container *ngTemplateOutlet="groupRowTemplate; context:{$implicit: group.group}">
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #defaultGroupRow>
+                        {{group.group}}
+                    </ng-template>
+                </mat-cell>
         </ng-container>
 
         <mat-row *matRowDef="let row; columns: (visibleColumns$ | async); when: isNotGroup" [class.selected]="row === selectedRow"

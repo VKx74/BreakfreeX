@@ -21,6 +21,7 @@ export class PublicChatComponent {
     ComponentIdentifier = ComponentIdentifier;
 
     get hasAccess(): boolean {
+        return true; // all user can see, just with subscriptions can message
         return this._identityService.isAuthorizedCustomer;
     }
     

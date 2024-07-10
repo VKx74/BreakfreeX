@@ -58,6 +58,21 @@
       max-height: 36px;
       transition: all 0.22s ease-in-out;
     }
+    
+    .group-header-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .group-header-row-title {
+        display: flex;
+      }
+
+      .group-header-row-risk {
+        display: flex;
+      }
+    }
 
     .god-view mat-row {
       overflow: hidden !important;
@@ -78,7 +93,8 @@
         padding-top: 4px;
         margin-top: 12px !important;
         padding-left: 10px !important;
-        height: 26px !important;
+        padding-right: 10px !important;
+        height: 30px !important;
       }
     }
 
@@ -1345,7 +1361,7 @@
   }
 
   .risk-cell {
-    background: #304a2f !important;
+    background: #304a2f;
     display: flex;
     align-items: center;
     padding: 3px;
@@ -1357,6 +1373,12 @@
     
     &:hover {
       filter: brightness(1.2);
+    }
+
+    &.group-risk {
+      background: #2a48678c;
+      border-color: #2a4867;
+      cursor: pointer;
     }
   }
 

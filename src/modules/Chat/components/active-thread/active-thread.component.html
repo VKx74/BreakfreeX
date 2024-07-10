@@ -115,7 +115,7 @@
             </div>
         </div>
 
-        <div class="footer flex flex-direction-column">
+        <div class="footer flex flex-direction-column" *ngIf="hasAccess; else outOfAccess">
             <div class="edit-message-wrapper flex align-items-baseline"
                  *ngIf="messageForEdit && !(messageForEdit.files && messageForEdit.files.length)">
                 <i class="edit-icon crypto-icon crypto-icon-edit"></i>
@@ -149,6 +149,9 @@
                 </div>
             </div>
         </div>
+        <ng-template #outOfAccess>
+            <div class="footer flex flex-direction-column out-of-access">Users with subscriptions can use chat</div>
+        </ng-template>
     </div>
 </div>
 

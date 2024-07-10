@@ -9,7 +9,7 @@
               (dragEnd)="onDragEnd($event)">
         
         <as-split-area [order]="0"
-                       [size]="85"
+                       [size]="75"
                        [minSize]="50"
                        [maxSize]="90"
                        [visible]="(activeThread$ | async) != null">
@@ -19,7 +19,7 @@
                                (onMaximise)="hiddenThreadList = !hiddenThreadList"></active-thread>
             </ng-container>
         </as-split-area>
-        <as-split-area [order]="1" [size]="15" [minSize]="10" [maxSize]="30" [visible]="!hiddenThreadList">
+        <as-split-area [order]="1" [size]="25" [minSize]="10" [maxSize]="50" [visible]="!hiddenThreadList">
             <thread-list class="full-height"
                          [chatMode]="chatMode"></thread-list>
         </as-split-area>
