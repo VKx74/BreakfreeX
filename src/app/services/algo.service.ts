@@ -569,8 +569,15 @@ export interface IEconomicEvent {
     IsBetterThanExpected?: boolean;
 }
 
+export enum TradingDirection {
+    Auto = 0,
+    Short = 1,
+    Long = 2
+}
+
 export interface IUserAutoTradingDefinedMarketData {
     symbol: string;
+    tradingDirection: TradingDirection;
     minStrength: number;
     minStrength1H: number;
     minStrength4H: number;
@@ -881,11 +888,12 @@ export class AlgoService {
         });
     }
 
-    addTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+    addTradableInstrumentForAccount(account: string, userId: string, symbols: [{symbol: string, tradingDirection: TradingDirection}]): Observable<IUserAutoTradingInfoData> {
         let markets = [];
         for (let s of symbols) {
             markets.push({
-                symbol: s
+                symbol: s.symbol,
+                tradingDirection: s.tradingDirection
             });
         }
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-markets`, {
