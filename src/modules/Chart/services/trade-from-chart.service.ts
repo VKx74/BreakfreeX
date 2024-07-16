@@ -949,6 +949,7 @@ export class TradeFromChartService implements TradingChartDesigner.ITradingFromC
         if (!order.SL && !order.TP) {
             return null;
         }
+        return;
 
         const shape = new TradingChartDesigner.ShapeSimpleTrade();
         shape.locked = false;
