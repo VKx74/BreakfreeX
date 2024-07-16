@@ -1202,15 +1202,15 @@
     background: themed("HITLActive") !important;
     border: 1px solid themed("HITLActiveBorder");
     display: flex;
-    column-gap: 3px;
+    column-gap: 1px;
     align-items: center;
-    padding: 3px;
+    padding: 3px 4px;
     //padding-right: 6px;
     font-weight: 600;
   }
   .HITL.active span {
    //background: themed("HITLActiveSpan");
-    padding: 0px 3px;
+   padding: 0px 1px;
     border-radius: 3px;
   }
 
