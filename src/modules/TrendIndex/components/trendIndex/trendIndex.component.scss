@@ -1327,6 +1327,7 @@
     padding: 0px 3px;
     background: themed("trendindextabbg");
     border-radius: 3px;
+    color: #fff;
   }
   span.iconx.enabledx {
     background: #156c27 !important;
@@ -1340,6 +1341,11 @@
   .symbolx {
     color: themed("statusRunnerTextColor");
     background-color: themed("trendindexdefaulttabcolor");
+    
+
+    &.iconx {
+      color: #fff;
+    }
   }
   .header-line {
     color: themed("valueTextColor");
@@ -1376,9 +1382,18 @@
     }
 
     &.group-risk {
-      background: #2a48678c;
-      border-color: #2a4867;
+      //background: #2a48678c;
+      //border-color: #2a4867;
+      background-color: transparent;
+      border: 1px solid transparent;
       cursor: pointer;
+      color: themed("orderpanelprefixcolor");
+
+      &:hover {
+        background: themed("statusRunner");
+      border-color: themed("statusRunnerHITLBorder");
+        filter: brightness(1.2);
+      }
     }
   }
 
