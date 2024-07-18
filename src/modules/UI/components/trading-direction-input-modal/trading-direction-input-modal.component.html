@@ -1,0 +1,29 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="reject()"><i
+                    class="crypto-icon crypto-icon-close cursor-pointer"></i>
+            </button>
+            <h4 class="modal-title">
+                <span>Select trading direction</span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <div class="title-description">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_action" (click)="short()">
+                    <span>Short</span>
+                </button>
+                <button class="crypto-button crypto-button_action" (click)="long()">
+                    <span>Long</span>
+                </button>
+                <button class="crypto-button crypto-button_action" (click)="auto()">
+                    <span>Auto</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

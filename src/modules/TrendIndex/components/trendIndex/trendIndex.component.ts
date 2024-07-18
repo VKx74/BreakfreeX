@@ -15,7 +15,7 @@ import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { BaseLayoutItem } from "@layout/base-layout-item";
-import { AlgoService, IMesaTrendIndex, INALog, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData, IUserMarketConfigData } from "@app/services/algo.service";
+import { AlgoService, IMesaTrendIndex, INALog, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData, IUserMarketConfigData, TradingDirection } from "@app/services/algo.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
@@ -27,12 +27,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BotTradingSettingsComponent } from 'modules/BreakfreeTrading/components/bot-trading/bot-trading-settings/bot-trading-settings.component';
 import { MatSelectChange } from "@angular/material/select";
 import { ConfirmModalComponent } from "UI";
+import { TradingDirectionModalComponent } from "modules/UI/components/trading-direction-input-modal/trading-direction-input-modal.component";
 
-const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
-const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
-const Bounds = ["DE10YB_EUR", "UK100_GBP", "USB02Y_USD", "USB30Y_USD"];
-const Commodities = ["BCO_USD", "CORN_USD", "NATGAS_USD", "SOYBN_USD", "WHEAT_USD", "WTICO_USD", "XCU_USD"];
-const Crypto = ["BTCUSDT", "ETHUSDT"];
+// const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
+// const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
+// const Bounds = ["DE10YB_EUR", "UK100_GBP", "USB02Y_USD", "USB30Y_USD"];
+// const Commodities = ["BCO_USD", "CORN_USD", "NATGAS_USD", "SOYBN_USD", "WHEAT_USD", "WTICO_USD", "XCU_USD"];
+// const Crypto = ["BTCUSDT", "ETHUSDT", "LTCUSDT", "SOLUSDT"];
 const OtherMarkets = "Unaligned Markets";
 const UpTrending = "Uptrending";
 const DownTrending = "Downtrending";
@@ -255,6 +256,7 @@ class TrendIndexVM {
 
     public setData(data: IMesaTrendIndex) {
         this.id = data.symbol;
+        this.type = data.group ? data.group : OtherMarkets;
         this.symbol = data.symbol.replace("_", "");
         this.datafeed = data.datafeed;
         this.last_price = data.last_price;
@@ -510,12 +512,20 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return this._userAutoTradingInfoData;
     }
 
+    get risksPerGroup(): { [key: string]: number } {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.risksPerGroup : null;
+    }
+
     get accountRisk(): number {
         return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.accountRisk : null;
     }
 
     get defaultMarketRisk(): number {
         return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.defaultMarketRisk : null;
+    }
+
+    get defaultGroupRisk(): number {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.defaultGroupRisk : null;
     }
 
     get maxInstrumentCount(): number {
@@ -532,9 +542,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
+    TradingDirection = TradingDirection;
 
-    constructor(protected _dialog: MatDialog,
-        protected _realtimeService: RealtimeService,
+    constructor(protected _realtimeService: RealtimeService,
         protected _translateService: TranslateService,
         protected _layoutManagerService: LayoutManagerService,
         protected _alertManager: AlertService,
@@ -642,7 +652,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     resetToDefaultSettings() {
-        this._dialog.open(ConfirmModalComponent, {
+        this._matDialog.open(ConfirmModalComponent, {
             data: {
                 message: `Do you really want to reset you NA settings to default for account #${this.myAutoTradingAccount}?`,
                 onConfirm: () => {
@@ -801,27 +811,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     private rankByGroups() {
-        for (let item of this.vm) {
-            if (Metals.indexOf(item.id) >= 0) {
-                item.type = `Metals`;
-            } else if (Indices.indexOf(item.id) >= 0) {
-                item.type = `Indices`;
-            } else if (Bounds.indexOf(item.id) >= 0) {
-                item.type = `Bounds`;
-            } else if (Commodities.indexOf(item.id) >= 0) {
-                item.type = `Commodities`;
-            } else if (Crypto.indexOf(item.id) >= 0) {
-                item.type = `Crypto`;
-            } else {
-                let currencies = item.id.split("_");
-                item.type = `${currencies[1]}`;
-            }
-
-            if (!item.type) {
-                item.type = OtherMarkets;
-            }
-        }
-
         let groupsData: ISymbolGroup[] = [];
         for (let item of this.vm) {
             let g = groupsData.find((_) => _.group === item.type);
@@ -930,7 +919,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     processCheckout() {
-        this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+        this._matDialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
     }
 
     private _sendInstrumentChange(instrument: IInstrument) {
@@ -1159,6 +1148,31 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return false;
     }
 
+    instrumentTradingDirection(item: TrendIndexVM): TradingDirection {
+        if (!this._userAutoTradingInfoData || !this._userAutoTradingInfoData.disabledMarkets || !this._userAutoTradingInfoData.disabledMarkets.length) {
+            return null;
+        }
+
+        for (let m of this._userAutoTradingInfoData.markets) {
+            if (m.symbol && m.symbol.replace("_", "").toLowerCase() === item.symbol.replace("_", "").toLowerCase()) {
+                return m.tradingDirection;
+            }
+        }
+
+        return null;
+    }
+
+    instrumentTradingDirectionText(item: TrendIndexVM): string {
+        let direction = this.instrumentTradingDirection(item);
+        if (direction === TradingDirection.Short) {
+            return "Short";
+        }
+        if (direction === TradingDirection.Long) {
+            return "Long";
+        }
+        return "Auto";
+    }
+
     instrumentSelectionChanged(item: TrendIndexVM, e: PointerEvent) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -1290,17 +1304,12 @@ export class TrendIndexComponent extends BaseLayoutItem {
         let symbol = item.symbol.replace("_", "").toUpperCase();
         this.loading = true;
         if (!isSelected) {
-            this._algoService.addTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
-                this._userAutoTradingInfoData = data;
-                this.loadUpdatedData();
-            }, (_) => {
-                if (_ && _.status === 403 && _.error) {
-                    this._alertManager.info(_.error);
-                } else {
-                    this._alertManager.info("Failed to enable trading instrument");
+            this._matDialog.open<TradingDirectionModalComponent>(TradingDirectionModalComponent).afterClosed().subscribe((value) => {
+                if (value === null || value === undefined) {
+                    this.loading = false;
+                    return;
                 }
-                this.loading = false;
-                this._changesDetected = true;
+                this.addMarkets(symbol, value);
             });
         } else {
             this._algoService.removeTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [symbol]).subscribe((data) => {
@@ -1316,6 +1325,21 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._changesDetected = true;
             });
         }
+    }
+
+    private addMarkets(symbol: string, tradingDirection: TradingDirection) {
+        this._algoService.addTradableInstrumentForAccount(this.myAutoTradingAccount, this._identityService.id, [{ symbol, tradingDirection }]).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to enable trading instrument");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
     }
 
     enableDisableTrading(item: TrendIndexVM) {
@@ -1374,6 +1398,21 @@ export class TrendIndexComponent extends BaseLayoutItem {
         });
     }
 
+    changeGroupRiskForAccount(group: string, risk: number) {
+        this._algoService.changeGroupRiskForAccount(this.myAutoTradingAccount, this._identityService.id, group, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change group risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
     changeRiskForAccount(risk: number) {
         this._algoService.changeRiskForAccount(this.myAutoTradingAccount, this._identityService.id, risk).subscribe((data) => {
             this._userAutoTradingInfoData = data;
@@ -1398,6 +1437,21 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 this._alertManager.info(_.error);
             } else {
                 this._alertManager.info("Failed to change instrument risk");
+            }
+            this.loading = false;
+            this._changesDetected = true;
+        });
+    }
+
+    changeDefaultGroupRisk(risk: number) {
+        this._algoService.changeDefaultGroupRisk(this.myAutoTradingAccount, this._identityService.id, risk).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadUpdatedData();
+        }, (_) => {
+            if (_ && _.status === 403 && _.error) {
+                this._alertManager.info(_.error);
+            } else {
+                this._alertManager.info("Failed to change group risk");
             }
             this.loading = false;
             this._changesDetected = true;
@@ -1452,7 +1506,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
         this._changesDetected = true;
     }
-
 
     showCharts(instrumentVM: TrendIndexVM) {
         this.loading = true;
@@ -1586,6 +1639,29 @@ export class TrendIndexComponent extends BaseLayoutItem {
         });
     }
 
+    setGroupRisk(group: string, e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        let existingRisk = this.getRiskPerGroup(group);
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: existingRisk > 0 ? existingRisk : 100,
+                title: group + " group risk allocation"
+            }
+        }).afterClosed().subscribe((value) => {
+            if (!Number.isFinite(value)) {
+                return;
+            }
+            this.changeGroupRiskForAccount(group, value);
+        });
+    }
+
     setAccountRisk(e: PointerEvent) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -1625,6 +1701,27 @@ export class TrendIndexComponent extends BaseLayoutItem {
                 return;
             }
             this.changeDefaultMarketRisk(value > 0 ? value : 12);
+        });
+    }
+
+    setDefaultGroupRisk(e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        if (!this.isBotConnected) {
+            return;
+        }
+
+        this._matDialog.open<PercentageInputModalComponent, IPercentageInputModalConfig>(PercentageInputModalComponent, {
+            data: {
+                value: this.defaultGroupRisk ? this.defaultGroupRisk : 100,
+                title: "Default Risk Per Group"
+            }
+        }).afterClosed().subscribe((value) => {
+            if (!Number.isFinite(value)) {
+                return;
+            }
+            this.changeDefaultGroupRisk(value);
         });
     }
 
@@ -1669,7 +1766,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     botSettings(): void {
         const screenHeight = window.innerHeight;
-        this._dialog.open(BotTradingSettingsComponent, {
+        this._matDialog.open(BotTradingSettingsComponent, {
             backdropClass: 'backdrop-background',
             position: {
                 top: screenHeight > 667 ? "100px" : null
@@ -1691,5 +1788,30 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._lastLogRefreshTime = null;
             this.getUserAutoTradingRuntimeLogs();
         }
+    }
+
+    getRiskPerGroup(group: string): number {
+        let groups = this.risksPerGroup;
+        if (!!groups) {
+            if (groups[group]) {
+                return groups[group];
+            }
+        }
+
+        let defaultRisk = this.defaultGroupRisk;
+        if (!!defaultRisk) {
+            return defaultRisk;
+        }
+
+        return -1;
+    }
+
+    getRiskPerGroupText(group: string): string {
+        let risk = this.getRiskPerGroup(group);
+        if (risk > 0) {
+            return risk + "%";
+        }
+
+        return "All";
     }
 }

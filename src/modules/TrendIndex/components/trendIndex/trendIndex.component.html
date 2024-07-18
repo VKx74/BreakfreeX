@@ -94,6 +94,14 @@
                             <input type="text" readonly
                                 placeholder='{{defaultMarketRisk ? defaultMarketRisk + "%" : "..."}}'
                                 (click)="setDefaultMarketRisk($event)">
+                        </div>  
+                        <div class="riskholder maxriskpermarket">
+                            <span class="itemholderx">
+                                <i class="fa-solid fa-dice-d10"></i>
+                            </span> Default Risk Each Group
+                            <input type="text" readonly
+                                placeholder='{{defaultGroupRisk ? defaultGroupRisk + "%" : "..."}}'
+                                (click)="setDefaultGroupRisk($event)">
                         </div>
                         <div class="riskholder riskallocation">
                             <span class="itemholderx"> <i class="fa-solid fa-dice-d4"></i></span>
@@ -212,6 +220,22 @@
                 <div>If you continue to see this issue after 15 minutes, contact support@breakfreetrading.com </div>
             </div>
         </ng-container>
+        <ng-template #groupRowHeaderTemplate let-name>                        
+            <div class="group-header-row">
+                <div class="group-header-row-title">{{name}}</div>
+                <div  class="group-header-row-risk">
+                    <div *ngIf="isBotConnected" class="symbolx risk-cell group-risk status-holder"
+                        (click)="setGroupRisk(name, $event)"
+                        tooltip
+                        matTooltip="{{getRiskPerGroupText(name) + ' Risk Allowed for \'' + name + '\' related instruments'}}">
+                        <span class="iconx"><i class="fa-solid fa-shield-check"></i></span>
+                        <!-- <span *ngIf="vmItem.risk == -1">All</span>
+                        <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span> -->
+                        <span>{{getRiskPerGroupText(name)}} Risk</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
         <ng-template #data_table>
             <div class="data-table">
                 <data-table #dataTableComponent [rows]="vm" [selectable]="true" [selectedRow]="selectedVM"
@@ -220,7 +244,8 @@
                     [hiddenColumns]="['driver', 'min_1', 'min_5', 'min_15', 'h_1', 'h_4', 'd_1', 'month_1', 'year_1', 'year_10', 'short_g', 'mid_g', 'long_g', 'risk']"
                     (onRowSelect)="instrumentSelect($event)" (onRowClick)="rowClicked($event)"
                     (onDoubleClick)="doubleClicked($event)" (onContextMenuSelected)="handleContextMenuSelected($event)"
-                    [ngClass]="{'god-view': extendedMode}">
+                    [ngClass]="{'god-view': extendedMode}"
+                    [groupRowTemplate]="groupRowHeaderTemplate">
 
                     <!--Columns-->
 
@@ -416,6 +441,7 @@
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
                                                             *ngIf="((isInstrumentSelected(vmItem) && vmItem.tradingState == 1) && userAutoTradingInfoData?.useManualTrading)">
                                                             <span><i class="fa-solid fa-stop"></i> Stop</span>
+                                                            <span>{{instrumentTradingDirectionText(vmItem)}}</span>
                                                         </div>
                                                         <div class="HITL available status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
@@ -427,6 +453,7 @@
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
                                                             *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  "> 
                                                             <span><i class="fa-solid fa-stop"></i> Stop</span>
+                                                            <span>{{instrumentTradingDirectionText(vmItem)}}</span>
                                                         </div>
 
                                                         

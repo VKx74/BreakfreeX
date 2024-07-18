@@ -58,6 +58,21 @@
       max-height: 36px;
       transition: all 0.22s ease-in-out;
     }
+    
+    .group-header-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .group-header-row-title {
+        display: flex;
+      }
+
+      .group-header-row-risk {
+        display: flex;
+      }
+    }
 
     .god-view mat-row {
       overflow: hidden !important;
@@ -78,7 +93,8 @@
         padding-top: 4px;
         margin-top: 12px !important;
         padding-left: 10px !important;
-        height: 26px !important;
+        padding-right: 10px !important;
+        height: 30px !important;
       }
     }
 
@@ -1186,15 +1202,15 @@
     background: themed("HITLActive") !important;
     border: 1px solid themed("HITLActiveBorder");
     display: flex;
-    column-gap: 3px;
+    column-gap: 1px;
     align-items: center;
-    padding: 3px;
+    padding: 3px 4px;
     //padding-right: 6px;
     font-weight: 600;
   }
   .HITL.active span {
    //background: themed("HITLActiveSpan");
-    padding: 0px 3px;
+   padding: 0px 1px;
     border-radius: 3px;
   }
 
@@ -1311,6 +1327,7 @@
     padding: 0px 3px;
     background: themed("trendindextabbg");
     border-radius: 3px;
+    color: #fff;
   }
   span.iconx.enabledx {
     background: #156c27 !important;
@@ -1324,6 +1341,11 @@
   .symbolx {
     color: themed("statusRunnerTextColor");
     background-color: themed("trendindexdefaulttabcolor");
+    
+
+    &.iconx {
+      color: #fff;
+    }
   }
   .header-line {
     color: themed("valueTextColor");
@@ -1345,7 +1367,7 @@
   }
 
   .risk-cell {
-    background: #304a2f !important;
+    background: #304a2f;
     display: flex;
     align-items: center;
     padding: 3px;
@@ -1357,6 +1379,21 @@
     
     &:hover {
       filter: brightness(1.2);
+    }
+
+    &.group-risk {
+      //background: #2a48678c;
+      //border-color: #2a4867;
+      background-color: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      color: themed("orderpanelprefixcolor");
+
+      &:hover {
+        background: themed("statusRunner");
+      border-color: themed("statusRunnerHITLBorder");
+        filter: brightness(1.2);
+      }
     }
   }
 

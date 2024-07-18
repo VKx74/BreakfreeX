@@ -13,17 +13,20 @@
 
   .root {
     height: 100%;
-   
+  }
 
+  .out-of-access {
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
   }
 }
 
 .root {
   @include themify($themes, true) {
-    background-color: themed('appPanelColor');
+    background-color: themed("appPanelColor");
   }
 }
-
 
 .top-line {
   height: 40px;
@@ -147,11 +150,11 @@
 
 .footer {
   padding: 0px;
-    flex-shrink: 0;
-    display: flex;
-    margin: 10px 5px;
-   
-    border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  margin: 10px 5px;
+
+  border-radius: 10px;
 
   .crypto-button {
     max-height: 32px;
@@ -209,19 +212,18 @@
   width: auto;
 }
 
-
 @include themify($themes, true) {
   .header {
-    border-bottom: 1px solid themed('appBackgroundColor');
+    border-bottom: 1px solid themed("appBackgroundColor");
   }
   &.maximized {
     *.crypto-icon-take-off {
-      color: themed('accentColor');
+      color: themed("accentColor");
     }
   }
 
   .top-line {
-    background-color: themed('appPanelColor');
+    background-color: themed("appPanelColor");
     //border-bottom-color: themed('panelBorderColor');
   }
 
@@ -230,14 +232,14 @@
   }
 
   .footer {
-    background: themed('inputBackgroundColor');
+    background: themed("inputBackgroundColor");
 
     .edit-message-wrapper {
       //border-top-color: themed('delimiterColor');
     }
 
     .edit-icon {
-      color: themed('accentColor');
+      color: themed("accentColor");
     }
 
     .cancel-editing-icon {
@@ -251,7 +253,7 @@
 
     &.disabled {
       //background: themed('inputDisabledBgColor');
-      background: themed('selectBgDisabled');
+      background: themed("selectBgDisabled");
     }
   }
 
@@ -262,16 +264,15 @@
       //color: themed('primeColor');
 
       &.reason-caption {
-        color: themed('accentColor');
+        color: themed("accentColor");
       }
     }
   }
 
   .banner-img-wrapper .icon {
-    color: themed('accentColor');
+    color: themed("accentColor");
   }
 }
-
 
 .header {
   display: flex;
@@ -280,7 +281,6 @@
   padding: 7px 9px 6px 22px;
   //padding: 0 2px 0 15px;
   //border-top: 1px solid transparent;
-
 
   .header_title {
     font-size: 13px;
@@ -296,7 +296,6 @@
     cursor: pointer;
   }
 
-
   ::ng-deep menu-toggle {
     *.menu-toggle {
       border-radius: 0;
@@ -308,7 +307,7 @@
         background-color: transparent;
 
         &:hover {
-          background-color: themed('inputBackgroundColor');
+          background-color: themed("inputBackgroundColor");
         }
       }
     }

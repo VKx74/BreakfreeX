@@ -48,6 +48,7 @@ import { BadgeComponent, MyBadgeComponent } from './components/badge/badge.compo
 import { StaticBadgeComponent } from './components/static-badge/static-badge.component';
 import { PercentageInputModalComponent } from './components/percentage-input-modal/percentage-input-modal.component';
 import { NumericInputModule } from '@numeric-input/numeric-input.module';
+import { TradingDirectionModalComponent } from './components/trading-direction-input-modal/trading-direction-input-modal.component';
 
 @NgModule({
     declarations: [
@@ -68,6 +69,7 @@ import { NumericInputModule } from '@numeric-input/numeric-input.module';
         ScrollableDirective,
         InputModalComponent,
         PercentageInputModalComponent,
+        TradingDirectionModalComponent,
         DebouncedInputComponent,
         SearchInputComponent,
         AutocompleteSearchComponent,
@@ -136,6 +138,7 @@ import { NumericInputModule } from '@numeric-input/numeric-input.module';
         ConfirmModalComponent,
         InputModalComponent,
         PercentageInputModalComponent,
+        TradingDirectionModalComponent,
         PinInputModalComponent
     ],
     providers: [

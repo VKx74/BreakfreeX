@@ -10,6 +10,7 @@ import {IOutputData} from "angular-split";
 import {JsUtil} from "../../../../utils/jsUtil";
 import {ChatInstanceKeyToken} from "../../chat-instance-key.token";
 import {ChatTranslateService} from "../../localization/token";
+import { IdentityService } from '@app/services/auth/identity.service';
 
 @Component({
     selector: 'base-chat',
@@ -40,7 +41,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     constructor(@Inject(ChatModeToken) public chatMode: ChatMode,
                 protected _localizationService: LocalizationService,
                 protected _translateService: TranslateService,
-                private _facadeService: FacadeService,
+                protected _facadeService: FacadeService,
+                protected _identityService: IdentityService,
                 public injector: Injector
                 ) {
     }
