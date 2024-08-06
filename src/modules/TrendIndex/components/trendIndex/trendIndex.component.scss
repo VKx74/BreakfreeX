@@ -1238,6 +1238,18 @@
     //border: 1px solid themed("statusRunnerHITLBorder") !important;
   }
 
+  .n-strategy-label {
+    color: themed("statusRunnerTextColor") !important;
+    background: themed("statusRunner");
+    border: 1px solid themed("statusRunnerHITLBorder");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 14px;
+  }
+
   .status-runner {
     padding: 3px 3px;
 

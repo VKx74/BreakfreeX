@@ -601,6 +601,7 @@ export interface IUserAutoTradingInfoData {
 export interface IUserMarketConfigData {
     isDisabled: boolean;
     isTradable: boolean;
+    strategyType: number;
     maxRisks: number;
     risks: number;
     symbol: string;

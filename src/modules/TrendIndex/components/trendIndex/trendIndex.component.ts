@@ -1115,6 +1115,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return false;
     }
 
+    getStrategyType(item: TrendIndexVM): number {
+        if (!this.myAutoTradingAccount) {
+            return;
+        }
+
+        for (let symbol of this._tradableInstruments) {
+            let s1 = symbol.symbol.replace("_", "").toUpperCase();
+            let s2 = item.symbol.replace("_", "").toUpperCase();
+            if (s1 === s2) {
+               return symbol.strategyType;
+            }
+        }
+
+        return;
+    }
+
     isAutoSelected(item: TrendIndexVM) {
         let isUserSelected = this.isInstrumentSelected(item);
         return !isUserSelected;
