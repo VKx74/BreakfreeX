@@ -531,7 +531,8 @@ export interface IMesaTrendIndex {
     price86400: number;
     current_phase: number;
     next_phase: number;
-    trading_state: number;
+    trading_state_n: number;
+    trading_state_sr: number;
 }
 
 export interface IMesaTrendDetails {
@@ -601,7 +602,6 @@ export interface IUserAutoTradingInfoData {
 export interface IUserMarketConfigData {
     isDisabled: boolean;
     isTradable: boolean;
-    strategyType: number;
     maxRisks: number;
     risks: number;
     symbol: string;
@@ -883,9 +883,9 @@ export class AlgoService {
         }));
     }
 
-    getTrendIndexMarketsConfigForAccount(account: string): Observable<IUserMarketConfigData[]> {
+    getTrendIndexMarketsConfigForAccount(account: string, strategyType: number): Observable<IUserMarketConfigData[]> {
         return this._http.post<IUserMarketConfigData[]>(`${this.url}apex/markets-config`, {
-            account: account, version: "2.0"
+            account: account, version: "2.0", strategy : strategyType
         });
     }
 

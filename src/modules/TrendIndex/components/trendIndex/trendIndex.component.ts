@@ -58,6 +58,11 @@ export enum ETrendIndexStrength {
     StrongDown
 }
 
+enum StrategyType {
+    SR = 0,
+    N = 2
+}
+
 enum PhaseState {
     Capitulation = 1,
     Tail = 2,
@@ -254,7 +259,7 @@ class TrendIndexVM {
         return weeks.toFixed(0) + " w";
     }
 
-    public setData(data: IMesaTrendIndex) {
+    public setData(data: IMesaTrendIndex, strategyType: StrategyType) {
         this.id = data.symbol;
         this.type = data.group ? data.group : OtherMarkets;
         this.symbol = data.symbol.replace("_", "");
@@ -372,7 +377,7 @@ class TrendIndexVM {
 
         this.currentMarketState = GetPhaseName(data.current_phase);
         this.expectedMarketState = GetPhaseName(data.next_phase);
-        this.tradingState = data.trading_state;
+        this.tradingState = strategyType === StrategyType.N ? data.trading_state_n : data.trading_state_sr;
 
         for (let key in this.trend_period_descriptions) {
             let item = this.trend_period_descriptions[key];
@@ -471,6 +476,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public autoSelected: number = null;
     public hitlAvailable: number = null;
     public hitlSelected: number = null;
+    public strategyType: StrategyType = StrategyType.N;
 
     public get hasAccess(): boolean {
         return true;
@@ -755,7 +761,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         let exists = false;
                         for (let existingItem of this.vm) {
                             if (item.symbol === existingItem.id) {
-                                existingItem.setData(item);
+                                existingItem.setData(item, this.strategyType);
                                 exists = true;
                                 break;
                             }
@@ -763,7 +769,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                         if (!exists) {
                             let model = new TrendIndexVM();
-                            model.setData(item);
+                            model.setData(item, this.strategyType);
                             this.vm.push(model);
                         }
                     } catch (ex) { }
@@ -890,7 +896,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     protected loadAutoTradingInstruments() {
         if (this.myAutoTradingAccount && this._userAutoTradingInfoData) {
-            this._algoService.getTrendIndexMarketsConfigForAccount(this.myAutoTradingAccount).subscribe((data) => {
+            this._algoService.getTrendIndexMarketsConfigForAccount(this.myAutoTradingAccount, this.strategyType).subscribe((data) => {
                 this._tradableInstruments = data;
                 this.rankByGroups();
                 this._changesDetected = true;
@@ -1123,8 +1129,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
         for (let symbol of this._tradableInstruments) {
             let s1 = symbol.symbol.replace("_", "").toUpperCase();
             let s2 = item.symbol.replace("_", "").toUpperCase();
-            if (s1 === s2) {
-               return symbol.strategyType;
+            if (s1 === s2 && symbol.isTradable) {
+               return this.strategyType;
             }
         }
 
