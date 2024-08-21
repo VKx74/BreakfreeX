@@ -8,21 +8,16 @@
       font-size: 9px;
     }
 
-
     .extended-mode,
     .trading-enabled {
       font-size: 11px !important;
     }
   }
   @media (max-width: 477px) {
-  
-    .mobilehiddenx  {
+    .mobilehiddenx {
       display: none !important;
     }
-
-
   }
-
 
   @media (max-width: 320px) {
     .mobilehiddenacc {
@@ -58,7 +53,7 @@
       max-height: 36px;
       transition: all 0.22s ease-in-out;
     }
-    
+
     .group-header-row {
       display: flex;
       flex-direction: row;
@@ -151,10 +146,9 @@
     display: flex;
     height: 24px;
 
-    .bft-form-select{
-    max-width:120px;
-  }
-    
+    .bft-form-select {
+      max-width: 120px;
+    }
   }
 
   .risk-management {
@@ -563,8 +557,6 @@
     text-align: center;
   }
 
- 
-
   .symbol-trade-state {
     display: flex;
     justify-content: center;
@@ -630,7 +622,7 @@
   }
   .NA-state {
     display: flex;
-    padding-right:3px;
+    padding-right: 3px;
   }
 
   .NA-state i {
@@ -687,7 +679,7 @@
       filter: brightness(1.2);
     }
   }
-  
+
   button.rest-to-default-button {
     border: 1px solid #616176;
     background: #383845;
@@ -1101,6 +1093,45 @@
     text-align: center;
   }
 
+  .strategy-selector {
+    margin-bottom: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    font-size: 12px;
+
+    .strategy-toggle {
+      display: flex;
+    }
+
+    .strategy-title {
+    }
+
+    button.strategy-toggle-button {
+      border: 1px solid #616176;
+      background: #383845;
+      color: #fff;
+      padding: 3px 6px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      -moz-column-gap: 3px;
+      column-gap: 3px;
+      transition: all 0.22s ease-in-out;
+      margin-left: 9px;
+
+      &.is-strategy-active {
+        background: #2a48678c;
+        border-color: #2a4867;
+        font-weight: bolder;
+      }
+
+      &:hover {
+        filter: brightness(1.2);
+      }
+    }
+  }
 }
 
 .manage-auto-trading-account-text {
@@ -1109,6 +1140,10 @@
 
 @include themify($themes, true) {
   .maintenance {
+    color: themed("valueTextColor");
+  }
+
+  .strategy-title {
     color: themed("valueTextColor");
   }
 
@@ -1209,8 +1244,8 @@
     font-weight: 600;
   }
   .HITL.active span {
-   //background: themed("HITLActiveSpan");
-   padding: 0px 1px;
+    //background: themed("HITLActiveSpan");
+    padding: 0px 1px;
     border-radius: 3px;
   }
 
@@ -1227,7 +1262,7 @@
   }
 
   .HITL.available span {
-   // background: themed("HITLavailablespan");
+    // background: themed("HITLavailablespan");
     padding: 1px 3px;
     border-radius: 3px;
   }
@@ -1353,7 +1388,6 @@
   .symbolx {
     color: themed("statusRunnerTextColor");
     background-color: themed("trendindexdefaulttabcolor");
-    
 
     &.iconx {
       color: #fff;
@@ -1388,7 +1422,7 @@
     border-radius: 3px;
     border: 1px solid #536a52;
     transition: all 0.22s ease-in-out;
-    
+
     &:hover {
       filter: brightness(1.2);
     }
@@ -1403,7 +1437,7 @@
 
       &:hover {
         background: themed("statusRunner");
-      border-color: themed("statusRunnerHITLBorder");
+        border-color: themed("statusRunnerHITLBorder");
         filter: brightness(1.2);
       }
     }

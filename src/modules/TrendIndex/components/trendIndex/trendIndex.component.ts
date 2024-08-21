@@ -48,6 +48,7 @@ interface ISymbolGroup {
 }
 
 export interface ITrendIndexComponentState {
+    StrategyType: number;
 }
 
 export enum ETrendIndexStrength {
@@ -231,6 +232,7 @@ class TrendIndexVM {
     longGroupPhase: string;
 
     risk: number;
+    strategyType: StrategyType;
 
     public static getDurationString(t: number) {
         if (!t) {
@@ -261,6 +263,7 @@ class TrendIndexVM {
 
     public setData(data: IMesaTrendIndex, strategyType: StrategyType) {
         this.id = data.symbol;
+        this.strategyType = strategyType;
         this.type = data.group ? data.group : OtherMarkets;
         this.symbol = data.symbol.replace("_", "");
         this.datafeed = data.datafeed;
@@ -476,7 +479,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public autoSelected: number = null;
     public hitlAvailable: number = null;
     public hitlSelected: number = null;
-    public strategyType: StrategyType = StrategyType.N;
+    public strategyType: StrategyType = StrategyType.SR;
 
     public get hasAccess(): boolean {
         return true;
@@ -573,7 +576,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     ngOnInit() {
         this.initialized.next(this);
+    }
 
+    initData()
+    {
         if (!this.hasAccess) {
             return;
         }
@@ -916,6 +922,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     getState(): ITrendIndexComponentState {
         return {
+            StrategyType : this.strategyType
         };
     }
 
@@ -1031,7 +1038,14 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._state = state;
         }
 
+        if (this._state && this._state.StrategyType)
+        {
+            this.strategyType = this._state.StrategyType;
+        }
+
         this._initialized = true;
+
+        this.initData();
     }
 
     closeCharts() {
@@ -1130,7 +1144,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             let s1 = symbol.symbol.replace("_", "").toUpperCase();
             let s2 = item.symbol.replace("_", "").toUpperCase();
             if (s1 === s2 && symbol.isTradable) {
-               return this.strategyType;
+               return item.strategyType;
             }
         }
 
@@ -1835,5 +1849,31 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
 
         return "All";
+    }
+
+    useSRStrategy()
+    {
+        if (this.strategyType === StrategyType.SR)
+        {
+            return;
+        }
+
+        this.strategyType = StrategyType.SR;
+        this.loadData();
+        this.loadUserAutoTradingInfoForAccount(true);
+        this.stateChanged.next(this);
+    }
+
+    useNStrategy()
+    {
+        if (this.strategyType === StrategyType.N)
+        {
+            return;
+        }
+
+        this.strategyType = StrategyType.N;
+        this.loadData();
+        this.loadUserAutoTradingInfoForAccount(true);
+        this.stateChanged.next(this);
     }
 }
