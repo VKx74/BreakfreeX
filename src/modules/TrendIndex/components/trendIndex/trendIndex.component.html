@@ -165,16 +165,19 @@
 
         <div class="strategy-selector">
             <div class="strategy-title">
-                Strategy type:
+                Trading model:
             </div>
             <div class="strategy-toggle">
                 <button class="strategy-toggle-button" (click)="useSRStrategy()" [ngClass]="{'is-strategy-active': strategyType == 0}">
-                    Support/Resistance
+                    Classic
                 </button>
+                
+
                 <button class="strategy-toggle-button"  (click)="useNStrategy()" [ngClass]="{'is-strategy-active': strategyType == 2}">
-                    Natural
+                    Unnamed <span class="beta">BETA</span>
                 </button>
             </div>
+            
         </div>
 
         <div class="chart-view" *ngIf="!!chartDataBars">
