@@ -138,6 +138,30 @@
     }
   }
 
+
+  .download-agent-beta a {
+    padding: 9px 9px;
+    font-weight: bold;
+    border-radius: 3px;
+    background: #894292;
+    color: #fff;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      margin-left: 8px;
+    }
+
+    &:hover {
+      background: #cb61da;
+      text-decoration: none;
+    }
+  }
+
   span.privatebetalabel {
     background: #000;
     border-radius: 6px;
