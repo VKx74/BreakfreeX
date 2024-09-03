@@ -60,6 +60,7 @@ export enum ETrendIndexStrength {
 }
 
 enum StrategyType {
+    Auto = -1,
     SR = 0,
     N = 2
 }
@@ -380,7 +381,20 @@ class TrendIndexVM {
 
         this.currentMarketState = GetPhaseName(data.current_phase);
         this.expectedMarketState = GetPhaseName(data.next_phase);
-        this.tradingState = strategyType === StrategyType.N ? data.trading_state_n : data.trading_state_sr;
+
+        if (strategyType === StrategyType.N) {
+            this.tradingState = data.trading_state_n;
+        } else if (strategyType === StrategyType.SR) {
+            this.tradingState = data.trading_state_sr;
+        } else {
+            if (data.trading_state_n === 2) {
+                this.tradingState = 2;
+                this.strategyType = StrategyType.N;
+            } else {
+                this.tradingState = data.trading_state_sr;
+                this.strategyType = StrategyType.SR;
+            }
+        }
 
         for (let key in this.trend_period_descriptions) {
             let item = this.trend_period_descriptions[key];
@@ -578,8 +592,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.initialized.next(this);
     }
 
-    initData()
-    {
+    initData() {
         if (!this.hasAccess) {
             return;
         }
@@ -922,7 +935,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     getState(): ITrendIndexComponentState {
         return {
-            StrategyType : this.strategyType
+            StrategyType: this.strategyType
         };
     }
 
@@ -1038,8 +1051,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._state = state;
         }
 
-        if (this._state && this._state.StrategyType)
-        {
+        if (this._state && this._state.StrategyType) {
             this.strategyType = this._state.StrategyType;
         }
 
@@ -1144,7 +1156,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             let s1 = symbol.symbol.replace("_", "").toUpperCase();
             let s2 = item.symbol.replace("_", "").toUpperCase();
             if (s1 === s2 && symbol.isTradable) {
-               return item.strategyType;
+                return item.strategyType;
             }
         }
 
@@ -1851,10 +1863,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return "All";
     }
 
-    useSRStrategy()
-    {
-        if (this.strategyType === StrategyType.SR)
-        {
+    useSRStrategy() {
+        if (this.strategyType === StrategyType.SR) {
             return;
         }
 
@@ -1864,14 +1874,23 @@ export class TrendIndexComponent extends BaseLayoutItem {
         this.stateChanged.next(this);
     }
 
-    useNStrategy()
-    {
-        if (this.strategyType === StrategyType.N)
-        {
+    useNStrategy() {
+        if (this.strategyType === StrategyType.N) {
             return;
         }
 
         this.strategyType = StrategyType.N;
+        this.loadData();
+        this.loadUserAutoTradingInfoForAccount(true);
+        this.stateChanged.next(this);
+    }
+
+    useCombinedStrategy() {
+        if (this.strategyType === StrategyType.Auto) {
+            return;
+        }
+
+        this.strategyType = StrategyType.Auto;
         this.loadData();
         this.loadUserAutoTradingInfoForAccount(true);
         this.stateChanged.next(this);
