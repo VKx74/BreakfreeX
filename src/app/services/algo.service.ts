@@ -486,6 +486,12 @@ export interface IRTDPayload {
     local_avg: number;
 }
 
+export interface ICFlexPayload {
+    dates: number[];
+    values: number[];
+    id?: string;
+}
+
 export interface IMesaTrendStrength {
     f: number;
     s: number;
@@ -771,6 +777,10 @@ export class AlgoService {
 
     calculateRTD(data: any): Observable<IRTDPayload> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
+    }
+
+    calculateCFlex(data: any): Observable<ICFlexPayload> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}cflex`, data).pipe(map(this._decrypt));
     }
 
     calculateRTDGuest(data: any): Observable<IRTDPayload> {

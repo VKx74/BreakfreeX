@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BreakfreeTradingService } from 'modules/BreakfreeTrading/services/breakfreeTrading.service';
 import { Observable, of, Subject } from 'rxjs';
-import { IBFTAAlgoCacheItemResponse, IBFTAAlgoTrendResponse, IBFTAlgoParameters, IRTDPayload } from '@app/services/algo.service';
+import { IBFTAAlgoCacheItemResponse, IBFTAAlgoTrendResponse, IBFTAlgoParameters, ICFlexPayload, IRTDPayload } from '@app/services/algo.service';
 import { BrokerService } from '@app/services/broker.service';
 import { MTBroker } from '@app/services/mt/mt.broker';
 import { TradingHelper } from "@app/services/mt/mt.helper";
@@ -67,6 +67,28 @@ export class IndicatorDataProviderService {
             }
 
             data.general_trend = globalTrendDesc;
+            return data;
+        });
+    }
+    
+    getCFlex(indicator: TradingChartDesigner.Indicator, params?: any): Promise<ICFlexPayload> {
+        let request = {
+            timeframe: params["timeframe"],
+            instrument: params["instrument"],
+            barsCount: params["barsCount"],
+            period: params["reflexPeriod"],
+            superSmooth: params["superSmoothPeriod"],
+            postSmooth: params["postSmoothPeriod"],
+            id: params["id"],
+            version: ""
+        };
+
+        if (!request.barsCount)
+        {
+            return null;
+        }
+
+        return this._bftService.getCFlex(request).then(data => {
             return data;
         });
     }
