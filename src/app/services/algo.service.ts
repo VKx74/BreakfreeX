@@ -599,6 +599,7 @@ export interface IUserAutoTradingInfoData {
     defaultMarketRisk: number;
     defaultGroupRisk: number;
     maxInstrumentCount: number;
+    strategy: number;
     disabledMarkets: string[];
     risksPerMarket: { [key: string]: number };
     risksPerGroup: { [key: string]: number };
@@ -975,6 +976,12 @@ export class AlgoService {
     changeBotEnabledForAccount(account: string, userId: string, switchedOff: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-state`, {
             account: account, userId: userId, version: "2.0", switchedOff: switchedOff
+        });
+    }
+
+    changeBotStrategyForAccount(account: string, userId: string, strategy: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-strategy`, {
+            account: account, userId: userId, version: "2.0", strategy: strategy
         });
     }
 

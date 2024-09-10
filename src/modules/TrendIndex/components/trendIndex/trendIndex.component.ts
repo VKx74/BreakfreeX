@@ -48,7 +48,6 @@ interface ISymbolGroup {
 }
 
 export interface ITrendIndexComponentState {
-    StrategyType: number;
 }
 
 export enum ETrendIndexStrength {
@@ -493,7 +492,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public autoSelected: number = null;
     public hitlAvailable: number = null;
     public hitlSelected: number = null;
-    public strategyType: StrategyType = StrategyType.SR;
+    // public strategyType: StrategyType = StrategyType.SR;
 
     public get hasAccess(): boolean {
         return true;
@@ -533,6 +532,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     get userAutoTradingInfoData(): IUserAutoTradingInfoData {
         return this._userAutoTradingInfoData;
+    }
+
+    get strategyType(): StrategyType {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.strategy : null;
     }
 
     get risksPerGroup(): { [key: string]: number } {
@@ -935,7 +938,6 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     getState(): ITrendIndexComponentState {
         return {
-            StrategyType: this.strategyType
         };
     }
 
@@ -1051,9 +1053,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._state = state;
         }
 
-        if (this._state && this._state.StrategyType) {
-            this.strategyType = this._state.StrategyType;
-        }
+        // if (this._state && this._state.StrategyType) {
+        //     this.strategyType = this._state.StrategyType;
+        // }
 
         this._initialized = true;
 
@@ -1868,10 +1870,11 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return;
         }
 
-        this.strategyType = StrategyType.SR;
-        this.loadData();
-        this.loadUserAutoTradingInfoForAccount(true);
-        this.stateChanged.next(this);
+        // this.strategyType = StrategyType.SR;
+        // this.loadData();
+        // this.loadUserAutoTradingInfoForAccount(true);
+        // this.stateChanged.next(this);
+        this.changeStrategy(StrategyType.SR);
     }
 
     useNStrategy() {
@@ -1879,20 +1882,26 @@ export class TrendIndexComponent extends BaseLayoutItem {
             return;
         }
 
-        this.strategyType = StrategyType.N;
-        this.loadData();
-        this.loadUserAutoTradingInfoForAccount(true);
-        this.stateChanged.next(this);
+        this.changeStrategy(StrategyType.N);
     }
 
     useCombinedStrategy() {
         if (this.strategyType === StrategyType.Auto) {
             return;
         }
+        
+        this.changeStrategy(StrategyType.Auto);
+    }
 
-        this.strategyType = StrategyType.Auto;
-        this.loadData();
-        this.loadUserAutoTradingInfoForAccount(true);
-        this.stateChanged.next(this);
+    private changeStrategy(strategy: StrategyType) {
+        this.loading = true;
+        this._algoService.changeBotStrategyForAccount(this.myAutoTradingAccount, this._identityService.id, strategy).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadData();
+            this.loadUserAutoTradingInfoForAccount(true);
+        }, () => {
+            this.loading = false;
+            this._changesDetected = true;
+        });
     }
 }
