@@ -403,6 +403,11 @@ export class WatchlistComponent extends BaseLayoutItem {
     }
 
     protected setWatchlist(watchlist: IWatchlistItem) {
+        if (this.activeWatchlist && watchlist && this.activeWatchlist.id === watchlist.id)
+        {
+            return;
+        }
+        
         this.activeWatchlist = watchlist;
         this._removeAllInstruments();
         this._loadInstrumentsForWatchlist(this.activeWatchlist.data);
