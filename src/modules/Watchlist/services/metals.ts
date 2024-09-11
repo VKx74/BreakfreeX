@@ -8,20 +8,7 @@ export const MetalsWatchlist: IWatchlistItem = {
     name: "Metals",
     trackingId: "Metals",
     isDefault: true,
-    data: [{
-        "id": "XAG_EUR",
-        "symbol": "XAGEUR",
-        "exchange": EExchange.Oanda,
-        "datafeed": EExchangeInstance.OandaExchange,
-        "type": EMarketType.Metals,
-        "tickSize": 0.00001,
-        "pricePrecision": 5,
-        "baseInstrument": "EUR",
-        "dependInstrument": "XAG",
-        "company": "XAG vs EUR",
-        "tradable": true,
-        "tickSizeCorrect": true
-        },
+    data: [
         {
         "id": "XAG_USD",
         "symbol": "XAGUSD",
@@ -37,20 +24,6 @@ export const MetalsWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
         },
         {
-        "id": "XAU_EUR",
-        "symbol": "XAUEUR",
-        "exchange": EExchange.Oanda,
-        "datafeed": EExchangeInstance.OandaExchange,
-        "type": EMarketType.Metals,
-        "tickSize": 0.001,
-        "pricePrecision": 3,
-        "baseInstrument": "EUR",
-        "dependInstrument": "XAU",
-        "company": "XAU vs EUR",
-        "tradable": true,
-        "tickSizeCorrect": true
-        },
-        {
         "id": "XAU_USD",
         "symbol": "XAUUSD",
         "exchange": EExchange.Oanda,
@@ -61,48 +34,6 @@ export const MetalsWatchlist: IWatchlistItem = {
         "baseInstrument": "USD",
         "dependInstrument": "XAU",
         "company": "XAU vs USD",
-        "tradable": true,
-        "tickSizeCorrect": true
-        },
-        {
-        "id": "XAU_XAG",
-        "symbol": "XAUXAG",
-        "exchange": EExchange.Oanda,
-        "datafeed": EExchangeInstance.OandaExchange,
-        "type": EMarketType.Metals,
-        "tickSize": 0.001,
-        "pricePrecision": 3,
-        "baseInstrument": "XAG",
-        "dependInstrument": "XAU",
-        "company": "XAU vs XAG",
-        "tradable": true,
-        "tickSizeCorrect": true
-        },
-        {
-        "id": "XPD_USD",
-        "symbol": "XPDUSD",
-        "exchange": EExchange.Oanda,
-        "datafeed": EExchangeInstance.OandaExchange,
-        "type": EMarketType.Metals,
-        "tickSize": 0.001,
-        "pricePrecision": 3,
-        "baseInstrument": "USD",
-        "dependInstrument": "XPD",
-        "company": "XPD vs USD",
-        "tradable": true,
-        "tickSizeCorrect": true
-        },
-        {
-        "id": "XPT_USD",
-        "symbol": "XPTUSD",
-        "exchange": EExchange.Oanda,
-        "datafeed": EExchangeInstance.OandaExchange,
-        "type": EMarketType.Metals,
-        "tickSize": 0.001,
-        "pricePrecision": 3,
-        "baseInstrument": "USD",
-        "dependInstrument": "XPT",
-        "company": "XPT vs USD",
         "tradable": true,
         "tickSizeCorrect": true
         }]

@@ -247,19 +247,6 @@ export const ExoticsForexWatchlist: IWatchlistItem = {
         "tickSizeCorrect": true
         },
         {
-        "id": "USD/RUB",
-        "symbol": "USDRUB",
-        "exchange": EExchange.Forex,
-        "datafeed": EExchangeInstance.TwelvedataExchange,
-        "type": EMarketType.Forex,
-        "tickSize": 0.00001,
-        "pricePrecision": 5,
-        "baseInstrument": "US Dollar",
-        "dependInstrument": "Russian Ruble",
-        "company": "US Dollar vs Russian Ruble",
-        "tradable": false
-        },
-        {
         "id": "USD_SEK",
         "symbol": "USDSEK",
         "exchange": EExchange.Oanda,
