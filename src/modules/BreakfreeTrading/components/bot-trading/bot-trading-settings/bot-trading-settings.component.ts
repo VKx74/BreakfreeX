@@ -38,9 +38,8 @@ export class BotTradingSettingsComponent extends Modal<BotTradingSettingsCompone
 
 
     public downloadLink: string = '/assets/NeuralAgent_3.19.7.ex5?+1';
+    public downloadLink2: string = '/assets/NeuralAgent_4.20.ex5?+1';
     public downloadUserDocLink: string = '/assets/NA 3.19.3 user doc.pdf?+1';
-    // public downloadLink2: string = '/assets/NA2_2.0_beta.ex5';
-    // public downloadLink3: string = 'https://forms.gle/wSJNCdN1ahYkosmq9';
 
     public get isAllowed(): boolean {
         // return true;

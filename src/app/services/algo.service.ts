@@ -486,6 +486,12 @@ export interface IRTDPayload {
     local_avg: number;
 }
 
+export interface ICFlexPayload {
+    dates: number[];
+    values: number[];
+    id?: string;
+}
+
 export interface IMesaTrendStrength {
     f: number;
     s: number;
@@ -531,7 +537,8 @@ export interface IMesaTrendIndex {
     price86400: number;
     current_phase: number;
     next_phase: number;
-    trading_state: number;
+    trading_state_n: number;
+    trading_state_sr: number;
 }
 
 export interface IMesaTrendDetails {
@@ -592,6 +599,7 @@ export interface IUserAutoTradingInfoData {
     defaultMarketRisk: number;
     defaultGroupRisk: number;
     maxInstrumentCount: number;
+    strategy: number;
     disabledMarkets: string[];
     risksPerMarket: { [key: string]: number };
     risksPerGroup: { [key: string]: number };
@@ -772,6 +780,10 @@ export class AlgoService {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
     }
 
+    calculateCFlex(data: any): Observable<ICFlexPayload> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}cflex`, data).pipe(map(this._decrypt));
+    }
+
     calculateRTDGuest(data: any): Observable<IRTDPayload> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd_guest`, data).pipe(map(this._decrypt));
     }
@@ -882,9 +894,9 @@ export class AlgoService {
         }));
     }
 
-    getTrendIndexMarketsConfigForAccount(account: string): Observable<IUserMarketConfigData[]> {
+    getTrendIndexMarketsConfigForAccount(account: string, strategyType: number): Observable<IUserMarketConfigData[]> {
         return this._http.post<IUserMarketConfigData[]>(`${this.url}apex/markets-config`, {
-            account: account, version: "2.0"
+            account: account, version: "2.0", strategy : strategyType
         });
     }
 
@@ -964,6 +976,12 @@ export class AlgoService {
     changeBotEnabledForAccount(account: string, userId: string, switchedOff: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-state`, {
             account: account, userId: userId, version: "2.0", switchedOff: switchedOff
+        });
+    }
+
+    changeBotStrategyForAccount(account: string, userId: string, strategy: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-strategy`, {
+            account: account, userId: userId, version: "2.0", strategy: strategy
         });
     }
 

@@ -58,6 +58,12 @@ export enum ETrendIndexStrength {
     StrongDown
 }
 
+enum StrategyType {
+    Auto = -1,
+    SR = 0,
+    N = 2
+}
+
 enum PhaseState {
     Capitulation = 1,
     Tail = 2,
@@ -226,6 +232,7 @@ class TrendIndexVM {
     longGroupPhase: string;
 
     risk: number;
+    strategyType: StrategyType;
 
     public static getDurationString(t: number) {
         if (!t) {
@@ -254,8 +261,9 @@ class TrendIndexVM {
         return weeks.toFixed(0) + " w";
     }
 
-    public setData(data: IMesaTrendIndex) {
+    public setData(data: IMesaTrendIndex, strategyType: StrategyType) {
         this.id = data.symbol;
+        this.strategyType = strategyType;
         this.type = data.group ? data.group : OtherMarkets;
         this.symbol = data.symbol.replace("_", "");
         this.datafeed = data.datafeed;
@@ -372,7 +380,20 @@ class TrendIndexVM {
 
         this.currentMarketState = GetPhaseName(data.current_phase);
         this.expectedMarketState = GetPhaseName(data.next_phase);
-        this.tradingState = data.trading_state;
+
+        if (strategyType === StrategyType.N) {
+            this.tradingState = data.trading_state_n;
+        } else if (strategyType === StrategyType.SR) {
+            this.tradingState = data.trading_state_sr;
+        } else {
+            if (data.trading_state_n === 2) {
+                this.tradingState = 2;
+                this.strategyType = StrategyType.N;
+            } else {
+                this.tradingState = data.trading_state_sr;
+                this.strategyType = StrategyType.SR;
+            }
+        }
 
         for (let key in this.trend_period_descriptions) {
             let item = this.trend_period_descriptions[key];
@@ -471,6 +492,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public autoSelected: number = null;
     public hitlAvailable: number = null;
     public hitlSelected: number = null;
+    // public strategyType: StrategyType = StrategyType.SR;
 
     public get hasAccess(): boolean {
         return true;
@@ -510,6 +532,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     get userAutoTradingInfoData(): IUserAutoTradingInfoData {
         return this._userAutoTradingInfoData;
+    }
+
+    get strategyType(): StrategyType {
+        return this._userAutoTradingInfoData ? this._userAutoTradingInfoData.strategy : null;
     }
 
     get risksPerGroup(): { [key: string]: number } {
@@ -567,7 +593,9 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     ngOnInit() {
         this.initialized.next(this);
+    }
 
+    initData() {
         if (!this.hasAccess) {
             return;
         }
@@ -755,7 +783,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
                         let exists = false;
                         for (let existingItem of this.vm) {
                             if (item.symbol === existingItem.id) {
-                                existingItem.setData(item);
+                                existingItem.setData(item, this.strategyType);
                                 exists = true;
                                 break;
                             }
@@ -763,7 +791,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
                         if (!exists) {
                             let model = new TrendIndexVM();
-                            model.setData(item);
+                            model.setData(item, this.strategyType);
                             this.vm.push(model);
                         }
                     } catch (ex) { }
@@ -890,7 +918,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
     protected loadAutoTradingInstruments() {
         if (this.myAutoTradingAccount && this._userAutoTradingInfoData) {
-            this._algoService.getTrendIndexMarketsConfigForAccount(this.myAutoTradingAccount).subscribe((data) => {
+            this._algoService.getTrendIndexMarketsConfigForAccount(this.myAutoTradingAccount, this.strategyType).subscribe((data) => {
                 this._tradableInstruments = data;
                 this.rankByGroups();
                 this._changesDetected = true;
@@ -1025,7 +1053,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._state = state;
         }
 
+        // if (this._state && this._state.StrategyType) {
+        //     this.strategyType = this._state.StrategyType;
+        // }
+
         this._initialized = true;
+
+        this.initData();
     }
 
     closeCharts() {
@@ -1113,6 +1147,22 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
 
         return false;
+    }
+
+    getStrategyType(item: TrendIndexVM): number {
+        if (!this.myAutoTradingAccount) {
+            return;
+        }
+
+        for (let symbol of this._tradableInstruments) {
+            let s1 = symbol.symbol.replace("_", "").toUpperCase();
+            let s2 = item.symbol.replace("_", "").toUpperCase();
+            if (s1 === s2 && symbol.isTradable) {
+                return item.strategyType;
+            }
+        }
+
+        return;
     }
 
     isAutoSelected(item: TrendIndexVM) {
@@ -1813,5 +1863,45 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
 
         return "All";
+    }
+
+    useSRStrategy() {
+        if (this.strategyType === StrategyType.SR) {
+            return;
+        }
+
+        // this.strategyType = StrategyType.SR;
+        // this.loadData();
+        // this.loadUserAutoTradingInfoForAccount(true);
+        // this.stateChanged.next(this);
+        this.changeStrategy(StrategyType.SR);
+    }
+
+    useNStrategy() {
+        if (this.strategyType === StrategyType.N) {
+            return;
+        }
+
+        this.changeStrategy(StrategyType.N);
+    }
+
+    useCombinedStrategy() {
+        if (this.strategyType === StrategyType.Auto) {
+            return;
+        }
+        
+        this.changeStrategy(StrategyType.Auto);
+    }
+
+    private changeStrategy(strategy: StrategyType) {
+        this.loading = true;
+        this._algoService.changeBotStrategyForAccount(this.myAutoTradingAccount, this._identityService.id, strategy).subscribe((data) => {
+            this._userAutoTradingInfoData = data;
+            this.loadData();
+            this.loadUserAutoTradingInfoForAccount(true);
+        }, () => {
+            this.loading = false;
+            this._changesDetected = true;
+        });
     }
 }
