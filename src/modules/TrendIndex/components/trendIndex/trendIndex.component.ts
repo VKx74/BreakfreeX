@@ -1776,6 +1776,8 @@ export class TrendIndexComponent extends BaseLayoutItem {
     }
 
     doubleClicked(instrumentVM: TrendIndexVM) {
+        return;
+        // disabled double click function
         console.log("doubleClicked");
         this.logsVisible = false;
         this.riskManagementVisible = false;

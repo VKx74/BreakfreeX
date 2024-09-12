@@ -679,14 +679,14 @@
 
                     <data-table-menu-item [id]="'trade'">
                         <ng-template>
-                            {{isSelectedInstrumentTradable() ? "Disable HITL" : "Enable HITL"}}
+                            {{isSelectedInstrumentTradable() ? "Stop Force Trading" : "Force Start Trading"}}
                         </ng-template>
                     </data-table-menu-item>
-                    <data-table-menu-item [id]="'openCharts'">
+                    <!--   <data-table-menu-item [id]="'openCharts'">
                         <ng-template>
                             View Analysis
                         </ng-template>
-                    </data-table-menu-item>
+                    </data-table-menu-item> -->
                     <data-table-menu-item [id]="'viewOnChart'">
                         <ng-template>
                             View Chart
