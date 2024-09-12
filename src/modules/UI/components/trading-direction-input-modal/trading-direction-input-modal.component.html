@@ -5,12 +5,18 @@
                     class="crypto-icon crypto-icon-close cursor-pointer"></i>
             </button>
             <h4 class="modal-title">
-                <span>Select trading direction</span>
+                <span>Force Trading Override</span>
             </h4>
+            
         </div>
         <div class="modal-body">
             <div class="title-description">
+                By default neural agent is backtested and tuned to trade at very specific moment to stay profitable.
+                <br>  <br>You can override the default strategy and force neural agent to trade any market in any direction for any duration, however it is completely on your own risk and responsibility. 
+                
             </div>
+
+          
         </div>
         <div class="modal-footer">
             <div class="btns-wrapper">
@@ -21,7 +27,7 @@
                     <span>Long</span>
                 </button>
                 <button class="crypto-button crypto-button_action" (click)="auto()">
-                    <span>Auto</span>
+                    <span>Auto Trend </span>
                 </button>
             </div>
         </div>
