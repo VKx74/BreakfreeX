@@ -6,6 +6,15 @@
 .modal-body {
   max-height: 75vh;
 }
+.title-description {
+  font-size: 12px;
+  background: #ff000082;
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  line-height: normal;
+}
+
 
 :host {
   .btns-wrapper {

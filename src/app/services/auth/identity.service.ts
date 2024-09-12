@@ -186,6 +186,31 @@ export class IdentityService {
         return false;
     }
 
+    public get isTrial(): boolean {
+        if (this.isAdmin) {
+            return false;
+        }
+
+        let trialExists = false;
+        let nonTrialExists = false;
+
+        if (this.subscriptions && this.subscriptions.length) {
+            for (const sub of this.subscriptions) {
+                if (sub.indexOf("(Trialing)") !== -1) {
+                    trialExists = true;
+                } else {
+                    nonTrialExists = true;
+                }
+            }
+        }
+
+        if (nonTrialExists) {
+            return false;
+        }
+
+        return trialExists;
+    }
+
     public get isChatAllowed(): boolean {
         return true;
         if (this.isAdmin) {
