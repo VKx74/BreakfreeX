@@ -118,7 +118,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     }
 
     get hasAccess(): boolean {
-        return this._identityService.isAuthorizedCustomer && !this._identityService.isTrial;
+        return this._identityService.isAuthorizedCustomer ;
     }
 
     get isAdmin(): boolean {
