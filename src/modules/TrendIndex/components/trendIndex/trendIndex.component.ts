@@ -1357,6 +1357,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this._matDialog.open<TradingDirectionModalComponent>(TradingDirectionModalComponent).afterClosed().subscribe((value) => {
                 if (value === null || value === undefined) {
                     this.loading = false;
+                    this._changesDetected = true;
                     return;
                 }
                 this.addMarkets(symbol, value);
@@ -1891,7 +1892,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         if (this.strategyType === StrategyType.Auto) {
             return;
         }
-        
+
         this.changeStrategy(StrategyType.Auto);
     }
 
