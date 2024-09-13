@@ -10,7 +10,6 @@ import { IBFTATrend } from "@app/services/algo.service";
 import { ItemsComponent } from "../../trade-manager/items-component/items.component";
 import { LocalStorageService } from "modules/Storage/services/local-storage.service";
 import { SettingsStorageService } from "@app/services/settings-storage.servic";
-import { TradeFromChartService } from "@chart/services/trade-from-chart.service";
 
 export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
     protected _hiddenColumns: string[] = this._getHiddenColumns();
@@ -37,7 +36,6 @@ export abstract class MTItemsComponent<T> extends ItemsComponent<T> {
         @Inject(AlertService) protected _alertService: AlertService,
         protected _dialog: MatDialog,
         protected _settingsStorageService: SettingsStorageService,
-        protected _tradingFromChartHandler: TradeFromChartService,
         protected _cdr: ChangeDetectorRef) {
         super(_broker, _dataHighlightService, _alertService, _dialog, _cdr);
 
