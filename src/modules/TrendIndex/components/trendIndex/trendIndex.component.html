@@ -460,8 +460,12 @@
                                                             <ng-container [ngSwitch]="getStrategyType(vmItem)">
                                                                 <ng-container *ngSwitchCase="2">
                                                                     <div class="n-strategy-label status-holder">
-                                                                        <span><i
-                                                                                class="fa-solid fa-square-n"></i></span>
+                                                                        <span><i class="fa-solid fa-square-n"></i></span>
+                                                                    </div>
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchCase="0">
+                                                                    <div class="n-strategy-label status-holder">
+                                                                        <span><i class="fa-solid fa-square-c"></i></span>
                                                                     </div>
                                                                 </ng-container>
                                                             </ng-container>
