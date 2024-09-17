@@ -2,18 +2,13 @@ import {
     Component,
     ElementRef,
     EventEmitter, Inject,
-    Input,
-    OnChanges,
     OnDestroy,
     OnInit,
     Output,
     ViewChild
 } from '@angular/core';
-import { EThreadType, IFileInfo, IThreadMessagePublish } from "../../models/thread";
-import { ChatApiService } from "../../services/chat.api.service";
-import { NotificationService } from "@app/services/notification.service";
-import { UsersService } from "@app/services/users.service";
-import { merge, Observable, of, Subject, Subscription } from "rxjs";
+import { EThreadType, IFileInfo } from "../../models/thread";
+import { merge, Observable, of } from "rxjs";
 import {
     catchError, distinct,
     distinctUntilChanged,
@@ -43,8 +38,6 @@ import { Roles } from "@app/models/auth/auth.models";
 import bind from "bind-decorator";
 import { IUploadFileInputConfig } from "../../../file-uploader/components/upload-file-input/upload-file-input.component";
 import { UploadFile } from "../../../file-uploader/data/UploadFIle";
-import { State } from "../../store/reducers";
-import { Store } from "@ngrx/store";
 import { IMessage } from "../../models/models";
 import {
     LoadThreadMessagesSuccess,
@@ -67,7 +60,7 @@ import {
     ThreadConfiguratorComponentResult
 } from "../thread-configurator/thread-configurator.component";
 import { FileStorageService } from "@app/services/file-storage.service";
-import { Actions, ofType } from "@ngrx/effects";
+import { ofType } from "@ngrx/effects";
 import {
     InfinityLoaderComponent,
     InfinityLoaderHandler,
