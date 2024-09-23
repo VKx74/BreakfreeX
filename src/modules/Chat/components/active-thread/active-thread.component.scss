@@ -20,9 +20,23 @@
     text-align: center;
     font-size: 14px;
   }
+
+  .chat-text-input {
+    font-size: 12px;
+    resize: none;
+    border: none;
+    padding-top: 5px;
+    padding-left: 10px;
+  }
 }
 
 .root {
+  @include themify($themes, true) {
+    background-color: themed("appPanelColor");
+  }
+}
+
+.chat-text-input {
   @include themify($themes, true) {
     background-color: themed("appPanelColor");
   }
@@ -189,6 +203,10 @@
     .control {
       &.add-file-control {
         font-size: 21px;
+        height: 100% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }

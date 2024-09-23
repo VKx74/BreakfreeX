@@ -430,10 +430,10 @@
                                                                             Active
                                                                         </div>
 
-                                                                        <!--span class=" marketstateshort" tooltip
+                                                                        <span class=" marketstateshort" tooltip
                                                                             [matTooltip]="vmItem.currentMarketState + ' ' + (vmItem.totalStrength * 100).toFixed(0) + '%'">{{vmItem.abbreviatedCurrentMarketState}}
                                                                             {{(vmItem.totalStrength *
-                                                                            100).toFixed(0)}}%</span -->
+                                                                            100).toFixed(0)}}%</span>
 
 
                                                                         <div class="symbolx statex status-holder hidden"
@@ -460,8 +460,12 @@
                                                             <ng-container [ngSwitch]="getStrategyType(vmItem)">
                                                                 <ng-container *ngSwitchCase="2">
                                                                     <div class="n-strategy-label status-holder">
-                                                                        <span><i
-                                                                                class="fa-solid fa-square-n"></i></span>
+                                                                        <span><i class="fa-solid fa-square-n"></i></span>
+                                                                    </div>
+                                                                </ng-container>
+                                                                <ng-container *ngSwitchCase="0">
+                                                                    <div class="n-strategy-label status-holder">
+                                                                        <span><i class="fa-solid fa-square-c"></i></span>
                                                                     </div>
                                                                 </ng-container>
                                                             </ng-container>

@@ -134,12 +134,13 @@
                     </upload-file-input>
                 </div>
 
-                <input class="crypto-input flex-grow-1"
+                <textarea class="chat-text-input flex-grow-1"
                        #messageInput
-                       (keyup)="onInputKeyUp($event)"
+                       rows="2"
                        [(ngModel)]="userMessage"
                        [disabled]="activeThread.isDisabled"
                        placeholder="{{'activeThread.' + (activeThread.isDisabled ? 'sendMessageDisabledPlaceholder' : 'sendMessagePlaceholder')  | translate}}">
+                </textarea>
                 <div class="right-side-controls flex align-items-center">
                     <emoji-picker class="control" title="{{'activeThread.emojiTitle' | translate}}"
                                   (onEmojiClick)="addEmoji($event)"></emoji-picker>
