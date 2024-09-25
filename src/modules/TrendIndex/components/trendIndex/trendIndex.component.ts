@@ -15,7 +15,7 @@ import { AlertService } from '@alert/services/alert.service';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { BaseLayoutItem } from "@layout/base-layout-item";
-import { AlgoService, IMesaTrendIndex, INALog, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData, IUserMarketConfigData, TradingDirection } from "@app/services/algo.service";
+import { AlgoService, IAutoTradingSymbolInfoResponse, IMesaTrendIndex, INALog, ITrendPeriodDescriptionResponse, IUserAutoTradingInfoData, IUserMarketConfigData, TradingDirection } from "@app/services/algo.service";
 import { InstrumentService } from "@app/services/instrument.service";
 import { ITrendIndexBarChartData } from "../trendIndexBarChart/trendIndexBarChart.component";
 import { ITrendIndexChartData } from "../trendIndexChart/trendIndexChart.component";
@@ -476,6 +476,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     private _lastLogRefreshTime: number;
     private _maxInstrumentCount: number = null;
     private _myAutoTradingAccount: string;
+    private _adminData: { [key: string]: IAutoTradingSymbolInfoResponse; };
 
     public logs: INALog[] = [];
     public isBotOnline: boolean;
@@ -566,6 +567,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
         return !!this.myAutoTradingAccount && !!this.userAutoTradingInfoData;
     }
 
+    get isAdmin(): boolean {
+        return this._identityService.isAdmin;
+    }
+
     vm: TrendIndexVM[] = [];
     selectedVM: TrendIndexVM;
     TradingDirection = TradingDirection;
@@ -618,6 +623,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
             } else {
                 this.loadAutoTradingInstruments();
             }
+            this.loadAdminData();
         }, 60 * 1000);
 
         this._logRefreshInterval = setInterval(() => {
@@ -628,6 +634,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }, 3 * 60 * 1000);
 
         this.loadData();
+        this.loadAdminData();
 
         this._identityService.myTradingAccount$.subscribe(() => {
             this._changesDetected = true;
@@ -808,6 +815,16 @@ export class TrendIndexComponent extends BaseLayoutItem {
             this.emptyResponse = true;
             this.loading = false;
             this._changesDetected = true;
+        });
+    }
+
+    protected loadAdminData() {
+        if (!this.isAdmin) {
+            return;
+        }
+
+        this._algoService.getTrendsAdminOverview().subscribe((data) => {
+            this._adminData = data;
         });
     }
 
@@ -1163,6 +1180,42 @@ export class TrendIndexComponent extends BaseLayoutItem {
         }
 
         return;
+    }
+
+    showInfo(item: TrendIndexVM, e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        for (let i in this._adminData) {
+            let names = i.split("_");
+            if (names.length < 3) {
+                continue;
+            }
+
+            names.splice(0, 2);
+            let normalizedSymbolName = names.join("").toLowerCase();
+            if (normalizedSymbolName !== item.symbol.toLowerCase()) {
+                continue;
+            }
+
+            this._matDialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
+                data: {
+                    title: 'Info 1',
+                    json: this._adminData[i]
+                }
+            });
+            return;
+        }
+    }
+
+    showInfo2(item: TrendIndexVM, e: PointerEvent) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        this._matDialog.open<JSONViewDialogComponent, IJSONViewDialogData>(JSONViewDialogComponent, {
+            data: {
+                title: 'Info 2',
+                json: item
+            }
+        });
     }
 
     isAutoSelected(item: TrendIndexVM) {
