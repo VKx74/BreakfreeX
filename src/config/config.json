@@ -4,7 +4,7 @@
   "apiUrls": {
     "successCheckoutRedirect": "https://breakfree.sh/success-checkout.html",
     "identityUrl": "https://auth-platform.breakfree.sh/",
-    "webSocketUrl": "wss://ws-platform-stage.breakfreetrading.com/wsnotification",
+    "webSocketUrl": "wss://ws-platform.breakfree.sh/wsnotification",
     "bitmexREST": "https://feed-platform.breakfree.sh/bitmex/",
     "bitmexWS": "wss://feed-platform.breakfree.sh/bitmex/subscribe/realtime/",
     "polygonREST": "https://feed-platform.breakfree.sh/polygon/",
@@ -27,10 +27,10 @@
     "eventsLogREST": "https://events-stage.breakfreetrading.com/v1/logs/api/Logs",
     "fileStorageREST": "https://files-platform.breakfree.sh/filestore/api/v1/Files/",
     "shuftiproApiRest": "https://platform-stage.breakfreetrading.com/kyc/api/",
-    "socialChatREST": "https://platform-stage.breakfreetrading.com/v1/chat/",
+    "socialChatREST": "https://platform.breakfree.sh/v1/chat/",
     "socialForumREST": "https://platform-stage.breakfreetrading.com/v1/forum/",
-    "notificationREST": "https://ws-platform-stage.breakfreetrading.com/wsnotification/api/",
-    "notificationWebSocketUrl": "wss://ws-platform-stage.breakfreetrading.com/wsnotification/ws",
+    "notificationREST": "https://ws-platform.breakfree.sh/wsnotification/api/",
+    "notificationWebSocketUrl": "wss://ws-platform.breakfree.sh/wsnotification/ws",
     "cointelegraphRssFeedREST": "https://app.breakfreetrading.com/rss/cointelegraph",
     "coindeskRssFeedREST": "https://app.breakfreetrading.com/rss/coindesk",
     "userDataStoreREST": "https://platform.breakfree.sh/userdatastore/api/v1/",
@@ -107,7 +107,7 @@
     },
     "notificationREST": {
       "name": "Notifications",
-      "url": "https://ws-platform-stage.breakfreetrading.com/wsnotification/"
+      "url": "https://ws-platform.breakfree.sh/wsnotification/"
     },
     "scriptEngineREST": {
       "name": "Script Engine",
@@ -119,7 +119,7 @@
     },
     "socialChatREST": {
       "name": "Social Chat",
-      "url": "https://platform-stage.breakfreetrading.com/v1/chat/"
+      "url": "https://platform.breakfree.sh/v1/chat/"
     },
     "socialForumREST": {
       "name": "Social Forum",
@@ -136,7 +136,7 @@
     "https://events-stage.breakfreetrading.com",
     "https://app.breakfreetrading.com",
     "https://systemnotification-platform.breakfree.sh",
-    "https://ws-platform-stage.breakfreetrading.com",
+    "https://ws-platform.breakfree.sh",
     "https://breakfreetrading.com",
     "https://platform-stage.breakfreetrading.com",
     "https://algo-platform.breakfree.sh",
