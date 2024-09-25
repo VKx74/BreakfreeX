@@ -331,8 +331,8 @@ export class ChatApiService {
         );
     }
 
-    getPublicThreadParticipants(threadId: string, params?: PaginationParams): Observable<IPaginationResponse<IThreadParticipant>> {
-        return this._usersProfileService.getAllUsersProfiles(params)
+    getPublicThreadParticipants(threadId: string, params?: PaginationParams, userName?: string): Observable<IPaginationResponse<IThreadParticipant>> {
+        return this._usersProfileService.searchUsersProfileByUserName(userName ? userName : "", params)
             .pipe(
                 flatMap(res => forkJoin(
                     of(res),
@@ -604,7 +604,7 @@ export class ChatApiService {
     private _getMappedUserProfiles(threadId: string, participants: IPaginationResponse<UserProfileModel>, bans: IPaginationResponse<IThreadBan>) {
         const mappedUserProfiles = participants.items.map(participant => {
             const threadParticipant = new ThreadParticipant(participant.id, threadId,
-                this._identity.role === Roles.Admin ? EThreadSubjectRole.Admin : EThreadSubjectRole.User);
+                participant.role === Roles.Admin ? EThreadSubjectRole.Admin : EThreadSubjectRole.User);
 
             threadParticipant.userModel = participant;
             threadParticipant.ban = bans.items.find(ban => ban.subjectId === participant.id);

@@ -130,6 +130,19 @@
 
 :host {
   flex-shrink: 0;
+
+  .banned {
+    opacity: 0.6;
+  }
+
+  .ban-label {
+    padding: 0px 6px;
+    font-weight: normal;
+    background-color: red;
+    margin-left: 5px;
+    border-radius: 3px;
+    color: white;
+  }
 }
 
 file-info-simple {
@@ -169,8 +182,8 @@ file-info-simple {
 .message-body {
   border-radius: 8px;
   padding: 0 9px 7px 11px;
-  max-width: 80%;
-  width: auto;
+  // max-width: 80%;
+  width: 100%;
 
   .top-line {
     padding-bottom: 4px;
@@ -178,6 +191,7 @@ file-info-simple {
 
   .creator-name {
     display: block;
+    cursor: pointer;
     max-width: 180px;
     margin-right: auto;
     padding-right: 10px;
@@ -189,6 +203,7 @@ file-info-simple {
     text-transform: capitalize;
     font-weight: bold;
     min-width: 100px;
+    opacity: 0.8;
   }
 
   .message-time {
@@ -226,6 +241,9 @@ file-info-simple {
 
 .root.current-user-message {
   justify-content: flex-start;
+  width: 100%;
+  margin-left: 0%;
+  // border-radius: 10px;
 
   &.message-item {
     justify-content: flex-end;
@@ -250,6 +268,7 @@ file-info-simple {
       -webkit-user-select: text;
       -ms-user-select: text;
       user-select: text;
+      white-space: pre-line
     }
   }
 }
@@ -277,6 +296,7 @@ file-info-simple {
       -webkit-user-select: text;
       -ms-user-select: text;
       user-select: text;
+      white-space: pre-line
     }
   }
 

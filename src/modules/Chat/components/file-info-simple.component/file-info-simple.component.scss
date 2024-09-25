@@ -3,12 +3,10 @@
 @import "../../../../global-styles/mixins/themify";
 
 .file-info-container {
-    height: 50px;
+    //height: 50px;
     display: flex;
-    padding-bottom: 5px;
-    padding-left: 15px;
-    padding-top: 10px;
-    border: 1px solid #ddd;
+   padding: 6px;
+    //border: 1px solid #ddd;
 
     .document {
         height: 100%;
@@ -36,9 +34,10 @@
         display: flex;
         justify-content: left;
         overflow: hidden;
+        border-radius: 6px;
 
         @include themify($themes, true) {
-            background: transparentize(themed('accentColor'), 0.8);
+           // background: transparentize(themed('accentColor'), 0.8);
         }
 
         img {
@@ -80,6 +79,7 @@
 .file-info-container {
     height: auto;
     display: flex;
+        max-width: 100%;
 }
 
 .file-info.pointer {
@@ -90,6 +90,7 @@
 .file-info-container .img-container img {
     height: auto;
     width: auto;
+    max-width: 100%;
     max-height: 160px;
     overflow: hidden;
 }

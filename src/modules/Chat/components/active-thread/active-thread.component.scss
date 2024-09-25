@@ -13,17 +13,34 @@
 
   .root {
     height: 100%;
-   
+  }
 
+  .out-of-access {
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .chat-text-input {
+    font-size: 12px;
+    resize: none;
+    border: none;
+    padding-top: 5px;
+    padding-left: 10px;
   }
 }
 
 .root {
   @include themify($themes, true) {
-    background-color: themed('appPanelColor');
+    background-color: themed("appPanelColor");
   }
 }
 
+.chat-text-input {
+  @include themify($themes, true) {
+    background-color: themed("appPanelColor");
+  }
+}
 
 .top-line {
   height: 40px;
@@ -117,10 +134,10 @@
 
   &.old-browser {
     flex-direction: column;
-    transform: scaleY(-1);
+    //transform: scaleY(-1);
 
     thread-message {
-      transform: scaleY(-1);
+      //transform: scaleY(-1);
     }
   }
 }
@@ -147,11 +164,11 @@
 
 .footer {
   padding: 0px;
-    flex-shrink: 0;
-    display: flex;
-    margin: 10px 4px 4px 4px;
-   
-    border-radius: 30px;
+  flex-shrink: 0;
+  display: flex;
+  margin: 10px 5px;
+
+  border-radius: 10px;
 
   .crypto-button {
     max-height: 32px;
@@ -186,6 +203,10 @@
     .control {
       &.add-file-control {
         font-size: 21px;
+        height: 100% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
@@ -209,19 +230,18 @@
   width: auto;
 }
 
-
 @include themify($themes, true) {
   .header {
-    border-bottom: 1px solid themed('appBackgroundColor');
+    border-bottom: 1px solid themed("appBackgroundColor");
   }
   &.maximized {
     *.crypto-icon-take-off {
-      color: themed('accentColor');
+      color: themed("accentColor");
     }
   }
 
   .top-line {
-    background-color: themed('appPanelColor');
+    background-color: themed("appPanelColor");
     //border-bottom-color: themed('panelBorderColor');
   }
 
@@ -230,14 +250,14 @@
   }
 
   .footer {
-    background: themed('inputBackgroundColor');
+    background: themed("inputBackgroundColor");
 
     .edit-message-wrapper {
       //border-top-color: themed('delimiterColor');
     }
 
     .edit-icon {
-      color: themed('accentColor');
+      color: themed("accentColor");
     }
 
     .cancel-editing-icon {
@@ -251,7 +271,7 @@
 
     &.disabled {
       //background: themed('inputDisabledBgColor');
-      background: themed('selectBgDisabled');
+      background: themed("selectBgDisabled");
     }
   }
 
@@ -262,16 +282,15 @@
       //color: themed('primeColor');
 
       &.reason-caption {
-        color: themed('accentColor');
+        color: themed("accentColor");
       }
     }
   }
 
   .banner-img-wrapper .icon {
-    color: themed('accentColor');
+    color: themed("accentColor");
   }
 }
-
 
 .header {
   display: flex;
@@ -280,7 +299,6 @@
   padding: 7px 9px 6px 22px;
   //padding: 0 2px 0 15px;
   //border-top: 1px solid transparent;
-
 
   .header_title {
     font-size: 13px;
@@ -296,7 +314,6 @@
     cursor: pointer;
   }
 
-
   ::ng-deep menu-toggle {
     *.menu-toggle {
       border-radius: 0;
@@ -308,7 +325,7 @@
         background-color: transparent;
 
         &:hover {
-          background-color: themed('inputBackgroundColor');
+          background-color: themed("inputBackgroundColor");
         }
       }
     }

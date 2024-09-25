@@ -11,9 +11,10 @@
     }
 }
 
+
 :host {
     .message-container {
-        padding: 15px;
+        padding: 0px;
         border-radius: 5px;
 
         .manage-message {
@@ -28,8 +29,10 @@
                 justify-content: center;
 
                 img {
-                    height: 300px;
-                    width: auto;
+                    height: 100%;
+          
+                    max-width: 900px;
+                    max-height: 500px;
                 }
             }
 
@@ -60,6 +63,8 @@
     }
 }
 
+
+
 .massage-input-wrapper {
     margin-top: 20px;
 
@@ -72,6 +77,17 @@
         }
     }
 }
+
+/deep/ .modal-body {
+    padding: 0px !important;
+    overflow-y: visible !important;
+}
+
+/deep/ .modal-footer {
+    padding: 0px !important;
+    display: none;
+}
+
 
 emoji-picker {
     margin: 0 10px;

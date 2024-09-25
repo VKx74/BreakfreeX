@@ -44,7 +44,7 @@ export class ThreadMembersComponent extends PaginationComponent<IThreadParticipa
     public banFilterKindArray: BanFilterKind[] = JsUtil.numericEnumToArray(BanFilterKind);
     public BanFilterKind = BanFilterKind;
     public activeFilterKind: BanFilterKind = BanFilterKind.All;
-    public activeQuery: string = '';
+    public searchQuery: string = '';
 
     get threadId() {
         return this.thread.id;
@@ -74,6 +74,14 @@ export class ThreadMembersComponent extends PaginationComponent<IThreadParticipa
                 this.banList = res.bans;
                 this.setPaginationHandler(res.data);
             });
+
+            this.searchHandler = {
+                onSearch: (query: string) => {
+                    this.searchQuery = query;
+                    this.resetPagination();
+                    return of();
+                },
+            };
     }
 
     public removeUserFromThread(participant: IThreadParticipant) {
@@ -135,7 +143,7 @@ export class ThreadMembersComponent extends PaginationComponent<IThreadParticipa
     getItems() {
         let obs: Observable<IPaginationResponse<IThreadParticipant>>;
         if (this.thread.type === EThreadType.Public) {
-            obs = this._threadService.getPublicThreadParticipants(this.thread.id, this.paginationParams);
+            obs = this._threadService.getPublicThreadParticipants(this.thread.id, this.paginationParams, this.searchQuery);
         } else {
             obs = this._threadService.getThreadParticipants(this.threadId, this.paginationParams);
         }

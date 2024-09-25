@@ -3,6 +3,12 @@
                             [loading]="false">
     <h3 class="header-left component-head_title">{{thread.name}} / Members</h3>
 
+    <ng-container ngProjectAs=".filters">
+        <manual-search [searchHandler]="searchHandler" placeholder="Search user...">
+            <span manual-search-trigger></span>
+        </manual-search>
+    </ng-container>
+
     <table class="crypto-table crypto-table_striped crypto-table_fixed-header">
         <thead>
         <tr>

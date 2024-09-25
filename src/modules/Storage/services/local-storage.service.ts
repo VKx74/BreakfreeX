@@ -6,6 +6,7 @@ import {JsUtil} from "../../../utils/jsUtil";
 export class LocalStorageService extends DataStorage {
     public static IsGuestKey = "isGuest";
     public static IsSpreadAutoProcessing = "isSpreadAutoProcessing";
+    public static SysNotificationKey = "sysNotificationKey";
 
     set(key: string, data: any): boolean {
         if (!this.canSave) {

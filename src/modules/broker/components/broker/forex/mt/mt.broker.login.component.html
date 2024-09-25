@@ -1,4 +1,4 @@
-<div class="connected-broker-area" *ngIf="!brokerConnected" [class.disabled]="showSpinner">
+<div class="connected-broker-area" [class.disabled]="showSpinner">
     <div class="flex-row" *ngIf="savedAccountExists()">
         <div class="connected-accounts">
             <mt-connected-account-info [brokerInstance]="brokerInstance" (onBrokerSelected)="brokerSelected($event)">
@@ -72,13 +72,13 @@
 
 </div>
 
-<div class="connectBrokerBlock" [class.disabled]="!policyAccepted">
-    <button class="crypto-button crypto-button_primary w-100" (click)="connect()" *ngIf="!brokerConnected">
+<div class="connectBrokerBlock">
+    <button [class.disabled]="!policyAccepted" class="crypto-button crypto-button_primary w-100" (click)="connect()">
         {{'broker.connect' | translate}}
     </button>
-    <button class="crypto-button crypto-button_primary w-100" (click)="disconnect()" *ngIf="brokerConnected">
+    <!-- <button class="crypto-button crypto-button_primary w-100" (click)="disconnect()" *ngIf="brokerConnected">
         {{'broker.disconnect' | translate}}
-    </button>
+    </button> -->
 </div>
 
 <bft-loader *ngIf="showSpinner"></bft-loader>

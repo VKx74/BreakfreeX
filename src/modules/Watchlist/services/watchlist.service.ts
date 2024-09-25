@@ -46,7 +46,7 @@ export class WatchlistService {
     }
 
     public getDefaultWatchlist(): IWatchlistItem[] {
-        return [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, CryptoWatchlist, IndicesWatchlist, CommoditiesWatchlist, MetalsWatchlist, BondsWatchlist, EquitiesWatchlist];
+        return [MajorForexWatchlist, MinorForexWatchlist, ExoticsForexWatchlist, IndicesWatchlist, MetalsWatchlist, EquitiesWatchlist];
     }
 
     public getWatchlists(): Observable<IWatchlistItem[]> {

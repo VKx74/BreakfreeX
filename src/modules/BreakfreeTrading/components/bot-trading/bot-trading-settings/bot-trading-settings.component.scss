@@ -14,21 +14,15 @@
     width: 100%;
     height: 100%;
   }
-  .remove-broker {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 15px;
-    min-height: 20vh;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+
 
   .agents {
     display: flex;
     row-gap: 3px;
     column-gap: 13px;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 
   a.NA2BETA {
@@ -42,11 +36,9 @@
     justify-content: space-around;
     align-items: stretch;
     flex-wrap: wrap;
-    row-gap: 20px;
-    padding: 15px;
+    row-gap: 5px;
   }
   .btn-wrapper {
-    margin-top: 32px;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -58,12 +50,20 @@
     font-size: 12px;
   }
 
+  .value-tips {
+    padding: 3px;
+    font-size: 12px !important;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+
   .field-title {
     margin-bottom: 6px;
   }
 
   .value-text {
-    margin: 12px 0px;
+    margin-bottom: 12px;
   }
 
   /deep/ {
@@ -74,20 +74,12 @@
     }
   }
 
-  .value-account {
-    display: flex;
-    flex-direction: row;
-    row-gap: 6px;
-    align-items: center;
-    column-gap: 6px;
-  }
-
   .value-account-id {
     font-size: 14px;
     font-weight: 600;
   }
 
-  .value-account-state {
+  .value-account-state, .value-account-selection {
     font-size: 12px;
     font-weight: 400;
   }
@@ -99,7 +91,6 @@
   .poilicy-profit-agreement,
   .liability-waiver-agreement {
     margin-bottom: 12px;
-    // display: inline-flex;
     align-items: center;
 
     input[type="checkbox"] {
@@ -111,7 +102,7 @@
 
     label,
     a {
-      font-size: 14px;
+      font-size: 12px;
     }
     a {
       text-decoration: none;
@@ -125,13 +116,12 @@
   }
 
   .download-agent a {
-    padding: 11px 18px;
+    padding: 9px 9px;
+    font-weight: bold;
     border-radius: 3px;
     background: #6c9242;
     color: #fff;
-
-    font-family: "Open Sans";
-    font-size: 13px;
+    font-size: 12px;
     text-decoration: none;
     cursor: pointer;
     display: flex;
@@ -144,6 +134,30 @@
 
     &:hover {
       background: #5a7a35;
+      text-decoration: none;
+    }
+  }
+
+
+  .download-agent-beta a {
+    padding: 9px 9px;
+    font-weight: bold;
+    border-radius: 3px;
+    background: #894292;
+    color: #fff;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      margin-left: 8px;
+    }
+
+    &:hover {
+      background: #cb61da;
       text-decoration: none;
     }
   }
@@ -179,21 +193,12 @@
       text-decoration: none;
     }
   }
-  .detach {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    row-gap: 6px;
-    column-gap: 6px;
-  }
 
   .announcementOfNeuralAgent2 {
     display: flex;
     flex-direction: column;
     row-gap: 12px;
-    margin-bottom: 12px;
-    margin-top: 12px;
+
   }
 
   .announcementOfNeuralAgent2-title {
@@ -216,16 +221,19 @@
   }
 
   @media (max-width: 768px) {
-    .policy-agreement-wrapper {
-      display: inline-block;
-      font-size: 14px;
-    }
-    .btn-wrapper {
-      margin-top: 32px;
-      display: flex;
-      justify-content: space-between;
-      flex-direction: column;
-      row-gap: 16px;
+    // .policy-agreement-wrapper {
+    //   display: inline-block;
+    //   font-size: 14px;
+    // }
+    // .btn-wrapper {
+    //   margin-top: 32px;
+    //   display: flex;
+    //   justify-content: space-between;
+    //   flex-direction: column;
+    //   row-gap: 16px;
+    // }
+    .hidden-mobile {
+      display: none;
     }
   }
 
@@ -252,7 +260,8 @@
   .announcementOfNeuralAgent2 {
     background-color: themed("card-background");
     border: 1px solid themed("card-border");
-    border-radius: 6px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
     padding: 12px;
   }
 
@@ -275,20 +284,105 @@
     padding: 6px 12px;
     color: themed("card-title");
     background-color: themed("card-background");
-    margin-top: 6px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    border: 1px solid #2e2e2e;
+    border-radius: 6px;
+    align-content: center;
+    align-items: center;
+
+    .value-account-text {
+      display: flex;
+      flex-direction: row;
+      row-gap: 6px;
+      align-items: center;
+      column-gap: 6px;
+    }
   }
 
+  .removebutton {
+    background: transparent;
+    color: themed("removebtn");
+    border: 1px solid #4e2c2c;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px !important;
+    display: flex;
+    padding: 3px 12px !important;
+    transition: all 0.2s;
+  }
+
+  .removebutton:hover {
+    background: #cf7070;
+    color: themed("removebtn");
+    border: 1px solid #4e2c2c;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px !important;
+    display: flex;
+    padding: 3px 12px !important;
+  }
+
+  .addbutton {
+    background: #6c9242;
+    color: #fff;
+   // border: 1px solid #4e2c2c;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px !important;
+    display: flex;
+    padding: 6px 12px;
+    transition: all 0.2s;
+    border: none;
+    border-radius: 3px;
+  }
+
+  .addbutton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .addbutton:hover {
+    background: #5a7a35;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px !important;
+    padding: 6px 12px;
+    display: flex;
+    border: none;
+    border-radius: 3px;
+
+  }
+
+
   .value-account-state {
-    color: #5a7a35 !important;
-    background-color: #a5bc8e;
+    color: #fff !important;
+    background-color: #6c9242;
+    border: 1px solid #434a44;
     padding: 3px 6px;
     border-radius: 6px;
     font-weight: 600;
   }
 
+  .value-account-selection {
+    color: #555353;
+    background-color: #adadad;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &.active {
+      color: #fff;
+      background-color: #6785de;
+    }
+  }
+
   .value-tips,
-  .accept-policy-text,
-  .value-account-state {
+  .accept-policy-text {
     color: themed("valueTextColor");
   }
   .accept-profit-policy-text,
@@ -297,10 +391,62 @@
     color: themed("valueTextColor");
   }
 
-  [type="checkbox"]:not(:checked) ~ label:before,
-  .value {
+  [type="checkbox"]:not(:checked) ~ label:before {
     border-color: themed("provider-text-color");
     border: 1px solid themed("provider-text-color");
+  }
+  .value-holder {
+    padding: 9px;
+    border-radius: 5px;
+    background: themed("valueholderbg");
+    margin-bottom: 15px;
+}
+  .remove-broker {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+    min-height: 20vh;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: themed("removebrokerbg");
+    border: 1px solid themed("removebrokerborder");
+
+  }
+
+  .specialxxx {
+    border: 1px solid #123 !important;
+}
+
+  .download-agentx {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: themed("card-background");
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+
+  .crypto-button-small {
+    padding: 6px 12px ;
+  }
+  
+  .value {
+    border: none;
+  }
+
+  .account-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn-wrapper {
+      margin-left: 10px;
+    }
   }
 
   .warningx {

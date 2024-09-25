@@ -1,11 +1,11 @@
-<div class="accountInfoRow">
+<div class="accountInfoRow" (click)="accountInfoRowOnClick($event)">
   <span>
     <svg class="status-img" [ngClass]="{'connected': status === BrokerConnectivityStatus.Connected, 'pending': status === BrokerConnectivityStatus.Pending, 'not_connected': status === BrokerConnectivityStatus.NoConnection}">
       <path class="path-data" d="M0,6a6,6 0 1,0 12,0a6,6 0 1,0 -12,0"></path>
     </svg>
   </span>
   <span class="no-wrap">{{activeAccount?.Account}}</span>
-  <span class="additional-info no-wrap tablet-hidden tablet-hidden hidden"><span class="seperatorx">/</span> {{activeAccount?.CompanyName}}</span>
+  <span class="additional-info no-wrap tablet-hidden"><span class="seperatorx">/</span> {{activeAccount?.CompanyName}}</span>
   <span class="additional-info no-wrap"> <span class="seperatorx">/</span> Balance: {{activeAccount?.Balance.toFixed(decimals)}} {{activeAccount?.Currency}}</span>
   <span class="additional-info no-wrap"><span class="seperatorx">/</span> PNL: {{activeAccount?.Pl.toFixed(decimals)}} {{activeAccount?.Currency}}</span>
 </div>

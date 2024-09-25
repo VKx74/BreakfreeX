@@ -486,6 +486,12 @@ export interface IRTDPayload {
     local_avg: number;
 }
 
+export interface ICFlexPayload {
+    dates: number[];
+    values: number[];
+    id?: string;
+}
+
 export interface IMesaTrendStrength {
     f: number;
     s: number;
@@ -511,6 +517,7 @@ export interface ITrendPeriodDescriptionResponse {
 
 export interface IMesaTrendIndex {
     symbol: string;
+    group: string;
     datafeed: string;
     strength: { [id: string]: IMesaTrendStrength; };
     avg_strength: { [id: string]: number; };
@@ -530,7 +537,8 @@ export interface IMesaTrendIndex {
     price86400: number;
     current_phase: number;
     next_phase: number;
-    trading_state: number;
+    trading_state_n: number;
+    trading_state_sr: number;
 }
 
 export interface IMesaTrendDetails {
@@ -568,8 +576,15 @@ export interface IEconomicEvent {
     IsBetterThanExpected?: boolean;
 }
 
+export enum TradingDirection {
+    Auto = 0,
+    Short = 1,
+    Long = 2
+}
+
 export interface IUserAutoTradingDefinedMarketData {
     symbol: string;
+    tradingDirection: TradingDirection;
     minStrength: number;
     minStrength1H: number;
     minStrength4H: number;
@@ -582,9 +597,12 @@ export interface IUserAutoTradingInfoData {
     botShutDown: boolean;
     accountRisk: number;
     defaultMarketRisk: number;
+    defaultGroupRisk: number;
     maxInstrumentCount: number;
+    strategy: number;
     disabledMarkets: string[];
     risksPerMarket: { [key: string]: number };
+    risksPerGroup: { [key: string]: number };
 }
 
 
@@ -607,6 +625,133 @@ export interface INALogResponse {
     lastOnlineDate: number;
     naVersion: string;
 }
+
+export interface IAutoTradingSymbolInfoResponse {
+    TotalStrength: number;
+    SL: number;
+    HalfBand1M: number;
+    HalfBand5M: number;
+    HalfBand15M: number;
+    HalfBand1H: number;
+    HalfBand4H: number;
+    HalfBand1D: number;
+    Entry1M: number;
+    Entry5M: number;
+    Entry15M: number;
+    Entry1H: number;
+    Entry4H: number;
+    Entry1D: number;
+    TP1M: number;
+    TP5M: number;
+    TP15M: number;
+    TP1H: number;
+    TP4H: number;
+    TP1D: number;
+    Strength1M: number;
+    Strength5M: number;
+    Strength15M: number;
+    Strength1H: number;
+    Strength4H: number;
+    Strength1D: number;
+    Strength1Month: number;
+    Strength1Y: number;
+    Strength10Y: number;
+    Phase1M: number;
+    Phase5M: number;
+    Phase15M: number;
+    Phase1H: number;
+    Phase4H: number;
+    Phase1D: number;
+    Phase1Month: number;
+    Phase1Y: number;
+    Phase10Y: number;
+    State1M: number;
+    State5M: number;
+    State15M: number;
+    State1H: number;
+    State4H: number;
+    State1D: number;
+    State1Month: number;
+    State1Y: number;
+    State10Y: number;
+    Volatility1M: number;
+    Volatility15M: number;
+    Volatility1H: number;
+    Volatility1D: number;
+    TrendDirection: number;
+    ShortGroupPhase: number;
+    MidGroupPhase: number;
+    LongGroupPhase: number;
+    ShortGroupStrength: number;
+    MidGroupStrength: number;
+    LongGroupStrength: number;
+    CurrentPhase: number;
+    NextPhase: number;
+    CurrentPrice: number;
+    Time: number;
+    TradingStateSR: number;
+    TradingStateN: number;
+    OppositeSL: number;
+    OppositeEntry1M: number;
+    OppositeEntry5M: number;
+    OppositeEntry15M: number;
+    OppositeEntry1H: number;
+    OppositeEntry4H: number;
+    OppositeEntry1D: number;
+    OppositeTrendDirection: number;
+    SL1M_N: number;
+    SL5M_N: number;
+    SL15M_N: number;
+    SL1H_N: number;
+    SL4H_N: number;
+    OppositeSL1M_N: number;
+    OppositeSL5M_N: number;
+    OppositeSL15M_N: number;
+    OppositeSL1H_N: number;
+    OppositeSL4H_N: number;
+    Skip1MinTrades_N: boolean;
+    Skip5MinTrades_N: boolean;
+    Skip15MinTrades_N: boolean;
+    Skip1HourTrades_N: boolean;
+    Skip4HourTrades_N: boolean;
+    MinStrength1M_N: number;
+    MinStrength5M_N: number;
+    MinStrength15M_N: number;
+    MinStrength1H_N: number;
+    MinStrength4H_N: number;
+    DDClosePositions_N: boolean;
+    DDCloseInitialInterval_N: number;
+    DDCloseIncreasePeriod_N: number;
+    DDCloseIncreaseThreshold_N: number;
+
+    SL1M_SR: number;
+    SL5M_SR: number;
+    SL15M_SR: number;
+    SL1H_SR: number;
+    SL4H_SR: number;
+    OppositeSL1M_SR: number;
+    OppositeSL5M_SR: number;
+    OppositeSL15M_SR: number;
+    OppositeSL1H_SR: number;
+    OppositeSL4H_SR: number;
+    Skip1MinTrades_SR: boolean;
+    Skip5MinTrades_SR: boolean;
+    Skip15MinTrades_SR: boolean;
+    Skip1HourTrades_SR: boolean;
+    Skip4HourTrades_SR: boolean;
+    MinStrength1M_SR: number;
+    MinStrength5M_SR: number;
+    MinStrength15M_SR: number;
+    MinStrength1H_SR: number;
+    MinStrength4H_SR: number;
+    DDClosePositions_SR: boolean;
+    DDCloseInitialInterval_SR: number;
+    DDCloseIncreasePeriod_SR: number;
+    DDCloseIncreaseThreshold_SR: number;
+    Logs_SR: string;
+    Logs_N: string;
+}
+
 
 class AlgoServiceEncryptionHelper {
     private static keySize = 256;
@@ -762,6 +907,10 @@ export class AlgoService {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd`, data).pipe(map(this._decrypt));
     }
 
+    calculateCFlex(data: any): Observable<ICFlexPayload> {
+        return this._http.post<IBFTAEncryptedResponse>(`${this.url}cflex`, data).pipe(map(this._decrypt));
+    }
+
     calculateRTDGuest(data: any): Observable<IRTDPayload> {
         return this._http.post<IBFTAEncryptedResponse>(`${this.url}rtd_guest`, data).pipe(map(this._decrypt));
     }
@@ -834,6 +983,10 @@ export class AlgoService {
         return this._http.get<IBFTAEncryptedResponse>(`${this.url}trends-summary`).pipe(map(this._decrypt));
     }
 
+    getTrendsAdminOverview(): Observable<{ [key: string]: IAutoTradingSymbolInfoResponse }> {
+        return this._http.get<{ [key: string]: IAutoTradingSymbolInfoResponse }>(`${this.url}trends-admin-overview`);
+    }
+
     getMesaTrendDetails(symbol: string, datafeed: string): Observable<IMesaTrendDetails> {
         return this._http.get<IBFTAEncryptedResponse>(`${this.url}trends?symbol=${symbol}&datafeed=${datafeed}`).pipe(map(this._decrypt));
     }
@@ -872,17 +1025,18 @@ export class AlgoService {
         }));
     }
 
-    getTrendIndexMarketsConfigForAccount(account: string): Observable<IUserMarketConfigData[]> {
+    getTrendIndexMarketsConfigForAccount(account: string, strategyType: number): Observable<IUserMarketConfigData[]> {
         return this._http.post<IUserMarketConfigData[]>(`${this.url}apex/markets-config`, {
-            account: account, version: "2.0"
+            account: account, version: "2.0", strategy: strategyType
         });
     }
 
-    addTradableInstrumentForAccount(account: string, userId: string, symbols: string[]): Observable<IUserAutoTradingInfoData> {
+    addTradableInstrumentForAccount(account: string, userId: string, symbols: [{ symbol: string, tradingDirection: TradingDirection }]): Observable<IUserAutoTradingInfoData> {
         let markets = [];
         for (let s of symbols) {
             markets.push({
-                symbol: s
+                symbol: s.symbol,
+                tradingDirection: s.tradingDirection
             });
         }
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/add-markets`, {
@@ -908,6 +1062,12 @@ export class AlgoService {
         });
     }
 
+    resetBotSettingsToDefault(account: string, userId: string): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/reset-bot-settings`, {
+            account: account, userId: userId, version: "2.0"
+        });
+    }
+
     changeMarketRiskForAccount(account: string, userId: string, symbol: string, risk: number): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-market-risk`, {
             account: account, userId: userId, version: "2.0", market: symbol, risk: risk
@@ -926,6 +1086,18 @@ export class AlgoService {
         });
     }
 
+    changeGroupRiskForAccount(account: string, userId: string, group: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-group-risk`, {
+            account: account, userId: userId, version: "2.0", group: group, risk: risk
+        });
+    }
+
+    changeDefaultGroupRisk(account: string, userId: string, risk: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-default-group-risk`, {
+            account: account, userId: userId, version: "2.0", risk: risk
+        });
+    }
+
     changeUseManualTradingForAccount(account: string, userId: string, useManualTrading: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-use-manual-trading`, {
             account: account, userId: userId, version: "2.0", useManualTrading: useManualTrading
@@ -935,6 +1107,12 @@ export class AlgoService {
     changeBotEnabledForAccount(account: string, userId: string, switchedOff: boolean): Observable<IUserAutoTradingInfoData> {
         return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-state`, {
             account: account, userId: userId, version: "2.0", switchedOff: switchedOff
+        });
+    }
+
+    changeBotStrategyForAccount(account: string, userId: string, strategy: number): Observable<IUserAutoTradingInfoData> {
+        return this._http.post<IUserAutoTradingInfoData>(`${this.url}apex/config/change-bot-strategy`, {
+            account: account, userId: userId, version: "2.0", strategy: strategy
         });
     }
 

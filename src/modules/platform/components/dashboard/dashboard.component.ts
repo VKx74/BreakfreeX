@@ -101,6 +101,7 @@ export class DashboardComponent {
     destroy$ = new Subject();
     showExceptionPopup = false;
     showStaticLogin = false;
+    layoutLoaded = false;
 
     get isBrokerConnected(): boolean {
         return this._brokerService.isConnected;
@@ -386,6 +387,7 @@ export class DashboardComponent {
                 if (isConfirmed) {
                     this._saveLayout = false;
                     this._localStorageService.remove(LocalStorageService.IsSpreadAutoProcessing);
+                    this._localStorageService.remove(LocalStorageService.SysNotificationKey);
                     this._layoutStorageService.removeDashboard().subscribe(data => {
                         this._identityService.signOut().subscribe(data1 => {
                             this._coockieService.deleteAllCookie();
@@ -533,6 +535,7 @@ export class DashboardComponent {
     }
 
     private _initializeLayout(state: IGoldenLayoutComponentState | ILayoutState) {
+        this.layoutLoaded = true;
         this._applyLayout(state);
         setTimeout(() => {
             this._initAutoSave();

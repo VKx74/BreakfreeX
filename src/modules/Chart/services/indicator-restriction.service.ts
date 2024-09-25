@@ -12,6 +12,7 @@ export class IndicatorRestrictionService {
 
         this._restrictedIndicators.push(TradingChartDesigner.MESA.instanceTypeName);
         this._restrictedIndicators.push(TradingChartDesigner.TradingZone.instanceTypeName);
+        this._restrictedIndicators.push(TradingChartDesigner.CFlex.instanceTypeName);
 
         if (!this._identity.isAuthorizedCustomer) {
             this._restrictedIndicators.push(TradingChartDesigner.RTD.instanceTypeName);

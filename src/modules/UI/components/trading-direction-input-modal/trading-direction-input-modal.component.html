@@ -1,0 +1,35 @@
+<div class="crypto-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="reject()"><i
+                    class="crypto-icon crypto-icon-close cursor-pointer"></i>
+            </button>
+            <h4 class="modal-title">
+                <span>Force Trading Override</span>
+            </h4>
+            
+        </div>
+        <div class="modal-body">
+            <div class="title-description">
+               <B> ONLY USE IF YOU ARE ADVANCED USER.  </B> <br>  <br> Neural Agent is already running on this market but it is not time to trade yet according to strategy. By default neural agent is backtested and tuned to trade at very specific moment to stay profitable.
+                <br>  <br>You can override the default strategy and force neural agent to trade any market in any direction for any duration, however it is completely on your own risk and responsibility outside of the expected results.  <br><br> <B> Force Start Results can be very good or very bad. </B>  
+                
+            </div>
+
+          
+        </div>
+        <div class="modal-footer">
+            <div class="btns-wrapper">
+                <button class="crypto-button crypto-button_action" (click)="short()">
+                    <span>Short</span>
+                </button>
+                <button class="crypto-button crypto-button_action" (click)="long()">
+                    <span>Long</span>
+                </button>
+                <button class="crypto-button crypto-button_action" (click)="auto()">
+                    <span>Auto Trend </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -18,6 +18,8 @@ import {IMessageDTO} from "../../models/api.models";
 })
 export class ThreadMessageComponent {
     @Input() message: IMessage = null;
+    @Input() isBanned: boolean = false;
+    @Output() onUsernameCopied = new EventEmitter<string>();
     @Output() onMessageRemove: EventEmitter<string> = new EventEmitter();
     @Output() onMessageEdit: EventEmitter<IMessage> = new EventEmitter();
     @Output() onMessageResend: EventEmitter<IMessage> = new EventEmitter();
@@ -46,6 +48,13 @@ export class ThreadMessageComponent {
 
     onAvatarColorSet(nameColor) {
         this.userNameColor = nameColor;
+    }
+
+    copyUsernameToChatInput() {
+        const username = this.message && this.message.creator && this.message.creator.userName;
+        if (username) {
+            this.onUsernameCopied.emit(`@${username}`);
+        }
     }
 
 

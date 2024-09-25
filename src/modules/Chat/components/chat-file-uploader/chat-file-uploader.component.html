@@ -16,7 +16,7 @@
                         </div>
                         <file-info-simple [File]='File' [FileInfo]='FileInfo' *ngIf='!isImage'>
                         </file-info-simple>
-                        <div class="manage-buttons flex" [ngClass]="(isImage)?'end':'center'">
+                        <div class="manage-buttons flex hidden" [ngClass]="(isImage)?'end':'center'">
                             <div class="manage-buttons-container pointer">
                                 <i title="{{'download' | translate}}" class="fa fa-download" (click)="download()"
                                    *ngIf='isReadOnly' title="{{'file.download' | translate}}"></i>
@@ -41,28 +41,29 @@
                 <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
             </div>
             <div class="massage-input-wrapper flex" *ngIf="!progress && !isReadOnly">
+                
                 <input style="background: none" class="crypto-input flex-grow-1" #messageInput [(ngModel)]="captionValue"
                        placeholder="{{'file.caption' | translate}}">
                 <div class="input-actions flex align-items-center">
                     <emoji-picker (onEmojiClick)="addEmoji($event)"></emoji-picker>
                     <!-- <div class="crypto-icon crypto-icon-send-message" (click)="sendMessage$.next(userMessage)"></div> -->
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
+                <div>
+
+
             <div class="flex justify-flex-end">
                 <div>
-                    <button class="crypto-button crypto-button_danger m-right-15" (click)="close();"
-                            *ngIf="!isReadOnly">
-                        {{ 'file.cancel' | translate }}
-                    </button>
+                
 
-                    <button class="crypto-button crypto-button_primary" [disabled]="!uploadBtnEnabled"
+                    <button class="crypto-button crypto-button_primary " [disabled]="!uploadBtnEnabled"
                             (click)="upload()">
-                        {{ 'file.ok' | translate }}
+                        Upload
                     </button>
                 </div>
             </div>
+                </div>
+            </div>
         </div>
+      
     </div>
 </div>

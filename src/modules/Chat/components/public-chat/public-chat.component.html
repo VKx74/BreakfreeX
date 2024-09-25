@@ -11,4 +11,34 @@
 <!--</div>-->
 <!--<base-chat [type]="ThreadType.Public" *showByTag="ComponentIdentifier.publicChat"></base-chat>-->
 
-<base-chat *showByTag="ComponentIdentifier.publicChat"></base-chat>
+<ng-container *ngIf="hasAccess; else outOfAccess">
+    <ng-container *ngIf="hasEarlyAccess; else outOfEarlyAccess">
+        <base-chat *showByTag="ComponentIdentifier.publicChat"></base-chat>
+    </ng-container>
+
+    <ng-template #outOfEarlyAccess>
+        <div class="out-of-access">
+            <div class="out-of-access-box">
+                <div class="image">
+                    <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
+                </div>
+                <div class="text early-access-text">
+                    Access to chat coming soon
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
+
+<ng-template #outOfAccess>
+    <div class="out-of-access" (click)="processCheckout()">
+        <div class="out-of-access-box">
+            <div class="image">
+                <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
+            </div>
+            <div class="text">
+                Upgrade your subscription to get access to Chat.
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { WebsocketBase } from '@app/interfaces/socket/socketBase';
 import { BFTSocketService } from '@app/services/socket/bft.socket.service';
-import { AlgoService, IBFTAAlgoCacheItemResponse, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAAlgoResponseV3, IBFTAlgoParameters, IBFTAMarketInfo, IBFTAPositionSize, IBFTAPositionSizeParameters, IBFTScannerCacheItem, IBFTScannerResponseHistoryItem, IRTDPayload } from '@app/services/algo.service';
+import { AlgoService, IBFTAAlgoCacheItemResponse, IBFTAAlgoResponse, IBFTAAlgoResponseV2, IBFTAAlgoResponseV3, IBFTAlgoParameters, IBFTAMarketInfo, IBFTAPositionSize, IBFTAPositionSizeParameters, IBFTScannerCacheItem, IBFTScannerResponseHistoryItem, ICFlexPayload, IRTDPayload } from '@app/services/algo.service';
 import { IInstrument } from '@app/models/common/instrument';
 import { IdentityService } from '@app/services/auth/identity.service';
 import { map } from 'rxjs/operators';
@@ -83,5 +83,9 @@ export class BreakfreeTradingService {
             return this.alogService.calculateRTDGuest(params).toPromise();
         }
         return this.alogService.calculateRTD(params).toPromise();
+    }
+    
+    getCFlex(params: any): Promise<ICFlexPayload> {
+        return this.alogService.calculateCFlex(params).toPromise();
     }
 }

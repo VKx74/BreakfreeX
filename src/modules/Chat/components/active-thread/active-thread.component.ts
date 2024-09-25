@@ -2,18 +2,13 @@ import {
     Component,
     ElementRef,
     EventEmitter, Inject,
-    Input,
-    OnChanges,
     OnDestroy,
     OnInit,
     Output,
     ViewChild
 } from '@angular/core';
-import {EThreadType, IFileInfo, IThreadMessagePublish} from "../../models/thread";
-import {ChatApiService} from "../../services/chat.api.service";
-import {NotificationService} from "@app/services/notification.service";
-import {UsersService} from "@app/services/users.service";
-import {merge, Observable, of, Subject, Subscription} from "rxjs";
+import { EThreadType, IFileInfo } from "../../models/thread";
+import { merge, Observable, of } from "rxjs";
 import {
     catchError, distinct,
     distinctUntilChanged,
@@ -25,10 +20,10 @@ import {
     takeUntil,
     tap
 } from "rxjs/operators";
-import {IdentityService} from "@app/services/auth/identity.service";
-import {AlertService} from "@alert/services/alert.service";
-import {TranslateService} from "@ngx-translate/core";
-import {MatDialog} from "@angular/material/dialog";
+import { IdentityService } from "@app/services/auth/identity.service";
+import { AlertService } from "@alert/services/alert.service";
+import { TranslateService } from "@ngx-translate/core";
+import { MatDialog } from "@angular/material/dialog";
 import {
     IInviteMembersModalConfig,
     InviteMembersModalComponent
@@ -37,15 +32,13 @@ import {
     IThreadMembersModalComponentConfig,
     ThreadMembersModalComponent
 } from "../thread-members-modal/thread-members-modal.component";
-import {ChatFileUploaderComponent} from 'modules/Chat/components/chat-file-uploader/chat-file-uploader.component';
-import {FileInfo} from '@app/models/storage/models';
-import {Roles} from "@app/models/auth/auth.models";
+import { ChatFileUploaderComponent } from 'modules/Chat/components/chat-file-uploader/chat-file-uploader.component';
+import { FileInfo } from '@app/models/storage/models';
+import { Roles } from "@app/models/auth/auth.models";
 import bind from "bind-decorator";
-import {IUploadFileInputConfig} from "../../../file-uploader/components/upload-file-input/upload-file-input.component";
-import {UploadFile} from "../../../file-uploader/data/UploadFIle";
-import {State} from "../../store/reducers";
-import {Store} from "@ngrx/store";
-import {IMessage} from "../../models/models";
+import { IUploadFileInputConfig } from "../../../file-uploader/components/upload-file-input/upload-file-input.component";
+import { UploadFile } from "../../../file-uploader/data/UploadFIle";
+import { IMessage } from "../../models/models";
 import {
     LoadThreadMessagesSuccess,
     RemoteMessageReceived,
@@ -56,27 +49,27 @@ import {
     UserBannedInThread,
     UserUnbannedInThread
 } from "../../store/actions";
-import {componentDestroyed} from "@w11k/ngx-componentdestroyed";
-import {IThreadDTO} from "../../models/api.models";
-import {FacadeService} from "../../services/facade.service";
-import {ObservableUtils} from "../../../../utils/observable.utils";
-import {ChatMode} from "../../enums/chat-mode";
+import { componentDestroyed } from "@w11k/ngx-componentdestroyed";
+import { IThreadDTO } from "../../models/api.models";
+import { FacadeService } from "../../services/facade.service";
+import { ObservableUtils } from "../../../../utils/observable.utils";
+import { ChatMode } from "../../enums/chat-mode";
 import {
     ThreadConfiguratorComponent,
     ThreadConfiguratorComponentConfig,
     ThreadConfiguratorComponentResult
 } from "../thread-configurator/thread-configurator.component";
-import {FileStorageService} from "@app/services/file-storage.service";
-import {Actions, ofType} from "@ngrx/effects";
+import { FileStorageService } from "@app/services/file-storage.service";
+import { ofType } from "@ngrx/effects";
 import {
     InfinityLoaderComponent,
     InfinityLoaderHandler,
     ScrollDirection
 } from "../../../infinity-loader/components/infinity-loader/infinity-loader.component";
-import {ProcessState, ProcessStateType} from "@app/helpers/ProcessState";
-import {ConfirmModalComponent, IConfirmModalConfig} from "UI";
-import {ChatModeToken} from "../../mode.token";
-import {ChatTranslateService} from "../../localization/token";
+import { ProcessState, ProcessStateType } from "@app/helpers/ProcessState";
+import { ConfirmModalComponent, IConfirmModalConfig } from "UI";
+import { ChatModeToken } from "../../mode.token";
+import { ChatTranslateService } from "../../localization/token";
 
 @Component({
     selector: 'active-thread',
@@ -91,11 +84,12 @@ import {ChatTranslateService} from "../../localization/token";
 })
 export class ActiveThreadComponent implements OnInit, OnDestroy {
     @Output() public onMaximise = new EventEmitter();
-    @ViewChild('messageInput', {static: false}) public input: ElementRef;
-    @ViewChild('fileInput', {static: false}) fileInput: ElementRef;
-    @ViewChild('messagesWrapper', {static: false}) messagesPanel: ElementRef;
-    @ViewChild(InfinityLoaderComponent, {static: false}) infinityLoader: InfinityLoaderComponent;
+    @ViewChild('messageInput', { static: false }) public input: ElementRef;
+    @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
+    @ViewChild('messagesWrapper', { static: false }) messagesPanel: ElementRef;
+    @ViewChild(InfinityLoaderComponent, { static: false }) infinityLoader: InfinityLoaderComponent;
 
+    bans: { [id: string]: string[]; } = {};
     activeThread$: Observable<IThreadDTO>;
     messages$: Observable<IMessage[]>;
     uploadFileInputConfig: IUploadFileInputConfig = {
@@ -114,6 +108,14 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             || this.canManageMembers
             || this.canLeaveThread
             || this.canRemoveThread);
+    }
+
+    get hasAccess(): boolean {
+        return this._identityService.isAuthorizedCustomer && !this._identityService.isTrial;
+    }
+
+    get isAdmin(): boolean {
+        return this._identityService.isAdmin;
     }
 
     get isGroupThread(): boolean {
@@ -176,12 +178,12 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     ScrollDirection = ScrollDirection;
 
     constructor(private _identityService: IdentityService,
-                private _alertService: AlertService,
-                private _translateService: TranslateService,
-                private _dialog: MatDialog,
-                private _facadeService: FacadeService,
-                private _fileStorage: FileStorageService,
-                @Inject(ChatModeToken) public chatMode: ChatMode) {
+        private _alertService: AlertService,
+        private _translateService: TranslateService,
+        private _dialog: MatDialog,
+        private _facadeService: FacadeService,
+        private _fileStorage: FileStorageService,
+        @Inject(ChatModeToken) public chatMode: ChatMode) {
     }
 
     public ngOnInit() {
@@ -209,18 +211,36 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
 
         const userBannedInThread$ = this._facadeService.actions$.pipe(
             ofType(UserBannedInThread),
-            filter(({threadId}) => this.activeThread && threadId === this.activeThread.id)
+            filter(({ threadId }) => this.activeThread && threadId === this.activeThread.id)
         );
         const userUnbannedInThread$ = this._facadeService.actions$.pipe(
             ofType(UserUnbannedInThread),
-            filter(({threadId}) => this.activeThread && threadId === this.activeThread.id)
+            filter(({ threadId }) => this.activeThread && threadId === this.activeThread.id)
         );
         const threadBlockedStatusChange$ = this._facadeService.actions$.pipe(
             ofType(ThreadUpdated),
-            filter(({thread}) => this.activeThread && thread.id === this.activeThread.id),
-            map(({thread}) => thread.isBlocked),
+            filter(({ thread }) => this.activeThread && thread.id === this.activeThread.id),
+            map(({ thread }) => thread.isBlocked),
             distinct()
         );
+
+        // userBannedInThread$.pipe(
+        //     takeUntil(componentDestroyed(this)),
+        //     tap(() => {
+        //         if (this.activeThread) {
+        //             this._loadBans(this.activeThread).subscribe();
+        //         }
+        //     })
+        // ); 
+        
+        // userUnbannedInThread$.pipe(
+        //     takeUntil(componentDestroyed(this)),
+        //     tap(() => {
+        //         if (this.activeThread) {
+        //             this._loadBans(this.activeThread).subscribe();
+        //         }
+        //     })
+        // );
 
         const loadThreadMessages$ = merge(
             selectedThreadChanged$,
@@ -243,11 +263,15 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             threadBlockedStatusChange$.pipe(filter((isBlocked) => isBlocked))
         );
 
-
         loadThreadMessages$
             .pipe(
                 tap(() => {
                     this.loadThreadMessagesStatus.setPending();
+                }),
+                switchMap((thread) => {
+                    return this._loadBans(thread).pipe(
+                        map(() => thread)
+                    );
                 }),
                 switchMap((thread) => {
                     return this._facadeService.loadThreadMessages(thread.id)
@@ -293,8 +317,8 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
 
 
         merge(
-            this._facadeService.actions$.pipe(ofType(RemoteMessageReceived), map(({message}) => message.threadId)),
-            this._facadeService.actions$.pipe(ofType(LoadThreadMessagesSuccess), map(({threadId}) => threadId))
+            this._facadeService.actions$.pipe(ofType(RemoteMessageReceived), map(({ message }) => message.threadId)),
+            this._facadeService.actions$.pipe(ofType(LoadThreadMessagesSuccess), map(({ threadId }) => threadId))
         )
             .pipe(
                 filter((threadId) => this.activeThread && threadId === this.activeThread.id),
@@ -311,14 +335,14 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             this._facadeService.actions$
                 .pipe(
                     ofType(SendMessageRequest),
-                    filter(({message}) => {
+                    filter(({ message }) => {
                         return this.activeThread && message.threadId === this.activeThread.id;
                     })
                 ),
 
             this._facadeService.actions$.pipe(
                 ofType(RemoteMessageReceived),
-                filter(({message}) => {
+                filter(({ message }) => {
                     return this.activeThread && message.threadId === this.activeThread.id;
                 })
             )
@@ -337,7 +361,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
                 ofType(RemoveMessageRequestSuccess, RemoteMessageRemoved),
                 takeUntil(componentDestroyed(this))
             )
-            .subscribe(({messageId}) => {
+            .subscribe(({ messageId }) => {
                 if (this.messageForEdit && this.messageForEdit.id === messageId) {
                     this.cancelEditing();
                 }
@@ -363,13 +387,41 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         }
     }
 
+    isNotBanned(msg: IMessage): boolean {
+        let threadId = !!this.activeThread ? this.activeThread.id : null;
+        if (!threadId || !this.bans[threadId]) {
+            return true;
+        }
+
+        return this.bans[threadId].indexOf(msg.creator.id) === -1;
+    }
+
+    private _loadBans(thread: IThreadDTO): Observable<any> {
+        // if (!!this.bans[thread.id] && !force) {
+        //     return of(null);
+        // }
+
+        return this._facadeService.loadBans(thread.id).pipe(map((_) => {
+            // this.bans = {};
+            this.bans[thread.id] = _.map((b) => b.subjectId);
+        }));
+    }
+
     private _sendMessage(message: string, files: IFileInfo[] = []) {
+        if (!this.hasAccess) {
+            return;
+        }
+
         const thread = ObservableUtils.instant(this.activeThread$);
         this._facadeService.sendMessage(message, files, thread.id)
             .subscribe();
     }
 
     private _editMessage(message: string, files: IFileInfo[] = [], messageId: string): Observable<any> {
+        if (!this.hasAccess) {
+            return of();
+        }
+
         const thread = ObservableUtils.instant(this.activeThread$);
         return this._facadeService.updateMessage(message, files, messageId, thread.id);
     }
@@ -405,6 +457,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             this._alertService.error(this._translateService.get('activeThread.disabledError'));
             return;
         }
+        
+        if (!this.hasAccess) {
+            return;
+        }
 
         const thread = ObservableUtils.instant(this.activeThread$);
 
@@ -436,6 +492,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     }
 
     handleResendMessage(message: IMessage) {
+        if (!this.hasAccess) {
+            return;
+        }
+
         this._facadeService.resendMessage(message)
             .subscribe({
                 error: (e) => {
@@ -448,18 +508,18 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     private _handleEditFileMessage(message: IMessage) {
         this._dialog.open(
             ChatFileUploaderComponent, {
-                data: {
-                    file: null,
-                    fileInfo: message.files[0],
-                    caption: message.content,
-                    onFileUploaded: ((fileInfo: FileInfo, caption: string) => {
-                        this._editFileMessage(caption, [{
-                            id: fileInfo.id,
-                            name: fileInfo.fileName
-                        }], message.id);
-                    })
-                }
-            });
+            data: {
+                file: null,
+                fileInfo: message.files[0],
+                caption: message.content,
+                onFileUploaded: ((fileInfo: FileInfo, caption: string) => {
+                    this._editFileMessage(caption, [{
+                        id: fileInfo.id,
+                        name: fileInfo.fileName
+                    }], message.id);
+                })
+            }
+        });
     }
 
     public cancelEditing() {
@@ -518,6 +578,11 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             default:
                 break;
         }
+    }
+
+    onUsernameCopied(username: string) {
+        this.userMessage += ` ${username}`;
+        this.input.nativeElement.focus();
     }
 
     public onInputClick(event) {
@@ -612,28 +677,28 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     public handleFileInput(files: UploadFile[]) {
         this._dialog.open(
             ChatFileUploaderComponent, {
-                data: {
-                    file: files[0],
-                    onFileUploaded: ((fileInfo: FileInfo, caption: string) => {
-                        const filesInfo = [{
-                            id: fileInfo.id,
-                            name: fileInfo.fileName
-                        }];
+            data: {
+                file: files[0],
+                onFileUploaded: ((fileInfo: FileInfo, caption: string) => {
+                    const filesInfo = [{
+                        id: fileInfo.id,
+                        name: fileInfo.fileName
+                    }];
 
-                        if (!this.isEditingMessage) {
-                            this._sendMessage(caption, filesInfo);
+                    if (!this.isEditingMessage) {
+                        this._sendMessage(caption, filesInfo);
 
-                            return;
-                        }
+                        return;
+                    }
 
-                        if (this._isFileMessage(this.messageForEdit)) {
-                            this._editFileMessage(caption, filesInfo, this.messageForEdit.id);
-                        } else {
-                            this._editTextMessage(caption, filesInfo, this.messageForEdit.id);
-                        }
-                    })
-                }
-            });
+                    if (this._isFileMessage(this.messageForEdit)) {
+                        this._editFileMessage(caption, filesInfo, this.messageForEdit.id);
+                    } else {
+                        this._editTextMessage(caption, filesInfo, this.messageForEdit.id);
+                    }
+                })
+            }
+        });
     }
 
     public createThread() {
