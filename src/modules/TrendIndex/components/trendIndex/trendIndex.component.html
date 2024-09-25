@@ -493,7 +493,6 @@
                                                             </div>
                                                         </div>
 
-
                                                         <div class="HITL active status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
                                                             *ngIf="((isInstrumentSelected(vmItem) && vmItem.tradingState == 1) && userAutoTradingInfoData?.useManualTrading)">
@@ -522,6 +521,13 @@
                                                                     class="fa-solid fa-shield-check"></i></span>
                                                             <span *ngIf="vmItem.risk == -1">All</span>
                                                             <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
+                                                        </div>
+
+                                                        <div class="symbolx info-cell status-holder" *ngIf="isAdmin" (click)="showInfo(vmItem, $event)">
+                                                            <span><i class="fa-solid fa-square-info"></i></span>
+                                                        </div>
+                                                        <div class="symbolx info-cell status-holder" *ngIf="isAdmin" (click)="showInfo2(vmItem, $event)">
+                                                            <span><i class="fa-solid fa-info-circle"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>

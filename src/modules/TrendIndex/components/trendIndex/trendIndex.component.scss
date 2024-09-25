@@ -1412,6 +1412,22 @@
     color: themed("valueTextColor");
   }
 
+  .info-cell {
+    background: #2f314a;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    //padding-right: 6px;
+    font-weight: 600;
+    border-radius: 3px;
+    border: 1px solid #272943;
+    transition: all 0.22s ease-in-out;
+
+    &:hover {
+      filter: brightness(1.2);
+    }
+  }
+
   .risk-cell {
     background: #304a2f;
     display: flex;
@@ -1472,7 +1488,7 @@
 
 .beta {
   font-size: 8px;
-    background: #64ae2a;
-    padding: 1px 6px;
-    border-radius: 2px;
+  background: #64ae2a;
+  padding: 1px 6px;
+  border-radius: 2px;
 }
