@@ -137,11 +137,35 @@
 
   .ban-label {
     padding: 0px 6px;
-    font-weight: normal;
     background-color: red;
     margin-left: 5px;
     border-radius: 3px;
     color: white;
+  }
+
+  .management-control {
+    display: inline-flex;
+
+    .remove-ban-control,
+    .ban-control,
+    .mute-control {
+      padding: 0px 6px;
+      margin-left: 5px;
+      border-radius: 3px;
+      color: white;
+      background-color: grey;
+    }
+
+    .remove-ban-control {
+      background-color: red;
+    }
+    .ban-control {
+      background-color: orange;
+    }
+    .mute-control {
+      background-color: darkcyan;
+    }
+
   }
 }
 

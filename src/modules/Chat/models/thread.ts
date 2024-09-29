@@ -46,6 +46,7 @@ export interface IThread {
     createdAt: string;
     updatedAt: string;
     isBanned: boolean;
+    bannedTill: string;
     isBlocked: boolean;
     isDisabled: boolean;
     removed: boolean;
@@ -113,6 +114,7 @@ export interface IThreadBanCreate {
     description: string; // maxLength: 255; minLength: 0
     threadId: string;
     subjectId: string;
+    durationDays: number;
 }
 
 export interface IThreadBan {
@@ -123,6 +125,7 @@ export interface IThreadBan {
     description: string;
     createdAt: string;
     updatedAt: string;
+    bannedTill: string;
 }
 
 export interface IThreadBanContainer {

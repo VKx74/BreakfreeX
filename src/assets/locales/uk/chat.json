@@ -79,6 +79,7 @@
   "failedToRemoveMember": "Невдалося видалити користувача з групи",
   "more": "Більше",
   "userBannedCaption": "Ви заблоковані у цьому чаті",
+  "userMutedCaption": "Ви тимчасово заблоковані у цьому чаті",
   "threadBlocked": "Цей чат заблоковано",
   "leaveThread": "Покинути чат",
   "removeThread": "Видалити чат",

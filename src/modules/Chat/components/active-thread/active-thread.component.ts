@@ -1,4 +1,5 @@
 import {
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter, Inject,
@@ -7,7 +8,7 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import { EThreadType, IFileInfo } from "../../models/thread";
+import { EThreadType, IFileInfo, IThreadBan } from "../../models/thread";
 import { merge, Observable, of } from "rxjs";
 import {
     catchError, distinct,
@@ -70,6 +71,8 @@ import { ProcessState, ProcessStateType } from "@app/helpers/ProcessState";
 import { ConfirmModalComponent, IConfirmModalConfig } from "UI";
 import { ChatModeToken } from "../../mode.token";
 import { ChatTranslateService } from "../../localization/token";
+import { ChatApiService } from 'modules/Chat/services/chat.api.service';
+import { InputModalComponent } from 'modules/UI/components/input-modal/input-modal.component';
 
 @Component({
     selector: 'active-thread',
@@ -89,7 +92,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
     @ViewChild('messagesWrapper', { static: false }) messagesPanel: ElementRef;
     @ViewChild(InfinityLoaderComponent, { static: false }) infinityLoader: InfinityLoaderComponent;
 
-    bans: { [id: string]: string[]; } = {};
+    bans: { [id: string]: IThreadBan[]; } = {};
     activeThread$: Observable<IThreadDTO>;
     messages$: Observable<IMessage[]>;
     uploadFileInputConfig: IUploadFileInputConfig = {
@@ -170,6 +173,14 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         return this.activeThread.isBanned;
     }
 
+    get isUserMutedInThread(): boolean {
+        return new Date(this.activeThread.bannedTill).getFullYear() < 3000;
+    }
+
+    get banedTillDate(): string {
+        return this.activeThread.bannedTill;
+    }
+
     get showCreateThreadBtn(): boolean {
         return this.chatMode === ChatMode.PublicThreads ? this._identityService.role === Roles.Admin : true;
     }
@@ -183,6 +194,8 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         private _dialog: MatDialog,
         private _facadeService: FacadeService,
         private _fileStorage: FileStorageService,
+        private _threadService: ChatApiService,
+        protected _cdr: ChangeDetectorRef,
         @Inject(ChatModeToken) public chatMode: ChatMode) {
     }
 
@@ -393,7 +406,52 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
             return true;
         }
 
-        return this.bans[threadId].indexOf(msg.creator.id) === -1;
+        let bans = this.bans[threadId];
+
+        for (let ban of bans)
+        {
+            if (ban.subjectId === msg.creator.id) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    isMute(msg: IMessage): boolean {
+        let threadId = !!this.activeThread ? this.activeThread.id : null;
+        if (!threadId || !this.bans[threadId]) {
+            return false;
+        }
+
+        let bans = this.bans[threadId];
+
+        for (let ban of bans)
+        {
+            if (ban.subjectId === msg.creator.id) {
+                if (ban.bannedTill.startsWith("9999")) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bannedTill(msg: IMessage): string {
+        let threadId = !!this.activeThread ? this.activeThread.id : null;
+        if (!threadId || !this.bans[threadId]) {
+            return;
+        }
+
+        let bans = this.bans[threadId];
+
+        for (let ban of bans)
+        {
+            if (ban.subjectId === msg.creator.id) {
+               return ban.bannedTill;
+            }
+        }
+        return;
     }
 
     private _loadBans(thread: IThreadDTO): Observable<any> {
@@ -401,9 +459,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
         //     return of(null);
         // }
 
+
         return this._facadeService.loadBans(thread.id).pipe(map((_) => {
             // this.bans = {};
-            this.bans[thread.id] = _.map((b) => b.subjectId);
+            this.bans[thread.id] = _;
         }));
     }
 
@@ -717,6 +776,114 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
                 }
             } as ThreadConfiguratorComponentConfig
         }).afterClosed();
+    }
+
+    public handleRemoveBan(msg: IMessage) {
+        let threadId = !!this.activeThread ? this.activeThread.id : null;
+        if (!threadId || !this.bans[threadId]) {
+            return;
+        }
+
+        let bans = this.bans[threadId];
+        let id = "";
+        let index = -1;
+
+        for (let ban of bans)
+        {
+            if (ban.subjectId === msg.creator.id) {
+                id = ban.id;
+                index = bans.indexOf(ban);
+                break;
+            }
+        }
+
+        if (!id) {
+            return;
+        }
+
+        this._dialog.open(ConfirmModalComponent, {data: this.getRemoveBanDialogData()})
+            .afterClosed()
+            .subscribe((confirm) => {
+                if (confirm) {
+                    this._threadService.deleteThreadBanById(id)
+                        .subscribe(() => {
+                            this.bans[threadId].splice(index, 1);
+                            this._alertService.success("Ban removed");
+                            this._cdr.markForCheck();
+                        }, () => {
+                            this._alertService.error("Failed to remove ban");
+                        });
+
+                }
+            });
+    }
+
+    public handleBan(msg: IMessage) {
+        this._dialog.open(InputModalComponent, {data: this.getCreateBanDialogData()})
+        .afterClosed()
+        .subscribe((value) => {
+            if (value) {
+                this._threadService.createThreadBan({
+                    description: value,
+                    subjectId: msg.creator.id,
+                    threadId: this.activeThread.id,
+                    durationDays: -1
+                }) .subscribe(() => {
+                    this._alertService.success("Ban added");
+                    this._loadBans(this.activeThread).subscribe(() => {
+                        this._cdr.markForCheck();
+                    });
+                }, () => {
+                    this._alertService.error("Failed to add ban");
+                });
+            }
+        });
+    }
+
+    public handleMute(msg: IMessage) {
+        this._dialog.open(InputModalComponent, {data: this.getCreateMuteDialogData()})
+        .afterClosed()
+        .subscribe((value) => {
+            if (value) {
+                this._threadService.createThreadBan({
+                    description: value,
+                    subjectId: msg.creator.id,
+                    threadId: this.activeThread.id,
+                    durationDays: 7
+                }) .subscribe(() => {
+                    this._alertService.success("Mute added");
+                    this._loadBans(this.activeThread).subscribe(() => {
+                        this._cdr.markForCheck();
+                    });
+                }, () => {
+                    this._alertService.error("Failed to add mute");
+                });
+            }
+        });
+    }
+
+    private getRemoveBanDialogData() {
+        return {
+            message: 'Remove user ban?'
+        };
+    }
+
+    private getCreateBanDialogData() {
+        return {
+            title: of('New ban'),
+            errorText: of('Please, enter a valid reason'),
+            buttonCaption: of('Ban'),
+            inputCaption: of('Reason'),
+        };
+    }
+
+    private getCreateMuteDialogData() {
+        return {
+            title: of('Mute user'),
+            errorText: of('Please, enter a valid reason'),
+            buttonCaption: of('Mute'),
+            inputCaption: of('Reason'),
+        };
     }
 
     private _handleCreateThreadError(e) {

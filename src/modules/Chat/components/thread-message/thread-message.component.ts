@@ -19,10 +19,16 @@ import {IMessageDTO} from "../../models/api.models";
 export class ThreadMessageComponent {
     @Input() message: IMessage = null;
     @Input() isBanned: boolean = false;
+    @Input() isMute: boolean = false;
+    @Input() bannedTill: string;
+    @Input() isAdminManagement: boolean = false;
     @Output() onUsernameCopied = new EventEmitter<string>();
     @Output() onMessageRemove: EventEmitter<string> = new EventEmitter();
     @Output() onMessageEdit: EventEmitter<IMessage> = new EventEmitter();
     @Output() onMessageResend: EventEmitter<IMessage> = new EventEmitter();
+    @Output() onRemoveBan: EventEmitter<IMessage> = new EventEmitter();
+    @Output() onBan: EventEmitter<IMessage> = new EventEmitter();
+    @Output() onMute: EventEmitter<IMessage> = new EventEmitter();
     userNameColor: string;
 
     MessageSendingStatus = MessageSendingStatus;
@@ -103,5 +109,30 @@ export class ThreadMessageComponent {
                     this.onMessageRemove.emit(this.message.id);
                 }
             });
+    }
+
+    removeBan(event: MouseEvent)
+    {
+        if (this.onRemoveBan) {
+            this.onRemoveBan.emit(this.message);
+        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    }
+    ban(event: MouseEvent)
+    {
+        if (this.onBan) {
+            this.onBan.emit(this.message);
+        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    }
+    mute(event: MouseEvent)
+    {   
+        if (this.onMute) {
+            this.onMute.emit(this.message);
+        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
     }
 }
