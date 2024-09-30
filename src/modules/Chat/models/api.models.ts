@@ -16,6 +16,7 @@ export interface IThreadDTO {
     isDisabled: boolean;
     removed: boolean;
     lastMessage: IMessageDTO;
+    bannedTill: string;
 }
 
 export interface IMessageDTO {

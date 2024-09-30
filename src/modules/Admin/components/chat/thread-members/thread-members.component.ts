@@ -100,7 +100,28 @@ export class ThreadMembersComponent extends PaginationComponent<IThreadParticipa
                     this._threadService.createThreadBan({
                         description: value,
                         subjectId: participant.subjectId,
-                        threadId: this.threadId
+                        threadId: this.threadId,
+                        durationDays: -1
+                    })
+                        .subscribe(resp => {
+                            participant.ban = resp;
+                        }, e => {
+                            console.log(e);
+                        });
+                }
+            });
+    }
+
+    public openMuteModal(participant: IThreadParticipant) {
+        this._dialog.open(InputModalComponent, {data: this.getCreateMuteDialogData()})
+            .afterClosed()
+            .subscribe((value) => {
+                if (value) {
+                    this._threadService.createThreadBan({
+                        description: value,
+                        subjectId: participant.subjectId,
+                        threadId: this.threadId,
+                        durationDays: 7
                     })
                         .subscribe(resp => {
                             participant.ban = resp;
@@ -174,6 +195,15 @@ export class ThreadMembersComponent extends PaginationComponent<IThreadParticipa
             title: of('New ban'),
             errorText: of('Please, enter a valid reason'),
             buttonCaption: of('Ban'),
+            inputCaption: of('Reason'),
+        };
+    }
+
+    private getCreateMuteDialogData(): IInputModalConfig {
+        return {
+            title: of('Mute user'),
+            errorText: of('Please, enter a valid reason'),
+            buttonCaption: of('Mute'),
             inputCaption: of('Reason'),
         };
     }

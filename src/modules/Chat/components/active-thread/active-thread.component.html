@@ -47,8 +47,7 @@
         </div>
         <div class="flex align-items-center">
             <ng-container *ngIf="showMoreBtn">
-                <div class="crypto-button-icon control" title="More"
-                     [matMenuTriggerFor]="menu">
+                <div class="crypto-button-icon control" title="More" [matMenuTriggerFor]="menu">
                     <span class="crypto-icon crypto-icon-settings"></span>
                 </div>
                 <mat-menu #menu="matMenu">
@@ -83,29 +82,30 @@
                         <i class="icon crypto-icon crypto-icon-banned-chat"></i>
                     </div>
                     <div class="text-center">
-                        <span *ngIf="activeThread.isBanned">{{'userBannedCaption' | translate}}</span>
-                        <span *ngIf="activeThread.isBlocked && !activeThread.isBanned">{{'threadBlocked' | translate}}</span>
+                        <span *ngIf="activeThread.isBanned && !isUserMutedInThread">{{'userBannedCaption' | translate}}</span>
+                        <span *ngIf="activeThread.isBanned && isUserMutedInThread">{{'userMutedCaption' | translate}}</span>
+                        <span *ngIf="activeThread.isBlocked && !activeThread.isBanned">{{'threadBlocked' |
+                            translate}}</span>
                     </div>
                 </div>
             </div>
         </ng-container>
 
         <div class="messages-outer-wrapper flex-grow-1 h-0">
-            <infinity-loader [scrollDirection]="ScrollDirection.Top"
-                             [handler]="infinityLoaderHandler"
-                             [showLoadingIndicator]="false"
-                             [infiniteScrollContainer]="messagesWrapper" class="full-width">
+            <infinity-loader [scrollDirection]="ScrollDirection.Top" [handler]="infinityLoaderHandler"
+                [showLoadingIndicator]="false" [infiniteScrollContainer]="messagesWrapper" class="full-width">
                 <div #messagesWrapper class="messages-wrapper flex">
                     <ng-container *ngFor="let message of (messages$ | async); trackBy: trackByFn">
                         <ng-container *ngIf="isNotBanned(message) || isAdmin">
-                            <thread-message
-                                    [message]="message"
-                                    [isBanned]="!isNotBanned(message)"
-                                    (onUsernameCopied)="onUsernameCopied($event)"
-                                    (onMessageRemove)="handleRemoveMessage($event)"
-                                    (onMessageEdit)="handleEditMessage(message)"
-                                    (onMessageResend)="handleResendMessage(message)"
-                            ></thread-message>
+                            <thread-message [message]="message" [isBanned]="!isNotBanned(message)"
+                                [isMute]="isMute(message)" [isAdminManagement]="isAdmin"
+                                [bannedTill]="bannedTill(message)"
+                                (onUsernameCopied)="onUsernameCopied($event)"
+                                (onMessageRemove)="handleRemoveMessage($event)"
+                                (onMessageEdit)="handleEditMessage(message)"
+                                (onMessageResend)="handleResendMessage(message)"
+                                (onRemoveBan)="handleRemoveBan(message)" (onBan)="handleBan(message)"
+                                (onMute)="handleMute(message)"></thread-message>
                         </ng-container>
                     </ng-container>
                 </div>
@@ -115,44 +115,43 @@
             </div>
         </div>
 
-        <div class="footer flex flex-direction-column" *ngIf="hasAccess; else outOfAccess">
-            <div class="edit-message-wrapper flex align-items-baseline"
-                 *ngIf="messageForEdit && !(messageForEdit.files && messageForEdit.files.length)">
-                <i class="edit-icon crypto-icon crypto-icon-edit"></i>
-                <div class="message-content flex-grow-1">{{messageForEdit.content}}</div>
-                <i class="cancel-editing-icon crypto-icon crypto-icon-close" (click)="cancelEditing()"></i>
-            </div>
-
-            <div class="message-input-wrapper flex" (click)="onInputClick($event)"
-                 [class.disabled]="activeThread.isDisabled">
-
-                <div class="left-side-controls">
-                    <upload-file-input [onFilesSelected]="handleFileInput"
-                                       title="{{'activeThread.attachFile' | translate}}"
-                                       [config]="uploadFileInputConfig" class="upload-file">
-                        <span class="crypto-icon crypto-icon-add-document control add-file-control"></span>
-                    </upload-file-input>
+        <ng-container *ngIf="!activeThread.isBanned">
+            <div class="footer flex flex-direction-column" *ngIf="hasAccess; else outOfAccess">
+                <div class="edit-message-wrapper flex align-items-baseline"
+                    *ngIf="messageForEdit && !(messageForEdit.files && messageForEdit.files.length)">
+                    <i class="edit-icon crypto-icon crypto-icon-edit"></i>
+                    <div class="message-content flex-grow-1">{{messageForEdit.content}}</div>
+                    <i class="cancel-editing-icon crypto-icon crypto-icon-close" (click)="cancelEditing()"></i>
                 </div>
 
-                <textarea class="chat-text-input flex-grow-1"
-                       #messageInput
-                       rows="2"
-                       [(ngModel)]="userMessage"
-                       [disabled]="activeThread.isDisabled"
-                       placeholder="{{'activeThread.' + (activeThread.isDisabled ? 'sendMessageDisabledPlaceholder' : 'sendMessagePlaceholder')  | translate}}">
+                <div class="message-input-wrapper flex" (click)="onInputClick($event)"
+                    [class.disabled]="activeThread.isDisabled">
+
+                    <div class="left-side-controls">
+                        <upload-file-input [onFilesSelected]="handleFileInput"
+                            title="{{'activeThread.attachFile' | translate}}" [config]="uploadFileInputConfig"
+                            class="upload-file">
+                            <span class="crypto-icon crypto-icon-add-document control add-file-control"></span>
+                        </upload-file-input>
+                    </div>
+
+                    <textarea class="chat-text-input flex-grow-1" #messageInput rows="2" [(ngModel)]="userMessage"
+                        [disabled]="activeThread.isDisabled"
+                        placeholder="{{'activeThread.' + (activeThread.isDisabled ? 'sendMessageDisabledPlaceholder' : 'sendMessagePlaceholder')  | translate}}">
                 </textarea>
-                <div class="right-side-controls flex align-items-center">
-                    <emoji-picker class="control" title="{{'activeThread.emojiTitle' | translate}}"
-                                  (onEmojiClick)="addEmoji($event)"></emoji-picker>
-                    <div class="crypto-icon crypto-icon-send-message control"
-                         title="{{'activeThread.sendMessageBtn' | translate}}"
-                         (click)="handleMessageInputSubmit()"></div>
+                    <div class="right-side-controls flex align-items-center">
+                        <emoji-picker class="control" title="{{'activeThread.emojiTitle' | translate}}"
+                            (onEmojiClick)="addEmoji($event)"></emoji-picker>
+                        <div class="crypto-icon crypto-icon-send-message control"
+                            title="{{'activeThread.sendMessageBtn' | translate}}" (click)="handleMessageInputSubmit()">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <ng-template #outOfAccess>
-            <div class="footer flex flex-direction-column out-of-access"> Chat disabled during trial.</div>
-        </ng-template>
+            <ng-template #outOfAccess>
+                <div class="footer flex flex-direction-column out-of-access"> Chat disabled during trial.</div>
+            </ng-template>
+        </ng-container>
     </div>
 </div>
 

@@ -1,27 +1,37 @@
 <div class="root flex" *ngIf="message" [class.current-user-message]="isUserMessage" [class.banned]="isBanned">
-   
-    <ng-container >
+
+    <ng-container>
         <div class="creator-avatar">
             <name-avatar [src]="message.creator?.avatarId" [name]="message.creator?.userName"
-                         (onColorSet)="onAvatarColorSet($event)"></name-avatar>
+                (onColorSet)="onAvatarColorSet($event)"></name-avatar>
         </div>
     </ng-container>
 
     <div class="message-body flex flex-direction-column">
         <div class="top-line flex align-items-center justify-flex-end">
-            <span class="creator-name t-overflow-ellipsis" (click)="copyUsernameToChatInput()">{{message.creator?.userName}}
-
-                <span *ngIf="isBanned" class="ban-label">Ban</span>
+            <span class="creator-name t-overflow-ellipsis"
+                (click)="copyUsernameToChatInput()">{{message.creator?.userName}}
+                <ng-container *ngIf="!isUserMessage">
+                    <div *ngIf="isAdminManagement" class="management-control">
+                        <span *ngIf="isBanned; else addBanContainer" class="remove-ban-control"
+                            title="Banned till {{bannedTill}}"
+                            (click)="removeBan($event)">{{isMute ? "Unmute" : "Remove Ban"}}</span>
+                        <ng-template #addBanContainer>
+                            <div class="ban-control" (click)="ban($event)">Ban</div>
+                            <div class="mute-control" (click)="mute($event)">Mute</div>
+                        </ng-template>
+                    </div>
+                </ng-container>
             </span>
 
             <span *ngIf="isUserMessage">
                 <span class="message-sending-status">
                     <i class="crypto-icon crypto-icon-message-send pending-status"
-                       *ngIf="message.sendingState === MessageSendingStatus.Pending"></i>
+                        *ngIf="message.sendingState === MessageSendingStatus.Pending"></i>
                     <i class="crypto-icon crypto-icon-message-send succeeded-status"
-                       *ngIf="message.sendingState === MessageSendingStatus.Succeeded"></i>
+                        *ngIf="message.sendingState === MessageSendingStatus.Succeeded"></i>
                     <i class="fa fa-exclamation-circle failed-status"
-                       *ngIf="message.sendingState === MessageSendingStatus.Failed"></i>
+                        *ngIf="message.sendingState === MessageSendingStatus.Failed"></i>
                 </span>
             </span>
             <span class="message-time">{{message.createdAt | timeAgo}}</span>
@@ -29,7 +39,7 @@
         <div class="message-content">
             <ng-container *ngIf="hasFile">
                 <file-info-simple [FileInfo]="file" [isChatView]="true"
-                                  (infoClick)='fileClick($event)'></file-info-simple>
+                    (infoClick)='fileClick($event)'></file-info-simple>
             </ng-container>
 
             <ng-container>
@@ -42,10 +52,10 @@
         <menu-toggle class="menu-toggle align-self-baseline" [matMenuTriggerFor]="messageMenu"></menu-toggle>
         <mat-menu #messageMenu="matMenu">
             <button mat-menu-item (click)="onMessageResend.emit(message)"
-                    *ngIf="message.sendingState === MessageSendingStatus.Failed">{{'resend' | translate}}</button>
+                *ngIf="message.sendingState === MessageSendingStatus.Failed">{{'resend' | translate}}</button>
 
             <button mat-menu-item (click)="onMessageEdit.emit(message)"
-                    *ngIf="message.sendingState === MessageSendingStatus.Succeeded">{{'edit' | translate}}</button>
+                *ngIf="message.sendingState === MessageSendingStatus.Succeeded">{{'edit' | translate}}</button>
 
             <button mat-menu-item (click)="removeMessage()">
                 <span class="crypto-color-red">{{'remove' | translate}}</span>

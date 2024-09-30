@@ -79,6 +79,7 @@
   "failedToRemoveMember": "Failed to remove member",
   "more": "More",
   "userBannedCaption": "Looks like you have been banned in this thread",
+  "userMutedCaption": "Looks like you have been muted in this thread",
   "threadBlocked": "Looks like this thread has been blocked",
   "leaveThread": "Leave thread",
   "removeThread": "Remove thread",

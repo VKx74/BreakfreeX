@@ -17,6 +17,7 @@
             <th>Role</th>
             <th>Reason</th>
             <th class="">Banned At</th>
+            <th class="">Banned Till</th>
             <th class="small-column"></th>
         </tr>
         </thead>
@@ -45,6 +46,9 @@
             <td>
                 {{participant.ban ? (participant.ban.updatedAt | localTime | date : 'short') : '-'}}
             </td>
+            <td>
+                {{participant.ban ? (participant.ban.bannedTill | localTime | date : 'short') : '-'}}
+            </td>
             <td class="small-column">
                 <ng-container
                         *ngIf="currentUserId !== participant.subjectId">
@@ -53,6 +57,10 @@
                         <button *ngIf="!participant.ban; else userBanOptions" mat-menu-item
                                 (click)="openBanModal(participant)">
                             <span class="">Ban</span>
+                        </button>   
+                        <button *ngIf="!participant.ban; else userBanOptions" mat-menu-item
+                                (click)="openMuteModal(participant)">
+                            <span class="">Mute</span>
                         </button>
 
                         <ng-template #userBanOptions>

@@ -128,7 +128,8 @@ export class ThreadMembersModalComponent extends Modal<IInviteMembersModalConfig
                     return this._threadService.createThreadBan({
                         description: value,
                         subjectId: member.user.id,
-                        threadId: this.data.threadId
+                        threadId: this.data.threadId,
+                        durationDays: -1
                     }).pipe(
                         tap((ban: IThreadBan) => {
                             member.ban = ban;
