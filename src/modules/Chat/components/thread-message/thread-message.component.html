@@ -8,33 +8,37 @@
     </ng-container>
 
     <div class="message-body flex flex-direction-column">
-        <div class="top-line flex align-items-center justify-flex-end">
-            <span class="creator-name t-overflow-ellipsis"
-                (click)="copyUsernameToChatInput()">{{message.creator?.userName}}
+        <div class="top-line flex">
+            <div class="name-container">
+                <span class="creator-name t-overflow-ellipsis"
+                    (click)="copyUsernameToChatInput()">{{message.creator?.userName}}
+                </span>
                 <ng-container *ngIf="!isUserMessage">
                     <div *ngIf="isAdminManagement" class="management-control">
                         <span *ngIf="isBanned; else addBanContainer" class="remove-ban-control"
-                            title="Banned till {{bannedTill}}"
-                            (click)="removeBan($event)">{{isMute ? "Unmute" : "Remove Ban"}}</span>
+                            title="Banned till {{bannedTill}}" (click)="removeBan($event)">{{isMute ? "Unmute" :
+                            "RemoveBan"}}</span>
                         <ng-template #addBanContainer>
                             <div class="ban-control" (click)="ban($event)">Ban</div>
                             <div class="mute-control" (click)="mute($event)">Mute</div>
                         </ng-template>
                     </div>
                 </ng-container>
-            </span>
+            </div>
 
-            <span *ngIf="isUserMessage">
-                <span class="message-sending-status">
-                    <i class="crypto-icon crypto-icon-message-send pending-status"
-                        *ngIf="message.sendingState === MessageSendingStatus.Pending"></i>
-                    <i class="crypto-icon crypto-icon-message-send succeeded-status"
-                        *ngIf="message.sendingState === MessageSendingStatus.Succeeded"></i>
-                    <i class="fa fa-exclamation-circle failed-status"
-                        *ngIf="message.sendingState === MessageSendingStatus.Failed"></i>
+            <div class="status-container">
+                <span *ngIf="isUserMessage">
+                    <span class="message-sending-status">
+                        <i class="crypto-icon crypto-icon-message-send pending-status"
+                            *ngIf="message.sendingState === MessageSendingStatus.Pending"></i>
+                        <i class="crypto-icon crypto-icon-message-send succeeded-status"
+                            *ngIf="message.sendingState === MessageSendingStatus.Succeeded"></i>
+                        <i class="fa fa-exclamation-circle failed-status"
+                            *ngIf="message.sendingState === MessageSendingStatus.Failed"></i>
+                    </span>
                 </span>
-            </span>
-            <span class="message-time">{{message.createdAt | timeAgo}}</span>
+                <span class="message-time">{{message.createdAt | timeAgo}}</span>
+            </div>
         </div>
         <div class="message-content">
             <ng-container *ngIf="hasFile">
