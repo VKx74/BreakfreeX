@@ -129,7 +129,7 @@
   overflow: auto;
   flex-grow: 1;
   padding: 0 3px 3px 3px;
-  flex-direction: column-reverse;
+  flex-direction: column;
   position: relative;
 
   &.old-browser {

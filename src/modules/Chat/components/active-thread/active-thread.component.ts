@@ -206,7 +206,7 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
 
         this.messages$ = this._facadeService.selectedThreadMessages$.pipe(
             map((messages) => {
-                return messages.slice().reverse();
+                return messages.slice();
             })
         );
 

@@ -537,7 +537,7 @@ export class ChatEffects {
 
                     return forkJoin({
                         threads: of(resp.data),
-                        messages: messages.length ? this._helper.convertToIMessages(messages) : of([])
+                        messages: of([])
                     });
                 })
             );
