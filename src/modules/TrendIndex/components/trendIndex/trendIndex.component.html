@@ -523,10 +523,10 @@
                                                             <span *ngIf="vmItem.risk > 0">{{vmItem.risk}}% Risk</span>
                                                         </div>
 
-                                                        <div class="symbolx info-cell status-holder" *ngIf="isAdmin" (click)="showInfo(vmItem, $event)">
+                                                        <div class="symbolx info-cell status-holder" *ngIf="isAdmin && showLogsButtons" (click)="showInfo(vmItem, $event)">
                                                             <span><i class="fa-solid fa-square-info"></i></span>
                                                         </div>
-                                                        <div class="symbolx info-cell status-holder" *ngIf="isAdmin" (click)="showInfo2(vmItem, $event)">
+                                                        <div class="symbolx info-cell status-holder" *ngIf="isAdmin && showLogsButtons" (click)="showInfo2(vmItem, $event)">
                                                             <span><i class="fa-solid fa-info-circle"></i></span>
                                                         </div>
                                                     </div>
