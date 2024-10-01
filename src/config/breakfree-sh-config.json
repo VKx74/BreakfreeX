@@ -2,59 +2,59 @@
   "apiKey": "8e738606c9ba4315aae2ef0ac15d6740",
   "fileStorageApiKey": "123",
   "apiUrls": {
-    "successCheckoutRedirect": "https://stage.breakfreetrading.com/success-checkout.html",
-    "identityUrl": "https://auth-platform-stage.breakfreetrading.com/",
-    "webSocketUrl": "wss://ws-platform-stage.breakfreetrading.com/wsnotification",
-    "bitmexREST": "https://feed-stage.breakfreetrading.com/bitmex/",
-    "bitmexWS": "wss://feed-stage.breakfreetrading.com/bitmex/subscribe/realtime/", 
-    "polygonREST": "https://feed-stage.breakfreetrading.com/polygon/",
-    "polygonWS": "wss://feed-stage.breakfreetrading.com/polygon/subscribe/realtime/",
-    "twelvedataREST": "https://feed-stage.breakfreetrading.com/twelvedata/",
-    "twelvedataWS": "wss://feed-stage.breakfreetrading.com/twelvedata/subscribe/realtime/",
-    "kaikoREST": "https://feed-stage.breakfreetrading.com/kaiko/",
-    "kaikoWS": "wss://feed-stage.breakfreetrading.com/kaiko/subscribe/realtime/",
-    "binanceREST": "https://feed-stage.breakfreetrading.com/binance/",
-    "binanceWS": "wss://feed-stage.breakfreetrading.com/binance/websocket",
-    "onadaWS": "wss://feed-stage.breakfreetrading.com/oanda/subscribe/realtime/",
-    "coinigyREST": "https://feed-stage.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
-    "coinigyWS": "wss://feed-stage.breakfreetrading.com/data/vendor/coinigy/ws",
+    "successCheckoutRedirect": "https://breakfreetrading.com/success-checkout.html",
+    "identityUrl": "https://auth-platform.breakfreetrading.com/",
+    "webSocketUrl": "wss://ws-platform.breakfreetrading.com/wsnotification",
+    "bitmexREST": "https://feed.breakfreetrading.com/bitmex/",
+    "bitmexWS": "wss://feed.breakfreetrading.com/bitmex/subscribe/realtime/", 
+    "polygonREST": "https://feed.breakfreetrading.com/polygon/",
+    "polygonWS": "wss://feed.breakfreetrading.com/polygon/subscribe/realtime/",
+    "twelvedataREST": "https://feed.breakfreetrading.com/twelvedata/",
+    "twelvedataWS": "wss://feed.breakfreetrading.com/twelvedata/subscribe/realtime/",
+    "kaikoREST": "https://feed.breakfreetrading.com/kaiko/",
+    "kaikoWS": "wss://feed.breakfreetrading.com/kaiko/subscribe/realtime/",
+    "binanceREST": "https://feed.breakfreetrading.com/binance/",
+    "binanceWS": "wss://feed.breakfreetrading.com/binance/websocket",
+    "onadaWS": "wss://feed.breakfreetrading.com/oanda/subscribe/realtime/",
+    "coinigyREST": "https://feed.breakfreetrading.com/data/vendor/coinigy/api/Coinigy/",
+    "coinigyWS": "wss://feed.breakfreetrading.com/data/vendor/coinigy/ws",
     "historystorageREST": "notused",
-    "scriptEngineUrlREST": "https://scripting-stage.breakfreetrading.com/scriptengine/fintasharp/",
-    "personalInfoREST": "https://auth-platform-stage.breakfreetrading.com/KYC/",
-    "eventConsolidatorUserApiREST": "https://events-stage.breakfreetrading.com/event/consolidator/user/api/TradingEvent/",
-    "eventConsolidatorAdminApiREST": "https://events-stage.breakfreetrading.com/event/consolidator/admin/api/TradingEvent/",
-    "eventConsolidatorWebSocket": "wss://events-stage.breakfreetrading.com/event/consolidator/user/TradingEventsSocket/",
-    "eventsLogREST": "https://events-stage.breakfreetrading.com/v1/logs/api/Logs",
-    "fileStorageREST": "https://files-stage.breakfreetrading.com/filestore/api/v1/Files/",
-    "shuftiproApiRest": "https://platform-stage.breakfreetrading.com/kyc/api/",
-    "socialChatREST": "https://platform-stage.breakfreetrading.com/v1/chat/",
-    "socialForumREST": "https://platform-stage.breakfreetrading.com/v1/forum/",
-    "notificationREST": "https://ws-platform-stage.breakfreetrading.com/wsnotification/api/",
-    "notificationWebSocketUrl": "wss://ws-platform-stage.breakfreetrading.com/wsnotification/ws",
+    "scriptEngineUrlREST": "https://scripting.breakfreetrading.com/scriptengine/fintasharp/",
+    "personalInfoREST": "https://auth-platform.breakfreetrading.com/KYC/",
+    "eventConsolidatorUserApiREST": "https://events.breakfreetrading.com/event/consolidator/user/api/TradingEvent/",
+    "eventConsolidatorAdminApiREST": "https://events.breakfreetrading.com/event/consolidator/admin/api/TradingEvent/",
+    "eventConsolidatorWebSocket": "wss://events.breakfreetrading.com/event/consolidator/user/TradingEventsSocket/",
+    "eventsLogREST": "https://events.breakfreetrading.com/v1/logs/api/Logs",
+    "fileStorageREST": "https://files.breakfreetrading.com/filestore/api/v1/Files/",
+    "shuftiproApiRest": "https://platform.breakfreetrading.com/kyc/api/",
+    "socialChatREST": "https://platform.breakfreetrading.com/v1/chat/",
+    "socialForumREST": "https://platform.breakfreetrading.com/v1/forum/",
+    "notificationREST": "https://ws-platform.breakfreetrading.com/wsnotification/api/",
+    "notificationWebSocketUrl": "wss://ws-platform.breakfreetrading.com/wsnotification/ws",
     "cointelegraphRssFeedREST": "https://app.breakfreetrading.com/rss/cointelegraph",
     "coindeskRssFeedREST": "https://app.breakfreetrading.com/rss/coindesk",
-    "userDataStoreREST": "https://platform-stage.breakfreetrading.com/userdatastore/api/v1/",
-    "systemNotificationApiRest": "https://system-platform-stage.breakfreetrading.com/v1/sysnotification/api/",
-    "scriptEngineREST": "https://scripting-stage.breakfreetrading.com/scriptengine/fintasharp/api/",
-    "oandabrokerREST": "https://feed-stage.breakfreetrading.com/oanda/",
+    "userDataStoreREST": "https://platform.breakfreetrading.com/userdatastore/api/v1/",
+    "systemNotificationApiRest": "https://system-platform.breakfreetrading.com/v1/sysnotification/api/",
+    "scriptEngineREST": "https://scripting.breakfreetrading.com/scriptengine/fintasharp/api/",
+    "oandabrokerREST": "https://feed.breakfreetrading.com/oanda/",
     "userprofileREST": "https://rest.yourdomain.com/api/v0.0/userprofile/",
     "historydatacollectorREST": "not used",
-    "news": "https://events-stage.breakfreetrading.com/news/",
+    "news": "https://events.breakfreetrading.com/news/",
     "exchangeManagementREST": "not used",
     "bftAlgoWS": "wss://fb.breakfreetrading.com",
-    "MT5WS": "wss://mtapi-stage.breakfreetrading.com/mt5/websocket",
-    "MT4WS": "wss://mtapi-stage.breakfreetrading.com/mt4/websocket",
-    "BinanceTestnetBrokerWS": "wss://cryptoapi-stage.breakfreetrading.com/binance-testnet/websocket",
-    "BinanceBrokerWS": "wss://cryptoapi-stage.breakfreetrading.com/binance/websocket",
-    "bftAlgoREST": "https://algo-stage.breakfreetrading.com/algoserver/",
-    "bftTradingProfilesREST": "https://mtapi-stage.breakfreetrading.com/portfolio/",
-    "bftAlertsWS": "wss://notifications-alerts-stage.breakfreetrading.com/websocket",
-    "bftAlertsREST": "https://user-api-alerts-stage.breakfreetrading.com/",
-    "socialFeedREST": "https://socialfeed-social-stage.breakfreetrading.com/",
-    "socialFeedWS": "wss://socialfeed-social-stage.breakfreetrading.com/websocket",
+    "MT5WS": "wss://mtapi.breakfreetrading.com/mt5/websocket",
+    "MT4WS": "wss://mtapi.breakfreetrading.com/mt4/websocket",
+    "BinanceTestnetBrokerWS": "wss://cryptoapi.breakfreetrading.com/binance-testnet/websocket",
+    "BinanceBrokerWS": "wss://cryptoapi.breakfreetrading.com/binance/websocket",
+    "bftAlgoREST": "https://algo.breakfreetrading.com/algoserver/",
+    "bftTradingProfilesREST": "https://mtapi.breakfreetrading.com/portfolio/",
+    "bftAlertsWS": "wss://notifications-alerts.breakfreetrading.com/websocket",
+    "bftAlertsREST": "https://user-api-alerts.breakfreetrading.com/",
+    "socialFeedREST": "https://social-sonarfeed.breakfreetrading.com/",
+    "socialFeedWS": "wss://social-sonarfeed.breakfreetrading.com/websocket",
 
-    "companionUserTracker": "https://usertracker-trackerapi.companion.to/usertracker/admin/",
-    "companionP2P": "https://usertracker-trackerapi.companion.to/usertracker/admin-p2p/"
+    "companionUserTracker": "https://usertracker-trackerapi-stage.companion.to/usertracker/admin/",
+    "companionP2P": "https://usertracker-trackerapi-stage.companion.to/usertracker/admin-p2p/"
   },
   "systemMonitoringUrls": {
     "platform": {
@@ -71,75 +71,75 @@
   "servicesHealthCheckUrls": {
     "bitmexREST": {
       "name": "Bitmex",
-      "url": "https://feed-stage.breakfreetrading.com/bitmex/"
+      "url": "https://feed.breakfreetrading.com/bitmex/"
     },
     "polygonREST": {
       "name": "Polygon",
-      "url": "https://feed-stage.breakfreetrading.com/polygon/"
+      "url": "https://feed.breakfreetrading.com/polygon/"
     }, 
     "twelvedataREST": {
       "name": "Twelvedata",
-      "url": "https://feed-stage.breakfreetrading.com/twelvedata/"
+      "url": "https://feed.breakfreetrading.com/twelvedata/"
     },
     "kaikoREST": {
       "name": "Kaiko",
-      "url": "https://feed-stage.breakfreetrading.com/kaiko/"
+      "url": "https://feed.breakfreetrading.com/kaiko/"
     },
     "eventConsolidator": {
       "name": "Event Consolidator",
-      "url": "https://events-stage.breakfreetrading.com/event/consolidator/"
+      "url": "https://events.breakfreetrading.com/event/consolidator/"
     },
     "eventConsolidatorUserApiREST": {
       "name": "Event Consolidator User Api",
-      "url": "https://events-stage.breakfreetrading.com/event/consolidator/user/"
+      "url": "https://events.breakfreetrading.com/event/consolidator/user/"
     },
     "eventConsolidatorAdminApiREST": {
       "name": "Event Consolidator Admin Api",
-      "url": "https://events-stage.breakfreetrading.com/event/consolidator/admin/"
+      "url": "https://events.breakfreetrading.com/event/consolidator/admin/"
     },
     "fileStorageREST": {
       "name": "File Storage",
-      "url": "https://files-stage.breakfreetrading.com/filestore/api/v1/Files/"
+      "url": "https://files.breakfreetrading.com/filestore/api/v1/Files/"
     },
     "identityUrl": {
       "name": "Identity",
-      "url": "https://auth-platform-stage.breakfreetrading.com/"
+      "url": "https://auth-platform.breakfreetrading.com/"
     },
     "notificationREST": {
       "name": "Notifications",
-      "url": "https://ws-platform-stage.breakfreetrading.com/wsnotification/"
+      "url": "https://ws-platform.breakfreetrading.com/wsnotification/"
     },
     "scriptEngineREST": {
       "name": "Script Engine",
-      "url": "https://scripting-stage.breakfreetrading.com/scriptengine/fintasharp/"
+      "url": "https://scripting.breakfreetrading.com/scriptengine/fintasharp/"
     },
     "shuftiproApiRest": {
       "name": "Shuftipro",
-      "url": "https://platform-stage.breakfreetrading.com/kyc/"
+      "url": "https://platform.breakfreetrading.com/kyc/"
     },
     "socialChatREST": {
       "name": "Social Chat",
-      "url": "https://platform-stage.breakfreetrading.com/v1/chat/"
+      "url": "https://platform.breakfreetrading.com/v1/chat/"
     },
     "socialForumREST": {
       "name": "Social Forum",
-      "url": "https://platform-stage.breakfreetrading.com/v1/forum/"
+      "url": "https://platform.breakfreetrading.com/v1/forum/"
     }
   },
   "endpointsBearerAuthRequired": [
-    "https://auth-platform-stage.breakfreetrading.com",
-    "https://feed-stage.breakfreetrading.com",
-    "https://scripting-stage.breakfreetrading.com",
-    "https://events-stage.breakfreetrading.com",
+    "https://auth-platform.breakfreetrading.com",
+    "https://feed.breakfreetrading.com",
+    "https://scripting.breakfreetrading.com",
+    "https://events.breakfreetrading.com",
     "https://app.breakfreetrading.com",
-    "https://system-platform-stage.breakfreetrading.com",
-    "https://ws-platform-stage.breakfreetrading.com",
+    "https://system-platform.breakfreetrading.com",
+    "https://ws-platform.breakfreetrading.com",
     "https://breakfreetrading.com",
-    "https://platform-stage.breakfreetrading.com",
-    "https://algo-stage.breakfreetrading.com",
-    "https://mtapi-stage.breakfreetrading.com",
-    "https://user-api-alerts-stage.breakfreetrading.com",
-    "https://socialfeed-social-stage.breakfreetrading.com",
-    "https://usertracker-trackerapi.companion.to"
+    "https://platform.breakfreetrading.com",
+    "https://algo.breakfreetrading.com",
+    "https://mtapi.breakfreetrading.com",
+    "https://user-api-alerts.breakfreetrading.com",
+    "https://social-sonarfeed.breakfreetrading.com",
+    "https://usertracker-trackerapi-stage.companion.to"
   ]
 }
