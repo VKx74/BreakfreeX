@@ -33,7 +33,7 @@ import { IdentityService } from '@app/services/auth/identity.service';
 export class ChatComponent implements OnInit, OnDestroy {
     activeThread$: Observable<IThreadDTO>;
 
-    hiddenThreadList: boolean = false;
+    hiddenThreadList: boolean = true;
     $initObs: Observable<any>;
     selectedThread$: Observable<IThreadDTO>;
     splitSizes = ['*', 50];
