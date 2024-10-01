@@ -67,6 +67,20 @@
         </div> -->
     </div>
 
+    <div class="data-trendindex-settings" *ngIf="isAdmin">
+        <div class="section flex justify-space-between">
+            <div class="info-user flex">
+                <span>
+                    <input type="checkbox" id="show-logs-buttons" [(ngModel)]="showLogsButtons">
+                    <label for="show-logs-buttons">Show Logs Buttons in trend index</label>
+                </span>
+                <!-- <span>
+                    <a (click)="privacyPolicy()">Terms Of Use & Privacy Policy</a>
+                </span> -->
+            </div>
+        </div>
+    </div> 
+
     <div class="data-authentication">
         <div class="section flex justify-space-between">
             <div class="info-user flex">

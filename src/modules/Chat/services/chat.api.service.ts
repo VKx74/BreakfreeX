@@ -37,7 +37,7 @@ import {IMessageDTO, IThreadDTO} from "../models/api.models";
 import {FileStorageService} from "@app/services/file-storage.service";
 import {FileInfo} from "@app/models/storage/models";
 
-export const DEFAULT_TAKE_COUNT = 15;
+export const DEFAULT_TAKE_COUNT = 25;
 
 type WithUsers<T> = {
     [P in keyof T]: T[P]

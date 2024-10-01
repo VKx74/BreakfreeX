@@ -28,6 +28,7 @@ import { BotTradingSettingsComponent } from 'modules/BreakfreeTrading/components
 import { MatSelectChange } from "@angular/material/select";
 import { ConfirmModalComponent } from "UI";
 import { TradingDirectionModalComponent } from "modules/UI/components/trading-direction-input-modal/trading-direction-input-modal.component";
+import { UserSettingsService } from "@app/services/user-settings/user-settings.service";
 
 // const Metals = ["XAG_EUR", "XAG_USD", "XAU_EUR", "XAU_USD", "XAU_XAG", "XPD_USD", "XPT_USD"];
 // const Indices = ["AU200_AUD", "CN50_USD", "EU50_EUR", "FR40_EUR", "DE30_EUR", "HK33_HKD", "IN50_USD", "JP225_USD", "NL25_EUR", "SG30_SGD", "TWIX_USD", "UK100_GBP", "NAS100_USD", "US2000_USD", "SPX500_USD", "US30_USD"];
@@ -493,6 +494,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
     public autoSelected: number = null;
     public hitlAvailable: number = null;
     public hitlSelected: number = null;
+    public showLogsButtons: boolean = false;
     // public strategyType: StrategyType = StrategyType.SR;
 
     public get hasAccess(): boolean {
@@ -583,8 +585,13 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _instrumentService: InstrumentService,
         protected _cdr: ChangeDetectorRef,
         protected _identityService: IdentityService,
+        protected _serSettingsService: UserSettingsService,
         protected _matDialog: MatDialog) {
         super();
+        
+        _serSettingsService.getSettings().subscribe((s) => {
+            this.showLogsButtons = !!s.showLogsButtons;
+        });
     }
 
     toggleUseManualTradingForAccount() {

@@ -1,17 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {IdentityService} from "@app/services/auth/identity.service";
-import {TranslateService} from "@ngx-translate/core";
-import {SettingsTranslateService} from "../../../broker/localization/token";
-import {UserAvatarShape} from "../../../UI/components/name-avatar/name-avatar.component";
-import {FileUploaderModalComponent} from "../../../file-uploader/components/file-uploader-modal/file-uploader-modal.component";
-import {FileInfo} from "@app/models/storage/models";
-import {UsersProfileService} from "@app/services/users-profile.service";
-import {MatDialog} from "@angular/material/dialog";
-import {FileStorageService} from "@app/services/file-storage.service";
-import {AppConfigService} from "@app/services/app.config.service";
-import {AccountInfoModel, PersonalInfoService, ISubscription, IPaymentAccount} from "@app/services/personal-info/personal-info.service";
-import {Observable} from "rxjs";
-import {tap} from "rxjs/internal/operators/tap";
+import { Component, OnInit } from '@angular/core';
+import { IdentityService } from "@app/services/auth/identity.service";
+import { TranslateService } from "@ngx-translate/core";
+import { SettingsTranslateService } from "../../../broker/localization/token";
+import { UserAvatarShape } from "../../../UI/components/name-avatar/name-avatar.component";
+import { FileUploaderModalComponent } from "../../../file-uploader/components/file-uploader-modal/file-uploader-modal.component";
+import { FileInfo } from "@app/models/storage/models";
+import { UsersProfileService } from "@app/services/users-profile.service";
+import { MatDialog } from "@angular/material/dialog";
+import { FileStorageService } from "@app/services/file-storage.service";
+import { AppConfigService } from "@app/services/app.config.service";
+import { AccountInfoModel, PersonalInfoService, ISubscription, IPaymentAccount } from "@app/services/personal-info/personal-info.service";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/internal/operators/tap";
+import { UserSettingsService } from '@app/services/user-settings/user-settings.service';
 
 interface IPersonalData {
     birthDay: number;
@@ -33,6 +34,8 @@ interface IPersonalData {
     ]
 })
 export class ProfileUserComponent implements OnInit {
+    private _showLogsButtons: boolean;
+
     UserAvatarShape = UserAvatarShape;
     _defaultPhotoLiteral = "DefaultPhoto";
     initData$: Observable<any>;
@@ -48,11 +51,15 @@ export class ProfileUserComponent implements OnInit {
     accounts: IPaymentAccount[];
 
     constructor(private _identityService: IdentityService,
-                private _profileService: UsersProfileService,
-                private _dialog: MatDialog,
-                private _fileStorageService: FileStorageService,
-                private _personalInfoService: PersonalInfoService
+        private _profileService: UsersProfileService,
+        private _dialog: MatDialog,
+        private _fileStorageService: FileStorageService,
+        private _personalInfoService: PersonalInfoService,
+        private _serSettingsService: UserSettingsService
     ) {
+        _serSettingsService.getSettings().subscribe((s) => {
+            this._showLogsButtons = !!s.showLogsButtons;
+        });
     }
 
     get currentUserId() {
@@ -63,8 +70,23 @@ export class ProfileUserComponent implements OnInit {
         return this._identityService.fullName;
     }
 
+    get isAdmin() {
+        return this._identityService.isAdmin;
+    }
+
     get avatarUrl() {
         return this.avatarId;
+    }
+
+    get showLogsButtons() {
+        return this._showLogsButtons;
+    }
+
+    set showLogsButtons(value: boolean) {
+        if (this._showLogsButtons !== value) {
+            this._showLogsButtons = value;
+            this._updateShowLogsButtonsSettings();
+        }
     }
 
     ngOnInit() {
@@ -86,18 +108,18 @@ export class ProfileUserComponent implements OnInit {
                     }
                 });
 
-        this._personalInfoService.getUserSubscriptions().subscribe( 
+        this._personalInfoService.getUserSubscriptions().subscribe(
             data => {
-               this.subscriptions = data;
+                this.subscriptions = data;
             }, error => {
-                
+
             });
 
-        this._personalInfoService.getUserAccounts().subscribe( 
+        this._personalInfoService.getUserAccounts().subscribe(
             data => {
-               this.accounts = data;
+                this.accounts = data;
             }, error => {
-                
+
             });
     }
 
@@ -106,28 +128,28 @@ export class ProfileUserComponent implements OnInit {
             FileUploaderModalComponent,
             {
                 data: {
-                        uploader: {
-                            allowedFiles: ['image/*'],
-                            maxFileSizeMb: 5,
-                            allowMultipleFiles: false
-                        },
-                        imageEditor: {
-                            viewportType: 'circle',
-                            height: 150,
-                            width: 150
-                        },
-                        useEditor: true,
-                        onFilesUploaded: ((filesInfo: FileInfo[]) => {
-                            console.log(filesInfo);
-                            let fileId = filesInfo[0].id;
-                            this._profileService.patchUserAvatar(this._identityService.id, fileId)
-                                .subscribe(data => {
-                                    if (this.avatarId !== this._defaultPhotoLiteral)
-                                        this._fileStorageService.deleteFile(this.avatarId);
-                                    this.avatarId = fileId;
-                                });
-                            console.log('uploaded', filesInfo);
-                        })
+                    uploader: {
+                        allowedFiles: ['image/*'],
+                        maxFileSizeMb: 5,
+                        allowMultipleFiles: false
+                    },
+                    imageEditor: {
+                        viewportType: 'circle',
+                        height: 150,
+                        width: 150
+                    },
+                    useEditor: true,
+                    onFilesUploaded: ((filesInfo: FileInfo[]) => {
+                        console.log(filesInfo);
+                        let fileId = filesInfo[0].id;
+                        this._profileService.patchUserAvatar(this._identityService.id, fileId)
+                            .subscribe(data => {
+                                if (this.avatarId !== this._defaultPhotoLiteral)
+                                    this._fileStorageService.deleteFile(this.avatarId);
+                                this.avatarId = fileId;
+                            });
+                        console.log('uploaded', filesInfo);
+                    })
                 }
             }
         );
@@ -157,6 +179,12 @@ export class ProfileUserComponent implements OnInit {
             // this.personalData.username = this._identityService.preferredUsername || '';
             cb();
         });
+    }
+
+    private _updateShowLogsButtonsSettings() {
+        this._serSettingsService.saveSettings({
+            showLogsButtons: this._showLogsButtons
+        }, true).subscribe();
     }
 
     private _initPersonalData(data: AccountInfoModel) {

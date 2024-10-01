@@ -32,11 +32,11 @@ export class InfinityLoaderComponent {
 
     @Host() private host: InfinityLoaderComponent;
 
-    handleScrollBottom() {
+    handleScrollBottom(data: any) {
         this.handleScroll(ScrollDirection.Bottom);
     }
 
-    handleScrollUp() {
+    handleScrollUp(data: any) {
         this.handleScroll(ScrollDirection.Top);
     }
 

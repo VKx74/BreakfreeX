@@ -18,6 +18,7 @@ export interface UserSettingsDTO {
     theme: Theme;
     rssFeedId: String;
     showTips: boolean;
+    showLogsButtons: boolean;
 }
 
 export interface UserSettings {
@@ -26,6 +27,7 @@ export interface UserSettings {
     theme?: Theme;
     rssFeed?: IRSSFeed;
     showTips?: boolean;
+    showLogsButtons?: boolean;
 }
 
 @Injectable()
@@ -113,7 +115,8 @@ export class UserSettingsService {
                         timeZone: TimeZones.find(t => t.id === dto.timeZoneId) || LocalTimeZone,
                         theme: dto.theme,
                         showTips: dto.showTips,
-                        rssFeed: feeds.find(f => f.id === dto.rssFeedId) || feeds[0]
+                        rssFeed: feeds.find(f => f.id === dto.rssFeedId) || feeds[0],
+                        showLogsButtons: dto.showLogsButtons
                     };
                 })
             );
@@ -125,7 +128,8 @@ export class UserSettingsService {
             timeZoneId: settings.timeZone ? settings.timeZone.id : "",
             theme: settings.theme,
             rssFeedId: settings.rssFeed ? settings.rssFeed.id : "",
-            showTips: settings.showTips
+            showTips: settings.showTips,
+            showLogsButtons: !!settings.showLogsButtons
         } as UserSettingsDTO);
     }
 
