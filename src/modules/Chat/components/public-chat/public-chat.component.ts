@@ -5,6 +5,7 @@ import {ChatMode} from "../../enums/chat-mode";
 import { MatDialog } from "@angular/material/dialog";
 import { CheckoutComponent } from 'modules/BreakfreeTrading/components/checkout/checkout.component';
 import { IdentityService } from '@app/services/auth/identity.service';
+import { UserSettingsService } from '@app/services/user-settings/user-settings.service';
 
 @Component({
     selector: 'public-chat',
@@ -18,6 +19,8 @@ import { IdentityService } from '@app/services/auth/identity.service';
     ]
 })
 export class PublicChatComponent {
+    public chatPolicyAccepted: boolean = true;
+
     ComponentIdentifier = ComponentIdentifier;
 
     get hasAccess(): boolean {
@@ -29,7 +32,10 @@ export class PublicChatComponent {
         return this._identityService.isChatAllowed;
     }
 
-    constructor(protected _dialog: MatDialog, protected _identityService: IdentityService) {
+    constructor(protected _dialog: MatDialog, protected _identityService: IdentityService, protected _userSettingsService: UserSettingsService) {
+        _userSettingsService.getSettings().subscribe((s) => {
+            this.chatPolicyAccepted = !!s.chatPolicyAccepted;
+        });
     }
 
     ngOnDestroy(): void {
@@ -37,6 +43,14 @@ export class PublicChatComponent {
 
     processCheckout() {
         this._dialog.open(CheckoutComponent, { backdropClass: 'backdrop-background' });
+    }
+
+    acceptRule() {
+        this._userSettingsService.saveSettings({
+            chatPolicyAccepted: true
+        }, true).subscribe();
+
+        this.chatPolicyAccepted = true;
     }
 }
 

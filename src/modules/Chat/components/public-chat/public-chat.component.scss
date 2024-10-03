@@ -29,8 +29,7 @@
                 max-width: 180px;
                 padding-top: 5px;
 
-                &.early-access-text
-                {
+                &.early-access-text {
                     justify-content: center;
                 }
             }
@@ -43,14 +42,21 @@
                 width: 200px;
             }
         }
+
+        .accept-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
     }
 }
 
 @include themify($themes, true) {
     .out-of-access-box {
-      background-color: themed("appPanelColor");
-      .text {
-        color: themed("valueTextColor");
-      }
+        background-color: themed("appPanelColor");
+        .text {
+            color: themed("valueTextColor");
+        }
     }
-  }
+}
