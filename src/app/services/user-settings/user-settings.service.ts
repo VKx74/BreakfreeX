@@ -19,6 +19,7 @@ export interface UserSettingsDTO {
     rssFeedId: String;
     showTips: boolean;
     showLogsButtons: boolean;
+    chatPolicyAccepted: boolean;
 }
 
 export interface UserSettings {
@@ -28,6 +29,7 @@ export interface UserSettings {
     rssFeed?: IRSSFeed;
     showTips?: boolean;
     showLogsButtons?: boolean;
+    chatPolicyAccepted?: boolean;
 }
 
 @Injectable()
@@ -116,7 +118,8 @@ export class UserSettingsService {
                         theme: dto.theme,
                         showTips: dto.showTips,
                         rssFeed: feeds.find(f => f.id === dto.rssFeedId) || feeds[0],
-                        showLogsButtons: dto.showLogsButtons
+                        showLogsButtons: dto.showLogsButtons,
+                        chatPolicyAccepted: dto.chatPolicyAccepted,
                     };
                 })
             );
@@ -129,7 +132,8 @@ export class UserSettingsService {
             theme: settings.theme,
             rssFeedId: settings.rssFeed ? settings.rssFeed.id : "",
             showTips: settings.showTips,
-            showLogsButtons: !!settings.showLogsButtons
+            showLogsButtons: !!settings.showLogsButtons,
+            chatPolicyAccepted: !!settings.chatPolicyAccepted,
         } as UserSettingsDTO);
     }
 

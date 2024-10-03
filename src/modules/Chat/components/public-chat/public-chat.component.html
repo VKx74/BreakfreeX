@@ -12,18 +12,23 @@
 <!--<base-chat [type]="ThreadType.Public" *showByTag="ComponentIdentifier.publicChat"></base-chat>-->
 
 <ng-container *ngIf="hasAccess; else outOfAccess">
-    <ng-container *ngIf="hasEarlyAccess; else outOfEarlyAccess">
+    <ng-container *ngIf="chatPolicyAccepted; else chatPolicy">
         <base-chat *showByTag="ComponentIdentifier.publicChat"></base-chat>
     </ng-container>
 
-    <ng-template #outOfEarlyAccess>
+    <ng-template #chatPolicy>
         <div class="out-of-access">
             <div class="out-of-access-box">
                 <div class="image">
                     <img class="BFTimage" src="assets/img/bftnavigatorlogo.svg">
                 </div>
                 <div class="text early-access-text">
-                    Access to chat coming soon
+                    Any negativity leads to instant ban. Only way to unban is by buying a new account. Complaining and negativity reserved to support@breakfreetrading.com
+                </div>
+                <div class="accept-buttons">
+                    <button class="crypto-button crypto-button_primary" (click)="acceptRule()">
+                        Accept Rule
+                    </button>
                 </div>
             </div>
         </div>
