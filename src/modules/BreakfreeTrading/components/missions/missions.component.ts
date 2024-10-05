@@ -20,7 +20,7 @@ enum Sections {
     Weekly = "Weekly Quests",
     Info = "Ranks",
     TradeGuard = "TradeGuard",
-    Analysis = "Trading Analysis",
+    Analysis = "Statistics",
     LeaderDashboard = "Leaderboard"
 }
 

@@ -142,7 +142,7 @@ ngOnInit(): void {
                         ticks: {
                             padding: 0,
                             fontSize: 11,
-                            maxTicksLimit: 12                            
+                            maxTicksLimit: 14                            
                         }
                                                
                     }]
