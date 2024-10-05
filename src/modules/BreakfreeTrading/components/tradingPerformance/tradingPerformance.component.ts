@@ -44,8 +44,8 @@ export class TradingPerformanceComponent implements OnInit {
             this.ChartDataSet.push({0: 0});
             this.ChartsSettingsSet = new Array<ChartWrapperSettings>();
             this.ChartsSettingsSet.push(new ChartWrapperSettings(0, 'Cumulative PnL', 'line', '%'));
-            this.ChartsSettingsSet.push(new ChartWrapperSettings(1, 'Daily PnL', 'bar', 'UAH'));
-            this.ChartsSettingsSet.push(new ChartWrapperSettings(2, 'Balance', 'line', 'UAH'));            
+            this.ChartsSettingsSet.push(new ChartWrapperSettings(1, 'Daily PnL', 'bar', 'USD'));
+           // this.ChartsSettingsSet.push(new ChartWrapperSettings(2, 'Balance', 'line', 'USD'));            
             
             this.periodSelectors.push(new PeriodDescriptor(Period.Last7Days, "7 days"));
             this.periodSelectors.push(new PeriodDescriptor(Period.Last30Days, "30 days"));
@@ -94,10 +94,10 @@ export class TradingPerformanceComponent implements OnInit {
             .subscribe((result: UserTradingPerformanceData) => {
                 this.ChartDataSet[0] = result.cumulativePnL;
                 this.ChartDataSet[1] = result.dailyPnL;
-                this.ChartDataSet[2] = result.balanceHistory;
+                //this.ChartDataSet[2] = result.balanceHistory;
                 this.AccCurency = result.accCurency;                
                 this.ChartsSettingsSet[1].unit = this.AccCurency;                
-                this.ChartsSettingsSet[2].unit = this.AccCurency;                
+               // this.ChartsSettingsSet[2].unit = this.AccCurency;                
                 
                 this.showSpinner = false;                
             }, (error: any) => {         

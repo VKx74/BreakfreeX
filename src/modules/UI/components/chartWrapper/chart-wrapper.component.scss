@@ -1,26 +1,30 @@
 :host{
     .root{
-        padding: 6px 9px;
-        max-height:350px;
+ 
+        max-height:441px;
         height: 100%;
         border-radius: 6px;
-        background: #fefffe;
+        background: #000;
         border-bottom:0px solid transparent;
+        color: #fff;
+        width: 100%;
     }
 
     .header{
-        padding-left: 12px;
-    padding-top: 6px;
+        padding-left: 6px;
+        padding-top: 6px;
+        height: 36px;
        
     }
     .header-name{
         font-size: 12px;
-        color: #474d57;
-        font-weight: 700;
+        color: #fff;
+       
     }
 
     .chart-wrapx{
-        height: 250px;
+        min-height: 320px;
+        max-height:570px;
         overflow: hidden;
       
     }
@@ -30,7 +34,9 @@
     @media screen and (max-width: 500px) {
 
         .chart-wrapx{
-            height: 150px;
+            height: 222px !important;
+            max-height:222px;
+            min-height: 144px;
             overflow: hidden;
           
        
