@@ -45,13 +45,13 @@ export class TradingPerformanceService {
         // this.url = "http://localhost:5000/";
     }
 
-    public getBalanceHistory(mtLogin: string, mtPlatform: string, period: Period = Period.Last30Days): Observable<any> {
-        return this._http.get(`${this.url}UserStats/BalanceHistory`, {params: {
-            mtLogin: mtLogin,
-            platform: mtPlatform,
-            period: period
-        }});
-    }
+    // public getBalanceHistory(mtLogin: string, mtPlatform: string, period: Period = Period.Last30Days): Observable<any> {
+    //     return this._http.get(`${this.url}UserStats/BalanceHistory`, {params: {
+    //         mtLogin: mtLogin,
+    //         platform: mtPlatform,
+    //         period: period
+    //     }});
+    // }
     
     public getWeeklyPnLHistory(mtLogin: string, mtPlatform: string): Observable<any> {
         return this._http.get(`${this.url}UserStats/WeeklyPnL`, {params: {
@@ -75,13 +75,13 @@ export class TradingPerformanceService {
         }});
     }
 
-    public getPublicQuestsLeaderBoard(useCache: boolean = false): Observable<LeaderDashboardItem[]> {
-        if (useCache && this._cachedLeaderBoard) {
-            return of(this._cachedLeaderBoard);
-        }
-        return this._http.get<LeaderDashboardItem[]>(`${this.url}UserStats/PublicQuestsLeaderBoard`).pipe(map((data) => {
-            this._cachedLeaderBoard = data;
-            return data;
-        }));
-    }
+    // public getPublicQuestsLeaderBoard(useCache: boolean = false): Observable<LeaderDashboardItem[]> {
+    //     if (useCache && this._cachedLeaderBoard) {
+    //         return of(this._cachedLeaderBoard);
+    //     }
+    //     return this._http.get<LeaderDashboardItem[]>(`${this.url}UserStats/PublicQuestsLeaderBoard`).pipe(map((data) => {
+    //         this._cachedLeaderBoard = data;
+    //         return data;
+    //     }));
+    // }
 }

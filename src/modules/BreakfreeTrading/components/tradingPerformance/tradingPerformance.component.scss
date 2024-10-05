@@ -1,31 +1,50 @@
 :host {
 
     .performance-container {
-        padding: 8px;
+        padding: 6px 14px;
         width: 100%;
     }
     .pnlcharts {
         display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
+        flex-direction: row;
+        -moz-column-gap: 8px;
         column-gap: 8px;
         row-gap: 8px;
+        max-width: 100%;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    
     }
+    .chartdivthing{
+        display: flex;
+        width: 49%;
+        padding: 3px;
+        border: 1px solid #ffffff4f;
+    }
+
+
+    .chartdivthing chart-wrapper {
+       width: 100%;
+       display: flex;
+       flex-direction: column;
+    }
+
+    .chartdivthing chart-wrapper div {
+        width: 100%;
+        display: flex;
+     }
 
     .acc-infox {
         display: flex;
-        justify-content: flex-start;
-        padding: 15px 20px;
-        border-radius: 6px;
-        background: white;
-        flex-direction: column;
-        column-gap: 3px;
-        row-gap: 3px;
-        margin-bottom: 8px;
+        justify-content: space-between;
+        background: #000;
+        width: 100%;
 
     .overview {
         font-size: 12px;
     font-weight: bold;
+    color: #fff;
 
 
     border-radius: 3px;
@@ -36,14 +55,11 @@
     }
     .acc-info {
         display: flex;
-        row-gap: 8px;
-        justify-content: center;
-        border-radius: 6px;
-        -moz-column-gap: 16px;
-        column-gap: 3px;
-        overflow: hidden;
-        align-items: flex-start;
-        flex-wrap: wrap;
+        justify-content: left;
+        align-items: center;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        column-gap: 12px;
     
     }
     .acc-info-param-body {
@@ -54,6 +70,14 @@
     }
 
     @media screen and (max-width: 730px) {
+
+        .chartdivthing
+        {
+            
+            width: 100% !important;
+        }
+
+
         .acc-info {
             display: flex;
             row-gap: 8px;
@@ -68,27 +92,23 @@
 
         .acc-infox {
             display: flex;
-            justify-content: flex-start;
-            padding: 9px 9px;
-            border-radius: 6px;
-            background: white;
-            flex-direction: column;
-            column-gap: 3px;
-            row-gap: 3px;
-            margin-bottom: 8px;
+            justify-content: center;
+            background: #000;
+            width: 100%;
         }
         .acc-info-param {
             padding-right: 5px;
             padding-left: 5px;
         }
         .acc-info-param-value {
-            font-size: 14px !important;
+            font-size: 12px !important;
+            color: #9e9e9e;
         }
     }
 
     .acc-info-param-value-add {
      
-        font-size: 14px ;
+        font-size: 12px ;
     }
 
     .acc-info-param {
@@ -96,10 +116,8 @@
         flex-direction: column;
     }
     .acc-info-param-header {
-        font-size: 14px;
-        color: #474d57;
-        font-weight: bold;
-    
+        font-size: 12px;
+        color: #e4e4e4;
     }
 
     .column1 {
@@ -111,8 +129,9 @@
         column-gap: 3px;
         align-items: center;
         text-align: left;
-        background: #efefef6e;
-        padding: 3px 9px;
+        margin-left:3px;
+ 
+       
         border-radius: 3px;
     }
 
@@ -125,8 +144,8 @@
     column-gap: 3px;
     align-items: center;
     text-align: left;
-    background: #efefef6e;
-    padding: 3px 9px;
+
+
     border-radius: 3px;
     }
 
@@ -139,66 +158,76 @@
         column-gap: 3px;
         align-items: center;
         text-align: left;
-        background: #efefef6e;
-        padding: 3px 9px;
+     
+      
         border-radius: 3px;
     }
     .acc-info-param-body {
         .acc-info-param-value {
-            font-size: 14px;
+            font-size: 12px;
+            color: #9e9e9e;
         }
         @media screen and (min-width: 420px) {
             .acc-info-param-value {
-                font-size: 14px;
+                font-size: 12px;
+                color: #9e9e9e;
             }
         }
 
         .acc-info-param-value-add {
-            font-size: 14px;
+            font-size: 12px;
         }
         .green {
-            color: green;
+            color: #4fd54a;
         }
         .red {
-            color: red;
+            color: #6E260E;
         }
     }
     .period-wrp {
         display: flex;
-        background: #3e3e3e;
-        padding: 3px;
-        border-radius: 6px;
+        padding: 0px;
+        border-radius: 3px;
+    }
     }
 
     .period-selectors {
         display: flex;
-        margin-bottom: 8px;
         justify-content: center;
         border-radius: 6px;
-
-        padding: 8px 4px;
     }
 
     .selector-wrapper {
 
     }
     .selector-button {
-        padding: 3px 8px;
-        background-color: #3e3e3e;
-        transition: all 0.2s ease-in-out;
-        color: #e2e2e2;
-    }
-    @media screen and (min-width: 420px) {
-        .selector-button {
-         
-            padding: 3px 8px;
-        }
+        padding: 3px 4px;
+        color: #ffffff7a;
+        border-radius: 0px !important;
+        font-size: 12px;
+        background-color: #000;
     }
 
+    .selector-button:hover{
+        background-color: #4d4b4b;
+        color: #fff;
+        border-radius: 0px !important;
+    }
+    
+    
+    @media screen and (min-width: 420px) {
+        .selector-button {
+            padding: 3px 4px;
+            color: #ffffff7a;
+            border-radius: 0px !important;
+            font-size: 11px;
+        }
+
     .btn-selected {
-        background: rgb(119, 119, 119);
+        background: #000000;
         font-weight: bold;
-        color: #fefefe;
+        border-radius: 0px !important;
+        color: #fff;
     }
     .doBlur {
         filter: blur(2px);
@@ -213,7 +242,7 @@
         align-items: center;
         height: 100%;
         font-size: 12px;
-        font-weight: 700;
+
         flex-direction: column;
     }
     .connected {
@@ -221,3 +250,31 @@
 
     }
 }
+
+
+.mobile-hidden {
+    display: flex;
+}
+
+.mobile-show {
+    display: none;
+}
+
+@media screen and (max-width: 555px) {
+    .mobile-show {
+        display: flex !important;
+    }
+    .mobile-hidden {
+        display: none !important;
+    }
+    .period-selectors {
+        display: flex;
+        justify-content: flex-end;
+        border-radius: 6px;
+        margin-top: -40px;
+        z-index: 999999;
+        position: relative;
+        padding-bottom: 12px;
+    }
+}
+

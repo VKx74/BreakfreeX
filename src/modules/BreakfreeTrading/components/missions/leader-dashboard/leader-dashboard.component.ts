@@ -47,23 +47,23 @@ export class LeaderDashboardComponent {
         private _alertService: AlertService) {
         this.userId = this._identityService.id;
         this.loading = true;
-        this._tradingPerformanceService.getPublicQuestsLeaderBoard(true).subscribe((items) => {
-            this.loading = false;
-            if (!items) {
-                return;
-            }
+        // this._tradingPerformanceService.getPublicQuestsLeaderBoard(true).subscribe((items) => {
+        //     this.loading = false;
+        //     if (!items) {
+        //         return;
+        //     }
 
-            let index = 1;
-            for (const item of items) {
-                this.items.push({
-                    level: item.level,
-                    name: item.userName,
-                    position: index++,
-                    rank: item.levelName,
-                    userId: item.userId
-                });
-            }
-        });
+        //     let index = 1;
+        //     for (const item of items) {
+        //         this.items.push({
+        //             level: item.level,
+        //             name: item.userName,
+        //             position: index++,
+        //             rank: item.levelName,
+        //             userId: item.userId
+        //         });
+        //     }
+        // });
     }
 
     ngOnInit() {

@@ -588,7 +588,7 @@ export class TrendIndexComponent extends BaseLayoutItem {
         protected _serSettingsService: UserSettingsService,
         protected _matDialog: MatDialog) {
         super();
-        
+
         _serSettingsService.getSettings().subscribe((s) => {
             this.showLogsButtons = !!s.showLogsButtons;
         });
@@ -1200,6 +1200,10 @@ export class TrendIndexComponent extends BaseLayoutItem {
 
             names.splice(0, 2);
             let normalizedSymbolName = names.join("").toLowerCase();
+            if (normalizedSymbolName === "btcusd") {
+                normalizedSymbolName = "btcusdt";
+            }
+            
             if (normalizedSymbolName !== item.symbol.toLowerCase()) {
                 continue;
             }

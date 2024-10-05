@@ -71,7 +71,7 @@ export class PlatformComponent implements OnInit, AfterViewInit {
 
         this._brokerService.onNotification.subscribe(value => {
             if (value.type === EBrokerNotification.OrderSLHit) {
-                this._notificationsService.show(`${value.order.Symbol} order #${value.order.Id} - SL Hit`, "Stop Loss Hit", NotificationType.Info);
+                this._notificationsService.show(`${value.order.Symbol} order #${value.order.Id} - Stop Hit`, "Stop Hit", NotificationType.Info);
             } else if (value.type === EBrokerNotification.OrderTPHit) {
                 this._notificationsService.show(`${value.order.Symbol} order #${value.order.Id} - TP Hit`, "Take Profit Hit", NotificationType.Info);
             } else if (value.type === EBrokerNotification.OrderFilled) {
