@@ -94,7 +94,7 @@ export class TradingPerformanceComponent implements OnInit {
             .subscribe((result: UserTradingPerformanceData) => {
                 this.ChartDataSet[0] = result.cumulativePnL;
                 this.ChartDataSet[1] = result.dailyPnL;
-                //this.ChartDataSet[2] = result.balanceHistory;
+                // this.ChartDataSet[2] = result.balanceHistory;
                 this.AccCurency = result.accCurency;                
                 this.ChartsSettingsSet[1].unit = this.AccCurency;                
                // this.ChartsSettingsSet[2].unit = this.AccCurency;                
