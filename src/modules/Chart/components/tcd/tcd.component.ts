@@ -152,6 +152,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         if (this._identity.isGuestMode) {
             ReplayModeSync.IsChartReplay = true;
         }
+        if (this._identity.isAdmin) {
+            DataFeedBase.MAX_BARS_PER_CHART = 5000;
+        }
         super.setTitle(of("Loading"));
     }
 

@@ -70,7 +70,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
     protected _visibleCountRatio = 0.4;
     protected _refreshOnRequestCompleted = true;
 
-    protected MAX_BARS_PER_CHART = 332;
+    public static MAX_BARS_PER_CHART = 332;
 
     private _requests = new Dictionary<number, IRequest>();
 
@@ -139,10 +139,10 @@ export abstract class DataFeedBase implements IDatafeedBase {
         switch (request.name) {
             case RequestKind.BARS:
                 dataManager.clearBarDataRows(instrument);
-                dataManager.appendInstrumentBars(instrument, bars.slice(0, this.MAX_BARS_PER_CHART));
+                dataManager.appendInstrumentBars(instrument, bars.slice(0, DataFeedBase.MAX_BARS_PER_CHART));
                 barsSet = true;
                 if (isChartMainSeries) {
-                    if (chart.recordsCount >= this.MAX_BARS_PER_CHART) {
+                    if (chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART) {
                         chart.canLoadMoreBars = false;
                     } else {
                         chart.canLoadMoreBars = true;
@@ -156,7 +156,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
                 if (bars.length) {
                     dataManager.insertInstrumentBars(instrument, 0, bars);
                     chart.invokeValueChanged(TradingChartDesigner.ChartEvent.BARS_INSERTED, bars);
-                    if (chart.recordsCount >= this.MAX_BARS_PER_CHART) {
+                    if (chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART) {
                         chart.canLoadMoreBars = false;
                     }
                 } else {
