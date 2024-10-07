@@ -31,6 +31,8 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
     static DefaultTimeframe = { periodicity: '', interval: 1 };
 
+    static MAX_BARS_PER_CHART = 332;
+
     static supportedTimeFramesStr: string[] = ['1 Minute', '5 Minutes', '15 Minutes', '30 Minutes', '1 Hour', '2 Hours', '4 Hours', '12 Hours', '1 Day', '1 Week'];
     static supportedTimeFrames: ITimeFrame[] = [
 
@@ -69,8 +71,6 @@ export abstract class DataFeedBase implements IDatafeedBase {
     protected _visibleCount = 200;
     protected _visibleCountRatio = 0.4;
     protected _refreshOnRequestCompleted = true;
-
-    public static MAX_BARS_PER_CHART = 332;
 
     private _requests = new Dictionary<number, IRequest>();
 
