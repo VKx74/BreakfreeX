@@ -248,6 +248,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart.showInstrumentWatermark = false;
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
             this.chart.isAuthorizedCustomer = this._identity.isAuthorizedCustomer;
+            this.chart.isAdmin = this._identity.isAdmin;
 
             if (state && state.chartState) {
                 // locale from app
@@ -308,7 +309,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                     }
                 }
 
-                this.chart.addIndicators(new TradingChartDesigner.TradingSessions());
+                // this.chart.addIndicators(new TradingChartDesigner.TradingSessions());
             }
 
             this._chartTrackerService.addChart(this.chart);

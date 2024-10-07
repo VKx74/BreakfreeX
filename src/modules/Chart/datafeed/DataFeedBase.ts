@@ -70,7 +70,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
     protected _visibleCountRatio = 0.4;
     protected _refreshOnRequestCompleted = true;
 
-    private MAX_BARS_PER_CHART = 2000;
+    protected MAX_BARS_PER_CHART = 332;
 
     private _requests = new Dictionary<number, IRequest>();
 
@@ -139,11 +139,14 @@ export abstract class DataFeedBase implements IDatafeedBase {
         switch (request.name) {
             case RequestKind.BARS:
                 dataManager.clearBarDataRows(instrument);
-                dataManager.appendInstrumentBars(instrument, bars);
+                dataManager.appendInstrumentBars(instrument, bars.slice(0, this.MAX_BARS_PER_CHART));
                 barsSet = true;
-
                 if (isChartMainSeries) {
-                    chart.canLoadMoreBars = true;
+                    if (chart.recordsCount >= this.MAX_BARS_PER_CHART) {
+                        chart.canLoadMoreBars = false;
+                    } else {
+                        chart.canLoadMoreBars = true;
+                    }
                 }
                 break;
             case RequestKind.MORE_BARS:
