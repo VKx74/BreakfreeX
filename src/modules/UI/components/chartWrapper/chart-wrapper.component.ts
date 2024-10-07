@@ -85,7 +85,8 @@ ngOnInit(): void {
             data: {
                 datasets: [{
                     borderColor: "#80b6f4",                    
-                    pointBackgroundColor: "#80b6f4",                    
+                    pointBackgroundColor: "#80b6f4", 
+                                       
                     fill: false,                  
                     data: [],                    
                 }],
@@ -114,15 +115,16 @@ ngOnInit(): void {
                         position: 'left',
                         gridLines: {
                             display: false,
-                            color: "rgba(255,255,255,0.42)",
-                            
+                            color: "rgba(255,255,255,0.77)",
+                           
                             lineWidth: 0,
                             drawBorder: true                            
                         },
                         ticks: {
                             padding: 0,
                             fontSize: 12,
-                            maxTicksLimit: 4                            
+                            maxTicksLimit: 4,
+                            fontColor: 'rgba(255,255,255,0.77',                        
                         }
                     }],
                     xAxes: [{
@@ -134,7 +136,7 @@ ngOnInit(): void {
                         // display: true,
                         gridLines: {
                             display: false,
-                            color: "rgba(255,255,255,0.42)",
+                            color: "rgba(255,255,255,0.77",
                     
                             lineWidth: 0,
                             drawBorder: true                            
@@ -142,7 +144,8 @@ ngOnInit(): void {
                         ticks: {
                             padding: 0,
                             fontSize: 11,
-                            maxTicksLimit: 14                            
+                            maxTicksLimit: 14,
+                            fontColor: 'rgba(255,255,255,0.77)'                                  
                         }
                                                
                     }]
