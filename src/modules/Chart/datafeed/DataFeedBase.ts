@@ -139,7 +139,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
         switch (request.name) {
             case RequestKind.BARS:
                 dataManager.clearBarDataRows(instrument);
-                dataManager.appendInstrumentBars(instrument, bars.slice(0, DataFeedBase.MAX_BARS_PER_CHART));
+                dataManager.appendInstrumentBars(instrument, bars.slice(Math.max(bars.length - DataFeedBase.MAX_BARS_PER_CHART, 0)));
                 barsSet = true;
                 if (isChartMainSeries) {
                     if (chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART) {
