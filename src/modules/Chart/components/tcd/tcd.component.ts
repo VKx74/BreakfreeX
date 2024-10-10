@@ -59,7 +59,7 @@ export interface ITcdComponentState {
 
 declare let defaultTheme: any;
 declare let darkTheme: any;
-declare let BreakfreeDarkTheme: any;
+declare let BreakfreeTheme: any;
 declare var ResizeObserver;
 
 interface ReplayWaiter {
@@ -920,9 +920,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     private _getTheme(): any {
         switch (this._themeService.activeTheme) {
             case Theme.Dark:
-                return BreakfreeDarkTheme;
+                return BreakfreeTheme;
             case Theme.Light:
-            // return fintatech;
+            // return Breakfree;
             default:
                 return defaultTheme;
         }
