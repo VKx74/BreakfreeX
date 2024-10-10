@@ -278,7 +278,7 @@
 
                             <div class="market-state-text">Neural Overview</div>
 
-                            <div class="market-state-info" *ngIf="isBotConnected">
+                            <div class="market-state-info hidden" *ngIf="isBotConnected">
                                 <div class="market-state-auto">
                                     Auto: {{autoSelected}}/{{autoAvailable}}
                                     <span (click)="disableAllAutoTrading()" class="disable-all"
