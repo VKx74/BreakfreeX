@@ -96,7 +96,7 @@ export class ThemeService {
     private getTCDThemeCssClass(theme: Theme): string {
         switch (theme) {
             case Theme.Dark:
-                return 'thmFintatechDarkTheme';
+                return 'Breakfree';
             case Theme.Light:
                 return 'thmLightTheme';
             default:
