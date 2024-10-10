@@ -58,7 +58,6 @@ export interface ITcdComponentState {
 }
 
 declare let defaultTheme: any;
-declare let darkTheme: any;
 declare let BreakfreeTheme: any;
 declare var ResizeObserver;
 
@@ -252,6 +251,8 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
             this.chart.isAuthorizedCustomer = this._identity.isAuthorizedCustomer;
             this.chart.isAdmin = this._identity.isAdmin;
+            // this.chart.showAllIndicators = this._identity.isAdmin;
+            // this.chart.simpleBFTIndicatorView = !this._identity.isAdmin;
 
             if (state && state.chartState) {
                 // locale from app

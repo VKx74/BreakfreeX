@@ -175,6 +175,10 @@ export class ActiveThreadComponent implements OnInit, OnDestroy {
 
     get isUserMutedInThread(): boolean {
         return new Date(this.activeThread.bannedTill).getFullYear() < 3000;
+    }  
+    
+    get mutedTillDateShortString(): string {
+        return new Date(this.activeThread.bannedTill).toDateString();
     }
 
     get banedTillDate(): string {

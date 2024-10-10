@@ -98,6 +98,9 @@ export class ThreadMessageComponent {
     }
 
     showMenuToggle(): boolean {
+        if (this._identityService.isAdmin) {
+            return true;
+        }
         return this.isUserMessage;
     }
 
