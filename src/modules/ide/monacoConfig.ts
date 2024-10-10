@@ -1,6 +1,6 @@
 /*
-    IMPORTANT NOTICE:  This software and source code is owned and licensed by Fintatech B.V., https://fintatech.com
-    Downloading, installing or otherwise using this software or source code shall be made only under Fintatech License agreement. If you do not granted Fintatech License agreement, you must promptly delete the software, source code and all associated downloadable materials and you must not use the software for any purpose whatsoever.
+    IMPORTANT NOTICE:  This software and source code is owned and licensed by Breakfree, https://breakfree.cc
+    Downloading, installing or otherwise using this software or source code shall be made only under Breakfree License agreement. If you do not granted Breakfree License agreement, you must promptly delete the software, source code and all associated downloadable materials and you must not use the software for any purpose whatsoever.
 */
 
 import {NgxMonacoEditorConfig} from 'ngx-monaco-editor';
@@ -8,7 +8,7 @@ import {fintaSharp} from './fintaSharp';
 import {IDEThemes} from "./fintaSharp/theme";
 
 export module monacoConfig {
-    export const fintatechConfig: NgxMonacoEditorConfig = {
+    export const BreakfreeConfig: NgxMonacoEditorConfig = {
         baseUrl: './assets',
         onMonacoLoad: () => {
             monaco.languages.register({ id: 'fintaSharp' });
