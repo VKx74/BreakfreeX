@@ -313,7 +313,7 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
                     }
                 }
 
-                // this.chart.addIndicators(new TradingChartDesigner.TradingSessions());
+                this.chart.addIndicators(new TradingChartDesigner.TradingSessions());
             }
 
             this._chartTrackerService.addChart(this.chart);
