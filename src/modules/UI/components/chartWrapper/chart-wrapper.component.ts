@@ -116,7 +116,6 @@ ngOnInit(): void {
                         gridLines: {
                             display: false,
                             color: "rgba(255,255,255,0.77)",
-                           
                             lineWidth: 0,
                             drawBorder: true                            
                         },
@@ -124,7 +123,7 @@ ngOnInit(): void {
                             padding: 0,
                             fontSize: 12,
                             maxTicksLimit: 4,
-                            fontColor: 'rgba(255,255,255,0.77',                        
+                            fontColor: 'rgba(255,255,255,0.77'                        
                         }
                     }],
                     xAxes: [{
@@ -137,7 +136,6 @@ ngOnInit(): void {
                         gridLines: {
                             display: false,
                             color: "rgba(255,255,255,0.77",
-                    
                             lineWidth: 0,
                             drawBorder: true                            
                         },
