@@ -7,6 +7,7 @@ import { AppConfigService } from './app.config.service';
 
 import * as CryptoJS from 'crypto-js';
 import { InstrumentService } from "./instrument.service";
+import { IdentityService } from "./auth/identity.service";
 
 
 export enum InstrumentTypeId {
@@ -303,6 +304,13 @@ export interface SaRResponse {
     date: number;
 }
 
+export interface IBFTASARResponseV3 {
+    mesa_avg: number;
+    strength: number;
+    mesa: IMesaTrendStrength[];
+    sar: SaRResponse[];
+}
+
 export interface IBFTAAlgoResponseV3 {
     levels: IBFTALevels;
     trade: IBFTATradeV2;
@@ -318,7 +326,7 @@ export interface IBFTAAlgoResponseV3 {
     resistance_ext_prob: number;
     sl_price: number;
     id: any;
-    sar: SaRResponse[];
+    sar: { [id: string]: IBFTASARResponseV3; };
     sar_prediction: SaRResponse[];
     rtd: IRTDPayload;
     mema_prediction: number[];
@@ -834,7 +842,7 @@ export class AlgoService {
 
     private url: string;
 
-    constructor(private _http: HttpClient, private _instrumentService: InstrumentService) {
+    constructor(private _http: HttpClient, private _instrumentService: InstrumentService, private _identityService: IdentityService) {
         this.url = AppConfigService.config.apiUrls.bftAlgoREST;
     }
 
@@ -870,6 +878,10 @@ export class AlgoService {
 
             // hide general SL printing on chart
             _.sl_price = undefined;
+
+            if (!this._identityService.isAdmin) {
+                this._updateUIData(_);
+            }
 
             return _;
         }));
@@ -1127,5 +1139,56 @@ export class AlgoService {
     private _decrypt(encrypted: IBFTAEncryptedResponse): any {
         const decrypted = AlgoServiceEncryptionHelper.decrypt(encrypted.data);
         return JSON.parse(decrypted);
+    }
+
+    private _updateUIData(data: IBFTAAlgoResponseV3): IBFTAAlgoResponseV3 {
+        if (!data.sar) {
+            return data;
+        }
+
+        let baseSRUpdated = false;
+
+        for (let k in data.sar) {
+            let sar = data.sar[k].sar;
+            let smoothingPeriod = 5;
+            if (smoothingPeriod <= 0) {
+                continue;
+            }
+
+            for (let i = 0; i < sar.length; i++) {
+                let s = (sar[i].s_m18 + sar[i].s) / 2;
+                let r = (sar[i].r_p18 + sar[i].r) / 2;
+                // let r_p28 = sar[i].r_p28;
+                // let s_m28 = sar[i].s_m28;
+
+                sar[i].s = s;
+                sar[i].r = r;
+                // sar[i].r_p28 = r_p28;
+                // sar[i].s_m28 = s_m28;
+            }
+
+            for (let i = smoothingPeriod; i < sar.length; i++) {
+                let s = sar[i].s;
+                let r = sar[i].r;
+                let r_p28 = sar[i].r_p28;
+                let s_m28 = sar[i].s_m28;
+                for (let j = 1; j < smoothingPeriod; j++) {
+                    s += sar[i - j].s;
+                    r += sar[i - j].r;
+                    r_p28 += sar[i - j].r_p28;
+                    s_m28 += sar[i - j].s_m28;
+                }
+                sar[i].s = s / smoothingPeriod;
+                sar[i].r = r / smoothingPeriod;
+                sar[i].r_p28 = r_p28 / smoothingPeriod;
+                sar[i].s_m28 = s_m28 / smoothingPeriod;
+            }
+
+            if (!baseSRUpdated) {
+                baseSRUpdated = true;
+                data.levels.ee = sar[sar.length - 1].r;
+                data.levels.ze = sar[sar.length - 1].s;
+            }
+        }
     }
 }
