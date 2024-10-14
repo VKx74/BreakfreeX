@@ -1150,21 +1150,33 @@ export class AlgoService {
 
         for (let k in data.sar) {
             let sar = data.sar[k].sar;
-            let smoothingPeriod = 5;
+            let smoothingPeriod = 3;
             if (smoothingPeriod <= 0) {
                 continue;
             }
+            
+            let min = -0.4;
+            let max = 0.1;
+            let step = 0.01;
+            let dir = true;
+            let random = 0;
 
             for (let i = 0; i < sar.length; i++) {
-                let s = (sar[i].s_m18 + sar[i].s) / 2;
-                let r = (sar[i].r_p18 + sar[i].r) / 2;
-                // let r_p28 = sar[i].r_p28;
-                // let s_m28 = sar[i].s_m28;
+                if (random >= max) {
+                    dir = false;
+                } else if (random <= min) {
+                    dir = true;
+                }
+
+                random += dir ? step : step * -1;
+
+                let mid = (sar[i].s + sar[i].r) / 2;
+                let diff = Math.abs(sar[i].s - sar[i].r);
+                let s = mid - (diff * (1 + random));
+                let r = mid + (diff * (1 + random));
 
                 sar[i].s = s;
                 sar[i].r = r;
-                // sar[i].r_p28 = r_p28;
-                // sar[i].s_m28 = s_m28;
             }
 
             for (let i = smoothingPeriod; i < sar.length; i++) {
