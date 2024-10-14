@@ -74,19 +74,33 @@
     <div class="content-wrapper flex flex-grow-1 h-0 full-width flex-direction-column">
         <ng-container *ngIf="(activeThread$ | async) as activeThread">
             <div class="overlay" *ngIf="activeThread.isBanned || activeThread.isBlocked">
-                <div class="overlay-content-wrapper">
-                    <div class="overlay-header text-center">
-                        <span class="header-caption">Oh no!</span>
-                    </div>
-                    <div class="banner-img-wrapper text-center">
-                        <i class="icon crypto-icon crypto-icon-banned-chat"></i>
-                    </div>
-                    <div class="text-center">
-                        <span *ngIf="activeThread.isBanned && !isUserMutedInThread">{{'userBannedCaption' | translate}}</span>
-                        <span *ngIf="activeThread.isBanned && isUserMutedInThread">{{'userMutedCaption' | translate}}</span>
-                        <span *ngIf="activeThread.isBlocked && !activeThread.isBanned">{{'threadBlocked' |
-                            translate}}</span>
-                    </div>
+                <div class="overlay-content-wrapper ban-wrapper">
+                        <div class="overlay-header text-center">
+                            <span class="header-caption">Oh no!</span>
+                        </div>
+                        <div class="banner-img-wrapper text-center">
+                            <i class="icon crypto-icon crypto-icon-banned-chat"></i>
+                        </div>
+                        <div class="text-center">
+                            <span *ngIf="activeThread.isBanned && !isUserMutedInThread">
+                                <div>
+                                    {{'userBannedCaption' | translate}}
+                                </div>
+                                <div class="text-justify">
+                                    {{'banDescriptionCaption' | translate}}
+                                </div>
+                            </span>
+                            <span *ngIf="activeThread.isBanned && isUserMutedInThread">
+                                <div>
+                                    {{'userMutedCaption' | translate}}
+                                </div>
+                                <div class="text-justify">
+                                    {{'mutedTillCaption' | translate}} {{mutedTillDateShortString}}
+                                </div>
+                            </span>
+                            <span *ngIf="activeThread.isBlocked && !activeThread.isBanned">{{'threadBlocked' |
+                                translate}}</span>
+                        </div>
                 </div>
             </div>
         </ng-container>
@@ -149,7 +163,7 @@
                 </div>
             </div>
             <ng-template #outOfAccess>
-                <div class="footer flex flex-direction-column out-of-access"> Chat disabled during trial.</div>
+                <div class="footer flex flex-direction-column out-of-access"> You can participate in the community after the trial finishes. </div>
             </ng-template>
         </ng-container>
     </div>

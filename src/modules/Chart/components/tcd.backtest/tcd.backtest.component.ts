@@ -19,7 +19,7 @@ import {LocalizationService} from "Localization";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 
 declare let defaultTheme: any;
-declare let fintatechDarkTheme: any;
+declare let BreakfreeTheme: any;
 
 @Component({
     selector: 'tcdBacktest',
@@ -144,7 +144,7 @@ export class TcdBacktestComponent {
     private _getTheme(): any {
         switch (this._themeService.getActiveTheme()) {
             case Theme.Dark:
-                return fintatechDarkTheme;
+                return BreakfreeTheme;
             case Theme.Light:
             default:
                 return defaultTheme;

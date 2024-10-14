@@ -59,6 +59,11 @@ export class DataFeed extends DataFeedBase {
      * @inheritDoc
      */
     sendRequest(request: TradingChartDesigner.IBarsRequest) {
+        if (request.chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART)
+        {
+            request.chart.canLoadMoreBars = false;
+            return;
+        }
         super.sendRequest(request);
         this._sendRequest(request);
     }

@@ -17,7 +17,7 @@ import {BehaviorSubject} from "rxjs";
         CommonModule,
         FormsModule,
         MonacoEditorModule.forRoot(
-            monacoConfig.fintatechConfig
+            monacoConfig.BreakfreeConfig
         ),
         LocalizationModule
     ],

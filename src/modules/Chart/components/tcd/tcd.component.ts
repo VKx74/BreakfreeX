@@ -58,8 +58,7 @@ export interface ITcdComponentState {
 }
 
 declare let defaultTheme: any;
-declare let darkTheme: any;
-declare let fintatechDarkTheme: any;
+declare let BreakfreeTheme: any;
 declare var ResizeObserver;
 
 interface ReplayWaiter {
@@ -151,6 +150,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
         super(_injector);
         if (this._identity.isGuestMode) {
             ReplayModeSync.IsChartReplay = true;
+        }
+        if (this._identity.isAdmin) {
+            DataFeedBase.MAX_BARS_PER_CHART = 5000;
         }
         super.setTitle(of("Loading"));
     }
@@ -248,6 +250,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
             this.chart.showInstrumentWatermark = false;
             this.chart.calendarEventsManager.visibilityMode = TradingChartDesigner.CalendarEventsVisibilityMode.All;
             this.chart.isAuthorizedCustomer = this._identity.isAuthorizedCustomer;
+            this.chart.isAdmin = this._identity.isAdmin;
+            this.chart.showAllIndicators = this._identity.isAdmin;
+            this.chart.simpleBFTIndicatorView = !this._identity.isAdmin;
 
             if (state && state.chartState) {
                 // locale from app
@@ -916,9 +921,9 @@ export class TcdComponent extends BaseGoldenLayoutItemComponent {
     private _getTheme(): any {
         switch (this._themeService.activeTheme) {
             case Theme.Dark:
-                return fintatechDarkTheme;
+                return BreakfreeTheme;
             case Theme.Light:
-            // return fintatech;
+            // return Breakfree;
             default:
                 return defaultTheme;
         }

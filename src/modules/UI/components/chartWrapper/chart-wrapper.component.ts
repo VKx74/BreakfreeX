@@ -57,18 +57,18 @@ ngOnInit(): void {
             if (!firstVal)
                 firstVal = chartData[key];
             if (lastVal < 0) {
-                this.Chart.data.datasets[0].backgroundColor.push('red');
+                this.Chart.data.datasets[0].backgroundColor.push('#6E260E');
             } else {
-                this.Chart.data.datasets[0].backgroundColor.push('green');
+                this.Chart.data.datasets[0].backgroundColor.push('#4fd54a');
             }
         });
 
         if (firstVal > lastVal ) {
-            this.Chart.data.datasets[0].borderColor = 'red';
-            this.Chart.data.datasets[0].pointBackgroundColor = 'red';            
+            this.Chart.data.datasets[0].borderColor = '#6E260E';
+            this.Chart.data.datasets[0].pointBackgroundColor = '#6E260E';            
         } else {
-            this.Chart.data.datasets[0].borderColor = 'green';
-            this.Chart.data.datasets[0].pointBackgroundColor = 'green';            
+            this.Chart.data.datasets[0].borderColor = '#4fd54a';
+            this.Chart.data.datasets[0].pointBackgroundColor = '#4fd54a';            
         }
         
         this.Chart.update();
@@ -85,7 +85,8 @@ ngOnInit(): void {
             data: {
                 datasets: [{
                     borderColor: "#80b6f4",                    
-                    pointBackgroundColor: "#80b6f4",                    
+                    pointBackgroundColor: "#80b6f4", 
+                                       
                     fill: false,                  
                     data: [],                    
                 }],
@@ -111,26 +112,39 @@ ngOnInit(): void {
                 },
                 scales: {
                     yAxes: [{
-                        position: 'right',
+                        position: 'left',
                         gridLines: {
-                            color: "rgba(50,50,50,0.1)",
-                            drawBorder: false                            
+                            display: false,
+                            color: "rgba(255,255,255,0.77)",
+                            lineWidth: 0,
+                            drawBorder: true                            
                         },
                         ticks: {
-                            padding: 6,
+                            padding: 0,
                             fontSize: 12,
-                            maxTicksLimit: 12                            
+                            maxTicksLimit: 4,
+                            fontColor: 'rgba(255,255,255,0.77'                        
                         }
                     }],
                     xAxes: [{
-                        barPercentage: 0.5,       // You can adjust this for your preference
+
+                        barPercentage: 0.23,       // You can adjust this for your preference
                         categoryPercentage: 0.7,  // You can adjust this for your preference
                         maxBarThickness: 50,       // Set your desired max width for bars here
             
                         // display: true,
                         gridLines: {
-                            color: "rgba(50,50,50,0.1)",                         
+                            display: false,
+                            color: "rgba(255,255,255,0.77",
+                            lineWidth: 0,
+                            drawBorder: true                            
                         },
+                        ticks: {
+                            padding: 0,
+                            fontSize: 11,
+                            maxTicksLimit: 14,
+                            fontColor: 'rgba(255,255,255,0.77)'                                  
+                        }
                                                
                     }]
                 }

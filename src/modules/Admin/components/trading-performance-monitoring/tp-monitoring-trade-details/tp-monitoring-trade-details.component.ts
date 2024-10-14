@@ -15,7 +15,7 @@ import { Modal } from "Shared";
 import { TzUtils } from "TimeZones";
 
 declare let defaultTheme: any;
-declare let fintatechDarkTheme: any;
+declare let BreakfreeTheme: any;
 
 @Component({
     selector: 'tp-monitoring-trade-details',
@@ -141,7 +141,7 @@ export class TPMonitoringTradeDetailsComponent extends Modal<Trade> implements O
     private _getTheme(): any {
         switch (this._themeService.getActiveTheme()) {
             case Theme.Dark:
-                return fintatechDarkTheme;
+                return BreakfreeTheme;
             case Theme.Light:
             default:
                 return defaultTheme;

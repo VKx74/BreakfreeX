@@ -11,7 +11,7 @@ import { takeUntil } from "rxjs/operators";
 
 declare var ResizeObserver;
 declare let defaultTheme: any;
-declare let fintatechDarkTheme: any;
+declare let BreakfreeTheme: any;
 
 class RestrictionManager {
     getRestrictions(chart: TradingChartDesigner.Chart): string[] {
@@ -249,7 +249,7 @@ export class SonarChartComponent implements OnInit {
     private _getTheme(): any {
         switch (this._themeService.activeTheme) {
             case Theme.Dark:
-                return fintatechDarkTheme;
+                return BreakfreeTheme;
             case Theme.Light:
             default:
                 return defaultTheme;

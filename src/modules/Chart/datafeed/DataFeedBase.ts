@@ -31,6 +31,8 @@ export abstract class DataFeedBase implements IDatafeedBase {
 
     static DefaultTimeframe = { periodicity: '', interval: 1 };
 
+    static MAX_BARS_PER_CHART = 332;
+
     static supportedTimeFramesStr: string[] = ['1 Minute', '5 Minutes', '15 Minutes', '30 Minutes', '1 Hour', '2 Hours', '4 Hours', '12 Hours', '1 Day', '1 Week'];
     static supportedTimeFrames: ITimeFrame[] = [
 
@@ -69,8 +71,6 @@ export abstract class DataFeedBase implements IDatafeedBase {
     protected _visibleCount = 200;
     protected _visibleCountRatio = 0.4;
     protected _refreshOnRequestCompleted = true;
-
-    private MAX_BARS_PER_CHART = 2000;
 
     private _requests = new Dictionary<number, IRequest>();
 
@@ -139,11 +139,14 @@ export abstract class DataFeedBase implements IDatafeedBase {
         switch (request.name) {
             case RequestKind.BARS:
                 dataManager.clearBarDataRows(instrument);
-                dataManager.appendInstrumentBars(instrument, bars);
+                dataManager.appendInstrumentBars(instrument, bars.slice(Math.max(bars.length - DataFeedBase.MAX_BARS_PER_CHART, 0)));
                 barsSet = true;
-
                 if (isChartMainSeries) {
-                    chart.canLoadMoreBars = true;
+                    if (chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART) {
+                        chart.canLoadMoreBars = false;
+                    } else {
+                        chart.canLoadMoreBars = true;
+                    }
                 }
                 break;
             case RequestKind.MORE_BARS:
@@ -153,7 +156,7 @@ export abstract class DataFeedBase implements IDatafeedBase {
                 if (bars.length) {
                     dataManager.insertInstrumentBars(instrument, 0, bars);
                     chart.invokeValueChanged(TradingChartDesigner.ChartEvent.BARS_INSERTED, bars);
-                    if (chart.recordsCount >= this.MAX_BARS_PER_CHART) {
+                    if (chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART) {
                         chart.canLoadMoreBars = false;
                     }
                 } else {

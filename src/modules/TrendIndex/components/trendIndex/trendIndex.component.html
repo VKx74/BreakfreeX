@@ -278,7 +278,7 @@
 
                             <div class="market-state-text">Neural Overview</div>
 
-                            <div class="market-state-info" *ngIf="isBotConnected">
+                            <div class="market-state-info hidden" *ngIf="isBotConnected">
                                 <div class="market-state-auto">
                                     Auto: {{autoSelected}}/{{autoAvailable}}
                                     <span (click)="disableAllAutoTrading()" class="disable-all"
@@ -499,12 +499,12 @@
                                                             <span><i class="fa-solid fa-stop"></i> Stop</span>
                                                             <span>{{instrumentTradingDirectionText(vmItem)}}</span>
                                                         </div>
-                                                        <div class="HITL available status-holder simple-hover"
+                                                        <!-- <div class="HITL available status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
                                                             *ngIf="(vmItem.tradingState == 1 && !isInstrumentSelected(vmItem) && userAutoTradingInfoData?.useManualTrading)">
 
                                                             <span> <i class="fa-solid fa-play"></i> Force Start</span>
-                                                        </div>
+                                                        </div> -->
                                                         <div class="HITL unavailable status-holder simple-hover"
                                                             (click)="instrumentSelectionChanged(vmItem, $event)"
                                                             *ngIf="(isInstrumentSelected(vmItem) && vmItem.tradingState != 1)  ">
@@ -687,11 +687,11 @@
                         </ng-template>
                     </data-table-cell>
 
-                    <data-table-menu-item [id]="'trade'">
+                    <!-- <data-table-menu-item [id]="'trade'">
                         <ng-template>
                             {{isSelectedInstrumentTradable() ? "Stop Force Trading" : "Force Start Trading"}}
                         </ng-template>
-                    </data-table-menu-item>
+                    </data-table-menu-item> -->
                     <!--   <data-table-menu-item [id]="'openCharts'">
                         <ng-template>
                             View Analysis

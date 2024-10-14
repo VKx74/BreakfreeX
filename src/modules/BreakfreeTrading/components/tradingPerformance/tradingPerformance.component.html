@@ -1,69 +1,75 @@
-<div [ngClass]="{'doBlur':showSpinner}"  *ngIf="isBrokerConnected; else brokerNotConnected" class="performance-container"> 
+<div [ngClass]="{'doBlur':showSpinner}" *ngIf="isBrokerConnected; else brokerNotConnected"
+    class="performance-container">
     <bft-loader *ngIf="showSpinner"></bft-loader>
-    <div>
-            <div class="period-selectors">
-                <div class="period-wrp">
-        <div *ngFor="let pselector of periodSelectors">
-        <div class="selector-wrapper">
-            <button class="selector-button crypto-button crypto-button_primary" [ngClass]="{'btn-selected': pselector.isSelected}" (click)="selectPeriod(pselector)">
-                {{pselector.name}}
-            </button>            
-        </div>
-    </div>
-    </div>
-    </div>
 
-    <div class="acc-infox mobilefix">
-        <div class="overview">Account Overview</div>
-       
-        <div class="acc-info mobilefix">
-            <div class="acc-info-param column1">
-                <div class="acc-info-param-header">Balance:</div>
-                <div class="acc-info-param-body">
-                    <div class="acc-info-param-value">${{EstBalance}}</div>
-                    <div class="acc-info-param-value-add hidden">{{EstBalanceUSD}}</div>
+    <div class="period-selectors mobile-show">
+        <div class="period-wrp mobile-show">
+            <div *ngFor="let pselector of periodSelectors">
+                <div class="selector-wrapper">
+                    <button class="selector-button crypto-button crypto-button_primary"
+                        [ngClass]="{'btn-selected': pselector.isSelected}" (click)="selectPeriod(pselector)">
+                        {{pselector.name}}
+                    </button>
                 </div>
-                
-            </div>
-            <div class="acc-info-param column2">
-                <div class="acc-info-param-header">24H PNL:</div>
-                <div class="acc-info-param-body">
-                    <div class="acc-info-param-value">{{DailyPnLVal}} / </div>
-                    <div class="acc-info-param-value-add" [ngClass]="{'green':DailyPnLsign > 0, 'red': DailyPnLsign < 0}">
-                        {{DailyPnLValPercent}}
-                    </div>
-                   
-                    
-                </div>
-               
-
-            </div>
-            <div class="acc-info-param column3">
-                <div class="acc-info-param-header">30-Days PNL:</div>
-                <div class="acc-info-param-body">
-                    <div class="acc-info-param-value">{{MonthlyPnLVal}} / </div>
-                    
-                    <div class="acc-info-param-value-add" [ngClass]="{'green':MonthlyPnLsign > 0, 'red': MonthlyPnLsign < 0}">
-                        {{MonthlyPnLValPercent}}
-                    </div>
-                    
-                  
-                </div>
-                
             </div>
         </div>
-    </div>
-
-    
     </div>
 
     <div class="pnlcharts">
-        <div *ngFor="let chartSett of ChartsSettingsSet">
+        <div class="chartdivthing" *ngFor="let chartSett of ChartsSettingsSet">
             <chart-wrapper [ChartSettings]='chartSett' [ChartData]='ChartDataSet[chartSett.index]'>
             </chart-wrapper>
-        </div> 
+
+        </div>
+        <div class="acc-infox mobilefix">
+            <div class="acc-info mobilefix">
+                <div class="acc-info-param column1">
+                    <div class="acc-info-param-header">Balance:</div>
+                    <div class="acc-info-param-body">
+                        <div class="acc-info-param-value">{{AccCurrencySign}}{{EstBalance}}</div>
+                        <div class="acc-info-param-value-add hidden">{{EstBalanceUSD}}</div>
+                    </div>
+                </div>
+                <div class="acc-info-param column2">
+                    <div class="acc-info-param-header">24H PNL:</div>
+                    <div class="acc-info-param-body">
+                        <div class="acc-info-param-value">{{DailyPnLVal}} / </div>
+                        <div class="acc-info-param-value-add"
+                            [ngClass]="{'green':DailyPnLsign > 0, 'red': DailyPnLsign < 0}">
+                            {{DailyPnLValPercent}}
+                        </div>
+                    </div>
+                </div>
+                <div class="acc-info-param column3">
+                    <div class="acc-info-param-header">30-Days PNL:</div>
+                    <div class="acc-info-param-body">
+                        <div class="acc-info-param-value">{{MonthlyPnLVal}} / </div>
+                        <div class="acc-info-param-value-add"
+                            [ngClass]="{'green':MonthlyPnLsign > 0, 'red': MonthlyPnLsign < 0}">
+                            {{MonthlyPnLValPercent}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="period-selectors mobile-hidden">
+                <div class="period-wrp mobile-hidden">
+                    <div *ngFor="let pselector of periodSelectors">
+                        <div class="selector-wrapper">
+                            <button class="selector-button crypto-button crypto-button_primary"
+                                [ngClass]="{'btn-selected': pselector.isSelected}" (click)="selectPeriod(pselector)">
+                                {{pselector.name}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
 <ng-template #brokerNotConnected>
-    <div class="broker-not-connected"><span><img class="connected" src="/assets/img/wifi-slash-solid.svg" alt=""></span>No Trading Account Connected</div>
-  </ng-template>
+    <div class="broker-not-connected"><span><img class="connected" src="/assets/img/wifi-slash-solid.svg"
+                alt=""></span>No Trading Account Connected</div>
+</ng-template>

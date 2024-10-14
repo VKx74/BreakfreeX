@@ -58,11 +58,11 @@ export class Script implements IScript {
     static defaultCodeTemplate(): string {
         return [
             'using System.ComponentModel.DataAnnotations;',
-            'using Fintatech.FintaSharp.Scripting.Indicators;',
-            'using Fintatech.FintaSharp.Scripting.Properties;',
-            'using Fintatech.FintaSharp.Interfaces;',
+            'using breakfree.FintaSharp.Scripting.Indicators;',
+            'using breakfree.FintaSharp.Scripting.Properties;',
+            'using breakfree.FintaSharp.Interfaces;',
 
-            'namespace Fintatech.FintaSharp.Scripting.Strategies',
+            'namespace breakfree.FintaSharp.Scripting.Strategies',
             '{',
             '    public class CustomStrategy : Strategy',
             '    {',
