@@ -21,6 +21,7 @@ import {map} from "rxjs/operators";
 import { EExchangeInstance } from '@app/interfaces/exchange/exchange';
 import { EMarketType } from '@app/models/common/marketType';
 import { ReplayModeSync } from '@chart/services/replay-mode-sync.service';
+import { RequestKind } from './models';
 
 @Injectable()
 export class DataFeed extends DataFeedBase {
@@ -59,11 +60,12 @@ export class DataFeed extends DataFeedBase {
      * @inheritDoc
      */
     sendRequest(request: TradingChartDesigner.IBarsRequest) {
-        if (request.chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART)
-        {
-            request.chart.canLoadMoreBars = false;
-            return;
-        }
+        // if (request.chart.recordsCount >= DataFeedBase.MAX_BARS_PER_CHART && request.name === RequestKind.MORE_BARS)
+        // {
+        //     debugger
+        //     request.chart.canLoadMoreBars = false;
+        //     return;
+        // }
         super.sendRequest(request);
         this._sendRequest(request);
     }
