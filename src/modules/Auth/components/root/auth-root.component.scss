@@ -22,18 +22,12 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    align-items: center;
-    padding: 30px 30px;
-    max-width: 450px;
-    min-height: 450px;
-
-    max-height: 800px;
-    height: auto;
+    max-width: 350px;
     background: #fff;
     color: #000;
     z-index: 2;
     border-radius: 9px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.09);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
   }
   .welcomeback {
     font-size: 24px !important;
@@ -363,6 +357,8 @@ span#actualquote {
   align-items: center;
   width: 100%;
   align-content: flex-start;
+  justify-content: center;
+
 }
 
 .left {
