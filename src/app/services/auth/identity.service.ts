@@ -279,6 +279,9 @@ export class IdentityService {
 
         if (this.subscriptions && this.subscriptions.length) {
             for (const sub of this.subscriptions) {
+                if (sub.indexOf("Breakfree AI") !== -1) {
+                    return true;
+                }
                 if (sub.indexOf("Neural") !== -1) {
                     return true;
                 }

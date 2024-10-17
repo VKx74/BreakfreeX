@@ -24,10 +24,9 @@
   /deep/.form-wrapper {
     padding: 0px !important;
   }
-  /deep/ {
-    mat-horizontal-stepper {
-      background-color: transparent !important;
-    }
+  .stepper
+  {
+    background-color: transparent;
   }
 }
 

@@ -8,6 +8,7 @@
     "build": "npm run build-stage",
     "build-prod": "ng build -c prod",
     "build-stage": "ng build -c stage",
+    "build-breakfree-sh": "ng build -c breakfree-sh",
     "report": "webpack-bundle-analyzer dist/stats.json --port=0",
     "report-prod": "ng build -c prod --sourceMap=false --stats-json",
     "report-build": "ng build --aot --stats-json",

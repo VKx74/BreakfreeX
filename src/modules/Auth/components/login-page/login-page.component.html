@@ -1,79 +1,13 @@
 <div class="content">
-    <div><h1 class="welcomeback">Welcome back</h1>
-    <span class="continue">Continue with Google or enter your details.</span>
+    <div>
 
-    <div class="beta google" >
-        <div class="login-with-google" (click)="doLoginWithGoogle()">
+
+    <div class="beta google" (click)="doLoginWithGoogle()" >
+        <div class="login-with-google" >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="28" height="28"><path fill="#4285F4" d="M23.6 14.23c0-.71-.06-1.4-.18-2.05H14v3.87h5.38a4.6 4.6 0 01-2 3.02v2.5h3.24c1.89-1.73 2.98-4.3 2.98-7.34z"></path><path fill="#34A853" d="M14 24c2.7 0 4.96-.9 6.62-2.42l-3.23-2.51c-.9.6-2.04.95-3.39.95-2.6 0-4.8-1.76-5.6-4.12H5.06v2.6A10 10 0 0014 24z"></path><path fill="#FBBC05" d="M8.4 15.9a6.01 6.01 0 010-3.8V9.5H5.06a10 10 0 000 9l3.34-2.6z"></path><path fill="#EA4335" d="M14 7.98c1.47 0 2.79.5 3.82 1.5L20.7 6.6A10 10 0 005.06 9.5l3.34 2.6c.8-2.36 3-4.12 5.6-4.12z"></path></svg>
             <span class="third-party-capture">Sign in with Google</span>
         </div>  
-    </div> 
-    <div class="betax cmpn hidden" >
-        <div class="login-with-google" (click)="doLoginWithCompanion()">
-            <img class="cmpnloginicon" src="/assets/img/cmpnlogo.png" alt="">
-                <span class="third-party-capture">Sign in with Companion</span>
-        </div>  
-    </div> 
-
-
-     </div>
-
-     
-     <span class="continuewithx"><span class="splitter"></span><span class="orspan">or</span> <span class="splitter"></span></span>
-
-    <div class="form-wrapper" [ngClass]="{notificationVisible: notification}" [formGroup]="formGroup">
-        <div class="form-header hidden">
-            <span class="form-header__title signIn">Sign in </span>
-            <span class="form-header__title"> / </span>
-            <span class="form-header__title signUp" (click)="doRegistration()" >Sign up </span>
-        </div>
-
-        <div class="crypto-form-unit emailfield">
-
-            <mat-form-field class="crypto-input full-width with-hint remove-bottom-padding no-borders-input">
-                <input matInput type="email" formControlName="email" placeholder="Email" onEnter (enterHandler)="doLogin()">
-
-                <mat-error>Invalid email</mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="crypto-form-unit passwordfield">
-
-            <mat-form-field class="crypto-input full-width with-hint no-borders-input">
-                <input matInput type="password" formControlName="password" placeholder="Password" onEnter (enterHandler)="doLogin()">
-
-                <mat-error>Password must contain 6 characters </mat-error>
-            </mat-form-field>
-        </div>
-        <div class="remember-wrapper ">
-            <label class="hidden">
-                <input class="remember-chk" type="checkbox" formControlName="rememberMe"/>
-                <span>Remember for 30 days</span>
-            </label>
-            <span class="forgotPassword" (click)="doPasswordRestoration()">Forgot your password?</span>
-        </div>
-        <div *ngIf="notification" class="notification"
-             [ngClass]="notification.isError ? 'is-error' : 'is-success'">
-            <span>{{notification.message}}</span>
-        </div>
-        <div class="button-on-error">
-            <span *ngIf="showReconfirmButton" (click)="handleResendConfirm()">Click here if you did not get the letter on email</span>
-            <span *ngIf="showFillInfoButton" (click)="handleFillPersonalInfo()">Click here to fill personal information again.</span>
-        </div>
-
-        <button class="btn crypto-button crypto-button-full-width action-btn"
-                (click)="doLogin()">
-            <div class="lds-ellipsis" *ngIf="processing">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <span *ngIf="!processing">Sign in</span>
-
-        </button>
-
-        <span class="donthave">Don't have an account? <a class="createuserbyemail" (click)="doRegistration()" >Signup for free</a></span>
+    </div>
         
     </div>
 </div>
