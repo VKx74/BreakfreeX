@@ -1,0 +1,2 @@
+src/assets/Navigator_1.1_OSX.zip filter=lfs diff=lfs merge=lfs -text
+src/assets/Navigator_1.1_WIN.zip filter=lfs diff=lfs merge=lfs -text
