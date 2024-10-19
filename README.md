@@ -1,11 +1,10 @@
 Start project
 
-1) 
-Rename .npmrc.template to .npmrc
+1. Rename .npmrc.template to .npmrc
 
-2) NPM I
+2. NPM I
 
-3) ng serve -o
+3. ng serve -o
 
 ---
 Must use specific node and angular version.
